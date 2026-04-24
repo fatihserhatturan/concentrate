@@ -1,0 +1,22 @@
+export const schemaStatements = [
+  "CREATE NODE TABLE IF NOT EXISTS Repo(id STRING PRIMARY KEY, path STRING, name STRING)",
+  "CREATE NODE TABLE IF NOT EXISTS File(id STRING PRIMARY KEY, path STRING, relativePath STRING, language STRING)",
+  "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64)",
+  "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, line INT64, endLine INT64)",
+  "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64)",
+  "CREATE NODE TABLE IF NOT EXISTS Call(id STRING PRIMARY KEY, name STRING, line INT64)",
+  "CREATE REL TABLE IF NOT EXISTS CONTAINS(FROM Repo TO File)",
+  "CREATE REL TABLE IF NOT EXISTS IMPORTS(FROM File TO Import)",
+  "CREATE REL TABLE IF NOT EXISTS DEFINES_FUNCTION(FROM File TO Function)",
+  "CREATE REL TABLE IF NOT EXISTS DEFINES_CLASS(FROM File TO Class)",
+  "CREATE REL TABLE IF NOT EXISTS CALLS(FROM Function TO Call)",
+];
+
+export const nodeLabels = ["Repo", "File", "Import", "Function", "Class", "Call"] as const;
+export const relationshipTypes = [
+  "CONTAINS",
+  "IMPORTS",
+  "DEFINES_FUNCTION",
+  "DEFINES_CLASS",
+  "CALLS",
+] as const;
