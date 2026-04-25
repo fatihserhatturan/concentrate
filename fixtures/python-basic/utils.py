@@ -1,0 +1,2 @@
+def utility():
+    return "resolved"

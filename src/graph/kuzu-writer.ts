@@ -19,7 +19,7 @@ export class KuzuGraphWriter {
   }
 
   async reset(): Promise<void> {
-    for (const type of [...relationshipTypes, "DEFINES"].reverse()) {
+    for (const type of [...relationshipTypes, "CONTAINS", "DEFINES"].reverse()) {
       await this.execute(`DROP TABLE IF EXISTS ${type}`);
     }
 

@@ -1,8 +1,7 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
 import Parser from "tree-sitter";
-import JavaScript from "tree-sitter-javascript";
-import TypeScript from "tree-sitter-typescript";
+import Python from "tree-sitter-python";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../graph/model.js";
 import type { SupportedLanguage } from "../scanner/language.js";
 import {
@@ -14,7 +13,7 @@ import {
 
 const parser = new Parser();
 
-export async function parseJavaScriptLikeFile(
+export async function parsePythonFile(
   rootPath: string,
   filePath: string,
   language: SupportedLanguage,
@@ -35,14 +34,14 @@ export async function parseJavaScriptLikeFile(
   ];
   const relationships: GraphRelationship[] = [];
 
-  parser.setLanguage(language === "typescript" ? TypeScript.typescript : JavaScript);
+  parser.setLanguage(Python);
   const tree = parser.parse(createTreeSitterInput(source));
   if (tree.rootNode.hasError) {
     throw new Error("Syntax error");
   }
 
   walk(tree.rootNode, (node) => {
-    if (node.type === "import_statement") {
+    if (node.type === "import_statement" || node.type === "import_from_statement") {
       const importNode = createImportNode(fileNodeId, node);
       if (importNode) {
         nodes.push(importNode);
@@ -55,7 +54,7 @@ export async function parseJavaScriptLikeFile(
       }
     }
 
-    if (isFunctionNode(node)) {
+    if (node.type === "function_definition") {
       const functionNode = createFunctionNode(fileNodeId, node);
       if (functionNode) {
         nodes.push(functionNode);
@@ -79,7 +78,7 @@ export async function parseJavaScriptLikeFile(
       }
     }
 
-    if (node.type === "class_declaration") {
+    if (node.type === "class_definition") {
       const classNode = createClassNode(fileNodeId, node);
       if (classNode) {
         nodes.push(classNode);
@@ -96,19 +95,10 @@ export async function parseJavaScriptLikeFile(
   return { fileNodeId, nodes, relationships };
 }
 
-function isFunctionNode(node: Parser.SyntaxNode): boolean {
-  return [
-    "function_declaration",
-    "method_definition",
-    "generator_function_declaration",
-  ].includes(node.type);
-}
-
 function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
-  const source = node
-    .namedChildren
-    .find((child) => child.type === "string")?.text
-    .replace(/^["']|["']$/g, "");
+  const source = node.type === "import_from_statement"
+    ? extractImportFromSource(node)
+    : extractImportStatementSource(node);
 
   if (!source) {
     return null;
@@ -123,6 +113,40 @@ function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
       line: node.startPosition.row + 1,
     },
   };
+}
+
+function extractImportFromSource(node: Parser.SyntaxNode): string | null {
+  const relativeImport = node.namedChildren.find((child) => child.type === "relative_import");
+  if (relativeImport) {
+    return normalizePythonRelativeImport(relativeImport.text);
+  }
+
+  const dottedName = node.namedChildren.find((child) => child.type === "dotted_name");
+  return dottedName?.text ?? null;
+}
+
+function extractImportStatementSource(node: Parser.SyntaxNode): string | null {
+  const firstImport = node.namedChildren.find((child) => (
+    child.type === "dotted_name" || child.type === "aliased_import"
+  ));
+
+  if (!firstImport) {
+    return null;
+  }
+
+  const dottedName = firstImport.type === "aliased_import"
+    ? firstImport.namedChildren.find((child) => child.type === "dotted_name")
+    : firstImport;
+
+  return dottedName?.text ?? null;
+}
+
+function normalizePythonRelativeImport(source: string): string {
+  const dotCount = source.match(/^\.+/)?.[0].length ?? 0;
+  const modulePath = source.slice(dotCount).replaceAll(".", "/");
+  const parentPrefix = dotCount <= 1 ? "." : [".", ...Array.from({ length: dotCount - 1 }, () => "..")].join("/");
+
+  return modulePath ? `${parentPrefix}/${modulePath}` : parentPrefix;
 }
 
 function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
@@ -164,7 +188,7 @@ function createCallNodes(functionNodeId: string, node: Parser.SyntaxNode): Graph
   const calls: GraphNode[] = [];
 
   walkScoped(node, (child) => {
-    if (child.type !== "call_expression") {
+    if (child.type !== "call") {
       return;
     }
 
@@ -185,7 +209,7 @@ function createCallNodes(functionNodeId: string, node: Parser.SyntaxNode): Graph
         columnNumber: child.startPosition.column,
       },
     });
-  }, (child) => isFunctionNode(child) || child.type === "class_declaration");
+  }, (child) => child.type === "function_definition" || child.type === "class_definition");
 
   return calls;
 }

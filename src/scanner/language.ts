@@ -1,6 +1,6 @@
 import path from "node:path";
 
-export type SupportedLanguage = "javascript" | "typescript";
+export type SupportedLanguage = "javascript" | "typescript" | "python";
 
 const extensionToLanguage = new Map<string, SupportedLanguage>([
   [".js", "javascript"],
@@ -11,6 +11,7 @@ const extensionToLanguage = new Map<string, SupportedLanguage>([
   [".tsx", "typescript"],
   [".mts", "typescript"],
   [".cts", "typescript"],
+  [".py", "python"],
 ]);
 
 export function detectLanguage(filePath: string): SupportedLanguage | null {

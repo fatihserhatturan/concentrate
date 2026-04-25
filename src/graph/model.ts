@@ -1,5 +1,6 @@
 export type GraphNodeLabel =
   | "Repo"
+  | "Directory"
   | "File"
   | "Import"
   | "Function"
@@ -7,8 +8,11 @@ export type GraphNodeLabel =
   | "Call";
 
 export type GraphRelationshipType =
-  | "CONTAINS"
+  | "CONTAINS_ROOT"
+  | "CONTAINS_DIRECTORY"
+  | "CONTAINS_FILE"
   | "IMPORTS"
+  | "RESOLVES_TO"
   | "DEFINES_FUNCTION"
   | "DEFINES_CLASS"
   | "CALLS";
