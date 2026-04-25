@@ -1,6 +1,6 @@
 # Development Plan
 
-The current goal is to turn Concentrate from a working scanner demo into a reliable JS/TS code graph indexer.
+The current goal is to turn Concentrate from a working scanner demo into a reliable multi-language code graph indexer.
 
 ## Milestone 2: Reliable JS/TS Indexer
 
@@ -34,10 +34,6 @@ The current goal is to turn Concentrate from a working scanner demo into a relia
    - Assert graph counts and selected relationships.
    - Cover imports, classes, functions, and call expressions.
 
-## Current Priority
-
-Fixture-based tests are complete. Milestone 2 is complete.
-
 ## Milestone 3: Multi-Language Indexing
 
 7. [x] Add Python parser support.
@@ -46,9 +42,48 @@ Fixture-based tests are complete. Milestone 2 is complete.
    - Resolve simple relative imports such as `from .utils import utility`.
    - Cover the behavior with fixture tests.
 
-## Current Priority
+8. [ ] Formalize language parser registry.
+   - Introduce a `LanguageParser` interface.
+   - Register JS/TS and Python parsers through a common registry.
+   - Keep `parseSourceFile` as a thin registry lookup.
+   - Make adding Go/Rust a small adapter task.
 
-Python parser support is complete.
+9. [ ] Harden Python import resolution.
+   - Resolve `from package.module import x`.
+   - Resolve `from . import utils`.
+   - Resolve `from ..core import thing`.
+   - Handle `import package.module as alias`.
+   - Account for `__init__.py` package files.
+   - Add fixture tests for each case.
+
+10. [ ] Add JS/TS path and package resolution.
+   - Read `tsconfig.json` `baseUrl` and `paths`.
+   - Resolve aliases such as `@/utils/foo`.
+   - Read `package.json` `exports`, `main`, and `types` where useful.
+   - Add fixtures for path aliases and package-style imports.
+
+11. [ ] Add Go parser support.
+   - Detect `.go` files.
+   - Extract package declarations, imports, functions, methods, and structs.
+   - Extract basic call expressions.
+   - Add Go fixture tests.
+
+12. [ ] Add Rust parser support.
+   - Detect `.rs` files.
+   - Extract `use`, `mod`, `fn`, `struct`, and `impl` structures.
+   - Extract basic call expressions.
+   - Add Rust fixture tests.
+
+13. [ ] Add scan progress and parser concurrency.
+   - Parse files with bounded concurrency.
+   - Add progress output for large repositories.
+   - Add `--max-files`, `--include`, and `--exclude` options.
+   - Keep output deterministic despite concurrency.
+
+14. [ ] Add schema version marker.
+   - Add a schema/version metadata table or node.
+   - Record graph schema version during scan/export.
+   - Prepare for future migrations instead of reset-only behavior.
 
 ## Milestone 4: Project Structure
 
@@ -57,3 +92,7 @@ Python parser support is complete.
    - Move directory graph creation and import resolution into focused scanner modules.
    - Move CLI scan reporting into a shared presenter.
    - Share Tree-sitter traversal helpers between language parsers.
+
+## Current Priority
+
+Milestone 3 planning is complete. Next recommended task: formalize the language parser registry.
