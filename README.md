@@ -6,6 +6,8 @@ Concentrate scans a codebase, extracts a structural code graph, and stores it in
 
 - JavaScript / TypeScript
 - Python
+- Go
+- Rust
 
 ## Current Capabilities
 

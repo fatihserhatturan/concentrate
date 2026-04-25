@@ -42,13 +42,13 @@ The current goal is to turn Concentrate from a working scanner demo into a relia
    - Resolve simple relative imports such as `from .utils import utility`.
    - Cover the behavior with fixture tests.
 
-8. [ ] Formalize language parser registry.
+8. [x] Formalize language parser registry.
    - Introduce a `LanguageParser` interface.
    - Register JS/TS and Python parsers through a common registry.
    - Keep `parseSourceFile` as a thin registry lookup.
    - Make adding Go/Rust a small adapter task.
 
-9. [ ] Harden Python import resolution.
+9. [x] Harden Python import resolution.
    - Resolve `from package.module import x`.
    - Resolve `from . import utils`.
    - Resolve `from ..core import thing`.
@@ -56,19 +56,19 @@ The current goal is to turn Concentrate from a working scanner demo into a relia
    - Account for `__init__.py` package files.
    - Add fixture tests for each case.
 
-10. [ ] Add JS/TS path and package resolution.
+10. [x] Add JS/TS path and package resolution.
    - Read `tsconfig.json` `baseUrl` and `paths`.
    - Resolve aliases such as `@/utils/foo`.
-   - Read `package.json` `exports`, `main`, and `types` where useful.
+   - [ ] Read `package.json` `exports`, `main`, and `types` where useful.
    - Add fixtures for path aliases and package-style imports.
 
-11. [ ] Add Go parser support.
+11. [x] Add Go parser support.
    - Detect `.go` files.
    - Extract package declarations, imports, functions, methods, and structs.
    - Extract basic call expressions.
    - Add Go fixture tests.
 
-12. [ ] Add Rust parser support.
+12. [x] Add Rust parser support.
    - Detect `.rs` files.
    - Extract `use`, `mod`, `fn`, `struct`, and `impl` structures.
    - Extract basic call expressions.
@@ -95,4 +95,4 @@ The current goal is to turn Concentrate from a working scanner demo into a relia
 
 ## Current Priority
 
-Milestone 3 planning is complete. Next recommended task: formalize the language parser registry.
+Rust parser support is complete. Package `exports`/`main`/`types` remains as a future follow-up for JS/TS. Next recommended task: add scan progress and parser concurrency.

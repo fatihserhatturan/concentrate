@@ -4,6 +4,7 @@ import Parser from "tree-sitter";
 import Python from "tree-sitter-python";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../graph/model.js";
 import type { SupportedLanguage } from "../scanner/language.js";
+import type { LanguageParser } from "./types.js";
 import {
   analyzeMemberCallExpression,
   createTreeSitterInput,
@@ -13,7 +14,12 @@ import {
 
 const parser = new Parser();
 
-export async function parsePythonFile(
+export const pythonParser: LanguageParser = {
+  language: "python",
+  parse: (rootPath, filePath) => parsePythonFile(rootPath, filePath, "python"),
+};
+
+async function parsePythonFile(
   rootPath: string,
   filePath: string,
   language: SupportedLanguage,
@@ -118,10 +124,30 @@ function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
 function extractImportFromSource(node: Parser.SyntaxNode): string | null {
   const relativeImport = node.namedChildren.find((child) => child.type === "relative_import");
   if (relativeImport) {
-    return normalizePythonRelativeImport(relativeImport.text);
+    return normalizePythonRelativeImport(relativeImport.text, getImportedName(node));
   }
 
   const dottedName = node.namedChildren.find((child) => child.type === "dotted_name");
+  return dottedName?.text ?? null;
+}
+
+function getImportedName(node: Parser.SyntaxNode): string | null {
+  const importSourceNode = node.namedChildren.find((child) => (
+    child.type === "relative_import" || child.type === "dotted_name"
+  ));
+  const importSourceIndex = importSourceNode ? node.namedChildren.indexOf(importSourceNode) : -1;
+  const importedName = node.namedChildren
+    .slice(importSourceIndex + 1)
+    .find((child) => child.type === "dotted_name" || child.type === "aliased_import");
+
+  if (!importedName) {
+    return null;
+  }
+
+  const dottedName = importedName.type === "aliased_import"
+    ? importedName.namedChildren.find((child) => child.type === "dotted_name")
+    : importedName;
+
   return dottedName?.text ?? null;
 }
 
@@ -141,12 +167,17 @@ function extractImportStatementSource(node: Parser.SyntaxNode): string | null {
   return dottedName?.text ?? null;
 }
 
-function normalizePythonRelativeImport(source: string): string {
+function normalizePythonRelativeImport(source: string, importedName: string | null): string {
   const dotCount = source.match(/^\.+/)?.[0].length ?? 0;
   const modulePath = source.slice(dotCount).replaceAll(".", "/");
   const parentPrefix = dotCount <= 1 ? "." : [".", ...Array.from({ length: dotCount - 1 }, () => "..")].join("/");
+  const importedPath = importedName?.replaceAll(".", "/") ?? null;
 
-  return modulePath ? `${parentPrefix}/${modulePath}` : parentPrefix;
+  if (modulePath) {
+    return `${parentPrefix}/${modulePath}`;
+  }
+
+  return importedPath ? `${parentPrefix}/${importedPath}` : parentPrefix;
 }
 
 function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {

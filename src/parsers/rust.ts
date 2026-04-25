@@ -1,10 +1,8 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
 import Parser from "tree-sitter";
-import JavaScript from "tree-sitter-javascript";
-import TypeScript from "tree-sitter-typescript";
+import Rust from "tree-sitter-rust";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../graph/model.js";
-import type { SupportedLanguage } from "../scanner/language.js";
 import type { LanguageParser } from "./types.js";
 import {
   analyzeMemberCallExpression,
@@ -15,21 +13,12 @@ import {
 
 const parser = new Parser();
 
-export const javascriptParser: LanguageParser = {
-  language: "javascript",
-  parse: (rootPath, filePath) => parseJavaScriptLikeFile(rootPath, filePath, "javascript"),
+export const rustParser: LanguageParser = {
+  language: "rust",
+  parse: (rootPath, filePath) => parseRustFile(rootPath, filePath),
 };
 
-export const typescriptParser: LanguageParser = {
-  language: "typescript",
-  parse: (rootPath, filePath) => parseJavaScriptLikeFile(rootPath, filePath, "typescript"),
-};
-
-async function parseJavaScriptLikeFile(
-  rootPath: string,
-  filePath: string,
-  language: SupportedLanguage,
-): Promise<ParsedSourceFile> {
+async function parseRustFile(rootPath: string, filePath: string): Promise<ParsedSourceFile> {
   const source = await readFile(filePath, "utf8");
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
@@ -40,20 +29,20 @@ async function parseJavaScriptLikeFile(
       properties: {
         path: filePath,
         relativePath,
-        language,
+        language: "rust",
       },
     },
   ];
   const relationships: GraphRelationship[] = [];
 
-  parser.setLanguage(language === "typescript" ? TypeScript.typescript : JavaScript);
+  parser.setLanguage(Rust);
   const tree = parser.parse(createTreeSitterInput(source));
   if (tree.rootNode.hasError) {
     throw new Error("Syntax error");
   }
 
   walk(tree.rootNode, (node) => {
-    if (node.type === "import_statement") {
+    if (node.type === "use_declaration" || node.type === "mod_item") {
       const importNode = createImportNode(fileNodeId, node);
       if (importNode) {
         nodes.push(importNode);
@@ -66,7 +55,7 @@ async function parseJavaScriptLikeFile(
       }
     }
 
-    if (isFunctionNode(node)) {
+    if (node.type === "function_item") {
       const functionNode = createFunctionNode(fileNodeId, node);
       if (functionNode) {
         nodes.push(functionNode);
@@ -90,8 +79,8 @@ async function parseJavaScriptLikeFile(
       }
     }
 
-    if (node.type === "class_declaration") {
-      const classNode = createClassNode(fileNodeId, node);
+    if (node.type === "struct_item") {
+      const classNode = createStructNode(fileNodeId, node);
       if (classNode) {
         nodes.push(classNode);
         relationships.push({
@@ -107,19 +96,10 @@ async function parseJavaScriptLikeFile(
   return { fileNodeId, nodes, relationships };
 }
 
-function isFunctionNode(node: Parser.SyntaxNode): boolean {
-  return [
-    "function_declaration",
-    "method_definition",
-    "generator_function_declaration",
-  ].includes(node.type);
-}
-
 function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
-  const source = node
-    .namedChildren
-    .find((child) => child.type === "string")?.text
-    .replace(/^["']|["']$/g, "");
+  const source = node.type === "mod_item"
+    ? node.namedChildren.find((child) => child.type === "identifier")?.text
+    : node.namedChildren[0]?.text;
 
   if (!source) {
     return null;
@@ -137,7 +117,10 @@ function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
 }
 
 function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
-  const name = extractName(node);
+  const name = node.childForFieldName("name")?.text
+    ?? node.namedChildren.find((child) => child.type === "identifier")?.text
+    ?? null;
+
   if (!name) {
     return null;
   }
@@ -154,8 +137,11 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphN
   };
 }
 
-function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
-  const name = extractName(node);
+function createStructNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
+  const name = node.childForFieldName("name")?.text
+    ?? node.namedChildren.find((child) => child.type === "type_identifier")?.text
+    ?? null;
+
   if (!name) {
     return null;
   }
@@ -175,11 +161,14 @@ function createCallNodes(functionNodeId: string, node: Parser.SyntaxNode): Graph
   const calls: GraphNode[] = [];
 
   walkScoped(node, (child) => {
-    if (child.type !== "call_expression") {
+    if (child.type !== "call_expression" && child.type !== "macro_invocation") {
       return;
     }
 
-    const callExpression = analyzeMemberCallExpression(child.childForFieldName("function")?.text);
+    const expression = child.type === "macro_invocation"
+      ? child.namedChildren.find((candidate) => candidate.type === "identifier")?.text
+      : child.childForFieldName("function")?.text;
+    const callExpression = analyzeMemberCallExpression(expression);
     if (!callExpression) {
       return;
     }
@@ -196,11 +185,7 @@ function createCallNodes(functionNodeId: string, node: Parser.SyntaxNode): Graph
         columnNumber: child.startPosition.column,
       },
     });
-  }, (child) => isFunctionNode(child) || child.type === "class_declaration");
+  }, (child) => child.type === "function_item");
 
   return calls;
-}
-
-function extractName(node: Parser.SyntaxNode): string | null {
-  return node.childForFieldName("name")?.text ?? null;
 }

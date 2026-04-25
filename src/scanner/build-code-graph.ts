@@ -74,7 +74,7 @@ export async function buildCodeGraph(
     }
   }
 
-  const resolvedImports = addImportResolutionRelationships(graph);
+  const resolvedImports = await addImportResolutionRelationships(graph, rootPath);
   report.resolvedImports = resolvedImports.resolved;
   report.unresolvedRelativeImports = resolvedImports.unresolved;
 
