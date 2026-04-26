@@ -107,7 +107,7 @@ the tool produces a faithful structural model of real-world codebases.
 
 ### 4b — Graph model accuracy
 
-17. [ ] Attribute class methods to their class, not their file.
+17. [x] Attribute class methods to their class, not their file.
    - Add `DEFINES_METHOD` relationship: `Class → Function`.
    - Remove the `File → DEFINES_FUNCTION` edge for methods that belong to a class.
    - Apply to all languages: JS/TS `method_definition`, Python class body
@@ -115,7 +115,7 @@ the tool produces a faithful structural model of real-world codebases.
    - Add `className` property to Function nodes for quick lookup.
    - Update fixture tests to assert the new relationship.
 
-18. [ ] Add function and class metadata properties.
+18. [x] Add function and class metadata properties.
    - `isExported: boolean` on Function and Class nodes (JS/TS `export` keyword,
      Python leading `_` convention, Go uppercase name, Rust `pub`).
    - `isAsync: boolean` on Function nodes (JS/TS `async`, Python `async def`,
@@ -125,7 +125,7 @@ the tool produces a faithful structural model of real-world codebases.
 
 ### 4c — Test coverage
 
-19. [ ] Add per-parser unit test files.
+19. [x] Add per-parser unit test files.
    - One test file per language: `javascript.test.ts`, `typescript.test.ts`,
      `python.test.ts`, `go.test.ts`, `rust.test.ts`.
    - Each test asserts extracted node counts, node properties (`name`, `kind`,
