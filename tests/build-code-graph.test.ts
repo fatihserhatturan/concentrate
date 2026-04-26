@@ -422,6 +422,50 @@ describe("buildCodeGraph", () => {
     assert.equal(graph.nodes.find((n) => n.properties.name === "fetchUser")?.properties.isExported, true);
   });
 
+  it("resolves call expressions to their target function nodes", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "call-resolution"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.parsedFiles, 2);
+
+    // same-file: run() calls helper() — both in main.ts
+    const helperNode = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "helper")!;
+    const runCallNodes = graph.relationships
+      .filter((r) => r.type === "CALLS")
+      .filter((r) => {
+        const fn = graph.nodes.find((n) => n.id === r.from);
+        return fn?.properties.name === "run";
+      })
+      .map((r) => r.to);
+
+    const helperCallId = runCallNodes.find((callId) => {
+      const call = graph.nodes.find((n) => n.id === callId);
+      return call?.properties.callee === "helper";
+    });
+    assert.ok(helperCallId, "Expected a Call node for helper()");
+    assertRelationship(graph.relationships, helperCallId, "CALL_RESOLVES_TO", helperNode.id);
+
+    // cross-file via namespace import: run() calls MathUtils.multiply(2,3) → multiply in utils.ts
+    const multiplyNode = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "multiply")!;
+    const multiplyCallId = runCallNodes.find((callId) => {
+      const call = graph.nodes.find((n) => n.id === callId);
+      return call?.properties.callee === "multiply";
+    });
+    assert.ok(multiplyCallId, "Expected a Call node for multiply()");
+    assertRelationship(graph.relationships, multiplyCallId, "CALL_RESOLVES_TO", multiplyNode.id);
+
+    // cross-file via named import (no receiver): run() calls add(1,2) → add in utils.ts
+    const addNode = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "add")!;
+    const addCallId = runCallNodes.find((callId) => {
+      const call = graph.nodes.find((n) => n.id === callId);
+      return call?.properties.callee === "add" && !call.properties.receiver;
+    });
+    assert.ok(addCallId, "Expected a Call node for add()");
+    assertRelationship(graph.relationships, addCallId, "CALL_RESOLVES_TO", addNode.id);
+  });
+
   it("extracts arrow functions and function expressions in TypeScript", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "arrow-functions"), {
       continueOnError: false,

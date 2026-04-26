@@ -161,7 +161,7 @@ by closing the most critical structural and semantic gaps.
 
 ### 5a — Call resolution
 
-23. [ ] Resolve call expressions to their target Function nodes.
+23. [x] Resolve call expressions to their target Function nodes.
    - Add `RESOLVES_TO` relationship: `Call → Function`.
    - For same-file calls: match by function name within the same file.
    - For cross-file calls: use import graph to locate the defining file, then match by name.
@@ -233,5 +233,5 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestone 4 is complete. Start Milestone 5 with task 23 (call resolution) —
-it has the largest impact on the practical queryability of the graph.
+Milestones 4 and 5a are complete. Continue Milestone 5 with task 24 (TypeScript
+interfaces, type aliases, and enums) or task 25 (class inheritance and implementation).

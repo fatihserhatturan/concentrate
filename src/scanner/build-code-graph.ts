@@ -6,6 +6,7 @@ import type { GraphNode, GraphRelationship } from "../graph/model.js";
 import { addDirectoryChain } from "./directory-graph.js";
 import { discoverFiles } from "./discover-files.js";
 import { addImportResolutionRelationships } from "./import-resolver.js";
+import { addCallResolutionRelationships } from "./call-resolver.js";
 import { detectLanguage } from "./language.js";
 import {
   createScanFailure,
@@ -109,6 +110,8 @@ export async function buildCodeGraph(
   const resolvedImports = await addImportResolutionRelationships(graph, rootPath);
   report.resolvedImports = resolvedImports.resolved;
   report.unresolvedRelativeImports = resolvedImports.unresolved;
+
+  addCallResolutionRelationships(graph);
 
   return createResult(rootPath, graph, report);
 }

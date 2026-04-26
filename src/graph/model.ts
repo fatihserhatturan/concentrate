@@ -16,7 +16,8 @@ export type GraphRelationshipType =
   | "DEFINES_FUNCTION"
   | "DEFINES_CLASS"
   | "DEFINES_METHOD"
-  | "CALLS";
+  | "CALLS"
+  | "CALL_RESOLVES_TO";
 
 export type GraphProperties = Record<string, string | number | boolean | null>;
 

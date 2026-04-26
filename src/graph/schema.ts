@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 
 export const schemaVersionTableStatement =
   "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
@@ -20,6 +20,7 @@ export const schemaStatements = [
   "CREATE REL TABLE IF NOT EXISTS DEFINES_CLASS(FROM File TO Class)",
   "CREATE REL TABLE IF NOT EXISTS DEFINES_METHOD(FROM Class TO Function)",
   "CREATE REL TABLE IF NOT EXISTS CALLS(FROM Function TO Call)",
+  "CREATE REL TABLE IF NOT EXISTS CALL_RESOLVES_TO(FROM Call TO Function)",
 ];
 
 export const nodeLabels = ["Repo", "Directory", "File", "Import", "Function", "Class", "Call"] as const;
@@ -33,4 +34,5 @@ export const relationshipTypes = [
   "DEFINES_CLASS",
   "DEFINES_METHOD",
   "CALLS",
+  "CALL_RESOLVES_TO",
 ] as const;
