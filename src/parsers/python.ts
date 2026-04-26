@@ -13,6 +13,7 @@ import {
 } from "./tree-sitter-utils.js";
 
 const parser = new Parser();
+parser.setLanguage(Python);
 
 export const pythonParser: LanguageParser = {
   language: "python",
@@ -40,7 +41,6 @@ async function parsePythonFile(
   ];
   const relationships: GraphRelationship[] = [];
 
-  parser.setLanguage(Python);
   const tree = parser.parse(createTreeSitterInput(source));
   if (tree.rootNode.hasError) {
     throw new Error("Syntax error");
@@ -60,7 +60,7 @@ async function parsePythonFile(
       }
     }
 
-    if (node.type === "function_definition") {
+    if (node.type === "function_definition" && !isPythonClassMethod(node)) {
       const functionNode = createFunctionNode(fileNodeId, node);
       if (functionNode) {
         nodes.push(functionNode);
@@ -94,6 +94,34 @@ async function parsePythonFile(
           type: "DEFINES_CLASS",
           properties: {},
         });
+
+        const className = String(classNode.properties.name);
+        const body = node.namedChildren.find((c) => c.type === "block");
+        if (body) {
+          for (const child of body.namedChildren) {
+            if (child.type !== "function_definition") continue;
+            const methodNode = createFunctionNode(fileNodeId, child, className);
+            if (methodNode) {
+              nodes.push(methodNode);
+              relationships.push({
+                from: classNode.id,
+                to: methodNode.id,
+                type: "DEFINES_METHOD",
+                properties: {},
+              });
+              const callNodes = createCallNodes(methodNode.id, child);
+              nodes.push(...callNodes);
+              relationships.push(
+                ...callNodes.map((callNode) => ({
+                  from: methodNode.id,
+                  to: callNode.id,
+                  type: "CALLS" as const,
+                  properties: {},
+                })),
+              );
+            }
+          }
+        }
       }
     }
   });
@@ -180,7 +208,11 @@ function normalizePythonRelativeImport(source: string, importedName: string | nu
   return importedPath ? `${parentPrefix}/${importedPath}` : parentPrefix;
 }
 
-function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
+function isPythonClassMethod(node: Parser.SyntaxNode): boolean {
+  return node.parent?.type === "block" && node.parent?.parent?.type === "class_definition";
+}
+
+function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, className?: string): GraphNode | null {
   const name = extractName(node);
   if (!name) {
     return null;
@@ -194,6 +226,7 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphN
       kind: node.type,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
+      className: className ?? null,
     },
   };
 }

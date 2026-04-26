@@ -12,6 +12,7 @@ import {
 } from "./tree-sitter-utils.js";
 
 const parser = new Parser();
+parser.setLanguage(Rust);
 
 export const rustParser: LanguageParser = {
   language: "rust",
@@ -35,7 +36,6 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
   ];
   const relationships: GraphRelationship[] = [];
 
-  parser.setLanguage(Rust);
   const tree = parser.parse(createTreeSitterInput(source));
   if (tree.rootNode.hasError) {
     throw new Error("Syntax error");
@@ -55,30 +55,6 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
       }
     }
 
-    if (node.type === "function_item") {
-      const functionNode = createFunctionNode(fileNodeId, node);
-      if (functionNode) {
-        nodes.push(functionNode);
-        relationships.push({
-          from: fileNodeId,
-          to: functionNode.id,
-          type: "DEFINES_FUNCTION",
-          properties: {},
-        });
-
-        const callNodes = createCallNodes(functionNode.id, node);
-        nodes.push(...callNodes);
-        relationships.push(
-          ...callNodes.map((callNode) => ({
-            from: functionNode.id,
-            to: callNode.id,
-            type: "CALLS" as const,
-            properties: {},
-          })),
-        );
-      }
-    }
-
     if (node.type === "struct_item") {
       const classNode = createStructNode(fileNodeId, node);
       if (classNode) {
@@ -93,7 +69,50 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
     }
   });
 
+  // Second pass: process functions now that all structs are indexed.
+  const classesByName = new Map(
+    nodes
+      .filter((n) => n.label === "Class")
+      .map((n) => [String(n.properties.name), n.id]),
+  );
+
+  walk(tree.rootNode, (node) => {
+    if (node.type !== "function_item") return;
+
+    const implTypeName = extractImplTypeName(node);
+    const classNodeId = implTypeName ? classesByName.get(implTypeName) : undefined;
+    const className = implTypeName ?? undefined;
+
+    const functionNode = createFunctionNode(fileNodeId, node, className);
+    if (!functionNode) return;
+
+    nodes.push(functionNode);
+
+    if (classNodeId) {
+      relationships.push({ from: classNodeId, to: functionNode.id, type: "DEFINES_METHOD", properties: {} });
+    } else {
+      relationships.push({ from: fileNodeId, to: functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
+    }
+
+    const callNodes = createCallNodes(functionNode.id, node);
+    nodes.push(...callNodes);
+    relationships.push(
+      ...callNodes.map((callNode) => ({
+        from: functionNode.id,
+        to: callNode.id,
+        type: "CALLS" as const,
+        properties: {},
+      })),
+    );
+  });
+
   return { fileNodeId, nodes, relationships };
+}
+
+function extractImplTypeName(node: Parser.SyntaxNode): string | null {
+  if (node.parent?.type !== "declaration_list") return null;
+  if (node.parent?.parent?.type !== "impl_item") return null;
+  return node.parent.parent.childForFieldName("type")?.text ?? null;
 }
 
 function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
@@ -116,7 +135,7 @@ function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
   };
 }
 
-function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
+function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, className?: string): GraphNode | null {
   const name = node.childForFieldName("name")?.text
     ?? node.namedChildren.find((child) => child.type === "identifier")?.text
     ?? null;
@@ -133,6 +152,7 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphN
       kind: node.type,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
+      className: className ?? null,
     },
   };
 }

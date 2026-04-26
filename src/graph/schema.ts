@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export const schemaVersionTableStatement =
   "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
@@ -8,7 +8,7 @@ export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS Directory(id STRING PRIMARY KEY, path STRING, relativePath STRING, name STRING)",
   "CREATE NODE TABLE IF NOT EXISTS File(id STRING PRIMARY KEY, path STRING, relativePath STRING, language STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64)",
-  "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, line INT64, endLine INT64)",
+  "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, line INT64, endLine INT64, className STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64)",
   "CREATE NODE TABLE IF NOT EXISTS Call(id STRING PRIMARY KEY, name STRING, expression STRING, callee STRING, receiver STRING, line INT64, columnNumber INT64)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_ROOT(FROM Repo TO Directory)",
@@ -18,6 +18,7 @@ export const schemaStatements = [
   "CREATE REL TABLE IF NOT EXISTS RESOLVES_TO(FROM Import TO File)",
   "CREATE REL TABLE IF NOT EXISTS DEFINES_FUNCTION(FROM File TO Function)",
   "CREATE REL TABLE IF NOT EXISTS DEFINES_CLASS(FROM File TO Class)",
+  "CREATE REL TABLE IF NOT EXISTS DEFINES_METHOD(FROM Class TO Function)",
   "CREATE REL TABLE IF NOT EXISTS CALLS(FROM Function TO Call)",
 ];
 
@@ -30,5 +31,6 @@ export const relationshipTypes = [
   "RESOLVES_TO",
   "DEFINES_FUNCTION",
   "DEFINES_CLASS",
+  "DEFINES_METHOD",
   "CALLS",
 ] as const;

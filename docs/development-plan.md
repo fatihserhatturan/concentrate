@@ -92,7 +92,7 @@ the tool produces a faithful structural model of real-world codebases.
 
 ### 4a — JS/TS parser completeness
 
-15. [ ] Extract arrow functions and function expressions in JS/TS.
+15. [x] Extract arrow functions and function expressions in JS/TS.
    - Extract `const foo = () => {}` (arrow_function assigned to variable).
    - Extract `const foo = async () => {}`.
    - Extract `export const foo = () => {}` (exported arrow).
@@ -100,7 +100,7 @@ the tool produces a faithful structural model of real-world codebases.
    - Use the variable name as the function name when available.
    - Add fixture tests for each form.
 
-16. [ ] Add per-language dedicated parser instances.
+16. [x] Add per-language dedicated parser instances.
    - Create one `new Parser()` per language, language pre-set at module init.
    - Remove all `setLanguage()` calls from the parse hot path.
    - Prevents fragility if an `await` is ever introduced between language switch and parse.

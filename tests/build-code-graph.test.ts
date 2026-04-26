@@ -104,6 +104,25 @@ describe("buildCodeGraph", () => {
       "file:utils.py",
     );
 
+    assertRelationship(
+      graph.relationships,
+      "file:main.py:class:8:Service",
+      "DEFINES_METHOD",
+      "file:main.py:function:9:run",
+    );
+
+    assertRelationship(
+      graph.relationships,
+      "file:main.py",
+      "DEFINES_FUNCTION",
+      "file:main.py:function:4:main",
+    );
+
+    assert.equal(
+      graph.nodes.find((n) => n.properties.name === "run")?.properties.className,
+      "Service",
+    );
+
     const serviceRunCalls = callsForFunction(graph.nodes, graph.relationships, "run");
     assert.deepEqual(serviceRunCalls, ["self.helper"]);
   });
@@ -197,8 +216,26 @@ describe("buildCodeGraph", () => {
       "file:service.go:class:8:Service",
     );
 
+    assertRelationship(
+      graph.relationships,
+      "file:service.go:class:8:Service",
+      "DEFINES_METHOD",
+      "file:service.go:function:16:Run",
+    );
+
+    assertRelationship(
+      graph.relationships,
+      "file:service.go",
+      "DEFINES_FUNCTION",
+      "file:service.go:function:12:NewService",
+    );
+
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "NewService"), ["strings.TrimSpace"]);
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "Run"), ["fmt.Println"]);
+    assert.equal(
+      graph.nodes.find((n) => n.properties.name === "Run")?.properties.className,
+      "Service",
+    );
   });
 
   it("extracts Rust files, imports, structs, functions, impl methods, and calls", async () => {
@@ -226,9 +263,105 @@ describe("buildCodeGraph", () => {
       "file:lib.rs:class:4:Service",
     );
 
+    assertRelationship(
+      graph.relationships,
+      "file:lib.rs:class:4:Service",
+      "DEFINES_METHOD",
+      "file:lib.rs:function:9:new",
+    );
+
+    assertRelationship(
+      graph.relationships,
+      "file:lib.rs:class:4:Service",
+      "DEFINES_METHOD",
+      "file:lib.rs:function:13:run",
+    );
+
+    assertRelationship(
+      graph.relationships,
+      "file:lib.rs",
+      "DEFINES_FUNCTION",
+      "file:lib.rs:function:23:make",
+    );
+
+    assert.equal(
+      graph.nodes.find((n) => n.properties.name === "new")?.properties.className,
+      "Service",
+    );
+
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "new"), ["format"]);
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "run"), ["println", "self.helper"]);
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "make"), ["Service::new", "String::new"]);
+  });
+
+  it("attributes TypeScript class methods to their class via DEFINES_METHOD", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "ts-class"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    assertNodeCount(graph.nodes, "Class", 1);
+    assertRelationship(
+      graph.relationships,
+      "file:service.ts",
+      "DEFINES_CLASS",
+      "file:service.ts:class:1:UserService",
+    );
+
+    assertRelationship(
+      graph.relationships,
+      "file:service.ts:class:1:UserService",
+      "DEFINES_METHOD",
+      "file:service.ts:function:2:greet",
+    );
+
+    assertRelationship(
+      graph.relationships,
+      "file:service.ts:class:1:UserService",
+      "DEFINES_METHOD",
+      "file:service.ts:function:6:format",
+    );
+
+    assertRelationship(
+      graph.relationships,
+      "file:service.ts",
+      "DEFINES_FUNCTION",
+      "file:service.ts:function:11:standalone",
+    );
+
+    assert.equal(
+      graph.nodes.find((n) => n.properties.name === "greet")?.properties.className,
+      "UserService",
+    );
+  });
+
+  it("extracts arrow functions and function expressions in TypeScript", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "arrow-functions"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const functionNodes = graph.nodes.filter((n) => n.label === "Function");
+    const functionNames = functionNodes.map((n) => String(n.properties.name)).sort();
+    assert.deepEqual(functionNames, ["fetchData", "greet", "inner", "multiply", "outer"]);
+
+    const greet = functionNodes.find((n) => n.properties.name === "greet")!;
+    assert.equal(greet.properties.kind, "arrow_function");
+
+    const fetchData = functionNodes.find((n) => n.properties.name === "fetchData")!;
+    assert.equal(fetchData.properties.kind, "arrow_function");
+
+    const multiply = functionNodes.find((n) => n.properties.name === "multiply")!;
+    assert.equal(multiply.properties.kind, "function_expression");
+
+    const outer = functionNodes.find((n) => n.properties.name === "outer")!;
+    assert.equal(outer.properties.kind, "function_declaration");
+
+    // calls inside inner (arrow) must not leak into outer
+    assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "outer"), ["inner"]);
+    assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "inner"), ["String"]);
   });
 });
 

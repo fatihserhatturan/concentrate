@@ -12,6 +12,7 @@ import {
 } from "./tree-sitter-utils.js";
 
 const parser = new Parser();
+parser.setLanguage(Go);
 
 export const goParser: LanguageParser = {
   language: "go",
@@ -35,7 +36,6 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
   ];
   const relationships: GraphRelationship[] = [];
 
-  parser.setLanguage(Go);
   const tree = parser.parse(createTreeSitterInput(source));
   if (tree.rootNode.hasError) {
     throw new Error("Syntax error");
@@ -55,30 +55,6 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
       }
     }
 
-    if (node.type === "function_declaration" || node.type === "method_declaration") {
-      const functionNode = createFunctionNode(fileNodeId, node);
-      if (functionNode) {
-        nodes.push(functionNode);
-        relationships.push({
-          from: fileNodeId,
-          to: functionNode.id,
-          type: "DEFINES_FUNCTION",
-          properties: {},
-        });
-
-        const callNodes = createCallNodes(functionNode.id, node);
-        nodes.push(...callNodes);
-        relationships.push(
-          ...callNodes.map((callNode) => ({
-            from: functionNode.id,
-            to: callNode.id,
-            type: "CALLS" as const,
-            properties: {},
-          })),
-        );
-      }
-    }
-
     if (node.type === "type_spec" && node.namedChildren.some((child) => child.type === "struct_type")) {
       const classNode = createStructNode(fileNodeId, node);
       if (classNode) {
@@ -91,6 +67,45 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
         });
       }
     }
+  });
+
+  // Second pass: process functions and methods now that all structs are indexed.
+  const classesByName = new Map(
+    nodes
+      .filter((n) => n.label === "Class")
+      .map((n) => [String(n.properties.name), n.id]),
+  );
+
+  walk(tree.rootNode, (node) => {
+    if (node.type !== "function_declaration" && node.type !== "method_declaration") return;
+
+    const receiverTypeName = node.type === "method_declaration"
+      ? extractGoReceiverTypeName(node)
+      : null;
+    const classNodeId = receiverTypeName ? classesByName.get(receiverTypeName) : undefined;
+    const className = receiverTypeName ?? undefined;
+
+    const functionNode = createFunctionNode(fileNodeId, node, className);
+    if (!functionNode) return;
+
+    nodes.push(functionNode);
+
+    if (classNodeId) {
+      relationships.push({ from: classNodeId, to: functionNode.id, type: "DEFINES_METHOD", properties: {} });
+    } else {
+      relationships.push({ from: fileNodeId, to: functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
+    }
+
+    const callNodes = createCallNodes(functionNode.id, node);
+    nodes.push(...callNodes);
+    relationships.push(
+      ...callNodes.map((callNode) => ({
+        from: functionNode.id,
+        to: callNode.id,
+        type: "CALLS" as const,
+        properties: {},
+      })),
+    );
   });
 
   return { fileNodeId, nodes, relationships };
@@ -118,7 +133,7 @@ function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
   };
 }
 
-function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
+function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, className?: string): GraphNode | null {
   const name = extractFunctionName(node);
   if (!name) {
     return null;
@@ -132,8 +147,26 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphN
       kind: node.type,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
+      className: className ?? null,
     },
   };
+}
+
+function extractGoReceiverTypeName(node: Parser.SyntaxNode): string | null {
+  const receiver = node.childForFieldName("receiver");
+  if (!receiver) return null;
+
+  for (const param of receiver.namedChildren) {
+    if (param.type !== "parameter_declaration") continue;
+    for (const typeChild of param.namedChildren) {
+      if (typeChild.type === "type_identifier") return typeChild.text;
+      if (typeChild.type === "pointer_type") {
+        const ti = typeChild.namedChildren.find((c) => c.type === "type_identifier");
+        if (ti) return ti.text;
+      }
+    }
+  }
+  return null;
 }
 
 function createStructNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {

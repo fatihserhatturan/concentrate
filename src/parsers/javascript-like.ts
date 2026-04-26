@@ -13,7 +13,11 @@ import {
   walkScoped,
 } from "./tree-sitter-utils.js";
 
-const parser = new Parser();
+const jsParser = new Parser();
+jsParser.setLanguage(JavaScript);
+
+const tsParser = new Parser();
+tsParser.setLanguage(TypeScript.typescript);
 
 export const javascriptParser: LanguageParser = {
   language: "javascript",
@@ -46,8 +50,7 @@ async function parseJavaScriptLikeFile(
   ];
   const relationships: GraphRelationship[] = [];
 
-  parser.setLanguage(language === "typescript" ? TypeScript.typescript : JavaScript);
-  const tree = parser.parse(createTreeSitterInput(source));
+  const tree = (language === "typescript" ? tsParser : jsParser).parse(createTreeSitterInput(source));
   if (tree.rootNode.hasError) {
     throw new Error("Syntax error");
   }
@@ -66,7 +69,7 @@ async function parseJavaScriptLikeFile(
       }
     }
 
-    if (isFunctionNode(node)) {
+    if (isFunctionNode(node) && node.type !== "method_definition") {
       const functionNode = createFunctionNode(fileNodeId, node);
       if (functionNode) {
         nodes.push(functionNode);
@@ -90,6 +93,33 @@ async function parseJavaScriptLikeFile(
       }
     }
 
+    if (node.type === "variable_declarator") {
+      const valueChild = node.childForFieldName("value");
+      if (isVariableFunctionValue(valueChild)) {
+        const functionNode = createVariableFunctionNode(fileNodeId, node, valueChild!);
+        if (functionNode) {
+          nodes.push(functionNode);
+          relationships.push({
+            from: fileNodeId,
+            to: functionNode.id,
+            type: "DEFINES_FUNCTION",
+            properties: {},
+          });
+
+          const callNodes = createCallNodes(functionNode.id, valueChild!);
+          nodes.push(...callNodes);
+          relationships.push(
+            ...callNodes.map((callNode) => ({
+              from: functionNode.id,
+              to: callNode.id,
+              type: "CALLS" as const,
+              properties: {},
+            })),
+          );
+        }
+      }
+    }
+
     if (node.type === "class_declaration") {
       const classNode = createClassNode(fileNodeId, node);
       if (classNode) {
@@ -100,6 +130,34 @@ async function parseJavaScriptLikeFile(
           type: "DEFINES_CLASS",
           properties: {},
         });
+
+        const className = String(classNode.properties.name);
+        const classBody = node.childForFieldName("body");
+        if (classBody) {
+          for (const child of classBody.namedChildren) {
+            if (child.type !== "method_definition") continue;
+            const methodNode = createFunctionNode(fileNodeId, child, className);
+            if (methodNode) {
+              nodes.push(methodNode);
+              relationships.push({
+                from: classNode.id,
+                to: methodNode.id,
+                type: "DEFINES_METHOD",
+                properties: {},
+              });
+              const callNodes = createCallNodes(methodNode.id, child);
+              nodes.push(...callNodes);
+              relationships.push(
+                ...callNodes.map((callNode) => ({
+                  from: methodNode.id,
+                  to: callNode.id,
+                  type: "CALLS" as const,
+                  properties: {},
+                })),
+              );
+            }
+          }
+        }
       }
     }
   });
@@ -112,7 +170,35 @@ function isFunctionNode(node: Parser.SyntaxNode): boolean {
     "function_declaration",
     "method_definition",
     "generator_function_declaration",
+    "arrow_function",
+    "function_expression",
   ].includes(node.type);
+}
+
+function isVariableFunctionValue(node: Parser.SyntaxNode | null | undefined): boolean {
+  return node?.type === "arrow_function" || node?.type === "function_expression";
+}
+
+function createVariableFunctionNode(
+  fileNodeId: string,
+  declarator: Parser.SyntaxNode,
+  valueNode: Parser.SyntaxNode,
+): GraphNode | null {
+  const nameNode = declarator.childForFieldName("name");
+  if (!nameNode || nameNode.type !== "identifier") {
+    return null;
+  }
+
+  return {
+    id: `${fileNodeId}:function:${declarator.startPosition.row + 1}:${nameNode.text}`,
+    label: "Function",
+    properties: {
+      name: nameNode.text,
+      kind: valueNode.type,
+      line: declarator.startPosition.row + 1,
+      endLine: valueNode.endPosition.row + 1,
+    },
+  };
 }
 
 function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
@@ -136,7 +222,7 @@ function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
   };
 }
 
-function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
+function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, className?: string): GraphNode | null {
   const name = extractName(node);
   if (!name) {
     return null;
@@ -150,6 +236,7 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphN
       kind: node.type,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
+      className: className ?? null,
     },
   };
 }
