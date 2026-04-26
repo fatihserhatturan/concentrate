@@ -1,0 +1,12 @@
+{
+  "name": "@sample/pkg",
+  "types": "./source/index.ts",
+  "main": "./source/index.js",
+  "exports": {
+    "./feature": {
+      "types": "./source/feature.ts",
+      "import": "./source/feature.js"
+    },
+    "./utils/*": "./source/utils/*.js"
+  }
+}

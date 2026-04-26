@@ -197,7 +197,7 @@ by closing the most critical structural and semantic gaps.
 
 ### 5e — Package boundary resolution
 
-27. [ ] Resolve `package.json` exports, main, and types fields.
+27. [x] Resolve `package.json` exports, main, and types fields.
    - Read `package.json` `exports`, `main`, and `types` to resolve package-style imports.
    - Fills the gap left by task 10 for Node.js package boundaries.
    - Add fixture and tests.

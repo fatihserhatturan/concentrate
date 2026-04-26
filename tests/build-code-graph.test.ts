@@ -547,6 +547,35 @@ describe("buildCodeGraph", () => {
     assertRelationship(graph.relationships, wildcardReExport.id, "RESOLVES_TO", "file:errors.ts");
     assertRelationship(graph.relationships, "file:index.ts", "RE_EXPORTS", wildcardReExport.id);
   });
+
+  it("resolves package.json exports, main, and types fields for JS/TS package imports", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "package-boundary"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.resolvedImports, 3);
+    assert.equal(graph.report.unresolvedRelativeImports, 0);
+
+    assertRelationship(
+      graph.relationships,
+      "file:app.ts:import:1:@sample/pkg",
+      "RESOLVES_TO",
+      "file:source/index.ts",
+    );
+    assertRelationship(
+      graph.relationships,
+      "file:app.ts:import:2:@sample/pkg/feature",
+      "RESOLVES_TO",
+      "file:source/feature.ts",
+    );
+    assertRelationship(
+      graph.relationships,
+      "file:app.ts:import:3:@sample/pkg/utils/math",
+      "RESOLVES_TO",
+      "file:source/utils/math.ts",
+    );
+  });
 });
 
 async function createScanErrorFixture(): Promise<string> {

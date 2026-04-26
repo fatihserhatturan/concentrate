@@ -10,11 +10,19 @@ const absoluteModuleLanguages = new Set(["python"]);
 type JsTsResolutionConfig = {
   baseUrl: string | null;
   paths: JsTsPathMapping[];
+  packageJson: JsTsPackageJsonResolutionConfig | null;
 };
 
 type JsTsPathMapping = {
   pattern: string;
   targets: string[];
+};
+
+type JsTsPackageJsonResolutionConfig = {
+  name: string | null;
+  main: string | null;
+  types: string | null;
+  exports: unknown;
 };
 
 type GoResolutionConfig = {
@@ -340,7 +348,129 @@ function createJsTsConfiguredImportBasePaths(
     candidates.push(path.posix.join(config.baseUrl, source));
   }
 
+  candidates.push(...createJsTsPackageImportBasePaths(source, config.packageJson));
+
   return candidates.map((candidate) => path.posix.normalize(candidate));
+}
+
+function createJsTsPackageImportBasePaths(
+  source: string,
+  packageJson: JsTsPackageJsonResolutionConfig | null,
+): string[] {
+  if (!packageJson?.name) {
+    return [];
+  }
+
+  if (source === packageJson.name) {
+    return [
+      ...extractPackageExportTargets(packageJson.exports, "."),
+      ...compact([packageJson.types, packageJson.main, "./index"]),
+    ].map(normalizePackageTarget);
+  }
+
+  const packagePrefix = `${packageJson.name}/`;
+  if (!source.startsWith(packagePrefix)) {
+    return [];
+  }
+
+  const subpath = `./${source.slice(packagePrefix.length)}`;
+  return [
+    ...extractPackageExportTargets(packageJson.exports, subpath),
+    subpath,
+  ].map(normalizePackageTarget);
+}
+
+function extractPackageExportTargets(exportsValue: unknown, subpath: string): string[] {
+  if (!exportsValue) {
+    return [];
+  }
+
+  if (typeof exportsValue === "string" || Array.isArray(exportsValue)) {
+    return subpath === "." ? extractConditionalPackageTargets(exportsValue) : [];
+  }
+
+  if (!isRecord(exportsValue)) {
+    return [];
+  }
+
+  const keys = Object.keys(exportsValue);
+  const hasSubpathKeys = keys.some((key) => key === "." || key.startsWith("./"));
+  if (!hasSubpathKeys) {
+    return subpath === "." ? extractConditionalPackageTargets(exportsValue) : [];
+  }
+
+  const exact = exportsValue[subpath];
+  if (exact) {
+    return extractConditionalPackageTargets(exact);
+  }
+
+  const wildcardTargets: string[] = [];
+  for (const [pattern, target] of Object.entries(exportsValue)) {
+    const matched = matchPackageExportPattern(subpath, pattern);
+    if (matched === null) {
+      continue;
+    }
+
+    for (const targetPattern of extractConditionalPackageTargets(target)) {
+      wildcardTargets.push(targetPattern.replaceAll("*", matched));
+    }
+  }
+
+  return wildcardTargets;
+}
+
+function extractConditionalPackageTargets(value: unknown): string[] {
+  if (typeof value === "string") {
+    return [value];
+  }
+
+  if (Array.isArray(value)) {
+    return value.flatMap(extractConditionalPackageTargets);
+  }
+
+  if (!isRecord(value)) {
+    return [];
+  }
+
+  const preferredConditions = ["types", "import", "module", "default", "require", "node"];
+  const targets: string[] = [];
+  for (const condition of preferredConditions) {
+    if (condition in value) {
+      targets.push(...extractConditionalPackageTargets(value[condition]));
+    }
+  }
+
+  if (targets.length > 0) {
+    return targets;
+  }
+
+  return Object.values(value).flatMap(extractConditionalPackageTargets);
+}
+
+function matchPackageExportPattern(subpath: string, pattern: string): string | null {
+  if (!pattern.includes("*")) {
+    return null;
+  }
+
+  const [prefix, suffix] = pattern.split("*", 2);
+  if (!subpath.startsWith(prefix) || !subpath.endsWith(suffix)) {
+    return null;
+  }
+
+  return subpath.slice(prefix.length, subpath.length - suffix.length);
+}
+
+function normalizePackageTarget(target: string): string {
+  const normalized = toPosixPath(target);
+  return normalized.startsWith("./") ? normalized.slice(2) : normalized;
+}
+
+function compact(values: Array<string | null>): string[] {
+  return values.filter((value): value is string => typeof value === "string" && value.length > 0);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === "object" && !Array.isArray(value);
 }
 
 function matchPathMapping(source: string, mapping: JsTsPathMapping): string | null {
@@ -400,6 +530,7 @@ async function readJsTsResolutionConfig(rootPath: string): Promise<JsTsResolutio
   const emptyConfig: JsTsResolutionConfig = {
     baseUrl: null,
     paths: [],
+    packageJson: null,
   };
 
   let rawConfig: string;
@@ -408,7 +539,10 @@ async function readJsTsResolutionConfig(rootPath: string): Promise<JsTsResolutio
   } catch (error) {
     const code = (error as NodeJS.ErrnoException).code;
     if (code === "ENOENT") {
-      return emptyConfig;
+      return {
+        ...emptyConfig,
+        packageJson: await readJsTsPackageJsonResolutionConfig(rootPath),
+      };
     }
 
     throw error;
@@ -426,7 +560,11 @@ async function readJsTsResolutionConfig(rootPath: string): Promise<JsTsResolutio
     : null;
   const paths = parseTsconfigPaths(compilerOptions.paths, baseUrl);
 
-  return { baseUrl, paths };
+  return {
+    baseUrl,
+    paths,
+    packageJson: await readJsTsPackageJsonResolutionConfig(rootPath),
+  };
 }
 
 function parseTsconfigPaths(paths: unknown, baseUrl: string | null): JsTsPathMapping[] {
@@ -454,6 +592,43 @@ function stripJsonCommentsAndTrailingCommas(value: string): string {
     .replace(/\/\*[\s\S]*?\*\//g, "")
     .replace(/(^|[^:])\/\/.*$/gm, "$1")
     .replace(/,\s*([}\]])/g, "$1");
+}
+
+async function readJsTsPackageJsonResolutionConfig(
+  rootPath: string,
+): Promise<JsTsPackageJsonResolutionConfig | null> {
+  let rawPackageJson: string;
+  try {
+    rawPackageJson = await readFile(path.join(rootPath, "package.json"), "utf8");
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === "ENOENT") {
+      return null;
+    }
+
+    throw error;
+  }
+
+  const parsed = JSON.parse(rawPackageJson) as {
+    name?: unknown;
+    main?: unknown;
+    types?: unknown;
+    typings?: unknown;
+    exports?: unknown;
+  };
+
+  const types = typeof parsed.types === "string"
+    ? parsed.types
+    : typeof parsed.typings === "string"
+      ? parsed.typings
+      : null;
+
+  return {
+    name: typeof parsed.name === "string" ? parsed.name : null,
+    main: typeof parsed.main === "string" ? parsed.main : null,
+    types,
+    exports: parsed.exports,
+  };
 }
 
 function toPosixPath(value: string): string {
