@@ -235,6 +235,7 @@ function createVariableFunctionNode(
       className: null,
       isExported: declarator.parent?.parent?.type === "export_statement",
       isAsync: valueNode.children.some((c) => c.type === "async"),
+      visibility: "public",
     },
   };
 }
@@ -306,6 +307,7 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       className: className ?? null,
       isExported: node.parent?.type === "export_statement",
       isAsync: node.children.some((c) => c.type === "async"),
+      visibility: extractTypeScriptVisibility(node),
     },
   };
 }
@@ -324,10 +326,16 @@ function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       isExported: node.parent?.type === "export_statement",
+      visibility: extractTypeScriptVisibility(node),
       extendsNames: serializeNameList(extractTypeScriptExtendsNames(node)),
       implementsNames: serializeNameList(extractTypeScriptImplementsNames(node)),
     },
   };
+}
+
+function extractTypeScriptVisibility(node: Parser.SyntaxNode): string {
+  const modifier = node.children.find((child) => child.type === "accessibility_modifier")?.text;
+  return modifier === "private" || modifier === "protected" ? modifier : "public";
 }
 
 function extractTypeScriptExtendsNames(node: Parser.SyntaxNode): string[] {

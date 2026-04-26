@@ -13,6 +13,10 @@ def _private():
     pass
 
 
+def __dunder():
+    pass
+
+
 class UserService:
     def get_name(self, id):
         return str(id)

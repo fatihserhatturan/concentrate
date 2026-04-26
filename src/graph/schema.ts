@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 7;
+export const SCHEMA_VERSION = 8;
 
 export const schemaVersionTableStatement =
   "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
@@ -8,8 +8,8 @@ export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS Directory(id STRING PRIMARY KEY, path STRING, relativePath STRING, name STRING)",
   "CREATE NODE TABLE IF NOT EXISTS File(id STRING PRIMARY KEY, path STRING, relativePath STRING, language STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64, isReExport BOOLEAN, isWildcard BOOLEAN)",
-  "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, line INT64, endLine INT64, className STRING, isExported BOOLEAN, isAsync BOOLEAN)",
-  "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN, extendsNames STRING, implementsNames STRING)",
+  "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, line INT64, endLine INT64, className STRING, isExported BOOLEAN, isAsync BOOLEAN, visibility STRING)",
+  "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN, visibility STRING, extendsNames STRING, implementsNames STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Interface(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",
   "CREATE NODE TABLE IF NOT EXISTS TypeAlias(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",
   "CREATE NODE TABLE IF NOT EXISTS Enum(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",

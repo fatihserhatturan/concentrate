@@ -204,7 +204,7 @@ by closing the most critical structural and semantic gaps.
 
 ### 5f — Visibility granularity
 
-28. [ ] Add `visibility` property to Function and Class nodes.
+28. [x] Add `visibility` property to Function and Class nodes.
    - TypeScript: `"private"`, `"protected"`, `"public"` (default `"public"`).
    - Rust: `"pub"`, `"pub(crate)"`, `"pub(super)"`, `"private"`.
    - Python: `"private"` (leading `_`), `"dunder"` (leading `__`), `"public"`.

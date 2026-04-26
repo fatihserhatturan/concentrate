@@ -229,6 +229,7 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       className: className ?? null,
       isExported: !name.startsWith("_"),
       isAsync: node.children.some((c) => c.type === "async"),
+      visibility: pythonVisibility(name),
     },
   };
 }
@@ -247,10 +248,18 @@ function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       isExported: !name.startsWith("_"),
+      visibility: pythonVisibility(name),
       extendsNames: serializeNameList(extractPythonBaseClassNames(node)),
       implementsNames: null,
     },
   };
+}
+
+function pythonVisibility(name: string): string {
+  if (name.startsWith("__")) {
+    return "dunder";
+  }
+  return name.startsWith("_") ? "private" : "public";
 }
 
 function extractPythonBaseClassNames(node: Parser.SyntaxNode): string[] {

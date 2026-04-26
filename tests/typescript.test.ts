@@ -21,6 +21,7 @@ describe("TypeScript parser", () => {
     assert.equal(fn.properties.isExported, true);
     assert.equal(fn.properties.isAsync, false);
     assert.equal(fn.properties.kind, "function_declaration");
+    assert.equal(fn.properties.visibility, "public");
   });
 
   it("extracts exported arrow function", async () => {
@@ -95,6 +96,7 @@ describe("TypeScript parser", () => {
     assert.ok(fetchMethod);
     assert.equal(getMethod.properties.className, "UserService");
     assert.equal(fetchMethod.properties.className, "UserService");
+    assert.equal(getMethod.properties.visibility, "public");
     assert.equal(getMethod.properties.isAsync, false);
     assert.equal(fetchMethod.properties.isAsync, true);
     assert.ok(result.relationships.some((r) => r.from === cls.id && r.to === getMethod.id && r.type === "DEFINES_METHOD"));

@@ -4,6 +4,8 @@ pub struct UserService {
 
 struct Internal;
 
+pub(crate) struct CrateVisible;
+
 impl UserService {
     pub fn new(name: String) -> Self {
         UserService { name }
@@ -25,5 +27,7 @@ pub fn create(name: String) -> UserService {
 async fn process(id: String) -> String {
     format!("{}", id)
 }
+
+pub(super) fn parent_visible() {}
 
 fn internal() {}

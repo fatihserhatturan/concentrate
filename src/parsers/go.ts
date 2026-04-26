@@ -150,6 +150,7 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       className: className ?? null,
       isExported: /^[A-Z]/.test(name),
       isAsync: false,
+      visibility: goVisibility(name),
     },
   };
 }
@@ -188,8 +189,13 @@ function createStructNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       isExported: /^[A-Z]/.test(name),
+      visibility: goVisibility(name),
     },
   };
+}
+
+function goVisibility(name: string): string {
+  return /^[A-Z]/.test(name) ? "exported" : "unexported";
 }
 
 function createCallNodes(functionNodeId: string, node: Parser.SyntaxNode): GraphNode[] {

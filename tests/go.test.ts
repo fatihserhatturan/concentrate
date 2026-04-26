@@ -26,6 +26,7 @@ describe("Go parser", () => {
     const cls = result.nodes.find((n) => n.label === "Class" && n.properties.name === "UserService");
     assert.ok(cls);
     assert.equal(cls.properties.isExported, true);
+    assert.equal(cls.properties.visibility, "exported");
   });
 
   it("extracts exported free function", async () => {
@@ -35,6 +36,7 @@ describe("Go parser", () => {
     assert.equal(fn.properties.isExported, true);
     assert.equal(fn.properties.isAsync, false);
     assert.equal(fn.properties.className, null);
+    assert.equal(fn.properties.visibility, "exported");
   });
 
   it("marks lowercase function as not exported", async () => {
@@ -42,6 +44,7 @@ describe("Go parser", () => {
     const fn = result.nodes.find((n) => n.label === "Function" && n.properties.name === "internalHelper");
     assert.ok(fn);
     assert.equal(fn.properties.isExported, false);
+    assert.equal(fn.properties.visibility, "unexported");
   });
 
   it("attributes methods to struct via DEFINES_METHOD", async () => {

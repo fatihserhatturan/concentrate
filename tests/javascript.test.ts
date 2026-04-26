@@ -29,6 +29,7 @@ describe("JavaScript parser", () => {
     assert.equal(fn.properties.isExported, true);
     assert.equal(fn.properties.isAsync, false);
     assert.equal(fn.properties.className, null);
+    assert.equal(fn.properties.visibility, "public");
   });
 
   it("extracts exported arrow function", async () => {
@@ -61,6 +62,7 @@ describe("JavaScript parser", () => {
     const cls = result.nodes.find((n) => n.label === "Class" && n.properties.name === "Calculator");
     assert.ok(cls);
     assert.equal(cls.properties.isExported, true);
+    assert.equal(cls.properties.visibility, "public");
   });
 
   it("attributes methods to class via DEFINES_METHOD", async () => {

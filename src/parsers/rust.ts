@@ -153,8 +153,9 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       className: className ?? null,
-      isExported: node.namedChildren.some((c) => c.type === "visibility_modifier" && c.text.startsWith("pub")),
+      isExported: rustVisibility(node) !== "private",
       isAsync: node.namedChildren.some((c) => c.type === "function_modifiers" && c.children.some((fc) => fc.type === "async")),
+      visibility: rustVisibility(node),
     },
   };
 }
@@ -175,9 +176,23 @@ function createStructNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
       name,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
-      isExported: node.namedChildren.some((c) => c.type === "visibility_modifier" && c.text.startsWith("pub")),
+      isExported: rustVisibility(node) !== "private",
+      visibility: rustVisibility(node),
     },
   };
+}
+
+function rustVisibility(node: Parser.SyntaxNode): string {
+  const modifier = node.namedChildren.find((c) => c.type === "visibility_modifier")?.text;
+  if (!modifier) {
+    return "private";
+  }
+
+  if (modifier === "pub" || modifier === "pub(crate)" || modifier === "pub(super)") {
+    return modifier;
+  }
+
+  return modifier.startsWith("pub") ? modifier : "private";
 }
 
 function createCallNodes(functionNodeId: string, node: Parser.SyntaxNode): GraphNode[] {

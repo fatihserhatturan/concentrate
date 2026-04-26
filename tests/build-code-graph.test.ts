@@ -416,7 +416,9 @@ describe("buildCodeGraph", () => {
     assert.equal(graph.nodes.find((n) => n.properties.name === "greet")?.properties.className, "UserService");
     assert.equal(graph.nodes.find((n) => n.properties.name === "greet")?.properties.isAsync, true);
     assert.equal(graph.nodes.find((n) => n.properties.name === "format")?.properties.isAsync, false);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "format")?.properties.visibility, "private");
     assert.equal(graph.nodes.find((n) => n.properties.name === "UserService" && n.label === "Class")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "UserService" && n.label === "Class")?.properties.visibility, "public");
     assert.equal(graph.nodes.find((n) => n.properties.name === "standalone")?.properties.isExported, true);
     assert.equal(graph.nodes.find((n) => n.properties.name === "fetchUser")?.properties.isAsync, true);
     assert.equal(graph.nodes.find((n) => n.properties.name === "fetchUser")?.properties.isExported, true);

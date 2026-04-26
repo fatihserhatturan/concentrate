@@ -28,6 +28,7 @@ describe("Python parser", () => {
     assert.equal(fn.properties.isExported, true);
     assert.equal(fn.properties.isAsync, false);
     assert.equal(fn.properties.className, null);
+    assert.equal(fn.properties.visibility, "public");
   });
 
   it("extracts async function", async () => {
@@ -43,6 +44,15 @@ describe("Python parser", () => {
     const fn = result.nodes.find((n) => n.label === "Function" && n.properties.name === "_private");
     assert.ok(fn);
     assert.equal(fn.properties.isExported, false);
+    assert.equal(fn.properties.visibility, "private");
+  });
+
+  it("marks double-underscore functions as dunder visibility", async () => {
+    const result = await pythonParser.parse(fixtureRoot, fixturePath);
+    const fn = result.nodes.find((n) => n.label === "Function" && n.properties.name === "__dunder");
+    assert.ok(fn);
+    assert.equal(fn.properties.isExported, false);
+    assert.equal(fn.properties.visibility, "dunder");
   });
 
   it("extracts class with isExported=true", async () => {
@@ -50,6 +60,7 @@ describe("Python parser", () => {
     const cls = result.nodes.find((n) => n.label === "Class" && n.properties.name === "UserService");
     assert.ok(cls);
     assert.equal(cls.properties.isExported, true);
+    assert.equal(cls.properties.visibility, "public");
   });
 
   it("attributes methods to class via DEFINES_METHOD", async () => {
@@ -66,6 +77,7 @@ describe("Python parser", () => {
     assert.equal(getMethod.properties.isAsync, false);
     assert.equal(fetchMethod.properties.isAsync, true);
     assert.equal(helperMethod.properties.isExported, false);
+    assert.equal(helperMethod.properties.visibility, "private");
     assert.ok(result.relationships.some((r) => r.from === cls.id && r.to === getMethod.id && r.type === "DEFINES_METHOD"));
     assert.ok(result.relationships.some((r) => r.from === cls.id && r.to === fetchMethod.id && r.type === "DEFINES_METHOD"));
   });
@@ -78,7 +90,7 @@ describe("Python parser", () => {
 
   it("total node counts are correct", async () => {
     const result = await pythonParser.parse(fixtureRoot, fixturePath);
-    assert.equal(result.nodes.filter((n) => n.label === "Function").length, 6);
+    assert.equal(result.nodes.filter((n) => n.label === "Function").length, 7);
     assert.equal(result.nodes.filter((n) => n.label === "Class").length, 1);
     assert.equal(result.nodes.filter((n) => n.label === "Import").length, 1);
   });
