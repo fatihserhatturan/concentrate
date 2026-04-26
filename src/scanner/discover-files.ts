@@ -15,11 +15,21 @@ const defaultIgnorePatterns = [
   "*.min.js",
 ];
 
-export async function discoverFiles(rootPath: string): Promise<string[]> {
+export type DiscoverFilesOptions = {
+  include?: string[];
+  exclude?: string[];
+};
+
+export async function discoverFiles(rootPath: string, options: DiscoverFilesOptions = {}): Promise<string[]> {
   const ig = ignore().add(defaultIgnorePatterns);
+  if (options.exclude && options.exclude.length > 0) {
+    ig.add(options.exclude);
+  }
   await addGitIgnore(rootPath, ig);
 
-  const entries = await fg("**/*", {
+  const patterns = options.include && options.include.length > 0 ? options.include : ["**/*"];
+
+  const entries = await fg(patterns, {
     cwd: rootPath,
     dot: true,
     onlyFiles: true,

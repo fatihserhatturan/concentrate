@@ -1,3 +1,8 @@
+export const SCHEMA_VERSION = 1;
+
+export const schemaVersionTableStatement =
+  "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
+
 export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS Repo(id STRING PRIMARY KEY, path STRING, name STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Directory(id STRING PRIMARY KEY, path STRING, relativePath STRING, name STRING)",

@@ -74,25 +74,87 @@ The current goal is to turn Concentrate from a working scanner demo into a relia
    - Extract basic call expressions.
    - Add Rust fixture tests.
 
-13. [ ] Add scan progress and parser concurrency.
+13. [x] Add scan progress and parser concurrency.
    - Parse files with bounded concurrency.
    - Add progress output for large repositories.
    - Add `--max-files`, `--include`, and `--exclude` options.
    - Keep output deterministic despite concurrency.
 
-14. [ ] Add schema version marker.
+14. [x] Add schema version marker.
    - Add a schema/version metadata table or node.
    - Record graph schema version during scan/export.
    - Prepare for future migrations instead of reset-only behavior.
 
-## Milestone 4: Project Structure
+## Milestone 4: Graph Completeness
 
-8. [x] Refactor scanner and CLI structure.
-   - Move graph mutation and dedupe logic into `GraphBuilder`.
-   - Move directory graph creation and import resolution into focused scanner modules.
-   - Move CLI scan reporting into a shared presenter.
-   - Share Tree-sitter traversal helpers between language parsers.
+The goal of this milestone is to close the most significant gaps in graph accuracy so that
+the tool produces a faithful structural model of real-world codebases.
+
+### 4a — JS/TS parser completeness
+
+15. [ ] Extract arrow functions and function expressions in JS/TS.
+   - Extract `const foo = () => {}` (arrow_function assigned to variable).
+   - Extract `const foo = async () => {}`.
+   - Extract `export const foo = () => {}` (exported arrow).
+   - Extract `const foo = function() {}` (function expression).
+   - Use the variable name as the function name when available.
+   - Add fixture tests for each form.
+
+16. [ ] Add per-language dedicated parser instances.
+   - Create one `new Parser()` per language, language pre-set at module init.
+   - Remove all `setLanguage()` calls from the parse hot path.
+   - Prevents fragility if an `await` is ever introduced between language switch and parse.
+
+### 4b — Graph model accuracy
+
+17. [ ] Attribute class methods to their class, not their file.
+   - Add `DEFINES_METHOD` relationship: `Class → Function`.
+   - Remove the `File → DEFINES_FUNCTION` edge for methods that belong to a class.
+   - Apply to all languages: JS/TS `method_definition`, Python class body
+     `function_definition`, Go `method_declaration`, Rust `impl` methods.
+   - Add `className` property to Function nodes for quick lookup.
+   - Update fixture tests to assert the new relationship.
+
+18. [ ] Add function and class metadata properties.
+   - `isExported: boolean` on Function and Class nodes (JS/TS `export` keyword,
+     Python leading `_` convention, Go uppercase name, Rust `pub`).
+   - `isAsync: boolean` on Function nodes (JS/TS `async`, Python `async def`,
+     Rust `async fn`).
+   - Enables queries such as "list all exported async functions".
+   - Add fixture assertions for each property.
+
+### 4c — Test coverage
+
+19. [ ] Add per-parser unit test files.
+   - One test file per language: `javascript.test.ts`, `typescript.test.ts`,
+     `python.test.ts`, `go.test.ts`, `rust.test.ts`.
+   - Each test asserts extracted node counts, node properties (`name`, `kind`,
+     `isExported`, `isAsync`), and key relationships.
+   - Cover the arrow function forms added in task 15 and method attribution from task 17.
+   - These tests should have caught the arrow-function gap before it shipped.
+
+### 4d — Query and output ergonomics
+
+20. [ ] Add `--format` option to the `query` command.
+   - `--format json` (default, current behavior): pretty-printed JSON array.
+   - `--format table`: ASCII table via `console.table`.
+   - `--format csv`: header row + comma-separated values, suitable for piping.
+   - Keep the default as `json` for scriptability.
+
+### 4e — Import resolution completeness
+
+21. [ ] Add Go project-internal import resolution.
+   - Detect the module name from `go.mod`.
+   - Resolve `module/pkg/foo` imports to local `.go` files.
+   - Add `RESOLVES_TO` edges for internal packages.
+   - Add fixture and test.
+
+22. [ ] Add Rust crate-relative import resolution.
+   - Resolve `use crate::module` and `use super::module` to local `.rs` files.
+   - Add `RESOLVES_TO` edges for crate-internal paths.
+   - Add fixture and test.
 
 ## Current Priority
 
-Rust parser support is complete. Package `exports`/`main`/`types` remains as a future follow-up for JS/TS. Next recommended task: add scan progress and parser concurrency.
+Milestone 3 is complete. Start Milestone 4 with task 15 (arrow function extraction) —
+it has the largest impact on graph completeness for real JS/TS codebases.

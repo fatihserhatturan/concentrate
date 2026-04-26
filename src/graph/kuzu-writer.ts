@@ -2,7 +2,7 @@ import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import kuzu from "kuzu";
 import type { Connection as KuzuConnection, Database as KuzuDatabase, QueryResult as KuzuQueryResult } from "kuzu";
-import { nodeLabels, relationshipTypes, schemaStatements } from "./schema.js";
+import { nodeLabels, relationshipTypes, schemaStatements, schemaVersionTableStatement, SCHEMA_VERSION } from "./schema.js";
 import type { GraphNode, GraphRelationship } from "./model.js";
 
 export class KuzuGraphWriter {
@@ -19,6 +19,8 @@ export class KuzuGraphWriter {
   }
 
   async reset(): Promise<void> {
+    await this.execute("DROP TABLE IF EXISTS _SchemaVersion");
+
     for (const type of [...relationshipTypes, "CONTAINS", "DEFINES"].reverse()) {
       await this.execute(`DROP TABLE IF EXISTS ${type}`);
     }
@@ -29,6 +31,21 @@ export class KuzuGraphWriter {
 
     for (const statement of schemaStatements) {
       await this.execute(statement);
+    }
+
+    await this.execute(schemaVersionTableStatement);
+    await this.execute(
+      `CREATE (:_SchemaVersion ${formatProperties({ version: SCHEMA_VERSION, writtenAt: new Date().toISOString() })})`,
+    );
+  }
+
+  async schemaVersion(): Promise<number | null> {
+    try {
+      const rows = await this.singleResult("MATCH (v:_SchemaVersion) RETURN v.version AS version LIMIT 1");
+      const version = rows[0]?.version;
+      return typeof version === "number" ? version : null;
+    } catch {
+      return null;
     }
   }
 

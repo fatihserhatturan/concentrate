@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { printScanReport } from "../cli/report.js";
+import { ProgressReporter } from "../cli/progress.js";
 import { buildCodeGraph } from "../scanner/build-code-graph.js";
 import { didFailFast } from "../scanner/report.js";
 import type { GraphNode, GraphRelationship } from "../graph/model.js";
@@ -8,13 +9,28 @@ import type { GraphNode, GraphRelationship } from "../graph/model.js";
 type ExportOptions = {
   output: string;
   continueOnError: boolean;
+  concurrency?: number;
+  maxFiles?: number;
+  include: string[];
+  exclude: string[];
 };
 
 export async function exportCommand(projectPath: string, options: ExportOptions): Promise<void> {
   const outputPath = path.resolve(options.output);
+  const progress = new ProgressReporter();
+
   const result = await buildCodeGraph(projectPath, {
     continueOnError: options.continueOnError,
+    concurrency: options.concurrency,
+    maxFiles: options.maxFiles,
+    include: options.include.length > 0 ? options.include : undefined,
+    exclude: options.exclude.length > 0 ? options.exclude : undefined,
+    onProgress: (current, total, relativePath) => {
+      progress.update(current, total, relativePath);
+    },
   });
+
+  progress.clear();
 
   if (didFailFast(result)) {
     printScanReport(result.report, result.nodes.length, result.relationships.length, outputPath);

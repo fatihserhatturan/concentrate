@@ -6,6 +6,10 @@ import { statsCommand } from "../commands/stats.js";
 import { queryCommand } from "../commands/query.js";
 import { exportCommand } from "../commands/export.js";
 
+function collect(value: string, previous: string[]): string[] {
+  return [...previous, value];
+}
+
 const program = new Command();
 
 program
@@ -19,6 +23,10 @@ program
   .argument("<path>", "Project path to scan")
   .option("-d, --database <path>", "Kuzu database path", ".concentrate/graph.kuzu")
   .option("--continue-on-error", "Continue scanning when a supported file fails to parse", false)
+  .option("--concurrency <n>", "Files to parse in parallel (default: CPU count)", parseInt)
+  .option("--max-files <n>", "Maximum number of files to parse", parseInt)
+  .option("--include <pattern>", "Include glob pattern, repeatable", collect, [] as string[])
+  .option("--exclude <pattern>", "Exclude glob pattern, repeatable", collect, [] as string[])
   .action(scanCommand);
 
 program
@@ -40,6 +48,10 @@ program
   .argument("<path>", "Project path to scan")
   .option("-o, --output <path>", "Output directory", ".concentrate/export")
   .option("--continue-on-error", "Continue exporting when a supported file fails to parse", false)
+  .option("--concurrency <n>", "Files to parse in parallel (default: CPU count)", parseInt)
+  .option("--max-files <n>", "Maximum number of files to parse", parseInt)
+  .option("--include <pattern>", "Include glob pattern, repeatable", collect, [] as string[])
+  .option("--exclude <pattern>", "Exclude glob pattern, repeatable", collect, [] as string[])
   .action(exportCommand);
 
 await program.parseAsync(process.argv);
