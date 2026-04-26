@@ -95,7 +95,7 @@ describe("buildCodeGraph", () => {
     assertNodeCount(graph.nodes, "Class", 1);
     assert.equal(
       graph.nodes.filter((node) => node.label === "Function").length,
-      4,
+      5,
     );
     assertRelationship(
       graph.relationships,
@@ -106,9 +106,9 @@ describe("buildCodeGraph", () => {
 
     assertRelationship(
       graph.relationships,
-      "file:main.py:class:8:Service",
+      "file:main.py:class:12:Service",
       "DEFINES_METHOD",
-      "file:main.py:function:9:run",
+      "file:main.py:function:13:run",
     );
 
     assertRelationship(
@@ -118,10 +118,19 @@ describe("buildCodeGraph", () => {
       "file:main.py:function:4:main",
     );
 
-    assert.equal(
-      graph.nodes.find((n) => n.properties.name === "run")?.properties.className,
-      "Service",
+    assertRelationship(
+      graph.relationships,
+      "file:main.py",
+      "DEFINES_FUNCTION",
+      "file:main.py:function:8:fetch",
     );
+
+    assert.equal(graph.nodes.find((n) => n.properties.name === "run")?.properties.className, "Service");
+    assert.equal(graph.nodes.find((n) => n.properties.name === "main")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "fetch")?.properties.isAsync, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "helper")?.properties.isAsync, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "run")?.properties.isAsync, false);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "Service" && n.label === "Class")?.properties.isExported, true);
 
     const serviceRunCalls = callsForFunction(graph.nodes, graph.relationships, "run");
     assert.deepEqual(serviceRunCalls, ["self.helper"]);
@@ -232,10 +241,11 @@ describe("buildCodeGraph", () => {
 
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "NewService"), ["strings.TrimSpace"]);
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "Run"), ["fmt.Println"]);
-    assert.equal(
-      graph.nodes.find((n) => n.properties.name === "Run")?.properties.className,
-      "Service",
-    );
+    assert.equal(graph.nodes.find((n) => n.properties.name === "Run")?.properties.className, "Service");
+    assert.equal(graph.nodes.find((n) => n.properties.name === "Run")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "NewService")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "Run")?.properties.isAsync, false);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "Service" && n.label === "Class")?.properties.isExported, true);
   });
 
   it("extracts Rust files, imports, structs, functions, impl methods, and calls", async () => {
@@ -253,7 +263,7 @@ describe("buildCodeGraph", () => {
     assertNodeCount(graph.nodes, "Class", 1);
     assert.equal(
       graph.nodes.filter((node) => node.label === "Function").length,
-      5,
+      6,
     );
 
     assertRelationship(
@@ -292,6 +302,11 @@ describe("buildCodeGraph", () => {
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "new"), ["format"]);
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "run"), ["println", "self.helper"]);
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "make"), ["Service::new", "String::new"]);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "make")?.properties.isExported, false);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "fetch")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "fetch")?.properties.isAsync, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "make")?.properties.isAsync, false);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "Service" && n.label === "Class")?.properties.isExported, false);
   });
 
   it("attributes TypeScript class methods to their class via DEFINES_METHOD", async () => {
@@ -330,10 +345,20 @@ describe("buildCodeGraph", () => {
       "file:service.ts:function:11:standalone",
     );
 
-    assert.equal(
-      graph.nodes.find((n) => n.properties.name === "greet")?.properties.className,
-      "UserService",
+    assertRelationship(
+      graph.relationships,
+      "file:service.ts",
+      "DEFINES_FUNCTION",
+      "file:service.ts:function:15:fetchUser",
     );
+
+    assert.equal(graph.nodes.find((n) => n.properties.name === "greet")?.properties.className, "UserService");
+    assert.equal(graph.nodes.find((n) => n.properties.name === "greet")?.properties.isAsync, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "format")?.properties.isAsync, false);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "UserService" && n.label === "Class")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "standalone")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "fetchUser")?.properties.isAsync, true);
+    assert.equal(graph.nodes.find((n) => n.properties.name === "fetchUser")?.properties.isExported, true);
   });
 
   it("extracts arrow functions and function expressions in TypeScript", async () => {

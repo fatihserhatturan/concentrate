@@ -1,5 +1,5 @@
 export class UserService {
-  greet(name: string): string {
+  async greet(name: string): Promise<string> {
     return this.format(name);
   }
 
@@ -10,4 +10,8 @@ export class UserService {
 
 export function standalone(): void {
   console.log("standalone");
+}
+
+export async function fetchUser(id: string): Promise<void> {
+  console.log(id);
 }

@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 export const schemaVersionTableStatement =
   "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
@@ -8,8 +8,8 @@ export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS Directory(id STRING PRIMARY KEY, path STRING, relativePath STRING, name STRING)",
   "CREATE NODE TABLE IF NOT EXISTS File(id STRING PRIMARY KEY, path STRING, relativePath STRING, language STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64)",
-  "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, line INT64, endLine INT64, className STRING)",
-  "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64)",
+  "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, line INT64, endLine INT64, className STRING, isExported BOOLEAN, isAsync BOOLEAN)",
+  "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",
   "CREATE NODE TABLE IF NOT EXISTS Call(id STRING PRIMARY KEY, name STRING, expression STRING, callee STRING, receiver STRING, line INT64, columnNumber INT64)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_ROOT(FROM Repo TO Directory)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_DIRECTORY(FROM Directory TO Directory)",

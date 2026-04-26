@@ -227,6 +227,8 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       className: className ?? null,
+      isExported: !name.startsWith("_"),
+      isAsync: node.children.some((c) => c.type === "async"),
     },
   };
 }
@@ -244,6 +246,7 @@ function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode
       name,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
+      isExported: !name.startsWith("_"),
     },
   };
 }

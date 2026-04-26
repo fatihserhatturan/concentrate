@@ -148,6 +148,8 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       className: className ?? null,
+      isExported: /^[A-Z]/.test(name),
+      isAsync: false,
     },
   };
 }
@@ -185,6 +187,7 @@ function createStructNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
       name,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
+      isExported: /^[A-Z]/.test(name),
     },
   };
 }

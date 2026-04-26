@@ -197,6 +197,9 @@ function createVariableFunctionNode(
       kind: valueNode.type,
       line: declarator.startPosition.row + 1,
       endLine: valueNode.endPosition.row + 1,
+      className: null,
+      isExported: declarator.parent?.parent?.type === "export_statement",
+      isAsync: valueNode.children.some((c) => c.type === "async"),
     },
   };
 }
@@ -237,6 +240,8 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       className: className ?? null,
+      isExported: node.parent?.type === "export_statement",
+      isAsync: node.children.some((c) => c.type === "async"),
     },
   };
 }
@@ -254,6 +259,7 @@ function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode
       name,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
+      isExported: node.parent?.type === "export_statement",
     },
   };
 }

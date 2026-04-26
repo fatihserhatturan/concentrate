@@ -5,9 +5,13 @@ def main():
     return utility()
 
 
+async def fetch():
+    return utility()
+
+
 class Service:
     def run(self):
         return self.helper()
 
-    def helper(self):
+    async def helper(self):
         return utility()

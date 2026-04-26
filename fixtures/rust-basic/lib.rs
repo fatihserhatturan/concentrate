@@ -23,3 +23,7 @@ impl Service {
 fn make() {
     Service::new(String::new());
 }
+
+pub async fn fetch(id: String) {
+    println!("{}", id);
+}

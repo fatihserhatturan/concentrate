@@ -153,6 +153,8 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       className: className ?? null,
+      isExported: node.namedChildren.some((c) => c.type === "visibility_modifier" && c.text.startsWith("pub")),
+      isAsync: node.namedChildren.some((c) => c.type === "function_modifiers" && c.children.some((fc) => fc.type === "async")),
     },
   };
 }
@@ -173,6 +175,7 @@ function createStructNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
       name,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
+      isExported: node.namedChildren.some((c) => c.type === "visibility_modifier" && c.text.startsWith("pub")),
     },
   };
 }
