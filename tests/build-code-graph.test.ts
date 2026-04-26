@@ -200,6 +200,24 @@ describe("buildCodeGraph", () => {
     );
   });
 
+  it("resolves Go project-internal imports via go.mod module name", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "go-import"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.parsedFiles, 2);
+    assert.equal(graph.report.resolvedImports, 1);
+    assert.equal(graph.report.unresolvedRelativeImports, 0);
+
+    assertRelationship(
+      graph.relationships,
+      "file:main.go:import:5:example.com/myapp/internal/service",
+      "RESOLVES_TO",
+      "file:internal/service/service.go",
+    );
+  });
+
   it("extracts Go files, imports, structs, functions, methods, and calls", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "go-basic"), {
       continueOnError: false,
@@ -246,6 +264,49 @@ describe("buildCodeGraph", () => {
     assert.equal(graph.nodes.find((n) => n.properties.name === "NewService")?.properties.isExported, true);
     assert.equal(graph.nodes.find((n) => n.properties.name === "Run")?.properties.isAsync, false);
     assert.equal(graph.nodes.find((n) => n.properties.name === "Service" && n.label === "Class")?.properties.isExported, true);
+  });
+
+  it("resolves Rust crate:: and super:: imports to local .rs files", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "rust-import"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.parsedFiles, 3);
+    assert.equal(graph.report.resolvedImports, 4);
+    assert.equal(graph.report.unresolvedRelativeImports, 0);
+
+    // mod utils; in lib.rs → utils.rs
+    assertRelationship(
+      graph.relationships,
+      "file:lib.rs:import:1:utils",
+      "RESOLVES_TO",
+      "file:utils.rs",
+    );
+
+    // mod helpers; in lib.rs → helpers/mod.rs
+    assertRelationship(
+      graph.relationships,
+      "file:lib.rs:import:2:helpers",
+      "RESOLVES_TO",
+      "file:helpers/mod.rs",
+    );
+
+    // use crate::utils::process; in lib.rs → utils.rs
+    assertRelationship(
+      graph.relationships,
+      "file:lib.rs:import:3:crate::utils::process",
+      "RESOLVES_TO",
+      "file:utils.rs",
+    );
+
+    // use super::utils; in helpers/mod.rs → utils.rs
+    assertRelationship(
+      graph.relationships,
+      "file:helpers/mod.rs:import:1:super::utils",
+      "RESOLVES_TO",
+      "file:utils.rs",
+    );
   });
 
   it("extracts Rust files, imports, structs, functions, impl methods, and calls", async () => {

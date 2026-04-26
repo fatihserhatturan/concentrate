@@ -17,6 +17,10 @@ type JsTsPathMapping = {
   targets: string[];
 };
 
+type GoResolutionConfig = {
+  moduleName: string | null;
+};
+
 export async function addImportResolutionRelationships(graph: GraphBuilder, rootPath: string): Promise<{
   resolved: number;
   unresolved: number;
@@ -24,6 +28,7 @@ export async function addImportResolutionRelationships(graph: GraphBuilder, root
   const fileIdByRelativePath = createFileIndex(graph.nodes);
   const importerFileIdByImportId = createImporterIndex(graph.relationships);
   const jsTsConfig = await readJsTsResolutionConfig(rootPath);
+  const goConfig = await readGoResolutionConfig(rootPath);
   let resolved = 0;
   let unresolved = 0;
 
@@ -38,11 +43,11 @@ export async function addImportResolutionRelationships(graph: GraphBuilder, root
     }
 
     const importerFileId = importerFileIdByImportId.get(node.id);
-    if (!importerFileId || !shouldAttemptResolution(source, importerFileId, jsTsConfig)) {
+    if (!importerFileId || !shouldAttemptResolution(source, importerFileId, jsTsConfig, goConfig)) {
       continue;
     }
 
-    const targetFileId = resolveImport(source, importerFileId, fileIdByRelativePath, jsTsConfig);
+    const targetFileId = resolveImport(source, importerFileId, fileIdByRelativePath, jsTsConfig, goConfig);
 
     if (!targetFileId) {
       unresolved += 1;
@@ -65,6 +70,7 @@ function shouldAttemptResolution(
   source: string,
   importerFileId: string,
   jsTsConfig: JsTsResolutionConfig,
+  goConfig: GoResolutionConfig,
 ): boolean {
   if (source.startsWith(".")) {
     return true;
@@ -72,6 +78,14 @@ function shouldAttemptResolution(
 
   if (isJsTsFile(importerFileId)) {
     return createJsTsConfiguredImportBasePaths(source, jsTsConfig).length > 0;
+  }
+
+  if (isGoFile(importerFileId) && goConfig.moduleName) {
+    return source.startsWith(`${goConfig.moduleName}/`);
+  }
+
+  if (isRustFile(importerFileId)) {
+    return source.startsWith("crate::") || source.startsWith("super::") || !source.includes("::");
   }
 
   return shouldResolveAbsoluteImport(importerFileId);
@@ -111,9 +125,10 @@ function resolveImport(
   importerFileId: string,
   fileIdByRelativePath: Map<string, string>,
   jsTsConfig: JsTsResolutionConfig,
+  goConfig: GoResolutionConfig,
 ): string | null {
   if (!source.startsWith(".")) {
-    return resolveAbsoluteImport(source, importerFileId, fileIdByRelativePath, jsTsConfig);
+    return resolveAbsoluteImport(source, importerFileId, fileIdByRelativePath, jsTsConfig, goConfig);
   }
 
   const importerRelativePath = importerFileId.slice("file:".length);
@@ -135,9 +150,18 @@ function resolveAbsoluteImport(
   importerFileId: string,
   fileIdByRelativePath: Map<string, string>,
   jsTsConfig: JsTsResolutionConfig,
+  goConfig: GoResolutionConfig,
 ): string | null {
   if (isJsTsFile(importerFileId)) {
     return resolveJsTsConfiguredImport(source, fileIdByRelativePath, jsTsConfig);
+  }
+
+  if (isGoFile(importerFileId)) {
+    return resolveGoImport(source, fileIdByRelativePath, goConfig);
+  }
+
+  if (isRustFile(importerFileId)) {
+    return resolveRustImport(source, importerFileId, fileIdByRelativePath);
   }
 
   if (!shouldResolveAbsoluteImport(importerFileId)) {
@@ -155,6 +179,26 @@ function resolveAbsoluteImport(
   return null;
 }
 
+function resolveGoImport(
+  source: string,
+  fileIdByRelativePath: Map<string, string>,
+  goConfig: GoResolutionConfig,
+): string | null {
+  if (!goConfig.moduleName || !source.startsWith(`${goConfig.moduleName}/`)) {
+    return null;
+  }
+
+  const pkgPath = source.slice(goConfig.moduleName.length + 1);
+
+  for (const [relativePath, fileId] of fileIdByRelativePath) {
+    if (relativePath.startsWith(`${pkgPath}/`) && relativePath.endsWith(".go")) {
+      return fileId;
+    }
+  }
+
+  return null;
+}
+
 function shouldResolveAbsoluteImport(importerFileId: string): boolean {
   const extension = path.posix.extname(importerFileId.slice("file:".length));
   return extension === ".py" || absoluteModuleLanguages.has(extension);
@@ -163,6 +207,99 @@ function shouldResolveAbsoluteImport(importerFileId: string): boolean {
 function isJsTsFile(fileId: string): boolean {
   const extension = path.posix.extname(fileId.slice("file:".length));
   return [".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs"].includes(extension);
+}
+
+function isGoFile(fileId: string): boolean {
+  return path.posix.extname(fileId.slice("file:".length)) === ".go";
+}
+
+function isRustFile(fileId: string): boolean {
+  return path.posix.extname(fileId.slice("file:".length)) === ".rs";
+}
+
+function resolveRustImport(
+  source: string,
+  importerFileId: string,
+  fileIdByRelativePath: Map<string, string>,
+): string | null {
+  const importerRelativePath = importerFileId.slice("file:".length);
+  const importerDir = path.posix.dirname(toPosixPath(importerRelativePath));
+
+  if (source.startsWith("crate::")) {
+    return resolveRustCrateImport(source.slice("crate::".length), fileIdByRelativePath);
+  }
+
+  if (source.startsWith("super::")) {
+    return resolveRustSuperImport(source, importerDir, fileIdByRelativePath);
+  }
+
+  // mod item: plain name, resolve relative to importer's directory
+  return resolveRustModuleByName(source, importerDir, fileIdByRelativePath);
+}
+
+function resolveRustCrateImport(
+  colonPath: string,
+  fileIdByRelativePath: Map<string, string>,
+): string | null {
+  const segments = colonPath.split("::");
+
+  for (let len = segments.length; len >= 1; len--) {
+    const modulePath = segments.slice(0, len).join("/");
+    for (const prefix of ["", "src/"]) {
+      for (const candidate of rustModuleCandidates(`${prefix}${modulePath}`)) {
+        const fileId = fileIdByRelativePath.get(candidate);
+        if (fileId) return fileId;
+      }
+    }
+  }
+
+  return null;
+}
+
+function resolveRustSuperImport(
+  source: string,
+  importerDir: string,
+  fileIdByRelativePath: Map<string, string>,
+): string | null {
+  const segments = source.split("::");
+  let superCount = 0;
+  while (segments[superCount] === "super") superCount++;
+
+  let baseDir = importerDir;
+  for (let i = 0; i < superCount; i++) {
+    baseDir = path.posix.dirname(baseDir);
+  }
+
+  const remainingSegments = segments.slice(superCount);
+  if (remainingSegments.length === 0) return null;
+
+  for (let len = remainingSegments.length; len >= 1; len--) {
+    const modulePath = remainingSegments.slice(0, len).join("/");
+    const basePath = baseDir === "." ? modulePath : `${baseDir}/${modulePath}`;
+    for (const candidate of rustModuleCandidates(basePath)) {
+      const fileId = fileIdByRelativePath.get(candidate);
+      if (fileId) return fileId;
+    }
+  }
+
+  return null;
+}
+
+function resolveRustModuleByName(
+  name: string,
+  importerDir: string,
+  fileIdByRelativePath: Map<string, string>,
+): string | null {
+  const basePath = importerDir === "." ? name : `${importerDir}/${name}`;
+  for (const candidate of rustModuleCandidates(basePath)) {
+    const fileId = fileIdByRelativePath.get(candidate);
+    if (fileId) return fileId;
+  }
+  return null;
+}
+
+function rustModuleCandidates(basePath: string): string[] {
+  return [`${basePath}.rs`, `${basePath}/mod.rs`];
 }
 
 function resolveJsTsConfiguredImport(
@@ -321,4 +458,19 @@ function stripJsonCommentsAndTrailingCommas(value: string): string {
 
 function toPosixPath(value: string): string {
   return value.split(path.sep).join(path.posix.sep);
+}
+
+async function readGoResolutionConfig(rootPath: string): Promise<GoResolutionConfig> {
+  let raw: string;
+  try {
+    raw = await readFile(path.join(rootPath, "go.mod"), "utf8");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return { moduleName: null };
+    }
+    throw error;
+  }
+
+  const match = raw.match(/^module\s+(\S+)/m);
+  return { moduleName: match?.[1] ?? null };
 }

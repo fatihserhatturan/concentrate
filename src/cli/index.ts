@@ -40,6 +40,7 @@ program
   .description("Run a Cypher query against the graph.")
   .argument("<cypher>", "Cypher query to execute")
   .option("-d, --database <path>", "Kuzu database path", ".concentrate/graph.kuzu")
+  .option("-f, --format <format>", "Output format: json, table, csv", "json")
   .action(queryCommand);
 
 program

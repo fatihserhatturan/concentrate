@@ -135,7 +135,7 @@ the tool produces a faithful structural model of real-world codebases.
 
 ### 4d — Query and output ergonomics
 
-20. [ ] Add `--format` option to the `query` command.
+20. [x] Add `--format` option to the `query` command.
    - `--format json` (default, current behavior): pretty-printed JSON array.
    - `--format table`: ASCII table via `console.table`.
    - `--format csv`: header row + comma-separated values, suitable for piping.
@@ -143,13 +143,13 @@ the tool produces a faithful structural model of real-world codebases.
 
 ### 4e — Import resolution completeness
 
-21. [ ] Add Go project-internal import resolution.
+21. [x] Add Go project-internal import resolution.
    - Detect the module name from `go.mod`.
    - Resolve `module/pkg/foo` imports to local `.go` files.
    - Add `RESOLVES_TO` edges for internal packages.
    - Add fixture and test.
 
-22. [ ] Add Rust crate-relative import resolution.
+22. [x] Add Rust crate-relative import resolution.
    - Resolve `use crate::module` and `use super::module` to local `.rs` files.
    - Add `RESOLVES_TO` edges for crate-internal paths.
    - Add fixture and test.
