@@ -170,7 +170,7 @@ by closing the most critical structural and semantic gaps.
 
 ### 5b — TypeScript-specific constructs
 
-24. [ ] Extract TypeScript interfaces, type aliases, and enums.
+24. [x] Extract TypeScript interfaces, type aliases, and enums.
    - Add `Interface` node label for `interface` declarations.
    - Add `TypeAlias` node label for `type X = ...` declarations.
    - Add `Enum` node label for `enum` declarations.
@@ -180,7 +180,7 @@ by closing the most critical structural and semantic gaps.
 
 ### 5c — Inheritance and implementation relationships
 
-25. [ ] Extract class inheritance and interface implementation.
+25. [x] Extract class inheritance and interface implementation.
    - Add `EXTENDS` relationship: `Class → Class`.
    - Add `IMPLEMENTS` relationship: `Class → Interface`.
    - Apply to JS/TS (`extends`, `implements` clauses) and Python (base class list).

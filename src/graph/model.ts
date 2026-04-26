@@ -5,6 +5,9 @@ export type GraphNodeLabel =
   | "Import"
   | "Function"
   | "Class"
+  | "Interface"
+  | "TypeAlias"
+  | "Enum"
   | "Call";
 
 export type GraphRelationshipType =
@@ -15,7 +18,12 @@ export type GraphRelationshipType =
   | "RESOLVES_TO"
   | "DEFINES_FUNCTION"
   | "DEFINES_CLASS"
+  | "DEFINES_INTERFACE"
+  | "DEFINES_TYPE_ALIAS"
+  | "DEFINES_ENUM"
   | "DEFINES_METHOD"
+  | "EXTENDS"
+  | "IMPLEMENTS"
   | "CALLS"
   | "CALL_RESOLVES_TO";
 

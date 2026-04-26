@@ -1,5 +1,17 @@
 import { helper } from "./utils.js";
 
+export interface UserRecord {
+  id: string;
+  name: string;
+}
+
+type UserId = string;
+
+export enum UserRole {
+  Admin,
+  Member,
+}
+
 export function greet(name: string): string {
   return helper(name);
 }

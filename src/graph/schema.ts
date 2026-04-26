@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 4;
+export const SCHEMA_VERSION = 6;
 
 export const schemaVersionTableStatement =
   "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
@@ -9,7 +9,10 @@ export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS File(id STRING PRIMARY KEY, path STRING, relativePath STRING, language STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64)",
   "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, line INT64, endLine INT64, className STRING, isExported BOOLEAN, isAsync BOOLEAN)",
-  "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",
+  "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN, extendsNames STRING, implementsNames STRING)",
+  "CREATE NODE TABLE IF NOT EXISTS Interface(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",
+  "CREATE NODE TABLE IF NOT EXISTS TypeAlias(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",
+  "CREATE NODE TABLE IF NOT EXISTS Enum(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",
   "CREATE NODE TABLE IF NOT EXISTS Call(id STRING PRIMARY KEY, name STRING, expression STRING, callee STRING, receiver STRING, line INT64, columnNumber INT64)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_ROOT(FROM Repo TO Directory)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_DIRECTORY(FROM Directory TO Directory)",
@@ -18,12 +21,28 @@ export const schemaStatements = [
   "CREATE REL TABLE IF NOT EXISTS RESOLVES_TO(FROM Import TO File)",
   "CREATE REL TABLE IF NOT EXISTS DEFINES_FUNCTION(FROM File TO Function)",
   "CREATE REL TABLE IF NOT EXISTS DEFINES_CLASS(FROM File TO Class)",
+  "CREATE REL TABLE IF NOT EXISTS DEFINES_INTERFACE(FROM File TO Interface)",
+  "CREATE REL TABLE IF NOT EXISTS DEFINES_TYPE_ALIAS(FROM File TO TypeAlias)",
+  "CREATE REL TABLE IF NOT EXISTS DEFINES_ENUM(FROM File TO Enum)",
   "CREATE REL TABLE IF NOT EXISTS DEFINES_METHOD(FROM Class TO Function)",
+  "CREATE REL TABLE IF NOT EXISTS EXTENDS(FROM Class TO Class)",
+  "CREATE REL TABLE IF NOT EXISTS IMPLEMENTS(FROM Class TO Interface)",
   "CREATE REL TABLE IF NOT EXISTS CALLS(FROM Function TO Call)",
   "CREATE REL TABLE IF NOT EXISTS CALL_RESOLVES_TO(FROM Call TO Function)",
 ];
 
-export const nodeLabels = ["Repo", "Directory", "File", "Import", "Function", "Class", "Call"] as const;
+export const nodeLabels = [
+  "Repo",
+  "Directory",
+  "File",
+  "Import",
+  "Function",
+  "Class",
+  "Interface",
+  "TypeAlias",
+  "Enum",
+  "Call",
+] as const;
 export const relationshipTypes = [
   "CONTAINS_ROOT",
   "CONTAINS_DIRECTORY",
@@ -32,7 +51,12 @@ export const relationshipTypes = [
   "RESOLVES_TO",
   "DEFINES_FUNCTION",
   "DEFINES_CLASS",
+  "DEFINES_INTERFACE",
+  "DEFINES_TYPE_ALIAS",
+  "DEFINES_ENUM",
   "DEFINES_METHOD",
+  "EXTENDS",
+  "IMPLEMENTS",
   "CALLS",
   "CALL_RESOLVES_TO",
 ] as const;

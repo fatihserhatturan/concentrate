@@ -160,6 +160,19 @@ async function parseJavaScriptLikeFile(
         }
       }
     }
+
+    if (language === "typescript") {
+      const typeDeclarationNode = createTypeScriptDeclarationNode(fileNodeId, node);
+      if (typeDeclarationNode) {
+        nodes.push(typeDeclarationNode.node);
+        relationships.push({
+          from: fileNodeId,
+          to: typeDeclarationNode.node.id,
+          type: typeDeclarationNode.relationshipType,
+          properties: {},
+        });
+      }
+    }
   });
 
   return { fileNodeId, nodes, relationships };
@@ -260,8 +273,95 @@ function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       isExported: node.parent?.type === "export_statement",
+      extendsNames: serializeNameList(extractTypeScriptExtendsNames(node)),
+      implementsNames: serializeNameList(extractTypeScriptImplementsNames(node)),
     },
   };
+}
+
+function extractTypeScriptExtendsNames(node: Parser.SyntaxNode): string[] {
+  const heritage = node.namedChildren.find((child) => child.type === "class_heritage");
+  const extendsClause = heritage?.namedChildren.find((child) => child.type === "extends_clause");
+  return extendsClause ? extractTypeNames(extendsClause) : [];
+}
+
+function extractTypeScriptImplementsNames(node: Parser.SyntaxNode): string[] {
+  const heritage = node.namedChildren.find((child) => child.type === "class_heritage");
+  const implementsClause = heritage?.namedChildren.find((child) => child.type === "implements_clause");
+  return implementsClause ? extractTypeNames(implementsClause) : [];
+}
+
+function extractTypeNames(node: Parser.SyntaxNode): string[] {
+  return node.namedChildren
+    .filter((child) => (
+      child.type === "identifier"
+      || child.type === "type_identifier"
+      || child.type === "nested_type_identifier"
+      || child.type === "generic_type"
+    ))
+    .map((child) => child.text);
+}
+
+function serializeNameList(names: string[]): string | null {
+  return names.length > 0 ? JSON.stringify(names) : null;
+}
+
+function createTypeScriptDeclarationNode(
+  fileNodeId: string,
+  node: Parser.SyntaxNode,
+): { node: GraphNode; relationshipType: GraphRelationship["type"] } | null {
+  const declaration = typeScriptDeclarationMetadata(node.type);
+  if (!declaration) {
+    return null;
+  }
+
+  const name = extractName(node);
+  if (!name) {
+    return null;
+  }
+
+  return {
+    node: {
+      id: `${fileNodeId}:${declaration.idSegment}:${node.startPosition.row + 1}:${name}`,
+      label: declaration.label,
+      properties: {
+        name,
+        line: node.startPosition.row + 1,
+        endLine: node.endPosition.row + 1,
+        isExported: node.parent?.type === "export_statement",
+      },
+    },
+    relationshipType: declaration.relationshipType,
+  };
+}
+
+function typeScriptDeclarationMetadata(nodeType: string): {
+  idSegment: string;
+  label: GraphNode["label"];
+  relationshipType: GraphRelationship["type"];
+} | null {
+  switch (nodeType) {
+    case "interface_declaration":
+      return {
+        idSegment: "interface",
+        label: "Interface",
+        relationshipType: "DEFINES_INTERFACE",
+      };
+    case "type_alias_declaration":
+      return {
+        idSegment: "type-alias",
+        label: "TypeAlias",
+        relationshipType: "DEFINES_TYPE_ALIAS",
+      };
+    case "enum_declaration":
+      return {
+        idSegment: "enum",
+        label: "Enum",
+        relationshipType: "DEFINES_ENUM",
+      };
+    default:
+      return null;
+  }
 }
 
 function createCallNodes(functionNodeId: string, node: Parser.SyntaxNode): GraphNode[] {

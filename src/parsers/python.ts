@@ -247,8 +247,25 @@ function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       isExported: !name.startsWith("_"),
+      extendsNames: serializeNameList(extractPythonBaseClassNames(node)),
+      implementsNames: null,
     },
   };
+}
+
+function extractPythonBaseClassNames(node: Parser.SyntaxNode): string[] {
+  const argumentList = node.namedChildren.find((child) => child.type === "argument_list");
+  if (!argumentList) {
+    return [];
+  }
+
+  return argumentList.namedChildren
+    .filter((child) => child.type === "identifier" || child.type === "attribute")
+    .map((child) => child.text);
+}
+
+function serializeNameList(names: string[]): string | null {
+  return names.length > 0 ? JSON.stringify(names) : null;
 }
 
 function createCallNodes(functionNodeId: string, node: Parser.SyntaxNode): GraphNode[] {

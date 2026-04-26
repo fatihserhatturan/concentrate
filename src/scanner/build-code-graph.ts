@@ -7,6 +7,7 @@ import { addDirectoryChain } from "./directory-graph.js";
 import { discoverFiles } from "./discover-files.js";
 import { addImportResolutionRelationships } from "./import-resolver.js";
 import { addCallResolutionRelationships } from "./call-resolver.js";
+import { addInheritanceRelationships } from "./inheritance-resolver.js";
 import { detectLanguage } from "./language.js";
 import {
   createScanFailure,
@@ -111,6 +112,7 @@ export async function buildCodeGraph(
   report.resolvedImports = resolvedImports.resolved;
   report.unresolvedRelativeImports = resolvedImports.unresolved;
 
+  addInheritanceRelationships(graph);
   addCallResolutionRelationships(graph);
 
   return createResult(rootPath, graph, report);

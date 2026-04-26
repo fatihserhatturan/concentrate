@@ -493,6 +493,30 @@ describe("buildCodeGraph", () => {
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "outer"), ["inner"]);
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "inner"), ["String"]);
   });
+
+  it("resolves class inheritance and interface implementation relationships", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "inheritance"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const httpClient = graph.nodes.find((n) => n.label === "Class" && n.properties.name === "HttpClient")!;
+    const baseClient = graph.nodes.find((n) => n.label === "Class" && n.properties.name === "BaseClient")!;
+    const retryable = graph.nodes.find((n) => n.label === "Interface" && n.properties.name === "Retryable")!;
+    const userService = graph.nodes.find((n) => n.label === "Class" && n.properties.name === "UserService")!;
+    const baseService = graph.nodes.find((n) => n.label === "Class" && n.properties.name === "BaseService")!;
+
+    assert.ok(httpClient);
+    assert.ok(baseClient);
+    assert.ok(retryable);
+    assert.ok(userService);
+    assert.ok(baseService);
+
+    assertRelationship(graph.relationships, httpClient.id, "EXTENDS", baseClient.id);
+    assertRelationship(graph.relationships, httpClient.id, "IMPLEMENTS", retryable.id);
+    assertRelationship(graph.relationships, userService.id, "EXTENDS", baseService.id);
+  });
 });
 
 async function createScanErrorFixture(): Promise<string> {

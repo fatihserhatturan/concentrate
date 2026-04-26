@@ -55,6 +55,37 @@ describe("TypeScript parser", () => {
     assert.equal(cls.properties.isExported, true);
   });
 
+  it("extracts TypeScript interface, type alias, and enum declarations", async () => {
+    const result = await typescriptParser.parse(fixtureRoot, fixturePath);
+    const iface = result.nodes.find((n) => n.label === "Interface" && n.properties.name === "UserRecord");
+    const typeAlias = result.nodes.find((n) => n.label === "TypeAlias" && n.properties.name === "UserId");
+    const enumNode = result.nodes.find((n) => n.label === "Enum" && n.properties.name === "UserRole");
+
+    assert.ok(iface);
+    assert.ok(typeAlias);
+    assert.ok(enumNode);
+    assert.equal(iface.properties.isExported, true);
+    assert.equal(typeAlias.properties.isExported, false);
+    assert.equal(enumNode.properties.isExported, true);
+  });
+
+  it("relates TypeScript declarations to their file", async () => {
+    const result = await typescriptParser.parse(fixtureRoot, fixturePath);
+    const iface = result.nodes.find((n) => n.label === "Interface" && n.properties.name === "UserRecord")!;
+    const typeAlias = result.nodes.find((n) => n.label === "TypeAlias" && n.properties.name === "UserId")!;
+    const enumNode = result.nodes.find((n) => n.label === "Enum" && n.properties.name === "UserRole")!;
+
+    assert.ok(result.relationships.some((r) => (
+      r.from === result.fileNodeId && r.to === iface.id && r.type === "DEFINES_INTERFACE"
+    )));
+    assert.ok(result.relationships.some((r) => (
+      r.from === result.fileNodeId && r.to === typeAlias.id && r.type === "DEFINES_TYPE_ALIAS"
+    )));
+    assert.ok(result.relationships.some((r) => (
+      r.from === result.fileNodeId && r.to === enumNode.id && r.type === "DEFINES_ENUM"
+    )));
+  });
+
   it("attributes methods to class via DEFINES_METHOD", async () => {
     const result = await typescriptParser.parse(fixtureRoot, fixturePath);
     const cls = result.nodes.find((n) => n.label === "Class" && n.properties.name === "UserService")!;
