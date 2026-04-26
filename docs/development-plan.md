@@ -154,7 +154,84 @@ the tool produces a faithful structural model of real-world codebases.
    - Add `RESOLVES_TO` edges for crate-internal paths.
    - Add fixture and test.
 
+## Milestone 5: Graph Depth and Queryability
+
+The goal of this milestone is to make the graph genuinely useful for code intelligence queries
+by closing the most critical structural and semantic gaps.
+
+### 5a — Call resolution
+
+23. [ ] Resolve call expressions to their target Function nodes.
+   - Add `RESOLVES_TO` relationship: `Call → Function`.
+   - For same-file calls: match by function name within the same file.
+   - For cross-file calls: use import graph to locate the defining file, then match by name.
+   - Apply to all languages.
+   - Enables queries such as "list all callers of function X".
+
+### 5b — TypeScript-specific constructs
+
+24. [ ] Extract TypeScript interfaces, type aliases, and enums.
+   - Add `Interface` node label for `interface` declarations.
+   - Add `TypeAlias` node label for `type X = ...` declarations.
+   - Add `Enum` node label for `enum` declarations.
+   - Add `DEFINES_INTERFACE`, `DEFINES_TYPE_ALIAS`, `DEFINES_ENUM` relationships from File.
+   - Extract `isExported` on each.
+   - Add fixture and tests.
+
+### 5c — Inheritance and implementation relationships
+
+25. [ ] Extract class inheritance and interface implementation.
+   - Add `EXTENDS` relationship: `Class → Class`.
+   - Add `IMPLEMENTS` relationship: `Class → Interface`.
+   - Apply to JS/TS (`extends`, `implements` clauses) and Python (base class list).
+   - Go struct embedding and Rust trait `impl` as stretch goals.
+   - Add fixture and tests.
+
+### 5d — Re-export tracking
+
+26. [ ] Track JS/TS re-exports.
+   - Handle `export { foo } from './bar'` — add `IMPORTS` + `RESOLVES_TO` edges.
+   - Handle `export * from './bar'` — add a wildcard re-export edge.
+   - Prevents import chain gaps at barrel files.
+   - Add fixture and tests.
+
+### 5e — Package boundary resolution
+
+27. [ ] Resolve `package.json` exports, main, and types fields.
+   - Read `package.json` `exports`, `main`, and `types` to resolve package-style imports.
+   - Fills the gap left by task 10 for Node.js package boundaries.
+   - Add fixture and tests.
+
+### 5f — Visibility granularity
+
+28. [ ] Add `visibility` property to Function and Class nodes.
+   - TypeScript: `"private"`, `"protected"`, `"public"` (default `"public"`).
+   - Rust: `"pub"`, `"pub(crate)"`, `"pub(super)"`, `"private"`.
+   - Python: `"private"` (leading `_`), `"dunder"` (leading `__`), `"public"`.
+   - Go: `"exported"` (uppercase) or `"unexported"`.
+   - Supersedes the boolean `isExported` for finer-grained queries.
+   - Update fixture assertions.
+
+## Long-Term Development Goals
+
+These items require significant architectural work or external integrations and are tracked
+separately as future investment areas rather than near-term tasks.
+
+### Incremental Scanning
+
+- Avoid full re-scans by tracking file content hashes between runs.
+- Only re-parse files whose hash has changed since the last scan.
+- Update only the affected nodes and relationships in the graph.
+- Critical for large codebases where full scans take too long to be practical.
+
+### MCP Server
+
+- Expose the graph as a Model Context Protocol (MCP) tool.
+- Allow Claude and other MCP clients to query the code graph directly in natural language.
+- Potential tools: `find_callers`, `find_definitions`, `list_exports`, `trace_import_chain`.
+- Turns Concentrate into an always-on code intelligence layer for AI-assisted development.
+
 ## Current Priority
 
-Milestone 3 is complete. Start Milestone 4 with task 15 (arrow function extraction) —
-it has the largest impact on graph completeness for real JS/TS codebases.
+Milestone 4 is complete. Start Milestone 5 with task 23 (call resolution) —
+it has the largest impact on the practical queryability of the graph.
