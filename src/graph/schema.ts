@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 6;
+export const SCHEMA_VERSION = 7;
 
 export const schemaVersionTableStatement =
   "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
@@ -7,7 +7,7 @@ export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS Repo(id STRING PRIMARY KEY, path STRING, name STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Directory(id STRING PRIMARY KEY, path STRING, relativePath STRING, name STRING)",
   "CREATE NODE TABLE IF NOT EXISTS File(id STRING PRIMARY KEY, path STRING, relativePath STRING, language STRING)",
-  "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64)",
+  "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64, isReExport BOOLEAN, isWildcard BOOLEAN)",
   "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, line INT64, endLine INT64, className STRING, isExported BOOLEAN, isAsync BOOLEAN)",
   "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN, extendsNames STRING, implementsNames STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Interface(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",
@@ -27,6 +27,7 @@ export const schemaStatements = [
   "CREATE REL TABLE IF NOT EXISTS DEFINES_METHOD(FROM Class TO Function)",
   "CREATE REL TABLE IF NOT EXISTS EXTENDS(FROM Class TO Class)",
   "CREATE REL TABLE IF NOT EXISTS IMPLEMENTS(FROM Class TO Interface)",
+  "CREATE REL TABLE IF NOT EXISTS RE_EXPORTS(FROM File TO Import)",
   "CREATE REL TABLE IF NOT EXISTS CALLS(FROM Function TO Call)",
   "CREATE REL TABLE IF NOT EXISTS CALL_RESOLVES_TO(FROM Call TO Function)",
 ];
@@ -57,6 +58,7 @@ export const relationshipTypes = [
   "DEFINES_METHOD",
   "EXTENDS",
   "IMPLEMENTS",
+  "RE_EXPORTS",
   "CALLS",
   "CALL_RESOLVES_TO",
 ] as const;

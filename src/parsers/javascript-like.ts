@@ -69,6 +69,28 @@ async function parseJavaScriptLikeFile(
       }
     }
 
+    if (node.type === "export_statement") {
+      const reExportNode = createReExportImportNode(fileNodeId, node);
+      if (reExportNode) {
+        nodes.push(reExportNode);
+        relationships.push({
+          from: fileNodeId,
+          to: reExportNode.id,
+          type: "IMPORTS",
+          properties: {},
+        });
+
+        if (reExportNode.properties.isWildcard === true) {
+          relationships.push({
+            from: fileNodeId,
+            to: reExportNode.id,
+            type: "RE_EXPORTS",
+            properties: {},
+          });
+        }
+      }
+    }
+
     if (isFunctionNode(node) && node.type !== "method_definition") {
       const functionNode = createFunctionNode(fileNodeId, node);
       if (functionNode) {
@@ -218,10 +240,7 @@ function createVariableFunctionNode(
 }
 
 function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
-  const source = node
-    .namedChildren
-    .find((child) => child.type === "string")?.text
-    .replace(/^["']|["']$/g, "");
+  const source = extractStringSource(node);
 
   if (!source) {
     return null;
@@ -234,8 +253,40 @@ function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
       source,
       specifier: node.text,
       line: node.startPosition.row + 1,
+      isReExport: false,
+      isWildcard: false,
     },
   };
+}
+
+function createReExportImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
+  const source = extractStringSource(node);
+  if (!source) {
+    return null;
+  }
+
+  return {
+    id: `${fileNodeId}:import:${node.startPosition.row + 1}:${source}`,
+    label: "Import",
+    properties: {
+      source,
+      specifier: node.text,
+      line: node.startPosition.row + 1,
+      isReExport: true,
+      isWildcard: isWildcardReExport(node),
+    },
+  };
+}
+
+function extractStringSource(node: Parser.SyntaxNode): string | null {
+  return node
+    .namedChildren
+    .find((child) => child.type === "string")?.text
+    .replace(/^["']|["']$/g, "") ?? null;
+}
+
+function isWildcardReExport(node: Parser.SyntaxNode): boolean {
+  return /^export\s+\*/.test(node.text);
 }
 
 function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, className?: string): GraphNode | null {

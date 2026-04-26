@@ -189,7 +189,7 @@ by closing the most critical structural and semantic gaps.
 
 ### 5d — Re-export tracking
 
-26. [ ] Track JS/TS re-exports.
+26. [x] Track JS/TS re-exports.
    - Handle `export { foo } from './bar'` — add `IMPORTS` + `RESOLVES_TO` edges.
    - Handle `export * from './bar'` — add a wildcard re-export edge.
    - Prevents import chain gaps at barrel files.

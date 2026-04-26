@@ -24,6 +24,7 @@ export type GraphRelationshipType =
   | "DEFINES_METHOD"
   | "EXTENDS"
   | "IMPLEMENTS"
+  | "RE_EXPORTS"
   | "CALLS"
   | "CALL_RESOLVES_TO";
 

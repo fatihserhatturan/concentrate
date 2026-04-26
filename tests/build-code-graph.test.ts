@@ -517,6 +517,36 @@ describe("buildCodeGraph", () => {
     assertRelationship(graph.relationships, httpClient.id, "IMPLEMENTS", retryable.id);
     assertRelationship(graph.relationships, userService.id, "EXTENDS", baseService.id);
   });
+
+  it("tracks JS/TS re-exports and resolves their target files", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "re-exports"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.resolvedImports, 2);
+    assert.equal(graph.report.unresolvedRelativeImports, 0);
+
+    const namedReExport = graph.nodes.find((n) => (
+      n.label === "Import" && n.properties.source === "./client.js"
+    ));
+    const wildcardReExport = graph.nodes.find((n) => (
+      n.label === "Import" && n.properties.source === "./errors.js"
+    ));
+
+    assert.ok(namedReExport);
+    assert.ok(wildcardReExport);
+    assert.equal(namedReExport.properties.isReExport, true);
+    assert.equal(namedReExport.properties.isWildcard, false);
+    assert.equal(wildcardReExport.properties.isReExport, true);
+    assert.equal(wildcardReExport.properties.isWildcard, true);
+
+    assertRelationship(graph.relationships, "file:index.ts", "IMPORTS", namedReExport.id);
+    assertRelationship(graph.relationships, namedReExport.id, "RESOLVES_TO", "file:client.ts");
+    assertRelationship(graph.relationships, "file:index.ts", "IMPORTS", wildcardReExport.id);
+    assertRelationship(graph.relationships, wildcardReExport.id, "RESOLVES_TO", "file:errors.ts");
+    assertRelationship(graph.relationships, "file:index.ts", "RE_EXPORTS", wildcardReExport.id);
+  });
 });
 
 async function createScanErrorFixture(): Promise<string> {
