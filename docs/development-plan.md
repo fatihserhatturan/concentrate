@@ -212,6 +212,76 @@ by closing the most critical structural and semantic gaps.
    - Supersedes the boolean `isExported` for finer-grained queries.
    - Update fixture assertions.
 
+## Milestone 6: JS/TS Graph Fidelity
+
+The goal of this milestone is to close the most significant structural gaps in the JS/TS
+graph so that queries reflect the real API surface and dependency structure of a codebase.
+
+### 6a — Named import/export binding resolution (P0)
+
+29. [ ] Parse named import and export bindings into discrete graph edges.
+   - Break `import { foo, bar } from './utils'` into individual `IMPORTS_NAME` edges
+     from File to the target Function/Class/TypeAlias nodes.
+   - Track the local alias when present: `import { foo as f }`.
+   - Fix the call resolver ambiguity: currently a name-only call scans all imported files
+     for any function with that name; use the binding list to narrow to the correct target.
+   - Add fixture and tests.
+
+### 6b — Dynamic import support (P0)
+
+30. [ ] Capture `import()` expressions as Import nodes with resolution.
+   - Detect `import(specifier)` call expressions (not `import_statement`).
+   - Emit an `Import` node with `isDynamic: true`.
+   - Add `IMPORTS` and `RESOLVES_TO` edges using the existing resolution pipeline.
+   - Cover `await import('./foo')`, `React.lazy(() => import('./Page'))`, and
+     `import(variable)` (unresolvable — record as unresolved).
+   - Add fixture and tests.
+
+### 6c — CommonJS require() support (P0)
+
+31. [ ] Treat `require()` calls as Import nodes in JS/CJS files.
+   - Detect `require(specifier)` call expressions in `.js` / `.cjs` / `.mjs` files.
+   - Emit an `Import` node with `isCjs: true`.
+   - Add `IMPORTS` and `RESOLVES_TO` edges using the existing resolution pipeline.
+   - Handle destructured form: `const { foo } = require('./utils')`.
+   - Add fixture and tests.
+
+### 6d — Function signature extraction (P1)
+
+32. [ ] Add parameter list and return type to Function nodes.
+   - Add `parameters` property: JSON-serialized array of `{ name, type }` objects.
+   - Add `returnType` property: the declared return type as a string, or `null`.
+   - Apply to JS/TS function declarations, arrow functions, and method definitions.
+   - Add fixture and tests.
+
+### 6e — Class field extraction (P1)
+
+33. [ ] Extract class fields and properties as nodes.
+   - Add a `Field` node label: `id`, `name`, `typeName`, `isStatic`, `isReadonly`,
+     `visibility`, `line`.
+   - Add `DEFINES_FIELD` relationship: `Class → Field`.
+   - Cover TypeScript `public/private/protected/readonly` modifiers.
+   - Cover private class fields (`#name`).
+   - Add fixture and tests.
+
+### 6f — Module-level constant and variable export extraction (P2)
+
+34. [ ] Extract exported module-level constants and variables.
+   - Add a `Variable` node label: `id`, `name`, `kind` (`const`/`let`/`var`),
+     `isExported`, `line`.
+   - Add `DEFINES_VARIABLE` relationship: `File → Variable`.
+   - Skip variable declarators that are arrow functions or function expressions
+     (already captured as Function nodes).
+   - Add fixture and tests.
+
+### 6g — Decorator extraction (P2)
+
+35. [ ] Extract decorators on classes and methods.
+   - Add a `Decorator` node label: `id`, `name`, `expression`, `line`.
+   - Add `HAS_DECORATOR` relationship: `Class → Decorator` and `Function → Decorator`.
+   - Apply to TypeScript class decorators and method decorators.
+   - Add fixture and tests.
+
 ## Long-Term Development Goals
 
 These items require significant architectural work or external integrations and are tracked
@@ -233,5 +303,5 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestones 4 and 5a are complete. Continue Milestone 5 with task 24 (TypeScript
-interfaces, type aliases, and enums) or task 25 (class inheritance and implementation).
+Milestone 5 is complete. Begin Milestone 6 with tasks 29–31 (P0: named import bindings,
+dynamic imports, CommonJS require) before moving to P1 signature and field extraction.

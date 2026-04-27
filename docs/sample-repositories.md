@@ -5,12 +5,12 @@ This document tracks external repositories used for scanner smoke tests.
 ## Ky
 
 - Repository: `https://github.com/sindresorhus/ky`
-- Local path: `/tmp/concentrate-sample-ky`
-- Graph database: `/Users/fatihserhatturan/Desktop/projeler/concentrate/.concentrate/ky.kuzu`
+- Local path: `C:/Users/turan.fatih/Desktop/concentrate-sample-ky`
+- Graph database: `.concentrate/ky.kuzu`
 - Last scan command:
 
 ```bash
-npm run dev -- scan /tmp/concentrate-sample-ky --database .concentrate/ky.kuzu
+npm run dev -- scan "C:/Users/turan.fatih/Desktop/concentrate-sample-ky" --database .concentrate/ky.kuzu
 ```
 
 - Example stats command:
