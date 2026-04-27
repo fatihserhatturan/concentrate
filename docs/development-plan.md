@@ -219,7 +219,7 @@ graph so that queries reflect the real API surface and dependency structure of a
 
 ### 6a — Named import/export binding resolution (P0)
 
-29. [ ] Parse named import and export bindings into discrete graph edges.
+29. [x] Parse named import and export bindings into discrete graph edges.
    - Break `import { foo, bar } from './utils'` into individual `IMPORTS_NAME` edges
      from File to the target Function/Class/TypeAlias nodes.
    - Track the local alias when present: `import { foo as f }`.
@@ -229,7 +229,7 @@ graph so that queries reflect the real API surface and dependency structure of a
 
 ### 6b — Dynamic import support (P0)
 
-30. [ ] Capture `import()` expressions as Import nodes with resolution.
+30. [x] Capture `import()` expressions as Import nodes with resolution.
    - Detect `import(specifier)` call expressions (not `import_statement`).
    - Emit an `Import` node with `isDynamic: true`.
    - Add `IMPORTS` and `RESOLVES_TO` edges using the existing resolution pipeline.

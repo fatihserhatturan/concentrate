@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import Parser from "tree-sitter";
 import JavaScript from "tree-sitter-javascript";
 import TypeScript from "tree-sitter-typescript";
-import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../graph/model.js";
+import type { GraphNode, GraphRelationship, ParsedSourceFile, ImportBinding } from "../graph/model.js";
 import type { SupportedLanguage } from "../scanner/language.js";
 import type { LanguageParser } from "./types.js";
 import {
@@ -66,6 +66,27 @@ async function parseJavaScriptLikeFile(
           type: "IMPORTS",
           properties: {},
         });
+      }
+    }
+
+    if (node.type === "call_expression") {
+      const fn = node.childForFieldName("function");
+      if (fn?.type === "import") {
+        const args = node.childForFieldName("arguments");
+        const sourceNode = args?.namedChildren.find((c) => c.type === "string");
+        if (sourceNode) {
+          const source = sourceNode.text.replace(/^["']|["']$/g, "");
+          const dynamicImportNode = createDynamicImportNode(fileNodeId, node, source);
+          if (!nodes.some((n) => n.id === dynamicImportNode.id)) {
+            nodes.push(dynamicImportNode);
+            relationships.push({
+              from: fileNodeId,
+              to: dynamicImportNode.id,
+              type: "IMPORTS",
+              properties: {},
+            });
+          }
+        }
       }
     }
 
@@ -256,8 +277,60 @@ function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
       line: node.startPosition.row + 1,
       isReExport: false,
       isWildcard: false,
+      isDynamic: false,
+      bindings: serializeImportBindings(node),
     },
   };
+}
+
+function createDynamicImportNode(fileNodeId: string, node: Parser.SyntaxNode, source: string): GraphNode {
+  return {
+    id: `${fileNodeId}:import:${node.startPosition.row + 1}:${source}`,
+    label: "Import",
+    properties: {
+      source,
+      specifier: node.text,
+      line: node.startPosition.row + 1,
+      isReExport: false,
+      isWildcard: false,
+      isDynamic: true,
+      bindings: null,
+    },
+  };
+}
+
+function serializeImportBindings(node: Parser.SyntaxNode): string | null {
+  const bindings: ImportBinding[] = [];
+  const importClause = node.namedChildren.find((c) => c.type === "import_clause");
+  if (!importClause) {
+    return null;
+  }
+
+  for (const child of importClause.namedChildren) {
+    if (child.type === "identifier") {
+      bindings.push({ imported: "default", local: child.text, kind: "default" });
+    } else if (child.type === "namespace_import") {
+      const nameNode = child.childForFieldName("alias") ?? child.namedChildren.find((c) => c.type === "identifier");
+      if (nameNode) {
+        bindings.push({ imported: "*", local: nameNode.text, kind: "namespace" });
+      }
+    } else if (child.type === "named_imports") {
+      for (const specifier of child.namedChildren) {
+        if (specifier.type !== "import_specifier") continue;
+        const nameNode = specifier.childForFieldName("name");
+        const aliasNode = specifier.childForFieldName("alias");
+        if (nameNode) {
+          bindings.push({
+            imported: nameNode.text,
+            local: aliasNode?.text ?? nameNode.text,
+            kind: "named",
+          });
+        }
+      }
+    }
+  }
+
+  return bindings.length > 0 ? JSON.stringify(bindings) : null;
 }
 
 function createReExportImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
@@ -275,6 +348,8 @@ function createReExportImportNode(fileNodeId: string, node: Parser.SyntaxNode): 
       line: node.startPosition.row + 1,
       isReExport: true,
       isWildcard: isWildcardReExport(node),
+      isDynamic: false,
+      bindings: null,
     },
   };
 }

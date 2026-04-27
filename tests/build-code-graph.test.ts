@@ -550,6 +550,132 @@ describe("buildCodeGraph", () => {
     assertRelationship(graph.relationships, "file:index.ts", "RE_EXPORTS", wildcardReExport.id);
   });
 
+  it("captures dynamic imports and resolves them via the existing pipeline", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "dynamic-imports"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.parsedFiles, 3);
+
+    // Two string-literal dynamic imports must be captured
+    const dynamicImports = graph.nodes.filter(
+      (n) => n.label === "Import" && n.properties.isDynamic === true,
+    );
+    assert.equal(dynamicImports.length, 2, "Expected 2 dynamic Import nodes");
+
+    const utilsImport = dynamicImports.find((n) => n.properties.source === "./utils");
+    const pageImport = dynamicImports.find((n) => n.properties.source === "./page");
+    assert.ok(utilsImport, "Dynamic import of ./utils");
+    assert.ok(pageImport, "Dynamic import of ./page");
+
+    // bindings must be null — dynamic imports carry no named specifiers
+    assert.equal(utilsImport!.properties.bindings, null);
+    assert.equal(pageImport!.properties.bindings, null);
+
+    // Both must resolve to their target files
+    assert.equal(graph.report.resolvedImports, 2);
+    assertRelationship(graph.relationships, utilsImport!.id, "RESOLVES_TO", "file:utils.ts");
+    assertRelationship(graph.relationships, pageImport!.id, "RESOLVES_TO", "file:page.ts");
+
+    // Variable-specifier import(path) must NOT produce an Import node
+    const variableImport = graph.nodes.find(
+      (n) => n.label === "Import" && n.properties.source === "path",
+    );
+    assert.equal(variableImport, undefined, "Variable-specifier import must not be captured");
+
+    // Static imports in the same codebase must have isDynamic: false
+    const staticImports = graph.nodes.filter(
+      (n) => n.label === "Import" && n.properties.isDynamic === false,
+    );
+    assert.equal(staticImports.length, 0, "No static imports in this fixture");
+  });
+
+  it("extracts named import bindings and resolves aliased calls to the correct target", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "named-imports"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.parsedFiles, 3);
+    assert.equal(graph.report.resolvedImports, 3);
+
+    // --- binding extraction ---
+    const namedImport = graph.nodes.find(
+      (n) => n.label === "Import" && n.properties.source === "./utils-a" && !n.properties.isReExport,
+    )!;
+    const aliasedImport = graph.nodes.find(
+      (n) => n.label === "Import" && n.properties.source === "./utils-b",
+    )!;
+    const namespaceImport = graph.nodes.find(
+      (n) => n.label === "Import" && n.properties.source === "./utils-a" && !n.properties.isReExport
+        && (n.properties.bindings as string ?? "").includes("namespace"),
+    )!;
+
+    assert.ok(namedImport, "named import from utils-a");
+    assert.ok(aliasedImport, "aliased import from utils-b");
+    assert.ok(namespaceImport, "namespace import from utils-a");
+
+    const namedBindings = JSON.parse(namedImport.properties.bindings as string);
+    assert.deepEqual(namedBindings, [{ imported: "format", local: "format", kind: "named" }]);
+
+    const aliasedBindings = JSON.parse(aliasedImport.properties.bindings as string);
+    assert.deepEqual(aliasedBindings, [{ imported: "format", local: "fmt", kind: "named" }]);
+
+    const nsBindings = JSON.parse(namespaceImport.properties.bindings as string);
+    assert.deepEqual(nsBindings, [{ imported: "*", local: "A", kind: "namespace" }]);
+
+    // --- call resolution ---
+    const runCallIds = graph.relationships
+      .filter((r) => r.type === "CALLS")
+      .filter((r) => graph.nodes.find((n) => n.id === r.from)?.properties.name === "run")
+      .map((r) => r.to);
+
+    const formatANode = graph.nodes.find(
+      (n) => n.label === "Function" && n.properties.name === "format"
+        && (n.id as string).includes("utils-a"),
+    )!;
+    const formatBNode = graph.nodes.find(
+      (n) => n.label === "Function" && n.properties.name === "format"
+        && (n.id as string).includes("utils-b"),
+    )!;
+    const parseNode = graph.nodes.find(
+      (n) => n.label === "Function" && n.properties.name === "parse",
+    )!;
+
+    assert.ok(formatANode, "format in utils-a");
+    assert.ok(formatBNode, "format in utils-b");
+    assert.ok(parseNode, "parse in utils-a");
+
+    // format('hello') → utils-a's format (not utils-b's)
+    const formatCallId = runCallIds.find((id) => {
+      const call = graph.nodes.find((n) => n.id === id);
+      return call?.properties.callee === "format" && !call.properties.receiver;
+    });
+    assert.ok(formatCallId, "Call node for format()");
+    assertRelationship(graph.relationships, formatCallId, "CALL_RESOLVES_TO", formatANode.id);
+    assert.ok(
+      !graph.relationships.some((r) => r.from === formatCallId && r.to === formatBNode.id),
+      "format() must NOT resolve to utils-b",
+    );
+
+    // fmt('world') → utils-b's format (via alias)
+    const fmtCallId = runCallIds.find((id) => {
+      const call = graph.nodes.find((n) => n.id === id);
+      return call?.properties.callee === "fmt";
+    });
+    assert.ok(fmtCallId, "Call node for fmt()");
+    assertRelationship(graph.relationships, fmtCallId, "CALL_RESOLVES_TO", formatBNode.id);
+
+    // A.parse('42') → utils-a's parse (via namespace)
+    const parseCallId = runCallIds.find((id) => {
+      const call = graph.nodes.find((n) => n.id === id);
+      return call?.properties.callee === "parse" && call.properties.receiver === "A";
+    });
+    assert.ok(parseCallId, "Call node for A.parse()");
+    assertRelationship(graph.relationships, parseCallId, "CALL_RESOLVES_TO", parseNode.id);
+  });
+
   it("resolves package.json exports, main, and types fields for JS/TS package imports", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "package-boundary"), {
       continueOnError: false,

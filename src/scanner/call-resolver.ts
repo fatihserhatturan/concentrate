@@ -1,5 +1,5 @@
 import { GraphBuilder } from "../graph/builder.js";
-import type { GraphNode } from "../graph/model.js";
+import type { GraphNode, ImportBinding } from "../graph/model.js";
 
 export function addCallResolutionRelationships(graph: GraphBuilder): {
   resolved: number;
@@ -138,31 +138,59 @@ function resolveCall(
     const sameFile = lookupFunctionInFile(callee, callerFileId, functionsByFileAndName);
     if (sameFile) return sameFile;
 
-    // Named import with no receiver: scan imports for a resolved file that defines callee
     if (!receiver) {
       const imports = importNodesByFile.get(callerFileId) ?? [];
       for (const importNode of imports) {
         const targetFileId = resolvedFileByImportId.get(importNode.id);
         if (!targetFileId) continue;
-        const found = lookupFunctionInFile(callee, targetFileId, functionsByFileAndName);
-        if (found) return found;
+
+        const bindings = parseBindings(importNode);
+        if (bindings !== null) {
+          // Narrow by binding: only consider this import if it brings `callee` into scope
+          const binding = bindings.find((b) => b.kind === "named" && b.local === callee);
+          if (!binding) continue;
+          // Use the original imported name (not the local alias) to look up in the target file
+          const found = lookupFunctionInFile(binding.imported, targetFileId, functionsByFileAndName);
+          if (found) return found;
+        } else {
+          // Fallback for imports without binding info (non-JS/TS files)
+          const found = lookupFunctionInFile(callee, targetFileId, functionsByFileAndName);
+          if (found) return found;
+        }
       }
     }
     return null;
   }
 
-  // Receiver-based: look for an import whose alias matches the receiver
+  // Receiver-based: find an import whose namespace or default alias matches the receiver
   const imports = importNodesByFile.get(callerFileId) ?? [];
   for (const importNode of imports) {
-    const alias = extractImportAlias(importNode.properties.specifier as string);
-    if (alias !== receiver) continue;
     const targetFileId = resolvedFileByImportId.get(importNode.id);
     if (!targetFileId) continue;
+
+    const bindings = parseBindings(importNode);
+    if (bindings !== null) {
+      const receiverBinding = bindings.find(
+        (b) => (b.kind === "namespace" || b.kind === "default") && b.local === receiver,
+      );
+      if (!receiverBinding) continue;
+    } else {
+      // Fallback to text parsing
+      const alias = extractImportAlias(importNode.properties.specifier as string);
+      if (alias !== receiver) continue;
+    }
+
     const found = lookupFunctionInFile(callee, targetFileId, functionsByFileAndName);
     if (found) return found;
   }
 
   return null;
+}
+
+function parseBindings(importNode: GraphNode): ImportBinding[] | null {
+  const raw = importNode.properties.bindings;
+  if (typeof raw !== "string") return null;
+  return JSON.parse(raw) as ImportBinding[];
 }
 
 function lookupFunctionInFile(

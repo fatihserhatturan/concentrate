@@ -30,6 +30,12 @@ export type GraphRelationshipType =
 
 export type GraphProperties = Record<string, string | number | boolean | null>;
 
+export type ImportBinding = {
+  imported: string;
+  local: string;
+  kind: "named" | "default" | "namespace";
+};
+
 export type GraphNode = {
   id: string;
   label: GraphNodeLabel;
