@@ -282,6 +282,59 @@ graph so that queries reflect the real API surface and dependency structure of a
    - Apply to TypeScript class decorators and method decorators.
    - Add fixture and tests.
 
+## Milestone 7: JS/TS Graph Fidelity — Remaining Gaps
+
+The goal of this milestone is to close the structural gaps identified after Milestone 6
+was completed. These are real-world patterns that appear frequently in JavaScript and
+TypeScript codebases but are not yet captured in the graph.
+
+### 7a — Class expression support (P0)
+
+36. [ ] Extract `class_expression` assigned to variables as Class nodes.
+   - Detect `variable_declarator` whose value is `class_expression`.
+   - Create a `Class` node using the variable name, linked via `DEFINES_CLASS`.
+   - Extract methods, fields, and decorators from the class body as with `class_declaration`.
+   - Add fixture and tests.
+
+### 7b — Constructor parameter properties (P0)
+
+37. [ ] Extract TypeScript constructor parameter properties as Field nodes.
+   - Detect `constructor` `method_definition` parameters with accessibility modifiers
+     (`public`, `private`, `protected`, `readonly`).
+   - Emit a `Field` node for each such parameter with the correct visibility and type.
+   - Link via `DEFINES_FIELD` from the parent Class node.
+   - Add fixture and tests.
+
+### 7c — Local named re-export tracking (P1)
+
+38. [ ] Track `export { foo }` statements that re-export local bindings.
+   - Detect `export_statement` nodes that have a named export list but no source string.
+   - Emit a `RE_EXPORTS` relationship from File to the target Function/Class/Variable node
+     by resolving the exported name against nodes already defined in the same file.
+   - Add fixture and tests.
+
+### 7d — CommonJS module.exports support (P1)
+
+39. [ ] Capture `module.exports` assignments as export metadata.
+   - Detect `module.exports = { ... }` and `module.exports.foo = ...` assignment patterns.
+   - For object-literal form: emit a `Variable` node (or reuse an existing node) per key.
+   - Mark each exported binding with `isExported: true`.
+   - Add fixture and tests.
+
+### 7e — Getter and setter kind tracking (P2)
+
+40. [ ] Distinguish getter and setter methods from regular methods.
+   - Read the `kind` field on `method_definition` nodes (`"get"`, `"set"`, `"method"`).
+   - Store the value as a `methodKind` property on Function nodes.
+   - Update fixture assertions.
+
+### 7f — Abstract class and method tracking (P2)
+
+41. [ ] Track the `abstract` modifier on classes and methods.
+   - Add an `isAbstract: boolean` property to Class and Function nodes.
+   - Set it to `true` when the TypeScript `abstract` keyword is present.
+   - Update fixture assertions.
+
 ## Long-Term Development Goals
 
 These items require significant architectural work or external integrations and are tracked
@@ -303,5 +356,6 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestone 5 is complete. Begin Milestone 6 with tasks 29–31 (P0: named import bindings,
-dynamic imports, CommonJS require) before moving to P1 signature and field extraction.
+Milestone 6 is complete. Begin Milestone 7 with tasks 36–37 (P0: class expression support,
+constructor parameter properties) before moving to P1 local re-export tracking and
+CommonJS module.exports support.
