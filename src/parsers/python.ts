@@ -230,6 +230,8 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       isExported: !name.startsWith("_"),
       isAsync: node.children.some((c) => c.type === "async"),
       visibility: pythonVisibility(name),
+      parameters: null,
+      returnType: null,
     },
   };
 }

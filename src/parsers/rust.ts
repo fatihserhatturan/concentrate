@@ -156,6 +156,8 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       isExported: rustVisibility(node) !== "private",
       isAsync: node.namedChildren.some((c) => c.type === "function_modifiers" && c.children.some((fc) => fc.type === "async")),
       visibility: rustVisibility(node),
+      parameters: null,
+      returnType: null,
     },
   };
 }

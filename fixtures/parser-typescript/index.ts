@@ -24,7 +24,28 @@ export const fetchData = async (url: string): Promise<string> => {
 
 const _internal = (): void => {};
 
+function Injectable() { return (target: any) => target; }
+function Get(path: string) { return (_t: any, _k: string, d: any) => d; }
+function Post(path: string) { return (_t: any, _k: string, d: any) => d; }
+
+@Injectable()
+class ApiController {
+  @Get('/all')
+  findAll(): string { return ''; }
+
+  @Post('/create')
+  create(): string { return ''; }
+}
+
 export class UserService {
+  public userId: string = '';
+  private password: string = '';
+  protected role: string = '';
+  readonly apiKey: string = '';
+  static instanceCount: number = 0;
+  #secret: string = '';
+  name: string = '';
+
   getName(id: string): string {
     return helper(id);
   }

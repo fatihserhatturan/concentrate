@@ -88,6 +88,24 @@ async function parseJavaScriptLikeFile(
           }
         }
       }
+
+      if (fn?.type === "identifier" && fn.text === "require") {
+        const args = node.childForFieldName("arguments");
+        const sourceNode = args?.namedChildren.find((c) => c.type === "string");
+        if (sourceNode) {
+          const source = sourceNode.text.replace(/^["']|["']$/g, "");
+          const cjsImportNode = createCjsImportNode(fileNodeId, node, source);
+          if (!nodes.some((n) => n.id === cjsImportNode.id)) {
+            nodes.push(cjsImportNode);
+            relationships.push({
+              from: fileNodeId,
+              to: cjsImportNode.id,
+              type: "IMPORTS",
+              properties: {},
+            });
+          }
+        }
+      }
     }
 
     if (node.type === "export_statement") {
@@ -160,6 +178,17 @@ async function parseJavaScriptLikeFile(
             })),
           );
         }
+      } else if (isModuleLevelDeclarator(node)) {
+        const variableNode = createVariableNode(fileNodeId, node);
+        if (variableNode) {
+          nodes.push(variableNode);
+          relationships.push({
+            from: fileNodeId,
+            to: variableNode.id,
+            type: "DEFINES_VARIABLE",
+            properties: {},
+          });
+        }
       }
     }
 
@@ -174,11 +203,44 @@ async function parseJavaScriptLikeFile(
           properties: {},
         });
 
+        // Class-level decorators are direct named children of class_declaration
+        for (const dec of node.namedChildren.filter((c) => c.type === "decorator")) {
+          const decoratorNode = createDecoratorNode(classNode.id, dec);
+          nodes.push(decoratorNode);
+          relationships.push({ from: classNode.id, to: decoratorNode.id, type: "HAS_DECORATOR", properties: {} });
+        }
+
         const className = String(classNode.properties.name);
         const classBody = node.childForFieldName("body");
         if (classBody) {
+          // Method decorators are siblings that appear immediately before method_definition
+          let pendingDecorators: Parser.SyntaxNode[] = [];
           for (const child of classBody.namedChildren) {
-            if (child.type !== "method_definition") continue;
+            if (child.type === "decorator") {
+              pendingDecorators.push(child);
+              continue;
+            }
+
+            if (child.type === "public_field_definition" || child.type === "field_definition") {
+              const fieldNode = createFieldNode(classNode.id, child);
+              if (fieldNode) {
+                nodes.push(fieldNode);
+                relationships.push({
+                  from: classNode.id,
+                  to: fieldNode.id,
+                  type: "DEFINES_FIELD",
+                  properties: {},
+                });
+              }
+              pendingDecorators = [];
+              continue;
+            }
+
+            if (child.type !== "method_definition") {
+              pendingDecorators = [];
+              continue;
+            }
+
             const methodNode = createFunctionNode(fileNodeId, child, className);
             if (methodNode) {
               nodes.push(methodNode);
@@ -198,7 +260,13 @@ async function parseJavaScriptLikeFile(
                   properties: {},
                 })),
               );
+              for (const dec of pendingDecorators) {
+                const decoratorNode = createDecoratorNode(methodNode.id, dec);
+                nodes.push(decoratorNode);
+                relationships.push({ from: methodNode.id, to: decoratorNode.id, type: "HAS_METHOD_DECORATOR", properties: {} });
+              }
             }
+            pendingDecorators = [];
           }
         }
       }
@@ -235,6 +303,35 @@ function isVariableFunctionValue(node: Parser.SyntaxNode | null | undefined): bo
   return node?.type === "arrow_function" || node?.type === "function_expression";
 }
 
+function isModuleLevelDeclarator(node: Parser.SyntaxNode): boolean {
+  const declaration = node.parent;
+  if (!declaration) return false;
+  const grandparent = declaration.parent;
+  return grandparent?.type === "program" || grandparent?.type === "export_statement";
+}
+
+function createVariableNode(fileNodeId: string, declarator: Parser.SyntaxNode): GraphNode | null {
+  const nameNode = declarator.childForFieldName("name");
+  if (!nameNode || nameNode.type !== "identifier") return null;
+
+  const declaration = declarator.parent!;
+  const kind = declaration.type === "variable_declaration"
+    ? "var"
+    : declaration.children[0]?.type === "const" ? "const" : "let";
+  const isExported = declaration.parent?.type === "export_statement";
+
+  return {
+    id: `${fileNodeId}:variable:${declarator.startPosition.row + 1}:${nameNode.text}`,
+    label: "Variable",
+    properties: {
+      name: nameNode.text,
+      kind,
+      isExported,
+      line: declarator.startPosition.row + 1,
+    },
+  };
+}
+
 function createVariableFunctionNode(
   fileNodeId: string,
   declarator: Parser.SyntaxNode,
@@ -257,6 +354,8 @@ function createVariableFunctionNode(
       isExported: declarator.parent?.parent?.type === "export_statement",
       isAsync: valueNode.children.some((c) => c.type === "async"),
       visibility: "public",
+      parameters: extractFunctionParameters(valueNode),
+      returnType: extractReturnType(valueNode),
     },
   };
 }
@@ -278,6 +377,7 @@ function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
       isReExport: false,
       isWildcard: false,
       isDynamic: false,
+      isCjs: false,
       bindings: serializeImportBindings(node),
     },
   };
@@ -294,9 +394,61 @@ function createDynamicImportNode(fileNodeId: string, node: Parser.SyntaxNode, so
       isReExport: false,
       isWildcard: false,
       isDynamic: true,
+      isCjs: false,
       bindings: null,
     },
   };
+}
+
+function createCjsImportNode(fileNodeId: string, node: Parser.SyntaxNode, source: string): GraphNode {
+  return {
+    id: `${fileNodeId}:import:${node.startPosition.row + 1}:${source}`,
+    label: "Import",
+    properties: {
+      source,
+      specifier: node.text,
+      line: node.startPosition.row + 1,
+      isReExport: false,
+      isWildcard: false,
+      isDynamic: false,
+      isCjs: true,
+      bindings: extractCjsBindings(node),
+    },
+  };
+}
+
+function extractCjsBindings(requireCall: Parser.SyntaxNode): string | null {
+  const declarator = requireCall.parent;
+  if (!declarator || declarator.type !== "variable_declarator") {
+    return null;
+  }
+
+  const nameNode = declarator.childForFieldName("name");
+  if (!nameNode) {
+    return null;
+  }
+
+  if (nameNode.type === "object_pattern") {
+    const bindings: ImportBinding[] = [];
+    for (const child of nameNode.namedChildren) {
+      if (child.type === "shorthand_property_identifier_pattern") {
+        bindings.push({ imported: child.text, local: child.text, kind: "named" });
+      } else if (child.type === "pair_pattern") {
+        const key = child.childForFieldName("key");
+        const value = child.childForFieldName("value");
+        if (key && value) {
+          bindings.push({ imported: key.text, local: value.text, kind: "named" });
+        }
+      }
+    }
+    return bindings.length > 0 ? JSON.stringify(bindings) : null;
+  }
+
+  if (nameNode.type === "identifier") {
+    return JSON.stringify([{ imported: "default", local: nameNode.text, kind: "default" }]);
+  }
+
+  return null;
 }
 
 function serializeImportBindings(node: Parser.SyntaxNode): string | null {
@@ -349,6 +501,7 @@ function createReExportImportNode(fileNodeId: string, node: Parser.SyntaxNode): 
       isReExport: true,
       isWildcard: isWildcardReExport(node),
       isDynamic: false,
+      isCjs: false,
       bindings: null,
     },
   };
@@ -383,8 +536,66 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       isExported: node.parent?.type === "export_statement",
       isAsync: node.children.some((c) => c.type === "async"),
       visibility: extractTypeScriptVisibility(node),
+      parameters: extractFunctionParameters(node),
+      returnType: extractReturnType(node),
     },
   };
+}
+
+function extractFunctionParameters(functionNode: Parser.SyntaxNode): string {
+  const paramsNode = functionNode.childForFieldName("parameters");
+  if (!paramsNode) {
+    return "[]";
+  }
+
+  // Single identifier: arrow shorthand `x => ...`
+  if (paramsNode.type === "identifier") {
+    return JSON.stringify([{ name: paramsNode.text, type: null }]);
+  }
+
+  const params: { name: string; type: string | null }[] = [];
+  for (const child of paramsNode.namedChildren) {
+    const param = extractSingleParameter(child);
+    if (param) {
+      params.push(param);
+    }
+  }
+  return JSON.stringify(params);
+}
+
+function extractSingleParameter(node: Parser.SyntaxNode): { name: string; type: string | null } | null {
+  if (node.type === "identifier") {
+    return { name: node.text, type: null };
+  }
+  if (node.type === "required_parameter" || node.type === "optional_parameter") {
+    const pattern = node.childForFieldName("pattern");
+    const typeAnnotation = node.childForFieldName("type");
+    if (!pattern) return null;
+    return {
+      name: pattern.text,
+      type: typeAnnotation ? typeAnnotation.text.replace(/^:\s*/, "") : null,
+    };
+  }
+  if (node.type === "rest_parameter") {
+    const pattern = node.childForFieldName("pattern");
+    const typeAnnotation = node.childForFieldName("type");
+    if (!pattern) return null;
+    return {
+      name: `...${pattern.text}`,
+      type: typeAnnotation ? typeAnnotation.text.replace(/^:\s*/, "") : null,
+    };
+  }
+  if (node.type === "assignment_pattern") {
+    const left = node.childForFieldName("left");
+    return left ? { name: left.text, type: null } : null;
+  }
+  return null;
+}
+
+function extractReturnType(functionNode: Parser.SyntaxNode): string | null {
+  const returnTypeNode = functionNode.childForFieldName("return_type");
+  if (!returnTypeNode) return null;
+  return returnTypeNode.text.replace(/^:\s*/, "");
 }
 
 function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
@@ -404,6 +615,61 @@ function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode
       visibility: extractTypeScriptVisibility(node),
       extendsNames: serializeNameList(extractTypeScriptExtendsNames(node)),
       implementsNames: serializeNameList(extractTypeScriptImplementsNames(node)),
+    },
+  };
+}
+
+function createFieldNode(classNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
+  const nameNode = node.childForFieldName("name");
+  if (!nameNode) return null;
+
+  const name = nameNode.text;
+  const typeAnnotation = node.childForFieldName("type");
+  const typeName = typeAnnotation ? typeAnnotation.text.replace(/^:\s*/, "") : null;
+  const isStatic = node.children.some((c) => c.type === "static");
+  const isReadonly = node.children.some((c) => c.type === "readonly");
+
+  let visibility: string;
+  if (name.startsWith("#")) {
+    visibility = "private";
+  } else {
+    const modifier = node.children.find((c) => c.type === "accessibility_modifier")?.text;
+    visibility = modifier === "private" || modifier === "protected" ? modifier : "public";
+  }
+
+  return {
+    id: `${classNodeId}:field:${node.startPosition.row + 1}:${name}`,
+    label: "Field",
+    properties: {
+      name,
+      typeName,
+      isStatic,
+      isReadonly,
+      visibility,
+      line: node.startPosition.row + 1,
+    },
+  };
+}
+
+function createDecoratorNode(targetId: string, node: Parser.SyntaxNode): GraphNode {
+  const inner = node.namedChildren[0];
+  let name: string;
+  if (!inner) {
+    name = node.text.replace(/^@/, "").trim();
+  } else if (inner.type === "identifier") {
+    name = inner.text;
+  } else if (inner.type === "call_expression") {
+    name = inner.childForFieldName("function")?.text ?? inner.text;
+  } else {
+    name = inner.text;
+  }
+  return {
+    id: `${targetId}:decorator:${node.startPosition.row + 1}:${name}`,
+    label: "Decorator",
+    properties: {
+      name,
+      expression: node.text,
+      line: node.startPosition.row + 1,
     },
   };
 }

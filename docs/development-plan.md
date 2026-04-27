@@ -239,7 +239,7 @@ graph so that queries reflect the real API surface and dependency structure of a
 
 ### 6c — CommonJS require() support (P0)
 
-31. [ ] Treat `require()` calls as Import nodes in JS/CJS files.
+31. [x] Treat `require()` calls as Import nodes in JS/CJS files.
    - Detect `require(specifier)` call expressions in `.js` / `.cjs` / `.mjs` files.
    - Emit an `Import` node with `isCjs: true`.
    - Add `IMPORTS` and `RESOLVES_TO` edges using the existing resolution pipeline.
@@ -248,7 +248,7 @@ graph so that queries reflect the real API surface and dependency structure of a
 
 ### 6d — Function signature extraction (P1)
 
-32. [ ] Add parameter list and return type to Function nodes.
+32. [x] Add parameter list and return type to Function nodes.
    - Add `parameters` property: JSON-serialized array of `{ name, type }` objects.
    - Add `returnType` property: the declared return type as a string, or `null`.
    - Apply to JS/TS function declarations, arrow functions, and method definitions.
@@ -256,7 +256,7 @@ graph so that queries reflect the real API surface and dependency structure of a
 
 ### 6e — Class field extraction (P1)
 
-33. [ ] Extract class fields and properties as nodes.
+33. [x] Extract class fields and properties as nodes.
    - Add a `Field` node label: `id`, `name`, `typeName`, `isStatic`, `isReadonly`,
      `visibility`, `line`.
    - Add `DEFINES_FIELD` relationship: `Class → Field`.
@@ -266,7 +266,7 @@ graph so that queries reflect the real API surface and dependency structure of a
 
 ### 6f — Module-level constant and variable export extraction (P2)
 
-34. [ ] Extract exported module-level constants and variables.
+34. [x] Extract exported module-level constants and variables.
    - Add a `Variable` node label: `id`, `name`, `kind` (`const`/`let`/`var`),
      `isExported`, `line`.
    - Add `DEFINES_VARIABLE` relationship: `File → Variable`.
@@ -276,7 +276,7 @@ graph so that queries reflect the real API surface and dependency structure of a
 
 ### 6g — Decorator extraction (P2)
 
-35. [ ] Extract decorators on classes and methods.
+35. [x] Extract decorators on classes and methods.
    - Add a `Decorator` node label: `id`, `name`, `expression`, `line`.
    - Add `HAS_DECORATOR` relationship: `Class → Decorator` and `Function → Decorator`.
    - Apply to TypeScript class decorators and method decorators.

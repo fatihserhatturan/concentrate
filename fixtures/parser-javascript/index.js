@@ -1,5 +1,9 @@
 import { helper } from "./utils.js";
 
+export const MAX_SIZE = 100;
+export let defaultName = 'World';
+var globalFlag = false;
+
 export function greet(name) {
   return helper(name);
 }

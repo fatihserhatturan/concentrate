@@ -704,6 +704,52 @@ describe("buildCodeGraph", () => {
       "file:source/utils/math.ts",
     );
   });
+
+  it("treats require() calls as Import nodes with isCjs:true and resolves them", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "commonjs-require"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.parsedFiles, 3);
+
+    // Three string-literal require() calls must be captured (./utils, ./lib twice deduped to one)
+    const cjsImports = graph.nodes.filter(
+      (n) => n.label === "Import" && n.properties.isCjs === true,
+    );
+    assert.equal(cjsImports.length, 2, "Expected 2 CJS Import nodes (./utils and ./lib)");
+
+    const utilsImport = cjsImports.find((n) => n.properties.source === "./utils");
+    const libImport = cjsImports.find((n) => n.properties.source === "./lib");
+    assert.ok(utilsImport, "CJS import of ./utils");
+    assert.ok(libImport, "CJS import of ./lib");
+
+    // isDynamic must be false for CJS imports
+    assert.equal(utilsImport!.properties.isDynamic, false);
+    assert.equal(libImport!.properties.isDynamic, false);
+
+    // bindings — default binding for utils, named bindings for lib
+    const utilsBindings = JSON.parse(utilsImport!.properties.bindings as string);
+    assert.deepEqual(utilsBindings, [{ imported: "default", local: "utils", kind: "default" }]);
+
+    const libBindings = JSON.parse(libImport!.properties.bindings as string);
+    assert.deepEqual(libBindings, [
+      { imported: "foo",  local: "foo",   kind: "named" },
+      { imported: "bar",  local: "bar",   kind: "named" },
+      { imported: "baz",  local: "myBaz", kind: "named" },
+    ]);
+
+    // Both must resolve to their target files
+    assert.equal(graph.report.resolvedImports, 2);
+    assertRelationship(graph.relationships, utilsImport!.id, "RESOLVES_TO", "file:utils.js");
+    assertRelationship(graph.relationships, libImport!.id, "RESOLVES_TO", "file:lib.js");
+
+    // Variable-specifier require(utils.name) must NOT produce an Import node
+    const variableRequire = graph.nodes.find(
+      (n) => n.label === "Import" && n.properties.source === "utils.name",
+    );
+    assert.equal(variableRequire, undefined, "Variable-specifier require must not be captured");
+  });
 });
 
 async function createScanErrorFixture(): Promise<string> {

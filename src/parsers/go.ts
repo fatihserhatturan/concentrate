@@ -151,6 +151,8 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
       isExported: /^[A-Z]/.test(name),
       isAsync: false,
       visibility: goVisibility(name),
+      parameters: null,
+      returnType: null,
     },
   };
 }
