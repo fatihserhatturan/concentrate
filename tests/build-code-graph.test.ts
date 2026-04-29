@@ -550,6 +550,29 @@ describe("buildCodeGraph", () => {
     assertRelationship(graph.relationships, "file:index.ts", "RE_EXPORTS", wildcardReExport.id);
   });
 
+  it("tracks local named re-exports to same-file definitions", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "local-re-exports"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.resolvedImports, 0);
+
+    const createClient = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "createClient")!;
+    const localClient = graph.nodes.find((n) => n.label === "Class" && n.properties.name === "LocalClient")!;
+    const defaultTimeout = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "defaultTimeout")!;
+    const ignoredSetting = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "ignoredSetting")!;
+
+    assert.ok(createClient);
+    assert.ok(localClient);
+    assert.ok(defaultTimeout);
+    assert.ok(ignoredSetting);
+    assertRelationship(graph.relationships, "file:index.ts", "RE_EXPORTS", createClient.id);
+    assertRelationship(graph.relationships, "file:index.ts", "RE_EXPORTS", localClient.id);
+    assertRelationship(graph.relationships, "file:index.ts", "RE_EXPORTS", defaultTimeout.id);
+    assert.ok(!graph.relationships.some((r) => r.from === "file:index.ts" && r.to === ignoredSetting.id && r.type === "RE_EXPORTS"));
+  });
+
   it("captures dynamic imports and resolves them via the existing pipeline", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "dynamic-imports"), {
       continueOnError: false,
@@ -749,6 +772,33 @@ describe("buildCodeGraph", () => {
       (n) => n.label === "Import" && n.properties.source === "utils.name",
     );
     assert.equal(variableRequire, undefined, "Variable-specifier require must not be captured");
+  });
+
+  it("captures module.exports assignments as exported metadata", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "commonjs-exports"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    assert.equal(graph.nodes.find((n) => n.label === "Function" && n.properties.name === "createClient")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.label === "Class" && n.properties.name === "ClientFactory")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "defaultTimeout")?.properties.isExported, true);
+    assert.equal(graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "internalOnly")?.properties.isExported, false);
+
+    const name = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "name")!;
+    const make = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "make")!;
+    const extra = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "extra")!;
+
+    assert.ok(name);
+    assert.ok(make);
+    assert.ok(extra);
+    assert.equal(name.properties.isExported, true);
+    assert.equal(make.properties.isExported, true);
+    assert.equal(extra.properties.isExported, true);
+    assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", name.id);
+    assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", make.id);
+    assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", extra.id);
   });
 });
 

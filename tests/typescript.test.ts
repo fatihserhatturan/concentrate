@@ -5,6 +5,12 @@ import { typescriptParser } from "../src/parsers/javascript-like.js";
 
 const fixtureRoot = path.resolve("fixtures/parser-typescript");
 const fixturePath = path.join(fixtureRoot, "index.ts");
+const classExpressionRoot = path.resolve("fixtures/class-expression");
+const classExpressionPath = path.join(classExpressionRoot, "typescript.ts");
+const constructorParameterRoot = path.resolve("fixtures/constructor-parameter-properties");
+const constructorParameterPath = path.join(constructorParameterRoot, "service.ts");
+const localReExportRoot = path.resolve("fixtures/local-re-exports");
+const localReExportPath = path.join(localReExportRoot, "index.ts");
 
 describe("TypeScript parser", () => {
   it("extracts file node with correct language", async () => {
@@ -54,6 +60,7 @@ describe("TypeScript parser", () => {
     const cls = result.nodes.find((n) => n.label === "Class" && n.properties.name === "UserService");
     assert.ok(cls);
     assert.equal(cls.properties.isExported, true);
+    assert.equal(cls.properties.isAbstract, false);
   });
 
   it("extracts TypeScript interface, type alias, and enum declarations", async () => {
@@ -96,6 +103,7 @@ describe("TypeScript parser", () => {
     assert.ok(fetchMethod);
     assert.equal(getMethod.properties.className, "UserService");
     assert.equal(fetchMethod.properties.className, "UserService");
+    assert.equal(getMethod.properties.methodKind, "method");
     assert.equal(getMethod.properties.visibility, "public");
     assert.equal(getMethod.properties.isAsync, false);
     assert.equal(fetchMethod.properties.isAsync, true);
@@ -150,6 +158,44 @@ describe("TypeScript parser", () => {
       { name: "id", type: "string" },
     ]);
     assert.equal(fetchUser.properties.returnType, "Promise<string>");
+  });
+
+  it("tracks getter and setter method kinds", async () => {
+    const result = await typescriptParser.parse(fixtureRoot, fixturePath);
+
+    const displayNameMethods = result.nodes.filter((n) => n.label === "Function" && n.properties.name === "displayName");
+    assert.equal(displayNameMethods.length, 2);
+    assert.ok(displayNameMethods.some((method) => method.properties.methodKind === "get"));
+    assert.ok(displayNameMethods.some((method) => method.properties.methodKind === "set"));
+  });
+
+  it("tracks abstract classes and methods", async () => {
+    const result = await typescriptParser.parse(fixtureRoot, fixturePath);
+
+    const baseRepository = result.nodes.find((n) => n.label === "Class" && n.properties.name === "BaseRepository")!;
+    assert.ok(baseRepository);
+    assert.equal(baseRepository.properties.isExported, true);
+    assert.equal(baseRepository.properties.isAbstract, true);
+
+    const findById = result.nodes.find((n) => n.label === "Function" && n.properties.name === "findById")!;
+    const save = result.nodes.find((n) => n.label === "Function" && n.properties.name === "save")!;
+    const kind = result.nodes.find((n) => n.label === "Function" && n.properties.name === "kind")!;
+    assert.ok(findById);
+    assert.ok(save);
+    assert.ok(kind);
+    assert.equal(findById.properties.isAbstract, true);
+    assert.equal(findById.properties.methodKind, "method");
+    assert.deepEqual(JSON.parse(findById.properties.parameters as string), [
+      { name: "id", type: "string" },
+    ]);
+    assert.equal(findById.properties.returnType, "string");
+    assert.equal(save.properties.isAbstract, true);
+    assert.equal(save.properties.visibility, "protected");
+    assert.equal(kind.properties.isAbstract, false);
+    assert.equal(kind.properties.methodKind, "get");
+    assert.ok(result.relationships.some((r) => r.from === baseRepository.id && r.to === findById.id && r.type === "DEFINES_METHOD"));
+    assert.ok(result.relationships.some((r) => r.from === baseRepository.id && r.to === save.id && r.type === "DEFINES_METHOD"));
+    assert.ok(!result.relationships.some((r) => r.to === findById.id && r.type === "DEFINES_FUNCTION"));
   });
 
   it("extracts class fields with correct modifiers", async () => {
@@ -237,5 +283,111 @@ describe("TypeScript parser", () => {
     );
     assert.equal(createDecorators.length, 1, "Expected 1 decorator on create");
     assert.equal(createDecorators[0]!.properties.name, "Post");
+  });
+
+  it("extracts TypeScript class expressions assigned to variables as classes", async () => {
+    const result = await typescriptParser.parse(classExpressionRoot, classExpressionPath);
+
+    const repository = result.nodes.find((n) => n.label === "Class" && n.properties.name === "Repository")!;
+    assert.ok(repository, "Repository class expression");
+    assert.equal(repository.properties.isExported, true);
+    assert.deepEqual(JSON.parse(repository.properties.extendsNames as string), ["BaseService"]);
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === repository.id && r.type === "DEFINES_CLASS"));
+    assert.equal(result.nodes.find((n) => n.label === "Variable" && n.properties.name === "Repository"), undefined);
+  });
+
+  it("extracts TypeScript class expression fields, methods, and decorators", async () => {
+    const result = await typescriptParser.parse(classExpressionRoot, classExpressionPath);
+    const repository = result.nodes.find((n) => n.label === "Class" && n.properties.name === "Repository")!;
+
+    const tableName = result.nodes.find((n) => n.label === "Field" && n.properties.name === "tableName")!;
+    assert.ok(tableName, "tableName field");
+    assert.equal(tableName.properties.typeName, "string");
+    assert.equal(tableName.properties.isReadonly, true);
+    assert.ok(result.relationships.some((r) => r.from === repository.id && r.to === tableName.id && r.type === "DEFINES_FIELD"));
+
+    const save = result.nodes.find((n) => n.label === "Function" && n.properties.name === "save")!;
+    assert.ok(save, "save method");
+    assert.equal(save.properties.className, "Repository");
+    assert.equal(save.properties.isAsync, true);
+    assert.deepEqual(JSON.parse(save.properties.parameters as string), [
+      { name: "id", type: "string" },
+    ]);
+    assert.equal(save.properties.returnType, "Promise<string>");
+    assert.ok(result.relationships.some((r) => r.from === repository.id && r.to === save.id && r.type === "DEFINES_METHOD"));
+
+    const classDecorators = result.nodes.filter(
+      (n) => n.label === "Decorator"
+        && result.relationships.some((r) => r.from === repository.id && r.to === n.id && r.type === "HAS_DECORATOR"),
+    );
+    assert.equal(classDecorators.length, 1);
+    assert.equal(classDecorators[0]!.properties.name, "Entity");
+
+    const methodDecorators = result.nodes.filter(
+      (n) => n.label === "Decorator"
+        && result.relationships.some((r) => r.from === save.id && r.to === n.id && r.type === "HAS_METHOD_DECORATOR"),
+    );
+    assert.equal(methodDecorators.length, 1);
+    assert.equal(methodDecorators[0]!.properties.name, "Route");
+  });
+
+  it("extracts constructor parameter properties as fields", async () => {
+    const result = await typescriptParser.parse(constructorParameterRoot, constructorParameterPath);
+    const accountService = result.nodes.find((n) => n.label === "Class" && n.properties.name === "AccountService")!;
+    assert.ok(accountService, "AccountService class");
+
+    const fields = result.nodes.filter((n) => n.label === "Field");
+    assert.equal(fields.length, 4, "Expected 4 constructor parameter Field nodes");
+
+    const repository = fields.find((f) => f.properties.name === "repository")!;
+    assert.ok(repository, "repository field");
+    assert.equal(repository.properties.typeName, "Repository");
+    assert.equal(repository.properties.visibility, "private");
+    assert.equal(repository.properties.isReadonly, true);
+    assert.equal(repository.properties.isStatic, false);
+
+    const logger = fields.find((f) => f.properties.name === "logger")!;
+    assert.ok(logger, "logger field");
+    assert.equal(logger.properties.typeName, "Logger");
+    assert.equal(logger.properties.visibility, "protected");
+    assert.equal(logger.properties.isReadonly, false);
+
+    const displayName = fields.find((f) => f.properties.name === "displayName")!;
+    assert.ok(displayName, "displayName field");
+    assert.equal(displayName.properties.typeName, "string");
+    assert.equal(displayName.properties.visibility, "public");
+
+    const serviceId = fields.find((f) => f.properties.name === "serviceId")!;
+    assert.ok(serviceId, "serviceId field");
+    assert.equal(serviceId.properties.typeName, "string");
+    assert.equal(serviceId.properties.visibility, "public");
+    assert.equal(serviceId.properties.isReadonly, true);
+
+    assert.equal(fields.find((f) => f.properties.name === "retries"), undefined);
+    for (const field of fields) {
+      assert.ok(
+        result.relationships.some((r) => r.from === accountService.id && r.to === field.id && r.type === "DEFINES_FIELD"),
+        `DEFINES_FIELD missing for ${field.properties.name}`,
+      );
+    }
+  });
+
+  it("tracks local named re-exports to same-file definitions", async () => {
+    const result = await typescriptParser.parse(localReExportRoot, localReExportPath);
+
+    const createClient = result.nodes.find((n) => n.label === "Function" && n.properties.name === "createClient")!;
+    const localClient = result.nodes.find((n) => n.label === "Class" && n.properties.name === "LocalClient")!;
+    const defaultTimeout = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "defaultTimeout")!;
+    const ignoredSetting = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "ignoredSetting")!;
+
+    assert.ok(createClient);
+    assert.ok(localClient);
+    assert.ok(defaultTimeout);
+    assert.ok(ignoredSetting);
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === createClient.id && r.type === "RE_EXPORTS"));
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === localClient.id && r.type === "RE_EXPORTS"));
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === defaultTimeout.id && r.type === "RE_EXPORTS"));
+    assert.ok(!result.relationships.some((r) => r.from === result.fileNodeId && r.to === ignoredSetting.id && r.type === "RE_EXPORTS"));
+    assert.equal(result.nodes.find((n) => n.label === "Import"), undefined);
   });
 });

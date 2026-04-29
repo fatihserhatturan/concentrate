@@ -5,6 +5,10 @@ import { javascriptParser } from "../src/parsers/javascript-like.js";
 
 const fixtureRoot = path.resolve("fixtures/parser-javascript");
 const fixturePath = path.join(fixtureRoot, "index.js");
+const classExpressionRoot = path.resolve("fixtures/class-expression");
+const classExpressionPath = path.join(classExpressionRoot, "javascript.js");
+const commonJsExportRoot = path.resolve("fixtures/commonjs-exports");
+const commonJsExportPath = path.join(commonJsExportRoot, "index.js");
 
 describe("JavaScript parser", () => {
   it("extracts file node with correct language", async () => {
@@ -74,6 +78,7 @@ describe("JavaScript parser", () => {
     assert.ok(fetchMethod);
     assert.equal(sumMethod.properties.className, "Calculator");
     assert.equal(fetchMethod.properties.className, "Calculator");
+    assert.equal(sumMethod.properties.methodKind, "method");
     assert.equal(fetchMethod.properties.isAsync, true);
     assert.ok(result.relationships.some((r) => r.from === cls.id && r.to === sumMethod.id && r.type === "DEFINES_METHOD"));
     assert.ok(result.relationships.some((r) => r.from === cls.id && r.to === fetchMethod.id && r.type === "DEFINES_METHOD"));
@@ -141,5 +146,87 @@ describe("JavaScript parser", () => {
     const internal = result.nodes.find((n) => n.label === "Function" && n.properties.name === "_internal")!;
     assert.deepEqual(JSON.parse(internal.properties.parameters as string), []);
     assert.equal(internal.properties.returnType, null);
+  });
+
+  it("tracks getter and setter method kinds", async () => {
+    const result = await javascriptParser.parse(fixtureRoot, fixturePath);
+
+    const resultMethods = result.nodes.filter((n) => n.label === "Function" && n.properties.name === "result");
+    assert.equal(resultMethods.length, 2);
+    assert.ok(resultMethods.some((method) => method.properties.methodKind === "get"));
+    assert.ok(resultMethods.some((method) => method.properties.methodKind === "set"));
+  });
+
+  it("extracts class expressions assigned to variables as classes", async () => {
+    const result = await javascriptParser.parse(classExpressionRoot, classExpressionPath);
+
+    const inlineService = result.nodes.find((n) => n.label === "Class" && n.properties.name === "InlineService")!;
+    const localWorker = result.nodes.find((n) => n.label === "Class" && n.properties.name === "LocalWorker")!;
+    assert.ok(inlineService, "InlineService class expression");
+    assert.ok(localWorker, "LocalWorker class expression");
+    assert.equal(inlineService.properties.isExported, true);
+    assert.equal(localWorker.properties.isExported, false);
+    assert.deepEqual(JSON.parse(inlineService.properties.extendsNames as string), ["BaseService"]);
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === inlineService.id && r.type === "DEFINES_CLASS"));
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === localWorker.id && r.type === "DEFINES_CLASS"));
+    assert.equal(result.nodes.find((n) => n.label === "Variable" && n.properties.name === "InlineService"), undefined);
+    assert.equal(result.nodes.find((n) => n.label === "Variable" && n.properties.name === "LocalWorker"), undefined);
+  });
+
+  it("extracts members and calls from JavaScript class expressions", async () => {
+    const result = await javascriptParser.parse(classExpressionRoot, classExpressionPath);
+    const inlineService = result.nodes.find((n) => n.label === "Class" && n.properties.name === "InlineService")!;
+
+    const cache = result.nodes.find((n) => n.label === "Field" && n.properties.name === "cache")!;
+    const find = result.nodes.find((n) => n.label === "Function" && n.properties.name === "find")!;
+    assert.ok(cache, "cache field");
+    assert.ok(find, "find method");
+    assert.equal(find.properties.className, "InlineService");
+    assert.ok(result.relationships.some((r) => r.from === inlineService.id && r.to === cache.id && r.type === "DEFINES_FIELD"));
+    assert.ok(result.relationships.some((r) => r.from === inlineService.id && r.to === find.id && r.type === "DEFINES_METHOD"));
+    assert.ok(!result.relationships.some((r) => r.to === find.id && r.type === "DEFINES_FUNCTION"));
+    assert.ok(result.relationships.some((r) => {
+      const target = result.nodes.find((n) => n.id === r.to);
+      return r.from === find.id && r.type === "CALLS" && target?.properties.expression === "helper";
+    }));
+  });
+
+  it("marks module.exports object shorthand bindings as exported", async () => {
+    const result = await javascriptParser.parse(commonJsExportRoot, commonJsExportPath);
+
+    const createClient = result.nodes.find((n) => n.label === "Function" && n.properties.name === "createClient")!;
+    const clientFactory = result.nodes.find((n) => n.label === "Class" && n.properties.name === "ClientFactory")!;
+    const defaultTimeout = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "defaultTimeout")!;
+    const internalOnly = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "internalOnly")!;
+
+    assert.ok(createClient);
+    assert.ok(clientFactory);
+    assert.ok(defaultTimeout);
+    assert.ok(internalOnly);
+    assert.equal(createClient.properties.isExported, true);
+    assert.equal(clientFactory.properties.isExported, true);
+    assert.equal(defaultTimeout.properties.isExported, true);
+    assert.equal(internalOnly.properties.isExported, false);
+  });
+
+  it("creates exported variables for module.exports object keys and property assignments", async () => {
+    const result = await javascriptParser.parse(commonJsExportRoot, commonJsExportPath);
+
+    const name = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "name")!;
+    const make = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "make")!;
+    const extra = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "extra")!;
+
+    assert.ok(name);
+    assert.ok(make);
+    assert.ok(extra);
+    assert.equal(name.properties.kind, "module.exports");
+    assert.equal(make.properties.kind, "module.exports");
+    assert.equal(extra.properties.kind, "module.exports");
+    assert.equal(name.properties.isExported, true);
+    assert.equal(make.properties.isExported, true);
+    assert.equal(extra.properties.isExported, true);
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === name.id && r.type === "DEFINES_VARIABLE"));
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === make.id && r.type === "DEFINES_VARIABLE"));
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === extra.id && r.type === "DEFINES_VARIABLE"));
   });
 });

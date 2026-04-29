@@ -49,6 +49,8 @@ async function parseJavaScriptLikeFile(
     },
   ];
   const relationships: GraphRelationship[] = [];
+  const localReExportNames: string[] = [];
+  const cjsExportBindings: CjsExportBinding[] = [];
 
   const tree = (language === "typescript" ? tsParser : jsParser).parse(createTreeSitterInput(source));
   if (tree.rootNode.hasError) {
@@ -109,6 +111,8 @@ async function parseJavaScriptLikeFile(
     }
 
     if (node.type === "export_statement") {
+      localReExportNames.push(...extractLocalReExportNames(node));
+
       const reExportNode = createReExportImportNode(fileNodeId, node);
       if (reExportNode) {
         nodes.push(reExportNode);
@@ -130,7 +134,11 @@ async function parseJavaScriptLikeFile(
       }
     }
 
-    if (isFunctionNode(node) && node.type !== "method_definition") {
+    if (node.type === "assignment_expression") {
+      cjsExportBindings.push(...extractCjsExportBindings(node));
+    }
+
+    if (isFunctionNode(node) && node.type !== "method_definition" && node.type !== "abstract_method_signature") {
       const functionNode = createFunctionNode(fileNodeId, node);
       if (functionNode) {
         nodes.push(functionNode);
@@ -156,7 +164,19 @@ async function parseJavaScriptLikeFile(
 
     if (node.type === "variable_declarator") {
       const valueChild = node.childForFieldName("value");
-      if (isVariableFunctionValue(valueChild)) {
+      if (isVariableClassValue(valueChild)) {
+        const classNode = createVariableClassNode(fileNodeId, node, valueChild!);
+        if (classNode) {
+          nodes.push(classNode);
+          relationships.push({
+            from: fileNodeId,
+            to: classNode.id,
+            type: "DEFINES_CLASS",
+            properties: {},
+          });
+          appendClassMembers(fileNodeId, classNode, valueChild!, nodes, relationships);
+        }
+      } else if (isVariableFunctionValue(valueChild)) {
         const functionNode = createVariableFunctionNode(fileNodeId, node, valueChild!);
         if (functionNode) {
           nodes.push(functionNode);
@@ -192,7 +212,7 @@ async function parseJavaScriptLikeFile(
       }
     }
 
-    if (node.type === "class_declaration") {
+    if (isClassNode(node)) {
       const classNode = createClassNode(fileNodeId, node);
       if (classNode) {
         nodes.push(classNode);
@@ -203,72 +223,7 @@ async function parseJavaScriptLikeFile(
           properties: {},
         });
 
-        // Class-level decorators are direct named children of class_declaration
-        for (const dec of node.namedChildren.filter((c) => c.type === "decorator")) {
-          const decoratorNode = createDecoratorNode(classNode.id, dec);
-          nodes.push(decoratorNode);
-          relationships.push({ from: classNode.id, to: decoratorNode.id, type: "HAS_DECORATOR", properties: {} });
-        }
-
-        const className = String(classNode.properties.name);
-        const classBody = node.childForFieldName("body");
-        if (classBody) {
-          // Method decorators are siblings that appear immediately before method_definition
-          let pendingDecorators: Parser.SyntaxNode[] = [];
-          for (const child of classBody.namedChildren) {
-            if (child.type === "decorator") {
-              pendingDecorators.push(child);
-              continue;
-            }
-
-            if (child.type === "public_field_definition" || child.type === "field_definition") {
-              const fieldNode = createFieldNode(classNode.id, child);
-              if (fieldNode) {
-                nodes.push(fieldNode);
-                relationships.push({
-                  from: classNode.id,
-                  to: fieldNode.id,
-                  type: "DEFINES_FIELD",
-                  properties: {},
-                });
-              }
-              pendingDecorators = [];
-              continue;
-            }
-
-            if (child.type !== "method_definition") {
-              pendingDecorators = [];
-              continue;
-            }
-
-            const methodNode = createFunctionNode(fileNodeId, child, className);
-            if (methodNode) {
-              nodes.push(methodNode);
-              relationships.push({
-                from: classNode.id,
-                to: methodNode.id,
-                type: "DEFINES_METHOD",
-                properties: {},
-              });
-              const callNodes = createCallNodes(methodNode.id, child);
-              nodes.push(...callNodes);
-              relationships.push(
-                ...callNodes.map((callNode) => ({
-                  from: methodNode.id,
-                  to: callNode.id,
-                  type: "CALLS" as const,
-                  properties: {},
-                })),
-              );
-              for (const dec of pendingDecorators) {
-                const decoratorNode = createDecoratorNode(methodNode.id, dec);
-                nodes.push(decoratorNode);
-                relationships.push({ from: methodNode.id, to: decoratorNode.id, type: "HAS_METHOD_DECORATOR", properties: {} });
-              }
-            }
-            pendingDecorators = [];
-          }
-        }
+        appendClassMembers(fileNodeId, classNode, node, nodes, relationships);
       }
     }
 
@@ -286,6 +241,9 @@ async function parseJavaScriptLikeFile(
     }
   });
 
+  applyCjsExportBindings(fileNodeId, nodes, relationships, cjsExportBindings);
+  relationships.push(...createLocalReExportRelationships(fileNodeId, nodes, relationships, localReExportNames));
+
   return { fileNodeId, nodes, relationships };
 }
 
@@ -293,14 +251,23 @@ function isFunctionNode(node: Parser.SyntaxNode): boolean {
   return [
     "function_declaration",
     "method_definition",
+    "abstract_method_signature",
     "generator_function_declaration",
     "arrow_function",
     "function_expression",
   ].includes(node.type);
 }
 
+function isClassNode(node: Parser.SyntaxNode): boolean {
+  return node.type === "class_declaration" || node.type === "abstract_class_declaration";
+}
+
 function isVariableFunctionValue(node: Parser.SyntaxNode | null | undefined): boolean {
   return node?.type === "arrow_function" || node?.type === "function_expression";
+}
+
+function isVariableClassValue(node: Parser.SyntaxNode | null | undefined): boolean {
+  return node?.type === "class" || node?.type === "class_expression";
 }
 
 function isModuleLevelDeclarator(node: Parser.SyntaxNode): boolean {
@@ -332,6 +299,12 @@ function createVariableNode(fileNodeId: string, declarator: Parser.SyntaxNode): 
   };
 }
 
+type CjsExportBinding = {
+  exportedName: string;
+  localName: string | null;
+  line: number;
+};
+
 function createVariableFunctionNode(
   fileNodeId: string,
   declarator: Parser.SyntaxNode,
@@ -348,16 +321,35 @@ function createVariableFunctionNode(
     properties: {
       name: nameNode.text,
       kind: valueNode.type,
+      methodKind: null,
       line: declarator.startPosition.row + 1,
       endLine: valueNode.endPosition.row + 1,
       className: null,
       isExported: declarator.parent?.parent?.type === "export_statement",
       isAsync: valueNode.children.some((c) => c.type === "async"),
+      isAbstract: false,
       visibility: "public",
       parameters: extractFunctionParameters(valueNode),
       returnType: extractReturnType(valueNode),
     },
   };
+}
+
+function createVariableClassNode(
+  fileNodeId: string,
+  declarator: Parser.SyntaxNode,
+  valueNode: Parser.SyntaxNode,
+): GraphNode | null {
+  const nameNode = declarator.childForFieldName("name");
+  if (!nameNode || nameNode.type !== "identifier") {
+    return null;
+  }
+
+  return createClassNode(fileNodeId, valueNode, {
+    name: nameNode.text,
+    line: declarator.startPosition.row + 1,
+    isExported: declarator.parent?.parent?.type === "export_statement",
+  });
 }
 
 function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
@@ -451,6 +443,183 @@ function extractCjsBindings(requireCall: Parser.SyntaxNode): string | null {
   return null;
 }
 
+function extractCjsExportBindings(node: Parser.SyntaxNode): CjsExportBinding[] {
+  const left = node.childForFieldName("left");
+  const right = node.childForFieldName("right");
+  if (!left || !right) {
+    return [];
+  }
+
+  if (isModuleExportsMember(left)) {
+    if (right.type !== "object") {
+      return [];
+    }
+
+    return right.namedChildren.flatMap((child) => extractCjsObjectExportBinding(child));
+  }
+
+  const propertyName = extractModuleExportsPropertyName(left);
+  if (!propertyName) {
+    return [];
+  }
+
+  return [{
+    exportedName: propertyName,
+    localName: null,
+    line: node.startPosition.row + 1,
+  }];
+}
+
+function extractCjsObjectExportBinding(node: Parser.SyntaxNode): CjsExportBinding[] {
+  if (node.type === "shorthand_property_identifier") {
+    return [{
+      exportedName: node.text,
+      localName: node.text,
+      line: node.startPosition.row + 1,
+    }];
+  }
+
+  if (node.type !== "pair") {
+    return [];
+  }
+
+  const key = node.childForFieldName("key");
+  if (!key) {
+    return [];
+  }
+
+  const exportedName = normalizeObjectPropertyName(key);
+  if (!exportedName) {
+    return [];
+  }
+
+  return [{
+    exportedName,
+    localName: null,
+    line: node.startPosition.row + 1,
+  }];
+}
+
+function applyCjsExportBindings(
+  fileNodeId: string,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+  bindings: CjsExportBinding[],
+): void {
+  if (bindings.length === 0) {
+    return;
+  }
+
+  const localDefinitionIds = new Set(
+    relationships
+      .filter((relationship) => (
+        relationship.from === fileNodeId
+        && (
+          relationship.type === "DEFINES_FUNCTION"
+          || relationship.type === "DEFINES_CLASS"
+          || relationship.type === "DEFINES_VARIABLE"
+        )
+      ))
+      .map((relationship) => relationship.to),
+  );
+  const localDefinitionsByName = new Map<string, GraphNode>();
+  for (const node of nodes) {
+    if (!localDefinitionIds.has(node.id)) {
+      continue;
+    }
+
+    const name = node.properties.name;
+    if (typeof name === "string" && !localDefinitionsByName.has(name)) {
+      localDefinitionsByName.set(name, node);
+    }
+  }
+
+  const uniqueBindings = new Map<string, CjsExportBinding>();
+  for (const binding of bindings) {
+    uniqueBindings.set(binding.exportedName, binding);
+  }
+
+  for (const binding of uniqueBindings.values()) {
+    const existingNode = localDefinitionsByName.get(binding.localName ?? binding.exportedName)
+      ?? localDefinitionsByName.get(binding.exportedName);
+    if (existingNode) {
+      existingNode.properties.isExported = true;
+      continue;
+    }
+
+    if (nodes.some((node) => node.label === "Variable" && node.id === createCjsExportVariableId(fileNodeId, binding))) {
+      continue;
+    }
+
+    const variableNode = createCjsExportVariableNode(fileNodeId, binding);
+    nodes.push(variableNode);
+    relationships.push({
+      from: fileNodeId,
+      to: variableNode.id,
+      type: "DEFINES_VARIABLE",
+      properties: {},
+    });
+  }
+}
+
+function createCjsExportVariableNode(fileNodeId: string, binding: CjsExportBinding): GraphNode {
+  return {
+    id: createCjsExportVariableId(fileNodeId, binding),
+    label: "Variable",
+    properties: {
+      name: binding.exportedName,
+      kind: "module.exports",
+      isExported: true,
+      line: binding.line,
+    },
+  };
+}
+
+function createCjsExportVariableId(fileNodeId: string, binding: CjsExportBinding): string {
+  return `${fileNodeId}:variable:${binding.line}:${binding.exportedName}`;
+}
+
+function extractModuleExportsPropertyName(node: Parser.SyntaxNode): string | null {
+  if (node.type !== "member_expression") {
+    return null;
+  }
+
+  const object = node.childForFieldName("object");
+  if (!object || !isModuleExportsMember(object)) {
+    return null;
+  }
+
+  const property = node.childForFieldName("property");
+  return property?.type === "property_identifier" ? property.text : null;
+}
+
+function isModuleExportsMember(node: Parser.SyntaxNode): boolean {
+  if (node.type !== "member_expression") {
+    return false;
+  }
+
+  const object = node.childForFieldName("object");
+  const property = node.childForFieldName("property");
+  return object?.type === "identifier" && object.text === "module"
+    && property?.type === "property_identifier" && property.text === "exports";
+}
+
+function normalizeObjectPropertyName(node: Parser.SyntaxNode): string | null {
+  if (
+    node.type === "property_identifier"
+    || node.type === "identifier"
+    || node.type === "shorthand_property_identifier"
+  ) {
+    return node.text;
+  }
+
+  if (node.type === "string") {
+    return node.text.replace(/^["']|["']$/g, "");
+  }
+
+  return null;
+}
+
 function serializeImportBindings(node: Parser.SyntaxNode): string | null {
   const bindings: ImportBinding[] = [];
   const importClause = node.namedChildren.find((c) => c.type === "import_clause");
@@ -507,6 +676,72 @@ function createReExportImportNode(fileNodeId: string, node: Parser.SyntaxNode): 
   };
 }
 
+function extractLocalReExportNames(node: Parser.SyntaxNode): string[] {
+  if (extractStringSource(node)) {
+    return [];
+  }
+
+  const exportClause = node.namedChildren.find((child) => child.type === "export_clause");
+  if (!exportClause) {
+    return [];
+  }
+
+  return exportClause.namedChildren
+    .filter((child) => child.type === "export_specifier")
+    .map((specifier) => specifier.childForFieldName("name")?.text)
+    .filter((name): name is string => name !== undefined);
+}
+
+function createLocalReExportRelationships(
+  fileNodeId: string,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+  exportNames: string[],
+): GraphRelationship[] {
+  if (exportNames.length === 0) {
+    return [];
+  }
+
+  const localDefinitionsByName = new Map<string, GraphNode>();
+  const localDefinitionIds = new Set(
+    relationships
+      .filter((relationship) => (
+        relationship.from === fileNodeId
+        && (
+          relationship.type === "DEFINES_FUNCTION"
+          || relationship.type === "DEFINES_CLASS"
+          || relationship.type === "DEFINES_VARIABLE"
+        )
+      ))
+      .map((relationship) => relationship.to),
+  );
+
+  for (const node of nodes) {
+    if (!localDefinitionIds.has(node.id)) {
+      continue;
+    }
+
+    const name = node.properties.name;
+    if (typeof name === "string" && !localDefinitionsByName.has(name)) {
+      localDefinitionsByName.set(name, node);
+    }
+  }
+
+  return Array.from(new Set(exportNames)).flatMap((name) => {
+    const target = localDefinitionsByName.get(name);
+    if (!target) {
+      return [];
+    }
+
+    return [{
+      from: fileNodeId,
+      to: target.id,
+      type: "RE_EXPORTS" as const,
+      properties: {},
+    }];
+  });
+}
+
 function extractStringSource(node: Parser.SyntaxNode): string | null {
   return node
     .namedChildren
@@ -530,16 +765,34 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
     properties: {
       name,
       kind: node.type,
+      methodKind: extractMethodKind(node),
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       className: className ?? null,
       isExported: node.parent?.type === "export_statement",
       isAsync: node.children.some((c) => c.type === "async"),
+      isAbstract: isTypeScriptAbstract(node),
       visibility: extractTypeScriptVisibility(node),
       parameters: extractFunctionParameters(node),
       returnType: extractReturnType(node),
     },
   };
+}
+
+function extractMethodKind(node: Parser.SyntaxNode): string | null {
+  if (node.type !== "method_definition" && node.type !== "abstract_method_signature") {
+    return null;
+  }
+
+  if (node.children.some((child) => child.type === "get")) {
+    return "get";
+  }
+
+  if (node.children.some((child) => child.type === "set")) {
+    return "set";
+  }
+
+  return "method";
 }
 
 function extractFunctionParameters(functionNode: Parser.SyntaxNode): string {
@@ -598,20 +851,26 @@ function extractReturnType(functionNode: Parser.SyntaxNode): string | null {
   return returnTypeNode.text.replace(/^:\s*/, "");
 }
 
-function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
-  const name = extractName(node);
+function createClassNode(
+  fileNodeId: string,
+  node: Parser.SyntaxNode,
+  options: { name?: string; line?: number; isExported?: boolean } = {},
+): GraphNode | null {
+  const name = options.name ?? extractName(node);
   if (!name) {
     return null;
   }
+  const line = options.line ?? node.startPosition.row + 1;
 
   return {
-    id: `${fileNodeId}:class:${node.startPosition.row + 1}:${name}`,
+    id: `${fileNodeId}:class:${line}:${name}`,
     label: "Class",
     properties: {
       name,
-      line: node.startPosition.row + 1,
+      line,
       endLine: node.endPosition.row + 1,
-      isExported: node.parent?.type === "export_statement",
+      isExported: options.isExported ?? node.parent?.type === "export_statement",
+      isAbstract: isTypeScriptAbstract(node),
       visibility: extractTypeScriptVisibility(node),
       extendsNames: serializeNameList(extractTypeScriptExtendsNames(node)),
       implementsNames: serializeNameList(extractTypeScriptImplementsNames(node)),
@@ -619,8 +878,148 @@ function createClassNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode
   };
 }
 
+function appendClassMembers(
+  fileNodeId: string,
+  classNode: GraphNode,
+  classSyntaxNode: Parser.SyntaxNode,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+): void {
+  for (const dec of classSyntaxNode.namedChildren.filter((c) => c.type === "decorator")) {
+    const decoratorNode = createDecoratorNode(classNode.id, dec);
+    nodes.push(decoratorNode);
+    relationships.push({ from: classNode.id, to: decoratorNode.id, type: "HAS_DECORATOR", properties: {} });
+  }
+
+  const className = String(classNode.properties.name);
+  const classBody = classSyntaxNode.childForFieldName("body");
+  if (!classBody) {
+    return;
+  }
+
+  let pendingDecorators: Parser.SyntaxNode[] = [];
+  for (const child of classBody.namedChildren) {
+    if (child.type === "decorator") {
+      pendingDecorators.push(child);
+      continue;
+    }
+
+    if (child.type === "public_field_definition" || child.type === "field_definition") {
+      const fieldNode = createFieldNode(classNode.id, child);
+      if (fieldNode) {
+        nodes.push(fieldNode);
+        relationships.push({
+          from: classNode.id,
+          to: fieldNode.id,
+          type: "DEFINES_FIELD",
+          properties: {},
+        });
+      }
+      pendingDecorators = [];
+      continue;
+    }
+
+    if (child.type !== "method_definition" && child.type !== "abstract_method_signature") {
+      pendingDecorators = [];
+      continue;
+    }
+
+    const methodNode = createFunctionNode(fileNodeId, child, className);
+    if (methodNode) {
+      const constructorFieldNodes = createConstructorParameterFieldNodes(classNode.id, child);
+      nodes.push(...constructorFieldNodes);
+      relationships.push(
+        ...constructorFieldNodes.map((fieldNode) => ({
+          from: classNode.id,
+          to: fieldNode.id,
+          type: "DEFINES_FIELD" as const,
+          properties: {},
+        })),
+      );
+
+      nodes.push(methodNode);
+      relationships.push({
+        from: classNode.id,
+        to: methodNode.id,
+        type: "DEFINES_METHOD",
+        properties: {},
+      });
+      const callNodes = createCallNodes(methodNode.id, child);
+      nodes.push(...callNodes);
+      relationships.push(
+        ...callNodes.map((callNode) => ({
+          from: methodNode.id,
+          to: callNode.id,
+          type: "CALLS" as const,
+          properties: {},
+        })),
+      );
+      for (const dec of pendingDecorators) {
+        const decoratorNode = createDecoratorNode(methodNode.id, dec);
+        nodes.push(decoratorNode);
+        relationships.push({ from: methodNode.id, to: decoratorNode.id, type: "HAS_METHOD_DECORATOR", properties: {} });
+      }
+    }
+    pendingDecorators = [];
+  }
+}
+
+function createConstructorParameterFieldNodes(
+  classNodeId: string,
+  methodNode: Parser.SyntaxNode,
+): GraphNode[] {
+  if (extractName(methodNode) !== "constructor") {
+    return [];
+  }
+
+  const paramsNode = methodNode.childForFieldName("parameters");
+  if (!paramsNode) {
+    return [];
+  }
+
+  return paramsNode.namedChildren
+    .map((param) => createConstructorParameterFieldNode(classNodeId, param))
+    .filter((node): node is GraphNode => node !== null);
+}
+
+function createConstructorParameterFieldNode(
+  classNodeId: string,
+  paramNode: Parser.SyntaxNode,
+): GraphNode | null {
+  const hasAccessibilityModifier = paramNode.children.some((child) => child.type === "accessibility_modifier");
+  const isReadonly = paramNode.children.some((child) => child.type === "readonly");
+  if (!hasAccessibilityModifier && !isReadonly) {
+    return null;
+  }
+
+  const nameNode = paramNode.childForFieldName("pattern")
+    ?? paramNode.namedChildren.find((child) => child.type === "identifier" || child.type === "property_identifier");
+  if (!nameNode) {
+    return null;
+  }
+
+  const typeAnnotation = paramNode.childForFieldName("type");
+  const typeName = typeAnnotation ? typeAnnotation.text.replace(/^:\s*/, "") : null;
+  const modifier = paramNode.children.find((child) => child.type === "accessibility_modifier")?.text;
+  const visibility = modifier === "private" || modifier === "protected" ? modifier : "public";
+
+  return {
+    id: `${classNodeId}:field:${paramNode.startPosition.row + 1}:${nameNode.text}`,
+    label: "Field",
+    properties: {
+      name: nameNode.text,
+      typeName,
+      isStatic: false,
+      isReadonly,
+      visibility,
+      line: paramNode.startPosition.row + 1,
+    },
+  };
+}
+
 function createFieldNode(classNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
-  const nameNode = node.childForFieldName("name");
+  const nameNode = node.childForFieldName("name")
+    ?? node.namedChildren.find((child) => child.type === "property_identifier" || child.type === "private_property_identifier");
   if (!nameNode) return null;
 
   const name = nameNode.text;
@@ -679,10 +1078,19 @@ function extractTypeScriptVisibility(node: Parser.SyntaxNode): string {
   return modifier === "private" || modifier === "protected" ? modifier : "public";
 }
 
+function isTypeScriptAbstract(node: Parser.SyntaxNode): boolean {
+  return node.type === "abstract_class_declaration"
+    || node.type === "abstract_method_signature"
+    || node.children.some((child) => child.type === "abstract");
+}
+
 function extractTypeScriptExtendsNames(node: Parser.SyntaxNode): string[] {
   const heritage = node.namedChildren.find((child) => child.type === "class_heritage");
   const extendsClause = heritage?.namedChildren.find((child) => child.type === "extends_clause");
-  return extendsClause ? extractTypeNames(extendsClause) : [];
+  if (extendsClause) {
+    return extractTypeNames(extendsClause);
+  }
+  return heritage ? extractTypeNames(heritage) : [];
 }
 
 function extractTypeScriptImplementsNames(node: Parser.SyntaxNode): string[] {
@@ -789,7 +1197,7 @@ function createCallNodes(functionNodeId: string, node: Parser.SyntaxNode): Graph
         columnNumber: child.startPosition.column,
       },
     });
-  }, (child) => isFunctionNode(child) || child.type === "class_declaration");
+  }, (child) => isFunctionNode(child) || isClassNode(child) || isVariableClassValue(child));
 
   return calls;
 }

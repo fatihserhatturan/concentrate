@@ -150,11 +150,13 @@ function createFunctionNode(fileNodeId: string, node: Parser.SyntaxNode, classNa
     properties: {
       name,
       kind: node.type,
+      methodKind: null,
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       className: className ?? null,
       isExported: rustVisibility(node) !== "private",
       isAsync: node.namedChildren.some((c) => c.type === "function_modifiers" && c.children.some((fc) => fc.type === "async")),
+      isAbstract: false,
       visibility: rustVisibility(node),
       parameters: null,
       returnType: null,
@@ -179,6 +181,7 @@ function createStructNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNod
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       isExported: rustVisibility(node) !== "private",
+      isAbstract: false,
       visibility: rustVisibility(node),
     },
   };

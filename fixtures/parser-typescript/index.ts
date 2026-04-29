@@ -37,6 +37,16 @@ class ApiController {
   create(): string { return ''; }
 }
 
+export abstract class BaseRepository {
+  abstract findById(id: string): string;
+
+  protected abstract save(): void;
+
+  get kind(): string {
+    return 'base';
+  }
+}
+
 export class UserService {
   public userId: string = '';
   private password: string = '';
@@ -45,6 +55,14 @@ export class UserService {
   static instanceCount: number = 0;
   #secret: string = '';
   name: string = '';
+
+  get displayName(): string {
+    return helper(this.name);
+  }
+
+  set displayName(value: string) {
+    this.name = value;
+  }
 
   getName(id: string): string {
     return helper(id);

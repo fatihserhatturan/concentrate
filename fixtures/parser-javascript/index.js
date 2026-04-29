@@ -17,6 +17,14 @@ export const compute = async function (x) {
 const _internal = () => {};
 
 export class Calculator {
+  get result() {
+    return helper('result');
+  }
+
+  set result(value) {
+    helper(value);
+  }
+
   sum(a, b) {
     return a + b;
   }

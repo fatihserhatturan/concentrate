@@ -54,8 +54,9 @@ export class KuzuGraphWriter {
       await this.insertNode(node);
     }
 
+    const nodeLabelById = new Map(nodes.map((node) => [node.id, node.label]));
     for (const relationship of relationships) {
-      await this.insertRelationship(relationship);
+      await this.insertRelationship(relationship, nodeLabelById);
     }
   }
 
@@ -87,11 +88,15 @@ export class KuzuGraphWriter {
     );
   }
 
-  private async insertRelationship(relationship: GraphRelationship): Promise<void> {
+  private async insertRelationship(
+    relationship: GraphRelationship,
+    nodeLabelById: Map<string, GraphNode["label"]>,
+  ): Promise<void> {
+    const relationshipType = physicalRelationshipType(relationship, nodeLabelById);
     await this.execute(
       [
         `MATCH (from {id: ${quote(relationship.from)}}), (to {id: ${quote(relationship.to)}})`,
-        `CREATE (from)-[:${relationship.type} ${formatProperties(relationship.properties)}]->(to)`,
+        `CREATE (from)-[:${relationshipType} ${formatProperties(relationship.properties)}]->(to)`,
       ].join(" "),
     );
   }
@@ -109,6 +114,27 @@ export class KuzuGraphWriter {
   private async execute(statement: string): Promise<void> {
     const result = await this.connection.query(statement);
     closeResults(result);
+  }
+}
+
+function physicalRelationshipType(
+  relationship: GraphRelationship,
+  nodeLabelById: Map<string, GraphNode["label"]>,
+): string {
+  if (relationship.type !== "RE_EXPORTS") {
+    return relationship.type;
+  }
+
+  const targetLabel = nodeLabelById.get(relationship.to);
+  switch (targetLabel) {
+    case "Function":
+      return "RE_EXPORTS_FUNCTION";
+    case "Class":
+      return "RE_EXPORTS_CLASS";
+    case "Variable":
+      return "RE_EXPORTS_VARIABLE";
+    default:
+      return "RE_EXPORTS";
   }
 }
 
