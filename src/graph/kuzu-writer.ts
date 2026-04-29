@@ -1,15 +1,16 @@
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import kuzu from "kuzu";
-import type { Connection as KuzuConnection, Database as KuzuDatabase, QueryResult as KuzuQueryResult } from "kuzu";
-import { nodeLabels, relationshipTypes, schemaStatements, schemaVersionTableStatement, SCHEMA_VERSION } from "./schema.js";
+import type { Connection as KuzuConnection, Database as KuzuDatabase } from "kuzu";
+import { formatProperties, quote } from "./kuzu-format.js";
+import { physicalRelationshipType } from "./kuzu-relationships.js";
+import { closeResults } from "./kuzu-results.js";
+import { readKuzuSchemaVersion, resetKuzuSchema } from "./kuzu-schema-management.js";
+import { nodeLabels } from "./schema.js";
 import type { GraphNode, GraphRelationship } from "./model.js";
 
 export class KuzuGraphWriter {
-  private constructor(
-    private readonly database: KuzuDatabase,
-    private readonly connection: KuzuConnection,
-  ) {}
+  private constructor(private readonly database: KuzuDatabase, private readonly connection: KuzuConnection) {}
 
   static async open(databasePath: string): Promise<KuzuGraphWriter> {
     await mkdir(path.dirname(databasePath), { recursive: true });
@@ -19,34 +20,11 @@ export class KuzuGraphWriter {
   }
 
   async reset(): Promise<void> {
-    await this.execute("DROP TABLE IF EXISTS _SchemaVersion");
-
-    for (const type of [...relationshipTypes, "CONTAINS", "DEFINES"].reverse()) {
-      await this.execute(`DROP TABLE IF EXISTS ${type}`);
-    }
-
-    for (const label of [...nodeLabels].reverse()) {
-      await this.execute(`DROP TABLE IF EXISTS ${label}`);
-    }
-
-    for (const statement of schemaStatements) {
-      await this.execute(statement);
-    }
-
-    await this.execute(schemaVersionTableStatement);
-    await this.execute(
-      `CREATE (:_SchemaVersion ${formatProperties({ version: SCHEMA_VERSION, writtenAt: new Date().toISOString() })})`,
-    );
+    await resetKuzuSchema((statement) => this.execute(statement));
   }
 
   async schemaVersion(): Promise<number | null> {
-    try {
-      const rows = await this.singleResult("MATCH (v:_SchemaVersion) RETURN v.version AS version LIMIT 1");
-      const version = rows[0]?.version;
-      return typeof version === "number" ? version : null;
-    } catch {
-      return null;
-    }
+    return readKuzuSchemaVersion((statement) => this.singleResult(statement));
   }
 
   async write(nodes: GraphNode[], relationships: GraphRelationship[]): Promise<void> {
@@ -115,56 +93,4 @@ export class KuzuGraphWriter {
     const result = await this.connection.query(statement);
     closeResults(result);
   }
-}
-
-function physicalRelationshipType(
-  relationship: GraphRelationship,
-  nodeLabelById: Map<string, GraphNode["label"]>,
-): string {
-  if (relationship.type !== "RE_EXPORTS") {
-    return relationship.type;
-  }
-
-  const targetLabel = nodeLabelById.get(relationship.to);
-  switch (targetLabel) {
-    case "Function":
-      return "RE_EXPORTS_FUNCTION";
-    case "Class":
-      return "RE_EXPORTS_CLASS";
-    case "Variable":
-      return "RE_EXPORTS_VARIABLE";
-    default:
-      return "RE_EXPORTS";
-  }
-}
-
-function closeResults(result: KuzuQueryResult | KuzuQueryResult[]): void {
-  for (const item of Array.isArray(result) ? result : [result]) {
-    item.close();
-  }
-}
-
-function formatProperties(properties: Record<string, unknown>): string {
-  const entries = Object.entries(properties);
-  if (entries.length === 0) {
-    return "{}";
-  }
-
-  return `{${entries.map(([key, value]) => `${key}: ${formatValue(value)}`).join(", ")}}`;
-}
-
-function formatValue(value: unknown): string {
-  if (value === null || value === undefined) {
-    return "NULL";
-  }
-
-  if (typeof value === "number" || typeof value === "boolean") {
-    return String(value);
-  }
-
-  return quote(String(value));
-}
-
-function quote(value: string): string {
-  return JSON.stringify(value);
 }

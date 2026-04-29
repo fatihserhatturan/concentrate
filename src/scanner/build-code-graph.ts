@@ -1,44 +1,18 @@
 import path from "node:path";
 import os from "node:os";
 import { GraphBuilder } from "../graph/builder.js";
-import { parseSourceFile } from "../parsers/index.js";
-import type { GraphNode, GraphRelationship } from "../graph/model.js";
-import { addDirectoryChain } from "./directory-graph.js";
+import type { BuildCodeGraphOptions, BuildCodeGraphResult } from "./build-code-graph-types.js";
+import { runWithConcurrency } from "./concurrency.js";
 import { discoverFiles } from "./discover-files.js";
-import { addImportResolutionRelationships } from "./import-resolver.js";
-import { addCallResolutionRelationships } from "./call-resolver.js";
-import { addInheritanceRelationships } from "./inheritance-resolver.js";
-import { detectLanguage } from "./language.js";
+import { finalizeGraphRelationships } from "./graph-finalize.js";
+import { parseFileWithContext, type ParseResult } from "./parse-source.js";
+import { addParseResultsToGraph } from "./parse-results.js";
 import {
-  createScanFailure,
   createScanReport,
   type ScanReport,
 } from "./report.js";
-
-export type BuildCodeGraphOptions = {
-  continueOnError: boolean;
-  concurrency?: number;
-  maxFiles?: number;
-  include?: string[];
-  exclude?: string[];
-  onProgress?: (current: number, total: number, relativePath: string) => void;
-};
-
-export type BuildCodeGraphResult = {
-  rootPath: string;
-  nodes: GraphNode[];
-  relationships: GraphRelationship[];
-  report: ScanReport;
-};
-
-type SupportedSourceFile = {
-  filePath: string;
-  language: NonNullable<ReturnType<typeof detectLanguage>>;
-};
-
-type ParseResult =
-  | { ok: true; parsed: Awaited<ReturnType<typeof parseSourceFile>>; filePath: string }
-  | { ok: false; error: unknown; filePath: string };
+import { filterSupportedSourceFiles } from "./source-files.js";
+export type { BuildCodeGraphOptions, BuildCodeGraphResult } from "./build-code-graph-types.js";
 
 export async function buildCodeGraph(
   projectPath: string,
@@ -51,13 +25,7 @@ export async function buildCodeGraph(
     exclude: options.exclude,
   });
 
-  let supportedFiles = files
-    .map((filePath) => ({ filePath, language: detectLanguage(filePath) }))
-    .filter((file): file is SupportedSourceFile => file.language !== null);
-
-  if (options.maxFiles !== undefined && options.maxFiles > 0) {
-    supportedFiles = supportedFiles.slice(0, options.maxFiles);
-  }
+  const supportedFiles = filterSupportedSourceFiles(files, options.maxFiles);
 
   const graph = new GraphBuilder();
   const report = createScanReport(files.length, supportedFiles.length);
@@ -88,32 +56,19 @@ export async function buildCodeGraph(
     },
   );
 
-  for (const result of parseResults) {
-    if (result.ok) {
-      const directoryNodeId = addDirectoryChain(graph, repoNodeId, rootPath, path.dirname(result.filePath));
-      graph.addNodes(result.parsed.nodes);
-      graph.addRelationships(result.parsed.relationships);
-      graph.addRelationship({
-        from: directoryNodeId,
-        to: result.parsed.fileNodeId,
-        type: "CONTAINS_FILE",
-        properties: {},
-      });
-      report.parsedFiles += 1;
-    } else {
-      report.failedFiles.push(createScanFailure(rootPath, result.filePath, result.error));
-      if (!options.continueOnError) {
-        return createResult(rootPath, graph, report);
-      }
-    }
+  const parsedFully = addParseResultsToGraph(
+    graph,
+    repoNodeId,
+    rootPath,
+    parseResults,
+    report,
+    options.continueOnError,
+  );
+  if (!parsedFully) {
+    return createResult(rootPath, graph, report);
   }
 
-  const resolvedImports = await addImportResolutionRelationships(graph, rootPath);
-  report.resolvedImports = resolvedImports.resolved;
-  report.unresolvedRelativeImports = resolvedImports.unresolved;
-
-  addInheritanceRelationships(graph);
-  addCallResolutionRelationships(graph);
+  await finalizeGraphRelationships(graph, rootPath, report);
 
   return createResult(rootPath, graph, report);
 }
@@ -129,39 +84,4 @@ function createResult(
     relationships: graph.relationships,
     report,
   };
-}
-
-async function parseFileWithContext(
-  rootPath: string,
-  filePath: string,
-  language: Parameters<typeof parseSourceFile>[2],
-): ReturnType<typeof parseSourceFile> {
-  try {
-    return await parseSourceFile(rootPath, filePath, language);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`Failed to parse ${filePath}: ${message}`, { cause: error });
-  }
-}
-
-async function runWithConcurrency<T, R>(
-  items: T[],
-  concurrency: number,
-  fn: (item: T) => Promise<R>,
-): Promise<R[]> {
-  if (items.length === 0) return [];
-
-  const results: R[] = new Array(items.length);
-  let nextIndex = 0;
-
-  async function worker(): Promise<void> {
-    while (nextIndex < items.length) {
-      const i = nextIndex++;
-      results[i] = await fn(items[i]!);
-    }
-  }
-
-  const workerCount = Math.min(Math.max(concurrency, 1), items.length);
-  await Promise.all(Array.from({ length: workerCount }, worker));
-  return results;
 }
