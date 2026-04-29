@@ -335,6 +335,107 @@ TypeScript codebases but are not yet captured in the graph.
    - Set it to `true` when the TypeScript `abstract` keyword is present.
    - Update fixture assertions.
 
+## Milestone 8: Node.js Backend Framework Fidelity
+
+The goal of this milestone is to make the graph accurately represent real-world Node.js
+backend codebases: Express, Fastify, Koa, NestJS, and similar frameworks. All gaps below
+were identified by analysing the JS/TS parser against common Node.js patterns.
+
+### 8a — Module-level call expressions (P0)
+
+42. [ ] Capture call expressions at module (program) scope as Call nodes.
+   - Currently `createCallNodes` only runs inside a `isFunctionNode` scope boundary.
+   - Walk the top-level `program` children and emit Call nodes for any `call_expression`
+     found directly at module level.
+   - Attach them via a new `MODULE_CALLS` relationship: `File → Call`.
+   - Covers `app.use(router)`, `app.listen(PORT)`, `fastify.register(plugin)`,
+     `mongoose.connect(uri)`, `NestFactory.create(AppModule)`, etc.
+   - Add fixture and tests.
+
+### 8b — Inline route handler functions (P0)
+
+43. [ ] Extract anonymous/inline functions passed as arguments as Function nodes.
+   - Detect `call_expression` arguments whose value is `arrow_function` or
+     `function_expression` (i.e. inline handlers).
+   - Emit a `Function` node with a synthetic name derived from the call context
+     (e.g. `<router.post /users handler:2>`).
+   - Add a `DEFINES_FUNCTION` relationship: `File → Function`.
+   - Add `PASSED_TO` relationship: `Function → Call` to link handler to its route call.
+   - Covers `router.get('/users', async (req, res) => { ... })`,
+     `fastify.route({ handler: async (req, reply) => { ... } })`.
+   - Add fixture and tests.
+
+### 8c — `new` expression call nodes (P1)
+
+44. [ ] Capture `new_expression` calls in the call graph.
+   - Extend `createCallNodes` (and module-level walk from task 42) to also emit a
+     Call node for `new_expression` nodes.
+   - Set `callee` to the constructor name, `receiver` to `null`.
+   - Covers `new PrismaClient()`, `new EventEmitter()`, `new Bull('queue', cfg)`.
+   - Add fixture and tests.
+
+### 8d — `tsconfig.json` `extends` chain resolution (P1)
+
+45. [ ] Resolve `extends` inheritance in tsconfig parsing.
+   - When `parseTsconfig` encounters an `"extends"` field, read the parent config
+     file and merge `baseUrl` and `paths` (child values take precedence).
+   - Support both relative paths (`./tsconfig.base.json`) and package references
+     (`@tsconfig/strictest`).
+   - Repeat recursively until no further `extends` is found.
+   - Fixes alias resolution for all NestJS and TypeScript monorepo projects.
+   - Add fixture and tests.
+
+### 8e — NestJS decorator argument extraction (P1)
+
+46. [ ] Parse decorator arguments into a structured `args` property on Decorator nodes.
+   - Add `args` property (JSON-serialized array of string values) to the Decorator schema.
+   - Extract string literal, number literal, and identifier arguments from the decorator
+     call expression.
+   - Enables queries such as
+     `MATCH (d:Decorator {name: 'Controller'}) RETURN d.args` → `["users"]`.
+   - Covers `@Controller('users')`, `@Get(':id')`, `@Module({...})`,
+     `@InjectRepository(User)`.
+   - Update schema version and fixture assertions.
+
+### 8f — Chained method call receiver resolution (P1)
+
+47. [ ] Handle chained call expressions in `analyzeMemberCallExpression`.
+   - When the receiver part of a member expression is itself a call expression
+     (e.g. `app.use(cors()).use(json())`), extract the root identifier (`app`) as
+     the effective receiver instead of returning the full sub-expression string.
+   - Prevents receiver values like `"app.use(cors()).use(json())"` from being
+     unresolvable in the call resolution index.
+   - Add unit tests for nested chain inputs.
+
+### 8g — `import type` distinction (P2)
+
+48. [ ] Add `isTypeOnly` property to Import nodes.
+   - Detect `import type { ... }` statements (tree-sitter node has `"type"` keyword
+     before the import clause).
+   - Set `isTypeOnly: true` on the emitted Import node.
+   - Enables filtering runtime dependencies from type-only dependencies in queries.
+   - Update schema version and fixture assertions.
+
+### 8h — Variable initialiser call linkage (P2)
+
+49. [ ] Link module-level variable initialisers to their Call nodes.
+   - When a `variable_declarator` at module level has a `call_expression` or
+     `new_expression` as its value, emit the corresponding Call node and add a
+     `INITIALIZED_BY` relationship: `Variable → Call`.
+   - Covers `const app = express()`, `const db = new PrismaClient()`,
+     `const router = Router()`.
+   - Add fixture and tests.
+
+### 8i — `export default` anonymous expression nodes (P2)
+
+50. [ ] Emit a placeholder node for anonymous `export default` expressions.
+   - Detect `export_statement` whose child is a bare expression (not a named
+     declaration): `export default router`, `export default express()`.
+   - Emit a `Variable` node with `name: "default"`, `kind: "export_default"`,
+     `isExported: true`.
+   - Add `DEFINES_VARIABLE` relationship: `File → Variable`.
+   - Add fixture and tests.
+
 ## Long-Term Development Goals
 
 These items require significant architectural work or external integrations and are tracked
@@ -356,6 +457,6 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestone 6 is complete. Begin Milestone 7 with tasks 36–37 (P0: class expression support,
-constructor parameter properties) before moving to P1 local re-export tracking and
-CommonJS module.exports support.
+Milestone 7 is complete. Begin Milestone 8 with tasks 42–43 (P0: module-level call
+expressions, inline route handler functions) before moving to P1 items (new expressions,
+tsconfig extends, decorator args, chained call resolution).
