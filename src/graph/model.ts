@@ -33,7 +33,10 @@ export type GraphRelationshipType =
   | "IMPLEMENTS"
   | "RE_EXPORTS"
   | "CALLS"
-  | "CALL_RESOLVES_TO";
+  | "CALL_RESOLVES_TO"
+  | "MODULE_CALLS"
+  | "PASSED_TO"
+  | "INITIALIZED_BY";
 
 export type GraphProperties = Record<string, string | number | boolean | null>;
 

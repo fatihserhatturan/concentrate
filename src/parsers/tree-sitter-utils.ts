@@ -48,9 +48,20 @@ export function analyzeMemberCallExpression(expression: string | undefined): Cal
     };
   }
 
+  const rawReceiver = expression.slice(0, lastDotIndex);
+  const receiver = rawReceiver.includes("(") ? stripCallsFromReceiver(rawReceiver) : rawReceiver;
+
   return {
     expression,
     callee: expression.slice(lastDotIndex + 1),
-    receiver: expression.slice(0, lastDotIndex),
+    receiver,
   };
+}
+
+function stripCallsFromReceiver(receiver: string): string {
+  const parenIndex = receiver.indexOf("(");
+  if (parenIndex === -1) return receiver;
+  const base = receiver.slice(0, parenIndex);
+  const dotIndex = base.indexOf(".");
+  return dotIndex === -1 ? base : base.slice(0, dotIndex);
 }

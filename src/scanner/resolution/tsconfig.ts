@@ -4,21 +4,30 @@ import type { JsTsPathMapping } from "./config.js";
 export function parseTsconfig(rawConfig: string): {
   baseUrl: string | null;
   paths: JsTsPathMapping[];
+  extendsPath: string | null;
+  hasBaseUrl: boolean;
+  hasPaths: boolean;
 } {
   const parsed = JSON.parse(stripJsonCommentsAndTrailingCommas(rawConfig)) as {
+    extends?: unknown;
     compilerOptions?: {
       baseUrl?: unknown;
       paths?: unknown;
     };
   };
   const compilerOptions = parsed.compilerOptions ?? {};
-  const baseUrl = typeof compilerOptions.baseUrl === "string"
+  const hasBaseUrl = "baseUrl" in compilerOptions;
+  const hasPaths = "paths" in compilerOptions;
+  const baseUrl = hasBaseUrl && typeof compilerOptions.baseUrl === "string"
     ? toPosixPath(compilerOptions.baseUrl)
     : null;
 
   return {
     baseUrl,
     paths: parseTsconfigPaths(compilerOptions.paths, baseUrl),
+    extendsPath: typeof parsed.extends === "string" ? parsed.extends : null,
+    hasBaseUrl,
+    hasPaths,
   };
 }
 

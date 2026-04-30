@@ -774,6 +774,357 @@ describe("buildCodeGraph", () => {
     assert.equal(variableRequire, undefined, "Variable-specifier require must not be captured");
   });
 
+  it("captures new_expression constructor calls in function bodies and at module level", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "new-expression"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const initFn = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "initialize")!;
+    assert.ok(initFn, "initialize function node");
+
+    // new_expression inside function body → CALLS relationship
+    const bodyCalls = graph.relationships
+      .filter((r) => r.type === "CALLS" && r.from === initFn.id)
+      .map((r) => graph.nodes.find((n) => n.id === r.to)!);
+
+    const bodyExpressions = bodyCalls.map((n) => n.properties.expression as string).sort();
+    // new EventEmitter(), new PrismaClient(), new express.Router(), emitter.on()
+    assert.deepEqual(bodyExpressions, [
+      "emitter.on",
+      "new EventEmitter",
+      "new PrismaClient",
+      "new express.Router",
+    ]);
+
+    // callee = constructor name, receiver = null for simple constructors
+    const emitterCall = bodyCalls.find((n) => n.properties.expression === "new EventEmitter")!;
+    assert.equal(emitterCall.properties.callee, "EventEmitter");
+    assert.equal(emitterCall.properties.receiver, null);
+
+    // receiver extracted for namespaced constructors (new express.Router)
+    const routerCall = bodyCalls.find((n) => n.properties.expression === "new express.Router")!;
+    assert.equal(routerCall.properties.callee, "Router");
+    assert.equal(routerCall.properties.receiver, "express");
+
+    // new_expression at module level → MODULE_CALLS
+    const moduleCalls = graph.relationships
+      .filter((r) => r.type === "MODULE_CALLS")
+      .map((r) => graph.nodes.find((n) => n.id === r.to)!);
+
+    assert.equal(moduleCalls.length, 1);
+    assert.equal(moduleCalls[0]!.properties.expression, "new Worker");
+    assert.equal(moduleCalls[0]!.properties.callee, "Worker");
+    assert.equal(moduleCalls[0]!.properties.receiver, null);
+  });
+
+  it("extracts inline route handler functions as Function nodes linked via PASSED_TO", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "inline-handlers"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    // 4 inline handlers: router.get, router.post, router.delete, router.use
+    const inlineHandlers = graph.nodes.filter(
+      (n) => n.label === "Function" && (n.properties.name as string).startsWith("<"),
+    );
+    assert.equal(inlineHandlers.length, 4, "Expected 4 inline handler Function nodes");
+
+    // synthetic names encode the callee and route path
+    const names = inlineHandlers.map((n) => n.properties.name as string).sort();
+    assert.deepEqual(names, [
+      "<router.delete:/users/:id:arg1>",
+      "<router.get:/users:arg1>",
+      "<router.post:/users:arg1>",
+      "<router.use:/users:arg2>",
+    ]);
+
+    // each linked from file via DEFINES_FUNCTION
+    for (const handler of inlineHandlers) {
+      assert.ok(
+        graph.relationships.some((r) => r.from === "file:routes.ts" && r.to === handler.id && r.type === "DEFINES_FUNCTION"),
+        `DEFINES_FUNCTION missing for ${handler.properties.name}`,
+      );
+    }
+
+    // each linked to its module-level Call node via PASSED_TO
+    const passedTo = graph.relationships.filter((r) => r.type === "PASSED_TO");
+    assert.equal(passedTo.length, 4, "Expected 4 PASSED_TO relationships");
+
+    for (const rel of passedTo) {
+      const callNode = graph.nodes.find((n) => n.id === rel.to);
+      assert.ok(callNode, `Call node ${rel.to} missing`);
+      assert.equal(callNode.label, "Call");
+    }
+
+    // isAsync is correctly extracted
+    const getHandler = inlineHandlers.find((n) => (n.properties.name as string).includes("router.get"))!;
+    const postHandler = inlineHandlers.find((n) => (n.properties.name as string).includes("router.post"))!;
+    assert.equal(getHandler.properties.isAsync, true);
+    assert.equal(postHandler.properties.isAsync, false);
+
+    // parameters are extracted
+    const getParams = JSON.parse(getHandler.properties.parameters as string);
+    assert.deepEqual(getParams, [{ name: "req", type: null }, { name: "res", type: null }]);
+
+    // inline handler body calls are captured via CALLS
+    const getCallNodes = graph.relationships
+      .filter((r) => r.type === "CALLS" && r.from === getHandler.id)
+      .map((r) => graph.nodes.find((n) => n.id === r.to)!);
+    assert.equal(getCallNodes.length, 1);
+    assert.equal(getCallNodes[0]!.properties.callee, "json");
+
+    // PASSED_TO target is the same Call node already emitted by MODULE_CALLS
+    for (const rel of passedTo) {
+      assert.ok(
+        graph.relationships.some((r) => r.type === "MODULE_CALLS" && r.to === rel.to),
+        `PASSED_TO target ${rel.to} must also have MODULE_CALLS`,
+      );
+    }
+  });
+
+  it("captures module-level call expressions as Call nodes linked via MODULE_CALLS", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "module-calls"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.parsedFiles, 2);
+
+    const moduleCalls = graph.relationships.filter((r) => r.type === "MODULE_CALLS");
+    // app.ts: app.use(cors()), app.use(express.json()), app.listen(3000)
+    // server.ts: server.listen(8080), server.on(...), server.close()
+    assert.equal(moduleCalls.length, 6, "Expected 6 MODULE_CALLS relationships");
+
+    const callNodeIds = new Set(moduleCalls.map((r) => r.to));
+    for (const id of callNodeIds) {
+      assert.ok(graph.nodes.find((n) => n.id === id && n.label === "Call"), `Call node ${id} missing`);
+    }
+
+    // all MODULE_CALLS must originate from File nodes
+    for (const rel of moduleCalls) {
+      const src = graph.nodes.find((n) => n.id === rel.from);
+      assert.ok(src, `Source node ${rel.from} missing`);
+      assert.equal(src.label, "File");
+    }
+
+    // verify callee/receiver extraction for app.ts calls
+    const appFileId = "file:app.ts";
+    const appCalls = moduleCalls
+      .filter((r) => r.from === appFileId)
+      .map((r) => graph.nodes.find((n) => n.id === r.to)!);
+
+    const expressions = appCalls.map((n) => n.properties.expression as string).sort();
+    assert.deepEqual(expressions, ["app.listen", "app.use", "app.use"]);
+
+    const listenCall = appCalls.find((n) => n.properties.callee === "listen");
+    assert.ok(listenCall, "app.listen call node");
+    assert.equal(listenCall.properties.receiver, "app");
+
+    // verify top-level await is unwrapped (server.ts: await server.close())
+    const serverFileId = "file:server.ts";
+    const serverCalls = moduleCalls
+      .filter((r) => r.from === serverFileId)
+      .map((r) => graph.nodes.find((n) => n.id === r.to)!);
+
+    const serverExpressions = serverCalls.map((n) => n.properties.expression as string).sort();
+    assert.deepEqual(serverExpressions, ["server.close", "server.listen", "server.on"]);
+
+    // module-level calls must NOT appear as function-body CALLS
+    for (const id of callNodeIds) {
+      assert.ok(
+        !graph.relationships.some((r) => r.type === "CALLS" && r.to === id),
+        `Call node ${id} must not be linked via CALLS`,
+      );
+    }
+
+    // function-body call inside bootstrap() must still use CALLS, not MODULE_CALLS
+    const bootstrapCalls = graph.relationships.filter((r) => {
+      const fn = graph.nodes.find((n) => n.id === r.from);
+      return r.type === "CALLS" && fn?.properties.name === "bootstrap";
+    });
+    assert.equal(bootstrapCalls.length, 1, "bootstrap() has one body call (app.listen)");
+  });
+
+  it("links module-level variable initializers to their Call nodes", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "variable-initializers"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const initializedBy = graph.relationships.filter((r) => r.type === "INITIALIZED_BY");
+    assert.equal(initializedBy.length, 4, "Expected 4 module-level initializer call links");
+
+    const callsByVariable = new Map<string, GraphNode>();
+    for (const rel of initializedBy) {
+      const variable = getNode(graph.nodes, rel.from);
+      const call = getNode(graph.nodes, rel.to);
+      assert.equal(variable.label, "Variable");
+      assert.equal(call.label, "Call");
+      callsByVariable.set(String(variable.properties.name), call);
+    }
+
+    assert.equal(callsByVariable.get("app")?.properties.expression, "express");
+    assert.equal(callsByVariable.get("app")?.properties.callee, "express");
+    assert.equal(callsByVariable.get("app")?.properties.receiver, null);
+
+    assert.equal(callsByVariable.get("db")?.properties.expression, "new PrismaClient");
+    assert.equal(callsByVariable.get("db")?.properties.callee, "PrismaClient");
+    assert.equal(callsByVariable.get("db")?.properties.receiver, null);
+
+    assert.equal(callsByVariable.get("router")?.properties.expression, "Router");
+    assert.equal(callsByVariable.get("router")?.properties.callee, "Router");
+    assert.equal(callsByVariable.get("router")?.properties.receiver, null);
+
+    assert.equal(callsByVariable.get("worker")?.properties.expression, "new Worker");
+    assert.equal(callsByVariable.get("worker")?.properties.callee, "Worker");
+    assert.equal(callsByVariable.get("worker")?.properties.receiver, null);
+
+    assert.ok(!callsByVariable.has("port"), "Literal initializer must not get INITIALIZED_BY");
+    assert.ok(!callsByVariable.has("local"), "Function-scoped initializer must not get INITIALIZED_BY");
+  });
+
+  it("emits placeholder variables for anonymous export default expressions", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "export-default-expressions"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.parsedFiles, 4);
+
+    const defaultVariables = graph.nodes.filter(
+      (n) => n.label === "Variable" && n.properties.name === "default",
+    );
+    assert.equal(defaultVariables.length, 3, "Expected default placeholders for expression exports only");
+
+    for (const variable of defaultVariables) {
+      assert.equal(variable.properties.kind, "export_default");
+      assert.equal(variable.properties.isExported, true);
+      assert.ok(
+        graph.relationships.some((r) => (
+          r.type === "DEFINES_VARIABLE"
+          && r.to === variable.id
+          && r.from.startsWith("file:")
+        )),
+        `DEFINES_VARIABLE missing for ${variable.id}`,
+      );
+    }
+
+    assertRelationship(
+      graph.relationships,
+      "file:identifier.ts",
+      "DEFINES_VARIABLE",
+      "file:identifier.ts:variable:3:default",
+    );
+    assertRelationship(
+      graph.relationships,
+      "file:call.ts",
+      "DEFINES_VARIABLE",
+      "file:call.ts:variable:3:default",
+    );
+    assertRelationship(
+      graph.relationships,
+      "file:anonymous-function.ts",
+      "DEFINES_VARIABLE",
+      "file:anonymous-function.ts:variable:1:default",
+    );
+
+    assert.equal(
+      graph.nodes.find((n) => n.id === "file:named-function.ts:variable:1:default"),
+      undefined,
+      "Named default function declaration must not get a placeholder Variable",
+    );
+
+    const page = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "Page");
+    assert.ok(page, "Named default function should still be parsed as a Function");
+    assert.equal(page.properties.isExported, true);
+  });
+
+  it("resolves TS path aliases inherited via tsconfig extends chain", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "ts-paths-extends"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.resolvedImports, 1);
+    assert.equal(graph.report.unresolvedRelativeImports, 0);
+
+    assertRelationship(
+      graph.relationships,
+      "file:src/index.ts:import:1:@lib/helper",
+      "RESOLVES_TO",
+      "file:src/lib/helper.ts",
+    );
+  });
+
+  it("marks import type statements with isTypeOnly:true", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "import-type"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const imports = graph.nodes.filter((n) => n.label === "Import");
+
+    const userImport = imports.find((n) => n.properties.source === "./types");
+    assert.ok(userImport, "import from ./types");
+    assert.equal(userImport.properties.isTypeOnly, true);
+
+    const expressImport = imports.find((n) => n.properties.source === "express");
+    assert.ok(expressImport, "import from express");
+    assert.equal(expressImport.properties.isTypeOnly, true);
+
+    const httpImport = imports.find((n) => n.properties.source === "http");
+    assert.ok(httpImport, "import from http");
+    assert.equal(httpImport.properties.isTypeOnly, false);
+
+    const fsImport = imports.find((n) => n.properties.source === "fs/promises");
+    assert.ok(fsImport, "import from fs/promises");
+    assert.equal(fsImport.properties.isTypeOnly, false);
+
+    const reExportImport = imports.find((n) => n.properties.isReExport === true);
+    assert.ok(reExportImport, "export type { User } re-export");
+    assert.equal(reExportImport.properties.isTypeOnly, true);
+  });
+
+  it("extracts decorator arguments into a JSON-serialized args property", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "nestjs-decorators"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const decorators = graph.nodes.filter((n) => n.label === "Decorator");
+
+    const controller = decorators.find((d) => d.properties.name === "Controller");
+    assert.ok(controller, "Controller decorator");
+    assert.deepEqual(JSON.parse(controller.properties.args as string), ["users"]);
+
+    const getById = decorators.find(
+      (d) => d.properties.name === "Get" && (d.properties.args as string).includes(":id"),
+    );
+    assert.ok(getById, "Get(':id') decorator");
+    assert.deepEqual(JSON.parse(getById.properties.args as string), [":id"]);
+
+    const getAll = decorators.find(
+      (d) => d.properties.name === "Get" && d.properties.args === "[]",
+    );
+    assert.ok(getAll, "Get() decorator with no args");
+
+    const deleteById = decorators.find(
+      (d) => d.properties.name === "Delete" && (d.properties.args as string).includes(":id"),
+    );
+    assert.ok(deleteById, "Delete(':id') decorator");
+    assert.deepEqual(JSON.parse(deleteById.properties.args as string), [":id"]);
+
+    const useGuards = decorators.find((d) => d.properties.name === "UseGuards");
+    assert.ok(useGuards, "UseGuards decorator");
+    assert.deepEqual(JSON.parse(useGuards.properties.args as string), ["AuthGuard"]);
+  });
+
   it("captures module.exports assignments as exported metadata", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "commonjs-exports"), {
       continueOnError: false,

@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 18;
+export const SCHEMA_VERSION = 23;
 
 export const schemaVersionTableStatement =
   "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
@@ -7,7 +7,7 @@ export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS Repo(id STRING PRIMARY KEY, path STRING, name STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Directory(id STRING PRIMARY KEY, path STRING, relativePath STRING, name STRING)",
   "CREATE NODE TABLE IF NOT EXISTS File(id STRING PRIMARY KEY, path STRING, relativePath STRING, language STRING)",
-  "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64, isReExport BOOLEAN, isWildcard BOOLEAN, isDynamic BOOLEAN, isCjs BOOLEAN, bindings STRING)",
+  "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64, isReExport BOOLEAN, isWildcard BOOLEAN, isDynamic BOOLEAN, isCjs BOOLEAN, isTypeOnly BOOLEAN, bindings STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Function(id STRING PRIMARY KEY, name STRING, kind STRING, methodKind STRING, line INT64, endLine INT64, className STRING, isExported BOOLEAN, isAsync BOOLEAN, isAbstract BOOLEAN, visibility STRING, parameters STRING, returnType STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Class(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN, isAbstract BOOLEAN, visibility STRING, extendsNames STRING, implementsNames STRING)",
   "CREATE NODE TABLE IF NOT EXISTS Interface(id STRING PRIMARY KEY, name STRING, line INT64, endLine INT64, isExported BOOLEAN)",
@@ -16,7 +16,7 @@ export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS Call(id STRING PRIMARY KEY, name STRING, expression STRING, callee STRING, receiver STRING, line INT64, columnNumber INT64)",
   "CREATE NODE TABLE IF NOT EXISTS Field(id STRING PRIMARY KEY, name STRING, typeName STRING, isStatic BOOLEAN, isReadonly BOOLEAN, visibility STRING, line INT64)",
   "CREATE NODE TABLE IF NOT EXISTS Variable(id STRING PRIMARY KEY, name STRING, kind STRING, isExported BOOLEAN, line INT64)",
-  "CREATE NODE TABLE IF NOT EXISTS Decorator(id STRING PRIMARY KEY, name STRING, expression STRING, line INT64)",
+  "CREATE NODE TABLE IF NOT EXISTS Decorator(id STRING PRIMARY KEY, name STRING, expression STRING, line INT64, args STRING)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_ROOT(FROM Repo TO Directory)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_DIRECTORY(FROM Directory TO Directory)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_FILE(FROM Directory TO File)",
@@ -40,6 +40,9 @@ export const schemaStatements = [
   "CREATE REL TABLE IF NOT EXISTS RE_EXPORTS_VARIABLE(FROM File TO Variable)",
   "CREATE REL TABLE IF NOT EXISTS CALLS(FROM Function TO Call)",
   "CREATE REL TABLE IF NOT EXISTS CALL_RESOLVES_TO(FROM Call TO Function)",
+  "CREATE REL TABLE IF NOT EXISTS MODULE_CALLS(FROM File TO Call)",
+  "CREATE REL TABLE IF NOT EXISTS PASSED_TO(FROM Function TO Call)",
+  "CREATE REL TABLE IF NOT EXISTS INITIALIZED_BY(FROM Variable TO Call)",
 ];
 
 export const nodeLabels = [
@@ -81,4 +84,7 @@ export const relationshipTypes = [
   "RE_EXPORTS_VARIABLE",
   "CALLS",
   "CALL_RESOLVES_TO",
+  "MODULE_CALLS",
+  "PASSED_TO",
+  "INITIALIZED_BY",
 ] as const;

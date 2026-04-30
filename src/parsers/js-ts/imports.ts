@@ -24,6 +24,7 @@ export function createImportNode(fileNodeId: string, node: Parser.SyntaxNode): G
       isWildcard: false,
       isDynamic: false,
       isCjs: false,
+      isTypeOnly: isTypeOnlyImport(node),
       bindings: serializeImportBindings(node),
     },
   };
@@ -41,6 +42,7 @@ export function createDynamicImportNode(fileNodeId: string, node: Parser.SyntaxN
       isWildcard: false,
       isDynamic: true,
       isCjs: false,
+      isTypeOnly: false,
       bindings: null,
     },
   };
@@ -58,6 +60,7 @@ export function createCjsImportNode(fileNodeId: string, node: Parser.SyntaxNode,
       isWildcard: false,
       isDynamic: false,
       isCjs: true,
+      isTypeOnly: false,
       bindings: extractCjsBindings(node),
     },
   };
@@ -80,9 +83,18 @@ export function createReExportImportNode(fileNodeId: string, node: Parser.Syntax
       isWildcard: isWildcardReExport(node),
       isDynamic: false,
       isCjs: false,
+      isTypeOnly: isTypeOnlyReExport(node),
       bindings: null,
     },
   };
+}
+
+function isTypeOnlyImport(node: Parser.SyntaxNode): boolean {
+  return /^import\s+type[\s{]/.test(node.text);
+}
+
+function isTypeOnlyReExport(node: Parser.SyntaxNode): boolean {
+  return /^export\s+type[\s{]/.test(node.text);
 }
 
 function isWildcardReExport(node: Parser.SyntaxNode): boolean {

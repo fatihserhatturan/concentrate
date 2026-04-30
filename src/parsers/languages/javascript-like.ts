@@ -26,6 +26,7 @@ import {
 } from "../js-ts/imports.js";
 import {
   applyCjsExportBindings,
+  createDefaultExportExpressionNode,
   createLocalReExportRelationships,
   extractCjsExportBindings,
   extractLocalReExportNames,
@@ -34,12 +35,16 @@ import {
 import {
   appendClassMembers,
   createCallNodes,
+  createInitializerCallNode,
+  createInlineHandlerNode,
+  createModuleLevelCallNodes,
   createClassNode,
   createFunctionNode,
   createTypeScriptDeclarationNode,
   createVariableClassNode,
   createVariableFunctionNode,
   createVariableNode,
+  isInlineHandlerArgument,
 } from "../js-ts/declarations.js";
 
 const jsParser = new Parser();
@@ -142,6 +147,17 @@ async function parseJavaScriptLikeFile(
     if (node.type === "export_statement") {
       localReExportNames.push(...extractLocalReExportNames(node));
 
+      const defaultExportNode = createDefaultExportExpressionNode(fileNodeId, node);
+      if (defaultExportNode) {
+        nodes.push(defaultExportNode);
+        relationships.push({
+          from: fileNodeId,
+          to: defaultExportNode.id,
+          type: "DEFINES_VARIABLE",
+          properties: {},
+        });
+      }
+
       const reExportNode = createReExportImportNode(fileNodeId, node);
       if (reExportNode) {
         nodes.push(reExportNode);
@@ -188,6 +204,33 @@ async function parseJavaScriptLikeFile(
             properties: {},
           })),
         );
+      } else if (isInlineHandlerArgument(node)) {
+        const result = createInlineHandlerNode(fileNodeId, node);
+        if (result) {
+          nodes.push(result.functionNode);
+          relationships.push({
+            from: fileNodeId,
+            to: result.functionNode.id,
+            type: "DEFINES_FUNCTION",
+            properties: {},
+          });
+          relationships.push({
+            from: result.functionNode.id,
+            to: result.callNodeId,
+            type: "PASSED_TO",
+            properties: {},
+          });
+          const callNodes = createCallNodes(result.functionNode.id, node);
+          nodes.push(...callNodes);
+          relationships.push(
+            ...callNodes.map((callNode) => ({
+              from: result.functionNode.id,
+              to: callNode.id,
+              type: "CALLS" as const,
+              properties: {},
+            })),
+          );
+        }
       }
     }
 
@@ -237,6 +280,19 @@ async function parseJavaScriptLikeFile(
             type: "DEFINES_VARIABLE",
             properties: {},
           });
+
+          if (valueChild?.type === "call_expression" || valueChild?.type === "new_expression") {
+            const callNode = createInitializerCallNode(fileNodeId, valueChild);
+            if (callNode) {
+              nodes.push(callNode);
+              relationships.push({
+                from: variableNode.id,
+                to: callNode.id,
+                type: "INITIALIZED_BY",
+                properties: {},
+              });
+            }
+          }
         }
       }
     }
@@ -272,6 +328,17 @@ async function parseJavaScriptLikeFile(
 
   applyCjsExportBindings(fileNodeId, nodes, relationships, cjsExportBindings);
   relationships.push(...createLocalReExportRelationships(fileNodeId, nodes, relationships, localReExportNames));
+
+  const moduleLevelCallNodes = createModuleLevelCallNodes(fileNodeId, tree.rootNode);
+  nodes.push(...moduleLevelCallNodes);
+  relationships.push(
+    ...moduleLevelCallNodes.map((callNode) => ({
+      from: fileNodeId,
+      to: callNode.id,
+      type: "MODULE_CALLS" as const,
+      properties: {},
+    })),
+  );
 
   return { fileNodeId, nodes, relationships };
 }

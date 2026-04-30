@@ -343,7 +343,7 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
 
 ### 8a — Module-level call expressions (P0)
 
-42. [ ] Capture call expressions at module (program) scope as Call nodes.
+42. [x] Capture call expressions at module (program) scope as Call nodes.
    - Currently `createCallNodes` only runs inside a `isFunctionNode` scope boundary.
    - Walk the top-level `program` children and emit Call nodes for any `call_expression`
      found directly at module level.
@@ -354,7 +354,7 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
 
 ### 8b — Inline route handler functions (P0)
 
-43. [ ] Extract anonymous/inline functions passed as arguments as Function nodes.
+43. [x] Extract anonymous/inline functions passed as arguments as Function nodes.
    - Detect `call_expression` arguments whose value is `arrow_function` or
      `function_expression` (i.e. inline handlers).
    - Emit a `Function` node with a synthetic name derived from the call context
@@ -367,7 +367,7 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
 
 ### 8c — `new` expression call nodes (P1)
 
-44. [ ] Capture `new_expression` calls in the call graph.
+44. [x] Capture `new_expression` calls in the call graph.
    - Extend `createCallNodes` (and module-level walk from task 42) to also emit a
      Call node for `new_expression` nodes.
    - Set `callee` to the constructor name, `receiver` to `null`.
@@ -376,7 +376,7 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
 
 ### 8d — `tsconfig.json` `extends` chain resolution (P1)
 
-45. [ ] Resolve `extends` inheritance in tsconfig parsing.
+45. [x] Resolve `extends` inheritance in tsconfig parsing.
    - When `parseTsconfig` encounters an `"extends"` field, read the parent config
      file and merge `baseUrl` and `paths` (child values take precedence).
    - Support both relative paths (`./tsconfig.base.json`) and package references
@@ -387,7 +387,7 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
 
 ### 8e — NestJS decorator argument extraction (P1)
 
-46. [ ] Parse decorator arguments into a structured `args` property on Decorator nodes.
+46. [x] Parse decorator arguments into a structured `args` property on Decorator nodes.
    - Add `args` property (JSON-serialized array of string values) to the Decorator schema.
    - Extract string literal, number literal, and identifier arguments from the decorator
      call expression.
@@ -399,7 +399,7 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
 
 ### 8f — Chained method call receiver resolution (P1)
 
-47. [ ] Handle chained call expressions in `analyzeMemberCallExpression`.
+47. [x] Handle chained call expressions in `analyzeMemberCallExpression`.
    - When the receiver part of a member expression is itself a call expression
      (e.g. `app.use(cors()).use(json())`), extract the root identifier (`app`) as
      the effective receiver instead of returning the full sub-expression string.
@@ -409,7 +409,7 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
 
 ### 8g — `import type` distinction (P2)
 
-48. [ ] Add `isTypeOnly` property to Import nodes.
+48. [x] Add `isTypeOnly` property to Import nodes.
    - Detect `import type { ... }` statements (tree-sitter node has `"type"` keyword
      before the import clause).
    - Set `isTypeOnly: true` on the emitted Import node.
@@ -418,7 +418,7 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
 
 ### 8h — Variable initialiser call linkage (P2)
 
-49. [ ] Link module-level variable initialisers to their Call nodes.
+49. [x] Link module-level variable initialisers to their Call nodes.
    - When a `variable_declarator` at module level has a `call_expression` or
      `new_expression` as its value, emit the corresponding Call node and add a
      `INITIALIZED_BY` relationship: `Variable → Call`.
@@ -428,7 +428,7 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
 
 ### 8i — `export default` anonymous expression nodes (P2)
 
-50. [ ] Emit a placeholder node for anonymous `export default` expressions.
+50. [x] Emit a placeholder node for anonymous `export default` expressions.
    - Detect `export_statement` whose child is a bare expression (not a named
      declaration): `export default router`, `export default express()`.
    - Emit a `Variable` node with `name: "default"`, `kind: "export_default"`,

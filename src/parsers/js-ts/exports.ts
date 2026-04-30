@@ -8,6 +8,28 @@ export type CjsExportBinding = {
   line: number;
 };
 
+export function createDefaultExportExpressionNode(fileNodeId: string, node: Parser.SyntaxNode): GraphNode | null {
+  if (node.type !== "export_statement" || !node.children.some((child) => child.type === "default")) {
+    return null;
+  }
+
+  const exported = node.namedChildren[0];
+  if (!exported || isNamedDefaultDeclaration(exported)) {
+    return null;
+  }
+
+  return {
+    id: `${fileNodeId}:variable:${node.startPosition.row + 1}:default`,
+    label: "Variable",
+    properties: {
+      name: "default",
+      kind: "export_default",
+      isExported: true,
+      line: node.startPosition.row + 1,
+    },
+  };
+}
+
 export function extractLocalReExportNames(node: Parser.SyntaxNode): string[] {
   if (extractStringSource(node)) {
     return [];
@@ -195,6 +217,13 @@ function createCjsExportVariableNode(fileNodeId: string, binding: CjsExportBindi
 
 function createCjsExportVariableId(fileNodeId: string, binding: CjsExportBinding): string {
   return `${fileNodeId}:variable:${binding.line}:${binding.exportedName}`;
+}
+
+function isNamedDefaultDeclaration(node: Parser.SyntaxNode): boolean {
+  return node.type === "function_declaration"
+    || node.type === "generator_function_declaration"
+    || node.type === "class_declaration"
+    || node.type === "abstract_class_declaration";
 }
 
 function extractModuleExportsPropertyName(node: Parser.SyntaxNode): string | null {

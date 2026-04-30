@@ -7,6 +7,56 @@ import {
 export { createJsTsConfiguredImportBasePaths } from "./path-mapping.js";
 import { parseTsconfig } from "./tsconfig.js";
 
+async function resolveExtendsTarget(extendsValue: string, fromDir: string): Promise<string | null> {
+  if (extendsValue.startsWith(".")) {
+    const resolved = path.resolve(fromDir, extendsValue);
+    return path.extname(resolved) ? resolved : `${resolved}.json`;
+  }
+  let current = fromDir;
+  while (true) {
+    const candidate = path.join(current, "node_modules", extendsValue, "tsconfig.json");
+    try {
+      await readFile(candidate, "utf8");
+      return candidate;
+    } catch {
+      // not found here
+    }
+    const parent = path.dirname(current);
+    if (parent === current) return null;
+    current = parent;
+  }
+}
+
+async function readTsconfigChain(
+  tsconfigPath: string,
+  visited = new Set<string>(),
+): Promise<{ baseUrl: string | null; paths: JsTsPathMapping[] }> {
+  const resolved = path.resolve(tsconfigPath);
+  if (visited.has(resolved)) return { baseUrl: null, paths: [] };
+  visited.add(resolved);
+
+  let raw: string;
+  try {
+    raw = await readFile(resolved, "utf8");
+  } catch {
+    return { baseUrl: null, paths: [] };
+  }
+
+  const parsed = parseTsconfig(raw);
+  const dir = path.dirname(resolved);
+  let parent: { baseUrl: string | null; paths: JsTsPathMapping[] } = { baseUrl: null, paths: [] };
+
+  if (parsed.extendsPath) {
+    const parentPath = await resolveExtendsTarget(parsed.extendsPath, dir);
+    if (parentPath) parent = await readTsconfigChain(parentPath, visited);
+  }
+
+  return {
+    baseUrl: parsed.hasBaseUrl ? parsed.baseUrl : parent.baseUrl,
+    paths: parsed.hasPaths ? parsed.paths : parent.paths,
+  };
+}
+
 export type JsTsResolutionConfig = {
   baseUrl: string | null;
   paths: JsTsPathMapping[];
@@ -29,9 +79,9 @@ export async function readJsTsResolutionConfig(rootPath: string): Promise<JsTsRe
     packageJson: null,
   };
 
-  let rawConfig: string;
+  const tsconfigPath = path.join(rootPath, "tsconfig.json");
   try {
-    rawConfig = await readFile(path.join(rootPath, "tsconfig.json"), "utf8");
+    await readFile(tsconfigPath, "utf8");
   } catch (error) {
     const code = (error as NodeJS.ErrnoException).code;
     if (code === "ENOENT") {
@@ -44,12 +94,15 @@ export async function readJsTsResolutionConfig(rootPath: string): Promise<JsTsRe
     throw error;
   }
 
-  const tsconfig = parseTsconfig(rawConfig);
+  const [tsconfig, packageJson] = await Promise.all([
+    readTsconfigChain(tsconfigPath),
+    readJsTsPackageJsonResolutionConfig(rootPath),
+  ]);
 
   return {
     baseUrl: tsconfig.baseUrl,
     paths: tsconfig.paths,
-    packageJson: await readJsTsPackageJsonResolutionConfig(rootPath),
+    packageJson,
   };
 }
 

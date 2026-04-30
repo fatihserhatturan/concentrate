@@ -60,7 +60,11 @@ export function appendClassMembers(
   nodes: GraphNode[],
   relationships: GraphRelationship[],
 ): void {
-  for (const dec of classSyntaxNode.namedChildren.filter((c) => c.type === "decorator")) {
+  const decoratorSource = classSyntaxNode.parent?.type === "export_statement"
+    || classSyntaxNode.parent?.type === "decorated_definition"
+    ? classSyntaxNode.parent
+    : classSyntaxNode;
+  for (const dec of decoratorSource.namedChildren.filter((c) => c.type === "decorator")) {
     const decoratorNode = createDecoratorNode(classNode.id, dec);
     nodes.push(decoratorNode);
     relationships.push({ from: classNode.id, to: decoratorNode.id, type: "HAS_DECORATOR", properties: {} });
@@ -226,15 +230,34 @@ function createFieldNode(classNodeId: string, node: Parser.SyntaxNode): GraphNod
   };
 }
 
+function extractDecoratorArgs(callExpr: Parser.SyntaxNode): string {
+  const argsNode = callExpr.childForFieldName("arguments");
+  if (!argsNode) return "[]";
+
+  const args = argsNode.namedChildren
+    .map((arg) => {
+      if (arg.type === "string") return arg.text.replace(/^["'`]|["'`]$/g, "");
+      if (arg.type === "number") return arg.text;
+      if (arg.type === "identifier" || arg.type === "type_identifier") return arg.text;
+      if (arg.type === "member_expression") return arg.text;
+      return null;
+    })
+    .filter((v): v is string => v !== null);
+
+  return JSON.stringify(args);
+}
+
 function createDecoratorNode(targetId: string, node: Parser.SyntaxNode): GraphNode {
   const inner = node.namedChildren[0];
   let name: string;
+  let args = "[]";
   if (!inner) {
     name = node.text.replace(/^@/, "").trim();
   } else if (inner.type === "identifier") {
     name = inner.text;
   } else if (inner.type === "call_expression") {
     name = inner.childForFieldName("function")?.text ?? inner.text;
+    args = extractDecoratorArgs(inner);
   } else {
     name = inner.text;
   }
@@ -245,6 +268,7 @@ function createDecoratorNode(targetId: string, node: Parser.SyntaxNode): GraphNo
       name,
       expression: node.text,
       line: node.startPosition.row + 1,
+      args,
     },
   };
 }
