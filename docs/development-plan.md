@@ -436,6 +436,123 @@ were identified by analysing the JS/TS parser against common Node.js patterns.
    - Add `DEFINES_VARIABLE` relationship: `File → Variable`.
    - Add fixture and tests.
 
+## Milestone 9: Node.js Backend Semantic Graph
+
+The goal of this milestone is to move beyond structural JS/TS extraction and add
+backend-aware graph semantics for Express, Fastify, NestJS, and similar Node.js
+server frameworks. Frontend frameworks such as React, Vue, and Angular are
+intentionally out of scope for this milestone.
+
+### 9a — Route node model (P0)
+
+51. [ ] Add first-class `Route` nodes and route relationships.
+   - Add a `Route` node label with properties such as `method`, `path`, `line`,
+     `framework`, and `handlerName`.
+   - Add relationships such as `DECLARES_ROUTE`: `File → Route` and
+     `ROUTE_HANDLED_BY`: `Route → Function`.
+   - Keep existing `Call`, `MODULE_CALLS`, and `PASSED_TO` nodes/relationships;
+     route nodes should enrich backend semantics without replacing raw structure.
+   - Update schema version and Kuzu schema tables.
+   - Add fixtures and tests.
+
+### 9b — Express/Koa router method extraction (P0)
+
+52. [ ] Extract Express/Koa-style route method calls into `Route` nodes.
+   - Detect `app.get`, `app.post`, `app.put`, `app.patch`, `app.delete`,
+     `app.options`, `app.head`, `router.get`, `router.use`, and similar calls.
+   - Extract literal path arguments from calls such as
+     `router.get('/users/:id', handler)`.
+   - Link inline handlers via existing synthetic `Function` nodes when available.
+   - Link referenced handlers such as `router.get('/users', listUsers)` to same-file
+     function declarations when possible.
+   - Add Express and Koa fixtures covering inline handlers, referenced handlers,
+     middleware chains, and `router.use`.
+
+### 9c — Router mount path extraction (P0)
+
+53. [ ] Model router and middleware mounting semantics.
+   - Detect `app.use('/api', router)`, `app.use('/admin', adminRouter)`, and
+     `router.use('/nested', childRouter)`.
+   - Add a relationship such as `MOUNTS`: `Variable/File/Route → Variable`
+     or another appropriate endpoint once the graph shape is finalized.
+   - Store mount path and line information as relationship properties.
+   - Combine mount paths with route paths in queries where possible, without
+     mutating the original route path.
+   - Add fixtures and tests for nested routers.
+
+### 9d — Fastify route and plugin semantics (P1)
+
+54. [ ] Extract Fastify route declarations and plugin registrations.
+   - Detect shorthand calls such as `fastify.get('/users', handler)` and
+     `fastify.post('/users', options, handler)`.
+   - Detect object-form declarations such as
+     `fastify.route({ method: 'GET', url: '/users', handler })`.
+   - Extract `fastify.register(plugin, { prefix: '/api' })` as plugin/mount
+     semantics with prefix metadata.
+   - Link inline and referenced handlers where possible.
+   - Add Fastify fixtures and tests.
+
+### 9e — NestJS controller route semantics (P1)
+
+55. [ ] Convert NestJS controller and method decorators into `Route` nodes.
+   - Use `@Controller('users')` as the controller base path.
+   - Use method decorators such as `@Get(':id')`, `@Post()`, `@Put()`,
+     `@Patch()`, and `@Delete()` to create route nodes.
+   - Link each route to the decorated class method via `ROUTE_HANDLED_BY`.
+   - Preserve raw `Decorator` nodes and `HAS_DECORATOR` / `HAS_METHOD_DECORATOR`
+     relationships.
+   - Add NestJS controller fixtures and tests.
+
+### 9f — NestJS module/provider graph (P1)
+
+56. [ ] Extract NestJS module metadata into provider/import/export relationships.
+   - Parse object-literal arguments passed to `@Module({ ... })`.
+   - Capture `imports`, `providers`, `controllers`, and `exports` arrays when
+     they contain identifiers.
+   - Add relationships such as `MODULE_IMPORTS`, `MODULE_PROVIDES`,
+     `MODULE_CONTROLS`, and `MODULE_EXPORTS` after finalizing the exact schema.
+   - Add fixtures for simple modules and modules with imported feature modules.
+
+### 9g — Constructor injection and `this.service` call resolution (P1)
+
+57. [ ] Resolve constructor-injected services to class methods.
+   - Track TypeScript constructor parameter properties such as
+     `constructor(private readonly usersService: UsersService)`.
+   - Link `this.usersService.findAll()` calls to `UsersService.findAll()` when
+     the service class is present in the scanned graph.
+   - Add a relationship such as `INJECTS`: `Class → Class` or a field-level link,
+     depending on the existing field model.
+   - Add NestJS service/controller fixtures and tests.
+
+### 9h — Instance variable method resolution (P2)
+
+58. [ ] Resolve method calls through variables initialized with `new`.
+   - Use `Variable -[:INITIALIZED_BY]-> Call(new ClassName)` to infer the variable
+     instance type when the class is defined locally.
+   - Resolve `service.run()` to the `run` method on `Service`.
+   - Support simple same-file and imported class cases first.
+   - Add fixtures for manually constructed services, repositories, and clients.
+
+### 9i — Object-literal handler extraction (P2)
+
+59. [ ] Extract handler functions nested in object literals.
+   - Detect handlers in patterns such as
+     `fastify.route({ handler: async (request, reply) => {} })`.
+   - Detect middleware/route config objects containing `preHandler`, `handler`,
+     or framework-specific callback keys.
+   - Emit synthetic `Function` nodes and link them to the owning call or route.
+   - Add fixtures and tests.
+
+### 9j — Backend smoke-test repositories (P2)
+
+60. [ ] Add backend sample repository smoke scans.
+   - Add sample repository entries for at least one Express app, one Fastify app,
+     and one NestJS app.
+   - Track last scan commands and expected high-level counts in
+     `docs/sample-repositories.md`.
+   - Run smoke scans after backend-semantic changes to catch real-world parser
+     regressions.
+
 ## Long-Term Development Goals
 
 These items require significant architectural work or external integrations and are tracked
@@ -457,6 +574,6 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestone 7 is complete. Begin Milestone 8 with tasks 42–43 (P0: module-level call
-expressions, inline route handler functions) before moving to P1 items (new expressions,
-tsconfig extends, decorator args, chained call resolution).
+Milestone 8 is complete. Begin Milestone 9 with tasks 51–53 (P0: first-class route
+nodes, Express/Koa route extraction, and router mount path semantics) before moving to
+Fastify, NestJS, and deeper DI/call-resolution work.
