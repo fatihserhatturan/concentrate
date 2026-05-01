@@ -9,12 +9,16 @@ export type JsTsPackageJsonResolutionConfig = {
   exports: unknown;
 };
 
+export type ConfigWarningSink = (filePath: string, error: unknown) => void;
+
 export async function readJsTsPackageJsonResolutionConfig(
   rootPath: string,
+  onWarning?: ConfigWarningSink,
 ): Promise<JsTsPackageJsonResolutionConfig | null> {
+  const packageJsonPath = path.join(rootPath, "package.json");
   let rawPackageJson: string;
   try {
-    rawPackageJson = await readFile(path.join(rootPath, "package.json"), "utf8");
+    rawPackageJson = await readFile(packageJsonPath, "utf8");
   } catch (error) {
     const code = (error as NodeJS.ErrnoException).code;
     if (code === "ENOENT") {
@@ -24,13 +28,25 @@ export async function readJsTsPackageJsonResolutionConfig(
     throw error;
   }
 
-  const parsed = JSON.parse(rawPackageJson) as {
+  let parsed: {
     name?: unknown;
     main?: unknown;
     types?: unknown;
     typings?: unknown;
     exports?: unknown;
   };
+  try {
+    parsed = JSON.parse(rawPackageJson) as {
+      name?: unknown;
+      main?: unknown;
+      types?: unknown;
+      typings?: unknown;
+      exports?: unknown;
+    };
+  } catch (error) {
+    onWarning?.(packageJsonPath, error);
+    return null;
+  }
 
   const types = typeof parsed.types === "string"
     ? parsed.types

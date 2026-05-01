@@ -8,6 +8,24 @@ Run these samples after backend-semantic parser or graph changes. The expected
 counts are intentionally high level so they catch broad regressions without
 pinning every parser detail.
 
+Run all configured smoke samples with:
+
+```bash
+npm run smoke:samples
+```
+
+Run only the standing samples or internet validation samples with:
+
+```bash
+npm run smoke:samples -- --suite standing --report .concentrate/smoke-standing-report.json
+npm run smoke:samples -- --suite internet --report .concentrate/smoke-internet-report.json
+```
+
+The smoke runner scans each repository, writes a Kuzu database, checks expected
+scan counts and semantic graph counts, and writes a machine-readable JSON
+report. Queries for each database are run serially to avoid Kuzu per-database
+lock contention.
+
 ### Express
 
 - Repository: `https://github.com/expressjs/express`
@@ -159,7 +177,16 @@ standing smoke samples.
   files, 0 support files, 0 generated files.
 - Expected smoke counts: schema version 33, 309 `Route` nodes, 3 `EntryPoint`
   nodes, 9 `EnvVar` nodes, 114 `ConfigValue` nodes, 0 `DataModel` nodes.
+- Write benchmark, 2026-05-01: transaction write mode completed the full scan
+  and write in 24.60 seconds; the legacy individual write mode completed the
+  same scan and write in 333.45 seconds.
+- Partial scan validation, 2026-05-01: running without excludes and with
+  `--continue-on-error` produced a queryable partial graph in 24.36 seconds,
+  preserving 2 failed decorator spec files in the report while writing 27348
+  nodes and 35045 relationships.
 - Notes: the full scan found 2 parser failures in decorator spec files; the
-  validation DB was produced by excluding those two spec files. Large graph
-  writes also show that single-row Kuzu `CREATE` inserts are now the main
-  performance bottleneck for production-scale repositories.
+  validation DB can now be produced either by excluding those two spec files or
+  by using `--continue-on-error` to keep a partial graph. Large graph validation
+  showed that wrapping graph writes in a manual Kuzu transaction is the first
+  required production-scale write path; the legacy single-row autocommit path
+  remains available with `--kuzu-write-mode individual`.

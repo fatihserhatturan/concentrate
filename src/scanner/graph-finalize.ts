@@ -15,7 +15,7 @@ export async function finalizeGraphRelationships(
   rootPath: string,
   report: ScanReport,
 ): Promise<void> {
-  const resolvedImports = await addImportResolutionRelationships(graph, rootPath);
+  const resolvedImports = await addImportResolutionRelationships(graph, rootPath, report);
   report.resolvedImports = resolvedImports.resolved;
   report.unresolvedRelativeImports = resolvedImports.unresolved;
 

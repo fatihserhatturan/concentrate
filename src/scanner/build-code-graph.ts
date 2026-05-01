@@ -40,7 +40,7 @@ export async function buildCodeGraph(
       name: path.basename(rootPath),
     },
   });
-  await addProjectConfigNodes(graph, repoNodeId, rootPath);
+  await addProjectConfigNodes(graph, repoNodeId, rootPath, report);
 
   let progressCount = 0;
   const parseResults = await runWithConcurrency(
@@ -67,10 +67,12 @@ export async function buildCodeGraph(
     options.continueOnError,
   );
   if (!parsedFully) {
+    report.status = "failed";
     return createResult(rootPath, graph, report);
   }
 
   await finalizeGraphRelationships(graph, rootPath, report);
+  report.status = report.failedFiles.length > 0 ? "partial" : "success";
 
   return createResult(rootPath, graph, report);
 }

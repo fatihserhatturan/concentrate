@@ -637,6 +637,104 @@ component models remain intentionally out of scope.
    - Include classification metadata in sample repository smoke stats.
    - Add fixtures covering common test layouts.
 
+## Milestone 11 — Production readiness from real-repo validation
+
+This milestone captures the gaps found while scanning the standing sample
+repositories plus small, medium, and large real-world Node.js/TypeScript
+repositories downloaded on 2026-05-01. The goal is to turn Concentrate from a
+strong internal analysis tool into a production-ready scanner that remains fast,
+predictable, and diagnosable on large repositories.
+
+### 11a — Bulk graph writes (P0)
+
+68. [x] Replace single-row Kuzu writes with a bulk writer.
+   - Batch node and relationship writes through JSONL/CSV import or a
+     transaction-oriented writer instead of one `CREATE` per record.
+   - Preserve existing schema versioning, physical relationship mapping, and
+     stats behavior.
+   - Benchmark against the large Nest validation repository and record before
+     and after timings.
+   - Keep the current writer path available as a simple fallback until the bulk
+     writer is proven stable.
+
+### 11b — Partial graph output on parse failures (P0)
+
+69. [x] Make `--continue-on-error` write partial graphs when parsing fails.
+   - Ensure supported files that parse successfully are still written to the
+     target database or export directory when some files fail.
+   - Keep failed file details in the scan report and return an appropriate
+     non-zero exit code or explicit partial-success status.
+   - Add regression coverage using the Nest decorator spec parse failures found
+     during real-repo validation.
+   - Document the difference between fail-fast, continue-with-partial-graph, and
+     clean successful scans.
+
+### 11c — Automated smoke validation runner (P0)
+
+70. [x] Add a one-command smoke validation runner for sample repositories.
+   - Run standing samples and internet validation samples through scan, stats,
+     and targeted semantic queries.
+   - Assert expected schema version, parsed/failed file counts, route counts,
+     entrypoint counts, environment/config counts, data model counts, and file
+     classification counts.
+   - Serialize a machine-readable smoke report for CI and a compact human
+     summary for local development.
+   - Run queries serially per Kuzu database to avoid known per-database lock
+     contention.
+
+### 11d — Config parser hardening (P1)
+
+71. [x] Harden project config parsing for real-world TypeScript/Node projects.
+   - Treat unreadable or malformed `tsconfig`, `jsconfig`, and package metadata
+     as warnings instead of scanner-fatal errors where possible.
+   - Expand JSONC handling to cover common comments, trailing commas, glob
+     strings, path aliases, and workspace config inheritance.
+   - Add fixtures based on real validation cases such as `@/*`, `src/*`, and
+     `**/*.spec.ts` path/glob strings.
+   - Surface config warnings in the scan report without hiding successfully
+     parsed source files.
+
+### 11e — Workspace and package graph (P1)
+
+72. [ ] Model monorepo workspaces and package boundaries.
+   - Detect npm, pnpm, yarn, and common package workspace layouts.
+   - Add package/workspace nodes or properties and link files, configs, and
+     internal imports to their owning package.
+   - Allow stats and queries to filter by package as well as production/test/
+     fixture/support/generated file class.
+   - Validate against the large Nest repository and the Ky sample repository.
+
+### 11f — Deeper data-access resolution (P1)
+
+73. [ ] Improve ORM and repository data-access resolution.
+   - Trace ORM clients through imports, aliases, dependency injection, wrapper
+     services, and repository class methods.
+   - Link service/repository methods back to concrete Prisma models,
+     Mongoose models, Sequelize models, TypeORM repositories, and Knex tables
+     when visible.
+   - Add false-positive guards for factory and framework APIs that resemble ORM
+     model calls.
+   - Expand real-repo validation queries for detected data models and accessed
+     operations.
+
+### 11g — Semantic accuracy review reports (P2)
+
+74. [ ] Add semantic sample reports for routes, entrypoints, config, and data access.
+   - Generate top-N route, entrypoint, env/config, and data-access query samples
+     after smoke scans.
+   - Include file path and line metadata so results can be spot-checked quickly.
+   - Track false positives and false negatives discovered during manual review.
+   - Use the report to guide follow-up parser and resolver improvements.
+
+### 11h — Kuzu query concurrency and retry behavior (P2)
+
+75. [ ] Make Kuzu CLI access friendlier under per-database lock contention.
+   - Add retry/backoff for transient Kuzu lock errors in stats and query
+     commands.
+   - Ensure smoke validation runs same-database queries serially.
+   - Document that parallel operations should target different database paths or
+     use the smoke runner's queueing behavior.
+
 ## Long-Term Development Goals
 
 These items require significant architectural work or external integrations and are tracked
@@ -658,6 +756,5 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestones 8, 9, and 10 are complete. Next planning pass should choose the
-highest-value item from the long-term development goals or add a new production
-readiness milestone.
+Milestones 8, 9, and 10 are complete. Continue Milestone 11 with task 72 (P1:
+workspace and package graph), then task 73 (deeper data-access resolution).

@@ -1,0 +1,5 @@
+{
+  "name": "malformed-config-fixture",
+  "exports": {
+    ".": "./index.ts",
+  // missing closing braces on purpose

@@ -2,7 +2,7 @@ import { GraphBuilder } from "../../graph/builder.js";
 import {
   createJsTsConfiguredImportBasePaths,
   readGoResolutionConfig,
-  readJsTsResolutionConfig,
+  readJsTsResolutionConfigWithWarnings,
   type GoResolutionConfig,
   type JsTsResolutionConfig,
 } from "./config.js";
@@ -14,14 +14,26 @@ import {
 } from "./file-kind.js";
 import { resolveImport } from "./import-dispatch.js";
 import { createFileIndex, createImporterIndex } from "./import-indexes.js";
+import path from "node:path";
+import { addUniqueScanWarning, type ScanReport } from "../report.js";
 
-export async function addImportResolutionRelationships(graph: GraphBuilder, rootPath: string): Promise<{
+export async function addImportResolutionRelationships(
+  graph: GraphBuilder,
+  rootPath: string,
+  report?: ScanReport,
+): Promise<{
   resolved: number;
   unresolved: number;
 }> {
   const fileIdByRelativePath = createFileIndex(graph.nodes);
   const importerFileIdByImportId = createImporterIndex(graph.relationships);
-  const jsTsConfig = await readJsTsResolutionConfig(rootPath);
+  const jsTsConfig = await readJsTsResolutionConfigWithWarnings(rootPath, (filePath, error) => {
+    if (!report) return;
+    addUniqueScanWarning(report, {
+      path: path.relative(rootPath, filePath),
+      message: error instanceof Error ? error.message : String(error),
+    });
+  });
   const goConfig = await readGoResolutionConfig(rootPath);
   let resolved = 0;
   let unresolved = 0;

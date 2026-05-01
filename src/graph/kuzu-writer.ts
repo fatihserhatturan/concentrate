@@ -9,6 +9,12 @@ import { readKuzuSchemaVersion, resetKuzuSchema } from "./kuzu-schema-management
 import { nodeLabels } from "./schema.js";
 import type { GraphNode, GraphRelationship } from "./model.js";
 
+export type KuzuWriteMode = "transaction" | "individual";
+
+export type KuzuWriteOptions = {
+  mode?: KuzuWriteMode;
+};
+
 export class KuzuGraphWriter {
   private constructor(private readonly database: KuzuDatabase, private readonly connection: KuzuConnection) {}
 
@@ -27,7 +33,32 @@ export class KuzuGraphWriter {
     return readKuzuSchemaVersion((statement) => this.singleResult(statement));
   }
 
-  async write(nodes: GraphNode[], relationships: GraphRelationship[]): Promise<void> {
+  async write(
+    nodes: GraphNode[],
+    relationships: GraphRelationship[],
+    options: KuzuWriteOptions = {},
+  ): Promise<void> {
+    const mode = options.mode ?? "transaction";
+    if (mode === "individual") {
+      await this.writeIndividually(nodes, relationships);
+      return;
+    }
+
+    await this.writeInTransaction(nodes, relationships);
+  }
+
+  private async writeInTransaction(nodes: GraphNode[], relationships: GraphRelationship[]): Promise<void> {
+    await this.execute("BEGIN TRANSACTION");
+    try {
+      await this.writeIndividually(nodes, relationships);
+      await this.execute("COMMIT");
+    } catch (error) {
+      await this.rollbackTransaction();
+      throw error;
+    }
+  }
+
+  private async writeIndividually(nodes: GraphNode[], relationships: GraphRelationship[]): Promise<void> {
     for (const node of nodes) {
       await this.insertNode(node);
     }
@@ -92,5 +123,13 @@ export class KuzuGraphWriter {
   private async execute(statement: string): Promise<void> {
     const result = await this.connection.query(statement);
     closeResults(result);
+  }
+
+  private async rollbackTransaction(): Promise<void> {
+    try {
+      await this.execute("ROLLBACK");
+    } catch {
+      // Preserve the original write error if rollback itself cannot complete.
+    }
   }
 }

@@ -1,9 +1,9 @@
 import path from "node:path";
-import { KuzuGraphWriter } from "../graph/kuzu-writer.js";
+import { KuzuGraphWriter, type KuzuWriteMode } from "../graph/kuzu-writer.js";
 import { printScanReport } from "../cli/report.js";
 import { ProgressReporter } from "../cli/progress.js";
 import { buildCodeGraph } from "../scanner/build-code-graph.js";
-import { didFailFast } from "../scanner/report.js";
+import { didFailFast, didPartiallySucceed } from "../scanner/report.js";
 
 type ScanOptions = {
   database: string;
@@ -12,6 +12,7 @@ type ScanOptions = {
   maxFiles?: number;
   include: string[];
   exclude: string[];
+  kuzuWriteMode: string;
 };
 
 export async function scanCommand(projectPath: string, options: ScanOptions): Promise<void> {
@@ -38,9 +39,25 @@ export async function scanCommand(projectPath: string, options: ScanOptions): Pr
   }
 
   const writer = await KuzuGraphWriter.open(databasePath);
-  await writer.reset();
-  await writer.write(result.nodes, result.relationships);
-  await writer.close();
+  try {
+    await writer.reset();
+    await writer.write(result.nodes, result.relationships, {
+      mode: parseKuzuWriteMode(options.kuzuWriteMode),
+    });
+  } finally {
+    await writer.close();
+  }
 
   printScanReport(result.report, result.nodes.length, result.relationships.length, databasePath);
+  if (didPartiallySucceed(result)) {
+    process.exitCode = 1;
+  }
+}
+
+function parseKuzuWriteMode(value: string): KuzuWriteMode {
+  if (value === "transaction" || value === "individual") {
+    return value;
+  }
+
+  throw new Error(`Unsupported Kuzu write mode: ${value}`);
 }

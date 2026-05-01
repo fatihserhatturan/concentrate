@@ -1,11 +1,13 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { GraphBuilder } from "../graph/builder.js";
+import { addScanWarning, type ScanReport } from "./report.js";
 
 export async function addProjectConfigNodes(
   graph: GraphBuilder,
   repoNodeId: string,
   rootPath: string,
+  report?: ScanReport,
 ): Promise<void> {
   await Promise.all([
     addJsonConfigValues(graph, repoNodeId, path.join(rootPath, "package.json"), "package.json", [
@@ -15,14 +17,18 @@ export async function addProjectConfigNodes(
       "main",
       "module",
       "types",
-    ]),
+    ], rootPath, report),
     addJsonConfigValues(graph, repoNodeId, path.join(rootPath, "tsconfig.json"), "tsconfig.json", [
       "compilerOptions.target",
       "compilerOptions.module",
       "compilerOptions.baseUrl",
       "compilerOptions.outDir",
       "compilerOptions.rootDir",
-    ]),
+    ], rootPath, report),
+    addJsonConfigValues(graph, repoNodeId, path.join(rootPath, "jsconfig.json"), "jsconfig.json", [
+      "compilerOptions.baseUrl",
+      "compilerOptions.checkJs",
+    ], rootPath, report),
   ]);
 }
 
@@ -32,11 +38,16 @@ async function addJsonConfigValues(
   filePath: string,
   source: string,
   keys: string[],
+  rootPath: string,
+  report?: ScanReport,
 ): Promise<void> {
   let parsed: unknown;
   try {
     parsed = JSON.parse(await readFile(filePath, "utf8")) as unknown;
-  } catch {
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+      if (report) addScanWarning(report, rootPath, filePath, error);
+    }
     return;
   }
 

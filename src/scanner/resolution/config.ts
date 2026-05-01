@@ -1,6 +1,7 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
 import {
+  type ConfigWarningSink,
   readJsTsPackageJsonResolutionConfig,
   type JsTsPackageJsonResolutionConfig,
 } from "./package-json.js";
@@ -29,6 +30,7 @@ async function resolveExtendsTarget(extendsValue: string, fromDir: string): Prom
 
 async function readTsconfigChain(
   tsconfigPath: string,
+  onWarning?: ConfigWarningSink,
   visited = new Set<string>(),
 ): Promise<{ baseUrl: string | null; paths: JsTsPathMapping[] }> {
   const resolved = path.resolve(tsconfigPath);
@@ -42,13 +44,19 @@ async function readTsconfigChain(
     return { baseUrl: null, paths: [] };
   }
 
-  const parsed = parseTsconfig(raw);
+  let parsed: ReturnType<typeof parseTsconfig>;
+  try {
+    parsed = parseTsconfig(raw);
+  } catch (error) {
+    onWarning?.(resolved, error);
+    return { baseUrl: null, paths: [] };
+  }
   const dir = path.dirname(resolved);
   let parent: { baseUrl: string | null; paths: JsTsPathMapping[] } = { baseUrl: null, paths: [] };
 
   if (parsed.extendsPath) {
     const parentPath = await resolveExtendsTarget(parsed.extendsPath, dir);
-    if (parentPath) parent = await readTsconfigChain(parentPath, visited);
+    if (parentPath) parent = await readTsconfigChain(parentPath, onWarning, visited);
   }
 
   return {
@@ -73,6 +81,13 @@ export type GoResolutionConfig = {
 };
 
 export async function readJsTsResolutionConfig(rootPath: string): Promise<JsTsResolutionConfig> {
+  return readJsTsResolutionConfigWithWarnings(rootPath);
+}
+
+export async function readJsTsResolutionConfigWithWarnings(
+  rootPath: string,
+  onWarning?: ConfigWarningSink,
+): Promise<JsTsResolutionConfig> {
   const emptyConfig: JsTsResolutionConfig = {
     baseUrl: null,
     paths: [],
@@ -87,7 +102,7 @@ export async function readJsTsResolutionConfig(rootPath: string): Promise<JsTsRe
     if (code === "ENOENT") {
       return {
         ...emptyConfig,
-        packageJson: await readJsTsPackageJsonResolutionConfig(rootPath),
+        packageJson: await readJsTsPackageJsonResolutionConfig(rootPath, onWarning),
       };
     }
 
@@ -95,8 +110,8 @@ export async function readJsTsResolutionConfig(rootPath: string): Promise<JsTsRe
   }
 
   const [tsconfig, packageJson] = await Promise.all([
-    readTsconfigChain(tsconfigPath),
-    readJsTsPackageJsonResolutionConfig(rootPath),
+    readTsconfigChain(tsconfigPath, onWarning),
+    readJsTsPackageJsonResolutionConfig(rootPath, onWarning),
   ]);
 
   return {

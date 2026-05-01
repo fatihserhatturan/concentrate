@@ -12,6 +12,8 @@ export function printScanReport(
   console.log(`  Skipped files:    ${report.skippedFiles}`);
   console.log(`  Parsed files:     ${report.parsedFiles}`);
   console.log(`  Failed files:     ${report.failedFiles.length}`);
+  console.log(`  Warnings:         ${report.warnings.length}`);
+  console.log(`  Status:           ${report.status}`);
   const classes = report.fileClassifications;
   console.log(
     `  File classes:     production ${classes.production}, test ${classes.test}, fixture ${classes.fixture}, support ${classes.support}, generated ${classes.generated}`,
@@ -26,6 +28,13 @@ export function printScanReport(
     console.log("Failed files");
     for (const failure of report.failedFiles) {
       console.log(`  - ${failure.path}: ${failure.message}`);
+    }
+  }
+
+  if (report.warnings.length > 0) {
+    console.log("Warnings");
+    for (const warning of report.warnings) {
+      console.log(`  - ${warning.path}: ${warning.message}`);
     }
   }
 }

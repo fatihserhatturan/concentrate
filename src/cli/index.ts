@@ -5,6 +5,7 @@ import { scanCommand } from "../commands/scan.js";
 import { statsCommand } from "../commands/stats.js";
 import { queryCommand } from "../commands/query.js";
 import { exportCommand } from "../commands/export.js";
+import { smokeCommand } from "../commands/smoke.js";
 
 function collect(value: string, previous: string[]): string[] {
   return [...previous, value];
@@ -27,6 +28,7 @@ program
   .option("--max-files <n>", "Maximum number of files to parse", parseInt)
   .option("--include <pattern>", "Include glob pattern, repeatable", collect, [] as string[])
   .option("--exclude <pattern>", "Exclude glob pattern, repeatable", collect, [] as string[])
+  .option("--kuzu-write-mode <mode>", "Kuzu write mode: transaction or individual", "transaction")
   .action(scanCommand);
 
 program
@@ -54,5 +56,13 @@ program
   .option("--include <pattern>", "Include glob pattern, repeatable", collect, [] as string[])
   .option("--exclude <pattern>", "Exclude glob pattern, repeatable", collect, [] as string[])
   .action(exportCommand);
+
+program
+  .command("smoke")
+  .description("Run sample repository smoke validation scans.")
+  .option("--suite <suite>", "Smoke suite: standing, internet, or all", "all")
+  .option("--report <path>", "Machine-readable smoke report path", ".concentrate/smoke-report.json")
+  .option("--allow-missing", "Skip missing sample repositories instead of failing", false)
+  .action(smokeCommand);
 
 await program.parseAsync(process.argv);

@@ -4,6 +4,9 @@ import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/scanner/build-code-graph.js";
+import { scanCommand } from "../src/commands/scan.js";
+import { KuzuGraphWriter } from "../src/graph/kuzu-writer.js";
+import { SCHEMA_VERSION } from "../src/graph/schema.js";
 import { getLanguageParser } from "../src/parsers/index.js";
 import { parseTsconfig } from "../src/scanner/resolution/tsconfig.js";
 import type { GraphNode, GraphRelationship, GraphNodeLabel, GraphRelationshipType } from "../src/graph/model.js";
@@ -68,6 +71,7 @@ describe("buildCodeGraph", () => {
     assert.equal(graph.report.discoveredFiles, 2);
     assert.equal(graph.report.supportedFiles, 2);
     assert.equal(graph.report.parsedFiles, 1);
+    assert.equal(graph.report.status, "partial");
     assert.equal(graph.report.failedFiles.length, 1);
     assert.equal(graph.report.failedFiles[0]?.path, "bad.ts");
     assert.match(graph.report.failedFiles[0]?.message ?? "", /Syntax error/);
@@ -78,6 +82,42 @@ describe("buildCodeGraph", () => {
       "DEFINES_FUNCTION",
       "file:good.ts:function:1:good",
     );
+  });
+
+  it("writes partial Kuzu graphs when continue-on-error is enabled", async () => {
+    const fixturePath = await createScanErrorFixture();
+    const databasePath = path.join(
+      await mkdtemp(path.join(os.tmpdir(), "concentrate-partial-graph-")),
+      "graph.kuzu",
+    );
+    const previousExitCode = process.exitCode;
+
+    await scanCommand(fixturePath, {
+      database: databasePath,
+      continueOnError: true,
+      include: [],
+      exclude: [],
+      kuzuWriteMode: "transaction",
+    });
+
+    assert.equal(process.exitCode, 1);
+    process.exitCode = previousExitCode;
+
+    const writer = await KuzuGraphWriter.open(databasePath);
+    try {
+      assert.equal(await writer.schemaVersion(), SCHEMA_VERSION);
+      const rows = await writer.query(
+        "MATCH (f:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN f.relativePath AS path, fn.name AS name",
+      );
+      assert.deepEqual(rows, [
+        {
+          path: "good.ts",
+          name: "good",
+        },
+      ]);
+    } finally {
+      await writer.close();
+    }
   });
 
   it("extracts Python files, imports, classes, functions, calls, and relative import resolution", async () => {
@@ -218,6 +258,25 @@ describe("buildCodeGraph", () => {
       { pattern: "@/*", targets: ["src/*"] },
       { pattern: "@app/*", targets: ["app/*"] },
     ]);
+  });
+
+  it("keeps scanning when project config files are malformed and reports warnings", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "malformed-config"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.status, "success");
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.parsedFiles, 1);
+    assert.equal(graph.report.warnings.length, 3);
+    assert.ok(graph.report.warnings.some((warning) => warning.path === "package.json"));
+    assert.ok(graph.report.warnings.some((warning) => warning.path === "tsconfig.json"));
+    assertRelationship(
+      graph.relationships,
+      "file:index.ts",
+      "DEFINES_FUNCTION",
+      "file:index.ts:function:1:main",
+    );
   });
 
   it("resolves Go project-internal imports via go.mod module name", async () => {

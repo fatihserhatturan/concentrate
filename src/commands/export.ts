@@ -3,7 +3,7 @@ import path from "node:path";
 import { printScanReport } from "../cli/report.js";
 import { ProgressReporter } from "../cli/progress.js";
 import { buildCodeGraph } from "../scanner/build-code-graph.js";
-import { didFailFast } from "../scanner/report.js";
+import { didFailFast, didPartiallySucceed } from "../scanner/report.js";
 import type { GraphNode, GraphRelationship } from "../graph/model.js";
 
 type ExportOptions = {
@@ -54,6 +54,9 @@ export async function exportCommand(projectPath: string, options: ExportOptions)
 
   printExportReport(outputPath, result.nodes.length, result.relationships.length);
   printScanReport(result.report, result.nodes.length, result.relationships.length, outputPath);
+  if (didPartiallySucceed(result)) {
+    process.exitCode = 1;
+  }
 }
 
 async function writeJsonl(

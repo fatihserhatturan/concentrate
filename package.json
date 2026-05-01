@@ -10,6 +10,7 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/cli/index.ts",
     "scan": "tsx src/cli/index.ts scan",
+    "smoke:samples": "tsx src/cli/index.ts smoke",
     "stats": "tsx src/cli/index.ts stats",
     "query": "tsx src/cli/index.ts query",
     "test": "tsx --test tests/**/*.test.ts",
