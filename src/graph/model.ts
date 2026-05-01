@@ -1,5 +1,6 @@
 export type GraphNodeLabel =
   | "Repo"
+  | "Package"
   | "Directory"
   | "File"
   | "Import"
@@ -20,8 +21,13 @@ export type GraphNodeLabel =
 
 export type GraphRelationshipType =
   | "CONTAINS_ROOT"
+  | "HAS_PACKAGE"
   | "CONTAINS_DIRECTORY"
   | "CONTAINS_FILE"
+  | "PACKAGE_CONTAINS_FILE"
+  | "PACKAGE_DECLARES_CONFIG"
+  | "PACKAGE_IMPORTS_PACKAGE"
+  | "IMPORTS_PACKAGE"
   | "IMPORTS"
   | "RESOLVES_TO"
   | "DEFINES_FUNCTION"

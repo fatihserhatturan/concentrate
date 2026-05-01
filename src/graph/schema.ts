@@ -1,10 +1,11 @@
-export const SCHEMA_VERSION = 33;
+export const SCHEMA_VERSION = 34;
 
 export const schemaVersionTableStatement =
   "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
 
 export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS Repo(id STRING PRIMARY KEY, path STRING, name STRING)",
+  "CREATE NODE TABLE IF NOT EXISTS Package(id STRING PRIMARY KEY, path STRING, relativePath STRING, name STRING, version STRING, isPrivate BOOLEAN, manager STRING, workspaceRoot BOOLEAN)",
   "CREATE NODE TABLE IF NOT EXISTS Directory(id STRING PRIMARY KEY, path STRING, relativePath STRING, name STRING)",
   "CREATE NODE TABLE IF NOT EXISTS File(id STRING PRIMARY KEY, path STRING, relativePath STRING, language STRING, sourceType STRING, isTest BOOLEAN, isFixture BOOLEAN, isSupport BOOLEAN, isGenerated BOOLEAN)",
   "CREATE NODE TABLE IF NOT EXISTS Import(id STRING PRIMARY KEY, source STRING, specifier STRING, line INT64, isReExport BOOLEAN, isWildcard BOOLEAN, isDynamic BOOLEAN, isCjs BOOLEAN, isTypeOnly BOOLEAN, bindings STRING)",
@@ -23,8 +24,13 @@ export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS ConfigValue(id STRING PRIMARY KEY, name STRING, value STRING, valueType STRING, line INT64)",
   "CREATE NODE TABLE IF NOT EXISTS DataModel(id STRING PRIMARY KEY, name STRING, library STRING)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_ROOT(FROM Repo TO Directory)",
+  "CREATE REL TABLE IF NOT EXISTS HAS_PACKAGE(FROM Repo TO Package)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_DIRECTORY(FROM Directory TO Directory)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_FILE(FROM Directory TO File)",
+  "CREATE REL TABLE IF NOT EXISTS PACKAGE_CONTAINS_FILE(FROM Package TO File)",
+  "CREATE REL TABLE IF NOT EXISTS PACKAGE_DECLARES_CONFIG(FROM Package TO ConfigValue)",
+  "CREATE REL TABLE IF NOT EXISTS PACKAGE_IMPORTS_PACKAGE(FROM Package TO Package, dependencyType STRING)",
+  "CREATE REL TABLE IF NOT EXISTS IMPORTS_PACKAGE(FROM Import TO Package)",
   "CREATE REL TABLE IF NOT EXISTS IMPORTS(FROM File TO Import)",
   "CREATE REL TABLE IF NOT EXISTS RESOLVES_TO(FROM Import TO File)",
   "CREATE REL TABLE IF NOT EXISTS DEFINES_FUNCTION(FROM File TO Function)",
@@ -77,6 +83,7 @@ export const schemaStatements = [
 
 export const nodeLabels = [
   "Repo",
+  "Package",
   "Directory",
   "File",
   "Import",
@@ -97,8 +104,13 @@ export const nodeLabels = [
 ] as const;
 export const relationshipTypes = [
   "CONTAINS_ROOT",
+  "HAS_PACKAGE",
   "CONTAINS_DIRECTORY",
   "CONTAINS_FILE",
+  "PACKAGE_CONTAINS_FILE",
+  "PACKAGE_DECLARES_CONFIG",
+  "PACKAGE_IMPORTS_PACKAGE",
+  "IMPORTS_PACKAGE",
   "IMPORTS",
   "RESOLVES_TO",
   "DEFINES_FUNCTION",

@@ -35,6 +35,7 @@ program
   .command("stats")
   .description("Show basic graph statistics.")
   .option("-d, --database <path>", "Kuzu database path", ".concentrate/graph.kuzu")
+  .option("--package <name>", "Filter file-owned stats to one package name or relative path")
   .action(statsCommand);
 
 program

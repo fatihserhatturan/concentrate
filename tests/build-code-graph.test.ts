@@ -807,6 +807,41 @@ describe("buildCodeGraph", () => {
     );
   });
 
+  it("models workspace packages and links files, config, and internal imports", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "workspace-monorepo"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.equal(graph.report.resolvedImports, 1);
+    assertNodeCount(graph.nodes, "Package", 3);
+
+    const rootPackage = getNode(graph.nodes, "package:.");
+    const apiPackage = getNode(graph.nodes, "package:apps/api");
+    const corePackage = getNode(graph.nodes, "package:packages/core");
+
+    assert.equal(rootPackage.properties.name, "workspace-monorepo");
+    assert.equal(rootPackage.properties.workspaceRoot, true);
+    assert.equal(apiPackage.properties.name, "@sample/api");
+    assert.equal(corePackage.properties.name, "@sample/core");
+
+    assertRelationship(graph.relationships, "repo:" + path.join(fixturesRoot, "workspace-monorepo"), "HAS_PACKAGE", "package:apps/api");
+    assertRelationship(graph.relationships, "package:apps/api", "PACKAGE_CONTAINS_FILE", "file:apps/api/src/server.ts");
+    assertRelationship(graph.relationships, "package:packages/core", "PACKAGE_CONTAINS_FILE", "file:packages/core/src/index.ts");
+    assertRelationship(graph.relationships, "package:apps/api", "PACKAGE_DECLARES_CONFIG", "config:package:apps/api:package.json:name");
+    assertRelationship(graph.relationships, "file:apps/api/src/server.ts:import:1:@sample/core", "RESOLVES_TO", "file:packages/core/src/index.ts");
+    assertRelationship(graph.relationships, "file:apps/api/src/server.ts:import:1:@sample/core", "IMPORTS_PACKAGE", "package:packages/core");
+    assert.ok(graph.relationships.some((relationship) => (
+      relationship.from === "package:apps/api"
+      && relationship.to === "package:packages/core"
+      && relationship.type === "PACKAGE_IMPORTS_PACKAGE"
+      && (
+        relationship.properties.dependencyType === "dependencies"
+        || relationship.properties.dependencyType === "internalImport"
+      )
+    )));
+  });
+
   it("treats require() calls as Import nodes with isCjs:true and resolves them", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "commonjs-require"), {
       continueOnError: false,

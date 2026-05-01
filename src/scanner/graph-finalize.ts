@@ -9,6 +9,7 @@ import { addInstanceMethodResolutionRelationships } from "./resolution/instances
 import { addNestJsModuleRelationships } from "./resolution/nestjs-modules.js";
 import { resolveRouteFullPaths } from "./resolution/route-paths.js";
 import type { ScanReport } from "./report.js";
+import { addImportPackageRelationships } from "./workspace-packages.js";
 
 export async function finalizeGraphRelationships(
   graph: GraphBuilder,
@@ -18,6 +19,7 @@ export async function finalizeGraphRelationships(
   const resolvedImports = await addImportResolutionRelationships(graph, rootPath, report);
   report.resolvedImports = resolvedImports.resolved;
   report.unresolvedRelativeImports = resolvedImports.unresolved;
+  addImportPackageRelationships(graph);
 
   addInheritanceRelationships(graph);
   addNestJsModuleRelationships(graph);

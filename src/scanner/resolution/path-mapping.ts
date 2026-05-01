@@ -1,6 +1,9 @@
 import path from "node:path";
 import type { JsTsResolutionConfig } from "./config.js";
-import { createJsTsPackageImportBasePaths } from "./package-json.js";
+import {
+  createJsTsPackageImportBasePaths,
+  createJsTsWorkspacePackageImportBasePaths,
+} from "./package-json.js";
 
 export function createJsTsConfiguredImportBasePaths(
   source: string,
@@ -24,6 +27,7 @@ export function createJsTsConfiguredImportBasePaths(
   }
 
   candidates.push(...createJsTsPackageImportBasePaths(source, config.packageJson));
+  candidates.push(...createJsTsWorkspacePackageImportBasePaths(source, config.workspacePackages));
 
   return candidates.map((candidate) => path.posix.normalize(candidate));
 }

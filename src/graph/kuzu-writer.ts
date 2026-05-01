@@ -15,6 +15,10 @@ export type KuzuWriteOptions = {
   mode?: KuzuWriteMode;
 };
 
+export type KuzuStatsOptions = {
+  packageName?: string;
+};
+
 export class KuzuGraphWriter {
   private constructor(private readonly database: KuzuDatabase, private readonly connection: KuzuConnection) {}
 
@@ -69,12 +73,54 @@ export class KuzuGraphWriter {
     }
   }
 
-  async stats(): Promise<Array<{ table: string; count: unknown }>> {
+  async stats(options: KuzuStatsOptions = {}): Promise<Array<{ table: string; count: unknown }>> {
+    if (options.packageName) {
+      return this.packageStats(options.packageName);
+    }
+
     const rows = [];
 
     for (const label of nodeLabels) {
       const result = await this.singleResult(`MATCH (n:${label}) RETURN count(n) AS count`);
       rows.push({ table: label, count: result[0]?.count ?? 0 });
+    }
+
+    return rows;
+  }
+
+  private async packageStats(packageName: string): Promise<Array<{ table: string; count: unknown }>> {
+    const packagePredicate = `p.name = ${quote(packageName)} OR p.relativePath = ${quote(packageName)}`;
+    const queries = [
+      {
+        table: "Package",
+        query: `MATCH (p:Package) WHERE ${packagePredicate} RETURN count(p) AS count`,
+      },
+      {
+        table: "File",
+        query: `MATCH (p:Package)-[:PACKAGE_CONTAINS_FILE]->(f:File) WHERE ${packagePredicate} RETURN count(f) AS count`,
+      },
+      {
+        table: "Import",
+        query: `MATCH (p:Package)-[:PACKAGE_CONTAINS_FILE]->(f:File)-[:IMPORTS]->(i:Import) WHERE ${packagePredicate} RETURN count(i) AS count`,
+      },
+      {
+        table: "Function",
+        query: `MATCH (p:Package)-[:PACKAGE_CONTAINS_FILE]->(f:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE ${packagePredicate} RETURN count(n) AS count`,
+      },
+      {
+        table: "Class",
+        query: `MATCH (p:Package)-[:PACKAGE_CONTAINS_FILE]->(f:File)-[:DEFINES_CLASS]->(n:Class) WHERE ${packagePredicate} RETURN count(n) AS count`,
+      },
+      {
+        table: "Route",
+        query: `MATCH (p:Package)-[:PACKAGE_CONTAINS_FILE]->(f:File)-[:DECLARES_ROUTE]->(n:Route) WHERE ${packagePredicate} RETURN count(n) AS count`,
+      },
+    ];
+
+    const rows = [];
+    for (const item of queries) {
+      const result = await this.singleResult(item.query);
+      rows.push({ table: item.table, count: result[0]?.count ?? 0 });
     }
 
     return rows;

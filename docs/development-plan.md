@@ -696,7 +696,7 @@ predictable, and diagnosable on large repositories.
 
 ### 11e — Workspace and package graph (P1)
 
-72. [ ] Model monorepo workspaces and package boundaries.
+72. [x] Model monorepo workspaces and package boundaries.
    - Detect npm, pnpm, yarn, and common package workspace layouts.
    - Add package/workspace nodes or properties and link files, configs, and
      internal imports to their owning package.
@@ -756,5 +756,5 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestones 8, 9, and 10 are complete. Continue Milestone 11 with task 72 (P1:
-workspace and package graph), then task 73 (deeper data-access resolution).
+Milestones 8, 9, and 10 are complete. Continue Milestone 11 with task 73 (P1:
+deeper data-access resolution), then task 74 (semantic sample reports).

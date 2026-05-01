@@ -3,7 +3,9 @@ import { readFile } from "node:fs/promises";
 import {
   type ConfigWarningSink,
   readJsTsPackageJsonResolutionConfig,
+  readJsTsWorkspacePackageResolutionConfigs,
   type JsTsPackageJsonResolutionConfig,
+  type JsTsWorkspacePackageResolutionConfig,
 } from "./package-json.js";
 export { createJsTsConfiguredImportBasePaths } from "./path-mapping.js";
 import { parseTsconfig } from "./tsconfig.js";
@@ -69,6 +71,7 @@ export type JsTsResolutionConfig = {
   baseUrl: string | null;
   paths: JsTsPathMapping[];
   packageJson: JsTsPackageJsonResolutionConfig | null;
+  workspacePackages: JsTsWorkspacePackageResolutionConfig[];
 };
 
 export type JsTsPathMapping = {
@@ -92,6 +95,7 @@ export async function readJsTsResolutionConfigWithWarnings(
     baseUrl: null,
     paths: [],
     packageJson: null,
+    workspacePackages: [],
   };
 
   const tsconfigPath = path.join(rootPath, "tsconfig.json");
@@ -103,21 +107,24 @@ export async function readJsTsResolutionConfigWithWarnings(
       return {
         ...emptyConfig,
         packageJson: await readJsTsPackageJsonResolutionConfig(rootPath, onWarning),
+        workspacePackages: await readJsTsWorkspacePackageResolutionConfigs(rootPath, onWarning),
       };
     }
 
     throw error;
   }
 
-  const [tsconfig, packageJson] = await Promise.all([
+  const [tsconfig, packageJson, workspacePackages] = await Promise.all([
     readTsconfigChain(tsconfigPath, onWarning),
     readJsTsPackageJsonResolutionConfig(rootPath, onWarning),
+    readJsTsWorkspacePackageResolutionConfigs(rootPath, onWarning),
   ]);
 
   return {
     baseUrl: tsconfig.baseUrl,
     paths: tsconfig.paths,
     packageJson,
+    workspacePackages,
   };
 }
 

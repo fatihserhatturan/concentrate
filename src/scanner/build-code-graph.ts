@@ -13,6 +13,7 @@ import {
   type ScanReport,
 } from "./report.js";
 import { filterSupportedSourceFiles } from "./source-files.js";
+import { addWorkspacePackageGraph } from "./workspace-packages.js";
 export type { BuildCodeGraphOptions, BuildCodeGraphResult } from "./build-code-graph-types.js";
 
 export async function buildCodeGraph(
@@ -71,6 +72,7 @@ export async function buildCodeGraph(
     return createResult(rootPath, graph, report);
   }
 
+  await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report);
   await finalizeGraphRelationships(graph, rootPath, report);
   report.status = report.failedFiles.length > 0 ? "partial" : "success";
 
