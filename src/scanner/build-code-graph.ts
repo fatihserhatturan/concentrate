@@ -7,6 +7,7 @@ import { discoverFiles } from "./discover-files.js";
 import { finalizeGraphRelationships } from "./graph-finalize.js";
 import { parseFileWithContext, type ParseResult } from "./parse-source.js";
 import { addParseResultsToGraph } from "./parse-results.js";
+import { addProjectConfigNodes } from "./project-config.js";
 import {
   createScanReport,
   type ScanReport,
@@ -39,6 +40,7 @@ export async function buildCodeGraph(
       name: path.basename(rootPath),
     },
   });
+  await addProjectConfigNodes(graph, repoNodeId, rootPath);
 
   let progressCount = 0;
   const parseResults = await runWithConcurrency(

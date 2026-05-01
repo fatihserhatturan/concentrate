@@ -12,6 +12,10 @@ export function printScanReport(
   console.log(`  Skipped files:    ${report.skippedFiles}`);
   console.log(`  Parsed files:     ${report.parsedFiles}`);
   console.log(`  Failed files:     ${report.failedFiles.length}`);
+  const classes = report.fileClassifications;
+  console.log(
+    `  File classes:     production ${classes.production}, test ${classes.test}, fixture ${classes.fixture}, support ${classes.support}, generated ${classes.generated}`,
+  );
   console.log(`  Resolved imports: ${report.resolvedImports}`);
   console.log(`  Unresolved rel:   ${report.unresolvedRelativeImports}`);
   console.log(`  Nodes written:    ${nodeCount}`);

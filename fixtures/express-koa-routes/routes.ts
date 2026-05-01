@@ -1,5 +1,7 @@
 import express from 'express'
+import { ADMIN_PATH, USERS_PATH } from './paths'
 
+const API_PREFIX = '/api'
 const app = express()
 const router = express.Router()
 const adminRouter = express.Router()
@@ -17,17 +19,22 @@ function authenticate(req, res, next) {
   next()
 }
 
-router.get('/users', listUsers)
-router.post('/users', authenticate, createUser)
+function validateUser(req, res, next) {
+  next()
+}
+
+router.get(USERS_PATH, listUsers)
+router.post(USERS_PATH, authenticate, validateUser, createUser)
+router.put('/users/:id', [authenticate, validateUser], createUser)
 router.delete('/users/:id', async (req, res) => {
   res.status(204).end()
 })
-router.use('/admin', authenticate, adminRouter)
+router.use(ADMIN_PATH, authenticate, adminRouter)
 router.use(authenticate)
 adminRouter.get('/dashboard', (ctx) => {
   ctx.body = 'ok'
 })
 
 cache.get('not-a-route')
-app.use('/api', router)
+app.use(API_PREFIX, router)
 app.listen(3000)

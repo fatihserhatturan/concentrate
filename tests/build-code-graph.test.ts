@@ -5,6 +5,7 @@ import path from "node:path";
 import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/scanner/build-code-graph.js";
 import { getLanguageParser } from "../src/parsers/index.js";
+import { parseTsconfig } from "../src/scanner/resolution/tsconfig.js";
 import type { GraphNode, GraphRelationship, GraphNodeLabel, GraphRelationshipType } from "../src/graph/model.js";
 
 const fixturesRoot = path.resolve("fixtures");
@@ -198,6 +199,25 @@ describe("buildCodeGraph", () => {
       "RESOLVES_TO",
       "file:src/internal.ts",
     );
+  });
+
+  it("parses tsconfig globs and trailing commas without treating them as comments", () => {
+    const parsed = parseTsconfig(`{
+      "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+          "@/*": ["src/*"],
+          "@app/*": ["app/*"],
+        }
+      },
+      "exclude": ["node_modules", "**/*.spec.ts"] // ordinary JSONC comment
+    }`);
+
+    assert.equal(parsed.baseUrl, ".");
+    assert.deepEqual(parsed.paths, [
+      { pattern: "@/*", targets: ["src/*"] },
+      { pattern: "@app/*", targets: ["app/*"] },
+    ]);
   });
 
   it("resolves Go project-internal imports via go.mod module name", async () => {
@@ -734,26 +754,36 @@ describe("buildCodeGraph", () => {
     });
 
     assert.equal(graph.report.failedFiles.length, 0);
-    assert.equal(graph.report.parsedFiles, 3);
+    assert.equal(graph.report.parsedFiles, 4);
 
-    // Three string-literal require() calls must be captured (./utils, ./lib twice deduped to one)
     const cjsImports = graph.nodes.filter(
       (n) => n.label === "Import" && n.properties.isCjs === true,
     );
-    assert.equal(cjsImports.length, 2, "Expected 2 CJS Import nodes (./utils and ./lib)");
+    assert.equal(cjsImports.length, 4, "Expected CJS Import nodes for default, member, destructured, and conditional require");
 
     const utilsImport = cjsImports.find((n) => n.properties.source === "./utils");
+    const helperImport = cjsImports.find((n) => (
+      n.properties.source === "./utils"
+      && typeof n.properties.bindings === "string"
+      && n.properties.bindings.includes("\"local\":\"helper\"")
+    ));
     const libImport = cjsImports.find((n) => n.properties.source === "./lib");
+    const conditionalImport = cjsImports.find((n) => n.properties.source === "./conditional");
     assert.ok(utilsImport, "CJS import of ./utils");
+    assert.ok(helperImport, "CJS member import of ./utils.helper");
     assert.ok(libImport, "CJS import of ./lib");
+    assert.ok(conditionalImport, "conditional CJS import of ./conditional");
 
-    // isDynamic must be false for CJS imports
     assert.equal(utilsImport!.properties.isDynamic, false);
+    assert.equal(helperImport!.properties.isDynamic, false);
     assert.equal(libImport!.properties.isDynamic, false);
+    assert.equal(conditionalImport!.properties.isDynamic, true);
 
-    // bindings — default binding for utils, named bindings for lib
     const utilsBindings = JSON.parse(utilsImport!.properties.bindings as string);
     assert.deepEqual(utilsBindings, [{ imported: "default", local: "utils", kind: "default" }]);
+
+    const helperBindings = JSON.parse(helperImport!.properties.bindings as string);
+    assert.deepEqual(helperBindings, [{ imported: "helper", local: "helper", kind: "named" }]);
 
     const libBindings = JSON.parse(libImport!.properties.bindings as string);
     assert.deepEqual(libBindings, [
@@ -762,10 +792,15 @@ describe("buildCodeGraph", () => {
       { imported: "baz",  local: "myBaz", kind: "named" },
     ]);
 
-    // Both must resolve to their target files
-    assert.equal(graph.report.resolvedImports, 2);
+    assert.equal(graph.report.resolvedImports, 4);
     assertRelationship(graph.relationships, utilsImport!.id, "RESOLVES_TO", "file:utils.js");
+    assertRelationship(graph.relationships, helperImport!.id, "RESOLVES_TO", "file:utils.js");
     assertRelationship(graph.relationships, libImport!.id, "RESOLVES_TO", "file:lib.js");
+    assertRelationship(graph.relationships, conditionalImport!.id, "RESOLVES_TO", "file:conditional.js");
+
+    const helperFunction = graph.nodes.find((n) => n.label === "Function" && n.id === "file:utils.js:function:1:helper")!;
+    const helperCall = graph.nodes.find((n) => n.label === "Call" && n.properties.expression === "helper")!;
+    assertRelationship(graph.relationships, helperCall.id, "CALL_RESOLVES_TO", helperFunction.id);
 
     // Variable-specifier require(utils.name) must NOT produce an Import node
     const variableRequire = graph.nodes.find(
@@ -1051,7 +1086,7 @@ describe("buildCodeGraph", () => {
     assert.equal(graph.report.failedFiles.length, 0);
 
     const routes = graph.nodes.filter((n) => n.label === "Route");
-    assert.equal(routes.length, 7, "Expected 7 route declarations");
+    assert.equal(routes.length, 8, "Expected 8 route declarations");
 
     const routesByKey = new Map(
       routes.map((route) => [`${route.properties.method}:${route.properties.path ?? "<none>"}`, route]),
@@ -1059,6 +1094,7 @@ describe("buildCodeGraph", () => {
 
     assert.ok(routesByKey.has("GET:/users"));
     assert.ok(routesByKey.has("POST:/users"));
+    assert.ok(routesByKey.has("PUT:/users/:id"));
     assert.ok(routesByKey.has("DELETE:/users/:id"));
     assert.ok(routesByKey.has("USE:/admin"));
     assert.ok(routesByKey.has("USE:<none>"));
@@ -1066,15 +1102,24 @@ describe("buildCodeGraph", () => {
     assert.ok(routesByKey.has("USE:/api"));
     assert.equal(routesByKey.get("GET:/users")?.properties.framework, "express-koa");
     assert.equal(routesByKey.get("GET:/users")?.properties.handlerName, "listUsers");
+    assert.equal(routesByKey.get("GET:/users")?.properties.pathExpression, "USERS_PATH");
+    assert.equal(routesByKey.get("GET:/users")?.properties.fullPath, "/api/users");
     assert.equal(routesByKey.get("POST:/users")?.properties.handlerName, "authenticate");
+    assert.equal(routesByKey.get("POST:/users")?.properties.fullPath, "/api/users");
+    assert.equal(routesByKey.get("PUT:/users/:id")?.properties.handlerName, "createUser");
+    assert.equal(routesByKey.get("PUT:/users/:id")?.properties.fullPath, "/api/users/:id");
     assert.equal(routesByKey.get("DELETE:/users/:id")?.properties.handlerName, null);
+    assert.equal(routesByKey.get("DELETE:/users/:id")?.properties.fullPath, "/api/users/:id");
+    assert.equal(routesByKey.get("USE:/admin")?.properties.fullPath, "/api/admin");
+    assert.equal(routesByKey.get("GET:/dashboard")?.properties.fullPath, "/api/admin/dashboard");
+    assert.equal(routesByKey.get("USE:/api")?.properties.fullPath, "/api");
 
     for (const route of routes) {
       assertRelationship(graph.relationships, "file:routes.ts", "DECLARES_ROUTE", route.id);
     }
 
     const routeHandledBy = graph.relationships.filter((r) => r.type === "ROUTE_HANDLED_BY");
-    assert.equal(routeHandledBy.length, 7, "Expected referenced and inline handlers to be linked");
+    assert.equal(routeHandledBy.length, 9, "Expected referenced and inline handlers to be linked");
 
     const handlerNamesByRoute = new Map<string, string[]>();
     for (const rel of routeHandledBy) {
@@ -1088,7 +1133,8 @@ describe("buildCodeGraph", () => {
     }
 
     assert.deepEqual(handlerNamesByRoute.get("GET:/users"), ["listUsers"]);
-    assert.deepEqual(handlerNamesByRoute.get("POST:/users")?.sort(), ["authenticate", "createUser"]);
+    assert.deepEqual(handlerNamesByRoute.get("POST:/users")?.sort(), ["authenticate", "createUser", "validateUser"]);
+    assert.deepEqual(handlerNamesByRoute.get("PUT:/users/:id"), ["createUser"]);
     assert.deepEqual(handlerNamesByRoute.get("USE:/admin"), ["authenticate"]);
     assert.deepEqual(handlerNamesByRoute.get("USE:<none>"), ["authenticate"]);
     assert.deepEqual(handlerNamesByRoute.get("DELETE:/users/:id"), ["<router.delete:/users/:id:arg1>"]);
@@ -1096,6 +1142,59 @@ describe("buildCodeGraph", () => {
 
     const falsePositive = routes.find((route) => route.properties.path === "not-a-route");
     assert.equal(falsePositive, undefined, "cache.get(...) must not be treated as a route");
+
+    const lifecycleSteps = graph.relationships.filter((r) => r.type === "ROUTE_LIFECYCLE_STEP");
+    const lifecycleByRoute = new Map<string, Array<{ name: string; role: unknown; scope: unknown; hook: unknown; orderIndex: unknown }>>();
+    for (const rel of lifecycleSteps) {
+      const route = getNode(graph.nodes, rel.from);
+      const fn = getNode(graph.nodes, rel.to);
+      const key = `${route.properties.method}:${route.properties.path ?? "<none>"}`;
+      lifecycleByRoute.set(key, [
+        ...(lifecycleByRoute.get(key) ?? []),
+        {
+          name: String(fn.properties.name),
+          role: rel.properties.role,
+          scope: rel.properties.scope,
+          hook: rel.properties.hook,
+          orderIndex: rel.properties.orderIndex,
+        },
+      ]);
+    }
+
+    assert.deepEqual(lifecycleByRoute.get("POST:/users"), [
+      { name: "authenticate", role: "middleware", scope: "route", hook: null, orderIndex: 0 },
+      { name: "validateUser", role: "middleware", scope: "route", hook: null, orderIndex: 1 },
+      { name: "createUser", role: "handler", scope: "route", hook: "handler", orderIndex: 2 },
+    ]);
+    assert.deepEqual(lifecycleByRoute.get("PUT:/users/:id"), [
+      { name: "authenticate", role: "middleware", scope: "route", hook: null, orderIndex: 0 },
+      { name: "validateUser", role: "middleware", scope: "route", hook: null, orderIndex: 1 },
+      { name: "createUser", role: "handler", scope: "route", hook: "handler", orderIndex: 2 },
+    ]);
+    assert.deepEqual(lifecycleByRoute.get("USE:<none>"), [
+      { name: "authenticate", role: "middleware", scope: "router", hook: null, orderIndex: 0 },
+    ]);
+
+    const precedes = graph.relationships
+      .filter((r) => r.type === "LIFECYCLE_PRECEDES")
+      .map((rel) => ({
+        from: getNode(graph.nodes, rel.from).properties.name,
+        to: getNode(graph.nodes, rel.to).properties.name,
+        routeId: rel.properties.routeId,
+        orderIndex: rel.properties.orderIndex,
+      }));
+    assert.ok(precedes.some((rel) => (
+      rel.from === "authenticate"
+      && rel.to === "validateUser"
+      && rel.routeId === routesByKey.get("POST:/users")?.id
+      && rel.orderIndex === 0
+    )));
+    assert.ok(precedes.some((rel) => (
+      rel.from === "validateUser"
+      && rel.to === "createUser"
+      && rel.routeId === routesByKey.get("PUT:/users/:id")?.id
+      && rel.orderIndex === 1
+    )));
 
     const mounts = graph.relationships.filter((r) => r.type === "MOUNTS");
     assert.equal(mounts.length, 4, "Expected router and middleware mount relationships");
@@ -1189,6 +1288,38 @@ describe("buildCodeGraph", () => {
       "<fastify.route:/object-inline:handler>",
       "<fastify.route:/object-inline:preHandler>",
     ]);
+
+    const lifecycleByRoute = new Map<string, Array<{ name: string; role: unknown; hook: unknown; orderIndex: unknown }>>();
+    for (const rel of graph.relationships.filter((r) => r.type === "ROUTE_LIFECYCLE_STEP")) {
+      const route = getNode(graph.nodes, rel.from);
+      const fn = getNode(graph.nodes, rel.to);
+      const key = `${route.properties.method}:${route.properties.path}`;
+      lifecycleByRoute.set(key, [
+        ...(lifecycleByRoute.get(key) ?? []),
+        {
+          name: String(fn.properties.name),
+          role: rel.properties.role,
+          hook: rel.properties.hook,
+          orderIndex: rel.properties.orderIndex,
+        },
+      ]);
+    }
+
+    assert.deepEqual(lifecycleByRoute.get("POST:/users"), [
+      { name: "auth", role: "middleware", hook: "preHandler", orderIndex: 0 },
+      { name: "createUser", role: "handler", hook: "handler", orderIndex: 1 },
+    ]);
+    assert.deepEqual(lifecycleByRoute.get("GET:/object-inline"), [
+      { name: "<fastify.route:/object-inline:preHandler>", role: "middleware", hook: "preHandler", orderIndex: 0 },
+      { name: "<fastify.route:/object-inline:handler>", role: "handler", hook: "handler", orderIndex: 1 },
+    ]);
+
+    assert.ok(graph.relationships.some((rel) => (
+      rel.type === "LIFECYCLE_PRECEDES"
+      && getNode(graph.nodes, rel.from).properties.name === "auth"
+      && getNode(graph.nodes, rel.to).properties.name === "createUser"
+      && rel.properties.routeId === routesByKey.get("POST:/users")?.id
+    )));
 
     const objectLiteralHandlers = graph.nodes.filter(
       (n) => n.label === "Function"
@@ -1455,16 +1586,176 @@ describe("buildCodeGraph", () => {
     const name = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "name")!;
     const make = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "make")!;
     const extra = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "extra")!;
+    const direct = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "direct")!;
+    const assignedName = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "assignedName")!;
 
     assert.ok(name);
     assert.ok(make);
     assert.ok(extra);
+    assert.ok(direct);
+    assert.ok(assignedName);
     assert.equal(name.properties.isExported, true);
     assert.equal(make.properties.isExported, true);
     assert.equal(extra.properties.isExported, true);
+    assert.equal(direct.properties.isExported, true);
+    assert.equal(assignedName.properties.isExported, true);
     assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", name.id);
     assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", make.id);
     assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", extra.id);
+    assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", direct.id);
+    assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", assignedName.id);
+  });
+
+  it("models backend config and environment usage", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "config-env"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const envVars = graph.nodes.filter((n) => n.label === "EnvVar");
+    assert.ok(envVars.some((n) => n.properties.name === "API_TOKEN"));
+    assert.ok(envVars.some((n) => n.properties.name === "DATABASE_URL"));
+    assert.ok(envVars.some((n) => n.properties.name === "NODE_ENV"));
+
+    const databaseUrl = envVars.find((n) => n.properties.name === "DATABASE_URL")!;
+    const nodeEnv = envVars.find((n) => n.properties.name === "NODE_ENV")!;
+    const apiToken = envVars.find((n) => n.properties.name === "API_TOKEN")!;
+    const listUsers = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "listUsers")!;
+    const route = graph.nodes.find((n) => n.label === "Route" && n.properties.path === "/users")!;
+
+    assertRelationship(graph.relationships, "file:server.ts", "USES_ENV", apiToken.id);
+    assertRelationship(graph.relationships, listUsers.id, "USES_ENV", databaseUrl.id);
+    assertRelationship(graph.relationships, listUsers.id, "USES_ENV", nodeEnv.id);
+    assertRelationship(graph.relationships, route.id, "USES_ENV", databaseUrl.id);
+    assertRelationship(graph.relationships, route.id, "USES_ENV", nodeEnv.id);
+
+    const featureFlag = graph.nodes.find((n) => n.label === "ConfigValue" && n.properties.name === "FEATURE_FLAG")!;
+    const retryLimit = graph.nodes.find((n) => n.label === "ConfigValue" && n.properties.name === "RETRY_LIMIT")!;
+    const enableCache = graph.nodes.find((n) => n.label === "ConfigValue" && n.properties.name === "ENABLE_CACHE")!;
+    const internalOnly = graph.nodes.find((n) => n.label === "ConfigValue" && n.properties.name === "INTERNAL_ONLY");
+
+    assert.equal(featureFlag.properties.value, "FEATURE_USERS");
+    assert.equal(featureFlag.properties.valueType, "string");
+    assert.equal(retryLimit.properties.value, "3");
+    assert.equal(retryLimit.properties.valueType, "number");
+    assert.equal(enableCache.properties.value, "true");
+    assert.equal(enableCache.properties.valueType, "boolean");
+    assert.equal(internalOnly, undefined);
+    assertRelationship(graph.relationships, "file:config.ts", "DECLARES_CONFIG", featureFlag.id);
+    assertRelationship(graph.relationships, "file:server.ts", "CONSUMES_CONFIG", featureFlag.id);
+    assertRelationship(graph.relationships, "file:server.ts", "CONSUMES_CONFIG", retryLimit.id);
+
+    const packageName = graph.nodes.find(
+      (n) => n.label === "ConfigValue" && n.properties.name === "package.json:name",
+    )!;
+    const tsTarget = graph.nodes.find(
+      (n) => n.label === "ConfigValue" && n.properties.name === "tsconfig.json:compilerOptions.target",
+    )!;
+    assert.equal(packageName.properties.value, "config-env-fixture");
+    assert.equal(tsTarget.properties.value, "ES2022");
+  });
+
+  it("adds non-HTTP backend entrypoint semantics", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "backend-entrypoints"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const entrypoints = graph.nodes.filter((n) => n.label === "EntryPoint");
+    assert.equal(entrypoints.length, 5, "Expected event, queue, cron, realtime, and NestJS scheduler entrypoints");
+
+    const entrypointsByKey = new Map(
+      entrypoints.map((entrypoint) => [
+        `${entrypoint.properties.kind}:${entrypoint.properties.trigger ?? "<none>"}`,
+        entrypoint,
+      ]),
+    );
+
+    assert.equal(entrypointsByKey.get("event:data")?.properties.library, "event-emitter");
+    assert.equal(entrypointsByKey.get("queue:email")?.properties.library, "bull");
+    assert.equal(entrypointsByKey.get("cron:*/5 * * * *")?.properties.library, "node-cron");
+    assert.equal(entrypointsByKey.get("realtime:connection")?.properties.library, "socket.io");
+    assert.equal(entrypointsByKey.get("scheduler:0 * * * *")?.properties.library, "nestjs-schedule");
+
+    for (const entrypoint of entrypoints) {
+      assertRelationship(graph.relationships, "file:service.ts", "DECLARES_ENTRYPOINT", entrypoint.id);
+    }
+
+    const handledBy = new Map<string, string[]>();
+    for (const rel of graph.relationships.filter((r) => r.type === "ENTRYPOINT_HANDLED_BY")) {
+      const entrypoint = getNode(graph.nodes, rel.from);
+      const handler = getNode(graph.nodes, rel.to);
+      const key = `${entrypoint.properties.kind}:${entrypoint.properties.trigger ?? "<none>"}`;
+      handledBy.set(key, [...(handledBy.get(key) ?? []), String(handler.properties.name)]);
+    }
+
+    assert.deepEqual(handledBy.get("event:data"), ["handleData"]);
+    assert.deepEqual(handledBy.get("queue:email"), ["handleJob"]);
+    assert.deepEqual(handledBy.get("cron:*/5 * * * *"), ["<cron.schedule:*/5 * * * *:arg1>"]);
+    assert.deepEqual(handledBy.get("realtime:connection"), ["handleConnection"]);
+    assert.deepEqual(handledBy.get("scheduler:0 * * * *"), ["syncUsers"]);
+  });
+
+  it("links backend handlers to data-access models and operations", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "data-access"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const dataModels = graph.nodes.filter((n) => n.label === "DataModel");
+    assert.ok(dataModels.some((n) => n.properties.name === "user" && n.properties.library === "prisma"));
+    assert.ok(dataModels.some((n) => n.properties.name === "users" && n.properties.library === "typeorm"));
+    assert.ok(dataModels.some((n) => n.properties.name === "Audit" && n.properties.library === "mongoose"));
+    assert.ok(dataModels.some((n) => n.properties.name === "Job" && n.properties.library === "sequelize"));
+    assert.ok(!dataModels.some((n) => n.properties.name === "Object"));
+    assert.ok(!dataModels.some((n) => n.properties.name === "NestFactory"));
+
+    const userModel = dataModels.find((n) => n.properties.name === "user" && n.properties.library === "prisma")!;
+    const usersModel = dataModels.find((n) => n.properties.name === "users" && n.properties.library === "typeorm")!;
+    const auditModel = dataModels.find((n) => n.properties.name === "Audit" && n.properties.library === "mongoose")!;
+    const jobModel = dataModels.find((n) => n.properties.name === "Job" && n.properties.library === "sequelize")!;
+    const listUsers = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "listUsers")!;
+    const createUser = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "createUser")!;
+    const handleJob = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "handleJob")!;
+    const getUsersRoute = graph.nodes.find((n) => n.label === "Route" && n.properties.method === "GET")!;
+    const postUsersRoute = graph.nodes.find((n) => n.label === "Route" && n.properties.method === "POST")!;
+    const cleanupEntrypoint = graph.nodes.find((n) => n.label === "EntryPoint" && n.properties.trigger === "cleanup")!;
+
+    assertDataAccess(graph.relationships, listUsers.id, userModel.id, "read", "prisma");
+    assertDataAccess(graph.relationships, listUsers.id, auditModel.id, "read", "mongoose");
+    assertDataAccess(graph.relationships, createUser.id, usersModel.id, "create", "typeorm");
+    assertDataAccess(graph.relationships, createUser.id, userModel.id, "update", "prisma");
+    assertDataAccess(graph.relationships, handleJob.id, jobModel.id, "delete", "sequelize");
+
+    assertDataAccess(graph.relationships, getUsersRoute.id, userModel.id, "read", "prisma");
+    assertDataAccess(graph.relationships, postUsersRoute.id, usersModel.id, "create", "typeorm");
+    assertDataAccess(graph.relationships, cleanupEntrypoint.id, jobModel.id, "delete", "sequelize");
+  });
+
+  it("classifies production, test, fixture, support, and generated files", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "file-classification"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+    assert.deepEqual(graph.report.fileClassifications, {
+      production: 1,
+      test: 2,
+      fixture: 1,
+      support: 2,
+      generated: 1,
+    });
+
+    assertFileClassification(graph.nodes, "src/index.ts", "production", false, false, false, false);
+    assertFileClassification(graph.nodes, "src/user.test.ts", "test", true, false, false, false);
+    assertFileClassification(graph.nodes, "src/__tests__/api.ts", "test", true, false, false, false);
+    assertFileClassification(graph.nodes, "fixtures/user.ts", "fixture", false, true, false, false);
+    assertFileClassification(graph.nodes, "__mocks__/client.ts", "support", false, false, true, false);
+    assertFileClassification(graph.nodes, "setupTests.ts", "support", false, false, true, false);
+    assertFileClassification(graph.nodes, "src/generated/client.ts", "generated", false, false, false, true);
   });
 });
 
@@ -1497,6 +1788,43 @@ function assertRelationship(
     )),
     `Expected relationship ${from} -[:${type}]-> ${to}`,
   );
+}
+
+function assertDataAccess(
+  relationships: GraphRelationship[],
+  from: string,
+  to: string,
+  operation: string,
+  library: string,
+): void {
+  assert.ok(
+    relationships.some((relationship) => (
+      relationship.from === from
+      && relationship.type === "ACCESSES_DATA"
+      && relationship.to === to
+      && relationship.properties.operation === operation
+      && relationship.properties.library === library
+    )),
+    `Expected data access ${from} -[:ACCESSES_DATA {${operation}, ${library}}]-> ${to}`,
+  );
+}
+
+function assertFileClassification(
+  nodes: GraphNode[],
+  relativePath: string,
+  sourceType: string,
+  isTest: boolean,
+  isFixture: boolean,
+  isSupport: boolean,
+  isGenerated: boolean,
+): void {
+  const file = nodes.find((node) => node.label === "File" && node.properties.relativePath === relativePath);
+  assert.ok(file, `Expected File node for ${relativePath}`);
+  assert.equal(file.properties.sourceType, sourceType);
+  assert.equal(file.properties.isTest, isTest);
+  assert.equal(file.properties.isFixture, isFixture);
+  assert.equal(file.properties.isSupport, isSupport);
+  assert.equal(file.properties.isGenerated, isGenerated);
 }
 
 function getNode(nodes: GraphNode[], id: string): GraphNode {

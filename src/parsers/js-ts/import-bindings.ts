@@ -2,7 +2,10 @@ import type Parser from "tree-sitter";
 import type { ImportBinding } from "../../graph/model.js";
 
 export function extractCjsBindings(requireCall: Parser.SyntaxNode): string | null {
-  const declarator = requireCall.parent;
+  const memberProperty = requireCall.parent?.type === "member_expression"
+    ? requireCall.parent.childForFieldName("property")
+    : null;
+  const declarator = memberProperty ? requireCall.parent?.parent : requireCall.parent;
   if (!declarator || declarator.type !== "variable_declarator") {
     return null;
   }
@@ -18,6 +21,10 @@ export function extractCjsBindings(requireCall: Parser.SyntaxNode): string | nul
   }
 
   if (nameNode.type === "identifier") {
+    if (memberProperty?.type === "property_identifier") {
+      return JSON.stringify([{ imported: memberProperty.text, local: nameNode.text, kind: "named" }]);
+    }
+
     return JSON.stringify([{ imported: "default", local: nameNode.text, kind: "default" }]);
   }
 

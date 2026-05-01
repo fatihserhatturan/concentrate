@@ -52,10 +52,101 @@ function parseTsconfigPaths(paths: unknown, baseUrl: string | null): JsTsPathMap
 }
 
 function stripJsonCommentsAndTrailingCommas(value: string): string {
-  return value
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/(^|[^:])\/\/.*$/gm, "$1")
-    .replace(/,\s*([}\]])/g, "$1");
+  let output = "";
+  let inString = false;
+  let quote: string | null = null;
+  let escaped = false;
+
+  for (let index = 0; index < value.length; index += 1) {
+    const char = value[index]!;
+    const next = value[index + 1];
+
+    if (inString) {
+      output += char;
+      if (escaped) {
+        escaped = false;
+      } else if (char === "\\") {
+        escaped = true;
+      } else if (char === quote) {
+        inString = false;
+        quote = null;
+      }
+      continue;
+    }
+
+    if (char === "\"" || char === "'") {
+      inString = true;
+      quote = char;
+      output += char;
+      continue;
+    }
+
+    if (char === "/" && next === "/") {
+      while (index < value.length && value[index] !== "\n") {
+        index += 1;
+      }
+      output += "\n";
+      continue;
+    }
+
+    if (char === "/" && next === "*") {
+      index += 2;
+      while (index < value.length && !(value[index] === "*" && value[index + 1] === "/")) {
+        index += 1;
+      }
+      index += 1;
+      continue;
+    }
+
+    output += char;
+  }
+
+  return stripTrailingCommas(output);
+}
+
+function stripTrailingCommas(value: string): string {
+  let output = "";
+  let inString = false;
+  let quote: string | null = null;
+  let escaped = false;
+
+  for (let index = 0; index < value.length; index += 1) {
+    const char = value[index]!;
+
+    if (inString) {
+      output += char;
+      if (escaped) {
+        escaped = false;
+      } else if (char === "\\") {
+        escaped = true;
+      } else if (char === quote) {
+        inString = false;
+        quote = null;
+      }
+      continue;
+    }
+
+    if (char === "\"" || char === "'") {
+      inString = true;
+      quote = char;
+      output += char;
+      continue;
+    }
+
+    if (char === ",") {
+      let lookahead = index + 1;
+      while (lookahead < value.length && /\s/u.test(value[lookahead]!)) {
+        lookahead += 1;
+      }
+      if (value[lookahead] === "}" || value[lookahead] === "]") {
+        continue;
+      }
+    }
+
+    output += char;
+  }
+
+  return output;
 }
 
 function toPosixPath(value: string): string {

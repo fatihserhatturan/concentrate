@@ -553,6 +553,90 @@ intentionally out of scope for this milestone.
    - Run smoke scans after backend-semantic changes to catch real-world parser
      regressions.
 
+## Milestone 10 — Deeper Node.js backend semantics
+
+This milestone extends the non-frontend JavaScript/TypeScript analysis beyond
+basic declarations, imports, routes, and dependency injection. Frontend
+framework-specific semantics such as React, Vue, Angular, Svelte, and similar
+component models remain intentionally out of scope.
+
+### 10a — Middleware and request lifecycle graph (P0)
+
+61. [x] Model middleware chains and request lifecycle ordering.
+   - Capture Express/Koa/Fastify middleware registrations such as `app.use`,
+     `router.use`, route-level middleware arrays, and Fastify `preHandler`
+     hooks.
+   - Add relationships that preserve execution order between middleware,
+     handlers, and error handlers.
+   - Distinguish application-level middleware, router-level middleware, and
+     route-level middleware where the framework pattern makes that clear.
+   - Add fixtures for auth, validation, controller, and error-handler chains.
+
+### 10b — Composed route path resolution (P0)
+
+62. [x] Resolve composed backend route paths across mounts and constants.
+   - Combine router mount paths with child route paths for simple literal and
+     constant-backed patterns.
+   - Resolve path constants declared in the same file or imported from local
+     modules when the value is a string literal.
+   - Preserve both raw route path and resolved full path on route nodes or
+     route-related relationships.
+   - Add real-repo smoke expectations that catch regressions in resolved path
+     counts.
+
+### 10c — CommonJS export and require edge cases (P1)
+
+63. [x] Expand CommonJS module semantics.
+   - Capture `exports.foo = ...`, `module.exports.foo = ...`,
+     `Object.assign(exports, ...)`, and common factory-export patterns.
+   - Track conditional `require()` calls as imports while marking them as
+     conditional or dynamic when the condition cannot be resolved statically.
+   - Improve call resolution through imported CommonJS object properties.
+   - Add fixtures for mixed ESM/CommonJS packages and legacy Node services.
+
+### 10d — Config and environment usage graph (P1)
+
+64. [x] Model backend config and environment access.
+   - Extract `process.env.NAME` and `process.env["NAME"]` references into graph
+     nodes or properties that can be queried by file, function, and route.
+   - Link simple config exports to their consumers when values are imported from
+     local config modules.
+   - Parse relevant `package.json` metadata and common TypeScript/Node config
+     files as project context.
+   - Add fixtures for feature flags, database URLs, and environment-gated code.
+
+### 10e — Event, job, and realtime entrypoints (P1)
+
+65. [x] Add non-HTTP backend entrypoint semantics.
+   - Detect `EventEmitter` listeners, queue consumers, cron jobs, scheduler
+     callbacks, and websocket handlers in common Node.js patterns.
+   - Add first-class entrypoint nodes or typed relationships that identify the
+     trigger kind and handler function.
+   - Support simple Bull/BullMQ, node-cron, NestJS scheduler, and socket.io
+     patterns before expanding to additional libraries.
+   - Add fixtures that prove handler functions are reachable from these
+     entrypoints.
+
+### 10f — ORM and data-access semantics (P1)
+
+66. [x] Link backend handlers to data-access models and operations.
+   - Detect common Prisma, TypeORM, Sequelize, Knex, and Mongoose call patterns.
+   - Model simple operations such as create, read, update, delete, query, and
+     transaction boundaries when they are visible in code.
+   - Link route handlers, services, and repository methods to the data models or
+     collections they access.
+   - Add fixtures for service/repository layers and direct model usage.
+
+### 10g — Test, fixture, and production-code classification (P2)
+
+67. [x] Classify test/support files separately from production graph content.
+   - Mark files matching common patterns such as `*.test.ts`, `*.spec.ts`,
+     `__tests__`, `fixtures`, `mocks`, and test setup files.
+   - Preserve test graph data while allowing queries and stats to filter by
+     production, test, fixture, or generated/support code.
+   - Include classification metadata in sample repository smoke stats.
+   - Add fixtures covering common test layouts.
+
 ## Long-Term Development Goals
 
 These items require significant architectural work or external integrations and are tracked
@@ -574,6 +658,6 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestone 8 is complete. Begin Milestone 9 with tasks 51–53 (P0: first-class route
-nodes, Express/Koa route extraction, and router mount path semantics) before moving to
-Fastify, NestJS, and deeper DI/call-resolution work.
+Milestones 8, 9, and 10 are complete. Next planning pass should choose the
+highest-value item from the long-term development goals or add a new production
+readiness milestone.

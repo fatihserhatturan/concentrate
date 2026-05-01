@@ -19,6 +19,11 @@ export function createVariableNode(fileNodeId: string, declarator: Parser.Syntax
       kind,
       isExported,
       line: declarator.startPosition.row + 1,
+      stringValue: extractStringValue(declarator.childForFieldName("value")),
     },
   };
+}
+
+function extractStringValue(valueNode: Parser.SyntaxNode | null): string | null {
+  return valueNode?.type === "string" ? valueNode.text.replace(/^["'`]|["'`]$/g, "") : null;
 }

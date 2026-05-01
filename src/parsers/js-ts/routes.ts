@@ -30,6 +30,15 @@ type RouteCandidate = {
   callNodeId: string;
   referencedHandlerNames: string[];
   objectHandlerNames: string[];
+  lifecycleSteps: RouteLifecycleStep[];
+};
+
+type RouteLifecycleStep = {
+  name: string;
+  role: string;
+  scope: string;
+  hook: string | null;
+  orderIndex: number;
 };
 
 export function createExpressKoaRouteGraph(
@@ -42,10 +51,12 @@ export function createExpressKoaRouteGraph(
   const routeRelationships: GraphRelationship[] = [];
   const functionsByName = indexFileFunctions(fileNodeId, nodes, relationships);
   const variablesByName = indexFileVariables(fileNodeId, nodes, relationships);
+  const stringConstantsByName = indexFileStringConstants(fileNodeId, nodes, relationships);
   const functionIdsByPassedToCallId = indexPassedToHandlers(relationships);
+  const functionIdsByName = functionsByName;
 
   for (const callExpr of moduleLevelCallExpressions(programNode)) {
-    const routes = createRouteNodes(fileNodeId, callExpr);
+    const routes = createRouteNodes(fileNodeId, callExpr, stringConstantsByName);
 
     for (const route of routes) {
       routeNodes.push(route.node);
@@ -87,9 +98,11 @@ export function createExpressKoaRouteGraph(
           properties: {},
         });
       }
+
+      routeRelationships.push(...createLifecycleRelationships(route.node.id, route.lifecycleSteps, functionIdsByName));
     }
 
-    routeRelationships.push(...createMountRelationships(callExpr, variablesByName, functionsByName));
+    routeRelationships.push(...createMountRelationships(callExpr, variablesByName, functionsByName, stringConstantsByName));
   }
 
   return { nodes: routeNodes, relationships: routeRelationships };
@@ -137,6 +150,8 @@ export function createNestJsRouteGraph(
       column: 0,
       method,
       routePath,
+      pathExpression: routePath,
+      receiverName: null,
       framework: "nestjs",
       handlerName: typeof methodNode.properties.name === "string" ? methodNode.properties.name : null,
     });
@@ -163,6 +178,7 @@ function createMountRelationships(
   callExpr: Parser.SyntaxNode,
   variablesByName: Map<string, string>,
   functionsByName: Map<string, string>,
+  stringConstantsByName: Map<string, string>,
 ): GraphRelationship[] {
   const parts = analyzeMemberCallExpression(callExpr.childForFieldName("function")?.text);
   if (!parts || !isMountCall(parts) || !isRouteReceiver(parts.receiver)) {
@@ -176,9 +192,10 @@ function createMountRelationships(
   if (!sourceVariableId) return [];
 
   const args = callExpr.childForFieldName("arguments")?.namedChildren ?? [];
-  const mountPath = parts.callee === "register"
-    ? extractObjectStringProperty(args.find((arg) => arg.type === "object"), "prefix")
-    : extractLeadingPath(args);
+  const mountPathInfo = parts.callee === "register"
+    ? extractObjectPathProperty(args.find((arg) => arg.type === "object"), "prefix", stringConstantsByName)
+    : extractLeadingPath(args, stringConstantsByName);
+  const mountPath = mountPathInfo ?? { value: null, expression: null };
   const mountedArgs = parts.callee === "register"
     ? args.slice(0, 1)
     : argsAfterLeadingPath(args);
@@ -195,7 +212,8 @@ function createMountRelationships(
       to: targetId,
       type: "MOUNTS" as const,
       properties: {
-        path: mountPath,
+        path: mountPath.value,
+        pathExpression: mountPath.expression,
         line,
       },
     }];
@@ -205,6 +223,7 @@ function createMountRelationships(
 function createRouteNodes(
   fileNodeId: string,
   callExpr: Parser.SyntaxNode,
+  stringConstantsByName: Map<string, string>,
 ): RouteCandidate[] {
   const parts = analyzeMemberCallExpression(callExpr.childForFieldName("function")?.text);
   if (!parts || !isRouteReceiver(parts.receiver)) {
@@ -212,7 +231,7 @@ function createRouteNodes(
   }
 
   if (parts.callee === "route" && isFastifyReceiver(parts.receiver)) {
-    return createFastifyObjectRouteNodes(fileNodeId, callExpr, parts.expression);
+    return createFastifyObjectRouteNodes(fileNodeId, callExpr, parts.expression, stringConstantsByName);
   }
 
   if (!routeMethods.has(parts.callee)) {
@@ -220,7 +239,8 @@ function createRouteNodes(
   }
 
   const args = callExpr.childForFieldName("arguments")?.namedChildren ?? [];
-  const routePath = extractLeadingPath(args);
+  const routePathInfo = extractLeadingPath(args, stringConstantsByName);
+  const routePath = routePathInfo.value;
   const handlerArgs = argsAfterLeadingPath(args);
   const referencedHandlerNames = handlerArgs
     .filter((arg) => arg.type === "identifier")
@@ -229,8 +249,16 @@ function createRouteNodes(
   const row = callExpr.startPosition.row + 1;
   const column = callExpr.startPosition.column;
   const method = parts.callee.toUpperCase();
-  const pathIdPart = routePath ?? "<none>";
   const callNodeId = `${fileNodeId}:modulecall:${row}:${column}:${parts.expression}`;
+  const lifecycleSteps = createCallLifecycleSteps({
+    args,
+    handlerArgs,
+    expression: parts.expression,
+    routePath,
+    method,
+    framework: routeFramework(parts.receiver),
+    scope: lifecycleScope(parts.receiver, parts.callee),
+  });
 
   return [{
     node: createRouteNode({
@@ -239,12 +267,15 @@ function createRouteNodes(
       column,
       method,
       routePath,
+      pathExpression: routePathInfo.expression,
+      receiverName: routeReceiverName(parts.receiver),
       framework: routeFramework(parts.receiver),
       handlerName,
     }),
     callNodeId,
     referencedHandlerNames,
     objectHandlerNames: [],
+    lifecycleSteps,
   }];
 }
 
@@ -252,12 +283,15 @@ function createFastifyObjectRouteNodes(
   fileNodeId: string,
   callExpr: Parser.SyntaxNode,
   expression: string,
+  stringConstantsByName: Map<string, string>,
 ): RouteCandidate[] {
   const args = callExpr.childForFieldName("arguments")?.namedChildren ?? [];
   const config = args.find((arg) => arg.type === "object");
   if (!config) return [];
 
-  const routePath = extractObjectStringProperty(config, "url") ?? extractObjectStringProperty(config, "path");
+  const routePathInfo = extractObjectPathProperty(config, "url", stringConstantsByName)
+    ?? extractObjectPathProperty(config, "path", stringConstantsByName);
+  const routePath = routePathInfo?.value ?? null;
   const methods = extractObjectStringListProperty(config, "method");
   if (!routePath || methods.length === 0) return [];
 
@@ -267,6 +301,7 @@ function createFastifyObjectRouteNodes(
     ? [`<${expression}:${routePath}:handler>`]
     : [];
   const handlerName = referencedHandlerNames[0] ?? objectHandlerNames[0] ?? null;
+  const lifecycleSteps = createFastifyObjectLifecycleSteps(config, expression, routePath);
   const row = callExpr.startPosition.row + 1;
   const column = callExpr.startPosition.column;
   const callNodeId = `${fileNodeId}:modulecall:${row}:${column}:${expression}`;
@@ -278,14 +313,175 @@ function createFastifyObjectRouteNodes(
       column,
       method: method.toUpperCase(),
       routePath,
+      pathExpression: routePathInfo?.expression ?? null,
+      receiverName: routeReceiverName(expression),
       framework: "fastify",
       handlerName,
     }),
     callNodeId,
     referencedHandlerNames,
     objectHandlerNames,
+    lifecycleSteps,
   }));
 }
+
+function createLifecycleRelationships(
+  routeNodeId: string,
+  steps: RouteLifecycleStep[],
+  functionsByName: Map<string, string>,
+): GraphRelationship[] {
+  const relationships: GraphRelationship[] = [];
+  const resolvedSteps = steps
+    .map((step) => ({ step, functionId: functionsByName.get(step.name) }))
+    .filter((entry): entry is { step: RouteLifecycleStep; functionId: string } => Boolean(entry.functionId));
+
+  for (const { step, functionId } of resolvedSteps) {
+    relationships.push({
+      from: routeNodeId,
+      to: functionId,
+      type: "ROUTE_LIFECYCLE_STEP",
+      properties: {
+        role: step.role,
+        scope: step.scope,
+        hook: step.hook,
+        orderIndex: step.orderIndex,
+      },
+    });
+  }
+
+  for (let index = 0; index < resolvedSteps.length - 1; index += 1) {
+    const current = resolvedSteps[index]!;
+    const next = resolvedSteps[index + 1]!;
+    relationships.push({
+      from: current.functionId,
+      to: next.functionId,
+      type: "LIFECYCLE_PRECEDES",
+      properties: {
+        routeId: routeNodeId,
+        scope: current.step.scope,
+        orderIndex: index,
+      },
+    });
+  }
+
+  return relationships;
+}
+
+function createCallLifecycleSteps(input: {
+  args: Parser.SyntaxNode[];
+  handlerArgs: Parser.SyntaxNode[];
+  expression: string;
+  routePath: string | null;
+  method: string;
+  framework: string;
+  scope: string;
+}): RouteLifecycleStep[] {
+  const steps: Omit<RouteLifecycleStep, "orderIndex">[] = [];
+
+  for (const arg of input.handlerArgs) {
+    if (input.framework === "fastify" && arg.type === "object") {
+      steps.push(...fastifyHookFunctionNames(arg).map((entry) => ({
+        name: entry.name,
+        role: entry.key === "handler" ? "handler" : "middleware",
+        scope: input.scope,
+        hook: entry.key,
+      })));
+      continue;
+    }
+
+    steps.push(...extractLifecycleFunctionNames(arg, input.args, input.expression, input.routePath).map((name) => ({
+      name,
+      role: "middleware",
+      scope: input.scope,
+      hook: null,
+    })));
+  }
+
+  if (input.method !== "USE") {
+    const last = steps[steps.length - 1];
+    if (last) {
+      last.role = "handler";
+      last.hook = last.hook ?? "handler";
+    }
+  }
+
+  return steps.map((step, orderIndex) => ({ ...step, orderIndex }));
+}
+
+function createFastifyObjectLifecycleSteps(
+  config: Parser.SyntaxNode,
+  expression: string,
+  routePath: string,
+): RouteLifecycleStep[] {
+  return fastifyHookFunctionNames(config, expression, routePath)
+    .map((entry, orderIndex) => ({
+      name: entry.name,
+      role: entry.key === "handler" ? "handler" : "middleware",
+      scope: "route",
+      hook: entry.key,
+      orderIndex,
+    }));
+}
+
+function fastifyHookFunctionNames(
+  objectNode: Parser.SyntaxNode,
+  expression?: string,
+  routePath?: string,
+): Array<{ key: string; name: string }> {
+  const names: Array<{ key: string; name: string }> = [];
+  for (const key of fastifyLifecycleKeys) {
+    const value = extractObjectProperty(objectNode, key);
+    if (!value) continue;
+
+    const extracted = extractLifecycleFunctionNames(value, [], expression, routePath, key);
+    names.push(...extracted.map((name) => ({ key, name })));
+  }
+  return names;
+}
+
+function extractLifecycleFunctionNames(
+  node: Parser.SyntaxNode,
+  args: Parser.SyntaxNode[],
+  expression?: string,
+  routePath?: string | null,
+  propertyName?: string,
+): string[] {
+  if (node.type === "identifier") {
+    return [node.text];
+  }
+
+  if (node.type === "array") {
+    return node.namedChildren.flatMap((child) => (
+      extractLifecycleFunctionNames(child, args, expression, routePath, propertyName)
+    ));
+  }
+
+  if (isFunctionExpressionNode(node) && expression) {
+    if (propertyName) {
+      return [routePath ? `<${expression}:${routePath}:${propertyName}>` : `<${expression}:${propertyName}>`];
+    }
+
+    const argIndex = args.indexOf(node);
+    if (argIndex >= 0) {
+      return [routePath ? `<${expression}:${routePath}:arg${argIndex}>` : `<${expression}:arg${argIndex}>`];
+    }
+  }
+
+  return [];
+}
+
+const fastifyLifecycleKeys = [
+  "onRequest",
+  "preParsing",
+  "preValidation",
+  "preHandler",
+  "preSerialization",
+  "onSend",
+  "onResponse",
+  "onTimeout",
+  "onError",
+  "handler",
+];
 
 function createRouteNode(input: {
   fileNodeId: string;
@@ -293,6 +489,8 @@ function createRouteNode(input: {
   column: number;
   method: string;
   routePath: string | null;
+  pathExpression: string | null;
+  receiverName: string | null;
   framework: string;
   handlerName: string | null;
 }): GraphNode {
@@ -304,6 +502,9 @@ function createRouteNode(input: {
     properties: {
       method: input.method,
       path: input.routePath,
+      fullPath: input.routePath,
+      pathExpression: input.pathExpression,
+      receiverName: input.receiverName,
       line: input.row,
       framework: input.framework,
       handlerName: input.handlerName,
@@ -314,6 +515,15 @@ function createRouteNode(input: {
 function extractObjectStringProperty(node: Parser.SyntaxNode | undefined, key: string): string | null {
   const value = node ? extractObjectProperty(node, key) : null;
   return value?.type === "string" ? stripStringQuotes(value.text) : null;
+}
+
+function extractObjectPathProperty(
+  node: Parser.SyntaxNode | undefined,
+  key: string,
+  stringConstantsByName: Map<string, string>,
+): { value: string | null; expression: string | null } | null {
+  const value = node ? extractObjectProperty(node, key) : null;
+  return value ? extractPathArgument(value, stringConstantsByName) : null;
 }
 
 function extractObjectStringListProperty(node: Parser.SyntaxNode, key: string): string[] {
@@ -354,14 +564,54 @@ function normalizeObjectKey(node: Parser.SyntaxNode): string {
   return node.type === "string" ? stripStringQuotes(node.text) : node.text;
 }
 
-function extractLeadingPath(args: Parser.SyntaxNode[]): string | null {
-  const pathArg = args.find((arg) => arg.type === "string");
-  return pathArg ? stripStringQuotes(pathArg.text) : null;
+function extractLeadingPath(
+  args: Parser.SyntaxNode[],
+  stringConstantsByName: Map<string, string>,
+): { value: string | null; expression: string | null } {
+  const pathArg = args.find((arg, index) => isPathArgument(arg, args, index, stringConstantsByName));
+  return pathArg ? extractPathArgument(pathArg, stringConstantsByName) : { value: null, expression: null };
 }
 
 function argsAfterLeadingPath(args: Parser.SyntaxNode[]): Parser.SyntaxNode[] {
-  const pathArg = args.find((arg) => arg.type === "string");
+  const pathArg = args.find((arg, index) => (
+    arg.type === "string" || (arg.type === "identifier" && index === 0 && args.length > 1)
+  ));
   return pathArg ? args.slice(args.indexOf(pathArg) + 1) : args;
+}
+
+function isPathArgument(
+  arg: Parser.SyntaxNode,
+  args: Parser.SyntaxNode[],
+  index: number,
+  stringConstantsByName: Map<string, string>,
+): boolean {
+  if (arg.type === "string") return true;
+  if (arg.type !== "identifier" || index !== 0) return false;
+  return stringConstantsByName.has(arg.text) || args.length > 1;
+}
+
+function extractPathArgument(
+  node: Parser.SyntaxNode,
+  stringConstantsByName: Map<string, string>,
+): { value: string | null; expression: string | null } {
+  if (node.type === "string") {
+    return {
+      value: stripStringQuotes(node.text),
+      expression: node.text,
+    };
+  }
+
+  if (node.type === "identifier") {
+    return {
+      value: stringConstantsByName.get(node.text) ?? null,
+      expression: node.text,
+    };
+  }
+
+  return {
+    value: null,
+    expression: node.text,
+  };
 }
 
 function isMountCall(parts: { callee: string; receiver: string | null }): boolean {
@@ -370,6 +620,16 @@ function isMountCall(parts: { callee: string; receiver: string | null }): boolea
 
 function routeFramework(receiver: string | null): string {
   return isFastifyReceiver(receiver) ? "fastify" : "express-koa";
+}
+
+function lifecycleScope(receiver: string | null, callee: string): string {
+  if (callee !== "use") return "route";
+  const root = receiver?.split(".")[0] ?? receiver;
+  return root === "app" || root === "fastify" ? "application" : "router";
+}
+
+function routeReceiverName(receiver: string | null): string | null {
+  return receiver?.split(".")[0] ?? null;
 }
 
 function isFastifyReceiver(receiver: string | null): boolean {
@@ -447,6 +707,30 @@ function indexFileVariables(
     }
   }
   return variables;
+}
+
+function indexFileStringConstants(
+  fileNodeId: string,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+): Map<string, string> {
+  const variableIds = new Set(
+    relationships
+      .filter((rel) => rel.from === fileNodeId && rel.type === "DEFINES_VARIABLE")
+      .map((rel) => rel.to),
+  );
+  const constants = new Map<string, string>();
+
+  for (const node of nodes) {
+    if (!variableIds.has(node.id) || node.label !== "Variable") continue;
+    const name = node.properties.name;
+    const value = node.properties.stringValue;
+    if (typeof name === "string" && typeof value === "string") {
+      constants.set(name, value);
+    }
+  }
+
+  return constants;
 }
 
 function indexPassedToHandlers(relationships: GraphRelationship[]): Map<string, string> {

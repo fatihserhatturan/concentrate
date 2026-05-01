@@ -12,7 +12,43 @@ export function physicalRelationshipType(
     return mountsRelationshipType(relationship, nodeLabelById);
   }
 
+  if (relationship.type === "USES_ENV") {
+    return sourceLabelRelationshipType("USES_ENV", relationship, nodeLabelById);
+  }
+
+  if (relationship.type === "CONSUMES_CONFIG") {
+    return sourceLabelRelationshipType("CONSUMES_CONFIG", relationship, nodeLabelById);
+  }
+
+  if (relationship.type === "DECLARES_CONFIG") {
+    return sourceLabelRelationshipType("DECLARES_CONFIG", relationship, nodeLabelById);
+  }
+
+  if (relationship.type === "ACCESSES_DATA") {
+    return sourceLabelRelationshipType("ACCESSES_DATA", relationship, nodeLabelById);
+  }
+
   return relationship.type;
+}
+
+function sourceLabelRelationshipType(
+  baseType: string,
+  relationship: GraphRelationship,
+  nodeLabelById: Map<string, GraphNode["label"]>,
+): string {
+  const sourceLabel = nodeLabelById.get(relationship.from);
+  switch (sourceLabel) {
+    case "Repo":
+      return `${baseType}_REPO`;
+    case "Route":
+      return `${baseType}_ROUTE`;
+    case "EntryPoint":
+      return `${baseType}_ENTRYPOINT`;
+    case "Function":
+      return `${baseType}_FUNCTION`;
+    default:
+      return `${baseType}_FILE`;
+  }
 }
 
 function reExportRelationshipType(

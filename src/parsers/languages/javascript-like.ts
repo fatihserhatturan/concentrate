@@ -29,6 +29,7 @@ import {
   createDefaultExportExpressionNode,
   createLocalReExportRelationships,
   extractCjsExportBindings,
+  extractCjsObjectAssignExportBindings,
   extractLocalReExportNames,
   type CjsExportBinding,
 } from "../js-ts/exports.js";
@@ -40,9 +41,13 @@ import {
   createModuleLevelCallNodes,
   createObjectLiteralHandlerNode,
   createExpressKoaRouteGraph,
+  createBackendEntrypointGraph,
   createNestJsRouteGraph,
   createClassNode,
+  createConfigValueGraph,
+  createFileEnvUsageGraph,
   createFunctionNode,
+  createFunctionEnvUsageGraph,
   createTypeScriptDeclarationNode,
   createVariableClassNode,
   createVariableFunctionNode,
@@ -134,7 +139,7 @@ async function parseJavaScriptLikeFile(
         const sourceNode = args?.namedChildren.find((c) => c.type === "string");
         if (sourceNode) {
           const source = sourceNode.text.replace(/^["']|["']$/g, "");
-          const cjsImportNode = createCjsImportNode(fileNodeId, node, source);
+          const cjsImportNode = createCjsImportNode(fileNodeId, node, source, isConditionalRequire(node));
           if (!nodes.some((n) => n.id === cjsImportNode.id)) {
             nodes.push(cjsImportNode);
             relationships.push({
@@ -187,6 +192,10 @@ async function parseJavaScriptLikeFile(
       cjsExportBindings.push(...extractCjsExportBindings(node));
     }
 
+    if (node.type === "call_expression") {
+      cjsExportBindings.push(...extractCjsObjectAssignExportBindings(node));
+    }
+
     if (isFunctionNode(node) && node.type !== "method_definition" && node.type !== "abstract_method_signature") {
       const functionNode = createFunctionNode(fileNodeId, node);
       if (functionNode) {
@@ -198,16 +207,19 @@ async function parseJavaScriptLikeFile(
           properties: {},
         });
 
-        const callNodes = createCallNodes(functionNode.id, node);
-        nodes.push(...callNodes);
-        relationships.push(
-          ...callNodes.map((callNode) => ({
-            from: functionNode.id,
-            to: callNode.id,
-            type: "CALLS" as const,
-            properties: {},
-          })),
-        );
+          const callNodes = createCallNodes(functionNode.id, node);
+          const envUsage = createFunctionEnvUsageGraph(functionNode.id, node);
+          nodes.push(...callNodes);
+          nodes.push(...envUsage.nodes);
+          relationships.push(
+            ...callNodes.map((callNode) => ({
+              from: functionNode.id,
+              to: callNode.id,
+              type: "CALLS" as const,
+              properties: {},
+            })),
+          );
+          relationships.push(...envUsage.relationships);
       } else if (isInlineHandlerArgument(node) || isObjectLiteralHandlerFunction(node)) {
         const result = isInlineHandlerArgument(node)
           ? createInlineHandlerNode(fileNodeId, node)
@@ -227,7 +239,9 @@ async function parseJavaScriptLikeFile(
             properties: {},
           });
           const callNodes = createCallNodes(result.functionNode.id, node);
+          const envUsage = createFunctionEnvUsageGraph(result.functionNode.id, node);
           nodes.push(...callNodes);
+          nodes.push(...envUsage.nodes);
           relationships.push(
             ...callNodes.map((callNode) => ({
               from: result.functionNode.id,
@@ -236,6 +250,7 @@ async function parseJavaScriptLikeFile(
               properties: {},
             })),
           );
+          relationships.push(...envUsage.relationships);
         }
       }
     }
@@ -299,6 +314,12 @@ async function parseJavaScriptLikeFile(
               });
             }
           }
+
+          const configValue = createConfigValueGraph(fileNodeId, node);
+          if (configValue) {
+            nodes.push(configValue.node);
+            relationships.push(configValue.relationship);
+          }
         }
       }
     }
@@ -332,6 +353,10 @@ async function parseJavaScriptLikeFile(
     }
   });
 
+  const fileEnvUsage = createFileEnvUsageGraph(fileNodeId, tree.rootNode);
+  nodes.push(...fileEnvUsage.nodes);
+  relationships.push(...fileEnvUsage.relationships);
+
   applyCjsExportBindings(fileNodeId, nodes, relationships, cjsExportBindings);
   relationships.push(...createLocalReExportRelationships(fileNodeId, nodes, relationships, localReExportNames));
 
@@ -354,5 +379,25 @@ async function parseJavaScriptLikeFile(
   nodes.push(...nestRouteGraph.nodes);
   relationships.push(...nestRouteGraph.relationships);
 
+  const entrypointGraph = createBackendEntrypointGraph(fileNodeId, tree.rootNode, nodes, relationships);
+  nodes.push(...entrypointGraph.nodes);
+  relationships.push(...entrypointGraph.relationships);
+
   return { fileNodeId, nodes, relationships };
+}
+
+function isConditionalRequire(node: Parser.SyntaxNode): boolean {
+  let current = node.parent;
+  while (current && current.type !== "program") {
+    if (
+      current.type === "if_statement"
+      || current.type === "conditional_expression"
+      || current.type === "switch_case"
+      || current.type === "switch_default"
+    ) {
+      return true;
+    }
+    current = current.parent;
+  }
+  return false;
 }

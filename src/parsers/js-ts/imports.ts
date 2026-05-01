@@ -48,7 +48,12 @@ export function createDynamicImportNode(fileNodeId: string, node: Parser.SyntaxN
   };
 }
 
-export function createCjsImportNode(fileNodeId: string, node: Parser.SyntaxNode, source: string): GraphNode {
+export function createCjsImportNode(
+  fileNodeId: string,
+  node: Parser.SyntaxNode,
+  source: string,
+  isConditional = false,
+): GraphNode {
   return {
     id: `${fileNodeId}:import:${node.startPosition.row + 1}:${source}`,
     label: "Import",
@@ -58,7 +63,7 @@ export function createCjsImportNode(fileNodeId: string, node: Parser.SyntaxNode,
       line: node.startPosition.row + 1,
       isReExport: false,
       isWildcard: false,
-      isDynamic: false,
+      isDynamic: isConditional,
       isCjs: true,
       isTypeOnly: false,
       bindings: extractCjsBindings(node),

@@ -100,6 +100,24 @@ export function extractCjsExportBindings(node: Parser.SyntaxNode): CjsExportBind
   }];
 }
 
+export function extractCjsObjectAssignExportBindings(node: Parser.SyntaxNode): CjsExportBinding[] {
+  if (node.type !== "call_expression") return [];
+
+  const fn = node.childForFieldName("function");
+  if (fn?.text !== "Object.assign") return [];
+
+  const args = node.childForFieldName("arguments")?.namedChildren ?? [];
+  const target = args[0];
+  const sourceObjects = args.slice(1).filter((arg) => arg.type === "object");
+  if (!target || sourceObjects.length === 0 || !isCjsExportTarget(target)) {
+    return [];
+  }
+
+  return sourceObjects.flatMap((objectNode) => (
+    objectNode.namedChildren.flatMap((child) => extractCjsObjectExportBinding(child))
+  ));
+}
+
 export function applyCjsExportBindings(
   fileNodeId: string,
   nodes: GraphNode[],
@@ -232,7 +250,7 @@ function extractModuleExportsPropertyName(node: Parser.SyntaxNode): string | nul
   }
 
   const object = node.childForFieldName("object");
-  if (!object || !isModuleExportsMember(object)) {
+  if (!object || !isCjsExportTarget(object)) {
     return null;
   }
 
@@ -249,6 +267,14 @@ function isModuleExportsMember(node: Parser.SyntaxNode): boolean {
   const property = node.childForFieldName("property");
   return object?.type === "identifier" && object.text === "module"
     && property?.type === "property_identifier" && property.text === "exports";
+}
+
+function isExportsIdentifier(node: Parser.SyntaxNode): boolean {
+  return node.type === "identifier" && node.text === "exports";
+}
+
+function isCjsExportTarget(node: Parser.SyntaxNode): boolean {
+  return isModuleExportsMember(node) || isExportsIdentifier(node);
 }
 
 function normalizeObjectPropertyName(node: Parser.SyntaxNode): string | null {

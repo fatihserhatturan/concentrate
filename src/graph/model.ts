@@ -12,7 +12,11 @@ export type GraphNodeLabel =
   | "TypeAlias"
   | "Enum"
   | "Call"
-  | "Route";
+  | "Route"
+  | "EntryPoint"
+  | "EnvVar"
+  | "ConfigValue"
+  | "DataModel";
 
 export type GraphRelationshipType =
   | "CONTAINS_ROOT"
@@ -41,11 +45,19 @@ export type GraphRelationshipType =
   | "DECLARES_ROUTE"
   | "ROUTE_HANDLED_BY"
   | "MOUNTS"
+  | "ROUTE_LIFECYCLE_STEP"
+  | "LIFECYCLE_PRECEDES"
   | "MODULE_IMPORTS"
   | "MODULE_PROVIDES"
   | "MODULE_CONTROLS"
   | "MODULE_EXPORTS"
-  | "INJECTS";
+  | "INJECTS"
+  | "USES_ENV"
+  | "DECLARES_CONFIG"
+  | "CONSUMES_CONFIG"
+  | "DECLARES_ENTRYPOINT"
+  | "ENTRYPOINT_HANDLED_BY"
+  | "ACCESSES_DATA";
 
 export type GraphProperties = Record<string, string | number | boolean | null>;
 

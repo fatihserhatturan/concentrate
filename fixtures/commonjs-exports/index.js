@@ -20,3 +20,9 @@ module.exports = {
 };
 
 module.exports.extra = defaultTimeout;
+exports.direct = true;
+module.exports.createAlias = createClient;
+Object.assign(exports, {
+  assignedFactory: ClientFactory,
+  assignedName: "assigned",
+});

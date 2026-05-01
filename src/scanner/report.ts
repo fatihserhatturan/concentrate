@@ -1,11 +1,13 @@
 import path from "node:path";
 import type { BuildCodeGraphResult } from "./build-code-graph.js";
+import { createFileClassificationCounts, type FileClassificationCounts } from "./file-classification.js";
 
 export type ScanReport = {
   discoveredFiles: number;
   supportedFiles: number;
   skippedFiles: number;
   parsedFiles: number;
+  fileClassifications: FileClassificationCounts;
   resolvedImports: number;
   unresolvedRelativeImports: number;
   failedFiles: ScanFailure[];
@@ -22,6 +24,7 @@ export function createScanReport(discoveredFiles: number, supportedFiles: number
     supportedFiles,
     skippedFiles: discoveredFiles - supportedFiles,
     parsedFiles: 0,
+    fileClassifications: createFileClassificationCounts(),
     resolvedImports: 0,
     unresolvedRelativeImports: 0,
     failedFiles: [],
