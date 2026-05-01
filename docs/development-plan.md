@@ -445,7 +445,7 @@ intentionally out of scope for this milestone.
 
 ### 9a — Route node model (P0)
 
-51. [ ] Add first-class `Route` nodes and route relationships.
+51. [x] Add first-class `Route` nodes and route relationships.
    - Add a `Route` node label with properties such as `method`, `path`, `line`,
      `framework`, and `handlerName`.
    - Add relationships such as `DECLARES_ROUTE`: `File → Route` and
@@ -457,7 +457,7 @@ intentionally out of scope for this milestone.
 
 ### 9b — Express/Koa router method extraction (P0)
 
-52. [ ] Extract Express/Koa-style route method calls into `Route` nodes.
+52. [x] Extract Express/Koa-style route method calls into `Route` nodes.
    - Detect `app.get`, `app.post`, `app.put`, `app.patch`, `app.delete`,
      `app.options`, `app.head`, `router.get`, `router.use`, and similar calls.
    - Extract literal path arguments from calls such as
@@ -470,7 +470,7 @@ intentionally out of scope for this milestone.
 
 ### 9c — Router mount path extraction (P0)
 
-53. [ ] Model router and middleware mounting semantics.
+53. [x] Model router and middleware mounting semantics.
    - Detect `app.use('/api', router)`, `app.use('/admin', adminRouter)`, and
      `router.use('/nested', childRouter)`.
    - Add a relationship such as `MOUNTS`: `Variable/File/Route → Variable`
@@ -482,7 +482,7 @@ intentionally out of scope for this milestone.
 
 ### 9d — Fastify route and plugin semantics (P1)
 
-54. [ ] Extract Fastify route declarations and plugin registrations.
+54. [x] Extract Fastify route declarations and plugin registrations.
    - Detect shorthand calls such as `fastify.get('/users', handler)` and
      `fastify.post('/users', options, handler)`.
    - Detect object-form declarations such as
@@ -494,7 +494,7 @@ intentionally out of scope for this milestone.
 
 ### 9e — NestJS controller route semantics (P1)
 
-55. [ ] Convert NestJS controller and method decorators into `Route` nodes.
+55. [x] Convert NestJS controller and method decorators into `Route` nodes.
    - Use `@Controller('users')` as the controller base path.
    - Use method decorators such as `@Get(':id')`, `@Post()`, `@Put()`,
      `@Patch()`, and `@Delete()` to create route nodes.
@@ -505,7 +505,7 @@ intentionally out of scope for this milestone.
 
 ### 9f — NestJS module/provider graph (P1)
 
-56. [ ] Extract NestJS module metadata into provider/import/export relationships.
+56. [x] Extract NestJS module metadata into provider/import/export relationships.
    - Parse object-literal arguments passed to `@Module({ ... })`.
    - Capture `imports`, `providers`, `controllers`, and `exports` arrays when
      they contain identifiers.
@@ -515,7 +515,7 @@ intentionally out of scope for this milestone.
 
 ### 9g — Constructor injection and `this.service` call resolution (P1)
 
-57. [ ] Resolve constructor-injected services to class methods.
+57. [x] Resolve constructor-injected services to class methods.
    - Track TypeScript constructor parameter properties such as
      `constructor(private readonly usersService: UsersService)`.
    - Link `this.usersService.findAll()` calls to `UsersService.findAll()` when
@@ -526,7 +526,7 @@ intentionally out of scope for this milestone.
 
 ### 9h — Instance variable method resolution (P2)
 
-58. [ ] Resolve method calls through variables initialized with `new`.
+58. [x] Resolve method calls through variables initialized with `new`.
    - Use `Variable -[:INITIALIZED_BY]-> Call(new ClassName)` to infer the variable
      instance type when the class is defined locally.
    - Resolve `service.run()` to the `run` method on `Service`.
@@ -535,7 +535,7 @@ intentionally out of scope for this milestone.
 
 ### 9i — Object-literal handler extraction (P2)
 
-59. [ ] Extract handler functions nested in object literals.
+59. [x] Extract handler functions nested in object literals.
    - Detect handlers in patterns such as
      `fastify.route({ handler: async (request, reply) => {} })`.
    - Detect middleware/route config objects containing `preHandler`, `handler`,
@@ -545,7 +545,7 @@ intentionally out of scope for this milestone.
 
 ### 9j — Backend smoke-test repositories (P2)
 
-60. [ ] Add backend sample repository smoke scans.
+60. [x] Add backend sample repository smoke scans.
    - Add sample repository entries for at least one Express app, one Fastify app,
      and one NestJS app.
    - Track last scan commands and expected high-level counts in

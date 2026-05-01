@@ -22,6 +22,23 @@ export function isInlineHandlerArgument(node: Parser.SyntaxNode): boolean {
   return isModuleLevelCallExpression(callExpr);
 }
 
+export function isObjectLiteralHandlerFunction(node: Parser.SyntaxNode): boolean {
+  if (node.type !== "arrow_function" && node.type !== "function_expression") return false;
+  if (node.parent?.type !== "pair") return false;
+
+  const key = node.parent.childForFieldName("key");
+  if (!key || !isHandlerPropertyName(key)) return false;
+
+  const objectNode = node.parent.parent;
+  const argsNode = objectNode?.parent;
+  const callExpr = argsNode?.parent;
+  if (objectNode?.type !== "object" || argsNode?.type !== "arguments" || callExpr?.type !== "call_expression") {
+    return false;
+  }
+
+  return isModuleLevelCallExpression(callExpr);
+}
+
 export function createInlineHandlerNode(
   fileNodeId: string,
   handlerNode: Parser.SyntaxNode,
@@ -70,6 +87,53 @@ export function createInlineHandlerNode(
   };
 }
 
+export function createObjectLiteralHandlerNode(
+  fileNodeId: string,
+  handlerNode: Parser.SyntaxNode,
+): { functionNode: GraphNode; callNodeId: string } | null {
+  const pairNode = handlerNode.parent;
+  const objectNode = pairNode?.parent;
+  const argsNode = objectNode?.parent;
+  const callExprNode = argsNode?.parent;
+  if (!pairNode || !objectNode || !argsNode || !callExprNode) return null;
+
+  const key = pairNode.childForFieldName("key");
+  const propertyName = key ? normalizePropertyName(key) : "handler";
+  const calleeText = callExprNode.childForFieldName("function")?.text ?? "unknown";
+  const callParts = analyzeMemberCallExpression(calleeText);
+  const expression = callParts?.expression ?? calleeText;
+  const routePath = extractRoutePathFromObject(objectNode)
+    ?? argsNode.namedChildren.find((c) => c.type === "string")?.text.replace(/^["']|["']$/g, "");
+  const syntheticName = routePath
+    ? `<${expression}:${routePath}:${propertyName}>`
+    : `<${expression}:${propertyName}>`;
+  const row = callExprNode.startPosition.row + 1;
+  const col = callExprNode.startPosition.column;
+  const callNodeId = `${fileNodeId}:modulecall:${row}:${col}:${expression}`;
+
+  return {
+    functionNode: {
+      id: `${fileNodeId}:function:${handlerNode.startPosition.row + 1}:${syntheticName}`,
+      label: "Function",
+      properties: {
+        name: syntheticName,
+        kind: handlerNode.type,
+        methodKind: null,
+        line: handlerNode.startPosition.row + 1,
+        endLine: handlerNode.endPosition.row + 1,
+        className: null,
+        isExported: false,
+        isAsync: handlerNode.children.some((c) => c.type === "async"),
+        isAbstract: false,
+        visibility: "public",
+        parameters: extractFunctionParameters(handlerNode),
+        returnType: extractReturnType(handlerNode),
+      },
+    },
+    callNodeId,
+  };
+}
+
 function isModuleLevelCallExpression(callExpr: Parser.SyntaxNode): boolean {
   const parent = callExpr.parent;
   if (parent?.type === "expression_statement") {
@@ -80,6 +144,38 @@ function isModuleLevelCallExpression(callExpr: Parser.SyntaxNode): boolean {
       && parent.parent.parent?.type === "program";
   }
   return false;
+}
+
+function isHandlerPropertyName(node: Parser.SyntaxNode): boolean {
+  return [
+    "handler",
+    "preHandler",
+    "preValidation",
+    "preParsing",
+    "preSerialization",
+    "onRequest",
+    "onResponse",
+    "onSend",
+    "onTimeout",
+    "onError",
+  ].includes(normalizePropertyName(node));
+}
+
+function extractRoutePathFromObject(objectNode: Parser.SyntaxNode): string | null {
+  for (const child of objectNode.namedChildren) {
+    if (child.type !== "pair") continue;
+    const key = child.childForFieldName("key");
+    const value = child.childForFieldName("value");
+    if (!key || value?.type !== "string") continue;
+    if (normalizePropertyName(key) === "url" || normalizePropertyName(key) === "path") {
+      return value.text.replace(/^["'`]|["'`]$/g, "");
+    }
+  }
+  return null;
+}
+
+function normalizePropertyName(node: Parser.SyntaxNode): string {
+  return node.type === "string" ? node.text.replace(/^["'`]|["'`]$/g, "") : node.text;
 }
 
 export function createModuleLevelCallNodes(fileNodeId: string, programNode: Parser.SyntaxNode): GraphNode[] {

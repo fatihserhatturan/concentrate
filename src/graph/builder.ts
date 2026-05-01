@@ -23,7 +23,7 @@ export class GraphBuilder {
   }
 
   addRelationship(relationship: GraphRelationship): void {
-    const id = `${relationship.from}:${relationship.type}:${relationship.to}`;
+    const id = `${relationship.from}:${relationship.type}:${relationship.to}:${JSON.stringify(relationship.properties)}`;
     if (this.relationshipIds.has(id)) {
       return;
     }

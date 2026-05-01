@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 23;
+export const SCHEMA_VERSION = 27;
 
 export const schemaVersionTableStatement =
   "CREATE NODE TABLE IF NOT EXISTS _SchemaVersion(version INT64 PRIMARY KEY, writtenAt STRING)";
@@ -17,6 +17,7 @@ export const schemaStatements = [
   "CREATE NODE TABLE IF NOT EXISTS Field(id STRING PRIMARY KEY, name STRING, typeName STRING, isStatic BOOLEAN, isReadonly BOOLEAN, visibility STRING, line INT64)",
   "CREATE NODE TABLE IF NOT EXISTS Variable(id STRING PRIMARY KEY, name STRING, kind STRING, isExported BOOLEAN, line INT64)",
   "CREATE NODE TABLE IF NOT EXISTS Decorator(id STRING PRIMARY KEY, name STRING, expression STRING, line INT64, args STRING)",
+  "CREATE NODE TABLE IF NOT EXISTS Route(id STRING PRIMARY KEY, method STRING, path STRING, line INT64, framework STRING, handlerName STRING)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_ROOT(FROM Repo TO Directory)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_DIRECTORY(FROM Directory TO Directory)",
   "CREATE REL TABLE IF NOT EXISTS CONTAINS_FILE(FROM Directory TO File)",
@@ -43,6 +44,15 @@ export const schemaStatements = [
   "CREATE REL TABLE IF NOT EXISTS MODULE_CALLS(FROM File TO Call)",
   "CREATE REL TABLE IF NOT EXISTS PASSED_TO(FROM Function TO Call)",
   "CREATE REL TABLE IF NOT EXISTS INITIALIZED_BY(FROM Variable TO Call)",
+  "CREATE REL TABLE IF NOT EXISTS DECLARES_ROUTE(FROM File TO Route)",
+  "CREATE REL TABLE IF NOT EXISTS ROUTE_HANDLED_BY(FROM Route TO Function)",
+  "CREATE REL TABLE IF NOT EXISTS MOUNTS_VARIABLE(FROM Variable TO Variable, path STRING, line INT64)",
+  "CREATE REL TABLE IF NOT EXISTS MOUNTS_FUNCTION(FROM Variable TO Function, path STRING, line INT64)",
+  "CREATE REL TABLE IF NOT EXISTS MODULE_IMPORTS(FROM Class TO Class)",
+  "CREATE REL TABLE IF NOT EXISTS MODULE_PROVIDES(FROM Class TO Class)",
+  "CREATE REL TABLE IF NOT EXISTS MODULE_CONTROLS(FROM Class TO Class)",
+  "CREATE REL TABLE IF NOT EXISTS MODULE_EXPORTS(FROM Class TO Class)",
+  "CREATE REL TABLE IF NOT EXISTS INJECTS(FROM Class TO Class, fieldName STRING)",
 ];
 
 export const nodeLabels = [
@@ -59,6 +69,7 @@ export const nodeLabels = [
   "TypeAlias",
   "Enum",
   "Call",
+  "Route",
 ] as const;
 export const relationshipTypes = [
   "CONTAINS_ROOT",
@@ -87,4 +98,13 @@ export const relationshipTypes = [
   "MODULE_CALLS",
   "PASSED_TO",
   "INITIALIZED_BY",
+  "DECLARES_ROUTE",
+  "ROUTE_HANDLED_BY",
+  "MOUNTS_VARIABLE",
+  "MOUNTS_FUNCTION",
+  "MODULE_IMPORTS",
+  "MODULE_PROVIDES",
+  "MODULE_CONTROLS",
+  "MODULE_EXPORTS",
+  "INJECTS",
 ] as const;

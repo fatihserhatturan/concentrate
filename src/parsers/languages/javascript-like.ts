@@ -38,6 +38,9 @@ import {
   createInitializerCallNode,
   createInlineHandlerNode,
   createModuleLevelCallNodes,
+  createObjectLiteralHandlerNode,
+  createExpressKoaRouteGraph,
+  createNestJsRouteGraph,
   createClassNode,
   createFunctionNode,
   createTypeScriptDeclarationNode,
@@ -45,6 +48,7 @@ import {
   createVariableFunctionNode,
   createVariableNode,
   isInlineHandlerArgument,
+  isObjectLiteralHandlerFunction,
 } from "../js-ts/declarations.js";
 
 const jsParser = new Parser();
@@ -204,8 +208,10 @@ async function parseJavaScriptLikeFile(
             properties: {},
           })),
         );
-      } else if (isInlineHandlerArgument(node)) {
-        const result = createInlineHandlerNode(fileNodeId, node);
+      } else if (isInlineHandlerArgument(node) || isObjectLiteralHandlerFunction(node)) {
+        const result = isInlineHandlerArgument(node)
+          ? createInlineHandlerNode(fileNodeId, node)
+          : createObjectLiteralHandlerNode(fileNodeId, node);
         if (result) {
           nodes.push(result.functionNode);
           relationships.push({
@@ -339,6 +345,14 @@ async function parseJavaScriptLikeFile(
       properties: {},
     })),
   );
+
+  const routeGraph = createExpressKoaRouteGraph(fileNodeId, tree.rootNode, nodes, relationships);
+  nodes.push(...routeGraph.nodes);
+  relationships.push(...routeGraph.relationships);
+
+  const nestRouteGraph = createNestJsRouteGraph(fileNodeId, nodes, relationships);
+  nodes.push(...nestRouteGraph.nodes);
+  relationships.push(...nestRouteGraph.relationships);
 
   return { fileNodeId, nodes, relationships };
 }

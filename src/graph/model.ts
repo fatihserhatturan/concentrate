@@ -11,7 +11,8 @@ export type GraphNodeLabel =
   | "Interface"
   | "TypeAlias"
   | "Enum"
-  | "Call";
+  | "Call"
+  | "Route";
 
 export type GraphRelationshipType =
   | "CONTAINS_ROOT"
@@ -36,7 +37,15 @@ export type GraphRelationshipType =
   | "CALL_RESOLVES_TO"
   | "MODULE_CALLS"
   | "PASSED_TO"
-  | "INITIALIZED_BY";
+  | "INITIALIZED_BY"
+  | "DECLARES_ROUTE"
+  | "ROUTE_HANDLED_BY"
+  | "MOUNTS"
+  | "MODULE_IMPORTS"
+  | "MODULE_PROVIDES"
+  | "MODULE_CONTROLS"
+  | "MODULE_EXPORTS"
+  | "INJECTS";
 
 export type GraphProperties = Record<string, string | number | boolean | null>;
 

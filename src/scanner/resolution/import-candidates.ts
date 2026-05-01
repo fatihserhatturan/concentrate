@@ -9,7 +9,7 @@ export function createRelativeImportCandidates(importBasePath: string): string[]
 
   candidates.add(importBasePath);
 
-  if (extension) {
+  if (extension && importTargetExtensions.includes(extension)) {
     const withoutExtension = importBasePath.slice(0, -extension.length);
     if (jsRuntimeExtensions.includes(extension)) {
       for (const candidateExtension of importTargetExtensions) {

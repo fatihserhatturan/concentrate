@@ -1043,6 +1043,177 @@ describe("buildCodeGraph", () => {
     assert.equal(page.properties.isExported, true);
   });
 
+  it("extracts Express/Koa-style route method calls into Route nodes", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "express-koa-routes"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const routes = graph.nodes.filter((n) => n.label === "Route");
+    assert.equal(routes.length, 7, "Expected 7 route declarations");
+
+    const routesByKey = new Map(
+      routes.map((route) => [`${route.properties.method}:${route.properties.path ?? "<none>"}`, route]),
+    );
+
+    assert.ok(routesByKey.has("GET:/users"));
+    assert.ok(routesByKey.has("POST:/users"));
+    assert.ok(routesByKey.has("DELETE:/users/:id"));
+    assert.ok(routesByKey.has("USE:/admin"));
+    assert.ok(routesByKey.has("USE:<none>"));
+    assert.ok(routesByKey.has("GET:/dashboard"));
+    assert.ok(routesByKey.has("USE:/api"));
+    assert.equal(routesByKey.get("GET:/users")?.properties.framework, "express-koa");
+    assert.equal(routesByKey.get("GET:/users")?.properties.handlerName, "listUsers");
+    assert.equal(routesByKey.get("POST:/users")?.properties.handlerName, "authenticate");
+    assert.equal(routesByKey.get("DELETE:/users/:id")?.properties.handlerName, null);
+
+    for (const route of routes) {
+      assertRelationship(graph.relationships, "file:routes.ts", "DECLARES_ROUTE", route.id);
+    }
+
+    const routeHandledBy = graph.relationships.filter((r) => r.type === "ROUTE_HANDLED_BY");
+    assert.equal(routeHandledBy.length, 7, "Expected referenced and inline handlers to be linked");
+
+    const handlerNamesByRoute = new Map<string, string[]>();
+    for (const rel of routeHandledBy) {
+      const route = getNode(graph.nodes, rel.from);
+      const handler = getNode(graph.nodes, rel.to);
+      const key = `${route.properties.method}:${route.properties.path ?? "<none>"}`;
+      handlerNamesByRoute.set(key, [
+        ...(handlerNamesByRoute.get(key) ?? []),
+        String(handler.properties.name),
+      ]);
+    }
+
+    assert.deepEqual(handlerNamesByRoute.get("GET:/users"), ["listUsers"]);
+    assert.deepEqual(handlerNamesByRoute.get("POST:/users")?.sort(), ["authenticate", "createUser"]);
+    assert.deepEqual(handlerNamesByRoute.get("USE:/admin"), ["authenticate"]);
+    assert.deepEqual(handlerNamesByRoute.get("USE:<none>"), ["authenticate"]);
+    assert.deepEqual(handlerNamesByRoute.get("DELETE:/users/:id"), ["<router.delete:/users/:id:arg1>"]);
+    assert.deepEqual(handlerNamesByRoute.get("GET:/dashboard"), ["<adminRouter.get:/dashboard:arg1>"]);
+
+    const falsePositive = routes.find((route) => route.properties.path === "not-a-route");
+    assert.equal(falsePositive, undefined, "cache.get(...) must not be treated as a route");
+
+    const mounts = graph.relationships.filter((r) => r.type === "MOUNTS");
+    assert.equal(mounts.length, 4, "Expected router and middleware mount relationships");
+
+    const mountTargets = mounts.map((rel) => {
+      const source = getNode(graph.nodes, rel.from);
+      const target = getNode(graph.nodes, rel.to);
+      return {
+        from: source.properties.name,
+        to: target.properties.name,
+        path: rel.properties.path,
+        line: rel.properties.line,
+      };
+    });
+
+    assert.ok(mountTargets.some((mount) => (
+      mount.from === "app"
+      && mount.to === "router"
+      && mount.path === "/api"
+    )));
+    assert.ok(mountTargets.some((mount) => (
+      mount.from === "router"
+      && mount.to === "adminRouter"
+      && mount.path === "/admin"
+    )));
+    assert.ok(mountTargets.some((mount) => (
+      mount.from === "router"
+      && mount.to === "authenticate"
+      && mount.path === "/admin"
+    )));
+    assert.ok(mountTargets.some((mount) => (
+      mount.from === "router"
+      && mount.to === "authenticate"
+      && mount.path === null
+    )));
+  });
+
+  it("extracts Fastify route declarations and plugin registrations", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "fastify-routes"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const routes = graph.nodes.filter((n) => n.label === "Route");
+    assert.equal(routes.length, 7, "Expected 7 Fastify route declarations");
+
+    const routesByKey = new Map(
+      routes.map((route) => [`${route.properties.method}:${route.properties.path}`, route]),
+    );
+
+    assert.ok(routesByKey.has("GET:/users"));
+    assert.ok(routesByKey.has("POST:/users"));
+    assert.ok(routesByKey.has("GET:/inline"));
+    assert.ok(routesByKey.has("GET:/health"));
+    assert.ok(routesByKey.has("GET:/status"));
+    assert.ok(routesByKey.has("HEAD:/status"));
+    assert.ok(routesByKey.has("GET:/object-inline"));
+
+    for (const route of routes) {
+      assert.equal(route.properties.framework, "fastify");
+      assertRelationship(graph.relationships, "file:server.ts", "DECLARES_ROUTE", route.id);
+    }
+
+    assert.equal(routesByKey.get("GET:/users")?.properties.handlerName, "listUsers");
+    assert.equal(routesByKey.get("POST:/users")?.properties.handlerName, "createUser");
+    assert.equal(routesByKey.get("GET:/inline")?.properties.handlerName, null);
+    assert.equal(routesByKey.get("GET:/health")?.properties.handlerName, "health");
+    assert.equal(routesByKey.get("GET:/status")?.properties.handlerName, "health");
+    assert.equal(routesByKey.get("HEAD:/status")?.properties.handlerName, "health");
+    assert.equal(routesByKey.get("GET:/object-inline")?.properties.handlerName, "<fastify.route:/object-inline:handler>");
+
+    const handlerNamesByRoute = new Map<string, string[]>();
+    for (const rel of graph.relationships.filter((r) => r.type === "ROUTE_HANDLED_BY")) {
+      const route = getNode(graph.nodes, rel.from);
+      const handler = getNode(graph.nodes, rel.to);
+      const key = `${route.properties.method}:${route.properties.path}`;
+      handlerNamesByRoute.set(key, [
+        ...(handlerNamesByRoute.get(key) ?? []),
+        String(handler.properties.name),
+      ]);
+    }
+
+    assert.deepEqual(handlerNamesByRoute.get("GET:/users"), ["listUsers"]);
+    assert.deepEqual(handlerNamesByRoute.get("POST:/users"), ["createUser"]);
+    assert.deepEqual(handlerNamesByRoute.get("GET:/inline"), ["<fastify.get:/inline:arg1>"]);
+    assert.deepEqual(handlerNamesByRoute.get("GET:/health"), ["health"]);
+    assert.deepEqual(handlerNamesByRoute.get("GET:/status"), ["health"]);
+    assert.deepEqual(handlerNamesByRoute.get("HEAD:/status"), ["health"]);
+    assert.deepEqual(handlerNamesByRoute.get("GET:/object-inline")?.sort(), [
+      "<fastify.route:/object-inline:handler>",
+      "<fastify.route:/object-inline:preHandler>",
+    ]);
+
+    const objectLiteralHandlers = graph.nodes.filter(
+      (n) => n.label === "Function"
+        && typeof n.properties.name === "string"
+        && n.properties.name.includes("fastify.route:/object-inline"),
+    );
+    assert.equal(objectLiteralHandlers.length, 2, "Expected handler and preHandler synthetic functions");
+    assert.ok(objectLiteralHandlers.some((handler) => handler.properties.name === "<fastify.route:/object-inline:handler>"));
+    assert.ok(objectLiteralHandlers.some((handler) => handler.properties.name === "<fastify.route:/object-inline:preHandler>"));
+
+    for (const handler of objectLiteralHandlers) {
+      assert.ok(
+        graph.relationships.some((r) => r.type === "PASSED_TO" && r.from === handler.id),
+        `${handler.properties.name} must be linked to the owning call`,
+      );
+    }
+
+    const mounts = graph.relationships.filter((r) => r.type === "MOUNTS");
+    assert.equal(mounts.length, 1, "Expected Fastify plugin registration mount");
+    const mount = mounts[0]!;
+    assert.equal(getNode(graph.nodes, mount.from).properties.name, "fastify");
+    assert.equal(getNode(graph.nodes, mount.to).properties.name, "usersPlugin");
+    assert.equal(mount.properties.path, "/api");
+  });
+
   it("resolves TS path aliases inherited via tsconfig extends chain", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "ts-paths-extends"), {
       continueOnError: false,
@@ -1123,6 +1294,150 @@ describe("buildCodeGraph", () => {
     const useGuards = decorators.find((d) => d.properties.name === "UseGuards");
     assert.ok(useGuards, "UseGuards decorator");
     assert.deepEqual(JSON.parse(useGuards.properties.args as string), ["AuthGuard"]);
+
+    const routes = graph.nodes.filter((n) => n.label === "Route");
+    assert.equal(routes.length, 4, "Expected 4 NestJS controller routes");
+
+    const routesByKey = new Map(
+      routes.map((route) => [`${route.properties.method}:${route.properties.path}`, route]),
+    );
+
+    assert.ok(routesByKey.has("GET:/users"));
+    assert.ok(routesByKey.has("GET:/users/:id"));
+    assert.ok(routesByKey.has("POST:/users"));
+    assert.ok(routesByKey.has("DELETE:/users/:id"));
+
+    for (const route of routes) {
+      assert.equal(route.properties.framework, "nestjs");
+      assertRelationship(graph.relationships, "file:users.controller.ts", "DECLARES_ROUTE", route.id);
+    }
+
+    assert.equal(routesByKey.get("GET:/users")?.properties.handlerName, "findAll");
+    assert.equal(routesByKey.get("GET:/users/:id")?.properties.handlerName, "findOne");
+    assert.equal(routesByKey.get("POST:/users")?.properties.handlerName, "create");
+    assert.equal(routesByKey.get("DELETE:/users/:id")?.properties.handlerName, "remove");
+
+    const handlerNamesByRoute = new Map<string, string>();
+    for (const rel of graph.relationships.filter((r) => r.type === "ROUTE_HANDLED_BY")) {
+      const route = getNode(graph.nodes, rel.from);
+      const handler = getNode(graph.nodes, rel.to);
+      if (route.properties.framework !== "nestjs") continue;
+      handlerNamesByRoute.set(
+        `${route.properties.method}:${route.properties.path}`,
+        String(handler.properties.name),
+      );
+    }
+
+    assert.equal(handlerNamesByRoute.get("GET:/users"), "findAll");
+    assert.equal(handlerNamesByRoute.get("GET:/users/:id"), "findOne");
+    assert.equal(handlerNamesByRoute.get("POST:/users"), "create");
+    assert.equal(handlerNamesByRoute.get("DELETE:/users/:id"), "remove");
+  });
+
+  it("extracts NestJS module metadata into class relationships", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "nestjs-modules"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const classId = (name: string): string => {
+      const node = graph.nodes.find((n) => n.label === "Class" && n.properties.name === name);
+      assert.ok(node, `Expected class ${name}`);
+      return node.id;
+    };
+
+    const appModule = classId("AppModule");
+    const usersModule = classId("UsersModule");
+    const appController = classId("AppController");
+    const appService = classId("AppService");
+    const authService = classId("AuthService");
+    const usersController = classId("UsersController");
+    const usersService = classId("UsersService");
+
+    assertRelationship(graph.relationships, appModule, "MODULE_IMPORTS", usersModule);
+    assertRelationship(graph.relationships, appModule, "MODULE_CONTROLS", appController);
+    assertRelationship(graph.relationships, appModule, "MODULE_PROVIDES", appService);
+    assertRelationship(graph.relationships, appModule, "MODULE_PROVIDES", authService);
+    assertRelationship(graph.relationships, appModule, "MODULE_EXPORTS", appService);
+    assertRelationship(graph.relationships, appModule, "MODULE_EXPORTS", authService);
+
+    assertRelationship(graph.relationships, usersModule, "MODULE_CONTROLS", usersController);
+    assertRelationship(graph.relationships, usersModule, "MODULE_PROVIDES", usersService);
+    assertRelationship(graph.relationships, usersModule, "MODULE_EXPORTS", usersService);
+  });
+
+  it("resolves constructor-injected service calls to class methods", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "nestjs-injection"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const controller = graph.nodes.find((n) => n.label === "Class" && n.properties.name === "UsersController");
+    const service = graph.nodes.find((n) => n.label === "Class" && n.properties.name === "UsersService");
+    assert.ok(controller, "UsersController class");
+    assert.ok(service, "UsersService class");
+
+    assert.ok(
+      graph.relationships.some((r) => (
+        r.from === controller.id
+        && r.to === service.id
+        && r.type === "INJECTS"
+        && r.properties.fieldName === "usersService"
+      )),
+      "UsersController must inject UsersService through usersService",
+    );
+
+    const serviceFindAll = graph.nodes.find(
+      (n) => n.label === "Function" && n.properties.className === "UsersService" && n.properties.name === "findAll",
+    );
+    const serviceFindOne = graph.nodes.find(
+      (n) => n.label === "Function" && n.properties.className === "UsersService" && n.properties.name === "findOne",
+    );
+    assert.ok(serviceFindAll, "UsersService.findAll method");
+    assert.ok(serviceFindOne, "UsersService.findOne method");
+
+    const findAllCall = graph.nodes.find(
+      (n) => n.label === "Call" && n.properties.expression === "this.usersService.findAll",
+    );
+    const findOneCall = graph.nodes.find(
+      (n) => n.label === "Call" && n.properties.expression === "this.usersService.findOne",
+    );
+    assert.ok(findAllCall, "this.usersService.findAll call");
+    assert.ok(findOneCall, "this.usersService.findOne call");
+
+    assertRelationship(graph.relationships, findAllCall.id, "CALL_RESOLVES_TO", serviceFindAll.id);
+    assertRelationship(graph.relationships, findOneCall.id, "CALL_RESOLVES_TO", serviceFindOne.id);
+  });
+
+  it("resolves method calls through variables initialized with new", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "instance-method-resolution"), {
+      continueOnError: false,
+    });
+
+    assert.equal(graph.report.failedFiles.length, 0);
+
+    const appRun = graph.nodes.find(
+      (n) => n.label === "Function" && n.properties.className === "AppService" && n.properties.name === "run",
+    );
+    const importedExecute = graph.nodes.find(
+      (n) => n.label === "Function" && n.properties.className === "ImportedService" && n.properties.name === "execute",
+    );
+    assert.ok(appRun, "AppService.run method");
+    assert.ok(importedExecute, "ImportedService.execute method");
+
+    const appRunCall = graph.nodes.find(
+      (n) => n.label === "Call" && n.properties.expression === "appService.run",
+    );
+    const importedExecuteCall = graph.nodes.find(
+      (n) => n.label === "Call" && n.properties.expression === "importedService.execute",
+    );
+    assert.ok(appRunCall, "appService.run call");
+    assert.ok(importedExecuteCall, "importedService.execute call");
+
+    assertRelationship(graph.relationships, appRunCall.id, "CALL_RESOLVES_TO", appRun.id);
+    assertRelationship(graph.relationships, importedExecuteCall.id, "CALL_RESOLVES_TO", importedExecute.id);
   });
 
   it("captures module.exports assignments as exported metadata", async () => {
