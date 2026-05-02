@@ -798,12 +798,23 @@ separately as future investment areas rather than near-term tasks.
 
 ### MCP Server
 
-- Expose the graph as a Model Context Protocol (MCP) tool.
-- Allow Claude and other MCP clients to query the code graph directly in natural language.
-- Potential tools: `find_callers`, `find_definitions`, `list_exports`, `trace_import_chain`.
-- Turns Concentrate into an always-on code intelligence layer for AI-assisted development.
+84. [x] Add a read-only stdio MCP server.
+   - Expose the graph as a Model Context Protocol (MCP) server.
+   - Add initial tools: `graph_stats`, `find_callers`, `find_definitions`,
+     `list_exports`, and `trace_import_chain`.
+   - Add CLI and npm entrypoints for MCP clients.
+
+85. [x] Add richer backend-semantic MCP tools.
+   - Add route, entrypoint, env/config, and data-access inspection tools.
+   - Keep outputs compact and source-linked for AI clients.
+   - Reuse smoke semantic queries where possible.
+
+86. [x] Add MCP client compatibility validation.
+   - Add protocol smoke tests for initialize, tools/list, and tools/call.
+   - Document client configuration examples.
+   - Capture expected limitations and troubleshooting notes.
 
 ## Current Priority
 
 Milestones 8, 9, 10, 11, and 12 are complete. Incremental Scanning tasks 79
-through 83 are complete. Continue with the next long-term development area.
+through 83 are complete. MCP Server tasks 84 through 86 are complete.

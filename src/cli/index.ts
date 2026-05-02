@@ -6,6 +6,7 @@ import { statsCommand } from "../commands/stats.js";
 import { queryCommand } from "../commands/query.js";
 import { exportCommand } from "../commands/export.js";
 import { smokeCommand } from "../commands/smoke.js";
+import { mcpCommand } from "../commands/mcp.js";
 
 function collect(value: string, previous: string[]): string[] {
   return [...previous, value];
@@ -74,5 +75,12 @@ program
   .option("--incremental-benchmark", "Run a no-change incremental benchmark after each smoke scan", false)
   .option("--allow-missing", "Skip missing sample repositories instead of failing", false)
   .action(smokeCommand);
+
+program
+  .command("mcp")
+  .description("Run a read-only MCP server over a Kuzu graph database.")
+  .option("-d, --database <path>", "Kuzu database path", ".concentrate/graph.kuzu")
+  .option("--no-retry-lock", "Disable retry/backoff for transient Kuzu database lock errors")
+  .action(mcpCommand);
 
 await program.parseAsync(process.argv);

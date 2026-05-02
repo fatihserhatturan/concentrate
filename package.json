@@ -14,6 +14,7 @@
     "benchmark:incremental": "npm run smoke:samples -- --suite all --incremental-benchmark --report .concentrate/incremental-benchmark-report.json --semantic-samples 5",
     "stats": "tsx src/cli/index.ts stats",
     "query": "tsx src/cli/index.ts query",
+    "mcp": "tsx src/cli/index.ts mcp",
     "verify:rc": "npm run typecheck && npm test && npm run build && npm run smoke:samples -- --suite standing --report .concentrate/smoke-standing-rc-report.json --semantic-samples 5",
     "test": "tsx --test tests/**/*.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
