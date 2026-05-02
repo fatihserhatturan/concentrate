@@ -4,6 +4,7 @@ import kuzu from "kuzu";
 import type { Connection as KuzuConnection, Database as KuzuDatabase } from "kuzu";
 import { formatProperties, quote } from "./kuzu-format.js";
 import { physicalRelationshipType } from "./kuzu-relationships.js";
+import { withKuzuRetry, type KuzuRetryOptions } from "./kuzu-retry.js";
 import { closeResults } from "./kuzu-results.js";
 import { readKuzuSchemaVersion, resetKuzuSchema } from "./kuzu-schema-management.js";
 import { nodeLabels } from "./schema.js";
@@ -15,18 +16,28 @@ export type KuzuWriteOptions = {
   mode?: KuzuWriteMode;
 };
 
+export type KuzuOpenOptions = {
+  retry?: KuzuRetryOptions | false;
+};
+
 export type KuzuStatsOptions = {
   packageName?: string;
 };
 
 export class KuzuGraphWriter {
-  private constructor(private readonly database: KuzuDatabase, private readonly connection: KuzuConnection) {}
+  private constructor(
+    private readonly database: KuzuDatabase,
+    private readonly connection: KuzuConnection,
+    private readonly retry: KuzuRetryOptions | false = false,
+  ) {}
 
-  static async open(databasePath: string): Promise<KuzuGraphWriter> {
+  static async open(databasePath: string, options: KuzuOpenOptions = {}): Promise<KuzuGraphWriter> {
     await mkdir(path.dirname(databasePath), { recursive: true });
-    const database = new kuzu.Database(databasePath) as KuzuDatabase;
-    const connection = new kuzu.Connection(database) as KuzuConnection;
-    return new KuzuGraphWriter(database, connection);
+    return withKuzuRetry(() => {
+      const database = new kuzu.Database(databasePath) as KuzuDatabase;
+      const connection = new kuzu.Connection(database) as KuzuConnection;
+      return new KuzuGraphWriter(database, connection, options.retry ?? false);
+    }, options.retry);
   }
 
   async reset(): Promise<void> {
@@ -157,7 +168,7 @@ export class KuzuGraphWriter {
   }
 
   private async singleResult(statement: string): Promise<Record<string, unknown>[]> {
-    const result = await this.connection.query(statement);
+    const result = await withKuzuRetry(() => this.connection.query(statement), this.retry);
     const first = Array.isArray(result) ? result[0] : result;
     try {
       return (await first.getAll()) as Record<string, unknown>[];
@@ -167,7 +178,7 @@ export class KuzuGraphWriter {
   }
 
   private async execute(statement: string): Promise<void> {
-    const result = await this.connection.query(statement);
+    const result = await withKuzuRetry(() => this.connection.query(statement), this.retry);
     closeResults(result);
   }
 

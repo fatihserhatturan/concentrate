@@ -13,6 +13,7 @@ type SmokeOptions = {
   suite: string;
   report: string;
   allowMissing: boolean;
+  semanticSamples?: number;
 };
 
 export type SmokeSample = {
@@ -64,6 +65,7 @@ export type SmokeSampleResult = {
   nodes?: number;
   relationships?: number;
   graph?: Partial<Record<SmokeMetricName, number>>;
+  semanticSamples?: SemanticSamples;
   failures: string[];
 };
 
@@ -71,6 +73,60 @@ export type SmokeReport = {
   status: "passed" | "failed";
   generatedAt: string;
   results: SmokeSampleResult[];
+};
+
+export type SemanticSamples = {
+  routes: SemanticRouteSample[];
+  entrypoints: SemanticEntrypointSample[];
+  envConfig: SemanticEnvConfigSample[];
+  dataAccess: SemanticDataAccessSample[];
+  review: SemanticReviewNotes;
+};
+
+export type SemanticRouteSample = {
+  file: string | null;
+  line: number | null;
+  method: string | null;
+  path: string | null;
+  fullPath: string | null;
+  framework: string | null;
+  handler: string | null;
+};
+
+export type SemanticEntrypointSample = {
+  file: string | null;
+  line: number | null;
+  kind: string | null;
+  trigger: string | null;
+  library: string | null;
+  handler: string | null;
+};
+
+export type SemanticEnvConfigSample = {
+  file: string | null;
+  line: number | null;
+  kind: "env" | "config";
+  name: string | null;
+  value: string | null;
+  valueType: string | null;
+  consumer: string | null;
+};
+
+export type SemanticDataAccessSample = {
+  file: string | null;
+  line: number | null;
+  sourceKind: string | null;
+  sourceName: string | null;
+  model: string | null;
+  library: string | null;
+  operation: string | null;
+  expression: string | null;
+};
+
+export type SemanticReviewNotes = {
+  falsePositiveFindings: string[];
+  falseNegativeFindings: string[];
+  notes: string[];
 };
 
 const defaultSamples: SmokeSample[] = [
@@ -270,6 +326,7 @@ export async function smokeCommand(options: SmokeOptions): Promise<void> {
   const report = await runSmokeValidation(samples, {
     allowMissing: options.allowMissing,
     reportPath: options.report,
+    semanticSampleLimit: options.semanticSamples,
   });
 
   printSmokeReport(report);
@@ -280,12 +337,12 @@ export async function smokeCommand(options: SmokeOptions): Promise<void> {
 
 export async function runSmokeValidation(
   samples: SmokeSample[],
-  options: { allowMissing: boolean; reportPath: string },
+  options: { allowMissing: boolean; reportPath: string; semanticSampleLimit?: number },
 ): Promise<SmokeReport> {
   const results: SmokeSampleResult[] = [];
 
   for (const sample of samples) {
-    results.push(await runSmokeSample(sample, options.allowMissing));
+    results.push(await runSmokeSample(sample, options.allowMissing, options.semanticSampleLimit ?? 10));
   }
 
   const report: SmokeReport = {
@@ -301,7 +358,11 @@ export async function runSmokeValidation(
   return report;
 }
 
-async function runSmokeSample(sample: SmokeSample, allowMissing: boolean): Promise<SmokeSampleResult> {
+async function runSmokeSample(
+  sample: SmokeSample,
+  allowMissing: boolean,
+  semanticSampleLimit: number,
+): Promise<SmokeSampleResult> {
   const projectPath = resolvePath(sample.projectPath);
   const databasePath = resolvePath(sample.databasePath);
   const failures: string[] = [];
@@ -332,6 +393,7 @@ async function runSmokeSample(sample: SmokeSample, allowMissing: boolean): Promi
   }
 
   const graphMetrics = await readGraphMetrics(databasePath, sample.expected.graph);
+  const semanticSamples = await readSemanticSamples(databasePath, semanticSampleLimit);
   compareScan(sample.expected, graph.report, graph.nodes.length, graph.relationships.length, failures);
   compareGraph(sample.expected.graph, graphMetrics, failures);
 
@@ -345,8 +407,184 @@ async function runSmokeSample(sample: SmokeSample, allowMissing: boolean): Promi
     nodes: graph.nodes.length,
     relationships: graph.relationships.length,
     graph: graphMetrics,
+    semanticSamples,
     failures,
   };
+}
+
+async function readSemanticSamples(databasePath: string, limit: number): Promise<SemanticSamples> {
+  const writer = await KuzuGraphWriter.open(databasePath);
+  try {
+    const routes = await readRouteSamples(writer, limit);
+    const entrypoints = await readEntrypointSamples(writer, limit);
+    const envConfig = await readEnvConfigSamples(writer, limit);
+    const dataAccess = await readDataAccessSamples(writer, limit);
+
+    return {
+      routes,
+      entrypoints,
+      envConfig,
+      dataAccess,
+      review: {
+        falsePositiveFindings: [],
+        falseNegativeFindings: [],
+        notes: [],
+      },
+    };
+  } finally {
+    await writer.close();
+  }
+}
+
+async function readRouteSamples(writer: KuzuGraphWriter, limit: number): Promise<SemanticRouteSample[]> {
+  const rows = await writer.query(`
+    MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)
+    OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function)
+    RETURN file.relativePath AS file,
+      route.line AS line,
+      route.method AS method,
+      route.path AS path,
+      route.fullPath AS fullPath,
+      route.framework AS framework,
+      handler.name AS handler
+    ORDER BY file.relativePath, route.line
+    LIMIT ${limit}
+  `) as Record<string, unknown>[];
+
+  return rows.map((row) => ({
+    file: nullableString(row.file),
+    line: nullableNumber(row.line),
+    method: nullableString(row.method),
+    path: nullableString(row.path),
+    fullPath: nullableString(row.fullPath),
+    framework: nullableString(row.framework),
+    handler: nullableString(row.handler),
+  }));
+}
+
+async function readEntrypointSamples(writer: KuzuGraphWriter, limit: number): Promise<SemanticEntrypointSample[]> {
+  const rows = await writer.query(`
+    MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)
+    OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function)
+    RETURN file.relativePath AS file,
+      entrypoint.line AS line,
+      entrypoint.kind AS kind,
+      entrypoint.trigger AS trigger,
+      entrypoint.library AS library,
+      handler.name AS handler
+    ORDER BY file.relativePath, entrypoint.line
+    LIMIT ${limit}
+  `) as Record<string, unknown>[];
+
+  return rows.map((row) => ({
+    file: nullableString(row.file),
+    line: nullableNumber(row.line),
+    kind: nullableString(row.kind),
+    trigger: nullableString(row.trigger),
+    library: nullableString(row.library),
+    handler: nullableString(row.handler),
+  }));
+}
+
+async function readEnvConfigSamples(writer: KuzuGraphWriter, limit: number): Promise<SemanticEnvConfigSample[]> {
+  const configLimit = Math.ceil(limit / 2);
+  const envLimit = Math.floor(limit / 2);
+  const configRows = await writer.query(`
+    MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue)
+    OPTIONAL MATCH (consumer)-[rel:CONSUMES_CONFIG_FILE]->(config)
+    RETURN file.relativePath AS file,
+      config.line AS line,
+      config.name AS name,
+      config.value AS value,
+      config.valueType AS valueType,
+      consumer.name AS consumer
+    ORDER BY file.relativePath, config.line
+    LIMIT ${configLimit}
+  `) as Record<string, unknown>[];
+
+  const envRows = await writer.query(`
+    MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar)
+    RETURN file.relativePath AS file,
+      rel.line AS line,
+      env.name AS name,
+      rel.access AS access
+    ORDER BY file.relativePath, rel.line
+    LIMIT ${envLimit}
+  `) as Record<string, unknown>[];
+
+  return [
+    ...configRows.map((row): SemanticEnvConfigSample => ({
+      file: nullableString(row.file),
+      line: nullableNumber(row.line),
+      kind: "config",
+      name: nullableString(row.name),
+      value: nullableString(row.value),
+      valueType: nullableString(row.valueType),
+      consumer: nullableString(row.consumer),
+    })),
+    ...envRows.map((row): SemanticEnvConfigSample => ({
+      file: nullableString(row.file),
+      line: nullableNumber(row.line),
+      kind: "env",
+      name: nullableString(row.name),
+      value: nullableString(row.access),
+      valueType: null,
+      consumer: nullableString(row.file),
+    })),
+  ];
+}
+
+async function readDataAccessSamples(writer: KuzuGraphWriter, limit: number): Promise<SemanticDataAccessSample[]> {
+  const functionLimit = Math.ceil(limit / 2);
+  const methodLimit = Math.floor(limit / 2);
+  const functionRows = await writer.query(`
+    MATCH (source)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel)
+    OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source)
+    RETURN file.relativePath AS file,
+      rel.line AS line,
+      'Function' AS sourceKind,
+      source.name AS sourceName,
+      model.name AS model,
+      model.library AS library,
+      rel.operation AS operation,
+      rel.expression AS expression
+    ORDER BY file.relativePath, rel.line
+    LIMIT ${functionLimit}
+  `) as Record<string, unknown>[];
+
+  const methodRows = await writer.query(`
+    MATCH (source)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel)
+    MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(source)
+    RETURN file.relativePath AS file,
+      rel.line AS line,
+      'Method' AS sourceKind,
+      source.name AS sourceName,
+      model.name AS model,
+      model.library AS library,
+      rel.operation AS operation,
+      rel.expression AS expression
+    ORDER BY file.relativePath, rel.line
+    LIMIT ${methodLimit}
+  `) as Record<string, unknown>[];
+
+  return [...functionRows, ...methodRows].slice(0, limit).map((row) => ({
+    file: nullableString(row.file),
+    line: nullableNumber(row.line),
+    sourceKind: nullableString(row.sourceKind),
+    sourceName: nullableString(row.sourceName),
+    model: nullableString(row.model),
+    library: nullableString(row.library),
+    operation: nullableString(row.operation),
+    expression: nullableString(row.expression),
+  }));
+}
+
+function nullableString(value: unknown): string | null {
+  return typeof value === "string" ? value : value === null || value === undefined ? null : String(value);
+}
+
+function nullableNumber(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
 
 async function readGraphMetrics(

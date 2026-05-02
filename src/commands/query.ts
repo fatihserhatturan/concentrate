@@ -1,17 +1,25 @@
 import path from "node:path";
 import { KuzuGraphWriter } from "../graph/kuzu-writer.js";
+import { defaultKuzuRetryOptions } from "../graph/kuzu-retry.js";
 
 type OutputFormat = "json" | "table" | "csv";
 
 type QueryOptions = {
   database: string;
   format: OutputFormat;
+  retryLock: boolean;
 };
 
 export async function queryCommand(cypher: string, options: QueryOptions): Promise<void> {
-  const writer = await KuzuGraphWriter.open(path.resolve(options.database));
-  const rows = await writer.query(cypher);
-  await writer.close();
+  const writer = await KuzuGraphWriter.open(path.resolve(options.database), {
+    retry: options.retryLock !== false ? defaultKuzuRetryOptions : false,
+  });
+  let rows: unknown[];
+  try {
+    rows = await writer.query(cypher);
+  } finally {
+    await writer.close();
+  }
 
   printRows(rows, options.format);
 }

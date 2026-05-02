@@ -36,6 +36,7 @@ program
   .description("Show basic graph statistics.")
   .option("-d, --database <path>", "Kuzu database path", ".concentrate/graph.kuzu")
   .option("--package <name>", "Filter file-owned stats to one package name or relative path")
+  .option("--no-retry-lock", "Disable retry/backoff for transient Kuzu database lock errors")
   .action(statsCommand);
 
 program
@@ -44,6 +45,7 @@ program
   .argument("<cypher>", "Cypher query to execute")
   .option("-d, --database <path>", "Kuzu database path", ".concentrate/graph.kuzu")
   .option("-f, --format <format>", "Output format: json, table, csv", "json")
+  .option("--no-retry-lock", "Disable retry/backoff for transient Kuzu database lock errors")
   .action(queryCommand);
 
 program
@@ -63,6 +65,7 @@ program
   .description("Run sample repository smoke validation scans.")
   .option("--suite <suite>", "Smoke suite: standing, internet, or all", "all")
   .option("--report <path>", "Machine-readable smoke report path", ".concentrate/smoke-report.json")
+  .option("--semantic-samples <n>", "Semantic sample rows per category", parseInt, 10)
   .option("--allow-missing", "Skip missing sample repositories instead of failing", false)
   .action(smokeCommand);
 

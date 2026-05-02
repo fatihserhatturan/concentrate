@@ -719,7 +719,7 @@ predictable, and diagnosable on large repositories.
 
 ### 11g — Semantic accuracy review reports (P2)
 
-74. [ ] Add semantic sample reports for routes, entrypoints, config, and data access.
+74. [x] Add semantic sample reports for routes, entrypoints, config, and data access.
    - Generate top-N route, entrypoint, env/config, and data-access query samples
      after smoke scans.
    - Include file path and line metadata so results can be spot-checked quickly.
@@ -728,7 +728,7 @@ predictable, and diagnosable on large repositories.
 
 ### 11h — Kuzu query concurrency and retry behavior (P2)
 
-75. [ ] Make Kuzu CLI access friendlier under per-database lock contention.
+75. [x] Make Kuzu CLI access friendlier under per-database lock contention.
    - Add retry/backoff for transient Kuzu lock errors in stats and query
      commands.
    - Ensure smoke validation runs same-database queries serially.
@@ -756,5 +756,5 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestones 8, 9, and 10 are complete. Continue Milestone 11 with task 74 (P2:
-semantic sample reports), then task 75 (Kuzu query concurrency and retry behavior).
+Milestones 8, 9, 10, and 11 are complete. Continue with the long-term
+development goals as follow-up investment areas.

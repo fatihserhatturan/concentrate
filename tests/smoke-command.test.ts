@@ -59,7 +59,18 @@ describe("smoke validation", () => {
     assert.equal(report.results[0]?.status, "passed");
     assert.deepEqual(report.results[0]?.failures, []);
 
-    const saved = JSON.parse(await readFile(reportPath, "utf8")) as { status?: string };
+    assert.ok(report.results[0]?.semanticSamples);
+    assert.deepEqual(report.results[0]?.semanticSamples?.review, {
+      falsePositiveFindings: [],
+      falseNegativeFindings: [],
+      notes: [],
+    });
+
+    const saved = JSON.parse(await readFile(reportPath, "utf8")) as {
+      status?: string;
+      results?: Array<{ semanticSamples?: unknown }>;
+    };
     assert.equal(saved.status, "passed");
+    assert.ok(saved.results?.[0]?.semanticSamples);
   });
 });

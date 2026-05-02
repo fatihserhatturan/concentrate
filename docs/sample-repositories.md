@@ -26,6 +26,17 @@ scan counts and semantic graph counts, and writes a machine-readable JSON
 report. Queries for each database are run serially to avoid Kuzu per-database
 lock contention.
 
+The `stats` and `query` commands retry transient Kuzu database lock errors with
+backoff by default. Use `--no-retry-lock` when a script should fail immediately
+instead. Parallel operations should target different database paths; the smoke
+runner intentionally runs samples and same-database queries in sequence.
+
+Each smoke result also includes `semanticSamples`: top route, entrypoint,
+env/config, and data-access rows with file and line metadata for quick manual
+review. Use `--semantic-samples <n>` to change the per-category sample size.
+The report includes empty false-positive and false-negative review arrays so
+manual findings can be recorded next to the sample rows.
+
 ### Express
 
 - Repository: `https://github.com/expressjs/express`
