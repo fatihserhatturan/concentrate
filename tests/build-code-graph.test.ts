@@ -1802,18 +1802,27 @@ describe("buildCodeGraph", () => {
     const dataModels = graph.nodes.filter((n) => n.label === "DataModel");
     assert.ok(dataModels.some((n) => n.properties.name === "user" && n.properties.library === "prisma"));
     assert.ok(dataModels.some((n) => n.properties.name === "users" && n.properties.library === "typeorm"));
+    assert.ok(dataModels.some((n) => n.properties.name === "User" && n.properties.library === "typeorm"));
     assert.ok(dataModels.some((n) => n.properties.name === "Audit" && n.properties.library === "mongoose"));
     assert.ok(dataModels.some((n) => n.properties.name === "Job" && n.properties.library === "sequelize"));
+    assert.ok(dataModels.some((n) => n.properties.name === "users" && n.properties.library === "knex"));
     assert.ok(!dataModels.some((n) => n.properties.name === "Object"));
     assert.ok(!dataModels.some((n) => n.properties.name === "NestFactory"));
 
     const userModel = dataModels.find((n) => n.properties.name === "user" && n.properties.library === "prisma")!;
     const usersModel = dataModels.find((n) => n.properties.name === "users" && n.properties.library === "typeorm")!;
+    const userTypeOrmModel = dataModels.find((n) => n.properties.name === "User" && n.properties.library === "typeorm")!;
     const auditModel = dataModels.find((n) => n.properties.name === "Audit" && n.properties.library === "mongoose")!;
     const jobModel = dataModels.find((n) => n.properties.name === "Job" && n.properties.library === "sequelize")!;
+    const knexUsersModel = dataModels.find((n) => n.properties.name === "users" && n.properties.library === "knex")!;
     const listUsers = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "listUsers")!;
     const createUser = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "createUser")!;
     const handleJob = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "handleJob")!;
+    const findUsers = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "findUsers")!;
+    const createUserMethod = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "createUser" && n.properties.className === "TypeOrmBackedRepository")!;
+    const readAudit = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "readAudit")!;
+    const knexListUsers = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "listUsers" && n.properties.className === "KnexBackedRepository")!;
+    const listViaRepository = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "listViaRepository")!;
     const getUsersRoute = graph.nodes.find((n) => n.label === "Route" && n.properties.method === "GET")!;
     const postUsersRoute = graph.nodes.find((n) => n.label === "Route" && n.properties.method === "POST")!;
     const cleanupEntrypoint = graph.nodes.find((n) => n.label === "EntryPoint" && n.properties.trigger === "cleanup")!;
@@ -1823,6 +1832,11 @@ describe("buildCodeGraph", () => {
     assertDataAccess(graph.relationships, createUser.id, usersModel.id, "create", "typeorm");
     assertDataAccess(graph.relationships, createUser.id, userModel.id, "update", "prisma");
     assertDataAccess(graph.relationships, handleJob.id, jobModel.id, "delete", "sequelize");
+    assertDataAccess(graph.relationships, findUsers.id, userModel.id, "read", "prisma");
+    assertDataAccess(graph.relationships, createUserMethod.id, userTypeOrmModel.id, "create", "typeorm");
+    assertDataAccess(graph.relationships, readAudit.id, auditModel.id, "read", "mongoose");
+    assertDataAccess(graph.relationships, knexListUsers.id, knexUsersModel.id, "read", "knex");
+    assertDataAccess(graph.relationships, listViaRepository.id, userModel.id, "read", "prisma");
 
     assertDataAccess(graph.relationships, getUsersRoute.id, userModel.id, "read", "prisma");
     assertDataAccess(graph.relationships, postUsersRoute.id, usersModel.id, "create", "typeorm");

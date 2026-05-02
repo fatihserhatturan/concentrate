@@ -706,7 +706,7 @@ predictable, and diagnosable on large repositories.
 
 ### 11f — Deeper data-access resolution (P1)
 
-73. [ ] Improve ORM and repository data-access resolution.
+73. [x] Improve ORM and repository data-access resolution.
    - Trace ORM clients through imports, aliases, dependency injection, wrapper
      services, and repository class methods.
    - Link service/repository methods back to concrete Prisma models,
@@ -756,5 +756,5 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestones 8, 9, and 10 are complete. Continue Milestone 11 with task 73 (P1:
-deeper data-access resolution), then task 74 (semantic sample reports).
+Milestones 8, 9, and 10 are complete. Continue Milestone 11 with task 74 (P2:
+semantic sample reports), then task 75 (Kuzu query concurrency and retry behavior).
