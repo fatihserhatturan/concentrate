@@ -1,5 +1,5 @@
 import path from "node:path";
-import { KuzuGraphWriter } from "../graph/kuzu-writer.js";
+import { KuzuGraphWriter } from "../adapters/kuzu/index.js";
 import { defaultKuzuRetryOptions } from "../graph/kuzu-retry.js";
 
 type StatsOptions = {

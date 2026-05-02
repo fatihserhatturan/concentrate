@@ -1,10 +1,11 @@
 import path from "node:path";
 import { mkdir, writeFile } from "node:fs/promises";
-import { KuzuGraphWriter, type KuzuWriteMode } from "../graph/kuzu-writer.js";
+import { KuzuGraphWriter, type KuzuWriteMode } from "../adapters/kuzu/index.js";
 import { SCHEMA_VERSION } from "../graph/schema.js";
 import { printScanReport } from "../cli/report.js";
 import { ProgressReporter } from "../cli/progress.js";
-import { buildCodeGraph } from "../scanner/build-code-graph.js";
+import { scanOrchestrator } from "../core/adapters/index.js";
+import type { BuildCodeGraphResult } from "../scanner/build-code-graph-types.js";
 import type { IncrementalMode } from "../scanner/parse-plan.js";
 import { didFailFast, didPartiallySucceed } from "../scanner/report.js";
 import type { IncrementalEligibility } from "../scanner/scan-manifest.js";
@@ -29,7 +30,7 @@ export async function scanCommand(projectPath: string, options: ScanOptions): Pr
   const kuzuWriteMode = parseKuzuWriteMode(options.kuzuWriteMode);
   const progress = new ProgressReporter();
 
-  const result = await buildCodeGraph(projectPath, {
+  const result = await scanOrchestrator.buildGraph(projectPath, {
     continueOnError: options.continueOnError,
     concurrency: options.concurrency,
     maxFiles: options.maxFiles,
@@ -69,7 +70,7 @@ export async function scanCommand(projectPath: string, options: ScanOptions): Pr
 
 async function writeGraph(
   writer: KuzuGraphWriter,
-  result: Awaited<ReturnType<typeof buildCodeGraph>>,
+  result: BuildCodeGraphResult,
   incrementalMode: IncrementalMode,
   kuzuWriteMode: KuzuWriteMode,
 ): Promise<void> {
@@ -124,7 +125,7 @@ async function writeGraph(
 
 async function resetAndWriteGraph(
   writer: KuzuGraphWriter,
-  result: Awaited<ReturnType<typeof buildCodeGraph>>,
+  result: BuildCodeGraphResult,
   kuzuWriteMode: KuzuWriteMode,
 ): Promise<void> {
   await writer.reset();

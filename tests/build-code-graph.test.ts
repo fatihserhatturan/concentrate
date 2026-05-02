@@ -1852,6 +1852,30 @@ describe("buildCodeGraph", () => {
     assert.equal(tsTarget.properties.value, "ES2022");
   });
 
+  it("links env usage inside function-valued variables to the function node", async () => {
+    const rootPath = await mkdtemp(path.join(os.tmpdir(), "concentrate-env-function-"));
+    await writeFile(
+      path.join(rootPath, "server.ts"),
+      [
+        "export const handler = () => {",
+        "  return process.env.HANDLER_TOKEN;",
+        "};",
+      ].join("\n"),
+      "utf8",
+    );
+
+    const graph = await buildCodeGraph(rootPath, {
+      continueOnError: false,
+    });
+
+    const handler = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "handler")!;
+    const handlerToken = graph.nodes.find((n) => n.label === "EnvVar" && n.properties.name === "HANDLER_TOKEN")!;
+
+    assert.ok(handler);
+    assert.ok(handlerToken);
+    assertRelationship(graph.relationships, handler.id, "USES_ENV", handlerToken.id);
+  });
+
   it("adds non-HTTP backend entrypoint semantics", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "backend-entrypoints"), {
       continueOnError: false,

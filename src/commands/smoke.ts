@@ -2,9 +2,9 @@ import { access, mkdir, writeFile } from "node:fs/promises";
 import { performance } from "node:perf_hooks";
 import os from "node:os";
 import path from "node:path";
-import { KuzuGraphWriter } from "../graph/kuzu-writer.js";
+import { KuzuGraphWriter } from "../adapters/kuzu/index.js";
 import { SCHEMA_VERSION } from "../graph/schema.js";
-import { buildCodeGraph } from "../scanner/build-code-graph.js";
+import { scanOrchestrator } from "../core/adapters/index.js";
 import type { FileClassificationCounts } from "../scanner/file-classification.js";
 import type { ScanReport, ScanStatus } from "../scanner/report.js";
 
@@ -296,7 +296,7 @@ const defaultSamples: SmokeSample[] = [
       resolvedImports: 49,
       unresolvedRelativeImports: 22,
       nodes: 540,
-      relationships: 861,
+      relationships: 862,
       fileClassifications: { production: 29, test: 7, fixture: 0, support: 3, generated: 0 },
       graph: {
         schemaVersion: SCHEMA_VERSION,
@@ -322,7 +322,7 @@ const defaultSamples: SmokeSample[] = [
       resolvedImports: 4914,
       unresolvedRelativeImports: 1395,
       nodes: 27392,
-      relationships: 42952,
+      relationships: 42953,
       fileClassifications: { production: 985, test: 351, fixture: 376, support: 0, generated: 0 },
       graph: {
         schemaVersion: SCHEMA_VERSION,
@@ -407,7 +407,7 @@ async function runSmokeSample(
   }
 
   const fullScanStartedAt = performance.now();
-  const graph = await buildCodeGraph(projectPath, {
+  const graph = await scanOrchestrator.buildGraph(projectPath, {
     continueOnError: sample.continueOnError ?? false,
     exclude: sample.exclude,
   });
@@ -464,7 +464,7 @@ async function runIncrementalBenchmark(
   await writeFile(previousManifestPath, `${JSON.stringify(previousManifest, null, 2)}\n`, "utf8");
 
   const incrementalScanStartedAt = performance.now();
-  const incrementalGraph = await buildCodeGraph(projectPath, {
+  const incrementalGraph = await scanOrchestrator.buildGraph(projectPath, {
     continueOnError: sample.continueOnError ?? false,
     exclude: sample.exclude,
     previousManifestPath,

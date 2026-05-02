@@ -190,7 +190,7 @@ standing smoke samples.
 - Graph database: `.concentrate/internet-node-express-realworld.kuzu`
 - Last scan result, 2026-05-02: 67 discovered files, 39 supported files,
   39 parsed files, 0 failed files, 49 resolved imports, 22 unresolved
-  relationships, 540 nodes, 861 relationships.
+  relationships, 540 nodes, 862 relationships.
 - File classification counts: 29 production files, 7 test files, 0 fixture
   files, 3 support files, 0 generated files.
 - Expected smoke counts: schema version 34, 26 `Route` nodes, 4 `EnvVar`
@@ -204,7 +204,7 @@ standing smoke samples.
 - Graph database: `.concentrate/internet-nest.kuzu`
 - Last scan result, 2026-05-02: 2115 discovered files, 1714 supported files,
   1712 parsed files, 2 failed files, 4914 resolved imports, 1395 unresolved
-  relationships, 27392 nodes, 42952 relationships.
+  relationships, 27392 nodes, 42953 relationships.
 - File classification counts: 985 production files, 351 test files, 376 fixture
   files, 0 support files, 0 generated files.
 - Expected smoke counts: schema version 34, 309 `Route` nodes, 3 `EntryPoint`

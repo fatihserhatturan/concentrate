@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { printScanReport } from "../cli/report.js";
 import { ProgressReporter } from "../cli/progress.js";
-import { buildCodeGraph } from "../scanner/build-code-graph.js";
+import { scanOrchestrator } from "../core/adapters/index.js";
 import type { IncrementalMode } from "../scanner/parse-plan.js";
 import { didFailFast, didPartiallySucceed } from "../scanner/report.js";
 import type { GraphNode, GraphRelationship } from "../graph/model.js";
@@ -22,7 +22,7 @@ export async function exportCommand(projectPath: string, options: ExportOptions)
   const outputPath = path.resolve(options.output);
   const progress = new ProgressReporter();
 
-  const result = await buildCodeGraph(projectPath, {
+  const result = await scanOrchestrator.buildGraph(projectPath, {
     continueOnError: options.continueOnError,
     concurrency: options.concurrency,
     maxFiles: options.maxFiles,

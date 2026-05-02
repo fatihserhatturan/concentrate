@@ -1,7 +1,7 @@
 import path from "node:path";
-import { KuzuGraphWriter } from "../graph/kuzu-writer.js";
+import { KuzuGraphWriter } from "../adapters/kuzu/index.js";
 import { defaultKuzuRetryOptions } from "../graph/kuzu-retry.js";
-import { runMcpServer } from "../mcp/server.js";
+import { runMcpServer } from "../adapters/mcp/index.js";
 
 type McpOptions = {
   database: string;

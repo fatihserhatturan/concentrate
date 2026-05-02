@@ -11,7 +11,6 @@ import {
   walk,
 } from "../tree-sitter-utils.js";
 import {
-  extractStringSource,
   isClassNode,
   isFunctionNode,
   isModuleLevelDeclarator,
@@ -40,14 +39,8 @@ import {
   createInlineHandlerNode,
   createModuleLevelCallNodes,
   createObjectLiteralHandlerNode,
-  createExpressKoaRouteGraph,
-  createBackendEntrypointGraph,
-  createNestJsRouteGraph,
   createClassNode,
-  createConfigValueGraph,
-  createFileEnvUsageGraph,
   createFunctionNode,
-  createFunctionEnvUsageGraph,
   createTypeScriptDeclarationNode,
   createVariableClassNode,
   createVariableFunctionNode,
@@ -55,6 +48,10 @@ import {
   isInlineHandlerArgument,
   isObjectLiteralHandlerFunction,
 } from "../js-ts/declarations.js";
+import { applyExpressKoaParseSemantics } from "../../integrations/frameworks/js-ts/express-koa.js";
+import { applyNestJsParseSemantics } from "../../integrations/frameworks/js-ts/nestjs.js";
+import { applyBackendEntrypointParseSemantics } from "../../integrations/frameworks/js-ts/backend-entrypoints.js";
+import { applyEnvConfigParseSemantics } from "../../integrations/frameworks/js-ts/env-config.js";
 
 const jsParser = new Parser();
 jsParser.setLanguage(JavaScript);
@@ -72,45 +69,39 @@ export const typescriptParser: LanguageParser = {
   parse: (rootPath, filePath) => parseJavaScriptLikeFile(rootPath, filePath, "typescript"),
 };
 
-async function parseJavaScriptLikeFile(
-  rootPath: string,
-  filePath: string,
-  language: SupportedLanguage,
-): Promise<ParsedSourceFile> {
-  const source = await readFile(filePath, "utf8");
-  const relativePath = path.relative(rootPath, filePath);
-  const fileNodeId = `file:${relativePath}`;
-  const nodes: GraphNode[] = [
-    {
-      id: fileNodeId,
-      label: "File",
-      properties: {
-        path: filePath,
-        relativePath,
-        language,
-      },
-    },
-  ];
-  const relationships: GraphRelationship[] = [];
-  const localReExportNames: string[] = [];
-  const cjsExportBindings: CjsExportBinding[] = [];
+// ─── Walk state ──────────────────────────────────────────────────────────────
 
-  const tree = (language === "typescript" ? tsParser : jsParser).parse(createTreeSitterInput(source));
-  if (tree.rootNode.hasError) {
-    throw new Error("Syntax error");
-  }
+type WalkState = {
+  nodes: GraphNode[];
+  relationships: GraphRelationship[];
+  cjsExportBindings: CjsExportBinding[];
+  localReExportNames: string[];
+  // Kept so framework passes can apply env-usage and config-value extraction
+  // without re-traversing the entire tree.
+  functionAstPairs: Array<{ functionNodeId: string; astNode: Parser.SyntaxNode }>;
+  variableDeclaratorAstNodes: Parser.SyntaxNode[];
+};
+
+// ─── Language-level walk ──────────────────────────────────────────────────────
+
+function walkJsTsNodes(
+  fileNodeId: string,
+  tree: Parser.Tree,
+  language: SupportedLanguage,
+): WalkState {
+  const nodes: GraphNode[] = [];
+  const relationships: GraphRelationship[] = [];
+  const cjsExportBindings: CjsExportBinding[] = [];
+  const localReExportNames: string[] = [];
+  const functionAstPairs: Array<{ functionNodeId: string; astNode: Parser.SyntaxNode }> = [];
+  const variableDeclaratorAstNodes: Parser.SyntaxNode[] = [];
 
   walk(tree.rootNode, (node) => {
     if (node.type === "import_statement") {
       const importNode = createImportNode(fileNodeId, node);
       if (importNode) {
         nodes.push(importNode);
-        relationships.push({
-          from: fileNodeId,
-          to: importNode.id,
-          type: "IMPORTS",
-          properties: {},
-        });
+        relationships.push({ from: fileNodeId, to: importNode.id, type: "IMPORTS", properties: {} });
       }
     }
 
@@ -124,12 +115,7 @@ async function parseJavaScriptLikeFile(
           const dynamicImportNode = createDynamicImportNode(fileNodeId, node, source);
           if (!nodes.some((n) => n.id === dynamicImportNode.id)) {
             nodes.push(dynamicImportNode);
-            relationships.push({
-              from: fileNodeId,
-              to: dynamicImportNode.id,
-              type: "IMPORTS",
-              properties: {},
-            });
+            relationships.push({ from: fileNodeId, to: dynamicImportNode.id, type: "IMPORTS", properties: {} });
           }
         }
       }
@@ -142,12 +128,7 @@ async function parseJavaScriptLikeFile(
           const cjsImportNode = createCjsImportNode(fileNodeId, node, source, isConditionalRequire(node));
           if (!nodes.some((n) => n.id === cjsImportNode.id)) {
             nodes.push(cjsImportNode);
-            relationships.push({
-              from: fileNodeId,
-              to: cjsImportNode.id,
-              type: "IMPORTS",
-              properties: {},
-            });
+            relationships.push({ from: fileNodeId, to: cjsImportNode.id, type: "IMPORTS", properties: {} });
           }
         }
       }
@@ -159,31 +140,15 @@ async function parseJavaScriptLikeFile(
       const defaultExportNode = createDefaultExportExpressionNode(fileNodeId, node);
       if (defaultExportNode) {
         nodes.push(defaultExportNode);
-        relationships.push({
-          from: fileNodeId,
-          to: defaultExportNode.id,
-          type: "DEFINES_VARIABLE",
-          properties: {},
-        });
+        relationships.push({ from: fileNodeId, to: defaultExportNode.id, type: "DEFINES_VARIABLE", properties: {} });
       }
 
       const reExportNode = createReExportImportNode(fileNodeId, node);
       if (reExportNode) {
         nodes.push(reExportNode);
-        relationships.push({
-          from: fileNodeId,
-          to: reExportNode.id,
-          type: "IMPORTS",
-          properties: {},
-        });
-
+        relationships.push({ from: fileNodeId, to: reExportNode.id, type: "IMPORTS", properties: {} });
         if (reExportNode.properties.isWildcard === true) {
-          relationships.push({
-            from: fileNodeId,
-            to: reExportNode.id,
-            type: "RE_EXPORTS",
-            properties: {},
-          });
+          relationships.push({ from: fileNodeId, to: reExportNode.id, type: "RE_EXPORTS", properties: {} });
         }
       }
     }
@@ -200,57 +165,29 @@ async function parseJavaScriptLikeFile(
       const functionNode = createFunctionNode(fileNodeId, node);
       if (functionNode) {
         nodes.push(functionNode);
-        relationships.push({
-          from: fileNodeId,
-          to: functionNode.id,
-          type: "DEFINES_FUNCTION",
-          properties: {},
-        });
+        relationships.push({ from: fileNodeId, to: functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
 
-          const callNodes = createCallNodes(functionNode.id, node);
-          const envUsage = createFunctionEnvUsageGraph(functionNode.id, node);
-          nodes.push(...callNodes);
-          nodes.push(...envUsage.nodes);
-          relationships.push(
-            ...callNodes.map((callNode) => ({
-              from: functionNode.id,
-              to: callNode.id,
-              type: "CALLS" as const,
-              properties: {},
-            })),
-          );
-          relationships.push(...envUsage.relationships);
+        const callNodes = createCallNodes(functionNode.id, node);
+        nodes.push(...callNodes);
+        relationships.push(...callNodes.map((c) => ({ from: functionNode.id, to: c.id, type: "CALLS" as const, properties: {} })));
+
+        // Deferred to framework pass — needs function AST node for env-usage walk.
+        functionAstPairs.push({ functionNodeId: functionNode.id, astNode: node });
       } else if (isInlineHandlerArgument(node) || isObjectLiteralHandlerFunction(node)) {
         const result = isInlineHandlerArgument(node)
           ? createInlineHandlerNode(fileNodeId, node)
           : createObjectLiteralHandlerNode(fileNodeId, node);
         if (result) {
           nodes.push(result.functionNode);
-          relationships.push({
-            from: fileNodeId,
-            to: result.functionNode.id,
-            type: "DEFINES_FUNCTION",
-            properties: {},
-          });
-          relationships.push({
-            from: result.functionNode.id,
-            to: result.callNodeId,
-            type: "PASSED_TO",
-            properties: {},
-          });
+          relationships.push({ from: fileNodeId, to: result.functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
+          relationships.push({ from: result.functionNode.id, to: result.callNodeId, type: "PASSED_TO", properties: {} });
+
           const callNodes = createCallNodes(result.functionNode.id, node);
-          const envUsage = createFunctionEnvUsageGraph(result.functionNode.id, node);
           nodes.push(...callNodes);
-          nodes.push(...envUsage.nodes);
-          relationships.push(
-            ...callNodes.map((callNode) => ({
-              from: result.functionNode.id,
-              to: callNode.id,
-              type: "CALLS" as const,
-              properties: {},
-            })),
-          );
-          relationships.push(...envUsage.relationships);
+          relationships.push(...callNodes.map((c) => ({ from: result.functionNode.id, to: c.id, type: "CALLS" as const, properties: {} })));
+
+          // Deferred to framework pass.
+          functionAstPairs.push({ functionNodeId: result.functionNode.id, astNode: node });
         }
       }
     }
@@ -261,65 +198,37 @@ async function parseJavaScriptLikeFile(
         const classNode = createVariableClassNode(fileNodeId, node, valueChild!);
         if (classNode) {
           nodes.push(classNode);
-          relationships.push({
-            from: fileNodeId,
-            to: classNode.id,
-            type: "DEFINES_CLASS",
-            properties: {},
-          });
+          relationships.push({ from: fileNodeId, to: classNode.id, type: "DEFINES_CLASS", properties: {} });
           appendClassMembers(fileNodeId, classNode, valueChild!, nodes, relationships);
         }
       } else if (isVariableFunctionValue(valueChild)) {
         const functionNode = createVariableFunctionNode(fileNodeId, node, valueChild!);
         if (functionNode) {
           nodes.push(functionNode);
-          relationships.push({
-            from: fileNodeId,
-            to: functionNode.id,
-            type: "DEFINES_FUNCTION",
-            properties: {},
-          });
-
+          relationships.push({ from: fileNodeId, to: functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
           const callNodes = createCallNodes(functionNode.id, valueChild!);
           nodes.push(...callNodes);
-          relationships.push(
-            ...callNodes.map((callNode) => ({
-              from: functionNode.id,
-              to: callNode.id,
-              type: "CALLS" as const,
-              properties: {},
-            })),
-          );
+          relationships.push(...callNodes.map((c) => ({ from: functionNode.id, to: c.id, type: "CALLS" as const, properties: {} })));
+
+          // Deferred to framework pass for per-function env/config semantics.
+          functionAstPairs.push({ functionNodeId: functionNode.id, astNode: valueChild! });
         }
       } else if (isModuleLevelDeclarator(node)) {
         const variableNode = createVariableNode(fileNodeId, node);
         if (variableNode) {
           nodes.push(variableNode);
-          relationships.push({
-            from: fileNodeId,
-            to: variableNode.id,
-            type: "DEFINES_VARIABLE",
-            properties: {},
-          });
+          relationships.push({ from: fileNodeId, to: variableNode.id, type: "DEFINES_VARIABLE", properties: {} });
 
           if (valueChild?.type === "call_expression" || valueChild?.type === "new_expression") {
             const callNode = createInitializerCallNode(fileNodeId, valueChild);
             if (callNode) {
               nodes.push(callNode);
-              relationships.push({
-                from: variableNode.id,
-                to: callNode.id,
-                type: "INITIALIZED_BY",
-                properties: {},
-              });
+              relationships.push({ from: variableNode.id, to: callNode.id, type: "INITIALIZED_BY", properties: {} });
             }
           }
 
-          const configValue = createConfigValueGraph(fileNodeId, node);
-          if (configValue) {
-            nodes.push(configValue.node);
-            relationships.push(configValue.relationship);
-          }
+          // Deferred to framework pass — config-value detection per declarator.
+          variableDeclaratorAstNodes.push(node);
         }
       }
     }
@@ -328,13 +237,7 @@ async function parseJavaScriptLikeFile(
       const classNode = createClassNode(fileNodeId, node);
       if (classNode) {
         nodes.push(classNode);
-        relationships.push({
-          from: fileNodeId,
-          to: classNode.id,
-          type: "DEFINES_CLASS",
-          properties: {},
-        });
-
+        relationships.push({ from: fileNodeId, to: classNode.id, type: "DEFINES_CLASS", properties: {} });
         appendClassMembers(fileNodeId, classNode, node, nodes, relationships);
       }
     }
@@ -343,47 +246,118 @@ async function parseJavaScriptLikeFile(
       const typeDeclarationNode = createTypeScriptDeclarationNode(fileNodeId, node);
       if (typeDeclarationNode) {
         nodes.push(typeDeclarationNode.node);
-        relationships.push({
-          from: fileNodeId,
-          to: typeDeclarationNode.node.id,
-          type: typeDeclarationNode.relationshipType,
-          properties: {},
-        });
+        relationships.push({ from: fileNodeId, to: typeDeclarationNode.node.id, type: typeDeclarationNode.relationshipType, properties: {} });
       }
     }
   });
 
-  const fileEnvUsage = createFileEnvUsageGraph(fileNodeId, tree.rootNode);
-  nodes.push(...fileEnvUsage.nodes);
-  relationships.push(...fileEnvUsage.relationships);
+  return { nodes, relationships, cjsExportBindings, localReExportNames, functionAstPairs, variableDeclaratorAstNodes };
+}
+
+// ─── Language-level finalization ─────────────────────────────────────────────
+
+function finalizeLanguageLevel(
+  fileNodeId: string,
+  tree: Parser.Tree,
+  state: WalkState,
+): ParsedSourceFile {
+  const { nodes, relationships, cjsExportBindings, localReExportNames } = state;
 
   applyCjsExportBindings(fileNodeId, nodes, relationships, cjsExportBindings);
   relationships.push(...createLocalReExportRelationships(fileNodeId, nodes, relationships, localReExportNames));
 
   const moduleLevelCallNodes = createModuleLevelCallNodes(fileNodeId, tree.rootNode);
   nodes.push(...moduleLevelCallNodes);
-  relationships.push(
-    ...moduleLevelCallNodes.map((callNode) => ({
-      from: fileNodeId,
-      to: callNode.id,
-      type: "MODULE_CALLS" as const,
-      properties: {},
-    })),
-  );
-
-  const routeGraph = createExpressKoaRouteGraph(fileNodeId, tree.rootNode, nodes, relationships);
-  nodes.push(...routeGraph.nodes);
-  relationships.push(...routeGraph.relationships);
-
-  const nestRouteGraph = createNestJsRouteGraph(fileNodeId, nodes, relationships);
-  nodes.push(...nestRouteGraph.nodes);
-  relationships.push(...nestRouteGraph.relationships);
-
-  const entrypointGraph = createBackendEntrypointGraph(fileNodeId, tree.rootNode, nodes, relationships);
-  nodes.push(...entrypointGraph.nodes);
-  relationships.push(...entrypointGraph.relationships);
+  relationships.push(...moduleLevelCallNodes.map((c) => ({ from: fileNodeId, to: c.id, type: "MODULE_CALLS" as const, properties: {} })));
 
   return { fileNodeId, nodes, relationships };
+}
+
+// ─── Framework semantic additions ────────────────────────────────────────────
+
+function applyFrameworkSemantics(
+  fileNodeId: string,
+  tree: Parser.Tree,
+  parsed: ParsedSourceFile,
+  state: WalkState,
+): void {
+  applyEnvConfigParseSemantics(
+    fileNodeId,
+    tree.rootNode,
+    parsed.nodes,
+    parsed.relationships,
+    state.functionAstPairs,
+    state.variableDeclaratorAstNodes,
+  );
+
+  applyExpressKoaParseSemantics(fileNodeId, tree.rootNode, parsed.nodes, parsed.relationships);
+  applyNestJsParseSemantics(fileNodeId, parsed.nodes, parsed.relationships);
+  applyBackendEntrypointParseSemantics(fileNodeId, tree.rootNode, parsed.nodes, parsed.relationships);
+}
+
+// ─── Public helpers ───────────────────────────────────────────────────────────
+
+function parseTree(source: string, language: SupportedLanguage): Parser.Tree {
+  return (language === "typescript" ? tsParser : jsParser).parse(createTreeSitterInput(source));
+}
+
+// Language-only parse — no framework semantic nodes (routes, entrypoints,
+// env/config). Used by the language integration boundary in Task 89.
+export async function parseJsTsLanguageOnly(
+  rootPath: string,
+  filePath: string,
+  language: SupportedLanguage,
+): Promise<ParsedSourceFile> {
+  const source = await readFile(filePath, "utf8");
+  const relativePath = path.relative(rootPath, filePath);
+  const fileNodeId = `file:${relativePath}`;
+
+  const fileNode: GraphNode = {
+    id: fileNodeId,
+    label: "File",
+    properties: { path: filePath, relativePath, language },
+  };
+
+  const tree = parseTree(source, language);
+  if (tree.rootNode.hasError) {
+    throw new Error("Syntax error");
+  }
+
+  const state = walkJsTsNodes(fileNodeId, tree, language);
+  state.nodes.unshift(fileNode);
+
+  return finalizeLanguageLevel(fileNodeId, tree, state);
+}
+
+// ─── Full parse (language + framework semantics) ──────────────────────────────
+
+async function parseJavaScriptLikeFile(
+  rootPath: string,
+  filePath: string,
+  language: SupportedLanguage,
+): Promise<ParsedSourceFile> {
+  const source = await readFile(filePath, "utf8");
+  const relativePath = path.relative(rootPath, filePath);
+  const fileNodeId = `file:${relativePath}`;
+
+  const fileNode: GraphNode = {
+    id: fileNodeId,
+    label: "File",
+    properties: { path: filePath, relativePath, language },
+  };
+
+  const tree = parseTree(source, language);
+  if (tree.rootNode.hasError) {
+    throw new Error("Syntax error");
+  }
+
+  const state = walkJsTsNodes(fileNodeId, tree, language);
+  state.nodes.unshift(fileNode);
+
+  const parsed = finalizeLanguageLevel(fileNodeId, tree, state);
+  applyFrameworkSemantics(fileNodeId, tree, parsed, state);
+
+  return parsed;
 }
 
 function isConditionalRequire(node: Parser.SyntaxNode): boolean {
