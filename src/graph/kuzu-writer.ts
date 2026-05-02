@@ -24,6 +24,16 @@ export type KuzuStatsOptions = {
   packageName?: string;
 };
 
+export type KuzuPatchOptions = KuzuWriteOptions & {
+  affectedFiles: string[];
+};
+
+export type KuzuPatchSummary = {
+  affectedFiles: number;
+  nodesWritten: number;
+  relationshipsWritten: number;
+};
+
 export class KuzuGraphWriter {
   private constructor(
     private readonly database: KuzuDatabase,
@@ -62,6 +72,55 @@ export class KuzuGraphWriter {
     await this.writeInTransaction(nodes, relationships);
   }
 
+  async patch(
+    nodes: GraphNode[],
+    relationships: GraphRelationship[],
+    options: KuzuPatchOptions,
+  ): Promise<KuzuPatchSummary> {
+    const affectedFileIds = options.affectedFiles.map((file) => `file:${toPosixPath(file)}`);
+    const affectedNodeIds = new Set(
+      nodes
+        .filter((node) => isOwnedByAffectedFile(node.id, affectedFileIds))
+        .map((node) => node.id),
+    );
+    const relationshipsToWrite = relationships.filter((relationship) => (
+      isOwnedByAffectedFile(relationship.from, affectedFileIds)
+      || isOwnedByAffectedFile(relationship.to, affectedFileIds)
+    ));
+    const relationshipEndpointIds = new Set<string>();
+    for (const relationship of relationshipsToWrite) {
+      relationshipEndpointIds.add(relationship.from);
+      relationshipEndpointIds.add(relationship.to);
+    }
+    const nodesToWrite = nodes.filter((node) => (
+      affectedNodeIds.has(node.id) || relationshipEndpointIds.has(node.id)
+    ));
+    const nodeLabelById = new Map(nodes.map((node) => [node.id, node.label]));
+    const mode = options.mode ?? "transaction";
+    if (mode === "individual") {
+      const nodesWritten = await this.patchIndividually(affectedFileIds, nodesToWrite, relationshipsToWrite, nodeLabelById);
+      return {
+        affectedFiles: affectedFileIds.length,
+        nodesWritten,
+        relationshipsWritten: relationshipsToWrite.length,
+      };
+    }
+
+    await this.execute("BEGIN TRANSACTION");
+    try {
+      const nodesWritten = await this.patchIndividually(affectedFileIds, nodesToWrite, relationshipsToWrite, nodeLabelById);
+      await this.execute("COMMIT");
+      return {
+        affectedFiles: affectedFileIds.length,
+        nodesWritten,
+        relationshipsWritten: relationshipsToWrite.length,
+      };
+    } catch (error) {
+      await this.rollbackTransaction();
+      throw error;
+    }
+  }
+
   private async writeInTransaction(nodes: GraphNode[], relationships: GraphRelationship[]): Promise<void> {
     await this.execute("BEGIN TRANSACTION");
     try {
@@ -82,6 +141,30 @@ export class KuzuGraphWriter {
     for (const relationship of relationships) {
       await this.insertRelationship(relationship, nodeLabelById);
     }
+  }
+
+  private async patchIndividually(
+    affectedFileIds: string[],
+    nodes: GraphNode[],
+    relationships: GraphRelationship[],
+    nodeLabelById: Map<string, GraphNode["label"]>,
+  ): Promise<number> {
+    for (const fileId of affectedFileIds) {
+      await this.deleteFileOwnedNodes(fileId);
+    }
+
+    let nodesWritten = 0;
+    for (const node of nodes) {
+      if (await this.insertNodeIfMissing(node)) {
+        nodesWritten += 1;
+      }
+    }
+
+    for (const relationship of relationships) {
+      await this.insertRelationship(relationship, nodeLabelById);
+    }
+
+    return nodesWritten;
   }
 
   async stats(options: KuzuStatsOptions = {}): Promise<Array<{ table: string; count: unknown }>> {
@@ -154,6 +237,24 @@ export class KuzuGraphWriter {
     );
   }
 
+  private async insertNodeIfMissing(node: GraphNode): Promise<boolean> {
+    const rows = await this.singleResult(
+      `MATCH (n) WHERE n.id = ${quote(node.id)} RETURN count(n) AS count`,
+    );
+    if (Number(rows[0]?.count ?? 0) > 0) {
+      return false;
+    }
+
+    await this.insertNode(node);
+    return true;
+  }
+
+  private async deleteFileOwnedNodes(fileId: string): Promise<void> {
+    await this.execute(
+      `MATCH (n) WHERE n.id = ${quote(fileId)} OR n.id STARTS WITH ${quote(`${fileId}:`)} DETACH DELETE n`,
+    );
+  }
+
   private async insertRelationship(
     relationship: GraphRelationship,
     nodeLabelById: Map<string, GraphNode["label"]>,
@@ -189,4 +290,12 @@ export class KuzuGraphWriter {
       // Preserve the original write error if rollback itself cannot complete.
     }
   }
+}
+
+function isOwnedByAffectedFile(nodeId: string, affectedFileIds: string[]): boolean {
+  return affectedFileIds.some((fileId) => nodeId === fileId || nodeId.startsWith(`${fileId}:`));
+}
+
+function toPosixPath(value: string): string {
+  return value.split(path.sep).join(path.posix.sep);
 }

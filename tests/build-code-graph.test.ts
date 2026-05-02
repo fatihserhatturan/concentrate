@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
@@ -33,6 +33,11 @@ describe("buildCodeGraph", () => {
     assert.equal(graph.report.failedFiles.length, 0);
     assert.equal(graph.report.resolvedImports, 1);
     assert.equal(graph.report.unresolvedRelativeImports, 0);
+    assert.equal(graph.manifest.version, 1);
+    assert.equal(graph.manifest.hashAlgorithm, "sha256");
+    assert.equal(graph.manifest.files.length, 2);
+    assert.deepEqual(graph.manifest.files.map((file) => file.path), ["index.ts", "utils.ts"]);
+    assert.ok(graph.manifest.files.every((file) => /^[a-f0-9]{64}$/u.test(file.hash)));
 
     assertNodeCount(graph.nodes, "File", 2);
     assertNodeCount(graph.nodes, "Import", 1);
@@ -84,12 +89,105 @@ describe("buildCodeGraph", () => {
     );
   });
 
+  it("compares current files with a previous scan manifest without skipping parsing", async () => {
+    const fixturePath = await createManifestDiffFixture();
+    const previousManifestPath = path.join(fixturePath, "previous-manifest.json");
+    const graph = await buildCodeGraph(fixturePath, {
+      continueOnError: false,
+      include: ["src/**/*"],
+      previousManifestPath,
+      incrementalMode: "changed-files",
+    });
+
+    assert.equal(graph.report.status, "success");
+    assert.equal(graph.report.parsedFiles, 3);
+    assert.deepEqual(graph.report.incremental, {
+      checked: true,
+      compatible: true,
+      reason: null,
+      previousManifestPath,
+      added: 1,
+      changed: 1,
+      unchanged: 1,
+      deleted: 1,
+      addedFiles: ["src/added.ts"],
+      changedFiles: ["src/changed.ts"],
+      unchangedFiles: ["src/same.ts"],
+      deletedFiles: ["src/deleted.ts"],
+    });
+    assert.deepEqual(graph.report.parsePlan, {
+      requestedMode: "changed-files",
+      effectiveMode: "full",
+      reason: "Changed-file-only parsing is not implemented yet; running a full parse before patching graph",
+      filesToParse: 3,
+      filesPlannedForReuse: 1,
+      addedFiles: ["src/added.ts"],
+      changedFiles: ["src/changed.ts"],
+      unchangedFiles: ["src/same.ts"],
+      deletedFiles: ["src/deleted.ts"],
+    });
+  });
+
+  it("patches an existing Kuzu graph for added, changed, and deleted files", async () => {
+    const fixturePath = await createKuzuPatchFixture();
+    const databasePath = path.join(
+      await mkdtemp(path.join(os.tmpdir(), "concentrate-patch-graph-")),
+      "graph.kuzu",
+    );
+    const previousManifestPath = path.join(path.dirname(databasePath), "previous-manifest.json");
+    const nextManifestPath = path.join(path.dirname(databasePath), "next-manifest.json");
+    const previousExitCode = process.exitCode;
+
+    await scanCommand(fixturePath, {
+      database: databasePath,
+      continueOnError: false,
+      include: ["src/**/*.ts"],
+      exclude: [],
+      kuzuWriteMode: "transaction",
+      manifest: previousManifestPath,
+      incremental: "full",
+    });
+
+    await writeFile(path.join(fixturePath, "src", "changed.ts"), "export function after() { return 22; }\n", "utf8");
+    await writeFile(path.join(fixturePath, "src", "added.ts"), "export function added() { return 3; }\n", "utf8");
+    await rm(path.join(fixturePath, "src", "deleted.ts"));
+
+    await scanCommand(fixturePath, {
+      database: databasePath,
+      continueOnError: false,
+      include: ["src/**/*.ts"],
+      exclude: [],
+      kuzuWriteMode: "transaction",
+      manifest: nextManifestPath,
+      previousManifest: previousManifestPath,
+      incremental: "changed-files",
+    });
+
+    process.exitCode = previousExitCode;
+
+    const writer = await KuzuGraphWriter.open(databasePath);
+    try {
+      const rows = await writer.query("MATCH (fn:Function) RETURN fn.name AS name ORDER BY name");
+      const names = rows.map((row) => String((row as { name: unknown }).name));
+      assert.deepEqual(names, ["added", "after", "same"]);
+
+      const files = await writer.query("MATCH (file:File) RETURN file.relativePath AS path ORDER BY path");
+      assert.deepEqual(
+        files.map((row) => String((row as { path: unknown }).path)),
+        ["src/added.ts", "src/changed.ts", "src/same.ts"],
+      );
+    } finally {
+      await writer.close();
+    }
+  });
+
   it("writes partial Kuzu graphs when continue-on-error is enabled", async () => {
     const fixturePath = await createScanErrorFixture();
     const databasePath = path.join(
       await mkdtemp(path.join(os.tmpdir(), "concentrate-partial-graph-")),
       "graph.kuzu",
     );
+    const manifestPath = path.join(path.dirname(databasePath), "manifest.json");
     const previousExitCode = process.exitCode;
 
     await scanCommand(fixturePath, {
@@ -98,10 +196,14 @@ describe("buildCodeGraph", () => {
       include: [],
       exclude: [],
       kuzuWriteMode: "transaction",
+      manifest: manifestPath,
+      incremental: "full",
     });
 
     assert.equal(process.exitCode, 1);
     process.exitCode = previousExitCode;
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as { files?: unknown[] };
+    assert.equal(manifest.files?.length, 2);
 
     const writer = await KuzuGraphWriter.open(databasePath);
     try {
@@ -1875,6 +1977,51 @@ async function createScanErrorFixture(): Promise<string> {
     "utf8",
   );
   await writeFile(path.join(fixturePath, "bad.ts"), "export function bad( {\n", "utf8");
+  return fixturePath;
+}
+
+async function createManifestDiffFixture(): Promise<string> {
+  const fixturePath = await mkdtemp(path.join(os.tmpdir(), "concentrate-manifest-diff-"));
+  const srcPath = path.join(fixturePath, "src");
+  await mkdir(srcPath, { recursive: true });
+
+  await writeFile(path.join(srcPath, "same.ts"), "export const same = 1;\n", "utf8");
+  await writeFile(path.join(srcPath, "changed.ts"), "export const changed = 2;\n", "utf8");
+  await writeFile(path.join(srcPath, "added.ts"), "export const added = 3;\n", "utf8");
+
+  const baseline = await buildCodeGraph(fixturePath, {
+    continueOnError: false,
+    include: ["src/same.ts", "src/changed.ts"],
+  });
+  await writeFile(
+    path.join(fixturePath, "previous-manifest.json"),
+    `${JSON.stringify({
+      ...baseline.manifest,
+      files: [
+        ...baseline.manifest.files,
+        {
+          path: "src/deleted.ts",
+          language: "typescript",
+          sizeBytes: 24,
+          mtimeMs: 1,
+          hash: "0".repeat(64),
+        },
+      ],
+    }, null, 2)}\n`,
+    "utf8",
+  );
+
+  await writeFile(path.join(srcPath, "changed.ts"), "export const changed = 22;\n", "utf8");
+  return fixturePath;
+}
+
+async function createKuzuPatchFixture(): Promise<string> {
+  const fixturePath = await mkdtemp(path.join(os.tmpdir(), "concentrate-kuzu-patch-"));
+  const srcPath = path.join(fixturePath, "src");
+  await mkdir(srcPath, { recursive: true });
+  await writeFile(path.join(srcPath, "same.ts"), "export function same() { return 1; }\n", "utf8");
+  await writeFile(path.join(srcPath, "changed.ts"), "export function before() { return 2; }\n", "utf8");
+  await writeFile(path.join(srcPath, "deleted.ts"), "export function deleted() { return 0; }\n", "utf8");
   return fixturePath;
 }
 

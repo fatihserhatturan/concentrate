@@ -20,6 +20,33 @@ export function printScanReport(
   );
   console.log(`  Resolved imports: ${report.resolvedImports}`);
   console.log(`  Unresolved rel:   ${report.unresolvedRelativeImports}`);
+  if (report.incremental.checked) {
+    const incremental = report.incremental;
+    console.log(
+      `  Incremental:      ${incremental.compatible ? "compatible" : "not compatible"}; added ${incremental.added}, changed ${incremental.changed}, unchanged ${incremental.unchanged}, deleted ${incremental.deleted}`,
+    );
+    if (incremental.reason) {
+      console.log(`  Incremental note: ${incremental.reason}`);
+    }
+  }
+  if (report.parsePlan.requestedMode !== "full") {
+    const plan = report.parsePlan;
+    console.log(
+      `  Parse plan:       requested ${plan.requestedMode}, effective ${plan.effectiveMode}; parse ${plan.filesToParse}, reuse ${plan.filesPlannedForReuse}`,
+    );
+    if (plan.reason) {
+      console.log(`  Parse plan note:  ${plan.reason}`);
+    }
+  }
+  if (report.graphPatch.requested) {
+    const patch = report.graphPatch;
+    console.log(
+      `  Graph write:      ${patch.effectiveMode}; affected ${patch.affectedFiles}, nodes ${patch.nodesWritten}, rels ${patch.relationshipsWritten}`,
+    );
+    if (patch.reason) {
+      console.log(`  Graph write note: ${patch.reason}`);
+    }
+  }
   console.log(`  Nodes written:    ${nodeCount}`);
   console.log(`  Rels written:     ${relationshipCount}`);
   console.log(`  Destination:      ${destination}`);

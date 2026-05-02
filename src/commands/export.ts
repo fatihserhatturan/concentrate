@@ -3,6 +3,7 @@ import path from "node:path";
 import { printScanReport } from "../cli/report.js";
 import { ProgressReporter } from "../cli/progress.js";
 import { buildCodeGraph } from "../scanner/build-code-graph.js";
+import type { IncrementalMode } from "../scanner/parse-plan.js";
 import { didFailFast, didPartiallySucceed } from "../scanner/report.js";
 import type { GraphNode, GraphRelationship } from "../graph/model.js";
 
@@ -13,6 +14,8 @@ type ExportOptions = {
   maxFiles?: number;
   include: string[];
   exclude: string[];
+  previousManifest?: string;
+  incremental: string;
 };
 
 export async function exportCommand(projectPath: string, options: ExportOptions): Promise<void> {
@@ -25,6 +28,8 @@ export async function exportCommand(projectPath: string, options: ExportOptions)
     maxFiles: options.maxFiles,
     include: options.include.length > 0 ? options.include : undefined,
     exclude: options.exclude.length > 0 ? options.exclude : undefined,
+    previousManifestPath: options.previousManifest ? path.resolve(options.previousManifest) : undefined,
+    incrementalMode: parseIncrementalMode(options.incremental),
     onProgress: (current, total, relativePath) => {
       progress.update(current, total, relativePath);
     },
@@ -46,9 +51,19 @@ export async function exportCommand(projectPath: string, options: ExportOptions)
     `${JSON.stringify({
       rootPath: result.rootPath,
       report: result.report,
+      manifest: {
+        path: "manifest.json",
+        files: result.manifest.files.length,
+        hashAlgorithm: result.manifest.hashAlgorithm,
+      },
       nodes: result.nodes.length,
       relationships: result.relationships.length,
     }, null, 2)}\n`,
+    "utf8",
+  );
+  await writeFile(
+    path.join(outputPath, "manifest.json"),
+    `${JSON.stringify(result.manifest, null, 2)}\n`,
     "utf8",
   );
 
@@ -57,6 +72,14 @@ export async function exportCommand(projectPath: string, options: ExportOptions)
   if (didPartiallySucceed(result)) {
     process.exitCode = 1;
   }
+}
+
+function parseIncrementalMode(value: string): IncrementalMode {
+  if (value === "full" || value === "changed-files") {
+    return value;
+  }
+
+  throw new Error(`Unsupported incremental mode: ${value}`);
 }
 
 async function writeJsonl(
@@ -77,6 +100,7 @@ function printExportReport(
   console.log(`  Nodes JSONL:   ${path.join(outputPath, "nodes.jsonl")}`);
   console.log(`  Rels JSONL:    ${path.join(outputPath, "relationships.jsonl")}`);
   console.log(`  Summary JSON:  ${path.join(outputPath, "summary.json")}`);
+  console.log(`  Manifest JSON: ${path.join(outputPath, "manifest.json")}`);
   console.log(`  Nodes:         ${nodeCount}`);
   console.log(`  Relationships: ${relationshipCount}`);
 }

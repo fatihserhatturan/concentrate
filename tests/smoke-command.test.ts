@@ -53,6 +53,7 @@ describe("smoke validation", () => {
     const report = await runSmokeValidation([sample], {
       allowMissing: false,
       reportPath,
+      incrementalBenchmark: true,
     });
 
     assert.equal(report.status, "passed");
@@ -60,6 +61,10 @@ describe("smoke validation", () => {
     assert.deepEqual(report.results[0]?.failures, []);
 
     assert.ok(report.results[0]?.semanticSamples);
+    assert.equal(report.results[0]?.incrementalBenchmark?.status, "passed");
+    assert.equal(report.results[0]?.incrementalBenchmark?.incremental.compatible, true);
+    assert.equal(report.results[0]?.incrementalBenchmark?.graphPatch.effectiveMode, "patch");
+    assert.equal(report.results[0]?.incrementalBenchmark?.graphPatch.affectedFiles, 0);
     assert.deepEqual(report.results[0]?.semanticSamples?.review, {
       falsePositiveFindings: [],
       falseNegativeFindings: [],
@@ -72,5 +77,6 @@ describe("smoke validation", () => {
     };
     assert.equal(saved.status, "passed");
     assert.ok(saved.results?.[0]?.semanticSamples);
+    assert.ok(saved.results?.[0]?.incrementalBenchmark);
   });
 });

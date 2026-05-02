@@ -5,6 +5,7 @@ import type { BuildCodeGraphOptions, BuildCodeGraphResult } from "./build-code-g
 import { runWithConcurrency } from "./concurrency.js";
 import { discoverFiles } from "./discover-files.js";
 import { finalizeGraphRelationships } from "./graph-finalize.js";
+import { createParsePlan } from "./parse-plan.js";
 import { parseFileWithContext, type ParseResult } from "./parse-source.js";
 import { addParseResultsToGraph } from "./parse-results.js";
 import { addProjectConfigNodes } from "./project-config.js";
@@ -12,6 +13,12 @@ import {
   createScanReport,
   type ScanReport,
 } from "./report.js";
+import {
+  compareScanManifests,
+  createScanManifest,
+  readScanManifest,
+  type ScanManifest,
+} from "./scan-manifest.js";
 import { filterSupportedSourceFiles } from "./source-files.js";
 import { addWorkspacePackageGraph } from "./workspace-packages.js";
 export type { BuildCodeGraphOptions, BuildCodeGraphResult } from "./build-code-graph-types.js";
@@ -28,9 +35,29 @@ export async function buildCodeGraph(
   });
 
   const supportedFiles = filterSupportedSourceFiles(files, options.maxFiles);
+  const manifest = await createScanManifest(rootPath, supportedFiles);
 
   const graph = new GraphBuilder();
   const report = createScanReport(files.length, supportedFiles.length);
+  if (options.previousManifestPath) {
+    try {
+      const previousManifest = await readScanManifest(options.previousManifestPath);
+      report.incremental = compareScanManifests(manifest, previousManifest, path.resolve(options.previousManifestPath));
+    } catch (error) {
+      report.incremental = {
+        ...report.incremental,
+        checked: true,
+        compatible: false,
+        previousManifestPath: path.resolve(options.previousManifestPath),
+        reason: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+  report.parsePlan = createParsePlan(
+    supportedFiles,
+    report.incremental,
+    options.incrementalMode ?? "full",
+  );
   const concurrency = options.concurrency ?? os.availableParallelism();
 
   graph.addNode({
@@ -69,25 +96,27 @@ export async function buildCodeGraph(
   );
   if (!parsedFully) {
     report.status = "failed";
-    return createResult(rootPath, graph, report);
+    return createResult(rootPath, graph, report, manifest);
   }
 
   await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report);
   await finalizeGraphRelationships(graph, rootPath, report);
   report.status = report.failedFiles.length > 0 ? "partial" : "success";
 
-  return createResult(rootPath, graph, report);
+  return createResult(rootPath, graph, report, manifest);
 }
 
 function createResult(
   rootPath: string,
   graph: GraphBuilder,
   report: ScanReport,
+  manifest: ScanManifest,
 ): BuildCodeGraphResult {
   return {
     rootPath,
     nodes: graph.nodes,
     relationships: graph.relationships,
     report,
+    manifest,
   };
 }

@@ -11,8 +11,10 @@
     "dev": "tsx src/cli/index.ts",
     "scan": "tsx src/cli/index.ts scan",
     "smoke:samples": "tsx src/cli/index.ts smoke",
+    "benchmark:incremental": "npm run smoke:samples -- --suite all --incremental-benchmark --report .concentrate/incremental-benchmark-report.json --semantic-samples 5",
     "stats": "tsx src/cli/index.ts stats",
     "query": "tsx src/cli/index.ts query",
+    "verify:rc": "npm run typecheck && npm test && npm run build && npm run smoke:samples -- --suite standing --report .concentrate/smoke-standing-rc-report.json --semantic-samples 5",
     "test": "tsx --test tests/**/*.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

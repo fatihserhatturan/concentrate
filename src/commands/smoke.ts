@@ -1,4 +1,5 @@
 import { access, mkdir, writeFile } from "node:fs/promises";
+import { performance } from "node:perf_hooks";
 import os from "node:os";
 import path from "node:path";
 import { KuzuGraphWriter } from "../graph/kuzu-writer.js";
@@ -14,6 +15,7 @@ type SmokeOptions = {
   report: string;
   allowMissing: boolean;
   semanticSamples?: number;
+  incrementalBenchmark?: boolean;
 };
 
 export type SmokeSample = {
@@ -66,6 +68,7 @@ export type SmokeSampleResult = {
   relationships?: number;
   graph?: Partial<Record<SmokeMetricName, number>>;
   semanticSamples?: SemanticSamples;
+  incrementalBenchmark?: IncrementalBenchmarkResult;
   failures: string[];
 };
 
@@ -127,6 +130,18 @@ export type SemanticReviewNotes = {
   falsePositiveFindings: string[];
   falseNegativeFindings: string[];
   notes: string[];
+};
+
+export type IncrementalBenchmarkResult = {
+  status: "passed" | "failed";
+  fullScanMs: number;
+  fullWriteMs: number;
+  incrementalScanMs: number;
+  incrementalWriteMs: number;
+  incremental: ScanReport["incremental"];
+  parsePlan: ScanReport["parsePlan"];
+  graphPatch: ScanReport["graphPatch"];
+  failures: string[];
 };
 
 const defaultSamples: SmokeSample[] = [
@@ -327,6 +342,7 @@ export async function smokeCommand(options: SmokeOptions): Promise<void> {
     allowMissing: options.allowMissing,
     reportPath: options.report,
     semanticSampleLimit: options.semanticSamples,
+    incrementalBenchmark: options.incrementalBenchmark ?? false,
   });
 
   printSmokeReport(report);
@@ -337,12 +353,22 @@ export async function smokeCommand(options: SmokeOptions): Promise<void> {
 
 export async function runSmokeValidation(
   samples: SmokeSample[],
-  options: { allowMissing: boolean; reportPath: string; semanticSampleLimit?: number },
+  options: {
+    allowMissing: boolean;
+    reportPath: string;
+    semanticSampleLimit?: number;
+    incrementalBenchmark?: boolean;
+  },
 ): Promise<SmokeReport> {
   const results: SmokeSampleResult[] = [];
 
   for (const sample of samples) {
-    results.push(await runSmokeSample(sample, options.allowMissing, options.semanticSampleLimit ?? 10));
+    results.push(await runSmokeSample(
+      sample,
+      options.allowMissing,
+      options.semanticSampleLimit ?? 10,
+      options.incrementalBenchmark ?? false,
+    ));
   }
 
   const report: SmokeReport = {
@@ -362,6 +388,7 @@ async function runSmokeSample(
   sample: SmokeSample,
   allowMissing: boolean,
   semanticSampleLimit: number,
+  incrementalBenchmark: boolean,
 ): Promise<SmokeSampleResult> {
   const projectPath = resolvePath(sample.projectPath);
   const databasePath = resolvePath(sample.databasePath);
@@ -379,23 +406,33 @@ async function runSmokeSample(
     return result;
   }
 
+  const fullScanStartedAt = performance.now();
   const graph = await buildCodeGraph(projectPath, {
     continueOnError: sample.continueOnError ?? false,
     exclude: sample.exclude,
   });
+  const fullScanMs = elapsedMs(fullScanStartedAt);
 
   const writer = await KuzuGraphWriter.open(databasePath);
+  const fullWriteStartedAt = performance.now();
   try {
     await writer.reset();
     await writer.write(graph.nodes, graph.relationships);
   } finally {
     await writer.close();
   }
+  const fullWriteMs = elapsedMs(fullWriteStartedAt);
 
   const graphMetrics = await readGraphMetrics(databasePath, sample.expected.graph);
   const semanticSamples = await readSemanticSamples(databasePath, semanticSampleLimit);
   compareScan(sample.expected, graph.report, graph.nodes.length, graph.relationships.length, failures);
   compareGraph(sample.expected.graph, graphMetrics, failures);
+  const incrementalBenchmarkResult = incrementalBenchmark
+    ? await runIncrementalBenchmark(sample, projectPath, databasePath, graph.manifest, graphMetrics, fullScanMs, fullWriteMs)
+    : undefined;
+  if (incrementalBenchmarkResult?.status === "failed") {
+    failures.push(...incrementalBenchmarkResult.failures.map((failure) => `incrementalBenchmark.${failure}`));
+  }
 
   return {
     name: sample.name,
@@ -408,6 +445,84 @@ async function runSmokeSample(
     relationships: graph.relationships.length,
     graph: graphMetrics,
     semanticSamples,
+    incrementalBenchmark: incrementalBenchmarkResult,
+    failures,
+  };
+}
+
+async function runIncrementalBenchmark(
+  sample: SmokeSample,
+  projectPath: string,
+  databasePath: string,
+  previousManifest: unknown,
+  expectedGraphMetrics: Partial<Record<SmokeMetricName, number>>,
+  fullScanMs: number,
+  fullWriteMs: number,
+): Promise<IncrementalBenchmarkResult> {
+  const failures: string[] = [];
+  const previousManifestPath = `${databasePath}.previous-manifest.json`;
+  await writeFile(previousManifestPath, `${JSON.stringify(previousManifest, null, 2)}\n`, "utf8");
+
+  const incrementalScanStartedAt = performance.now();
+  const incrementalGraph = await buildCodeGraph(projectPath, {
+    continueOnError: sample.continueOnError ?? false,
+    exclude: sample.exclude,
+    previousManifestPath,
+    incrementalMode: "changed-files",
+  });
+  const incrementalScanMs = elapsedMs(incrementalScanStartedAt);
+
+  const writer = await KuzuGraphWriter.open(databasePath);
+  const incrementalWriteStartedAt = performance.now();
+  try {
+    if (await writer.schemaVersion() === SCHEMA_VERSION && incrementalGraph.report.incremental.compatible) {
+      const affectedFiles = [
+        ...incrementalGraph.report.parsePlan.addedFiles,
+        ...incrementalGraph.report.parsePlan.changedFiles,
+        ...incrementalGraph.report.parsePlan.deletedFiles,
+      ];
+      const patch = await writer.patch(incrementalGraph.nodes, incrementalGraph.relationships, { affectedFiles });
+      incrementalGraph.report.graphPatch = {
+        requested: true,
+        effectiveMode: "patch",
+        reason: null,
+        affectedFiles: patch.affectedFiles,
+        nodesWritten: patch.nodesWritten,
+        relationshipsWritten: patch.relationshipsWritten,
+      };
+    } else {
+      incrementalGraph.report.graphPatch = {
+        ...incrementalGraph.report.graphPatch,
+        requested: true,
+        effectiveMode: "reset",
+        reason: incrementalGraph.report.incremental.reason ?? "Previous graph is not compatible",
+      };
+      await writer.reset();
+      await writer.write(incrementalGraph.nodes, incrementalGraph.relationships);
+    }
+  } finally {
+    await writer.close();
+  }
+  const incrementalWriteMs = elapsedMs(incrementalWriteStartedAt);
+
+  const actualGraphMetrics = await readGraphMetrics(databasePath, expectedGraphMetrics);
+  compareGraph(expectedGraphMetrics, actualGraphMetrics, failures);
+  if (!incrementalGraph.report.incremental.compatible) {
+    failures.push(incrementalGraph.report.incremental.reason ?? "incremental comparison was not compatible");
+  }
+  if (incrementalGraph.report.graphPatch.effectiveMode !== "patch") {
+    failures.push(`graphPatch.effectiveMode: expected patch, got ${incrementalGraph.report.graphPatch.effectiveMode}`);
+  }
+
+  return {
+    status: failures.length === 0 ? "passed" : "failed",
+    fullScanMs,
+    fullWriteMs,
+    incrementalScanMs,
+    incrementalWriteMs,
+    incremental: incrementalGraph.report.incremental,
+    parsePlan: incrementalGraph.report.parsePlan,
+    graphPatch: incrementalGraph.report.graphPatch,
     failures,
   };
 }
@@ -672,6 +787,10 @@ function compareValue(label: string, expected: unknown, actual: unknown, failure
   }
 }
 
+function elapsedMs(startedAt: number): number {
+  return Math.round((performance.now() - startedAt) * 100) / 100;
+}
+
 function selectSamples(samples: SmokeSample[], suite: string): SmokeSample[] {
   if (suite === "all") return samples;
   if (suite === "standing" || suite === "internet") {
@@ -685,6 +804,12 @@ function printSmokeReport(report: SmokeReport): void {
   console.log(`  Status: ${report.status}`);
   for (const result of report.results) {
     console.log(`  - ${result.name}: ${result.status}`);
+    if (result.incrementalBenchmark) {
+      const benchmark = result.incrementalBenchmark;
+      console.log(
+        `      incremental: ${benchmark.status}; full scan/write ${benchmark.fullScanMs}ms/${benchmark.fullWriteMs}ms, incremental scan/write ${benchmark.incrementalScanMs}ms/${benchmark.incrementalWriteMs}ms`,
+      );
+    }
     for (const failure of result.failures) {
       console.log(`      ${failure}`);
     }

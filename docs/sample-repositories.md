@@ -21,6 +21,19 @@ npm run smoke:samples -- --suite standing --report .concentrate/smoke-standing-r
 npm run smoke:samples -- --suite internet --report .concentrate/smoke-internet-report.json
 ```
 
+Run full-versus-incremental no-change benchmarks across standing and internet
+samples with:
+
+```bash
+npm run benchmark:incremental
+```
+
+For standing-only benchmark checks:
+
+```bash
+npm run smoke:samples -- --suite standing --incremental-benchmark --report .concentrate/incremental-standing-benchmark-report.json
+```
+
 The smoke runner scans each repository, writes a Kuzu database, checks expected
 scan counts and semantic graph counts, and writes a machine-readable JSON
 report. Queries for each database are run serially to avoid Kuzu per-database

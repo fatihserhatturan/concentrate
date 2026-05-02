@@ -735,6 +735,32 @@ predictable, and diagnosable on large repositories.
    - Document that parallel operations should target different database paths or
      use the smoke runner's queueing behavior.
 
+## Milestone 12 — Pre Long-Term Stabilization
+
+Before starting incremental scanning or MCP server work, freeze a reliable
+baseline and make the current production-readiness gaps explicit.
+
+76. [x] Add a release-readiness baseline checklist.
+   - Document the exact validation commands required before long-term work:
+     typecheck, unit tests, build, standing smoke, and internet smoke.
+   - Record the current schema version, smoke report paths, and expected
+     high-level counts as the baseline for future architectural changes.
+   - Make it clear which generated databases and reports are validation
+     artifacts rather than source files.
+
+77. [x] Add a known limitations and semantic review backlog.
+   - Summarize current parser/resolver limitations discovered during sample
+     scans, especially false-positive and false-negative risks.
+   - Group gaps by imports, routes, entrypoints, config/env, data access,
+     workspace/package graph, and Kuzu operations.
+   - Link each limitation to the long-term goal or follow-up area it blocks.
+
+78. [x] Add a lightweight release candidate verification command.
+   - Provide a single npm script that runs the core local validation sequence
+     without requiring internet sample repositories.
+   - Keep internet smoke validation as an explicit heavier command.
+   - Document when to run the lightweight command versus the full smoke suite.
+
 ## Long-Term Development Goals
 
 These items require significant architectural work or external integrations and are tracked
@@ -742,10 +768,33 @@ separately as future investment areas rather than near-term tasks.
 
 ### Incremental Scanning
 
-- Avoid full re-scans by tracking file content hashes between runs.
-- Only re-parse files whose hash has changed since the last scan.
-- Update only the affected nodes and relationships in the graph.
-- Critical for large codebases where full scans take too long to be practical.
+79. [x] Add scan manifest generation with file content hashes.
+   - Produce a deterministic manifest of supported source files with relative
+     path, language, size, mtime, and SHA-256 content hash.
+   - Persist the manifest from scan/export commands as a validation artifact.
+   - Use the manifest as the baseline for future changed-file detection.
+
+80. [x] Compare current files with a previous scan manifest.
+   - Detect added, changed, unchanged, and deleted supported source files.
+   - Surface incremental eligibility in the scan report without skipping parse
+     work yet.
+   - Keep full-scan behavior as the default until graph patching exists.
+
+81. [x] Add changed-file-only parse planning.
+   - Build a parse plan for `--incremental changed-files` requests.
+   - Report added, changed, unchanged, and deleted file sets in the parse plan.
+   - Clearly fall back to full scan until unchanged graph slice preservation
+     and patching are implemented.
+
+82. [x] Add graph patch updates for incremental scans.
+   - Remove stale nodes and relationships for changed or deleted files.
+   - Insert updated graph slices for added and changed files.
+   - Re-run cross-file finalizers for affected relationship classes.
+
+83. [x] Add incremental scan validation and benchmarks.
+   - Add fixtures for add/change/delete file scenarios.
+   - Benchmark full versus incremental scans on standing and large samples.
+   - Document when incremental scanning is safe to use.
 
 ### MCP Server
 
@@ -756,5 +805,5 @@ separately as future investment areas rather than near-term tasks.
 
 ## Current Priority
 
-Milestones 8, 9, 10, and 11 are complete. Continue with the long-term
-development goals as follow-up investment areas.
+Milestones 8, 9, 10, 11, and 12 are complete. Incremental Scanning tasks 79
+through 83 are complete. Continue with the next long-term development area.

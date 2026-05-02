@@ -29,6 +29,9 @@ program
   .option("--include <pattern>", "Include glob pattern, repeatable", collect, [] as string[])
   .option("--exclude <pattern>", "Exclude glob pattern, repeatable", collect, [] as string[])
   .option("--kuzu-write-mode <mode>", "Kuzu write mode: transaction or individual", "transaction")
+  .option("--manifest <path>", "Incremental scan manifest output path", ".concentrate/scan-manifest.json")
+  .option("--previous-manifest <path>", "Previous scan manifest used only for incremental eligibility reporting")
+  .option("--incremental <mode>", "Incremental mode: full or changed-files", "full")
   .action(scanCommand);
 
 program
@@ -58,6 +61,8 @@ program
   .option("--max-files <n>", "Maximum number of files to parse", parseInt)
   .option("--include <pattern>", "Include glob pattern, repeatable", collect, [] as string[])
   .option("--exclude <pattern>", "Exclude glob pattern, repeatable", collect, [] as string[])
+  .option("--previous-manifest <path>", "Previous scan manifest used only for incremental eligibility reporting")
+  .option("--incremental <mode>", "Incremental mode: full or changed-files", "full")
   .action(exportCommand);
 
 program
@@ -66,6 +71,7 @@ program
   .option("--suite <suite>", "Smoke suite: standing, internet, or all", "all")
   .option("--report <path>", "Machine-readable smoke report path", ".concentrate/smoke-report.json")
   .option("--semantic-samples <n>", "Semantic sample rows per category", parseInt, 10)
+  .option("--incremental-benchmark", "Run a no-change incremental benchmark after each smoke scan", false)
   .option("--allow-missing", "Skip missing sample repositories instead of failing", false)
   .action(smokeCommand);
 
