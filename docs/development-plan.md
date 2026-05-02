@@ -814,7 +814,59 @@ separately as future investment areas rather than near-term tasks.
    - Document client configuration examples.
    - Capture expected limitations and troubleshooting notes.
 
+### Layered Core Architecture
+
+87. [ ] Add architecture contracts for the layered core.
+   - Define core interfaces for parser integrations, language resolvers,
+     semantic contributors, graph contributions, and scan orchestration.
+   - Keep the contracts language/framework independent.
+   - Add compile-only or unit tests that prove current modules can satisfy the
+     contracts without behavior changes.
+
+88. [ ] Introduce compatibility adapters around the existing scanner pipeline.
+   - Wrap current parser registry, parse-source, graph finalization, and report
+     flow behind the new core-facing contracts.
+   - Keep existing file paths and behavior stable while adapters are introduced.
+   - Validate with typecheck, unit tests, build, and standing smoke.
+
+89. [ ] Split JavaScript/TypeScript language extraction from framework semantics.
+   - Move JS/TS language-level parsing, imports, symbols, calls, classes,
+     variables, and type declarations into a language integration boundary.
+   - Leave Express, Fastify, NestJS, backend entrypoints, env/config, and
+     data-access semantics outside the language layer.
+   - Preserve all current JS/TS parser and backend semantic tests.
+
+90. [ ] Move JS/TS framework semantics into explicit framework modules.
+   - Create framework semantic modules for Express/Koa, Fastify, NestJS,
+     backend entrypoints, env/config, and data access.
+   - Make each module consume language-level graph output through contracts.
+   - Validate with standing smoke, internet smoke, and MCP semantic tools.
+
+91. [ ] Move Python, Go, and Rust parsers behind language integration contracts.
+   - Add language integration wrappers for Python, Go, and Rust.
+   - Keep language-specific import resolution within each integration boundary.
+   - Preserve all language parser tests and cross-file resolution behavior.
+
+92. [ ] Separate adapters for Kuzu, CLI, export, smoke, and MCP.
+   - Make CLI/export/smoke/MCP depend on core contracts instead of scanner
+     internals where practical.
+   - Keep Kuzu as an adapter around graph write/read operations.
+   - Preserve public command behavior and JSON report shapes.
+
+93. [ ] Add architecture guardrails and dependency boundary checks.
+   - Add tests or scripts that prevent core from importing concrete language or
+     framework modules.
+   - Document allowed dependency directions.
+   - Include the guardrail in release-candidate validation when stable.
+
+94. [ ] Run full migration validation and update architecture docs.
+   - Run typecheck, unit tests, build, verify:rc, standing smoke, internet smoke,
+     incremental benchmark, and MCP stdio smoke.
+   - Update `docs/layered-core-architecture.md` with actual final directories.
+   - Record any remaining compatibility shims and follow-up cleanup tasks.
+
 ## Current Priority
 
 Milestones 8, 9, 10, 11, and 12 are complete. Incremental Scanning tasks 79
-through 83 are complete. MCP Server tasks 84 through 86 are complete.
+through 83 are complete. MCP Server tasks 84 through 86 are complete. Start
+Layered Core Architecture work with task 87.
