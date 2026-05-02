@@ -1,4 +1,4 @@
-import type { GraphNode, GraphRelationship } from "../../graph/model.js";
+import type { GraphNode, GraphRelationship } from "../graph/model.js";
 
 export interface IGraphContributor {
   readonly nodes: GraphNode[];

@@ -1,5 +1,5 @@
 import type Parser from "tree-sitter";
-import type { GraphNode, GraphRelationship } from "../../../graph/model.js";
+import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import { createExpressKoaRouteGraph } from "../../../parsers/js-ts/routes.js";
 
 // Parse-time Express/Koa route semantic module.

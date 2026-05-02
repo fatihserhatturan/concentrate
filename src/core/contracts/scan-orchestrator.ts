@@ -1,4 +1,4 @@
-import type { BuildCodeGraphOptions, BuildCodeGraphResult } from "../../scanner/build-code-graph-types.js";
+import type { BuildCodeGraphOptions, BuildCodeGraphResult } from "../scan/result.js";
 
 export interface IScanOrchestrator {
   buildGraph(

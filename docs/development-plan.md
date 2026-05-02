@@ -865,8 +865,87 @@ separately as future investment areas rather than near-term tasks.
    - Update `docs/layered-core-architecture.md` with actual final directories.
    - Record any remaining compatibility shims and follow-up cleanup tasks.
 
+### Core Independence
+
+95. [x] Move graph model DTOs behind core-owned exports.
+   - Add core-facing graph node, relationship, label, and relationship-type
+     exports without changing the stored graph schema.
+   - Make contracts and integrations import graph DTOs from `src/core/` instead
+     of directly from `src/graph/model`.
+   - Keep legacy `src/graph/model` imports working as compatibility aliases
+     until all callers migrate.
+
+96. [x] Move scan report and scan result DTOs behind core-owned exports.
+   - Add core-facing scan report, scan status, parse plan, and build result
+     exports.
+   - Make core contracts, commands, adapters, and tests consume these exports
+     where practical.
+   - Preserve public JSON report shape and existing command output.
+
+97. [x] Introduce a core scan orchestrator service.
+   - Move the high-level scan orchestration contract implementation into
+     `src/core/scan/` while delegating existing low-level scanner helpers.
+   - Keep parser discovery, parse result aggregation, graph finalization,
+     incremental manifest handling, and reporting behavior unchanged.
+   - Validate with typecheck, unit tests, build, verify:rc, and standing smoke.
+
+98. [x] Add a core integration registry for languages and semantic contributors.
+   - Replace direct scanner-facing parser registry wiring with a core registry
+     that owns language parsers, language resolvers, and semantic contributors.
+   - Keep JavaScript/TypeScript, Python, Go, and Rust integrations registered
+     through the same public behavior.
+   - Add tests that prove new integrations can be registered without editing
+     scanner orchestration internals.
+
+99. [x] Thin command implementations into platform adapters.
+   - Add CLI/export/smoke/MCP adapter entry points that call core services and
+     platform adapters instead of scanner internals.
+   - Keep command flags, default paths, stdout summaries, JSON reports, and
+     exit behavior stable.
+   - Preserve Kuzu retry, schema, and report compatibility through adapter
+     boundaries.
+
+100. [x] Tighten architecture guardrails after core DTO migration.
+   - Update dependency boundary tests so core contracts no longer import
+     scanner or legacy graph modules after DTO aliases are in place.
+   - Add checks that commands and platform adapters do not leak back into core
+     or language/framework integrations.
+   - Include the tightened guardrails in release-candidate validation.
+
+101. [ ] Split shared JS/TS HTTP route semantics into explicit framework wiring.
+   - Keep the shared HTTP route extractor where it reduces duplication, but
+     wire Express/Koa and Fastify through explicit framework modules.
+   - Add tests that cover Express/Koa and Fastify through their framework module
+     boundaries.
+   - Preserve all current route, lifecycle, full-path, and smoke counts.
+
+102. [ ] Move remaining stable scanner helpers into core packages.
+   - Identify scanner helpers that are platform/language independent, such as
+     parse planning, file classification contracts, report assembly, and
+     graph-finalization coordination.
+   - Move them incrementally into `src/core/scan/` or `src/core/incremental/`
+     with compatibility re-exports.
+   - Keep low-level filesystem scanning and legacy scanner imports working
+     until callers migrate.
+
+103. [ ] Document and deprecate compatibility aliases.
+   - Update architecture docs with the final core-owned DTO/service boundaries.
+   - Mark legacy scanner/graph import paths as compatibility aliases where
+     applicable.
+   - Add a cleanup checklist for removing aliases in a later breaking or major
+     internal migration.
+
+104. [ ] Run full core-independence validation.
+   - Run typecheck, unit tests, build, verify:rc, standing smoke, internet smoke,
+     incremental benchmark, MCP stdio smoke, and architecture guardrails.
+   - Compare smoke counts against the task 94 baseline and document intentional
+     count changes.
+   - Update development and architecture docs with the final status of tasks
+     95 through 103.
+
 ## Current Priority
 
 Milestones 8, 9, 10, 11, and 12 are complete. Incremental Scanning tasks 79
-through 83 are complete. MCP Server tasks 84 through 86 are complete. Start
-Layered Core Architecture work with task 87.
+through 83 are complete. MCP Server tasks 84 through 86 are complete. Layered
+Core Architecture tasks 87 through 94 are complete. Core Independence tasks 95
+through 100 are complete. Continue with task 101.

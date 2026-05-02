@@ -3,6 +3,10 @@ import path from "node:path";
 import { describe, it } from "node:test";
 import type { IGraphContributor } from "../src/core/contracts/graph-contributor.js";
 import type { ILanguageParser } from "../src/core/contracts/language-parser.js";
+import type { GraphNode as CoreGraphNode, ParsedSourceFile as CoreParsedSourceFile } from "../src/core/graph/model.js";
+import type { BuildCodeGraphResult, IncrementalMode, ScanManifest, ScanReport } from "../src/core/scan/index.js";
+import { buildCodeGraph as coreBuildCodeGraph, createScanReport, scanOrchestrator as coreScanOrchestrator } from "../src/core/scan/index.js";
+import { CoreIntegrationRegistry } from "../src/core/integrations/index.js";
 import { GraphBuilder } from "../src/graph/builder.js";
 import type { LanguageParser } from "../src/parsers/types.js";
 import {
@@ -27,6 +31,43 @@ describe("Core contract conformance", () => {
     const builder = new GraphBuilder();
     const _contrib: IGraphContributor = builder;
     assert.ok(_contrib);
+  });
+
+  it("core graph DTO exports provide the graph model surface", () => {
+    const fileNode: CoreGraphNode = {
+      id: "file:index.ts",
+      label: "File",
+      properties: { relativePath: "index.ts", language: "typescript" },
+    };
+    const parsed: CoreParsedSourceFile = {
+      fileNodeId: fileNode.id,
+      nodes: [fileNode],
+      relationships: [],
+    };
+
+    assert.equal(parsed.nodes[0]?.label, "File");
+  });
+
+  it("core scan DTO exports provide the scan report and result surface", () => {
+    const incrementalMode: IncrementalMode = "full";
+    const report: ScanReport = createScanReport(1, 1);
+    const manifest: ScanManifest = {
+      version: 1,
+      rootPath: fixturesRoot,
+      hashAlgorithm: "sha256",
+      generatedAt: "2026-05-02T00:00:00.000Z",
+      files: [],
+    };
+    const result: BuildCodeGraphResult = {
+      rootPath: fixturesRoot,
+      nodes: [],
+      relationships: [],
+      report,
+      manifest,
+    };
+
+    assert.equal(incrementalMode, "full");
+    assert.equal(result.report.status, "success");
   });
 
   it("LanguageParser satisfies ILanguageParser", () => {
@@ -69,6 +110,46 @@ describe("Core contract conformance", () => {
 
   it("scanOrchestrator satisfies IScanOrchestrator", () => {
     assert.equal(typeof scanOrchestrator.buildGraph, "function");
+  });
+
+  it("core scan module owns the scan orchestrator surface", () => {
+    assert.equal(typeof coreBuildCodeGraph, "function");
+    assert.equal(coreScanOrchestrator.buildGraph, coreBuildCodeGraph);
+  });
+
+  it("core integration registry accepts new integrations without scanner edits", async () => {
+    const registry = new CoreIntegrationRegistry();
+    const parser: ILanguageParser = {
+      language: "custom",
+      async parse() {
+        return {
+          fileNodeId: "file:custom.lang",
+          nodes: [],
+          relationships: [],
+        };
+      },
+    };
+    const resolverCalls: string[] = [];
+    const contributorCalls: string[] = [];
+
+    registry.registerLanguageParser(parser);
+    registry.registerLanguageResolver({
+      resolve() {
+        resolverCalls.push("resolver");
+      },
+    });
+    registry.registerSemanticContributor({
+      contribute() {
+        contributorCalls.push("contributor");
+      },
+    });
+
+    assert.equal(registry.getLanguageParser("custom"), parser);
+    assert.equal(registry.getLanguageIntegration("custom"), parser);
+    await registry.languageResolvers[0]?.resolve(new GraphBuilder(), fixturesRoot, createScanReport(0, 0));
+    await registry.semanticContributors[0]?.contribute(new GraphBuilder(), fixturesRoot, createScanReport(0, 0));
+    assert.deepEqual(resolverCalls, ["resolver"]);
+    assert.deepEqual(contributorCalls, ["contributor"]);
   });
 });
 

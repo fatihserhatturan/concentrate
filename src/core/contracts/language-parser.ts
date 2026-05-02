@@ -1,4 +1,4 @@
-import type { ParsedSourceFile } from "../../graph/model.js";
+import type { ParsedSourceFile } from "../graph/model.js";
 
 export interface ILanguageParser {
   readonly language: string;

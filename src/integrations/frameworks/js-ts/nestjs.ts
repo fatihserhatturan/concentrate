@@ -1,4 +1,4 @@
-import type { GraphNode, GraphRelationship } from "../../../graph/model.js";
+import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import { createNestJsRouteGraph } from "../../../parsers/js-ts/routes.js";
 import { GraphBuilder } from "../../../graph/builder.js";
 import { addNestJsModuleRelationships } from "../../../scanner/resolution/nestjs-modules.js";

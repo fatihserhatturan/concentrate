@@ -1,4 +1,4 @@
-import type { ScanReport } from "../scanner/report.js";
+import type { ScanReport } from "../core/scan/report.js";
 
 export function printScanReport(
   report: ScanReport,

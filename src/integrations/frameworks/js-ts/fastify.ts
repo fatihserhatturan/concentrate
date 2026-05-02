@@ -1,5 +1,5 @@
 import type Parser from "tree-sitter";
-import type { GraphNode, GraphRelationship } from "../../../graph/model.js";
+import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import { createExpressKoaRouteGraph } from "../../../parsers/js-ts/routes.js";
 import { GraphBuilder } from "../../../graph/builder.js";
 import { resolveRouteFullPaths } from "../../../scanner/resolution/route-paths.js";

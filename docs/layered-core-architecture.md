@@ -125,10 +125,12 @@ Enforced by `tests/guardrails.test.ts`:
 
 | Module | May import from | Must not import from |
 | --- | --- | --- |
-| `src/core/contracts/` | `src/graph/model`, `src/scanner/report`, `src/scanner/build-code-graph-types`, each other | `src/integrations/`, `src/parsers/languages/`, `src/graph/kuzu*`, `src/adapters/` |
-| `src/integrations/languages/` | `src/core/`, `src/parsers/`, `src/graph/model` | `src/integrations/frameworks/`, `src/commands/` |
-| `src/integrations/frameworks/` | `src/core/`, `src/integrations/languages/`, `src/parsers/`, `src/graph/model` | `src/commands/`, `src/adapters/` |
-| `src/core/adapters/` | anything — this is the wiring layer | — |
+| `src/core/contracts/` | `src/core/graph`, `src/core/scan`, each other | `src/scanner/`, `src/graph/`, `src/integrations/`, `src/parsers/`, `src/adapters/`, `src/commands/` |
+| `src/core/` | core modules, temporary scanner/parser/legacy graph shims where documented | `src/adapters/cli/`, `src/adapters/kuzu/`, `src/adapters/mcp/`, `src/commands/` |
+| `src/integrations/languages/` | `src/core/`, `src/parsers/` | `src/integrations/frameworks/`, `src/commands/` |
+| `src/integrations/frameworks/` | `src/core/`, `src/integrations/languages/`, `src/parsers/` | `src/commands/`, `src/adapters/` |
+| `src/commands/` | `src/adapters/cli/` | `src/core/`, `src/scanner/`, `src/graph/`, `src/parsers/`, `src/integrations/` |
+| `src/core/adapters/` | core compatibility wiring | platform adapters and commands |
 | `src/adapters/` | anything — this is the platform adapter layer | — |
 
 ## Proposed Directory Shape
@@ -168,11 +170,14 @@ The target shape is a destination, not a requirement for the first task.
 
 ## Current Migration Snapshot
 
-Implemented directories after tasks 87 through 94:
+Implemented directories after tasks 87 through 100:
 
 ```text
 src/core/
   contracts/
+  graph/
+  integrations/
+  scan/
   adapters/
 
 src/integrations/languages/
@@ -190,45 +195,58 @@ src/integrations/frameworks/js-ts/
   nestjs.ts
 
 src/adapters/
+  cli/
   kuzu/
   mcp/
 ```
 
 Remaining compatibility shims:
 
-- Core contracts still reuse `src/graph/model`, `src/scanner/report`, and
-  `src/scanner/build-code-graph-types` until graph/report types move into the
-  core package.
-- `src/core/adapters/` wraps the existing scanner pipeline instead of owning a
-  fully independent core orchestrator.
+- Core graph DTO exports currently alias `src/graph/model` until the legacy
+  graph model module can become a compatibility facade around core-owned types.
+- Core scan DTO exports currently alias scanner report/result/manifest/parse
+  plan modules until the legacy scanner modules can become compatibility
+  facades around core-owned types.
+- Core integration registry owns scan parsers, language-boundary parsers,
+  language resolvers, and semantic contributors while compatibility adapter
+  exports remain available.
+- CLI command modules delegate to `src/adapters/cli/` entry points; those
+  adapters call core services and Kuzu/MCP platform adapters while preserving
+  command output compatibility.
+- Dependency guardrails resolve relative imports to concrete `src/...` paths
+  and enforce core contract, command, core/platform, and integration/platform
+  boundaries.
+- `src/core/adapters/` keeps compatibility re-exports for older wiring paths.
 - CLI/export/smoke/MCP commands now enter through core/platform adapters where
-  practical, but command implementations still import report, schema, parse
-  plan, and retry internals for existing public output compatibility.
+  practical, but command implementations still import schema and retry internals
+  for existing public output compatibility.
 
 Follow-up cleanup tasks:
 
-- Move stable graph/report/result DTOs into `src/core/` once the adapter
-  contracts settle.
+- Turn legacy graph/report/result modules into compatibility facades once the
+  core-owned DTO aliases settle.
 - Split framework parse-time modules further where shared HTTP route detection
   becomes too broad for framework-specific behavior.
 - Add first-class CLI/export adapters if command output compatibility no
-  longer needs direct scanner/report imports.
+  longer needs direct schema/retry imports.
 
 ## Next Phase: Core Independence
 
 The next migration phase keeps the shell architecture in place while moving
 stable ownership into the core. The intended order is:
 
-1. Publish core-owned graph DTO exports, then migrate contracts/integrations to
-   those exports.
+1. Publish core-owned graph DTO exports and migrate contracts/integrations to
+   those exports. This is complete for task 95.
 2. Publish core-owned scan report/result DTO exports and preserve existing JSON
-   shapes through compatibility aliases.
+   shapes through compatibility aliases. This is complete for task 96.
 3. Move high-level scan orchestration into `src/core/scan/`, delegating legacy
-   helpers until each helper has a safe home.
+   helpers until each helper has a safe home. This is complete for task 97.
 4. Let command and platform adapters call the core service instead of scanner
-   internals.
+   internals. Core parser/resolver/contributor registry ownership is complete
+   for task 98, and command thinning is complete for task 99.
 5. Tighten guardrails so the temporary core-to-scanner/graph allowances shrink
-   as each alias is removed.
+   as each alias is removed. Initial tightened guardrails are complete for task
+   100 and run through `npm test`/`npm run verify:rc`.
 
 This phase should not change graph schema, CLI behavior, smoke report shape, or
 MCP tool output except where a task explicitly documents an intentional semantic

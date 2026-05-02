@@ -1,4 +1,4 @@
-import type { ScanReport } from "../../scanner/report.js";
+import type { ScanReport } from "../scan/report.js";
 import type { IGraphContributor } from "./graph-contributor.js";
 
 export interface ISemanticContributor {
