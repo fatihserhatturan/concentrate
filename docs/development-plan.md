@@ -912,14 +912,14 @@ separately as future investment areas rather than near-term tasks.
      or language/framework integrations.
    - Include the tightened guardrails in release-candidate validation.
 
-101. [ ] Split shared JS/TS HTTP route semantics into explicit framework wiring.
+101. [x] Split shared JS/TS HTTP route semantics into explicit framework wiring.
    - Keep the shared HTTP route extractor where it reduces duplication, but
      wire Express/Koa and Fastify through explicit framework modules.
    - Add tests that cover Express/Koa and Fastify through their framework module
      boundaries.
    - Preserve all current route, lifecycle, full-path, and smoke counts.
 
-102. [ ] Move remaining stable scanner helpers into core packages.
+102. [x] Move remaining stable scanner helpers into core packages.
    - Identify scanner helpers that are platform/language independent, such as
      parse planning, file classification contracts, report assembly, and
      graph-finalization coordination.
@@ -928,14 +928,14 @@ separately as future investment areas rather than near-term tasks.
    - Keep low-level filesystem scanning and legacy scanner imports working
      until callers migrate.
 
-103. [ ] Document and deprecate compatibility aliases.
+103. [x] Document and deprecate compatibility aliases.
    - Update architecture docs with the final core-owned DTO/service boundaries.
    - Mark legacy scanner/graph import paths as compatibility aliases where
      applicable.
    - Add a cleanup checklist for removing aliases in a later breaking or major
      internal migration.
 
-104. [ ] Run full core-independence validation.
+104. [x] Run full core-independence validation.
    - Run typecheck, unit tests, build, verify:rc, standing smoke, internet smoke,
      incremental benchmark, MCP stdio smoke, and architecture guardrails.
    - Compare smoke counts against the task 94 baseline and document intentional
@@ -948,4 +948,4 @@ separately as future investment areas rather than near-term tasks.
 Milestones 8, 9, 10, 11, and 12 are complete. Incremental Scanning tasks 79
 through 83 are complete. MCP Server tasks 84 through 86 are complete. Layered
 Core Architecture tasks 87 through 94 are complete. Core Independence tasks 95
-through 100 are complete. Continue with task 101.
+through 104 are complete. All Core Independence tasks (95–104) are done.

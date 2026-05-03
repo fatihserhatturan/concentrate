@@ -49,6 +49,7 @@ import {
   isObjectLiteralHandlerFunction,
 } from "../js-ts/declarations.js";
 import { applyExpressKoaParseSemantics } from "../../integrations/frameworks/js-ts/express-koa.js";
+import { applyFastifyParseSemantics } from "../../integrations/frameworks/js-ts/fastify.js";
 import { applyNestJsParseSemantics } from "../../integrations/frameworks/js-ts/nestjs.js";
 import { applyBackendEntrypointParseSemantics } from "../../integrations/frameworks/js-ts/backend-entrypoints.js";
 import { applyEnvConfigParseSemantics } from "../../integrations/frameworks/js-ts/env-config.js";
@@ -291,6 +292,7 @@ function applyFrameworkSemantics(
   );
 
   applyExpressKoaParseSemantics(fileNodeId, tree.rootNode, parsed.nodes, parsed.relationships);
+  applyFastifyParseSemantics(fileNodeId, tree.rootNode, parsed.nodes, parsed.relationships);
   applyNestJsParseSemantics(fileNodeId, parsed.nodes, parsed.relationships);
   applyBackendEntrypointParseSemantics(fileNodeId, tree.rootNode, parsed.nodes, parsed.relationships);
 }
@@ -327,6 +329,34 @@ export async function parseJsTsLanguageOnly(
   state.nodes.unshift(fileNode);
 
   return finalizeLanguageLevel(fileNodeId, tree, state);
+}
+
+// Language-only parse that also returns the tree root node for framework
+// module boundary tests that need to call applyXxxParseSemantics directly.
+export async function parseJsTsWithRootNode(
+  rootPath: string,
+  filePath: string,
+  language: SupportedLanguage,
+): Promise<{ parsed: ParsedSourceFile; rootNode: Parser.SyntaxNode }> {
+  const source = await readFile(filePath, "utf8");
+  const relativePath = path.relative(rootPath, filePath);
+  const fileNodeId = `file:${relativePath}`;
+
+  const fileNode: GraphNode = {
+    id: fileNodeId,
+    label: "File",
+    properties: { path: filePath, relativePath, language },
+  };
+
+  const tree = parseTree(source, language);
+  if (tree.rootNode.hasError) {
+    throw new Error("Syntax error");
+  }
+
+  const state = walkJsTsNodes(fileNodeId, tree, language);
+  state.nodes.unshift(fileNode);
+
+  return { parsed: finalizeLanguageLevel(fileNodeId, tree, state), rootNode: tree.rootNode };
 }
 
 // ─── Full parse (language + framework semantics) ──────────────────────────────

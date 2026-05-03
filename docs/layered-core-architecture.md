@@ -170,7 +170,7 @@ The target shape is a destination, not a requirement for the first task.
 
 ## Current Migration Snapshot
 
-Implemented directories after tasks 87 through 100:
+Implemented directories after tasks 87 through 103:
 
 ```text
 src/core/
@@ -200,57 +200,151 @@ src/adapters/
   mcp/
 ```
 
-Remaining compatibility shims:
+### Core-Owned Boundaries (tasks 95–103)
 
-- Core graph DTO exports currently alias `src/graph/model` until the legacy
-  graph model module can become a compatibility facade around core-owned types.
-- Core scan DTO exports currently alias scanner report/result/manifest/parse
-  plan modules until the legacy scanner modules can become compatibility
-  facades around core-owned types.
-- Core integration registry owns scan parsers, language-boundary parsers,
-  language resolvers, and semantic contributors while compatibility adapter
-  exports remain available.
-- CLI command modules delegate to `src/adapters/cli/` entry points; those
-  adapters call core services and Kuzu/MCP platform adapters while preserving
-  command output compatibility.
-- Dependency guardrails resolve relative imports to concrete `src/...` paths
-  and enforce core contract, command, core/platform, and integration/platform
-  boundaries.
-- `src/core/adapters/` keeps compatibility re-exports for older wiring paths.
-- CLI/export/smoke/MCP commands now enter through core/platform adapters where
-  practical, but command implementations still import schema and retry internals
-  for existing public output compatibility.
+The following modules now live in `src/core/` and are the authoritative source.
+Legacy `src/scanner/` and `src/graph/` paths are compatibility facades where
+indicated.
 
-Follow-up cleanup tasks:
+| Core module | Canonical location | Legacy compat path |
+| --- | --- | --- |
+| Graph node/relationship model | `src/core/graph/model.ts` re-exports `src/graph/model.ts` | `src/graph/model.ts` (still canonical — direction not yet flipped) |
+| File classification | `src/core/scan/file-classification.ts` | `src/scanner/file-classification.ts` ← compat facade |
+| Parse plan | `src/core/scan/parse-plan.ts` | `src/scanner/parse-plan.ts` ← compat facade |
+| Scan report / warnings | `src/core/scan/report.ts` | `src/scanner/report.ts` ← compat facade |
+| BuildCodeGraph result/options | `src/core/scan/result.ts` | `src/scanner/build-code-graph-types.ts` ← compat facade |
+| Scan manifest types | `src/core/scan/manifest.ts` re-exports `src/scanner/scan-manifest.ts` | `src/scanner/scan-manifest.ts` (FS-bound — not yet flipped) |
+| Scan orchestrator | `src/core/scan/orchestrator.ts` | — |
+| Integration registry | `src/core/integrations/` | — |
 
-- Turn legacy graph/report/result modules into compatibility facades once the
-  core-owned DTO aliases settle.
-- Split framework parse-time modules further where shared HTTP route detection
-  becomes too broad for framework-specific behavior.
-- Add first-class CLI/export adapters if command output compatibility no
-  longer needs direct schema/retry imports.
+### Remaining Active Scanner Modules (not yet moved)
 
-## Next Phase: Core Independence
+These scanner files still contain real implementations and have not been moved
+to core. They remain in `src/scanner/` intentionally:
 
-The next migration phase keeps the shell architecture in place while moving
-stable ownership into the core. The intended order is:
+- `scan-manifest.ts` — filesystem I/O (readFile, stat, crypto); should move
+  once a core I/O abstraction is introduced.
+- `source-files.ts` — language detection for discovered files; tightly coupled
+  to `scan-manifest.ts`.
+- `build-code-graph.ts` — scan entry point; delegates to core orchestrator but
+  handles Kuzu writes and report printing.
+- `directory-graph.ts`, `discover-files.ts`, `concurrency.ts` — low-level
+  filesystem and concurrency helpers.
+- `graph-finalize.ts` — post-parse relationship resolution; calls the core
+  integration registry.
+- `parse-results.ts`, `parse-source.ts` — parse aggregation and dispatch.
+- `project-config.ts`, `workspace-packages.ts` — project and monorepo config
+  reading.
+- `language.ts` — file extension to language mapping.
+- `resolution/` — import, call, inheritance, and framework-specific resolvers.
+
+### Compatibility Alias Cleanup Checklist
+
+The following aliases exist to preserve backward compatibility while callers
+migrate to core-owned paths. Remove each alias only after verifying that no
+`src/` file imports the legacy path.
+
+**Ready to clean up (compat facades pointing at core):**
+
+1. `src/scanner/file-classification.ts`
+   - Remove once all callers import from `src/core/scan/file-classification.js`.
+   - Check: `grep -r "scanner/file-classification" src/`
+
+2. `src/scanner/parse-plan.ts`
+   - Remove once all callers import from `src/core/scan/parse-plan.js`.
+   - Check: `grep -r "scanner/parse-plan" src/`
+
+3. `src/scanner/report.ts`
+   - Remove once all callers import from `src/core/scan/report.js`.
+   - Check: `grep -r "scanner/report" src/`
+
+4. `src/scanner/build-code-graph-types.ts`
+   - Remove once all callers import from `src/core/scan/result.js`.
+   - Check: `grep -r "scanner/build-code-graph-types" src/`
+
+**Pending direction flip (core currently re-exports from legacy):**
+
+5. `src/core/graph/model.ts` re-exports from `src/graph/model.ts`.
+   - When ready: copy implementation to `src/core/graph/model.ts`, turn
+     `src/graph/model.ts` into a compat facade re-exporting from core.
+   - Prerequisite: verify all `src/graph/model` importers can tolerate the
+     path change or update them to use `src/core/graph/model`.
+
+6. `src/core/scan/manifest.ts` re-exports from `src/scanner/scan-manifest.ts`.
+   - When ready: introduce a core I/O abstraction, move FS-bound logic behind
+     it, then flip the direction as with the scan DTO files.
+
+**Adapters and wiring shims:**
+
+7. `src/core/adapters/` — compatibility re-exports kept for older wiring paths.
+   - Remove once downstream callers use the direct core or platform adapter
+     paths.
+
+8. `src/core/scan/report.ts` and `src/core/scan/parse-plan.ts` import
+   `createUncheckedIncrementalEligibility` and types from
+   `src/scanner/scan-manifest.ts` as documented shims. Update to core paths
+   when item 6 above is resolved.
+
+9. `src/core/scan/parse-plan.ts` imports `SupportedSourceFile` from
+   `src/scanner/source-files.ts` as a documented shim. Update when
+   `source-files.ts` moves or its type is duplicated in core.
+
+**Removing a compat alias — general steps:**
+1. Run `grep -r "legacy/path" src/` and update each caller to the core path.
+2. Delete the compat file.
+3. Run `npm run typecheck && npm test && npm run build` to confirm no breakage.
+4. Update this checklist.
+
+## Core Independence Phase (tasks 95–103) — Completed
+
+This phase moved stable ownership into the core while preserving all public
+behavior. Each step is now complete:
 
 1. Publish core-owned graph DTO exports and migrate contracts/integrations to
-   those exports. This is complete for task 95.
+   those exports. **Complete — task 95.**
 2. Publish core-owned scan report/result DTO exports and preserve existing JSON
-   shapes through compatibility aliases. This is complete for task 96.
+   shapes through compatibility aliases. **Complete — task 96.**
 3. Move high-level scan orchestration into `src/core/scan/`, delegating legacy
-   helpers until each helper has a safe home. This is complete for task 97.
+   helpers until each helper has a safe home. **Complete — task 97.**
 4. Let command and platform adapters call the core service instead of scanner
-   internals. Core parser/resolver/contributor registry ownership is complete
-   for task 98, and command thinning is complete for task 99.
+   internals. Core parser/resolver/contributor registry ownership and command
+   thinning. **Complete — tasks 98–99.**
 5. Tighten guardrails so the temporary core-to-scanner/graph allowances shrink
-   as each alias is removed. Initial tightened guardrails are complete for task
-   100 and run through `npm test`/`npm run verify:rc`.
+   as each alias is removed. **Complete — task 100.**
+6. Split shared JS/TS HTTP route semantics so Express/Koa and Fastify are wired
+   through their own framework modules. **Complete — task 101.**
+7. Move stable scanner helpers (file-classification, parse-plan, report,
+   build-code-graph-types) into `src/core/scan/` and turn the legacy scanner
+   paths into compatibility facades. **Complete — task 102.**
+8. Document and deprecate compatibility aliases; add cleanup checklist.
+   **Complete — task 103.**
 
 This phase should not change graph schema, CLI behavior, smoke report shape, or
 MCP tool output except where a task explicitly documents an intentional semantic
 count improvement.
+
+### Validation Run — Task 104 (2026-05-03)
+
+All checks passed. Smoke counts are identical to the task 100 baseline —
+tasks 101–103 introduced no regressions.
+
+```
+npm run typecheck   ✓
+npm test            ✓  161/161 tests, 18 suites
+npm run build       ✓
+standing smoke      ✓  express, fastify, nestjs-starter, ky — all passed
+incremental bench   ✓  7/7 repos passed; incremental write times 56–97 ms vs full 951–34,414 ms
+MCP stdio smoke     ✓  2/2 tests passed
+```
+
+Standing smoke counts (schema version 34, unchanged from task 100 baseline):
+
+| Sample | Parsed files | Nodes | Relationships | Routes |
+| --- | --- | --- | --- | --- |
+| express | 141 | 3281 | 4130 | 91 |
+| fastify | 18 | 339 | 392 | 1 |
+| nestjs-starter | 7 | 68 | 95 | 1 |
+| ky | 52 | 5494 | 6926 | 0 |
 
 Validation run for task 94:
 

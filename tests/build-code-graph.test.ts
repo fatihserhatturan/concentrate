@@ -8,6 +8,9 @@ import { scanCommand } from "../src/commands/scan.js";
 import { KuzuGraphWriter } from "../src/graph/kuzu-writer.js";
 import { SCHEMA_VERSION } from "../src/graph/schema.js";
 import { getLanguageParser } from "../src/parsers/index.js";
+import { parseJsTsWithRootNode } from "../src/parsers/languages/javascript-like.js";
+import { applyExpressKoaParseSemantics } from "../src/integrations/frameworks/js-ts/express-koa.js";
+import { applyFastifyParseSemantics } from "../src/integrations/frameworks/js-ts/fastify.js";
 import { parseTsconfig } from "../src/scanner/resolution/tsconfig.js";
 import type { GraphNode, GraphRelationship, GraphNodeLabel, GraphRelationshipType } from "../src/graph/model.js";
 
@@ -2131,3 +2134,43 @@ function callsForFunction(
 
   return calls.sort();
 }
+
+describe("framework module wiring", () => {
+  const expressKoaFixture = path.join(fixturesRoot, "express-koa-routes", "routes.ts");
+  const fastifyFixture = path.join(fixturesRoot, "fastify-routes", "server.ts");
+  const root = fixturesRoot;
+
+  it("applyExpressKoaParseSemantics produces express-koa routes from an Express fixture", async () => {
+    const { parsed, rootNode } = await parseJsTsWithRootNode(root, expressKoaFixture, "typescript");
+    applyExpressKoaParseSemantics(parsed.fileNodeId, rootNode, parsed.nodes, parsed.relationships);
+    const routes = parsed.nodes.filter((n) => n.label === "Route");
+    assert.ok(routes.length > 0, "Expected Express/Koa routes");
+    for (const route of routes) {
+      assert.equal(route.properties.framework, "express-koa", `Unexpected framework on route ${route.properties.path}`);
+    }
+  });
+
+  it("applyFastifyParseSemantics produces fastify routes from a Fastify fixture", async () => {
+    const { parsed, rootNode } = await parseJsTsWithRootNode(root, fastifyFixture, "javascript");
+    applyFastifyParseSemantics(parsed.fileNodeId, rootNode, parsed.nodes, parsed.relationships);
+    const routes = parsed.nodes.filter((n) => n.label === "Route");
+    assert.ok(routes.length > 0, "Expected Fastify routes");
+    for (const route of routes) {
+      assert.equal(route.properties.framework, "fastify", `Unexpected framework on route ${route.properties.path}`);
+    }
+  });
+
+  it("applyExpressKoaParseSemantics produces no routes from a Fastify fixture", async () => {
+    const { parsed, rootNode } = await parseJsTsWithRootNode(root, fastifyFixture, "javascript");
+    applyExpressKoaParseSemantics(parsed.fileNodeId, rootNode, parsed.nodes, parsed.relationships);
+    const routes = parsed.nodes.filter((n) => n.label === "Route");
+    assert.equal(routes.length, 0, "Express/Koa module must not process Fastify receivers");
+  });
+
+  it("applyFastifyParseSemantics produces no routes from an Express/Koa fixture", async () => {
+    const { parsed, rootNode } = await parseJsTsWithRootNode(root, expressKoaFixture, "typescript");
+    applyFastifyParseSemantics(parsed.fileNodeId, rootNode, parsed.nodes, parsed.relationships);
+    const routes = parsed.nodes.filter((n) => n.label === "Route");
+    assert.equal(routes.length, 0, "Fastify module must not process Express/Koa receivers");
+  });
+});

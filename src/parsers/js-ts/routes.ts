@@ -2,6 +2,8 @@ import type Parser from "tree-sitter";
 import type { GraphNode, GraphRelationship } from "../../graph/model.js";
 import { analyzeMemberCallExpression } from "../tree-sitter-utils.js";
 
+type FrameworkFilter = "express-koa" | "fastify";
+
 const routeMethods = new Set([
   "all",
   "delete",
@@ -47,6 +49,25 @@ export function createExpressKoaRouteGraph(
   nodes: GraphNode[],
   relationships: GraphRelationship[],
 ): { nodes: GraphNode[]; relationships: GraphRelationship[] } {
+  return createHttpRouteGraph(fileNodeId, programNode, nodes, relationships, "express-koa");
+}
+
+export function createFastifyRouteGraph(
+  fileNodeId: string,
+  programNode: Parser.SyntaxNode,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+): { nodes: GraphNode[]; relationships: GraphRelationship[] } {
+  return createHttpRouteGraph(fileNodeId, programNode, nodes, relationships, "fastify");
+}
+
+function createHttpRouteGraph(
+  fileNodeId: string,
+  programNode: Parser.SyntaxNode,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+  frameworkFilter: FrameworkFilter,
+): { nodes: GraphNode[]; relationships: GraphRelationship[] } {
   const routeNodes: GraphNode[] = [];
   const routeRelationships: GraphRelationship[] = [];
   const functionsByName = indexFileFunctions(fileNodeId, nodes, relationships);
@@ -56,7 +77,7 @@ export function createExpressKoaRouteGraph(
   const functionIdsByName = functionsByName;
 
   for (const callExpr of moduleLevelCallExpressions(programNode)) {
-    const routes = createRouteNodes(fileNodeId, callExpr, stringConstantsByName);
+    const routes = createRouteNodes(fileNodeId, callExpr, stringConstantsByName, frameworkFilter);
 
     for (const route of routes) {
       routeNodes.push(route.node);
@@ -102,7 +123,7 @@ export function createExpressKoaRouteGraph(
       routeRelationships.push(...createLifecycleRelationships(route.node.id, route.lifecycleSteps, functionIdsByName));
     }
 
-    routeRelationships.push(...createMountRelationships(callExpr, variablesByName, functionsByName, stringConstantsByName));
+    routeRelationships.push(...createMountRelationships(callExpr, variablesByName, functionsByName, stringConstantsByName, frameworkFilter));
   }
 
   return { nodes: routeNodes, relationships: routeRelationships };
@@ -179,9 +200,14 @@ function createMountRelationships(
   variablesByName: Map<string, string>,
   functionsByName: Map<string, string>,
   stringConstantsByName: Map<string, string>,
+  frameworkFilter: FrameworkFilter,
 ): GraphRelationship[] {
   const parts = analyzeMemberCallExpression(callExpr.childForFieldName("function")?.text);
   if (!parts || !isMountCall(parts) || !isRouteReceiver(parts.receiver)) {
+    return [];
+  }
+
+  if (!matchesFrameworkFilter(parts.receiver, frameworkFilter)) {
     return [];
   }
 
@@ -224,9 +250,14 @@ function createRouteNodes(
   fileNodeId: string,
   callExpr: Parser.SyntaxNode,
   stringConstantsByName: Map<string, string>,
+  frameworkFilter: FrameworkFilter,
 ): RouteCandidate[] {
   const parts = analyzeMemberCallExpression(callExpr.childForFieldName("function")?.text);
   if (!parts || !isRouteReceiver(parts.receiver)) {
+    return [];
+  }
+
+  if (!matchesFrameworkFilter(parts.receiver, frameworkFilter)) {
     return [];
   }
 
@@ -636,6 +667,10 @@ function isFastifyReceiver(receiver: string | null): boolean {
   if (!receiver) return false;
   const root = receiver.split(".")[0] ?? receiver;
   return root === "fastify";
+}
+
+function matchesFrameworkFilter(receiver: string | null, filter: FrameworkFilter): boolean {
+  return filter === "fastify" ? isFastifyReceiver(receiver) : !isFastifyReceiver(receiver);
 }
 
 function isRouteReceiver(receiver: string | null): boolean {
