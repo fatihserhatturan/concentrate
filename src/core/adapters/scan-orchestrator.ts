@@ -1,1 +1,1 @@
-export { scanOrchestrator } from "../scan/orchestrator.js";
+export { scanOrchestrator } from "../../composition/orchestrator.js";

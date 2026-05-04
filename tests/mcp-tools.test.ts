@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { buildCodeGraph } from "../src/core/scan/orchestrator.js";
+import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { KuzuGraphWriter } from "../src/adapters/kuzu/kuzu-writer.js";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { handleMcpRequest } from "../src/adapters/mcp/server.js";

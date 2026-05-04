@@ -16,18 +16,28 @@ import {
 import { filterSupportedSourceFiles } from "./source-files.js";
 import { addWorkspacePackageGraph } from "./workspace-packages.js";
 import type { IScanOrchestrator } from "../contracts/scan-orchestrator.js";
+import type { ILanguageParser } from "../contracts/language-parser.js";
+import type { ILanguageResolver } from "../contracts/language-resolver.js";
+import type { ISemanticContributor } from "../contracts/semantic-contributor.js";
 import { createParsePlan } from "./parse-plan.js";
 import type { ScanReport } from "./report.js";
 import { createScanReport } from "./report.js";
 import type { BuildCodeGraphOptions, BuildCodeGraphResult } from "./result.js";
 
-export const scanOrchestrator: IScanOrchestrator = {
-  buildGraph: buildCodeGraph,
-};
+export interface ScanDependencies {
+  getParser: (language: string) => ILanguageParser;
+  resolvers: readonly ILanguageResolver[];
+  contributors: readonly ISemanticContributor[];
+}
+
+export function createScanOrchestrator(deps: ScanDependencies): IScanOrchestrator {
+  return { buildGraph: (projectPath, options) => buildCodeGraph(projectPath, options, deps) };
+}
 
 export async function buildCodeGraph(
   projectPath: string,
   options: BuildCodeGraphOptions,
+  deps: ScanDependencies,
 ): Promise<BuildCodeGraphResult> {
   const rootPath = path.resolve(projectPath);
   const repoNodeId = `repo:${rootPath}`;
@@ -80,7 +90,8 @@ export async function buildCodeGraph(
       const current = ++progressCount;
       options.onProgress?.(current, supportedFiles.length, path.relative(rootPath, filePath));
       try {
-        const parsed = await parseFileWithContext(rootPath, filePath, language);
+        const parser = deps.getParser(language);
+        const parsed = await parseFileWithContext(rootPath, filePath, language, parser);
         return { ok: true, parsed, filePath };
       } catch (error) {
         return { ok: false, error, filePath };
@@ -102,7 +113,7 @@ export async function buildCodeGraph(
   }
 
   await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report);
-  await finalizeGraphRelationships(graph, rootPath, report);
+  await finalizeGraphRelationships(graph, rootPath, report, deps.resolvers, deps.contributors);
   report.status = report.failedFiles.length > 0 ? "partial" : "success";
 
   return createResult(rootPath, graph, report, manifest);

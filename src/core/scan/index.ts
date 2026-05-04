@@ -19,10 +19,8 @@ export type {
   ScanStatus,
   ScanWarning,
 } from "./report.js";
-export {
-  buildCodeGraph,
-  scanOrchestrator,
-} from "./orchestrator.js";
+export { buildCodeGraph, scanOrchestrator } from "../../composition/orchestrator.js";
+export { buildCodeGraph as coreBuildCodeGraph, createScanOrchestrator, type ScanDependencies } from "./orchestrator.js";
 export {
   addScanWarning,
   addUniqueScanWarning,

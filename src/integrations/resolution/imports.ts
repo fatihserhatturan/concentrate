@@ -1,20 +1,20 @@
-import { GraphBuilder } from "../../../../core/graph/builder.js";
+import { GraphBuilder } from "../../core/graph/builder.js";
 import {
   createJsTsConfiguredImportBasePaths,
   readJsTsResolutionConfigWithWarnings,
   type JsTsResolutionConfig,
-} from "./config.js";
-import { readGoResolutionConfig, type GoResolutionConfig } from "../../../../integrations/languages/go/resolution.js";
+} from "../languages/js-ts/resolution/config.js";
+import { readGoResolutionConfig, type GoResolutionConfig } from "../languages/go/resolution.js";
 import {
   isGoFile,
   isJsTsFile,
   isRustFile,
   shouldResolveAbsoluteImport,
-} from "../../../../core/scan/resolution/file-kind.js";
-import { resolveImport } from "./import-dispatch.js";
-import { createFileIndex, createImporterIndex } from "./import-indexes.js";
+} from "../../core/scan/resolution/file-kind.js";
+import { resolveImport } from "../languages/js-ts/resolution/import-dispatch.js";
+import { createFileIndex, createImporterIndex } from "../languages/js-ts/resolution/import-indexes.js";
 import path from "node:path";
-import { addUniqueScanWarning, type ScanReport } from "../../../../core/scan/report.js";
+import { addUniqueScanWarning, type ScanReport } from "../../core/scan/report.js";
 
 export async function addImportResolutionRelationships(
   graph: GraphBuilder,

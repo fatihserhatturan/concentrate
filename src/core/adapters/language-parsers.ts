@@ -1,5 +1,5 @@
 import type { ILanguageParser } from "../contracts/language-parser.js";
-import { coreIntegrationRegistry } from "../integrations/default-registry.js";
+import { coreIntegrationRegistry } from "../../composition/default-registry.js";
 
 export function getParserAdapter(language: string): ILanguageParser {
   return coreIntegrationRegistry.getLanguageParser(language);

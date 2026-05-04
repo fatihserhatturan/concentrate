@@ -114,7 +114,7 @@ describe("Core contract conformance", () => {
 
   it("core scan module owns the scan orchestrator surface", () => {
     assert.equal(typeof coreBuildCodeGraph, "function");
-    assert.equal(coreScanOrchestrator.buildGraph, coreBuildCodeGraph);
+    assert.equal(typeof coreScanOrchestrator.buildGraph, "function");
   });
 
   it("core integration registry accepts new integrations without scanner edits", async () => {

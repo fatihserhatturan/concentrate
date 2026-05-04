@@ -1,31 +1,31 @@
-import { GraphBuilder } from "../graph/builder.js";
-import { addCallResolutionRelationships } from "../scan/resolution/calls.js";
-import { addInheritanceRelationships } from "../scan/resolution/inheritance.js";
-import { addImportResolutionRelationships } from "../../integrations/languages/js-ts/resolution/imports.js";
-import { addImportPackageRelationships } from "../scan/workspace-packages.js";
-import { javascriptParser, typescriptParser } from "../../integrations/frameworks/js-ts/scanner.js";
-import { pythonParser } from "../../integrations/languages/python/parser.js";
-import { goParser } from "../../integrations/languages/go/parser.js";
-import { rustParser } from "../../integrations/languages/rust/parser.js";
+import { addImportResolutionRelationships } from "../integrations/resolution/imports.js";
+import { addImportPackageRelationships } from "../core/scan/workspace-packages.js";
+import { addCallResolutionRelationships } from "../core/scan/resolution/calls.js";
+import { addInheritanceRelationships } from "../core/scan/resolution/inheritance.js";
+import { javascriptParser, typescriptParser } from "../integrations/frameworks/js-ts/scanner.js";
+import { pythonParser } from "../integrations/languages/python/parser.js";
+import { goParser } from "../integrations/languages/go/parser.js";
+import { rustParser } from "../integrations/languages/rust/parser.js";
 import {
   javascriptLanguageParser,
   typescriptLanguageParser,
-} from "../../integrations/languages/js-ts/index.js";
-import { pythonLanguageParser } from "../../integrations/languages/python/index.js";
-import { goLanguageParser } from "../../integrations/languages/go/index.js";
-import { rustLanguageParser } from "../../integrations/languages/rust/index.js";
+} from "../integrations/languages/js-ts/index.js";
+import { pythonLanguageParser } from "../integrations/languages/python/index.js";
+import { goLanguageParser } from "../integrations/languages/go/index.js";
+import { rustLanguageParser } from "../integrations/languages/rust/index.js";
 import {
   nestjsModulesContributor,
   nestjsInjectionContributor,
   instanceMethodContributor,
-} from "../../integrations/frameworks/js-ts/nestjs.js";
-import { routePathContributor } from "../../integrations/frameworks/js-ts/fastify.js";
-import { envConfigContributor } from "../../integrations/frameworks/js-ts/env-config.js";
-import { dataAccessContributor } from "../../integrations/frameworks/js-ts/data-access.js";
-import type { ILanguageResolver } from "../contracts/language-resolver.js";
-import { CoreIntegrationRegistry } from "./registry.js";
+} from "../integrations/frameworks/js-ts/nestjs.js";
+import { routePathContributor } from "../integrations/frameworks/js-ts/fastify.js";
+import { envConfigContributor } from "../integrations/frameworks/js-ts/env-config.js";
+import { dataAccessContributor } from "../integrations/frameworks/js-ts/data-access.js";
+import { GraphBuilder } from "../core/graph/builder.js";
+import type { ILanguageResolver } from "../core/contracts/language-resolver.js";
+import { CoreIntegrationRegistry } from "../core/integrations/registry.js";
 
-export const coreIntegrationRegistry = createDefaultCoreIntegrationRegistry();
+export { CoreIntegrationRegistry };
 
 export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry {
   const registry = new CoreIntegrationRegistry();
@@ -93,10 +93,7 @@ function createDefaultLanguageResolvers(): ILanguageResolver[] {
     },
   };
 
-  return [
-    importResolver,
-    packageImportResolver,
-    inheritanceResolver,
-    callResolver,
-  ];
+  return [importResolver, packageImportResolver, inheritanceResolver, callResolver];
 }
+
+export const coreIntegrationRegistry = createDefaultCoreIntegrationRegistry();
