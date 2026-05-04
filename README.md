@@ -1,41 +1,68 @@
 # Concentrate
 
-Concentrate scans a codebase, extracts a structural code graph, and stores it in an embedded graph database.
+Scans a codebase, extracts a structural code graph, and stores it in an embedded [KuzuDB](https://kuzudb.com) graph database.
 
 ## Supported Languages
 
-- JavaScript / TypeScript
-- Python
-- Go
-- Rust
+JavaScript / TypeScript · Python · Go · Rust
 
-## Current Capabilities
+## What It Extracts
 
-- Discover source files while respecting common ignore rules.
-- Extract file, import, class, function, and call-expression nodes.
-- Persist the normalized graph into Kuzu.
-- Export the normalized graph as JSONL.
-- Query the graph through a small CLI.
+- **Structural nodes** — File, Function, Class, Import, Variable, Decorator, Entrypoint
+- **HTTP routes** — Express, Koa, Fastify, NestJS (with full composed path resolution)
+- **Dependency injection** — NestJS constructor injection chains
+- **Environment usage** — `process.env.*` accesses linked to routes and functions
+- **Data access** — Prisma, TypeORM, Sequelize, Knex, Mongoose ORM call detection
+- **Import resolution** — relative, tsconfig path aliases, Go module paths, Rust crate paths
 
-## Commands
+## Usage
 
 ```bash
 npm install
+
+# Scan a project into a graph database
 npm run dev -- scan ./path/to/project
+
+# Show graph statistics
 npm run dev -- stats
-npm run dev -- query "MATCH (f:File) RETURN f.path LIMIT 10"
+
+# Run a Cypher query
 npm run dev -- query "MATCH (f:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN f.relativePath, fn.name LIMIT 10"
-npm run dev -- export ./path/to/project --output .concentrate/export/project
-npm test
+
+# Export graph as JSONL
+npm run dev -- export ./path/to/project --output .concentrate/export
+
+# Start MCP server (for AI tool integration)
+npm run dev -- mcp
 ```
 
 ## Architecture
 
-```text
+```
 src/
-  cli/        CLI entrypoint
-  commands/   scan, stats, query commands
-  graph/      normalized graph model and Kuzu writer
-  parsers/    language-specific Tree-sitter extractors
-  scanner/    file discovery, ignore handling, language detection
+  index.ts          — CLI binary entry point
+  adapters/
+    cli/            — Command adapters (scan, stats, query, export, smoke, mcp)
+    kuzu/           — KuzuDB writer, schema, retry
+    mcp/            — MCP server adapter
+  commands/         — Commander-wired CLI command definitions
+  core/
+    contracts/      — Language-agnostic interfaces
+    graph/          — Graph model (GraphNode, GraphRelationship, GraphBuilder)
+    integrations/   — Default parser + contributor registry
+    scan/           — Orchestration, file discovery, manifest, report
+      resolution/   — Language-agnostic call/inheritance/import resolution
+  integrations/
+    frameworks/js-ts/   — Express, Fastify, NestJS, env-config, data-access semantics
+    languages/          — Go, Python, Rust, JS/TS parsers and resolution
+  types/            — Ambient type declarations for tree-sitter bindings
+```
+
+## Development
+
+```bash
+npm test                  # unit tests
+npm run typecheck         # TypeScript check
+npm run build             # compile to dist/
+npm run verify:rc         # typecheck + tests + build + standing smoke
 ```
