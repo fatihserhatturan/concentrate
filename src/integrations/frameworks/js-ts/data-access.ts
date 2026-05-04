@@ -1,5 +1,5 @@
-import { GraphBuilder } from "../../../graph/builder.js";
-import { addDataAccessRelationships } from "../../../scanner/resolution/data-access.js";
+import { GraphBuilder } from "../../../core/graph/builder.js";
+import { addDataAccessRelationships } from "./resolution/data-access.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 
 // Post-parse data-access semantic module.

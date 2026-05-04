@@ -1,8 +1,8 @@
 import type Parser from "tree-sitter";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
-import { createFastifyRouteGraph } from "../../../parsers/js-ts/routes.js";
-import { GraphBuilder } from "../../../graph/builder.js";
-import { resolveRouteFullPaths } from "../../../scanner/resolution/route-paths.js";
+import { createFastifyRouteGraph } from "../../languages/js-ts/routes.js";
+import { GraphBuilder } from "../../../core/graph/builder.js";
+import { resolveRouteFullPaths } from "./resolution/route-paths.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 
 // Parse-time Fastify route semantic module.

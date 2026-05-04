@@ -943,9 +943,191 @@ separately as future investment areas rather than near-term tasks.
    - Update development and architecture docs with the final status of tasks
      95 through 103.
 
+## Architecture Completion Phase (tasks 105–120)
+
+The Core Independence phase established stable boundaries and moved key DTOs and
+services into `src/core/`. The Architecture Completion phase finishes the job:
+it moves every remaining real implementation out of the legacy `src/parsers/`,
+`src/graph/`, `src/scanner/`, `src/mcp/`, and `src/cli/` directories and into
+their correct target locations, then removes the now-empty legacy trees.
+
+Each task must keep `npm run typecheck`, `npm test`, and `npm run build` green.
+Standing smoke is required for any task that touches parsing, resolution, or
+graph writing. The guardrail test suite enforces direction at every step.
+
+105. [x] Flip src/graph/model.ts to be a compatibility facade.
+   - Copy the full implementation from `src/graph/model.ts` into
+     `src/core/graph/model.ts` so that file becomes the canonical source.
+   - Replace `src/graph/model.ts` with a re-export facade pointing at
+     `src/core/graph/model.ts`.
+   - Update `src/core/graph/model.ts` to no longer import from
+     `src/graph/model.ts` (remove the circular re-export chain).
+   - Verify all importers of `src/graph/model.ts` still compile through the
+     facade without changes.
+   - Required checks: typecheck, tests, build.
+
+106. [x] Move Kuzu-specific files from src/graph/ to src/adapters/kuzu/.
+   - Move `kuzu-format.ts`, `kuzu-relationships.ts`, `kuzu-results.ts`,
+     `kuzu-retry.ts`, `kuzu-schema-management.ts`, `kuzu-writer.ts`, and
+     `schema.ts` from `src/graph/` to `src/adapters/kuzu/`.
+   - Move `src/graph/builder.ts` to `src/core/graph/builder.ts`.
+   - Update `src/adapters/kuzu/index.ts` to import directly from the new
+     locations instead of from `src/graph/`.
+   - Leave compat re-export facades in `src/graph/` for each moved file so
+     existing callers keep working until they are updated.
+   - Required checks: typecheck, tests, build, standing smoke.
+
+107. [x] Move MCP server implementation from src/mcp/ to src/adapters/mcp/.
+   - Move `src/mcp/server.ts` and `src/mcp/tools.ts` directly into
+     `src/adapters/mcp/`.
+   - Update `src/adapters/mcp/index.ts` to import from the new sibling paths
+     instead of `../../mcp/`.
+   - Remove the now-empty `src/mcp/` directory.
+   - Required checks: typecheck, tests, build, MCP stdio smoke.
+
+108. [x] Move CLI helper modules from src/cli/ to src/adapters/cli/.
+   - Move `src/cli/progress.ts` and `src/cli/report.ts` into
+     `src/adapters/cli/`.
+   - Update all callers (commands and adapters) to import from the new paths.
+   - Consolidate or remove `src/cli/index.ts` once its exports are covered by
+     `src/adapters/cli/index.ts`.
+   - Remove the now-empty `src/cli/` directory.
+   - Required checks: typecheck, tests, build.
+
+109. [x] Move core-agnostic scanner utilities to src/core/scan/.
+   - Move `src/scanner/concurrency.ts`, `directory-graph.ts`,
+     `discover-files.ts`, and `language.ts` to `src/core/scan/`.
+   - Add compat re-export facades in `src/scanner/` for each moved file.
+   - Update internal callers inside `src/scanner/` to import from the new
+     core paths where possible.
+   - Required checks: typecheck, tests, build.
+
+110. [x] Move scanner parse orchestration modules to src/core/scan/.
+   - Move `src/scanner/parse-source.ts`, `parse-results.ts`, and
+     `graph-finalize.ts` to `src/core/scan/`.
+   - Add compat facades in `src/scanner/` for each moved file.
+   - Update `src/core/scan/orchestrator.ts` to import directly from the new
+     core paths instead of going through scanner shims.
+   - Required checks: typecheck, tests, build, standing smoke.
+
+111. [x] Move project and workspace config readers to src/core/scan/.
+   - Move `src/scanner/project-config.ts` and `workspace-packages.ts` to
+     `src/core/scan/`.
+   - Add compat facades in `src/scanner/` for each moved file.
+   - Required checks: typecheck, tests, build.
+
+112. [x] Introduce a core I/O abstraction and move scan-manifest to core.
+   - Define a minimal `FileSystemReader` interface in `src/core/scan/` that
+     provides `readFile`, `stat`, and `hash` operations.
+   - Refactor `src/scanner/scan-manifest.ts` to accept the interface instead
+     of calling Node fs APIs directly.
+   - Move `scan-manifest.ts` to `src/core/scan/manifest.ts` and wire the
+     real Node.js implementation through the adapter layer.
+   - Flip `src/core/scan/manifest.ts` from re-exporting the scanner path to
+     being the canonical source; turn the scanner path into a compat facade.
+   - Remove the documented shim comments from `src/core/scan/report.ts` and
+     `src/core/scan/parse-plan.ts` once this flip is complete.
+   - Required checks: typecheck, tests, build, incremental benchmark.
+
+113. [x] Move Go, Python, and Rust parsers into their language integration packages.
+   - Move `src/parsers/languages/go.ts` into `src/integrations/languages/go/`
+     and expand the existing `index.ts` stub to include the full implementation.
+   - Move `src/parsers/languages/python.ts` into
+     `src/integrations/languages/python/` similarly.
+   - Move `src/parsers/languages/rust.ts` into
+     `src/integrations/languages/rust/` similarly.
+   - Move `src/scanner/resolution/go-imports.ts` into
+     `src/integrations/languages/go/`.
+   - Move `src/scanner/resolution/rust-imports.ts` into
+     `src/integrations/languages/rust/`.
+   - Add compat re-export facades at the old paths for the scanner resolution
+     files.
+   - Update the type declaration files in `src/types/` to sit alongside their
+     language integration directory instead of in the shared types folder.
+   - Required checks: typecheck, tests, build.
+
+114. [x] Move JS/TS parser internals to src/integrations/languages/js-ts/.
+   - Move all 14 files under `src/parsers/js-ts/` into
+     `src/integrations/languages/js-ts/`.
+   - Move `src/parsers/languages/javascript-like.ts` into
+     `src/integrations/languages/js-ts/` and rename it to align with the
+     integration naming convention.
+   - Move `src/parsers/tree-sitter-utils.ts` to a shared location accessible
+     to all language integrations (e.g. `src/integrations/languages/`).
+   - Update all import paths in framework modules, test files, and adapter
+     wiring to use the new locations.
+   - Add compat facades in `src/parsers/js-ts/` for any files still referenced
+     by external callers.
+   - Required checks: typecheck, tests, build, standing smoke.
+
+115. [x] Relocate language-agnostic resolution helpers to src/core/.
+   - Identify the files in `src/scanner/resolution/` that contain no
+     language- or framework-specific logic, such as `call-targets.ts`,
+     `calls.ts`, `inheritance.ts`, `import-candidates.ts`, `file-kind.ts`,
+     and `config.ts`.
+   - Move them to `src/core/scan/resolution/` or `src/core/contracts/` as
+     appropriate.
+   - Add compat facades in `src/scanner/resolution/` for each moved file.
+   - Required checks: typecheck, tests, build.
+
+116. [x] Relocate JS/TS-specific resolution helpers to src/integrations/languages/js-ts/.
+   - Move the JS/TS import and path resolution files from
+     `src/scanner/resolution/` — including `js-ts-imports.ts`,
+     `path-mapping.ts`, `tsconfig.ts`, `import-dispatch.ts`,
+     `package-json.ts`, `package-json-exports.ts`, `import-indexes.ts`,
+     `indexes.ts`, and `node-indexes.ts` — into
+     `src/integrations/languages/js-ts/resolution/`.
+   - Add compat facades in `src/scanner/resolution/` for each moved file.
+   - Required checks: typecheck, tests, build, standing smoke.
+
+117. [x] Relocate framework-specific resolution helpers to src/integrations/frameworks/js-ts/.
+   - Move the remaining JS/TS resolution files that carry framework semantics
+     — `route-paths.ts`, `nestjs-modules.ts`, `instances.ts`,
+     `injections.ts`, `env-config.ts`, and `data-access.ts` — into
+     `src/integrations/frameworks/js-ts/resolution/`.
+   - Add compat facades in `src/scanner/resolution/` for each moved file.
+   - Required checks: typecheck, tests, build, standing smoke, internet smoke
+     for backend semantic changes.
+
+118. [x] Remove compat facades and clean up empty legacy directories.
+   - For each compat facade in `src/parsers/`, `src/graph/`, `src/scanner/`,
+     and `src/scanner/resolution/`: run the grep check from the cleanup
+     checklist, update any remaining callers to the canonical path, then
+     delete the facade file.
+   - Remove `src/parsers/registry.ts`, `index.ts`, and `types.ts` once all
+     callers are on core paths.
+   - Remove the empty `src/parsers/` and `src/parsers/js-ts/` directories.
+   - Remove the empty `src/scanner/resolution/` and `src/scanner/` directories.
+   - Remove `src/graph/` once only the `model.ts` facade remained and its
+     callers have been updated to `src/core/graph/model.ts`.
+   - Remove the `src/types/` directory if all type declaration files have
+     moved to their respective language integration directories.
+   - Required checks: typecheck, tests, build, standing smoke.
+
+119. [x] Tighten guardrails to reflect the completed architecture.
+   - Update `tests/guardrails.test.ts` to remove any temporary allowances
+     that were documented as migration shims (e.g. core-to-scanner imports,
+     parsers-to-scanner cross-references).
+   - Add guardrail rules for the new `src/integrations/languages/` and
+     `src/integrations/frameworks/` resolution sub-directories.
+   - Confirm that `src/core/` no longer imports from any legacy directory.
+   - Required checks: typecheck, tests, build.
+
+120. [x] Run full architecture completion validation.
+   - Run typecheck, unit tests, build, verify:rc, standing smoke, internet
+     smoke, incremental benchmark, and MCP stdio smoke.
+   - Confirm that the directory tree matches the target shape from the
+     architecture document: no `src/parsers/`, `src/graph/`, `src/scanner/`,
+     `src/mcp/`, or `src/cli/` directories remain.
+   - Compare smoke counts against the task 104 baseline; document any
+     intentional semantic count changes.
+   - Update `docs/layered-core-architecture.md` with the final migration
+     snapshot and close out the Architecture Completion phase.
+
 ## Current Priority
 
 Milestones 8, 9, 10, 11, and 12 are complete. Incremental Scanning tasks 79
 through 83 are complete. MCP Server tasks 84 through 86 are complete. Layered
 Core Architecture tasks 87 through 94 are complete. Core Independence tasks 95
-through 104 are complete. All Core Independence tasks (95–104) are done.
+through 104 are complete. Continue with the Architecture Completion phase
+starting at task 105.

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { rustParser } from "../src/parsers/rust.js";
+import { rustParser } from "../src/integrations/languages/rust/parser.js";
 
 const fixtureRoot = path.resolve("fixtures/parser-rust");
 const fixturePath = path.join(fixtureRoot, "lib.rs");

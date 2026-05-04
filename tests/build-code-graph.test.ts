@@ -3,26 +3,26 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { buildCodeGraph } from "../src/scanner/build-code-graph.js";
+import { buildCodeGraph } from "../src/core/scan/orchestrator.js";
 import { scanCommand } from "../src/commands/scan.js";
-import { KuzuGraphWriter } from "../src/graph/kuzu-writer.js";
-import { SCHEMA_VERSION } from "../src/graph/schema.js";
-import { getLanguageParser } from "../src/parsers/index.js";
-import { parseJsTsWithRootNode } from "../src/parsers/languages/javascript-like.js";
+import { KuzuGraphWriter } from "../src/adapters/kuzu/kuzu-writer.js";
+import { SCHEMA_VERSION } from "../src/adapters/kuzu/schema.js";
+import { coreIntegrationRegistry } from "../src/core/integrations/default-registry.js";
+import { parseJsTsWithRootNode } from "../src/integrations/languages/js-ts/parser.js";
 import { applyExpressKoaParseSemantics } from "../src/integrations/frameworks/js-ts/express-koa.js";
 import { applyFastifyParseSemantics } from "../src/integrations/frameworks/js-ts/fastify.js";
-import { parseTsconfig } from "../src/scanner/resolution/tsconfig.js";
-import type { GraphNode, GraphRelationship, GraphNodeLabel, GraphRelationshipType } from "../src/graph/model.js";
+import { parseTsconfig } from "../src/integrations/languages/js-ts/resolution/tsconfig.js";
+import type { GraphNode, GraphRelationship, GraphNodeLabel, GraphRelationshipType } from "../src/core/graph/model.js";
 
 const fixturesRoot = path.resolve("fixtures");
 
 describe("buildCodeGraph", () => {
   it("registers language parsers through the parser registry", () => {
-    assert.equal(getLanguageParser("javascript").language, "javascript");
-    assert.equal(getLanguageParser("typescript").language, "typescript");
-    assert.equal(getLanguageParser("python").language, "python");
-    assert.equal(getLanguageParser("go").language, "go");
-    assert.equal(getLanguageParser("rust").language, "rust");
+    assert.equal(coreIntegrationRegistry.getLanguageParser("javascript").language, "javascript");
+    assert.equal(coreIntegrationRegistry.getLanguageParser("typescript").language, "typescript");
+    assert.equal(coreIntegrationRegistry.getLanguageParser("python").language, "python");
+    assert.equal(coreIntegrationRegistry.getLanguageParser("go").language, "go");
+    assert.equal(coreIntegrationRegistry.getLanguageParser("rust").language, "rust");
   });
 
   it("resolves relative JS imports to TypeScript source files", async () => {

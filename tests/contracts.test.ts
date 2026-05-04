@@ -7,8 +7,8 @@ import type { GraphNode as CoreGraphNode, ParsedSourceFile as CoreParsedSourceFi
 import type { BuildCodeGraphResult, IncrementalMode, ScanManifest, ScanReport } from "../src/core/scan/index.js";
 import { buildCodeGraph as coreBuildCodeGraph, createScanReport, scanOrchestrator as coreScanOrchestrator } from "../src/core/scan/index.js";
 import { CoreIntegrationRegistry } from "../src/core/integrations/index.js";
-import { GraphBuilder } from "../src/graph/builder.js";
-import type { LanguageParser } from "../src/parsers/types.js";
+import { GraphBuilder } from "../src/core/graph/builder.js";
+import type { LanguageParser } from "../src/core/contracts/language-parser.js";
 import {
   getParserAdapter,
   languageParsers,

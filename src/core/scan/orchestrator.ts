@@ -1,22 +1,22 @@
 import os from "node:os";
 import path from "node:path";
-import { GraphBuilder } from "../../graph/builder.js";
-import { runWithConcurrency } from "../../scanner/concurrency.js";
-import { discoverFiles } from "../../scanner/discover-files.js";
-import { finalizeGraphRelationships } from "../../scanner/graph-finalize.js";
-import { parseFileWithContext, type ParseResult } from "../../scanner/parse-source.js";
-import { addParseResultsToGraph } from "../../scanner/parse-results.js";
-import { addProjectConfigNodes } from "../../scanner/project-config.js";
+import { GraphBuilder } from "../graph/builder.js";
+import { runWithConcurrency } from "./concurrency.js";
+import { discoverFiles } from "./discover-files.js";
+import { finalizeGraphRelationships } from "./graph-finalize.js";
+import { parseFileWithContext, type ParseResult } from "./parse-source.js";
+import { addParseResultsToGraph } from "./parse-results.js";
+import { addProjectConfigNodes } from "./project-config.js";
 import {
   compareScanManifests,
   createScanManifest,
   readScanManifest,
   type ScanManifest,
-} from "../../scanner/scan-manifest.js";
-import { filterSupportedSourceFiles } from "../../scanner/source-files.js";
-import { addWorkspacePackageGraph } from "../../scanner/workspace-packages.js";
+} from "./manifest.js";
+import { filterSupportedSourceFiles } from "./source-files.js";
+import { addWorkspacePackageGraph } from "./workspace-packages.js";
 import type { IScanOrchestrator } from "../contracts/scan-orchestrator.js";
-import { createParsePlan } from "../../scanner/parse-plan.js";
+import { createParsePlan } from "./parse-plan.js";
 import type { ScanReport } from "./report.js";
 import { createScanReport } from "./report.js";
 import type { BuildCodeGraphOptions, BuildCodeGraphResult } from "./result.js";

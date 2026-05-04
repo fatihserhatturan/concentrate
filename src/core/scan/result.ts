@@ -1,8 +1,7 @@
 import type { GraphNode, GraphRelationship } from "../graph/model.js";
 import type { IncrementalMode } from "./parse-plan.js";
 import type { ScanReport } from "./report.js";
-// ScanManifest remains in scanner/scan-manifest (FS-bound) as a documented shim.
-import type { ScanManifest } from "../../scanner/scan-manifest.js";
+import type { ScanManifest } from "./manifest.js";
 
 export type BuildCodeGraphOptions = {
   continueOnError: boolean;

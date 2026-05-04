@@ -3,7 +3,7 @@ import { performance } from "node:perf_hooks";
 import os from "node:os";
 import path from "node:path";
 import { KuzuGraphWriter } from "../kuzu/index.js";
-import { SCHEMA_VERSION } from "../../graph/schema.js";
+import { SCHEMA_VERSION } from "../kuzu/schema.js";
 import type { FileClassificationCounts, ScanReport, ScanStatus } from "../../core/scan/index.js";
 import { scanOrchestrator } from "../../core/scan/index.js";
 

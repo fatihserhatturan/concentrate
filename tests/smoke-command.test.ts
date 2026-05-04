@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { runSmokeValidation, type SmokeSample } from "../src/commands/smoke.js";
-import { SCHEMA_VERSION } from "../src/graph/schema.js";
+import { SCHEMA_VERSION } from "../src/adapters/kuzu/schema.js";
 
 describe("smoke validation", () => {
   it("runs scan, writes Kuzu, checks expected counts, and writes a report", async () => {

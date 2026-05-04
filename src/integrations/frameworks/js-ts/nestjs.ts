@@ -1,9 +1,9 @@
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
-import { createNestJsRouteGraph } from "../../../parsers/js-ts/routes.js";
-import { GraphBuilder } from "../../../graph/builder.js";
-import { addNestJsModuleRelationships } from "../../../scanner/resolution/nestjs-modules.js";
-import { addInjectionRelationships } from "../../../scanner/resolution/injections.js";
-import { addInstanceMethodResolutionRelationships } from "../../../scanner/resolution/instances.js";
+import { createNestJsRouteGraph } from "../../languages/js-ts/routes.js";
+import { GraphBuilder } from "../../../core/graph/builder.js";
+import { addNestJsModuleRelationships } from "./resolution/nestjs-modules.js";
+import { addInjectionRelationships } from "./resolution/injections.js";
+import { addInstanceMethodResolutionRelationships } from "./resolution/instances.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 
 // Parse-time NestJS route semantic module.

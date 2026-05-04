@@ -3,9 +3,9 @@ import { mkdtemp } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
-import type { GraphNode, GraphRelationship } from "../src/graph/model.js";
-import { SCHEMA_VERSION } from "../src/graph/schema.js";
-import { KuzuGraphWriter } from "../src/graph/kuzu-writer.js";
+import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
+import { SCHEMA_VERSION } from "../src/adapters/kuzu/schema.js";
+import { KuzuGraphWriter } from "../src/adapters/kuzu/kuzu-writer.js";
 
 describe("Kuzu route schema", () => {
   it("writes Route nodes and route relationships", async () => {

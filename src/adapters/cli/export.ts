@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { printScanReport } from "../../cli/report.js";
-import { ProgressReporter } from "../../cli/progress.js";
+import { printScanReport } from "./report.js";
+import { ProgressReporter } from "./progress.js";
 import type { GraphNode, GraphRelationship } from "../../core/graph/model.js";
 import type { IncrementalMode } from "../../core/scan/index.js";
 import { didFailFast, didPartiallySucceed, scanOrchestrator } from "../../core/scan/index.js";

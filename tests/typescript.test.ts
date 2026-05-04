@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { typescriptParser } from "../src/parsers/javascript-like.js";
+import { typescriptParser } from "../src/integrations/frameworks/js-ts/scanner.js";
 
 const fixtureRoot = path.resolve("fixtures/parser-typescript");
 const fixturePath = path.join(fixtureRoot, "index.ts");

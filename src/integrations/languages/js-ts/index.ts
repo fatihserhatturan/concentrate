@@ -1,4 +1,4 @@
-import { parseJsTsLanguageOnly } from "../../../parsers/languages/javascript-like.js";
+import { parseJsTsLanguageOnly } from "./parser.js";
 import type { ILanguageParser } from "../../../core/contracts/language-parser.js";
 
 export const javascriptLanguageParser: ILanguageParser = {

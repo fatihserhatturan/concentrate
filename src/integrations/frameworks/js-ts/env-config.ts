@@ -4,9 +4,9 @@ import {
   createConfigValueGraph,
   createFileEnvUsageGraph,
   createFunctionEnvUsageGraph,
-} from "../../../parsers/js-ts/env-config.js";
-import { GraphBuilder } from "../../../graph/builder.js";
-import { addEnvAndConfigRelationships } from "../../../scanner/resolution/env-config.js";
+} from "../../languages/js-ts/env-config.js";
+import { GraphBuilder } from "../../../core/graph/builder.js";
+import { addEnvAndConfigRelationships } from "./resolution/env-config.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 
 // Parse-time env/config semantic module.

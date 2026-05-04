@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { analyzeMemberCallExpression } from "../src/parsers/tree-sitter-utils.js";
+import { analyzeMemberCallExpression } from "../src/integrations/languages/tree-sitter-utils.js";
 
 describe("analyzeMemberCallExpression", () => {
   it("returns null for undefined input", () => {

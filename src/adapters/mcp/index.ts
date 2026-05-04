@@ -1,1 +1,1 @@
-export { runMcpServer, handleMcpRequest } from "../../mcp/server.js";
+export { runMcpServer, handleMcpRequest } from "./server.js";

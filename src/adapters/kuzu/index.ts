@@ -6,4 +6,4 @@ export {
   type KuzuStatsOptions,
   type KuzuPatchOptions,
   type KuzuPatchSummary,
-} from "../../graph/kuzu-writer.js";
+} from "./kuzu-writer.js";

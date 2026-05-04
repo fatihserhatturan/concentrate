@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { pythonParser } from "../src/parsers/python.js";
+import { pythonParser } from "../src/integrations/languages/python/parser.js";
 
 const fixtureRoot = path.resolve("fixtures/parser-python");
 const fixturePath = path.join(fixtureRoot, "module.py");

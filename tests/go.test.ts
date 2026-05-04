@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { goParser } from "../src/parsers/go.js";
+import { goParser } from "../src/integrations/languages/go/parser.js";
 
 const fixtureRoot = path.resolve("fixtures/parser-go");
 const fixturePath = path.join(fixtureRoot, "service.go");

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { isKuzuLockError, withKuzuRetry } from "../src/graph/kuzu-retry.js";
+import { isKuzuLockError, withKuzuRetry } from "../src/adapters/kuzu/kuzu-retry.js";
 
 describe("Kuzu retry helpers", () => {
   it("recognizes transient Kuzu lock errors", () => {

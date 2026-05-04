@@ -1,6 +1,6 @@
 import type Parser from "tree-sitter";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
-import { createBackendEntrypointGraph } from "../../../parsers/js-ts/entrypoints.js";
+import { createBackendEntrypointGraph } from "../../languages/js-ts/entrypoints.js";
 
 // Parse-time backend entrypoint semantic module.
 // Detects non-HTTP backend entrypoints: EventEmitter listeners, Bull/BullMQ

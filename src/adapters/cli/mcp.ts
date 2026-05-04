@@ -1,5 +1,5 @@
 import path from "node:path";
-import { defaultKuzuRetryOptions } from "../../graph/kuzu-retry.js";
+import { defaultKuzuRetryOptions } from "../kuzu/kuzu-retry.js";
 import { KuzuGraphWriter } from "../kuzu/index.js";
 import { runMcpServer } from "../mcp/index.js";
 

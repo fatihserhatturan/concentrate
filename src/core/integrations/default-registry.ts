@@ -1,12 +1,12 @@
-import { GraphBuilder } from "../../graph/builder.js";
-import { addCallResolutionRelationships } from "../../scanner/resolution/calls.js";
-import { addInheritanceRelationships } from "../../scanner/resolution/inheritance.js";
-import { addImportResolutionRelationships } from "../../scanner/resolution/imports.js";
-import { addImportPackageRelationships } from "../../scanner/workspace-packages.js";
-import { javascriptParser, typescriptParser } from "../../parsers/languages/javascript-like.js";
-import { pythonParser } from "../../parsers/languages/python.js";
-import { goParser } from "../../parsers/languages/go.js";
-import { rustParser } from "../../parsers/languages/rust.js";
+import { GraphBuilder } from "../graph/builder.js";
+import { addCallResolutionRelationships } from "../scan/resolution/calls.js";
+import { addInheritanceRelationships } from "../scan/resolution/inheritance.js";
+import { addImportResolutionRelationships } from "../../integrations/languages/js-ts/resolution/imports.js";
+import { addImportPackageRelationships } from "../scan/workspace-packages.js";
+import { javascriptParser, typescriptParser } from "../../integrations/frameworks/js-ts/scanner.js";
+import { pythonParser } from "../../integrations/languages/python/parser.js";
+import { goParser } from "../../integrations/languages/go/parser.js";
+import { rustParser } from "../../integrations/languages/rust/parser.js";
 import {
   javascriptLanguageParser,
   typescriptLanguageParser,

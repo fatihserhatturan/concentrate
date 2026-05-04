@@ -2,9 +2,7 @@ import path from "node:path";
 import type { BuildCodeGraphResult } from "./result.js";
 import { createFileClassificationCounts, type FileClassificationCounts } from "./file-classification.js";
 import type { ParsePlan } from "./parse-plan.js";
-// createUncheckedIncrementalEligibility remains in scanner/scan-manifest (FS-bound)
-// and is kept here as a documented scanner shim until scan-manifest moves to core.
-import { createUncheckedIncrementalEligibility, type IncrementalEligibility } from "../../scanner/scan-manifest.js";
+import { createUncheckedIncrementalEligibility, type IncrementalEligibility } from "./manifest.js";
 
 export type ScanStatus = "success" | "partial" | "failed";
 

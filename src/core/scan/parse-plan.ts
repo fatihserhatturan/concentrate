@@ -1,7 +1,5 @@
-// scanner/scan-manifest and scanner/source-files remain in src/scanner/ as documented shims
-// until those modules are ready to move to core.
-import type { IncrementalEligibility } from "../../scanner/scan-manifest.js";
-import type { SupportedSourceFile } from "../../scanner/source-files.js";
+import type { IncrementalEligibility } from "./manifest.js";
+import type { SupportedSourceFile } from "./source-files.js";
 
 export type IncrementalMode = "full" | "changed-files";
 

@@ -356,6 +356,48 @@ Validation run for task 94:
 - `npm run benchmark:incremental`
 - `npx tsx --test tests/mcp-tools.test.ts`
 
+## Architecture Completion Phase (tasks 105–120)
+
+This phase finishes what the Core Independence phase started. Every remaining
+real implementation is moved out of the legacy `src/parsers/`, `src/graph/`,
+`src/scanner/`, `src/mcp/`, and `src/cli/` trees and into the correct target
+layer. When done, those legacy directories are removed entirely.
+
+### Remaining Legacy Inventory (as of task 104)
+
+| Legacy path | File count | Target location | Blocker |
+| --- | --- | --- | --- |
+| `src/graph/model.ts` | 1 | `src/core/graph/model.ts` (direction flip) | None — task 105 |
+| `src/graph/kuzu-*.ts`, `schema.ts`, `builder.ts` | 8 | `src/adapters/kuzu/` + `src/core/graph/` | Task 105 first |
+| `src/mcp/server.ts`, `tools.ts` | 2 | `src/adapters/mcp/` | None — task 107 |
+| `src/cli/progress.ts`, `report.ts`, `index.ts` | 3 | `src/adapters/cli/` | None — task 108 |
+| `src/scanner/concurrency.ts`, `directory-graph.ts`, `discover-files.ts`, `language.ts` | 4 | `src/core/scan/` | None — task 109 |
+| `src/scanner/parse-source.ts`, `parse-results.ts`, `graph-finalize.ts` | 3 | `src/core/scan/` | Task 109 first |
+| `src/scanner/project-config.ts`, `workspace-packages.ts` | 2 | `src/core/scan/` | None — task 111 |
+| `src/scanner/scan-manifest.ts`, `source-files.ts` | 2 | `src/core/scan/` | Needs I/O abstraction — task 112 |
+| `src/parsers/languages/go.ts`, `python.ts`, `rust.ts` | 3 | `src/integrations/languages/{go,python,rust}/` | None — task 113 |
+| `src/parsers/js-ts/*` (14 files) | 14 | `src/integrations/languages/js-ts/` | None — task 114 |
+| `src/scanner/resolution/` language-agnostic helpers | ~6 | `src/core/scan/resolution/` | Task 109 first |
+| `src/scanner/resolution/` JS/TS helpers | ~9 | `src/integrations/languages/js-ts/resolution/` | Task 114 first |
+| `src/scanner/resolution/` framework helpers | ~6 | `src/integrations/frameworks/js-ts/resolution/` | Task 116 first |
+| `src/types/tree-sitter-*.d.ts` | 3 | each language integration directory | Task 113 first |
+
+### Phase Completion Criteria
+
+The Architecture Completion phase is done when:
+
+- `src/parsers/`, `src/graph/`, `src/scanner/`, `src/mcp/`, and `src/cli/`
+  no longer exist.
+- `src/core/graph/model.ts` is the canonical graph model source;
+  `src/graph/model.ts` does not exist.
+- All Kuzu-specific files live under `src/adapters/kuzu/`.
+- All language parser implementations live under
+  `src/integrations/languages/`.
+- All framework-specific resolution logic lives under
+  `src/integrations/frameworks/js-ts/`.
+- The guardrail test contains no documented temporary allowances.
+- All smoke counts match the task 104 baseline.
+
 ## Validation Matrix
 
 | Migration area | Required checks |
@@ -377,3 +419,74 @@ Validation run for task 94:
 - Framework modules can be tested independently from language parsers where
   practical.
 - Core remains free of concrete language and framework imports.
+
+---
+
+## Migration Completion Snapshot — 2026-05-04
+
+**Architecture Completion phase (tasks 105–120) is complete.**
+
+### Final directory tree
+
+```
+src/
+  adapters/
+    cli/        — CLI command adapters (scan, stats, query, export, smoke, mcp)
+    kuzu/       — Kuzu database adapter (writer, schema, retry, format)
+    mcp/        — MCP server adapter
+  commands/     — Commander-wired CLI command entry points
+  core/
+    contracts/  — Language-agnostic interfaces (ILanguageParser, ISemanticContributor, …)
+    graph/      — Graph model (GraphNode, GraphRelationship, GraphBuilder)
+    integrations/ — Default registry wiring (parsers + contributors)
+    scan/       — Scan orchestration, file discovery, report, manifest
+      resolution/ — Language-agnostic resolution (calls, inheritance, indexes, …)
+  integrations/
+    frameworks/
+      js-ts/    — Framework parse-time semantics (Express/Koa, Fastify, NestJS, …)
+        resolution/ — Post-parse framework resolution (routes, injections, data-access, …)
+        scanner.ts  — Full JS/TS scan parser (language + all framework semantics)
+    languages/
+      go/       — Go parser + resolution
+      js-ts/    — JS/TS language parser (language-only)
+        resolution/ — JS/TS import resolution (config, dispatch, indexes, tsconfig, …)
+      python/   — Python parser
+      rust/     — Rust parser + resolution
+      tree-sitter-utils.ts — Shared Tree-sitter walk utilities
+  index.ts      — CLI binary entry point
+  types/        — Ambient type declarations for tree-sitter language bindings
+```
+
+### Legacy directories removed
+
+| Directory | Tasks |
+| --- | --- |
+| `src/graph/` | 105–107 |
+| `src/mcp/` | 108 |
+| `src/scanner/` (orchestration) | 109–112 |
+| `src/parsers/js-ts/` | 114 |
+| `src/parsers/` | 113, 118 |
+| `src/scanner/resolution/` | 115–118 |
+| `src/cli/` | 120 |
+
+### Smoke baseline at completion (2026-05-04, schema v34)
+
+| Project | Nodes | Relationships | Routes | Routes w/ full path |
+| --- | --- | --- | --- | --- |
+| express | 3281 | 4130 | 91 | 57 |
+| fastify | 339 | 392 | 1 | 1 |
+| nestjs-starter | 68 | 95 | 1 | 1 |
+| ky | 5494 | 6926 | 0 | 0 |
+
+### Guardrail rules at completion
+
+8 enforced rules (up from 6 at phase start):
+
+1. `core/contracts/` — no imports from integrations, adapters, commands, or legacy dirs
+2. `core/scan/` + `core/graph/` — no imports from integrations or adapters
+3. `core/` — no imports from adapters, commands, or legacy dirs
+4. `integrations/languages/` — no imports from frameworks, adapters, commands, or legacy dirs
+5. `integrations/frameworks/` — no imports from adapters, commands, or legacy dirs
+6. `integrations/languages/js-ts/resolution/` — no imports from frameworks
+7. `integrations/frameworks/js-ts/resolution/` — no imports from adapters or commands
+8. `commands/` — no imports from core, integrations, or legacy dirs

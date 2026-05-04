@@ -1,8 +1,8 @@
 import path from "node:path";
 import { mkdir, writeFile } from "node:fs/promises";
-import { SCHEMA_VERSION } from "../../graph/schema.js";
-import { printScanReport } from "../../cli/report.js";
-import { ProgressReporter } from "../../cli/progress.js";
+import { SCHEMA_VERSION } from "../kuzu/schema.js";
+import { printScanReport } from "./report.js";
+import { ProgressReporter } from "./progress.js";
 import type { BuildCodeGraphResult, IncrementalEligibility, IncrementalMode } from "../../core/scan/index.js";
 import { didFailFast, didPartiallySucceed, scanOrchestrator } from "../../core/scan/index.js";
 import { KuzuGraphWriter, type KuzuWriteMode } from "../kuzu/index.js";
