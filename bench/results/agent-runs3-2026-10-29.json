@@ -1,0 +1,1897 @@
+{
+  "recordedAt": "2026-10-29T14:03:34.559Z",
+  "model": "sonnet",
+  "runs": 3,
+  "maxTurns": 15,
+  "totals": {
+    "baseline": {
+      "runs": 39,
+      "correct": 38,
+      "medianInputTokens": 95967,
+      "medianOutputTokens": 578,
+      "medianToolCalls": 2,
+      "medianTurns": 3,
+      "medianDurationMs": 15044,
+      "medianCostUsd": 0.0541
+    },
+    "concentrate": {
+      "runs": 39,
+      "correct": 39,
+      "medianInputTokens": 97666,
+      "medianOutputTokens": 504,
+      "medianToolCalls": 2,
+      "medianTurns": 3,
+      "medianDurationMs": 14110,
+      "medianCostUsd": 0.0558
+    }
+  },
+  "results": [
+    {
+      "id": "rw-token-callers",
+      "sample": "internet-node-express-realworld",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 95304,
+            "medianOutputTokens": 463,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 10399,
+            "medianCostUsd": 0.0491
+          },
+          "runs": [
+            {
+              "answer": "Four functions call `generateToken`. All are in `src/app/routes/auth/auth.service.ts`:\n\n- **`createUser`** (line 38) calls it at line 80.\n- **`login`** (line 84) calls it at line 119.\n- **`getCurrentUser`** (line 131) calls it at line 147.\n- **`updateUser`** (line 151) calls it at line 181.\n\n`generateToken` is defined in `src/app/routes/auth/token.utils.ts` and imported into `auth.service.ts`. No other file calls it.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 36211,
+              "costUsd": 0.13929940000000002,
+              "inputTokens": 6,
+              "outputTokens": 463,
+              "cacheCreationTokens": 32084,
+              "cacheReadTokens": 63214,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`generateToken` is defined in `src/app/routes/auth/token.utils.ts`. Four functions call it. All four are in `src/app/routes/auth/auth.service.ts`, and I matched each call site to its function by line number:\n\n- **`createUser`** (line 38) calls it at line 80.\n- **`login`** (line 84) calls it at line 119.\n- **`getCurrentUser`** (line 131) calls it at line 147.\n- **`updateUser`** (line 151) calls it at line 181.\n\nI searched with a text match, so a call through an alias or a re-export would not show up.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10399,
+              "costUsd": 0.049109,
+              "inputTokens": 6,
+              "outputTokens": 473,
+              "cacheCreationTokens": 8933,
+              "cacheReadTokens": 86350,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four functions call `generateToken`. All four are in `src/app/routes/auth/auth.service.ts`:\n\n- **`createUser`** calls it at line 80.\n- **`login`** calls it at line 119.\n- **`getCurrentUser`** calls it at line 147.\n- **`updateUser`** calls it at line 181.\n\n`generateToken` is defined in `src/app/routes/auth/token.utils.ts` and imported into `auth.service.ts` at line 6. I found no other callers in the project.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8393,
+              "costUsd": 0.048504599999999995,
+              "inputTokens": 6,
+              "outputTokens": 401,
+              "cacheCreationTokens": 8962,
+              "cacheReadTokens": 86346,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97233,
+            "medianOutputTokens": 257,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 12062,
+            "medianCostUsd": 0.05
+          },
+          "runs": [
+            {
+              "answer": "Four functions call `generateToken`. All four are in `src/app/routes/auth/auth.service.ts`:\n\n- `createUser` (line 80)\n- `login` (line 119)\n- `getCurrentUser` (line 147)\n- `updateUser` (line 181)\n\n`generateToken` itself is defined in `src/app/routes/auth/token.utils.ts`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11395,
+              "costUsd": 0.052624,
+              "inputTokens": 8,
+              "outputTokens": 368,
+              "cacheCreationTokens": 10034,
+              "cacheReadTokens": 87920,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four functions call `generateToken`, all in `src/app/routes/auth/auth.service.ts`:\n\n- `createUser` (line 80)\n- `login` (line 119)\n- `getCurrentUser` (line 147)\n- `updateUser` (line 181)\n\nI got this from the code graph's caller lookup, not by reading the source.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12062,
+              "costUsd": 0.05000140000000001,
+              "inputTokens": 8,
+              "outputTokens": 257,
+              "cacheCreationTokens": 9665,
+              "cacheReadTokens": 87554,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four functions call `generateToken`. All of them are in `src/app/routes/auth/auth.service.ts`:\n\n- `createUser` (line 80)\n- `login` (line 119)\n- `getCurrentUser` (line 147)\n- `updateUser` (line 181)",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 14626,
+              "costUsd": 0.0498098,
+              "inputTokens": 8,
+              "outputTokens": 237,
+              "cacheCreationTokens": 9667,
+              "cacheReadTokens": 87558,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rw-profile-mapper-impact",
+      "sample": "internet-node-express-realworld",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 132542,
+            "medianOutputTokens": 1067,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 17757,
+            "medianCostUsd": 0.0697
+          },
+          "runs": [
+            {
+              "answer": "Changing `profileMapper` (`src/app/routes/profile/profile.utils.ts`) affects these five routes. The router is mounted under `/api` in `routes.ts`, so each path carries that prefix.\n\n**Profile routes**, through `profile.service.ts` (`getProfile`, `followUser`, `unfollowUser`):\n- `GET /api/profiles/:username`\n- `POST /api/profiles/:username/follow`\n- `DELETE /api/profiles/:username/follow`\n\n**Article routes**, through `article.service.ts` (`favoriteArticle` and `unfavoriteArticle` each map `article.author` with `profileMapper`):\n- `POST /api/articles/:slug/favorite`\n- `DELETE /api/articles/:slug/favorite`\n\nOther article endpoints don't use `profileMapper` directly. I didn't trace their service code for indirect calls. The only other direct caller is the unit test `src/tests/utils/profile.utils.test.ts`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 17757,
+              "costUsd": 0.06702459999999999,
+              "inputTokens": 8,
+              "outputTokens": 875,
+              "cacheCreationTokens": 11575,
+              "cacheReadTokens": 119586,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changing `profileMapper` (`src/app/routes/profile/profile.utils.ts`) affects five routes. The router is mounted under `/api` in `routes.ts`.\n\n**Through `profile.service.ts`** (`getProfile`, `followUser`, `unfollowUser`):\n- `GET /api/profiles/:username`\n- `POST /api/profiles/:username/follow`\n- `DELETE /api/profiles/:username/follow`\n\n**Through `article.service.ts`**, where `favoriteArticle` and `unfavoriteArticle` use it to build the `author` field:\n- `POST /api/articles/:slug/favorite`\n- `DELETE /api/articles/:slug/favorite`\n\nThe other article routes don't call `profileMapper` directly. The grep found only two call sites in `article.service.ts`, at lines 599 and 645. `article.mapper.ts` and `author.mapper.ts` also look related, but I didn't open them. Nothing in the grep ties them to `profileMapper`.\n\nThe unit test `src/tests/utils/profile.utils.test.ts` also covers it.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 19539,
+              "costUsd": 0.0791785,
+              "inputTokens": 10,
+              "outputTokens": 1346,
+              "cacheCreationTokens": 12515,
+              "cacheReadTokens": 156385,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 1,
+                "Bash": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changing `profileMapper` (`src/app/routes/profile/profile.utils.ts`) affects five routes. All are mounted under `/api`.\n\n**Through `profile.service.ts`** (`getProfile`, `followUser`, `unfollowUser`, in `profile.controller.ts`):\n- `GET /api/profiles/:username`\n- `POST /api/profiles/:username/follow`\n- `DELETE /api/profiles/:username/follow`\n\n**Through `article.service.ts`** (`favoriteArticle` at line 599, `unfavoriteArticle` at line 645, in `article.controller.ts`). `profileMapper` builds the `author` field in the returned article:\n- `POST /api/articles/:slug/favorite`\n- `DELETE /api/articles/:slug/favorite`\n\nNo other article routes call `profileMapper`. Its only other caller is the unit test, `src/tests/utils/profile.utils.test.ts`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 13846,
+              "costUsd": 0.06974100000000001,
+              "inputTokens": 8,
+              "outputTokens": 1067,
+              "cacheCreationTokens": 11744,
+              "cacheReadTokens": 120790,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 100190,
+            "medianOutputTokens": 459,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 16763,
+            "medianCostUsd": 0.0606
+          },
+          "runs": [
+            {
+              "answer": "Changing `profileMapper` (`src/app/routes/profile/profile.utils.ts:4`) affects five routes:\n\n| Method | Full path | Reached via |\n|---|---|---|\n| GET | `/api/profiles/:username` | `getProfile` |\n| POST | `/api/profiles/:username/follow` | `followUser` |\n| DELETE | `/api/profiles/:username/follow` | `unfollowUser` |\n| POST | `/api/articles/:slug/favorite` | `favoriteArticle` |\n| DELETE | `/api/articles/:slug/favorite` | `unfavoriteArticle` |\n\nThe two article routes are easy to miss, because the favorite and unfavorite services also call `profileMapper`.\n\nThree test suites also exercise it: `profile.utils.test.ts`, `profile.service.test.ts` and `article.service.test.ts`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 16763,
+              "costUsd": 0.0595772,
+              "inputTokens": 8,
+              "outputTokens": 459,
+              "cacheCreationTokens": 11540,
+              "cacheReadTokens": 88112,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changing `profileMapper` (`src/app/routes/profile/profile.utils.ts:4`) affects five routes:\n\n| Method | Full path | Reached via |\n|---|---|---|\n| GET | `/api/profiles/:username` | `getProfile` |\n| POST | `/api/profiles/:username/follow` | `followUser` |\n| DELETE | `/api/profiles/:username/follow` | `unfollowUser` |\n| POST | `/api/articles/:slug/favorite` | `favoriteArticle` |\n| DELETE | `/api/articles/:slug/favorite` | `unfavoriteArticle` |\n\nThe callers are `getProfile`, `followUser` and `unfollowUser` in `profile.service.ts`, and `favoriteArticle` and `unfavoriteArticle` in `article.service.ts`. Tests that exercise it are `profile.utils.test.ts`, `profile.service.test.ts` and `article.service.test.ts`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 7356,
+              "costUsd": 0.06111369999999999,
+              "inputTokens": 8,
+              "outputTokens": 504,
+              "cacheCreationTokens": 11805,
+              "cacheReadTokens": 88377,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changing `profileMapper` (`src/app/routes/profile/profile.utils.ts:4`) affects five routes:\n\n| Method | Full path | Reached through |\n|---|---|---|\n| GET | `/api/profiles/:username` | `getProfile` |\n| POST | `/api/profiles/:username/follow` | `followUser` |\n| DELETE | `/api/profiles/:username/follow` | `unfollowUser` |\n| POST | `/api/articles/:slug/favorite` | `favoriteArticle` |\n| DELETE | `/api/articles/:slug/favorite` | `unfavoriteArticle` |\n\nThe tests in `profile.utils.test.ts`, `profile.service.test.ts` and `article.service.test.ts` also cover the mapper's callers, so they could fail too.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 19027,
+              "costUsd": 0.060631599999999994,
+              "inputTokens": 8,
+              "outputTokens": 448,
+              "cacheCreationTokens": 11824,
+              "cacheReadTokens": 88396,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rw-delete-comment-tables",
+      "sample": "internet-node-express-realworld",
+      "category": "data",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 163779,
+            "medianOutputTokens": 1503,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 22369,
+            "medianCostUsd": 0.0777
+          },
+          "runs": [
+            {
+              "answer": "The endpoint touches the `Comment` table with two operations, and it reads the `User` table once as part of the first one. The handler is at `article.controller.ts:190-201` and calls `deleteComment` at `article.service.ts:527`.\n\n1. **SELECT on `Comment`, joined to `User`.** `prisma.comment.findFirst` filters on `id` and `author.id = userId`. Prisma joins `User` to apply that filter and to return `author.id` and `author.username`. This is a read only.\n2. **DELETE on `Comment`.** `prisma.comment.delete({ where: { id } })` runs only if the first query found a row.\n\nNotes:\n- **Slug is ignored.** `:slug` is never read, so the `Article` table isn't touched. A comment can be deleted through any slug as long as the caller authored it.\n- **Auth.** `auth.required` checks the JWT and doesn't query the database for it in the code I read.\n- **Not found and not yours.** A comment that doesn't exist, or that belongs to someone else, gives a 404 from the first query. The later 403 check can't be reached, because the query already limits results to the caller's own comments.\n- **No cascade effects.** `Comment` has `onDelete: Cascade` relations to `Article` and `User`. Those fire when an article or user is deleted, not when a comment is. Deleting a comment affects no other table.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 67683,
+              "costUsd": 0.0777199,
+              "inputTokens": 10,
+              "outputTokens": 1503,
+              "cacheCreationTokens": 11870,
+              "cacheReadTokens": 151899,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 4,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The endpoint touches only one table, `Comment`, and it does so twice. No `@@map` is set in `src/prisma/schema.prisma`, so the table name is the Prisma model name.\n\nThe route is `router.delete('/articles/:slug/comments/:id', auth.required, ...)` in `article.controller.ts:190`. It calls `deleteComment(Number(req.params.id), req.auth?.user?.id)`.\n\n| Order | Table | Operation | Where |\n|---|---|---|---|\n| 1 | `Comment` | SELECT, via `prisma.comment.findFirst` | `article.service.ts:528` |\n| 2 | `Comment` | DELETE, via `prisma.comment.delete` | `article.service.ts:555` |\n\n- **The read:** it filters on `id` and on `author.id = userId`. It selects only the author's `id` and `username`. Prisma reads the author through the relation, which may be a join or a separate query against `User`. Your code never queries `User` directly.\n- **The write:** it deletes the row with `where: { id }`.\n\nSeveral things in the code are easy to misread:\n- **`:slug` is ignored.** The `Article` table is never read or written. A comment can be deleted through any slug, as long as the comment `id` belongs to the caller.\n- **A non-owner gets a 404, not a 403.** The `findFirst` already filters by author, so someone else's comment returns no row and the handler throws a 404. The later `comment.author.id !== userId` check, which would return a 403, can't be reached.\n- **There is no transaction.** The select and the delete run as two separate statements.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 16403,
+              "costUsd": 0.08678920000000001,
+              "inputTokens": 10,
+              "outputTokens": 1521,
+              "cacheCreationTokens": 13943,
+              "cacheReadTokens": 157872,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 4,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The endpoint touches two tables, `Comment` and `User`, and it never uses the slug.\n\nThe route is in `article.controller.ts:190`. It runs `auth.required`, then calls `deleteComment(Number(req.params.id), req.auth?.user?.id)` in `article.service.ts:527`. I found no Prisma calls in the auth middleware, so it only checks the token and doesn't query the database.\n\n| Table | Operation | Where | Purpose |\n|---|---|---|---|\n| `Comment` | SELECT (`findFirst`) | `article.service.ts:528` | Finds the comment where `id` matches and `author.id` equals the caller. |\n| `User` | SELECT (join) | same query | Reads `author.id` and `author.username` through the relation, both for the author filter and the selected fields. |\n| `Comment` | DELETE (`delete`) | `article.service.ts:555` | Deletes the row by `id`. |\n\n- **Slug:** `:slug` is never read, so the article and its table aren't queried. The comment is deleted even if the slug doesn't match its article.\n- **No match:** If the caller isn't the author or the comment doesn't exist, the `findFirst` returns nothing and the endpoint responds 404. The later 403 check can't be reached, because the query already filters on the author.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 22369,
+              "costUsd": 0.0692023,
+              "inputTokens": 10,
+              "outputTokens": 1331,
+              "cacheCreationTokens": 10179,
+              "cacheReadTokens": 151563,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 98814,
+            "medianOutputTokens": 465,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 14211,
+            "medianCostUsd": 0.0568
+          },
+          "runs": [
+            {
+              "answer": "`DELETE /api/articles/:slug/comments/:id` touches one table, **Comment**, through Prisma:\n\n- **Read:** `prisma.comment.findFirst` at `src/app/routes/article/article.service.ts:528`, inside `deleteComment`.\n- **Delete:** `prisma.comment.delete` at `src/app/routes/article/article.service.ts:555`, in the same function.\n\nThe route handler is in `src/app/routes/article/article.controller.ts:193-200` and calls `deleteComment`. The `HttpException` calls at lines 546 and 550 are error paths and don't touch the database. I got this from the code graph's route details, so I didn't read the service source. That means I can't say what the two `HttpException` checks test.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 19676,
+              "costUsd": 0.0567605,
+              "inputTokens": 8,
+              "outputTokens": 465,
+              "cacheCreationTokens": 10824,
+              "cacheReadTokens": 87985,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "It touches one table, **Comment** (Prisma), in `deleteComment` in `src/app/routes/article/article.service.ts`:\n\n- **Read:** `prisma.comment.findFirst` at line 528. It looks up the comment before deleting.\n- **Delete:** `prisma.comment.delete` at line 555. It removes the comment row.\n\nBetween the two, lines 546 and 550 throw `HttpException`. These look like guard checks, probably \"not found\" and \"not the author\". I haven't read that code to confirm.\n\nThe code graph shows no access to any other table, such as Article or User. The slug is not looked up in an `Article` table by this route. If `findFirst` filters on the article through a relation, that happens inside the Comment query itself.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10910,
+              "costUsd": 0.056682100000000006,
+              "inputTokens": 8,
+              "outputTokens": 458,
+              "cacheCreationTokens": 10822,
+              "cacheReadTokens": 87981,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`DELETE /api/articles/:slug/comments/:id` touches one table, **Comment**, through Prisma. The graph shows two operations, both in `deleteComment` in `src/app/routes/article/article.service.ts`:\n\n| Operation | Prisma call | Line |\n|---|---|---|\n| Read | `prisma.comment.findFirst` | 528 |\n| Delete | `prisma.comment.delete` | 555 |\n\nThe handler is at `src/app/routes/article/article.controller.ts:193` and calls `deleteComment`. The graph found no other tables, such as Article or User, in the route's call chain.\n\n`deleteComment` also throws `HttpException` at lines 546 and 550, which I take to be failed checks between the read and the delete. I didn't open the source to confirm that. The graph also doesn't show whether the `findFirst` query filters on the article slug or the author.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 14211,
+              "costUsd": 0.0572063,
+              "inputTokens": 8,
+              "outputTokens": 510,
+              "cacheCreationTokens": 10823,
+              "cacheReadTokens": 87983,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rw-env",
+      "sample": "internet-node-express-realworld",
+      "category": "env",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 95988,
+            "medianOutputTokens": 811,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 13034,
+            "medianCostUsd": 0.0545
+          },
+          "runs": [
+            {
+              "answer": "The app reads these environment variables:\n\n| Variable | Where | Default | Purpose |\n|---|---|---|---|\n| `DATABASE_URL` | `src/prisma/schema.prisma:3` | none (required) | Prisma database connection string |\n| `JWT_SECRET` | `src/app/routes/auth/auth.ts:16,21`, `src/app/routes/auth/token.utils.ts:4` | `'superSecret'` | Secret for signing and verifying JWTs |\n| `PORT` | `src/main.ts:53` | `3000` | Port the server listens on |\n| `NODE_ENV` | `src/prisma/prisma-client.ts:19` | none | When it is `development`, the Prisma client is set up differently (I didn't open the file to see how) |\n| `HOST` | `e2e/src/support/test-setup.ts:7` | `localhost` | Host the e2e tests connect to |\n| `PORT` | `e2e/src/support/test-setup.ts:8` | `3000` | Port the e2e tests connect to |\n\n- **JWT secret:** `JWT_SECRET` falls back to a hardcoded value. Set it explicitly in production, or anyone can forge tokens.\n- **No `.env` file:** There is no `.env*` file in the repo. `dotenv` is only in `package-lock.json`, probably as a dependency of Nx or Prisma, and nothing in the source imports it. You need to set `DATABASE_URL` in your shell, or in a `.env` file that Prisma picks up on its own.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 16650,
+              "costUsd": 0.05597920000000001,
+              "inputTokens": 6,
+              "outputTokens": 811,
+              "cacheCreationTokens": 9810,
+              "cacheReadTokens": 86172,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The app reads these environment variables:\n\n| Variable | Where | Default | Purpose |\n|---|---|---|---|\n| `DATABASE_URL` | `src/prisma/schema.prisma:3` | none (required) | Prisma database connection string |\n| `JWT_SECRET` | `src/app/routes/auth/auth.ts:16,21`, `src/app/routes/auth/token.utils.ts:4` | `'superSecret'` | Signs and verifies JWTs |\n| `PORT` | `src/main.ts:53` | `3000` | HTTP listen port |\n| `NODE_ENV` | `src/prisma/prisma-client.ts:19` | none | When it is `development`, the Prisma client does extra setup |\n\nThe e2e tests (`e2e/src/support/test-setup.ts:7-8`) also read `HOST` (default `localhost`) and `PORT` (default `3000`).\n\n- **Hardcoded JWT fallback:** if `JWT_SECRET` isn't set, the app signs tokens with `'superSecret'`. Set it explicitly in production.\n- **No `.env` file:** there is none in the repo. No app code imports `dotenv`. It only shows up in `package-lock.json`, probably as a dependency of another package. Prisma loads `.env` itself when you run its CLI, but at runtime you need to set these variables in the shell or your deployment.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 13034,
+              "costUsd": 0.05305050000000001,
+              "inputTokens": 6,
+              "outputTokens": 750,
+              "cacheCreationTokens": 9216,
+              "cacheReadTokens": 86745,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The app reads these environment variables:\n\n| Variable | Where | Default | Purpose |\n|---|---|---|---|\n| `DATABASE_URL` | `src/prisma/schema.prisma:3` | none (required) | Prisma database connection string |\n| `JWT_SECRET` | `src/app/routes/auth/auth.ts:16,21`, `src/app/routes/auth/token.utils.ts:4` | `'superSecret'` | Secret for signing and verifying JWTs |\n| `PORT` | `src/main.ts:53` | `3000` | Port the server listens on |\n| `NODE_ENV` | `src/prisma/prisma-client.ts:19` | none | When it is `development`, the Prisma client setup takes a dev-only branch. I didn't read what that branch does. |\n| `HOST` | `e2e/src/support/test-setup.ts:7` | `localhost` | Host used by the e2e tests |\n| `PORT` | `e2e/src/support/test-setup.ts:8` | `3000` | Port used by the e2e tests |\n\n- **Insecure default:** `JWT_SECRET` falls back to the hardcoded `'superSecret'`. Set it explicitly in production.\n- **No `.env` file:** The repo has no `.env*` file, so you have to supply `DATABASE_URL` yourself.\n- **Possible `.env` loading:** `dotenv` is in `package-lock.json`, but the code never imports it. It may be there as a dependency of Nx or Prisma, which load `.env` themselves.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12327,
+              "costUsd": 0.0545481,
+              "inputTokens": 6,
+              "outputTokens": 873,
+              "cacheCreationTokens": 9283,
+              "cacheReadTokens": 86741,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 98363,
+            "medianOutputTokens": 764,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 14910,
+            "medianCostUsd": 0.0585
+          },
+          "runs": [
+            {
+              "answer": "The app reads these environment variables:\n\n| Variable | Where | Default | Purpose |\n|---|---|---|---|\n| `DATABASE_URL` | `src/prisma/schema.prisma:3` | none | Prisma database connection string. The README (line 28) lists it as required. |\n| `JWT_SECRET` | `src/app/routes/auth/auth.ts:16,21` and `src/app/routes/auth/token.utils.ts:4` | `'superSecret'` | Secret for signing and verifying JWTs. |\n| `PORT` | `src/main.ts:53` | `3000` | Port the server listens on. |\n| `NODE_ENV` | `src/prisma/prisma-client.ts:19` | none | Checked for `'development'` in the Prisma client setup. |\n| `HOST` | `e2e/src/support/test-setup.ts:7` | `'localhost'` | Host the e2e tests target. Test-only. |\n| `PORT` | `e2e/src/support/test-setup.ts:8` | `'3000'` | Port the e2e tests target. Test-only. |\n\n`JWT_SECRET` falls back to a hardcoded `'superSecret'`. If it isn't set in production, anyone who knows that default can forge tokens, so set it explicitly there.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 15952,
+              "costUsd": 0.0585402,
+              "inputTokens": 8,
+              "outputTokens": 764,
+              "cacheCreationTokens": 10523,
+              "cacheReadTokens": 87922,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 2,
+                "mcp__concentrate__list_env_config": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The app reads these environment variables:\n\n| Variable | Read in | Used for |\n|---|---|---|\n| `PORT` | `src/main.ts:53` | Port the server listens on |\n| `JWT_SECRET` | `src/app/routes/auth/auth.ts:16`, `src/app/routes/auth/auth.ts:21`, `src/app/routes/auth/token.utils.ts:4` | Signing and verifying JWTs |\n| `NODE_ENV` | `src/prisma/prisma-client.ts:19` | Prisma client setup |\n| `HOST` | `e2e/src/support/test-setup.ts:7` | Host for the e2e tests only |\n| `PORT` | `e2e/src/support/test-setup.ts:8` | Port for the e2e tests only |\n\nI took the \"Used for\" column from the variable names and file locations. I didn't open the files to confirm what each one does.\n\nThe code graph and a grep for `process.env.*` found the same seven reads. Prisma also reads `DATABASE_URL` if the schema uses `env(\"DATABASE_URL\")`, but I didn't check the schema or any `.env` files. I can look if you want that confirmed.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14110,
+              "costUsd": 0.056199900000000004,
+              "inputTokens": 8,
+              "outputTokens": 643,
+              "cacheCreationTokens": 10242,
+              "cacheReadTokens": 87859,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__list_env_config": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The app reads these environment variables:\n\n| Variable | Where | Purpose |\n|---|---|---|\n| `DATABASE_URL` | `src/prisma/schema.prisma:3` | Prisma datasource connection string. The README (line 28) lists it as required. |\n| `JWT_SECRET` | `src/app/routes/auth/auth.ts:16,21` and `src/app/routes/auth/token.utils.ts:4` | Secret for signing and verifying JWTs. |\n| `PORT` | `src/main.ts:53` | Port the server listens on. |\n| `NODE_ENV` | `src/prisma/prisma-client.ts:19` | Used in the Prisma client setup. |\n| `HOST` | `e2e/src/support/test-setup.ts:7` | E2E tests only. |\n| `PORT` | `e2e/src/support/test-setup.ts:8` | E2E tests only. |\n\nPrisma reads `DATABASE_URL` through its `env()` helper in the schema, not `process.env`. The code-graph tool didn't list it for that reason, and I found it with a text search.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 14910,
+              "costUsd": 0.058748299999999996,
+              "inputTokens": 8,
+              "outputTokens": 790,
+              "cacheCreationTokens": 10512,
+              "cacheReadTokens": 87843,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 2,
+                "mcp__concentrate__list_env_config": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rw-http-exception",
+      "sample": "internet-node-express-realworld",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 94873,
+            "medianOutputTokens": 386,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 8797,
+            "medianCostUsd": 0.0472
+          },
+          "runs": [
+            {
+              "answer": "Three files create `HttpException` errors with `new HttpException`:\n\n- `src/app/routes/article/article.service.ts` (13 places)\n- `src/app/routes/auth/auth.service.ts` (7 places)\n- `src/app/routes/profile/profile.service.ts` (1 place)\n\nTwo other files mention `HttpException` but don't create it:\n\n- `src/app/models/http-exception.model.ts` defines the class.\n- `src/main.ts` references it, probably in error handling. I didn't open it to check.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10108,
+              "costUsd": 0.0494823,
+              "inputTokens": 6,
+              "outputTokens": 380,
+              "cacheCreationTokens": 9277,
+              "cacheReadTokens": 85623,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Files that create (`new HttpException(...)`) errors:\n\n- `src/app/routes/article/article.service.ts`: 13 occurrences\n- `src/app/routes/auth/auth.service.ts`: 7 occurrences\n- `src/app/routes/profile/profile.service.ts`: 1 occurrence\n\nTwo other files mention `HttpException` but don't create instances:\n\n- `src/app/models/http-exception.model.ts`: defines the class\n- `src/main.ts`: references it, most likely in the error-handling middleware",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 5795,
+              "costUsd": 0.04718340000000001,
+              "inputTokens": 6,
+              "outputTokens": 386,
+              "cacheCreationTokens": 8673,
+              "cacheReadTokens": 86194,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`HttpException` errors are created in three service files, all under `src/app/routes/`:\n\n- **`article/article.service.ts`** has the most.\n  - 422 validation errors for a blank or non-unique title, description and body, at lines 167, 171, 175, 190, 330 and 475.\n  - 404 not found, at lines 270, 307, 401 and 546.\n  - 403 forbidden, at lines 311, 405 and 550.\n- **`auth/auth.service.ts`**\n  - 422 for a blank email, username or password, at lines 29, 45, 49, 53, 89 and 93.\n  - 403, at line 124.\n- **`profile/profile.service.ts`**\n  - 404, at line 16.\n\nI searched for `new HttpException`. The class itself is defined somewhere else (likely a `models/http-exception.model.ts` file), and I didn't look for it.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8797,
+              "costUsd": 0.0464543,
+              "inputTokens": 4,
+              "outputTokens": 391,
+              "cacheCreationTokens": 9270,
+              "cacheReadTokens": 54563,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64997,
+            "medianOutputTokens": 374,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 8578,
+            "medianCostUsd": 0.0487
+          },
+          "runs": [
+            {
+              "answer": "`HttpException` is defined in `src/app/models/http-exception.model.ts`. Three files throw it with `new HttpException(...)`:\n\n- **`src/app/routes/auth/auth.service.ts`** throws 422 for blank email, username or password, and 403 at line 124.\n- **`src/app/routes/article/article.service.ts`** throws 422 for blank fields or a duplicate title, 404 for an article that isn't found, and 403 for forbidden actions. The throws are at lines 167–190, 270, 307–330, 401–405, 475 and 546–550.\n- **`src/app/routes/profile/profile.service.ts`** throws 404 at line 16.\n\n`src/main.ts` imports it but doesn't throw it. Its error-handling middleware takes `Error | HttpException` (line 28).",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8578,
+              "costUsd": 0.049502,
+              "inputTokens": 4,
+              "outputTokens": 372,
+              "cacheCreationTokens": 10065,
+              "cacheReadTokens": 55140,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`HttpException` is thrown (`new HttpException`) in three files:\n\n- **`src/app/routes/auth/auth.service.ts`** throws 422 for blank or invalid fields (lines 29, 45, 49, 53, 89, 93) and 403 (line 124).\n- **`src/app/routes/article/article.service.ts`** throws 422 for blank fields or a duplicate title (lines 167, 171, 175, 190, 330, 475), 404 (lines 270, 307, 401, 546) and 403 (lines 311, 405, 550).\n- **`src/app/routes/profile/profile.service.ts`** throws 404 (line 16).\n\nI only searched for `new HttpException`. The class itself is defined elsewhere, and I didn't look for it. A subclass or factory that builds these errors wouldn't show up in this list.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 10815,
+              "costUsd": 0.0487323,
+              "inputTokens": 4,
+              "outputTokens": 381,
+              "cacheCreationTokens": 9850,
+              "cacheReadTokens": 55143,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three files create `HttpException` errors, all with `new HttpException(...)`:\n\n- **`src/app/routes/article/article.service.ts`** has the most (13 throws). It raises:\n  - 422 for blank title, description or body, and for a non-unique title.\n  - 404 for an article that isn't found.\n  - 403 for authorization failures.\n- **`src/app/routes/auth/auth.service.ts`** has 7 throws. It raises:\n  - 422 for blank email, username or password, and for the credential error at line 29.\n  - 403 at line 124.\n- **`src/app/routes/profile/profile.service.ts`** has 1 throw. It raises a 404 at line 16.\n\nI only searched `*.ts` files with the literal text `new HttpException`. I didn't look at where the class is defined or at how it's caught.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6247,
+              "costUsd": 0.0486583,
+              "inputTokens": 4,
+              "outputTokens": 374,
+              "cacheCreationTokens": 9849,
+              "cacheReadTokens": 55143,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fastify-postgres-routes",
+      "sample": "fastify",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 2,
+            "medianInputTokens": 97619,
+            "medianOutputTokens": 712,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 14189,
+            "medianCostUsd": 0.0574
+          },
+          "runs": [
+            {
+              "answer": "The fastify-postgres example defines five routes in `fastify-postgres/server.js`. None have a path prefix.\n\n| Method | Path | Line | What it does |\n|---|---|---|---|\n| GET | `/` | 14 | Lists all rows in `books` |\n| POST | `/` | 21 | Inserts a book from `body.title` and returns the new row |\n| GET | `/:id` | 32 | Returns the book with that id |\n| PATCH | `/:id` | 42 | Updates the title in a transaction and returns the updated row |\n| DELETE | `/:id` | 56 | Deletes the book and returns `{ rowCount }` |",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 11809,
+              "costUsd": 0.0675487,
+              "inputTokens": 8,
+              "outputTokens": 712,
+              "cacheCreationTokens": 12197,
+              "cacheReadTokens": 116247,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Glob": 1,
+                "Grep": 2,
+                "Bash": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The fastify-postgres example defines four routes, all in `fastify-postgres/server.js`:\n\n| Method | Path | Line |\n|--------|------|------|\n| GET | `/` | 14 |\n| POST | `/` | 21 |\n| GET | `/:id` | 32 |\n| DELETE | `/:id` | 56 |\n\n`index.js` only starts the app on port 3000 and adds no routes. I found these with a text search for route-registration calls, so I haven't read the handlers or run the app.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 14189,
+              "costUsd": 0.054147299999999995,
+              "inputTokens": 6,
+              "outputTokens": 781,
+              "cacheCreationTokens": 9416,
+              "cacheReadTokens": 86613,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1,
+                "Read": 1
+              },
+              "correct": false,
+              "missing": [
+                "PATCH"
+              ]
+            },
+            {
+              "answer": "The fastify-postgres example (`fastify-postgres/server.js`) defines 5 routes. They're registered directly on the app with no prefix, so the paths are exactly as written.\n\n| Method | Path | Line | What it does |\n|--------|------|------|--------------|\n| GET | `/` | 14 | Lists all rows in `books` |\n| POST | `/` | 21 | Inserts a book using `body.title` and returns the new row |\n| GET | `/:id` | 32 | Fetches one book by id |\n| PATCH | `/:id` | 42 | Updates a book's title in a transaction and returns the updated row |\n| DELETE | `/:id` | 56 | Deletes a book by id and returns `{ rowCount }` |\n\n`test.js` in the same folder exercises the same five method and path combinations.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 19792,
+              "costUsd": 0.0574357,
+              "inputTokens": 6,
+              "outputTokens": 704,
+              "cacheCreationTokens": 10416,
+              "cacheReadTokens": 87197,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 132584,
+            "medianOutputTokens": 709,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 11495,
+            "medianCostUsd": 0.0633
+          },
+          "runs": [
+            {
+              "answer": "The fastify-postgres example has 5 routes. All of them are in `fastify-postgres/server.js`, and none are registered under a prefix.\n\n| Method | Path | Line |\n|--------|------|------|\n| GET | `/` | 14 |\n| POST | `/` | 21 |\n| GET | `/:id` | 32 |\n| PATCH | `/:id` | 42 |\n| DELETE | `/:id` | 56 |\n\nI got these from the code graph's route list and then checked `index.js` and `server.js` for prefixes. The only `register` call there is the `fastify-postgres` plugin, so the paths are exactly as shown.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 11495,
+              "costUsd": 0.06376240000000001,
+              "inputTokens": 10,
+              "outputTokens": 728,
+              "cacheCreationTokens": 11072,
+              "cacheReadTokens": 121744,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 2,
+                "mcp__concentrate__list_routes": 1,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The fastify-postgres example has 5 routes. All of them are in `fastify-postgres/server.js`, and there is no route prefix.\n\n| Method | Path | Line |\n|--------|------|------|\n| GET | `/` | 14 |\n| POST | `/` | 21 |\n| GET | `/:id` | 32 |\n| PATCH | `/:id` | 42 |\n| DELETE | `/:id` | 56 |\n\nThe only `register` call in the file is the `fastify-postgres` plugin, and it takes no prefix.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 21810,
+              "costUsd": 0.0633142,
+              "inputTokens": 10,
+              "outputTokens": 709,
+              "cacheCreationTokens": 11012,
+              "cacheReadTokens": 121562,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 2,
+                "mcp__concentrate__list_routes": 1,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The fastify-postgres example defines 5 routes, all in `fastify-postgres/server.js`. None has a prefix, and the Concentrate route index and the source agree.\n\n| Method | Path | Line | What it does |\n|---|---|---|---|\n| GET | `/` | 14 | Lists all rows in `books` |\n| POST | `/` | 21 | Inserts a book using `body.title` |\n| GET | `/:id` | 32 | Fetches one book by id |\n| PATCH | `/:id` | 42 | Updates a book's title in a transaction and returns the updated row |\n| DELETE | `/:id` | 56 | Deletes a book by id and returns `{ rowCount }` |",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 9875,
+              "costUsd": 0.06005429999999999,
+              "inputTokens": 8,
+              "outputTokens": 706,
+              "cacheCreationTokens": 11047,
+              "cacheReadTokens": 87903,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__list_routes": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fastify-env",
+      "sample": "fastify",
+      "category": "env",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 63176,
+            "medianOutputTokens": 412,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 12311,
+            "medianCostUsd": 0.0442
+          },
+          "runs": [
+            {
+              "answer": "The examples read two environment variables:\n\n- **`DATABASE_URL`** in `fastify-postgres/server.js:6`. It's the Postgres connection string. The line is `process.env.DATABASE_URL ||`, so a fallback follows it.\n- **`MONGO_URI`** in `tests/server.js:9`. It's the MongoDB connection string and defaults to `'mongodb://localhost/prod'`.\n\nI searched for `process.env`, `import.meta.env`, `Deno.env` and `dotenv`, and excluded `node_modules`. The only other hit was a `.gitignore` comment about dotenv files. There are no `.env*` files in the repo, so neither variable has a checked-in default file.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 16668,
+              "costUsd": 0.046344699999999996,
+              "inputTokens": 4,
+              "outputTokens": 412,
+              "cacheCreationTokens": 9205,
+              "cacheReadTokens": 53967,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The examples read two environment variables:\n\n- **`DATABASE_URL`** is read in `fastify-postgres/server.js:6`. It's the Postgres connection string, and the code uses `process.env.DATABASE_URL ||` followed by a fallback.\n- **`MONGO_URI`** is read in `tests/server.js:9`. It's the MongoDB connection string, and it falls back to `mongodb://localhost/prod`.\n\nNo other files read `process.env`, `import.meta.env` or `dotenv`. The repo has no `.env*` files. The only dotenv mention is a comment in `.gitignore:75`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12311,
+              "costUsd": 0.044199300000000004,
+              "inputTokens": 4,
+              "outputTokens": 417,
+              "cacheCreationTokens": 8641,
+              "cacheReadTokens": 54573,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The examples read two environment variables:\n\n- **`DATABASE_URL`** is read in `fastify-postgres/server.js:6`. It is used as the Postgres connection string, and the code checks it first (`process.env.DATABASE_URL || …`).\n- **`MONGO_URI`** is read in `tests/server.js:9`. If it isn't set, it defaults to `mongodb://localhost/prod`.\n\nI searched for `process.env`, `import.meta.env`, `Deno.env` and `env.NAME`-style access, excluding `node_modules`. I also found no `.env*` files in the repo, so nothing there defines these variables.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9804,
+              "costUsd": 0.043763199999999995,
+              "inputTokens": 4,
+              "outputTokens": 393,
+              "cacheCreationTokens": 8592,
+              "cacheReadTokens": 54572,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97389,
+            "medianOutputTokens": 450,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 12847,
+            "medianCostUsd": 0.0519
+          },
+          "runs": [
+            {
+              "answer": "The examples read two environment variables:\n\n| Variable | File | Line | Fallback |\n|---|---|---|---|\n| `DATABASE_URL` | `fastify-postgres/server.js` | 6 | An `||` follows it, so there is a fallback, but I didn't read the file to see what it is. |\n| `MONGO_URI` | `tests/server.js` | 9 | `mongodb://localhost/prod` |\n\nI searched for `process.env` and `import.meta.env`, and the code graph's env-config listing gave the same two results. Both checks skip `node_modules`, and neither would catch variables read in other ways, such as `dotenv` config files or destructured access.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12566,
+              "costUsd": 0.0519382,
+              "inputTokens": 8,
+              "outputTokens": 453,
+              "cacheCreationTokens": 9655,
+              "cacheReadTokens": 87722,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__list_env_config": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The examples read two environment variables:\n\n| Variable | File | Line | Fallback |\n|---|---|---|---|\n| `DATABASE_URL` | `fastify-postgres/server.js` | 6 | The `||` suggests a default connection string. I didn't open the file to check it. |\n| `MONGO_URI` | `tests/server.js` | 9 | `mongodb://localhost/prod` |\n\nA grep for `process.env`, `import.meta.env` and `Deno.env` outside `node_modules` found only these two reads. The code-graph env-config listing returned the same two. I didn't look for `.env` files or other config sources.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12847,
+              "costUsd": 0.051936699999999995,
+              "inputTokens": 8,
+              "outputTokens": 450,
+              "cacheCreationTokens": 9662,
+              "cacheReadTokens": 87727,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__list_env_config": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The examples read two environment variables:\n\n| Variable | File | Line | Fallback |\n|---|---|---|---|\n| `DATABASE_URL` | `fastify-postgres/server.js` | 6 | Used with `||`, so a default follows it. |\n| `MONGO_URI` | `tests/server.js` | 9 | `mongodb://localhost/prod` |\n\nA grep for `process.env` and `import.meta.env` and the code graph's env-config listing found the same two. I didn't open either file, so I haven't checked what the `DATABASE_URL` fallback is.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 13595,
+              "costUsd": 0.05166640000000001,
+              "inputTokens": 8,
+              "outputTokens": 425,
+              "cacheCreationTokens": 9657,
+              "cacheReadTokens": 87724,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__list_env_config": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "express-user-routes",
+      "sample": "express",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 63958,
+            "medianOutputTokens": 373,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 9373,
+            "medianCostUsd": 0.0467
+          },
+          "runs": [
+            {
+              "answer": "Routes in `examples/route-separation/index.js` handled by functions exported from `user.js`:\n\n| Method | Path | Handler |\n|---|---|---|\n| GET | `/users` | `user.list` |\n| ALL (any method) | `/user/:id{/:op}` | `user.load` |\n| GET | `/user/:id` | `user.view` |\n| GET | `/user/:id/view` | `user.view` |\n| GET | `/user/:id/edit` | `user.edit` |\n| PUT | `/user/:id/edit` | `user.update` |\n\n`user.load` is middleware, not an endpoint. It looks up the user and calls `next()`, or passes a 404 error if the user doesn't exist. It runs before the `/user/:id...` routes below it.\n\nThe other two routes, `GET /` (`site.index`) and `GET /posts` (`post.list`), come from `site.js` and `post.js`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 9402,
+              "costUsd": 0.0554409,
+              "inputTokens": 4,
+              "outputTokens": 370,
+              "cacheCreationTokens": 11625,
+              "cacheReadTokens": 52329,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Routes in `examples/route-separation/index.js` handled by functions exported from `user.js`:\n\n| Method | Path | Handler |\n|---|---|---|\n| GET | `/users` | `user.list` |\n| ALL | `/user/:id{/:op}` | `user.load` (middleware that loads the user, or 404s) |\n| GET | `/user/:id` | `user.view` |\n| GET | `/user/:id/view` | `user.view` |\n| GET | `/user/:id/edit` | `user.edit` |\n| PUT | `/user/:id/edit` | `user.update` |\n\n`user.load` is registered with `app.all`, so it runs for every HTTP method on `/user/:id` and `/user/:id/:op`. It runs before the `view`, `edit` and `update` handlers.\n\n`GET /` goes to `site.index` and `GET /posts` goes to `post.list`. Neither comes from `user.js`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 9373,
+              "costUsd": 0.04646410000000001,
+              "inputTokens": 4,
+              "outputTokens": 373,
+              "cacheCreationTokens": 9316,
+              "cacheReadTokens": 54621,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Routes in `examples/route-separation/index.js` that use functions exported from `user.js`:\n\n| Method | Path | Handler |\n|---|---|---|\n| GET | `/users` | `user.list` |\n| ALL | `/user/:id{/:op}` | `user.load` (middleware that loads the user, or 404s) |\n| GET | `/user/:id` | `user.view` |\n| GET | `/user/:id/view` | `user.view` |\n| GET | `/user/:id/edit` | `user.edit` |\n| PUT | `/user/:id/edit` | `user.update` |\n\n`user.load` is registered with `app.all`, so it runs for every HTTP method on `/user/:id` and `/user/:id/:op`. It calls `next()` and doesn't send a response. The `/user/:id` view and edit routes after it depend on it to set `req.user`.\n\nThe other routes use different modules: `/` goes to `site.index` and `/posts` goes to `post.list`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7383,
+              "costUsd": 0.0467443,
+              "inputTokens": 4,
+              "outputTokens": 391,
+              "cacheCreationTokens": 9341,
+              "cacheReadTokens": 54623,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 65084,
+            "medianOutputTokens": 434,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 8265,
+            "medianCostUsd": 0.0481
+          },
+          "runs": [
+            {
+              "answer": "In `examples/route-separation/index.js`, these routes are handled by functions exported from `user.js`:\n\n| Method | Path | Handler |\n|---|---|---|\n| GET | `/users` | `user.list` |\n| ALL | `/user/:id{/:op}` | `user.load` |\n| GET | `/user/:id` | `user.view` |\n| GET | `/user/:id/view` | `user.view` |\n| GET | `/user/:id/edit` | `user.edit` |\n| PUT | `/user/:id/edit` | `user.update` |\n\nThe `ALL` route matches every HTTP method. `user.load` runs first and attaches `req.user` for the other `/user/:id` routes.\n\nI only grepped for the `user` lines in `index.js`, so I didn't check `user.js`'s `exports` directly. The handler names come from the `user.<name>` references in the route definitions.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7130,
+              "costUsd": 0.0475314,
+              "inputTokens": 4,
+              "outputTokens": 434,
+              "cacheCreationTokens": 9416,
+              "cacheReadTokens": 55194,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Routes in `examples/route-separation/index.js` (lines 40–45) handled by functions exported from `user.js`:\n\n| Method | Path | Handler |\n|---|---|---|\n| GET | `/users` | `user.list` |\n| ALL | `/user/:id{/:op}` | `user.load` (middleware that loads the user, or 404s) |\n| GET | `/user/:id` | `user.view` |\n| GET | `/user/:id/view` | `user.view` |\n| GET | `/user/:id/edit` | `user.edit` |\n| PUT | `/user/:id/edit` | `user.update` |\n\n`:id` is the index into the fake `users` array. `{/:op}` is an optional path segment. `/` and `/posts` are handled by `site.js` and `post.js`, not `user.js`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12001,
+              "costUsd": 0.055119,
+              "inputTokens": 6,
+              "outputTokens": 517,
+              "cacheCreationTokens": 10301,
+              "cacheReadTokens": 87330,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "These routes in `examples/route-separation/index.js` use functions exported from `user.js`:\n\n| Method | Path | Handler |\n|---|---|---|\n| GET | `/users` | `user.list` |\n| ALL | `/user/:id{/:op}` | `user.load` (middleware that loads the user, or returns a 404) |\n| GET | `/user/:id` | `user.view` |\n| GET | `/user/:id/view` | `user.view` |\n| GET | `/user/:id/edit` | `user.edit` |\n| PUT | `/user/:id/edit` | `user.update` |\n\nThe other two routes, `GET /` (`site.index`) and `GET /posts` (`post.list`), come from `site.js` and `post.js`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8265,
+              "costUsd": 0.0481414,
+              "inputTokens": 4,
+              "outputTokens": 307,
+              "cacheCreationTokens": 9886,
+              "cacheReadTokens": 55194,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "express-trystat",
+      "sample": "express",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 95253,
+            "medianOutputTokens": 443,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 15283,
+            "medianCostUsd": 0.0494
+          },
+          "runs": [
+            {
+              "answer": "In `lib/view.js`, `tryStat` is called twice, both inside `View.prototype.resolve`:\n\n- **Line 174** checks `<dir>/<file>` (the path with its extension).\n- **Line 182** is the fallback. It checks `<dir>/<basename>/index<ext>`.\n\n`tryStat` itself is defined at line 197. It wraps `fs.statSync` and returns `undefined` instead of throwing if the path doesn't exist.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 15283,
+              "costUsd": 0.0514671,
+              "inputTokens": 6,
+              "outputTokens": 429,
+              "cacheCreationTokens": 9651,
+              "cacheReadTokens": 85611,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`tryStat` is called twice in `lib/view.js`. Both calls are inside `View.prototype.resolve` (the function starting at line 169):\n\n- **Line 174:** `var stat = tryStat(path);`. This checks `<dir>/<file>`, the direct path.\n- **Line 182:** `stat = tryStat(path);`. This checks `<dir>/<basename>/index<ext>`, the index-file fallback.\n\n`tryStat` itself is defined at line 197. It wraps `fs.statSync` in a try/catch and returns `undefined` on error.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 18234,
+              "costUsd": 0.049366400000000005,
+              "inputTokens": 6,
+              "outputTokens": 464,
+              "cacheCreationTokens": 9023,
+              "cacheReadTokens": 86224,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`tryStat` is called twice in `lib/view.js`, both times from `View.prototype.resolve` (defined at line 169):\n\n- **Line 174:** `var stat = tryStat(path);` checks `<dir>/<file>`.\n- **Line 182:** `stat = tryStat(path);` checks `<dir>/<basename>/index<ext>` as a fallback.\n\n`tryStat` itself is defined at line 197. It wraps `fs.statSync` and returns `undefined` if the call throws.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12454,
+              "costUsd": 0.0491564,
+              "inputTokens": 6,
+              "outputTokens": 443,
+              "cacheCreationTokens": 9023,
+              "cacheReadTokens": 86224,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 96987,
+            "medianOutputTokens": 458,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 17531,
+            "medianCostUsd": 0.0517
+          },
+          "runs": [
+            {
+              "answer": "In `lib/view.js`, `tryStat` is called twice, both times from `View.prototype.resolve` (defined at line 169):\n\n- **Line 174:** `var stat = tryStat(path);` checks `<dir>/<file>`, which is the `<path>.<ext>` case.\n- **Line 182:** `stat = tryStat(path);` checks `<dir>/<basename>/index<ext>`, which is the `<path>/index.<ext>` case.\n\n`tryStat` is defined at line 197. It wraps `fs.statSync` in a try/catch and returns `undefined` on error. `resolve` uses it to find a view file without throwing when the path doesn't exist.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 13391,
+              "costUsd": 0.05213140000000001,
+              "inputTokens": 6,
+              "outputTokens": 499,
+              "cacheCreationTokens": 9598,
+              "cacheReadTokens": 87374,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`tryStat` is called twice in `lib/view.js`. Both calls are inside `View.prototype.resolve` (defined at line 169):\n\n- **Line 174:** `tryStat(path)` checks the direct path, `<dir>/<file>`.\n- **Line 182:** `tryStat(path)` checks the fallback path, `<dir>/<basename>/index<ext>`.\n\n`tryStat` itself is defined at line 197. It wraps `fs.statSync` in a try/catch and returns `undefined` on error.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 24065,
+              "costUsd": 0.05164400000000001,
+              "inputTokens": 6,
+              "outputTokens": 449,
+              "cacheCreationTokens": 9601,
+              "cacheReadTokens": 87380,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "In `lib/view.js`, `tryStat` is called twice. Both calls are inside `View.prototype.resolve` (starts at line 169):\n\n- **Line 174:** `var stat = tryStat(path);` checks `<dir>/<file>`, the path with the extension.\n- **Line 182:** `stat = tryStat(path);` checks `<dir>/<basename>/index<ext>`, the fallback.\n\n`tryStat` itself is defined at line 197. It wraps `fs.statSync` in a try/catch and returns `undefined` on error.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 17531,
+              "costUsd": 0.051738200000000005,
+              "inputTokens": 6,
+              "outputTokens": 458,
+              "cacheCreationTokens": 9602,
+              "cacheReadTokens": 87382,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ky-validate-and-merge",
+      "sample": "ky",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 95878,
+            "medianOutputTokens": 503,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 11817,
+            "medianCostUsd": 0.0517
+          },
+          "runs": [
+            {
+              "answer": "All calls to `validateAndMerge` are in `source/index.ts`. They sit inside the `createInstance` function (line 10). It's defined in `source/utils/merge.ts:54` and imported at line 7.\n\n| Line | Where in `createInstance` |\n|---|---|\n| 12 | The base `ky(input, options)` callable. |\n| 16 | The per-method shortcuts (`ky.get`, `ky.post` and so on), set up in the `for (const method of requestMethods)` loop. |\n| 19 | `ky.create`. |\n| 25 | `ky.extend`. |\n\nLines 12 and 16 are arrow functions assigned inside `createInstance`. Lines 19 and 25 are also arrow functions, assigned to `ky.create` and `ky.extend`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 11817,
+              "costUsd": 0.0605959,
+              "inputTokens": 6,
+              "outputTokens": 516,
+              "cacheCreationTokens": 11753,
+              "cacheReadTokens": 84119,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`validateAndMerge` is called only from `source/index.ts`. All four calls are inside the `createInstance` function (`source/index.ts:10`):\n\n- **Line 12:** the `ky(input, options)` function itself.\n- **Line 16:** the per-method shortcuts, such as `ky.get` and `ky.post`. These are assigned in a loop over `requestMethods`.\n- **Line 19:** the `ky.create` arrow function.\n- **Line 25:** the `ky.extend` arrow function.\n\nThe function is defined in `source/utils/merge.ts:54`, and no other file calls it.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 16590,
+              "costUsd": 0.0517085,
+              "inputTokens": 6,
+              "outputTokens": 503,
+              "cacheCreationTokens": 9507,
+              "cacheReadTokens": 86385,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`validateAndMerge` is defined in `source/utils/merge.ts:54`. Its only callers are in `source/index.ts`, all inside the `createInstance` function:\n\n- **Line 12:** the `ky` call function, `(input, options) => Ky.create(input, validateAndMerge(defaults, options))`.\n- **Line 16:** the per-method shortcuts, `ky[method] = ...`, which pass `{method}` as a third argument.\n- **Line 19:** `ky.create`, which calls `createInstance(validateAndMerge(newDefaults))`.\n- **Line 25:** `ky.extend`, which calls `createInstance(validateAndMerge(defaults, newDefaults))`.\n\nI inferred that all four sit inside `createInstance` from the `createInstance` calls on lines 19 and 25. I didn't open the file to confirm it.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 10850,
+              "costUsd": 0.0437538,
+              "inputTokens": 4,
+              "outputTokens": 367,
+              "cacheCreationTokens": 8655,
+              "cacheReadTokens": 54558,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97580,
+            "medianOutputTokens": 507,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 14227,
+            "medianCostUsd": 0.0541
+          },
+          "runs": [
+            {
+              "answer": "The only caller is `createInstance` in `source/index.ts`. It's defined at line 10 and calls `validateAndMerge` in four places:\n\n- **Line 12:** the base `ky(input, options)` function.\n- **Line 16:** the per-method shortcuts like `ky.get` and `ky.post`, built in the loop over `requestMethods`.\n- **Line 19:** the `ky.create` arrow function, which sits inside `createInstance`.\n- **Line 25:** the `ky.extend` arrow function, which also sits inside `createInstance`.\n\n`validateAndMerge` itself is defined in `source/utils/merge.ts:54`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 21840,
+              "costUsd": 0.0541007,
+              "inputTokens": 6,
+              "outputTokens": 507,
+              "cacheCreationTokens": 10067,
+              "cacheReadTokens": 87507,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`validateAndMerge` is only called from `source/index.ts`, and every call is inside the `createInstance` function (line 10). It's defined in `source/utils/merge.ts:54`.\n\nThe calls sit in four closures within `createInstance`:\n- **Line 12:** the `ky(input, options)` function itself.\n- **Line 16:** the per-method shortcuts, such as `ky.get`, set up in the loop over `requestMethods`.\n- **Line 19:** `ky.create`.\n- **Line 25:** `ky.extend`.\n\nI found these by searching the code for the name, not with the code-graph `find_callers` tool I loaded, so a call made through an alias or a re-export wouldn't show up. The search found no other uses, only the import at line 7.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14227,
+              "costUsd": 0.057317099999999996,
+              "inputTokens": 8,
+              "outputTokens": 646,
+              "cacheCreationTokens": 10512,
+              "cacheReadTokens": 87931,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`validateAndMerge` is called only from `source/index.ts`. It's defined in `source/utils/merge.ts:54` and imported at line 7 of `index.ts`.\n\nAll four call sites are inside the `createInstance` function (`source/index.ts:10`). Each one sits in a different closure within it:\n\n| Line | Enclosing code |\n|---|---|\n| 12 | The base `ky` callable, `(input, options) => Ky.create(...)` |\n| 16 | The per-method shortcuts (`ky.get`, `ky.post`, etc.), assigned in the `for (const method of requestMethods)` loop |\n| 19 | `ky.create` |\n| 25 | `ky.extend` |",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12801,
+              "costUsd": 0.053296300000000005,
+              "inputTokens": 6,
+              "outputTokens": 455,
+              "cacheCreationTokens": 9996,
+              "cacheReadTokens": 87503,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "nest-typeorm-user-writes",
+      "sample": "internet-nest",
+      "category": "data",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 96079,
+            "medianOutputTokens": 601,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 15085,
+            "medianCostUsd": 0.0539
+          },
+          "runs": [
+            {
+              "answer": "Two `UsersService` methods write to the user table (`sample/05-sql-typeorm/src/users/users.service.ts`). Each is called by one route in `users.controller.ts`, which is mounted under `@Controller('users')`.\n\n| Service method | Write operation | HTTP route | Controller handler |\n|---|---|---|---|\n| `create(createUserDto)` (line 14) | `usersRepository.save(user)` inserts a new row | `POST /users` | `create` (line 18) |\n| `remove(id)` (line 30) | `usersRepository.delete(id)` deletes a row | `DELETE /users/:id` | `remove` (line 33) |\n\n`findAll()` and `findOne()` only read. They are called by `GET /users` and `GET /users/:id`.\n\n`remove` takes `id` as a string, because the controller's `@Param('id')` has no `ParseIntPipe`. `findOne` does use that pipe.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 13022,
+              "costUsd": 0.0624062,
+              "inputTokens": 6,
+              "outputTokens": 601,
+              "cacheCreationTokens": 11994,
+              "cacheReadTokens": 84082,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two `UsersService` methods write to the user table. Each is reached by one route in `UsersController`, which is mounted at `/users`.\n\n| Service method | Write | HTTP route |\n|---|---|---|\n| `create(createUserDto)` (`users.service.ts:14`) | `usersRepository.save(user)` inserts a row | `POST /users` (`users.controller.ts:18`) |\n| `remove(id)` (`users.service.ts:30`) | `usersRepository.delete(id)` deletes a row | `DELETE /users/:id` (`users.controller.ts:33`) |\n\n`findAll()` and `findOne()` only read. They are behind `GET /users` and `GET /users/:id`.\n\n`remove` takes `id` as a string with no `ParseIntPipe`, unlike `findOne`. The raw path parameter goes straight to `delete`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 15085,
+              "costUsd": 0.0532599,
+              "inputTokens": 6,
+              "outputTokens": 578,
+              "cacheCreationTokens": 9708,
+              "cacheReadTokens": 86359,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two `UsersService` methods write to the user table. Each is called by one route in `UsersController`, which is mounted at `/users`.\n\n| Service method | Write | HTTP route | Controller handler |\n|---|---|---|---|\n| `create(createUserDto)` (`users.service.ts:14`) | `usersRepository.save(user)` inserts a new row with `firstName` and `lastName`. | `POST /users` | `create` (`users.controller.ts:18`) |\n| `remove(id)` (`users.service.ts:30`) | `usersRepository.delete(id)` deletes the row with that id. | `DELETE /users/:id` | `remove` (`users.controller.ts:33`) |\n\nThe other two methods only read. `findAll()` calls `find()` and backs `GET /users`. `findOne(id)` calls `findOneBy()` and backs `GET /users/:id`.\n\nThe `:id` in `DELETE /users/:id` is passed as a string with no `ParseIntPipe`. The `GET /users/:id` route does use `ParseIntPipe`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 15636,
+              "costUsd": 0.0539383,
+              "inputTokens": 6,
+              "outputTokens": 645,
+              "cacheCreationTokens": 9710,
+              "cacheReadTokens": 86363,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97733,
+            "medianOutputTokens": 622,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 13317,
+            "medianCostUsd": 0.0558
+          },
+          "runs": [
+            {
+              "answer": "Two `UsersService` methods write to the user table. Each is reached by one HTTP route.\n\n| Service method | Write operation | HTTP route |\n|---|---|---|\n| `create()` (`users.service.ts:19`) | `usersRepository.save(user)` (insert) | `POST /users` (`users.controller.ts:18`) |\n| `remove()` (`users.service.ts:31`) | `usersRepository.delete(id)` | `DELETE /users/:id` (`users.controller.ts:33`) |\n\nThe other two methods only read. `findAll()` (`find()`) is called by `GET /users`, and `findOne()` (`findOneBy`) is called by `GET /users/:id`.\n\nThe controller is mounted at `users` (`@Controller('users')`). I found no update method or `PUT`/`PATCH` route, so existing users can only be created or deleted.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 13317,
+              "costUsd": 0.054673,
+              "inputTokens": 6,
+              "outputTokens": 668,
+              "cacheCreationTokens": 9797,
+              "cacheReadTokens": 87930,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two `UsersService` methods write to the user table. Each is called by one route in `UsersController`, and I found no other callers.\n\n| Service method | Write | HTTP route | Controller handler |\n|---|---|---|---|\n| `create(createUserDto)` (`users.service.ts:14`) | `usersRepository.save(user)` inserts a new row | `POST /users` | `UsersController.create` (`users.controller.ts:18`) |\n| `remove(id)` (`users.service.ts:30`) | `usersRepository.delete(id)` deletes a row | `DELETE /users/:id` | `UsersController.remove` (`users.controller.ts:33`) |\n\n`findAll()` and `findOne(id)` only read. They are called by `GET /users` and `GET /users/:id`.\n\nI read `users.service.ts` and `users.controller.ts` directly. I didn't check whether anything outside `src/users` calls the service. `app.module.ts` and `users.module.ts` only wire the modules together.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10871,
+              "costUsd": 0.0562149,
+              "inputTokens": 6,
+              "outputTokens": 622,
+              "cacheCreationTokens": 10293,
+              "cacheReadTokens": 88109,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Read": 2,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two `UsersService` methods write to the user table, and each is called by one route in `UsersController`. The controller has a global-prefix-free `@Controller('users')` path.\n\n| Service method | Write operation | HTTP route |\n|---|---|---|\n| `create(createUserDto)` (`users.service.ts:14`) | `usersRepository.save(user)` inserts a new row | `POST /users` (`users.controller.ts:18`) |\n| `remove(id)` (`users.service.ts:30`) | `usersRepository.delete(id)` deletes a row | `DELETE /users/:id` (`users.controller.ts:33`) |\n\nThe other two methods only read:\n- `findAll()` uses `find()` and is called by `GET /users`.\n- `findOne(id)` uses `findOneBy()` and is called by `GET /users/:id`.\n\nThere is no update method or route. I only read these two files. I didn't check whether anything else in the app, such as a seed or another module, calls these methods.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 19862,
+              "costUsd": 0.055766500000000004,
+              "inputTokens": 6,
+              "outputTokens": 615,
+              "cacheCreationTokens": 10215,
+              "cacheReadTokens": 87445,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "nest-mongoose-cat-writes",
+      "sample": "internet-nest",
+      "category": "data",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 95997,
+            "medianOutputTokens": 590,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 15323,
+            "medianCostUsd": 0.0541
+          },
+          "runs": [
+            {
+              "answer": "Three routes in `sample/06-mongoose` modify the cats collection. There's no global prefix in `main.ts`, so the paths are exactly as the controller declares them (`@Controller('cats')`, app on port 3000):\n\n| Method | Full path | Handler | Effect |\n|---|---|---|---|\n| `POST` | `/cats` | `create` | Inserts a new cat with `catModel.create` |\n| `POST` | `/cats/:id` | `update` | Updates a cat with `findByIdAndUpdate` |\n| `DELETE` | `/cats/:id` | `delete` | Deletes a cat with `findByIdAndDelete` |\n\nThe update route uses `POST`, not `PUT` or `PATCH`. The other two routes, `GET /cats` and `GET /cats/:id`, only read.\n\nThe routes are in `sample/06-mongoose/src/cats/cats.controller.ts`, and the database calls are in `cats.service.ts` in the same folder.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 15323,
+              "costUsd": 0.0558566,
+              "inputTokens": 6,
+              "outputTokens": 590,
+              "cacheCreationTokens": 10345,
+              "cacheReadTokens": 85646,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "In `sample/06-mongoose`, three routes modify the cats collection. All are in `src/cats/cats.controller.ts`, and the controller prefix is `cats`. I found no global prefix or versioning in the sample, so these are the full paths.\n\n| Method | Path | Handler | Effect |\n|---|---|---|---|\n| `POST` | `/cats` | `create` | Creates a cat |\n| `POST` | `/cats/:id` | `update` | Updates the cat with that id (an update, despite using POST) |\n| `DELETE` | `/cats/:id` | `delete` | Deletes the cat with that id |\n\nThe two `GET` routes, `/cats` and `/cats/:id`, only read.\n\nI read the controller but not `cats.service.ts`. The effects above come from the handler names (`create`, `update`, `delete`) and the service calls they make.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 15044,
+              "costUsd": 0.0541166,
+              "inputTokens": 6,
+              "outputTokens": 742,
+              "cacheCreationTokens": 9505,
+              "cacheReadTokens": 86646,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three routes in `sample/06-mongoose` modify the cats collection. All three are in `src/cats/cats.controller.ts`, under `@Controller('cats')`. I found no `setGlobalPrefix` call in `src`, so there is no global prefix.\n\n| Method | Path | Handler | Mongoose call |\n|---|---|---|---|\n| POST | `/cats` | `create` | `catModel.create()` |\n| POST | `/cats/:id` | `update` | `catModel.findByIdAndUpdate()` |\n| DELETE | `/cats/:id` | `delete` | `catModel.findByIdAndDelete()` |\n\nThe update route uses POST, not PUT or PATCH. The other two routes, `GET /cats` and `GET /cats/:id`, only read.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 16421,
+              "costUsd": 0.051995,
+              "inputTokens": 6,
+              "outputTokens": 533,
+              "cacheCreationTokens": 9507,
+              "cacheReadTokens": 86250,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97549,
+            "medianOutputTokens": 770,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 14141,
+            "medianCostUsd": 0.0565
+          },
+          "runs": [
+            {
+              "answer": "Three routes in `sample/06-mongoose` modify the cats collection. All three are in `src/cats/cats.controller.ts`, and the controller is mounted at `cats`:\n\n| Method | Path | Handler | Effect |\n|---|---|---|---|\n| POST | `/cats` | `create` | Inserts a new cat |\n| POST | `/cats/:id` | `update` | Updates the cat with that id (this sample uses POST, not PUT or PATCH) |\n| DELETE | `/cats/:id` | `delete` | Deletes the cat with that id |\n\n`GET /cats` and `GET /cats/:id` only read.\n\nI found no `setGlobalPrefix` or `RouterModule` in `src`, so I believe there is no extra prefix. I didn't open `CatsService`, so I'm assuming from the handler names that each one writes to the collection.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14138,
+              "costUsd": 0.0548101,
+              "inputTokens": 6,
+              "outputTokens": 682,
+              "cacheCreationTokens": 9812,
+              "cacheReadTokens": 87301,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three routes in `sample/06-mongoose` modify the cats collection. All live in `src/cats/cats.controller.ts`, under `@Controller('cats')`:\n\n| Method | Path | Handler | Effect |\n|---|---|---|---|\n| `POST` | `/cats` | `create` | Inserts a new cat (`catModel.create`) |\n| `POST` | `/cats/:id` | `update` | Updates a cat by id (`findByIdAndUpdate`) |\n| `DELETE` | `/cats/:id` | `delete` | Deletes a cat by id (`findByIdAndDelete`) |\n\nThe update route uses `POST`, not `PUT` or `PATCH`.\n\n`GET /cats` and `GET /cats/:id` only read. I found no global prefix or `RouterModule` in the sample's `src`, so the paths have no extra prefix. I didn't check `main.ts` for a global prefix beyond that grep.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 17312,
+              "costUsd": 0.0583339,
+              "inputTokens": 6,
+              "outputTokens": 846,
+              "cacheCreationTokens": 10283,
+              "cacheReadTokens": 87299,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 1,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three routes in `sample/06-mongoose` modify the cats collection. All are in `src/cats/cats.controller.ts`:\n\n| Method | Path | Handler | Effect |\n|---|---|---|---|\n| POST | `/cats` | `create` | Inserts a new cat |\n| POST | `/cats/:id` | `update` | Updates the cat with that id (this sample uses POST for updates, not PUT or PATCH) |\n| DELETE | `/cats/:id` | `delete` | Deletes the cat with that id |\n\n`GET /cats` and `GET /cats/:id` only read. The paths are exactly as shown because the sample has no `setGlobalPrefix`. I didn't open `cats.service.ts`, so the \"Effect\" column comes from the handler names and the Mongoose sample's usual behavior, not from the service code.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14141,
+              "costUsd": 0.05654429999999999,
+              "inputTokens": 6,
+              "outputTokens": 770,
+              "cacheCreationTokens": 10020,
+              "cacheReadTokens": 87523,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "nest-repl-cycle",
+      "sample": "internet-nest",
+      "category": "cycles",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 131345,
+            "medianOutputTokens": 1319,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 24545,
+            "medianCostUsd": 0.068
+          },
+          "runs": [
+            {
+              "answer": "Yes, there is an import cycle in `packages/core/repl`. I read the relative imports by hand because `madge` and `dpdm` aren't installed.\n\n**The cycle**\n\n```\nrepl-context.ts\n  → native-functions/index.ts\n    → {help,get,resolve,select,methods,debug}-repl-fn.ts   (each one)\n      → repl-function.ts\n        → repl-context.ts\n```\n\nThe files involved are:\n- `repl/repl-context.ts`, which imports `./native-functions` and `./repl-function`\n- `repl/native-functions/index.ts`, which re-exports all six function files\n- `repl/native-functions/help-repl-fn.ts`, `get-repl-fn.ts`, `resolve-repl-fn.ts`, `select-relp-fn.ts`, `methods-repl-fn.ts` and `debug-repl-fn.ts`, which each import `ReplFunction` from `../repl-function`\n- `repl/repl-function.ts`, which imports `ReplContext` from `./repl-context`\n\nThat is six cycles that share the same two ends, `repl-context` and `repl-function`. The barrel `native-functions/index.ts` sits in the middle of all of them.\n\n**Which parts are real**\n\n- `repl-function.ts:3` is a value import, `import { ReplContext }`. `ReplContext` is only used as a constructor parameter type there. With `emitDecoratorMetadata` it could be emitted as a runtime reference, but this class has no decorators, so TypeScript elides the import. The cycle probably doesn't exist in the compiled JS. It is still a cycle for static analysis.\n- `debug-repl-fn.ts` imports `ModuleDebugEntry` from `../repl-context`. It uses `import type`, so it is erased and adds no runtime cycle.\n- `repl.interfaces.ts` ↔ `repl-context.ts` and `repl-function.ts` also form a loop, but every edge there is `import type`, so it is harmless.\n\n**Fix**\n\nChange `repl-function.ts:3` to `import type { ReplContext } from './repl-context';`. That removes the only value-level back edge and breaks all six cycles. I haven't made the change. Do you want me to?",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 24545,
+              "costUsd": 0.0737409,
+              "inputTokens": 8,
+              "outputTokens": 1319,
+              "cacheCreationTokens": 12130,
+              "cacheReadTokens": 120149,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Glob": 1,
+                "Bash": 2,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Yes. Reading the imports by hand (`madge` isn't installed), I found one cycle inside `packages/core/repl`.\n\n**Core cycle:** `repl-context.ts` ↔ `repl-function.ts`\n- `repl-context.ts:18` imports `ReplFunction` from `./repl-function`.\n- `repl-function.ts:3` imports `ReplContext` from `./repl-context`.\n\n**Longer cycle through `native-functions/`:** `repl-context.ts` also imports `./native-functions` (lines 10-17). Each of those files extends `ReplFunction` and imports `../repl-function`, which imports `repl-context.ts` again. So these files are in the loop too:\n- `native-functions/index.ts`\n- `debug-repl-fn.ts`\n- `get-repl-fn.ts`\n- `help-repl-fn.ts`\n- `methods-repl-fn.ts`\n- `resolve-repl-fn.ts`\n- `select-relp-fn.ts`\n\n**What it does at runtime:** the cycle is probably harmless. In `repl-function.ts`, `ReplContext` is used only as a constructor parameter type. The class has no decorators, so TypeScript should drop that import from the compiled output. I didn't check whether `emitDecoratorMetadata` is on or build the package. If the import is dropped, the cycle exists only in the source.\n\n**Fix:** change `repl-function.ts:3` to `import type { ReplContext } from './repl-context';`. That is the pattern the other files here already use for `repl.interfaces`. With that change, madge-style tools won't report the cycle.\n\n**Not covered:** I only looked at imports within the `repl` folder. `repl-logger.ts` and `repl.ts` also import from outside it (`nest-application`, `router/*`, `nest-factory`). Whether those form a larger cycle back into `repl` would need a whole-package check.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 33612,
+              "costUsd": 0.067996,
+              "inputTokens": 6,
+              "outputTokens": 1364,
+              "cacheCreationTokens": 11386,
+              "cacheReadTokens": 88000,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 1,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Yes, there is one import cycle in `packages/core/repl`. I traced it by reading the relative imports in every file there. I didn't run a tool like madge, because it isn't installed.\n\n**The cycle:**\n\n```\nrepl-context.ts\n  → native-functions/index.ts            (barrel)\n    → help-repl-fn.ts, get-repl-fn.ts, resolve-repl-fn.ts,\n      select-relp-fn.ts, debug-repl-fn.ts, methods-repl-fn.ts\n      → repl-function.ts\n        → repl-context.ts               (back to the start)\n```\n\nThe files involved are:\n- `repl-context.ts`\n- `native-functions/index.ts`\n- all six `native-functions/*-repl-fn.ts` files\n- `repl-function.ts`\n\n**Does it exist at runtime?**\n- **Source level:** yes. `repl-function.ts:3` has `import { ReplContext } from './repl-context'`, and `repl-context.ts` imports `./native-functions` and `./repl-function`.\n- **Compiled output:** probably not. `ReplContext` is used in `repl-function.ts` only as a constructor parameter type (line 15). TypeScript drops imports that are only used as types, unless `emitDecoratorMetadata` is on and the class is decorated. I didn't check the tsconfig or the emitted JS.\n- **Other type-only edges:** `debug-repl-fn.ts` → `repl-context` (`import type`) and `repl.interfaces.ts` → `repl-context` and `repl-function` (`import type`) also point back at `repl-context`. They are erased, so they add no runtime cycle.\n\n**Fix:** change `repl-function.ts:3` to `import type { ReplContext } from './repl-context'`. That breaks the cycle explicitly and keeps it from reappearing if the compiler settings change.\n\nI only checked inside `repl/`. The files also import from `../injector`, `../router` and `../nest-factory`, and I didn't check whether those lead back into `repl/`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 24288,
+              "costUsd": 0.06804110000000001,
+              "inputTokens": 8,
+              "outputTokens": 1228,
+              "cacheCreationTokens": 10926,
+              "cacheReadTokens": 120411,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Bash": 1,
+                "Glob": 1,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97695,
+            "medianOutputTokens": 839,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 15000,
+            "medianCostUsd": 0.0575
+          },
+          "runs": [
+            {
+              "answer": "Yes. There are two runtime import cycles (neither is type-only) that involve `packages/core/repl`.\n\n**1. A large cycle that leaves the folder (16 files in the group, 3 of them in `repl`)**\n\nMembers in `repl`: `index.ts`, `repl-logger.ts`, `repl.ts`\n\nOne shortest loop:\n```\ncore/repl/index.ts\n → core/repl/repl.ts\n → core/nest-factory.ts\n → microservices/index.ts\n → microservices/tokens.ts\n → core/index.ts\n → core/repl/index.ts\n```\n`repl.ts` imports `nest-factory`, which pulls in `microservices`. From there the path goes through the `core` barrel (`core/index.ts`), which re-exports `repl`.\n\n**2. A cycle entirely inside `repl` (10 files)**\n\nMembers:\n- `native-functions/debug-repl-fn.ts`\n- `native-functions/get-repl-fn.ts`\n- `native-functions/help-repl-fn.ts`\n- `native-functions/index.ts`\n- `native-functions/methods-repl-fn.ts`\n- `native-functions/resolve-repl-fn.ts`\n- `native-functions/select-relp-fn.ts`\n- `repl-context.ts`\n- `repl-function.ts`\n- `repl.interfaces.ts`\n\nOne shortest loop:\n```\nnative-functions/debug-repl-fn.ts\n → repl-function.ts\n → repl-context.ts\n → native-functions/index.ts\n → native-functions/debug-repl-fn.ts\n```\n`repl-context.ts` imports the `native-functions` barrel to register the built-in functions. Those functions extend `ReplFunction` from `repl-function.ts`, which in turn imports `repl-context.ts`.\n\nI only looked at the cycle report. I haven't opened the files to check which of these imports are used only as types.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 16898,
+              "costUsd": 0.0570497,
+              "inputTokens": 8,
+              "outputTokens": 798,
+              "cacheCreationTokens": 10073,
+              "cacheReadTokens": 87617,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_import_cycles": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Yes. There are two runtime import cycles (neither is type-only) that touch `packages/core/repl`.\n\n**1. A cycle that leaves the folder (16 files in the group)**\n\nThree files in `repl` take part: `index.ts`, `repl.ts` and `repl-logger.ts`. One shortest loop is:\n\n```\ncore/repl/index.ts\n → core/repl/repl.ts\n → core/nest-factory.ts\n → microservices/index.ts\n → microservices/tokens.ts\n → core/index.ts\n → core/repl/index.ts\n```\n\nIt runs through `nest-factory.ts`, the `microservices` package and the `core/index.ts` barrel. The other 13 files in the group are outside `repl`, and the tool only lists the members that match the path.\n\n**2. A cycle entirely inside `repl` (10 files)**\n\nAll of these are in `packages/core/repl`:\n- `native-functions/debug-repl-fn.ts`\n- `native-functions/get-repl-fn.ts`\n- `native-functions/help-repl-fn.ts`\n- `native-functions/index.ts`\n- `native-functions/methods-repl-fn.ts`\n- `native-functions/resolve-repl-fn.ts`\n- `native-functions/select-relp-fn.ts` (the filename really is spelled \"relp\")\n- `repl-context.ts`\n- `repl-function.ts`\n- `repl.interfaces.ts`\n\nOne shortest loop is:\n\n```\ndebug-repl-fn.ts → repl-function.ts → repl-context.ts → native-functions/index.ts → debug-repl-fn.ts\n```\n\n`repl-context.ts` imports the `native-functions` barrel, and each native function extends `repl-function.ts`, which depends on `repl-context.ts`.\n\nI haven't opened the files, so I can't say which import in each loop is the best one to cut. For cycle 2, importing the individual `*-repl-fn.ts` files directly in `repl-context.ts` instead of the barrel is a likely fix. I can check that if you want.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 14842,
+              "costUsd": 0.05745549999999999,
+              "inputTokens": 8,
+              "outputTokens": 839,
+              "cacheCreationTokens": 10072,
+              "cacheReadTokens": 87615,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_import_cycles": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Yes. There are two runtime import cycles (neither is type-only) that involve files in `packages/core/repl`.\n\n**1. A large cycle that leaves the folder (16 files in the group, 3 of them in `repl`)**\n\nThe `repl` files in it are `index.ts`, `repl-logger.ts` and `repl.ts`. The shortest loop is:\n\n`core/repl/index.ts` → `core/repl/repl.ts` → `core/nest-factory.ts` → `microservices/index.ts` → `microservices/tokens.ts` → `core/index.ts` → back to `core/repl/index.ts`\n\nThe link that closes the loop is `microservices/tokens.ts` importing from the `core` barrel (`core/index.ts`). That barrel re-exports `repl`.\n\n**2. A cycle entirely inside `native-functions` (10 files)**\n\nThe files are:\n- `native-functions/debug-repl-fn.ts`\n- `native-functions/get-repl-fn.ts`\n- `native-functions/help-repl-fn.ts`\n- `native-functions/index.ts`\n- `native-functions/methods-repl-fn.ts`\n- `native-functions/resolve-repl-fn.ts`\n- `native-functions/select-relp-fn.ts`\n- `repl-context.ts`\n- `repl-function.ts`\n- `repl.interfaces.ts`\n\nThe shortest loop is:\n\n`debug-repl-fn.ts` → `repl-function.ts` → `repl-context.ts` → `native-functions/index.ts` → `debug-repl-fn.ts`\n\n`repl-context.ts` imports the `native-functions` barrel. Each native function extends `ReplFunction`, which depends on `ReplContext`. The tool reports a group, so the loop above is one example and the other files are tied into it by similar paths.\n\nIf you want to break them, the likely fixes are to have `microservices/tokens.ts` import directly from the specific core file instead of the `core/index.ts` barrel, and to have `repl-context.ts` import the individual native functions instead of their `index.ts`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 15000,
+              "costUsd": 0.05752549999999999,
+              "inputTokens": 8,
+              "outputTokens": 846,
+              "cacheCreationTokens": 10072,
+              "cacheReadTokens": 87615,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_import_cycles": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -78,14 +78,14 @@ Every number below comes from pinned open-source repositories and can be reprodu
 - Route recall, route full paths and data-access recall are 100%.
 - Call recall is still growing; see [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 
-<p align="center"><img src="docs/assets/agent-hard.svg" alt="Agent benchmark on nestjs/nest: input tokens −23%, tool calls −43%, turns −33%, wall time −27%; import-cycle questions use about 2.5 times fewer tokens" width="860"></p>
+<p align="center"><img src="docs/assets/agent-hard.svg" alt="Agent benchmark on nestjs/nest, 3 runs per question: correct 12/18 to 18/18, input tokens −24%, tool calls −33%, turns −25%, wall time −25%; import-cycle questions use 2 to 4.6 times fewer tokens" width="860"></p>
 
-**Agents do less work on whole-repository questions.** Claude Code answered six questions about [nestjs/nest](https://github.com/nestjs/nest) (1,714 files), with and without Concentrate. With it:
-- the median answer used 23% fewer input tokens and 43% fewer tool calls;
-- one more question was answered correctly;
-- on import-cycle questions it read about 2.5× fewer tokens.
+**Agents answer whole-repository questions correctly, with less work.** Claude Code answered six questions about [nestjs/nest](https://github.com/nestjs/nest) (1,714 files) three times each, with and without Concentrate. With it:
+- 18 of 18 answers were correct, against 12 of 18 without;
+- the median answer used 24% fewer input tokens and 33% fewer tool calls;
+- on import-cycle questions, which grep cannot answer, every answer was complete, at 2–4.6× fewer tokens.
 
-This set ran once per question. On narrow questions over small repositories both setups do equally well; the full method and results are in [agent-benchmark.md](docs/agent-benchmark.md).
+On narrow questions over small repositories both setups do about equally well (39/39 against 38/39 correct); the full method and results are in [agent-benchmark.md](docs/agent-benchmark.md).
 
 <p align="center"><img src="docs/assets/scan-scaling.svg" alt="Cold scan time grows linearly with graph size: nestjs/nest, 52.7k nodes, in 1.7 s and 541 MB" width="820"></p>
 
@@ -107,7 +107,6 @@ The goal is a code graph an agent can rely on as much as on the source itself. T
 - easy installation in any MCP client.
 
 Next up:
-- **Agent benchmark rerun** on the improved graph ([#50](https://github.com/fatihserhatturan/concentrate/issues/50)). On the labels, data-access recall went from 93% to 100% with [#49](https://github.com/fatihserhatturan/concentrate/issues/49), route recall went from 80% to 100% and route full paths from 75% to 100% with [#41](https://github.com/fatihserhatturan/concentrate/issues/41)–[#44](https://github.com/fatihserhatturan/concentrate/issues/44); call recall went from 40% to 73% with [#45](https://github.com/fatihserhatturan/concentrate/issues/45)–[#47](https://github.com/fatihserhatturan/concentrate/issues/47).
 - **Distribution** (Phase 9): npm publishing, an `init` command and CI ([#16](https://github.com/fatihserhatturan/concentrate/issues/16)).
 
 The full plan is in [docs/ROADMAP.md](docs/ROADMAP.md).
