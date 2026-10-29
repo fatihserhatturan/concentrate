@@ -102,7 +102,8 @@ async function dispatch(program: ProgramSpec, argv: string[], io: CliIo): Promis
 
   const command = findCommand(program, first);
   if (!command) {
-    throw new CliError(`unknown command '${first}'`);
+    const suggestion = closestMatch(first, program.commands.map((candidate) => candidate.name));
+    throw new CliError(`unknown command '${first}'${suggestion ? `. Did you mean '${suggestion}'?` : ""}`);
   }
   if (rest.includes("-h") || rest.includes("--help")) {
     io.stdout(commandHelp(program, command, io));
@@ -140,7 +141,12 @@ export function parseCommandArgs(
     if (token.kind !== "option") continue;
     const flag = byName.get(token.name);
     if (!flag) {
-      throw new CliError(`unknown option '${token.rawName}'`);
+      const names = flags.flatMap((candidate) => [
+        ...(candidate.short ? [`-${candidate.short}`] : []),
+        `--${candidate.long}`,
+      ]);
+      const suggestion = closestMatch(token.rawName, [...names, "-h", "--help"]);
+      throw new CliError(`unknown option '${token.rawName}'${suggestion ? `. Did you mean '${suggestion}'?` : ""}`);
     }
     if (flag.takesValue && token.value === undefined) {
       throw new CliError(`option '${flag.term}' argument missing`);
@@ -175,6 +181,37 @@ export function parseCommandArgs(
   }
 
   return { positionals, options };
+}
+
+function closestMatch(input: string, candidates: string[]): string | undefined {
+  let best: string | undefined;
+  let bestDistance = 3;
+  let tied = false;
+  for (const candidate of candidates) {
+    const distance = editDistance(input, candidate);
+    if (distance < bestDistance) {
+      best = candidate;
+      bestDistance = distance;
+      tied = false;
+    } else if (distance === bestDistance) {
+      tied = true;
+    }
+  }
+  return tied ? undefined : best;
+}
+
+function editDistance(left: string, right: string): number {
+  const row = Array.from({ length: right.length + 1 }, (_, index) => index);
+  for (let i = 1; i <= left.length; i++) {
+    let diagonal = row[0]!;
+    row[0] = i;
+    for (let j = 1; j <= right.length; j++) {
+      const above = row[j]!;
+      row[j] = Math.min(row[j]! + 1, row[j - 1]! + 1, diagonal + (left[i - 1] === right[j - 1] ? 0 : 1));
+      diagonal = above;
+    }
+  }
+  return row[right.length]!;
 }
 
 function toInteger(flag: ParsedFlag, value: unknown): number {
