@@ -49,11 +49,14 @@ and deeper package graph queries.
     when it is named `app`, `router`, `fastify` or `…Router`. Apps created by
     other factories, or received from another module under another name, are
     not read.
-  - Mount prefixes are only followed within a file. A prefix applied in
-    another file is lost: a chained, default-exported router
-    (`export default Router().use('/api', api)` with `api = Router().use(…)`,
-    the realworld routes are found without `/api`) and a router mounted as
-    `app.use('/api/v1', require('./api_v1'))` (Express's `multi-router`).
+  - Mount prefixes are followed across files when the mounted router is an
+    imported name (`import users from './users'`, `const v2 =
+    require('./v2')`) or `require('./x')` in place, and the other file exports
+    it as its default (`export default router`, `module.exports = router`,
+    `export default Router().use(…)`) or by name (`export const admin =
+    Router()`). Routers re-exported through a barrel, chains assigned to
+    `module.exports = Router().use(…)`, and routes declared on a chain
+    (`Router().get(…)`) are not followed.
 
 Blocks or informs: semantic sample review reports and MCP route inspection
 tools.

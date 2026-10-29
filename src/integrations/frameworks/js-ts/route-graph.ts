@@ -107,6 +107,14 @@ function createHttpRouteGraph(
   const functionIdsByPassedToCallId = indexPassedToHandlers(relationships);
   const functionIdsByName = functionsByName;
   const importedNames = indexFileNamedImports(fileNodeId, nodes, relationships);
+  const mountIndexes: MountIndexes = {
+    fileNodeId,
+    variablesByName,
+    functionsByName,
+    functionIdsByPassedToCallId,
+    stringConstantsByName,
+    importBindingsByLocal: indexFileImportBindings(fileNodeId, nodes, relationships),
+  };
 
   const moduleReceivers = factoryReceivers(programNode);
   const sites: Array<{ callExpr: SyntaxNode; scope: FunctionRouteScope | null }> = [
@@ -190,18 +198,11 @@ function createHttpRouteGraph(
     }
 
     if (!scope) {
-      routeRelationships.push(...createMountRelationships(
-        fileNodeId,
-        callExpr,
-        moduleReceivers,
-        variablesByName,
-        functionsByName,
-        functionIdsByPassedToCallId,
-        stringConstantsByName,
-        frameworkFilter,
-      ));
+      routeRelationships.push(...createMountRelationships(callExpr, moduleReceivers, mountIndexes, frameworkFilter));
     }
   }
+
+  routeRelationships.push(...createChainedMountRelationships(programNode, mountIndexes, frameworkFilter));
 
   return { nodes: routeNodes, relationships: routeRelationships };
 }
@@ -335,14 +336,22 @@ function createDecoratorRouteGraph(
   return { nodes: routeNodes, relationships: routeRelationships };
 }
 
+// What mount relationships are built from: the file's declarations, and the
+// local names its imports bind (`import users from './users'`,
+// `const v2 = require('./v2')`), by local name.
+type MountIndexes = {
+  fileNodeId: string;
+  variablesByName: Map<string, string>;
+  functionsByName: Map<string, string>;
+  functionIdsByPassedToCallId: Map<string, string>;
+  stringConstantsByName: Map<string, string>;
+  importBindingsByLocal: Map<string, { importId: string; imported: string }>;
+};
+
 function createMountRelationships(
-  fileNodeId: string,
   callExpr: SyntaxNode,
   moduleReceivers: Map<string, FrameworkFilter>,
-  variablesByName: Map<string, string>,
-  functionsByName: Map<string, string>,
-  functionIdsByPassedToCallId: Map<string, string>,
-  stringConstantsByName: Map<string, string>,
+  indexes: MountIndexes,
   frameworkFilter: FrameworkFilter,
 ): GraphRelationship[] {
   const parts = analyzeMemberCallExpression(callExpr.childForFieldName("function")?.text);
@@ -354,39 +363,138 @@ function createMountRelationships(
   const receiverName = parts.receiver?.split(".")[0];
   if (!receiverName) return [];
 
-  const sourceVariableId = variablesByName.get(receiverName);
+  const sourceVariableId = indexes.variablesByName.get(receiverName);
   if (!sourceVariableId) return [];
 
+  return mountRelationshipsFor(callExpr, parts.callee, parts.expression, sourceVariableId, indexes);
+}
+
+// Mounts made by a chain on a router created in place, at module level:
+// `const api = Router().use(tags).use('/x', other)` (from the `api`
+// variable) and `export default Router().use('/api', api)` (from the
+// file's default export).
+function createChainedMountRelationships(
+  programNode: SyntaxNode,
+  indexes: MountIndexes,
+  frameworkFilter: FrameworkFilter,
+): GraphRelationship[] {
+  const relationships: GraphRelationship[] = [];
+  const addChain = (expression: SyntaxNode | null, sourceVariableId: string | undefined) => {
+    const chain = expression && sourceVariableId ? routerChain(expression) : null;
+    if (!chain || chain.framework !== frameworkFilter) return;
+    for (const call of chain.calls) {
+      const property = call.childForFieldName("function")?.childForFieldName("property")?.text;
+      if (!property || !isMountCall(property, chain.framework)) continue;
+      relationships.push(...mountRelationshipsFor(call, property, property, sourceVariableId!, indexes));
+    }
+  };
+
+  for (const stmt of programNode.namedChildren) {
+    const declaration = stmt.type === "export_statement" ? stmt.childForFieldName("declaration") : stmt;
+    if (declaration?.type === "lexical_declaration" || declaration?.type === "variable_declaration") {
+      for (const declarator of declaration.namedChildren) {
+        const name = declarator.childForFieldName("name");
+        if (declarator.type !== "variable_declarator" || name?.type !== "identifier") continue;
+        let value = declarator.childForFieldName("value");
+        while (value?.type === "assignment_expression") value = value.childForFieldName("right");
+        addChain(value, indexes.variablesByName.get(name.text));
+      }
+    } else if (stmt.type === "export_statement" && stmt.children.some((child) => child.type === "default")) {
+      addChain(stmt.childForFieldName("value"), indexes.variablesByName.get("default"));
+    }
+  }
+  return relationships;
+}
+
+// `Router().use(a).use(b)`: the chained calls, outermost first, when the
+// chain starts at an app or router factory.
+function routerChain(expression: SyntaxNode): { calls: SyntaxNode[]; framework: FrameworkFilter } | null {
+  const calls: SyntaxNode[] = [];
+  let node = expression;
+  while (node.type === "call_expression") {
+    const object = node.childForFieldName("function");
+    const base = object?.type === "member_expression" ? object.childForFieldName("object") : null;
+    if (!base || (base.type !== "call_expression" && base.type !== "new_expression")) break;
+    calls.push(node);
+    node = base;
+  }
+
+  const factory = node.childForFieldName(node.type === "new_expression" ? "constructor" : "function");
+  const framework = calls.length > 0 && factory ? appFactoryFramework(factory.text) : null;
+  return framework ? { calls, framework } : null;
+}
+
+function mountRelationshipsFor(
+  callExpr: SyntaxNode,
+  callee: string,
+  expression: string,
+  sourceVariableId: string,
+  indexes: MountIndexes,
+): GraphRelationship[] {
   const args = callExpr.childForFieldName("arguments")?.namedChildren ?? [];
-  const mountPathInfo = parts.callee === "register"
-    ? extractObjectPathProperty(args.find((arg) => arg.type === "object"), "prefix", stringConstantsByName)
-    : extractLeadingPath(args, stringConstantsByName);
+  const mountPathInfo = callee === "register"
+    ? extractObjectPathProperty(args.find((arg) => arg.type === "object"), "prefix", indexes.stringConstantsByName)
+    : extractLeadingPath(args, indexes.stringConstantsByName);
   const mountPath = mountPathInfo ?? { value: null, expression: null };
-  const mountedArgs = parts.callee === "register"
+  const mountedArgs = callee === "register"
     ? args.slice(0, 1)
     : argsAfterLeadingPath(args);
-  const line = callExpr.startPosition.row + 1;
+  // The line of `.use` itself, which in a chain is not where the call starts.
+  const property = callExpr.childForFieldName("function")?.childForFieldName("property");
+  const line = (property ?? callExpr).startPosition.row + 1;
 
   return mountedArgs.flatMap((arg) => {
-    // fastify.register(async (instance) => { … }, { prefix }) mounts the inline plugin.
-    const targetId = arg.type === "identifier"
-      ? variablesByName.get(arg.text) ?? functionsByName.get(arg.text)
-      : isFunctionExpressionNode(arg) && parts.callee === "register"
-        ? functionIdsByPassedToCallId.get(callNodeIdFor(fileNodeId, null, callExpr, parts.expression))
-        : undefined;
-    if (!targetId) return [];
+    const target = mountTarget(arg, callExpr, callee, expression, indexes);
+    if (!target) return [];
 
     return [{
       from: sourceVariableId,
-      to: targetId,
+      to: target.id,
       type: "MOUNTS" as const,
       properties: {
         path: mountPath.value,
         pathExpression: mountPath.expression,
         line,
+        // A router of another file: the target is the Import, resolved to
+        // that file's exported router after the parse (resolution/route-paths.ts).
+        ...(target.importedName ? { importedName: target.importedName } : {}),
       },
     }];
   });
+}
+
+function mountTarget(
+  arg: SyntaxNode,
+  callExpr: SyntaxNode,
+  callee: string,
+  expression: string,
+  indexes: MountIndexes,
+): { id: string; importedName?: string } | null {
+  if (arg.type === "identifier") {
+    const binding = indexes.importBindingsByLocal.get(arg.text);
+    if (binding) return { id: binding.importId, importedName: binding.imported };
+    const id = indexes.variablesByName.get(arg.text) ?? indexes.functionsByName.get(arg.text);
+    return id ? { id } : null;
+  }
+
+  // app.use('/v1', require('./v1')): the Import the language parser made for that call.
+  const source = requiredSource(arg);
+  if (source) {
+    return { id: `${indexes.fileNodeId}:import:${arg.startPosition.row + 1}:${source}`, importedName: "default" };
+  }
+
+  // fastify.register(async (instance) => { … }, { prefix }) mounts the inline plugin.
+  if (isFunctionExpressionNode(arg) && callee === "register") {
+    const id = indexes.functionIdsByPassedToCallId.get(callNodeIdFor(indexes.fileNodeId, null, callExpr, expression));
+    return id ? { id } : null;
+  }
+  return null;
+}
+
+function requiredSource(node: SyntaxNode): string | null {
+  if (node.type !== "call_expression" || node.childForFieldName("function")?.text !== "require") return null;
+  const source = node.childForFieldName("arguments")?.namedChildren[0];
+  return source?.type === "string" ? stripStringQuotes(source.text) : null;
 }
 
 function createRouteNodes(
@@ -926,6 +1034,35 @@ function indexFileVariables(
     }
   }
   return variables;
+}
+
+// Local names bound by the file's imports (named or default, ES or CommonJS),
+// with the Import node and the imported name.
+function indexFileImportBindings(
+  fileNodeId: string,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+): Map<string, { importId: string; imported: string }> {
+  const importIds = new Set(
+    relationships
+      .filter((rel) => rel.from === fileNodeId && rel.type === "IMPORTS")
+      .map((rel) => rel.to),
+  );
+
+  const bindings = new Map<string, { importId: string; imported: string }>();
+  for (const node of nodes) {
+    if (!importIds.has(node.id) || node.label !== "Import" || typeof node.properties.bindings !== "string") continue;
+    try {
+      for (const binding of JSON.parse(node.properties.bindings) as ImportBinding[]) {
+        if (binding.kind === "named" || binding.kind === "default") {
+          bindings.set(binding.local, { importId: node.id, imported: binding.imported });
+        }
+      }
+    } catch {
+      continue;
+    }
+  }
+  return bindings;
 }
 
 // Local names bound by named imports from `source`, mapped to the imported name.

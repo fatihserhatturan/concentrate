@@ -70,11 +70,11 @@ Rules:
 
 | Sample | Labels | TP | FP | FN | Precision | Recall | Full path |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| express | 59 | 59 | 0 | 0 | 100.0% | 100.0% | 93.2% (55/59) |
+| express | 59 | 59 | 0 | 0 | 100.0% | 100.0% | 100.0% (59/59) |
 | fastify | 14 | 14 | 0 | 0 | 100.0% | 100.0% | 100.0% (14/14) |
-| internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 5.0% (1/20) |
+| internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
 | nestjs-starter | 1 | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% (1/1) |
-| **all** | 94 | 94 | 0 | 0 | **100.0%** | **100.0%** | **75.5% (71/94)** |
+| **all** | 94 | 94 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (94/94)** |
 
 ### Call resolution
 
@@ -106,15 +106,12 @@ resolve = path.resolve` in express's `lib/view.js`, is left unresolved since
 #48.) Every labeled route is found: routes registered inside plugin
 functions and `build()` factories (#41), fastify-decorators controllers
 (#42), and apps and routers recognized by the factory that created them
-(`apiv1 = express.Router()`, `main = express()`, #43). Recall is where the
-gaps are, and they cluster:
+(`apiv1 = express.Router()`, `main = express()`, #43), each with its full
+path: mount prefixes are followed across files, through chained and
+default-exported routers (`export default Router().use('/api', api)`) and
+`app.use('/api/v1', require('./api_v1'))` (#44). Recall is where the gaps
+are, and they cluster:
 
-- **Mount prefixes across files.** A prefix applied in another file is not
-  followed. realworld mounts every controller with
-  `export default Router().use('/api', api)`, where `api = Router().use(...)`,
-  so its routes are found without `/api`; Express's `multi-router` mounts
-  `app.use('/api/v1', require('./controllers/api_v1'))`, so those 4 routes
-  are found without `/api/v1`.
 - **Objects assembled at runtime.** Express's `app` gets its methods from
   `lib/application.js` through `merge-descriptors`; the 20 `app.set` /
   `app.use` / `app.listen` labels in the examples point there. They are left
