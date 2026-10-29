@@ -31,7 +31,8 @@ the only runtime dependency left is `web-tree-sitter`.
   dependency is not pinned or has install scripts or dependencies, or if anything but
   `src/integrations/languages/syntax/tree-sitter.ts` imports web-tree-sitter.
   `tests/grammars.test.ts` checks the vendored grammars against their manifest.
-- **Focus.** The Node.js/TypeScript backend niche first; Python, Go and Rust stay at least at today's level.
+- **Focus.** The Node.js/TypeScript backend niche first, then the whole JS/TS ecosystem including the
+  frontend (M8); Python, Go and Rust stay at least at today's level.
 
 ### Dependency replacement map
 
@@ -54,6 +55,10 @@ the only runtime dependency left is `web-tree-sitter`.
 | M5 – Incremental & agent tools | 5, 6a | Real incremental scan, watch mode, and the first agent-facing MCP tools. |
 | M6 – Release | 8, 9 | Published to npm with a benchmarked README and CI. |
 | M7 – Niche depth | 6b, 7 | Deeper Node.js/TS backend semantics and the remaining MCP tools. |
+| M8 – Full JS/TS ecosystem | 10–17 | Frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular) and vanilla JS: components, pages, frontend → backend API links, stores and DOM events. |
+
+Order from here: the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73)), then M8, then
+the M6 release (Phase 9).
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -246,11 +251,11 @@ Extractors use only a narrow tree-sitter API: `type`, `id`, `text`, `startPositi
 ### Grammars
 
 - [ ] Upgrade javascript (0.25), python (0.25), go (0.25), rust (0.24) and typescript to current releases; review and document each golden diff
-- [ ] Parse `.tsx` with the TSX grammar (today `.tsx` uses the TypeScript grammar)
+- [ ] Parse `.tsx` with the TSX grammar (today `.tsx` uses the TypeScript grammar). Moved to Phase 10 ([#75](https://github.com/fatihserhatturan/concentrate/issues/75)).
 
 ### Error tolerance (behavior improvement)
 
-- [ ] Produce a partial graph plus a scan warning instead of rejecting a file whose tree has `ERROR` nodes
+- [ ] Produce a partial graph plus a scan warning instead of rejecting a file whose tree has `ERROR` nodes. Moved to Phase 10 ([#75](https://github.com/fatihserhatturan/concentrate/issues/75)).
 - [ ] Document the resulting golden diffs
 
 ### Integration
@@ -414,8 +419,8 @@ Concentrate already models Express/Koa/Fastify/NestJS routes, NestJS DI, env usa
 ### Frameworks
 
 - [ ] Hono routes
-- [ ] Next.js app router `route.ts` handlers and server actions
-- [ ] tRPC procedures
+- [ ] Next.js app router `route.ts` handlers and server actions. Moved to Phase 12 ([#77](https://github.com/fatihserhatturan/concentrate/issues/77)).
+- [ ] tRPC procedures. Moved to Phase 13 ([#78](https://github.com/fatihserhatturan/concentrate/issues/78)).
 - [ ] GraphQL resolvers (Apollo, NestJS)
 - [ ] NestJS guards, interceptors and pipes
 - [ ] Ordered middleware chains
@@ -429,7 +434,7 @@ Concentrate already models Express/Koa/Fastify/NestJS routes, NestJS DI, env usa
 
 ### Cross-service
 
-- [ ] Match outbound HTTP calls (fetch, axios) to routes inside a monorepo
+- [ ] Match outbound HTTP calls (fetch, axios) to routes inside a monorepo. Moved to Phase 13 ([#78](https://github.com/fatihserhatturan/concentrate/issues/78)).
 - [ ] BullMQ producer/consumer matching
 - [ ] EventEmitter emit/on matching
 
@@ -512,6 +517,296 @@ Requires the portable parser (M3): the only runtime dependency is `web-tree-sitt
 - [ ] Package is published to npm
 - [ ] CI is green on all matrix targets
 - [ ] `concentrate init` produces a working MCP setup
+
+## M8: Full JS/TS ecosystem
+
+Phases 10–17 extend the graph from the Node.js backend to the whole JS/TS ecosystem: frontend
+frameworks, vanilla JS and the links between frontend and backend.
+
+### Decisions
+
+- **Still one runtime dependency.** The only new grammars are `tsx` (from the pinned
+  `tree-sitter-typescript` package) and the official `tree-sitter-html`, vendored as `.wasm` through
+  `npm run grammars:build`.
+- **No Vue, Svelte or Astro grammars.** An own single-file-component splitter extracts `<script>`
+  blocks and Astro frontmatter with their offsets and parses them with the JS/TS grammar; templates
+  are parsed with the HTML grammar. Line numbers point into the original file.
+- **One framework-neutral schema.** New labels: `Component`, `Page` and `Store`. New relationships:
+  `RENDERS`, `USES_HOOK`, `PAGE_RENDERS`, `REQUESTS` (Call → Route), `READS_STORE` and
+  `WRITES_STORE`. DOM events reuse `EntryPoint` (kind `dom-event`); server handlers of full-stack
+  frameworks (Next.js `route.ts`, Nuxt `server/api`, SvelteKit `+server.ts`, Astro endpoints) reuse
+  `Route`. Each phase bumps `SCHEMA_VERSION`.
+- **Measured like the backend.** Every phase adds a pinned sample with hand labels to
+  `bench:accuracy`; precision stays at 100% and recall is reported. The RealWorld "Conduit"
+  frontends are the first candidates: they share their API with `internet-node-express-realworld`,
+  so frontend → backend links can be measured end to end.
+
+## Phase 10: Frontend file foundation (TSX, HTML, single-file components, vanilla JS) ([#75](https://github.com/fatihserhatturan/concentrate/issues/75))
+
+**Milestone:** M8 – Full JS/TS ecosystem
+**Depends on:** Phase 3a ([#5](https://github.com/fatihserhatturan/concentrate/issues/5))
+
+**Goal:** Parse every file a JS/TS frontend is made of, without rejecting files on a syntax error.
+
+Today `.tsx` is parsed with the TypeScript grammar, which has no JSX (`src/core/scan/language.ts`), and a file whose tree has `ERROR` nodes is rejected, so most React components produce no graph. `.html`, `.vue`, `.svelte` and `.astro` files are not read at all. This phase takes over the TSX and error-tolerance items of Phase 3b and adds the file layer every later M8 phase builds on.
+
+### Grammars
+
+- [ ] Parse `.tsx` with the TSX grammar (built from the pinned `tree-sitter-typescript` package, `tsx` directory)
+- [ ] Vendor the official `tree-sitter-html` grammar as `.wasm` through `npm run grammars:build`
+- [ ] Produce a partial graph plus a scan warning instead of rejecting a file whose tree has `ERROR` nodes; review the golden diffs
+
+### Single-file components
+
+- [ ] Own SFC splitter for `.vue`, `.svelte` and `.astro`: extract `<script>` blocks and Astro frontmatter with their line and column offsets and parse them with the JS/TS grammar
+- [ ] Parse the template part with the HTML grammar; Vue directives, Svelte blocks and Astro expressions are read as attributes or text
+- [ ] Graph line numbers point into the original file; `File.language` records `vue`, `svelte`, `astro` or `html`
+
+### Vanilla JS
+
+- [ ] `<script src>` and `<script type="module">` in `.html` files become `IMPORTS` / `RESOLVES_TO`; inline `<script>` blocks are parsed
+- [ ] `addEventListener(...)` and `on*` attributes become `EntryPoint` nodes (kind `dom-event`, trigger = event name) linked to their handler
+- [ ] `customElements.define('x-tag', Class)` becomes a `Component` (kind `web-component`)
+
+### Acceptance criteria
+
+- [ ] Fixtures for TSX, a file with a syntax error, each SFC format and a vanilla HTML page, with golden coverage
+- [ ] `internet-nest` files that failed on syntax errors produce partial graphs
+- [ ] Precision stays at 100% in `bench:accuracy`; parse time per file is reported in `docs/benchmarks.md`
+
+## Phase 11: Component model and React ([#76](https://github.com/fatihserhatturan/concentrate/issues/76))
+
+**Milestone:** M8 – Full JS/TS ecosystem
+**Depends on:** Phase 10
+
+**Goal:** Answer "what renders this component, what does it render, and which hooks does it use?" for React code.
+
+This phase introduces the framework-neutral component schema that the Vue, Svelte, Astro and Angular phases reuse: a `Component` node, `RENDERS` and `USES_HOOK` relationships. React comes first because JSX and TSX are already parsed after Phase 10.
+
+### Schema
+
+- [ ] `Component` label (name, framework, kind, line, endLine, isExported), defined by the file that declares it
+- [ ] `RENDERS` (Component → Component, with the props names) and `USES_HOOK` (Component or Function → Function); bump `SCHEMA_VERSION`
+
+### React
+
+- [ ] Function and class components: JSX return, `React.FC` / `FC` annotations, `memo`, `forwardRef` and `lazy` wrappers
+- [ ] JSX `<Child prop=…>` resolves through imports and barrels to the child `Component`
+- [ ] Built-in and custom hooks (`use*`) resolve through call resolution to `USES_HOOK`
+- [ ] `createContext` providers and `useContext` consumers
+
+### MCP
+
+- [ ] `component_tree`: renders / rendered by, props, hooks
+- [ ] `find_component_usages`: every place a component is rendered
+- [ ] `impact_of` follows `RENDERS` upwards
+
+### Acceptance criteria
+
+- [ ] Fixtures and golden coverage for each component form and for hooks across files
+- [ ] A pinned React sample (candidate: a RealWorld "Conduit" React frontend) with hand labels for components and `RENDERS` in `bench:accuracy`
+- [ ] Precision stays at 100%; recall is reported
+
+## Phase 12: Pages, client routing and Next.js ([#77](https://github.com/fatihserhatturan/concentrate/issues/77))
+
+**Milestone:** M8 – Full JS/TS ecosystem
+**Depends on:** Phase 11
+
+**Goal:** Map every URL a frontend serves to the page and components behind it, and Next.js server handlers to routes.
+
+Adds a `Page` node for client-visible URLs. Server-side handlers of full-stack frameworks keep the existing `Route` label. Takes over the Next.js item of Phase 7 (#14).
+
+### Schema
+
+- [ ] `Page` label (path, fullPath, framework, kind: page / layout / loading / error / not-found) and `PAGE_RENDERS` (Page → Component); bump `SCHEMA_VERSION`
+
+### Next.js
+
+- [ ] `app/` router: `page`, `layout`, `loading`, `error`, route groups, dynamic and catch-all segments, parallel routes
+- [ ] `pages/` router, including `_app` and `_document`
+- [ ] `app/**/route.ts` handlers and `pages/api/**` become `Route` nodes with methods
+- [ ] Server actions (`"use server"`) and `middleware.ts` with its `matcher`
+
+### Client routers
+
+- [ ] React Router: JSX `<Route>` trees and `createBrowserRouter` objects, nested paths
+- [ ] TanStack Router file and code routes
+
+### MCP
+
+- [ ] `list_pages`
+- [ ] `route_details` and `impact_of` include pages
+
+### Acceptance criteria
+
+- [ ] Fixtures and golden coverage for both Next.js routers and both client routers
+- [ ] A pinned Next.js sample with hand labels for pages and route handlers in `bench:accuracy`
+- [ ] Precision stays at 100%; recall is reported
+
+## Phase 13: Frontend → backend API links ([#78](https://github.com/fatihserhatturan/concentrate/issues/78))
+
+**Milestone:** M8 – Full JS/TS ecosystem
+**Depends on:** Phase 10, Phase 11
+
+**Goal:** Answer "which frontend code calls this endpoint?" and follow a change across the frontend–backend boundary.
+
+Links outbound HTTP calls to the `Route` nodes the backend phases already build. Takes over the "match outbound HTTP calls to routes" and tRPC items of Phase 7 (#14). Precision comes first: dynamic or ambiguous URLs are left unlinked. Includes #58 (destructured `process.env` reads) and #59 (`import.meta.env`).
+
+### Schema
+
+- [ ] `REQUESTS` (Call → Route, with method, url and how the match was made); bump `SCHEMA_VERSION`
+
+### Clients
+
+- [ ] `fetch`, `axios` (including instances created with `baseURL`), `ky`, `ofetch` / `$fetch`
+- [ ] SWR and TanStack Query keys and fetchers
+- [ ] tRPC: client procedure calls to router procedures
+
+### Matching
+
+- [ ] URLs from literals, template strings and constants; base URLs from config and env
+- [ ] Match against `Route.fullPath` with method and parameter segments, across packages in a monorepo
+- [ ] Env: destructured reads (#58), `import.meta.env` (#59), `NEXT_PUBLIC_*` and `VITE_*`
+
+### MCP
+
+- [ ] `api_consumers`: the frontend calls that reach a route
+- [ ] `impact_of` and `route_details` cross from routes to their callers and back
+
+### Acceptance criteria
+
+- [ ] Fixtures and golden coverage for each client and for an unmatched dynamic URL
+- [ ] The RealWorld frontend sample linked to `internet-node-express-realworld`, with hand labels for `REQUESTS` in `bench:accuracy`
+- [ ] Precision stays at 100%; recall is reported
+
+## Phase 14: Vue and Nuxt ([#79](https://github.com/fatihserhatturan/concentrate/issues/79))
+
+**Milestone:** M8 – Full JS/TS ecosystem
+**Depends on:** Phase 11, Phase 13
+
+**Goal:** The component, page, API and store graph for Vue and Nuxt applications.
+
+Builds on the SFC splitter (Phase 10), the component schema (Phase 11), the page schema (Phase 12) and API links (Phase 13). Introduces the `Store` node, which Phases 15 and 17 reuse.
+
+### Vue
+
+- [ ] Components from `.vue` files: `<script setup>`, `defineComponent`, Options API; props from `defineProps` and `props`
+- [ ] Template usage (`<UserCard>`, `<user-card>`) becomes `RENDERS`; global `app.component` registrations
+- [ ] Composables become `USES_HOOK`
+- [ ] `@click` / `v-on` handlers become `EntryPoint` (kind `dom-event`)
+- [ ] Vue Router route records become `Page` nodes
+
+### Nuxt
+
+- [ ] `pages/` and `layouts/` become `Page` nodes; auto-imported components and composables resolve
+- [ ] `server/api` and `server/routes` become `Route` nodes
+- [ ] `useFetch`, `useAsyncData` and `$fetch` become `REQUESTS`
+
+### Stores
+
+- [ ] `Store` label (name, library) with `READS_STORE` / `WRITES_STORE`; bump `SCHEMA_VERSION`
+- [ ] Pinia `defineStore` (options and setup stores)
+
+### Acceptance criteria
+
+- [ ] Fixtures and golden coverage for each component style, Nuxt pages and server routes, and Pinia
+- [ ] A pinned Vue or Nuxt sample (candidate: a RealWorld Vue frontend) with hand labels in `bench:accuracy`
+- [ ] Precision stays at 100%; recall is reported
+
+## Phase 15: Svelte, SvelteKit and Astro ([#80](https://github.com/fatihserhatturan/concentrate/issues/80))
+
+**Milestone:** M8 – Full JS/TS ecosystem
+**Depends on:** Phase 11, Phase 13
+
+**Goal:** The component, page, API and store graph for Svelte, SvelteKit and Astro applications.
+
+Reuses the SFC splitter (Phase 10), `Component` and `RENDERS` (Phase 11), `Page` (Phase 12), `REQUESTS` (Phase 13) and `Store` (Phase 14).
+
+### Svelte
+
+- [ ] Components from `.svelte` files and template usage become `RENDERS`; props from `export let` and `$props()`
+- [ ] `on:click` and `onclick` handlers become `EntryPoint` (kind `dom-event`)
+- [ ] Svelte stores (`writable`, `readable`, `derived`) and runes (`$state`) become `Store`
+
+### SvelteKit
+
+- [ ] `+page` and `+layout` files become `Page` nodes, with route parameters
+- [ ] `+server.ts` handlers become `Route` nodes
+- [ ] `load` functions and form actions; `fetch` inside `load` becomes `REQUESTS`
+
+### Astro
+
+- [ ] `src/pages` files become `Page` nodes; endpoint files become `Route` nodes
+- [ ] Components rendered from `.astro` templates, including islands (`client:*`) of other frameworks, become `RENDERS`
+
+### Acceptance criteria
+
+- [ ] Fixtures and golden coverage for Svelte components and stores, SvelteKit routes and Astro pages and islands
+- [ ] A pinned Svelte or SvelteKit sample with hand labels in `bench:accuracy`
+- [ ] Precision stays at 100%; recall is reported
+
+## Phase 16: Angular ([#81](https://github.com/fatihserhatturan/concentrate/issues/81))
+
+**Milestone:** M8 – Full JS/TS ecosystem
+**Depends on:** Phase 11, Phase 13
+
+**Goal:** The component, DI, routing and API graph for Angular applications.
+
+Angular is decorator-based like NestJS. The decorator route graph (`createDecoratorRouteGraph` in `route-graph.ts`) and NestJS DI resolution (`resolution/injections.ts`) are reused where they fit.
+
+### Components
+
+- [ ] `@Component` (module-based and standalone) becomes `Component`, with its selector and `@Input` / `input()` props
+- [ ] Template usage by selector (inline `template` and `templateUrl` files) becomes `RENDERS`
+- [ ] `(click)` bindings and `@HostListener` become `EntryPoint` (kind `dom-event`)
+
+### Services and DI
+
+- [ ] `@Injectable` services and constructor or `inject()` injection, reusing the NestJS DI resolution
+- [ ] `@NgModule` declarations, imports and providers
+
+### Routing and API
+
+- [ ] Angular Router `Routes` arrays (including lazy `loadComponent` / `loadChildren`) become `Page` nodes
+- [ ] `HttpClient` calls become `REQUESTS`
+
+### Acceptance criteria
+
+- [ ] Fixtures and golden coverage for components, DI, routes and `HttpClient`
+- [ ] A pinned Angular sample (candidate: a RealWorld Angular frontend) with hand labels in `bench:accuracy`
+- [ ] Precision stays at 100%; recall is reported
+
+## Phase 17: State libraries and ecosystem measurement ([#82](https://github.com/fatihserhatturan/concentrate/issues/82))
+
+**Milestone:** M8 – Full JS/TS ecosystem
+**Depends on:** Phase 11, Phase 13, Phase 14
+
+**Goal:** Cover the common React state libraries and measure what the frontend graph is worth to an agent.
+
+Completes M8: React-side stores on the `Store` node from Phase 14, store-aware MCP tools, and frontend questions in the agent benchmark (#73).
+
+### Stores
+
+- [ ] Redux Toolkit: `createSlice`, `configureStore`, `useSelector` and `dispatch` of slice actions
+- [ ] Zustand `create` stores and their selectors
+- [ ] Jotai atoms
+
+### MCP
+
+- [ ] `list_stores`
+- [ ] `impact_of` follows store reads and writes
+
+### Measurement
+
+- [ ] Frontend and full-stack questions in the agent benchmark: which component calls this endpoint, what a component change affects, which pages a store reaches
+- [ ] Accuracy report section for each M8 relation type
+- [ ] README "What it sees" table and languages line cover the frontend
+
+### Acceptance criteria
+
+- [ ] Fixtures and golden coverage for each store library
+- [ ] Agent benchmark results with the frontend questions, per category, are committed and documented
+- [ ] README and `docs/accuracy.md` report the M8 coverage
 
 ## Verification (every milestone)
 
