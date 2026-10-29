@@ -103,10 +103,12 @@ See [benchmarks.md](docs/benchmarks.md#release-report).
 
 The goal is a code graph an agent can rely on as much as on the source itself. That means three things:
 - recall as high as precision;
-- the backend semantics agents ask about most;
+- the backend and frontend semantics agents ask about most;
 - easy installation in any MCP client.
 
-Next up:
+Next up, in this order:
+- **Agent benchmark v2** ([#73](https://github.com/fatihserhatturan/concentrate/issues/73)): call-resolution and graph-gap questions, more models, per-category results.
+- **The whole JS/TS ecosystem** (M8, [#75](https://github.com/fatihserhatturan/concentrate/issues/75)–[#82](https://github.com/fatihserhatturan/concentrate/issues/82)): React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular and vanilla JS, with components, pages, stores, DOM events and frontend → backend API links.
 - **Distribution** (Phase 9): npm publishing, an `init` command and CI ([#16](https://github.com/fatihserhatturan/concentrate/issues/16)).
 
 The full plan is in [docs/ROADMAP.md](docs/ROADMAP.md).
