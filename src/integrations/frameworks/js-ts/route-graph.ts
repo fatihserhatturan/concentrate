@@ -209,11 +209,77 @@ export function createNestJsRouteGraph(
   nodes: GraphNode[],
   relationships: GraphRelationship[],
 ): { nodes: GraphNode[]; relationships: GraphRelationship[] } {
+  return createDecoratorRouteGraph(fileNodeId, nodes, relationships, {
+    framework: "nestjs",
+    methodOf: (decorator) => nestMethodDecorators.get(String(decorator.properties.name)) ?? null,
+    isController: (decorator) => decorator.properties.name === "Controller",
+    controllerPath: firstDecoratorArg,
+    methodPath: firstDecoratorArg,
+  });
+}
+
+// fastify-decorators controllers: `@Controller('/users')` or
+// `@Controller({ route: '/users' })` on the class, `@GET('/:id')` or
+// `@GET({ url: '/:id' })` on its methods. Only decorators imported from
+// fastify-decorators count, so a local `GET` decorator is not a route.
+export function createFastifyDecoratorRouteGraph(
+  fileNodeId: string,
+  programNode: SyntaxNode,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+): { nodes: GraphNode[]; relationships: GraphRelationship[] } {
+  const imported = indexFileImportedNames(fileNodeId, nodes, relationships, "fastify-decorators");
+  if (imported.size === 0) return { nodes: [], relationships: [] };
+
+  const stringConstantsByName = indexFileStringConstants(fileNodeId, nodes, relationships);
+  const decoratorAsts = indexDecoratorAsts(programNode);
+  const importedName = (decorator: GraphNode) => imported.get(String(decorator.properties.name)) ?? null;
+  const decoratorPath = (key: string) => (decorator: GraphNode): string | null => {
+    const literal = firstDecoratorArg(decorator);
+    if (literal !== null) return literal;
+    const call = decoratorAsts.get(`${decorator.properties.line}:${decorator.properties.name}`)?.namedChildren[0];
+    const config = call?.type === "call_expression"
+      ? call.childForFieldName("arguments")?.namedChildren.find((arg) => arg.type === "object")
+      : undefined;
+    return extractObjectPathProperty(config, key, stringConstantsByName)?.value ?? null;
+  };
+
+  return createDecoratorRouteGraph(fileNodeId, nodes, relationships, {
+    framework: "fastify",
+    methodOf: (decorator) => {
+      const name = importedName(decorator);
+      return name && fastifyMethodDecorators.has(name) ? name : null;
+    },
+    isController: (decorator) => importedName(decorator) === "Controller",
+    controllerPath: decoratorPath("route"),
+    methodPath: decoratorPath("url"),
+  });
+}
+
+const fastifyMethodDecorators = new Set(["ALL", "DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]);
+
+// How one framework declares routes with decorators: which method decorators
+// name an HTTP method, which class decorator makes a controller, and where
+// each takes its path.
+type DecoratorRouteDialect = {
+  framework: string;
+  methodOf(decorator: GraphNode): string | null;
+  isController(decorator: GraphNode): boolean;
+  controllerPath(decorator: GraphNode): string | null;
+  methodPath(decorator: GraphNode): string | null;
+};
+
+function createDecoratorRouteGraph(
+  fileNodeId: string,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+  dialect: DecoratorRouteDialect,
+): { nodes: GraphNode[]; relationships: GraphRelationship[] } {
   const routeNodes: GraphNode[] = [];
   const routeRelationships: GraphRelationship[] = [];
   const nodeById = new Map(nodes.map((node) => [node.id, node]));
   const classIdsByMethodId = indexClassIdsByMethodId(relationships);
-  const controllerPathByClassId = indexNestControllerPaths(nodeById, relationships);
+  const controllerPathByClassId = indexControllerPaths(nodeById, relationships, dialect);
 
   for (const rel of relationships) {
     if (rel.type !== "HAS_METHOD_DECORATOR") continue;
@@ -224,20 +290,17 @@ export function createNestJsRouteGraph(
       continue;
     }
 
-    const decoratorName = decoratorNode.properties.name;
-    if (typeof decoratorName !== "string" || !nestMethodDecorators.has(decoratorName)) {
-      continue;
-    }
+    const method = dialect.methodOf(decoratorNode);
+    if (!method) continue;
 
     const classId = classIdsByMethodId.get(methodNode.id);
     if (!classId || !controllerPathByClassId.has(classId)) {
       continue;
     }
 
-    const method = nestMethodDecorators.get(decoratorName)!;
     const routePath = joinRoutePaths(
       controllerPathByClassId.get(classId) ?? null,
-      firstDecoratorArg(decoratorNode),
+      dialect.methodPath(decoratorNode),
     );
     const line = Number(decoratorNode.properties.line);
     const routeNode = createRouteNode({
@@ -248,7 +311,7 @@ export function createNestJsRouteGraph(
       routePath,
       pathExpression: routePath,
       receiverName: null,
-      framework: "nestjs",
+      framework: dialect.framework,
       handlerName: typeof methodNode.properties.name === "string" ? methodNode.properties.name : null,
     });
 
@@ -839,6 +902,34 @@ function indexFileVariables(
   return variables;
 }
 
+// Local names bound by named imports from `source`, mapped to the imported name.
+function indexFileImportedNames(
+  fileNodeId: string,
+  nodes: GraphNode[],
+  relationships: GraphRelationship[],
+  source: string,
+): Map<string, string> {
+  const importIds = new Set(
+    relationships
+      .filter((rel) => rel.from === fileNodeId && rel.type === "IMPORTS")
+      .map((rel) => rel.to),
+  );
+
+  const names = new Map<string, string>();
+  for (const node of nodes) {
+    if (!importIds.has(node.id) || node.label !== "Import" || node.properties.source !== source) continue;
+    if (typeof node.properties.bindings !== "string") continue;
+    try {
+      for (const binding of JSON.parse(node.properties.bindings) as ImportBinding[]) {
+        if (binding.kind === "named") names.set(binding.local, binding.imported);
+      }
+    } catch {
+      continue;
+    }
+  }
+  return names;
+}
+
 // Local names bound by `import { a } from ...` or `const { a } = require(...)`.
 function indexFileNamedImports(
   fileNodeId: string,
@@ -900,22 +991,41 @@ function indexClassIdsByMethodId(relationships: GraphRelationship[]): Map<string
   return classIds;
 }
 
-function indexNestControllerPaths(
+function indexControllerPaths(
   nodeById: Map<string, GraphNode>,
   relationships: GraphRelationship[],
+  dialect: DecoratorRouteDialect,
 ): Map<string, string | null> {
   const controllerPaths = new Map<string, string | null>();
   for (const rel of relationships) {
     if (rel.type !== "HAS_DECORATOR") continue;
 
     const decoratorNode = nodeById.get(rel.to);
-    if (decoratorNode?.label !== "Decorator" || decoratorNode.properties.name !== "Controller") {
+    if (decoratorNode?.label !== "Decorator" || !dialect.isController(decoratorNode)) {
       continue;
     }
 
-    controllerPaths.set(rel.from, firstDecoratorArg(decoratorNode));
+    controllerPaths.set(rel.from, dialect.controllerPath(decoratorNode));
   }
   return controllerPaths;
+}
+
+// Decorator syntax nodes by line and name, as their Decorator nodes record them.
+function indexDecoratorAsts(programNode: SyntaxNode): Map<string, SyntaxNode> {
+  const decorators = new Map<string, SyntaxNode>();
+  const visit = (node: SyntaxNode) => {
+    for (const child of node.namedChildren) {
+      if (child.type === "decorator") {
+        const inner = child.namedChildren[0];
+        const name = inner?.type === "call_expression" ? inner.childForFieldName("function")?.text : inner?.text;
+        if (name) decorators.set(`${child.startPosition.row + 1}:${name}`, child);
+        continue;
+      }
+      visit(child);
+    }
+  };
+  visit(programNode);
+  return decorators;
 }
 
 function joinRoutePaths(basePath: string | null, methodPath: string | null): string {

@@ -107,7 +107,7 @@ The goal is a code graph an agent can rely on as much as on the source itself. T
 - easy installation in any MCP client.
 
 Next up:
-- **Route recall:** fastify-decorators routes, routers recognized by how they were created, and mount prefixes through chained routers ([#42](https://github.com/fatihserhatturan/concentrate/issues/42)–[#44](https://github.com/fatihserhatturan/concentrate/issues/44)). Route recall went from 80% to 92% with routes registered inside functions ([#41](https://github.com/fatihserhatturan/concentrate/issues/41)). Call recall on the labels went from 40% to 73% with [#45](https://github.com/fatihserhatturan/concentrate/issues/45)–[#47](https://github.com/fatihserhatturan/concentrate/issues/47).
+- **Route recall:** routers recognized by how they were created, and mount prefixes through chained routers ([#43](https://github.com/fatihserhatturan/concentrate/issues/43), [#44](https://github.com/fatihserhatturan/concentrate/issues/44)). Route recall went from 80% to 94% with routes registered inside functions and fastify-decorators controllers ([#41](https://github.com/fatihserhatturan/concentrate/issues/41), [#42](https://github.com/fatihserhatturan/concentrate/issues/42)). Call recall on the labels went from 40% to 73% with [#45](https://github.com/fatihserhatturan/concentrate/issues/45)–[#47](https://github.com/fatihserhatturan/concentrate/issues/47).
 - **Distribution** (Phase 9): npm publishing, an `init` command and CI ([#16](https://github.com/fatihserhatturan/concentrate/issues/16)).
 
 The full plan is in [docs/ROADMAP.md](docs/ROADMAP.md).
