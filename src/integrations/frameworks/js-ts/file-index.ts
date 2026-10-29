@@ -61,12 +61,14 @@ export function functionBodyCallExpressions(functionNode: SyntaxNode): SyntaxNod
   return calls;
 }
 
-// Locals declared in a function's own body with a call initializer
-// (`const app = fastify(opts)`), by name, with the called expression's text.
-export function functionLocalCallInitializers(functionNode: SyntaxNode): Map<string, string> {
-  const body = functionNode.childForFieldName("body");
+// Variables declared in a scope (a function's own body, or the program) with
+// a call initializer (`const app = fastify(opts)`, `var app = module.exports =
+// express()`), by name, with the called expression's text. Functions declared
+// inside the scope are not entered.
+export function scopeCallInitializers(scopeNode: SyntaxNode): Map<string, string> {
+  const body = scopeNode.type === "program" ? scopeNode : scopeNode.childForFieldName("body");
   const locals = new Map<string, string>();
-  if (body?.type !== "statement_block") return locals;
+  if (body?.type !== "statement_block" && body?.type !== "program") return locals;
 
   const visit = (node: SyntaxNode) => {
     for (const child of node.namedChildren) {
@@ -74,6 +76,7 @@ export function functionLocalCallInitializers(functionNode: SyntaxNode): Map<str
       if (child.type === "variable_declarator") {
         const name = child.childForFieldName("name");
         let value = child.childForFieldName("value");
+        while (value?.type === "assignment_expression") value = value.childForFieldName("right");
         if (value?.type === "await_expression") value = value.namedChildren[0] ?? null;
         if (name?.type === "identifier" && (value?.type === "call_expression" || value?.type === "new_expression")) {
           const callee = value.childForFieldName(value.type === "new_expression" ? "constructor" : "function");

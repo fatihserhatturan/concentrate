@@ -535,6 +535,18 @@
           "framework": "fastify"
         }
       }
+    ],
+    "factory-receivers": [
+      {
+        "tool": "list_routes",
+        "args": {}
+      },
+      {
+        "tool": "list_routes",
+        "args": {
+          "framework": "fastify"
+        }
+      }
     ]
   }
 }

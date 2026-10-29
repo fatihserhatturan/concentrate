@@ -43,12 +43,17 @@ and deeper package graph queries.
   - `register(plugin, { prefix })` applies its prefix only to a plugin defined
     in the same file; a plugin imported or `require`d from another file, and
     mounts made inside a function, keep their routes unprefixed.
-  - Routes are only read from receivers named `app`, `router`, `fastify` or
-    `…Router`; `const apiv1 = express.Router()` and `const main = express()`
-    are missed.
-  - A mount prefix applied through a chained, default-exported router
-    (`export default Router().use('/api', api)` with `api = Router().use(…)`)
-    is lost, so the realworld routes are found without `/api`.
+  - A receiver is an app or router when a variable was created by a known
+    factory (`express()`, `express.Router()`, `Router()`, `new Koa()`,
+    `new Router()`, `new KoaRouter()`, `fastify()`), whatever its name, or
+    when it is named `app`, `router`, `fastify` or `…Router`. Apps created by
+    other factories, or received from another module under another name, are
+    not read.
+  - Mount prefixes are only followed within a file. A prefix applied in
+    another file is lost: a chained, default-exported router
+    (`export default Router().use('/api', api)` with `api = Router().use(…)`,
+    the realworld routes are found without `/api`) and a router mounted as
+    `app.use('/api/v1', require('./api_v1'))` (Express's `multi-router`).
 
 Blocks or informs: semantic sample review reports and MCP route inspection
 tools.

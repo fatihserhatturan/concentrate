@@ -6,7 +6,7 @@ import {
   firstDecoratorArg,
   functionBodyCallExpressions,
   functionParameterNames,
-  functionLocalCallInitializers,
+  scopeCallInitializers,
   indexFileFunctions,
   indexPassedToHandlers,
   moduleLevelCallExpressions,
@@ -108,6 +108,7 @@ function createHttpRouteGraph(
   const functionIdsByName = functionsByName;
   const importedNames = indexFileNamedImports(fileNodeId, nodes, relationships);
 
+  const moduleReceivers = factoryReceivers(programNode);
   const sites: Array<{ callExpr: SyntaxNode; scope: FunctionRouteScope | null }> = [
     ...moduleLevelCallExpressions(programNode).map((callExpr) => ({ callExpr, scope: null })),
   ];
@@ -123,7 +124,7 @@ function createHttpRouteGraph(
   }
 
   for (const { callExpr, scope } of sites) {
-    const routes = createRouteNodes(fileNodeId, callExpr, stringConstantsByName, frameworkFilter, scope);
+    const routes = createRouteNodes(fileNodeId, callExpr, stringConstantsByName, frameworkFilter, scope ?? moduleReceivers);
 
     for (const route of routes) {
       routeNodes.push(route.node);
@@ -192,6 +193,7 @@ function createHttpRouteGraph(
       routeRelationships.push(...createMountRelationships(
         fileNodeId,
         callExpr,
+        moduleReceivers,
         variablesByName,
         functionsByName,
         functionIdsByPassedToCallId,
@@ -336,6 +338,7 @@ function createDecoratorRouteGraph(
 function createMountRelationships(
   fileNodeId: string,
   callExpr: SyntaxNode,
+  moduleReceivers: Map<string, FrameworkFilter>,
   variablesByName: Map<string, string>,
   functionsByName: Map<string, string>,
   functionIdsByPassedToCallId: Map<string, string>,
@@ -343,11 +346,8 @@ function createMountRelationships(
   frameworkFilter: FrameworkFilter,
 ): GraphRelationship[] {
   const parts = analyzeMemberCallExpression(callExpr.childForFieldName("function")?.text);
-  if (!parts || !isMountCall(parts) || !isRouteReceiver(parts.receiver)) {
-    return [];
-  }
-
-  if (!matchesFrameworkFilter(parts.receiver, frameworkFilter)) {
+  const framework = parts ? moduleReceiverFramework(parts.receiver, moduleReceivers) : undefined;
+  if (!parts || framework !== frameworkFilter || !isMountCall(parts.callee, framework)) {
     return [];
   }
 
@@ -394,14 +394,15 @@ function createRouteNodes(
   callExpr: SyntaxNode,
   stringConstantsByName: Map<string, string>,
   frameworkFilter: FrameworkFilter,
-  scope: FunctionRouteScope | null,
+  scopeOrModuleReceivers: FunctionRouteScope | Map<string, FrameworkFilter>,
 ): RouteCandidate[] {
   const parts = analyzeMemberCallExpression(callExpr.childForFieldName("function")?.text);
   if (!parts) return [];
 
+  const scope = scopeOrModuleReceivers instanceof Map ? null : scopeOrModuleReceivers;
   const framework = scope
     ? scope.receivers.get(routeReceiverName(parts.receiver) ?? "")
-    : isRouteReceiver(parts.receiver) ? routeFramework(parts.receiver) : undefined;
+    : moduleReceiverFramework(parts.receiver, scopeOrModuleReceivers as Map<string, FrameworkFilter>);
   if (framework !== frameworkFilter) {
     return [];
   }
@@ -723,11 +724,45 @@ function functionRouteReceivers(functionNode: SyntaxNode): Map<string, Framework
     else if (isRouteReceiver(first)) receivers.set(first, routeFramework(first));
   }
 
-  for (const [name, callee] of functionLocalCallInitializers(functionNode)) {
-    if (receivers.has(name) || !isRouteReceiver(name)) continue;
-    receivers.set(name, isFastifyFactory(callee) ? "fastify" : routeFramework(name));
+  for (const [name, callee] of scopeCallInitializers(functionNode)) {
+    if (receivers.has(name)) continue;
+    const framework = appFactoryFramework(callee) ?? (isRouteReceiver(name) ? routeFramework(name) : null);
+    if (framework) receivers.set(name, framework);
   }
   return receivers;
+}
+
+// Module-level variables created by an app or router factory, whatever their
+// name: `const apiv1 = express.Router()`, `var main = express()`.
+function factoryReceivers(programNode: SyntaxNode): Map<string, FrameworkFilter> {
+  const receivers = new Map<string, FrameworkFilter>();
+  for (const [name, callee] of scopeCallInitializers(programNode)) {
+    const framework = appFactoryFramework(callee);
+    if (framework) receivers.set(name, framework);
+  }
+  return receivers;
+}
+
+// The framework of a module-level receiver: from the factory that created it,
+// else from its name (`app`, `router`, `fastify`, `…Router`).
+function moduleReceiverFramework(receiver: string | null, moduleReceivers: Map<string, FrameworkFilter>): FrameworkFilter | undefined {
+  const root = routeReceiverName(receiver);
+  if (!root) return undefined;
+  return moduleReceivers.get(root) ?? (isRouteReceiver(root) ? routeFramework(root) : undefined);
+}
+
+// The framework an app or router factory belongs to, from the called
+// expression: `express()`, `express.Router()`, `Router()`, `new Koa()`,
+// `new KoaRouter()` (also on the express module required in place), and
+// `fastify()` / `Fastify()` or the fastify module required and called in one go.
+function appFactoryFramework(callee: string): FrameworkFilter | null {
+  const required = callee.match(/^require\(\s*["']([^"']+)["']\s*\)(\.Router)?$/);
+  if (required) {
+    if (required[1] === "fastify" && !required[2]) return "fastify";
+    return required[1] === "express" ? "express-koa" : null;
+  }
+  if (/^fastify$/i.test(callee)) return "fastify";
+  return /^(express|express\.Router|Router|Koa|KoaRouter)$/.test(callee) ? "express-koa" : null;
 }
 
 function isFastifyPluginFunction(functionNode: SyntaxNode, parameters: string[]): boolean {
@@ -736,11 +771,6 @@ function isFastifyPluginFunction(functionNode: SyntaxNode, parameters: string[])
   const args = functionNode.parent;
   const callee = args?.type === "arguments" ? args.parent?.childForFieldName("function") : null;
   return args?.namedChildren[0]?.id === functionNode.id && /\.register$/.test(callee?.text ?? "");
-}
-
-// `fastify(opts)`, `Fastify()`, or the fastify module required and called in one go.
-function isFastifyFactory(callee: string): boolean {
-  return /^(fastify|require\(\s*["']fastify["']\s*\))$/i.test(callee);
 }
 
 
@@ -846,8 +876,8 @@ function extractPathArgument(
   };
 }
 
-function isMountCall(parts: { callee: string; receiver: string | null }): boolean {
-  return parts.callee === "use" || (parts.callee === "register" && isFastifyReceiver(parts.receiver));
+function isMountCall(callee: string, framework: FrameworkFilter): boolean {
+  return callee === "use" || (callee === "register" && framework === "fastify");
 }
 
 function routeFramework(receiver: string | null): FrameworkFilter {
@@ -868,10 +898,6 @@ function isFastifyReceiver(receiver: string | null): boolean {
   if (!receiver) return false;
   const root = receiver.split(".")[0] ?? receiver;
   return root === "fastify";
-}
-
-function matchesFrameworkFilter(receiver: string | null, filter: FrameworkFilter): boolean {
-  return routeFramework(receiver) === filter;
 }
 
 function isRouteReceiver(receiver: string | null): boolean {
