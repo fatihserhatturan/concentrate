@@ -547,6 +547,12 @@
           "framework": "fastify"
         }
       }
+    ],
+    "cross-file-mounts": [
+      {
+        "tool": "list_routes",
+        "args": {}
+      }
     ]
   }
 }

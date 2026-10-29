@@ -10,6 +10,7 @@ type RoutePathContext = {
 };
 
 export function resolveRouteFullPaths(graph: IGraphContributor): void {
+  resolveImportedMountTargets(graph);
   const context = createRoutePathContext(graph.nodes, graph.relationships);
 
   resolveImportedStringConstants(graph.nodes, graph.relationships, context.constantsByFileId);
@@ -38,6 +39,52 @@ export function resolveRouteFullPaths(graph: IGraphContributor): void {
   }
 
   applyNestGlobalPrefixes(graph, context);
+}
+
+// A mount of a router imported from another file (`app.use(routes)` with
+// `import routes from './routes'`, `app.use('/v1', require('./v1'))`) points
+// at the Import after the parse. It is moved to the router that file exports:
+// the variable its default export names (`export default router`,
+// `module.exports = router`) or the default export expression itself
+// (`export default Router().use(...)`), or the named export's variable. A
+// mount whose router is not found is dropped.
+function resolveImportedMountTargets(graph: IGraphContributor): void {
+  const mounts = graph.relationships.filter((rel) => rel.type === "MOUNTS" && typeof rel.properties.importedName === "string");
+  if (mounts.length === 0) return;
+
+  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+  const resolvedFileByImportId = new Map<string, string>();
+  const variableIdByFileAndName = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    if (rel.type === "RESOLVES_TO") {
+      resolvedFileByImportId.set(rel.from, rel.to);
+    } else if (rel.type === "DEFINES_VARIABLE") {
+      const name = nodeById.get(rel.to)?.properties.name;
+      if (typeof name === "string") variableIdByFileAndName.set(key(rel.from, name), rel.to);
+    }
+  }
+
+  const unresolved = new Set<GraphRelationship>();
+  for (const mount of mounts) {
+    const importedName = mount.properties.importedName as string;
+    delete mount.properties.importedName;
+
+    const fileId = resolvedFileByImportId.get(mount.to);
+    const defaultName = fileId ? nodeById.get(fileId)?.properties.defaultExport : undefined;
+    const targetId = !fileId
+      ? undefined
+      : importedName === "default"
+        ? (typeof defaultName === "string" ? variableIdByFileAndName.get(key(fileId, defaultName)) : undefined)
+          ?? variableIdByFileAndName.get(key(fileId, "default"))
+        : variableIdByFileAndName.get(key(fileId, importedName));
+    if (targetId) mount.to = targetId;
+    else unresolved.add(mount);
+  }
+
+  if (unresolved.size === 0) return;
+  for (let index = graph.relationships.length - 1; index >= 0; index -= 1) {
+    if (unresolved.has(graph.relationships[index]!)) graph.relationships.splice(index, 1);
+  }
 }
 
 // app.setGlobalPrefix('api') prefixes every NestJS route of the application.
