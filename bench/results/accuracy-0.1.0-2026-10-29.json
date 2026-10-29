@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-29T13:26:40.328Z",
+  "recordedAt": "2026-10-29T13:35:13.566Z",
   "samples": [
     {
       "sample": "express",
@@ -46,11 +46,11 @@
     {
       "sample": "internet-nest",
       "dataAccess": {
-        "tp": 14,
+        "tp": 17,
         "fp": 0,
-        "fn": 3,
+        "fn": 0,
         "precision": 1,
-        "recall": 0.8235294117647058
+        "recall": 1
       }
     },
     {
@@ -133,11 +133,11 @@
       "recall": 0.726027397260274
     },
     "dataAccess": {
-      "tp": 40,
+      "tp": 43,
       "fp": 0,
-      "fn": 3,
+      "fn": 0,
       "precision": 1,
-      "recall": 0.9302325581395349
+      "recall": 1
     }
   }
 }

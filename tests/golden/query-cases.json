@@ -553,6 +553,26 @@
         "tool": "list_routes",
         "args": {}
       }
+    ],
+    "orm-vocabulary": [
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "typeorm"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "mongoose"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "operation": "delete"
+        }
+      }
     ]
   }
 }

@@ -94,9 +94,9 @@ Labels counts calls with a project target. Another 310 call sites are labeled
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| internet-nest | 17 | 14 | 0 | 3 | 100.0% | 82.4% |
+| internet-nest | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 26 | 26 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 43 | 40 | 0 | 3 | **100.0%** | **93.0%** |
+| **all** | 43 | 43 | 0 | 0 | **100.0%** | **100.0%** |
 
 ## What the misses are
 
@@ -120,8 +120,10 @@ are, and they cluster:
   (Default imports, #45; constructors and static methods, #46; and
   module-level calls, `require('./x')(...)` and `module.exports = …`
   defaults, #47, resolve now.)
-- **Data-access vocabulary.** TypeORM `findOneBy` and Mongoose
-  `findByIdAndUpdate` / `findByIdAndDelete` are not recognized.
+
+Every labeled data access is found since #49 (the TypeORM `*By` and Mongoose
+`findById*` / `findOneAnd*` methods, and calls on a receiver split over
+lines, `this.catModel\n  .findByIdAndUpdate(…)`).
 
 The same list, by area, is in [known-limitations.md](known-limitations.md).
 
