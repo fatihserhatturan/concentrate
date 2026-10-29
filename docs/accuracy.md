@@ -70,11 +70,11 @@ Rules:
 
 | Sample | Labels | TP | FP | FN | Precision | Recall | Full path |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| express | 59 | 53 | 0 | 6 | 100.0% | 89.8% | 100.0% (53/53) |
+| express | 59 | 59 | 0 | 0 | 100.0% | 100.0% | 93.2% (55/59) |
 | fastify | 14 | 14 | 0 | 0 | 100.0% | 100.0% | 100.0% (14/14) |
 | internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 5.0% (1/20) |
 | nestjs-starter | 1 | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% (1/1) |
-| **all** | 94 | 88 | 0 | 6 | **100.0%** | **93.6%** | **78.4% (69/88)** |
+| **all** | 94 | 94 | 0 | 0 | **100.0%** | **100.0%** | **75.5% (71/94)** |
 
 ### Call resolution
 
@@ -103,17 +103,18 @@ Labels counts calls with a project target. Another 310 call sites are labeled
 Precision is 100% everywhere: no route, call target or data access the graph
 states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
 resolve = path.resolve` in express's `lib/view.js`, is left unresolved since
-#48.) fastify has no route misses left: routes registered inside plugin
-functions and `build()` factories (#41) and fastify-decorators controllers
-(#42) are read. Recall is where the gaps are, and they cluster:
+#48.) Every labeled route is found: routes registered inside plugin
+functions and `build()` factories (#41), fastify-decorators controllers
+(#42), and apps and routers recognized by the factory that created them
+(`apiv1 = express.Router()`, `main = express()`, #43). Recall is where the
+gaps are, and they cluster:
 
-- **Receivers with other names.** Routes are read from receivers named `app`,
-  `router`, `fastify` or `…Router`; Express's `multi-router` and `vhost`
-  examples use `apiv1 = express.Router()` and `main = express()`: express's
-  6 misses.
-- **Mount prefixes through chained routers.** realworld mounts every
-  controller with `export default Router().use('/api', api)`, where
-  `api = Router().use(...)`; the routes are found without `/api`.
+- **Mount prefixes across files.** A prefix applied in another file is not
+  followed. realworld mounts every controller with
+  `export default Router().use('/api', api)`, where `api = Router().use(...)`,
+  so its routes are found without `/api`; Express's `multi-router` mounts
+  `app.use('/api/v1', require('./controllers/api_v1'))`, so those 4 routes
+  are found without `/api/v1`.
 - **Objects assembled at runtime.** Express's `app` gets its methods from
   `lib/application.js` through `merge-descriptors`; the 20 `app.set` /
   `app.use` / `app.listen` labels in the examples point there. They are left

@@ -1,0 +1,1024 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 41
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 0
+          },
+          {
+            "table": "Directory",
+            "count": 1
+          },
+          {
+            "table": "File",
+            "count": 4
+          },
+          {
+            "table": "Import",
+            "count": 5
+          },
+          {
+            "table": "Function",
+            "count": 9
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 12
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 29
+          },
+          {
+            "table": "Route",
+            "count": 8
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 0
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 41,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 0
+        },
+        {
+          "table": "Directory",
+          "count": 1
+        },
+        {
+          "table": "File",
+          "count": 4
+        },
+        {
+          "table": "Import",
+          "count": 5
+        },
+        {
+          "table": "Function",
+          "count": 9
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 12
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 29
+        },
+        {
+          "table": "Route",
+          "count": 8
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 0
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "inner",
+            "kind": "Function",
+            "file": "factory.js",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "home",
+            "kind": "Function",
+            "file": "main.js",
+            "line": 4,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "handle",
+            "kind": "Function",
+            "file": "main.js",
+            "line": 12,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "createStore",
+            "kind": "Function",
+            "file": "not-routes.js",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "express",
+            "kind": "Variable",
+            "file": "api.js",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "express",
+            "kind": "Variable",
+            "file": "factory.js",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "express",
+            "kind": "Variable",
+            "file": "main.js",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "KoaRouter",
+            "kind": "Variable",
+            "file": "main.js",
+            "line": 2,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "server",
+            "kind": "Variable",
+            "file": "main.js",
+            "line": 19,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "web",
+            "kind": "Variable",
+            "file": "main.js",
+            "line": 22,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "cache",
+            "kind": "Variable",
+            "file": "not-routes.js",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "store",
+            "kind": "Variable",
+            "file": "not-routes.js",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "inner",
+          "kind": "Function",
+          "file": "factory.js",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "home",
+          "kind": "Function",
+          "file": "main.js",
+          "line": 4,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "handle",
+          "kind": "Function",
+          "file": "main.js",
+          "line": 12,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "createStore",
+          "kind": "Function",
+          "file": "not-routes.js",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "express",
+          "kind": "Variable",
+          "file": "api.js",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "express",
+          "kind": "Variable",
+          "file": "factory.js",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "express",
+          "kind": "Variable",
+          "file": "main.js",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "KoaRouter",
+          "kind": "Variable",
+          "file": "main.js",
+          "line": 2,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "server",
+          "kind": "Variable",
+          "file": "main.js",
+          "line": 19,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "web",
+          "kind": "Variable",
+          "file": "main.js",
+          "line": 22,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "cache",
+          "kind": "Variable",
+          "file": "not-routes.js",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "store",
+          "kind": "Variable",
+          "file": "not-routes.js",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 12
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "not-routes.js",
+            "name": "cache",
+            "kind": "Variable",
+            "line": 9,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "not-routes.js",
+            "name": "store",
+            "kind": "Variable",
+            "line": 12,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "not-routes.js",
+          "name": "cache",
+          "kind": "Variable",
+          "line": 9,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "not-routes.js",
+          "name": "store",
+          "kind": "Variable",
+          "line": 12,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "api.js",
+            "line": 12,
+            "method": "GET",
+            "path": "/stats",
+            "fullPath": "/admin/stats",
+            "framework": "express-koa",
+            "handlerName": "stats",
+            "handler": "stats"
+          },
+          {
+            "file": "api.js",
+            "line": 15,
+            "method": "GET",
+            "path": "/users",
+            "fullPath": "/users",
+            "framework": "express-koa",
+            "handlerName": "list",
+            "handler": "list"
+          },
+          {
+            "file": "api.js",
+            "line": 16,
+            "method": "USE",
+            "path": "/admin",
+            "fullPath": "/admin",
+            "framework": "express-koa",
+            "handlerName": "admin",
+            "handler": null
+          },
+          {
+            "file": "factory.js",
+            "line": 9,
+            "method": "GET",
+            "path": "/inner",
+            "fullPath": "/inner",
+            "framework": "express-koa",
+            "handlerName": "inner",
+            "handler": "inner"
+          },
+          {
+            "file": "main.js",
+            "line": 17,
+            "method": "GET",
+            "path": "/",
+            "fullPath": "/",
+            "framework": "express-koa",
+            "handlerName": "home",
+            "handler": "home"
+          },
+          {
+            "file": "main.js",
+            "line": 20,
+            "method": "POST",
+            "path": "/login",
+            "fullPath": "/login",
+            "framework": "express-koa",
+            "handlerName": "login",
+            "handler": "login"
+          },
+          {
+            "file": "main.js",
+            "line": 23,
+            "method": "GET",
+            "path": "/k",
+            "fullPath": "/k",
+            "framework": "express-koa",
+            "handlerName": "handle",
+            "handler": "handle"
+          },
+          {
+            "file": "main.js",
+            "line": 26,
+            "method": "GET",
+            "path": "/f",
+            "fullPath": "/f",
+            "framework": "fastify",
+            "handlerName": "handle",
+            "handler": "handle"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "api.js",
+          "line": 12,
+          "method": "GET",
+          "path": "/stats",
+          "fullPath": "/admin/stats",
+          "framework": "express-koa",
+          "handlerName": "stats",
+          "handler": "stats"
+        },
+        {
+          "file": "api.js",
+          "line": 15,
+          "method": "GET",
+          "path": "/users",
+          "fullPath": "/users",
+          "framework": "express-koa",
+          "handlerName": "list",
+          "handler": "list"
+        },
+        {
+          "file": "api.js",
+          "line": 16,
+          "method": "USE",
+          "path": "/admin",
+          "fullPath": "/admin",
+          "framework": "express-koa",
+          "handlerName": "admin",
+          "handler": null
+        },
+        {
+          "file": "factory.js",
+          "line": 9,
+          "method": "GET",
+          "path": "/inner",
+          "fullPath": "/inner",
+          "framework": "express-koa",
+          "handlerName": "inner",
+          "handler": "inner"
+        },
+        {
+          "file": "main.js",
+          "line": 17,
+          "method": "GET",
+          "path": "/",
+          "fullPath": "/",
+          "framework": "express-koa",
+          "handlerName": "home",
+          "handler": "home"
+        },
+        {
+          "file": "main.js",
+          "line": 20,
+          "method": "POST",
+          "path": "/login",
+          "fullPath": "/login",
+          "framework": "express-koa",
+          "handlerName": "login",
+          "handler": "login"
+        },
+        {
+          "file": "main.js",
+          "line": 23,
+          "method": "GET",
+          "path": "/k",
+          "fullPath": "/k",
+          "framework": "express-koa",
+          "handlerName": "handle",
+          "handler": "handle"
+        },
+        {
+          "file": "main.js",
+          "line": 26,
+          "method": "GET",
+          "path": "/f",
+          "fullPath": "/f",
+          "framework": "fastify",
+          "handlerName": "handle",
+          "handler": "handle"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "api.js",
+            "line": 12,
+            "method": "GET",
+            "path": "/stats",
+            "fullPath": "/admin/stats",
+            "framework": "express-koa",
+            "handlerName": "stats",
+            "handler": "stats"
+          },
+          {
+            "file": "api.js",
+            "line": 15,
+            "method": "GET",
+            "path": "/users",
+            "fullPath": "/users",
+            "framework": "express-koa",
+            "handlerName": "list",
+            "handler": "list"
+          },
+          {
+            "file": "api.js",
+            "line": 16,
+            "method": "USE",
+            "path": "/admin",
+            "fullPath": "/admin",
+            "framework": "express-koa",
+            "handlerName": "admin",
+            "handler": null
+          },
+          {
+            "file": "factory.js",
+            "line": 9,
+            "method": "GET",
+            "path": "/inner",
+            "fullPath": "/inner",
+            "framework": "express-koa",
+            "handlerName": "inner",
+            "handler": "inner"
+          },
+          {
+            "file": "main.js",
+            "line": 17,
+            "method": "GET",
+            "path": "/",
+            "fullPath": "/",
+            "framework": "express-koa",
+            "handlerName": "home",
+            "handler": "home"
+          },
+          {
+            "file": "main.js",
+            "line": 20,
+            "method": "POST",
+            "path": "/login",
+            "fullPath": "/login",
+            "framework": "express-koa",
+            "handlerName": "login",
+            "handler": "login"
+          },
+          {
+            "file": "main.js",
+            "line": 23,
+            "method": "GET",
+            "path": "/k",
+            "fullPath": "/k",
+            "framework": "express-koa",
+            "handlerName": "handle",
+            "handler": "handle"
+          },
+          {
+            "file": "main.js",
+            "line": 26,
+            "method": "GET",
+            "path": "/f",
+            "fullPath": "/f",
+            "framework": "fastify",
+            "handlerName": "handle",
+            "handler": "handle"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "api.js",
+          "line": 12,
+          "method": "GET",
+          "path": "/stats",
+          "fullPath": "/admin/stats",
+          "framework": "express-koa",
+          "handlerName": "stats",
+          "handler": "stats"
+        },
+        {
+          "file": "api.js",
+          "line": 15,
+          "method": "GET",
+          "path": "/users",
+          "fullPath": "/users",
+          "framework": "express-koa",
+          "handlerName": "list",
+          "handler": "list"
+        },
+        {
+          "file": "api.js",
+          "line": 16,
+          "method": "USE",
+          "path": "/admin",
+          "fullPath": "/admin",
+          "framework": "express-koa",
+          "handlerName": "admin",
+          "handler": null
+        },
+        {
+          "file": "factory.js",
+          "line": 9,
+          "method": "GET",
+          "path": "/inner",
+          "fullPath": "/inner",
+          "framework": "express-koa",
+          "handlerName": "inner",
+          "handler": "inner"
+        },
+        {
+          "file": "main.js",
+          "line": 17,
+          "method": "GET",
+          "path": "/",
+          "fullPath": "/",
+          "framework": "express-koa",
+          "handlerName": "home",
+          "handler": "home"
+        },
+        {
+          "file": "main.js",
+          "line": 20,
+          "method": "POST",
+          "path": "/login",
+          "fullPath": "/login",
+          "framework": "express-koa",
+          "handlerName": "login",
+          "handler": "login"
+        },
+        {
+          "file": "main.js",
+          "line": 23,
+          "method": "GET",
+          "path": "/k",
+          "fullPath": "/k",
+          "framework": "express-koa",
+          "handlerName": "handle",
+          "handler": "handle"
+        },
+        {
+          "file": "main.js",
+          "line": 26,
+          "method": "GET",
+          "path": "/f",
+          "fullPath": "/f",
+          "framework": "fastify",
+          "handlerName": "handle",
+          "handler": "handle"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {
+      "framework": "fastify"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND route.framework = \"fastify\" OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "main.js",
+            "line": 26,
+            "method": "GET",
+            "path": "/f",
+            "fullPath": "/f",
+            "framework": "fastify",
+            "handlerName": "handle",
+            "handler": "handle"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "framework": "fastify",
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "main.js",
+          "line": 26,
+          "method": "GET",
+          "path": "/f",
+          "fullPath": "/f",
+          "framework": "fastify",
+          "handlerName": "handle",
+          "handler": "handle"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  }
+]
