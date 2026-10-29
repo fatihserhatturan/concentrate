@@ -43,7 +43,9 @@ export function analyzeMemberCallExpression(expression: string | undefined): Cal
     };
   }
 
-  const rawReceiver = expression.slice(0, lastDotIndex);
+  // A chain split over lines (`this.catModel\n  .findById(…)`) leaves line
+  // breaks and indentation around its dots and at the end of the receiver.
+  const rawReceiver = expression.slice(0, lastDotIndex).replace(/\s*(\??\.)\s*/gu, "$1").trim();
   const receiver = rawReceiver.includes("(") ? stripCallsFromReceiver(rawReceiver) : rawReceiver;
 
   return {

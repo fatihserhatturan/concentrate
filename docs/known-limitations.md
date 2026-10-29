@@ -146,9 +146,12 @@ audits.
 - Current false-positive guards avoid broad framework factories, but review
   findings from `semanticSamples.dataAccess` should be fed back into resolver
   rules.
-- Found by the accuracy report ([accuracy.md](accuracy.md)): TypeORM
-  `findOneBy` and Mongoose `findByIdAndUpdate` / `findByIdAndDelete` are not
-  recognized as data access.
+- The method vocabulary covers the TypeORM Repository / EntityManager API
+  (`findOneBy`, `findAndCountBy`, `softDelete`, `increment`, …) and the
+  Mongoose Model API (`findByIdAndUpdate`, `findOneAndDelete`,
+  `countDocuments`, …). Prisma's `findUniqueOrThrow` / `findFirstOrThrow` /
+  `groupBy` and Sequelize's `findAndCountAll` / `bulkCreate` are not in it
+  yet.
 
 Blocks or informs: deeper ORM-specific long-term work and MCP data lineage
 queries.

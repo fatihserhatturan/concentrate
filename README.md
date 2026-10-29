@@ -75,7 +75,7 @@ Every number below comes from pinned open-source repositories and can be reprodu
 
 **The graph is trustworthy.**
 - Against hand-written labels, 100% of reported routes, call targets and database accesses are correct.
-- Route recall and route full paths are 100%, and data-access recall is 93%.
+- Route recall, route full paths and data-access recall are 100%.
 - Call recall is still growing; see [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 
 <p align="center"><img src="docs/assets/agent-hard.svg" alt="Agent benchmark on nestjs/nest: input tokens −23%, tool calls −43%, turns −33%, wall time −27%; import-cycle questions use about 2.5 times fewer tokens" width="860"></p>
@@ -107,7 +107,7 @@ The goal is a code graph an agent can rely on as much as on the source itself. T
 - easy installation in any MCP client.
 
 Next up:
-- **Data-access vocabulary and a benchmark rerun:** TypeORM `findOneBy`, Mongoose `findByIdAndUpdate` / `findByIdAndDelete` ([#49](https://github.com/fatihserhatturan/concentrate/issues/49)), and the agent benchmark on the improved graph ([#50](https://github.com/fatihserhatturan/concentrate/issues/50)). On the labels, route recall went from 80% to 100% and route full paths from 75% to 100% with [#41](https://github.com/fatihserhatturan/concentrate/issues/41)–[#44](https://github.com/fatihserhatturan/concentrate/issues/44); call recall went from 40% to 73% with [#45](https://github.com/fatihserhatturan/concentrate/issues/45)–[#47](https://github.com/fatihserhatturan/concentrate/issues/47).
+- **Agent benchmark rerun** on the improved graph ([#50](https://github.com/fatihserhatturan/concentrate/issues/50)). On the labels, data-access recall went from 93% to 100% with [#49](https://github.com/fatihserhatturan/concentrate/issues/49), route recall went from 80% to 100% and route full paths from 75% to 100% with [#41](https://github.com/fatihserhatturan/concentrate/issues/41)–[#44](https://github.com/fatihserhatturan/concentrate/issues/44); call recall went from 40% to 73% with [#45](https://github.com/fatihserhatturan/concentrate/issues/45)–[#47](https://github.com/fatihserhatturan/concentrate/issues/47).
 - **Distribution** (Phase 9): npm publishing, an `init` command and CI ([#16](https://github.com/fatihserhatturan/concentrate/issues/16)).
 
 The full plan is in [docs/ROADMAP.md](docs/ROADMAP.md).
