@@ -71,10 +71,10 @@ Rules:
 | Sample | Labels | TP | FP | FN | Precision | Recall | Full path |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | express | 59 | 53 | 0 | 6 | 100.0% | 89.8% | 100.0% (53/53) |
-| fastify | 14 | 12 | 0 | 2 | 100.0% | 85.7% | 100.0% (12/12) |
+| fastify | 14 | 14 | 0 | 0 | 100.0% | 100.0% | 100.0% (14/14) |
 | internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 5.0% (1/20) |
 | nestjs-starter | 1 | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% (1/1) |
-| **all** | 94 | 86 | 0 | 8 | **100.0%** | **91.5%** | **77.9% (67/86)** |
+| **all** | 94 | 88 | 0 | 6 | **100.0%** | **93.6%** | **78.4% (69/88)** |
 
 ### Call resolution
 
@@ -103,11 +103,10 @@ Labels counts calls with a project target. Another 310 call sites are labeled
 Precision is 100% everywhere: no route, call target or data access the graph
 states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
 resolve = path.resolve` in express's `lib/view.js`, is left unresolved since
-#48.) Recall is where the gaps are, and they cluster:
+#48.) fastify has no route misses left: routes registered inside plugin
+functions and `build()` factories (#41) and fastify-decorators controllers
+(#42) are read. Recall is where the gaps are, and they cluster:
 
-- **Decorator routes outside NestJS.** fastify-decorators' `@GET` / `@POST`
-  are not read: fastify's 2 misses. (Routes registered inside a plugin
-  function or a `build()` factory, 11 misses before, are read since #41.)
 - **Receivers with other names.** Routes are read from receivers named `app`,
   `router`, `fastify` or `…Router`; Express's `multi-router` and `vhost`
   examples use `apiv1 = express.Router()` and `main = express()`: express's

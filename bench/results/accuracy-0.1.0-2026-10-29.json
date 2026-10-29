@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-29T13:07:35.031Z",
+  "recordedAt": "2026-10-29T13:13:52.604Z",
   "samples": [
     {
       "sample": "express",
@@ -25,14 +25,14 @@
     {
       "sample": "fastify",
       "routes": {
-        "tp": 12,
+        "tp": 14,
         "fp": 0,
-        "fn": 2,
+        "fn": 0,
         "precision": 1,
-        "recall": 0.8571428571428571,
+        "recall": 1,
         "fullPath": {
-          "correct": 12,
-          "total": 12
+          "correct": 14,
+          "total": 14
         }
       },
       "calls": {
@@ -115,14 +115,14 @@
   ],
   "totals": {
     "routes": {
-      "tp": 86,
+      "tp": 88,
       "fp": 0,
-      "fn": 8,
+      "fn": 6,
       "precision": 1,
-      "recall": 0.9148936170212766,
+      "recall": 0.9361702127659575,
       "fullPath": {
-        "correct": 67,
-        "total": 86
+        "correct": 69,
+        "total": 88
       }
     },
     "calls": {

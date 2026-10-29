@@ -29,7 +29,9 @@ and deeper package graph queries.
   calls it when its argument is a string literal or a visible constant. Its
   `exclude` option and prefixes chosen at runtime are not modelled.
 - Found by the accuracy report ([accuracy.md](accuracy.md)):
-  - fastify-decorators' `@GET` / `@POST` are not read.
+  - fastify-decorators controllers (`@Controller` with `@GET` / `@POST` / …)
+    are read when the decorators are imported from `fastify-decorators`; a
+    prefix given to `bootstrap(app, { prefix })` is not applied.
   - Inside a function, routes are read only when the receiver is the
     function's first parameter (a Fastify plugin `(instance, opts, done)`, a
     function passed inline to `.register(...)`, or a parameter with an app
