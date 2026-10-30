@@ -1,5 +1,5 @@
 import type { ILanguageResolver } from "../contracts/language-resolver.js";
-import type { ISemanticContributor } from "../contracts/semantic-contributor.js";
+import type { ISemanticContributor, ScanSettings } from "../contracts/semantic-contributor.js";
 import type { GraphBuilder } from "../graph/builder.js";
 import type { ScanReport } from "./report.js";
 
@@ -10,12 +10,13 @@ export async function finalizeGraphRelationships(
   resolvers: readonly ILanguageResolver[],
   contributors: readonly ISemanticContributor[],
   files: readonly string[],
+  settings: ScanSettings = { apiOrigins: [] },
 ): Promise<void> {
   for (const resolver of resolvers) {
     await resolver.resolve(graph, rootPath, report);
   }
 
   for (const contributor of contributors) {
-    await contributor.contribute(graph, rootPath, report, files);
+    await contributor.contribute(graph, rootPath, report, files, settings);
   }
 }

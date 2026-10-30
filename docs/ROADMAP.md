@@ -677,8 +677,8 @@ Links outbound HTTP calls to the `Route` nodes the backend phases already build.
 
 ### Acceptance criteria
 
-- [ ] Fixtures and golden coverage for each client and for an unmatched dynamic URL
-- [ ] The RealWorld frontend sample linked to `internet-node-express-realworld`, with hand labels for `REQUESTS` in `bench:accuracy`
+- [x] Fixtures and golden coverage for each client and for an unmatched dynamic URL
+- [x] The RealWorld frontend sample linked to `internet-node-express-realworld`, with hand labels for `REQUESTS` in `bench:accuracy`
 - [x] Precision stays at 100%; recall is reported
 
 ## Phase 14: Vue and Nuxt ([#79](https://github.com/fatihserhatturan/concentrate/issues/79))

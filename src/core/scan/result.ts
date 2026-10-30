@@ -11,6 +11,8 @@ export type BuildCodeGraphOptions = {
   maxFiles?: number;
   include?: string[];
   exclude?: string[];
+  // Origins that serve this project's routes (see ScanSettings.apiOrigins).
+  apiOrigins?: string[];
   // Reuse per-file parse results stored here (see parse-cache.ts); unset parses every file.
   cacheDirectory?: string;
   onProgress?: (current: number, total: number, relativePath: string) => void;

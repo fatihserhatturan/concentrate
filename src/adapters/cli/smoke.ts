@@ -25,6 +25,7 @@ export type SmokeSample = {
   databasePath: string;
   continueOnError?: boolean;
   exclude?: string[];
+  apiOrigins?: string[];
   expected: SmokeExpected;
 };
 
@@ -55,7 +56,8 @@ export type SmokeMetricName =
   | "entrypoints"
   | "envVars"
   | "configValues"
-  | "dataModels";
+  | "dataModels"
+  | "requests";
 
 export type SmokeSampleResult = {
   name: string;
@@ -146,10 +148,15 @@ export type IncrementalBenchmarkResult = {
 export type SampleManifestEntry = {
   name: string;
   suite: SmokeSuite;
-  repo: string;
-  sha: string;
+  // One repository at the sample root, or `parts`: several repositories,
+  // each checked out into its own directory of the sample.
+  repo?: string;
+  sha?: string;
+  parts?: Array<{ dir: string; repo: string; sha: string }>;
   continueOnError?: boolean;
   exclude?: string[];
+  // Scan setting: origins that serve the sample's own routes.
+  apiOrigins?: string[];
 };
 
 type SampleExpectation = Pick<SmokeSample, "name" | "suite" | "expected">;
@@ -184,6 +191,7 @@ export function resolveSamples(expectations: SampleExpectation[], manifest: Samp
       databasePath: `.concentrate/${sample.name}.graph`,
       continueOnError: entry.continueOnError,
       exclude: entry.exclude,
+      apiOrigins: entry.apiOrigins,
     };
   });
 }
@@ -402,6 +410,28 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       },
     },
   },
+  {
+    name: "internet-realworld-fullstack",
+    suite: "internet",
+    expected: {
+      // pages/_document.tsx fails: the grammar rejects a bare & in a JSX attribute string.
+      status: "partial",
+      discoveredFiles: 165,
+      supportedFiles: 101,
+      parsedFiles: 100,
+      failedFiles: 1,
+      resolvedImports: 181,
+      unresolvedRelativeImports: 0,
+      nodes: 1599,
+      relationships: 2420,
+      fileClassifications: { production: 90, test: 7, fixture: 0, support: 3, generated: 0 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 26,
+        requests: 32,
+      },
+    },
+  },
 ];
 
 export async function smokeCommand(options: SmokeOptions): Promise<void> {
@@ -478,6 +508,7 @@ async function runSmokeSample(
   const graph = await scanOrchestrator.buildGraph(projectPath, {
     continueOnError: sample.continueOnError ?? false,
     exclude: sample.exclude,
+    apiOrigins: sample.apiOrigins,
   });
   const fullScanMs = elapsedMs(fullScanStartedAt);
 
@@ -529,6 +560,7 @@ async function runIncrementalBenchmark(
   const scan = () => scanOrchestrator.buildGraph(projectPath, {
     continueOnError: sample.continueOnError ?? false,
     exclude: sample.exclude,
+    apiOrigins: sample.apiOrigins,
     cacheDirectory,
   });
 
@@ -769,6 +801,7 @@ async function readGraphMetrics(
     if ("moduleProvides" in expected) {
       metrics.moduleProvides = await queryCount(writer, "MATCH ()-[r:MODULE_PROVIDES]->() RETURN count(r) AS count");
     }
+    if ("requests" in expected) metrics.requests = await queryCount(writer, "MATCH ()-[r:REQUESTS]->() RETURN count(r) AS count");
     if ("injects" in expected) metrics.injects = await queryCount(writer, "MATCH ()-[r:INJECTS]->() RETURN count(r) AS count");
     if ("entrypoints" in expected) metrics.entrypoints = await queryCount(writer, "MATCH (n:EntryPoint) RETURN count(n) AS count");
     if ("envVars" in expected) metrics.envVars = await queryCount(writer, "MATCH (n:EnvVar) RETURN count(n) AS count");

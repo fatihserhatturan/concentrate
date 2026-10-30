@@ -16,6 +16,7 @@ export type ExportAdapterOptions = {
   maxFiles?: number;
   include: string[];
   exclude: string[];
+  apiOrigin?: string[];
   cacheDir: string;
   cache?: boolean;
   normalized?: boolean;
@@ -32,6 +33,7 @@ export async function runExportAdapter(projectPath: string, options: ExportAdapt
     maxFiles: options.maxFiles,
     include: options.include.length > 0 ? options.include : undefined,
     exclude: options.exclude.length > 0 ? options.exclude : undefined,
+    apiOrigins: options.apiOrigin,
     cacheDirectory: options.cache === false ? undefined : path.resolve(options.cacheDir),
     onProgress: (current, total, relativePath) => {
       progress.update(current, total, relativePath);

@@ -1,7 +1,7 @@
 /**
  * Accuracy report: precision and recall of routes, call resolution, data
- * access, UI components, their renders and UI pages against hand-written
- * labels in bench/labels/<sample>.json.
+ * access, UI components, their renders, UI pages and frontend requests
+ * against hand-written labels in bench/labels/<sample>.json.
  *
  *   npm run bench:accuracy -- [--sample name] [--details] [--json out.json]
  *
@@ -14,7 +14,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { readSampleManifest, samplesDirectory } from "../src/adapters/cli/smoke.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
-import { compareCalls, compareComponents, compareDataAccess, comparePages, compareRenders, compareRoutes, sumScores, type Labels, type RouteScore, type Score } from "./accuracy/compare.js";
+import { compareCalls, compareComponents, compareDataAccess, comparePages, compareRenders, compareRequests, compareRoutes, sumScores, type Labels, type RouteScore, type Score } from "./accuracy/compare.js";
 
 const { values } = parseArgs({
   options: {
@@ -25,12 +25,12 @@ const { values } = parseArgs({
 });
 
 const labelsDirectory = new URL("../bench/labels/", import.meta.url);
-const kinds = ["routes", "calls", "dataAccess", "components", "renders", "pages"] as const;
+const kinds = ["routes", "calls", "dataAccess", "components", "renders", "pages", "requests"] as const;
 type Kind = (typeof kinds)[number];
 
 const labelFiles = (await readdir(labelsDirectory)).filter((file) => file.endsWith(".json")).sort();
 const manifest = await readSampleManifest();
-type Scores = { routes?: RouteScore; calls?: Score; dataAccess?: Score; components?: Score; renders?: Score; pages?: Score };
+type Scores = { routes?: RouteScore; calls?: Score; dataAccess?: Score; components?: Score; renders?: Score; pages?: Score; requests?: Score };
 const results: Array<{ sample: string; scores: Scores }> = [];
 
 for (const labelFile of labelFiles) {
@@ -41,8 +41,8 @@ for (const labelFile of labelFiles) {
     console.error(`Sample ${labels.sample} is missing at ${projectPath}; run \`npm run samples:fetch\`.`);
     process.exit(1);
   }
-  const continueOnError = manifest.find((entry) => entry.name === labels.sample)?.continueOnError === true;
-  const graph = await buildCodeGraph(projectPath, { continueOnError });
+  const entry = manifest.find((sample) => sample.name === labels.sample);
+  const graph = await buildCodeGraph(projectPath, { continueOnError: entry?.continueOnError === true, apiOrigins: entry?.apiOrigins });
   const scores: Scores = {};
   if (labels.routes) scores.routes = compareRoutes(graph, labels.routes);
   if (labels.calls) scores.calls = compareCalls(graph, labels.calls);
@@ -50,6 +50,7 @@ for (const labelFile of labelFiles) {
   if (labels.components) scores.components = compareComponents(graph, labels.components);
   if (labels.renders) scores.renders = compareRenders(graph, labels.renders);
   if (labels.pages) scores.pages = comparePages(graph, labels.pages);
+  if (labels.requests) scores.requests = compareRequests(graph, labels.requests);
   results.push({ sample: labels.sample, scores });
 }
 
@@ -61,6 +62,7 @@ const titles: Record<Kind, string> = {
   components: "Components",
   renders: "Component renders",
   pages: "Pages",
+  requests: "API requests",
 };
 
 // Routes get one more column: detected routes whose full path is right.

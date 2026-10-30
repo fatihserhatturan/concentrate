@@ -233,7 +233,10 @@ Blocks or informs: future query server design.
   class member that contains an `ERROR` or `MISSING` node is left out (the
   file is parsed again with that text blanked), and the scan reports a warning
   with the lines left out. A file that stays broken after four rounds fails
-  as before. Python, Go and Rust files with syntax errors are still reported
+  as before. One case is a bare `&` in a JSX attribute string
+  (`href="…?family=x&display=swap"`): the tree-sitter JS / TSX grammars
+  reject it, and their error recovery can take the whole file with it.
+  Python, Go and Rust files with syntax errors are still reported
   as failed files (`--continue-on-error` keeps the rest of the scan).
 
 - HTML pages (`.html`, `.htm`): `<script src>` becomes an `Import` of the
@@ -407,7 +410,8 @@ Astro).
   query function fetching the key, object or v3 positional form) are a GET
   of their key when the key, or the first element of an array key, is a
   string or template starting with `/` or `http` (or a template starting
-  with a substitution); `cond ? key : null` is read too. A query with its
+  with a substitution); `cond ? key : null` is read too. A key held in a
+  local variable (`useSWR(fetchURL, fetcher)`) is not read. A query with its
   own `queryFn` is linked through the calls inside it; a `queryFn` or SWR
   fetcher that builds a different URL than the key (`fetch(API + key)`),
   `useSWRInfinite`, `useSWRMutation`, `useMutation` and
@@ -419,7 +423,11 @@ Astro).
   argument become the constant they name (a string, or a template resolved
   in turn, in the same file or imported by name), the instance base URL is
   joined in front, and a `localhost` / `127.0.0.1` / `0.0.0.0` origin is
-  dropped. Env reads (`${process.env.API_URL}/posts`, `import.meta.env.*`,
+  dropped, as is an origin declared with `--api-origin <url>` (the scan
+  option `apiOrigins`, for a frontend that calls its deployed backend:
+  `--api-origin https://api.example.com` turns
+  `https://api.example.com/users` into `/users`; the URL's path is not
+  used). Env reads (`${process.env.API_URL}/posts`, `import.meta.env.*`,
   also through a constant or an instance `baseURL`) take their value from
   the `.env*` files the scan sees (nearest directory first:
   `.env.development.local`, `.env.local`, `.env.development`, `.env`,

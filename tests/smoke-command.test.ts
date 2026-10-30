@@ -92,7 +92,9 @@ describe("smoke validation", () => {
     assert.equal(samples.length, manifest.length);
     for (const sample of samples) {
       assert.equal(sample.projectPath, path.join(samplesDirectory(), sample.name));
-      assert.match(manifest.find((entry) => entry.name === sample.name)!.sha, /^[0-9a-f]{40}$/);
+      const entry = manifest.find((item) => item.name === sample.name)!;
+      // A sample assembled from several repositories pins each part.
+      for (const part of entry.parts ?? [entry]) assert.match(part.sha!, /^[0-9a-f]{40}$/);
     }
     assert.throws(() => resolveSamples(defaultSampleExpectations, manifest.slice(1)), /disagree/);
   });

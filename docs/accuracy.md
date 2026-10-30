@@ -1,7 +1,7 @@
 # Accuracy report
 
 How often the graph is right about routes, call targets, data access, UI
-components and UI pages,
+components, UI pages and frontend → backend requests,
 measured against hand-written labels on the pinned sample repositories
 (`scripts/samples.json`).
 
@@ -29,6 +29,7 @@ chosen files); every target was decided by reading the code.
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma) | the services; the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend) | `src/components/`: every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app) | `app/` and `pages/`: every page, layout, loading and not-found file |
+| Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project) | `frontend/`: every HTTP call that reaches a backend route |
 
 Rules:
 
@@ -71,6 +72,14 @@ Rules:
   segments in Next's syntax (`/docs/[[...slug]]`), `component` the name of
   the component it exports as default. Metadata routes (`app/robots.ts`) are
   not pages.
+- **Requests.** `{ file, line, route, routeFile }` for every frontend call
+  whose URL reaches one backend route: `route` is the route's method and full
+  path (`GET /api/articles/:slug`), `routeFile` the file that declares it.
+  The frontend calls the deployed API (`https://conduit.productionready.io/api`),
+  which the sample declares in `apiOrigins` (`--api-origin` on the CLI). A
+  call whose URL is a variable reassigned in branches is labeled with the
+  route most branches request; calls to the frontend's own origin (`/user`),
+  through a wrapper's URL parameter, or to local storage are not labeled.
 
 ## Scoring
 
@@ -91,8 +100,10 @@ Rules:
   render linked to another component is an FP and an FN.
 - **Pages:** file, kind, full path and the rendered component all match; a
   page with the wrong path or component is an FP and an FN.
+- **Requests:** the call's file and line (±1), the route and its declaring
+  file all match; a call linked to another route is an FP and an FN.
 
-## Results (2026-10-30, schema 48)
+## Results (2026-10-30, schema 53)
 
 ### Routes
 
@@ -145,10 +156,16 @@ Labels counts calls with a project target. Another 310 call sites are labeled
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-nextjs-taxonomy | 27 | 27 | 0 | 0 | 100.0% | 100.0% |
 
+### API requests
+
+| Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-realworld-fullstack | 32 | 31 | 0 | 1 | 100.0% | 96.9% |
+
 ## What the misses are
 
 Precision is 100% everywhere: no route, call target, data access, component,
-render or page the graph states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
+render, page or request the graph states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
 resolve = path.resolve` in express's `lib/view.js`, is left unresolved since
 #48.) Every labeled route is found: routes registered inside plugin
 functions and `build()` factories (#41), fastify-decorators controllers
@@ -174,6 +191,13 @@ are, and they cluster:
   `ProfileFavorites`, a class that extends another component class
   (`Profile`) instead of `React.Component`. Every labeled render is found:
   renders of `export default connect(...)(X)` modules resolve to X.
+
+- **SWR keys in local variables.** The one missed request is
+  `components/article/ArticleList.tsx`, which passes `useSWR` a local
+  `fetchURL` that a `switch` reassigns; a hook key is only read when it is a
+  string or template. Every other frontend call links to its route, through
+  `SERVER_BASE_URL` template strings, `axios` calls in `lib/api/` and SWR
+  keys in components and pages.
 
 Every labeled data access is found since #49 (the TypeORM `*By` and Mongoose
 `findById*` / `findOneAnd*` methods, and calls on a receiver split over

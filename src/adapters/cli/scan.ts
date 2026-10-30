@@ -14,6 +14,7 @@ export type ScanAdapterOptions = {
   maxFiles?: number;
   include: string[];
   exclude: string[];
+  apiOrigin?: string[];
   retryLock: boolean;
   cacheDir: string;
   cache?: boolean;
@@ -53,6 +54,7 @@ export async function scanIntoStore(
     maxFiles: options.maxFiles,
     include: options.include.length > 0 ? options.include : undefined,
     exclude: options.exclude.length > 0 ? options.exclude : undefined,
+    apiOrigins: options.apiOrigin,
     cacheDirectory: options.cache === false ? undefined : path.resolve(options.cacheDir),
     onProgress,
   });

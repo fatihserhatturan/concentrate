@@ -24,28 +24,34 @@ const selected = manifest.samples.filter((sample) => values.suite === "all" || s
 const git = (cwd, ...args) => execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
 
 mkdirSync(samplesDir, { recursive: true });
+// A sample is one repository at its root, or `parts`: repositories checked
+// out into directories of the sample.
 for (const sample of selected) {
-  const target = path.join(samplesDir, sample.name);
-  if (existsSync(path.join(target, ".git"))) {
-    let head = "";
-    try {
-      head = git(target, "rev-parse", "HEAD");
-    } catch {
-      // Broken checkout; re-fetch below.
+  const checkouts = sample.parts
+    ? sample.parts.map((part) => ({ label: `${sample.name}/${part.dir}`, target: path.join(samplesDir, sample.name, part.dir), repo: part.repo, sha: part.sha }))
+    : [{ label: sample.name, target: path.join(samplesDir, sample.name), repo: sample.repo, sha: sample.sha }];
+  for (const { label, target, repo, sha } of checkouts) {
+    if (existsSync(path.join(target, ".git"))) {
+      let head = "";
+      try {
+        head = git(target, "rev-parse", "HEAD");
+      } catch {
+        // Broken checkout; re-fetch below.
+      }
+      if (head === sha) {
+        console.log(`ok       ${label} @ ${sha.slice(0, 12)}`);
+        continue;
+      }
     }
-    if (head === sample.sha) {
-      console.log(`ok       ${sample.name} @ ${sample.sha.slice(0, 12)}`);
-      continue;
-    }
-  }
 
-  console.log(`fetching ${sample.name} @ ${sample.sha.slice(0, 12)} from ${sample.repo}`);
-  rmSync(target, { recursive: true, force: true });
-  mkdirSync(target, { recursive: true });
-  git(target, "init", "--quiet");
-  git(target, "remote", "add", "origin", sample.repo);
-  git(target, "fetch", "--quiet", "--depth", "1", "origin", sample.sha);
-  git(target, "-c", "advice.detachedHead=false", "checkout", "--quiet", "FETCH_HEAD");
+    console.log(`fetching ${label} @ ${sha.slice(0, 12)} from ${repo}`);
+    rmSync(target, { recursive: true, force: true });
+    mkdirSync(target, { recursive: true });
+    git(target, "init", "--quiet");
+    git(target, "remote", "add", "origin", repo);
+    git(target, "fetch", "--quiet", "--depth", "1", "origin", sha);
+    git(target, "-c", "advice.detachedHead=false", "checkout", "--quiet", "FETCH_HEAD");
+  }
 }
 
 console.log(`Samples ready in ${samplesDir}`);

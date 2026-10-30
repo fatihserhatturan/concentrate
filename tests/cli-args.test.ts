@@ -188,6 +188,7 @@ describe("concentrate program spec", () => {
         continueOnError: false,
         include: [],
         exclude: [],
+        apiOrigin: [],
         retryLock: true,
         cacheDir: ".concentrate/cache",
         cache: true,
@@ -195,6 +196,7 @@ describe("concentrate program spec", () => {
       },
     });
     assert.equal(parseCommandArgs(scan, [".", "--no-cache"]).options.cache, false);
+    assert.deepEqual(parseCommandArgs(scan, [".", "--api-origin", "https://a.io", "--api-origin", "https://b.io"]).options.apiOrigin, ["https://a.io", "https://b.io"]);
 
     const smoke = concentrate.commands.find((command) => command.name === "smoke")!;
     assert.deepEqual(parseCommandArgs(smoke, []).options, {

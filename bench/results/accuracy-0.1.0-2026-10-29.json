@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-30T15:09:43.237Z",
+  "recordedAt": "2026-10-30T16:27:53.783Z",
   "samples": [
     {
       "sample": "express",
@@ -120,6 +120,16 @@
       }
     },
     {
+      "sample": "internet-realworld-fullstack",
+      "requests": {
+        "tp": 31,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.96875
+      }
+    },
+    {
       "sample": "ky",
       "calls": {
         "tp": 13,
@@ -197,6 +207,13 @@
       "fn": 0,
       "precision": 1,
       "recall": 1
+    },
+    "requests": {
+      "tp": 31,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.96875
     }
   }
 }

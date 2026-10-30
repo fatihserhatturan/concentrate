@@ -74,7 +74,7 @@ Every number below comes from pinned open-source repositories and can be reprodu
 <p align="center"><img src="docs/assets/precision.svg" alt="Precision by relation type: HTTP routes 100%, call targets 100%, data access 100%" width="640"></p>
 
 **The graph is trustworthy.**
-- Against hand-written labels, 100% of reported routes, call targets, database accesses, React components and component renders are correct.
+- Against hand-written labels, 100% of reported routes, call targets, database accesses, React components, component renders, pages and frontend → backend API requests are correct.
 - Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React frontend) are 100%.
 - Call recall (72.6%) is still growing; see [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 
