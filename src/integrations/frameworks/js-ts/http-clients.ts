@@ -11,7 +11,16 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 //   `axios.get(url)` / `.post` / … on the default import of `axios`;
 // - ky: `ky(url, options?)` and `ky.get(url)` / … on the default import of `ky`;
 // - ofetch: `ofetch(url, options?)` imported from `ofetch`, and `$fetch`
-//   (Nuxt's global) unless the file declares one.
+//   (Nuxt's global) unless the file declares one;
+// - data-fetching hooks whose key is the URL (GET): `useSWR(key, fetcher?)`
+//   and `useSWRImmutable` (client `swr`), and TanStack Query's `useQuery`,
+//   `useSuspenseQuery`, `useInfiniteQuery` and `queryOptions` without a
+//   `queryFn` (the default query function fetches the key; client
+//   `tanstack-query`), in object or v3 positional form. The URL is the key, or
+//   the first element of an array key, when it is a string or template that
+//   starts with `/` or `http`, or a template that starts with a substitution
+//   (a ternary with one side null, too); a query
+//   with its own `queryFn` is left to the calls inside it.
 // The method is the member name or the literal `method` option (GET when
 // there is none); options that are not an object literal, or that spread
 // another object, leave it null. The URL is a string or template literal as
@@ -39,6 +48,8 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
   const ky = new Set([...imported].filter(([, from]) => from === "ky:default").map(([name]) => name));
   const ofetch = new Set([...imported].filter(([, from]) => from === "ofetch:ofetch" || from === "ofetch:$fetch").map(([name]) => name));
   if (!local("$fetch")) ofetch.add("$fetch");
+  const swr = new Set([...imported].filter(([, from]) => from === "swr:default" || from === "swr/immutable:default").map(([name]) => name));
+  const query = new Set([...imported].filter(([, from]) => queryHook.test(from)).map(([name]) => name));
 
   const bindings = new Set([...imported.keys(), ...parsed.nodes.filter((node) => node.label === "Variable").map((node) => String(node.properties.name))]);
   markInstances(rootNode, parsed.nodes, { axios, ky, ofetch });
@@ -52,7 +63,7 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
 
   const visit = (node: SyntaxNode) => {
     if (node.type === "call_expression") {
-      const request = httpRequest(node, { fetch: !local("fetch"), axios, ky, ofetch }) ?? instanceRequest(node, bindings);
+      const request = httpRequest(node, { fetch: !local("fetch"), axios, ky, ofetch }) ?? keyRequest(node, swr, query) ?? instanceRequest(node, bindings);
       const call = request ? callsByPosition.get(`${node.startPosition.row + 1}:${node.startPosition.column}`) : undefined;
       if (request && call) {
         if (request.client) call.properties.httpClient = request.client;
@@ -64,6 +75,48 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
     for (const child of node.namedChildren) if (child) visit(child);
   };
   visit(rootNode);
+}
+
+const queryHook = /^(?:@tanstack\/(?:react|vue|solid|svelte|angular)-query(?:-experimental)?|react-query):(?:useQuery|useSuspenseQuery|useInfiniteQuery|useSuspenseInfiniteQuery|queryOptions)$/u;
+
+// `useSWR('/api/user', fetcher)`, `useQuery({ queryKey: ['/api/todos'] })`.
+function keyRequest(call: SyntaxNode, swr: ReadonlySet<string>, query: ReadonlySet<string>): Request | null {
+  const callee = call.childForFieldName("function")?.text ?? "";
+  const args = call.childForFieldName("arguments")?.namedChildren.filter((arg): arg is SyntaxNode => arg !== null) ?? [];
+  let key: SyntaxNode | null | undefined;
+  let client: string;
+  if (swr.has(callee)) {
+    client = "swr";
+    key = args[0];
+  } else if (query.has(callee)) {
+    client = "tanstack-query";
+    const options = args[0] ? entries(args[0]) : null;
+    if (options) {
+      if (options.has("queryFn")) return null;
+      key = options.get("queryKey");
+    } else {
+      if (args[1]?.type === "arrow_function" || args[1]?.type === "function_expression" || args[1]?.type === "identifier") return null;
+      key = args[0];
+    }
+  } else {
+    return null;
+  }
+  const url = urlKey(key ?? undefined);
+  return url ? { client, method: "GET", url } : null;
+}
+
+function urlKey(key: SyntaxNode | undefined): string | null {
+  if (key?.type === "array") return urlKey(key.namedChildren[0] ?? undefined);
+  if (key?.type === "ternary_expression") {
+    const consequence = key.childForFieldName("consequence");
+    const alternative = key.childForFieldName("alternative");
+    if (alternative?.type === "null") return urlKey(consequence ?? undefined);
+    if (consequence?.type === "null") return urlKey(alternative ?? undefined);
+    return null;
+  }
+  if (key?.type !== "string" && key?.type !== "template_string") return null;
+  const url = urlOf(key);
+  return url !== null && /^(?:\/|https?:\/\/|\$\{)/u.test(url) && !(url.startsWith("${") && key.type === "string") ? url : null;
 }
 
 type Clients = { fetch: boolean; axios: Set<string>; ky: Set<string>; ofetch: Set<string> };
