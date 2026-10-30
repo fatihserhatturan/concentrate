@@ -17,6 +17,9 @@ export type ComponentLabel = { file: string; name: string; line: number };
 export type RenderLabel = { file: string; parent: string; line: number; child: string; childFile: string };
 // `component` is the name of the component the page renders, or null.
 export type PageLabel = { file: string; fullPath: string; kind: string; component: string | null };
+// A frontend call (file, line) that reaches the route `route` ("METHOD /path")
+// declared in `routeFile`.
+export type RequestLabel = { file: string; line: number; route: string; routeFile: string };
 
 export type Labels = {
   sample: string;
@@ -33,6 +36,8 @@ export type Labels = {
   renders?: { scope: string[]; items: RenderLabel[] };
   // UI pages declared in `scope`.
   pages?: { scope: string[]; items: PageLabel[] };
+  // Calls in `scope` that request a route of the repository (REQUESTS).
+  requests?: { scope: string[]; items: RequestLabel[] };
 };
 
 export type Score = {
@@ -368,6 +373,42 @@ export function comparePages(graph: Graph, labels: NonNullable<Labels["pages"]>)
     label.file === page.file && label.kind === page.kind && label.fullPath === page.fullPath && label.component === page.component
   ));
   const describe = (page: PageLabel) => `${page.file} ${page.kind} ${page.fullPath} -> ${page.component ?? "(none)"}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+// REQUESTS edges with the calling file and line and the route's declaring file.
+export function scanRequests(graph: Graph): RequestLabel[] {
+  const files = filePaths(graph);
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const fileOfRoute = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    const file = rel.type === "DECLARES_ROUTE" ? byId.get(rel.from)?.properties.relativePath : undefined;
+    if (typeof file === "string") fileOfRoute.set(rel.to, file);
+  }
+  return graph.relationships.flatMap((rel) => {
+    if (rel.type !== "REQUESTS") return [];
+    const call = byId.get(rel.from);
+    const route = byId.get(rel.to);
+    const file = fileOfNodeId(rel.from, files);
+    if (!call || !route || !file) return [];
+    const path = route.properties.fullPath ?? route.properties.path;
+    return [{
+      file,
+      line: num(call.properties.line),
+      route: `${String(route.properties.method).toUpperCase()} ${String(path)}`,
+      routeFile: fileOfRoute.get(rel.to) ?? "",
+    }];
+  });
+}
+
+// A request is right when the call (file, line) links to the labeled route; a
+// link to another route is both a false positive and a false negative.
+export function compareRequests(graph: Graph, labels: NonNullable<Labels["requests"]>): Score {
+  const found = scanRequests(graph).filter((request) => inScope(request.file, labels.scope));
+  const result = pair(labels.items, found, (label, request) => (
+    label.file === request.file && nearLine(label.line, request.line) && label.route === request.route && label.routeFile === request.routeFile
+  ));
+  const describe = (request: RequestLabel) => `${request.file}:${request.line} -> ${request.route} (${request.routeFile})`;
   return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
 }
 

@@ -10,6 +10,7 @@ import {
   compareDataAccess,
   comparePages,
   compareRenders,
+  compareRequests,
   compareRoutes,
   fileOfNodeId,
   normalizePath,
@@ -276,6 +277,43 @@ describe("accuracy comparator: pages", () => {
   });
 });
 
+describe("accuracy comparator: requests", () => {
+  // web/api.ts line 3 requests GET /api/users; line 7 requests the wrong route.
+  const graph: Graph = { nodes: files("web/api.ts", "server/app.js"), relationships: [] };
+  const route = (index: number, method: string, fullPath: string) => {
+    const id = `file:server/app.js:route:${index}`;
+    graph.nodes.push(node(id, "Route", { method, path: fullPath, fullPath, line: index }));
+    graph.relationships.push(rel("file:server/app.js", "DECLARES_ROUTE", id));
+    return id;
+  };
+  const users = route(1, "GET", "/api/users");
+  const user = route(2, "GET", "/api/users/:id");
+  const call = (line: number, to: string) => {
+    const id = `file:web/api.ts:call:${line}:1:fetch`;
+    graph.nodes.push(node(id, "Call", { line }));
+    graph.relationships.push(rel(id, "REQUESTS", to));
+  };
+  call(3, users);
+  call(7, user);
+
+  it("matches a call's file, line ±1 and route with its declaring file", () => {
+    const score = compareRequests(graph, {
+      scope: ["web/"],
+      items: [
+        { file: "web/api.ts", line: 4, route: "GET /api/users", routeFile: "server/app.js" },
+        { file: "web/api.ts", line: 7, route: "GET /api/users", routeFile: "server/app.js" },
+        { file: "web/api.ts", line: 12, route: "POST /api/users", routeFile: "server/app.js" },
+      ],
+    });
+    assert.deepEqual([score.tp, score.fp, score.fn], [1, 1, 2]);
+    assert.deepEqual(score.falsePositives, ["web/api.ts:7 -> GET /api/users/:id (server/app.js)"]);
+    assert.deepEqual(score.falseNegatives, [
+      "web/api.ts:7 -> GET /api/users (server/app.js)",
+      "web/api.ts:12 -> POST /api/users (server/app.js)",
+    ]);
+  });
+});
+
 describe("label files", () => {
   const labelsDirectory = path.join(import.meta.dirname, "../bench/labels");
   for (const labelFile of readdirSync(labelsDirectory).filter((file) => file.endsWith(".json"))) {
@@ -303,6 +341,9 @@ describe("label files", () => {
       for (const page of labels.pages?.items ?? []) {
         assert.ok(page.file && page.fullPath.startsWith("/") && page.kind && page.component !== undefined, JSON.stringify(page));
       }
+      for (const request of labels.requests?.items ?? []) {
+        assert.ok(request.file && Number.isInteger(request.line) && /^[A-Z]+ \//.test(request.route) && request.routeFile, JSON.stringify(request));
+      }
     });
 
     const projectPath = path.join(samplesDirectory(), labels.sample);
@@ -315,6 +356,7 @@ describe("label files", () => {
         ...(labels.components?.items ?? []).map((component) => component.file),
         ...(labels.renders?.items ?? []).flatMap((render) => [render.file, render.childFile]),
         ...(labels.pages?.items ?? []).map((page) => page.file),
+        ...(labels.requests?.items ?? []).flatMap((request) => [request.file, request.routeFile]),
       ]);
       for (const file of named) assert.ok(existsSync(path.join(projectPath, file)), `${file} is missing in ${labels.sample}`);
     });

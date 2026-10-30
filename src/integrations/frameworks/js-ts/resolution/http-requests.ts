@@ -25,8 +25,9 @@ import { createVariableResolver } from "./variable-resolver.js";
 // imports, and loses its request otherwise; `${NAME}` placeholders become the
 // string constants they name (same file or imported; a template constant is
 // resolved in turn); the base is joined to a relative URL; and a local origin
-// (`http://localhost:3000`, `127.0.0.1`, `0.0.0.0`) is dropped, so the URL
-// becomes a path. A URL that is a single unresolved variable is left null.
+// (`http://localhost:3000`, `127.0.0.1`, `0.0.0.0`), or one of the scan's
+// `apiOrigins` (the scheme, host and port of each; `--api-origin`), is
+// dropped, so the URL becomes a path. A URL that is a single unresolved variable is left null.
 //
 // Env reads (`${process.env.API_URL}`, `import.meta.env.VITE_API`, also
 // through a constant) take their value from the `.env*` files the scan
@@ -41,8 +42,15 @@ type RouteSegment = { kind: "literal"; value: string } | { kind: "param" } | { k
 type RouteEntry = { id: string; method: string; segments: RouteSegment[] };
 
 export const httpRequestsContributor: ISemanticContributor = {
-  async contribute(graph, rootPath, _report, files) {
-    resolveRequestUrls(graph.nodes, graph.relationships, await readEnvFiles(rootPath, files));
+  async contribute(graph, rootPath, _report, files, settings) {
+    const origins = (settings?.apiOrigins ?? []).flatMap((origin) => {
+      try {
+        return [new URL(origin).origin.toLowerCase()];
+      } catch {
+        return [];
+      }
+    });
+    resolveRequestUrls(graph.nodes, graph.relationships, await readEnvFiles(rootPath, files), origins);
     const routes: RouteEntry[] = [];
     // `METHOD:fullPath` → tRPC procedure routes.
     const trpcRoutes = new Map<string, string[]>();
@@ -133,7 +141,7 @@ function parseEnvFile(content: string): Map<string, string> {
   return values;
 }
 
-function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship[], env: EnvFiles): void {
+function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship[], env: EnvFiles, origins: readonly string[]): void {
   const calls = nodes.filter((node) => node.label === "Call" && (node.properties.httpMethod !== undefined || node.properties.httpReceiver !== undefined));
   if (calls.length === 0) return;
   const { nodeById, fileByVariableId, variableOf, fileOfCall } = createVariableResolver(nodes, relationships);
@@ -191,7 +199,7 @@ function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship
     const written = call.properties.httpUrl;
     if (typeof written !== "string" || !fileId) continue;
     const url = substitute(written, fileId);
-    const resolved = /^\$\{[^}]*\}$/u.test(url) && base === null ? null : localPath(joinBaseUrl(base, url));
+    const resolved = /^\$\{[^}]*\}$/u.test(url) && base === null ? null : localPath(joinBaseUrl(base, url), origins);
     call.properties.httpUrl = usedEnv && !resolved?.startsWith("/") ? written : resolved;
   }
 }
@@ -202,9 +210,11 @@ function joinBaseUrl(base: string | null, url: string): string {
   return `${base.replace(/\/+$/u, "")}/${url.replace(/^\/+/u, "")}`;
 }
 
-function localPath(url: string): string {
+function localPath(url: string, origins: readonly string[]): string {
   const match = /^https?:\/\/(?:localhost|127\.0\.0\.1|0\.0\.0\.0)(?::\d+)?(?=[/]|$)/iu.exec(url);
-  return match ? url.slice(match[0].length) || "/" : url;
+  if (match) return url.slice(match[0].length) || "/";
+  const origin = origins.find((candidate) => url.toLowerCase().startsWith(candidate) && /^(?:[/]|$)/u.test(url.slice(candidate.length)));
+  return origin ? url.slice(origin.length) || "/" : url;
 }
 
 // The method and URL segments of an HTTP call: `null` for a dynamic segment.

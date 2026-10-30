@@ -1859,6 +1859,38 @@ describe("buildCodeGraph", () => {
     assert.equal(tsTarget.properties.value, "ES2022");
   });
 
+  it("links calls to a declared API origin to the scanned routes", async () => {
+    const fixturePath = await mkdtemp(path.join(os.tmpdir(), "concentrate-api-origins-"));
+    try {
+      await writeFile(path.join(fixturePath, "package.json"), JSON.stringify({ dependencies: { express: "4.21.1" } }));
+      await writeFile(
+        path.join(fixturePath, "server.js"),
+        "const express = require('express');\nconst app = express();\napp.get('/api/users', (req, res) => res.json([]));\n",
+      );
+      await writeFile(
+        path.join(fixturePath, "client.ts"),
+        [
+          "export const deployed = () => fetch('https://api.example.com/api/users');",
+          "export const origin = () => fetch('https://api.example.com');",
+          "export const lookalike = () => fetch('https://api.example.com.evil.io/api/users');",
+          "export const other = () => fetch('https://other.example.com/api/users');",
+          "",
+        ].join("\n"),
+      );
+      const requestsFrom = (graph: Awaited<ReturnType<typeof buildCodeGraph>>) => graph.relationships
+        .filter((rel) => rel.type === "REQUESTS")
+        .map((rel) => String(getNode(graph.nodes, rel.from).properties.line))
+        .sort();
+
+      const declared = await buildCodeGraph(fixturePath, { continueOnError: false, apiOrigins: ["https://API.example.com/api"] });
+      assert.deepEqual(requestsFrom(declared), ["1"]);
+      const undeclared = await buildCodeGraph(fixturePath, { continueOnError: false });
+      assert.deepEqual(requestsFrom(undeclared), []);
+    } finally {
+      await rm(fixturePath, { recursive: true, force: true });
+    }
+  });
+
   it("links env usage inside function-valued variables to the function node", async () => {
     const rootPath = await mkdtemp(path.join(os.tmpdir(), "concentrate-env-function-"));
     await writeFile(

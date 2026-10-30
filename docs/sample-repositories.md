@@ -27,6 +27,12 @@ sample test (`tests/golden-samples.test.ts`) all read from there.
 | internet-node-express-firebase-mongodb | internet | JDIZM/node-express-firebase-mongodb | `269ab2619cf320bb38eb821e95a35dd9ad772770` |
 | internet-node-express-realworld | internet | gothinkster/node-express-realworld-example-app | `30b68e1e881462b2f4164ea09ab4c4f5699c7b0b` |
 | internet-nest | internet | nestjs/nest | `958ff952c00bd5a25efa04ffaafac28721af7827` |
+| internet-realworld-fullstack | internet | gothinkster/node-express-realworld-example-app in `backend/`, reck1ess/next-realworld-example-app in `frontend/` | `30b68e1e881462b2f4164ea09ab4c4f5699c7b0b`, `be9ef569bc395975d98c1973fac23ba9277797e7` |
+
+A sample with `parts` is assembled from several repositories, each cloned
+into its own directory of the sample, so the frontend and the backend are
+scanned as one project. `apiOrigins` in the manifest is passed to the scan
+like `--api-origin`.
 
 At these commits every recorded count reproduces exactly, except ky's
 `discoveredFiles` (67 instead of 68: the original local clone had one extra
@@ -225,6 +231,23 @@ standing smoke samples.
 - Expected smoke counts: schema version 36, 26 `Route` nodes, 4 `EnvVar`
   nodes, 9 `ConfigValue` nodes, 4 `DataModel` nodes, 4 `Table` nodes (from
   `src/prisma/schema.prisma`).
+
+### RealWorld Fullstack
+
+- Scale: medium
+- Repositories: the RealWorld Express backend (above) in `backend/` and
+  `https://github.com/reck1ess/next-realworld-example-app` (Next.js pages
+  router, SWR and axios) in `frontend/`.
+- Local path: `.concentrate/samples/internet-realworld-fullstack`
+- Scan options: `apiOrigins: ["https://conduit.productionready.io"]`, the
+  deployed API the frontend calls (`SERVER_BASE_URL`).
+- Last scan result, 2026-10-30: 165 discovered files, 101 supported files,
+  100 parsed files, 1 failed file (`frontend/pages/_document.tsx`: a bare `&`
+  in a JSX attribute string, see [known-limitations.md](known-limitations.md)),
+  181 resolved imports, 1599 nodes, 2420 relationships.
+- Expected smoke counts: 26 `Route` nodes and 32 `REQUESTS` edges (31 from
+  the frontend, 1 from the backend's e2e test); the hand labels are in
+  [accuracy.md](accuracy.md).
 
 ### Nest
 

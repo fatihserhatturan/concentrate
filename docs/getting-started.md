@@ -62,6 +62,10 @@ offers 24 tools, a graph summary resource, and paged, structured results.
   fail instead).
 - **Large repositories.** `--exclude <glob>` (repeatable) skips paths, and
   `--continue-on-error` keeps the scan going past files that fail to parse.
+- **Deployed APIs.** A frontend that calls its backend by its public URL
+  (`https://api.example.com/users`) links to the scanned routes once that
+  origin is declared: `--api-origin https://api.example.com` (repeatable)
+  treats it like `localhost`. Calls to other origins stay unlinked.
 
 What the graph can and cannot see is listed in
 [known-limitations.md](known-limitations.md).
