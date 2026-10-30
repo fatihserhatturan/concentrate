@@ -470,10 +470,21 @@ Astro).
   `PAGE_RENDERS` goes to the file's component. `definePageMeta({ path })`
   overrides, `.js` / `.tsx` pages and pages added by modules or the
   `pages:extend` hook are not read.
+- Nuxt server routes: each file of `server/api/` (served at `/api/…`) and
+  `server/routes/` (at `/…`) at the package root is a `Route` (framework
+  `nuxt`) whose path follows the page rules (`[id]` → `:id`, `[...path]` →
+  `:path(.*)*`, `index` → its folder). A method suffix (`users.post.ts`) sets
+  the method, otherwise it is `ALL`. The handler is the function passed to
+  the default-exported call (`defineEventHandler(async (event) => …)`,
+  `eventHandler(getUser)`), or a function exported as default.
+  `server/middleware/`, `server/plugins/`, Nitro `routeRules`, `apiDir` /
+  `serverDir` overrides and handlers registered with `useBase` or a router
+  in code are not read.
 - Nuxt auto-imports: a call to a name its file neither declares nor imports
   resolves to the function exported under that name from a top-level file
   of `composables/` or `utils/` (or their `<dir>/index.*`), when one file
-  exports it; default exports, re-exports (`export { x } from`) and
+  exports it (in code under `server/`, from `server/utils/` instead);
+  default exports, re-exports (`export { x } from`) and
   `imports.dirs` from `nuxt.config` are not read, nor are Nuxt's and Vue's
   own auto-imports (`useFetch`, `ref`), which stay unresolved. A tag no import
   resolves renders the component of `components/<path>.vue` named by its
@@ -491,8 +502,12 @@ Astro).
   `httpMethod`, `httpUrl`) for `fetch` (also `window.fetch` /
   `globalThis.fetch`, unless the file declares or imports its own `fetch`),
   the default import of `axios` (`axios(…)`, `axios.request(…)`,
-  `axios.get(…)` / `.post` / …), the default import of `ky` and `ofetch` /
-  `$fetch`.
+  `axios.get(…)` / `.post` / …), the default import of `ky`, `ofetch` /
+  `$fetch`, and Nuxt's `useFetch` / `useLazyFetch` (client `nuxt`; global, or
+  imported from `#app`, `#imports` or `nuxt/app`, so a file's own `useFetch`
+  hook is not one). `useAsyncData(key, () => $fetch(url))` is linked through
+  the `$fetch` inside it; a `useFetch` URL given as a function or a ref is not
+  read.
 - Instances: `axios.create({ baseURL })`, `ky.create` / `ky.extend({ prefixUrl })`
   and `ofetch.create({ baseURL })` assigned to a top-level variable or
   default-exported mark that `Variable` (`httpClient`, `httpBaseUrl`); calls

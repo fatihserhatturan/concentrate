@@ -46,14 +46,14 @@ export const agentToolDefinitions = [
   },
   {
     name: "api_consumers",
-    description: `The frontend calls that reach a route (fetch, axios, ky, ofetch, SWR, TanStack Query and tRPC calls linked by URL or procedure path), each with its route, the calling function or file and line, the client, the method and URL as resolved, and the match kind (exact, parameter or catch-all). Filter by the route's method, path, file or framework, or by the calling file or client; with no filter, lists every linked call. ${budgetNote}`,
+    description: `The frontend calls that reach a route (fetch, axios, ky, ofetch, Nuxt useFetch, SWR, TanStack Query and tRPC calls linked by URL or procedure path), each with its route, the calling function or file and line, the client, the method and URL as resolved, and the match kind (exact, parameter or catch-all). Filter by the route's method, path, file or framework, or by the calling file or client; with no filter, lists every linked call. ${budgetNote}`,
     inputSchema: objectSchema({
       method: { type: "string", description: "Optional route method, case-insensitive (GET, post, query, mutation, ...)." },
       path: { type: "string", description: "Optional route path, matched against the resolved full path or the path as declared (/api/users/:id, post.byId)." },
       routeFile: { type: "string", description: "Optional scan-relative file of the route declaration." },
-      framework: { type: "string", description: "Optional route framework, such as express-koa, nextjs or trpc." },
+      framework: { type: "string", description: "Optional route framework, such as express-koa, nextjs, nuxt or trpc." },
       file: { type: "string", description: "Optional scan-relative file of the calling code." },
-      client: { type: "string", description: "Optional client: fetch, axios, ky, ofetch, swr, tanstack-query or trpc." },
+      client: { type: "string", description: "Optional client: fetch, axios, ky, ofetch, nuxt, swr, tanstack-query or trpc." },
       limit: limit(50),
     }),
   },
