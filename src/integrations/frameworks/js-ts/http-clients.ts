@@ -22,7 +22,8 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 // Instances: `const api = axios.create({ baseURL })`, `ky.create` /
 // `ky.extend({ prefixUrl })` and `ofetch.create({ baseURL })` (also as the
 // default export) mark their Variable with `httpClient` and `httpBaseUrl`
-// (as written, or `${NAME}`; the expression text when it is computed).
+// (as written; any other expression, a variable or `process.env.API_URL ?? …`,
+// as `${expression}`).
 // Calls on a receiver that may be one, `api.get(url)` / `api.request(…)` or
 // `api(url | config)` on an imported or local binding, are recorded with
 // `httpReceiver` and no `httpClient`; the contributor resolves the receiver
@@ -129,7 +130,7 @@ function clientInstance(value: SyntaxNode, clients: Omit<Clients, "fetch">): { c
   const options = value.childForFieldName("arguments")?.namedChildren[0];
   const option = options ? entries(options)?.get(client === "ky" ? "prefixUrl" : "baseURL") : undefined;
   if (option === undefined) return { client, baseUrl: options && !entries(options) ? options.text : null };
-  return { client, baseUrl: option === null ? `\${${client === "ky" ? "prefixUrl" : "baseURL"}}` : urlOf(option) ?? option.text };
+  return { client, baseUrl: option === null ? `\${${client === "ky" ? "prefixUrl" : "baseURL"}}` : urlOf(option) ?? `\${${option.text}}` };
 }
 
 function httpRequest(call: SyntaxNode, clients: Clients): Request | null {

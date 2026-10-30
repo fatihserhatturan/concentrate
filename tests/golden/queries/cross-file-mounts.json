@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 51
+        "result": 52
       },
       {
         "method": "stats",
@@ -103,7 +103,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 51,
+      "schemaVersion": 52,
       "stats": [
         {
           "table": "Repo",

@@ -31,7 +31,7 @@
 {"kind":"node","id":"file:server.ts:modulecall:14:0:app.get","label":"Call","properties":{"args":"[\"/users\",\"listUsers\"]","callee":"get","columnNumber":0,"expression":"app.get","line":14,"name":"app.get","receiver":"app"}}
 {"kind":"node","id":"file:server.ts:route:14:0:GET:/users","label":"Route","properties":{"framework":"express-koa","fullPath":"/users","handlerName":"listUsers","line":14,"method":"GET","path":"/users","pathExpression":"'/users'","receiverName":"app"}}
 {"kind":"node","id":"file:server.ts:variable:3:app","label":"Variable","properties":{"isExported":false,"kind":"const","line":3,"name":"app","stringValue":null}}
-{"kind":"node","id":"file:server.ts:variable:4:token","label":"Variable","properties":{"isExported":false,"kind":"const","line":4,"name":"token","stringValue":null}}
+{"kind":"node","id":"file:server.ts:variable:4:token","label":"Variable","properties":{"isExported":false,"kind":"const","line":4,"name":"token","stringTemplate":"${process.env.API_TOKEN}","stringValue":null}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":false,"manager":null,"name":"config-env-fixture","path":"<root>","relativePath":".","version":"1.0.0","workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"config-env","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:config.ts","properties":{}}

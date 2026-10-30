@@ -20,8 +20,30 @@ export function createVariableNode(fileNodeId: string, declarator: SyntaxNode): 
       isExported,
       line: declarator.startPosition.row + 1,
       stringValue: extractStringValue(declarator.childForFieldName("value")),
+      ...stringTemplateProperty(declarator.childForFieldName("value")),
     },
   };
+}
+
+// A value built from other values, for the http-requests contributor to
+// resolve: the body of a template literal with substitutions
+// (`${API_ORIGIN}/api`), or an env read, alone or with a literal fallback
+// (`process.env.API_URL ?? "http://localhost:4000"`), as one substitution.
+function stringTemplateProperty(valueNode: SyntaxNode | null): { stringTemplate?: string } {
+  if (valueNode?.type === "template_string" && valueNode.namedChildren.some((child) => child?.type === "template_substitution")) {
+    return { stringTemplate: valueNode.text.slice(1, -1) };
+  }
+  return valueNode && isEnvRead(valueNode) ? { stringTemplate: `\${${valueNode.text}}` } : {};
+}
+
+function isEnvRead(node: SyntaxNode): boolean {
+  if (node.type === "binary_expression") {
+    const operator = node.childForFieldName("operator")?.type;
+    const right = node.childForFieldName("right");
+    const left = node.childForFieldName("left");
+    return (operator === "??" || operator === "||") && right?.type === "string" && left !== null && isEnvRead(left);
+  }
+  return node.type === "member_expression" && /^(?:process|import\.meta)\.env\.[A-Za-z_]\w*$/u.test(node.text);
 }
 
 function extractStringValue(valueNode: SyntaxNode | null): string | null {
