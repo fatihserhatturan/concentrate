@@ -434,6 +434,18 @@ Astro).
   has none. Generated files (`routeTree.gen.ts`) repeat the routes and are
   skipped; `createLazyRoute` and virtual file routes (`virtualRouteConfig`)
   are not read.
+- Vue Router: in a file that imports `vue-router`, the records of the
+  `routes` passed to `createRouter` (inline or an array of the same file)
+  and of arrays typed `RouteRecordRaw[]` (annotation, `satisfies` or `as`)
+  are `Page`s (framework `vue-router`, router `object`). `fullPath` joins a
+  child's path onto its parent's; a child with path `''` is `index`, a
+  record with children `layout`, one with only `redirect` `redirect`.
+  `component: Home` and `components: { default: Home }` give
+  `Page.component`; `component: () => import('./About.vue')` gives
+  `Page.componentSource`, and `PAGE_RENDERS` goes to that module's default
+  component. Records spread in (`...routes`), built by functions or held in
+  untyped arrays of another file, named views other than `default`, `alias`
+  paths and `defineAsyncComponent` loaders are not read.
 
 ## API Calls
 

@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":10,"supportedFiles":9,"parsedFiles":9,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":18,"supportedFiles":17,"parsedFiles":17,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"vue-components","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"vue-components","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
@@ -6,6 +6,8 @@
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"dir:src/components","label":"Directory","properties":{"name":"components","path":"<root>/src/components","relativePath":"src/components"}}
 {"kind":"node","id":"dir:src/composables","label":"Directory","properties":{"name":"composables","path":"<root>/src/composables","relativePath":"src/composables"}}
+{"kind":"node","id":"dir:src/router","label":"Directory","properties":{"name":"router","path":"<root>/src/router","relativePath":"src/router"}}
+{"kind":"node","id":"dir:src/views","label":"Directory","properties":{"name":"views","path":"<root>/src/views","relativePath":"src/views"}}
 {"kind":"node","id":"file:src/App.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/App.vue","relativePath":"src/App.vue","sourceType":"production"}}
 {"kind":"node","id":"file:src/App.vue:component:1:App","label":"Component","properties":{"endLine":36,"framework":"vue","hooks":"useUsers","isExported":true,"kind":"script-setup","line":1,"name":"App","pendingRenders":"[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]","props":"title,query"}}
 {"kind":"node","id":"file:src/App.vue:entrypoint:11:26:dom-event:click","label":"EntryPoint","properties":{"handlerName":"select","kind":"dom-event","library":"vue","line":11,"receiverName":"button","trigger":"click"}}
@@ -79,11 +81,46 @@
 {"kind":"node","id":"file:src/composables/useUsers.ts:function:7:load:call:7:21:api.get","label":"Call","properties":{"args":"[\"/users\"]","callee":"get","columnNumber":21,"expression":"api.get","line":7,"name":"api.get","receiver":"api"}}
 {"kind":"node","id":"file:src/composables/useUsers.ts:import:1:vue","label":"Import","properties":{"bindings":"[{\"imported\":\"ref\",\"local\":\"ref\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"vue","specifier":"import { ref } from 'vue';"}}
 {"kind":"node","id":"file:src/composables/useUsers.ts:import:2:./useApi","label":"Import","properties":{"bindings":"[{\"imported\":\"useApi\",\"local\":\"useApi\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./useApi","specifier":"import { useApi } from './useApi';"}}
+{"kind":"node","id":"file:src/router/index.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/router/index.ts","relativePath":"src/router/index.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/router/index.ts:import:1:vue-router","label":"Import","properties":{"bindings":"[{\"imported\":\"createRouter\",\"local\":\"createRouter\",\"kind\":\"named\"},{\"imported\":\"createWebHistory\",\"local\":\"createWebHistory\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"vue-router","specifier":"import { createRouter, createWebHistory } from 'vue-router';"}}
+{"kind":"node","id":"file:src/router/index.ts:import:2:./routes","label":"Import","properties":{"bindings":"[{\"imported\":\"routes\",\"local\":\"routes\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./routes","specifier":"import { routes } from './routes';"}}
+{"kind":"node","id":"file:src/router/index.ts:import:3:../views/UserView.vue","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"UserView\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"../views/UserView.vue","specifier":"import UserView from '../views/UserView.vue';"}}
+{"kind":"node","id":"file:src/router/index.ts:initializercall:6:22:createRouter","label":"Call","properties":{"args":"[]","callee":"createRouter","columnNumber":22,"expression":"createRouter","line":6,"name":"createRouter","receiver":null}}
+{"kind":"node","id":"file:src/router/index.ts:page:8:11","label":"Page","properties":{"component":"UserView","componentSource":null,"framework":"vue-router","fullPath":"/users/:id","kind":"page","line":8,"path":"/users/:id","router":"object","slot":null}}
+{"kind":"node","id":"file:src/router/index.ts:variable:6:router","label":"Variable","properties":{"isExported":true,"kind":"const","line":6,"name":"router","stringValue":null}}
+{"kind":"node","id":"file:src/router/routes.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/router/routes.ts","relativePath":"src/router/routes.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/router/routes.ts:import:12:../views/SettingsProfile.vue","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":true,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":12,"source":"../views/SettingsProfile.vue","specifier":"import('../views/SettingsProfile.vue')"}}
+{"kind":"node","id":"file:src/router/routes.ts:import:13:../views/SettingsSecurity.vue","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":true,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":13,"source":"../views/SettingsSecurity.vue","specifier":"import('../views/SettingsSecurity.vue')"}}
+{"kind":"node","id":"file:src/router/routes.ts:import:1:vue-router","label":"Import","properties":{"bindings":"[{\"imported\":\"RouteRecordRaw\",\"local\":\"RouteRecordRaw\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":1,"source":"vue-router","specifier":"import type { RouteRecordRaw } from 'vue-router';"}}
+{"kind":"node","id":"file:src/router/routes.ts:import:2:../views/HomeView.vue","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"HomeView\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"../views/HomeView.vue","specifier":"import HomeView from '../views/HomeView.vue';"}}
+{"kind":"node","id":"file:src/router/routes.ts:import:3:../views/SettingsLayout.vue","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"SettingsLayout\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"../views/SettingsLayout.vue","specifier":"import SettingsLayout from '../views/SettingsLayout.vue';"}}
+{"kind":"node","id":"file:src/router/routes.ts:import:7:../views/AboutView.vue","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":true,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":7,"source":"../views/AboutView.vue","specifier":"import('../views/AboutView.vue')"}}
+{"kind":"node","id":"file:src/router/routes.ts:page:12:6","label":"Page","properties":{"component":null,"componentSource":"../views/SettingsProfile.vue","framework":"vue-router","fullPath":"/settings","kind":"index","line":12,"path":"","router":"object","slot":null}}
+{"kind":"node","id":"file:src/router/routes.ts:page:13:6","label":"Page","properties":{"component":null,"componentSource":"../views/SettingsSecurity.vue","framework":"vue-router","fullPath":"/settings/security","kind":"page","line":13,"path":"security","router":"object","slot":null}}
+{"kind":"node","id":"file:src/router/routes.ts:page:16:2","label":"Page","properties":{"component":null,"componentSource":null,"framework":"vue-router","fullPath":"/old-home","kind":"redirect","line":16,"path":"/old-home","router":"object","slot":null}}
+{"kind":"node","id":"file:src/router/routes.ts:page:6:2","label":"Page","properties":{"component":"HomeView","componentSource":null,"framework":"vue-router","fullPath":"/","kind":"page","line":6,"path":"/","router":"object","slot":null}}
+{"kind":"node","id":"file:src/router/routes.ts:page:7:2","label":"Page","properties":{"component":null,"componentSource":"../views/AboutView.vue","framework":"vue-router","fullPath":"/about","kind":"page","line":7,"path":"/about","router":"object","slot":null}}
+{"kind":"node","id":"file:src/router/routes.ts:page:8:2","label":"Page","properties":{"component":"SettingsLayout","componentSource":null,"framework":"vue-router","fullPath":"/settings","kind":"layout","line":8,"path":"/settings","router":"object","slot":null}}
+{"kind":"node","id":"file:src/router/routes.ts:variable:5:routes","label":"Variable","properties":{"isExported":true,"kind":"const","line":5,"name":"routes","stringValue":null}}
+{"kind":"node","id":"file:src/views/AboutView.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/views/AboutView.vue","relativePath":"src/views/AboutView.vue","sourceType":"production"}}
+{"kind":"node","id":"file:src/views/AboutView.vue:component:1:AboutView","label":"Component","properties":{"endLine":3,"framework":"vue","hooks":null,"isExported":true,"kind":"template","line":1,"name":"AboutView","pendingRenders":null,"props":null}}
+{"kind":"node","id":"file:src/views/HomeView.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/views/HomeView.vue","relativePath":"src/views/HomeView.vue","sourceType":"production"}}
+{"kind":"node","id":"file:src/views/HomeView.vue:component:1:HomeView","label":"Component","properties":{"endLine":3,"framework":"vue","hooks":null,"isExported":true,"kind":"template","line":1,"name":"HomeView","pendingRenders":null,"props":null}}
+{"kind":"node","id":"file:src/views/SettingsLayout.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/views/SettingsLayout.vue","relativePath":"src/views/SettingsLayout.vue","sourceType":"production"}}
+{"kind":"node","id":"file:src/views/SettingsLayout.vue:component:1:SettingsLayout","label":"Component","properties":{"endLine":5,"framework":"vue","hooks":null,"isExported":true,"kind":"template","line":1,"name":"SettingsLayout","pendingRenders":"[{\"name\":\"RouterView\",\"props\":[],\"line\":3}]","props":null}}
+{"kind":"node","id":"file:src/views/SettingsProfile.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/views/SettingsProfile.vue","relativePath":"src/views/SettingsProfile.vue","sourceType":"production"}}
+{"kind":"node","id":"file:src/views/SettingsProfile.vue:component:1:SettingsProfile","label":"Component","properties":{"endLine":3,"framework":"vue","hooks":null,"isExported":true,"kind":"template","line":1,"name":"SettingsProfile","pendingRenders":null,"props":null}}
+{"kind":"node","id":"file:src/views/SettingsSecurity.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/views/SettingsSecurity.vue","relativePath":"src/views/SettingsSecurity.vue","sourceType":"production"}}
+{"kind":"node","id":"file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity","label":"Component","properties":{"endLine":3,"framework":"vue","hooks":null,"isExported":true,"kind":"template","line":1,"name":"SettingsSecurity","pendingRenders":null,"props":null}}
+{"kind":"node","id":"file:src/views/UserView.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/views/UserView.vue","relativePath":"src/views/UserView.vue","sourceType":"production"}}
+{"kind":"node","id":"file:src/views/UserView.vue:component:1:UserView","label":"Component","properties":{"endLine":3,"framework":"vue","hooks":null,"isExported":true,"kind":"template","line":1,"name":"UserView","pendingRenders":null,"props":null}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"vue-components","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"vue-components","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/components","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/composables","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/router","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/views","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/App.vue","properties":{}}
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Badge.vue","properties":{}}
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/ListItem.vue","properties":{}}
@@ -93,6 +130,14 @@
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/UserList.vue","properties":{}}
 {"kind":"rel","from":"dir:src/composables","type":"CONTAINS_FILE","to":"file:src/composables/useApi.ts","properties":{}}
 {"kind":"rel","from":"dir:src/composables","type":"CONTAINS_FILE","to":"file:src/composables/useUsers.ts","properties":{}}
+{"kind":"rel","from":"dir:src/router","type":"CONTAINS_FILE","to":"file:src/router/index.ts","properties":{}}
+{"kind":"rel","from":"dir:src/router","type":"CONTAINS_FILE","to":"file:src/router/routes.ts","properties":{}}
+{"kind":"rel","from":"dir:src/views","type":"CONTAINS_FILE","to":"file:src/views/AboutView.vue","properties":{}}
+{"kind":"rel","from":"dir:src/views","type":"CONTAINS_FILE","to":"file:src/views/HomeView.vue","properties":{}}
+{"kind":"rel","from":"dir:src/views","type":"CONTAINS_FILE","to":"file:src/views/SettingsLayout.vue","properties":{}}
+{"kind":"rel","from":"dir:src/views","type":"CONTAINS_FILE","to":"file:src/views/SettingsProfile.vue","properties":{}}
+{"kind":"rel","from":"dir:src/views","type":"CONTAINS_FILE","to":"file:src/views/SettingsSecurity.vue","properties":{}}
+{"kind":"rel","from":"dir:src/views","type":"CONTAINS_FILE","to":"file:src/views/UserView.vue","properties":{}}
 {"kind":"rel","from":"file:src/App.vue","type":"DECLARES_COMPONENT","to":"file:src/App.vue:component:1:App","properties":{}}
 {"kind":"rel","from":"file:src/App.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/App.vue:entrypoint:11:26:dom-event:click","properties":{}}
 {"kind":"rel","from":"file:src/App.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/App.vue:entrypoint:12:10:dom-event:submit","properties":{}}
@@ -204,6 +249,51 @@
 {"kind":"rel","from":"file:src/composables/useUsers.ts:function:7:load","type":"CALLS","to":"file:src/composables/useUsers.ts:function:7:load:call:7:21:api.get","properties":{}}
 {"kind":"rel","from":"file:src/composables/useUsers.ts:import:2:./useApi","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/composables/useUsers.ts:import:2:./useApi","type":"RESOLVES_TO","to":"file:src/composables/useApi.ts","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts","type":"DECLARES_PAGE","to":"file:src/router/index.ts:page:8:11","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts","type":"DEFINES_VARIABLE","to":"file:src/router/index.ts:variable:6:router","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts","type":"IMPORTS","to":"file:src/router/index.ts:import:1:vue-router","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts","type":"IMPORTS","to":"file:src/router/index.ts:import:2:./routes","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts","type":"IMPORTS","to":"file:src/router/index.ts:import:3:../views/UserView.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts:import:2:./routes","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts:import:2:./routes","type":"RESOLVES_TO","to":"file:src/router/routes.ts","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts:import:3:../views/UserView.vue","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts:import:3:../views/UserView.vue","type":"RESOLVES_TO","to":"file:src/views/UserView.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts:page:8:11","type":"PAGE_RENDERS","to":"file:src/views/UserView.vue:component:1:UserView","properties":{}}
+{"kind":"rel","from":"file:src/router/index.ts:variable:6:router","type":"INITIALIZED_BY","to":"file:src/router/index.ts:initializercall:6:22:createRouter","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"DECLARES_PAGE","to":"file:src/router/routes.ts:page:12:6","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"DECLARES_PAGE","to":"file:src/router/routes.ts:page:13:6","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"DECLARES_PAGE","to":"file:src/router/routes.ts:page:16:2","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"DECLARES_PAGE","to":"file:src/router/routes.ts:page:6:2","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"DECLARES_PAGE","to":"file:src/router/routes.ts:page:7:2","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"DECLARES_PAGE","to":"file:src/router/routes.ts:page:8:2","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"DEFINES_VARIABLE","to":"file:src/router/routes.ts:variable:5:routes","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"IMPORTS","to":"file:src/router/routes.ts:import:12:../views/SettingsProfile.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"IMPORTS","to":"file:src/router/routes.ts:import:13:../views/SettingsSecurity.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"IMPORTS","to":"file:src/router/routes.ts:import:1:vue-router","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"IMPORTS","to":"file:src/router/routes.ts:import:2:../views/HomeView.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"IMPORTS","to":"file:src/router/routes.ts:import:3:../views/SettingsLayout.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts","type":"IMPORTS","to":"file:src/router/routes.ts:import:7:../views/AboutView.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:12:../views/SettingsProfile.vue","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:12:../views/SettingsProfile.vue","type":"RESOLVES_TO","to":"file:src/views/SettingsProfile.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:13:../views/SettingsSecurity.vue","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:13:../views/SettingsSecurity.vue","type":"RESOLVES_TO","to":"file:src/views/SettingsSecurity.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:2:../views/HomeView.vue","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:2:../views/HomeView.vue","type":"RESOLVES_TO","to":"file:src/views/HomeView.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:3:../views/SettingsLayout.vue","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:3:../views/SettingsLayout.vue","type":"RESOLVES_TO","to":"file:src/views/SettingsLayout.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:7:../views/AboutView.vue","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:import:7:../views/AboutView.vue","type":"RESOLVES_TO","to":"file:src/views/AboutView.vue","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:page:12:6","type":"PAGE_RENDERS","to":"file:src/views/SettingsProfile.vue:component:1:SettingsProfile","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:page:13:6","type":"PAGE_RENDERS","to":"file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:page:6:2","type":"PAGE_RENDERS","to":"file:src/views/HomeView.vue:component:1:HomeView","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:page:7:2","type":"PAGE_RENDERS","to":"file:src/views/AboutView.vue:component:1:AboutView","properties":{}}
+{"kind":"rel","from":"file:src/router/routes.ts:page:8:2","type":"PAGE_RENDERS","to":"file:src/views/SettingsLayout.vue:component:1:SettingsLayout","properties":{}}
+{"kind":"rel","from":"file:src/views/AboutView.vue","type":"DECLARES_COMPONENT","to":"file:src/views/AboutView.vue:component:1:AboutView","properties":{}}
+{"kind":"rel","from":"file:src/views/HomeView.vue","type":"DECLARES_COMPONENT","to":"file:src/views/HomeView.vue:component:1:HomeView","properties":{}}
+{"kind":"rel","from":"file:src/views/SettingsLayout.vue","type":"DECLARES_COMPONENT","to":"file:src/views/SettingsLayout.vue:component:1:SettingsLayout","properties":{}}
+{"kind":"rel","from":"file:src/views/SettingsProfile.vue","type":"DECLARES_COMPONENT","to":"file:src/views/SettingsProfile.vue:component:1:SettingsProfile","properties":{}}
+{"kind":"rel","from":"file:src/views/SettingsSecurity.vue","type":"DECLARES_COMPONENT","to":"file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity","properties":{}}
+{"kind":"rel","from":"file:src/views/UserView.vue","type":"DECLARES_COMPONENT","to":"file:src/views/UserView.vue:component:1:UserView","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/App.vue","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Badge.vue","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/ListItem.vue","properties":{}}
@@ -213,6 +303,14 @@
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/UserList.vue","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/composables/useApi.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/composables/useUsers.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/router/index.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/router/routes.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/views/AboutView.vue","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/views/HomeView.vue","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/views/SettingsLayout.vue","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/views/SettingsProfile.vue","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/views/SettingsSecurity.vue","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/views/UserView.vue","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
