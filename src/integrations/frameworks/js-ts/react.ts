@@ -6,7 +6,10 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 // typed `FC`), classes that extend `Component` / `PureComponent`, and
 // `memo` / `forwardRef` wrappers. Contexts from `createContext` are
 // components of kind `context`; `lazy(() => import(...))` is a component of
-// kind `lazy` that records the module and export it loads. The JSX elements a component renders are
+// kind `lazy` that records the module and export it loads. A component
+// exported through a higher-order component (`export default
+// connect(...)(View)`, `withRouter(View)`) records the wrapper's name in
+// `defaultExportWrapper`, so the default import resolves to it. The JSX elements a component renders are
 // recorded on it as `pendingRenders` and the hooks it calls as `hooks`; the
 // component-graph contributor links them across files.
 
@@ -32,7 +35,7 @@ const wrappers = new Map([
 ] as const);
 const componentTypes = /^(React\.)?(FC|FunctionComponent|VFC)\b/u;
 
-export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsParsedFile): void {
+export function applyReactParseSemantics({ fileNodeId, rootNode, parsed, state }: JsTsParsedFile): void {
   const nodesById = new Map(parsed.nodes.map((node) => [node.id, node]));
   const astByFunctionId = new Map(state.functionAstPairs.map((pair) => [pair.functionNodeId, pair.astNode]));
   const functionIdByAstId = new Map(state.functionAstPairs.map((pair) => [pair.astNode.id, pair.functionNodeId]));
@@ -150,6 +153,7 @@ export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsPars
   const framework = jsxFramework(parsed.nodes, parsed.relationships, fileNodeId);
   const hooksByFunctionId = hookCallNames(parsed.nodes, parsed.relationships);
   const defaultExport = nodesById.get(fileNodeId)?.properties.defaultExport;
+  const wrapped = typeof defaultExport === "string" ? null : wrappedDefaultExport(rootNode);
   for (const candidate of candidates) {
     const renders = candidate.renderRoots.flatMap(collectRenders);
     const component: GraphNode = {
@@ -161,9 +165,10 @@ export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsPars
         kind: candidate.kind,
         line: candidate.line,
         endLine: candidate.endLine,
-        isExported: candidate.isExported || candidate.name === defaultExport,
+        isExported: candidate.isExported || candidate.name === defaultExport || candidate.name === wrapped?.name,
         pendingRenders: renders.length > 0 ? JSON.stringify(renders) : null,
         hooks: candidate.definedBy.functionId ? hooksByFunctionId.get(candidate.definedBy.functionId)?.join(",") ?? null : null,
+        defaultExportWrapper: candidate.name === wrapped?.name && candidate.kind !== "context" ? wrapped.wrapper : null,
         lazySource: candidate.lazy?.source ?? null,
         lazyExport: candidate.lazy?.exportName ?? null,
       },
@@ -176,6 +181,28 @@ export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsPars
       parsed.relationships.push({ from: component.id, to: candidate.definedBy.functionId, type: "COMPONENT_DEFINED_BY_FUNCTION", properties: {} });
     }
   }
+}
+
+// `export default connect(mapState)(View)`, `export default
+// withRouter(View)`, `export default compose(a, b)(memo(View))`: calls that
+// each take one argument, ending at a name. Returns that name and the name
+// of the outermost wrapper (`connect`, `withRouter`, `compose`); whether the
+// name is a component is up to the caller.
+function wrappedDefaultExport(program: SyntaxNode): { name: string; wrapper: string } | null {
+  for (const statement of program.namedChildren) {
+    if (statement?.type !== "export_statement" || !statement.children.some((child) => child?.type === "default")) continue;
+    let expression: SyntaxNode | null = statement.namedChildren[0] ?? null;
+    if (expression?.type !== "call_expression") return null;
+    let wrapper = expression.childForFieldName("function");
+    while (wrapper?.type === "call_expression") wrapper = wrapper.childForFieldName("function");
+    if (!wrapper || (wrapper.type !== "identifier" && wrapper.type !== "member_expression")) return null;
+    while (expression?.type === "call_expression") {
+      const args: Array<SyntaxNode | null> = expression.childForFieldName("arguments")?.namedChildren.filter((child) => child?.type !== "comment") ?? [];
+      expression = args.length === 1 ? args[0] ?? null : null;
+    }
+    return expression?.type === "identifier" ? { name: expression.text, wrapper: wrapper.text } : null;
+  }
+  return null;
 }
 
 // The module and export a `lazy` loader imports: `() => import('./Page')`

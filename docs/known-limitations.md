@@ -257,7 +257,11 @@ Astro).
   PascalCase variable. A function that returns JSX from a nested callback
   only, a render helper in camelCase and a component created by another
   higher-order function (`styled.div`, `connect(...)(View)`, `observer`) are
-  not components.
+  not components. A component exported through such a wrapper (`export
+  default connect(mapState)(View)`, `withRouter(View)`, nested wrappers too)
+  is the module's default export for `RENDERS`: a call chain where each call
+  takes one argument and the last is a component of the file; the wrapper
+  is recorded as `Component.defaultExportWrapper`.
 - `lazy(...)` / `React.lazy(...)` assigned to a PascalCase variable is a
   Component of kind `lazy` that `RENDERS` the component it loads: the default
   export for `() => import('./Page')`, a named one for

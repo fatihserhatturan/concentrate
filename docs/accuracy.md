@@ -78,7 +78,7 @@ Rules:
   line (±1) and component, and the rendered component's name and file; a
   render linked to another component is an FP and an FN.
 
-## Results (2026-10-30, schema 45)
+## Results (2026-10-30, schema 46)
 
 ### Routes
 
@@ -122,7 +122,7 @@ Labels counts calls with a project target. Another 310 call sites are labeled
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| internet-react-realworld | 29 | 23 | 0 | 6 | 100.0% | 79.3% |
+| internet-react-realworld | 29 | 29 | 0 | 0 | 100.0% | 100.0% |
 
 ## What the misses are
 
@@ -147,11 +147,10 @@ are, and they cluster:
   module-level calls, `require('./x')(...)` and `module.exports = …`
   defaults, #47, resolve now.)
 
-- **Components behind a higher-order wrapper.** The six missed renders
-  are all of `export default connect(...)(X)` modules: the element renders
-  the module's default export, which the graph does not know is X. The one
-  missed component is `ProfileFavorites`, a class that extends another
-  component class (`Profile`) instead of `React.Component`.
+- **Component class hierarchies.** The one missed component is
+  `ProfileFavorites`, a class that extends another component class
+  (`Profile`) instead of `React.Component`. Every labeled render is found:
+  renders of `export default connect(...)(X)` modules resolve to X.
 
 Every labeled data access is found since #49 (the TypeORM `*By` and Mongoose
 `findById*` / `findOneAnd*` methods, and calls on a receiver split over

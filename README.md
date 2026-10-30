@@ -75,8 +75,8 @@ Every number below comes from pinned open-source repositories and can be reprodu
 
 **The graph is trustworthy.**
 - Against hand-written labels, 100% of reported routes, call targets, database accesses, React components and component renders are correct.
-- Route recall, route full paths and data-access recall are 100%.
-- Call recall (72.6%) and render recall (79.3%, on the RealWorld React frontend) are still growing; see [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
+- Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React frontend) are 100%.
+- Call recall (72.6%) is still growing; see [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 
 <p align="center"><img src="docs/assets/agent-hard.svg" alt="Agent benchmark on nestjs/nest, 3 runs per question: correct 12/18 to 18/18, input tokens −24%, tool calls −33%, turns −25%, wall time −25%; import-cycle questions use 2 to 4.6 times fewer tokens" width="860"></p>
 

@@ -38,11 +38,14 @@ export function addComponentRelationships(graph: IGraphContributor): void {
   }
   if (fileByComponentId.size === 0) return;
 
-  // `export default function App()` / `export default App`.
+  // `export default function App()` / `export default App`, or a component
+  // exported through a wrapper (`export default connect(...)(App)`).
   for (const [fileId, byName] of componentsByFileAndName) {
     const defaultExport = nodesById.get(fileId)?.properties.defaultExport;
-    const ids = typeof defaultExport === "string" ? byName.get(defaultExport) : undefined;
-    if (ids && !byName.has("default")) byName.set("default", ids);
+    const ids = typeof defaultExport === "string"
+      ? byName.get(defaultExport)
+      : [...byName.values()].flat().filter((id) => typeof nodesById.get(id)?.properties.defaultExportWrapper === "string");
+    if (ids && ids.length > 0 && !byName.has("default")) byName.set("default", ids);
   }
 
   const contextsByFileAndName = new Map<string, Map<string, string[]>>();
