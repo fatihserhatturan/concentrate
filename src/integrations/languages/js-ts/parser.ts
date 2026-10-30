@@ -46,6 +46,7 @@ import {
   isInitializerHandlerArgument,
   isInlineHandlerArgument,
   isObjectLiteralHandlerFunction,
+  scopedRouteHandlerOwner,
 } from "./declarations.js";
 
 // ─── Walk state ──────────────────────────────────────────────────────────────
@@ -78,6 +79,19 @@ export function walkJsTsNodes(
   let defaultExportFrom: string | null = null;
   const functionAstPairs: Array<{ functionNodeId: string; astNode: SyntaxNode }> = [];
   const variableDeclaratorAstNodes: SyntaxNode[] = [];
+
+  // An inline function with a synthetic Function node, passed to a call.
+  const addInlineHandler = (result: { functionNode: GraphNode; callNodeId: string }, node: SyntaxNode) => {
+    nodes.push(result.functionNode);
+    relationships.push({ from: fileNodeId, to: result.functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
+    relationships.push({ from: result.functionNode.id, to: result.callNodeId, type: "PASSED_TO", properties: {} });
+
+    const callNodes = createCallNodes(result.functionNode.id, node, callbackKeys);
+    nodes.push(...callNodes);
+    relationships.push(...callNodes.map((c) => ({ from: result.functionNode.id, to: c.id, type: "CALLS" as const, properties: {} })));
+
+    functionAstPairs.push({ functionNodeId: result.functionNode.id, astNode: node });
+  };
 
   walk(tree.rootNode, (node) => {
     if (node.type === "import_statement") {
@@ -165,17 +179,14 @@ export function walkJsTsNodes(
           : isInitializerHandlerArgument(node)
             ? createInlineHandlerNode(fileNodeId, node, "initializercall")
             : createObjectLiteralHandlerNode(fileNodeId, node);
-        if (result) {
-          nodes.push(result.functionNode);
-          relationships.push({ from: fileNodeId, to: result.functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
-          relationships.push({ from: result.functionNode.id, to: result.callNodeId, type: "PASSED_TO", properties: {} });
-
-          const callNodes = createCallNodes(result.functionNode.id, node, callbackKeys);
-          nodes.push(...callNodes);
-          relationships.push(...callNodes.map((c) => ({ from: result.functionNode.id, to: c.id, type: "CALLS" as const, properties: {} })));
-
-          functionAstPairs.push({ functionNodeId: result.functionNode.id, astNode: node });
-        }
+        if (result) addInlineHandler(result, node);
+      } else {
+        // The walk visits a function before the functions inside it, so the
+        // owner's node (if it has one) is already known.
+        const owner = scopedRouteHandlerOwner(node, callbackKeys);
+        const ownerId = owner && (functionAstPairs.find((pair) => pair.astNode.id === owner.id)?.functionNodeId ?? fileNodeId);
+        const result = ownerId ? createInlineHandlerNode(fileNodeId, node, "call", ownerId) : null;
+        if (result) addInlineHandler(result, node);
       }
     }
 

@@ -149,7 +149,10 @@ function createHttpRouteGraph(
 
       // Synthetic names of inline functions repeat across calls of a file, so
       // the route's steps resolve against its own call's functions first.
-      const localFunctionIds = passedFunctionsByCallId.get(route.callNodeId) ?? new Map<string, string>();
+      const localFunctionIds = localStepFunctionIds(
+        passedFunctionsByCallId.get(route.callNodeId) ?? new Map<string, string>(),
+        route.lifecycleSteps,
+      );
       const stepFunctionIds = localFunctionIds.size > 0
         ? new Map([...functionIdsByName, ...localFunctionIds])
         : functionIdsByName;
@@ -639,6 +642,27 @@ function createFastifyObjectRouteNodes(
     objectHandlerNames,
     lifecycleSteps,
   }));
+}
+
+// The functions passed to a route's call, keyed by the names its steps use.
+// The parser names an inline function by the literal path it sees
+// (`<app.get:arg1>` for `app.get(HEALTH, …)`), the route by the resolved one
+// (`<app.get:/health:arg1>`), so a step also matches the function in the same
+// argument or property position.
+function localStepFunctionIds(passed: Map<string, string>, steps: RouteLifecycleStep[]): Map<string, string> {
+  if (passed.size === 0) return passed;
+  const local = new Map(passed);
+  const byPosition = new Map([...passed].map(([name, id]) => [syntheticPosition(name), id]));
+  for (const step of steps) {
+    const position = syntheticPosition(step.name);
+    const id = position ? byPosition.get(position) : undefined;
+    if (id && !local.has(step.name)) local.set(step.name, id);
+  }
+  return local;
+}
+
+function syntheticPosition(name: string): string | null {
+  return /^<.*:([^:>]+)>$/u.exec(name)?.[1] ?? null;
 }
 
 export function createLifecycleRelationships(

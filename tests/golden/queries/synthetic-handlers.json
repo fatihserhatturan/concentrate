@@ -33,7 +33,7 @@
           },
           {
             "table": "Function",
-            "count": 7
+            "count": 8
           },
           {
             "table": "Class",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 2
+            "count": 3
           },
           {
             "table": "Decorator",
@@ -65,11 +65,11 @@
           },
           {
             "table": "Call",
-            "count": 20
+            "count": 22
           },
           {
             "table": "Route",
-            "count": 5
+            "count": 6
           },
           {
             "table": "EntryPoint",
@@ -119,7 +119,7 @@
         },
         {
           "table": "Function",
-          "count": 7
+          "count": 8
         },
         {
           "table": "Class",
@@ -131,7 +131,7 @@
         },
         {
           "table": "Variable",
-          "count": 2
+          "count": 3
         },
         {
           "table": "Decorator",
@@ -151,11 +151,11 @@
         },
         {
           "table": "Call",
-          "count": 20
+          "count": 22
         },
         {
           "table": "Route",
-          "count": 5
+          "count": 6
         },
         {
           "table": "EntryPoint",
@@ -243,6 +243,14 @@
             "kind": "Function",
             "file": "app.js",
             "line": 36,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.get:arg1>",
+            "kind": "Function",
+            "file": "app.js",
+            "line": 43,
             "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           }
@@ -347,6 +355,14 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "name": "<app.get:arg1>",
+          "kind": "Function",
+          "file": "app.js",
+          "line": 43,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "express",
           "kind": "Variable",
           "file": "app.js",
@@ -357,7 +373,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 8
+        "returned": 9
       }
     }
   },
@@ -494,6 +510,16 @@
             "framework": "express-koa",
             "handlerName": "requireUser",
             "handler": "requireUser"
+          },
+          {
+            "file": "app.js",
+            "line": 43,
+            "method": "GET",
+            "path": "/status",
+            "fullPath": "/status",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:arg1>"
           }
         ]
       }
@@ -562,11 +588,21 @@
           "framework": "express-koa",
           "handlerName": "requireUser",
           "handler": "requireUser"
+        },
+        {
+          "file": "app.js",
+          "line": 43,
+          "method": "GET",
+          "path": "/status",
+          "fullPath": "/status",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:arg1>"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 6
+        "returned": 7
       }
     }
   },
@@ -725,6 +761,16 @@
             "framework": "express-koa",
             "handlerName": "requireUser",
             "handler": "requireUser"
+          },
+          {
+            "file": "app.js",
+            "line": 43,
+            "method": "GET",
+            "path": "/status",
+            "fullPath": "/status",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:arg1>"
           }
         ]
       }
@@ -793,11 +839,21 @@
           "framework": "express-koa",
           "handlerName": "requireUser",
           "handler": "requireUser"
+        },
+        {
+          "file": "app.js",
+          "line": 43,
+          "method": "GET",
+          "path": "/status",
+          "fullPath": "/status",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:arg1>"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 6
+        "returned": 7
       }
     }
   },
@@ -888,6 +944,14 @@
             "file": "app.js",
             "line": 36,
             "endLine": 38
+          },
+          {
+            "id": "file:app.js:function:43:<app.get:arg1>",
+            "name": "<app.get:arg1>",
+            "className": null,
+            "file": "app.js",
+            "line": 43,
+            "endLine": 45
           }
         ]
       },
@@ -1174,6 +1238,14 @@
             "file": "app.js",
             "line": 36,
             "endLine": 38
+          },
+          {
+            "id": "file:app.js:function:43:<app.get:arg1>",
+            "name": "<app.get:arg1>",
+            "className": null,
+            "file": "app.js",
+            "line": 43,
+            "endLine": 45
           }
         ]
       },
@@ -1362,6 +1434,277 @@
               "file": "app.js",
               "line": 36,
               "endLine": 38
+            }
+          ],
+          "callChain": [],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "GET",
+      "path": "/status"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "GET",
+          "path": "/status"
+        },
+        "rows": [
+          {
+            "id": "file:app.js:route:43:0:GET:/status",
+            "method": "GET",
+            "path": "/status",
+            "fullPath": "/status",
+            "framework": "express-koa",
+            "handlerName": null,
+            "file": "app.js",
+            "line": 43
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:app.js:function:7:logRequests",
+            "name": "logRequests",
+            "className": null,
+            "file": "app.js",
+            "line": 7,
+            "endLine": 10
+          },
+          {
+            "id": "file:app.js:function:12:<app.use:arg0>",
+            "name": "<app.use:arg0>",
+            "className": null,
+            "file": "app.js",
+            "line": 12,
+            "endLine": 15
+          },
+          {
+            "id": "file:app.js:function:17:<app.use:arg0>",
+            "name": "<app.use:arg0>",
+            "className": null,
+            "file": "app.js",
+            "line": 17,
+            "endLine": 20
+          },
+          {
+            "id": "file:app.js:function:24:<app.get:/health:arg1>",
+            "name": "<app.get:/health:arg1>",
+            "className": null,
+            "file": "app.js",
+            "line": 24,
+            "endLine": 27
+          },
+          {
+            "id": "file:app.js:function:27:<app.get:/health:arg2>",
+            "name": "<app.get:/health:arg2>",
+            "className": null,
+            "file": "app.js",
+            "line": 27,
+            "endLine": 29
+          },
+          {
+            "id": "file:app.js:function:31:requireUser",
+            "name": "requireUser",
+            "className": null,
+            "file": "app.js",
+            "line": 31,
+            "endLine": 33
+          },
+          {
+            "id": "file:app.js:function:36:<app.get:/me:arg2>",
+            "name": "<app.get:/me:arg2>",
+            "className": null,
+            "file": "app.js",
+            "line": 36,
+            "endLine": 38
+          },
+          {
+            "id": "file:app.js:function:43:<app.get:arg1>",
+            "name": "<app.get:arg1>",
+            "className": null,
+            "file": "app.js",
+            "line": 43,
+            "endLine": 45
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app.js:route:43:0:GET:/status"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:app.js:route:43:0:GET:/status",
+            "fn": "file:app.js:function:43:<app.get:arg1>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "params": {
+          "ids": [
+            "file:app.js:route:43:0:GET:/status"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:app.js:route:43:0:GET:/status",
+            "fn": "file:app.js:function:43:<app.get:arg1>",
+            "role": "handler",
+            "scope": "route",
+            "hook": "handler",
+            "orderIndex": 0
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "params": {
+          "ids": [
+            "file:app.js:route:43:0:GET:/status"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE id(route) IN $ids RETURN id(route) AS route, id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation",
+        "params": {
+          "ids": [
+            "file:app.js:route:43:0:GET:/status"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:USES_ENV_ROUTE]->(env:EnvVar) WHERE id(route) IN $ids RETURN id(route) AS route, env.name AS name, rel.access AS access, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:app.js:route:43:0:GET:/status"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:CONSUMES_CONFIG_ROUTE]->(config:ConfigValue) WHERE id(route) IN $ids RETURN id(route) AS route, config.name AS name, rel.localName AS localName",
+        "params": {
+          "ids": [
+            "file:app.js:route:43:0:GET:/status"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app.js:function:43:<app.get:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app.js:function:43:<app.get:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app.js:function:43:<app.get:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app.js:function:43:<app.get:arg1>"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "method": "GET",
+      "path": "/status",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/status",
+          "fullPath": "/status",
+          "framework": "express-koa",
+          "handlerName": null,
+          "file": "app.js",
+          "line": 43,
+          "handlers": [
+            {
+              "name": "<app.get:arg1>",
+              "className": null,
+              "file": "app.js",
+              "line": 43,
+              "endLine": 45
+            }
+          ],
+          "lifecycle": [
+            {
+              "role": "handler",
+              "scope": "route",
+              "hook": "handler",
+              "orderIndex": 0,
+              "name": "<app.get:arg1>",
+              "className": null,
+              "file": "app.js",
+              "line": 43,
+              "endLine": 45
             }
           ],
           "callChain": [],

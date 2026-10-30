@@ -522,6 +522,13 @@
         "args": {}
       },
       {
+        "tool": "route_details",
+        "args": {
+          "method": "POST",
+          "path": "/accounts"
+        }
+      },
+      {
         "tool": "list_routes",
         "args": {
           "framework": "fastify"
@@ -603,6 +610,13 @@
         "args": {
           "method": "GET",
           "path": "/me"
+        }
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "GET",
+          "path": "/status"
         }
       }
     ]

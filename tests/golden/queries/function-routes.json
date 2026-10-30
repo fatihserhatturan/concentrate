@@ -25,15 +25,15 @@
           },
           {
             "table": "File",
-            "count": 4
+            "count": 5
           },
           {
             "table": "Import",
-            "count": 3
+            "count": 4
           },
           {
             "table": "Function",
-            "count": 9
+            "count": 16
           },
           {
             "table": "Class",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 3
+            "count": 4
           },
           {
             "table": "Decorator",
@@ -65,11 +65,11 @@
           },
           {
             "table": "Call",
-            "count": 19
+            "count": 31
           },
           {
             "table": "Route",
-            "count": 5
+            "count": 7
           },
           {
             "table": "EntryPoint",
@@ -111,15 +111,15 @@
         },
         {
           "table": "File",
-          "count": 4
+          "count": 5
         },
         {
           "table": "Import",
-          "count": 3
+          "count": 4
         },
         {
           "table": "Function",
-          "count": 9
+          "count": 16
         },
         {
           "table": "Class",
@@ -131,7 +131,7 @@
         },
         {
           "table": "Variable",
-          "count": 3
+          "count": 4
         },
         {
           "table": "Decorator",
@@ -151,11 +151,11 @@
         },
         {
           "table": "Call",
-          "count": 19
+          "count": 31
         },
         {
           "table": "Route",
-          "count": 5
+          "count": 7
         },
         {
           "table": "EntryPoint",
@@ -199,6 +199,22 @@
             "relationship": "DEFINES_FUNCTION"
           },
           {
+            "name": "loadUser",
+            "kind": "Function",
+            "file": "inline.js",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<fastify.get:/accounts/:id:arg1>",
+            "kind": "Function",
+            "file": "inline.js",
+            "line": 14,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
             "name": "configure",
             "kind": "Function",
             "file": "not-routes.js",
@@ -235,6 +251,14 @@
             "kind": "Function",
             "file": "server.js",
             "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.get:/:arg1>",
+            "kind": "Function",
+            "file": "server.js",
+            "line": 9,
             "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           }
@@ -291,6 +315,22 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "name": "loadUser",
+          "kind": "Function",
+          "file": "inline.js",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<fastify.get:/accounts/:id:arg1>",
+          "kind": "Function",
+          "file": "inline.js",
+          "line": 14,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "configure",
           "kind": "Function",
           "file": "not-routes.js",
@@ -331,6 +371,14 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "name": "<app.get:/:arg1>",
+          "kind": "Function",
+          "file": "server.js",
+          "line": 9,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "express",
           "kind": "Variable",
           "file": "not-routes.js",
@@ -341,7 +389,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 7
+        "returned": 10
       }
     }
   },
@@ -475,6 +523,26 @@
             "handler": "health"
           },
           {
+            "file": "inline.js",
+            "line": 14,
+            "method": "GET",
+            "path": "/accounts/:id",
+            "fullPath": "/accounts/:id",
+            "framework": "fastify",
+            "handlerName": null,
+            "handler": "<fastify.get:/accounts/:id:arg1>"
+          },
+          {
+            "file": "inline.js",
+            "line": 15,
+            "method": "POST",
+            "path": "/accounts",
+            "fullPath": "/accounts",
+            "framework": "fastify",
+            "handlerName": null,
+            "handler": "<fastify.post:/accounts:arg1>"
+          },
+          {
             "file": "plugin.js",
             "line": 8,
             "method": "GET",
@@ -502,7 +570,7 @@
             "fullPath": "/",
             "framework": "fastify",
             "handlerName": null,
-            "handler": null
+            "handler": "<app.get:/:arg1>"
           },
           {
             "file": "server.js",
@@ -533,6 +601,26 @@
           "handler": "health"
         },
         {
+          "file": "inline.js",
+          "line": 14,
+          "method": "GET",
+          "path": "/accounts/:id",
+          "fullPath": "/accounts/:id",
+          "framework": "fastify",
+          "handlerName": null,
+          "handler": "<fastify.get:/accounts/:id:arg1>"
+        },
+        {
+          "file": "inline.js",
+          "line": 15,
+          "method": "POST",
+          "path": "/accounts",
+          "fullPath": "/accounts",
+          "framework": "fastify",
+          "handlerName": null,
+          "handler": "<fastify.post:/accounts:arg1>"
+        },
+        {
           "file": "plugin.js",
           "line": 8,
           "method": "GET",
@@ -560,7 +648,7 @@
           "fullPath": "/",
           "framework": "fastify",
           "handlerName": null,
-          "handler": null
+          "handler": "<app.get:/:arg1>"
         },
         {
           "file": "server.js",
@@ -575,7 +663,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 5
+        "returned": 7
       }
     }
   },
@@ -686,6 +774,26 @@
             "handler": "health"
           },
           {
+            "file": "inline.js",
+            "line": 14,
+            "method": "GET",
+            "path": "/accounts/:id",
+            "fullPath": "/accounts/:id",
+            "framework": "fastify",
+            "handlerName": null,
+            "handler": "<fastify.get:/accounts/:id:arg1>"
+          },
+          {
+            "file": "inline.js",
+            "line": 15,
+            "method": "POST",
+            "path": "/accounts",
+            "fullPath": "/accounts",
+            "framework": "fastify",
+            "handlerName": null,
+            "handler": "<fastify.post:/accounts:arg1>"
+          },
+          {
             "file": "plugin.js",
             "line": 8,
             "method": "GET",
@@ -713,7 +821,7 @@
             "fullPath": "/",
             "framework": "fastify",
             "handlerName": null,
-            "handler": null
+            "handler": "<app.get:/:arg1>"
           },
           {
             "file": "server.js",
@@ -744,6 +852,26 @@
           "handler": "health"
         },
         {
+          "file": "inline.js",
+          "line": 14,
+          "method": "GET",
+          "path": "/accounts/:id",
+          "fullPath": "/accounts/:id",
+          "framework": "fastify",
+          "handlerName": null,
+          "handler": "<fastify.get:/accounts/:id:arg1>"
+        },
+        {
+          "file": "inline.js",
+          "line": 15,
+          "method": "POST",
+          "path": "/accounts",
+          "fullPath": "/accounts",
+          "framework": "fastify",
+          "handlerName": null,
+          "handler": "<fastify.post:/accounts:arg1>"
+        },
+        {
           "file": "plugin.js",
           "line": 8,
           "method": "GET",
@@ -771,7 +899,7 @@
           "fullPath": "/",
           "framework": "fastify",
           "handlerName": null,
-          "handler": null
+          "handler": "<app.get:/:arg1>"
         },
         {
           "file": "server.js",
@@ -786,7 +914,372 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 5
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "POST",
+      "path": "/accounts"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "POST",
+          "path": "/accounts"
+        },
+        "rows": [
+          {
+            "id": "file:inline.js:route:15:2:POST:/accounts",
+            "method": "POST",
+            "path": "/accounts",
+            "fullPath": "/accounts",
+            "framework": "fastify",
+            "handlerName": null,
+            "file": "inline.js",
+            "line": 15
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:health.js:function:1:health",
+            "name": "health",
+            "className": null,
+            "file": "health.js",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:inline.js:function:3:loadUser",
+            "name": "loadUser",
+            "className": null,
+            "file": "inline.js",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:inline.js:function:7:audit",
+            "name": "audit",
+            "className": null,
+            "file": "inline.js",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:inline.js:function:13:accounts",
+            "name": "accounts",
+            "className": null,
+            "file": "inline.js",
+            "line": 13,
+            "endLine": 21
+          },
+          {
+            "id": "file:inline.js:function:14:<fastify.get:/accounts/:id:arg1>",
+            "name": "<fastify.get:/accounts/:id:arg1>",
+            "className": null,
+            "file": "inline.js",
+            "line": 14,
+            "endLine": 14
+          },
+          {
+            "id": "file:inline.js:function:15:<fastify.post:/accounts:arg1>",
+            "name": "<fastify.post:/accounts:arg1>",
+            "className": null,
+            "file": "inline.js",
+            "line": 15,
+            "endLine": 18
+          },
+          {
+            "id": "file:inline.js:function:23:build",
+            "name": "build",
+            "className": null,
+            "file": "inline.js",
+            "line": 23,
+            "endLine": 27
+          },
+          {
+            "id": "file:not-routes.js:function:3:fallback",
+            "name": "fallback",
+            "className": null,
+            "file": "not-routes.js",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:not-routes.js:function:7:lookup",
+            "name": "lookup",
+            "className": null,
+            "file": "not-routes.js",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:not-routes.js:function:11:configure",
+            "name": "configure",
+            "className": null,
+            "file": "not-routes.js",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:plugin.js:function:3:listUsers",
+            "name": "listUsers",
+            "className": null,
+            "file": "plugin.js",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:plugin.js:function:7:users",
+            "name": "users",
+            "className": null,
+            "file": "plugin.js",
+            "line": 7,
+            "endLine": 10
+          },
+          {
+            "id": "file:plugin.js:function:14:<fastify.register:arg0>",
+            "name": "<fastify.register:arg0>",
+            "className": null,
+            "file": "plugin.js",
+            "line": 14,
+            "endLine": 16
+          },
+          {
+            "id": "file:server.js:function:3:createItem",
+            "name": "createItem",
+            "className": null,
+            "file": "server.js",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:server.js:function:7:build",
+            "name": "build",
+            "className": null,
+            "file": "server.js",
+            "line": 7,
+            "endLine": 14
+          },
+          {
+            "id": "file:server.js:function:9:<app.get:/:arg1>",
+            "name": "<app.get:/:arg1>",
+            "className": null,
+            "file": "server.js",
+            "line": 9,
+            "endLine": 9
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:inline.js:function:13:accounts",
+            "callee": "file:inline.js:function:7:audit",
+            "line": 20
+          },
+          {
+            "caller": "file:inline.js:function:14:<fastify.get:/accounts/:id:arg1>",
+            "callee": "file:inline.js:function:3:loadUser",
+            "line": 14
+          },
+          {
+            "caller": "file:inline.js:function:15:<fastify.post:/accounts:arg1>",
+            "callee": "file:inline.js:function:7:audit",
+            "line": 16
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:inline.js:route:15:2:POST:/accounts"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:inline.js:route:15:2:POST:/accounts",
+            "fn": "file:inline.js:function:15:<fastify.post:/accounts:arg1>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "params": {
+          "ids": [
+            "file:inline.js:route:15:2:POST:/accounts"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:inline.js:route:15:2:POST:/accounts",
+            "fn": "file:inline.js:function:15:<fastify.post:/accounts:arg1>",
+            "role": "handler",
+            "scope": "route",
+            "hook": "handler",
+            "orderIndex": 0
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "params": {
+          "ids": [
+            "file:inline.js:route:15:2:POST:/accounts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE id(route) IN $ids RETURN id(route) AS route, id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation",
+        "params": {
+          "ids": [
+            "file:inline.js:route:15:2:POST:/accounts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:USES_ENV_ROUTE]->(env:EnvVar) WHERE id(route) IN $ids RETURN id(route) AS route, env.name AS name, rel.access AS access, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:inline.js:route:15:2:POST:/accounts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:CONSUMES_CONFIG_ROUTE]->(config:ConfigValue) WHERE id(route) IN $ids RETURN id(route) AS route, config.name AS name, rel.localName AS localName",
+        "params": {
+          "ids": [
+            "file:inline.js:route:15:2:POST:/accounts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:inline.js:function:15:<fastify.post:/accounts:arg1>",
+            "file:inline.js:function:7:audit"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:inline.js:function:15:<fastify.post:/accounts:arg1>",
+            "file:inline.js:function:7:audit"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:inline.js:function:15:<fastify.post:/accounts:arg1>",
+            "file:inline.js:function:7:audit"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:inline.js:function:15:<fastify.post:/accounts:arg1>",
+            "file:inline.js:function:7:audit"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "method": "POST",
+      "path": "/accounts",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/accounts",
+          "fullPath": "/accounts",
+          "framework": "fastify",
+          "handlerName": null,
+          "file": "inline.js",
+          "line": 15,
+          "handlers": [
+            {
+              "name": "<fastify.post:/accounts:arg1>",
+              "className": null,
+              "file": "inline.js",
+              "line": 15,
+              "endLine": 18
+            }
+          ],
+          "lifecycle": [
+            {
+              "role": "handler",
+              "scope": "route",
+              "hook": "handler",
+              "orderIndex": 0,
+              "name": "<fastify.post:/accounts:arg1>",
+              "className": null,
+              "file": "inline.js",
+              "line": 15,
+              "endLine": 18
+            }
+          ],
+          "callChain": [
+            {
+              "depth": 1,
+              "caller": "<fastify.post:/accounts:arg1>",
+              "callerFile": "inline.js",
+              "line": 16,
+              "callee": "audit",
+              "calleeClass": null,
+              "calleeFile": "inline.js"
+            }
+          ],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
       }
     }
   },
@@ -809,6 +1302,26 @@
             "framework": "fastify",
             "handlerName": "health",
             "handler": "health"
+          },
+          {
+            "file": "inline.js",
+            "line": 14,
+            "method": "GET",
+            "path": "/accounts/:id",
+            "fullPath": "/accounts/:id",
+            "framework": "fastify",
+            "handlerName": null,
+            "handler": "<fastify.get:/accounts/:id:arg1>"
+          },
+          {
+            "file": "inline.js",
+            "line": 15,
+            "method": "POST",
+            "path": "/accounts",
+            "fullPath": "/accounts",
+            "framework": "fastify",
+            "handlerName": null,
+            "handler": "<fastify.post:/accounts:arg1>"
           },
           {
             "file": "plugin.js",
@@ -838,7 +1351,7 @@
             "fullPath": "/",
             "framework": "fastify",
             "handlerName": null,
-            "handler": null
+            "handler": "<app.get:/:arg1>"
           },
           {
             "file": "server.js",
@@ -870,6 +1383,26 @@
           "handler": "health"
         },
         {
+          "file": "inline.js",
+          "line": 14,
+          "method": "GET",
+          "path": "/accounts/:id",
+          "fullPath": "/accounts/:id",
+          "framework": "fastify",
+          "handlerName": null,
+          "handler": "<fastify.get:/accounts/:id:arg1>"
+        },
+        {
+          "file": "inline.js",
+          "line": 15,
+          "method": "POST",
+          "path": "/accounts",
+          "fullPath": "/accounts",
+          "framework": "fastify",
+          "handlerName": null,
+          "handler": "<fastify.post:/accounts:arg1>"
+        },
+        {
           "file": "plugin.js",
           "line": 8,
           "method": "GET",
@@ -897,7 +1430,7 @@
           "fullPath": "/",
           "framework": "fastify",
           "handlerName": null,
-          "handler": null
+          "handler": "<app.get:/:arg1>"
         },
         {
           "file": "server.js",
@@ -912,7 +1445,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 5
+        "returned": 7
       }
     }
   }

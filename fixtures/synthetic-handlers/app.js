@@ -37,4 +37,11 @@ app.get('/me', requireUser, (req, res) => {
   res.json({ user: req.user });
 });
 
+// A path held in a constant: the parser names the handler by the literal it
+// sees (`<app.get:arg1>`), the route by the resolved path.
+const STATUS_PATH = '/status';
+app.get(STATUS_PATH, (req, res) => {
+  res.json({ status: 'up' });
+});
+
 module.exports = app;
