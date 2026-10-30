@@ -74,6 +74,7 @@ export type GraphRelationshipType =
   | "USES_CONTEXT"
   | "DECLARES_PAGE"
   | "PAGE_RENDERS"
+  | "REQUESTS"
   | "ACCESSES_DATA"
   | "MAPS_TO_TABLE"
   | "RELATES_TO"

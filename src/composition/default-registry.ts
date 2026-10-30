@@ -17,6 +17,7 @@ import { envConfigContributor } from "../integrations/frameworks/js-ts/env-confi
 import { dataAccessContributor } from "../integrations/frameworks/js-ts/data-access.js";
 import { componentGraphContributor } from "../integrations/frameworks/js-ts/resolution/component-graph.js";
 import { nextjsPagesContributor, nextjsRoutesContributor } from "../integrations/frameworks/js-ts/nextjs.js";
+import { httpRequestsContributor } from "../integrations/frameworks/js-ts/resolution/http-requests.js";
 import type { ILanguageResolver } from "../core/contracts/language-resolver.js";
 import { CoreIntegrationRegistry } from "../core/integrations/registry.js";
 
@@ -40,6 +41,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     routeHandlerContributor,
     routePathContributor,
     nextjsRoutesContributor,
+    httpRequestsContributor,
     envConfigContributor,
     dataAccessContributor,
     componentGraphContributor,

@@ -370,6 +370,28 @@ Astro).
   skipped; `createLazyRoute` and virtual file routes (`virtualRouteConfig`)
   are not read.
 
+## API Calls
+
+- Outbound HTTP calls are recorded on their `Call` node (`httpClient`,
+  `httpMethod`, `httpUrl`) for `fetch` (also `window.fetch` /
+  `globalThis.fetch`, unless the file declares or imports its own `fetch`),
+  the default import of `axios` (`axios(…)`, `axios.request(…)`,
+  `axios.get(…)` / `.post` / …), the default import of `ky` and `ofetch` /
+  `$fetch`. Instances (`axios.create`, `ky.create`, `ofetch.create`),
+  wrapper functions around a client and SWR / TanStack Query fetchers are not
+  followed yet.
+- The method is the member name or a literal `method` option (GET without
+  one); options held in a variable or spreading another object leave it
+  unknown, and the call is not linked.
+- `REQUESTS` links a call to the `Route` its URL reaches when the URL is a
+  same-origin string or template literal (`/api/users/${id}`) and exactly one
+  route is the most specific match (literal segments over parameters over
+  catch-alls); `match` says `exact`, `parameter` or `catch-all`. URLs held in
+  variables or constants, built from a base URL or env var
+  (`${process.env.API_URL}/posts`), absolute URLs, partly dynamic segments
+  (`/u/${id}.json`) and ties between routes stay unlinked. Query strings are
+  ignored.
+
 ## Review Process
 
 - Smoke reports include empty `falsePositiveFindings`,
