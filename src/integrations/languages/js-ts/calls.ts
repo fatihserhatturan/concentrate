@@ -45,6 +45,47 @@ export function isInlineHandlerArgument(node: SyntaxNode): boolean {
   return isModuleLevelCallExpression(callExpr);
 }
 
+const scopedRouteMethods = new Set(["all", "del", "delete", "get", "head", "options", "patch", "post", "put", "use"]);
+
+// An inline function passed after a path to a route-shaped statement call in
+// a function body (`instance.get('/users', async (req) => …)` in a plugin
+// or an app factory), and the function that call belongs to. The gate
+// is the call's shape only, so `.then(() => …)` and `.map((x) => …)` stay part
+// of their function. The owner must have a Function node, or be the unnamed
+// module export, whose calls belong to the file.
+export function scopedRouteHandlerOwner(node: SyntaxNode, callbackKeys: ReadonlySet<string>): SyntaxNode | null {
+  if (node.type !== "arrow_function" && node.type !== "function_expression") return null;
+  if (node.parent?.type !== "arguments") return null;
+  const callExpr = node.parent.parent;
+  if (callExpr?.type !== "call_expression" || isModuleLevelCallExpression(callExpr)) return null;
+
+  const statement = callExpr.parent?.type === "await_expression" ? callExpr.parent.parent : callExpr.parent;
+  if (statement?.type !== "expression_statement") return null;
+
+  const callee = callExpr.childForFieldName("function");
+  const method = callee?.type === "member_expression" ? callee.childForFieldName("property")?.text : undefined;
+  if (!method || !scopedRouteMethods.has(method)) return null;
+
+  const args = node.parent.namedChildren;
+  if (args[0]?.type !== "string" && args[0]?.type !== "template_string") return null;
+  if (args[0].id === node.id) return null;
+
+  let owner = statement.parent;
+  while (owner && !isFunctionNode(owner) && !isClassNode(owner)) owner = owner.parent;
+  if (!owner || !isFunctionNode(owner) || owner.type === "method_definition") return null;
+  return ownsCalls(owner, callbackKeys) || isAnonymousModuleExport(owner) ? owner : null;
+}
+
+function isAnonymousModuleExport(node: SyntaxNode): boolean {
+  const parent = node.parent;
+  if (parent?.type === "assignment_expression") {
+    return parent.childForFieldName("right")?.id === node.id
+      && /^(module\.)?exports$/u.test(parent.childForFieldName("left")?.text ?? "")
+      && parent.parent?.parent?.type === "program";
+  }
+  return parent?.type === "export_statement" && parent.children.some((child) => child.type === "default");
+}
+
 // A callback passed to the call that initializes a module-level variable:
 // `export const User = createParamDecorator((data, ctx) => { … })`.
 export function isInitializerHandlerArgument(node: SyntaxNode): boolean {
@@ -81,7 +122,8 @@ export function isObjectLiteralHandlerFunction(node: SyntaxNode, callbackKeys: R
 export function createInlineHandlerNode(
   fileNodeId: string,
   handlerNode: SyntaxNode,
-  callKind: "modulecall" | "initializercall" = "modulecall",
+  callKind: "modulecall" | "initializercall" | "call" = "modulecall",
+  callOwnerId: string = fileNodeId,
 ): { functionNode: GraphNode; callNodeId: string } | null {
   const argsNode = handlerNode.parent;
   const callExprNode = argsNode?.parent;
@@ -102,7 +144,8 @@ export function createInlineHandlerNode(
 
   const row = callExprNode.startPosition.row + 1;
   const col = callExprNode.startPosition.column;
-  const callNodeId = `${fileNodeId}:${callKind}:${row}:${col}:${expression}`;
+  // A call inside a function has its owner's id as prefix (createCallNodes).
+  const callNodeId = `${callOwnerId}:${callKind}:${row}:${col}:${expression}`;
 
   return {
     functionNode: {
@@ -395,5 +438,6 @@ function ownsCalls(node: SyntaxNode, callbackKeys: ReadonlySet<string>): boolean
 
   return isInlineHandlerArgument(node)
     || isObjectLiteralHandlerFunction(node, callbackKeys)
-    || isInitializerHandlerArgument(node);
+    || isInitializerHandlerArgument(node)
+    || scopedRouteHandlerOwner(node, callbackKeys) !== null;
 }

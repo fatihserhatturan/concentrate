@@ -37,9 +37,12 @@ and deeper package graph queries.
     function passed inline to `.register(...)`, or a parameter with an app
     name) or a local created by a call (`const app = fastify(opts)`) with an
     app name. A module-level app used inside a function is not read there.
-  - Inline handlers of such routes (`app.get('/', async () => …)`) have no
-    Function node, so the route has no `ROUTE_HANDLED_BY` to them; named
-    handlers link.
+  - Inline handlers of such routes (`app.get('/', async () => …)`) get a
+    synthetic Function node when the call is a statement with a path first
+    (`get`, `post`, …, `use`), so the route links to them and their calls are
+    theirs. This is decided by the call's shape, so a route-shaped call on a
+    receiver that is not read as an app (a test server's `server.get('/', …)`)
+    also gets handler functions, without a route.
   - `register(plugin, { prefix })` applies its prefix only to a plugin defined
     in the same file; a plugin imported or `require`d from another file, and
     mounts made inside a function, keep their routes unprefixed.
