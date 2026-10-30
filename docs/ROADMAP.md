@@ -625,7 +625,7 @@ Adds a `Page` node for client-visible URLs. Server-side handlers of full-stack f
 ### Next.js
 
 - [x] `app/` router: `page`, `layout`, `loading`, `error`, route groups, dynamic and catch-all segments, parallel routes
-- [ ] `pages/` router, including `_app` and `_document`
+- [x] `pages/` router, including `_app` and `_document`
 - [ ] `app/**/route.ts` handlers and `pages/api/**` become `Route` nodes with methods
 - [ ] Server actions (`"use server"`) and `middleware.ts` with its `matcher`
 

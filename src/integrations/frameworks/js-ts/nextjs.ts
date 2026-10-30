@@ -9,10 +9,25 @@ import type { ISemanticContributor } from "../../../core/contracts/semantic-cont
 // `app/`) is a Page whose path is its folder: route groups `(group)` and
 // parallel-route slots `@slot` leave the URL, dynamic segments keep Next's
 // syntax (`[id]`, `[...slug]`, `[[...slug]]`). Private folders (`_lib`) and
-// intercepting routes (`(.)photo`) are not routable and are skipped. Each
-// Page has PAGE_RENDERS to the component its file exports as default.
+// intercepting routes (`(.)photo`) are not routable and are skipped.
+//
+// Pages Router: every file under `pages/` (or `src/pages/`) is a page whose
+// path is the file path without its extension (`index` is its folder);
+// `_app`, `_document` and `_error` are the custom app, document and error
+// page, `404` and `500` the not-found and error pages. `pages/api/` holds API
+// routes, not pages; tests are left out.
+//
+// Each Page has PAGE_RENDERS to the component its file exports as default.
 
 const pageFile = /^(page|layout|template|loading|error|global-error|not-found|default)\.(jsx?|tsx?|mjs|cjs)$/u;
+const sourceExtension = /\.(jsx?|tsx?|mjs|cjs)$/u;
+const specialPages = new Map([
+  ["_app", { kind: "app", path: "/" }],
+  ["_document", { kind: "document", path: "/" }],
+  ["_error", { kind: "error", path: "/" }],
+  ["404", { kind: "not-found", path: "/404" }],
+  ["500", { kind: "error", path: "/500" }],
+]);
 
 export const nextjsPagesContributor: ISemanticContributor = {
   async contribute(graph) {
@@ -48,6 +63,27 @@ export const nextjsPagesContributor: ISemanticContributor = {
           : [];
       });
       const appDirectory = inPackage.some((entry) => entry.path.startsWith("app/")) ? "app/" : "src/app/";
+      const pagesDirectory = inPackage.some((entry) => entry.path.startsWith("pages/")) ? "pages/" : "src/pages/";
+      const addPage = (file: GraphNode, properties: GraphNode["properties"]) => {
+        const page: GraphNode = { id: `${file.id}:page`, label: "Page", properties: { ...properties, fullPath: properties.path } };
+        nodes.push(page);
+        relationships.push({ from: file.id, to: page.id, type: "DECLARES_PAGE", properties: {} });
+        const component = defaultExportComponent(file, componentsByFile.get(file.id) ?? []);
+        if (component) relationships.push({ from: page.id, to: component.id, type: "PAGE_RENDERS", properties: {} });
+      };
+
+      for (const { file, path: filePath } of inPackage) {
+        if (!filePath.startsWith(pagesDirectory) || file.properties.isTest === true || !sourceExtension.test(filePath)) continue;
+        const segments = filePath.slice(pagesDirectory.length).replace(sourceExtension, "").split("/");
+        if (segments[0] === "api") continue;
+        const special = segments.length === 1 ? specialPages.get(segments[0]!) : undefined;
+        if (special) {
+          addPage(file, { path: special.path, framework: "nextjs", router: "pages", kind: special.kind, slot: null });
+          continue;
+        }
+        if (segments.at(-1) === "index") segments.pop();
+        addPage(file, { path: `/${segments.join("/")}`, framework: "nextjs", router: "pages", kind: "page", slot: null });
+      }
 
       for (const { file, path: filePath } of inPackage) {
         if (!filePath.startsWith(appDirectory)) continue;
@@ -57,17 +93,7 @@ export const nextjsPagesContributor: ISemanticContributor = {
 
         const slot = [...segments].reverse().find((segment) => segment.startsWith("@"))?.slice(1) ?? null;
         const urlSegments = segments.filter((segment) => !/^\(.+\)$/u.test(segment) && !segment.startsWith("@"));
-        const pagePath = `/${urlSegments.join("/")}`;
-        const page: GraphNode = {
-          id: `${file.id}:page`,
-          label: "Page",
-          properties: { path: pagePath, fullPath: pagePath, framework: "nextjs", router: "app", kind, slot },
-        };
-        nodes.push(page);
-        relationships.push({ from: file.id, to: page.id, type: "DECLARES_PAGE", properties: {} });
-
-        const component = defaultExportComponent(file, componentsByFile.get(file.id) ?? []);
-        if (component) relationships.push({ from: page.id, to: component.id, type: "PAGE_RENDERS", properties: {} });
+        addPage(file, { path: `/${urlSegments.join("/")}`, framework: "nextjs", router: "app", kind, slot });
       }
     }
     graph.addNodes(nodes);
