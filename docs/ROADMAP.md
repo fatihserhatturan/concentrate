@@ -641,8 +641,8 @@ Adds a `Page` node for client-visible URLs. Server-side handlers of full-stack f
 
 ### Acceptance criteria
 
-- [ ] Fixtures and golden coverage for both Next.js routers and both client routers
-- [ ] A pinned Next.js sample with hand labels for pages and route handlers in `bench:accuracy`
+- [x] Fixtures and golden coverage for both Next.js routers and both client routers
+- [x] A pinned Next.js sample with hand labels for pages and route handlers in `bench:accuracy`
 - [x] Precision stays at 100%; recall is reported
 
 ## Phase 13: Frontend → backend API links ([#78](https://github.com/fatihserhatturan/concentrate/issues/78))

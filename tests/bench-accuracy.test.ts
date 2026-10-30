@@ -8,6 +8,7 @@ import {
   compareCalls,
   compareComponents,
   compareDataAccess,
+  comparePages,
   compareRenders,
   compareRoutes,
   fileOfNodeId,
@@ -247,6 +248,34 @@ describe("accuracy comparator: components and renders", () => {
   });
 });
 
+describe("accuracy comparator: pages", () => {
+  // app/page.tsx renders Home; app/about/page.tsx renders nothing.
+  const graph: Graph = { nodes: files("app/page.tsx", "app/about/page.tsx"), relationships: [] };
+  const page = (file: string, fullPath: string, kind: string) => {
+    const id = `file:${file}:page`;
+    graph.nodes.push(node(id, "Page", { fullPath, kind }));
+    graph.relationships.push(rel(`file:${file}`, "DECLARES_PAGE", id));
+    return id;
+  };
+  const home = page("app/page.tsx", "/", "page");
+  page("app/about/page.tsx", "/about", "page");
+  graph.nodes.push(node("file:app/page.tsx:component:1:Home", "Component", { name: "Home", line: 1 }));
+  graph.relationships.push(rel(home, "PAGE_RENDERS", "file:app/page.tsx:component:1:Home"));
+
+  it("matches pages by file, kind, full path and rendered component", () => {
+    const score = comparePages(graph, {
+      scope: ["app/"],
+      items: [
+        { file: "app/page.tsx", fullPath: "/", kind: "page", component: "Home" },
+        { file: "app/about/page.tsx", fullPath: "/about", kind: "page", component: "About" },
+      ],
+    });
+    assert.deepEqual([score.tp, score.fp, score.fn], [1, 1, 1]);
+    assert.deepEqual(score.falsePositives, ["app/about/page.tsx page /about -> (none)"]);
+    assert.deepEqual(score.falseNegatives, ["app/about/page.tsx page /about -> About"]);
+  });
+});
+
 describe("label files", () => {
   const labelsDirectory = path.join(import.meta.dirname, "../bench/labels");
   for (const labelFile of readdirSync(labelsDirectory).filter((file) => file.endsWith(".json"))) {
@@ -271,6 +300,9 @@ describe("label files", () => {
       for (const render of labels.renders?.items ?? []) {
         assert.ok(render.file && render.parent && render.child && render.childFile && Number.isInteger(render.line), JSON.stringify(render));
       }
+      for (const page of labels.pages?.items ?? []) {
+        assert.ok(page.file && page.fullPath.startsWith("/") && page.kind && page.component !== undefined, JSON.stringify(page));
+      }
     });
 
     const projectPath = path.join(samplesDirectory(), labels.sample);
@@ -282,6 +314,7 @@ describe("label files", () => {
         ...(labels.dataAccess?.items ?? []).map((access) => access.file),
         ...(labels.components?.items ?? []).map((component) => component.file),
         ...(labels.renders?.items ?? []).flatMap((render) => [render.file, render.childFile]),
+        ...(labels.pages?.items ?? []).map((page) => page.file),
       ]);
       for (const file of named) assert.ok(existsSync(path.join(projectPath, file)), `${file} is missing in ${labels.sample}`);
     });

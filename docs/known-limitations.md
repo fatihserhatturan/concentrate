@@ -313,8 +313,12 @@ Astro).
   `DELETE`, `PATCH` or `OPTIONS` (declared or assigned an arrow); a
   re-export (`export { handler as GET }`) is not followed. A file under
   `pages/api/` gives one `Route` of method `ALL` handled by its default
-  export, since the handler branches on `req.method` itself. Paths follow the
-  page rules above.
+  export, since the handler branches on `req.method` itself. A default export
+  that wraps a file function (`withAuth(handler)`, or a named function passed
+  inline) is handled by that function; one built by a library call
+  (`NextAuth(options)`), held in such a variable, or wrapping an anonymous
+  arrow (which has no Function node) gives a `Route` without a handler.
+  Paths follow the page rules above.
 - Server actions: a module whose directive prologue has `"use server"` makes
   each exported function an `EntryPoint` of kind `server-action` (library
   `react`); so does a function whose own body starts with the directive. Such
@@ -322,7 +326,9 @@ Astro).
   listed. Which form or component calls an action is not linked.
 - Middleware: `middleware` (or Next 16's `proxy`) at the package root or in
   `src/` is an `EntryPoint` of kind `middleware`, handled by its exported
-  `middleware` / `proxy` function or default export. The trigger lists the
+  `middleware` / `proxy` function or default export, or by the function a
+  wrapped default export takes (`withAuth(function middleware(req) {…})`,
+  same rules as `pages/api/`). The trigger lists the
   literal `config.matcher` paths (strings and `{ source }` objects); a
   computed matcher is not read, and no matcher (every request) leaves it
   null.

@@ -1,0 +1,5 @@
+{
+  "name": "nextjs-wrapped-exports",
+  "private": true,
+  "dependencies": { "next": "14.2.15", "next-auth": "4.24.8" }
+}

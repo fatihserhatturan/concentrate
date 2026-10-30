@@ -382,6 +382,27 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       },
     },
   },
+  {
+    name: "internet-nextjs-taxonomy",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 188,
+      supportedFiles: 131,
+      parsedFiles: 131,
+      failedFiles: 0,
+      resolvedImports: 259,
+      // Package imports (`next/link`) are tried against `baseUrl: "."` and counted here.
+      unresolvedRelativeImports: 259,
+      nodes: 2200,
+      relationships: 3697,
+      fileClassifications: { production: 131, test: 0, fixture: 0, support: 0, generated: 0 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 9,
+        entrypoints: 1,
+      },
+    },
+  },
 ];
 
 export async function smokeCommand(options: SmokeOptions): Promise<void> {

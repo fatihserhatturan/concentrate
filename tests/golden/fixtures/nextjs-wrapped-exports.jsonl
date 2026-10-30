@@ -1,0 +1,67 @@
+{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":4,"parsedFiles":4,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"nextjs-wrapped-exports","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"nextjs-wrapped-exports","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"nextjs-wrapped-exports","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:lib","label":"Directory","properties":{"name":"lib","path":"<root>/lib","relativePath":"lib"}}
+{"kind":"node","id":"dir:pages","label":"Directory","properties":{"name":"pages","path":"<root>/pages","relativePath":"pages"}}
+{"kind":"node","id":"dir:pages/api","label":"Directory","properties":{"name":"api","path":"<root>/pages/api","relativePath":"pages/api"}}
+{"kind":"node","id":"file:lib/auth.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/lib/auth.ts","relativePath":"lib/auth.ts","sourceType":"production"}}
+{"kind":"node","id":"file:lib/auth.ts:function:1:withAuth","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"withAuth","parameters":"[{\"name\":\"handler\",\"type\":\"(req: unknown, res: { status(code: number): { json(body: unknown): void } }) => Promise<void>\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:middleware.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/middleware.ts","relativePath":"middleware.ts","sourceType":"production"}}
+{"kind":"node","id":"file:middleware.ts:entrypoint:6:0:middleware:/dashboard/:path*, /login","label":"EntryPoint","properties":{"handlerName":"middleware","kind":"middleware","library":"nextjs","line":6,"receiverName":null,"trigger":"/dashboard/:path*, /login"}}
+{"kind":"node","id":"file:middleware.ts:function:6:middleware","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_expression","line":6,"methodKind":null,"name":"middleware","parameters":"[{\"name\":\"req\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:middleware.ts:function:6:middleware:call:7:11:req.nextUrl.pathname.startsWith","label":"Call","properties":{"args":"[\"/login\"]","callee":"startsWith","columnNumber":11,"expression":"req.nextUrl.pathname.startsWith","line":7,"name":"req.nextUrl.pathname.startsWith","receiver":"req.nextUrl.pathname"}}
+{"kind":"node","id":"file:middleware.ts:function:6:middleware:call:7:55:NextResponse.next","label":"Call","properties":{"args":"[]","callee":"next","columnNumber":55,"expression":"NextResponse.next","line":7,"name":"NextResponse.next","receiver":"NextResponse"}}
+{"kind":"node","id":"file:middleware.ts:import:1:next-auth/middleware","label":"Import","properties":{"bindings":"[{\"imported\":\"withAuth\",\"local\":\"withAuth\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"next-auth/middleware","specifier":"import { withAuth } from 'next-auth/middleware';"}}
+{"kind":"node","id":"file:middleware.ts:import:2:next/server","label":"Import","properties":{"bindings":"[{\"imported\":\"NextResponse\",\"local\":\"NextResponse\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"next/server","specifier":"import { NextResponse } from 'next/server';"}}
+{"kind":"node","id":"file:middleware.ts:variable:12:config","label":"Variable","properties":{"isExported":true,"kind":"const","line":12,"name":"config","stringValue":null}}
+{"kind":"node","id":"file:middleware.ts:variable:5:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":5,"name":"default"}}
+{"kind":"node","id":"file:pages/api/inline.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/pages/api/inline.ts","relativePath":"pages/api/inline.ts","sourceType":"production"}}
+{"kind":"node","id":"file:pages/api/inline.ts:import:1:../../lib/auth","label":"Import","properties":{"bindings":"[{\"imported\":\"withAuth\",\"local\":\"withAuth\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"../../lib/auth","specifier":"import { withAuth } from '../../lib/auth';"}}
+{"kind":"node","id":"file:pages/api/inline.ts:route:4:0:ALL:/api/inline","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/inline","handlerName":null,"line":4,"method":"ALL","path":"/api/inline","pathExpression":null,"receiverName":null}}
+{"kind":"node","id":"file:pages/api/inline.ts:variable:4:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":4,"name":"default"}}
+{"kind":"node","id":"file:pages/api/session.ts","label":"File","properties":{"defaultExport":"handler","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/pages/api/session.ts","relativePath":"pages/api/session.ts","sourceType":"production"}}
+{"kind":"node","id":"file:pages/api/session.ts:import:1:next-auth","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"NextAuth\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"next-auth","specifier":"import NextAuth from 'next-auth';"}}
+{"kind":"node","id":"file:pages/api/session.ts:initializercall:4:16:NextAuth","label":"Call","properties":{"args":"[]","callee":"NextAuth","columnNumber":16,"expression":"NextAuth","line":4,"name":"NextAuth","receiver":null}}
+{"kind":"node","id":"file:pages/api/session.ts:route:6:0:ALL:/api/session","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/session","handlerName":null,"line":6,"method":"ALL","path":"/api/session","pathExpression":null,"receiverName":null}}
+{"kind":"node","id":"file:pages/api/session.ts:variable:4:handler","label":"Variable","properties":{"isExported":false,"kind":"const","line":4,"name":"handler","stringValue":null}}
+{"kind":"node","id":"file:pages/api/session.ts:variable:6:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":6,"name":"default"}}
+{"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"nextjs-wrapped-exports","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"nextjs-wrapped-exports","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:lib","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:pages","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:middleware.ts","properties":{}}
+{"kind":"rel","from":"dir:lib","type":"CONTAINS_FILE","to":"file:lib/auth.ts","properties":{}}
+{"kind":"rel","from":"dir:pages","type":"CONTAINS_DIRECTORY","to":"dir:pages/api","properties":{}}
+{"kind":"rel","from":"dir:pages/api","type":"CONTAINS_FILE","to":"file:pages/api/inline.ts","properties":{}}
+{"kind":"rel","from":"dir:pages/api","type":"CONTAINS_FILE","to":"file:pages/api/session.ts","properties":{}}
+{"kind":"rel","from":"file:lib/auth.ts","type":"DEFINES_FUNCTION","to":"file:lib/auth.ts:function:1:withAuth","properties":{}}
+{"kind":"rel","from":"file:middleware.ts","type":"DECLARES_ENTRYPOINT","to":"file:middleware.ts:entrypoint:6:0:middleware:/dashboard/:path*, /login","properties":{}}
+{"kind":"rel","from":"file:middleware.ts","type":"DEFINES_FUNCTION","to":"file:middleware.ts:function:6:middleware","properties":{}}
+{"kind":"rel","from":"file:middleware.ts","type":"DEFINES_VARIABLE","to":"file:middleware.ts:variable:12:config","properties":{}}
+{"kind":"rel","from":"file:middleware.ts","type":"DEFINES_VARIABLE","to":"file:middleware.ts:variable:5:default","properties":{}}
+{"kind":"rel","from":"file:middleware.ts","type":"IMPORTS","to":"file:middleware.ts:import:1:next-auth/middleware","properties":{}}
+{"kind":"rel","from":"file:middleware.ts","type":"IMPORTS","to":"file:middleware.ts:import:2:next/server","properties":{}}
+{"kind":"rel","from":"file:middleware.ts:entrypoint:6:0:middleware:/dashboard/:path*, /login","type":"ENTRYPOINT_HANDLED_BY","to":"file:middleware.ts:function:6:middleware","properties":{}}
+{"kind":"rel","from":"file:middleware.ts:function:6:middleware","type":"CALLS","to":"file:middleware.ts:function:6:middleware:call:7:11:req.nextUrl.pathname.startsWith","properties":{}}
+{"kind":"rel","from":"file:middleware.ts:function:6:middleware","type":"CALLS","to":"file:middleware.ts:function:6:middleware:call:7:55:NextResponse.next","properties":{}}
+{"kind":"rel","from":"file:pages/api/inline.ts","type":"DECLARES_ROUTE","to":"file:pages/api/inline.ts:route:4:0:ALL:/api/inline","properties":{}}
+{"kind":"rel","from":"file:pages/api/inline.ts","type":"DEFINES_VARIABLE","to":"file:pages/api/inline.ts:variable:4:default","properties":{}}
+{"kind":"rel","from":"file:pages/api/inline.ts","type":"IMPORTS","to":"file:pages/api/inline.ts:import:1:../../lib/auth","properties":{}}
+{"kind":"rel","from":"file:pages/api/inline.ts:import:1:../../lib/auth","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:pages/api/inline.ts:import:1:../../lib/auth","type":"RESOLVES_TO","to":"file:lib/auth.ts","properties":{}}
+{"kind":"rel","from":"file:pages/api/session.ts","type":"DECLARES_ROUTE","to":"file:pages/api/session.ts:route:6:0:ALL:/api/session","properties":{}}
+{"kind":"rel","from":"file:pages/api/session.ts","type":"DEFINES_VARIABLE","to":"file:pages/api/session.ts:variable:4:handler","properties":{}}
+{"kind":"rel","from":"file:pages/api/session.ts","type":"DEFINES_VARIABLE","to":"file:pages/api/session.ts:variable:6:default","properties":{}}
+{"kind":"rel","from":"file:pages/api/session.ts","type":"IMPORTS","to":"file:pages/api/session.ts:import:1:next-auth","properties":{}}
+{"kind":"rel","from":"file:pages/api/session.ts:variable:4:handler","type":"INITIALIZED_BY","to":"file:pages/api/session.ts:initializercall:4:16:NextAuth","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:lib/auth.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:middleware.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:pages/api/inline.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:pages/api/session.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_CONFIG","to":"config:package.json:name","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:.","properties":{}}

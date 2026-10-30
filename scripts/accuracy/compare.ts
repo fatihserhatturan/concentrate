@@ -15,6 +15,8 @@ export type DataAccessLabel = { file: string; function: string; model: string; o
 export type ComponentLabel = { file: string; name: string; line: number };
 // `file` and `line` are the rendering element's; `parent` is the component it is in.
 export type RenderLabel = { file: string; parent: string; line: number; child: string; childFile: string };
+// `component` is the name of the component the page renders, or null.
+export type PageLabel = { file: string; fullPath: string; kind: string; component: string | null };
 
 export type Labels = {
   sample: string;
@@ -29,6 +31,8 @@ export type Labels = {
   components?: { scope: string[]; items: ComponentLabel[] };
   // Elements in `scope` that render a component of the repository.
   renders?: { scope: string[]; items: RenderLabel[] };
+  // UI pages declared in `scope`.
+  pages?: { scope: string[]; items: PageLabel[] };
 };
 
 export type Score = {
@@ -337,6 +341,33 @@ export function compareRenders(graph: Graph, labels: NonNullable<Labels["renders
     && label.childFile === render.childFile
   ));
   const describe = (render: RenderLabel) => `${render.file}:${render.line} ${render.parent} -> ${render.childFile} ${render.child}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+// Page nodes with their declaring file and the component they render.
+export function scanPages(graph: Graph): PageLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const fileOf = new Map<string, string>();
+  const componentOf = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    const file = rel.type === "DECLARES_PAGE" ? byId.get(rel.from)?.properties.relativePath : undefined;
+    if (typeof file === "string") fileOf.set(rel.to, file);
+    if (rel.type === "PAGE_RENDERS") componentOf.set(rel.from, String(byId.get(rel.to)?.properties.name));
+  }
+  return graph.nodes.flatMap((node) => {
+    const file = fileOf.get(node.id);
+    if (node.label !== "Page" || !file) return [];
+    return [{ file, fullPath: String(node.properties.fullPath), kind: String(node.properties.kind), component: componentOf.get(node.id) ?? null }];
+  });
+}
+
+// A page is right when its file, kind, full path and rendered component all match.
+export function comparePages(graph: Graph, labels: NonNullable<Labels["pages"]>): Score {
+  const found = scanPages(graph).filter((page) => inScope(page.file, labels.scope));
+  const result = pair(labels.items, found, (label, page) => (
+    label.file === page.file && label.kind === page.kind && label.fullPath === page.fullPath && label.component === page.component
+  ));
+  const describe = (page: PageLabel) => `${page.file} ${page.kind} ${page.fullPath} -> ${page.component ?? "(none)"}`;
   return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
 }
 
