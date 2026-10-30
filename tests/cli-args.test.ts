@@ -78,6 +78,10 @@ describe("CLI argument router", () => {
 
   for (const [argv, message] of [
     [["scan", "src", "--bogus"], "error: unknown option '--bogus'\n"],
+    // One-letter short options get no suggestion: `stats` has only -h, which
+    // is one edit away from any of them.
+    [["stats", "-x"], "error: unknown option '-x'\n"],
+    [["scan", "src", "-x"], "error: unknown option '-x'\n"],
     [["--bogus"], "error: unknown option '--bogus'\n"],
     [["bogus"], "error: unknown command 'bogus'\n"],
     [["scan"], "error: missing required argument 'path'\n"],

@@ -145,7 +145,9 @@ export function parseCommandArgs(
         ...(candidate.short ? [`-${candidate.short}`] : []),
         `--${candidate.long}`,
       ]);
-      const suggestion = closestMatch(token.rawName, [...names, "-h", "--help"]);
+      // A one-letter short option is within one edit of every other short
+      // option, so a suggestion for it would be a guess.
+      const suggestion = /^-[^-]$/u.test(token.rawName) ? undefined : closestMatch(token.rawName, [...names, "-h", "--help"]);
       throw new CliError(`unknown option '${token.rawName}'${suggestion ? `. Did you mean '${suggestion}'?` : ""}`);
     }
     if (flag.takesValue && token.value === undefined) {
