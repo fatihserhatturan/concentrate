@@ -17,8 +17,8 @@ import { isHookCall, type PendingRender } from "../react.js";
 //   only listed in `Component.hooks`.
 // - USES_CONTEXT: such a function to the context its `useContext(Ctx)` /
 //   `use(Ctx)` reads.
-// - PAGE_RENDERS: a React Router Page to the component its route renders
-//   (`Page.component`).
+// - PAGE_RENDERS: a React Router or TanStack Router Page to the component its
+//   route renders (`Page.component`).
 export const componentGraphContributor: ISemanticContributor = {
   contribute(graph) {
     addComponentRelationships(graph);
@@ -99,7 +99,7 @@ export function addComponentRelationships(graph: IGraphContributor): void {
     if (rel.type !== "DECLARES_PAGE") continue;
     const page = nodesById.get(rel.to);
     const name = page?.properties.component;
-    if (page?.properties.framework !== "react-router" || typeof name !== "string") continue;
+    if (!page || typeof name !== "string") continue;
     const dot = name.lastIndexOf(".");
     const target = dot === -1
       ? resolveDeclaration(name, rel.from, componentsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId)

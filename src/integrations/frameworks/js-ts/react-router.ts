@@ -12,9 +12,9 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 // Each route is a Page: `path` is its own segment as written (null for index
 // and pathless routes), `fullPath` joins it onto its parent route's (a path
 // that starts with `/` stands alone), and `kind` is `layout` when it has
-// child routes, `index` for an index route. `component` is the component it renders, `element={<X />}`
-// or `Component={X}` (`component={X}` in v5); the component graph links it
-// with PAGE_RENDERS. Lazy routes (`lazy: () => import(…)`) and routes
+// child routes, `index` for an index route. `component` is the component it
+// renders, `element={<X />}` or `Component={X}` (`component={X}` in v5); the
+// component graph links it with PAGE_RENDERS. Lazy routes (`lazy: () => import(…)`) and routes
 // assembled at runtime are not followed; a `<Routes>` inside a routed
 // component starts again from `/`.
 
@@ -24,7 +24,7 @@ const routerFactories = new Set(["createBrowserRouter", "createHashRouter", "cre
 type Route = { path: string | null; index: boolean; component: string | null; line: number; column: number; children: Route[] };
 
 export function applyReactRouterSemantics({ fileNodeId, rootNode, parsed }: JsTsParsedFile): void {
-  const imported = routerImports(parsed.nodes, parsed.relationships, fileNodeId);
+  const imported = routerImports(parsed.nodes, parsed.relationships, fileNodeId, routerSource);
   if (imported.size === 0) return;
   const routeTag = [...imported].find(([, name]) => name === "Route")?.[0];
   const factories = new Set([...imported].filter(([, name]) => routerFactories.has(name)).map(([local]) => local));
@@ -68,13 +68,19 @@ export function applyReactRouterSemantics({ fileNodeId, rootNode, parsed }: JsTs
   for (const { routes, router } of roots) for (const route of routes) add(route, "/", router);
 }
 
-// Local name → exported name of what the file imports from React Router.
-function routerImports(nodes: GraphNode[], relationships: JsTsParsedFile["parsed"]["relationships"], fileNodeId: string): Map<string, string> {
+// Local name → exported name of what the file imports by name from a source
+// matching `source`.
+export function routerImports(
+  nodes: GraphNode[],
+  relationships: JsTsParsedFile["parsed"]["relationships"],
+  fileNodeId: string,
+  source: RegExp,
+): Map<string, string> {
   const importIds = new Set(relationships.filter((rel) => rel.from === fileNodeId && rel.type === "IMPORTS").map((rel) => rel.to));
   const imported = new Map<string, string>();
   for (const node of nodes) {
     if (node.label !== "Import" || !importIds.has(node.id)) continue;
-    if (typeof node.properties.source !== "string" || !routerSource.test(node.properties.source)) continue;
+    if (typeof node.properties.source !== "string" || !source.test(node.properties.source)) continue;
     if (typeof node.properties.bindings !== "string") continue;
     for (const binding of JSON.parse(node.properties.bindings) as ImportBinding[]) {
       if (binding.kind === "named") imported.set(binding.local, binding.imported);
@@ -153,7 +159,7 @@ function collectArrayDeclarations(node: SyntaxNode, arrays: Map<string, SyntaxNo
   for (const child of node.namedChildren) if (child) collectArrayDeclarations(child, arrays);
 }
 
-function unwrap(node: SyntaxNode | null): SyntaxNode | null {
+export function unwrap(node: SyntaxNode | null): SyntaxNode | null {
   let current = node;
   while (current && ["parenthesized_expression", "satisfies_expression", "as_expression", "jsx_expression"].includes(current.type)) {
     current = current.namedChildren[0] ?? null;
@@ -161,7 +167,7 @@ function unwrap(node: SyntaxNode | null): SyntaxNode | null {
   return current;
 }
 
-function stringValue(node: SyntaxNode | null): string | null {
+export function stringValue(node: SyntaxNode | null): string | null {
   const value = unwrap(node);
   if (value?.type === "string") return value.text.slice(1, -1);
   if (value?.type === "template_string" && !value.namedChildren.some((child) => child?.type === "template_substitution")) return value.text.slice(1, -1);
@@ -169,7 +175,7 @@ function stringValue(node: SyntaxNode | null): string | null {
 }
 
 // The outermost element of `element={<X />}`, when it is a component.
-function elementComponent(node: SyntaxNode | null): string | null {
+export function elementComponent(node: SyntaxNode | null): string | null {
   const value = unwrap(node);
   const opening = value?.type === "jsx_element" ? value.childForFieldName("open_tag") : value?.type === "jsx_self_closing_element" ? value : null;
   const name = opening?.childForFieldName("name")?.text;
@@ -177,12 +183,12 @@ function elementComponent(node: SyntaxNode | null): string | null {
 }
 
 // `Component={Home}` / `Component={pages.Home}`.
-function referenceName(node: SyntaxNode | null): string | null {
+export function referenceName(node: SyntaxNode | null): string | null {
   const value = unwrap(node);
   return value?.type === "identifier" || value?.type === "member_expression" ? value.text : null;
 }
 
-function joinPath(parent: string, path: string | null): string {
+export function joinPath(parent: string, path: string | null): string {
   if (path === null || path === "") return parent;
   const joined = path.startsWith("/") ? path : `${parent}/${path}`;
   const normalized = joined.replace(/\/{2,}/gu, "/");
