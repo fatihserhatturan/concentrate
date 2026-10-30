@@ -572,6 +572,18 @@
         "args": {
           "operation": "delete"
         }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "prisma"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "sequelize"
+        }
       }
     ],
     "synthetic-handlers": [

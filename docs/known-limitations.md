@@ -147,11 +147,14 @@ audits.
   findings from `semanticSamples.dataAccess` should be fed back into resolver
   rules.
 - The method vocabulary covers the TypeORM Repository / EntityManager API
-  (`findOneBy`, `findAndCountBy`, `softDelete`, `increment`, …) and the
+  (`findOneBy`, `findAndCountBy`, `softDelete`, `increment`, …), the
   Mongoose Model API (`findByIdAndUpdate`, `findOneAndDelete`,
-  `countDocuments`, …). Prisma's `findUniqueOrThrow` / `findFirstOrThrow` /
-  `groupBy` and Sequelize's `findAndCountAll` / `bulkCreate` are not in it
-  yet.
+  `countDocuments`, …), Prisma's `findUniqueOrThrow` / `findFirstOrThrow` /
+  `groupBy` and Sequelize's `findAndCountAll` / `bulkCreate`.
+- Sequelize models are recognized when created with `sequelize.define(…)` or
+  a factory whose name says so; class-based models (`class Order extends
+  Model` with `Order.init(…)`, or `sequelize-typescript` decorators) are not
+  yet, so their calls create no data access.
 
 Blocks or informs: deeper ORM-specific long-term work and MCP data lineage
 queries.
