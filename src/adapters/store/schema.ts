@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 46;
+export const SCHEMA_VERSION = 47;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -39,6 +39,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Route", properties: { method: "STRING", path: "STRING", fullPath: "STRING", pathExpression: "STRING", receiverName: "STRING", line: "INT64", framework: "STRING", handlerName: "STRING", pendingHandlerRefs: "STRING", scopeFunctionId: "STRING" } },
   { label: "EntryPoint", properties: { kind: "STRING", trigger: "STRING", receiverName: "STRING", library: "STRING", line: "INT64", handlerName: "STRING" } },
   { label: "EnvVar", properties: { name: "STRING" } },
+  { label: "Page", properties: { path: "STRING", fullPath: "STRING", framework: "STRING", router: "STRING", kind: "STRING", slot: "STRING" } },
   { label: "Component", properties: { name: "STRING", framework: "STRING", kind: "STRING", tagName: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", pendingRenders: "STRING", hooks: "STRING", lazySource: "STRING", lazyExport: "STRING", defaultExportWrapper: "STRING" } },
   { label: "ConfigValue", properties: { name: "STRING", value: "STRING", valueType: "STRING", line: "INT64" } },
   { label: "DataModel", properties: { name: "STRING", library: "STRING", declaredIn: "STRING", line: "INT64" } },
@@ -82,6 +83,8 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "DECLARES_ENTRYPOINT", from: "File", to: "EntryPoint", properties: {} },
   { type: "ENTRYPOINT_HANDLED_BY", from: "EntryPoint", to: "Function", properties: {} },
   { type: "DECLARES_COMPONENT", from: "File", to: "Component", properties: {} },
+  { type: "DECLARES_PAGE", from: "File", to: "Page", properties: {} },
+  { type: "PAGE_RENDERS", from: "Page", to: "Component", properties: {} },
   { type: "COMPONENT_DEFINED_BY", from: "Component", to: "Class", properties: {} },
   { type: "COMPONENT_DEFINED_BY_FUNCTION", from: "Component", to: "Function", properties: {} },
   { type: "RENDERS", from: "Component", to: "Component", properties: { props: "STRING", line: "INT64" } },
@@ -143,6 +146,7 @@ export const nodeLabels = [
   "DataModel",
   "Table",
   "Component",
+  "Page",
 ] as const;
 export const relationshipTypes = relationshipTables.map((table) => table.type);
 
