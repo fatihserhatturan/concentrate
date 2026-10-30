@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { parseSyntaxTree, type GrammarName, type SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { ILanguageParser } from "../../../core/contracts/language-parser.js";
-import { parseJsTsSource, type JsTsFrameworkPlugin } from "../js-ts/parser.js";
+import { parseJsTsSource, type JsTsFrameworkPlugin, type ScriptBlock } from "../js-ts/parser.js";
 
 // Markup files: HTML pages and single-file components (.vue, .svelte,
 // .astro). `<script src>` becomes an Import of the file, and inline scripts
@@ -24,6 +24,10 @@ type ScriptElement = {
   body: CodeRange | null;
   // The `lang` attribute of a component script (`ts`, `tsx`, …).
   lang: string;
+  // Attribute names of the start tag, lowercase (`setup`, `context`, …).
+  attributeNames: string[];
+  line: number;
+  endLine: number;
 };
 
 // Code to keep; `end` is where a `;` goes (the start of `</script>` or of the
@@ -96,6 +100,13 @@ async function parseMarkup(
   // scripts say which in `lang`.
   const langs = language === "astro" ? ["ts"] : inline.map((script) => script.lang);
   const grammar = scriptGrammar(langs);
+  const blocks: ScriptBlock[] = inline.map((script) => ({
+    start: script.body!.start,
+    end: script.body!.end,
+    line: script.line,
+    endLine: script.endLine,
+    attributes: script.attributeNames,
+  }));
   const parsed: ParsedSourceFile = code.length > 0
     ? await parseJsTsSource(
       rootPath,
@@ -105,6 +116,7 @@ async function parseMarkup(
       plugins,
       language,
       grammar,
+      blocks,
     )
     : {
       fileNodeId,
@@ -165,7 +177,14 @@ function readScriptElement(node: SyntaxNode): ScriptElement | null {
   const body = raw && raw.text.trim() !== ""
     ? { start: raw.startIndex, end: raw.endIndex, separator: endTag ? endTag.startIndex : null }
     : null;
-  return { src, body, lang: attributeText(attributes.get("lang")).trim().toLowerCase() };
+  return {
+    src,
+    body,
+    lang: attributeText(attributes.get("lang")).trim().toLowerCase(),
+    attributeNames: [...attributes.keys()],
+    line: node.startPosition.row + 1,
+    endLine: node.endPosition.row + 1,
+  };
 }
 
 // The grammar for a file's scripts: TSX when one uses `lang="tsx"`, else

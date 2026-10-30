@@ -33,7 +33,7 @@
           },
           {
             "table": "Function",
-            "count": 5
+            "count": 6
           },
           {
             "table": "Class",
@@ -73,7 +73,7 @@
           },
           {
             "table": "EntryPoint",
-            "count": 1
+            "count": 2
           },
           {
             "table": "EnvVar",
@@ -127,7 +127,7 @@
         },
         {
           "table": "Function",
-          "count": 5
+          "count": 6
         },
         {
           "table": "Class",
@@ -167,7 +167,7 @@
         },
         {
           "table": "EntryPoint",
-          "count": 1
+          "count": 2
         },
         {
           "table": "EnvVar",
@@ -206,6 +206,14 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": [
+          {
+            "name": "<script setup>",
+            "kind": "Function",
+            "file": "src/components/CartButton.vue",
+            "line": 11,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
           {
             "name": "refresh",
             "kind": "Function",
@@ -291,6 +299,14 @@
       },
       "definitions": [
         {
+          "name": "<script setup>",
+          "kind": "Function",
+          "file": "src/components/CartButton.vue",
+          "line": 11,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "refresh",
           "kind": "Function",
           "file": "src/components/Total.svelte",
@@ -341,7 +357,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 6
+        "returned": 7
       }
     }
   },
@@ -514,6 +530,15 @@
         "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "file": "src/components/CartButton.vue",
+            "line": 2,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "vue",
+            "handlerName": "add",
+            "handler": "add"
+          },
+          {
             "file": "src/pages/index.astro",
             "line": 16,
             "kind": "dom-event",
@@ -531,6 +556,15 @@
       },
       "entrypoints": [
         {
+          "file": "src/components/CartButton.vue",
+          "line": 2,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "vue",
+          "handlerName": "add",
+          "handler": "add"
+        },
+        {
           "file": "src/pages/index.astro",
           "line": 16,
           "kind": "dom-event",
@@ -542,7 +576,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 1
+        "returned": 2
       }
     }
   },
@@ -825,6 +859,15 @@
             "path": "<root>/src/components/CartButton.vue",
             "line": 18,
             "endLine": 20
+          },
+          {
+            "id": "file:src/components/CartButton.vue:function:11:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/CartButton.vue",
+            "path": "<root>/src/components/CartButton.vue",
+            "line": 11,
+            "endLine": 21
           }
         ]
       },
@@ -960,7 +1003,14 @@
         "params": {
           "file": "src/components/CartButton.vue"
         },
-        "rows": []
+        "rows": [
+          {
+            "kind": "dom-event",
+            "trigger": "click",
+            "handlerName": "add",
+            "line": 2
+          }
+        ]
       }
     ],
     "output": {
@@ -979,9 +1029,21 @@
       ],
       "outline": [
         {
+          "kind": "entrypoint:dom-event",
+          "trigger": "click",
+          "handlerName": "add",
+          "line": 2
+        },
+        {
           "kind": "variable",
           "name": "name",
           "line": 8
+        },
+        {
+          "kind": "function",
+          "name": "<script setup>",
+          "line": 11,
+          "endLine": 21
         },
         {
           "kind": "variable",
@@ -1002,7 +1064,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 4
+        "returned": 6
       }
     }
   },

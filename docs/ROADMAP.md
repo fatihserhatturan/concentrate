@@ -695,8 +695,8 @@ Builds on the SFC splitter (Phase 10), the component schema (Phase 11), the page
 - [x] Components from `.vue` files: `<script setup>`, `defineComponent`, Options API; props from `defineProps` and `props`
 - [x] Template usage (`<UserCard>`, `<user-card>`) becomes `RENDERS`
 - [ ] Global `app.component` registrations
-- [ ] Composables become `USES_HOOK`
-- [ ] `@click` / `v-on` handlers become `EntryPoint` (kind `dom-event`)
+- [x] Composables become `USES_HOOK`
+- [x] `@click` / `v-on` handlers become `EntryPoint` (kind `dom-event`)
 - [ ] Vue Router route records become `Page` nodes
 
 ### Nuxt

@@ -21,19 +21,19 @@
           },
           {
             "table": "Directory",
-            "count": 3
+            "count": 4
           },
           {
             "table": "File",
-            "count": 6
+            "count": 9
           },
           {
             "table": "Import",
-            "count": 7
+            "count": 14
           },
           {
             "table": "Function",
-            "count": 2
+            "count": 12
           },
           {
             "table": "Class",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 7
+            "count": 19
           },
           {
             "table": "Route",
@@ -73,7 +73,7 @@
           },
           {
             "table": "EntryPoint",
-            "count": 0
+            "count": 5
           },
           {
             "table": "EnvVar",
@@ -93,7 +93,7 @@
           },
           {
             "table": "Component",
-            "count": 6
+            "count": 7
           },
           {
             "table": "Page",
@@ -115,19 +115,19 @@
         },
         {
           "table": "Directory",
-          "count": 3
+          "count": 4
         },
         {
           "table": "File",
-          "count": 6
+          "count": 9
         },
         {
           "table": "Import",
-          "count": 7
+          "count": 14
         },
         {
           "table": "Function",
-          "count": 2
+          "count": 12
         },
         {
           "table": "Class",
@@ -159,7 +159,7 @@
         },
         {
           "table": "Call",
-          "count": 7
+          "count": 19
         },
         {
           "table": "Route",
@@ -167,7 +167,7 @@
         },
         {
           "table": "EntryPoint",
-          "count": 0
+          "count": 5
         },
         {
           "table": "EnvVar",
@@ -187,7 +187,7 @@
         },
         {
           "table": "Component",
-          "count": 6
+          "count": 7
         },
         {
           "table": "Page",
@@ -207,10 +207,34 @@
         "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": [
           {
+            "name": "<script setup>",
+            "kind": "Function",
+            "file": "src/App.vue",
+            "line": 19,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<onMounted:arg0>",
+            "kind": "Function",
+            "file": "src/App.vue",
+            "line": 31,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
             "name": "select",
             "kind": "Function",
             "file": "src/App.vue",
-            "line": 24,
+            "line": 32,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "save",
+            "kind": "Function",
+            "file": "src/App.vue",
+            "line": 33,
             "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           },
@@ -218,8 +242,48 @@
             "name": "setup",
             "kind": "Function",
             "file": "src/components/ListItem.vue",
-            "line": 16,
+            "line": 17,
             "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "setup",
+            "kind": "Function",
+            "file": "src/components/SearchBox.vue",
+            "line": 10,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<script setup>",
+            "kind": "Function",
+            "file": "src/components/Tag.vue",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<script setup>",
+            "kind": "Function",
+            "file": "src/components/UserCard.vue",
+            "line": 8,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "useApi",
+            "kind": "Function",
+            "file": "src/composables/useApi.ts",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "useUsers",
+            "kind": "Function",
+            "file": "src/composables/useUsers.ts",
+            "line": 4,
+            "isExported": true,
             "relationship": "DEFINES_FUNCTION"
           }
         ]
@@ -237,15 +301,7 @@
             "name": "current",
             "kind": "Variable",
             "file": "src/App.vue",
-            "line": 21,
-            "isExported": false,
-            "relationship": "DEFINES_VARIABLE"
-          },
-          {
-            "name": "users",
-            "kind": "Variable",
-            "file": "src/App.vue",
-            "line": 22,
+            "line": 28,
             "isExported": false,
             "relationship": "DEFINES_VARIABLE"
           },
@@ -253,7 +309,7 @@
             "name": "view",
             "kind": "Variable",
             "file": "src/App.vue",
-            "line": 23,
+            "line": 30,
             "isExported": false,
             "relationship": "DEFINES_VARIABLE"
           },
@@ -261,7 +317,15 @@
             "name": "default",
             "kind": "Variable",
             "file": "src/components/ListItem.vue",
-            "line": 11,
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "src/components/SearchBox.vue",
+            "line": 9,
             "isExported": true,
             "relationship": "DEFINES_VARIABLE"
           },
@@ -299,10 +363,34 @@
       },
       "definitions": [
         {
+          "name": "<script setup>",
+          "kind": "Function",
+          "file": "src/App.vue",
+          "line": 19,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<onMounted:arg0>",
+          "kind": "Function",
+          "file": "src/App.vue",
+          "line": 31,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "select",
           "kind": "Function",
           "file": "src/App.vue",
-          "line": 24,
+          "line": 32,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "save",
+          "kind": "Function",
+          "file": "src/App.vue",
+          "line": 33,
           "isExported": false,
           "relationship": "DEFINES_FUNCTION"
         },
@@ -310,23 +398,55 @@
           "name": "setup",
           "kind": "Function",
           "file": "src/components/ListItem.vue",
-          "line": 16,
+          "line": 17,
           "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "setup",
+          "kind": "Function",
+          "file": "src/components/SearchBox.vue",
+          "line": 10,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<script setup>",
+          "kind": "Function",
+          "file": "src/components/Tag.vue",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<script setup>",
+          "kind": "Function",
+          "file": "src/components/UserCard.vue",
+          "line": 8,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "useApi",
+          "kind": "Function",
+          "file": "src/composables/useApi.ts",
+          "line": 1,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "useUsers",
+          "kind": "Function",
+          "file": "src/composables/useUsers.ts",
+          "line": 4,
+          "isExported": true,
           "relationship": "DEFINES_FUNCTION"
         },
         {
           "name": "current",
           "kind": "Variable",
           "file": "src/App.vue",
-          "line": 21,
-          "isExported": false,
-          "relationship": "DEFINES_VARIABLE"
-        },
-        {
-          "name": "users",
-          "kind": "Variable",
-          "file": "src/App.vue",
-          "line": 22,
+          "line": 28,
           "isExported": false,
           "relationship": "DEFINES_VARIABLE"
         },
@@ -334,7 +454,7 @@
           "name": "view",
           "kind": "Variable",
           "file": "src/App.vue",
-          "line": 23,
+          "line": 30,
           "isExported": false,
           "relationship": "DEFINES_VARIABLE"
         },
@@ -342,7 +462,15 @@
           "name": "default",
           "kind": "Variable",
           "file": "src/components/ListItem.vue",
-          "line": 11,
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "default",
+          "kind": "Variable",
+          "file": "src/components/SearchBox.vue",
+          "line": 9,
           "isExported": true,
           "relationship": "DEFINES_VARIABLE"
         },
@@ -357,7 +485,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 7
+        "returned": 15
       }
     }
   },
@@ -368,7 +496,22 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
-        "rows": []
+        "rows": [
+          {
+            "file": "src/composables/useApi.ts",
+            "name": "useApi",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/composables/useUsers.ts",
+            "name": "useUsers",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
       },
       {
         "method": "query",
@@ -383,7 +526,14 @@
             "file": "src/components/ListItem.vue",
             "name": "default",
             "kind": "Variable",
-            "line": 11,
+            "line": 12,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/components/SearchBox.vue",
+            "name": "default",
+            "kind": "Variable",
+            "line": 9,
             "relationship": "DEFINES_VARIABLE"
           },
           {
@@ -437,10 +587,31 @@
       },
       "exports": [
         {
+          "file": "src/composables/useApi.ts",
+          "name": "useApi",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/composables/useUsers.ts",
+          "name": "useUsers",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "file": "src/components/ListItem.vue",
           "name": "default",
           "kind": "Variable",
-          "line": 11,
+          "line": 12,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/components/SearchBox.vue",
+          "name": "default",
+          "kind": "Variable",
+          "line": 9,
           "relationship": "DEFINES_VARIABLE"
         },
         {
@@ -453,7 +624,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 2
+        "returned": 5
       }
     }
   },
@@ -485,17 +656,109 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
-        "rows": []
+        "rows": [
+          {
+            "file": "src/App.vue",
+            "line": 11,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "vue",
+            "handlerName": "select",
+            "handler": "select"
+          },
+          {
+            "file": "src/App.vue",
+            "line": 12,
+            "kind": "dom-event",
+            "trigger": "submit",
+            "library": "vue",
+            "handlerName": "save",
+            "handler": "save"
+          },
+          {
+            "file": "src/App.vue",
+            "line": 13,
+            "kind": "dom-event",
+            "trigger": "input",
+            "library": "vue",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/App.vue",
+            "line": 13,
+            "kind": "dom-event",
+            "trigger": "keyup",
+            "library": "vue",
+            "handlerName": "save",
+            "handler": "save"
+          },
+          {
+            "file": "src/components/SearchBox.vue",
+            "line": 2,
+            "kind": "dom-event",
+            "trigger": "keyup",
+            "library": "vue",
+            "handlerName": "submit",
+            "handler": "submit"
+          }
+        ]
       }
     ],
     "output": {
       "query": {
         "limit": 50
       },
-      "entrypoints": [],
+      "entrypoints": [
+        {
+          "file": "src/App.vue",
+          "line": 11,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "vue",
+          "handlerName": "select",
+          "handler": "select"
+        },
+        {
+          "file": "src/App.vue",
+          "line": 12,
+          "kind": "dom-event",
+          "trigger": "submit",
+          "library": "vue",
+          "handlerName": "save",
+          "handler": "save"
+        },
+        {
+          "file": "src/App.vue",
+          "line": 13,
+          "kind": "dom-event",
+          "trigger": "input",
+          "library": "vue",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/App.vue",
+          "line": 13,
+          "kind": "dom-event",
+          "trigger": "keyup",
+          "library": "vue",
+          "handlerName": "save",
+          "handler": "save"
+        },
+        {
+          "file": "src/components/SearchBox.vue",
+          "line": 2,
+          "kind": "dom-event",
+          "trigger": "keyup",
+          "library": "vue",
+          "handlerName": "submit",
+          "handler": "submit"
+        }
+      ],
       "page": {
         "offset": 0,
-        "returned": 0
+        "returned": 5
       }
     }
   },
@@ -584,11 +847,11 @@
             "framework": "vue",
             "file": "src/App.vue",
             "line": 1,
-            "endLine": 25,
+            "endLine": 36,
             "isExported": true,
             "tagName": null,
             "props": "title,query",
-            "hooks": null,
+            "hooks": "useUsers",
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
           },
           {
@@ -612,11 +875,25 @@
             "framework": "vue",
             "file": "src/components/ListItem.vue",
             "line": 1,
-            "endLine": 20,
+            "endLine": 22,
             "isExported": true,
             "tagName": null,
             "props": "item",
-            "hooks": null,
+            "hooks": "useUsers",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "name": "SearchBox",
+            "kind": "composition",
+            "framework": "vue",
+            "file": "src/components/SearchBox.vue",
+            "line": 1,
+            "endLine": 17,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useUsers",
             "pendingRenders": null
           },
           {
@@ -686,6 +963,12 @@
             "props": "label"
           },
           {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "line": 15,
+            "props": ""
+          },
+          {
             "parent": "file:src/components/ListItem.vue:component:1:ListItem",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 4,
@@ -703,7 +986,28 @@
         "method": "query",
         "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn",
         "params": {},
-        "rows": []
+        "rows": [
+          {
+            "component": "file:src/App.vue:component:1:App",
+            "fn": "file:src/App.vue:function:19:<script setup>"
+          },
+          {
+            "component": "file:src/components/ListItem.vue:component:1:ListItem",
+            "fn": "file:src/components/ListItem.vue:function:17:setup"
+          },
+          {
+            "component": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "fn": "file:src/components/SearchBox.vue:function:10:setup"
+          },
+          {
+            "component": "file:src/components/Tag.vue:component:1:TagChip",
+            "fn": "file:src/components/Tag.vue:function:5:<script setup>"
+          },
+          {
+            "component": "file:src/components/UserCard.vue:component:1:UserCard",
+            "fn": "file:src/components/UserCard.vue:function:8:<script setup>"
+          }
+        ]
       },
       {
         "method": "query",
@@ -717,20 +1021,100 @@
         "params": {},
         "rows": [
           {
-            "id": "file:src/App.vue:function:24:select",
+            "id": "file:src/App.vue:function:31:<onMounted:arg0>",
+            "name": "<onMounted:arg0>",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 31,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/App.vue:function:32:select",
             "name": "select",
             "className": null,
             "file": "src/App.vue",
-            "line": 24,
-            "endLine": 24
+            "line": 32,
+            "endLine": 32
           },
           {
-            "id": "file:src/components/ListItem.vue:function:16:setup",
+            "id": "file:src/App.vue:function:33:save",
+            "name": "save",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 33,
+            "endLine": 35
+          },
+          {
+            "id": "file:src/App.vue:function:19:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 19,
+            "endLine": 36
+          },
+          {
+            "id": "file:src/components/ListItem.vue:function:17:setup",
             "name": "setup",
             "className": null,
             "file": "src/components/ListItem.vue",
-            "line": 16,
-            "endLine": 18
+            "line": 17,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:function:13:submit",
+            "name": "submit",
+            "className": null,
+            "file": "src/components/SearchBox.vue",
+            "line": 13,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:function:10:setup",
+            "name": "setup",
+            "className": null,
+            "file": "src/components/SearchBox.vue",
+            "line": 10,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/components/Tag.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/Tag.vue",
+            "line": 5,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/components/UserCard.vue:function:8:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/UserCard.vue",
+            "line": 8,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/composables/useApi.ts:function:1:useApi",
+            "name": "useApi",
+            "className": null,
+            "file": "src/composables/useApi.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "name": "useUsers",
+            "className": null,
+            "file": "src/composables/useUsers.ts",
+            "line": 4,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/composables/useUsers.ts:function:7:load",
+            "name": "load",
+            "className": null,
+            "file": "src/composables/useUsers.ts",
+            "line": 7,
+            "endLine": 7
           }
         ]
       },
@@ -743,7 +1127,28 @@
       {
         "method": "query",
         "cypher": "MATCH (user:Function)-[rel:USES_HOOK]->(hook:Function) RETURN id(user) AS user, id(hook) AS hook, rel.line AS line",
-        "rows": []
+        "rows": [
+          {
+            "user": "file:src/App.vue:function:19:<script setup>",
+            "hook": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "line": 29
+          },
+          {
+            "user": "file:src/components/ListItem.vue:function:17:setup",
+            "hook": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "line": 18
+          },
+          {
+            "user": "file:src/components/SearchBox.vue:function:10:setup",
+            "hook": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "line": 12
+          },
+          {
+            "user": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "hook": "file:src/composables/useApi.ts:function:1:useApi",
+            "line": 6
+          }
+        ]
       },
       {
         "method": "query",
@@ -762,15 +1167,33 @@
           "framework": "vue",
           "file": "src/App.vue",
           "line": 1,
-          "endLine": 25,
+          "endLine": 36,
           "isExported": true,
           "props": [
             "title",
             "query"
           ],
-          "definedBy": null,
-          "hooks": [],
-          "customHooks": [],
+          "definedBy": {
+            "kind": "function",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 19,
+            "endLine": 36
+          },
+          "hooks": [
+            "useUsers"
+          ],
+          "customHooks": [
+            {
+              "name": "useUsers",
+              "className": null,
+              "file": "src/composables/useUsers.ts",
+              "line": 4,
+              "endLine": 9,
+              "calledAt": 29
+            }
+          ],
           "contexts": [],
           "renders": [
             {
@@ -810,6 +1233,16 @@
               "props": [
                 "label"
               ]
+            },
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.vue",
+              "line": 15,
+              "component": "SearchBox",
+              "componentKind": "composition",
+              "componentFile": "src/components/SearchBox.vue",
+              "props": []
             },
             {
               "depth": 2,
@@ -875,11 +1308,11 @@
             "framework": "vue",
             "file": "src/App.vue",
             "line": 1,
-            "endLine": 25,
+            "endLine": 36,
             "isExported": true,
             "tagName": null,
             "props": "title,query",
-            "hooks": null,
+            "hooks": "useUsers",
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
           },
           {
@@ -903,11 +1336,25 @@
             "framework": "vue",
             "file": "src/components/ListItem.vue",
             "line": 1,
-            "endLine": 20,
+            "endLine": 22,
             "isExported": true,
             "tagName": null,
             "props": "item",
-            "hooks": null,
+            "hooks": "useUsers",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "name": "SearchBox",
+            "kind": "composition",
+            "framework": "vue",
+            "file": "src/components/SearchBox.vue",
+            "line": 1,
+            "endLine": 17,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useUsers",
             "pendingRenders": null
           },
           {
@@ -975,6 +1422,12 @@
             "child": "file:src/components/Tag.vue:component:1:TagChip",
             "line": 5,
             "props": "label"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "line": 15,
+            "props": ""
           },
           {
             "parent": "file:src/components/ListItem.vue:component:1:ListItem",
@@ -1047,11 +1500,11 @@
             "framework": "vue",
             "file": "src/App.vue",
             "line": 1,
-            "endLine": 25,
+            "endLine": 36,
             "isExported": true,
             "tagName": null,
             "props": "title,query",
-            "hooks": null,
+            "hooks": "useUsers",
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
           },
           {
@@ -1075,11 +1528,25 @@
             "framework": "vue",
             "file": "src/components/ListItem.vue",
             "line": 1,
-            "endLine": 20,
+            "endLine": 22,
             "isExported": true,
             "tagName": null,
             "props": "item",
-            "hooks": null,
+            "hooks": "useUsers",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "name": "SearchBox",
+            "kind": "composition",
+            "framework": "vue",
+            "file": "src/components/SearchBox.vue",
+            "line": 1,
+            "endLine": 17,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useUsers",
             "pendingRenders": null
           },
           {
@@ -1149,6 +1616,12 @@
             "props": "label"
           },
           {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "line": 15,
+            "props": ""
+          },
+          {
             "parent": "file:src/components/ListItem.vue:component:1:ListItem",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 4,
@@ -1206,6 +1679,9 @@
             "file": "src/components/ListItem.vue"
           },
           {
+            "file": "src/components/SearchBox.vue"
+          },
+          {
             "file": "src/components/Tag.vue"
           },
           {
@@ -1213,6 +1689,12 @@
           },
           {
             "file": "src/components/UserList.vue"
+          },
+          {
+            "file": "src/composables/useApi.ts"
+          },
+          {
+            "file": "src/composables/useUsers.ts"
           }
         ]
       },
@@ -1372,6 +1854,536 @@
       "page": {
         "offset": 0,
         "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "useApi"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/App.vue:function:31:<onMounted:arg0>",
+            "name": "<onMounted:arg0>",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 31,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/App.vue:function:32:select",
+            "name": "select",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 32,
+            "endLine": 32
+          },
+          {
+            "id": "file:src/App.vue:function:33:save",
+            "name": "save",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 33,
+            "endLine": 35
+          },
+          {
+            "id": "file:src/App.vue:function:19:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 19,
+            "endLine": 36
+          },
+          {
+            "id": "file:src/components/ListItem.vue:function:17:setup",
+            "name": "setup",
+            "className": null,
+            "file": "src/components/ListItem.vue",
+            "line": 17,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:function:13:submit",
+            "name": "submit",
+            "className": null,
+            "file": "src/components/SearchBox.vue",
+            "line": 13,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:function:10:setup",
+            "name": "setup",
+            "className": null,
+            "file": "src/components/SearchBox.vue",
+            "line": 10,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/components/Tag.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/Tag.vue",
+            "line": 5,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/components/UserCard.vue:function:8:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/UserCard.vue",
+            "line": 8,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/composables/useApi.ts:function:1:useApi",
+            "name": "useApi",
+            "className": null,
+            "file": "src/composables/useApi.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "name": "useUsers",
+            "className": null,
+            "file": "src/composables/useUsers.ts",
+            "line": 4,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/composables/useUsers.ts:function:7:load",
+            "name": "load",
+            "className": null,
+            "file": "src/composables/useUsers.ts",
+            "line": 7,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/App.vue:function:19:<script setup>",
+            "callee": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "line": 29
+          },
+          {
+            "caller": "file:src/components/ListItem.vue:function:17:setup",
+            "callee": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "line": 18
+          },
+          {
+            "caller": "file:src/components/SearchBox.vue:function:10:setup",
+            "callee": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "line": 12
+          },
+          {
+            "caller": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "callee": "file:src/composables/useApi.ts:function:1:useApi",
+            "line": 6
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi",
+            "file:src/composables/useUsers.ts:function:4:useUsers",
+            "file:src/App.vue:function:19:<script setup>",
+            "file:src/components/ListItem.vue:function:17:setup",
+            "file:src/components/SearchBox.vue:function:10:setup"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi",
+            "file:src/composables/useUsers.ts:function:4:useUsers",
+            "file:src/App.vue:function:19:<script setup>",
+            "file:src/components/ListItem.vue:function:17:setup",
+            "file:src/components/SearchBox.vue:function:10:setup"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi",
+            "file:src/composables/useUsers.ts:function:4:useUsers",
+            "file:src/App.vue:function:19:<script setup>",
+            "file:src/components/ListItem.vue:function:17:setup",
+            "file:src/components/SearchBox.vue:function:10:setup"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi",
+            "file:src/composables/useUsers.ts:function:4:useUsers",
+            "file:src/App.vue:function:19:<script setup>",
+            "file:src/components/ListItem.vue:function:17:setup",
+            "file:src/components/SearchBox.vue:function:10:setup"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:src/App.vue:component:1:App",
+            "fn": "file:src/App.vue:function:19:<script setup>"
+          },
+          {
+            "component": "file:src/components/ListItem.vue:component:1:ListItem",
+            "fn": "file:src/components/ListItem.vue:function:17:setup"
+          },
+          {
+            "component": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "fn": "file:src/components/SearchBox.vue:function:10:setup"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi",
+            "file:src/composables/useUsers.ts:function:4:useUsers",
+            "file:src/App.vue:function:19:<script setup>",
+            "file:src/components/ListItem.vue:function:17:setup",
+            "file:src/components/SearchBox.vue:function:10:setup"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.vue:component:1:App",
+            "name": "App",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/App.vue",
+            "line": 1,
+            "endLine": 36,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,query",
+            "hooks": "useUsers",
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
+          },
+          {
+            "id": "file:src/components/Badge.vue:component:1:Badge",
+            "name": "Badge",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/components/Badge.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/ListItem.vue:component:1:ListItem",
+            "name": "ListItem",
+            "kind": "composition",
+            "framework": "vue",
+            "file": "src/components/ListItem.vue",
+            "line": 1,
+            "endLine": 22,
+            "isExported": true,
+            "tagName": null,
+            "props": "item",
+            "hooks": "useUsers",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "name": "SearchBox",
+            "kind": "composition",
+            "framework": "vue",
+            "file": "src/components/SearchBox.vue",
+            "line": 1,
+            "endLine": 17,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useUsers",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Tag.vue:component:1:TagChip",
+            "name": "TagChip",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/Tag.vue",
+            "line": 1,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "props": "label,color",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/UserCard.vue:component:1:UserCard",
+            "name": "UserCard",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/UserCard.vue",
+            "line": 1,
+            "endLine": 15,
+            "isExported": true,
+            "tagName": null,
+            "props": "user,title",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/UserList.vue:component:1:UserList",
+            "name": "UserList",
+            "kind": "options",
+            "framework": "vue",
+            "file": "src/components/UserList.vue",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "props": "modelValue,filter",
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/UserCard.vue:component:1:UserCard",
+            "line": 3,
+            "props": "user,title"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/UserList.vue:component:1:UserList",
+            "line": 4,
+            "props": "modelValue,filter"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/Tag.vue:component:1:TagChip",
+            "line": 5,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/components/ListItem.vue:component:1:ListItem",
+            "child": "file:src/components/Badge.vue:component:1:Badge",
+            "line": 4,
+            "props": "count"
+          },
+          {
+            "parent": "file:src/components/UserList.vue:component:1:UserList",
+            "child": "file:src/components/ListItem.vue:component:1:ListItem",
+            "line": 3,
+            "props": "key,item"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:src/App.vue:component:1:App",
+            "file:src/components/ListItem.vue:component:1:ListItem",
+            "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "file:src/components/UserList.vue:component:1:UserList"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "symbol": "useApi",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "useApi",
+          "className": null,
+          "file": "src/composables/useApi.ts",
+          "line": 1,
+          "endLine": 3
+        }
+      ],
+      "callers": [
+        {
+          "name": "useUsers",
+          "className": null,
+          "file": "src/composables/useUsers.ts",
+          "line": 4,
+          "endLine": 9,
+          "depth": 1
+        },
+        {
+          "name": "<script setup>",
+          "className": null,
+          "file": "src/App.vue",
+          "line": 19,
+          "endLine": 36,
+          "depth": 2
+        },
+        {
+          "name": "setup",
+          "className": null,
+          "file": "src/components/ListItem.vue",
+          "line": 17,
+          "endLine": 20,
+          "depth": 2
+        },
+        {
+          "name": "setup",
+          "className": null,
+          "file": "src/components/SearchBox.vue",
+          "line": 10,
+          "endLine": 15,
+          "depth": 2
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [],
+      "entrypoints": [],
+      "components": [
+        {
+          "name": "App",
+          "kind": "script-setup",
+          "file": "src/App.vue",
+          "line": 1,
+          "depth": 0,
+          "changedThrough": [
+            "<script setup>"
+          ]
+        },
+        {
+          "name": "ListItem",
+          "kind": "composition",
+          "file": "src/components/ListItem.vue",
+          "line": 1,
+          "depth": 0,
+          "changedThrough": [
+            "setup"
+          ]
+        },
+        {
+          "name": "SearchBox",
+          "kind": "composition",
+          "file": "src/components/SearchBox.vue",
+          "line": 1,
+          "depth": 0,
+          "changedThrough": [
+            "setup"
+          ]
+        },
+        {
+          "name": "UserList",
+          "kind": "options",
+          "file": "src/components/UserList.vue",
+          "line": 1,
+          "depth": 1,
+          "renders": [
+            "ListItem"
+          ]
+        }
+      ],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 4
       }
     }
   }

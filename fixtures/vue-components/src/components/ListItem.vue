@@ -7,6 +7,7 @@
 
 <script>
 import BadgeIcon from './Badge.vue';
+import { useUsers } from '../composables/useUsers';
 
 export default {
   components: { BadgeIcon },
@@ -14,6 +15,7 @@ export default {
     item: { type: Object, required: true },
   },
   setup(props) {
+    useUsers();
     return {};
   },
 };
