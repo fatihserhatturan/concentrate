@@ -37,7 +37,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "route_details",
-    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the downstream call chain (up to 4 levels), and the data access, env vars and config of the route and that chain. Each route lists its consumers (the frontend calls that reach it) with the components and pages whose code makes them. A GET also lists the UI pages at that path (Next.js, React Router, TanStack Router) with the component each renders and the same chain and resources for that component's code. ${budgetNote}`,
+    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the downstream call chain (up to 4 levels), and the data access, env vars and config of the route and that chain. Each route lists its consumers (the frontend calls that reach it) with the components and pages whose code makes them. A GET also lists the UI pages at that path (Next.js, React Router, TanStack Router, Vue Router) with the component each renders and the same chain and resources for that component's code. ${budgetNote}`,
     inputSchema: objectSchema({
       method: { type: "string", description: "HTTP method, case-insensitive (GET, post, ...)." },
       path: { type: "string", description: "Route or page path, matched against the resolved full path or the path as declared." },

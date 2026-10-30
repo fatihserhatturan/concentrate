@@ -697,7 +697,7 @@ Builds on the SFC splitter (Phase 10), the component schema (Phase 11), the page
 - [ ] Global `app.component` registrations
 - [x] Composables become `USES_HOOK`
 - [x] `@click` / `v-on` handlers become `EntryPoint` (kind `dom-event`)
-- [ ] Vue Router route records become `Page` nodes
+- [x] Vue Router route records become `Page` nodes
 
 ### Nuxt
 

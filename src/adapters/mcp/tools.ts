@@ -194,7 +194,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_pages",
-    description: "List UI pages (Next.js App and Pages Router, React Router, TanStack Router) with source file, line, path as declared, full URL path, router, kind (page, layout, index, ...) and the component each renders, ordered by full path.",
+    description: "List UI pages (Next.js App and Pages Router, React Router, TanStack Router, Vue Router) with source file, line, path as declared, full URL path, router, kind (page, layout, index, ...) and the component each renders, ordered by full path.",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -202,7 +202,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       framework: {
         type: "string",
-        description: "Optional framework filter: nextjs, react-router or tanstack-router.",
+        description: "Optional framework filter: nextjs, react-router, tanstack-router or vue-router.",
       },
       path: {
         type: "string",

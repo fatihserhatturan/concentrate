@@ -685,6 +685,19 @@
         "args": {
           "symbol": "useApi"
         }
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "GET",
+          "path": "/settings/security"
+        }
+      },
+      {
+        "tool": "list_pages",
+        "args": {
+          "framework": "vue-router"
+        }
       }
     ],
     "vanilla-html": [

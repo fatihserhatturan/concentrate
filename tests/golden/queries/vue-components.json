@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 54
+        "result": 55
       },
       {
         "method": "stats",
@@ -21,15 +21,15 @@
           },
           {
             "table": "Directory",
-            "count": 4
+            "count": 6
           },
           {
             "table": "File",
-            "count": 9
+            "count": 17
           },
           {
             "table": "Import",
-            "count": 14
+            "count": 23
           },
           {
             "table": "Function",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 6
+            "count": 8
           },
           {
             "table": "Decorator",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 19
+            "count": 20
           },
           {
             "table": "Route",
@@ -93,17 +93,17 @@
           },
           {
             "table": "Component",
-            "count": 7
+            "count": 13
           },
           {
             "table": "Page",
-            "count": 0
+            "count": 7
           }
         ]
       }
     ],
     "output": {
-      "schemaVersion": 54,
+      "schemaVersion": 55,
       "stats": [
         {
           "table": "Repo",
@@ -115,15 +115,15 @@
         },
         {
           "table": "Directory",
-          "count": 4
+          "count": 6
         },
         {
           "table": "File",
-          "count": 9
+          "count": 17
         },
         {
           "table": "Import",
-          "count": 14
+          "count": 23
         },
         {
           "table": "Function",
@@ -139,7 +139,7 @@
         },
         {
           "table": "Variable",
-          "count": 6
+          "count": 8
         },
         {
           "table": "Decorator",
@@ -159,7 +159,7 @@
         },
         {
           "table": "Call",
-          "count": 19
+          "count": 20
         },
         {
           "table": "Route",
@@ -187,11 +187,11 @@
         },
         {
           "table": "Component",
-          "count": 7
+          "count": 13
         },
         {
           "table": "Page",
-          "count": 0
+          "count": 7
         }
       ]
     }
@@ -334,6 +334,22 @@
             "kind": "Variable",
             "file": "src/components/UserList.vue",
             "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "router",
+            "kind": "Variable",
+            "file": "src/router/index.ts",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "routes",
+            "kind": "Variable",
+            "file": "src/router/routes.ts",
+            "line": 5,
             "isExported": true,
             "relationship": "DEFINES_VARIABLE"
           }
@@ -481,11 +497,27 @@
           "line": 12,
           "isExported": true,
           "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "router",
+          "kind": "Variable",
+          "file": "src/router/index.ts",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "routes",
+          "kind": "Variable",
+          "file": "src/router/routes.ts",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 15
+        "returned": 17
       }
     }
   },
@@ -541,6 +573,20 @@
             "name": "default",
             "kind": "Variable",
             "line": 12,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/router/index.ts",
+            "name": "router",
+            "kind": "Variable",
+            "line": 6,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/router/routes.ts",
+            "name": "routes",
+            "kind": "Variable",
+            "line": 5,
             "relationship": "DEFINES_VARIABLE"
           }
         ]
@@ -620,11 +666,25 @@
           "kind": "Variable",
           "line": 12,
           "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/router/index.ts",
+          "name": "router",
+          "kind": "Variable",
+          "line": 6,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/router/routes.ts",
+          "name": "routes",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 5
+        "returned": 7
       }
     }
   },
@@ -935,6 +995,90 @@
             "isExported": true,
             "tagName": null,
             "props": "modelValue,filter",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/AboutView.vue:component:1:AboutView",
+            "name": "AboutView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/AboutView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/HomeView.vue:component:1:HomeView",
+            "name": "HomeView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/HomeView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/SettingsLayout.vue:component:1:SettingsLayout",
+            "name": "SettingsLayout",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsLayout.vue",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":3}]"
+          },
+          {
+            "id": "file:src/views/SettingsProfile.vue:component:1:SettingsProfile",
+            "name": "SettingsProfile",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsProfile.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity",
+            "name": "SettingsSecurity",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsSecurity.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/UserView.vue:component:1:UserView",
+            "name": "UserView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/UserView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           }
@@ -1398,6 +1542,90 @@
             "props": "modelValue,filter",
             "hooks": null,
             "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/AboutView.vue:component:1:AboutView",
+            "name": "AboutView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/AboutView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/HomeView.vue:component:1:HomeView",
+            "name": "HomeView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/HomeView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/SettingsLayout.vue:component:1:SettingsLayout",
+            "name": "SettingsLayout",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsLayout.vue",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":3}]"
+          },
+          {
+            "id": "file:src/views/SettingsProfile.vue:component:1:SettingsProfile",
+            "name": "SettingsProfile",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsProfile.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity",
+            "name": "SettingsSecurity",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsSecurity.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/UserView.vue:component:1:UserView",
+            "name": "UserView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/UserView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
           }
         ]
       },
@@ -1590,6 +1818,90 @@
             "props": "modelValue,filter",
             "hooks": null,
             "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/AboutView.vue:component:1:AboutView",
+            "name": "AboutView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/AboutView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/HomeView.vue:component:1:HomeView",
+            "name": "HomeView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/HomeView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/SettingsLayout.vue:component:1:SettingsLayout",
+            "name": "SettingsLayout",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsLayout.vue",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":3}]"
+          },
+          {
+            "id": "file:src/views/SettingsProfile.vue:component:1:SettingsProfile",
+            "name": "SettingsProfile",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsProfile.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity",
+            "name": "SettingsSecurity",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsSecurity.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/UserView.vue:component:1:UserView",
+            "name": "UserView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/UserView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
           }
         ]
       },
@@ -1695,6 +2007,30 @@
           },
           {
             "file": "src/composables/useUsers.ts"
+          },
+          {
+            "file": "src/router/index.ts"
+          },
+          {
+            "file": "src/router/routes.ts"
+          },
+          {
+            "file": "src/views/AboutView.vue"
+          },
+          {
+            "file": "src/views/HomeView.vue"
+          },
+          {
+            "file": "src/views/SettingsLayout.vue"
+          },
+          {
+            "file": "src/views/SettingsProfile.vue"
+          },
+          {
+            "file": "src/views/SettingsSecurity.vue"
+          },
+          {
+            "file": "src/views/UserView.vue"
           }
         ]
       },
@@ -2222,6 +2558,90 @@
             "props": "modelValue,filter",
             "hooks": null,
             "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/AboutView.vue:component:1:AboutView",
+            "name": "AboutView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/AboutView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/HomeView.vue:component:1:HomeView",
+            "name": "HomeView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/HomeView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/SettingsLayout.vue:component:1:SettingsLayout",
+            "name": "SettingsLayout",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsLayout.vue",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":3}]"
+          },
+          {
+            "id": "file:src/views/SettingsProfile.vue:component:1:SettingsProfile",
+            "name": "SettingsProfile",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsProfile.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity",
+            "name": "SettingsSecurity",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/SettingsSecurity.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/views/UserView.vue:component:1:UserView",
+            "name": "UserView",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/views/UserView.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
           }
         ]
       },
@@ -2384,6 +2804,487 @@
       "page": {
         "offset": 0,
         "returned": 4
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "GET",
+      "path": "/settings/security"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "GET",
+          "path": "/settings/security"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE page.fullPath = $path OR page.path = $path OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component) RETURN id(page) AS id, page.path AS path, page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, id(component) AS component, component.name AS componentName ORDER BY file, line LIMIT 5",
+        "params": {
+          "path": "/settings/security"
+        },
+        "rows": [
+          {
+            "id": "file:src/router/routes.ts:page:13:6",
+            "path": "security",
+            "fullPath": "/settings/security",
+            "framework": "vue-router",
+            "router": "object",
+            "kind": "page",
+            "slot": null,
+            "file": "src/router/routes.ts",
+            "line": 13,
+            "component": "file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity",
+            "componentName": "SettingsSecurity"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/App.vue:function:31:<onMounted:arg0>",
+            "name": "<onMounted:arg0>",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 31,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/App.vue:function:32:select",
+            "name": "select",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 32,
+            "endLine": 32
+          },
+          {
+            "id": "file:src/App.vue:function:33:save",
+            "name": "save",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 33,
+            "endLine": 35
+          },
+          {
+            "id": "file:src/App.vue:function:19:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 19,
+            "endLine": 36
+          },
+          {
+            "id": "file:src/components/ListItem.vue:function:17:setup",
+            "name": "setup",
+            "className": null,
+            "file": "src/components/ListItem.vue",
+            "line": 17,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:function:13:submit",
+            "name": "submit",
+            "className": null,
+            "file": "src/components/SearchBox.vue",
+            "line": 13,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:function:10:setup",
+            "name": "setup",
+            "className": null,
+            "file": "src/components/SearchBox.vue",
+            "line": 10,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/components/Tag.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/Tag.vue",
+            "line": 5,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/components/UserCard.vue:function:8:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/UserCard.vue",
+            "line": 8,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/composables/useApi.ts:function:1:useApi",
+            "name": "useApi",
+            "className": null,
+            "file": "src/composables/useApi.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "name": "useUsers",
+            "className": null,
+            "file": "src/composables/useUsers.ts",
+            "line": 4,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/composables/useUsers.ts:function:7:load",
+            "name": "load",
+            "className": null,
+            "file": "src/composables/useUsers.ts",
+            "line": 7,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/App.vue:function:19:<script setup>",
+            "callee": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "line": 29
+          },
+          {
+            "caller": "file:src/components/ListItem.vue:function:17:setup",
+            "callee": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "line": 18
+          },
+          {
+            "caller": "file:src/components/SearchBox.vue:function:10:setup",
+            "callee": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "line": 12
+          },
+          {
+            "caller": "file:src/composables/useUsers.ts:function:4:useUsers",
+            "callee": "file:src/composables/useApi.ts:function:1:useApi",
+            "line": 6
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn",
+        "params": {},
+        "rows": [
+          {
+            "component": "file:src/App.vue:component:1:App",
+            "fn": "file:src/App.vue:function:19:<script setup>"
+          },
+          {
+            "component": "file:src/components/ListItem.vue:component:1:ListItem",
+            "fn": "file:src/components/ListItem.vue:function:17:setup"
+          },
+          {
+            "component": "file:src/components/SearchBox.vue:component:1:SearchBox",
+            "fn": "file:src/components/SearchBox.vue:function:10:setup"
+          },
+          {
+            "component": "file:src/components/Tag.vue:component:1:TagChip",
+            "fn": "file:src/components/Tag.vue:function:5:<script setup>"
+          },
+          {
+            "component": "file:src/components/UserCard.vue:component:1:UserCard",
+            "fn": "file:src/components/UserCard.vue:function:8:<script setup>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) WHERE id(component) IN $ids RETURN id(component) AS id, file.relativePath AS file, component.line AS line",
+        "params": {
+          "ids": [
+            "file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/views/SettingsSecurity.vue:component:1:SettingsSecurity",
+            "file": "src/views/SettingsSecurity.vue",
+            "line": 1
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "method": "GET",
+      "path": "/settings/security",
+      "routes": [],
+      "pages": [
+        {
+          "path": "security",
+          "fullPath": "/settings/security",
+          "framework": "vue-router",
+          "router": "object",
+          "kind": "page",
+          "slot": null,
+          "file": "src/router/routes.ts",
+          "line": 13,
+          "component": {
+            "name": "SettingsSecurity",
+            "file": "src/views/SettingsSecurity.vue",
+            "line": 1
+          },
+          "callChain": [],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_pages",
+    "args": {
+      "framework": "vue-router"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true AND page.framework = \"vue-router\" OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "rows": [
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "vue-router",
+            "router": "object",
+            "kind": "page",
+            "slot": null,
+            "file": "src/router/routes.ts",
+            "line": 6,
+            "component": "HomeView",
+            "componentFile": "src/views/HomeView.vue"
+          },
+          {
+            "fullPath": "/about",
+            "path": "/about",
+            "framework": "vue-router",
+            "router": "object",
+            "kind": "page",
+            "slot": null,
+            "file": "src/router/routes.ts",
+            "line": 7,
+            "component": "AboutView",
+            "componentFile": "src/views/AboutView.vue"
+          },
+          {
+            "fullPath": "/old-home",
+            "path": "/old-home",
+            "framework": "vue-router",
+            "router": "object",
+            "kind": "redirect",
+            "slot": null,
+            "file": "src/router/routes.ts",
+            "line": 16,
+            "component": null,
+            "componentFile": null
+          },
+          {
+            "fullPath": "/settings",
+            "path": "/settings",
+            "framework": "vue-router",
+            "router": "object",
+            "kind": "layout",
+            "slot": null,
+            "file": "src/router/routes.ts",
+            "line": 8,
+            "component": "SettingsLayout",
+            "componentFile": "src/views/SettingsLayout.vue"
+          },
+          {
+            "fullPath": "/settings",
+            "path": "",
+            "framework": "vue-router",
+            "router": "object",
+            "kind": "index",
+            "slot": null,
+            "file": "src/router/routes.ts",
+            "line": 12,
+            "component": "SettingsProfile",
+            "componentFile": "src/views/SettingsProfile.vue"
+          },
+          {
+            "fullPath": "/settings/security",
+            "path": "security",
+            "framework": "vue-router",
+            "router": "object",
+            "kind": "page",
+            "slot": null,
+            "file": "src/router/routes.ts",
+            "line": 13,
+            "component": "SettingsSecurity",
+            "componentFile": "src/views/SettingsSecurity.vue"
+          },
+          {
+            "fullPath": "/users/:id",
+            "path": "/users/:id",
+            "framework": "vue-router",
+            "router": "object",
+            "kind": "page",
+            "slot": null,
+            "file": "src/router/index.ts",
+            "line": 8,
+            "component": "UserView",
+            "componentFile": "src/views/UserView.vue"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "framework": "vue-router",
+        "limit": 50
+      },
+      "pages": [
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "vue-router",
+          "router": "object",
+          "kind": "page",
+          "slot": null,
+          "file": "src/router/routes.ts",
+          "line": 6,
+          "component": "HomeView",
+          "componentFile": "src/views/HomeView.vue"
+        },
+        {
+          "fullPath": "/about",
+          "path": "/about",
+          "framework": "vue-router",
+          "router": "object",
+          "kind": "page",
+          "slot": null,
+          "file": "src/router/routes.ts",
+          "line": 7,
+          "component": "AboutView",
+          "componentFile": "src/views/AboutView.vue"
+        },
+        {
+          "fullPath": "/old-home",
+          "path": "/old-home",
+          "framework": "vue-router",
+          "router": "object",
+          "kind": "redirect",
+          "slot": null,
+          "file": "src/router/routes.ts",
+          "line": 16,
+          "component": null,
+          "componentFile": null
+        },
+        {
+          "fullPath": "/settings",
+          "path": "/settings",
+          "framework": "vue-router",
+          "router": "object",
+          "kind": "layout",
+          "slot": null,
+          "file": "src/router/routes.ts",
+          "line": 8,
+          "component": "SettingsLayout",
+          "componentFile": "src/views/SettingsLayout.vue"
+        },
+        {
+          "fullPath": "/settings",
+          "path": "",
+          "framework": "vue-router",
+          "router": "object",
+          "kind": "index",
+          "slot": null,
+          "file": "src/router/routes.ts",
+          "line": 12,
+          "component": "SettingsProfile",
+          "componentFile": "src/views/SettingsProfile.vue"
+        },
+        {
+          "fullPath": "/settings/security",
+          "path": "security",
+          "framework": "vue-router",
+          "router": "object",
+          "kind": "page",
+          "slot": null,
+          "file": "src/router/routes.ts",
+          "line": 13,
+          "component": "SettingsSecurity",
+          "componentFile": "src/views/SettingsSecurity.vue"
+        },
+        {
+          "fullPath": "/users/:id",
+          "path": "/users/:id",
+          "framework": "vue-router",
+          "router": "object",
+          "kind": "page",
+          "slot": null,
+          "file": "src/router/index.ts",
+          "line": 8,
+          "component": "UserView",
+          "componentFile": "src/views/UserView.vue"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
       }
     }
   }
