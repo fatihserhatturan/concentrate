@@ -660,14 +660,14 @@ Links outbound HTTP calls to the `Route` nodes the backend phases already build.
 
 ### Clients
 
-- [ ] `fetch`, `axios` (including instances created with `baseURL`), `ky`, `ofetch` / `$fetch`
+- [x] `fetch`, `axios` (including instances created with `baseURL`), `ky`, `ofetch` / `$fetch`
 - [ ] SWR and TanStack Query keys and fetchers
 - [ ] tRPC: client procedure calls to router procedures
 
 ### Matching
 
 - [ ] URLs from literals, template strings and constants; base URLs from config and env
-- [ ] Match against `Route.fullPath` with method and parameter segments, across packages in a monorepo
+- [x] Match against `Route.fullPath` with method and parameter segments, across packages in a monorepo
 - [ ] Env: destructured reads (#58), `import.meta.env` (#59), `NEXT_PUBLIC_*` and `VITE_*`
 
 ### MCP
