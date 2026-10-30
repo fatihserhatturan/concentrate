@@ -1,6 +1,6 @@
 import path from "node:path";
 
-export type SupportedLanguage = "javascript" | "typescript" | "python" | "go" | "rust";
+export type SupportedLanguage = "javascript" | "typescript" | "html" | "python" | "go" | "rust";
 
 const extensionToLanguage = new Map<string, SupportedLanguage>([
   [".js", "javascript"],
@@ -11,6 +11,8 @@ const extensionToLanguage = new Map<string, SupportedLanguage>([
   [".tsx", "typescript"],
   [".mts", "typescript"],
   [".cts", "typescript"],
+  [".html", "html"],
+  [".htm", "html"],
   [".py", "python"],
   [".go", "go"],
   [".rs", "rust"],

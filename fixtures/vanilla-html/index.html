@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Todo</title>
+  <script src="js/store.js"></script>
+  <script src="js/vendor.js?v=3" defer></script>
+  <script src="https://cdn.example.com/lib.js"></script>
+  <script type="application/ld+json">{ "@type": "WebSite" }</script>
+</head>
+<body>
+  <ul id="todos"></ul>
+  <script>function renderTodos() { return loadTodos().map(String); }</script><script>renderTodos();</script>
+  <script type="module">
+    import { formatTodo } from './js/format.js';
+
+    export function showFirst() {
+      return formatTodo(renderTodos()[0]);
+    }
+  </script>
+</body>
+</html>

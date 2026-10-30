@@ -330,17 +330,31 @@ export interface JsTsFrameworkPlugin {
 export async function parseJsTsFile(
   rootPath: string,
   filePath: string,
-  language: SupportedLanguage,
+  language: "javascript" | "typescript",
   plugins: readonly JsTsFrameworkPlugin[] = [],
 ): Promise<ParsedSourceFile> {
-  const source = await readFile(filePath, "utf8");
+  return parseJsTsSource(rootPath, filePath, await readFile(filePath, "utf8"), language, plugins);
+}
+
+// Parses `source` as the JS/TS of `filePath`. Files that embed scripts (HTML,
+// single-file components) pass their text with everything but the script
+// blanked out, so positions point into the original file, and their own
+// `fileLanguage` for the File node.
+export async function parseJsTsSource(
+  rootPath: string,
+  filePath: string,
+  source: string,
+  language: "javascript" | "typescript",
+  plugins: readonly JsTsFrameworkPlugin[] = [],
+  fileLanguage: SupportedLanguage = language,
+): Promise<ParsedSourceFile> {
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
 
   const fileNode: GraphNode = {
     id: fileNodeId,
     label: "File",
-    properties: { path: filePath, relativePath, language },
+    properties: { path: filePath, relativePath, language: fileLanguage },
   };
 
   const { tree, warnings } = await parseTolerantTree(source, language, filePath);

@@ -653,6 +653,26 @@
           "file": "src/orders.ts"
         }
       }
+    ],
+    "vanilla-html": [
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "loadTodos"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "formatTodo"
+        }
+      },
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "index.html"
+        }
+      }
     ]
   }
 }

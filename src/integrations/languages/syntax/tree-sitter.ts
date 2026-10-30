@@ -7,7 +7,7 @@ import { Language, Parser, type Node, type Tree } from "web-tree-sitter";
 
 export type SyntaxNode = Node;
 export type SyntaxTree = Tree;
-export type GrammarName = "javascript" | "typescript" | "tsx" | "python" | "go" | "rust";
+export type GrammarName = "javascript" | "typescript" | "tsx" | "html" | "python" | "go" | "rust";
 
 const grammarsDirectory = fileURLToPath(new URL("../../../../vendor/grammars/", import.meta.url));
 

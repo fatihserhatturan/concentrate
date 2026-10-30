@@ -211,7 +211,20 @@ Blocks or informs: future query server design.
   as before. Python, Go and Rust files with syntax errors are still reported
   as failed files (`--continue-on-error` keeps the rest of the scan).
 
-Blocks or informs: ROADMAP Phase 11 (React).
+- HTML pages (`.html`, `.htm`): `<script src>` becomes an `Import` of the
+  page; a relative path resolves like `./path` (without `?query` / `#hash`).
+  Root-relative paths (`/client.js`) and URLs are kept as written but not
+  resolved, since the web root is not known. Inline scripts with a JavaScript
+  `type` (none, `module`, `text/javascript`, …) are parsed as JavaScript of the
+  page, with positions in the `.html` file; other script types (JSON, import
+  maps, templates) are skipped. Server templates saved as `.html` (EJS,
+  Handlebars) are read as plain HTML, so template tags inside a script make
+  those statements syntax errors that are left out. Event handler attributes
+  (`onclick="…"`), `addEventListener` and custom elements are not modelled
+  yet.
+
+Blocks or informs: ROADMAP Phase 10 (DOM events, web components, single-file
+components) and Phase 11 (React).
 
 ## Review Process
 

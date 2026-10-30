@@ -553,7 +553,7 @@ Today `.tsx` is parsed with the TypeScript grammar, which has no JSX (`src/core/
 ### Grammars
 
 - [x] Parse `.tsx` with the TSX grammar (built from the pinned `tree-sitter-typescript` package, `tsx` directory)
-- [ ] Vendor the official `tree-sitter-html` grammar as `.wasm` through `npm run grammars:build`
+- [x] Vendor the official `tree-sitter-html` grammar as `.wasm` through `npm run grammars:build`
 - [x] Produce a partial graph plus a scan warning instead of rejecting a file whose tree has `ERROR` nodes; review the golden diffs
 
 ### Single-file components
@@ -564,7 +564,7 @@ Today `.tsx` is parsed with the TypeScript grammar, which has no JSX (`src/core/
 
 ### Vanilla JS
 
-- [ ] `<script src>` and `<script type="module">` in `.html` files become `IMPORTS` / `RESOLVES_TO`; inline `<script>` blocks are parsed
+- [x] `<script src>` and `<script type="module">` in `.html` files become `IMPORTS` / `RESOLVES_TO`; inline `<script>` blocks are parsed
 - [ ] `addEventListener(...)` and `on*` attributes become `EntryPoint` nodes (kind `dom-event`, trigger = event name) linked to their handler
 - [ ] `customElements.define('x-tag', Class)` becomes a `Component` (kind `web-component`)
 
