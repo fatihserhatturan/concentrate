@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 45
+        "result": 46
       },
       {
         "method": "stats",
@@ -25,15 +25,15 @@
           },
           {
             "table": "File",
-            "count": 13
+            "count": 15
           },
           {
             "table": "Import",
-            "count": 25
+            "count": 30
           },
           {
             "table": "Function",
-            "count": 20
+            "count": 23
           },
           {
             "table": "Class",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 7
+            "count": 9
           },
           {
             "table": "Decorator",
@@ -93,13 +93,13 @@
           },
           {
             "table": "Component",
-            "count": 16
+            "count": 17
           }
         ]
       }
     ],
     "output": {
-      "schemaVersion": 45,
+      "schemaVersion": 46,
       "stats": [
         {
           "table": "Repo",
@@ -115,15 +115,15 @@
         },
         {
           "table": "File",
-          "count": 13
+          "count": 15
         },
         {
           "table": "Import",
-          "count": 25
+          "count": 30
         },
         {
           "table": "Function",
-          "count": 20
+          "count": 23
         },
         {
           "table": "Class",
@@ -135,7 +135,7 @@
         },
         {
           "table": "Variable",
-          "count": 7
+          "count": 9
         },
         {
           "table": "Decorator",
@@ -183,7 +183,7 @@
         },
         {
           "table": "Component",
-          "count": 16
+          "count": 17
         }
       ]
     }
@@ -263,6 +263,30 @@
             "relationship": "DEFINES_FUNCTION"
           },
           {
+            "name": "mapStateToProps",
+            "kind": "Function",
+            "file": "src/components/Profile.jsx",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "ProfileView",
+            "kind": "Function",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "reducer",
+            "kind": "Function",
+            "file": "src/components/Store.js",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
             "name": "Reports",
             "kind": "Function",
             "file": "src/pages/Reports.tsx",
@@ -282,7 +306,7 @@
             "name": "loadArchive",
             "kind": "Function",
             "file": "src/pages/routes.tsx",
-            "line": 8,
+            "line": 9,
             "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           },
@@ -290,7 +314,7 @@
             "name": "Pages",
             "kind": "Function",
             "file": "src/pages/routes.tsx",
-            "line": 11,
+            "line": 12,
             "isExported": true,
             "relationship": "DEFINES_FUNCTION"
           }
@@ -331,15 +355,23 @@
             "relationship": "DEFINES_VARIABLE"
           },
           {
-            "name": "Settings",
+            "name": "default",
             "kind": "Variable",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "isExported": false,
+            "file": "src/components/Profile.jsx",
+            "line": 11,
+            "isExported": true,
             "relationship": "DEFINES_VARIABLE"
           },
           {
-            "name": "Reports",
+            "name": "default",
+            "kind": "Variable",
+            "file": "src/components/Store.js",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Settings",
             "kind": "Variable",
             "file": "src/pages/routes.tsx",
             "line": 4,
@@ -347,10 +379,18 @@
             "relationship": "DEFINES_VARIABLE"
           },
           {
+            "name": "Reports",
+            "kind": "Variable",
+            "file": "src/pages/routes.tsx",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
             "name": "Archive",
             "kind": "Variable",
             "file": "src/pages/routes.tsx",
-            "line": 9,
+            "line": 10,
             "isExported": false,
             "relationship": "DEFINES_VARIABLE"
           }
@@ -453,6 +493,30 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "name": "mapStateToProps",
+          "kind": "Function",
+          "file": "src/components/Profile.jsx",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "ProfileView",
+          "kind": "Function",
+          "file": "src/components/Profile.jsx",
+          "line": 9,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "reducer",
+          "kind": "Function",
+          "file": "src/components/Store.js",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "Reports",
           "kind": "Function",
           "file": "src/pages/Reports.tsx",
@@ -472,7 +536,7 @@
           "name": "loadArchive",
           "kind": "Function",
           "file": "src/pages/routes.tsx",
-          "line": 8,
+          "line": 9,
           "isExported": false,
           "relationship": "DEFINES_FUNCTION"
         },
@@ -480,7 +544,7 @@
           "name": "Pages",
           "kind": "Function",
           "file": "src/pages/routes.tsx",
-          "line": 11,
+          "line": 12,
           "isExported": true,
           "relationship": "DEFINES_FUNCTION"
         },
@@ -509,41 +573,26 @@
           "relationship": "DEFINES_VARIABLE"
         },
         {
-          "name": "Settings",
+          "name": "default",
           "kind": "Variable",
-          "file": "src/pages/routes.tsx",
-          "line": 3,
-          "isExported": false,
+          "file": "src/components/Profile.jsx",
+          "line": 11,
+          "isExported": true,
           "relationship": "DEFINES_VARIABLE"
         },
         {
-          "name": "Reports",
+          "name": "default",
           "kind": "Variable",
-          "file": "src/pages/routes.tsx",
-          "line": 4,
-          "isExported": false,
+          "file": "src/components/Store.js",
+          "line": 6,
+          "isExported": true,
           "relationship": "DEFINES_VARIABLE"
-        },
-        {
-          "name": "Archive",
-          "kind": "Variable",
-          "file": "src/pages/routes.tsx",
-          "line": 9,
-          "isExported": false,
-          "relationship": "DEFINES_VARIABLE"
-        },
-        {
-          "name": "User",
-          "kind": "TypeAlias",
-          "file": "src/App.tsx",
-          "line": 8,
-          "isExported": false,
-          "relationship": "DEFINES_TYPE_ALIAS"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 19
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
       }
     }
   },
@@ -615,7 +664,7 @@
             "file": "src/pages/routes.tsx",
             "name": "Pages",
             "kind": "Function",
-            "line": 11,
+            "line": 12,
             "relationship": "DEFINES_FUNCTION"
           }
         ]
@@ -663,6 +712,20 @@
             "name": "Input",
             "kind": "Variable",
             "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/components/Profile.jsx",
+            "name": "default",
+            "kind": "Variable",
+            "line": 11,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/components/Store.js",
+            "name": "default",
+            "kind": "Variable",
+            "line": 6,
             "relationship": "DEFINES_VARIABLE"
           }
         ]
@@ -776,7 +839,7 @@
           "file": "src/pages/routes.tsx",
           "name": "Pages",
           "kind": "Function",
-          "line": 11,
+          "line": 12,
           "relationship": "DEFINES_FUNCTION"
         },
         {
@@ -815,6 +878,20 @@
           "relationship": "DEFINES_VARIABLE"
         },
         {
+          "file": "src/components/Profile.jsx",
+          "name": "default",
+          "kind": "Variable",
+          "line": 11,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/components/Store.js",
+          "name": "default",
+          "kind": "Variable",
+          "line": 6,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
           "file": "src/cart/CartContext.tsx",
           "name": "Cart",
           "kind": "TypeAlias",
@@ -824,7 +901,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 15
+        "returned": 17
       }
     }
   },
@@ -973,6 +1050,12 @@
           },
           {
             "file": "src/components/Legacy.jsx"
+          },
+          {
+            "file": "src/components/Profile.jsx"
+          },
+          {
+            "file": "src/components/Store.js"
           },
           {
             "file": "src/components/index.ts"
@@ -1370,6 +1453,30 @@
             "isExported": false
           },
           {
+            "id": "file:src/components/Profile.jsx:function:5:mapStateToProps",
+            "name": "mapStateToProps",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 5,
+            "isExported": false
+          },
+          {
+            "id": "file:src/components/Profile.jsx:function:9:ProfileView",
+            "name": "ProfileView",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "isExported": false
+          },
+          {
+            "id": "file:src/components/Store.js:function:3:reducer",
+            "name": "reducer",
+            "className": null,
+            "file": "src/components/Store.js",
+            "line": 3,
+            "isExported": false
+          },
+          {
             "id": "file:src/pages/Reports.tsx:function:3:Reports",
             "name": "Reports",
             "className": null,
@@ -1386,14 +1493,6 @@
             "isExported": true
           },
           {
-            "id": "file:src/pages/routes.tsx:function:3:<lazy:arg0>",
-            "name": "<lazy:arg0>",
-            "className": null,
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "isExported": false
-          },
-          {
             "id": "file:src/pages/routes.tsx:function:4:<lazy:arg0>",
             "name": "<lazy:arg0>",
             "className": null,
@@ -1402,19 +1501,27 @@
             "isExported": false
           },
           {
-            "id": "file:src/pages/routes.tsx:function:8:loadArchive",
-            "name": "loadArchive",
+            "id": "file:src/pages/routes.tsx:function:5:<lazy:arg0>",
+            "name": "<lazy:arg0>",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 8,
+            "line": 5,
             "isExported": false
           },
           {
-            "id": "file:src/pages/routes.tsx:function:11:Pages",
+            "id": "file:src/pages/routes.tsx:function:9:loadArchive",
+            "name": "loadArchive",
+            "className": null,
+            "file": "src/pages/routes.tsx",
+            "line": 9,
+            "isExported": false
+          },
+          {
+            "id": "file:src/pages/routes.tsx:function:12:Pages",
             "name": "Pages",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 11,
+            "line": 12,
             "isExported": true
           }
         ]
@@ -1524,27 +1631,43 @@
             "isExported": true
           },
           {
-            "id": "file:src/pages/routes.tsx:variable:3:Settings",
-            "name": "Settings",
+            "id": "file:src/components/Profile.jsx:variable:11:default",
+            "name": "default",
             "className": null,
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "isExported": false
+            "file": "src/components/Profile.jsx",
+            "line": 11,
+            "isExported": true
           },
           {
-            "id": "file:src/pages/routes.tsx:variable:4:Reports",
-            "name": "Reports",
+            "id": "file:src/components/Store.js:variable:6:default",
+            "name": "default",
+            "className": null,
+            "file": "src/components/Store.js",
+            "line": 6,
+            "isExported": true
+          },
+          {
+            "id": "file:src/pages/routes.tsx:variable:4:Settings",
+            "name": "Settings",
             "className": null,
             "file": "src/pages/routes.tsx",
             "line": 4,
             "isExported": false
           },
           {
-            "id": "file:src/pages/routes.tsx:variable:9:Archive",
+            "id": "file:src/pages/routes.tsx:variable:5:Reports",
+            "name": "Reports",
+            "className": null,
+            "file": "src/pages/routes.tsx",
+            "line": 5,
+            "isExported": false
+          },
+          {
+            "id": "file:src/pages/routes.tsx:variable:10:Archive",
             "name": "Archive",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 9,
+            "line": 10,
             "isExported": false
           }
         ]
@@ -1792,6 +1915,62 @@
             "bindings": "[{\"imported\":\"Button\",\"local\":\"Button\",\"kind\":\"named\"}]"
           },
           {
+            "id": "file:src/components/Profile.jsx:import:1:react-redux",
+            "file": "src/components/Profile.jsx",
+            "target": null,
+            "source": "react-redux",
+            "specifier": "import { connect } from 'react-redux';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"connect\",\"local\":\"connect\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/Profile.jsx:import:2:react-router-dom",
+            "file": "src/components/Profile.jsx",
+            "target": null,
+            "source": "react-router-dom",
+            "specifier": "import { withRouter } from 'react-router-dom';",
+            "line": 2,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"withRouter\",\"local\":\"withRouter\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/Profile.jsx:import:3:./Button",
+            "file": "src/components/Profile.jsx",
+            "target": "src/components/Button.tsx",
+            "source": "./Button",
+            "specifier": "import { Button } from './Button';",
+            "line": 3,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"Button\",\"local\":\"Button\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/Store.js:import:1:redux",
+            "file": "src/components/Store.js",
+            "target": null,
+            "source": "redux",
+            "specifier": "import { createStore } from 'redux';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"createStore\",\"local\":\"createStore\",\"kind\":\"named\"}]"
+          },
+          {
             "id": "file:src/components/index.ts:import:1:./Button",
             "file": "src/components/index.ts",
             "target": "src/components/Button.tsx",
@@ -1862,25 +2041,25 @@
             "bindings": "[{\"imported\":\"lazy\",\"local\":\"lazy\",\"kind\":\"named\"},{\"imported\":\"Suspense\",\"local\":\"Suspense\",\"kind\":\"named\"}]"
           },
           {
-            "id": "file:src/pages/routes.tsx:import:3:./Settings",
+            "id": "file:src/pages/routes.tsx:import:2:../components/Profile",
+            "file": "src/pages/routes.tsx",
+            "target": "src/components/Profile.jsx",
+            "source": "../components/Profile",
+            "specifier": "import ConnectedProfile from '../components/Profile';",
+            "line": 2,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"default\",\"local\":\"ConnectedProfile\",\"kind\":\"default\"}]"
+          },
+          {
+            "id": "file:src/pages/routes.tsx:import:4:./Settings",
             "file": "src/pages/routes.tsx",
             "target": "src/pages/Settings.tsx",
             "source": "./Settings",
             "specifier": "import('./Settings')",
-            "line": 3,
-            "isReExport": false,
-            "isWildcard": false,
-            "isDynamic": true,
-            "isCjs": false,
-            "isTypeOnly": false,
-            "bindings": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:import:4:./Reports",
-            "file": "src/pages/routes.tsx",
-            "target": "src/pages/Reports.tsx",
-            "source": "./Reports",
-            "specifier": "import('./Reports')",
             "line": 4,
             "isReExport": false,
             "isWildcard": false,
@@ -1890,12 +2069,26 @@
             "bindings": null
           },
           {
-            "id": "file:src/pages/routes.tsx:import:8:./Archive",
+            "id": "file:src/pages/routes.tsx:import:5:./Reports",
+            "file": "src/pages/routes.tsx",
+            "target": "src/pages/Reports.tsx",
+            "source": "./Reports",
+            "specifier": "import('./Reports')",
+            "line": 5,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": true,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:import:9:./Archive",
             "file": "src/pages/routes.tsx",
             "target": null,
             "source": "./Archive",
             "specifier": "import('./Archive')",
-            "line": 8,
+            "line": 9,
             "isReExport": false,
             "isWildcard": false,
             "isDynamic": true,
@@ -2159,6 +2352,19 @@
             "pendingRenders": null
           },
           {
+            "id": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "name": "ProfileView",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
             "id": "file:src/pages/Reports.tsx:component:3:Reports",
             "name": "Reports",
             "kind": "function",
@@ -2185,21 +2391,8 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:3:Settings",
+            "id": "file:src/pages/routes.tsx:component:4:Settings",
             "name": "Settings",
-            "kind": "lazy",
-            "framework": "react",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3,
-            "isExported": false,
-            "tagName": null,
-            "hooks": null,
-            "pendingRenders": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:component:4:Reports",
-            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
@@ -2211,30 +2404,43 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:9:Archive",
-            "name": "Archive",
+            "id": "file:src/pages/routes.tsx:component:5:Reports",
+            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 9,
-            "endLine": 9,
+            "line": 5,
+            "endLine": 5,
             "isExported": false,
             "tagName": null,
             "hooks": null,
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:11:Pages",
+            "id": "file:src/pages/routes.tsx:component:10:Archive",
+            "name": "Archive",
+            "kind": "lazy",
+            "framework": "react",
+            "file": "src/pages/routes.tsx",
+            "line": 10,
+            "endLine": 10,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:component:12:Pages",
             "name": "Pages",
             "kind": "function",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17,
+            "line": 12,
+            "endLine": 19,
             "isExported": true,
             "tagName": null,
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":13}]"
+            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
         ]
       },
@@ -2303,39 +2509,51 @@
             "props": "label,onClick"
           },
           {
+            "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
             "props": "label"
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:3:Settings",
+            "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
-            "line": 3,
-            "props": ""
-          },
-          {
-            "parent": "file:src/pages/routes.tsx:component:4:Reports",
-            "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 4,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:3:Settings",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:5:Reports",
+            "child": "file:src/pages/Reports.tsx:component:3:Reports",
+            "line": 5,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:4:Reports",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:4:Settings",
+            "line": 15,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:9:Archive",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:5:Reports",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:10:Archive",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "line": 16,
             "props": ""
           }
         ]
@@ -2378,6 +2596,10 @@
             "fn": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>"
           },
           {
+            "component": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "fn": "file:src/components/Profile.jsx:function:9:ProfileView"
+          },
+          {
             "component": "file:src/pages/Reports.tsx:component:3:Reports",
             "fn": "file:src/pages/Reports.tsx:function:3:Reports"
           },
@@ -2386,8 +2608,8 @@
             "fn": "file:src/pages/Settings.tsx:function:1:Settings"
           },
           {
-            "component": "file:src/pages/routes.tsx:component:11:Pages",
-            "fn": "file:src/pages/routes.tsx:function:11:Pages"
+            "component": "file:src/pages/routes.tsx:component:12:Pages",
+            "fn": "file:src/pages/routes.tsx:function:12:Pages"
           }
         ]
       },
@@ -2513,6 +2735,30 @@
             "endLine": 5
           },
           {
+            "id": "file:src/components/Profile.jsx:function:5:mapStateToProps",
+            "name": "mapStateToProps",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Profile.jsx:function:9:ProfileView",
+            "name": "ProfileView",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/components/Store.js:function:3:reducer",
+            "name": "reducer",
+            "className": null,
+            "file": "src/components/Store.js",
+            "line": 3,
+            "endLine": 3
+          },
+          {
             "id": "file:src/pages/Reports.tsx:function:3:Reports",
             "name": "Reports",
             "className": null,
@@ -2529,14 +2775,6 @@
             "endLine": 3
           },
           {
-            "id": "file:src/pages/routes.tsx:function:3:<lazy:arg0>",
-            "name": "<lazy:arg0>",
-            "className": null,
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3
-          },
-          {
             "id": "file:src/pages/routes.tsx:function:4:<lazy:arg0>",
             "name": "<lazy:arg0>",
             "className": null,
@@ -2545,20 +2783,28 @@
             "endLine": 4
           },
           {
-            "id": "file:src/pages/routes.tsx:function:8:loadArchive",
+            "id": "file:src/pages/routes.tsx:function:5:<lazy:arg0>",
+            "name": "<lazy:arg0>",
+            "className": null,
+            "file": "src/pages/routes.tsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/pages/routes.tsx:function:9:loadArchive",
             "name": "loadArchive",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 8,
-            "endLine": 8
+            "line": 9,
+            "endLine": 9
           },
           {
-            "id": "file:src/pages/routes.tsx:function:11:Pages",
+            "id": "file:src/pages/routes.tsx:function:12:Pages",
             "name": "Pages",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17
+            "line": 12,
+            "endLine": 19
           }
         ]
       },
@@ -2841,6 +3087,19 @@
             "pendingRenders": null
           },
           {
+            "id": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "name": "ProfileView",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
             "id": "file:src/pages/Reports.tsx:component:3:Reports",
             "name": "Reports",
             "kind": "function",
@@ -2867,21 +3126,8 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:3:Settings",
+            "id": "file:src/pages/routes.tsx:component:4:Settings",
             "name": "Settings",
-            "kind": "lazy",
-            "framework": "react",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3,
-            "isExported": false,
-            "tagName": null,
-            "hooks": null,
-            "pendingRenders": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:component:4:Reports",
-            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
@@ -2893,30 +3139,43 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:9:Archive",
-            "name": "Archive",
+            "id": "file:src/pages/routes.tsx:component:5:Reports",
+            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 9,
-            "endLine": 9,
+            "line": 5,
+            "endLine": 5,
             "isExported": false,
             "tagName": null,
             "hooks": null,
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:11:Pages",
+            "id": "file:src/pages/routes.tsx:component:10:Archive",
+            "name": "Archive",
+            "kind": "lazy",
+            "framework": "react",
+            "file": "src/pages/routes.tsx",
+            "line": 10,
+            "endLine": 10,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:component:12:Pages",
             "name": "Pages",
             "kind": "function",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17,
+            "line": 12,
+            "endLine": 19,
             "isExported": true,
             "tagName": null,
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":13}]"
+            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
         ]
       },
@@ -2985,39 +3244,51 @@
             "props": "label,onClick"
           },
           {
+            "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
             "props": "label"
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:3:Settings",
+            "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
-            "line": 3,
-            "props": ""
-          },
-          {
-            "parent": "file:src/pages/routes.tsx:component:4:Reports",
-            "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 4,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:3:Settings",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:5:Reports",
+            "child": "file:src/pages/Reports.tsx:component:3:Reports",
+            "line": 5,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:4:Reports",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:4:Settings",
+            "line": 15,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:9:Archive",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:5:Reports",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:10:Archive",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "line": 16,
             "props": ""
           }
         ]
@@ -3060,6 +3331,10 @@
             "fn": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>"
           },
           {
+            "component": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "fn": "file:src/components/Profile.jsx:function:9:ProfileView"
+          },
+          {
             "component": "file:src/pages/Reports.tsx:component:3:Reports",
             "fn": "file:src/pages/Reports.tsx:function:3:Reports"
           },
@@ -3068,8 +3343,8 @@
             "fn": "file:src/pages/Settings.tsx:function:1:Settings"
           },
           {
-            "component": "file:src/pages/routes.tsx:component:11:Pages",
-            "fn": "file:src/pages/routes.tsx:function:11:Pages"
+            "component": "file:src/pages/routes.tsx:component:12:Pages",
+            "fn": "file:src/pages/routes.tsx:function:12:Pages"
           }
         ]
       },
@@ -3195,6 +3470,30 @@
             "endLine": 5
           },
           {
+            "id": "file:src/components/Profile.jsx:function:5:mapStateToProps",
+            "name": "mapStateToProps",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Profile.jsx:function:9:ProfileView",
+            "name": "ProfileView",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/components/Store.js:function:3:reducer",
+            "name": "reducer",
+            "className": null,
+            "file": "src/components/Store.js",
+            "line": 3,
+            "endLine": 3
+          },
+          {
             "id": "file:src/pages/Reports.tsx:function:3:Reports",
             "name": "Reports",
             "className": null,
@@ -3211,14 +3510,6 @@
             "endLine": 3
           },
           {
-            "id": "file:src/pages/routes.tsx:function:3:<lazy:arg0>",
-            "name": "<lazy:arg0>",
-            "className": null,
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3
-          },
-          {
             "id": "file:src/pages/routes.tsx:function:4:<lazy:arg0>",
             "name": "<lazy:arg0>",
             "className": null,
@@ -3227,20 +3518,28 @@
             "endLine": 4
           },
           {
-            "id": "file:src/pages/routes.tsx:function:8:loadArchive",
+            "id": "file:src/pages/routes.tsx:function:5:<lazy:arg0>",
+            "name": "<lazy:arg0>",
+            "className": null,
+            "file": "src/pages/routes.tsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/pages/routes.tsx:function:9:loadArchive",
             "name": "loadArchive",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 8,
-            "endLine": 8
+            "line": 9,
+            "endLine": 9
           },
           {
-            "id": "file:src/pages/routes.tsx:function:11:Pages",
+            "id": "file:src/pages/routes.tsx:function:12:Pages",
             "name": "Pages",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17
+            "line": 12,
+            "endLine": 19
           }
         ]
       },
@@ -3493,6 +3792,19 @@
             "pendingRenders": null
           },
           {
+            "id": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "name": "ProfileView",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
             "id": "file:src/pages/Reports.tsx:component:3:Reports",
             "name": "Reports",
             "kind": "function",
@@ -3519,21 +3831,8 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:3:Settings",
+            "id": "file:src/pages/routes.tsx:component:4:Settings",
             "name": "Settings",
-            "kind": "lazy",
-            "framework": "react",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3,
-            "isExported": false,
-            "tagName": null,
-            "hooks": null,
-            "pendingRenders": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:component:4:Reports",
-            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
@@ -3545,30 +3844,43 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:9:Archive",
-            "name": "Archive",
+            "id": "file:src/pages/routes.tsx:component:5:Reports",
+            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 9,
-            "endLine": 9,
+            "line": 5,
+            "endLine": 5,
             "isExported": false,
             "tagName": null,
             "hooks": null,
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:11:Pages",
+            "id": "file:src/pages/routes.tsx:component:10:Archive",
+            "name": "Archive",
+            "kind": "lazy",
+            "framework": "react",
+            "file": "src/pages/routes.tsx",
+            "line": 10,
+            "endLine": 10,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:component:12:Pages",
             "name": "Pages",
             "kind": "function",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17,
+            "line": 12,
+            "endLine": 19,
             "isExported": true,
             "tagName": null,
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":13}]"
+            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
         ]
       },
@@ -3637,39 +3949,51 @@
             "props": "label,onClick"
           },
           {
+            "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
             "props": "label"
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:3:Settings",
+            "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
-            "line": 3,
-            "props": ""
-          },
-          {
-            "parent": "file:src/pages/routes.tsx:component:4:Reports",
-            "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 4,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:3:Settings",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:5:Reports",
+            "child": "file:src/pages/Reports.tsx:component:3:Reports",
+            "line": 5,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:4:Reports",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:4:Settings",
+            "line": 15,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:9:Archive",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:5:Reports",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:10:Archive",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "line": 16,
             "props": ""
           }
         ]
@@ -3690,7 +4014,7 @@
         }
       ],
       "counts": {
-        "render": 3
+        "render": 4
       },
       "usages": [
         {
@@ -3714,6 +4038,15 @@
         },
         {
           "kind": "render",
+          "file": "src/components/Profile.jsx",
+          "line": 9,
+          "from": "ProfileView",
+          "props": [
+            "label"
+          ]
+        },
+        {
+          "kind": "render",
           "file": "src/pages/Reports.tsx",
           "line": 4,
           "from": "Reports",
@@ -3724,7 +4057,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 3
+        "returned": 4
       }
     }
   },
@@ -3869,6 +4202,19 @@
             "pendingRenders": null
           },
           {
+            "id": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "name": "ProfileView",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
             "id": "file:src/pages/Reports.tsx:component:3:Reports",
             "name": "Reports",
             "kind": "function",
@@ -3895,21 +4241,8 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:3:Settings",
+            "id": "file:src/pages/routes.tsx:component:4:Settings",
             "name": "Settings",
-            "kind": "lazy",
-            "framework": "react",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3,
-            "isExported": false,
-            "tagName": null,
-            "hooks": null,
-            "pendingRenders": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:component:4:Reports",
-            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
@@ -3921,30 +4254,43 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:9:Archive",
-            "name": "Archive",
+            "id": "file:src/pages/routes.tsx:component:5:Reports",
+            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 9,
-            "endLine": 9,
+            "line": 5,
+            "endLine": 5,
             "isExported": false,
             "tagName": null,
             "hooks": null,
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:11:Pages",
+            "id": "file:src/pages/routes.tsx:component:10:Archive",
+            "name": "Archive",
+            "kind": "lazy",
+            "framework": "react",
+            "file": "src/pages/routes.tsx",
+            "line": 10,
+            "endLine": 10,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:component:12:Pages",
             "name": "Pages",
             "kind": "function",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17,
+            "line": 12,
+            "endLine": 19,
             "isExported": true,
             "tagName": null,
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":13}]"
+            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
         ]
       },
@@ -4013,39 +4359,51 @@
             "props": "label,onClick"
           },
           {
+            "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
             "props": "label"
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:3:Settings",
+            "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
-            "line": 3,
-            "props": ""
-          },
-          {
-            "parent": "file:src/pages/routes.tsx:component:4:Reports",
-            "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 4,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:3:Settings",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:5:Reports",
+            "child": "file:src/pages/Reports.tsx:component:3:Reports",
+            "line": 5,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:4:Reports",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:4:Settings",
+            "line": 15,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:9:Archive",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:5:Reports",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:10:Archive",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "line": 16,
             "props": ""
           }
         ]
@@ -4160,6 +4518,30 @@
             "endLine": 5
           },
           {
+            "id": "file:src/components/Profile.jsx:function:5:mapStateToProps",
+            "name": "mapStateToProps",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Profile.jsx:function:9:ProfileView",
+            "name": "ProfileView",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/components/Store.js:function:3:reducer",
+            "name": "reducer",
+            "className": null,
+            "file": "src/components/Store.js",
+            "line": 3,
+            "endLine": 3
+          },
+          {
             "id": "file:src/pages/Reports.tsx:function:3:Reports",
             "name": "Reports",
             "className": null,
@@ -4176,14 +4558,6 @@
             "endLine": 3
           },
           {
-            "id": "file:src/pages/routes.tsx:function:3:<lazy:arg0>",
-            "name": "<lazy:arg0>",
-            "className": null,
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3
-          },
-          {
             "id": "file:src/pages/routes.tsx:function:4:<lazy:arg0>",
             "name": "<lazy:arg0>",
             "className": null,
@@ -4192,20 +4566,28 @@
             "endLine": 4
           },
           {
-            "id": "file:src/pages/routes.tsx:function:8:loadArchive",
+            "id": "file:src/pages/routes.tsx:function:5:<lazy:arg0>",
+            "name": "<lazy:arg0>",
+            "className": null,
+            "file": "src/pages/routes.tsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/pages/routes.tsx:function:9:loadArchive",
             "name": "loadArchive",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 8,
-            "endLine": 8
+            "line": 9,
+            "endLine": 9
           },
           {
-            "id": "file:src/pages/routes.tsx:function:11:Pages",
+            "id": "file:src/pages/routes.tsx:function:12:Pages",
             "name": "Pages",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17
+            "line": 12,
+            "endLine": 19
           }
         ]
       },
@@ -4423,6 +4805,19 @@
             "pendingRenders": null
           },
           {
+            "id": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "name": "ProfileView",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
             "id": "file:src/pages/Reports.tsx:component:3:Reports",
             "name": "Reports",
             "kind": "function",
@@ -4449,21 +4844,8 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:3:Settings",
+            "id": "file:src/pages/routes.tsx:component:4:Settings",
             "name": "Settings",
-            "kind": "lazy",
-            "framework": "react",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3,
-            "isExported": false,
-            "tagName": null,
-            "hooks": null,
-            "pendingRenders": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:component:4:Reports",
-            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
@@ -4475,30 +4857,43 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:9:Archive",
-            "name": "Archive",
+            "id": "file:src/pages/routes.tsx:component:5:Reports",
+            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 9,
-            "endLine": 9,
+            "line": 5,
+            "endLine": 5,
             "isExported": false,
             "tagName": null,
             "hooks": null,
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:11:Pages",
+            "id": "file:src/pages/routes.tsx:component:10:Archive",
+            "name": "Archive",
+            "kind": "lazy",
+            "framework": "react",
+            "file": "src/pages/routes.tsx",
+            "line": 10,
+            "endLine": 10,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:component:12:Pages",
             "name": "Pages",
             "kind": "function",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17,
+            "line": 12,
+            "endLine": 19,
             "isExported": true,
             "tagName": null,
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":13}]"
+            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
         ]
       },
@@ -4567,39 +4962,51 @@
             "props": "label,onClick"
           },
           {
+            "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
             "props": "label"
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:3:Settings",
+            "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
-            "line": 3,
-            "props": ""
-          },
-          {
-            "parent": "file:src/pages/routes.tsx:component:4:Reports",
-            "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 4,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:3:Settings",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:5:Reports",
+            "child": "file:src/pages/Reports.tsx:component:3:Reports",
+            "line": 5,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:4:Reports",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:4:Settings",
+            "line": 15,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:9:Archive",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:5:Reports",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:10:Archive",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "line": 16,
             "props": ""
           }
         ]
@@ -4746,6 +5153,30 @@
             "endLine": 5
           },
           {
+            "id": "file:src/components/Profile.jsx:function:5:mapStateToProps",
+            "name": "mapStateToProps",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Profile.jsx:function:9:ProfileView",
+            "name": "ProfileView",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/components/Store.js:function:3:reducer",
+            "name": "reducer",
+            "className": null,
+            "file": "src/components/Store.js",
+            "line": 3,
+            "endLine": 3
+          },
+          {
             "id": "file:src/pages/Reports.tsx:function:3:Reports",
             "name": "Reports",
             "className": null,
@@ -4762,14 +5193,6 @@
             "endLine": 3
           },
           {
-            "id": "file:src/pages/routes.tsx:function:3:<lazy:arg0>",
-            "name": "<lazy:arg0>",
-            "className": null,
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3
-          },
-          {
             "id": "file:src/pages/routes.tsx:function:4:<lazy:arg0>",
             "name": "<lazy:arg0>",
             "className": null,
@@ -4778,20 +5201,28 @@
             "endLine": 4
           },
           {
-            "id": "file:src/pages/routes.tsx:function:8:loadArchive",
+            "id": "file:src/pages/routes.tsx:function:5:<lazy:arg0>",
+            "name": "<lazy:arg0>",
+            "className": null,
+            "file": "src/pages/routes.tsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/pages/routes.tsx:function:9:loadArchive",
             "name": "loadArchive",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 8,
-            "endLine": 8
+            "line": 9,
+            "endLine": 9
           },
           {
-            "id": "file:src/pages/routes.tsx:function:11:Pages",
+            "id": "file:src/pages/routes.tsx:function:12:Pages",
             "name": "Pages",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17
+            "line": 12,
+            "endLine": 19
           }
         ]
       },
@@ -5061,6 +5492,19 @@
             "pendingRenders": null
           },
           {
+            "id": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "name": "ProfileView",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
             "id": "file:src/pages/Reports.tsx:component:3:Reports",
             "name": "Reports",
             "kind": "function",
@@ -5087,21 +5531,8 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:3:Settings",
+            "id": "file:src/pages/routes.tsx:component:4:Settings",
             "name": "Settings",
-            "kind": "lazy",
-            "framework": "react",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3,
-            "isExported": false,
-            "tagName": null,
-            "hooks": null,
-            "pendingRenders": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:component:4:Reports",
-            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
@@ -5113,30 +5544,43 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:9:Archive",
-            "name": "Archive",
+            "id": "file:src/pages/routes.tsx:component:5:Reports",
+            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 9,
-            "endLine": 9,
+            "line": 5,
+            "endLine": 5,
             "isExported": false,
             "tagName": null,
             "hooks": null,
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:11:Pages",
+            "id": "file:src/pages/routes.tsx:component:10:Archive",
+            "name": "Archive",
+            "kind": "lazy",
+            "framework": "react",
+            "file": "src/pages/routes.tsx",
+            "line": 10,
+            "endLine": 10,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:component:12:Pages",
             "name": "Pages",
             "kind": "function",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17,
+            "line": 12,
+            "endLine": 19,
             "isExported": true,
             "tagName": null,
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":13}]"
+            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
         ]
       },
@@ -5205,39 +5649,51 @@
             "props": "label,onClick"
           },
           {
+            "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
             "props": "label"
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:3:Settings",
+            "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
-            "line": 3,
-            "props": ""
-          },
-          {
-            "parent": "file:src/pages/routes.tsx:component:4:Reports",
-            "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 4,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:3:Settings",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:5:Reports",
+            "child": "file:src/pages/Reports.tsx:component:3:Reports",
+            "line": 5,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:4:Reports",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:4:Settings",
+            "line": 15,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:9:Archive",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:5:Reports",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:10:Archive",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "line": 16,
             "props": ""
           }
         ]
@@ -5292,6 +5748,16 @@
           ]
         },
         {
+          "name": "ProfileView",
+          "kind": "function",
+          "file": "src/components/Profile.jsx",
+          "line": 9,
+          "depth": 1,
+          "renders": [
+            "Button"
+          ]
+        },
+        {
           "name": "Reports",
           "kind": "function",
           "file": "src/pages/Reports.tsx",
@@ -5325,7 +5791,7 @@
           "name": "Reports",
           "kind": "lazy",
           "file": "src/pages/routes.tsx",
-          "line": 4,
+          "line": 5,
           "depth": 2,
           "renders": [
             "Reports"
@@ -5335,10 +5801,10 @@
           "name": "Pages",
           "kind": "function",
           "file": "src/pages/routes.tsx",
-          "line": 11,
-          "depth": 3,
+          "line": 12,
+          "depth": 2,
           "renders": [
-            "Reports"
+            "ProfileView"
           ]
         }
       ],
@@ -5468,6 +5934,30 @@
             "endLine": 5
           },
           {
+            "id": "file:src/components/Profile.jsx:function:5:mapStateToProps",
+            "name": "mapStateToProps",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Profile.jsx:function:9:ProfileView",
+            "name": "ProfileView",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/components/Store.js:function:3:reducer",
+            "name": "reducer",
+            "className": null,
+            "file": "src/components/Store.js",
+            "line": 3,
+            "endLine": 3
+          },
+          {
             "id": "file:src/pages/Reports.tsx:function:3:Reports",
             "name": "Reports",
             "className": null,
@@ -5484,14 +5974,6 @@
             "endLine": 3
           },
           {
-            "id": "file:src/pages/routes.tsx:function:3:<lazy:arg0>",
-            "name": "<lazy:arg0>",
-            "className": null,
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3
-          },
-          {
             "id": "file:src/pages/routes.tsx:function:4:<lazy:arg0>",
             "name": "<lazy:arg0>",
             "className": null,
@@ -5500,20 +5982,28 @@
             "endLine": 4
           },
           {
-            "id": "file:src/pages/routes.tsx:function:8:loadArchive",
+            "id": "file:src/pages/routes.tsx:function:5:<lazy:arg0>",
+            "name": "<lazy:arg0>",
+            "className": null,
+            "file": "src/pages/routes.tsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/pages/routes.tsx:function:9:loadArchive",
             "name": "loadArchive",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 8,
-            "endLine": 8
+            "line": 9,
+            "endLine": 9
           },
           {
-            "id": "file:src/pages/routes.tsx:function:11:Pages",
+            "id": "file:src/pages/routes.tsx:function:12:Pages",
             "name": "Pages",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17
+            "line": 12,
+            "endLine": 19
           }
         ]
       },
@@ -5793,6 +6283,19 @@
             "pendingRenders": null
           },
           {
+            "id": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "name": "ProfileView",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
             "id": "file:src/pages/Reports.tsx:component:3:Reports",
             "name": "Reports",
             "kind": "function",
@@ -5819,21 +6322,8 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:3:Settings",
+            "id": "file:src/pages/routes.tsx:component:4:Settings",
             "name": "Settings",
-            "kind": "lazy",
-            "framework": "react",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3,
-            "isExported": false,
-            "tagName": null,
-            "hooks": null,
-            "pendingRenders": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:component:4:Reports",
-            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
@@ -5845,30 +6335,43 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:9:Archive",
-            "name": "Archive",
+            "id": "file:src/pages/routes.tsx:component:5:Reports",
+            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 9,
-            "endLine": 9,
+            "line": 5,
+            "endLine": 5,
             "isExported": false,
             "tagName": null,
             "hooks": null,
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:11:Pages",
+            "id": "file:src/pages/routes.tsx:component:10:Archive",
+            "name": "Archive",
+            "kind": "lazy",
+            "framework": "react",
+            "file": "src/pages/routes.tsx",
+            "line": 10,
+            "endLine": 10,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:component:12:Pages",
             "name": "Pages",
             "kind": "function",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17,
+            "line": 12,
+            "endLine": 19,
             "isExported": true,
             "tagName": null,
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":13}]"
+            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
         ]
       },
@@ -5937,39 +6440,51 @@
             "props": "label,onClick"
           },
           {
+            "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
             "props": "label"
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:3:Settings",
+            "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
-            "line": 3,
-            "props": ""
-          },
-          {
-            "parent": "file:src/pages/routes.tsx:component:4:Reports",
-            "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 4,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:3:Settings",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:5:Reports",
+            "child": "file:src/pages/Reports.tsx:component:3:Reports",
+            "line": 5,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:4:Reports",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:4:Settings",
+            "line": 15,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:9:Archive",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:5:Reports",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:10:Archive",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "line": 16,
             "props": ""
           }
         ]
@@ -6183,6 +6698,19 @@
             "pendingRenders": null
           },
           {
+            "id": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "name": "ProfileView",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
             "id": "file:src/pages/Reports.tsx:component:3:Reports",
             "name": "Reports",
             "kind": "function",
@@ -6209,21 +6737,8 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:3:Settings",
+            "id": "file:src/pages/routes.tsx:component:4:Settings",
             "name": "Settings",
-            "kind": "lazy",
-            "framework": "react",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3,
-            "isExported": false,
-            "tagName": null,
-            "hooks": null,
-            "pendingRenders": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:component:4:Reports",
-            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
@@ -6235,30 +6750,43 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:9:Archive",
-            "name": "Archive",
+            "id": "file:src/pages/routes.tsx:component:5:Reports",
+            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 9,
-            "endLine": 9,
+            "line": 5,
+            "endLine": 5,
             "isExported": false,
             "tagName": null,
             "hooks": null,
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:11:Pages",
+            "id": "file:src/pages/routes.tsx:component:10:Archive",
+            "name": "Archive",
+            "kind": "lazy",
+            "framework": "react",
+            "file": "src/pages/routes.tsx",
+            "line": 10,
+            "endLine": 10,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:component:12:Pages",
             "name": "Pages",
             "kind": "function",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17,
+            "line": 12,
+            "endLine": 19,
             "isExported": true,
             "tagName": null,
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":13}]"
+            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
         ]
       },
@@ -6327,39 +6855,51 @@
             "props": "label,onClick"
           },
           {
+            "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
             "props": "label"
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:3:Settings",
+            "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
-            "line": 3,
-            "props": ""
-          },
-          {
-            "parent": "file:src/pages/routes.tsx:component:4:Reports",
-            "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 4,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:3:Settings",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:5:Reports",
+            "child": "file:src/pages/Reports.tsx:component:3:Reports",
+            "line": 5,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:4:Reports",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:4:Settings",
+            "line": 15,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:9:Archive",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:5:Reports",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:10:Archive",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "line": 16,
             "props": ""
           }
         ]
@@ -6402,6 +6942,10 @@
             "fn": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>"
           },
           {
+            "component": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "fn": "file:src/components/Profile.jsx:function:9:ProfileView"
+          },
+          {
             "component": "file:src/pages/Reports.tsx:component:3:Reports",
             "fn": "file:src/pages/Reports.tsx:function:3:Reports"
           },
@@ -6410,8 +6954,8 @@
             "fn": "file:src/pages/Settings.tsx:function:1:Settings"
           },
           {
-            "component": "file:src/pages/routes.tsx:component:11:Pages",
-            "fn": "file:src/pages/routes.tsx:function:11:Pages"
+            "component": "file:src/pages/routes.tsx:component:12:Pages",
+            "fn": "file:src/pages/routes.tsx:function:12:Pages"
           }
         ]
       },
@@ -6537,6 +7081,30 @@
             "endLine": 5
           },
           {
+            "id": "file:src/components/Profile.jsx:function:5:mapStateToProps",
+            "name": "mapStateToProps",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Profile.jsx:function:9:ProfileView",
+            "name": "ProfileView",
+            "className": null,
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/components/Store.js:function:3:reducer",
+            "name": "reducer",
+            "className": null,
+            "file": "src/components/Store.js",
+            "line": 3,
+            "endLine": 3
+          },
+          {
             "id": "file:src/pages/Reports.tsx:function:3:Reports",
             "name": "Reports",
             "className": null,
@@ -6553,14 +7121,6 @@
             "endLine": 3
           },
           {
-            "id": "file:src/pages/routes.tsx:function:3:<lazy:arg0>",
-            "name": "<lazy:arg0>",
-            "className": null,
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3
-          },
-          {
             "id": "file:src/pages/routes.tsx:function:4:<lazy:arg0>",
             "name": "<lazy:arg0>",
             "className": null,
@@ -6569,20 +7129,28 @@
             "endLine": 4
           },
           {
-            "id": "file:src/pages/routes.tsx:function:8:loadArchive",
+            "id": "file:src/pages/routes.tsx:function:5:<lazy:arg0>",
+            "name": "<lazy:arg0>",
+            "className": null,
+            "file": "src/pages/routes.tsx",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/pages/routes.tsx:function:9:loadArchive",
             "name": "loadArchive",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 8,
-            "endLine": 8
+            "line": 9,
+            "endLine": 9
           },
           {
-            "id": "file:src/pages/routes.tsx:function:11:Pages",
+            "id": "file:src/pages/routes.tsx:function:12:Pages",
             "name": "Pages",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17
+            "line": 12,
+            "endLine": 19
           }
         ]
       },
@@ -6639,16 +7207,16 @@
           "kind": "function",
           "framework": "react",
           "file": "src/pages/routes.tsx",
-          "line": 11,
-          "endLine": 17,
+          "line": 12,
+          "endLine": 19,
           "isExported": true,
           "definedBy": {
             "kind": "function",
             "name": "Pages",
             "className": null,
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17
+            "line": 12,
+            "endLine": 19
           },
           "hooks": [],
           "customHooks": [],
@@ -6658,7 +7226,7 @@
               "depth": 1,
               "parent": "Pages",
               "parentFile": "src/pages/routes.tsx",
-              "line": 14,
+              "line": 15,
               "component": "Settings",
               "componentKind": "lazy",
               "componentFile": "src/pages/routes.tsx",
@@ -6668,7 +7236,7 @@
               "depth": 1,
               "parent": "Pages",
               "parentFile": "src/pages/routes.tsx",
-              "line": 14,
+              "line": 15,
               "component": "Reports",
               "componentKind": "lazy",
               "componentFile": "src/pages/routes.tsx",
@@ -6678,17 +7246,39 @@
               "depth": 1,
               "parent": "Pages",
               "parentFile": "src/pages/routes.tsx",
-              "line": 14,
+              "line": 15,
               "component": "Archive",
               "componentKind": "lazy",
               "componentFile": "src/pages/routes.tsx",
               "props": []
             },
             {
+              "depth": 1,
+              "parent": "Pages",
+              "parentFile": "src/pages/routes.tsx",
+              "line": 16,
+              "component": "ProfileView",
+              "componentKind": "function",
+              "componentFile": "src/components/Profile.jsx",
+              "props": []
+            },
+            {
+              "depth": 2,
+              "parent": "ProfileView",
+              "parentFile": "src/components/Profile.jsx",
+              "line": 9,
+              "component": "Button",
+              "componentKind": "function",
+              "componentFile": "src/components/Button.tsx",
+              "props": [
+                "label"
+              ]
+            },
+            {
               "depth": 2,
               "parent": "Settings",
               "parentFile": "src/pages/routes.tsx",
-              "line": 3,
+              "line": 4,
               "component": "Settings",
               "componentKind": "function",
               "componentFile": "src/pages/Settings.tsx",
@@ -6698,7 +7288,7 @@
               "depth": 2,
               "parent": "Reports",
               "parentFile": "src/pages/routes.tsx",
-              "line": 4,
+              "line": 5,
               "component": "Reports",
               "componentKind": "function",
               "componentFile": "src/pages/Reports.tsx",
@@ -6723,7 +7313,7 @@
               "props": [
                 "fallback"
               ],
-              "line": 13
+              "line": 14
             }
           ],
           "renderedBy": []
@@ -6876,6 +7466,19 @@
             "pendingRenders": null
           },
           {
+            "id": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "name": "ProfileView",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.jsx",
+            "line": 9,
+            "endLine": 9,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
             "id": "file:src/pages/Reports.tsx:component:3:Reports",
             "name": "Reports",
             "kind": "function",
@@ -6902,21 +7505,8 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:3:Settings",
+            "id": "file:src/pages/routes.tsx:component:4:Settings",
             "name": "Settings",
-            "kind": "lazy",
-            "framework": "react",
-            "file": "src/pages/routes.tsx",
-            "line": 3,
-            "endLine": 3,
-            "isExported": false,
-            "tagName": null,
-            "hooks": null,
-            "pendingRenders": null
-          },
-          {
-            "id": "file:src/pages/routes.tsx:component:4:Reports",
-            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
@@ -6928,30 +7518,43 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:9:Archive",
-            "name": "Archive",
+            "id": "file:src/pages/routes.tsx:component:5:Reports",
+            "name": "Reports",
             "kind": "lazy",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 9,
-            "endLine": 9,
+            "line": 5,
+            "endLine": 5,
             "isExported": false,
             "tagName": null,
             "hooks": null,
             "pendingRenders": null
           },
           {
-            "id": "file:src/pages/routes.tsx:component:11:Pages",
+            "id": "file:src/pages/routes.tsx:component:10:Archive",
+            "name": "Archive",
+            "kind": "lazy",
+            "framework": "react",
+            "file": "src/pages/routes.tsx",
+            "line": 10,
+            "endLine": 10,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/routes.tsx:component:12:Pages",
             "name": "Pages",
             "kind": "function",
             "framework": "react",
             "file": "src/pages/routes.tsx",
-            "line": 11,
-            "endLine": 17,
+            "line": 12,
+            "endLine": 19,
             "isExported": true,
             "tagName": null,
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":13}]"
+            "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
         ]
       },
@@ -7020,39 +7623,51 @@
             "props": "label,onClick"
           },
           {
+            "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
             "props": "label"
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:3:Settings",
+            "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
-            "line": 3,
-            "props": ""
-          },
-          {
-            "parent": "file:src/pages/routes.tsx:component:4:Reports",
-            "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 4,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:3:Settings",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:5:Reports",
+            "child": "file:src/pages/Reports.tsx:component:3:Reports",
+            "line": 5,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:4:Reports",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:4:Settings",
+            "line": 15,
             "props": ""
           },
           {
-            "parent": "file:src/pages/routes.tsx:component:11:Pages",
-            "child": "file:src/pages/routes.tsx:component:9:Archive",
-            "line": 14,
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:5:Reports",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/pages/routes.tsx:component:10:Archive",
+            "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/pages/routes.tsx:component:12:Pages",
+            "child": "file:src/components/Profile.jsx:component:9:ProfileView",
+            "line": 16,
             "props": ""
           }
         ]
@@ -7076,8 +7691,8 @@
           "kind": "lazy",
           "framework": "react",
           "file": "src/pages/routes.tsx",
-          "line": 4,
-          "endLine": 4,
+          "line": 5,
+          "endLine": 5,
           "isExported": false
         }
       ],
@@ -7088,7 +7703,7 @@
         {
           "kind": "render",
           "file": "src/pages/routes.tsx",
-          "line": 4,
+          "line": 5,
           "from": "Reports",
           "props": [],
           "target": "src/pages/Reports.tsx:3"
@@ -7096,10 +7711,10 @@
         {
           "kind": "render",
           "file": "src/pages/routes.tsx",
-          "line": 14,
+          "line": 15,
           "from": "Pages",
           "props": [],
-          "target": "src/pages/routes.tsx:4"
+          "target": "src/pages/routes.tsx:5"
         }
       ],
       "page": {
