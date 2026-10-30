@@ -7,6 +7,7 @@ import { applyBackendEntrypointParseSemantics } from "./backend-entrypoints.js";
 import { applyEnvConfigParseSemantics } from "./env-config.js";
 import { applyDataSchemaParseSemantics } from "./data-schemas.js";
 import { applyDomAttributeSemantics, applyDomParseSemantics } from "./dom.js";
+import { applyReactParseSemantics } from "./react.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
 // the nodes earlier ones added (NestJS routes, for example, read decorators).
@@ -66,6 +67,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     name: "dom",
     onFile: ({ fileNodeId, rootNode, parsed }) =>
       applyDomParseSemantics(fileNodeId, rootNode, parsed.nodes, parsed.relationships),
+  },
+  {
+    // Function, class, memo and forwardRef components and the JSX they render.
+    name: "react",
+    onFile: applyReactParseSemantics,
   },
 ];
 

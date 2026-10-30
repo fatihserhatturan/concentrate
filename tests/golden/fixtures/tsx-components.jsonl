@@ -5,6 +5,8 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"tsx-components","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"file:src/ProductList.tsx","label":"File","properties":{"defaultExport":"App","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/ProductList.tsx","relativePath":"src/ProductList.tsx","sourceType":"production"}}
+{"kind":"node","id":"file:src/ProductList.tsx:component:12:ProductList","label":"Component","properties":{"endLine":24,"framework":"react","isExported":true,"kind":"function","line":12,"name":"ProductList","pendingRenders":null}}
+{"kind":"node","id":"file:src/ProductList.tsx:component:26:App","label":"Component","properties":{"endLine":29,"framework":"react","isExported":true,"kind":"function","line":26,"name":"App","pendingRenders":null}}
 {"kind":"node","id":"file:src/ProductList.tsx:function:12:ProductList","label":"Function","properties":{"className":null,"endLine":24,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":12,"methodKind":null,"name":"ProductList","parameters":"[{\"name\":\"{ products }\",\"type\":\"{ products: Product[] }\"}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/ProductList.tsx:function:12:ProductList:call:13:19:firstOf","label":"Call","properties":{"args":"[\"products\"]","callee":"firstOf","columnNumber":19,"expression":"firstOf","line":13,"name":"firstOf","receiver":null}}
 {"kind":"node","id":"file:src/ProductList.tsx:function:12:ProductList:call:17:7:products.map","label":"Call","properties":{"args":"[]","callee":"map","columnNumber":7,"expression":"products.map","line":17,"name":"products.map","receiver":"products"}}
@@ -25,12 +27,17 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/ProductList.tsx","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/format.ts","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx","type":"DECLARES_COMPONENT","to":"file:src/ProductList.tsx:component:12:ProductList","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx","type":"DECLARES_COMPONENT","to":"file:src/ProductList.tsx:component:26:App","properties":{}}
 {"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_FUNCTION","to":"file:src/ProductList.tsx:function:12:ProductList","properties":{}}
 {"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_FUNCTION","to":"file:src/ProductList.tsx:function:26:App","properties":{}}
 {"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_FUNCTION","to":"file:src/ProductList.tsx:function:6:firstOf","properties":{}}
 {"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_FUNCTION","to":"file:src/ProductList.tsx:function:8:trackClick","properties":{}}
 {"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_TYPE_ALIAS","to":"file:src/ProductList.tsx:type-alias:3:Product","properties":{}}
 {"kind":"rel","from":"file:src/ProductList.tsx","type":"IMPORTS","to":"file:src/ProductList.tsx:import:1:./format","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:component:12:ProductList","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/ProductList.tsx:function:12:ProductList","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:component:26:App","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/ProductList.tsx:function:26:App","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:component:26:App","type":"RENDERS","to":"file:src/ProductList.tsx:component:12:ProductList","properties":{"line":28,"props":"products"}}
 {"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList","type":"CALLS","to":"file:src/ProductList.tsx:function:12:ProductList:call:13:19:firstOf","properties":{}}
 {"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList","type":"CALLS","to":"file:src/ProductList.tsx:function:12:ProductList:call:17:7:products.map","properties":{}}
 {"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList","type":"CALLS","to":"file:src/ProductList.tsx:function:12:ProductList:call:18:44:trackClick","properties":{}}

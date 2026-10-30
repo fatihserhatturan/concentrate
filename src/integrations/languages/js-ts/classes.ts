@@ -298,6 +298,8 @@ function extractTypeNames(node: SyntaxNode): string[] {
       || child.type === "type_identifier"
       || child.type === "nested_type_identifier"
       || child.type === "generic_type"
+      // `extends events.EventEmitter`
+      || child.type === "member_expression"
     ))
     .map((child) => child.text);
 }

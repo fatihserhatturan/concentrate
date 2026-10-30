@@ -212,10 +212,8 @@ Blocks or informs: future query server design.
   0.23.1, typescript and tsx 0.23.2, python 0.21.0, go 0.21.2, rust 0.21.0
   (see `vendor/grammars/manifest.json`). Newer syntax that only later grammar
   releases understand produces `ERROR` nodes.
-- JSX is parsed but not modelled yet: components, props and inline JSX event
-  handlers create no nodes of their own, so a call inside
-  `onClick={() => track()}` is attributed to the enclosing component
-  (Phase 11).
+- Inline JSX event handlers create no nodes of their own, so a call inside
+  `onClick={() => track()}` is attributed to the enclosing component.
 - A JS/TS file with syntax errors produces a partial graph: each statement or
   class member that contains an `ERROR` or `MISSING` node is left out (the
   file is parsed again with that text blanked), and the scan reports a warning
@@ -248,6 +246,27 @@ Blocks or informs: future query server design.
 
 Blocks or informs: ROADMAP Phases 11–15 (components, React, Vue, Svelte,
 Astro).
+
+## Components
+
+- React components are functions named in PascalCase that return JSX
+  themselves (an arrow with a JSX body, or a `return` of their own through
+  parentheses, `? :` and `&&`), PascalCase functions typed `FC` /
+  `FunctionComponent`, classes that extend `Component` / `PureComponent`
+  (with `React.` or not), and `memo` / `forwardRef` wrappers assigned to a
+  PascalCase variable. A function that returns JSX from a nested callback
+  only, a render helper in camelCase and a component created by another
+  higher-order function (`styled.div`, `connect(...)(View)`, `observer`) are
+  not components. `lazy(() => import(...))` is not linked yet.
+- `framework` is `react` unless the file imports `preact` or `solid-js`;
+  the JSX transform needs no React import, so a project on another JSX library
+  without such an import is labelled `react`.
+- `RENDERS` links `<Child …>` / `<Ns.Child>` elements anywhere in a
+  component (including callbacks such as `items.map(...)`) to a component
+  declared in the same file or imported by name or as the default export,
+  through barrels. Elements that stay unresolved (library components such as
+  `<Link>`, components passed as props) remain in `Component.pendingRenders`.
+  Props are the attribute names; spread props (`{...rest}`) are not listed.
 
 ## Review Process
 
