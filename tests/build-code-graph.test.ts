@@ -1786,7 +1786,8 @@ describe("buildCodeGraph", () => {
     assert.equal(graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "internalOnly")?.properties.isExported, false);
 
     const name = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "name")!;
-    const make = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "make")!;
+    // A function under a module.exports key is an exported Function.
+    const make = graph.nodes.find((n) => n.label === "Function" && n.properties.name === "make")!;
     const extra = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "extra")!;
     const direct = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "direct")!;
     const assignedName = graph.nodes.find((n) => n.label === "Variable" && n.properties.name === "assignedName")!;
@@ -1802,7 +1803,7 @@ describe("buildCodeGraph", () => {
     assert.equal(direct.properties.isExported, true);
     assert.equal(assignedName.properties.isExported, true);
     assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", name.id);
-    assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", make.id);
+    assertRelationship(graph.relationships, "file:index.js", "DEFINES_FUNCTION", make.id);
     assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", extra.id);
     assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", direct.id);
     assertRelationship(graph.relationships, "file:index.js", "DEFINES_VARIABLE", assignedName.id);

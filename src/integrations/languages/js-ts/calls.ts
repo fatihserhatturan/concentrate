@@ -12,6 +12,7 @@ import {
   isModuleLevelDeclarator,
   isVariableClassValue,
   isVariableFunctionValue,
+  moduleObjectPropertyFunctionName,
 } from "./common.js";
 import {
   extractFunctionParameters,
@@ -422,6 +423,7 @@ export function createCallNodes(
 function ownsCalls(node: SyntaxNode, callbackKeys: ReadonlySet<string>): boolean {
   if (isClassNode(node) || isVariableClassValue(node)) return true;
   if (!isFunctionNode(node)) return false;
+  if (moduleObjectPropertyFunctionName(node) !== null) return true;
   if (node.type === "method_definition" || node.type === "abstract_method_signature") {
     return node.parent?.type === "class_body";
   }

@@ -70,6 +70,14 @@ tools.
   `it('…', () => …)`) belong to the enclosing function. Callbacks passed to a
   module-level call or to a module-level variable initializer get a synthetic
   `Function` node of their own instead.
+- Functions stored under a property of a module-level object literal
+  (`const api = { get: (id) => …, list() { … } }`, nested objects,
+  `export default { … }`, `module.exports = { … }`) are `Function` nodes named
+  by the property, with their calls. `api.get()` resolves to them through a
+  default or namespace import of the file (by name within that file, so two
+  objects with a `get` in one file share the first); named imports of the
+  object (`import { TagAPI }`) and objects built inside functions, returned
+  or passed to calls are not followed.
 - Parameter decorators such as `@Param()` or `@InjectRepository()` are recorded
   as `Call` nodes of their method; class and method decorators are `Decorator`
   nodes.

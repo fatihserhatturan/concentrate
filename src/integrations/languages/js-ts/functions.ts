@@ -41,8 +41,8 @@ export function createVariableFunctionNode(
   };
 }
 
-export function createFunctionNode(fileNodeId: string, node: SyntaxNode, className?: string): GraphNode | null {
-  const name = extractName(node);
+export function createFunctionNode(fileNodeId: string, node: SyntaxNode, className?: string, propertyName?: string): GraphNode | null {
+  const name = propertyName ?? extractName(node);
   if (!name) {
     return null;
   }
