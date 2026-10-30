@@ -10,6 +10,7 @@ import { applyDomAttributeSemantics, applyDomParseSemantics } from "./dom.js";
 import { applyReactParseSemantics } from "./react.js";
 import { applyReactRouterSemantics } from "./react-router.js";
 import { applyHttpClientSemantics } from "./http-clients.js";
+import { applyTrpcSemantics } from "./trpc.js";
 import { applyServerFunctionSemantics } from "./server-functions.js";
 import { applyTanStackRouterSemantics } from "./tanstack-router.js";
 
@@ -96,6 +97,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // Outbound fetch, axios, ky and ofetch calls.
     name: "http-clients",
     onFile: applyHttpClientSemantics,
+  },
+  {
+    // tRPC routers (procedures as routes) and client procedure calls.
+    name: "trpc",
+    onFile: applyTrpcSemantics,
   },
 ];
 

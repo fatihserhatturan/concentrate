@@ -662,7 +662,7 @@ Links outbound HTTP calls to the `Route` nodes the backend phases already build.
 
 - [x] `fetch`, `axios` (including instances created with `baseURL`), `ky`, `ofetch` / `$fetch`
 - [x] SWR and TanStack Query keys and fetchers
-- [ ] tRPC: client procedure calls to router procedures
+- [x] tRPC: client procedure calls to router procedures
 
 ### Matching
 

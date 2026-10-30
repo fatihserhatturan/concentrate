@@ -2,11 +2,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { GraphNode, GraphRelationship } from "../../../../core/graph/model.js";
 import type { ISemanticContributor } from "../../../../core/contracts/semantic-contributor.js";
-import { resolveDeclaration } from "../../../../core/scan/resolution/call-targets.js";
-import { createResolutionRelationshipIndex, indexImportNodesByFile } from "../../../../core/scan/resolution/indexes.js";
+import { createVariableResolver } from "./variable-resolver.js";
 
 // REQUESTS: an outbound HTTP call (`Call.httpMethod` / `httpUrl`, set by the
-// http-clients parse plugin) to the Route it reaches, matched on the method
+// http-clients and trpc parse plugins) to the Route it reaches, matched on the method
 // and the route's full path. Only same-origin paths (`/api/users`) are
 // matched. A `${…}` segment of a template URL matches a route parameter
 // (`:id`, `[id]`, `{id}`); a literal segment matches the same literal or a
@@ -16,7 +15,9 @@ import { createResolutionRelationshipIndex, indexImportNodesByFile } from "../..
 // call unlinked, as does a URL with a partly dynamic segment (`/u/${id}.json`).
 // `match` is `exact` when every segment matched a literal, `catch-all` when a
 // catch-all took the end, otherwise `parameter`. Routes of method ALL match
-// any method; middleware mounts (USE) match none.
+// any method; middleware mounts (USE) match none. A tRPC call (`httpClient`
+// `trpc`) links to the procedure Route with the same method and dotted full
+// path (`match` `exact`); tRPC routes take no part in URL matching.
 //
 // Before matching, each call's URL is resolved in place: a call on a
 // receiver (`api.get(…)`, `httpReceiver`) takes the client and base URL of
@@ -43,16 +44,33 @@ export const httpRequestsContributor: ISemanticContributor = {
   async contribute(graph, rootPath, _report, files) {
     resolveRequestUrls(graph.nodes, graph.relationships, await readEnvFiles(rootPath, files));
     const routes: RouteEntry[] = [];
+    // `METHOD:fullPath` → tRPC procedure routes.
+    const trpcRoutes = new Map<string, string[]>();
     for (const node of graph.nodes) {
       if (node.label !== "Route" || typeof node.properties.fullPath !== "string") continue;
+      if (node.properties.framework === "trpc") {
+        const key = `${node.properties.method}:${node.properties.fullPath}`;
+        trpcRoutes.set(key, [...(trpcRoutes.get(key) ?? []), node.id]);
+        continue;
+      }
       const method = String(node.properties.method).toUpperCase();
       if (method === "USE") continue;
       routes.push({ id: node.id, method, segments: routeSegments(node.properties.fullPath) });
     }
-    if (routes.length === 0) return;
-
     const added: GraphRelationship[] = [];
     for (const call of graph.nodes) {
+      if (call.label !== "Call" || call.properties.httpClient !== "trpc") continue;
+      const { httpMethod: method, httpUrl: url } = call.properties;
+      const ids = trpcRoutes.get(`${method}:${url}`);
+      if (ids?.length === 1) added.push({ from: call.id, to: ids[0]!, type: "REQUESTS", properties: { method, url, match: "exact" } });
+    }
+    if (routes.length === 0) {
+      for (const rel of added) graph.addRelationship(rel);
+      return;
+    }
+
+    for (const call of graph.nodes) {
+      if (call.properties.httpClient === "trpc") continue;
       const request = requestOf(call);
       if (!request) continue;
       let best: { route: RouteEntry; score: number; match: string } | null = null;
@@ -118,32 +136,7 @@ function parseEnvFile(content: string): Map<string, string> {
 function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship[], env: EnvFiles): void {
   const calls = nodes.filter((node) => node.label === "Call" && (node.properties.httpMethod !== undefined || node.properties.httpReceiver !== undefined));
   if (calls.length === 0) return;
-  const index = createResolutionRelationshipIndex(relationships);
-  const importNodesByFile = indexImportNodesByFile(nodes, index.fileByImportId);
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
-  const fileByVariableId = new Map<string, string>();
-  const variablesByFileAndName = new Map<string, Map<string, string[]>>();
-  const addVariable = (fileId: string, name: string, id: string) => {
-    const byName = variablesByFileAndName.get(fileId) ?? new Map<string, string[]>();
-    byName.set(name, [...(byName.get(name) ?? []), id]);
-    variablesByFileAndName.set(fileId, byName);
-  };
-  for (const rel of relationships) {
-    const variable = rel.type === "DEFINES_VARIABLE" ? nodeById.get(rel.to) : undefined;
-    if (variable?.label !== "Variable" || typeof variable.properties.name !== "string") continue;
-    fileByVariableId.set(variable.id, rel.from);
-    addVariable(rel.from, variable.properties.name, variable.id);
-  }
-  // `export default api` / `module.exports = api`.
-  for (const [fileId, byName] of variablesByFileAndName) {
-    const name = nodeById.get(fileId)?.properties.defaultExport;
-    const ids = typeof name === "string" && !byName.has("default") ? byName.get(name) : undefined;
-    if (ids) byName.set("default", ids);
-  }
-  const variableOf = (name: string, fileId: string) => {
-    const id = resolveDeclaration(name, fileId, variablesByFileAndName, importNodesByFile, index.resolvedFileByImportId);
-    return id ? nodeById.get(id) : undefined;
-  };
+  const { nodeById, fileByVariableId, variableOf, fileOfCall } = createVariableResolver(nodes, relationships);
   const envValue = (name: string, fileId: string): string | undefined => {
     const relativePath = nodeById.get(fileId)?.properties.relativePath;
     if (typeof relativePath !== "string") return undefined;
@@ -178,8 +171,7 @@ function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship
   });
 
   for (const call of calls) {
-    const callerFunctionId = index.callerFunctionByCallId.get(call.id);
-    const fileId = index.callerFileByModuleCallId.get(call.id) ?? (callerFunctionId ? index.fileByFunctionId.get(callerFunctionId) : undefined);
+    const fileId = fileOfCall(call.id);
     usedEnv = false;
     let base: string | null = null;
     const receiver = call.properties.httpReceiver;

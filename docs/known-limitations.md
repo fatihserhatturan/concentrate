@@ -427,6 +427,25 @@ Astro).
   `parameter` or `catch-all`. Unresolved or absolute URLs, partly dynamic
   segments (`/u/${id}.json`) and ties between routes stay unlinked. Query
   strings are ignored.
+- tRPC: procedures of a top-level `router({…})`, `t.router({…})` or
+  `createTRPCRouter({…})` (also default-exported) are `Route` nodes
+  (framework `trpc`, method `QUERY` / `MUTATION` / `SUBSCRIPTION`,
+  `fullPath` the dotted path such as `post.byId`). Mounted router variables
+  (`post: postRouter`, `{ user }`) are followed in the same file and through
+  imports; a router mounted by two routers gets no `fullPath`. A router
+  is only read when every entry is a procedure (a chain through a
+  `…procedure` ending in `.query` / `.mutation` / `.subscription`), a
+  nested router call or a router variable. `mergeRouters`, routers built in
+  functions, resolver functions (no `ROUTE_HANDLED_BY`) and the HTTP
+  endpoint the adapter mounts (`/api/trpc`) are not read.
+- tRPC calls `client.post.byId.useQuery()` / `.query()` / `.mutate()` /
+  `.queryOptions()` / `.fetch()` / … link to the procedure with the same path
+  and type when `client` is created by `createTRPCReact`, `createTRPCNext`,
+  `createTRPCClient`, `createTRPCProxyClient`, `createTRPCOptionsProxy` or
+  `createTRPCQueryUtils` (in the file or imported), bound to `useTRPC()` /
+  `useTRPCClient()`, or is `client.useUtils()`. Server-side callers
+  (`createCaller`, `createHydrationHelpers`), cache helpers (`invalidate`,
+  `setData`) and clients passed as arguments are not read.
 
 ## Review Process
 

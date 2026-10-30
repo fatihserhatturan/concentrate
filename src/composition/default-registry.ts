@@ -18,6 +18,7 @@ import { dataAccessContributor } from "../integrations/frameworks/js-ts/data-acc
 import { componentGraphContributor } from "../integrations/frameworks/js-ts/resolution/component-graph.js";
 import { nextjsPagesContributor, nextjsRoutesContributor } from "../integrations/frameworks/js-ts/nextjs.js";
 import { httpRequestsContributor } from "../integrations/frameworks/js-ts/resolution/http-requests.js";
+import { trpcRoutesContributor } from "../integrations/frameworks/js-ts/resolution/trpc-routes.js";
 import type { ILanguageResolver } from "../core/contracts/language-resolver.js";
 import { CoreIntegrationRegistry } from "../core/integrations/registry.js";
 
@@ -41,6 +42,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     routeHandlerContributor,
     routePathContributor,
     nextjsRoutesContributor,
+    trpcRoutesContributor,
     httpRequestsContributor,
     envConfigContributor,
     dataAccessContributor,

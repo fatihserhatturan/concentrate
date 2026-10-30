@@ -833,6 +833,21 @@
           "file": "src/server.ts"
         }
       }
+    ],
+    "trpc": [
+      {
+        "tool": "list_routes",
+        "args": {
+          "framework": "trpc"
+        }
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "query",
+          "path": "user.me"
+        }
+      }
     ]
   }
 }
