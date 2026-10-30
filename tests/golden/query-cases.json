@@ -573,6 +573,26 @@
           "operation": "delete"
         }
       }
+    ],
+    "synthetic-handlers": [
+      {
+        "tool": "list_routes",
+        "args": {}
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "GET",
+          "path": "/health"
+        }
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "GET",
+          "path": "/me"
+        }
+      }
     ]
   }
 }

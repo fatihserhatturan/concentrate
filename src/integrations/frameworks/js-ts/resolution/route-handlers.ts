@@ -65,7 +65,7 @@ export function addImportedRouteHandlerRelationships(graph: IGraphContributor): 
 
     const functionIdsByName = new Map<string, string>();
     for (const step of pending.steps) {
-      const functionId = resolveName(fileId, step.name);
+      const functionId = pending.local?.[step.name] ?? resolveName(fileId, step.name);
       if (functionId) functionIdsByName.set(step.name, functionId);
     }
     added.push(...createLifecycleRelationships(node.id, pending.steps, functionIdsByName));
@@ -82,6 +82,7 @@ function parsePendingHandlerRefs(value: unknown): PendingHandlerRefs | null {
     return {
       handlers: Array.isArray(parsed.handlers) ? parsed.handlers : [],
       steps: Array.isArray(parsed.steps) ? parsed.steps : [],
+      ...(parsed.local && typeof parsed.local === "object" ? { local: parsed.local } : {}),
     };
   } catch {
     return null;

@@ -8,6 +8,7 @@ import {
   functionParameterNames,
   scopeCallInitializers,
   indexFileFunctions,
+  indexPassedToFunctions,
   indexPassedToHandlers,
   moduleLevelCallExpressions,
   stripStringQuotes,
@@ -64,11 +65,13 @@ export type RouteLifecycleStep = {
   orderIndex: number;
 };
 
-// Route references that did not resolve to a function in the declaring file:
+// Route references that did not resolve to a function in the declaring file
+// (`local`: the inline functions of the route's own call, by synthetic name):
 // handler identifiers, and the full lifecycle step list when any step is unresolved.
 export type PendingHandlerRefs = {
   handlers: string[];
   steps: RouteLifecycleStep[];
+  local?: Record<string, string>;
 };
 
 export function createExpressKoaRouteGraph(
@@ -105,6 +108,7 @@ function createHttpRouteGraph(
   const variablesByName = indexFileVariables(fileNodeId, nodes, relationships);
   const stringConstantsByName = indexFileStringConstants(fileNodeId, nodes, relationships);
   const functionIdsByPassedToCallId = indexPassedToHandlers(relationships);
+  const passedFunctionsByCallId = indexPassedToFunctions(nodes, relationships);
   const functionIdsByName = functionsByName;
   const importedNames = indexFileNamedImports(fileNodeId, nodes, relationships);
   const mountIndexes: MountIndexes = {
@@ -143,7 +147,25 @@ function createHttpRouteGraph(
         properties: {},
       });
 
-      const inlineHandlerId = functionIdsByPassedToCallId.get(route.callNodeId);
+      // Synthetic names of inline functions repeat across calls of a file, so
+      // the route's steps resolve against its own call's functions first.
+      const localFunctionIds = passedFunctionsByCallId.get(route.callNodeId) ?? new Map<string, string>();
+      const stepFunctionIds = localFunctionIds.size > 0
+        ? new Map([...functionIdsByName, ...localFunctionIds])
+        : functionIdsByName;
+      // The handler is the step with the handler role (the last argument, or
+      // a `handler` property), not the first inline function, which may be a
+      // middleware; a route without one (`use`) keeps its first inline
+      // function. Steps named by an identifier are linked below with the
+      // referenced names.
+      const linkedByName = new Set([...route.referencedHandlerNames, ...route.objectHandlerNames]);
+      const unlinkedStepId = (step: RouteLifecycleStep | undefined) => (
+        step && !linkedByName.has(step.name) ? stepFunctionIds.get(step.name) : undefined
+      );
+      const handlerStep = route.lifecycleSteps.find((step) => step.role === "handler");
+      const inlineHandlerId = handlerStep
+        ? unlinkedStepId(handlerStep)
+        : functionIdsByPassedToCallId.get(route.callNodeId) ?? unlinkedStepId(route.lifecycleSteps[0]);
       if (inlineHandlerId) {
         routeRelationships.push({
           from: route.node.id,
@@ -183,17 +205,18 @@ function createHttpRouteGraph(
       // parse (resolution/route-handlers.ts). The lifecycle chain is built
       // there in one piece so LIFECYCLE_PRECEDES links across both kinds.
       const hasUnresolvedSteps = route.lifecycleSteps.some((step) => (
-        !functionIdsByName.has(step.name) && importedNames.has(step.name)
+        !stepFunctionIds.has(step.name) && importedNames.has(step.name)
       ));
       if (unresolvedHandlerNames.length > 0 || hasUnresolvedSteps) {
         const pending: PendingHandlerRefs = {
           handlers: unresolvedHandlerNames,
           steps: hasUnresolvedSteps ? route.lifecycleSteps : [],
+          ...(hasUnresolvedSteps && localFunctionIds.size > 0 ? { local: Object.fromEntries(localFunctionIds) } : {}),
         };
         route.node.properties.pendingHandlerRefs = JSON.stringify(pending);
       }
       if (!hasUnresolvedSteps) {
-        routeRelationships.push(...createLifecycleRelationships(route.node.id, route.lifecycleSteps, functionIdsByName));
+        routeRelationships.push(...createLifecycleRelationships(route.node.id, route.lifecycleSteps, stepFunctionIds));
       }
     }
 
@@ -750,6 +773,11 @@ function extractLifecycleFunctionNames(
   }
 
   if (isFunctionExpressionNode(node) && expression) {
+    // A named function expression (`app.use(function logRequests(…) {…})`)
+    // has a Function node of its own under that name.
+    const ownName = node.childForFieldName("name");
+    if (ownName?.type === "identifier") return [ownName.text];
+
     if (propertyName) {
       return [routePath ? `<${expression}:${routePath}:${propertyName}>` : `<${expression}:${propertyName}>`];
     }

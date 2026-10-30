@@ -1444,10 +1444,8 @@ describe("buildCodeGraph", () => {
     assert.deepEqual(handlerNamesByRoute.get("GET:/health"), ["health"]);
     assert.deepEqual(handlerNamesByRoute.get("GET:/status"), ["health"]);
     assert.deepEqual(handlerNamesByRoute.get("HEAD:/status"), ["health"]);
-    assert.deepEqual(handlerNamesByRoute.get("GET:/object-inline")?.sort(), [
-      "<fastify.route:/object-inline:handler>",
-      "<fastify.route:/object-inline:preHandler>",
-    ]);
+    // The preHandler is a lifecycle step (middleware), not a handler.
+    assert.deepEqual(handlerNamesByRoute.get("GET:/object-inline"), ["<fastify.route:/object-inline:handler>"]);
 
     const lifecycleByRoute = new Map<string, Array<{ name: string; role: unknown; hook: unknown; orderIndex: unknown }>>();
     for (const rel of graph.relationships.filter((r) => r.type === "ROUTE_LIFECYCLE_STEP")) {

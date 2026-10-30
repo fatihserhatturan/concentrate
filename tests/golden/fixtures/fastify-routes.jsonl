@@ -88,7 +88,6 @@
 {"kind":"rel","from":"file:server.ts:route:31:0:GET:/status","type":"ROUTE_LIFECYCLE_STEP","to":"file:server.ts:function:13:health","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
 {"kind":"rel","from":"file:server.ts:route:31:0:HEAD:/status","type":"ROUTE_HANDLED_BY","to":"file:server.ts:function:13:health","properties":{}}
 {"kind":"rel","from":"file:server.ts:route:31:0:HEAD:/status","type":"ROUTE_LIFECYCLE_STEP","to":"file:server.ts:function:13:health","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
-{"kind":"rel","from":"file:server.ts:route:32:0:GET:/object-inline","type":"ROUTE_HANDLED_BY","to":"file:server.ts:function:35:<fastify.route:/object-inline:preHandler>","properties":{}}
 {"kind":"rel","from":"file:server.ts:route:32:0:GET:/object-inline","type":"ROUTE_HANDLED_BY","to":"file:server.ts:function:38:<fastify.route:/object-inline:handler>","properties":{}}
 {"kind":"rel","from":"file:server.ts:route:32:0:GET:/object-inline","type":"ROUTE_LIFECYCLE_STEP","to":"file:server.ts:function:35:<fastify.route:/object-inline:preHandler>","properties":{"hook":"preHandler","orderIndex":0,"role":"middleware","scope":"route"}}
 {"kind":"rel","from":"file:server.ts:route:32:0:GET:/object-inline","type":"ROUTE_LIFECYCLE_STEP","to":"file:server.ts:function:38:<fastify.route:/object-inline:handler>","properties":{"hook":"handler","orderIndex":1,"role":"handler","scope":"route"}}
