@@ -2,7 +2,7 @@ import { addImportResolutionRelationships } from "../integrations/resolution/imp
 import { addImportPackageRelationships } from "../core/scan/workspace-packages.js";
 import { addCallResolutionRelationships } from "../core/scan/resolution/calls.js";
 import { addInheritanceRelationships } from "../core/scan/resolution/inheritance.js";
-import { javascriptParser, typescriptParser } from "../integrations/frameworks/js-ts/scanner.js";
+import { htmlParser, javascriptParser, typescriptParser } from "../integrations/frameworks/js-ts/scanner.js";
 import { pythonParser } from "../integrations/languages/python/parser.js";
 import { goParser } from "../integrations/languages/go/parser.js";
 import { rustParser } from "../integrations/languages/rust/parser.js";
@@ -23,7 +23,7 @@ export { CoreIntegrationRegistry };
 export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry {
   const registry = new CoreIntegrationRegistry();
 
-  for (const parser of [javascriptParser, typescriptParser, pythonParser, goParser, rustParser]) {
+  for (const parser of [javascriptParser, typescriptParser, htmlParser, pythonParser, goParser, rustParser]) {
     registry.registerLanguageParser(parser);
   }
 

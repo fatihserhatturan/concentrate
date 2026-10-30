@@ -19,6 +19,12 @@
       "sha256": "3c6cb1c86cecc6d8c99b3a7dfc0aba8b838e2adf036bb23f384d6d8be395ae30",
       "bytes": 1447323
     },
+    "html": {
+      "package": "tree-sitter-html",
+      "version": "0.23.2",
+      "sha256": "11960fcc4fe3a01930de6bbae9b2c5c4d0a6c16012a5d20cc2069fa5b78d3bbd",
+      "bytes": 18695
+    },
     "python": {
       "package": "tree-sitter-python",
       "version": "0.21.0",

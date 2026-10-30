@@ -33,7 +33,7 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 | **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle: models, tables, and read and write operations |
 | **Workspaces** | packages and the dependencies between them, both declared and used in source |
 
-Languages: TypeScript and JavaScript (JSX/TSX included), Python, Go and Rust. Framework semantics are currently strongest for Node.js and TypeScript backends.
+Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages (script tags and inline scripts), Python, Go and Rust. Framework semantics are currently strongest for Node.js and TypeScript backends.
 
 ## How it works
 

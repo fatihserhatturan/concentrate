@@ -1,4 +1,5 @@
 import { createJsTsParser, type JsTsFrameworkPlugin } from "../../languages/js-ts/index.js";
+import { createHtmlParser } from "../../languages/html/parser.js";
 import { applyExpressKoaParseSemantics } from "./express-koa.js";
 import { applyFastifyParseSemantics } from "./fastify.js";
 import { applyNestJsParseSemantics } from "./nestjs.js";
@@ -63,3 +64,5 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
 
 export const javascriptParser = createJsTsParser("javascript", jsTsFrameworkPlugins);
 export const typescriptParser = createJsTsParser("typescript", jsTsFrameworkPlugins);
+// Inline scripts of HTML pages get the same framework semantics.
+export const htmlParser = createHtmlParser(jsTsFrameworkPlugins);
