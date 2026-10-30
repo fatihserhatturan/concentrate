@@ -18,6 +18,7 @@ const outDir = path.join(root, "vendor/grammars");
 const grammars = [
   { name: "javascript", package: "tree-sitter-javascript", version: "0.23.1", dir: "." },
   { name: "typescript", package: "tree-sitter-typescript", version: "0.23.2", dir: "typescript" },
+  { name: "tsx", package: "tree-sitter-typescript", version: "0.23.2", dir: "tsx" },
   { name: "python", package: "tree-sitter-python", version: "0.21.0", dir: "." },
   { name: "go", package: "tree-sitter-go", version: "0.21.2", dir: "." },
   { name: "rust", package: "tree-sitter-rust", version: "0.21.0", dir: "." },

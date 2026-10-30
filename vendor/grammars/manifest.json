@@ -13,6 +13,12 @@
       "sha256": "d24392183c75c103feafb827c9c086de00c30198e27f362cc971fbca6e91a87f",
       "bytes": 1415400
     },
+    "tsx": {
+      "package": "tree-sitter-typescript",
+      "version": "0.23.2",
+      "sha256": "3c6cb1c86cecc6d8c99b3a7dfc0aba8b838e2adf036bb23f384d6d8be395ae30",
+      "bytes": 1447323
+    },
     "python": {
       "package": "tree-sitter-python",
       "version": "0.21.0",

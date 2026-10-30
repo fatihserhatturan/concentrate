@@ -251,7 +251,7 @@ Extractors use only a narrow tree-sitter API: `type`, `id`, `text`, `startPositi
 ### Grammars
 
 - [ ] Upgrade javascript (0.25), python (0.25), go (0.25), rust (0.24) and typescript to current releases; review and document each golden diff
-- [ ] Parse `.tsx` with the TSX grammar (today `.tsx` uses the TypeScript grammar). Moved to Phase 10 ([#75](https://github.com/fatihserhatturan/concentrate/issues/75)).
+- [x] Parse `.tsx` with the TSX grammar (done in Phase 10, [#75](https://github.com/fatihserhatturan/concentrate/issues/75)).
 
 ### Error tolerance (behavior improvement)
 
@@ -552,7 +552,7 @@ Today `.tsx` is parsed with the TypeScript grammar, which has no JSX (`src/core/
 
 ### Grammars
 
-- [ ] Parse `.tsx` with the TSX grammar (built from the pinned `tree-sitter-typescript` package, `tsx` directory)
+- [x] Parse `.tsx` with the TSX grammar (built from the pinned `tree-sitter-typescript` package, `tsx` directory)
 - [ ] Vendor the official `tree-sitter-html` grammar as `.wasm` through `npm run grammars:build`
 - [ ] Produce a partial graph plus a scan warning instead of rejecting a file whose tree has `ERROR` nodes; review the golden diffs
 
