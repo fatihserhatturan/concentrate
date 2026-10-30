@@ -28,8 +28,15 @@ function parserFor(grammar: GrammarName): Promise<Parser> {
 
 // Parses `source`; the caller owns the tree and must delete() it, since trees
 // live in WebAssembly memory that the garbage collector does not reclaim.
-export async function parseSyntaxTree(grammar: GrammarName, source: string): Promise<SyntaxTree> {
-  const tree = (await parserFor(grammar)).parse(source);
+// `parseText`, when given, is what the grammar reads instead: a stand-in of
+// the same length, while node text still comes from `source`.
+export async function parseSyntaxTree(grammar: GrammarName, source: string, parseText = source): Promise<SyntaxTree> {
+  const parser = await parserFor(grammar);
+  let text = parseText;
+  // The tree reads node text through the callback it was parsed with, so it
+  // switches to `source` once the parse is done.
+  const tree = parseText === source ? parser.parse(source) : parser.parse((index) => text.slice(index));
+  text = source;
   if (!tree) throw new Error(`tree-sitter could not parse the ${grammar} source`);
   return tree;
 }
@@ -41,16 +48,19 @@ export async function parseSyntaxTree(grammar: GrammarName, source: string): Pro
 // whose parent type is in `statementParents`, or, in the last round, the
 // nearest child of the root. Returns the tree and the first line of every
 // left-out statement; throws when the source cannot be cleaned up.
+// `standIn`, when given, maps the text to what the grammar reads (see
+// `parseSyntaxTree`); it must keep every character's position.
 export async function parseSyntaxTreeSkippingErrors(
   grammar: GrammarName,
   source: string,
   statementParents: ReadonlySet<string>,
   rounds = 4,
+  standIn: (text: string) => string = (text) => text,
 ): Promise<{ tree: SyntaxTree; skippedLines: number[] }> {
   const skipped = new Set<number>();
   let text = source;
   for (let round = 1; ; round += 1) {
-    const tree = await parseSyntaxTree(grammar, text);
+    const tree = await parseSyntaxTree(grammar, text, standIn(text));
     if (!tree.rootNode.hasError) return { tree, skippedLines: [...skipped].sort((a, b) => a - b) };
 
     const lastRound = round >= rounds;
@@ -62,7 +72,7 @@ export async function parseSyntaxTreeSkippingErrors(
       skipped.add(range.line);
     }
     if (lastRound) {
-      const last = await parseSyntaxTree(grammar, text);
+      const last = await parseSyntaxTree(grammar, text, standIn(text));
       if (!last.rootNode.hasError) return { tree: last, skippedLines: [...skipped].sort((a, b) => a - b) };
       last.delete();
       break;

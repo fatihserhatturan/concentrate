@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 53
+        "result": 54
       },
       {
         "method": "stats",
@@ -103,7 +103,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 53,
+      "schemaVersion": 54,
       "stats": [
         {
           "table": "Repo",
@@ -1000,7 +1000,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:8:App",
@@ -1012,6 +1012,7 @@
             "endLine": 21,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Routes\",\"props\":[],\"line\":10},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":11},{\"name\":\"Route\",\"props\":[\"index\",\"element\"],\"line\":12},{\"name\":\"Route\",\"props\":[\"path\"],\"line\":13},{\"name\":\"Route\",\"props\":[\"index\",\"element\"],\"line\":14},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":15},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":17}]"
           },
@@ -1025,6 +1026,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -1038,6 +1040,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -1051,6 +1054,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -1064,6 +1068,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Outlet\",\"props\":[],\"line\":4}]"
           },
@@ -1077,6 +1082,7 @@
             "endLine": 1,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -1090,6 +1096,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -1103,6 +1110,7 @@
             "endLine": 7,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -1116,6 +1124,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -1129,6 +1138,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -1142,6 +1152,7 @@
             "endLine": 7,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           }

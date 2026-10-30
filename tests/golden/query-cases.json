@@ -654,6 +654,33 @@
         }
       }
     ],
+    "vue-components": [
+      {
+        "tool": "component_tree",
+        "args": {
+          "name": "App",
+          "depth": 3
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "UserCard"
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "MyWidget"
+        }
+      },
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "src/components/UserList.vue"
+        }
+      }
+    ],
     "vanilla-html": [
       {
         "tool": "find_callers",

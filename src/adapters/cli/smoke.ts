@@ -414,17 +414,16 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     name: "internet-realworld-fullstack",
     suite: "internet",
     expected: {
-      // pages/_document.tsx fails: the grammar rejects a bare & in a JSX attribute string.
-      status: "partial",
+      status: "success",
       discoveredFiles: 165,
       supportedFiles: 101,
-      parsedFiles: 100,
-      failedFiles: 1,
+      parsedFiles: 101,
+      failedFiles: 0,
       resolvedImports: 181,
       unresolvedRelativeImports: 0,
-      nodes: 1599,
-      relationships: 2420,
-      fileClassifications: { production: 90, test: 7, fixture: 0, support: 3, generated: 0 },
+      nodes: 1610,
+      relationships: 2431,
+      fileClassifications: { production: 91, test: 7, fixture: 0, support: 3, generated: 0 },
       graph: {
         schemaVersion: GRAPH_SCHEMA_VERSION,
         routes: 26,

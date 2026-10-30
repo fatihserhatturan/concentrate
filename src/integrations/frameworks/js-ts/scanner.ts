@@ -13,6 +13,7 @@ import { applyHttpClientSemantics } from "./http-clients.js";
 import { applyTrpcSemantics } from "./trpc.js";
 import { applyServerFunctionSemantics } from "./server-functions.js";
 import { applyTanStackRouterSemantics } from "./tanstack-router.js";
+import { applyVueScriptSemantics, applyVueTemplateSemantics } from "./vue.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
 // the nodes earlier ones added (NestJS routes, for example, read decorators).
@@ -79,6 +80,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     onFile: applyReactParseSemantics,
   },
   {
+    // The options, props and component registrations of a .vue file's script.
+    name: "vue",
+    onFile: applyVueScriptSemantics,
+  },
+  {
     // React Router <Route> trees and route objects.
     name: "react-router",
     onFile: applyReactRouterSemantics,
@@ -115,6 +121,11 @@ const markupPlugins: readonly HtmlPagePlugin[] = [
     name: "dom-attributes",
     onPage: ({ fileNodeId, documentNode, parsed }) =>
       applyDomAttributeSemantics(fileNodeId, documentNode, parsed.nodes, parsed.relationships),
+  },
+  {
+    // The component of a .vue file and the components its template renders.
+    name: "vue-components",
+    onPage: applyVueTemplateSemantics,
   },
 ];
 

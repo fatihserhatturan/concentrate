@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 53
+        "result": 54
       },
       {
         "method": "stats",
@@ -103,7 +103,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 53,
+      "schemaVersion": 54,
       "stats": [
         {
           "table": "Repo",
@@ -2227,7 +2227,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:10:Profile",
@@ -2239,6 +2239,7 @@
             "endLine": 17,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
           },
@@ -2252,6 +2253,7 @@
             "endLine": 41,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2265,6 +2267,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2278,6 +2281,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useState",
             "pendingRenders": null
           },
@@ -2291,6 +2295,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2304,6 +2309,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2317,6 +2323,7 @@
             "endLine": 12,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2330,6 +2337,7 @@
             "endLine": 10,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useCartCount,useEffect",
             "pendingRenders": null
           },
@@ -2343,6 +2351,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2356,6 +2365,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2369,6 +2379,7 @@
             "endLine": 9,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2382,6 +2393,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2395,6 +2407,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2408,6 +2421,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2421,6 +2435,7 @@
             "endLine": 5,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2434,6 +2449,7 @@
             "endLine": 10,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -2447,6 +2463,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
@@ -2962,7 +2979,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:10:Profile",
@@ -2974,6 +2991,7 @@
             "endLine": 17,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
           },
@@ -2987,6 +3005,7 @@
             "endLine": 41,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3000,6 +3019,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3013,6 +3033,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useState",
             "pendingRenders": null
           },
@@ -3026,6 +3047,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3039,6 +3061,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3052,6 +3075,7 @@
             "endLine": 12,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3065,6 +3089,7 @@
             "endLine": 10,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useCartCount,useEffect",
             "pendingRenders": null
           },
@@ -3078,6 +3103,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3091,6 +3117,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3104,6 +3131,7 @@
             "endLine": 9,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3117,6 +3145,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3130,6 +3159,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3143,6 +3173,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3156,6 +3187,7 @@
             "endLine": 5,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3169,6 +3201,7 @@
             "endLine": 10,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3182,6 +3215,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
@@ -3667,7 +3701,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:10:Profile",
@@ -3679,6 +3713,7 @@
             "endLine": 17,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
           },
@@ -3692,6 +3727,7 @@
             "endLine": 41,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3705,6 +3741,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3718,6 +3755,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useState",
             "pendingRenders": null
           },
@@ -3731,6 +3769,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3744,6 +3783,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3757,6 +3797,7 @@
             "endLine": 12,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3770,6 +3811,7 @@
             "endLine": 10,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useCartCount,useEffect",
             "pendingRenders": null
           },
@@ -3783,6 +3825,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3796,6 +3839,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3809,6 +3853,7 @@
             "endLine": 9,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3822,6 +3867,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3835,6 +3881,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3848,6 +3895,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3861,6 +3909,7 @@
             "endLine": 5,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3874,6 +3923,7 @@
             "endLine": 10,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -3887,6 +3937,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
@@ -4077,7 +4128,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:10:Profile",
@@ -4089,6 +4140,7 @@
             "endLine": 17,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
           },
@@ -4102,6 +4154,7 @@
             "endLine": 41,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4115,6 +4168,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4128,6 +4182,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useState",
             "pendingRenders": null
           },
@@ -4141,6 +4196,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4154,6 +4210,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4167,6 +4224,7 @@
             "endLine": 12,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4180,6 +4238,7 @@
             "endLine": 10,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useCartCount,useEffect",
             "pendingRenders": null
           },
@@ -4193,6 +4252,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4206,6 +4266,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4219,6 +4280,7 @@
             "endLine": 9,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4232,6 +4294,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4245,6 +4308,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4258,6 +4322,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4271,6 +4336,7 @@
             "endLine": 5,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4284,6 +4350,7 @@
             "endLine": 10,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4297,6 +4364,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
@@ -4680,7 +4748,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:10:Profile",
@@ -4692,6 +4760,7 @@
             "endLine": 17,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
           },
@@ -4705,6 +4774,7 @@
             "endLine": 41,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4718,6 +4788,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4731,6 +4802,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useState",
             "pendingRenders": null
           },
@@ -4744,6 +4816,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4757,6 +4830,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4770,6 +4844,7 @@
             "endLine": 12,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4783,6 +4858,7 @@
             "endLine": 10,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useCartCount,useEffect",
             "pendingRenders": null
           },
@@ -4796,6 +4872,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4809,6 +4886,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4822,6 +4900,7 @@
             "endLine": 9,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4835,6 +4914,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4848,6 +4928,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4861,6 +4942,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4874,6 +4956,7 @@
             "endLine": 5,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4887,6 +4970,7 @@
             "endLine": 10,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -4900,6 +4984,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
@@ -5367,7 +5452,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:10:Profile",
@@ -5379,6 +5464,7 @@
             "endLine": 17,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
           },
@@ -5392,6 +5478,7 @@
             "endLine": 41,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5405,6 +5492,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5418,6 +5506,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useState",
             "pendingRenders": null
           },
@@ -5431,6 +5520,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5444,6 +5534,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5457,6 +5548,7 @@
             "endLine": 12,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5470,6 +5562,7 @@
             "endLine": 10,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useCartCount,useEffect",
             "pendingRenders": null
           },
@@ -5483,6 +5576,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5496,6 +5590,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5509,6 +5604,7 @@
             "endLine": 9,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5522,6 +5618,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5535,6 +5632,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5548,6 +5646,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5561,6 +5660,7 @@
             "endLine": 5,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5574,6 +5674,7 @@
             "endLine": 10,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -5587,6 +5688,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
@@ -6180,7 +6282,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:10:Profile",
@@ -6192,6 +6294,7 @@
             "endLine": 17,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
           },
@@ -6205,6 +6308,7 @@
             "endLine": 41,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6218,6 +6322,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6231,6 +6336,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useState",
             "pendingRenders": null
           },
@@ -6244,6 +6350,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6257,6 +6364,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6270,6 +6378,7 @@
             "endLine": 12,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6283,6 +6392,7 @@
             "endLine": 10,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useCartCount,useEffect",
             "pendingRenders": null
           },
@@ -6296,6 +6406,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6309,6 +6420,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6322,6 +6434,7 @@
             "endLine": 9,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6335,6 +6448,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6348,6 +6462,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6361,6 +6476,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6374,6 +6490,7 @@
             "endLine": 5,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6387,6 +6504,7 @@
             "endLine": 10,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6400,6 +6518,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
@@ -6610,7 +6729,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:10:Profile",
@@ -6622,6 +6741,7 @@
             "endLine": 17,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
           },
@@ -6635,6 +6755,7 @@
             "endLine": 41,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6648,6 +6769,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6661,6 +6783,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useState",
             "pendingRenders": null
           },
@@ -6674,6 +6797,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6687,6 +6811,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6700,6 +6825,7 @@
             "endLine": 12,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6713,6 +6839,7 @@
             "endLine": 10,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useCartCount,useEffect",
             "pendingRenders": null
           },
@@ -6726,6 +6853,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6739,6 +6867,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6752,6 +6881,7 @@
             "endLine": 9,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6765,6 +6895,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6778,6 +6909,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6791,6 +6923,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6804,6 +6937,7 @@
             "endLine": 5,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6817,6 +6951,7 @@
             "endLine": 10,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -6830,6 +6965,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }
@@ -7378,7 +7514,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:10:Profile",
@@ -7390,6 +7526,7 @@
             "endLine": 17,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
           },
@@ -7403,6 +7540,7 @@
             "endLine": 41,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7416,6 +7554,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7429,6 +7568,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useState",
             "pendingRenders": null
           },
@@ -7442,6 +7582,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7455,6 +7596,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7468,6 +7610,7 @@
             "endLine": 12,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7481,6 +7624,7 @@
             "endLine": 10,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": "useCartCount,useEffect",
             "pendingRenders": null
           },
@@ -7494,6 +7638,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7507,6 +7652,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7520,6 +7666,7 @@
             "endLine": 9,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7533,6 +7680,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7546,6 +7694,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7559,6 +7708,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7572,6 +7722,7 @@
             "endLine": 5,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7585,6 +7736,7 @@
             "endLine": 10,
             "isExported": false,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": null
           },
@@ -7598,6 +7750,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Suspense\",\"props\":[\"fallback\"],\"line\":14}]"
           }

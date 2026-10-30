@@ -1,0 +1,5 @@
+{
+  "name": "vue-components",
+  "private": true,
+  "dependencies": { "vue": "3.5.12", "vue-router": "4.4.5" }
+}

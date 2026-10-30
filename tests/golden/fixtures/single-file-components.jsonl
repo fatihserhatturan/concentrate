@@ -8,6 +8,7 @@
 {"kind":"node","id":"dir:src/lib","label":"Directory","properties":{"name":"lib","path":"<root>/src/lib","relativePath":"src/lib"}}
 {"kind":"node","id":"dir:src/pages","label":"Directory","properties":{"name":"pages","path":"<root>/src/pages","relativePath":"src/pages"}}
 {"kind":"node","id":"file:src/components/CartButton.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/components/CartButton.vue","relativePath":"src/components/CartButton.vue","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/CartButton.vue:component:1:CartButton","label":"Component","properties":{"endLine":25,"framework":"vue","isExported":true,"kind":"script-setup","line":1,"name":"CartButton","pendingRenders":null,"props":"id,label"}}
 {"kind":"node","id":"file:src/components/CartButton.vue:config:8:name","label":"ConfigValue","properties":{"line":8,"name":"name","value":"CartButton","valueType":"string"}}
 {"kind":"node","id":"file:src/components/CartButton.vue:function:18:add","label":"Function","properties":{"className":null,"endLine":20,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":18,"methodKind":null,"name":"add","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/components/CartButton.vue:function:18:add:call:19:16:addToCart","label":"Call","properties":{"args":"[\"props.id\"]","callee":"addToCart","columnNumber":16,"expression":"addToCart","line":19,"name":"addToCart","receiver":null}}
@@ -51,6 +52,7 @@
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Total.svelte","properties":{}}
 {"kind":"rel","from":"dir:src/lib","type":"CONTAINS_FILE","to":"file:src/lib/cart.ts","properties":{}}
 {"kind":"rel","from":"dir:src/pages","type":"CONTAINS_FILE","to":"file:src/pages/index.astro","properties":{}}
+{"kind":"rel","from":"file:src/components/CartButton.vue","type":"DECLARES_COMPONENT","to":"file:src/components/CartButton.vue:component:1:CartButton","properties":{}}
 {"kind":"rel","from":"file:src/components/CartButton.vue","type":"DECLARES_CONFIG","to":"file:src/components/CartButton.vue:config:8:name","properties":{}}
 {"kind":"rel","from":"file:src/components/CartButton.vue","type":"DEFINES_FUNCTION","to":"file:src/components/CartButton.vue:function:18:add","properties":{}}
 {"kind":"rel","from":"file:src/components/CartButton.vue","type":"DEFINES_VARIABLE","to":"file:src/components/CartButton.vue:variable:15:props","properties":{}}

@@ -168,6 +168,7 @@ function summary(component: ComponentInfo) {
     endLine: component.endLine,
     isExported: component.isExported,
     ...(component.tagName ? { tagName: component.tagName } : {}),
+    ...(component.props.length > 0 ? { props: component.props } : {}),
   };
 }
 

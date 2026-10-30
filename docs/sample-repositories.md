@@ -242,9 +242,8 @@ standing smoke samples.
 - Scan options: `apiOrigins: ["https://conduit.productionready.io"]`, the
   deployed API the frontend calls (`SERVER_BASE_URL`).
 - Last scan result, 2026-10-30: 165 discovered files, 101 supported files,
-  100 parsed files, 1 failed file (`frontend/pages/_document.tsx`: a bare `&`
-  in a JSX attribute string, see [known-limitations.md](known-limitations.md)),
-  181 resolved imports, 1599 nodes, 2420 relationships.
+  101 parsed files, 0 failed files, 181 resolved imports, 1610 nodes, 2431
+  relationships.
 - Expected smoke counts: 26 `Route` nodes and 32 `REQUESTS` edges (31 from
   the frontend, 1 from the backend's e2e test); the hand labels are in
   [accuracy.md](accuracy.md).

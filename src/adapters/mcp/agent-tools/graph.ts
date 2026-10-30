@@ -425,6 +425,8 @@ export type ComponentInfo = {
   endLine: number | null;
   isExported: boolean | null;
   tagName: string | null;
+  // Declared prop names (Vue), in order.
+  props: string[];
   // Built-in and custom hooks the component calls, by name.
   hooks: string[];
   // Rendered elements that resolved to no Component (library components).
@@ -439,7 +441,7 @@ export async function loadComponents(engine: IQueryEngine): Promise<Map<string, 
     MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component)
     RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework,
       file.relativePath AS file, component.line AS line, component.endLine AS endLine,
-      component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks,
+      component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks,
       component.pendingRenders AS pendingRenders
   `) as Row[];
   const components = new Map<string, ComponentInfo>();
@@ -456,6 +458,7 @@ export async function loadComponents(engine: IQueryEngine): Promise<Map<string, 
       endLine: num(row.endLine),
       isExported: typeof row.isExported === "boolean" ? row.isExported : null,
       tagName: str(row.tagName),
+      props: str(row.props)?.split(",").filter(Boolean) ?? [],
       hooks: str(row.hooks)?.split(",").filter(Boolean) ?? [],
       unresolvedRenders: parseRenders(row.pendingRenders),
     });

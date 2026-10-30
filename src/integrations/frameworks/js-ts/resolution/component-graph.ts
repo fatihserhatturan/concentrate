@@ -6,9 +6,10 @@ import { createResolutionRelationshipIndex, indexImportNodesByFile } from "../..
 import { isHookCall, type PendingRender } from "../react.js";
 
 // Cross-file component relationships:
-// - RENDERS: the JSX a component renders (`<UserCard name={…} />`) to the
-//   rendered Component, declared in the same file or imported by name or as the
-//   default export, through barrels. `<CartContext.Provider>` renders the
+// - RENDERS: the JSX a component renders (`<UserCard name={…} />`), or the
+//   component tags of a Vue template, to the rendered Component, declared in
+//   the same file or imported by name or as the default export (the
+//   component of a `.vue` file), through barrels. `<CartContext.Provider>` renders the
 //   context. `Component.pendingRenders` keeps the elements that stay
 //   unresolved (library components such as `<Link>`). A `lazy` component
 //   RENDERS the component its dynamic import loads.
@@ -40,11 +41,15 @@ export function addComponentRelationships(graph: IGraphContributor): void {
   }
   if (fileByComponentId.size === 0) return;
 
-  // `export default function App()` / `export default App`, or a component
-  // exported through a wrapper (`export default connect(...)(App)`).
+  // `export default function App()` / `export default App`, a component
+  // exported through a wrapper (`export default connect(...)(App)`), or the
+  // component of a `.vue` file.
   for (const [fileId, byName] of componentsByFileAndName) {
-    const defaultExport = nodesById.get(fileId)?.properties.defaultExport;
-    const ids = typeof defaultExport === "string"
+    const file = nodesById.get(fileId);
+    const defaultExport = file?.properties.defaultExport;
+    const ids = file?.properties.language === "vue"
+      ? [...byName.values()].flat().filter((id) => nodesById.get(id)?.properties.framework === "vue")
+      : typeof defaultExport === "string"
       ? byName.get(defaultExport)
       : [...byName.values()].flat().filter((id) => typeof nodesById.get(id)?.properties.defaultExportWrapper === "string");
     if (ids && ids.length > 0 && !byName.has("default")) byName.set("default", ids);
