@@ -656,7 +656,7 @@ Links outbound HTTP calls to the `Route` nodes the backend phases already build.
 
 ### Schema
 
-- [ ] `REQUESTS` (Call → Route, with method, url and how the match was made); bump `SCHEMA_VERSION`
+- [x] `REQUESTS` (Call → Route, with method, url and how the match was made); bump `SCHEMA_VERSION`
 
 ### Clients
 
