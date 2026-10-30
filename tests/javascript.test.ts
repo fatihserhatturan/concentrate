@@ -213,7 +213,8 @@ describe("JavaScript parser", () => {
     const result = await javascriptParser.parse(commonJsExportRoot, commonJsExportPath);
 
     const name = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "name")!;
-    const make = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "make")!;
+    // A function under a module.exports key is an exported Function.
+    const make = result.nodes.find((n) => n.label === "Function" && n.properties.name === "make")!;
     const extra = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "extra")!;
     const direct = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "direct")!;
     const assignedName = result.nodes.find((n) => n.label === "Variable" && n.properties.name === "assignedName")!;
@@ -224,7 +225,7 @@ describe("JavaScript parser", () => {
     assert.ok(direct);
     assert.ok(assignedName);
     assert.equal(name.properties.kind, "module.exports");
-    assert.equal(make.properties.kind, "module.exports");
+    assert.equal(make.properties.kind, "arrow_function");
     assert.equal(extra.properties.kind, "module.exports");
     assert.equal(direct.properties.kind, "module.exports");
     assert.equal(assignedName.properties.kind, "module.exports");
@@ -234,7 +235,7 @@ describe("JavaScript parser", () => {
     assert.equal(direct.properties.isExported, true);
     assert.equal(assignedName.properties.isExported, true);
     assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === name.id && r.type === "DEFINES_VARIABLE"));
-    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === make.id && r.type === "DEFINES_VARIABLE"));
+    assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === make.id && r.type === "DEFINES_FUNCTION"));
     assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === extra.id && r.type === "DEFINES_VARIABLE"));
     assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === direct.id && r.type === "DEFINES_VARIABLE"));
     assert.ok(result.relationships.some((r) => r.from === result.fileNodeId && r.to === assignedName.id && r.type === "DEFINES_VARIABLE"));

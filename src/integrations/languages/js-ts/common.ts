@@ -55,3 +55,53 @@ export function isTypeScriptAbstract(node: SyntaxNode): boolean {
 export function serializeNameList(names: string[]): string | null {
   return names.length > 0 ? JSON.stringify(names) : null;
 }
+
+// A function stored under a property of a module-level object literal, and
+// that property's name: `const api = { get: (id) => …, list() { … } }`,
+// `export default { … }`, `module.exports = { … }`, nested objects too.
+// Objects built inside functions, passed to calls or returned are not
+// followed.
+export function moduleObjectPropertyFunctionName(node: SyntaxNode): string | null {
+  let key: SyntaxNode | null = null;
+  let object: SyntaxNode | null = null;
+  if (node.type === "method_definition" && node.parent?.type === "object") {
+    key = node.childForFieldName("name");
+    object = node.parent;
+  } else if (
+    (node.type === "arrow_function" || node.type === "function_expression")
+    && !node.childForFieldName("name")
+    && node.parent?.type === "pair"
+    && node.parent.childForFieldName("value")?.id === node.id
+  ) {
+    key = node.parent.childForFieldName("key");
+    object = node.parent.parent;
+  }
+  const name = key?.type === "property_identifier" ? key.text : key?.type === "string" ? key.text.slice(1, -1) : null;
+  if (!name || object?.type !== "object") return null;
+
+  let current: SyntaxNode = object;
+  for (;;) {
+    let parent = current.parent;
+    while (parent && (parent.type === "as_expression" || parent.type === "satisfies_expression" || parent.type === "parenthesized_expression")) {
+      current = parent;
+      parent = parent.parent;
+    }
+    if (parent?.type === "pair" && parent.childForFieldName("value")?.id === current.id && parent.parent?.type === "object") {
+      current = parent.parent;
+      continue;
+    }
+    if (parent?.type === "variable_declarator") {
+      return parent.childForFieldName("value")?.id === current.id && isModuleLevelDeclarator(parent) ? name : null;
+    }
+    if (parent?.type === "export_statement") return parent.children.some((child) => child.type === "default") ? name : null;
+    if (parent?.type === "assignment_expression") {
+      return parent.childForFieldName("right")?.id === current.id
+        && /^(?:module\.)?exports(?:\.[\w$]+)?$/u.test(parent.childForFieldName("left")?.text ?? "")
+        && parent.parent?.type === "expression_statement"
+        && parent.parent.parent?.type === "program"
+        ? name
+        : null;
+    }
+    return null;
+  }
+}

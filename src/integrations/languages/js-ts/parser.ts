@@ -12,6 +12,7 @@ import {
   isModuleLevelDeclarator,
   isVariableClassValue,
   isVariableFunctionValue,
+  moduleObjectPropertyFunctionName,
 } from "./common.js";
 import {
   createCjsImportNode,
@@ -162,8 +163,12 @@ export function walkJsTsNodes(
       cjsExportBindings.push(...extractCjsObjectAssignExportBindings(node));
     }
 
-    if (isFunctionNode(node) && node.type !== "method_definition" && node.type !== "abstract_method_signature") {
-      const functionNode = createFunctionNode(fileNodeId, node);
+    if (isFunctionNode(node) && node.type !== "abstract_method_signature" && (node.type !== "method_definition" || node.parent?.type === "object")) {
+      // Functions of module-level object literals are named by their property.
+      const propertyName = moduleObjectPropertyFunctionName(node);
+      const functionNode = node.type === "method_definition"
+        ? propertyName ? createFunctionNode(fileNodeId, node, undefined, propertyName) : null
+        : createFunctionNode(fileNodeId, node) ?? (propertyName ? createFunctionNode(fileNodeId, node, undefined, propertyName) : null);
       if (functionNode) {
         nodes.push(functionNode);
         relationships.push({ from: fileNodeId, to: functionNode.id, type: "DEFINES_FUNCTION", properties: {} });

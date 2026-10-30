@@ -33,7 +33,7 @@
           },
           {
             "table": "Function",
-            "count": 5
+            "count": 6
           },
           {
             "table": "Class",
@@ -127,7 +127,7 @@
         },
         {
           "table": "Function",
-          "count": 5
+          "count": 6
         },
         {
           "table": "Class",
@@ -220,6 +220,14 @@
             "file": "src/app/posts.tsx",
             "line": 20,
             "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "query",
+            "kind": "Function",
+            "file": "src/app/posts.tsx",
+            "line": 32,
+            "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           },
           {
@@ -364,6 +372,14 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "name": "query",
+          "kind": "Function",
+          "file": "src/app/posts.tsx",
+          "line": 32,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "<t.procedure.use:arg0>",
           "kind": "Function",
           "file": "src/server/trpc.ts",
@@ -454,7 +470,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 13
+        "returned": 14
       }
     }
   },
@@ -1220,6 +1236,14 @@
             "endLine": 29
           },
           {
+            "id": "file:src/app/posts.tsx:function:32:query",
+            "name": "query",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 32,
+            "endLine": 32
+          },
+          {
             "id": "file:src/server/trpc.ts:function:7:<t.procedure.use:arg0>",
             "name": "<t.procedure.use:arg0>",
             "className": null,
@@ -1459,6 +1483,14 @@
             "file": "src/app/posts.tsx",
             "line": 26,
             "endLine": 29
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:32:query",
+            "name": "query",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 32,
+            "endLine": 32
           },
           {
             "id": "file:src/server/trpc.ts:function:7:<t.procedure.use:arg0>",
@@ -1848,6 +1880,14 @@
             "file": "src/app/posts.tsx",
             "line": 26,
             "endLine": 29
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:32:query",
+            "name": "query",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 32,
+            "endLine": 32
           },
           {
             "id": "file:src/server/trpc.ts:function:7:<t.procedure.use:arg0>",

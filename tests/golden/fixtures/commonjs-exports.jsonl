@@ -2,6 +2,8 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"commonjs-exports","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"file:index.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/index.js","relativePath":"index.js","sourceType":"production"}}
 {"kind":"node","id":"file:index.js:class:5:ClientFactory","label":"Class","properties":{"endLine":9,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":5,"name":"ClientFactory","visibility":"public"}}
+{"kind":"node","id":"file:index.js:function:19:make","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"arrow_function","line":19,"methodKind":null,"name":"make","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:index.js:function:19:make:call:19:14:createClient","label":"Call","properties":{"args":"[]","callee":"createClient","columnNumber":14,"expression":"createClient","line":19,"name":"createClient","receiver":null}}
 {"kind":"node","id":"file:index.js:function:1:createClient","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"createClient","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:index.js:function:6:create","label":"Function","properties":{"className":"ClientFactory","endLine":8,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"method_definition","line":6,"methodKind":"method","name":"create","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:index.js:function:6:create:call:7:11:createClient","label":"Call","properties":{"args":"[]","callee":"createClient","columnNumber":11,"expression":"createClient","line":7,"name":"createClient","receiver":null}}
@@ -9,7 +11,6 @@
 {"kind":"node","id":"file:index.js:variable:11:defaultTimeout","label":"Variable","properties":{"isExported":true,"kind":"const","line":11,"name":"defaultTimeout","stringValue":null}}
 {"kind":"node","id":"file:index.js:variable:12:internalOnly","label":"Variable","properties":{"isExported":false,"kind":"const","line":12,"name":"internalOnly","stringValue":null}}
 {"kind":"node","id":"file:index.js:variable:18:name","label":"Variable","properties":{"isExported":true,"kind":"module.exports","line":18,"name":"name"}}
-{"kind":"node","id":"file:index.js:variable:19:make","label":"Variable","properties":{"isExported":true,"kind":"module.exports","line":19,"name":"make"}}
 {"kind":"node","id":"file:index.js:variable:22:extra","label":"Variable","properties":{"isExported":true,"kind":"module.exports","line":22,"name":"extra"}}
 {"kind":"node","id":"file:index.js:variable:23:direct","label":"Variable","properties":{"isExported":true,"kind":"module.exports","line":23,"name":"direct"}}
 {"kind":"node","id":"file:index.js:variable:24:createAlias","label":"Variable","properties":{"isExported":true,"kind":"module.exports","line":24,"name":"createAlias"}}
@@ -18,11 +19,11 @@
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"commonjs-exports","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:index.js","properties":{}}
 {"kind":"rel","from":"file:index.js","type":"DEFINES_CLASS","to":"file:index.js:class:5:ClientFactory","properties":{}}
+{"kind":"rel","from":"file:index.js","type":"DEFINES_FUNCTION","to":"file:index.js:function:19:make","properties":{}}
 {"kind":"rel","from":"file:index.js","type":"DEFINES_FUNCTION","to":"file:index.js:function:1:createClient","properties":{}}
 {"kind":"rel","from":"file:index.js","type":"DEFINES_VARIABLE","to":"file:index.js:variable:11:defaultTimeout","properties":{}}
 {"kind":"rel","from":"file:index.js","type":"DEFINES_VARIABLE","to":"file:index.js:variable:12:internalOnly","properties":{}}
 {"kind":"rel","from":"file:index.js","type":"DEFINES_VARIABLE","to":"file:index.js:variable:18:name","properties":{}}
-{"kind":"rel","from":"file:index.js","type":"DEFINES_VARIABLE","to":"file:index.js:variable:19:make","properties":{}}
 {"kind":"rel","from":"file:index.js","type":"DEFINES_VARIABLE","to":"file:index.js:variable:22:extra","properties":{}}
 {"kind":"rel","from":"file:index.js","type":"DEFINES_VARIABLE","to":"file:index.js:variable:23:direct","properties":{}}
 {"kind":"rel","from":"file:index.js","type":"DEFINES_VARIABLE","to":"file:index.js:variable:24:createAlias","properties":{}}
@@ -30,6 +31,8 @@
 {"kind":"rel","from":"file:index.js","type":"DEFINES_VARIABLE","to":"file:index.js:variable:27:assignedName","properties":{}}
 {"kind":"rel","from":"file:index.js","type":"MODULE_CALLS","to":"file:index.js:modulecall:25:0:Object.assign","properties":{}}
 {"kind":"rel","from":"file:index.js:class:5:ClientFactory","type":"DEFINES_METHOD","to":"file:index.js:function:6:create","properties":{}}
+{"kind":"rel","from":"file:index.js:function:19:make","type":"CALLS","to":"file:index.js:function:19:make:call:19:14:createClient","properties":{}}
+{"kind":"rel","from":"file:index.js:function:19:make:call:19:14:createClient","type":"CALL_RESOLVES_TO","to":"file:index.js:function:1:createClient","properties":{}}
 {"kind":"rel","from":"file:index.js:function:6:create","type":"CALLS","to":"file:index.js:function:6:create:call:7:11:createClient","properties":{}}
 {"kind":"rel","from":"file:index.js:function:6:create:call:7:11:createClient","type":"CALL_RESOLVES_TO","to":"file:index.js:function:1:createClient","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
