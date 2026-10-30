@@ -666,7 +666,7 @@ Links outbound HTTP calls to the `Route` nodes the backend phases already build.
 
 ### Matching
 
-- [ ] URLs from literals, template strings and constants; base URLs from config and env
+- [x] URLs from literals, template strings and constants; base URLs from config and env
 - [x] Match against `Route.fullPath` with method and parameter segments, across packages in a monorepo
 - [x] Env: destructured reads (#58), `import.meta.env` (#59), `NEXT_PUBLIC_*` and `VITE_*`
 

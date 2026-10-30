@@ -398,11 +398,19 @@ Astro).
   one); options held in a variable or spreading another object leave it
   unknown, and the call is not linked.
 - `httpUrl` is resolved before matching: `${NAME}` and a bare variable
-  argument become the string constant they name (a string or a template
-  without substitutions, in the same file or imported by name), the
-  instance base URL is joined in front, and a `localhost` / `127.0.0.1` /
-  `0.0.0.0` origin is dropped. Env vars (`${process.env.API_URL}/posts`),
-  other origins and computed values stay unresolved.
+  argument become the constant they name (a string, or a template resolved
+  in turn, in the same file or imported by name), the instance base URL is
+  joined in front, and a `localhost` / `127.0.0.1` / `0.0.0.0` origin is
+  dropped. Env reads (`${process.env.API_URL}/posts`, `import.meta.env.*`,
+  also through a constant or an instance `baseURL`) take their value from
+  the `.env*` files the scan sees (nearest directory first:
+  `.env.development.local`, `.env.local`, `.env.development`, `.env`,
+  `.env.example`, `.env.sample`) or from a literal `??` / `||` fallback.
+  Gitignored env files are not read, `.env.production` and `.env.test` are
+  not used, values are not expanded (`${OTHER}`), and only URL or path
+  values count. A URL resolved through env is kept only when it ends up a
+  path; otherwise it stays as written and unlinked. Other origins and
+  computed values (`API + "/posts"`, function calls) stay unresolved.
 - `REQUESTS` links a call to the `Route` its URL reaches when the resolved
   URL is a path and exactly one route is the most specific match (literal
   segments over parameters over catch-alls); `match` says `exact`,
