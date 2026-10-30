@@ -81,7 +81,7 @@ describe("buildCodeGraph", () => {
     assert.equal(graph.report.parsedFiles, 1);
     assert.equal(graph.report.status, "partial");
     assert.equal(graph.report.failedFiles.length, 1);
-    assert.equal(graph.report.failedFiles[0]?.path, "bad.ts");
+    assert.equal(graph.report.failedFiles[0]?.path, "bad.py");
     assert.match(graph.report.failedFiles[0]?.message ?? "", /Syntax error/);
 
     assertRelationship(
@@ -90,6 +90,37 @@ describe("buildCodeGraph", () => {
       "DEFINES_FUNCTION",
       "file:good.ts:function:1:good",
     );
+  });
+
+  it("leaves out JS/TS statements with syntax errors and keeps the rest of the file", async () => {
+    const fixturePath = await mkdtemp(path.join(os.tmpdir(), "concentrate-syntax-errors-"));
+    await writeFile(
+      path.join(fixturePath, "partial.ts"),
+      [
+        "export function ok() {",
+        "  const x = ;",
+        "  return run();",
+        "}",
+        "function run() { return 2; }",
+        "class K {",
+        "  m() { return run(); }",
+        "  n( { }",
+        "}",
+        "export function broken( {",
+        "",
+      ].join("\n"),
+      "utf8",
+    );
+    const graph = await buildCodeGraph(fixturePath, { continueOnError: false });
+
+    assert.equal(graph.report.status, "success");
+    assert.deepEqual(graph.report.failedFiles, []);
+    assert.deepEqual(graph.report.warnings, [
+      { path: "partial.ts", message: "Syntax error: left out the statements at lines 2, 8, 10" },
+    ]);
+    const functions = graph.nodes.filter((node) => node.label === "Function").map((node) => String(node.properties.name)).sort();
+    assert.deepEqual(functions, ["m", "ok", "run"]);
+    assertRelationship(graph.relationships, "file:partial.ts:function:1:ok:call:3:9:run", "CALL_RESOLVES_TO", "file:partial.ts:function:5:run");
   });
 
   it("rescans with the parse cache after files are added, changed, and deleted", async () => {
@@ -1962,7 +1993,8 @@ async function createScanErrorFixture(): Promise<string> {
     "export function good(): string {\n  return \"ok\";\n}\n",
     "utf8",
   );
-  await writeFile(path.join(fixturePath, "bad.ts"), "export function bad( {\n", "utf8");
+  // JS/TS files with syntax errors produce partial graphs; Python ones still fail.
+  await writeFile(path.join(fixturePath, "bad.py"), "def bad(:\n", "utf8");
   return fixturePath;
 }
 

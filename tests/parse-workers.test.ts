@@ -35,13 +35,15 @@ describe("parse workers", () => {
       );
     }
     await writeFile(path.join(root, "src", "util.py"), "def greet(name):\n    return name\n");
-    await writeFile(path.join(root, "src", "broken.ts"), "export function broken( {\n");
+    await writeFile(path.join(root, "src", "partial.ts"), "export function partial( {\n");
+    await writeFile(path.join(root, "src", "broken.py"), "def broken(:\n");
 
     const mainThread = await buildCodeGraph(root, { continueOnError: true, workers: 0 });
     const workers = await buildCodeGraph(root, { continueOnError: true, workers: 2 });
     assert.equal(mainThread.report.parseWorkers, 0);
     assert.equal(workers.report.parseWorkers, 2);
     assert.equal(workers.report.failedFiles.length, 1);
+    assert.equal(workers.report.warnings.length, 1);
     assert.equal(renderGolden(workers), renderGolden(mainThread));
   });
 

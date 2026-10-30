@@ -95,4 +95,6 @@ export type ParsedSourceFile = {
   fileNodeId: string;
   nodes: GraphNode[];
   relationships: GraphRelationship[];
+  // Problems the parser worked around; the scan reports them as warnings.
+  warnings?: string[];
 };
