@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 24
+            "count": 25
           },
           {
             "table": "Route",
@@ -159,7 +159,7 @@
         },
         {
           "table": "Call",
-          "count": 24
+          "count": 25
         },
         {
           "table": "Route",

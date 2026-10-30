@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":18,"supportedFiles":17,"parsedFiles":17,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":19,"supportedFiles":18,"parsedFiles":18,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"vue-components","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"vue-components","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
@@ -9,7 +9,7 @@
 {"kind":"node","id":"dir:src/router","label":"Directory","properties":{"name":"router","path":"<root>/src/router","relativePath":"src/router"}}
 {"kind":"node","id":"dir:src/views","label":"Directory","properties":{"name":"views","path":"<root>/src/views","relativePath":"src/views"}}
 {"kind":"node","id":"file:src/App.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/App.vue","relativePath":"src/App.vue","sourceType":"production"}}
-{"kind":"node","id":"file:src/App.vue:component:1:App","label":"Component","properties":{"endLine":36,"framework":"vue","hooks":"useUsers","isExported":true,"kind":"script-setup","line":1,"name":"App","pendingRenders":"[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]","props":"title,query"}}
+{"kind":"node","id":"file:src/App.vue:component:1:App","label":"Component","properties":{"endLine":36,"framework":"vue","hooks":"useUsers","isExported":true,"kind":"script-setup","line":1,"name":"App","pendingRenders":"[{\"name\":\"RouterView\",\"props\":[],\"line\":8}]","props":"title,query"}}
 {"kind":"node","id":"file:src/App.vue:entrypoint:11:26:dom-event:click","label":"EntryPoint","properties":{"handlerName":"select","kind":"dom-event","library":"vue","line":11,"receiverName":"button","trigger":"click"}}
 {"kind":"node","id":"file:src/App.vue:entrypoint:12:10:dom-event:submit","label":"EntryPoint","properties":{"handlerName":"save","kind":"dom-event","library":"vue","line":12,"receiverName":"form","trigger":"submit"}}
 {"kind":"node","id":"file:src/App.vue:entrypoint:13:13:dom-event:keyup","label":"EntryPoint","properties":{"handlerName":"save","kind":"dom-event","library":"vue","line":13,"receiverName":"input","trigger":"keyup"}}
@@ -52,6 +52,7 @@
 {"kind":"node","id":"file:src/components/SearchBox.vue:function:13:submit:call:13:25:load","label":"Call","properties":{"args":"[]","callee":"load","columnNumber":25,"expression":"load","line":13,"name":"load","receiver":null}}
 {"kind":"node","id":"file:src/components/SearchBox.vue:import:6:vue","label":"Import","properties":{"bindings":"[{\"imported\":\"defineComponent\",\"local\":\"defineComponent\",\"kind\":\"named\"},{\"imported\":\"ref\",\"local\":\"ref\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":6,"source":"vue","specifier":"import { defineComponent, ref } from 'vue';"}}
 {"kind":"node","id":"file:src/components/SearchBox.vue:import:7:../composables/useUsers","label":"Import","properties":{"bindings":"[{\"imported\":\"useUsers\",\"local\":\"useUsers\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":7,"source":"../composables/useUsers","specifier":"import { useUsers } from '../composables/useUsers';"}}
+{"kind":"node","id":"file:src/components/SearchBox.vue:initializercall:9:15:defineComponent","label":"Call","properties":{"args":"[]","callee":"defineComponent","columnNumber":15,"expression":"defineComponent","line":9,"name":"defineComponent","receiver":null}}
 {"kind":"node","id":"file:src/components/SearchBox.vue:variable:9:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":9,"name":"default"}}
 {"kind":"node","id":"file:src/components/Tag.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/components/Tag.vue","relativePath":"src/components/Tag.vue","sourceType":"production"}}
 {"kind":"node","id":"file:src/components/Tag.vue:component:1:TagChip","label":"Component","properties":{"endLine":8,"framework":"vue","hooks":null,"isExported":true,"kind":"script-setup","line":1,"name":"TagChip","pendingRenders":null,"props":"label,color"}}
@@ -69,6 +70,7 @@
 {"kind":"node","id":"file:src/components/UserList.vue:component:1:UserList","label":"Component","properties":{"endLine":18,"framework":"vue","hooks":null,"isExported":true,"kind":"options","line":1,"name":"UserList","pendingRenders":null,"props":"modelValue,filter"}}
 {"kind":"node","id":"file:src/components/UserList.vue:import:10:./ListItem.vue","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"ListItem\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":10,"source":"./ListItem.vue","specifier":"import ListItem from './ListItem.vue';"}}
 {"kind":"node","id":"file:src/components/UserList.vue:import:9:vue","label":"Import","properties":{"bindings":"[{\"imported\":\"defineComponent\",\"local\":\"defineComponent\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":9,"source":"vue","specifier":"import { defineComponent } from 'vue';"}}
+{"kind":"node","id":"file:src/components/UserList.vue:initializercall:12:15:defineComponent","label":"Call","properties":{"args":"[]","callee":"defineComponent","columnNumber":15,"expression":"defineComponent","line":12,"name":"defineComponent","receiver":null}}
 {"kind":"node","id":"file:src/components/UserList.vue:variable:12:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":12,"name":"default"}}
 {"kind":"node","id":"file:src/composables/useApi.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/composables/useApi.ts","relativePath":"src/composables/useApi.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/composables/useApi.ts:function:1:useApi","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"useApi","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -81,6 +83,16 @@
 {"kind":"node","id":"file:src/composables/useUsers.ts:function:7:load:call:7:21:api.get","label":"Call","properties":{"args":"[\"/users\"]","callee":"get","columnNumber":21,"expression":"api.get","line":7,"name":"api.get","receiver":"api"}}
 {"kind":"node","id":"file:src/composables/useUsers.ts:import:1:vue","label":"Import","properties":{"bindings":"[{\"imported\":\"ref\",\"local\":\"ref\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"vue","specifier":"import { ref } from 'vue';"}}
 {"kind":"node","id":"file:src/composables/useUsers.ts:import:2:./useApi","label":"Import","properties":{"bindings":"[{\"imported\":\"useApi\",\"local\":\"useApi\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./useApi","specifier":"import { useApi } from './useApi';"}}
+{"kind":"node","id":"file:src/main.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/main.ts","relativePath":"src/main.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/main.ts:import:1:vue","label":"Import","properties":{"bindings":"[{\"imported\":\"createApp\",\"local\":\"createApp\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"vue","specifier":"import { createApp } from 'vue';"}}
+{"kind":"node","id":"file:src/main.ts:import:2:./App.vue","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"App\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./App.vue","specifier":"import App from './App.vue';"}}
+{"kind":"node","id":"file:src/main.ts:import:3:./components/Badge.vue","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"Badge\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"./components/Badge.vue","specifier":"import Badge from './components/Badge.vue';"}}
+{"kind":"node","id":"file:src/main.ts:import:4:./router","label":"Import","properties":{"bindings":"[{\"imported\":\"router\",\"local\":\"router\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":4,"source":"./router","specifier":"import { router } from './router';"}}
+{"kind":"node","id":"file:src/main.ts:initializercall:6:12:createApp","label":"Call","properties":{"args":"[\"App\"]","callee":"createApp","columnNumber":12,"expression":"createApp","line":6,"name":"createApp","receiver":null}}
+{"kind":"node","id":"file:src/main.ts:modulecall:10:0:app.mount","label":"Call","properties":{"args":"[\"#app\"]","callee":"mount","columnNumber":0,"expression":"app.mount","line":10,"name":"app.mount","receiver":"app"}}
+{"kind":"node","id":"file:src/main.ts:modulecall:8:0:app.component","label":"Call","properties":{"args":"[\"MyWidget\",\"Badge\"]","callee":"component","columnNumber":0,"expression":"app.component","line":8,"name":"app.component","receiver":"app"}}
+{"kind":"node","id":"file:src/main.ts:modulecall:9:0:app.use","label":"Call","properties":{"args":"[\"router\"]","callee":"use","columnNumber":0,"expression":"app.use","line":9,"name":"app.use","receiver":"app"}}
+{"kind":"node","id":"file:src/main.ts:variable:6:app","label":"Variable","properties":{"isExported":false,"kind":"const","line":6,"name":"app","stringValue":null}}
 {"kind":"node","id":"file:src/router/index.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/router/index.ts","relativePath":"src/router/index.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/router/index.ts:import:1:vue-router","label":"Import","properties":{"bindings":"[{\"imported\":\"createRouter\",\"local\":\"createRouter\",\"kind\":\"named\"},{\"imported\":\"createWebHistory\",\"local\":\"createWebHistory\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"vue-router","specifier":"import { createRouter, createWebHistory } from 'vue-router';"}}
 {"kind":"node","id":"file:src/router/index.ts:import:2:./routes","label":"Import","properties":{"bindings":"[{\"imported\":\"routes\",\"local\":\"routes\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./routes","specifier":"import { routes } from './routes';"}}
@@ -122,6 +134,7 @@
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/router","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/views","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/App.vue","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.ts","properties":{}}
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Badge.vue","properties":{}}
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/ListItem.vue","properties":{}}
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/SearchBox.vue","properties":{}}
@@ -156,6 +169,7 @@
 {"kind":"rel","from":"file:src/App.vue","type":"IMPORTS","to":"file:src/App.vue:import:24:./components/SearchBox.vue","properties":{}}
 {"kind":"rel","from":"file:src/App.vue","type":"IMPORTS","to":"file:src/App.vue:import:25:./composables/useUsers","properties":{}}
 {"kind":"rel","from":"file:src/App.vue:component:1:App","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/App.vue:function:19:<script setup>","properties":{}}
+{"kind":"rel","from":"file:src/App.vue:component:1:App","type":"RENDERS","to":"file:src/components/Badge.vue:component:1:Badge","properties":{"line":9,"props":""}}
 {"kind":"rel","from":"file:src/App.vue:component:1:App","type":"RENDERS","to":"file:src/components/SearchBox.vue:component:1:SearchBox","properties":{"line":15,"props":""}}
 {"kind":"rel","from":"file:src/App.vue:component:1:App","type":"RENDERS","to":"file:src/components/Tag.vue:component:1:TagChip","properties":{"line":5,"props":"label"}}
 {"kind":"rel","from":"file:src/App.vue:component:1:App","type":"RENDERS","to":"file:src/components/UserCard.vue:component:1:UserCard","properties":{"line":3,"props":"user,title"}}
@@ -216,6 +230,7 @@
 {"kind":"rel","from":"file:src/components/SearchBox.vue:function:13:submit","type":"CALLS","to":"file:src/components/SearchBox.vue:function:13:submit:call:13:25:load","properties":{}}
 {"kind":"rel","from":"file:src/components/SearchBox.vue:import:7:../composables/useUsers","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/components/SearchBox.vue:import:7:../composables/useUsers","type":"RESOLVES_TO","to":"file:src/composables/useUsers.ts","properties":{}}
+{"kind":"rel","from":"file:src/components/SearchBox.vue:variable:9:default","type":"INITIALIZED_BY","to":"file:src/components/SearchBox.vue:initializercall:9:15:defineComponent","properties":{}}
 {"kind":"rel","from":"file:src/components/Tag.vue","type":"DECLARES_COMPONENT","to":"file:src/components/Tag.vue:component:1:TagChip","properties":{}}
 {"kind":"rel","from":"file:src/components/Tag.vue","type":"DEFINES_FUNCTION","to":"file:src/components/Tag.vue:function:5:<script setup>","properties":{}}
 {"kind":"rel","from":"file:src/components/Tag.vue:component:1:TagChip","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/Tag.vue:function:5:<script setup>","properties":{}}
@@ -236,6 +251,7 @@
 {"kind":"rel","from":"file:src/components/UserList.vue:component:1:UserList","type":"RENDERS","to":"file:src/components/ListItem.vue:component:1:ListItem","properties":{"line":3,"props":"key,item"}}
 {"kind":"rel","from":"file:src/components/UserList.vue:import:10:./ListItem.vue","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/components/UserList.vue:import:10:./ListItem.vue","type":"RESOLVES_TO","to":"file:src/components/ListItem.vue","properties":{}}
+{"kind":"rel","from":"file:src/components/UserList.vue:variable:12:default","type":"INITIALIZED_BY","to":"file:src/components/UserList.vue:initializercall:12:15:defineComponent","properties":{}}
 {"kind":"rel","from":"file:src/composables/useApi.ts","type":"DEFINES_FUNCTION","to":"file:src/composables/useApi.ts:function:1:useApi","properties":{}}
 {"kind":"rel","from":"file:src/composables/useApi.ts:function:1:useApi","type":"CALLS","to":"file:src/composables/useApi.ts:function:1:useApi:call:2:33:fetch","properties":{}}
 {"kind":"rel","from":"file:src/composables/useUsers.ts","type":"DEFINES_FUNCTION","to":"file:src/composables/useUsers.ts:function:4:useUsers","properties":{}}
@@ -249,6 +265,21 @@
 {"kind":"rel","from":"file:src/composables/useUsers.ts:function:7:load","type":"CALLS","to":"file:src/composables/useUsers.ts:function:7:load:call:7:21:api.get","properties":{}}
 {"kind":"rel","from":"file:src/composables/useUsers.ts:import:2:./useApi","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/composables/useUsers.ts:import:2:./useApi","type":"RESOLVES_TO","to":"file:src/composables/useApi.ts","properties":{}}
+{"kind":"rel","from":"file:src/main.ts","type":"DEFINES_VARIABLE","to":"file:src/main.ts:variable:6:app","properties":{}}
+{"kind":"rel","from":"file:src/main.ts","type":"IMPORTS","to":"file:src/main.ts:import:1:vue","properties":{}}
+{"kind":"rel","from":"file:src/main.ts","type":"IMPORTS","to":"file:src/main.ts:import:2:./App.vue","properties":{}}
+{"kind":"rel","from":"file:src/main.ts","type":"IMPORTS","to":"file:src/main.ts:import:3:./components/Badge.vue","properties":{}}
+{"kind":"rel","from":"file:src/main.ts","type":"IMPORTS","to":"file:src/main.ts:import:4:./router","properties":{}}
+{"kind":"rel","from":"file:src/main.ts","type":"MODULE_CALLS","to":"file:src/main.ts:modulecall:10:0:app.mount","properties":{}}
+{"kind":"rel","from":"file:src/main.ts","type":"MODULE_CALLS","to":"file:src/main.ts:modulecall:8:0:app.component","properties":{}}
+{"kind":"rel","from":"file:src/main.ts","type":"MODULE_CALLS","to":"file:src/main.ts:modulecall:9:0:app.use","properties":{}}
+{"kind":"rel","from":"file:src/main.ts:import:2:./App.vue","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/main.ts:import:2:./App.vue","type":"RESOLVES_TO","to":"file:src/App.vue","properties":{}}
+{"kind":"rel","from":"file:src/main.ts:import:3:./components/Badge.vue","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/main.ts:import:3:./components/Badge.vue","type":"RESOLVES_TO","to":"file:src/components/Badge.vue","properties":{}}
+{"kind":"rel","from":"file:src/main.ts:import:4:./router","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/main.ts:import:4:./router","type":"RESOLVES_TO","to":"file:src/router/index.ts","properties":{}}
+{"kind":"rel","from":"file:src/main.ts:variable:6:app","type":"INITIALIZED_BY","to":"file:src/main.ts:initializercall:6:12:createApp","properties":{}}
 {"kind":"rel","from":"file:src/router/index.ts","type":"DECLARES_PAGE","to":"file:src/router/index.ts:page:8:11","properties":{}}
 {"kind":"rel","from":"file:src/router/index.ts","type":"DEFINES_VARIABLE","to":"file:src/router/index.ts:variable:6:router","properties":{}}
 {"kind":"rel","from":"file:src/router/index.ts","type":"IMPORTS","to":"file:src/router/index.ts:import:1:vue-router","properties":{}}
@@ -303,6 +334,7 @@
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/UserList.vue","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/composables/useApi.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/composables/useUsers.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/main.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/router/index.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/router/routes.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/views/AboutView.vue","properties":{}}

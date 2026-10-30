@@ -671,7 +671,7 @@
       {
         "tool": "find_component_usages",
         "args": {
-          "name": "MyWidget"
+          "name": "Badge"
         }
       },
       {
@@ -697,6 +697,39 @@
         "tool": "list_pages",
         "args": {
           "framework": "vue-router"
+        }
+      }
+    ],
+    "nuxt-app": [
+      {
+        "tool": "list_pages",
+        "args": {
+          "framework": "nuxt"
+        }
+      },
+      {
+        "tool": "component_tree",
+        "args": {
+          "name": "Default",
+          "depth": 3
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "Button"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "useCart"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "formatName"
         }
       }
     ],

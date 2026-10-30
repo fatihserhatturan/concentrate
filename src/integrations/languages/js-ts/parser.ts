@@ -140,6 +140,15 @@ export function walkJsTsNodes(
       if (defaultExportNode) {
         nodes.push(defaultExportNode);
         relationships.push({ from: fileNodeId, to: defaultExportNode.id, type: "DEFINES_VARIABLE", properties: {} });
+
+        // `export default defineNuxtPlugin((nuxtApp) => { … })` is initialized
+        // by the call, like a variable.
+        const value = node.namedChildren[0];
+        const callNode = value?.type === "call_expression" || value?.type === "new_expression" ? createInitializerCallNode(fileNodeId, value) : null;
+        if (callNode) {
+          nodes.push(callNode);
+          relationships.push({ from: defaultExportNode.id, to: callNode.id, type: "INITIALIZED_BY", properties: {} });
+        }
       }
 
       const reExportNode = createReExportImportNode(fileNodeId, node);

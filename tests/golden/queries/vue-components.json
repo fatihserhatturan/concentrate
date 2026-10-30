@@ -25,11 +25,11 @@
           },
           {
             "table": "File",
-            "count": 17
+            "count": 18
           },
           {
             "table": "Import",
-            "count": 23
+            "count": 27
           },
           {
             "table": "Function",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 8
+            "count": 9
           },
           {
             "table": "Decorator",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 20
+            "count": 26
           },
           {
             "table": "Route",
@@ -119,11 +119,11 @@
         },
         {
           "table": "File",
-          "count": 17
+          "count": 18
         },
         {
           "table": "Import",
-          "count": 23
+          "count": 27
         },
         {
           "table": "Function",
@@ -139,7 +139,7 @@
         },
         {
           "table": "Variable",
-          "count": 8
+          "count": 9
         },
         {
           "table": "Decorator",
@@ -159,7 +159,7 @@
         },
         {
           "table": "Call",
-          "count": 20
+          "count": 26
         },
         {
           "table": "Route",
@@ -912,7 +912,7 @@
             "tagName": null,
             "props": "title,query",
             "hooks": "useUsers",
-            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8}]"
           },
           {
             "id": "file:src/components/Badge.vue:component:1:Badge",
@@ -1110,6 +1110,12 @@
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
             "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/Badge.vue:component:1:Badge",
+            "line": 9,
             "props": ""
           },
           {
@@ -1382,6 +1388,16 @@
               "depth": 1,
               "parent": "App",
               "parentFile": "src/App.vue",
+              "line": 9,
+              "component": "Badge",
+              "componentKind": "template",
+              "componentFile": "src/components/Badge.vue",
+              "props": []
+            },
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.vue",
               "line": 15,
               "component": "SearchBox",
               "componentKind": "composition",
@@ -1419,11 +1435,6 @@
               "name": "RouterView",
               "props": [],
               "line": 8
-            },
-            {
-              "name": "MyWidget",
-              "props": [],
-              "line": 9
             }
           ],
           "renderedBy": []
@@ -1457,7 +1468,7 @@
             "tagName": null,
             "props": "title,query",
             "hooks": "useUsers",
-            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8}]"
           },
           {
             "id": "file:src/components/Badge.vue:component:1:Badge",
@@ -1655,6 +1666,12 @@
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
             "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/Badge.vue:component:1:Badge",
+            "line": 9,
             "props": ""
           },
           {
@@ -1714,7 +1731,7 @@
   {
     "tool": "find_component_usages",
     "args": {
-      "name": "MyWidget"
+      "name": "Badge"
     },
     "calls": [
       {
@@ -1733,7 +1750,7 @@
             "tagName": null,
             "props": "title,query",
             "hooks": "useUsers",
-            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8}]"
           },
           {
             "id": "file:src/components/Badge.vue:component:1:Badge",
@@ -1934,6 +1951,12 @@
             "props": ""
           },
           {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/Badge.vue:component:1:Badge",
+            "line": 9,
+            "props": ""
+          },
+          {
             "parent": "file:src/components/ListItem.vue:component:1:ListItem",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 4,
@@ -1949,11 +1972,21 @@
       }
     ],
     "output": {
-      "name": "MyWidget",
+      "name": "Badge",
       "file": null,
-      "components": [],
+      "components": [
+        {
+          "name": "Badge",
+          "kind": "template",
+          "framework": "vue",
+          "file": "src/components/Badge.vue",
+          "line": 1,
+          "endLine": 3,
+          "isExported": true
+        }
+      ],
       "counts": {
-        "unresolved": 1
+        "render": 2
       },
       "usages": [
         {
@@ -1961,13 +1994,21 @@
           "file": "src/App.vue",
           "line": 9,
           "from": "App",
-          "props": [],
-          "resolved": false
+          "props": []
+        },
+        {
+          "kind": "render",
+          "file": "src/components/ListItem.vue",
+          "line": 4,
+          "from": "ListItem",
+          "props": [
+            "count"
+          ]
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 1
+        "returned": 2
       }
     }
   },
@@ -2007,6 +2048,9 @@
           },
           {
             "file": "src/composables/useUsers.ts"
+          },
+          {
+            "file": "src/main.ts"
           },
           {
             "file": "src/router/index.ts"
@@ -2473,7 +2517,7 @@
             "tagName": null,
             "props": "title,query",
             "hooks": "useUsers",
-            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8}]"
           },
           {
             "id": "file:src/components/Badge.vue:component:1:Badge",
@@ -2671,6 +2715,12 @@
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
             "line": 15,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/Badge.vue:component:1:Badge",
+            "line": 9,
             "props": ""
           },
           {

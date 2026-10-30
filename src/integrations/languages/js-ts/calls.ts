@@ -88,13 +88,17 @@ function isAnonymousModuleExport(node: SyntaxNode): boolean {
 }
 
 // A callback passed to the call that initializes a module-level variable:
-// `export const User = createParamDecorator((data, ctx) => { … })`.
+// `export const User = createParamDecorator((data, ctx) => { … })`, or the
+// default export: `export default defineNuxtPlugin((nuxtApp) => { … })`.
 export function isInitializerHandlerArgument(node: SyntaxNode): boolean {
   if (node.type !== "arrow_function" && node.type !== "function_expression") return false;
   if (node.parent?.type !== "arguments") return false;
   const callExpr = node.parent.parent;
   if (!callExpr || callExpr.type !== "call_expression") return false;
   const declarator = callExpr.parent;
+  if (declarator?.type === "export_statement") {
+    return declarator.namedChildren[0]?.id === callExpr.id && declarator.children.some((child) => child.type === "default");
+  }
   return declarator?.type === "variable_declarator"
     && declarator.childForFieldName("value")?.id === callExpr.id
     && isModuleLevelDeclarator(declarator);
