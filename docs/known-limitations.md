@@ -260,7 +260,8 @@ Blocks or informs: future query server design.
   block has `lang="ts"` (always for Astro). The template is only parsed with
   the HTML grammar: directives (`@click`, `v-if`, `on:click`), blocks
   (`{#if}`) and `{expressions}` are not read as code yet, and a component
-  rendered in a template is no `RENDERS` relationship yet (Phases 11–15).
+  rendered in a Svelte or Astro template is no `RENDERS` relationship yet
+  (Phase 15; Vue templates: see Components).
   Svelte `$:` reactive statements are labelled statements, so their calls
   have no caller.
 
@@ -308,6 +309,29 @@ Astro).
   `<Ctx>`) are `RENDERS` of it, and `useContext(Ctx)` / `use(Ctx)` in a
   component or custom hook is `USES_CONTEXT` (Function → Component) when the
   context resolves by name or import.
+- Vue: every `.vue` file is one Component (framework `vue`, line 1 to the
+  end of the file), named by `defineOptions({ name })` or the `name` option,
+  else by the file name in PascalCase (`user-card.vue` → `UserCard`). `kind`
+  is `script-setup`, `composition` (an options object with `setup()`),
+  `options` (`export default {…}` or `export default defineComponent({…})`)
+  or `template` (no options object). `Component.props` lists the declared
+  props: `defineProps` with a type literal, an interface or type alias of
+  the same file, an object or an array (also under `withDefaults`), or the
+  `props` option. Imported prop types, intersections and props declared in
+  `.ts` / `.js` components (`defineComponent` outside a `.vue` file) are not
+  read.
+- Vue templates: tags in PascalCase (`<UserCard>`, `<Form.Input>`) or
+  kebab-case (`<user-card>`, read as `UserCard`) are `RENDERS` of the
+  component the file imports under that name, or under the name the
+  `components` option registers it as (`components: { Item: ListItem }`).
+  Props are the attributes and bindings (`title`, `:user`, `v-bind:user`,
+  `v-model` as `modelValue`, `v-model:title`); event listeners (`@click`),
+  slots (`#item`) and other directives are not. `<component :is>`,
+  `<slot>` and other lowercase tags are elements. Global registrations
+  (`app.component('UserCard', UserCard)`), Nuxt auto-imports and library
+  components (`<RouterView>`, `<router-link>`) stay in
+  `Component.pendingRenders`; composables and event handlers are not read
+  yet (Phase 14).
 
 ## Pages
 

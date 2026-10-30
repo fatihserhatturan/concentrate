@@ -1,0 +1,1378 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 54
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 3
+          },
+          {
+            "table": "File",
+            "count": 6
+          },
+          {
+            "table": "Import",
+            "count": 7
+          },
+          {
+            "table": "Function",
+            "count": 2
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 6
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 1
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 7
+          },
+          {
+            "table": "Route",
+            "count": 0
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 6
+          },
+          {
+            "table": "Page",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 54,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 3
+        },
+        {
+          "table": "File",
+          "count": 6
+        },
+        {
+          "table": "Import",
+          "count": 7
+        },
+        {
+          "table": "Function",
+          "count": 2
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 6
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 1
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 7
+        },
+        {
+          "table": "Route",
+          "count": 0
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 6
+        },
+        {
+          "table": "Page",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "select",
+            "kind": "Function",
+            "file": "src/App.vue",
+            "line": 24,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "setup",
+            "kind": "Function",
+            "file": "src/components/ListItem.vue",
+            "line": 16,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "current",
+            "kind": "Variable",
+            "file": "src/App.vue",
+            "line": 21,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "users",
+            "kind": "Variable",
+            "file": "src/App.vue",
+            "line": 22,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "view",
+            "kind": "Variable",
+            "file": "src/App.vue",
+            "line": 23,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "src/components/ListItem.vue",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "src/components/UserList.vue",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "select",
+          "kind": "Function",
+          "file": "src/App.vue",
+          "line": 24,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "setup",
+          "kind": "Function",
+          "file": "src/components/ListItem.vue",
+          "line": 16,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "current",
+          "kind": "Variable",
+          "file": "src/App.vue",
+          "line": 21,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "users",
+          "kind": "Variable",
+          "file": "src/App.vue",
+          "line": 22,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "view",
+          "kind": "Variable",
+          "file": "src/App.vue",
+          "line": 23,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "default",
+          "kind": "Variable",
+          "file": "src/components/ListItem.vue",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "default",
+          "kind": "Variable",
+          "file": "src/components/UserList.vue",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/components/ListItem.vue",
+            "name": "default",
+            "kind": "Variable",
+            "line": 11,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/components/UserList.vue",
+            "name": "default",
+            "kind": "Variable",
+            "line": 12,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/components/ListItem.vue",
+          "name": "default",
+          "kind": "Variable",
+          "line": 11,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/components/UserList.vue",
+          "name": "default",
+          "kind": "Variable",
+          "line": 12,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "component_tree",
+    "args": {
+      "name": "App",
+      "depth": 3
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.vue:component:1:App",
+            "name": "App",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/App.vue",
+            "line": 1,
+            "endLine": 25,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,query",
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
+          },
+          {
+            "id": "file:src/components/Badge.vue:component:1:Badge",
+            "name": "Badge",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/components/Badge.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/ListItem.vue:component:1:ListItem",
+            "name": "ListItem",
+            "kind": "composition",
+            "framework": "vue",
+            "file": "src/components/ListItem.vue",
+            "line": 1,
+            "endLine": 20,
+            "isExported": true,
+            "tagName": null,
+            "props": "item",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Tag.vue:component:1:TagChip",
+            "name": "TagChip",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/Tag.vue",
+            "line": 1,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "props": "label,color",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/UserCard.vue:component:1:UserCard",
+            "name": "UserCard",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/UserCard.vue",
+            "line": 1,
+            "endLine": 15,
+            "isExported": true,
+            "tagName": null,
+            "props": "user,title",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/UserList.vue:component:1:UserList",
+            "name": "UserList",
+            "kind": "options",
+            "framework": "vue",
+            "file": "src/components/UserList.vue",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "props": "modelValue,filter",
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/UserCard.vue:component:1:UserCard",
+            "line": 3,
+            "props": "user,title"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/UserList.vue:component:1:UserList",
+            "line": 4,
+            "props": "modelValue,filter"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/Tag.vue:component:1:TagChip",
+            "line": 5,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/ListItem.vue:component:1:ListItem",
+            "child": "file:src/components/Badge.vue:component:1:Badge",
+            "line": 4,
+            "props": "count"
+          },
+          {
+            "parent": "file:src/components/UserList.vue:component:1:UserList",
+            "child": "file:src/components/ListItem.vue:component:1:ListItem",
+            "line": 3,
+            "props": "key,item"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/App.vue:function:24:select",
+            "name": "select",
+            "className": null,
+            "file": "src/App.vue",
+            "line": 24,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/components/ListItem.vue:function:16:setup",
+            "name": "setup",
+            "className": null,
+            "file": "src/components/ListItem.vue",
+            "line": 16,
+            "endLine": 18
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_HOOK]->(hook:Function) RETURN id(user) AS user, id(hook) AS hook, rel.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_CONTEXT]->(context:Component) RETURN id(user) AS user, id(context) AS context, rel.line AS line",
+        "rows": []
+      }
+    ],
+    "output": {
+      "name": "App",
+      "file": null,
+      "depth": 3,
+      "components": [
+        {
+          "name": "App",
+          "kind": "script-setup",
+          "framework": "vue",
+          "file": "src/App.vue",
+          "line": 1,
+          "endLine": 25,
+          "isExported": true,
+          "props": [
+            "title",
+            "query"
+          ],
+          "definedBy": null,
+          "hooks": [],
+          "customHooks": [],
+          "contexts": [],
+          "renders": [
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.vue",
+              "line": 3,
+              "component": "UserCard",
+              "componentKind": "script-setup",
+              "componentFile": "src/components/UserCard.vue",
+              "props": [
+                "user",
+                "title"
+              ]
+            },
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.vue",
+              "line": 4,
+              "component": "UserList",
+              "componentKind": "options",
+              "componentFile": "src/components/UserList.vue",
+              "props": [
+                "modelValue",
+                "filter"
+              ]
+            },
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.vue",
+              "line": 5,
+              "component": "TagChip",
+              "componentKind": "script-setup",
+              "componentFile": "src/components/Tag.vue",
+              "props": [
+                "label"
+              ]
+            },
+            {
+              "depth": 2,
+              "parent": "UserList",
+              "parentFile": "src/components/UserList.vue",
+              "line": 3,
+              "component": "ListItem",
+              "componentKind": "composition",
+              "componentFile": "src/components/ListItem.vue",
+              "props": [
+                "key",
+                "item"
+              ]
+            },
+            {
+              "depth": 3,
+              "parent": "ListItem",
+              "parentFile": "src/components/ListItem.vue",
+              "line": 4,
+              "component": "Badge",
+              "componentKind": "template",
+              "componentFile": "src/components/Badge.vue",
+              "props": [
+                "count"
+              ]
+            }
+          ],
+          "unresolvedRenders": [
+            {
+              "name": "RouterView",
+              "props": [],
+              "line": 8
+            },
+            {
+              "name": "MyWidget",
+              "props": [],
+              "line": 9
+            }
+          ],
+          "renderedBy": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "find_component_usages",
+    "args": {
+      "name": "UserCard"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.vue:component:1:App",
+            "name": "App",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/App.vue",
+            "line": 1,
+            "endLine": 25,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,query",
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
+          },
+          {
+            "id": "file:src/components/Badge.vue:component:1:Badge",
+            "name": "Badge",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/components/Badge.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/ListItem.vue:component:1:ListItem",
+            "name": "ListItem",
+            "kind": "composition",
+            "framework": "vue",
+            "file": "src/components/ListItem.vue",
+            "line": 1,
+            "endLine": 20,
+            "isExported": true,
+            "tagName": null,
+            "props": "item",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Tag.vue:component:1:TagChip",
+            "name": "TagChip",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/Tag.vue",
+            "line": 1,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "props": "label,color",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/UserCard.vue:component:1:UserCard",
+            "name": "UserCard",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/UserCard.vue",
+            "line": 1,
+            "endLine": 15,
+            "isExported": true,
+            "tagName": null,
+            "props": "user,title",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/UserList.vue:component:1:UserList",
+            "name": "UserList",
+            "kind": "options",
+            "framework": "vue",
+            "file": "src/components/UserList.vue",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "props": "modelValue,filter",
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/UserCard.vue:component:1:UserCard",
+            "line": 3,
+            "props": "user,title"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/UserList.vue:component:1:UserList",
+            "line": 4,
+            "props": "modelValue,filter"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/Tag.vue:component:1:TagChip",
+            "line": 5,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/ListItem.vue:component:1:ListItem",
+            "child": "file:src/components/Badge.vue:component:1:Badge",
+            "line": 4,
+            "props": "count"
+          },
+          {
+            "parent": "file:src/components/UserList.vue:component:1:UserList",
+            "child": "file:src/components/ListItem.vue:component:1:ListItem",
+            "line": 3,
+            "props": "key,item"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "name": "UserCard",
+      "file": null,
+      "components": [
+        {
+          "name": "UserCard",
+          "kind": "script-setup",
+          "framework": "vue",
+          "file": "src/components/UserCard.vue",
+          "line": 1,
+          "endLine": 15,
+          "isExported": true,
+          "props": [
+            "user",
+            "title"
+          ]
+        }
+      ],
+      "counts": {
+        "render": 1
+      },
+      "usages": [
+        {
+          "kind": "render",
+          "file": "src/App.vue",
+          "line": 3,
+          "from": "App",
+          "props": [
+            "user",
+            "title"
+          ]
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "find_component_usages",
+    "args": {
+      "name": "MyWidget"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.vue:component:1:App",
+            "name": "App",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/App.vue",
+            "line": 1,
+            "endLine": 25,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,query",
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8},{\"name\":\"MyWidget\",\"props\":[],\"line\":9}]"
+          },
+          {
+            "id": "file:src/components/Badge.vue:component:1:Badge",
+            "name": "Badge",
+            "kind": "template",
+            "framework": "vue",
+            "file": "src/components/Badge.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/ListItem.vue:component:1:ListItem",
+            "name": "ListItem",
+            "kind": "composition",
+            "framework": "vue",
+            "file": "src/components/ListItem.vue",
+            "line": 1,
+            "endLine": 20,
+            "isExported": true,
+            "tagName": null,
+            "props": "item",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Tag.vue:component:1:TagChip",
+            "name": "TagChip",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/Tag.vue",
+            "line": 1,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "props": "label,color",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/UserCard.vue:component:1:UserCard",
+            "name": "UserCard",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/UserCard.vue",
+            "line": 1,
+            "endLine": 15,
+            "isExported": true,
+            "tagName": null,
+            "props": "user,title",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/UserList.vue:component:1:UserList",
+            "name": "UserList",
+            "kind": "options",
+            "framework": "vue",
+            "file": "src/components/UserList.vue",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "props": "modelValue,filter",
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/UserCard.vue:component:1:UserCard",
+            "line": 3,
+            "props": "user,title"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/UserList.vue:component:1:UserList",
+            "line": 4,
+            "props": "modelValue,filter"
+          },
+          {
+            "parent": "file:src/App.vue:component:1:App",
+            "child": "file:src/components/Tag.vue:component:1:TagChip",
+            "line": 5,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/ListItem.vue:component:1:ListItem",
+            "child": "file:src/components/Badge.vue:component:1:Badge",
+            "line": 4,
+            "props": "count"
+          },
+          {
+            "parent": "file:src/components/UserList.vue:component:1:UserList",
+            "child": "file:src/components/ListItem.vue:component:1:ListItem",
+            "line": 3,
+            "props": "key,item"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "name": "MyWidget",
+      "file": null,
+      "components": [],
+      "counts": {
+        "unresolved": 1
+      },
+      "usages": [
+        {
+          "kind": "render",
+          "file": "src/App.vue",
+          "line": 9,
+          "from": "App",
+          "props": [],
+          "resolved": false
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "get_file_outline",
+    "args": {
+      "file": "src/components/UserList.vue"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "rows": [
+          {
+            "file": "src/App.vue"
+          },
+          {
+            "file": "src/components/Badge.vue"
+          },
+          {
+            "file": "src/components/ListItem.vue"
+          },
+          {
+            "file": "src/components/Tag.vue"
+          },
+          {
+            "file": "src/components/UserCard.vue"
+          },
+          {
+            "file": "src/components/UserList.vue"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/components/UserList.vue"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/components/UserList.vue"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/components/UserList.vue"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/components/UserList.vue"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/components/UserList.vue"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/components/UserList.vue"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/components/UserList.vue"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/components/UserList.vue:variable:12:default",
+            "name": "default",
+            "file": "src/components/UserList.vue",
+            "path": "<root>/src/components/UserList.vue",
+            "line": 12
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(n:Route) WHERE file.relativePath IN $files RETURN id(n) AS id, n.method AS method, coalesce(n.fullPath, n.path) AS routePath, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/components/UserList.vue"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_FIELD]->(field:Field) WHERE file.relativePath = $file RETURN class.name AS className, field.name AS name, field.typeName AS typeName, field.line AS line",
+        "params": {
+          "file": "src/components/UserList.vue"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:IMPORTS]->(imp:Import) WHERE file.relativePath = $file RETURN imp.source AS source, imp.line AS line, imp.isTypeOnly AS isTypeOnly",
+        "params": {
+          "file": "src/components/UserList.vue"
+        },
+        "rows": [
+          {
+            "source": "vue",
+            "line": 9,
+            "isTypeOnly": false
+          },
+          {
+            "source": "./ListItem.vue",
+            "line": 10,
+            "isTypeOnly": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE file.relativePath = $file RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.handlerName AS handlerName, entrypoint.line AS line",
+        "params": {
+          "file": "src/components/UserList.vue"
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "file": "src/components/UserList.vue",
+      "imports": [
+        {
+          "source": "vue",
+          "line": 9,
+          "isTypeOnly": false
+        },
+        {
+          "source": "./ListItem.vue",
+          "line": 10,
+          "isTypeOnly": false
+        }
+      ],
+      "outline": [
+        {
+          "kind": "variable",
+          "name": "default",
+          "line": 12
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  }
+]
