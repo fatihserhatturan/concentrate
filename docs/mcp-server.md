@@ -129,9 +129,12 @@ These answer a whole question in one call instead of a chain of lookups.
   function in it; both together narrow the symbol to the file. Returns
   `callers` (transitive, with `depth`), `moduleCallers` (top-level code that
   calls the seeds or their callers), `routes` and `entrypoints` that run any of
-  them (`reachedThrough` says which function and in which role), and the
-  `dataAccess`, `tables`, `envVars` and `config` of the seeds themselves. For a route,
-  use `route_details`.
+  them (`reachedThrough` says which function and in which role),
+  `components`: the UI components those functions implement (`depth: 0`,
+  `changedThrough` names the functions) and the components that render them,
+  following `RENDERS` up to `maxDepth` levels (`renders` names the child), and
+  the `dataAccess`, `tables`, `envVars` and `config` of the seeds themselves.
+  For a route, use `route_details`.
 - `detect_changes({ base = "HEAD", maxDepth = 5, limit = 50 })`: runs
   `git diff --unified=0 <base>` (no shell; `base` must look like a revision)
   plus untracked files, maps the changed lines onto declarations whose
@@ -156,6 +159,21 @@ These answer a whole question in one call instead of a chain of lookups.
   line order: imports, functions, classes with their methods and fields,
   interfaces, types, enums, variables, routes and entrypoints. `file` can be a
   unique path suffix; several matches return `candidates`.
+- `component_tree({ name, file?, depth = 2, limit = 5 })`: for each component
+  with that name: its `kind`, file and span, `definedBy` (its function, or
+  its class), `hooks` (every `use*` call by name), `customHooks` (the
+  repository's hooks it calls, with the call line), `contexts` it reads
+  directly or `through` a custom hook (followed through hooks that use other
+  hooks), `renders` and `renderedBy` (render edges with `depth`, `parent`,
+  `component`, the render `line` and the `props` passed, up to `depth` levels
+  each way) and `unresolvedRenders` (elements that resolved to no component,
+  such as library components).
+- `find_component_usages({ name, file?, limit = 50 })`: every `render` of a
+  component with that name (`from` is the rendering component, plus the file,
+  line and `props`), and for a context the functions that read it (`kind:
+  "context"`). Elements of that name that resolved to no component, such as
+  `<Link>` from a library, are listed with `resolved: false` unless `file` is
+  given. `counts` sums the usages by kind.
 
 `file` arguments accept the scan-relative path or a path suffix
 (`users/service.ts` matches `src/users/service.ts`).
@@ -243,8 +261,9 @@ Every tool that returns a list pages one primary list: `definitions`,
 `callers`, `exports`, `routes`, `entrypoints`, `envConfig`, `dataAccess`, and
 for the agent tools `callers` (`impact_of`), `changedFiles`
 (`detect_changes`), `routes` (`route_details`), `matches`
-(`get_symbol_source`) and `outline` (`get_file_outline`, `limit` defaults to
-200), and for the analysis tools `symbols`, `references`, `cycles`,
+(`get_symbol_source`), `outline` (`get_file_outline`, `limit` defaults to
+200), `components` (`component_tree`) and `usages` (`find_component_usages`),
+and for the analysis tools `symbols`, `references`, `cycles`,
 `unusedExports` and `edges` (`architecture_overview`). `limit` is the page size (at most 200). The result has a
 `page: { offset, returned, nextCursor? }` field; pass `nextCursor` back as
 `cursor` with the other arguments unchanged to get the next page. `limit` may

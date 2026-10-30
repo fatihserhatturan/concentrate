@@ -125,7 +125,8 @@ export const byFileAndLine = (left: object, right: object) => {
 // What is affected when the `seedIds` functions change: their transitive
 // callers (up to `maxDepth`), module-level code that calls them, the routes
 // and entrypoints that run any of those functions, and the data models, env
-// vars and config values the seeds themselves use.
+// vars and config values the seeds themselves use. Components implemented by
+// any of those functions add the components that render them.
 export async function computeImpact(
   engine: IQueryEngine,
   seedIds: readonly string[],
@@ -141,7 +142,7 @@ export async function computeImpact(
   const seeds = [...new Set(seedIds)];
   const name = (id: string) => describeFunction(functions.get(id), id);
 
-  const [moduleCallers, routes, entrypoints, resources] = await Promise.all([
+  const [moduleCallers, routes, entrypoints, resources, components] = await Promise.all([
     engine.query(`
       MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function)
       WHERE id(fn) IN $ids
@@ -160,7 +161,8 @@ export async function computeImpact(
         file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn
     `, { ids: affectedIds }),
     functionResources(engine, seeds),
-  ]) as [Row[], Row[], Row[], FunctionResources];
+    componentImpact(engine, affectedIds, maxDepth, name),
+  ]) as [Row[], Row[], Row[], FunctionResources, Awaited<ReturnType<typeof componentImpact>>];
 
   const via = (row: Row) => ({
     function: name(String(row.fn)).name,
@@ -186,6 +188,7 @@ export async function computeImpact(
       .sort(byFileAndLine)
       .slice(0, limit),
     entrypoints: mergeRows(entrypoints, ["fn"], "reachedThrough", via).sort(byFileAndLine).slice(0, limit),
+    components: components.slice(0, limit),
     dataAccess: mergeRows(resources.dataAccess, ["fn"], "usedBy", via).slice(0, limit),
     tables: summarizeTables(resources.tables, via).slice(0, limit),
     envVars: mergeRows(resources.envVars, ["fn"], "usedBy", via).slice(0, limit),
@@ -398,4 +401,152 @@ export async function loadSymbols(
     }
   });
   return symbols.sort(byFileAndLine);
+}
+
+export type ComponentInfo = {
+  id: string;
+  name: string;
+  kind: string | null;
+  framework: string | null;
+  file: string | null;
+  line: number | null;
+  endLine: number | null;
+  isExported: boolean | null;
+  tagName: string | null;
+  // Built-in and custom hooks the component calls, by name.
+  hooks: string[];
+  // Rendered elements that resolved to no Component (library components).
+  unresolvedRenders: Array<{ name: string; props: string[]; line: number | null }>;
+};
+
+export type RenderEdge = { parent: string; child: string; line: number | null; props: string[] };
+
+// Every component with its declaring file.
+export async function loadComponents(engine: IQueryEngine): Promise<Map<string, ComponentInfo>> {
+  const rows = await engine.query(`
+    MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component)
+    RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework,
+      file.relativePath AS file, component.line AS line, component.endLine AS endLine,
+      component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks,
+      component.pendingRenders AS pendingRenders
+  `) as Row[];
+  const components = new Map<string, ComponentInfo>();
+  for (const row of rows) {
+    const id = str(row.id);
+    if (!id || components.has(id)) continue;
+    components.set(id, {
+      id,
+      name: str(row.name) ?? "",
+      kind: str(row.kind),
+      framework: str(row.framework),
+      file: str(row.file),
+      line: num(row.line),
+      endLine: num(row.endLine),
+      isExported: typeof row.isExported === "boolean" ? row.isExported : null,
+      tagName: str(row.tagName),
+      hooks: str(row.hooks)?.split(",").filter(Boolean) ?? [],
+      unresolvedRenders: parseRenders(row.pendingRenders),
+    });
+  }
+  return components;
+}
+
+function parseRenders(value: unknown): ComponentInfo["unresolvedRenders"] {
+  if (typeof value !== "string") return [];
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.flatMap((item: { name?: unknown; props?: unknown; line?: unknown }) =>
+      typeof item?.name === "string"
+        ? [{ name: item.name, props: Array.isArray(item.props) ? item.props.filter((prop): prop is string => typeof prop === "string") : [], line: num(item.line) }]
+        : []);
+  } catch {
+    return [];
+  }
+}
+
+// Component -[:RENDERS]-> Component.
+export async function loadRenderEdges(engine: IQueryEngine): Promise<RenderEdge[]> {
+  const rows = await engine.query(`
+    MATCH (parent:Component)-[rel:RENDERS]->(child:Component)
+    RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props
+  `) as Row[];
+  return rows.flatMap((row) => {
+    const parent = str(row.parent);
+    const child = str(row.child);
+    return parent && child
+      ? [{ parent, child, line: num(row.line), props: str(row.props)?.split(",").filter(Boolean) ?? [] }]
+      : [];
+  });
+}
+
+// The functions that implement each component: its function, or the methods
+// of its class (`className` set). Restrict to components implemented by the
+// `functionIds` functions when given.
+export async function loadComponentFunctions(
+  engine: IQueryEngine,
+  functionIds?: readonly string[],
+): Promise<Array<{ component: string; fn: string; className: string | null }>> {
+  const filter = functionIds ? "WHERE id(fn) IN $ids" : "";
+  const params = functionIds ? { ids: [...functionIds] } : {};
+  const [functions, methods] = await Promise.all([
+    engine.query(`
+      MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function)
+      ${filter}
+      RETURN id(component) AS component, id(fn) AS fn
+    `, params),
+    engine.query(`
+      MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function)
+      ${filter}
+      RETURN id(component) AS component, id(fn) AS fn, class.name AS className
+    `, params),
+  ]) as Row[][];
+  return [...functions, ...methods].flatMap((row) => {
+    const component = str(row.component);
+    const fn = str(row.fn);
+    return component && fn ? [{ component, fn, className: str(row.className) }] : [];
+  });
+}
+
+// The components implemented by the `affectedIds` functions, and every
+// component that renders them (up to `maxDepth` levels). Depth 0 is a
+// component whose own code is affected.
+export async function componentImpact(
+  engine: IQueryEngine,
+  affectedIds: readonly string[],
+  maxDepth: number,
+  describe: (id: string) => ReturnType<typeof describeFunction>,
+) {
+  const implementations = await loadComponentFunctions(engine, affectedIds);
+  if (implementations.length === 0) return [];
+  const [components, renders] = await Promise.all([loadComponents(engine), loadRenderEdges(engine)]);
+
+  const changedThrough = new Map<string, Set<string>>();
+  for (const { component, fn } of implementations) {
+    const through = changedThrough.get(component) ?? new Set();
+    through.add(describe(fn).name);
+    changedThrough.set(component, through);
+  }
+  const depth = walkCalls(renders.map(({ parent, child, line }) => ({ caller: parent, callee: child, line })), changedThrough.keys(), "up", maxDepth);
+  const renderedChildren = new Map<string, Set<string>>();
+  for (const edge of renders) {
+    if (!depth.has(edge.parent) || !depth.has(edge.child) || depth.get(edge.parent)! !== depth.get(edge.child)! + 1) continue;
+    const children = renderedChildren.get(edge.parent) ?? new Set();
+    children.add(components.get(edge.child)?.name ?? edge.child);
+    renderedChildren.set(edge.parent, children);
+  }
+
+  return [...depth].map(([id, level]) => {
+    const component = components.get(id);
+    return {
+      name: component?.name ?? id,
+      kind: component?.kind ?? null,
+      file: component?.file ?? null,
+      line: component?.line ?? null,
+      depth: level,
+      ...(level === 0
+        ? { changedThrough: [...changedThrough.get(id)!].sort() }
+        : { renders: [...renderedChildren.get(id) ?? []].sort() }),
+    };
+  }).sort((a, b) => a.depth - b.depth || byFileAndLine(a, b));
 }

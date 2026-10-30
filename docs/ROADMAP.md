@@ -599,9 +599,9 @@ This phase introduces the framework-neutral component schema that the Vue, Svelt
 
 ### MCP
 
-- [ ] `component_tree`: renders / rendered by, props, hooks
-- [ ] `find_component_usages`: every place a component is rendered
-- [ ] `impact_of` follows `RENDERS` upwards
+- [x] `component_tree`: renders / rendered by, props, hooks
+- [x] `find_component_usages`: every place a component is rendered
+- [x] `impact_of` follows `RENDERS` upwards
 
 ### Acceptance criteria
 

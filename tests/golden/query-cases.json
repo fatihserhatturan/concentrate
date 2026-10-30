@@ -713,6 +713,49 @@
         "args": {
           "symbol": "Card"
         }
+      },
+      {
+        "tool": "component_tree",
+        "args": {
+          "name": "Profile"
+        }
+      },
+      {
+        "tool": "component_tree",
+        "args": {
+          "name": "CartBadge",
+          "depth": 3
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "Button"
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "CartContext"
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "Link"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "Button"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "useCart"
+        }
       }
     ]
   }

@@ -39,7 +39,7 @@ const STATIC_TTL_MS = 60 * 60 * 1000;
 const instructions = [
   "Concentrate answers questions about one scanned codebase from its code graph.",
   `Start with the ${resourceDefinitions[0]!.uri} resource or graph_stats for an overview.`,
-  "Use search_symbols, find_definitions, list_routes and list_entrypoints to locate code; find_references for uses; impact_of, route_details and detect_changes for what a change affects; get_symbol_source and get_file_outline to read code; architecture_overview, find_import_cycles and find_unused_exports for the whole repository.",
+  "Use search_symbols, find_definitions, list_routes and list_entrypoints to locate code; find_references for uses; impact_of, route_details and detect_changes for what a change affects; component_tree and find_component_usages for UI components; get_symbol_source and get_file_outline to read code; architecture_overview, find_import_cycles and find_unused_exports for the whole repository.",
   "List results are paged: pass page.nextCursor back as cursor, with the other arguments unchanged, for the next page.",
 ].join(" ");
 

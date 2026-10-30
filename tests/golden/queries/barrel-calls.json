@@ -1239,6 +1239,30 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:packages/core/src/math.ts:function:1:add",
+            "file:packages/app/src/main.ts:function:4:run",
+            "file:packages/core/src/report.ts:function:3:report"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:packages/core/src/math.ts:function:1:add",
+            "file:packages/app/src/main.ts:function:4:run",
+            "file:packages/core/src/report.ts:function:3:report"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1275,6 +1299,7 @@
       "moduleCallers": [],
       "routes": [],
       "entrypoints": [],
+      "components": [],
       "dataAccess": [],
       "tables": [],
       "envVars": [],

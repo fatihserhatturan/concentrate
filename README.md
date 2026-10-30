@@ -9,7 +9,7 @@
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
   <img alt="Node.js 22+" src="https://img.shields.io/badge/node-%E2%89%A522-339933.svg">
   <img alt="Runtime dependencies: 1" src="https://img.shields.io/badge/runtime%20deps-1-brightgreen.svg">
-  <img alt="MCP: 20 tools" src="https://img.shields.io/badge/MCP-20%20tools-6f42c1.svg">
+  <img alt="MCP: 22 tools" src="https://img.shields.io/badge/MCP-22%20tools-6f42c1.svg">
   <img alt="Languages" src="https://img.shields.io/badge/languages-TS%20%7C%20JS%20%7C%20Python%20%7C%20Go%20%7C%20Rust-informational.svg">
 </p>
 
@@ -43,7 +43,7 @@ flowchart LR
   B --> C[Extract<br/>languages + frameworks]
   C --> D[Resolve<br/>across files]
   D --> E[(Graph<br/>snapshot)]
-  E --> F[MCP · 20 tools]
+  E --> F[MCP · 22 tools]
   E --> G[Cypher]
   E --> H[CLI · export]
 ```
@@ -97,7 +97,7 @@ See [benchmarks.md](docs/benchmarks.md#release-report).
 
 <p align="center"><img src="docs/assets/tool-latency.svg" alt="MCP tool latency on nestjs/nest: p50 between 0.4 ms and 123 ms" width="640"></p>
 
-**Answers come back in milliseconds.** On the nestjs/nest graph, the median latency of all 20 MCP tools is between 0.4 ms and 123 ms.
+**Answers come back in milliseconds.** On the nestjs/nest graph, the median latency of the 20 MCP tools measured in the 0.1.0 release benchmark is between 0.4 ms and 123 ms.
 
 ## Where it is going
 
@@ -118,7 +118,7 @@ The full plan is in [docs/ROADMAP.md](docs/ROADMAP.md).
 | | |
 | --- | --- |
 | [Getting started](docs/getting-started.md) | install, scan, query, watch, and connect an agent |
-| [MCP server](docs/mcp-server.md) | client setup and the reference for all 20 tools |
+| [MCP server](docs/mcp-server.md) | client setup and the reference for all 22 tools |
 | [Cypher subset](docs/cypher.md) | querying the graph directly |
 | [Architecture](docs/architecture.md) | the scan pipeline and source layout |
 | [Accuracy](docs/accuracy.md) · [Benchmarks](docs/benchmarks.md) · [Agent benchmark](docs/agent-benchmark.md) | how the numbers above are measured |
