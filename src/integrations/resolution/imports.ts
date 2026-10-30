@@ -13,6 +13,7 @@ import {
 } from "../../core/scan/resolution/file-kind.js";
 import { resolveImport } from "../languages/js-ts/resolution/import-dispatch.js";
 import { createFileIndex, createImporterIndex } from "../languages/js-ts/resolution/import-indexes.js";
+import { existsSync } from "node:fs";
 import path from "node:path";
 import { addUniqueScanWarning, type ScanReport } from "../../core/scan/report.js";
 
@@ -34,6 +35,25 @@ export async function addImportResolutionRelationships(
     });
   });
   const goConfig = await readGoResolutionConfig(rootPath);
+  // A bare specifier tried only because of `baseUrl` (`next/link` against
+  // `baseUrl: "."`) is a package import, not an unresolved one, unless its
+  // first segment names a file or folder under baseUrl (`types` for
+  // `types/index.d.ts`). Path aliases, package `imports` and workspace
+  // packages are always counted.
+  const baseUrlEntries = new Map<string, boolean>();
+  const isPackageImport = (source: string, importerFileId: string): boolean => {
+    const baseUrl = jsTsConfig.baseUrl;
+    if (source.startsWith(".") || !isJsTsFile(importerFileId) || !baseUrl) return false;
+    if (createJsTsConfiguredImportBasePaths(source, { ...jsTsConfig, baseUrl: null }).length > 0) return false;
+    const segment = source.split("/")[0]!;
+    let local = baseUrlEntries.get(segment);
+    if (local === undefined) {
+      const entry = path.join(rootPath, baseUrl, segment);
+      local = ["", ".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".d.ts"].some((extension) => existsSync(`${entry}${extension}`));
+      baseUrlEntries.set(segment, local);
+    }
+    return !local;
+  };
   let resolved = 0;
   let unresolved = 0;
 
@@ -55,7 +75,7 @@ export async function addImportResolutionRelationships(
     const targetFileId = resolveImport(source, importerFileId, fileIdByRelativePath, jsTsConfig, goConfig);
 
     if (!targetFileId) {
-      unresolved += 1;
+      if (!isPackageImport(source, importerFileId)) unresolved += 1;
       continue;
     }
 
@@ -70,6 +90,7 @@ export async function addImportResolutionRelationships(
 
   return { resolved, unresolved };
 }
+
 
 function shouldAttemptResolution(
   source: string,
