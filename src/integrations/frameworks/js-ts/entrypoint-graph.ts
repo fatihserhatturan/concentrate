@@ -197,7 +197,7 @@ function extractEntrypointTrigger(args: SyntaxNode[], kind: string): string | nu
   return kind === "queue" ? null : null;
 }
 
-function createEntrypointNode(input: {
+export function createEntrypointNode(input: {
   fileNodeId: string;
   row: number;
   column: number;

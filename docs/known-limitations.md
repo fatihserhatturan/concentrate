@@ -98,6 +98,18 @@ Blocks or informs: MCP `find_callers` and dependency impact analysis.
 - Inline handlers are represented with synthetic function names; these are
   useful for graph queries but may need friendlier presentation in future UI or
   MCP responses.
+- DOM listeners: every `x.addEventListener('event', handler)` is an
+  `EntryPoint` (kind `dom-event`, library `dom`), on any EventTarget, so an
+  `AbortSignal` listener counts too. The handler is linked when it is a
+  function named in the same file, or an inline function passed to a
+  module-level call; inline handlers inside functions or methods
+  (`this.addEventListener('click', () => …)` in `connectedCallback`) and
+  handlers imported from other files are not linked.
+  `on*` attributes of HTML pages are entrypoints too; the handler is the first
+  function the attribute calls, linked when the page itself defines it.
+- `customElements.define('x-tag', Class)` becomes a `Component` (framework
+  `web-components`); `COMPONENT_DEFINED_BY` links the class only when it is
+  declared in the same file.
 
 Blocks or informs: MCP `list_entrypoints` and future backend runtime summaries.
 
@@ -219,12 +231,12 @@ Blocks or informs: future query server design.
   page, with positions in the `.html` file; other script types (JSON, import
   maps, templates) are skipped. Server templates saved as `.html` (EJS,
   Handlebars) are read as plain HTML, so template tags inside a script make
-  those statements syntax errors that are left out. Event handler attributes
-  (`onclick="…"`), `addEventListener` and custom elements are not modelled
-  yet.
+  those statements syntax errors that are left out. The code of `on*`
+  attributes is not parsed: only the event and the handler name are read
+  (see Entrypoints).
 
-Blocks or informs: ROADMAP Phase 10 (DOM events, web components, single-file
-components) and Phase 11 (React).
+Blocks or informs: ROADMAP Phase 10 (single-file components) and Phase 11
+(React).
 
 ## Review Process
 

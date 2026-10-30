@@ -565,8 +565,8 @@ Today `.tsx` is parsed with the TypeScript grammar, which has no JSX (`src/core/
 ### Vanilla JS
 
 - [x] `<script src>` and `<script type="module">` in `.html` files become `IMPORTS` / `RESOLVES_TO`; inline `<script>` blocks are parsed
-- [ ] `addEventListener(...)` and `on*` attributes become `EntryPoint` nodes (kind `dom-event`, trigger = event name) linked to their handler
-- [ ] `customElements.define('x-tag', Class)` becomes a `Component` (kind `web-component`)
+- [x] `addEventListener(...)` and `on*` attributes become `EntryPoint` nodes (kind `dom-event`, trigger = event name) linked to their handler
+- [x] `customElements.define('x-tag', Class)` becomes a `Component` (kind `web-component`)
 
 ### Acceptance criteria
 
