@@ -631,7 +631,7 @@ Adds a `Page` node for client-visible URLs. Server-side handlers of full-stack f
 
 ### Client routers
 
-- [ ] React Router: JSX `<Route>` trees and `createBrowserRouter` objects, nested paths
+- [x] React Router: JSX `<Route>` trees and `createBrowserRouter` objects, nested paths
 - [ ] TanStack Router file and code routes
 
 ### MCP

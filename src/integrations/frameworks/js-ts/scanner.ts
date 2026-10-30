@@ -8,6 +8,7 @@ import { applyEnvConfigParseSemantics } from "./env-config.js";
 import { applyDataSchemaParseSemantics } from "./data-schemas.js";
 import { applyDomAttributeSemantics, applyDomParseSemantics } from "./dom.js";
 import { applyReactParseSemantics } from "./react.js";
+import { applyReactRouterSemantics } from "./react-router.js";
 import { applyServerFunctionSemantics } from "./server-functions.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
@@ -73,6 +74,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // Function, class, memo and forwardRef components and the JSX they render.
     name: "react",
     onFile: applyReactParseSemantics,
+  },
+  {
+    // React Router <Route> trees and route objects.
+    name: "react-router",
+    onFile: applyReactRouterSemantics,
   },
   {
     // "use server" functions (server actions).
