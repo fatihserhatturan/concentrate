@@ -4,15 +4,16 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 
 // React components: functions named in PascalCase that return JSX (or are
 // typed `FC`), classes that extend `Component` / `PureComponent`, and
-// `memo` / `forwardRef` wrappers. The JSX elements a component renders are
-// recorded on it as `pendingRenders`; the component-renders contributor links
-// them to the rendered components across files.
+// `memo` / `forwardRef` wrappers. Contexts from `createContext` are
+// components of kind `context`. The JSX elements a component renders are
+// recorded on it as `pendingRenders` and the hooks it calls as `hooks`; the
+// component-graph contributor links them across files.
 
 export type PendingRender = { name: string; props: string[]; line: number };
 
 type ComponentCandidate = {
   name: string;
-  kind: "function" | "class" | "memo" | "forwardRef";
+  kind: "function" | "class" | "memo" | "forwardRef" | "context";
   line: number;
   endLine: number | null;
   isExported: boolean;
@@ -43,6 +44,23 @@ export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsPars
   }
 
   const candidates: ComponentCandidate[] = [];
+
+  // export const CartContext = createContext<Cart | null>(null)
+  for (const declarator of state.variableDeclaratorAstNodes) {
+    const name = declarator.childForFieldName("name");
+    const value = declarator.childForFieldName("value");
+    const callee = value?.type === "call_expression" ? value.childForFieldName("function")?.text : undefined;
+    if (name?.type !== "identifier" || (callee !== "createContext" && callee !== "React.createContext")) continue;
+    candidates.push({
+      name: name.text,
+      kind: "context",
+      line: declarator.startPosition.row + 1,
+      endLine: declarator.endPosition.row + 1,
+      isExported: declarator.parent?.parent?.type === "export_statement",
+      definedBy: {},
+      renderRoots: [],
+    });
+  }
   // Functions wrapped under their own name: `const Card = memo(function Card() {…})`.
   const wrappedNames = new Map<string, string>();
 
@@ -109,6 +127,7 @@ export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsPars
   }
 
   const framework = jsxFramework(parsed.nodes, parsed.relationships, fileNodeId);
+  const hooksByFunctionId = hookCallNames(parsed.nodes, parsed.relationships);
   const defaultExport = nodesById.get(fileNodeId)?.properties.defaultExport;
   for (const candidate of candidates) {
     const renders = candidate.renderRoots.flatMap(collectRenders);
@@ -123,15 +142,39 @@ export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsPars
         endLine: candidate.endLine,
         isExported: candidate.isExported || candidate.name === defaultExport,
         pendingRenders: renders.length > 0 ? JSON.stringify(renders) : null,
+        hooks: candidate.definedBy.functionId ? hooksByFunctionId.get(candidate.definedBy.functionId)?.join(",") ?? null : null,
       },
     };
     parsed.nodes.push(component);
     parsed.relationships.push({ from: fileNodeId, to: component.id, type: "DECLARES_COMPONENT", properties: {} });
-    const definedBy: GraphRelationship = candidate.definedBy.classId
-      ? { from: component.id, to: candidate.definedBy.classId, type: "COMPONENT_DEFINED_BY", properties: {} }
-      : { from: component.id, to: candidate.definedBy.functionId!, type: "COMPONENT_DEFINED_BY_FUNCTION", properties: {} };
-    parsed.relationships.push(definedBy);
+    if (candidate.definedBy.classId) {
+      parsed.relationships.push({ from: component.id, to: candidate.definedBy.classId, type: "COMPONENT_DEFINED_BY", properties: {} });
+    } else if (candidate.definedBy.functionId) {
+      parsed.relationships.push({ from: component.id, to: candidate.definedBy.functionId, type: "COMPONENT_DEFINED_BY_FUNCTION", properties: {} });
+    }
   }
+}
+
+// `useState()`, `React.useEffect()`, `useCart()`, React 19's `use(Ctx)`: a
+// call named like a hook.
+export function isHookCall(call: GraphNode): boolean {
+  const callee = call.properties.callee;
+  const receiver = call.properties.receiver;
+  return typeof callee === "string" && /^use([A-Z0-9]|$)/u.test(callee) && (receiver === null || receiver === undefined || receiver === "React");
+}
+
+// The hooks each function calls, sorted and without repeats.
+function hookCallNames(nodes: GraphNode[], relationships: GraphRelationship[]): Map<string, string[]> {
+  const calls = new Map(nodes.filter((node) => node.label === "Call" && isHookCall(node)).map((node) => [node.id, String(node.properties.callee)]));
+  const names = new Map<string, Set<string>>();
+  for (const rel of relationships) {
+    const callee = rel.type === "CALLS" ? calls.get(rel.to) : undefined;
+    if (!callee) continue;
+    let set = names.get(rel.from);
+    if (!set) names.set(rel.from, set = new Set());
+    set.add(callee);
+  }
+  return new Map([...names].map(([id, set]) => [id, [...set].sort()]));
 }
 
 // Synthetic names (`<memo:arg0>`) never qualify; neither does a lone capital.

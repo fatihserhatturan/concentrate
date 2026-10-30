@@ -69,6 +69,8 @@ export type GraphRelationshipType =
   | "COMPONENT_DEFINED_BY"
   | "COMPONENT_DEFINED_BY_FUNCTION"
   | "RENDERS"
+  | "USES_HOOK"
+  | "USES_CONTEXT"
   | "ACCESSES_DATA"
   | "MAPS_TO_TABLE"
   | "RELATES_TO"

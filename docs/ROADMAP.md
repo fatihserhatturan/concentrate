@@ -587,15 +587,15 @@ This phase introduces the framework-neutral component schema that the Vue, Svelt
 
 - [x] `Component` label (name, framework, kind, line, endLine, isExported), defined by the file that declares it
 - [x] `RENDERS` (Component → Component, with the props names); bump `SCHEMA_VERSION`
-- [ ] `USES_HOOK` (Component or Function → Function)
+- [x] `USES_HOOK` (from the component's or hook's Function → Function) and `USES_CONTEXT` (Function → context Component)
 
 ### React
 
 - [x] Function and class components: JSX return, `React.FC` / `FC` annotations, `memo` and `forwardRef` wrappers
 - [ ] `lazy(() => import(...))` components
 - [x] JSX `<Child prop=…>` resolves through imports and barrels to the child `Component`
-- [ ] Built-in and custom hooks (`use*`) resolve through call resolution to `USES_HOOK`
-- [ ] `createContext` providers and `useContext` consumers
+- [x] Built-in and custom hooks (`use*`) resolve through call resolution to `USES_HOOK`
+- [x] `createContext` providers and `useContext` consumers
 
 ### MCP
 
