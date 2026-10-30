@@ -123,6 +123,44 @@ describe("buildCodeGraph", () => {
     assertRelationship(graph.relationships, "file:partial.ts:function:1:ok:call:3:9:run", "CALL_RESOLVES_TO", "file:partial.ts:function:5:run");
   });
 
+  it("parses a bare & in a JSX attribute string and keeps the attribute text as written", async () => {
+    const fixturePath = await mkdtemp(path.join(os.tmpdir(), "concentrate-jsx-ampersand-"));
+    const fontsUrl = "//fonts.googleapis.com/css?family=Titillium+Web:700&display=swap";
+    await writeFile(
+      path.join(fixturePath, "Head.tsx"),
+      [
+        "export class Head {",
+        "  render() {",
+        "    return (",
+        "      <head>",
+        "        <link",
+        "          rel=\"stylesheet\"",
+        `          href="${fontsUrl}"`,
+        "        />",
+        "        <a href='/a?x=1&amp;y=2&z=3'>x</a>",
+        "      </head>",
+        "    );",
+        "  }",
+        "}",
+        "export const query = \"a=1&b=2\" + track();",
+        "function track() { return \"&c=3\"; }",
+        "",
+      ].join("\n"),
+      "utf8",
+    );
+    const graph = await buildCodeGraph(fixturePath, { continueOnError: false });
+
+    assert.equal(graph.report.status, "success");
+    assert.deepEqual(graph.report.failedFiles, []);
+    assert.deepEqual(graph.report.warnings, []);
+    assertRelationship(graph.relationships, "file:Head.tsx", "DEFINES_CLASS", "file:Head.tsx:class:1:Head");
+
+    const { rootNode } = await parseJsTsWithRootNode(fixturePath, path.join(fixturePath, "Head.tsx"), "typescript");
+    const texts = (type: string) => rootNode.descendantsOfType(type).map((node) => node!.text);
+    assert.deepEqual(texts("jsx_attribute"), ["rel=\"stylesheet\"", `href="${fontsUrl}"`, "href='/a?x=1&amp;y=2&z=3'"]);
+    assert.deepEqual(texts("string"), ["\"stylesheet\"", `"${fontsUrl}"`, "'/a?x=1&amp;y=2&z=3'", "\"a=1&b=2\"", "\"&c=3\""]);
+  });
+
   it("rescans with the parse cache after files are added, changed, and deleted", async () => {
     const fixturePath = await createPatchFixture();
     const databasePath = path.join(

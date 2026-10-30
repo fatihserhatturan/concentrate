@@ -297,13 +297,34 @@ function grammarFor(language: SupportedLanguage, filePath: string): GrammarName 
 // a syntax error is left out on its own, and the rest of the file is kept.
 const statementParents = new Set(["program", "statement_block", "class_body", "switch_case", "switch_default"]);
 
+// A bare `&` before a letter or `#` in a quoted, space-free JSX attribute value
+// (`href="…?family=x&display=swap"`): the JS / TSX grammars only take `&` there
+// as the start of an entity such as `&amp;`, and their error recovery can take
+// the whole file with it. Valid entities are left alone.
+const jsxAttributeValue = /(?<=[\w-]=)(["'])[^"'\s<>{}]*\1/gu;
+const bareAmpersand = /&(?!#\d+;|#x[\da-f]+;|[a-z][a-z\d]*;)(?=[a-z#])/giu;
+
+// The same text with those `&` replaced by `_`, for the grammar to read; node
+// text still comes from the original, so attribute values are unchanged.
+export function withoutBareJsxAmpersands(source: string): string {
+  return source.replace(jsxAttributeValue, (value) => value.replace(bareAmpersand, "_"));
+}
+
 // Parses a file, leaving out the statements that contain syntax errors. The
 // caller owns the tree and must delete() it.
 async function parseTolerantTree(
   source: string,
   grammar: GrammarName,
 ): Promise<{ tree: SyntaxTree; warnings: string[] }> {
-  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors(grammar, source, statementParents);
+  // The stand-in is only used when the file does not parse as written.
+  let standIn: ((text: string) => string) | undefined;
+  if (withoutBareJsxAmpersands(source) !== source) {
+    const plain = await parseSyntaxTree(grammar, source);
+    if (!plain.rootNode.hasError) return { tree: plain, warnings: [] };
+    plain.delete();
+    standIn = withoutBareJsxAmpersands;
+  }
+  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors(grammar, source, statementParents, undefined, standIn);
   const warnings = skippedLines.length === 0
     ? []
     : [`Syntax error: left out the statement${skippedLines.length === 1 ? "" : "s"} at line${skippedLines.length === 1 ? "" : "s"} ${skippedLines.join(", ")}`];

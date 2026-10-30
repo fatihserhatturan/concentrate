@@ -233,9 +233,11 @@ Blocks or informs: future query server design.
   class member that contains an `ERROR` or `MISSING` node is left out (the
   file is parsed again with that text blanked), and the scan reports a warning
   with the lines left out. A file that stays broken after four rounds fails
-  as before. One case is a bare `&` in a JSX attribute string
-  (`href="…?family=x&display=swap"`): the tree-sitter JS / TSX grammars
-  reject it, and their error recovery can take the whole file with it.
+  as before. A bare `&` in a quoted JSX attribute string
+  (`href="…?family=x&display=swap"`), which the tree-sitter JS / TSX grammars
+  reject, is handled: a file that does not parse as written is parsed again
+  with such `&` read as `_` (node text and attribute values stay as written).
+  A bare `&` before a letter in JSX text (`<p>a&b</p>`) is still an error.
   Python, Go and Rust files with syntax errors are still reported
   as failed files (`--continue-on-error` keeps the rest of the scan).
 
