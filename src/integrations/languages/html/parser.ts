@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { withSyntaxTree, type SyntaxNode } from "../syntax/tree-sitter.js";
+import { parseSyntaxTree, type SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { ILanguageParser } from "../../../core/contracts/language-parser.js";
 import { parseJsTsSource, type JsTsFrameworkPlugin } from "../js-ts/parser.js";
@@ -21,10 +21,21 @@ type ScriptElement = {
   end: number | null;
 };
 
-export function createHtmlParser(plugins: readonly JsTsFrameworkPlugin[] = []): ILanguageParser {
+// Semantics of the markup itself (event attributes, for example). Page
+// plugins run after the scripts are parsed, on the HTML tree, and add to
+// `parsed`; the tree is freed afterwards.
+export interface HtmlPagePlugin {
+  readonly name: string;
+  onPage(page: { fileNodeId: string; documentNode: SyntaxNode; parsed: ParsedSourceFile }): void;
+}
+
+export function createHtmlParser(
+  plugins: readonly JsTsFrameworkPlugin[] = [],
+  pagePlugins: readonly HtmlPagePlugin[] = [],
+): ILanguageParser {
   return {
     language: "html",
-    parse: (rootPath, filePath) => parseHtmlFile(rootPath, filePath, plugins),
+    parse: (rootPath, filePath) => parseHtmlFile(rootPath, filePath, plugins, pagePlugins),
   };
 }
 
@@ -32,11 +43,29 @@ export async function parseHtmlFile(
   rootPath: string,
   filePath: string,
   plugins: readonly JsTsFrameworkPlugin[] = [],
+  pagePlugins: readonly HtmlPagePlugin[] = [],
 ): Promise<ParsedSourceFile> {
   const source = await readFile(filePath, "utf8");
+  const tree = await parseSyntaxTree("html", source);
+  try {
+    const parsed = await parseHtmlPage(rootPath, filePath, source, tree.rootNode, plugins);
+    for (const plugin of pagePlugins) plugin.onPage({ fileNodeId: parsed.fileNodeId, documentNode: tree.rootNode, parsed });
+    return parsed;
+  } finally {
+    tree.delete();
+  }
+}
+
+async function parseHtmlPage(
+  rootPath: string,
+  filePath: string,
+  source: string,
+  documentNode: SyntaxNode,
+  plugins: readonly JsTsFrameworkPlugin[],
+): Promise<ParsedSourceFile> {
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
-  const scripts = await withSyntaxTree("html", source, (tree) => scriptElements(tree.rootNode));
+  const scripts = scriptElements(documentNode);
 
   const inline = scripts.filter((script) => !script.src && script.body);
   const parsed: ParsedSourceFile = inline.length > 0

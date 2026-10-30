@@ -6,6 +6,7 @@ import { applyNestJsParseSemantics } from "./nestjs.js";
 import { applyBackendEntrypointParseSemantics } from "./backend-entrypoints.js";
 import { applyEnvConfigParseSemantics } from "./env-config.js";
 import { applyDataSchemaParseSemantics } from "./data-schemas.js";
+import { applyDomAttributeSemantics, applyDomParseSemantics } from "./dom.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
 // the nodes earlier ones added (NestJS routes, for example, read decorators).
@@ -60,9 +61,22 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     onFile: ({ fileNodeId, rootNode, parsed }) =>
       applyDataSchemaParseSemantics(fileNodeId, rootNode, parsed.nodes, parsed.relationships),
   },
+  {
+    // addEventListener listeners and customElements.define.
+    name: "dom",
+    onFile: ({ fileNodeId, rootNode, parsed }) =>
+      applyDomParseSemantics(fileNodeId, rootNode, parsed.nodes, parsed.relationships),
+  },
 ];
 
 export const javascriptParser = createJsTsParser("javascript", jsTsFrameworkPlugins);
 export const typescriptParser = createJsTsParser("typescript", jsTsFrameworkPlugins);
 // Inline scripts of HTML pages get the same framework semantics.
-export const htmlParser = createHtmlParser(jsTsFrameworkPlugins);
+export const htmlParser = createHtmlParser(jsTsFrameworkPlugins, [
+  {
+    // on* event attributes.
+    name: "dom-attributes",
+    onPage: ({ fileNodeId, documentNode, parsed }) =>
+      applyDomAttributeSemantics(fileNodeId, documentNode, parsed.nodes, parsed.relationships),
+  },
+]);

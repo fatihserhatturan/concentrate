@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 41
+        "result": 42
       },
       {
         "method": "stats",
@@ -25,19 +25,19 @@
           },
           {
             "table": "File",
-            "count": 4
+            "count": 5
           },
           {
             "table": "Import",
-            "count": 4
+            "count": 5
           },
           {
             "table": "Function",
-            "count": 4
+            "count": 9
           },
           {
             "table": "Class",
-            "count": 0
+            "count": 1
           },
           {
             "table": "Field",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 7
+            "count": 17
           },
           {
             "table": "Route",
@@ -73,7 +73,7 @@
           },
           {
             "table": "EntryPoint",
-            "count": 0
+            "count": 6
           },
           {
             "table": "EnvVar",
@@ -90,12 +90,16 @@
           {
             "table": "Table",
             "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 1
           }
         ]
       }
     ],
     "output": {
-      "schemaVersion": 41,
+      "schemaVersion": 42,
       "stats": [
         {
           "table": "Repo",
@@ -111,19 +115,19 @@
         },
         {
           "table": "File",
-          "count": 4
+          "count": 5
         },
         {
           "table": "Import",
-          "count": 4
+          "count": 5
         },
         {
           "table": "Function",
-          "count": 4
+          "count": 9
         },
         {
           "table": "Class",
-          "count": 0
+          "count": 1
         },
         {
           "table": "Field",
@@ -151,7 +155,7 @@
         },
         {
           "table": "Call",
-          "count": 7
+          "count": 17
         },
         {
           "table": "Route",
@@ -159,7 +163,7 @@
         },
         {
           "table": "EntryPoint",
-          "count": 0
+          "count": 6
         },
         {
           "table": "EnvVar",
@@ -176,6 +180,10 @@
         {
           "table": "Table",
           "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 1
         }
       ]
     }
@@ -194,7 +202,23 @@
             "name": "renderTodos",
             "kind": "Function",
             "file": "index.html",
-            "line": 13,
+            "line": 18,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "onReady",
+            "kind": "Function",
+            "file": "js/todo-item.js",
+            "line": 11,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<document.addEventListener:keydown:arg1>",
+            "kind": "Function",
+            "file": "js/todo-item.js",
+            "line": 21,
             "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           }
@@ -203,7 +227,16 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
-        "rows": []
+        "rows": [
+          {
+            "name": "TodoItem",
+            "kind": "Class",
+            "file": "js/todo-item.js",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
       },
       {
         "method": "query",
@@ -237,14 +270,38 @@
           "name": "renderTodos",
           "kind": "Function",
           "file": "index.html",
-          "line": 13,
+          "line": 18,
           "isExported": false,
           "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "onReady",
+          "kind": "Function",
+          "file": "js/todo-item.js",
+          "line": 11,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<document.addEventListener:keydown:arg1>",
+          "kind": "Function",
+          "file": "js/todo-item.js",
+          "line": 21,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "TodoItem",
+          "kind": "Class",
+          "file": "js/todo-item.js",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_CLASS"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 1
+        "returned": 4
       }
     }
   },
@@ -260,7 +317,7 @@
             "file": "index.html",
             "name": "showFirst",
             "kind": "Function",
-            "line": 17,
+            "line": 22,
             "relationship": "DEFINES_FUNCTION"
           },
           {
@@ -327,7 +384,7 @@
           "file": "index.html",
           "name": "showFirst",
           "kind": "Function",
-          "line": 17,
+          "line": 22,
           "relationship": "DEFINES_FUNCTION"
         },
         {
@@ -372,17 +429,127 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
-        "rows": []
+        "rows": [
+          {
+            "file": "index.html",
+            "line": 14,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "dom",
+            "handlerName": "renderTodos",
+            "handler": "renderTodos"
+          },
+          {
+            "file": "index.html",
+            "line": 15,
+            "kind": "dom-event",
+            "trigger": "submit",
+            "library": "dom",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "js/todo-item.js",
+            "line": 3,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "dom",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "js/todo-item.js",
+            "line": 12,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "dom",
+            "handlerName": "onAdd",
+            "handler": "onAdd"
+          },
+          {
+            "file": "js/todo-item.js",
+            "line": 20,
+            "kind": "dom-event",
+            "trigger": "DOMContentLoaded",
+            "library": "dom",
+            "handlerName": "onReady",
+            "handler": "onReady"
+          },
+          {
+            "file": "js/todo-item.js",
+            "line": 21,
+            "kind": "dom-event",
+            "trigger": "keydown",
+            "library": "dom",
+            "handlerName": null,
+            "handler": "<document.addEventListener:keydown:arg1>"
+          }
+        ]
       }
     ],
     "output": {
       "query": {
         "limit": 50
       },
-      "entrypoints": [],
+      "entrypoints": [
+        {
+          "file": "index.html",
+          "line": 14,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "dom",
+          "handlerName": "renderTodos",
+          "handler": "renderTodos"
+        },
+        {
+          "file": "index.html",
+          "line": 15,
+          "kind": "dom-event",
+          "trigger": "submit",
+          "library": "dom",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "js/todo-item.js",
+          "line": 3,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "dom",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "js/todo-item.js",
+          "line": 12,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "dom",
+          "handlerName": "onAdd",
+          "handler": "onAdd"
+        },
+        {
+          "file": "js/todo-item.js",
+          "line": 20,
+          "kind": "dom-event",
+          "trigger": "DOMContentLoaded",
+          "library": "dom",
+          "handlerName": "onReady",
+          "handler": "onReady"
+        },
+        {
+          "file": "js/todo-item.js",
+          "line": 21,
+          "kind": "dom-event",
+          "trigger": "keydown",
+          "library": "dom",
+          "handlerName": null,
+          "handler": "<document.addEventListener:keydown:arg1>"
+        }
+      ],
       "page": {
         "offset": 0,
-        "returned": 0
+        "returned": 6
       }
     }
   },
@@ -468,7 +635,7 @@
             "caller": "renderTodos",
             "callerKind": "Function",
             "file": "index.html",
-            "line": 13,
+            "line": 18,
             "expression": "loadTodos",
             "relationship": "CALLS"
           }
@@ -497,7 +664,7 @@
           "caller": "renderTodos",
           "callerKind": "Function",
           "file": "index.html",
-          "line": 13,
+          "line": 18,
           "expression": "loadTodos",
           "relationship": "CALLS"
         }
@@ -523,7 +690,7 @@
             "caller": "showFirst",
             "callerKind": "Function",
             "file": "index.html",
-            "line": 18,
+            "line": 23,
             "expression": "formatTodo",
             "relationship": "CALLS"
           }
@@ -552,7 +719,7 @@
           "caller": "showFirst",
           "callerKind": "Function",
           "file": "index.html",
-          "line": 18,
+          "line": 23,
           "expression": "formatTodo",
           "relationship": "CALLS"
         }
@@ -583,6 +750,9 @@
             "file": "js/store.js"
           },
           {
+            "file": "js/todo-item.js"
+          },
+          {
             "file": "js/vendor.js"
           }
         ]
@@ -598,22 +768,22 @@
         },
         "rows": [
           {
-            "id": "file:index.html:function:13:renderTodos",
+            "id": "file:index.html:function:18:renderTodos",
             "name": "renderTodos",
             "className": null,
             "file": "index.html",
             "path": "<root>/index.html",
-            "line": 13,
-            "endLine": 13
+            "line": 18,
+            "endLine": 18
           },
           {
-            "id": "file:index.html:function:17:showFirst",
+            "id": "file:index.html:function:22:showFirst",
             "name": "showFirst",
             "className": null,
             "file": "index.html",
             "path": "<root>/index.html",
-            "line": 17,
-            "endLine": 19
+            "line": 22,
+            "endLine": 24
           }
         ]
       },
@@ -715,18 +885,23 @@
             "isTypeOnly": false
           },
           {
-            "source": "./js/vendor.js",
+            "source": "./js/todo-item.js",
             "line": 7,
             "isTypeOnly": false
           },
           {
-            "source": "https://cdn.example.com/lib.js",
+            "source": "./js/vendor.js",
             "line": 8,
             "isTypeOnly": false
           },
           {
+            "source": "https://cdn.example.com/lib.js",
+            "line": 9,
+            "isTypeOnly": false
+          },
+          {
             "source": "./js/format.js",
-            "line": 15,
+            "line": 20,
             "isTypeOnly": false
           }
         ]
@@ -737,7 +912,20 @@
         "params": {
           "file": "index.html"
         },
-        "rows": []
+        "rows": [
+          {
+            "kind": "dom-event",
+            "trigger": "click",
+            "handlerName": "renderTodos",
+            "line": 14
+          },
+          {
+            "kind": "dom-event",
+            "trigger": "submit",
+            "handlerName": null,
+            "line": 15
+          }
+        ]
       }
     ],
     "output": {
@@ -749,38 +937,55 @@
           "isTypeOnly": false
         },
         {
-          "source": "./js/vendor.js",
+          "source": "./js/todo-item.js",
           "line": 7,
           "isTypeOnly": false
         },
         {
-          "source": "https://cdn.example.com/lib.js",
+          "source": "./js/vendor.js",
           "line": 8,
           "isTypeOnly": false
         },
         {
+          "source": "https://cdn.example.com/lib.js",
+          "line": 9,
+          "isTypeOnly": false
+        },
+        {
           "source": "./js/format.js",
-          "line": 15,
+          "line": 20,
           "isTypeOnly": false
         }
       ],
       "outline": [
         {
+          "kind": "entrypoint:dom-event",
+          "trigger": "click",
+          "handlerName": "renderTodos",
+          "line": 14
+        },
+        {
+          "kind": "entrypoint:dom-event",
+          "trigger": "submit",
+          "handlerName": null,
+          "line": 15
+        },
+        {
           "kind": "function",
           "name": "renderTodos",
-          "line": 13,
-          "endLine": 13
+          "line": 18,
+          "endLine": 18
         },
         {
           "kind": "function",
           "name": "showFirst",
-          "line": 17,
-          "endLine": 19
+          "line": 22,
+          "endLine": 24
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 2
+        "returned": 4
       }
     }
   }
