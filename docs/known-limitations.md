@@ -154,10 +154,11 @@ audits.
   Mongoose Model API (`findByIdAndUpdate`, `findOneAndDelete`,
   `countDocuments`, …), Prisma's `findUniqueOrThrow` / `findFirstOrThrow` /
   `groupBy` and Sequelize's `findAndCountAll` / `bulkCreate`.
-- Sequelize models are recognized when created with `sequelize.define(…)` or
-  a factory whose name says so; class-based models (`class Order extends
-  Model` with `Order.init(…)`, or `sequelize-typescript` decorators) are not
-  yet, so their calls create no data access.
+- Sequelize models are recognized when created with `sequelize.define(…)`, a
+  factory whose name says so, or as a class that extends the `Model` its file
+  imports from `sequelize` / `sequelize-typescript` (or another such class).
+  Class models are matched by name, so only static calls on the class name
+  itself (`Order.findAll()`) count; an instance (`order.save()`) does not.
 
 Blocks or informs: deeper ORM-specific long-term work and MCP data lineage
 queries.
