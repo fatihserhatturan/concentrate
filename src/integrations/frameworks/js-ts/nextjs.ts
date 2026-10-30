@@ -45,7 +45,7 @@ export const nextjsPagesContributor: ISemanticContributor = {
     const nodes: GraphNode[] = [];
     const relationships: GraphRelationship[] = [];
     const addPage = (file: GraphNode, properties: GraphNode["properties"]) => {
-      const page: GraphNode = { id: `${file.id}:page`, label: "Page", properties: { ...properties, fullPath: properties.path } };
+      const page: GraphNode = { id: `${file.id}:page`, label: "Page", properties: { ...properties, fullPath: properties.path, line: null, component: null } };
       nodes.push(page);
       relationships.push({ from: file.id, to: page.id, type: "DECLARES_PAGE", properties: {} });
       const component = defaultExportComponent(file, componentsByFile.get(file.id) ?? []);

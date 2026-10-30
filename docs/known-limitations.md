@@ -329,7 +329,21 @@ Astro).
 - `PAGE_RENDERS` links a page to the component its file exports as default.
   A default export that is not a component (a lowercase function, or one
   that only returns `null`) has no `PAGE_RENDERS`.
-- React Router and TanStack Router are not mapped yet.
+- React Router: in a file that imports `react-router`, `react-router-dom` or
+  `react-router-native`, every `<Route>` element (router `jsx`) and every
+  route object in the array passed to `createBrowserRouter`,
+  `createHashRouter`, `createMemoryRouter` or `useRoutes`, inline or as a
+  variable of the same file (router `object`), is a `Page` (framework
+  `react-router`). `path` is the route's own segment (null for index and
+  pathless routes), `fullPath` joins it onto its parent route's, and `kind` is
+  `layout` with child routes, `index` for an index route, otherwise `page`.
+  `Page.component` and `PAGE_RENDERS` name the component of `element={<X />}`
+  (the outermost element, so a wrapper such as `<RequireAuth>` is what the
+  page renders), `Component={X}` or v5's `component={X}`. Not followed: route
+  arrays from another file, routes built at runtime (`.map`), `lazy` routes,
+  v5 `render` props, and descendant `<Routes>` inside a routed component,
+  whose paths start again from `/` instead of the parent route's.
+- TanStack Router is not mapped yet.
 
 ## Review Process
 

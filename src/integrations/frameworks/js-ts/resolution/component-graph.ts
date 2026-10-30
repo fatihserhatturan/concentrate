@@ -17,6 +17,8 @@ import { isHookCall, type PendingRender } from "../react.js";
 //   only listed in `Component.hooks`.
 // - USES_CONTEXT: such a function to the context its `useContext(Ctx)` /
 //   `use(Ctx)` reads.
+// - PAGE_RENDERS: a React Router Page to the component its route renders
+//   (`Page.component`).
 export const componentGraphContributor: ISemanticContributor = {
   contribute(graph) {
     addComponentRelationships(graph);
@@ -91,6 +93,18 @@ export function addComponentRelationships(graph: IGraphContributor): void {
       }
     }
     component.properties.pendingRenders = unresolved.length > 0 ? JSON.stringify(unresolved) : null;
+  }
+
+  for (const rel of graph.relationships) {
+    if (rel.type !== "DECLARES_PAGE") continue;
+    const page = nodesById.get(rel.to);
+    const name = page?.properties.component;
+    if (page?.properties.framework !== "react-router" || typeof name !== "string") continue;
+    const dot = name.lastIndexOf(".");
+    const target = dot === -1
+      ? resolveDeclaration(name, rel.from, componentsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId)
+      : resolveCall(name.slice(dot + 1), name.slice(0, dot), rel.from, componentsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId);
+    if (target) added.push({ from: page.id, to: target, type: "PAGE_RENDERS", properties: {} });
   }
 
   // Functions that may call hooks: those defining a component, and custom hooks.
