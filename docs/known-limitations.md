@@ -197,16 +197,18 @@ Blocks or informs: future query server design.
 ## Parsing
 
 - Grammars are pinned to the versions the native binding used: javascript
-  0.23.1, typescript 0.23.2, python 0.21.0, go 0.21.2, rust 0.21.0 (see
-  `vendor/grammars/manifest.json`). Newer syntax that only later grammar
+  0.23.1, typescript and tsx 0.23.2, python 0.21.0, go 0.21.2, rust 0.21.0
+  (see `vendor/grammars/manifest.json`). Newer syntax that only later grammar
   releases understand produces `ERROR` nodes.
-- `.tsx` files are parsed with the TypeScript grammar, not the TSX grammar, so
-  JSX inside them can produce syntax errors.
+- JSX is parsed but not modelled yet: components, props and inline JSX event
+  handlers create no nodes of their own, so a call inside
+  `onClick={() => track()}` is attributed to the enclosing component
+  (Phase 11).
 - A file whose tree contains an `ERROR` node is reported as a failed file
   instead of producing a partial graph (`--continue-on-error` keeps the rest of
   the scan).
 
-Blocks or informs: ROADMAP Phase 3b (grammar upgrades, TSX, error tolerance).
+Blocks or informs: ROADMAP Phase 10 (error tolerance) and Phase 11 (React).
 
 ## Review Process
 

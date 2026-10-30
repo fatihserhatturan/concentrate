@@ -25,6 +25,7 @@ describe("vendored grammars", () => {
     const samples: Record<GrammarName, [string, string]> = {
       javascript: ["const a = f(1);", "lexical_declaration"],
       typescript: ["let a: number = f(1);", "lexical_declaration"],
+      tsx: ["let a = <A b={f(1)} />;", "lexical_declaration"],
       python: ["a = f(1)", "expression_statement"],
       go: ["package main\nfunc main() {}", "package_clause"],
       rust: ["fn main() {}", "function_item"],

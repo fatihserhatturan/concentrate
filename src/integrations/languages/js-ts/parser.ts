@@ -277,9 +277,11 @@ export function finalizeLanguageLevel(
 
 // ─── Public helpers ───────────────────────────────────────────────────────────
 
-// The caller owns the tree and must delete() it.
-export function parseTree(source: string, language: SupportedLanguage): Promise<SyntaxTree> {
-  return parseSyntaxTree(language === "typescript" ? "typescript" : "javascript", source);
+// The caller owns the tree and must delete() it. `.tsx` files need the TSX
+// grammar: the TypeScript one has no JSX and reads `<T>x` as a type assertion.
+export function parseTree(source: string, language: SupportedLanguage, filePath = ""): Promise<SyntaxTree> {
+  if (language !== "typescript") return parseSyntaxTree("javascript", source);
+  return parseSyntaxTree(path.extname(filePath) === ".tsx" ? "tsx" : "typescript", source);
 }
 
 // A parsed file as framework plugins see it: the language-level graph plus the
@@ -319,7 +321,7 @@ export async function parseJsTsFile(
     properties: { path: filePath, relativePath, language },
   };
 
-  const tree = await parseTree(source, language);
+  const tree = await parseTree(source, language, filePath);
   try {
     if (tree.rootNode.hasError) {
       throw new Error("Syntax error");
@@ -357,7 +359,7 @@ export async function parseJsTsWithRootNode(
   };
 
   // The tree stays alive for the caller's root node; this helper is for tests.
-  const tree = await parseTree(source, language);
+  const tree = await parseTree(source, language, filePath);
   if (tree.rootNode.hasError) {
     tree.delete();
     throw new Error("Syntax error");

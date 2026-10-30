@@ -619,6 +619,26 @@
           "path": "/status"
         }
       }
+    ],
+    "tsx-components": [
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "formatPrice"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "trackClick"
+        }
+      },
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "src/ProductList.tsx"
+        }
+      }
     ]
   }
 }

@@ -1,0 +1,53 @@
+{"kind":"report","status":"success","discoveredFiles":3,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"tsx-components","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"tsx-components","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"tsx-components","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"file:src/ProductList.tsx","label":"File","properties":{"defaultExport":"App","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/ProductList.tsx","relativePath":"src/ProductList.tsx","sourceType":"production"}}
+{"kind":"node","id":"file:src/ProductList.tsx:function:12:ProductList","label":"Function","properties":{"className":null,"endLine":24,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":12,"methodKind":null,"name":"ProductList","parameters":"[{\"name\":\"{ products }\",\"type\":\"{ products: Product[] }\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/ProductList.tsx:function:12:ProductList:call:13:19:firstOf","label":"Call","properties":{"args":"[\"products\"]","callee":"firstOf","columnNumber":19,"expression":"firstOf","line":13,"name":"firstOf","receiver":null}}
+{"kind":"node","id":"file:src/ProductList.tsx:function:12:ProductList:call:17:7:products.map","label":"Call","properties":{"args":"[]","callee":"map","columnNumber":7,"expression":"products.map","line":17,"name":"products.map","receiver":"products"}}
+{"kind":"node","id":"file:src/ProductList.tsx:function:12:ProductList:call:18:44:trackClick","label":"Call","properties":{"args":"[\"product.id\"]","callee":"trackClick","columnNumber":44,"expression":"trackClick","line":18,"name":"trackClick","receiver":null}}
+{"kind":"node","id":"file:src/ProductList.tsx:function:12:ProductList:call:19:26:formatPrice","label":"Call","properties":{"args":"[\"product.cents\"]","callee":"formatPrice","columnNumber":26,"expression":"formatPrice","line":19,"name":"formatPrice","receiver":null}}
+{"kind":"node","id":"file:src/ProductList.tsx:function:26:App","label":"Function","properties":{"className":null,"endLine":29,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":26,"methodKind":null,"name":"App","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/ProductList.tsx:function:6:firstOf","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"arrow_function","line":6,"methodKind":null,"name":"firstOf","parameters":"[{\"name\":\"items\",\"type\":\"T[]\"}]","returnType":"T | undefined","visibility":"public"}}
+{"kind":"node","id":"file:src/ProductList.tsx:function:8:trackClick","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":8,"methodKind":null,"name":"trackClick","parameters":"[{\"name\":\"id\",\"type\":\"string\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/ProductList.tsx:function:8:trackClick:call:9:2:console.log","label":"Call","properties":{"args":"[\"clicked\",\"id\"]","callee":"log","columnNumber":2,"expression":"console.log","line":9,"name":"console.log","receiver":"console"}}
+{"kind":"node","id":"file:src/ProductList.tsx:import:1:./format","label":"Import","properties":{"bindings":"[{\"imported\":\"formatPrice\",\"local\":\"formatPrice\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"./format","specifier":"import { formatPrice } from './format';"}}
+{"kind":"node","id":"file:src/ProductList.tsx:type-alias:3:Product","label":"TypeAlias","properties":{"endLine":3,"isExported":true,"line":3,"name":"Product"}}
+{"kind":"node","id":"file:src/format.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/format.ts","relativePath":"src/format.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/format.ts:function:1:formatPrice","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"formatPrice","parameters":"[{\"name\":\"cents\",\"type\":\"number\"}]","returnType":"string","visibility":"public"}}
+{"kind":"node","id":"file:src/format.ts:function:1:formatPrice:call:2:13:(cents / 100).toFixed","label":"Call","properties":{"args":"[\"2\"]","callee":"toFixed","columnNumber":13,"expression":"(cents / 100).toFixed","line":2,"name":"(cents / 100).toFixed","receiver":""}}
+{"kind":"node","id":"file:src/format.ts:function:6:asNumber","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":6,"methodKind":null,"name":"asNumber","parameters":"[{\"name\":\"value\",\"type\":\"unknown\"}]","returnType":"number","visibility":"public"}}
+{"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"tsx-components","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"tsx-components","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/ProductList.tsx","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/format.ts","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_FUNCTION","to":"file:src/ProductList.tsx:function:12:ProductList","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_FUNCTION","to":"file:src/ProductList.tsx:function:26:App","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_FUNCTION","to":"file:src/ProductList.tsx:function:6:firstOf","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_FUNCTION","to":"file:src/ProductList.tsx:function:8:trackClick","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx","type":"DEFINES_TYPE_ALIAS","to":"file:src/ProductList.tsx:type-alias:3:Product","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx","type":"IMPORTS","to":"file:src/ProductList.tsx:import:1:./format","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList","type":"CALLS","to":"file:src/ProductList.tsx:function:12:ProductList:call:13:19:firstOf","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList","type":"CALLS","to":"file:src/ProductList.tsx:function:12:ProductList:call:17:7:products.map","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList","type":"CALLS","to":"file:src/ProductList.tsx:function:12:ProductList:call:18:44:trackClick","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList","type":"CALLS","to":"file:src/ProductList.tsx:function:12:ProductList:call:19:26:formatPrice","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList:call:13:19:firstOf","type":"CALL_RESOLVES_TO","to":"file:src/ProductList.tsx:function:6:firstOf","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList:call:18:44:trackClick","type":"CALL_RESOLVES_TO","to":"file:src/ProductList.tsx:function:8:trackClick","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:function:12:ProductList:call:19:26:formatPrice","type":"CALL_RESOLVES_TO","to":"file:src/format.ts:function:1:formatPrice","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:function:8:trackClick","type":"CALLS","to":"file:src/ProductList.tsx:function:8:trackClick:call:9:2:console.log","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:import:1:./format","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/ProductList.tsx:import:1:./format","type":"RESOLVES_TO","to":"file:src/format.ts","properties":{}}
+{"kind":"rel","from":"file:src/format.ts","type":"DEFINES_FUNCTION","to":"file:src/format.ts:function:1:formatPrice","properties":{}}
+{"kind":"rel","from":"file:src/format.ts","type":"DEFINES_FUNCTION","to":"file:src/format.ts:function:6:asNumber","properties":{}}
+{"kind":"rel","from":"file:src/format.ts:function:1:formatPrice","type":"CALLS","to":"file:src/format.ts:function:1:formatPrice:call:2:13:(cents / 100).toFixed","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/ProductList.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/format.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_CONFIG","to":"config:package.json:name","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:.","properties":{}}
