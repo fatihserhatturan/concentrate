@@ -5,7 +5,8 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 // React components: functions named in PascalCase that return JSX (or are
 // typed `FC`), classes that extend `Component` / `PureComponent`, and
 // `memo` / `forwardRef` wrappers. Contexts from `createContext` are
-// components of kind `context`. The JSX elements a component renders are
+// components of kind `context`; `lazy(() => import(...))` is a component of
+// kind `lazy` that records the module and export it loads. The JSX elements a component renders are
 // recorded on it as `pendingRenders` and the hooks it calls as `hooks`; the
 // component-graph contributor links them across files.
 
@@ -13,12 +14,13 @@ export type PendingRender = { name: string; props: string[]; line: number };
 
 type ComponentCandidate = {
   name: string;
-  kind: "function" | "class" | "memo" | "forwardRef" | "context";
+  kind: "function" | "class" | "memo" | "forwardRef" | "context" | "lazy";
   line: number;
   endLine: number | null;
   isExported: boolean;
   definedBy: { functionId?: string; classId?: string };
   renderRoots: SyntaxNode[];
+  lazy?: { source: string; exportName: string };
 };
 
 const classBases = new Set(["Component", "PureComponent", "React.Component", "React.PureComponent"]);
@@ -59,6 +61,25 @@ export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsPars
       isExported: declarator.parent?.parent?.type === "export_statement",
       definedBy: {},
       renderRoots: [],
+    });
+  }
+  // const Settings = lazy(() => import('./Settings'))
+  for (const declarator of state.variableDeclaratorAstNodes) {
+    const name = declarator.childForFieldName("name");
+    const value = declarator.childForFieldName("value");
+    const callee = value?.type === "call_expression" ? value.childForFieldName("function")?.text : undefined;
+    if (name?.type !== "identifier" || !isComponentName(name.text) || (callee !== "lazy" && callee !== "React.lazy")) continue;
+    // A loader that is not followed still makes a component; it renders nothing known.
+    const loaded = lazyImport(value!.childForFieldName("arguments")?.namedChildren[0]);
+    candidates.push({
+      name: name.text,
+      kind: "lazy",
+      line: declarator.startPosition.row + 1,
+      endLine: declarator.endPosition.row + 1,
+      isExported: declarator.parent?.parent?.type === "export_statement",
+      definedBy: {},
+      renderRoots: [],
+      ...(loaded ? { lazy: loaded } : {}),
     });
   }
   // Functions wrapped under their own name: `const Card = memo(function Card() {…})`.
@@ -143,6 +164,8 @@ export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsPars
         isExported: candidate.isExported || candidate.name === defaultExport,
         pendingRenders: renders.length > 0 ? JSON.stringify(renders) : null,
         hooks: candidate.definedBy.functionId ? hooksByFunctionId.get(candidate.definedBy.functionId)?.join(",") ?? null : null,
+        lazySource: candidate.lazy?.source ?? null,
+        lazyExport: candidate.lazy?.exportName ?? null,
       },
     };
     parsed.nodes.push(component);
@@ -153,6 +176,53 @@ export function applyReactParseSemantics({ fileNodeId, parsed, state }: JsTsPars
       parsed.relationships.push({ from: component.id, to: candidate.definedBy.functionId, type: "COMPONENT_DEFINED_BY_FUNCTION", properties: {} });
     }
   }
+}
+
+// The module and export a `lazy` loader imports: `() => import('./Page')`
+// loads the default export, `() => import('./Pages').then((m) => ({ default:
+// m.Settings }))` a named one. Anything else (a loader function by name, a
+// computed path) is not followed.
+function lazyImport(loader: SyntaxNode | null | undefined): { source: string; exportName: string } | null {
+  if (loader?.type !== "arrow_function" && loader?.type !== "function_expression") return null;
+  let body = loader.childForFieldName("body");
+  if (body?.type === "statement_block") {
+    const statements = body.namedChildren.filter((child) => child?.type !== "comment");
+    body = statements.length === 1 && statements[0]?.type === "return_statement" ? statements[0].namedChildren[0] ?? null : null;
+  }
+  while (body?.type === "parenthesized_expression") body = body.namedChildren[0] ?? null;
+  if (body?.type !== "call_expression") return null;
+
+  const fn = body.childForFieldName("function");
+  if (fn?.type === "import") {
+    const source = importSource(body);
+    return source ? { source, exportName: "default" } : null;
+  }
+  // import('./Pages').then((m) => ({ default: m.Settings }))
+  if (fn?.type !== "member_expression" || fn.childForFieldName("property")?.text !== "then") return null;
+  const imported = fn.childForFieldName("object");
+  const source = imported?.type === "call_expression" && imported.childForFieldName("function")?.type === "import" ? importSource(imported) : null;
+  const mapper = body.childForFieldName("arguments")?.namedChildren[0];
+  const parameter = mapper?.type === "arrow_function"
+    ? mapper.childForFieldName("parameter")?.text ?? mapper.childForFieldName("parameters")?.namedChildren[0]?.text
+    : undefined;
+  let mapped = mapper?.type === "arrow_function" ? mapper.childForFieldName("body") : null;
+  while (mapped?.type === "parenthesized_expression") mapped = mapped.namedChildren[0] ?? null;
+  if (!source || !parameter || mapped?.type !== "object") return null;
+  for (const pair of mapped.namedChildren) {
+    if (pair?.type !== "pair" || pair.childForFieldName("key")?.text !== "default") continue;
+    const value = pair.childForFieldName("value");
+    if (value?.type === "member_expression" && value.childForFieldName("object")?.text === parameter) {
+      const exportName = value.childForFieldName("property")?.text;
+      return exportName ? { source, exportName } : null;
+    }
+  }
+  return null;
+}
+
+function importSource(importCall: SyntaxNode): string | null {
+  const argument = importCall.childForFieldName("arguments")?.namedChildren[0];
+  if (argument?.type !== "string") return null;
+  return argument.text.slice(1, -1);
 }
 
 // `useState()`, `React.useEffect()`, `useCart()`, React 19's `use(Ctx)`: a

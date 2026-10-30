@@ -257,7 +257,13 @@ Astro).
   PascalCase variable. A function that returns JSX from a nested callback
   only, a render helper in camelCase and a component created by another
   higher-order function (`styled.div`, `connect(...)(View)`, `observer`) are
-  not components. `lazy(() => import(...))` is not linked yet.
+  not components.
+- `lazy(...)` / `React.lazy(...)` assigned to a PascalCase variable is a
+  Component of kind `lazy` that `RENDERS` the component it loads: the default
+  export for `() => import('./Page')`, a named one for
+  `() => import('./Pages').then((m) => ({ default: m.Settings }))`. A loader
+  passed by name (`lazy(loadPage)`) or a computed path is not followed; the
+  lazy component then renders nothing known.
 - `framework` is `react` unless the file imports `preact` or `solid-js`;
   the JSX transform needs no React import, so a project on another JSX library
   without such an import is labelled `react`.
