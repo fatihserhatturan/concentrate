@@ -25,15 +25,15 @@
           },
           {
             "table": "File",
-            "count": 21
+            "count": 23
           },
           {
             "table": "Import",
-            "count": 6
+            "count": 7
           },
           {
             "table": "Function",
-            "count": 24
+            "count": 29
           },
           {
             "table": "Class",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 1
+            "count": 3
           },
           {
             "table": "Decorator",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 9
+            "count": 21
           },
           {
             "table": "Route",
@@ -73,7 +73,7 @@
           },
           {
             "table": "EntryPoint",
-            "count": 0
+            "count": 4
           },
           {
             "table": "EnvVar",
@@ -119,15 +119,15 @@
         },
         {
           "table": "File",
-          "count": 21
+          "count": 23
         },
         {
           "table": "Import",
-          "count": 6
+          "count": 7
         },
         {
           "table": "Function",
-          "count": 24
+          "count": 29
         },
         {
           "table": "Class",
@@ -139,7 +139,7 @@
         },
         {
           "table": "Variable",
-          "count": 1
+          "count": 3
         },
         {
           "table": "Decorator",
@@ -159,7 +159,7 @@
         },
         {
           "table": "Call",
-          "count": 9
+          "count": 21
         },
         {
           "table": "Route",
@@ -167,7 +167,7 @@
         },
         {
           "table": "EntryPoint",
-          "count": 0
+          "count": 4
         },
         {
           "table": "EnvVar",
@@ -207,6 +207,14 @@
         "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": [
           {
+            "name": "subscribe",
+            "kind": "Function",
+            "file": "app/(marketing)/about/page.tsx",
+            "line": 4,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
             "name": "DELETE",
             "kind": "Function",
             "file": "app/(marketing)/api/items/[id]/route.ts",
@@ -227,6 +235,30 @@
             "kind": "Function",
             "file": "app/_components/page.tsx",
             "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "normalize",
+            "kind": "Function",
+            "file": "app/actions.ts",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "createPost",
+            "kind": "Function",
+            "file": "app/actions.ts",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "deletePost",
+            "kind": "Function",
+            "file": "app/actions.ts",
+            "line": 14,
             "isExported": true,
             "relationship": "DEFINES_FUNCTION"
           },
@@ -293,6 +325,14 @@
             "line": 1,
             "isExported": true,
             "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "middleware",
+            "kind": "Function",
+            "file": "middleware.ts",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
           }
         ]
       },
@@ -339,6 +379,14 @@
       },
       "definitions": [
         {
+          "name": "subscribe",
+          "kind": "Function",
+          "file": "app/(marketing)/about/page.tsx",
+          "line": 4,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "DELETE",
           "kind": "Function",
           "file": "app/(marketing)/api/items/[id]/route.ts",
@@ -359,6 +407,30 @@
           "kind": "Function",
           "file": "app/_components/page.tsx",
           "line": 1,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "normalize",
+          "kind": "Function",
+          "file": "app/actions.ts",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "createPost",
+          "kind": "Function",
+          "file": "app/actions.ts",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "deletePost",
+          "kind": "Function",
+          "file": "app/actions.ts",
+          "line": 14,
           "isExported": true,
           "relationship": "DEFINES_FUNCTION"
         },
@@ -427,6 +499,14 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "name": "middleware",
+          "kind": "Function",
+          "file": "middleware.ts",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "users",
           "kind": "Variable",
           "file": "app/api/users/route.ts",
@@ -437,7 +517,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 12
+        "returned": 17
       }
     }
   },
@@ -453,7 +533,7 @@
             "file": "app/(marketing)/about/page.tsx",
             "name": "About",
             "kind": "Function",
-            "line": 4,
+            "line": 10,
             "relationship": "DEFINES_FUNCTION"
           },
           {
@@ -482,6 +562,20 @@
             "name": "NotARoute",
             "kind": "Function",
             "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/actions.ts",
+            "name": "createPost",
+            "kind": "Function",
+            "line": 10,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/actions.ts",
+            "name": "deletePost",
+            "kind": "Function",
+            "line": 14,
             "relationship": "DEFINES_FUNCTION"
           },
           {
@@ -609,6 +703,13 @@
             "kind": "Function",
             "line": 2,
             "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "middleware.ts",
+            "name": "middleware",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
           }
         ]
       },
@@ -620,7 +721,15 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
-        "rows": []
+        "rows": [
+          {
+            "file": "middleware.ts",
+            "name": "config",
+            "kind": "Variable",
+            "line": 8,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
       },
       {
         "method": "query",
@@ -667,7 +776,7 @@
           "file": "app/(marketing)/about/page.tsx",
           "name": "About",
           "kind": "Function",
-          "line": 4,
+          "line": 10,
           "relationship": "DEFINES_FUNCTION"
         },
         {
@@ -696,6 +805,20 @@
           "name": "NotARoute",
           "kind": "Function",
           "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/actions.ts",
+          "name": "createPost",
+          "kind": "Function",
+          "line": 10,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/actions.ts",
+          "name": "deletePost",
+          "kind": "Function",
+          "line": 14,
           "relationship": "DEFINES_FUNCTION"
         },
         {
@@ -823,11 +946,25 @@
           "kind": "Function",
           "line": 2,
           "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "middleware.ts",
+          "name": "middleware",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "middleware.ts",
+          "name": "config",
+          "kind": "Variable",
+          "line": 8,
+          "relationship": "DEFINES_VARIABLE"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 23
+        "returned": 27
       }
     }
   },
@@ -921,17 +1058,91 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
-        "rows": []
+        "rows": [
+          {
+            "file": "app/(marketing)/about/page.tsx",
+            "line": 4,
+            "kind": "server-action",
+            "trigger": "subscribe",
+            "library": "react",
+            "handlerName": "subscribe",
+            "handler": "subscribe"
+          },
+          {
+            "file": "app/actions.ts",
+            "line": 10,
+            "kind": "server-action",
+            "trigger": "createPost",
+            "library": "react",
+            "handlerName": "createPost",
+            "handler": "createPost"
+          },
+          {
+            "file": "app/actions.ts",
+            "line": 14,
+            "kind": "server-action",
+            "trigger": "deletePost",
+            "library": "react",
+            "handlerName": "deletePost",
+            "handler": "deletePost"
+          },
+          {
+            "file": "middleware.ts",
+            "line": 3,
+            "kind": "middleware",
+            "trigger": "/dashboard/:path*, /api/:path*",
+            "library": "nextjs",
+            "handlerName": "middleware",
+            "handler": "middleware"
+          }
+        ]
       }
     ],
     "output": {
       "query": {
         "limit": 50
       },
-      "entrypoints": [],
+      "entrypoints": [
+        {
+          "file": "app/(marketing)/about/page.tsx",
+          "line": 4,
+          "kind": "server-action",
+          "trigger": "subscribe",
+          "library": "react",
+          "handlerName": "subscribe",
+          "handler": "subscribe"
+        },
+        {
+          "file": "app/actions.ts",
+          "line": 10,
+          "kind": "server-action",
+          "trigger": "createPost",
+          "library": "react",
+          "handlerName": "createPost",
+          "handler": "createPost"
+        },
+        {
+          "file": "app/actions.ts",
+          "line": 14,
+          "kind": "server-action",
+          "trigger": "deletePost",
+          "library": "react",
+          "handlerName": "deletePost",
+          "handler": "deletePost"
+        },
+        {
+          "file": "middleware.ts",
+          "line": 3,
+          "kind": "middleware",
+          "trigger": "/dashboard/:path*, /api/:path*",
+          "library": "nextjs",
+          "handlerName": "middleware",
+          "handler": "middleware"
+        }
+      ],
       "page": {
         "offset": 0,
-        "returned": 0
+        "returned": 4
       }
     }
   },
@@ -1077,12 +1288,20 @@
         "params": {},
         "rows": [
           {
-            "id": "file:app/(marketing)/about/page.tsx:function:4:About",
-            "name": "About",
+            "id": "file:app/(marketing)/about/page.tsx:function:4:subscribe",
+            "name": "subscribe",
             "className": null,
             "file": "app/(marketing)/about/page.tsx",
             "line": 4,
-            "endLine": 6
+            "endLine": 7
+          },
+          {
+            "id": "file:app/(marketing)/about/page.tsx:function:10:About",
+            "name": "About",
+            "className": null,
+            "file": "app/(marketing)/about/page.tsx",
+            "line": 10,
+            "endLine": 16
           },
           {
             "id": "file:app/(marketing)/api/items/[id]/route.ts:function:2:DELETE",
@@ -1115,6 +1334,30 @@
             "file": "app/_components/page.tsx",
             "line": 1,
             "endLine": 3
+          },
+          {
+            "id": "file:app/actions.ts:function:6:normalize",
+            "name": "normalize",
+            "className": null,
+            "file": "app/actions.ts",
+            "line": 6,
+            "endLine": 8
+          },
+          {
+            "id": "file:app/actions.ts:function:10:createPost",
+            "name": "createPost",
+            "className": null,
+            "file": "app/actions.ts",
+            "line": 10,
+            "endLine": 12
+          },
+          {
+            "id": "file:app/actions.ts:function:14:deletePost",
+            "name": "deletePost",
+            "className": null,
+            "file": "app/actions.ts",
+            "line": 14,
+            "endLine": 16
           },
           {
             "id": "file:app/api/users/route.ts:function:3:authorize",
@@ -1267,6 +1510,14 @@
             "file": "components/page.tsx",
             "line": 2,
             "endLine": 4
+          },
+          {
+            "id": "file:middleware.ts:function:3:middleware",
+            "name": "middleware",
+            "className": null,
+            "file": "middleware.ts",
+            "line": 3,
+            "endLine": 6
           }
         ]
       },
@@ -1280,6 +1531,11 @@
         "method": "query",
         "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
         "rows": [
+          {
+            "caller": "file:app/actions.ts:function:10:createPost",
+            "callee": "file:app/actions.ts:function:6:normalize",
+            "line": 11
+          },
           {
             "caller": "file:app/api/users/route.ts:function:11:POST",
             "callee": "file:app/api/users/route.ts:function:3:authorize",

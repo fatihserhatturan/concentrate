@@ -1,6 +1,8 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
+import { withSyntaxTree, type SyntaxNode } from "../../languages/syntax/tree-sitter.js";
+import { createEntrypointNode } from "./entrypoint-graph.js";
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 
@@ -78,8 +80,14 @@ export const nextjsPagesContributor: ISemanticContributor = {
 // under `pages/api/`, a Route of method ALL (the handler branches on
 // `req.method` itself). Both are handled by the exported function, so env,
 // config and data access reach the route like any other.
+//
+// Middleware: `middleware` (Next 16: `proxy`) at the package root or in
+// `src/` is an EntryPoint of kind `middleware` handled by its exported
+// `middleware` / `proxy` function or default export; the trigger is its
+// `config.matcher` paths, or null when it runs for every request.
 const routeFile = /^route\.(jsx?|tsx?|mjs|cjs)$/u;
 const handlerMethods = new Set(["GET", "HEAD", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]);
+const middlewareFile = /^(?:src\/)?(middleware|proxy)\.(jsx?|tsx?|mjs|cjs)$/u;
 
 export const nextjsRoutesContributor: ISemanticContributor = {
   async contribute(graph) {
@@ -134,6 +142,31 @@ export const nextjsRoutesContributor: ISemanticContributor = {
           : undefined;
         if (handler) addRoute(file, "ALL", pagesRouterPath(segments), handler);
       }
+
+      for (const { file, path: filePath } of project.files) {
+        const name = middlewareFile.exec(filePath)?.[1];
+        if (!name) continue;
+        const defaultExport = file.properties.defaultExport;
+        const handler = (functionsByFile.get(file.id) ?? []).find((fn) =>
+          (fn.properties.name === name && fn.properties.isExported === true) || fn.properties.name === defaultExport);
+        if (!handler) continue;
+        const matcher = await middlewareMatcher(file);
+        const entrypoint = createEntrypointNode({
+          fileNodeId: file.id,
+          row: Number(handler.properties.line),
+          column: 0,
+          kind: "middleware",
+          trigger: matcher.length > 0 ? matcher.join(", ") : null,
+          receiverName: null,
+          library: "nextjs",
+          handlerName: String(handler.properties.name),
+        });
+        nodes.push(entrypoint);
+        relationships.push(
+          { from: file.id, to: entrypoint.id, type: "DECLARES_ENTRYPOINT", properties: {} },
+          { from: entrypoint.id, to: handler.id, type: "ENTRYPOINT_HANDLED_BY", properties: {} },
+        );
+      }
     }
     graph.addNodes(nodes);
     graph.addRelationships(relationships);
@@ -141,7 +174,7 @@ export const nextjsRoutesContributor: ISemanticContributor = {
 };
 
 type RouterFile = { file: GraphNode; segments: string[]; name: string };
-type NextProject = { appFiles: RouterFile[]; pagesFiles: RouterFile[] };
+type NextProject = { files: Array<{ file: GraphNode; path: string }>; appFiles: RouterFile[]; pagesFiles: RouterFile[] };
 
 // The routable files of each package that depends on `next`. App Router
 // files keep their folder segments and file name, minus private folders and
@@ -173,7 +206,7 @@ async function nextProjects(graph: IGraphContributor, nodesById: Map<string, Gra
     const appDirectory = inPackage.some((entry) => entry.path.startsWith("app/")) ? "app/" : "src/app/";
     const pagesDirectory = inPackage.some((entry) => entry.path.startsWith("pages/")) ? "pages/" : "src/pages/";
 
-    const project: NextProject = { appFiles: [], pagesFiles: [] };
+    const project: NextProject = { files: inPackage, appFiles: [], pagesFiles: [] };
     for (const { file, path: filePath } of inPackage) {
       if (filePath.startsWith(appDirectory)) {
         const segments = filePath.slice(appDirectory.length).split("/");
@@ -187,6 +220,49 @@ async function nextProjects(graph: IGraphContributor, nodesById: Map<string, Gra
     projects.push(project);
   }
   return projects;
+}
+
+// `export const config = { matcher: '/a/:path*' }`, or an array of paths and
+// `{ source }` objects: the literal paths, in order.
+async function middlewareMatcher(file: GraphNode): Promise<string[]> {
+  const filePath = file.properties.path;
+  if (typeof filePath !== "string") return [];
+  let source: string;
+  try {
+    source = await readFile(filePath, "utf8");
+  } catch {
+    return [];
+  }
+  const grammar = /\.tsx?$/u.test(filePath) ? (filePath.endsWith("x") ? "tsx" : "typescript") : "javascript";
+  return withSyntaxTree(grammar, source, (tree) => {
+    for (const statement of tree.rootNode.namedChildren) {
+      const declaration = statement?.type === "export_statement" ? statement.childForFieldName("declaration") : null;
+      for (const declarator of declaration?.namedChildren ?? []) {
+        if (declarator?.type !== "variable_declarator" || declarator.childForFieldName("name")?.text !== "config") continue;
+        const value = declarator.childForFieldName("value");
+        const matcher = value?.type === "object"
+          ? value.namedChildren.find((pair) => pair?.type === "pair" && propertyKey(pair) === "matcher")?.childForFieldName("value")
+          : null;
+        return matcher ? matcherPaths(matcher) : [];
+      }
+    }
+    return [];
+  });
+}
+
+function matcherPaths(node: SyntaxNode): string[] {
+  if (node.type === "string") return [node.text.slice(1, -1)];
+  if (node.type === "array") return node.namedChildren.flatMap((child) => (child ? matcherPaths(child) : []));
+  if (node.type === "object") {
+    const source = node.namedChildren.find((pair) => pair?.type === "pair" && propertyKey(pair) === "source")?.childForFieldName("value");
+    return source?.type === "string" ? [source.text.slice(1, -1)] : [];
+  }
+  return [];
+}
+
+function propertyKey(pair: SyntaxNode): string | undefined {
+  const key = pair.childForFieldName("key");
+  return key?.type === "string" ? key.text.slice(1, -1) : key?.text;
 }
 
 // Route groups and parallel-route slots leave the URL.

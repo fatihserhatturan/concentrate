@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":14,"supportedFiles":13,"parsedFiles":13,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":15,"supportedFiles":14,"parsedFiles":14,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"nextjs-pages-router","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"nextjs-pages-router","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
@@ -14,6 +14,14 @@
 {"kind":"node","id":"file:src/components/Layout.tsx:component:3:Layout","label":"Component","properties":{"defaultExportWrapper":null,"endLine":5,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":3,"name":"Layout","pendingRenders":null}}
 {"kind":"node","id":"file:src/components/Layout.tsx:function:3:Layout","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"Layout","parameters":"[{\"name\":\"{ children }\",\"type\":\"{ children: ReactNode }\"}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/components/Layout.tsx:import:1:react","label":"Import","properties":{"bindings":"[{\"imported\":\"ReactNode\",\"local\":\"ReactNode\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":1,"source":"react","specifier":"import type { ReactNode } from 'react';"}}
+{"kind":"node","id":"file:src/middleware.ts","label":"File","properties":{"defaultExport":"auth","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/middleware.ts","relativePath":"src/middleware.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/middleware.ts:entrypoint:4:0:middleware:<none>","label":"EntryPoint","properties":{"handlerName":"auth","kind":"middleware","library":"nextjs","line":4,"receiverName":null,"trigger":null}}
+{"kind":"node","id":"file:src/middleware.ts:function:4:auth","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":4,"methodKind":null,"name":"auth","parameters":"[{\"name\":\"request\",\"type\":\"NextRequest\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/middleware.ts:function:4:auth:call:5:108:NextResponse.next","label":"Call","properties":{"args":"[]","callee":"next","columnNumber":108,"expression":"NextResponse.next","line":5,"name":"NextResponse.next","receiver":"NextResponse"}}
+{"kind":"node","id":"file:src/middleware.ts:function:4:auth:call:5:57:NextResponse.redirect","label":"Call","properties":{"args":"[]","callee":"redirect","columnNumber":57,"expression":"NextResponse.redirect","line":5,"name":"NextResponse.redirect","receiver":"NextResponse"}}
+{"kind":"node","id":"file:src/middleware.ts:function:4:auth:call:5:79:new URL","label":"Call","properties":{"args":"[\"/\",\"request.url\"]","callee":"URL","columnNumber":79,"expression":"new URL","line":5,"name":"new URL","receiver":null}}
+{"kind":"node","id":"file:src/middleware.ts:function:4:auth:call:5:9:request.nextUrl.pathname.startsWith","label":"Call","properties":{"args":"[\"/admin\"]","callee":"startsWith","columnNumber":9,"expression":"request.nextUrl.pathname.startsWith","line":5,"name":"request.nextUrl.pathname.startsWith","receiver":"request.nextUrl.pathname"}}
+{"kind":"node","id":"file:src/middleware.ts:import:1:next/server","label":"Import","properties":{"bindings":"[{\"imported\":\"NextResponse\",\"local\":\"NextResponse\",\"kind\":\"named\"},{\"imported\":\"NextRequest\",\"local\":\"NextRequest\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"next/server","specifier":"import { NextResponse, type NextRequest } from 'next/server';"}}
 {"kind":"node","id":"file:src/pages/404.tsx","label":"File","properties":{"defaultExport":"NotFound","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/pages/404.tsx","relativePath":"src/pages/404.tsx","sourceType":"production"}}
 {"kind":"node","id":"file:src/pages/404.tsx:component:1:NotFound","label":"Component","properties":{"defaultExportWrapper":null,"endLine":3,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":1,"name":"NotFound","pendingRenders":null}}
 {"kind":"node","id":"file:src/pages/404.tsx:function:1:NotFound","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"NotFound","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -73,6 +81,7 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/components","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/pages","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/middleware.ts","properties":{}}
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Layout.tsx","properties":{}}
 {"kind":"rel","from":"dir:src/pages","type":"CONTAINS_DIRECTORY","to":"dir:src/pages/api","properties":{}}
 {"kind":"rel","from":"dir:src/pages","type":"CONTAINS_DIRECTORY","to":"dir:src/pages/blog","properties":{}}
@@ -94,6 +103,14 @@
 {"kind":"rel","from":"file:src/components/Layout.tsx","type":"DEFINES_FUNCTION","to":"file:src/components/Layout.tsx:function:3:Layout","properties":{}}
 {"kind":"rel","from":"file:src/components/Layout.tsx","type":"IMPORTS","to":"file:src/components/Layout.tsx:import:1:react","properties":{}}
 {"kind":"rel","from":"file:src/components/Layout.tsx:component:3:Layout","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/Layout.tsx:function:3:Layout","properties":{}}
+{"kind":"rel","from":"file:src/middleware.ts","type":"DECLARES_ENTRYPOINT","to":"file:src/middleware.ts:entrypoint:4:0:middleware:<none>","properties":{}}
+{"kind":"rel","from":"file:src/middleware.ts","type":"DEFINES_FUNCTION","to":"file:src/middleware.ts:function:4:auth","properties":{}}
+{"kind":"rel","from":"file:src/middleware.ts","type":"IMPORTS","to":"file:src/middleware.ts:import:1:next/server","properties":{}}
+{"kind":"rel","from":"file:src/middleware.ts:entrypoint:4:0:middleware:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/middleware.ts:function:4:auth","properties":{}}
+{"kind":"rel","from":"file:src/middleware.ts:function:4:auth","type":"CALLS","to":"file:src/middleware.ts:function:4:auth:call:5:108:NextResponse.next","properties":{}}
+{"kind":"rel","from":"file:src/middleware.ts:function:4:auth","type":"CALLS","to":"file:src/middleware.ts:function:4:auth:call:5:57:NextResponse.redirect","properties":{}}
+{"kind":"rel","from":"file:src/middleware.ts:function:4:auth","type":"CALLS","to":"file:src/middleware.ts:function:4:auth:call:5:79:new URL","properties":{}}
+{"kind":"rel","from":"file:src/middleware.ts:function:4:auth","type":"CALLS","to":"file:src/middleware.ts:function:4:auth:call:5:9:request.nextUrl.pathname.startsWith","properties":{}}
 {"kind":"rel","from":"file:src/pages/404.tsx","type":"DECLARES_COMPONENT","to":"file:src/pages/404.tsx:component:1:NotFound","properties":{}}
 {"kind":"rel","from":"file:src/pages/404.tsx","type":"DECLARES_PAGE","to":"file:src/pages/404.tsx:page","properties":{}}
 {"kind":"rel","from":"file:src/pages/404.tsx","type":"DEFINES_FUNCTION","to":"file:src/pages/404.tsx:function:1:NotFound","properties":{}}
@@ -161,6 +178,7 @@
 {"kind":"rel","from":"file:src/pages/shop/[[...filters]].tsx:component:1:Shop","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/pages/shop/[[...filters]].tsx:function:1:Shop","properties":{}}
 {"kind":"rel","from":"file:src/pages/shop/[[...filters]].tsx:page","type":"PAGE_RENDERS","to":"file:src/pages/shop/[[...filters]].tsx:component:1:Shop","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Layout.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/middleware.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/404.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/500.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/_app.tsx","properties":{}}
