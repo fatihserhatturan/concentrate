@@ -636,8 +636,8 @@ Adds a `Page` node for client-visible URLs. Server-side handlers of full-stack f
 
 ### MCP
 
-- [ ] `list_pages`
-- [ ] `route_details` and `impact_of` include pages
+- [x] `list_pages`
+- [x] `route_details` and `impact_of` include pages
 
 ### Acceptance criteria
 

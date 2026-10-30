@@ -778,6 +778,46 @@
           "method": "POST",
           "path": "/api/users"
         }
+      },
+      {
+        "tool": "list_pages",
+        "args": {}
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "GET",
+          "path": "/about"
+        }
+      }
+    ],
+    "react-router": [
+      {
+        "tool": "list_pages",
+        "args": {
+          "path": "/users"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "UserDetail"
+        }
+      }
+    ],
+    "tanstack-router": [
+      {
+        "tool": "list_pages",
+        "args": {
+          "framework": "tanstack-router"
+        }
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "get",
+          "path": "/posts/$postId"
+        }
       }
     ]
   }

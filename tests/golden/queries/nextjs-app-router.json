@@ -1716,5 +1716,833 @@
         "returned": 1
       }
     }
+  },
+  {
+    "tool": "list_pages",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "rows": [
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "layout",
+            "slot": null,
+            "file": "app/layout.tsx",
+            "line": null,
+            "component": "RootLayout",
+            "componentFile": "app/layout.tsx"
+          },
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "not-found",
+            "slot": null,
+            "file": "app/not-found.tsx",
+            "line": null,
+            "component": "NotFound",
+            "componentFile": "app/not-found.tsx"
+          },
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "page",
+            "slot": null,
+            "file": "app/page.tsx",
+            "line": null,
+            "component": "Home",
+            "componentFile": "app/page.tsx"
+          },
+          {
+            "fullPath": "/about",
+            "path": "/about",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "page",
+            "slot": null,
+            "file": "app/(marketing)/about/page.tsx",
+            "line": null,
+            "component": "About",
+            "componentFile": "app/(marketing)/about/page.tsx"
+          },
+          {
+            "fullPath": "/blog/[slug]",
+            "path": "/blog/[slug]",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "error",
+            "slot": null,
+            "file": "app/blog/[slug]/error.tsx",
+            "line": null,
+            "component": "BlogError",
+            "componentFile": "app/blog/[slug]/error.tsx"
+          },
+          {
+            "fullPath": "/blog/[slug]",
+            "path": "/blog/[slug]",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "loading",
+            "slot": null,
+            "file": "app/blog/[slug]/loading.tsx",
+            "line": null,
+            "component": "Loading",
+            "componentFile": "app/blog/[slug]/loading.tsx"
+          },
+          {
+            "fullPath": "/blog/[slug]",
+            "path": "/blog/[slug]",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "page",
+            "slot": null,
+            "file": "app/blog/[slug]/page.tsx",
+            "line": null,
+            "component": "BlogPost",
+            "componentFile": "app/blog/[slug]/page.tsx"
+          },
+          {
+            "fullPath": "/dashboard",
+            "path": "/dashboard",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "page",
+            "slot": "analytics",
+            "file": "app/dashboard/@analytics/page.tsx",
+            "line": null,
+            "component": "Analytics",
+            "componentFile": "app/dashboard/@analytics/page.tsx"
+          },
+          {
+            "fullPath": "/dashboard",
+            "path": "/dashboard",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "default",
+            "slot": "team",
+            "file": "app/dashboard/@team/default.tsx",
+            "line": null,
+            "component": null,
+            "componentFile": null
+          },
+          {
+            "fullPath": "/dashboard",
+            "path": "/dashboard",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "page",
+            "slot": "team",
+            "file": "app/dashboard/@team/page.tsx",
+            "line": null,
+            "component": "Team",
+            "componentFile": "app/dashboard/@team/page.tsx"
+          },
+          {
+            "fullPath": "/dashboard",
+            "path": "/dashboard",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "layout",
+            "slot": null,
+            "file": "app/dashboard/layout.tsx",
+            "line": null,
+            "component": "DashboardLayout",
+            "componentFile": "app/dashboard/layout.tsx"
+          },
+          {
+            "fullPath": "/docs/[...slug]",
+            "path": "/docs/[...slug]",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "page",
+            "slot": null,
+            "file": "app/docs/[...slug]/page.tsx",
+            "line": null,
+            "component": "Docs",
+            "componentFile": "app/docs/[...slug]/page.tsx"
+          },
+          {
+            "fullPath": "/shop/[[...filters]]",
+            "path": "/shop/[[...filters]]",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "page",
+            "slot": null,
+            "file": "app/shop/[[...filters]]/page.tsx",
+            "line": null,
+            "component": null,
+            "componentFile": null
+          },
+          {
+            "fullPath": "/shop/[[...filters]]",
+            "path": "/shop/[[...filters]]",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "template",
+            "slot": null,
+            "file": "app/shop/[[...filters]]/template.tsx",
+            "line": null,
+            "component": "ShopTemplate",
+            "componentFile": "app/shop/[[...filters]]/template.tsx"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "pages": [
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "layout",
+          "slot": null,
+          "file": "app/layout.tsx",
+          "line": null,
+          "component": "RootLayout",
+          "componentFile": "app/layout.tsx"
+        },
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "not-found",
+          "slot": null,
+          "file": "app/not-found.tsx",
+          "line": null,
+          "component": "NotFound",
+          "componentFile": "app/not-found.tsx"
+        },
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "page",
+          "slot": null,
+          "file": "app/page.tsx",
+          "line": null,
+          "component": "Home",
+          "componentFile": "app/page.tsx"
+        },
+        {
+          "fullPath": "/about",
+          "path": "/about",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "page",
+          "slot": null,
+          "file": "app/(marketing)/about/page.tsx",
+          "line": null,
+          "component": "About",
+          "componentFile": "app/(marketing)/about/page.tsx"
+        },
+        {
+          "fullPath": "/blog/[slug]",
+          "path": "/blog/[slug]",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "error",
+          "slot": null,
+          "file": "app/blog/[slug]/error.tsx",
+          "line": null,
+          "component": "BlogError",
+          "componentFile": "app/blog/[slug]/error.tsx"
+        },
+        {
+          "fullPath": "/blog/[slug]",
+          "path": "/blog/[slug]",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "loading",
+          "slot": null,
+          "file": "app/blog/[slug]/loading.tsx",
+          "line": null,
+          "component": "Loading",
+          "componentFile": "app/blog/[slug]/loading.tsx"
+        },
+        {
+          "fullPath": "/blog/[slug]",
+          "path": "/blog/[slug]",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "page",
+          "slot": null,
+          "file": "app/blog/[slug]/page.tsx",
+          "line": null,
+          "component": "BlogPost",
+          "componentFile": "app/blog/[slug]/page.tsx"
+        },
+        {
+          "fullPath": "/dashboard",
+          "path": "/dashboard",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "page",
+          "slot": "analytics",
+          "file": "app/dashboard/@analytics/page.tsx",
+          "line": null,
+          "component": "Analytics",
+          "componentFile": "app/dashboard/@analytics/page.tsx"
+        },
+        {
+          "fullPath": "/dashboard",
+          "path": "/dashboard",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "default",
+          "slot": "team",
+          "file": "app/dashboard/@team/default.tsx",
+          "line": null,
+          "component": null,
+          "componentFile": null
+        },
+        {
+          "fullPath": "/dashboard",
+          "path": "/dashboard",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "page",
+          "slot": "team",
+          "file": "app/dashboard/@team/page.tsx",
+          "line": null,
+          "component": "Team",
+          "componentFile": "app/dashboard/@team/page.tsx"
+        },
+        {
+          "fullPath": "/dashboard",
+          "path": "/dashboard",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "layout",
+          "slot": null,
+          "file": "app/dashboard/layout.tsx",
+          "line": null,
+          "component": "DashboardLayout",
+          "componentFile": "app/dashboard/layout.tsx"
+        },
+        {
+          "fullPath": "/docs/[...slug]",
+          "path": "/docs/[...slug]",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "page",
+          "slot": null,
+          "file": "app/docs/[...slug]/page.tsx",
+          "line": null,
+          "component": "Docs",
+          "componentFile": "app/docs/[...slug]/page.tsx"
+        },
+        {
+          "fullPath": "/shop/[[...filters]]",
+          "path": "/shop/[[...filters]]",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "page",
+          "slot": null,
+          "file": "app/shop/[[...filters]]/page.tsx",
+          "line": null,
+          "component": null,
+          "componentFile": null
+        },
+        {
+          "fullPath": "/shop/[[...filters]]",
+          "path": "/shop/[[...filters]]",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "template",
+          "slot": null,
+          "file": "app/shop/[[...filters]]/template.tsx",
+          "line": null,
+          "component": "ShopTemplate",
+          "componentFile": "app/shop/[[...filters]]/template.tsx"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 14
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "GET",
+      "path": "/about"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "GET",
+          "path": "/about"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE page.fullPath = $path OR page.path = $path OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component) RETURN id(page) AS id, page.path AS path, page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, id(component) AS component, component.name AS componentName ORDER BY file, line LIMIT 5",
+        "params": {
+          "path": "/about"
+        },
+        "rows": [
+          {
+            "id": "file:app/(marketing)/about/page.tsx:page",
+            "path": "/about",
+            "fullPath": "/about",
+            "framework": "nextjs",
+            "router": "app",
+            "kind": "page",
+            "slot": null,
+            "file": "app/(marketing)/about/page.tsx",
+            "line": null,
+            "component": "file:app/(marketing)/about/page.tsx:component:10:About",
+            "componentName": "About"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:app/(marketing)/about/page.tsx:function:4:subscribe",
+            "name": "subscribe",
+            "className": null,
+            "file": "app/(marketing)/about/page.tsx",
+            "line": 4,
+            "endLine": 7
+          },
+          {
+            "id": "file:app/(marketing)/about/page.tsx:function:10:About",
+            "name": "About",
+            "className": null,
+            "file": "app/(marketing)/about/page.tsx",
+            "line": 10,
+            "endLine": 16
+          },
+          {
+            "id": "file:app/(marketing)/api/items/[id]/route.ts:function:2:DELETE",
+            "name": "DELETE",
+            "className": null,
+            "file": "app/(marketing)/api/items/[id]/route.ts",
+            "line": 2,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/(marketing)/api/items/[id]/route.ts:function:8:revalidate",
+            "name": "revalidate",
+            "className": null,
+            "file": "app/(marketing)/api/items/[id]/route.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:app/_components/Nav.tsx:function:2:Nav",
+            "name": "Nav",
+            "className": null,
+            "file": "app/_components/Nav.tsx",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:app/_components/page.tsx:function:1:NotARoute",
+            "name": "NotARoute",
+            "className": null,
+            "file": "app/_components/page.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/actions.ts:function:6:normalize",
+            "name": "normalize",
+            "className": null,
+            "file": "app/actions.ts",
+            "line": 6,
+            "endLine": 8
+          },
+          {
+            "id": "file:app/actions.ts:function:10:createPost",
+            "name": "createPost",
+            "className": null,
+            "file": "app/actions.ts",
+            "line": 10,
+            "endLine": 12
+          },
+          {
+            "id": "file:app/actions.ts:function:14:deletePost",
+            "name": "deletePost",
+            "className": null,
+            "file": "app/actions.ts",
+            "line": 14,
+            "endLine": 16
+          },
+          {
+            "id": "file:app/api/users/route.ts:function:3:authorize",
+            "name": "authorize",
+            "className": null,
+            "file": "app/api/users/route.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/api/users/route.ts:function:7:GET",
+            "name": "GET",
+            "className": null,
+            "file": "app/api/users/route.ts",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:app/api/users/route.ts:function:11:POST",
+            "name": "POST",
+            "className": null,
+            "file": "app/api/users/route.ts",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:app/blog/[slug]/error.tsx:function:3:BlogError",
+            "name": "BlogError",
+            "className": null,
+            "file": "app/blog/[slug]/error.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/blog/[slug]/loading.tsx:function:1:Loading",
+            "name": "Loading",
+            "className": null,
+            "file": "app/blog/[slug]/loading.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/blog/[slug]/page.tsx:function:1:BlogPost",
+            "name": "BlogPost",
+            "className": null,
+            "file": "app/blog/[slug]/page.tsx",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:app/dashboard/@analytics/page.tsx:function:1:Analytics",
+            "name": "Analytics",
+            "className": null,
+            "file": "app/dashboard/@analytics/page.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/dashboard/@team/default.tsx:function:1:TeamDefault",
+            "name": "TeamDefault",
+            "className": null,
+            "file": "app/dashboard/@team/default.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/dashboard/@team/page.tsx:function:1:Team",
+            "name": "Team",
+            "className": null,
+            "file": "app/dashboard/@team/page.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/dashboard/layout.tsx:function:3:DashboardLayout",
+            "name": "DashboardLayout",
+            "className": null,
+            "file": "app/dashboard/layout.tsx",
+            "line": 3,
+            "endLine": 10
+          },
+          {
+            "id": "file:app/docs/[...slug]/page.tsx:function:1:Docs",
+            "name": "Docs",
+            "className": null,
+            "file": "app/docs/[...slug]/page.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/feed/(.)photo/[id]/page.tsx:function:2:PhotoModal",
+            "name": "PhotoModal",
+            "className": null,
+            "file": "app/feed/(.)photo/[id]/page.tsx",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:app/layout.tsx:function:4:RootLayout",
+            "name": "RootLayout",
+            "className": null,
+            "file": "app/layout.tsx",
+            "line": 4,
+            "endLine": 13
+          },
+          {
+            "id": "file:app/not-found.tsx:function:1:NotFound",
+            "name": "NotFound",
+            "className": null,
+            "file": "app/not-found.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/page.tsx:function:3:Home",
+            "name": "Home",
+            "className": null,
+            "file": "app/page.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/shop/[[...filters]]/page.tsx:function:3:shop",
+            "name": "shop",
+            "className": null,
+            "file": "app/shop/[[...filters]]/page.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/shop/[[...filters]]/template.tsx:function:3:ShopTemplate",
+            "name": "ShopTemplate",
+            "className": null,
+            "file": "app/shop/[[...filters]]/template.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:components/Hero.tsx:function:1:Hero",
+            "name": "Hero",
+            "className": null,
+            "file": "components/Hero.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:components/page.tsx:function:2:Stray",
+            "name": "Stray",
+            "className": null,
+            "file": "components/page.tsx",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:middleware.ts:function:3:middleware",
+            "name": "middleware",
+            "className": null,
+            "file": "middleware.ts",
+            "line": 3,
+            "endLine": 6
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:app/actions.ts:function:10:createPost",
+            "callee": "file:app/actions.ts:function:6:normalize",
+            "line": 11
+          },
+          {
+            "caller": "file:app/api/users/route.ts:function:11:POST",
+            "callee": "file:app/api/users/route.ts:function:3:authorize",
+            "line": 12
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn",
+        "params": {},
+        "rows": [
+          {
+            "component": "file:app/(marketing)/about/page.tsx:component:10:About",
+            "fn": "file:app/(marketing)/about/page.tsx:function:10:About"
+          },
+          {
+            "component": "file:app/_components/Nav.tsx:component:2:Nav",
+            "fn": "file:app/_components/Nav.tsx:function:2:Nav"
+          },
+          {
+            "component": "file:app/_components/page.tsx:component:1:NotARoute",
+            "fn": "file:app/_components/page.tsx:function:1:NotARoute"
+          },
+          {
+            "component": "file:app/blog/[slug]/error.tsx:component:3:BlogError",
+            "fn": "file:app/blog/[slug]/error.tsx:function:3:BlogError"
+          },
+          {
+            "component": "file:app/blog/[slug]/loading.tsx:component:1:Loading",
+            "fn": "file:app/blog/[slug]/loading.tsx:function:1:Loading"
+          },
+          {
+            "component": "file:app/blog/[slug]/page.tsx:component:1:BlogPost",
+            "fn": "file:app/blog/[slug]/page.tsx:function:1:BlogPost"
+          },
+          {
+            "component": "file:app/dashboard/@analytics/page.tsx:component:1:Analytics",
+            "fn": "file:app/dashboard/@analytics/page.tsx:function:1:Analytics"
+          },
+          {
+            "component": "file:app/dashboard/@team/page.tsx:component:1:Team",
+            "fn": "file:app/dashboard/@team/page.tsx:function:1:Team"
+          },
+          {
+            "component": "file:app/dashboard/layout.tsx:component:3:DashboardLayout",
+            "fn": "file:app/dashboard/layout.tsx:function:3:DashboardLayout"
+          },
+          {
+            "component": "file:app/docs/[...slug]/page.tsx:component:1:Docs",
+            "fn": "file:app/docs/[...slug]/page.tsx:function:1:Docs"
+          },
+          {
+            "component": "file:app/feed/(.)photo/[id]/page.tsx:component:2:PhotoModal",
+            "fn": "file:app/feed/(.)photo/[id]/page.tsx:function:2:PhotoModal"
+          },
+          {
+            "component": "file:app/layout.tsx:component:4:RootLayout",
+            "fn": "file:app/layout.tsx:function:4:RootLayout"
+          },
+          {
+            "component": "file:app/not-found.tsx:component:1:NotFound",
+            "fn": "file:app/not-found.tsx:function:1:NotFound"
+          },
+          {
+            "component": "file:app/page.tsx:component:3:Home",
+            "fn": "file:app/page.tsx:function:3:Home"
+          },
+          {
+            "component": "file:app/shop/[[...filters]]/template.tsx:component:3:ShopTemplate",
+            "fn": "file:app/shop/[[...filters]]/template.tsx:function:3:ShopTemplate"
+          },
+          {
+            "component": "file:components/Hero.tsx:component:1:Hero",
+            "fn": "file:components/Hero.tsx:function:1:Hero"
+          },
+          {
+            "component": "file:components/page.tsx:component:2:Stray",
+            "fn": "file:components/page.tsx:function:2:Stray"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) WHERE id(component) IN $ids RETURN id(component) AS id, file.relativePath AS file, component.line AS line",
+        "params": {
+          "ids": [
+            "file:app/(marketing)/about/page.tsx:component:10:About"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:app/(marketing)/about/page.tsx:component:10:About",
+            "file": "app/(marketing)/about/page.tsx",
+            "line": 10
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/(marketing)/about/page.tsx:function:10:About"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/(marketing)/about/page.tsx:function:10:About"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/(marketing)/about/page.tsx:function:10:About"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/(marketing)/about/page.tsx:function:10:About"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "method": "GET",
+      "path": "/about",
+      "routes": [],
+      "pages": [
+        {
+          "path": "/about",
+          "fullPath": "/about",
+          "framework": "nextjs",
+          "router": "app",
+          "kind": "page",
+          "slot": null,
+          "file": "app/(marketing)/about/page.tsx",
+          "line": null,
+          "component": {
+            "name": "About",
+            "file": "app/(marketing)/about/page.tsx",
+            "line": 10
+          },
+          "callChain": [],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
   }
 ]

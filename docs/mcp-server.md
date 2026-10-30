@@ -103,6 +103,13 @@ even for large repositories; read it first to decide which tools to call.
 - `trace_import_chain`: returns a resolved import path between two files when
   one exists.
 - `list_routes`: lists detected HTTP route declarations and handlers.
+- `list_pages({ file?, framework?, path?, limit = 50 })`: UI pages from the
+  Next.js App and Pages Router, React Router and TanStack Router, ordered by
+  `fullPath`: the declaring `file` and `line`, `path` as declared, `router`,
+  `kind` (`page`, `layout`, `index`, `lazy`, Next's `loading`, `error`, ...),
+  Next's parallel-route `slot`, and the `component` it renders with its
+  `componentFile`. `path` keeps pages under a prefix of whole segments
+  (`/users` matches `/users/:id`, not `/usersettings`).
 - `list_entrypoints`: lists non-HTTP backend entrypoints such as queues, cron
   jobs, events, realtime handlers, and schedulers.
 - `list_env_config`: lists environment variable usage and config declarations
@@ -132,8 +139,9 @@ These answer a whole question in one call instead of a chain of lookups.
   them (`reachedThrough` says which function and in which role),
   `components`: the UI components those functions implement (`depth: 0`,
   `changedThrough` names the functions) and the components that render them,
-  following `RENDERS` up to `maxDepth` levels (`renders` names the child), and
-  the `dataAccess`, `tables`, `envVars` and `config` of the seeds themselves.
+  following `RENDERS` up to `maxDepth` levels (`renders` names the child),
+  `pages` that render any of those components (`renders` names it, `depth` is
+  its depth), and the `dataAccess`, `tables`, `envVars` and `config` of the seeds themselves.
   For a route, use `route_details`.
 - `detect_changes({ base = "HEAD", maxDepth = 5, limit = 50 })`: runs
   `git diff --unified=0 <base>` (no shell; `base` must look like a revision)
@@ -149,7 +157,11 @@ These answer a whole question in one call instead of a chain of lookups.
   with the call line), and the `dataAccess`, `tables`, `envVars` and `config`
   of the route and that chain (`usedBy` lists where each one is used). A
   `tables` entry has the table, its `kind` and `library`, and the `reads` and
-  `writes` operations on it.
+  `writes` operations on it. A `GET` also returns `pages`, the UI pages whose
+  full or declared path matches: each with its `router`, `kind` and file, the
+  `component` it renders, and the `callChain`, `dataAccess`, `tables`,
+  `envVars` and `config` of the functions that implement that component.
+  `routes` may be empty when only pages match.
 - `get_symbol_source({ name, file?, kind?, limit = 5 })`: source text of a
   declaration, sliced from the file on disk with the span from the last scan
   (at most 400 lines each, `truncated: true` beyond). `Class.method` selects
@@ -258,7 +270,7 @@ verdicts.
 ### Paging and output budget
 
 Every tool that returns a list pages one primary list: `definitions`,
-`callers`, `exports`, `routes`, `entrypoints`, `envConfig`, `dataAccess`, and
+`callers`, `exports`, `routes`, `pages`, `entrypoints`, `envConfig`, `dataAccess`, and
 for the agent tools `callers` (`impact_of`), `changedFiles`
 (`detect_changes`), `routes` (`route_details`), `matches`
 (`get_symbol_source`), `outline` (`get_file_outline`, `limit` defaults to

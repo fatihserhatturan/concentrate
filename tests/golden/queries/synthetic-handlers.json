@@ -902,6 +902,14 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE page.fullPath = $path OR page.path = $path OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component) RETURN id(page) AS id, page.path AS path, page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, id(component) AS component, component.name AS componentName ORDER BY file, line LIMIT 5",
+        "params": {
+          "path": "/health"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
         "params": {},
         "rows": [
@@ -1193,6 +1201,14 @@
             "line": 36
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE page.fullPath = $path OR page.path = $path OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component) RETURN id(page) AS id, page.path AS path, page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, id(component) AS component, component.name AS componentName ORDER BY file, line LIMIT 5",
+        "params": {
+          "path": "/me"
+        },
+        "rows": []
       },
       {
         "method": "query",
@@ -1491,6 +1507,14 @@
             "line": 43
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE page.fullPath = $path OR page.path = $path OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component) RETURN id(page) AS id, page.path AS path, page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, id(component) AS component, component.name AS componentName ORDER BY file, line LIMIT 5",
+        "params": {
+          "path": "/status"
+        },
+        "rows": []
       },
       {
         "method": "query",

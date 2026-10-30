@@ -40,6 +40,7 @@ const graphTools: Record<string, McpTool> = {
   list_exports: { handler: listExports, listKey: "exports", defaultLimit: 50 },
   trace_import_chain: { handler: traceImportChain },
   list_routes: { handler: listRoutes, listKey: "routes", defaultLimit: 50 },
+  list_pages: { handler: listPages, listKey: "pages", defaultLimit: 50 },
   list_entrypoints: { handler: listEntrypoints, listKey: "entrypoints", defaultLimit: 50 },
   list_env_config: { handler: listEnvConfig, listKey: "envConfig", defaultLimit: 50 },
   list_data_access: { handler: listDataAccess, listKey: "dataAccess", defaultLimit: 50 },
@@ -54,6 +55,7 @@ const titles: Record<string, string> = {
   list_exports: "List exports",
   trace_import_chain: "Trace import chain",
   list_routes: "List HTTP routes",
+  list_pages: "List UI pages",
   list_entrypoints: "List entrypoints",
   list_env_config: "List env vars and config",
   list_data_access: "List data access",
@@ -182,6 +184,28 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       framework: {
         type: "string",
         description: "Optional framework filter, such as express-koa or fastify.",
+      },
+      limit: {
+        type: "number",
+        description: "Maximum rows to return. Defaults to 50.",
+      },
+    }),
+  },
+  {
+    name: "list_pages",
+    description: "List UI pages (Next.js App and Pages Router, React Router, TanStack Router) with source file, line, path as declared, full URL path, router, kind (page, layout, index, ...) and the component each renders, ordered by full path.",
+    inputSchema: objectSchema({
+      file: {
+        type: "string",
+        description: "Optional file relative path.",
+      },
+      framework: {
+        type: "string",
+        description: "Optional framework filter: nextjs, react-router or tanstack-router.",
+      },
+      path: {
+        type: "string",
+        description: "Optional full path prefix of whole segments: /users matches /users and /users/:id.",
       },
       limit: {
         type: "number",
@@ -452,6 +476,44 @@ async function listRoutes(
   `);
 
   return { query: { file, framework, limit }, routes: window.take(rows) };
+}
+
+async function listPages(
+  engine: GraphQueryEngine,
+  args: Record<string, unknown>,
+  window: PageWindow,
+): Promise<Record<string, unknown>> {
+  const file = optionalString(args.file);
+  const framework = optionalString(args.framework);
+  const path = optionalString(args.path);
+  const { limit, fetch } = window;
+  const fileFilter = file ? `AND file.relativePath = ${quote(file)}` : "";
+  const frameworkFilter = framework ? `AND page.framework = ${quote(framework)}` : "";
+  // A prefix of whole segments: /users matches /users and /users/:id, not /usersettings.
+  const prefix = path?.replace(/\/+$/u, "");
+  const pathFilter = prefix ? `AND (page.fullPath = ${quote(prefix)} OR page.fullPath STARTS WITH ${quote(`${prefix}/`)})` : "";
+  const rows = await engine.query(`
+    MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)
+    WHERE true
+      ${fileFilter}
+      ${frameworkFilter}
+      ${pathFilter}
+    OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File)
+    RETURN page.fullPath AS fullPath,
+      page.path AS path,
+      page.framework AS framework,
+      page.router AS router,
+      page.kind AS kind,
+      page.slot AS slot,
+      file.relativePath AS file,
+      page.line AS line,
+      component.name AS component,
+      componentFile.relativePath AS componentFile
+    ORDER BY page.fullPath, file.relativePath, page.line, page.kind
+    LIMIT ${fetch}
+  `);
+
+  return { query: { file, framework, path, limit }, pages: window.take(rows) };
 }
 
 async function listEntrypoints(
