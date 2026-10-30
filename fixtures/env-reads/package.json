@@ -1,0 +1,6 @@
+{
+  "name": "env-reads-fixture",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/server.ts"
+}

@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 50;
+export const SCHEMA_VERSION = 51;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -38,7 +38,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Decorator", properties: { name: "STRING", expression: "STRING", line: "INT64", args: "STRING" } },
   { label: "Route", properties: { method: "STRING", path: "STRING", fullPath: "STRING", pathExpression: "STRING", receiverName: "STRING", line: "INT64", framework: "STRING", handlerName: "STRING", pendingHandlerRefs: "STRING", scopeFunctionId: "STRING" } },
   { label: "EntryPoint", properties: { kind: "STRING", trigger: "STRING", receiverName: "STRING", library: "STRING", line: "INT64", handlerName: "STRING" } },
-  { label: "EnvVar", properties: { name: "STRING" } },
+  { label: "EnvVar", properties: { name: "STRING", isPublic: "BOOLEAN" } },
   { label: "Page", properties: { path: "STRING", fullPath: "STRING", framework: "STRING", router: "STRING", kind: "STRING", slot: "STRING", line: "INT64", component: "STRING" } },
   { label: "Component", properties: { name: "STRING", framework: "STRING", kind: "STRING", tagName: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", pendingRenders: "STRING", hooks: "STRING", lazySource: "STRING", lazyExport: "STRING", defaultExportWrapper: "STRING" } },
   { label: "ConfigValue", properties: { name: "STRING", value: "STRING", valueType: "STRING", line: "INT64" } },

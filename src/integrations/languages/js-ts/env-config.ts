@@ -2,6 +2,15 @@ import type { SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import { walk } from "../tree-sitter-utils.js";
 
+// Env reads: `process.env.NAME`, `process.env["NAME"]`, the same on
+// `import.meta.env` (Vite, Astro; built-ins such as `MODE` and `DEV` too),
+// and destructuring, `const { PORT, DB: url = "…" } = process.env` (access
+// `destructure`, one read per key; a `...rest` element is skipped). An env
+// var whose name has a client-exposed prefix (`NEXT_PUBLIC_`, `VITE_`, …) is
+// marked `isPublic`.
+
+const publicPrefixes = /^(?:NEXT_PUBLIC_|VITE_|NUXT_PUBLIC_|PUBLIC_|REACT_APP_|EXPO_PUBLIC_|GATSBY_)/u;
+
 type EnvAccess = {
   name: string;
   line: number;
@@ -87,6 +96,7 @@ function createEnvUsageGraph(
       label: "EnvVar",
       properties: {
         name: access.name,
+        ...(publicPrefixes.test(access.name) ? { isPublic: true } : {}),
       },
     };
     nodes.push(envNode);
@@ -107,6 +117,10 @@ function createEnvUsageGraph(
 function extractEnvAccesses(node: SyntaxNode): EnvAccess[] {
   const accesses: EnvAccess[] = [];
   walk(node, (child) => {
+    if (child.type === "variable_declarator") {
+      accesses.push(...extractDestructuredEnvAccesses(child));
+      return;
+    }
     if (child.type !== "member_expression" && child.type !== "subscript_expression") {
       return;
     }
@@ -117,9 +131,30 @@ function extractEnvAccesses(node: SyntaxNode): EnvAccess[] {
   return dedupeEnvAccesses(accesses);
 }
 
+// `const { PORT, DATABASE_URL: url = "…" } = process.env`
+function extractDestructuredEnvAccesses(declarator: SyntaxNode): EnvAccess[] {
+  const pattern = declarator.childForFieldName("name");
+  const value = declarator.childForFieldName("value");
+  if (pattern?.type !== "object_pattern" || !value || !/^(?:process|import\.meta)\.env$/u.test(value.text)) {
+    return [];
+  }
+
+  const accesses: EnvAccess[] = [];
+  for (const property of pattern.namedChildren) {
+    let key: SyntaxNode | null | undefined = null;
+    if (property?.type === "shorthand_property_identifier_pattern") key = property;
+    else if (property?.type === "object_assignment_pattern") key = property.childForFieldName("left");
+    else if (property?.type === "pair_pattern") key = property.childForFieldName("key");
+    if (!key || !property) continue;
+    const name = key.type === "string" ? key.text.slice(1, -1) : key.text;
+    if (name) accesses.push({ name, line: property.startPosition.row + 1, access: "destructure" });
+  }
+  return accesses;
+}
+
 function extractEnvAccessesFromText(text: string, line: number): EnvAccess[] {
   const accesses: EnvAccess[] = [];
-  for (const match of text.matchAll(/\bprocess\.env\.([A-Za-z_]\w*)\b/g)) {
+  for (const match of text.matchAll(/\b(?:process|import\.meta)\.env\.([A-Za-z_]\w*)\b/g)) {
     accesses.push({
       name: match[1]!,
       line,
@@ -127,7 +162,7 @@ function extractEnvAccessesFromText(text: string, line: number): EnvAccess[] {
     });
   }
 
-  for (const match of text.matchAll(/\bprocess\.env\[['"`]([^'"`]+)['"`]\]/g)) {
+  for (const match of text.matchAll(/\b(?:process|import\.meta)\.env\[['"`]([^'"`]+)['"`]\]/g)) {
     accesses.push({
       name: match[1]!,
       line,

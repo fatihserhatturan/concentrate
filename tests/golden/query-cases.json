@@ -819,6 +819,20 @@
           "path": "/posts/$postId"
         }
       }
+    ],
+    "env-reads": [
+      {
+        "tool": "list_env_config",
+        "args": {
+          "name": "VITE_API_URL"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "file": "src/server.ts"
+        }
+      }
     ]
   }
 }

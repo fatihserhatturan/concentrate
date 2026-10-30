@@ -115,9 +115,16 @@ Blocks or informs: MCP `list_entrypoints` and future backend runtime summaries.
 
 ## Config and Environment
 
-- Environment and config links cover direct `process.env` access and visible
-  local config exports. Complex schema validators or config factories may need
-  additional resolver logic.
+- Environment and config links cover `process.env` and `import.meta.env`
+  reads (`.NAME`, `["NAME"]`, and destructuring such as
+  `const { PORT, DB: url = "…" } = process.env`, access `destructure`; a
+  `...rest` element is not followed) and visible local config exports.
+  `import.meta.env` built-ins (`MODE`, `DEV`, `PROD`, `SSR`, `BASE_URL`) are
+  recorded like any other name. Env vars with a client-exposed prefix
+  (`NEXT_PUBLIC_`, `VITE_`, `NUXT_PUBLIC_`, `PUBLIC_`, `REACT_APP_`,
+  `EXPO_PUBLIC_`, `GATSBY_`) are marked `isPublic`. Reads through an alias
+  (`const env = process.env; env.PORT`), complex schema validators or config
+  factories may need additional resolver logic.
 - Project config parsing is warning-tolerant, but warnings are diagnostic only;
   they do not yet influence confidence scores in semantic samples.
 
