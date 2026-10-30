@@ -1,0 +1,236 @@
+{
+  "sample": "internet-nextjs-taxonomy",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Pages: every App Router special file (page, layout, loading, not-found) under app/, its kind, its URL (route groups such as (marketing) leave it, dynamic and catch-all segments keep Next's syntax) and the component it exports as default; app/robots.ts is a metadata route, not a page, and there are no pages under pages/ outside pages/api/. Routes: each GET/POST/PATCH/DELETE function a route file under app/api/ exports, at the function's line, and the pages/api/ handler as method ALL at its export default line; app/api/auth/[...nextauth]/_route.ts is not a route file (Next only serves files named route), so its re-exported handlers are not routes.",
+  "routes": {
+    "scope": [
+      "app/",
+      "pages/"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/api/og",
+        "file": "app/api/og/route.tsx",
+        "line": 15
+      },
+      {
+        "method": "GET",
+        "path": "/api/posts",
+        "file": "app/api/posts/route.ts",
+        "line": 14
+      },
+      {
+        "method": "POST",
+        "path": "/api/posts",
+        "file": "app/api/posts/route.ts",
+        "line": 41
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/posts/[postId]",
+        "file": "app/api/posts/[postId]/route.ts",
+        "line": 14
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/posts/[postId]",
+        "file": "app/api/posts/[postId]/route.ts",
+        "line": 44
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/users/[userId]",
+        "file": "app/api/users/[userId]/route.ts",
+        "line": 14
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/stripe",
+        "file": "app/api/users/stripe/route.ts",
+        "line": 12
+      },
+      {
+        "method": "POST",
+        "path": "/api/webhooks/stripe",
+        "file": "app/api/webhooks/stripe/route.ts",
+        "line": 8
+      },
+      {
+        "method": "ALL",
+        "path": "/api/auth/[...nextauth]",
+        "file": "pages/api/auth/[...nextauth].ts",
+        "line": 6
+      }
+    ]
+  },
+  "pages": {
+    "scope": [
+      "app/",
+      "pages/"
+    ],
+    "items": [
+      {
+        "file": "app/layout.tsx",
+        "fullPath": "/",
+        "kind": "layout",
+        "component": "RootLayout"
+      },
+      {
+        "file": "app/(auth)/layout.tsx",
+        "fullPath": "/",
+        "kind": "layout",
+        "component": "AuthLayout"
+      },
+      {
+        "file": "app/(auth)/login/page.tsx",
+        "fullPath": "/login",
+        "kind": "page",
+        "component": "LoginPage"
+      },
+      {
+        "file": "app/(auth)/register/page.tsx",
+        "fullPath": "/register",
+        "kind": "page",
+        "component": "RegisterPage"
+      },
+      {
+        "file": "app/(dashboard)/dashboard/layout.tsx",
+        "fullPath": "/dashboard",
+        "kind": "layout",
+        "component": "DashboardLayout"
+      },
+      {
+        "file": "app/(dashboard)/dashboard/loading.tsx",
+        "fullPath": "/dashboard",
+        "kind": "loading",
+        "component": "DashboardLoading"
+      },
+      {
+        "file": "app/(dashboard)/dashboard/page.tsx",
+        "fullPath": "/dashboard",
+        "kind": "page",
+        "component": "DashboardPage"
+      },
+      {
+        "file": "app/(dashboard)/dashboard/billing/loading.tsx",
+        "fullPath": "/dashboard/billing",
+        "kind": "loading",
+        "component": "DashboardBillingLoading"
+      },
+      {
+        "file": "app/(dashboard)/dashboard/billing/page.tsx",
+        "fullPath": "/dashboard/billing",
+        "kind": "page",
+        "component": "BillingPage"
+      },
+      {
+        "file": "app/(dashboard)/dashboard/settings/loading.tsx",
+        "fullPath": "/dashboard/settings",
+        "kind": "loading",
+        "component": "DashboardSettingsLoading"
+      },
+      {
+        "file": "app/(dashboard)/dashboard/settings/page.tsx",
+        "fullPath": "/dashboard/settings",
+        "kind": "page",
+        "component": "SettingsPage"
+      },
+      {
+        "file": "app/(docs)/layout.tsx",
+        "fullPath": "/",
+        "kind": "layout",
+        "component": "DocsLayout"
+      },
+      {
+        "file": "app/(docs)/docs/layout.tsx",
+        "fullPath": "/docs",
+        "kind": "layout",
+        "component": "DocsLayout"
+      },
+      {
+        "file": "app/(docs)/docs/[[...slug]]/page.tsx",
+        "fullPath": "/docs/[[...slug]]",
+        "kind": "page",
+        "component": "DocPage"
+      },
+      {
+        "file": "app/(docs)/guides/layout.tsx",
+        "fullPath": "/guides",
+        "kind": "layout",
+        "component": "GuidesLayout"
+      },
+      {
+        "file": "app/(docs)/guides/page.tsx",
+        "fullPath": "/guides",
+        "kind": "page",
+        "component": "GuidesPage"
+      },
+      {
+        "file": "app/(docs)/guides/[...slug]/page.tsx",
+        "fullPath": "/guides/[...slug]",
+        "kind": "page",
+        "component": "GuidePage"
+      },
+      {
+        "file": "app/(editor)/editor/layout.tsx",
+        "fullPath": "/editor",
+        "kind": "layout",
+        "component": "EditorLayout"
+      },
+      {
+        "file": "app/(editor)/editor/[postId]/loading.tsx",
+        "fullPath": "/editor/[postId]",
+        "kind": "loading",
+        "component": "Loading"
+      },
+      {
+        "file": "app/(editor)/editor/[postId]/not-found.tsx",
+        "fullPath": "/editor/[postId]",
+        "kind": "not-found",
+        "component": "NotFound"
+      },
+      {
+        "file": "app/(editor)/editor/[postId]/page.tsx",
+        "fullPath": "/editor/[postId]",
+        "kind": "page",
+        "component": "EditorPage"
+      },
+      {
+        "file": "app/(marketing)/layout.tsx",
+        "fullPath": "/",
+        "kind": "layout",
+        "component": "MarketingLayout"
+      },
+      {
+        "file": "app/(marketing)/page.tsx",
+        "fullPath": "/",
+        "kind": "page",
+        "component": "IndexPage"
+      },
+      {
+        "file": "app/(marketing)/[...slug]/page.tsx",
+        "fullPath": "/[...slug]",
+        "kind": "page",
+        "component": "PagePage"
+      },
+      {
+        "file": "app/(marketing)/blog/page.tsx",
+        "fullPath": "/blog",
+        "kind": "page",
+        "component": "BlogPage"
+      },
+      {
+        "file": "app/(marketing)/blog/[...slug]/page.tsx",
+        "fullPath": "/blog/[...slug]",
+        "kind": "page",
+        "component": "PostPage"
+      },
+      {
+        "file": "app/(marketing)/pricing/page.tsx",
+        "fullPath": "/pricing",
+        "kind": "page",
+        "component": "PricingPage"
+      }
+    ]
+  }
+}

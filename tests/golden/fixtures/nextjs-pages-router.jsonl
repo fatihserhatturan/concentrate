@@ -1,12 +1,14 @@
-{"kind":"report","status":"success","discoveredFiles":15,"supportedFiles":14,"parsedFiles":14,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":18,"supportedFiles":17,"parsedFiles":17,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"nextjs-pages-router","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"nextjs-pages-router","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"nextjs-pages-router","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"dir:src/components","label":"Directory","properties":{"name":"components","path":"<root>/src/components","relativePath":"src/components"}}
+{"kind":"node","id":"dir:src/lib","label":"Directory","properties":{"name":"lib","path":"<root>/src/lib","relativePath":"src/lib"}}
 {"kind":"node","id":"dir:src/pages","label":"Directory","properties":{"name":"pages","path":"<root>/src/pages","relativePath":"src/pages"}}
 {"kind":"node","id":"dir:src/pages/api","label":"Directory","properties":{"name":"api","path":"<root>/src/pages/api","relativePath":"src/pages/api"}}
+{"kind":"node","id":"dir:src/pages/api/auth","label":"Directory","properties":{"name":"auth","path":"<root>/src/pages/api/auth","relativePath":"src/pages/api/auth"}}
 {"kind":"node","id":"dir:src/pages/blog","label":"Directory","properties":{"name":"blog","path":"<root>/src/pages/blog","relativePath":"src/pages/blog"}}
 {"kind":"node","id":"dir:src/pages/docs","label":"Directory","properties":{"name":"docs","path":"<root>/src/pages/docs","relativePath":"src/pages/docs"}}
 {"kind":"node","id":"dir:src/pages/shop","label":"Directory","properties":{"name":"shop","path":"<root>/src/pages/shop","relativePath":"src/pages/shop"}}
@@ -14,6 +16,10 @@
 {"kind":"node","id":"file:src/components/Layout.tsx:component:3:Layout","label":"Component","properties":{"defaultExportWrapper":null,"endLine":5,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":3,"name":"Layout","pendingRenders":null}}
 {"kind":"node","id":"file:src/components/Layout.tsx:function:3:Layout","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"Layout","parameters":"[{\"name\":\"{ children }\",\"type\":\"{ children: ReactNode }\"}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/components/Layout.tsx:import:1:react","label":"Import","properties":{"bindings":"[{\"imported\":\"ReactNode\",\"local\":\"ReactNode\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":1,"source":"react","specifier":"import type { ReactNode } from 'react';"}}
+{"kind":"node","id":"file:src/lib/auth.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/lib/auth.ts","relativePath":"src/lib/auth.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/lib/auth.ts:function:3:withAuth","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"withAuth","parameters":"[{\"name\":\"handler\",\"type\":\"NextApiHandler\"}]","returnType":"NextApiHandler","visibility":"public"}}
+{"kind":"node","id":"file:src/lib/auth.ts:function:3:withAuth:call:4:23:handler","label":"Call","properties":{"args":"[\"req\",\"res\"]","callee":"handler","columnNumber":23,"expression":"handler","line":4,"name":"handler","receiver":null}}
+{"kind":"node","id":"file:src/lib/auth.ts:import:1:next","label":"Import","properties":{"bindings":"[{\"imported\":\"NextApiHandler\",\"local\":\"NextApiHandler\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":1,"source":"next","specifier":"import type { NextApiHandler } from 'next';"}}
 {"kind":"node","id":"file:src/middleware.ts","label":"File","properties":{"defaultExport":"auth","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/middleware.ts","relativePath":"src/middleware.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/middleware.ts:entrypoint:4:0:middleware:<none>","label":"EntryPoint","properties":{"handlerName":"auth","kind":"middleware","library":"nextjs","line":4,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:src/middleware.ts:function:4:auth","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":4,"methodKind":null,"name":"auth","parameters":"[{\"name\":\"request\",\"type\":\"NextRequest\"}]","returnType":null,"visibility":"public"}}
@@ -48,6 +54,18 @@
 {"kind":"node","id":"file:src/pages/about.tsx:function:1:About","label":"Function","properties":{"className":null,"endLine":1,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":1,"methodKind":null,"name":"About","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/pages/about.tsx:page","label":"Page","properties":{"component":null,"framework":"nextjs","fullPath":"/about","kind":"page","line":null,"path":"/about","router":"pages","slot":null}}
 {"kind":"node","id":"file:src/pages/about.tsx:variable:3:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":3,"name":"default"}}
+{"kind":"node","id":"file:src/pages/api/auth/[...nextauth].ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/pages/api/auth/[...nextauth].ts","relativePath":"src/pages/api/auth/[...nextauth].ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/pages/api/auth/[...nextauth].ts:import:1:next-auth","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"NextAuth\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"next-auth","specifier":"import NextAuth from 'next-auth';"}}
+{"kind":"node","id":"file:src/pages/api/auth/[...nextauth].ts:route:4:0:ALL:/api/auth/[...nextauth]","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/auth/[...nextauth]","handlerName":null,"line":4,"method":"ALL","path":"/api/auth/[...nextauth]","pathExpression":null,"receiverName":null}}
+{"kind":"node","id":"file:src/pages/api/auth/[...nextauth].ts:variable:4:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":4,"name":"default"}}
+{"kind":"node","id":"file:src/pages/api/secure.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/pages/api/secure.ts","relativePath":"src/pages/api/secure.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/pages/api/secure.ts:function:5:handler","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":5,"methodKind":null,"name":"handler","parameters":"[{\"name\":\"req\",\"type\":null},{\"name\":\"res\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/pages/api/secure.ts:function:5:handler:call:6:2:res.status","label":"Call","properties":{"args":"[\"200\"]","callee":"status","columnNumber":2,"expression":"res.status","line":6,"name":"res.status","receiver":"res"}}
+{"kind":"node","id":"file:src/pages/api/secure.ts:function:5:handler:call:6:2:res.status(200).json","label":"Call","properties":{"args":"[]","callee":"json","columnNumber":2,"expression":"res.status(200).json","line":6,"name":"res.status(200).json","receiver":"res"}}
+{"kind":"node","id":"file:src/pages/api/secure.ts:import:1:next","label":"Import","properties":{"bindings":"[{\"imported\":\"NextApiHandler\",\"local\":\"NextApiHandler\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":1,"source":"next","specifier":"import type { NextApiHandler } from 'next';"}}
+{"kind":"node","id":"file:src/pages/api/secure.ts:import:2:../../lib/auth","label":"Import","properties":{"bindings":"[{\"imported\":\"withAuth\",\"local\":\"withAuth\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"../../lib/auth","specifier":"import { withAuth } from '../../lib/auth';"}}
+{"kind":"node","id":"file:src/pages/api/secure.ts:route:9:0:ALL:/api/secure","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/secure","handlerName":"handler","line":9,"method":"ALL","path":"/api/secure","pathExpression":null,"receiverName":null}}
+{"kind":"node","id":"file:src/pages/api/secure.ts:variable:9:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":9,"name":"default"}}
 {"kind":"node","id":"file:src/pages/api/users.ts","label":"File","properties":{"defaultExport":"handler","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/pages/api/users.ts","relativePath":"src/pages/api/users.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/pages/api/users.ts:function:4:handler","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":4,"methodKind":null,"name":"handler","parameters":"[{\"name\":\"req\",\"type\":\"NextApiRequest\"},{\"name\":\"res\",\"type\":\"NextApiResponse\"}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/pages/api/users.ts:function:4:handler:call:5:2:res.status","label":"Call","properties":{"args":"[\"200\"]","callee":"status","columnNumber":2,"expression":"res.status","line":5,"name":"res.status","receiver":"res"}}
@@ -80,9 +98,11 @@
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"nextjs-pages-router","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/components","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/lib","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/pages","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/middleware.ts","properties":{}}
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Layout.tsx","properties":{}}
+{"kind":"rel","from":"dir:src/lib","type":"CONTAINS_FILE","to":"file:src/lib/auth.ts","properties":{}}
 {"kind":"rel","from":"dir:src/pages","type":"CONTAINS_DIRECTORY","to":"dir:src/pages/api","properties":{}}
 {"kind":"rel","from":"dir:src/pages","type":"CONTAINS_DIRECTORY","to":"dir:src/pages/blog","properties":{}}
 {"kind":"rel","from":"dir:src/pages","type":"CONTAINS_DIRECTORY","to":"dir:src/pages/docs","properties":{}}
@@ -94,7 +114,10 @@
 {"kind":"rel","from":"dir:src/pages","type":"CONTAINS_FILE","to":"file:src/pages/about.test.tsx","properties":{}}
 {"kind":"rel","from":"dir:src/pages","type":"CONTAINS_FILE","to":"file:src/pages/about.tsx","properties":{}}
 {"kind":"rel","from":"dir:src/pages","type":"CONTAINS_FILE","to":"file:src/pages/index.tsx","properties":{}}
+{"kind":"rel","from":"dir:src/pages/api","type":"CONTAINS_DIRECTORY","to":"dir:src/pages/api/auth","properties":{}}
+{"kind":"rel","from":"dir:src/pages/api","type":"CONTAINS_FILE","to":"file:src/pages/api/secure.ts","properties":{}}
 {"kind":"rel","from":"dir:src/pages/api","type":"CONTAINS_FILE","to":"file:src/pages/api/users.ts","properties":{}}
+{"kind":"rel","from":"dir:src/pages/api/auth","type":"CONTAINS_FILE","to":"file:src/pages/api/auth/[...nextauth].ts","properties":{}}
 {"kind":"rel","from":"dir:src/pages/blog","type":"CONTAINS_FILE","to":"file:src/pages/blog/[slug].tsx","properties":{}}
 {"kind":"rel","from":"dir:src/pages/blog","type":"CONTAINS_FILE","to":"file:src/pages/blog/index.tsx","properties":{}}
 {"kind":"rel","from":"dir:src/pages/docs","type":"CONTAINS_FILE","to":"file:src/pages/docs/[...slug].tsx","properties":{}}
@@ -103,6 +126,9 @@
 {"kind":"rel","from":"file:src/components/Layout.tsx","type":"DEFINES_FUNCTION","to":"file:src/components/Layout.tsx:function:3:Layout","properties":{}}
 {"kind":"rel","from":"file:src/components/Layout.tsx","type":"IMPORTS","to":"file:src/components/Layout.tsx:import:1:react","properties":{}}
 {"kind":"rel","from":"file:src/components/Layout.tsx:component:3:Layout","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/Layout.tsx:function:3:Layout","properties":{}}
+{"kind":"rel","from":"file:src/lib/auth.ts","type":"DEFINES_FUNCTION","to":"file:src/lib/auth.ts:function:3:withAuth","properties":{}}
+{"kind":"rel","from":"file:src/lib/auth.ts","type":"IMPORTS","to":"file:src/lib/auth.ts:import:1:next","properties":{}}
+{"kind":"rel","from":"file:src/lib/auth.ts:function:3:withAuth","type":"CALLS","to":"file:src/lib/auth.ts:function:3:withAuth:call:4:23:handler","properties":{}}
 {"kind":"rel","from":"file:src/middleware.ts","type":"DECLARES_ENTRYPOINT","to":"file:src/middleware.ts:entrypoint:4:0:middleware:<none>","properties":{}}
 {"kind":"rel","from":"file:src/middleware.ts","type":"DEFINES_FUNCTION","to":"file:src/middleware.ts:function:4:auth","properties":{}}
 {"kind":"rel","from":"file:src/middleware.ts","type":"IMPORTS","to":"file:src/middleware.ts:import:1:next/server","properties":{}}
@@ -144,6 +170,19 @@
 {"kind":"rel","from":"file:src/pages/about.tsx","type":"DEFINES_VARIABLE","to":"file:src/pages/about.tsx:variable:3:default","properties":{}}
 {"kind":"rel","from":"file:src/pages/about.tsx:component:1:About","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/pages/about.tsx:function:1:About","properties":{}}
 {"kind":"rel","from":"file:src/pages/about.tsx:page","type":"PAGE_RENDERS","to":"file:src/pages/about.tsx:component:1:About","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/auth/[...nextauth].ts","type":"DECLARES_ROUTE","to":"file:src/pages/api/auth/[...nextauth].ts:route:4:0:ALL:/api/auth/[...nextauth]","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/auth/[...nextauth].ts","type":"DEFINES_VARIABLE","to":"file:src/pages/api/auth/[...nextauth].ts:variable:4:default","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/auth/[...nextauth].ts","type":"IMPORTS","to":"file:src/pages/api/auth/[...nextauth].ts:import:1:next-auth","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts","type":"DECLARES_ROUTE","to":"file:src/pages/api/secure.ts:route:9:0:ALL:/api/secure","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts","type":"DEFINES_FUNCTION","to":"file:src/pages/api/secure.ts:function:5:handler","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts","type":"DEFINES_VARIABLE","to":"file:src/pages/api/secure.ts:variable:9:default","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts","type":"IMPORTS","to":"file:src/pages/api/secure.ts:import:1:next","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts","type":"IMPORTS","to":"file:src/pages/api/secure.ts:import:2:../../lib/auth","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts:function:5:handler","type":"CALLS","to":"file:src/pages/api/secure.ts:function:5:handler:call:6:2:res.status","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts:function:5:handler","type":"CALLS","to":"file:src/pages/api/secure.ts:function:5:handler:call:6:2:res.status(200).json","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts:import:2:../../lib/auth","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts:import:2:../../lib/auth","type":"RESOLVES_TO","to":"file:src/lib/auth.ts","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts:route:9:0:ALL:/api/secure","type":"ROUTE_HANDLED_BY","to":"file:src/pages/api/secure.ts:function:5:handler","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/users.ts","type":"DECLARES_ROUTE","to":"file:src/pages/api/users.ts:route:4:0:ALL:/api/users","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/users.ts","type":"DEFINES_FUNCTION","to":"file:src/pages/api/users.ts:function:4:handler","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/users.ts","type":"IMPORTS","to":"file:src/pages/api/users.ts:import:1:next","properties":{}}
@@ -178,6 +217,7 @@
 {"kind":"rel","from":"file:src/pages/shop/[[...filters]].tsx:component:1:Shop","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/pages/shop/[[...filters]].tsx:function:1:Shop","properties":{}}
 {"kind":"rel","from":"file:src/pages/shop/[[...filters]].tsx:page","type":"PAGE_RENDERS","to":"file:src/pages/shop/[[...filters]].tsx:component:1:Shop","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Layout.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/lib/auth.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/middleware.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/404.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/500.tsx","properties":{}}
@@ -185,6 +225,8 @@
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/_document.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/about.test.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/about.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/api/auth/[...nextauth].ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/api/secure.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/api/users.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/blog/[slug].tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/pages/blog/index.tsx","properties":{}}

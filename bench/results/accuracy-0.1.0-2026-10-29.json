@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-30T13:24:44.853Z",
+  "recordedAt": "2026-10-30T15:09:43.237Z",
   "samples": [
     {
       "sample": "express",
@@ -47,6 +47,27 @@
       "sample": "internet-nest",
       "dataAccess": {
         "tp": 17,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-nextjs-taxonomy",
+      "routes": {
+        "tp": 9,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 9,
+          "total": 9
+        }
+      },
+      "pages": {
+        "tp": 27,
         "fp": 0,
         "fn": 0,
         "precision": 1,
@@ -132,14 +153,14 @@
   ],
   "totals": {
     "routes": {
-      "tp": 94,
+      "tp": 103,
       "fp": 0,
       "fn": 0,
       "precision": 1,
       "recall": 1,
       "fullPath": {
-        "correct": 94,
-        "total": 94
+        "correct": 103,
+        "total": 103
       }
     },
     "calls": {
@@ -165,6 +186,13 @@
     },
     "renders": {
       "tp": 29,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "pages": {
+      "tp": 27,
       "fp": 0,
       "fn": 0,
       "precision": 1,

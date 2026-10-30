@@ -1,7 +1,7 @@
 # Accuracy report
 
-How often the graph is right about routes, call targets, data access and UI
-components,
+How often the graph is right about routes, call targets, data access, UI
+components and UI pages,
 measured against hand-written labels on the pinned sample repositories
 (`scripts/samples.json`).
 
@@ -24,10 +24,11 @@ chosen files); every target was decided by reading the code.
 
 | Kind | Samples | Scope |
 | --- | --- | --- |
-| Routes | express, fastify, nestjs-starter, internet-node-express-realworld | every route declared with a literal path in the scoped files; tests excluded |
+| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy | every route declared with a literal path in the scoped files; tests excluded |
 | Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld | every call site in 4–9 chosen files per sample |
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma) | the services; the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend) | `src/components/`: every component and every element that renders one |
+| Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app) | `app/` and `pages/`: every page, layout, loading and not-found file |
 
 Rules:
 
@@ -35,7 +36,12 @@ Rules:
   prefixes included. Middleware mounts (`app.use`) are not routes. Express
   examples that build paths at runtime (`examples/resource`,
   `examples/route-map`, `examples/mvc`) are listed under `routes.computed` in
-  the label file and not scored.
+  the label file and not scored. Next.js route handlers are labeled at the
+  exported `GET` / `POST` / ... function, with Next's path syntax
+  (`/api/posts/[postId]`); a `pages/api/` handler is method `ALL`, at its
+  `export default` line when that is a library call (`NextAuth(options)`).
+  `app/api/auth/[...nextauth]/_route.ts` is not a route file (Next only
+  serves files named `route`), so its handlers are not labeled.
 - **Calls.** `{ file, line, callee, target }`, where `callee` is the called
   name (the last member, or the class of `new X`). `target` is the project
   declaration the call runs (`{ file, name, className? }`; `new X` targets X's
@@ -59,6 +65,12 @@ Rules:
   (`<Link>`, `<Route>`), components passed as props (`<Route
   component={Home}>`) and elements in class methods other than `render()`
   (which render library components only) are not labeled.
+- **Pages.** `{ file, fullPath, kind, component }` for every Next.js special
+  file: `kind` is the file's role (`page`, `layout`, `loading`,
+  `not-found`), `fullPath` its URL with route groups left out and dynamic
+  segments in Next's syntax (`/docs/[[...slug]]`), `component` the name of
+  the component it exports as default. Metadata routes (`app/robots.ts`) are
+  not pages.
 
 ## Scoring
 
@@ -77,8 +89,10 @@ Rules:
 - **Components:** file, name and line (±1). **Renders:** the element's file,
   line (±1) and component, and the rendered component's name and file; a
   render linked to another component is an FP and an FN.
+- **Pages:** file, kind, full path and the rendered component all match; a
+  page with the wrong path or component is an FP and an FN.
 
-## Results (2026-10-30, schema 46)
+## Results (2026-10-30, schema 48)
 
 ### Routes
 
@@ -86,9 +100,10 @@ Rules:
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | express | 59 | 59 | 0 | 0 | 100.0% | 100.0% | 100.0% (59/59) |
 | fastify | 14 | 14 | 0 | 0 | 100.0% | 100.0% | 100.0% (14/14) |
+| internet-nextjs-taxonomy | 9 | 9 | 0 | 0 | 100.0% | 100.0% | 100.0% (9/9) |
 | internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
 | nestjs-starter | 1 | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% (1/1) |
-| **all** | 94 | 94 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (94/94)** |
+| **all** | 103 | 103 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (103/103)** |
 
 ### Call resolution
 
@@ -124,15 +139,23 @@ Labels counts calls with a project target. Another 310 call sites are labeled
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-react-realworld | 29 | 29 | 0 | 0 | 100.0% | 100.0% |
 
+### Pages
+
+| Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-nextjs-taxonomy | 27 | 27 | 0 | 0 | 100.0% | 100.0% |
+
 ## What the misses are
 
-Precision is 100% everywhere: no route, call target, data access, component
-or render the graph states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
+Precision is 100% everywhere: no route, call target, data access, component,
+render or page the graph states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
 resolve = path.resolve` in express's `lib/view.js`, is left unresolved since
 #48.) Every labeled route is found: routes registered inside plugin
 functions and `build()` factories (#41), fastify-decorators controllers
 (#42), and apps and routers recognized by the factory that created them
-(`apiv1 = express.Router()`, `main = express()`, #43), each with its full
+(`apiv1 = express.Router()`, `main = express()`, #43), Next.js route
+handlers, including a `pages/api/` route whose default export is
+`NextAuth(options)`, each with its full
 path: mount prefixes are followed across files, through chained and
 default-exported routers (`export default Router().use('/api', api)`) and
 `app.use('/api/v1', require('./api_v1'))` (#44). Recall is where the gaps

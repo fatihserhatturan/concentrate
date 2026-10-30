@@ -79,7 +79,12 @@ export const nextjsPagesContributor: ISemanticContributor = {
 // `app/` exports, one Route per method, and the default export of each file
 // under `pages/api/`, a Route of method ALL (the handler branches on
 // `req.method` itself). Both are handled by the exported function, so env,
-// config and data access reach the route like any other.
+// config and data access reach the route like any other. A `pages/api/`
+// default export that wraps a function of the file (`withAuth(handler)`, or
+// a named function passed inline) is handled by that function; one built by
+// a library call (`NextAuth(options)`) or held in a variable is a Route
+// without a handler, and so is an anonymous arrow passed inline, which has
+// no Function node. Middleware follows the same rule.
 //
 // Middleware: `middleware` (Next 16: `proxy`) at the package root or in
 // `src/` is an EntryPoint of kind `middleware` handled by its exported
@@ -101,8 +106,7 @@ export const nextjsRoutesContributor: ISemanticContributor = {
 
     const nodes: GraphNode[] = [];
     const relationships: GraphRelationship[] = [];
-    const addRoute = (file: GraphNode, method: string, routePath: string, handler: GraphNode) => {
-      const line = Number(handler.properties.line);
+    const addRoute = (file: GraphNode, method: string, routePath: string, handler: GraphNode | null, line: number) => {
       const route: GraphNode = {
         id: `${file.id}:route:${line}:0:${method}:${routePath}`,
         label: "Route",
@@ -114,14 +118,12 @@ export const nextjsRoutesContributor: ISemanticContributor = {
           receiverName: null,
           line,
           framework: "nextjs",
-          handlerName: String(handler.properties.name),
+          handlerName: handler ? String(handler.properties.name) : null,
         },
       };
       nodes.push(route);
-      relationships.push(
-        { from: file.id, to: route.id, type: "DECLARES_ROUTE", properties: {} },
-        { from: route.id, to: handler.id, type: "ROUTE_HANDLED_BY", properties: {} },
-      );
+      relationships.push({ from: file.id, to: route.id, type: "DECLARES_ROUTE", properties: {} });
+      if (handler) relationships.push({ from: route.id, to: handler.id, type: "ROUTE_HANDLED_BY", properties: {} });
     };
 
     for (const project of await nextProjects(graph, nodesById)) {
@@ -130,42 +132,51 @@ export const nextjsRoutesContributor: ISemanticContributor = {
         const routePath = appRouterPath(segments);
         for (const fn of functionsByFile.get(file.id) ?? []) {
           const method = String(fn.properties.name);
-          if (fn.properties.isExported === true && handlerMethods.has(method)) addRoute(file, method, routePath, fn);
+          if (fn.properties.isExported === true && handlerMethods.has(method)) addRoute(file, method, routePath, fn, Number(fn.properties.line));
         }
       }
 
       for (const { file, segments } of project.pagesFiles) {
         if (segments[0] !== "api") continue;
         const defaultExport = file.properties.defaultExport;
+        const functions = functionsByFile.get(file.id) ?? [];
         const handler = typeof defaultExport === "string"
-          ? (functionsByFile.get(file.id) ?? []).find((fn) => fn.properties.name === defaultExport)
+          ? functions.find((fn) => fn.properties.name === defaultExport)
           : undefined;
-        if (handler) addRoute(file, "ALL", pagesRouterPath(segments), handler);
+        if (handler) {
+          addRoute(file, "ALL", pagesRouterPath(segments), handler, Number(handler.properties.line));
+          continue;
+        }
+        // `export default withAuth(handler)` / `export default NextAuth(options)`.
+        const wrapped = await wrappedDefaultExport(file);
+        if (wrapped) addRoute(file, "ALL", pagesRouterPath(segments), wrappedFunction(wrapped, functions), wrapped.line);
       }
 
       for (const { file, path: filePath } of project.files) {
         const name = middlewareFile.exec(filePath)?.[1];
         if (!name) continue;
         const defaultExport = file.properties.defaultExport;
-        const handler = (functionsByFile.get(file.id) ?? []).find((fn) =>
+        const functions = functionsByFile.get(file.id) ?? [];
+        const direct = functions.find((fn) =>
           (fn.properties.name === name && fn.properties.isExported === true) || fn.properties.name === defaultExport);
-        if (!handler) continue;
+        // `export default withAuth(function middleware(req) {…}, options)`.
+        const wrapped = direct ? null : await wrappedDefaultExport(file);
+        if (!direct && !wrapped) continue;
+        const handler = direct ?? wrappedFunction(wrapped!, functions);
         const matcher = await middlewareMatcher(file);
         const entrypoint = createEntrypointNode({
           fileNodeId: file.id,
-          row: Number(handler.properties.line),
+          row: handler ? Number(handler.properties.line) : wrapped!.line,
           column: 0,
           kind: "middleware",
           trigger: matcher.length > 0 ? matcher.join(", ") : null,
           receiverName: null,
           library: "nextjs",
-          handlerName: String(handler.properties.name),
+          handlerName: handler ? String(handler.properties.name) : null,
         });
         nodes.push(entrypoint);
-        relationships.push(
-          { from: file.id, to: entrypoint.id, type: "DECLARES_ENTRYPOINT", properties: {} },
-          { from: entrypoint.id, to: handler.id, type: "ENTRYPOINT_HANDLED_BY", properties: {} },
-        );
+        relationships.push({ from: file.id, to: entrypoint.id, type: "DECLARES_ENTRYPOINT", properties: {} });
+        if (handler) relationships.push({ from: entrypoint.id, to: handler.id, type: "ENTRYPOINT_HANDLED_BY", properties: {} });
       }
     }
     graph.addNodes(nodes);
@@ -222,20 +233,50 @@ async function nextProjects(graph: IGraphContributor, nodesById: Map<string, Gra
   return projects;
 }
 
+type WrappedExport = { line: number; names: string[]; functionLines: number[] };
+
+// A default export that is a call (`export default withAuth(handler)`) or a
+// variable: its line, the variable or the identifiers among the arguments of
+// the call and of nested calls, and the lines of functions passed inline,
+// outermost first.
+async function wrappedDefaultExport(file: GraphNode): Promise<WrappedExport | null> {
+  const parsed = await withFileSyntaxTree(file, (root) => {
+    for (const statement of root.namedChildren) {
+      if (statement?.type !== "export_statement" || !statement.children.some((child) => child?.type === "default")) continue;
+      const value = statement.childForFieldName("value");
+      const line = statement.startPosition.row + 1;
+      if (value?.type === "identifier") return { line, names: [value.text], functionLines: [] };
+      if (value?.type !== "call_expression") return null;
+      const names: string[] = [];
+      const functionLines: number[] = [];
+      const collect = (call: SyntaxNode) => {
+        for (const argument of call.childForFieldName("arguments")?.namedChildren ?? []) {
+          if (argument?.type === "identifier") names.push(argument.text);
+          else if (argument?.type === "call_expression") collect(argument);
+          else if (argument?.type === "function_expression" || argument?.type === "arrow_function") functionLines.push(argument.startPosition.row + 1);
+        }
+      };
+      collect(value);
+      return { line, names, functionLines };
+    }
+    return null;
+  });
+  return parsed ?? null;
+}
+
+// The file function a wrapped default export runs: one it names, else one
+// passed inline; null when it wraps none (`NextAuth(options)`).
+function wrappedFunction(wrapped: WrappedExport, functions: readonly GraphNode[]): GraphNode | null {
+  return functions.find((fn) => wrapped.names.includes(String(fn.properties.name)))
+    ?? functions.find((fn) => wrapped.functionLines.includes(Number(fn.properties.line)))
+    ?? null;
+}
+
 // `export const config = { matcher: '/a/:path*' }`, or an array of paths and
 // `{ source }` objects: the literal paths, in order.
 async function middlewareMatcher(file: GraphNode): Promise<string[]> {
-  const filePath = file.properties.path;
-  if (typeof filePath !== "string") return [];
-  let source: string;
-  try {
-    source = await readFile(filePath, "utf8");
-  } catch {
-    return [];
-  }
-  const grammar = /\.tsx?$/u.test(filePath) ? (filePath.endsWith("x") ? "tsx" : "typescript") : "javascript";
-  return withSyntaxTree(grammar, source, (tree) => {
-    for (const statement of tree.rootNode.namedChildren) {
+  const matcher = await withFileSyntaxTree(file, (root) => {
+    for (const statement of root.namedChildren) {
       const declaration = statement?.type === "export_statement" ? statement.childForFieldName("declaration") : null;
       for (const declarator of declaration?.namedChildren ?? []) {
         if (declarator?.type !== "variable_declarator" || declarator.childForFieldName("name")?.text !== "config") continue;
@@ -248,6 +289,21 @@ async function middlewareMatcher(file: GraphNode): Promise<string[]> {
     }
     return [];
   });
+  return matcher ?? [];
+}
+
+// Reads and parses a file of the graph; undefined when it cannot be read.
+async function withFileSyntaxTree<T>(file: GraphNode, visit: (root: SyntaxNode) => T): Promise<T | undefined> {
+  const filePath = file.properties.path;
+  if (typeof filePath !== "string") return undefined;
+  let source: string;
+  try {
+    source = await readFile(filePath, "utf8");
+  } catch {
+    return undefined;
+  }
+  const grammar = /\.tsx?$/u.test(filePath) ? (filePath.endsWith("x") ? "tsx" : "typescript") : "javascript";
+  return withSyntaxTree(grammar, source, (tree) => visit(tree.rootNode));
 }
 
 function matcherPaths(node: SyntaxNode): string[] {
