@@ -673,6 +673,33 @@
           "file": "index.html"
         }
       }
+    ],
+    "single-file-components": [
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "formatTotal"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "addToCart"
+        }
+      },
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "src/components/CartButton.vue"
+        }
+      },
+      {
+        "tool": "trace_import_chain",
+        "args": {
+          "from": "src/pages/index.astro",
+          "to": "src/lib/cart.ts"
+        }
+      }
     ]
   }
 }

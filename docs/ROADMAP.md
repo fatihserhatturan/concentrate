@@ -558,9 +558,9 @@ Today `.tsx` is parsed with the TypeScript grammar, which has no JSX (`src/core/
 
 ### Single-file components
 
-- [ ] Own SFC splitter for `.vue`, `.svelte` and `.astro`: extract `<script>` blocks and Astro frontmatter with their line and column offsets and parse them with the JS/TS grammar
-- [ ] Parse the template part with the HTML grammar; Vue directives, Svelte blocks and Astro expressions are read as attributes or text
-- [ ] Graph line numbers point into the original file; `File.language` records `vue`, `svelte`, `astro` or `html`
+- [x] Own SFC splitter for `.vue`, `.svelte` and `.astro`: extract `<script>` blocks and Astro frontmatter with their line and column offsets and parse them with the JS/TS grammar
+- [x] Parse the template part with the HTML grammar; Vue directives, Svelte blocks and Astro expressions are read as attributes or text
+- [x] Graph line numbers point into the original file; `File.language` records `vue`, `svelte`, `astro` or `html`
 
 ### Vanilla JS
 
@@ -570,9 +570,9 @@ Today `.tsx` is parsed with the TypeScript grammar, which has no JSX (`src/core/
 
 ### Acceptance criteria
 
-- [ ] Fixtures for TSX, a file with a syntax error, each SFC format and a vanilla HTML page, with golden coverage
+- [x] Fixtures for TSX, a file with a syntax error, each SFC format and a vanilla HTML page, with golden coverage
 - [x] `internet-nest` files that failed on syntax errors produce partial graphs (the 2 microservices decorator specs)
-- [ ] Precision stays at 100% in `bench:accuracy`; parse time per file is reported in `docs/benchmarks.md`
+- [x] Precision stays at 100% in `bench:accuracy`; parse time per file is reported in `docs/benchmarks.md`
 
 ## Phase 11: Component model and React ([#76](https://github.com/fatihserhatturan/concentrate/issues/76))
 

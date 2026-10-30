@@ -296,10 +296,9 @@ const statementParents = new Set(["program", "statement_block", "class_body", "s
 // caller owns the tree and must delete() it.
 async function parseTolerantTree(
   source: string,
-  language: SupportedLanguage,
-  filePath: string,
+  grammar: GrammarName,
 ): Promise<{ tree: SyntaxTree; warnings: string[] }> {
-  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors(grammarFor(language, filePath), source, statementParents);
+  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors(grammar, source, statementParents);
   const warnings = skippedLines.length === 0
     ? []
     : [`Syntax error: left out the statement${skippedLines.length === 1 ? "" : "s"} at line${skippedLines.length === 1 ? "" : "s"} ${skippedLines.join(", ")}`];
@@ -347,6 +346,7 @@ export async function parseJsTsSource(
   language: "javascript" | "typescript",
   plugins: readonly JsTsFrameworkPlugin[] = [],
   fileLanguage: SupportedLanguage = language,
+  grammar: GrammarName = grammarFor(language, filePath),
 ): Promise<ParsedSourceFile> {
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
@@ -357,7 +357,7 @@ export async function parseJsTsSource(
     properties: { path: filePath, relativePath, language: fileLanguage },
   };
 
-  const { tree, warnings } = await parseTolerantTree(source, language, filePath);
+  const { tree, warnings } = await parseTolerantTree(source, grammar);
   try {
     const callbackKeys = new Set(plugins.flatMap((plugin) => plugin.callbackPropertyNames ?? []));
     const state = walkJsTsNodes(fileNodeId, tree, language, callbackKeys);
@@ -392,7 +392,7 @@ export async function parseJsTsWithRootNode(
   };
 
   // The tree stays alive for the caller's root node; this helper is for tests.
-  const { tree } = await parseTolerantTree(source, language, filePath);
+  const { tree } = await parseTolerantTree(source, grammarFor(language, filePath));
 
   const state = walkJsTsNodes(fileNodeId, tree, language);
   state.nodes.unshift(fileNode);

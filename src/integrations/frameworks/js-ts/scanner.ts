@@ -1,5 +1,5 @@
 import { createJsTsParser, type JsTsFrameworkPlugin } from "../../languages/js-ts/index.js";
-import { createHtmlParser } from "../../languages/html/parser.js";
+import { createMarkupParser, type HtmlPagePlugin } from "../../languages/html/parser.js";
 import { applyExpressKoaParseSemantics } from "./express-koa.js";
 import { applyFastifyParseSemantics } from "./fastify.js";
 import { applyNestJsParseSemantics } from "./nestjs.js";
@@ -71,12 +71,18 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
 
 export const javascriptParser = createJsTsParser("javascript", jsTsFrameworkPlugins);
 export const typescriptParser = createJsTsParser("typescript", jsTsFrameworkPlugins);
-// Inline scripts of HTML pages get the same framework semantics.
-export const htmlParser = createHtmlParser(jsTsFrameworkPlugins, [
+// Scripts of HTML pages and single-file components get the same framework
+// semantics; the markup gets the DOM attribute semantics.
+const markupPlugins: readonly HtmlPagePlugin[] = [
   {
     // on* event attributes.
     name: "dom-attributes",
     onPage: ({ fileNodeId, documentNode, parsed }) =>
       applyDomAttributeSemantics(fileNodeId, documentNode, parsed.nodes, parsed.relationships),
   },
-]);
+];
+
+export const htmlParser = createMarkupParser("html", jsTsFrameworkPlugins, markupPlugins);
+export const vueParser = createMarkupParser("vue", jsTsFrameworkPlugins, markupPlugins);
+export const svelteParser = createMarkupParser("svelte", jsTsFrameworkPlugins, markupPlugins);
+export const astroParser = createMarkupParser("astro", jsTsFrameworkPlugins, markupPlugins);

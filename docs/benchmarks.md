@@ -110,6 +110,31 @@ scan's graph exactly.
 - From the CLI, `scan` of express goes from 0.49 s to 0.22 s wall time with a
   warm cache.
 
+## Frontend file formats
+
+Phase 10 added the TSX and HTML grammars, partial trees for syntax errors and
+markup files (HTML, Vue, Svelte, Astro), whose scripts are parsed from the
+file text with the markup blanked out. Per-file parse time with the language
+parser (parse plus extraction and framework plugins), median of 200 runs after
+20 warm-up runs, Apple M4, Node v24.13.0, recorded 2026-10-30:
+
+| File | Language | Bytes | ms per file |
+| --- | --- | ---: | ---: |
+| `tsx-components/src/ProductList.tsx` | typescript (TSX grammar) | 873 | 0.58 |
+| `syntax-errors/src/orders.ts` (3 statements left out, 4 parses) | typescript | 427 | 0.27 |
+| `vanilla-html/index.html` | html | 816 | 0.37 |
+| `single-file-components/src/components/CartButton.vue` | vue | 499 | 0.31 |
+| `single-file-components/src/components/Total.svelte` | svelte | 372 | 0.23 |
+| `single-file-components/src/pages/index.astro` | astro | 618 | 0.38 |
+| `single-file-components/src/lib/cart.ts` (plain TS, for comparison) | typescript | 167 | 0.16 |
+
+- A markup file costs one HTML parse plus one JS/TS parse of its scripts, so it
+  stays in the range of a plain TS file of the same size.
+- A file with syntax errors is parsed once per round (here four times), and
+  only those files pay for it.
+- The standing samples have no `.tsx`, `.vue`, `.svelte` or `.astro` files, so
+  their scan times above are unchanged; a frontend sample comes with Phase 11.
+
 ## Parser benchmark and parse workers
 
 `npm run bench:parser` (Phase 3e) builds, then measures `dist/` on every
