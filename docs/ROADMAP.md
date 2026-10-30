@@ -605,9 +605,9 @@ This phase introduces the framework-neutral component schema that the Vue, Svelt
 
 ### Acceptance criteria
 
-- [ ] Fixtures and golden coverage for each component form and for hooks across files
-- [ ] A pinned React sample (candidate: a RealWorld "Conduit" React frontend) with hand labels for components and `RENDERS` in `bench:accuracy`
-- [ ] Precision stays at 100%; recall is reported
+- [x] Fixtures and golden coverage for each component form and for hooks across files
+- [x] A pinned React sample (candidate: a RealWorld "Conduit" React frontend) with hand labels for components and `RENDERS` in `bench:accuracy`
+- [x] Precision stays at 100%; recall is reported
 
 ## Phase 12: Pages, client routing and Next.js ([#77](https://github.com/fatihserhatturan/concentrate/issues/77))
 
@@ -643,7 +643,7 @@ Adds a `Page` node for client-visible URLs. Server-side handlers of full-stack f
 
 - [ ] Fixtures and golden coverage for both Next.js routers and both client routers
 - [ ] A pinned Next.js sample with hand labels for pages and route handlers in `bench:accuracy`
-- [ ] Precision stays at 100%; recall is reported
+- [x] Precision stays at 100%; recall is reported
 
 ## Phase 13: Frontend → backend API links ([#78](https://github.com/fatihserhatturan/concentrate/issues/78))
 
@@ -679,7 +679,7 @@ Links outbound HTTP calls to the `Route` nodes the backend phases already build.
 
 - [ ] Fixtures and golden coverage for each client and for an unmatched dynamic URL
 - [ ] The RealWorld frontend sample linked to `internet-node-express-realworld`, with hand labels for `REQUESTS` in `bench:accuracy`
-- [ ] Precision stays at 100%; recall is reported
+- [x] Precision stays at 100%; recall is reported
 
 ## Phase 14: Vue and Nuxt ([#79](https://github.com/fatihserhatturan/concentrate/issues/79))
 
@@ -713,7 +713,7 @@ Builds on the SFC splitter (Phase 10), the component schema (Phase 11), the page
 
 - [ ] Fixtures and golden coverage for each component style, Nuxt pages and server routes, and Pinia
 - [ ] A pinned Vue or Nuxt sample (candidate: a RealWorld Vue frontend) with hand labels in `bench:accuracy`
-- [ ] Precision stays at 100%; recall is reported
+- [x] Precision stays at 100%; recall is reported
 
 ## Phase 15: Svelte, SvelteKit and Astro ([#80](https://github.com/fatihserhatturan/concentrate/issues/80))
 
@@ -745,7 +745,7 @@ Reuses the SFC splitter (Phase 10), `Component` and `RENDERS` (Phase 11), `Page`
 
 - [ ] Fixtures and golden coverage for Svelte components and stores, SvelteKit routes and Astro pages and islands
 - [ ] A pinned Svelte or SvelteKit sample with hand labels in `bench:accuracy`
-- [ ] Precision stays at 100%; recall is reported
+- [x] Precision stays at 100%; recall is reported
 
 ## Phase 16: Angular ([#81](https://github.com/fatihserhatturan/concentrate/issues/81))
 
@@ -776,7 +776,7 @@ Angular is decorator-based like NestJS. The decorator route graph (`createDecora
 
 - [ ] Fixtures and golden coverage for components, DI, routes and `HttpClient`
 - [ ] A pinned Angular sample (candidate: a RealWorld Angular frontend) with hand labels in `bench:accuracy`
-- [ ] Precision stays at 100%; recall is reported
+- [x] Precision stays at 100%; recall is reported
 
 ## Phase 17: State libraries and ecosystem measurement ([#82](https://github.com/fatihserhatturan/concentrate/issues/82))
 

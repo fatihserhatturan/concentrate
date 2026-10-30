@@ -1,0 +1,381 @@
+{
+  "sample": "internet-react-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Components: every React component declared in src/components/ (function and class components, including ProfileFavorites, which extends Profile). Renders: every JSX element in a component that renders a component of the repository, one label per element; rendering a module's connect(...)(X) default export counts as rendering X. Library elements (Link, Route, Switch), the lowercase <list-errors> element, and components passed as props (<Route component={Home}>) are not renders. Elements in class methods other than render() are not labeled; they render library components only.",
+  "components": {
+    "scope": [
+      "src/components/"
+    ],
+    "items": [
+      {
+        "file": "src/components/App.js",
+        "name": "App",
+        "line": 33
+      },
+      {
+        "file": "src/components/Header.js",
+        "name": "LoggedOutView",
+        "line": 4
+      },
+      {
+        "file": "src/components/Header.js",
+        "name": "LoggedInView",
+        "line": 33
+      },
+      {
+        "file": "src/components/Header.js",
+        "name": "Header",
+        "line": 72
+      },
+      {
+        "file": "src/components/Home/Banner.js",
+        "name": "Banner",
+        "line": 3
+      },
+      {
+        "file": "src/components/Home/MainView.js",
+        "name": "YourFeedTab",
+        "line": 7
+      },
+      {
+        "file": "src/components/Home/MainView.js",
+        "name": "GlobalFeedTab",
+        "line": 27
+      },
+      {
+        "file": "src/components/Home/MainView.js",
+        "name": "TagFilterTab",
+        "line": 44
+      },
+      {
+        "file": "src/components/Home/MainView.js",
+        "name": "MainView",
+        "line": 68
+      },
+      {
+        "file": "src/components/Home/Tags.js",
+        "name": "Tags",
+        "line": 4
+      },
+      {
+        "file": "src/components/Home/index.js",
+        "name": "Home",
+        "line": 30
+      },
+      {
+        "file": "src/components/ArticleList.js",
+        "name": "ArticleList",
+        "line": 5
+      },
+      {
+        "file": "src/components/ArticlePreview.js",
+        "name": "ArticlePreview",
+        "line": 21
+      },
+      {
+        "file": "src/components/ListPagination.js",
+        "name": "ListPagination",
+        "line": 11
+      },
+      {
+        "file": "src/components/ListErrors.js",
+        "name": "ListErrors",
+        "line": 3
+      },
+      {
+        "file": "src/components/Article/ArticleActions.js",
+        "name": "ArticleActions",
+        "line": 12
+      },
+      {
+        "file": "src/components/Article/ArticleMeta.js",
+        "name": "ArticleMeta",
+        "line": 5
+      },
+      {
+        "file": "src/components/Article/Comment.js",
+        "name": "Comment",
+        "line": 5
+      },
+      {
+        "file": "src/components/Article/CommentContainer.js",
+        "name": "CommentContainer",
+        "line": 6
+      },
+      {
+        "file": "src/components/Article/CommentInput.js",
+        "name": "CommentInput",
+        "line": 11
+      },
+      {
+        "file": "src/components/Article/CommentList.js",
+        "name": "CommentList",
+        "line": 4
+      },
+      {
+        "file": "src/components/Article/DeleteButton.js",
+        "name": "DeleteButton",
+        "line": 11
+      },
+      {
+        "file": "src/components/Article/index.js",
+        "name": "Article",
+        "line": 21
+      },
+      {
+        "file": "src/components/Editor.js",
+        "name": "Editor",
+        "line": 33
+      },
+      {
+        "file": "src/components/Login.js",
+        "name": "Login",
+        "line": 25
+      },
+      {
+        "file": "src/components/Profile.js",
+        "name": "EditProfileSettings",
+        "line": 13
+      },
+      {
+        "file": "src/components/Profile.js",
+        "name": "FollowUserButton",
+        "line": 26
+      },
+      {
+        "file": "src/components/Profile.js",
+        "name": "Profile",
+        "line": 77
+      },
+      {
+        "file": "src/components/ProfileFavorites.js",
+        "name": "ProfileFavorites",
+        "line": 18
+      },
+      {
+        "file": "src/components/Register.js",
+        "name": "Register",
+        "line": 29
+      },
+      {
+        "file": "src/components/Settings.js",
+        "name": "SettingsForm",
+        "line": 11
+      },
+      {
+        "file": "src/components/Settings.js",
+        "name": "Settings",
+        "line": 139
+      }
+    ]
+  },
+  "renders": {
+    "scope": [
+      "src/components/"
+    ],
+    "items": [
+      {
+        "file": "src/components/App.js",
+        "parent": "App",
+        "line": 55,
+        "child": "Header",
+        "childFile": "src/components/Header.js"
+      },
+      {
+        "file": "src/components/App.js",
+        "parent": "App",
+        "line": 74,
+        "child": "Header",
+        "childFile": "src/components/Header.js"
+      },
+      {
+        "file": "src/components/Header.js",
+        "parent": "Header",
+        "line": 82,
+        "child": "LoggedOutView",
+        "childFile": "src/components/Header.js"
+      },
+      {
+        "file": "src/components/Header.js",
+        "parent": "Header",
+        "line": 84,
+        "child": "LoggedInView",
+        "childFile": "src/components/Header.js"
+      },
+      {
+        "file": "src/components/Home/MainView.js",
+        "parent": "MainView",
+        "line": 74,
+        "child": "YourFeedTab",
+        "childFile": "src/components/Home/MainView.js"
+      },
+      {
+        "file": "src/components/Home/MainView.js",
+        "parent": "MainView",
+        "line": 79,
+        "child": "GlobalFeedTab",
+        "childFile": "src/components/Home/MainView.js"
+      },
+      {
+        "file": "src/components/Home/MainView.js",
+        "parent": "MainView",
+        "line": 81,
+        "child": "TagFilterTab",
+        "childFile": "src/components/Home/MainView.js"
+      },
+      {
+        "file": "src/components/Home/MainView.js",
+        "parent": "MainView",
+        "line": 86,
+        "child": "ArticleList",
+        "childFile": "src/components/ArticleList.js"
+      },
+      {
+        "file": "src/components/Home/index.js",
+        "parent": "Home",
+        "line": 48,
+        "child": "Banner",
+        "childFile": "src/components/Home/Banner.js"
+      },
+      {
+        "file": "src/components/Home/index.js",
+        "parent": "Home",
+        "line": 52,
+        "child": "MainView",
+        "childFile": "src/components/Home/MainView.js"
+      },
+      {
+        "file": "src/components/Home/index.js",
+        "parent": "Home",
+        "line": 59,
+        "child": "Tags",
+        "childFile": "src/components/Home/Tags.js"
+      },
+      {
+        "file": "src/components/ArticleList.js",
+        "parent": "ArticleList",
+        "line": 25,
+        "child": "ArticlePreview",
+        "childFile": "src/components/ArticlePreview.js"
+      },
+      {
+        "file": "src/components/ArticleList.js",
+        "parent": "ArticleList",
+        "line": 30,
+        "child": "ListPagination",
+        "childFile": "src/components/ListPagination.js"
+      },
+      {
+        "file": "src/components/Article/ArticleMeta.js",
+        "parent": "ArticleMeta",
+        "line": 22,
+        "child": "ArticleActions",
+        "childFile": "src/components/Article/ArticleActions.js"
+      },
+      {
+        "file": "src/components/Article/Comment.js",
+        "parent": "Comment",
+        "line": 29,
+        "child": "DeleteButton",
+        "childFile": "src/components/Article/DeleteButton.js"
+      },
+      {
+        "file": "src/components/Article/CommentContainer.js",
+        "parent": "CommentContainer",
+        "line": 12,
+        "child": "CommentInput",
+        "childFile": "src/components/Article/CommentInput.js"
+      },
+      {
+        "file": "src/components/Article/CommentContainer.js",
+        "parent": "CommentContainer",
+        "line": 15,
+        "child": "CommentList",
+        "childFile": "src/components/Article/CommentList.js"
+      },
+      {
+        "file": "src/components/Article/CommentContainer.js",
+        "parent": "CommentContainer",
+        "line": 31,
+        "child": "CommentList",
+        "childFile": "src/components/Article/CommentList.js"
+      },
+      {
+        "file": "src/components/Article/CommentList.js",
+        "parent": "CommentList",
+        "line": 10,
+        "child": "Comment",
+        "childFile": "src/components/Article/Comment.js"
+      },
+      {
+        "file": "src/components/Article/index.js",
+        "parent": "Article",
+        "line": 48,
+        "child": "ArticleMeta",
+        "childFile": "src/components/Article/ArticleMeta.js"
+      },
+      {
+        "file": "src/components/Article/index.js",
+        "parent": "Article",
+        "line": 85,
+        "child": "CommentContainer",
+        "childFile": "src/components/Article/CommentContainer.js"
+      },
+      {
+        "file": "src/components/Editor.js",
+        "parent": "Editor",
+        "line": 101,
+        "child": "ListErrors",
+        "childFile": "src/components/ListErrors.js"
+      },
+      {
+        "file": "src/components/Login.js",
+        "parent": "Login",
+        "line": 56,
+        "child": "ListErrors",
+        "childFile": "src/components/ListErrors.js"
+      },
+      {
+        "file": "src/components/Register.js",
+        "parent": "Register",
+        "line": 63,
+        "child": "ListErrors",
+        "childFile": "src/components/ListErrors.js"
+      },
+      {
+        "file": "src/components/Profile.js",
+        "parent": "Profile",
+        "line": 132,
+        "child": "EditProfileSettings",
+        "childFile": "src/components/Profile.js"
+      },
+      {
+        "file": "src/components/Profile.js",
+        "parent": "Profile",
+        "line": 133,
+        "child": "FollowUserButton",
+        "childFile": "src/components/Profile.js"
+      },
+      {
+        "file": "src/components/Profile.js",
+        "parent": "Profile",
+        "line": 154,
+        "child": "ArticleList",
+        "childFile": "src/components/ArticleList.js"
+      },
+      {
+        "file": "src/components/Settings.js",
+        "parent": "Settings",
+        "line": 149,
+        "child": "ListErrors",
+        "childFile": "src/components/ListErrors.js"
+      },
+      {
+        "file": "src/components/Settings.js",
+        "parent": "Settings",
+        "line": 151,
+        "child": "SettingsForm",
+        "childFile": "src/components/Settings.js"
+      }
+    ]
+  }
+}
