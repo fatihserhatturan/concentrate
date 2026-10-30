@@ -1,6 +1,7 @@
 import { objectSchema } from "../args.js";
 import { OUTPUT_BUDGET_CHARS } from "../budget.js";
 import type { McpTool } from "../tools.js";
+import { componentTree, findComponentUsages } from "./components.js";
 import { detectChanges, impactOf } from "./impact.js";
 import { routeDetails } from "./route.js";
 import { getFileOutline, getSymbolSource } from "./source.js";
@@ -17,7 +18,7 @@ const limit = (fallback: number) => ({ type: "number", description: `Maximum ite
 export const agentToolDefinitions = [
   {
     name: "impact_of",
-    description: `What is affected if a function, method, class or file changes: transitive callers with their call depth, module-level callers, the routes and entrypoints that run any of them, and the data models, env vars and config the changed code uses. For a route, use route_details instead. ${budgetNote}`,
+    description: `What is affected if a function, method, class or file changes: transitive callers with their call depth, module-level callers, the routes and entrypoints that run any of them, the UI components they implement and the components that render those, and the data models, env vars and config the changed code uses. For a route, use route_details instead. ${budgetNote}`,
     inputSchema: objectSchema({
       symbol: { type: "string", description: "Function, method or class name (a class covers all its methods)." },
       file: { type: "string", description: "Scan-relative file path or path suffix. Alone, covers every function in the file; with symbol, narrows it." },
@@ -61,6 +62,25 @@ export const agentToolDefinitions = [
       limit: limit(200),
     }, ["file"]),
   },
+  {
+    name: "component_tree",
+    description: `A UI component's tree: what it renders and what renders it (each with the props passed and the render line, up to depth levels), elements that resolved to no component (library components), the function or class that defines it, its hooks, and the contexts it reads directly or through custom hooks. ${budgetNote}`,
+    inputSchema: objectSchema({
+      name: { type: "string", description: "Exact component name." },
+      file: { type: "string", description: "Optional scan-relative file path or path suffix of the component." },
+      depth: { type: "number", description: "How many render levels to follow each way. Defaults to 2, at most 10." },
+      limit: limit(5),
+    }, ["name"]),
+  },
+  {
+    name: "find_component_usages",
+    description: `Where a UI component is rendered: each render site with the rendering component, file, line and props passed; for a context, also the functions that read it (useContext / use). Elements of that name that resolved to no component (library components such as Link) are listed with resolved: false. ${budgetNote}`,
+    inputSchema: objectSchema({
+      name: { type: "string", description: "Exact component name." },
+      file: { type: "string", description: "Optional scan-relative file path or path suffix of the component; leaves out unresolved elements." },
+      limit: limit(50),
+    }, ["name"]),
+  },
 ];
 
 export const agentTools: Record<string, McpTool> = {
@@ -69,4 +89,6 @@ export const agentTools: Record<string, McpTool> = {
   route_details: { handler: routeDetails, listKey: "routes", defaultLimit: 5 },
   get_symbol_source: { handler: getSymbolSource, listKey: "matches", defaultLimit: 5 },
   get_file_outline: { handler: getFileOutline, listKey: "outline", defaultLimit: 200 },
+  component_tree: { handler: componentTree, listKey: "components", defaultLimit: 5 },
+  find_component_usages: { handler: findComponentUsages, listKey: "usages", defaultLimit: 50 },
 };

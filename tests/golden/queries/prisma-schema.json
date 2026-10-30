@@ -2535,6 +2535,28 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/users.ts:function:9:renameUser",
+            "file:src/routes.ts:function:14:<app.patch:/users/:id:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/users.ts:function:9:renameUser",
+            "file:src/routes.ts:function:14:<app.patch:/users/:id:arg1>"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -2579,6 +2601,7 @@
         }
       ],
       "entrypoints": [],
+      "components": [],
       "dataAccess": [
         {
           "model": "User",

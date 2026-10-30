@@ -3,7 +3,7 @@
 ## Using Concentrate
 
 - [Getting started](getting-started.md): install, scan, query, watch, export, and connect an agent.
-- [MCP server](mcp-server.md): client setup, protocol, and the reference for all 20 tools.
+- [MCP server](mcp-server.md): client setup, protocol, and the reference for all 22 tools.
 - [Cypher subset](cypher.md): the read-only query language over the graph.
 - [Known limitations](known-limitations.md): what the graph does not see yet.
 

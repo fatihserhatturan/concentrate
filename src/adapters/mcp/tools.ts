@@ -63,6 +63,8 @@ const titles: Record<string, string> = {
   route_details: "Route details",
   get_symbol_source: "Get symbol source",
   get_file_outline: "Get file outline",
+  component_tree: "Component tree",
+  find_component_usages: "Find component usages",
   search_symbols: "Search symbols",
   find_references: "Find references",
   find_import_cycles: "Find import cycles",

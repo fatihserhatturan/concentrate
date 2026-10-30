@@ -1712,5 +1712,2927 @@
         "returned": 2
       }
     }
+  },
+  {
+    "tool": "component_tree",
+    "args": {
+      "name": "Profile"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:component:10:Profile",
+            "name": "Profile",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
+          },
+          {
+            "id": "file:src/App.tsx:component:29:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "name": "CartContext",
+            "kind": "context",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 5,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "name": "CartProvider",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "name": "Avatar",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Button.tsx:component:3:Button",
+            "name": "Button",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Card.tsx:component:4:Card",
+            "name": "Card",
+            "kind": "memo",
+            "framework": "react",
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "name": "CartBadge",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useCartCount,useEffect",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Input.tsx:component:3:Input",
+            "name": "Input",
+            "kind": "forwardRef",
+            "framework": "react",
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "name": "Legacy",
+            "kind": "class",
+            "framework": "react",
+            "file": "src/components/Legacy.jsx",
+            "line": 4,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Card.tsx:component:4:Card",
+            "line": 12,
+            "props": "title"
+          },
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "line": 13,
+            "props": "url"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "line": 31,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "line": 33,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/App.tsx:component:10:Profile",
+            "line": 35,
+            "props": "key,user"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Input.tsx:component:3:Input",
+            "line": 36,
+            "props": "name"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "line": 37,
+            "props": "ready,onGo"
+          },
+          {
+            "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 10,
+            "props": "value"
+          },
+          {
+            "parent": "file:src/components/Card.tsx:component:4:Card",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 6,
+            "props": "label,onClick"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn",
+        "params": {},
+        "rows": [
+          {
+            "component": "file:src/App.tsx:component:10:Profile",
+            "fn": "file:src/App.tsx:function:10:Profile"
+          },
+          {
+            "component": "file:src/App.tsx:component:29:App",
+            "fn": "file:src/App.tsx:function:29:App"
+          },
+          {
+            "component": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "fn": "file:src/cart/CartContext.tsx:function:7:CartProvider"
+          },
+          {
+            "component": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "fn": "file:src/components/Avatar.tsx:function:3:Avatar"
+          },
+          {
+            "component": "file:src/components/Button.tsx:component:3:Button",
+            "fn": "file:src/components/Button.tsx:function:3:Button"
+          },
+          {
+            "component": "file:src/components/Card.tsx:component:4:Card",
+            "fn": "file:src/components/Card.tsx:function:4:Card"
+          },
+          {
+            "component": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "fn": "file:src/components/CartBadge.tsx:function:4:CartBadge"
+          },
+          {
+            "component": "file:src/components/Input.tsx:component:3:Input",
+            "fn": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {},
+        "rows": [
+          {
+            "component": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "fn": "file:src/components/Legacy.jsx:function:5:render",
+            "className": "Legacy"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/App.tsx:function:10:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/App.tsx:function:20:FormatDate",
+            "name": "FormatDate",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/App.tsx:function:25:renderRow",
+            "name": "renderRow",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 25,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/App.tsx:function:29:App",
+            "name": "App",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:7:CartProvider",
+            "name": "CartProvider",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:9:add",
+            "name": "add",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:4:useCart",
+            "name": "useCart",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 4,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "name": "useCartCount",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 10,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:function:3:Avatar",
+            "name": "Avatar",
+            "className": null,
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/components/Button.tsx:function:3:Button",
+            "name": "Button",
+            "className": null,
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Card.tsx:function:4:Card",
+            "name": "Card",
+            "className": null,
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "name": "CartBadge",
+            "className": null,
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>",
+            "name": "<forwardRef:arg0>",
+            "className": null,
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/Legacy.jsx:function:5:render",
+            "name": "render",
+            "className": "Legacy",
+            "file": "src/components/Legacy.jsx",
+            "line": 5,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_HOOK]->(hook:Function) RETURN id(user) AS user, id(hook) AS hook, rel.line AS line",
+        "rows": [
+          {
+            "user": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "hook": "file:src/cart/useCart.ts:function:4:useCart",
+            "line": 11
+          },
+          {
+            "user": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "hook": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "line": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_CONTEXT]->(context:Component) RETURN id(user) AS user, id(context) AS context, rel.line AS line",
+        "rows": [
+          {
+            "user": "file:src/cart/useCart.ts:function:4:useCart",
+            "context": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 5
+          }
+        ]
+      }
+    ],
+    "output": {
+      "name": "Profile",
+      "file": null,
+      "depth": 2,
+      "components": [
+        {
+          "name": "Profile",
+          "kind": "function",
+          "framework": "react",
+          "file": "src/App.tsx",
+          "line": 10,
+          "endLine": 17,
+          "isExported": false,
+          "definedBy": {
+            "kind": "function",
+            "name": "Profile",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17
+          },
+          "hooks": [],
+          "customHooks": [],
+          "contexts": [],
+          "renders": [
+            {
+              "depth": 1,
+              "parent": "Profile",
+              "parentFile": "src/App.tsx",
+              "line": 12,
+              "component": "Card",
+              "componentKind": "memo",
+              "componentFile": "src/components/Card.tsx",
+              "props": [
+                "title"
+              ]
+            },
+            {
+              "depth": 1,
+              "parent": "Profile",
+              "parentFile": "src/App.tsx",
+              "line": 13,
+              "component": "Avatar",
+              "componentKind": "function",
+              "componentFile": "src/components/Avatar.tsx",
+              "props": [
+                "url"
+              ]
+            },
+            {
+              "depth": 2,
+              "parent": "Card",
+              "parentFile": "src/components/Card.tsx",
+              "line": 9,
+              "component": "Button",
+              "componentKind": "function",
+              "componentFile": "src/components/Button.tsx",
+              "props": [
+                "label"
+              ]
+            }
+          ],
+          "unresolvedRenders": [
+            {
+              "name": "Link",
+              "props": [
+                "to"
+              ],
+              "line": 14
+            }
+          ],
+          "renderedBy": [
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.tsx",
+              "line": 35,
+              "component": "Profile",
+              "componentKind": "function",
+              "componentFile": "src/App.tsx",
+              "props": [
+                "key",
+                "user"
+              ]
+            }
+          ]
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "component_tree",
+    "args": {
+      "name": "CartBadge",
+      "depth": 3
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:component:10:Profile",
+            "name": "Profile",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
+          },
+          {
+            "id": "file:src/App.tsx:component:29:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "name": "CartContext",
+            "kind": "context",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 5,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "name": "CartProvider",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "name": "Avatar",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Button.tsx:component:3:Button",
+            "name": "Button",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Card.tsx:component:4:Card",
+            "name": "Card",
+            "kind": "memo",
+            "framework": "react",
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "name": "CartBadge",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useCartCount,useEffect",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Input.tsx:component:3:Input",
+            "name": "Input",
+            "kind": "forwardRef",
+            "framework": "react",
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "name": "Legacy",
+            "kind": "class",
+            "framework": "react",
+            "file": "src/components/Legacy.jsx",
+            "line": 4,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Card.tsx:component:4:Card",
+            "line": 12,
+            "props": "title"
+          },
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "line": 13,
+            "props": "url"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "line": 31,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "line": 33,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/App.tsx:component:10:Profile",
+            "line": 35,
+            "props": "key,user"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Input.tsx:component:3:Input",
+            "line": 36,
+            "props": "name"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "line": 37,
+            "props": "ready,onGo"
+          },
+          {
+            "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 10,
+            "props": "value"
+          },
+          {
+            "parent": "file:src/components/Card.tsx:component:4:Card",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 6,
+            "props": "label,onClick"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn",
+        "params": {},
+        "rows": [
+          {
+            "component": "file:src/App.tsx:component:10:Profile",
+            "fn": "file:src/App.tsx:function:10:Profile"
+          },
+          {
+            "component": "file:src/App.tsx:component:29:App",
+            "fn": "file:src/App.tsx:function:29:App"
+          },
+          {
+            "component": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "fn": "file:src/cart/CartContext.tsx:function:7:CartProvider"
+          },
+          {
+            "component": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "fn": "file:src/components/Avatar.tsx:function:3:Avatar"
+          },
+          {
+            "component": "file:src/components/Button.tsx:component:3:Button",
+            "fn": "file:src/components/Button.tsx:function:3:Button"
+          },
+          {
+            "component": "file:src/components/Card.tsx:component:4:Card",
+            "fn": "file:src/components/Card.tsx:function:4:Card"
+          },
+          {
+            "component": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "fn": "file:src/components/CartBadge.tsx:function:4:CartBadge"
+          },
+          {
+            "component": "file:src/components/Input.tsx:component:3:Input",
+            "fn": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {},
+        "rows": [
+          {
+            "component": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "fn": "file:src/components/Legacy.jsx:function:5:render",
+            "className": "Legacy"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/App.tsx:function:10:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/App.tsx:function:20:FormatDate",
+            "name": "FormatDate",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/App.tsx:function:25:renderRow",
+            "name": "renderRow",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 25,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/App.tsx:function:29:App",
+            "name": "App",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:7:CartProvider",
+            "name": "CartProvider",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:9:add",
+            "name": "add",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:4:useCart",
+            "name": "useCart",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 4,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "name": "useCartCount",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 10,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:function:3:Avatar",
+            "name": "Avatar",
+            "className": null,
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/components/Button.tsx:function:3:Button",
+            "name": "Button",
+            "className": null,
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Card.tsx:function:4:Card",
+            "name": "Card",
+            "className": null,
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "name": "CartBadge",
+            "className": null,
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>",
+            "name": "<forwardRef:arg0>",
+            "className": null,
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/Legacy.jsx:function:5:render",
+            "name": "render",
+            "className": "Legacy",
+            "file": "src/components/Legacy.jsx",
+            "line": 5,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_HOOK]->(hook:Function) RETURN id(user) AS user, id(hook) AS hook, rel.line AS line",
+        "rows": [
+          {
+            "user": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "hook": "file:src/cart/useCart.ts:function:4:useCart",
+            "line": 11
+          },
+          {
+            "user": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "hook": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "line": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_CONTEXT]->(context:Component) RETURN id(user) AS user, id(context) AS context, rel.line AS line",
+        "rows": [
+          {
+            "user": "file:src/cart/useCart.ts:function:4:useCart",
+            "context": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 5
+          }
+        ]
+      }
+    ],
+    "output": {
+      "name": "CartBadge",
+      "file": null,
+      "depth": 3,
+      "components": [
+        {
+          "name": "CartBadge",
+          "kind": "function",
+          "framework": "react",
+          "file": "src/components/CartBadge.tsx",
+          "line": 4,
+          "endLine": 10,
+          "isExported": true,
+          "definedBy": {
+            "kind": "function",
+            "name": "CartBadge",
+            "className": null,
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10
+          },
+          "hooks": [
+            "useCartCount",
+            "useEffect"
+          ],
+          "customHooks": [
+            {
+              "name": "useCartCount",
+              "className": null,
+              "file": "src/cart/useCart.ts",
+              "line": 10,
+              "endLine": 13,
+              "calledAt": 5
+            }
+          ],
+          "contexts": [
+            {
+              "name": "CartContext",
+              "file": "src/cart/CartContext.tsx",
+              "line": 5,
+              "through": "useCart"
+            }
+          ],
+          "renders": [],
+          "unresolvedRenders": [],
+          "renderedBy": [
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.tsx",
+              "line": 33,
+              "component": "CartBadge",
+              "componentKind": "function",
+              "componentFile": "src/components/CartBadge.tsx",
+              "props": []
+            }
+          ]
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "find_component_usages",
+    "args": {
+      "name": "Button"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:component:10:Profile",
+            "name": "Profile",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
+          },
+          {
+            "id": "file:src/App.tsx:component:29:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "name": "CartContext",
+            "kind": "context",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 5,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "name": "CartProvider",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "name": "Avatar",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Button.tsx:component:3:Button",
+            "name": "Button",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Card.tsx:component:4:Card",
+            "name": "Card",
+            "kind": "memo",
+            "framework": "react",
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "name": "CartBadge",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useCartCount,useEffect",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Input.tsx:component:3:Input",
+            "name": "Input",
+            "kind": "forwardRef",
+            "framework": "react",
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "name": "Legacy",
+            "kind": "class",
+            "framework": "react",
+            "file": "src/components/Legacy.jsx",
+            "line": 4,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Card.tsx:component:4:Card",
+            "line": 12,
+            "props": "title"
+          },
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "line": 13,
+            "props": "url"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "line": 31,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "line": 33,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/App.tsx:component:10:Profile",
+            "line": 35,
+            "props": "key,user"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Input.tsx:component:3:Input",
+            "line": 36,
+            "props": "name"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "line": 37,
+            "props": "ready,onGo"
+          },
+          {
+            "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 10,
+            "props": "value"
+          },
+          {
+            "parent": "file:src/components/Card.tsx:component:4:Card",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 6,
+            "props": "label,onClick"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "name": "Button",
+      "file": null,
+      "components": [
+        {
+          "name": "Button",
+          "kind": "function",
+          "framework": "react",
+          "file": "src/components/Button.tsx",
+          "line": 3,
+          "endLine": 5,
+          "isExported": true
+        }
+      ],
+      "counts": {
+        "render": 2
+      },
+      "usages": [
+        {
+          "kind": "render",
+          "file": "src/components/Card.tsx",
+          "line": 9,
+          "from": "Card",
+          "props": [
+            "label"
+          ]
+        },
+        {
+          "kind": "render",
+          "file": "src/components/Legacy.jsx",
+          "line": 6,
+          "from": "Legacy",
+          "props": [
+            "label",
+            "onClick"
+          ]
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "find_component_usages",
+    "args": {
+      "name": "CartContext"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:component:10:Profile",
+            "name": "Profile",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
+          },
+          {
+            "id": "file:src/App.tsx:component:29:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "name": "CartContext",
+            "kind": "context",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 5,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "name": "CartProvider",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "name": "Avatar",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Button.tsx:component:3:Button",
+            "name": "Button",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Card.tsx:component:4:Card",
+            "name": "Card",
+            "kind": "memo",
+            "framework": "react",
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "name": "CartBadge",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useCartCount,useEffect",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Input.tsx:component:3:Input",
+            "name": "Input",
+            "kind": "forwardRef",
+            "framework": "react",
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "name": "Legacy",
+            "kind": "class",
+            "framework": "react",
+            "file": "src/components/Legacy.jsx",
+            "line": 4,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Card.tsx:component:4:Card",
+            "line": 12,
+            "props": "title"
+          },
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "line": 13,
+            "props": "url"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "line": 31,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "line": 33,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/App.tsx:component:10:Profile",
+            "line": 35,
+            "props": "key,user"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Input.tsx:component:3:Input",
+            "line": 36,
+            "props": "name"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "line": 37,
+            "props": "ready,onGo"
+          },
+          {
+            "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 10,
+            "props": "value"
+          },
+          {
+            "parent": "file:src/components/Card.tsx:component:4:Card",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 6,
+            "props": "label,onClick"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/App.tsx:function:10:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/App.tsx:function:20:FormatDate",
+            "name": "FormatDate",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/App.tsx:function:25:renderRow",
+            "name": "renderRow",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 25,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/App.tsx:function:29:App",
+            "name": "App",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:7:CartProvider",
+            "name": "CartProvider",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:9:add",
+            "name": "add",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:4:useCart",
+            "name": "useCart",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 4,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "name": "useCartCount",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 10,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:function:3:Avatar",
+            "name": "Avatar",
+            "className": null,
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/components/Button.tsx:function:3:Button",
+            "name": "Button",
+            "className": null,
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Card.tsx:function:4:Card",
+            "name": "Card",
+            "className": null,
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "name": "CartBadge",
+            "className": null,
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>",
+            "name": "<forwardRef:arg0>",
+            "className": null,
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/Legacy.jsx:function:5:render",
+            "name": "render",
+            "className": "Legacy",
+            "file": "src/components/Legacy.jsx",
+            "line": 5,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_CONTEXT]->(context:Component) WHERE id(context) IN $ids RETURN id(user) AS user, id(context) AS context, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:src/cart/CartContext.tsx:component:5:CartContext"
+          ]
+        },
+        "rows": [
+          {
+            "user": "file:src/cart/useCart.ts:function:4:useCart",
+            "context": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 5
+          }
+        ]
+      }
+    ],
+    "output": {
+      "name": "CartContext",
+      "file": null,
+      "components": [
+        {
+          "name": "CartContext",
+          "kind": "context",
+          "framework": "react",
+          "file": "src/cart/CartContext.tsx",
+          "line": 5,
+          "endLine": 5,
+          "isExported": true
+        }
+      ],
+      "counts": {
+        "render": 1,
+        "context": 1
+      },
+      "usages": [
+        {
+          "kind": "render",
+          "file": "src/cart/CartContext.tsx",
+          "line": 10,
+          "from": "CartProvider",
+          "props": [
+            "value"
+          ]
+        },
+        {
+          "kind": "context",
+          "file": "src/cart/useCart.ts",
+          "line": 5,
+          "from": "useCart"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "find_component_usages",
+    "args": {
+      "name": "Link"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:component:10:Profile",
+            "name": "Profile",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
+          },
+          {
+            "id": "file:src/App.tsx:component:29:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "name": "CartContext",
+            "kind": "context",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 5,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "name": "CartProvider",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "name": "Avatar",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Button.tsx:component:3:Button",
+            "name": "Button",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Card.tsx:component:4:Card",
+            "name": "Card",
+            "kind": "memo",
+            "framework": "react",
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "name": "CartBadge",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useCartCount,useEffect",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Input.tsx:component:3:Input",
+            "name": "Input",
+            "kind": "forwardRef",
+            "framework": "react",
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "name": "Legacy",
+            "kind": "class",
+            "framework": "react",
+            "file": "src/components/Legacy.jsx",
+            "line": 4,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Card.tsx:component:4:Card",
+            "line": 12,
+            "props": "title"
+          },
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "line": 13,
+            "props": "url"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "line": 31,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "line": 33,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/App.tsx:component:10:Profile",
+            "line": 35,
+            "props": "key,user"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Input.tsx:component:3:Input",
+            "line": 36,
+            "props": "name"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "line": 37,
+            "props": "ready,onGo"
+          },
+          {
+            "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 10,
+            "props": "value"
+          },
+          {
+            "parent": "file:src/components/Card.tsx:component:4:Card",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 6,
+            "props": "label,onClick"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "name": "Link",
+      "file": null,
+      "components": [],
+      "counts": {
+        "unresolved": 1
+      },
+      "usages": [
+        {
+          "kind": "render",
+          "file": "src/App.tsx",
+          "line": 14,
+          "from": "Profile",
+          "props": [
+            "to"
+          ],
+          "resolved": false
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "Button"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/App.tsx:function:10:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/App.tsx:function:20:FormatDate",
+            "name": "FormatDate",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/App.tsx:function:25:renderRow",
+            "name": "renderRow",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 25,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/App.tsx:function:29:App",
+            "name": "App",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:7:CartProvider",
+            "name": "CartProvider",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:9:add",
+            "name": "add",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:4:useCart",
+            "name": "useCart",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 4,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "name": "useCartCount",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 10,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:function:3:Avatar",
+            "name": "Avatar",
+            "className": null,
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/components/Button.tsx:function:3:Button",
+            "name": "Button",
+            "className": null,
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Card.tsx:function:4:Card",
+            "name": "Card",
+            "className": null,
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "name": "CartBadge",
+            "className": null,
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>",
+            "name": "<forwardRef:arg0>",
+            "className": null,
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/Legacy.jsx:function:5:render",
+            "name": "render",
+            "className": "Legacy",
+            "file": "src/components/Legacy.jsx",
+            "line": 5,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/App.tsx:function:29:App",
+            "callee": "file:src/App.tsx:function:20:FormatDate",
+            "line": 37
+          },
+          {
+            "caller": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "callee": "file:src/cart/useCart.ts:function:4:useCart",
+            "line": 11
+          },
+          {
+            "caller": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "callee": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "line": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:function:3:Button"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:function:3:Button"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:function:3:Button"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:function:3:Button"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:function:3:Button"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:function:3:Button"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:function:3:Button"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:function:3:Button"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:src/components/Button.tsx:component:3:Button",
+            "fn": "file:src/components/Button.tsx:function:3:Button"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:function:3:Button"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:component:10:Profile",
+            "name": "Profile",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
+          },
+          {
+            "id": "file:src/App.tsx:component:29:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "name": "CartContext",
+            "kind": "context",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 5,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "name": "CartProvider",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "name": "Avatar",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Button.tsx:component:3:Button",
+            "name": "Button",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Card.tsx:component:4:Card",
+            "name": "Card",
+            "kind": "memo",
+            "framework": "react",
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "name": "CartBadge",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useCartCount,useEffect",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Input.tsx:component:3:Input",
+            "name": "Input",
+            "kind": "forwardRef",
+            "framework": "react",
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "name": "Legacy",
+            "kind": "class",
+            "framework": "react",
+            "file": "src/components/Legacy.jsx",
+            "line": 4,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Card.tsx:component:4:Card",
+            "line": 12,
+            "props": "title"
+          },
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "line": 13,
+            "props": "url"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "line": 31,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "line": 33,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/App.tsx:component:10:Profile",
+            "line": 35,
+            "props": "key,user"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Input.tsx:component:3:Input",
+            "line": 36,
+            "props": "name"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "line": 37,
+            "props": "ready,onGo"
+          },
+          {
+            "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 10,
+            "props": "value"
+          },
+          {
+            "parent": "file:src/components/Card.tsx:component:4:Card",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 6,
+            "props": "label,onClick"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "symbol": "Button",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "Button",
+          "className": null,
+          "file": "src/components/Button.tsx",
+          "line": 3,
+          "endLine": 5
+        }
+      ],
+      "callers": [],
+      "moduleCallers": [],
+      "routes": [],
+      "entrypoints": [],
+      "components": [
+        {
+          "name": "Button",
+          "kind": "function",
+          "file": "src/components/Button.tsx",
+          "line": 3,
+          "depth": 0,
+          "changedThrough": [
+            "Button"
+          ]
+        },
+        {
+          "name": "Card",
+          "kind": "memo",
+          "file": "src/components/Card.tsx",
+          "line": 4,
+          "depth": 1,
+          "renders": [
+            "Button"
+          ]
+        },
+        {
+          "name": "Legacy",
+          "kind": "class",
+          "file": "src/components/Legacy.jsx",
+          "line": 4,
+          "depth": 1,
+          "renders": [
+            "Button"
+          ]
+        },
+        {
+          "name": "Profile",
+          "kind": "function",
+          "file": "src/App.tsx",
+          "line": 10,
+          "depth": 2,
+          "renders": [
+            "Card"
+          ]
+        },
+        {
+          "name": "App",
+          "kind": "function",
+          "file": "src/App.tsx",
+          "line": 29,
+          "depth": 2,
+          "renders": [
+            "Legacy"
+          ]
+        }
+      ],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "useCart"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/App.tsx:function:10:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/App.tsx:function:20:FormatDate",
+            "name": "FormatDate",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/App.tsx:function:25:renderRow",
+            "name": "renderRow",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 25,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/App.tsx:function:29:App",
+            "name": "App",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:7:CartProvider",
+            "name": "CartProvider",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:9:add",
+            "name": "add",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:4:useCart",
+            "name": "useCart",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 4,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "name": "useCartCount",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 10,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:function:3:Avatar",
+            "name": "Avatar",
+            "className": null,
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/components/Button.tsx:function:3:Button",
+            "name": "Button",
+            "className": null,
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/components/Card.tsx:function:4:Card",
+            "name": "Card",
+            "className": null,
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "name": "CartBadge",
+            "className": null,
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>",
+            "name": "<forwardRef:arg0>",
+            "className": null,
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/Legacy.jsx:function:5:render",
+            "name": "render",
+            "className": "Legacy",
+            "file": "src/components/Legacy.jsx",
+            "line": 5,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/App.tsx:function:29:App",
+            "callee": "file:src/App.tsx:function:20:FormatDate",
+            "line": 37
+          },
+          {
+            "caller": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "callee": "file:src/cart/useCart.ts:function:4:useCart",
+            "line": 11
+          },
+          {
+            "caller": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "callee": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "line": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/cart/useCart.ts:function:4:useCart",
+            "file:src/cart/useCart.ts:function:10:useCartCount",
+            "file:src/components/CartBadge.tsx:function:4:CartBadge"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/cart/useCart.ts:function:4:useCart",
+            "file:src/cart/useCart.ts:function:10:useCartCount",
+            "file:src/components/CartBadge.tsx:function:4:CartBadge"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/cart/useCart.ts:function:4:useCart",
+            "file:src/cart/useCart.ts:function:10:useCartCount",
+            "file:src/components/CartBadge.tsx:function:4:CartBadge"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/cart/useCart.ts:function:4:useCart"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/cart/useCart.ts:function:4:useCart"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/cart/useCart.ts:function:4:useCart"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/cart/useCart.ts:function:4:useCart"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/cart/useCart.ts:function:4:useCart",
+            "file:src/cart/useCart.ts:function:10:useCartCount",
+            "file:src/components/CartBadge.tsx:function:4:CartBadge"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "fn": "file:src/components/CartBadge.tsx:function:4:CartBadge"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/cart/useCart.ts:function:4:useCart",
+            "file:src/cart/useCart.ts:function:10:useCartCount",
+            "file:src/components/CartBadge.tsx:function:4:CartBadge"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:component:10:Profile",
+            "name": "Profile",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 10,
+            "endLine": 17,
+            "isExported": false,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":14}]"
+          },
+          {
+            "id": "file:src/App.tsx:component:29:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/App.tsx",
+            "line": 29,
+            "endLine": 41,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "name": "CartContext",
+            "kind": "context",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 5,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "name": "CartProvider",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "name": "Avatar",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Button.tsx:component:3:Button",
+            "name": "Button",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Card.tsx:component:4:Card",
+            "name": "Card",
+            "kind": "memo",
+            "framework": "react",
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "endLine": 12,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "name": "CartBadge",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "hooks": "useCartCount,useEffect",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Input.tsx:component:3:Input",
+            "name": "Input",
+            "kind": "forwardRef",
+            "framework": "react",
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "name": "Legacy",
+            "kind": "class",
+            "framework": "react",
+            "file": "src/components/Legacy.jsx",
+            "line": 4,
+            "endLine": 8,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Card.tsx:component:4:Card",
+            "line": 12,
+            "props": "title"
+          },
+          {
+            "parent": "file:src/App.tsx:component:10:Profile",
+            "child": "file:src/components/Avatar.tsx:component:3:Avatar",
+            "line": 13,
+            "props": "url"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "line": 31,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "line": 33,
+            "props": ""
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/App.tsx:component:10:Profile",
+            "line": 35,
+            "props": "key,user"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Input.tsx:component:3:Input",
+            "line": 36,
+            "props": "name"
+          },
+          {
+            "parent": "file:src/App.tsx:component:29:App",
+            "child": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "line": 37,
+            "props": "ready,onGo"
+          },
+          {
+            "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
+            "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
+            "line": 10,
+            "props": "value"
+          },
+          {
+            "parent": "file:src/components/Card.tsx:component:4:Card",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 9,
+            "props": "label"
+          },
+          {
+            "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
+            "child": "file:src/components/Button.tsx:component:3:Button",
+            "line": 6,
+            "props": "label,onClick"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "symbol": "useCart",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "useCart",
+          "className": null,
+          "file": "src/cart/useCart.ts",
+          "line": 4,
+          "endLine": 8
+        }
+      ],
+      "callers": [
+        {
+          "name": "useCartCount",
+          "className": null,
+          "file": "src/cart/useCart.ts",
+          "line": 10,
+          "endLine": 13,
+          "depth": 1
+        },
+        {
+          "name": "CartBadge",
+          "className": null,
+          "file": "src/components/CartBadge.tsx",
+          "line": 4,
+          "endLine": 10,
+          "depth": 2
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [],
+      "entrypoints": [],
+      "components": [
+        {
+          "name": "CartBadge",
+          "kind": "function",
+          "file": "src/components/CartBadge.tsx",
+          "line": 4,
+          "depth": 0,
+          "changedThrough": [
+            "CartBadge"
+          ]
+        },
+        {
+          "name": "App",
+          "kind": "function",
+          "file": "src/App.tsx",
+          "line": 29,
+          "depth": 1,
+          "renders": [
+            "CartBadge"
+          ]
+        }
+      ],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
   }
 ]

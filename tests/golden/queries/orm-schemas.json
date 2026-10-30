@@ -3499,6 +3499,30 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/typeorm/photos.service.ts:function:6:constructor",
+            "file:src/typeorm/photos.service.ts:function:8:list",
+            "file:src/typeorm/photos.service.ts:function:12:add"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/typeorm/photos.service.ts:function:6:constructor",
+            "file:src/typeorm/photos.service.ts:function:8:list",
+            "file:src/typeorm/photos.service.ts:function:12:add"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -3532,6 +3556,7 @@
       "moduleCallers": [],
       "routes": [],
       "entrypoints": [],
+      "components": [],
       "dataAccess": [
         {
           "model": "Photo",
