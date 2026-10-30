@@ -1,7 +1,8 @@
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { requiredString } from "../args.js";
 import type { PageWindow } from "../paging.js";
-import { describeFunction, functionResources, loadCallEdges, loadComponentFunctions, loadFunctions, mergeRows, summarizeTables, tableAccessColumns, walkCalls } from "./graph.js";
+import { optionalString } from "../args.js";
+import { apiConsumers as loadApiConsumers, describeConsumer, describeFunction, functionResources, loadCallEdges, loadComponentFunctions, loadFunctions, mergeRows, summarizeTables, tableAccessColumns, walkCalls } from "./graph.js";
 
 type Row = Record<string, unknown>;
 
@@ -11,6 +12,8 @@ const CHAIN_DEPTH = 4;
 // matches case-insensitively; the path matches the resolved full path or the
 // path as written. A GET also lists the UI pages at that path, with the
 // component each renders and what that component's code calls and uses.
+// Each route lists its consumers: the calls that reach it (REQUESTS) and the
+// components and pages whose code makes them.
 export async function routeDetails(engine: IQueryEngine, args: Record<string, unknown>, window: PageWindow) {
   const method = requiredString(args.method, "method");
   const routePath = requiredString(args.path, "path");
@@ -99,6 +102,7 @@ export async function routeDetails(engine: IQueryEngine, args: Record<string, un
       tables: summarizeTables([...ofRoute(routeTables), ...resources.tables], usedBy),
       envVars: uses(routeEnv, resources.envVars),
       config: uses(routeConfig, resources.config),
+      ...await routeConsumers(engine, String(route.id), functions, edges),
     });
   }
   return { method, path: routePath, routes: details, ...(pages.length > 0 ? { pages } : {}) };
@@ -171,4 +175,47 @@ function downstreamCalls(
       calleeFile: describe(edge.callee).file,
     }))
     .sort((a, b) => a.depth - b.depth || String(a.callerFile).localeCompare(String(b.callerFile)) || (a.line ?? 0) - (b.line ?? 0));
+}
+
+// The consumers of one route, with the components and pages whose code
+// makes those calls.
+async function routeConsumers(engine: IQueryEngine, routeId: string, functions: Awaited<ReturnType<typeof loadFunctions>>, edges: Awaited<ReturnType<typeof loadCallEdges>>) {
+  const { consumers, components, pages } = await loadApiConsumers(engine, [routeId], CHAIN_DEPTH, functions, edges);
+  return {
+    consumers: consumers.map(describeConsumer).map(({ route: _route, ...consumer }) => consumer),
+    ...(components.length > 0 ? { consumerComponents: components, consumerPages: pages } : {}),
+  };
+}
+
+// api_consumers: the frontend calls that reach a route (REQUESTS), filtered by
+// the route's method, path (resolved full path or as declared), file or
+// framework, or by the calling file or client; with no filter, every linked
+// call. Each consumer names its route, the function or file making the call,
+// and the method, URL and match kind of the link.
+export async function apiConsumers(engine: IQueryEngine, args: Record<string, unknown>, window: PageWindow) {
+  const method = optionalString(args.method);
+  const routePath = optionalString(args.path);
+  const routeFile = optionalString(args.routeFile);
+  const framework = optionalString(args.framework);
+  const file = optionalString(args.file);
+  const client = optionalString(args.client);
+  const [functions, edges] = await Promise.all([loadFunctions(engine), loadCallEdges(engine)]);
+  const routes = await engine.query(`
+    MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)
+    WHERE true
+      ${method ? "AND lower(route.method) = lower($method)" : ""}
+      ${routePath ? "AND (route.fullPath = $path OR route.path = $path)" : ""}
+      ${routeFile ? "AND routeFile.relativePath = $routeFile" : ""}
+      ${framework ? "AND route.framework = $framework" : ""}
+    RETURN id(route) AS id
+  `, { method: method ?? "", path: routePath ?? "", routeFile: routeFile ?? "", framework: framework ?? "" }) as Row[];
+  const { consumers } = await loadApiConsumers(engine, routes.map((route) => String(route.id)), 0, functions, edges);
+  const rows = consumers
+    .filter((consumer) => (!file || consumer.file === file) && (!client || consumer.client === client))
+    .map(describeConsumer);
+  return {
+    query: { method: method ?? null, path: routePath ?? null, routeFile: routeFile ?? null, framework: framework ?? null, file: file ?? null, client: client ?? null, limit: window.limit },
+    consumers: window.take(rows),
+    ...(rows.length === 0 ? { note: "No call reaches a matching route. Use list_routes to see the declared routes; unresolved or dynamic URLs are not linked." } : {}),
+  };
 }

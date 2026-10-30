@@ -1658,6 +1658,16 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:route:11:0:POST:/api/users"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1708,7 +1718,8 @@
               ]
             }
           ],
-          "config": []
+          "config": [],
+          "consumers": []
         }
       ],
       "page": {

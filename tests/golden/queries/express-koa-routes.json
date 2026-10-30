@@ -1525,6 +1525,16 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:routes.ts:route:27:0:POST:<none>"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1587,7 +1597,8 @@
           "dataAccess": [],
           "tables": [],
           "envVars": [],
-          "config": []
+          "config": [],
+          "consumers": []
         }
       ],
       "page": {
@@ -1680,7 +1691,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
         "params": {
           "ids": [
             "file:routes.ts:function:18:authenticate"
@@ -1688,6 +1699,7 @@
         },
         "rows": [
           {
+            "routeId": "file:routes.ts:route:27:0:POST:<none>",
             "method": "POST",
             "path": "/users",
             "fullPath": "/api/users",
@@ -1699,6 +1711,7 @@
             "fn": "file:routes.ts:function:18:authenticate"
           },
           {
+            "routeId": "file:routes.ts:route:27:0:POST:<none>",
             "method": "POST",
             "path": "/users",
             "fullPath": "/api/users",
@@ -1710,6 +1723,7 @@
             "fn": "file:routes.ts:function:18:authenticate"
           },
           {
+            "routeId": "file:routes.ts:route:28:0:PUT:/users/:id",
             "method": "PUT",
             "path": "/users/:id",
             "fullPath": "/api/users/:id",
@@ -1721,6 +1735,7 @@
             "fn": "file:routes.ts:function:18:authenticate"
           },
           {
+            "routeId": "file:routes.ts:route:32:0:USE:<none>",
             "method": "USE",
             "path": "/admin",
             "fullPath": "/api/admin",
@@ -1732,6 +1747,7 @@
             "fn": "file:routes.ts:function:18:authenticate"
           },
           {
+            "routeId": "file:routes.ts:route:32:0:USE:<none>",
             "method": "USE",
             "path": "/admin",
             "fullPath": "/api/admin",
@@ -1743,6 +1759,7 @@
             "fn": "file:routes.ts:function:18:authenticate"
           },
           {
+            "routeId": "file:routes.ts:route:33:0:USE:<none>",
             "method": "USE",
             "path": null,
             "fullPath": null,
@@ -1754,6 +1771,7 @@
             "fn": "file:routes.ts:function:18:authenticate"
           },
           {
+            "routeId": "file:routes.ts:route:33:0:USE:<none>",
             "method": "USE",
             "path": null,
             "fullPath": null,
@@ -1832,6 +1850,19 @@
         "params": {
           "ids": [
             "file:routes.ts:function:18:authenticate"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:routes.ts:route:27:0:POST:<none>",
+            "file:routes.ts:route:28:0:PUT:/users/:id",
+            "file:routes.ts:route:32:0:USE:<none>",
+            "file:routes.ts:route:33:0:USE:<none>"
           ]
         },
         "rows": []
@@ -1917,6 +1948,9 @@
       "entrypoints": [],
       "components": [],
       "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
       "dataAccess": [],
       "tables": [],
       "envVars": [],

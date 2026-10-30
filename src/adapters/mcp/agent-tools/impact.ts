@@ -122,7 +122,7 @@ export async function detectChanges(engine: IQueryEngine, args: Record<string, u
     ...(unscannedFiles.length > 0
       ? { note: "Some changed files are not in the graph (new, unsupported or excluded). Rescan, or keep `concentrate watch` running, to include new files." }
       : {}),
-    impact: impact && { callers: impact.callers, moduleCallers: impact.moduleCallers, routes: impact.routes, entrypoints: impact.entrypoints, components: impact.components, pages: impact.pages, dataAccess: impact.dataAccess, envVars: impact.envVars, config: impact.config },
+    impact: impact && { callers: impact.callers, moduleCallers: impact.moduleCallers, routes: impact.routes, entrypoints: impact.entrypoints, components: impact.components, pages: impact.pages, apiConsumers: impact.apiConsumers, consumerComponents: impact.consumerComponents, consumerPages: impact.consumerPages, dataAccess: impact.dataAccess, envVars: impact.envVars, config: impact.config },
   };
 }
 

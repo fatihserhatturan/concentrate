@@ -672,8 +672,8 @@ Links outbound HTTP calls to the `Route` nodes the backend phases already build.
 
 ### MCP
 
-- [ ] `api_consumers`: the frontend calls that reach a route
-- [ ] `impact_of` and `route_details` cross from routes to their callers and back
+- [x] `api_consumers`: the frontend calls that reach a route
+- [x] `impact_of` and `route_details` cross from routes to their callers and back
 
 ### Acceptance criteria
 

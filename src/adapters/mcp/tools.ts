@@ -63,6 +63,7 @@ const titles: Record<string, string> = {
   impact_of: "Impact of a change",
   detect_changes: "Detect working-tree changes",
   route_details: "Route details",
+  api_consumers: "API consumers",
   get_symbol_source: "Get symbol source",
   get_file_outline: "Get file outline",
   component_tree: "Component tree",

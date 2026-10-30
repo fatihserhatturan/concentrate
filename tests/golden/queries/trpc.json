@@ -1331,6 +1331,53 @@
           "ids": []
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/server/routers/user.ts:route:4:6:QUERY:me"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/server/routers/user.ts:route:4:6:QUERY:me",
+            "routeMethod": "QUERY",
+            "routeFullPath": "user.me",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/routers/user.ts",
+            "routeLine": 4,
+            "call": "file:src/app/posts.tsx:function:15:Me:call:17:18:trpc.user.me.queryOptions",
+            "line": 17,
+            "expression": "trpc.user.me.queryOptions",
+            "client": "trpc",
+            "method": "QUERY",
+            "url": "user.me",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:15:Me"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/posts.tsx:function:15:Me"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/app/posts.tsx:function:15:Me"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1351,12 +1398,608 @@
           "dataAccess": [],
           "tables": [],
           "envVars": [],
-          "config": []
+          "config": [],
+          "consumers": [
+            {
+              "client": "trpc",
+              "method": "QUERY",
+              "url": "user.me",
+              "match": "exact",
+              "file": "src/app/posts.tsx",
+              "line": 17,
+              "expression": "trpc.user.me.queryOptions",
+              "function": "Me"
+            }
+          ]
         }
       ],
       "page": {
         "offset": 0,
         "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/app/posts.tsx:function:4:Posts",
+            "name": "Posts",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 4,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:15:Me",
+            "name": "Me",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 15,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:20:health",
+            "name": "health",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 20,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:26:wrong",
+            "name": "wrong",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 26,
+            "endLine": 29
+          },
+          {
+            "id": "file:src/server/trpc.ts:function:7:<t.procedure.use:arg0>",
+            "name": "<t.procedure.use:arg0>",
+            "className": null,
+            "file": "src/server/trpc.ts",
+            "line": 7,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "",
+          "routeFile": "",
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/server/root.ts:route:8:10:QUERY:health"
+          },
+          {
+            "id": "file:src/server/routers/post.ts:route:5:7:QUERY:all"
+          },
+          {
+            "id": "file:src/server/routers/post.ts:route:6:8:QUERY:byId"
+          },
+          {
+            "id": "file:src/server/routers/post.ts:route:7:10:MUTATION:create"
+          },
+          {
+            "id": "file:src/server/routers/post.ts:route:9:10:QUERY:comments.list"
+          },
+          {
+            "id": "file:src/server/routers/post.ts:route:11:9:SUBSCRIPTION:onAdd"
+          },
+          {
+            "id": "file:src/server/routers/user.ts:route:4:6:QUERY:me"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/server/root.ts:route:8:10:QUERY:health",
+            "file:src/server/routers/post.ts:route:5:7:QUERY:all",
+            "file:src/server/routers/post.ts:route:6:8:QUERY:byId",
+            "file:src/server/routers/post.ts:route:7:10:MUTATION:create",
+            "file:src/server/routers/post.ts:route:9:10:QUERY:comments.list",
+            "file:src/server/routers/post.ts:route:11:9:SUBSCRIPTION:onAdd",
+            "file:src/server/routers/user.ts:route:4:6:QUERY:me"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/server/root.ts:route:8:10:QUERY:health",
+            "routeMethod": "QUERY",
+            "routeFullPath": "health",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/root.ts",
+            "routeLine": 8,
+            "call": "file:src/app/posts.tsx:function:20:health:call:22:9:client.health.query",
+            "line": 22,
+            "expression": "client.health.query",
+            "client": "trpc",
+            "method": "QUERY",
+            "url": "health",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:20:health"
+          },
+          {
+            "route": "file:src/server/routers/post.ts:route:5:7:QUERY:all",
+            "routeMethod": "QUERY",
+            "routeFullPath": "post.all",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/routers/post.ts",
+            "routeLine": 5,
+            "call": "file:src/app/posts.tsx:function:4:Posts:call:5:16:api.post.all.useQuery",
+            "line": 5,
+            "expression": "api.post.all.useQuery",
+            "client": "trpc",
+            "method": "QUERY",
+            "url": "post.all",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:4:Posts"
+          },
+          {
+            "route": "file:src/server/routers/post.ts:route:6:8:QUERY:byId",
+            "routeMethod": "QUERY",
+            "routeFullPath": "post.byId",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/routers/post.ts",
+            "routeLine": 6,
+            "call": "file:src/app/posts.tsx:function:4:Posts:call:9:2:utils.post.byId.fetch",
+            "line": 9,
+            "expression": "utils.post.byId.fetch",
+            "client": "trpc",
+            "method": "QUERY",
+            "url": "post.byId",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:4:Posts"
+          },
+          {
+            "route": "file:src/server/routers/post.ts:route:7:10:MUTATION:create",
+            "routeMethod": "MUTATION",
+            "routeFullPath": "post.create",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/routers/post.ts",
+            "routeLine": 7,
+            "call": "file:src/app/posts.tsx:function:4:Posts:call:6:17:api.post.create.useMutation",
+            "line": 6,
+            "expression": "api.post.create.useMutation",
+            "client": "trpc",
+            "method": "MUTATION",
+            "url": "post.create",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:4:Posts"
+          },
+          {
+            "route": "file:src/server/routers/post.ts:route:7:10:MUTATION:create",
+            "routeMethod": "MUTATION",
+            "routeFullPath": "post.create",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/routers/post.ts",
+            "routeLine": 7,
+            "call": "file:src/app/posts.tsx:function:20:health:call:21:8:client.post.create.mutate",
+            "line": 21,
+            "expression": "client.post.create.mutate",
+            "client": "trpc",
+            "method": "MUTATION",
+            "url": "post.create",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:20:health"
+          },
+          {
+            "route": "file:src/server/routers/post.ts:route:9:10:QUERY:comments.list",
+            "routeMethod": "QUERY",
+            "routeFullPath": "post.comments.list",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/routers/post.ts",
+            "routeLine": 9,
+            "call": "file:src/app/posts.tsx:function:4:Posts:call:7:19:api.post.comments.list.useQuery",
+            "line": 7,
+            "expression": "api.post.comments.list.useQuery",
+            "client": "trpc",
+            "method": "QUERY",
+            "url": "post.comments.list",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:4:Posts"
+          },
+          {
+            "route": "file:src/server/routers/user.ts:route:4:6:QUERY:me",
+            "routeMethod": "QUERY",
+            "routeFullPath": "user.me",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/routers/user.ts",
+            "routeLine": 4,
+            "call": "file:src/app/posts.tsx:function:15:Me:call:17:18:trpc.user.me.queryOptions",
+            "line": 17,
+            "expression": "trpc.user.me.queryOptions",
+            "client": "trpc",
+            "method": "QUERY",
+            "url": "user.me",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:15:Me"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/posts.tsx:function:20:health",
+            "file:src/app/posts.tsx:function:4:Posts",
+            "file:src/app/posts.tsx:function:15:Me"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/app/posts.tsx:function:20:health",
+            "file:src/app/posts.tsx:function:4:Posts",
+            "file:src/app/posts.tsx:function:15:Me"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": null,
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "QUERY",
+            "fullPath": "health",
+            "framework": "trpc",
+            "file": "src/server/root.ts",
+            "line": 8
+          },
+          "client": "trpc",
+          "method": "QUERY",
+          "url": "health",
+          "match": "exact",
+          "file": "src/app/posts.tsx",
+          "line": 22,
+          "expression": "client.health.query",
+          "function": "health"
+        },
+        {
+          "route": {
+            "method": "QUERY",
+            "fullPath": "post.all",
+            "framework": "trpc",
+            "file": "src/server/routers/post.ts",
+            "line": 5
+          },
+          "client": "trpc",
+          "method": "QUERY",
+          "url": "post.all",
+          "match": "exact",
+          "file": "src/app/posts.tsx",
+          "line": 5,
+          "expression": "api.post.all.useQuery",
+          "function": "Posts"
+        },
+        {
+          "route": {
+            "method": "QUERY",
+            "fullPath": "post.byId",
+            "framework": "trpc",
+            "file": "src/server/routers/post.ts",
+            "line": 6
+          },
+          "client": "trpc",
+          "method": "QUERY",
+          "url": "post.byId",
+          "match": "exact",
+          "file": "src/app/posts.tsx",
+          "line": 9,
+          "expression": "utils.post.byId.fetch",
+          "function": "Posts"
+        },
+        {
+          "route": {
+            "method": "QUERY",
+            "fullPath": "post.comments.list",
+            "framework": "trpc",
+            "file": "src/server/routers/post.ts",
+            "line": 9
+          },
+          "client": "trpc",
+          "method": "QUERY",
+          "url": "post.comments.list",
+          "match": "exact",
+          "file": "src/app/posts.tsx",
+          "line": 7,
+          "expression": "api.post.comments.list.useQuery",
+          "function": "Posts"
+        },
+        {
+          "route": {
+            "method": "MUTATION",
+            "fullPath": "post.create",
+            "framework": "trpc",
+            "file": "src/server/routers/post.ts",
+            "line": 7
+          },
+          "client": "trpc",
+          "method": "MUTATION",
+          "url": "post.create",
+          "match": "exact",
+          "file": "src/app/posts.tsx",
+          "line": 6,
+          "expression": "api.post.create.useMutation",
+          "function": "Posts"
+        },
+        {
+          "route": {
+            "method": "MUTATION",
+            "fullPath": "post.create",
+            "framework": "trpc",
+            "file": "src/server/routers/post.ts",
+            "line": 7
+          },
+          "client": "trpc",
+          "method": "MUTATION",
+          "url": "post.create",
+          "match": "exact",
+          "file": "src/app/posts.tsx",
+          "line": 21,
+          "expression": "client.post.create.mutate",
+          "function": "health"
+        },
+        {
+          "route": {
+            "method": "QUERY",
+            "fullPath": "user.me",
+            "framework": "trpc",
+            "file": "src/server/routers/user.ts",
+            "line": 4
+          },
+          "client": "trpc",
+          "method": "QUERY",
+          "url": "user.me",
+          "match": "exact",
+          "file": "src/app/posts.tsx",
+          "line": 17,
+          "expression": "trpc.user.me.queryOptions",
+          "function": "Me"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "framework": "trpc",
+      "path": "post.create"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/app/posts.tsx:function:4:Posts",
+            "name": "Posts",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 4,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:15:Me",
+            "name": "Me",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 15,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:20:health",
+            "name": "health",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 20,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:26:wrong",
+            "name": "wrong",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 26,
+            "endLine": 29
+          },
+          {
+            "id": "file:src/server/trpc.ts:function:7:<t.procedure.use:arg0>",
+            "name": "<t.procedure.use:arg0>",
+            "className": null,
+            "file": "src/server/trpc.ts",
+            "line": 7,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND (route.fullPath = $path OR route.path = $path) AND route.framework = $framework RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "post.create",
+          "routeFile": "",
+          "framework": "trpc"
+        },
+        "rows": [
+          {
+            "id": "file:src/server/routers/post.ts:route:7:10:MUTATION:create"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/server/routers/post.ts:route:7:10:MUTATION:create"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/server/routers/post.ts:route:7:10:MUTATION:create",
+            "routeMethod": "MUTATION",
+            "routeFullPath": "post.create",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/routers/post.ts",
+            "routeLine": 7,
+            "call": "file:src/app/posts.tsx:function:4:Posts:call:6:17:api.post.create.useMutation",
+            "line": 6,
+            "expression": "api.post.create.useMutation",
+            "client": "trpc",
+            "method": "MUTATION",
+            "url": "post.create",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:4:Posts"
+          },
+          {
+            "route": "file:src/server/routers/post.ts:route:7:10:MUTATION:create",
+            "routeMethod": "MUTATION",
+            "routeFullPath": "post.create",
+            "routeFramework": "trpc",
+            "routeFile": "src/server/routers/post.ts",
+            "routeLine": 7,
+            "call": "file:src/app/posts.tsx:function:20:health:call:21:8:client.post.create.mutate",
+            "line": 21,
+            "expression": "client.post.create.mutate",
+            "client": "trpc",
+            "method": "MUTATION",
+            "url": "post.create",
+            "match": "exact",
+            "fn": "file:src/app/posts.tsx:function:20:health"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/posts.tsx:function:4:Posts",
+            "file:src/app/posts.tsx:function:20:health"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/app/posts.tsx:function:4:Posts",
+            "file:src/app/posts.tsx:function:20:health"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": "post.create",
+        "routeFile": null,
+        "framework": "trpc",
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "MUTATION",
+            "fullPath": "post.create",
+            "framework": "trpc",
+            "file": "src/server/routers/post.ts",
+            "line": 7
+          },
+          "client": "trpc",
+          "method": "MUTATION",
+          "url": "post.create",
+          "match": "exact",
+          "file": "src/app/posts.tsx",
+          "line": 6,
+          "expression": "api.post.create.useMutation",
+          "function": "Posts"
+        },
+        {
+          "route": {
+            "method": "MUTATION",
+            "fullPath": "post.create",
+            "framework": "trpc",
+            "file": "src/server/routers/post.ts",
+            "line": 7
+          },
+          "client": "trpc",
+          "method": "MUTATION",
+          "url": "post.create",
+          "match": "exact",
+          "file": "src/app/posts.tsx",
+          "line": 21,
+          "expression": "client.post.create.mutate",
+          "function": "health"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
       }
     }
   }

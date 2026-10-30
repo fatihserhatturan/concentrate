@@ -847,6 +847,45 @@
           "method": "query",
           "path": "user.me"
         }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {}
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "framework": "trpc",
+          "path": "post.create"
+        }
+      }
+    ],
+    "data-fetching-hooks": [
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "get",
+          "path": "/api/todos/:id"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "client": "swr"
+        }
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "get",
+          "path": "/api/todos"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "file": "server/app.js"
+        }
       }
     ]
   }

@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":4,"parsedFiles":4,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"data-fetching-hooks","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"data-fetching-hooks","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
@@ -57,6 +57,18 @@
 {"kind":"node","id":"file:web/swr.tsx:function:6:Profile:call:8:26:useSWRImmutable","label":"Call","properties":{"args":"[\"fetcher\"]","callee":"useSWRImmutable","columnNumber":26,"expression":"useSWRImmutable","httpClient":"swr","httpMethod":"GET","httpUrl":"/api/todos","line":8,"name":"useSWRImmutable","receiver":null}}
 {"kind":"node","id":"file:web/swr.tsx:import:1:swr","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"useSWR\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"swr","specifier":"import useSWR from 'swr';"}}
 {"kind":"node","id":"file:web/swr.tsx:import:2:swr/immutable","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"useSWRImmutable\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"swr/immutable","specifier":"import useSWRImmutable from 'swr/immutable';"}}
+{"kind":"node","id":"file:web/todo-page.tsx","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/web/todo-page.tsx","relativePath":"web/todo-page.tsx","sourceType":"production"}}
+{"kind":"node","id":"file:web/todo-page.tsx:component:13:App","label":"Component","properties":{"defaultExportWrapper":null,"endLine":19,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":13,"name":"App","pendingRenders":"[{\"name\":\"Routes\",\"props\":[],\"line\":15},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":16}]"}}
+{"kind":"node","id":"file:web/todo-page.tsx:component:4:TodoList","label":"Component","properties":{"defaultExportWrapper":null,"endLine":7,"framework":"react","hooks":"useSWR","isExported":false,"kind":"function","lazyExport":null,"lazySource":null,"line":4,"name":"TodoList","pendingRenders":null}}
+{"kind":"node","id":"file:web/todo-page.tsx:component:9:TodoPage","label":"Component","properties":{"defaultExportWrapper":null,"endLine":11,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":9,"name":"TodoPage","pendingRenders":null}}
+{"kind":"node","id":"file:web/todo-page.tsx:function:13:App","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":13,"methodKind":null,"name":"App","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:web/todo-page.tsx:function:4:TodoList","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":4,"methodKind":null,"name":"TodoList","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:web/todo-page.tsx:function:4:TodoList:call:5:19:useSWR","label":"Call","properties":{"args":"[\"/api/todos\"]","callee":"useSWR","columnNumber":19,"expression":"useSWR","httpClient":"swr","httpMethod":"GET","httpUrl":"/api/todos","line":5,"name":"useSWR","receiver":null}}
+{"kind":"node","id":"file:web/todo-page.tsx:function:4:TodoList:call:6:14:String","label":"Call","properties":{"args":"[\"data\"]","callee":"String","columnNumber":14,"expression":"String","line":6,"name":"String","receiver":null}}
+{"kind":"node","id":"file:web/todo-page.tsx:function:9:TodoPage","label":"Function","properties":{"className":null,"endLine":11,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":9,"methodKind":null,"name":"TodoPage","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:web/todo-page.tsx:import:1:swr","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"useSWR\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"swr","specifier":"import useSWR from 'swr';"}}
+{"kind":"node","id":"file:web/todo-page.tsx:import:2:react-router-dom","label":"Import","properties":{"bindings":"[{\"imported\":\"Route\",\"local\":\"Route\",\"kind\":\"named\"},{\"imported\":\"Routes\",\"local\":\"Routes\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"react-router-dom","specifier":"import { Route, Routes } from 'react-router-dom';"}}
+{"kind":"node","id":"file:web/todo-page.tsx:page:16:6","label":"Page","properties":{"component":"TodoPage","framework":"react-router","fullPath":"/todos","kind":"page","line":16,"path":"/todos","router":"jsx","slot":null}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"data-fetching-hooks","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"data-fetching-hooks","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:server","properties":{}}
@@ -64,6 +76,7 @@
 {"kind":"rel","from":"dir:server","type":"CONTAINS_FILE","to":"file:server/app.js","properties":{}}
 {"kind":"rel","from":"dir:web","type":"CONTAINS_FILE","to":"file:web/query.tsx","properties":{}}
 {"kind":"rel","from":"dir:web","type":"CONTAINS_FILE","to":"file:web/swr.tsx","properties":{}}
+{"kind":"rel","from":"dir:web","type":"CONTAINS_FILE","to":"file:web/todo-page.tsx","properties":{}}
 {"kind":"rel","from":"file:server/app.js","type":"DECLARES_ROUTE","to":"file:server/app.js:route:5:0:GET:/api/user","properties":{}}
 {"kind":"rel","from":"file:server/app.js","type":"DECLARES_ROUTE","to":"file:server/app.js:route:6:0:GET:/api/todos","properties":{}}
 {"kind":"rel","from":"file:server/app.js","type":"DECLARES_ROUTE","to":"file:server/app.js:route:7:0:GET:/api/todos/:id","properties":{}}
@@ -132,9 +145,28 @@
 {"kind":"rel","from":"file:web/swr.tsx:function:6:Profile:call:10:25:useSWR","type":"REQUESTS","to":"file:server/app.js:route:7:0:GET:/api/todos/:id","properties":{"match":"parameter","method":"GET","url":"/api/todos/${token}"}}
 {"kind":"rel","from":"file:web/swr.tsx:function:6:Profile:call:7:25:useSWR","type":"REQUESTS","to":"file:server/app.js:route:5:0:GET:/api/user","properties":{"match":"exact","method":"GET","url":"/api/user"}}
 {"kind":"rel","from":"file:web/swr.tsx:function:6:Profile:call:8:26:useSWRImmutable","type":"REQUESTS","to":"file:server/app.js:route:6:0:GET:/api/todos","properties":{"match":"exact","method":"GET","url":"/api/todos"}}
+{"kind":"rel","from":"file:web/todo-page.tsx","type":"DECLARES_COMPONENT","to":"file:web/todo-page.tsx:component:13:App","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx","type":"DECLARES_COMPONENT","to":"file:web/todo-page.tsx:component:4:TodoList","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx","type":"DECLARES_COMPONENT","to":"file:web/todo-page.tsx:component:9:TodoPage","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx","type":"DECLARES_PAGE","to":"file:web/todo-page.tsx:page:16:6","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx","type":"DEFINES_FUNCTION","to":"file:web/todo-page.tsx:function:13:App","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx","type":"DEFINES_FUNCTION","to":"file:web/todo-page.tsx:function:4:TodoList","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx","type":"DEFINES_FUNCTION","to":"file:web/todo-page.tsx:function:9:TodoPage","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx","type":"IMPORTS","to":"file:web/todo-page.tsx:import:1:swr","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx","type":"IMPORTS","to":"file:web/todo-page.tsx:import:2:react-router-dom","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx:component:13:App","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:web/todo-page.tsx:function:13:App","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx:component:13:App","type":"RENDERS","to":"file:web/todo-page.tsx:component:9:TodoPage","properties":{"line":16,"props":""}}
+{"kind":"rel","from":"file:web/todo-page.tsx:component:4:TodoList","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:web/todo-page.tsx:function:4:TodoList","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx:component:9:TodoPage","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:web/todo-page.tsx:function:9:TodoPage","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx:component:9:TodoPage","type":"RENDERS","to":"file:web/todo-page.tsx:component:4:TodoList","properties":{"line":10,"props":""}}
+{"kind":"rel","from":"file:web/todo-page.tsx:function:4:TodoList","type":"CALLS","to":"file:web/todo-page.tsx:function:4:TodoList:call:5:19:useSWR","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx:function:4:TodoList","type":"CALLS","to":"file:web/todo-page.tsx:function:4:TodoList:call:6:14:String","properties":{}}
+{"kind":"rel","from":"file:web/todo-page.tsx:function:4:TodoList:call:5:19:useSWR","type":"REQUESTS","to":"file:server/app.js:route:6:0:GET:/api/todos","properties":{"match":"exact","method":"GET","url":"/api/todos"}}
+{"kind":"rel","from":"file:web/todo-page.tsx:page:16:6","type":"PAGE_RENDERS","to":"file:web/todo-page.tsx:component:9:TodoPage","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:server/app.js","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:web/query.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:web/swr.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:web/todo-page.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

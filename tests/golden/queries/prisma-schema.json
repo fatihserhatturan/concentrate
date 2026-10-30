@@ -2209,6 +2209,16 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes.ts:route:14:0:PATCH:/users/:id"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -2337,7 +2347,8 @@
             }
           ],
           "envVars": [],
-          "config": []
+          "config": [],
+          "consumers": []
         }
       ],
       "page": {
@@ -2442,7 +2453,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
         "params": {
           "ids": [
             "file:src/users.ts:function:9:renameUser",
@@ -2451,6 +2462,7 @@
         },
         "rows": [
           {
+            "routeId": "file:src/routes.ts:route:14:0:PATCH:/users/:id",
             "method": "PATCH",
             "path": "/users/:id",
             "fullPath": "/users/:id",
@@ -2462,6 +2474,7 @@
             "fn": "file:src/routes.ts:function:14:<app.patch:/users/:id:arg1>"
           },
           {
+            "routeId": "file:src/routes.ts:route:14:0:PATCH:/users/:id",
             "method": "PATCH",
             "path": "/users/:id",
             "fullPath": "/users/:id",
@@ -2565,6 +2578,16 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes.ts:route:14:0:PATCH:/users/:id"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -2611,6 +2634,9 @@
       "entrypoints": [],
       "components": [],
       "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
       "dataAccess": [
         {
           "model": "User",
