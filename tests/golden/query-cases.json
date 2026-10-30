@@ -756,6 +756,19 @@
         "args": {
           "symbol": "useCart"
         }
+      },
+      {
+        "tool": "component_tree",
+        "args": {
+          "name": "Pages",
+          "depth": 3
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "Reports"
+        }
       }
     ]
   }

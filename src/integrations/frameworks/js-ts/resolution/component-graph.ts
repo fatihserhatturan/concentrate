@@ -10,7 +10,8 @@ import { isHookCall, type PendingRender } from "../react.js";
 //   rendered Component, declared in the same file or imported by name or as the
 //   default export, through barrels. `<CartContext.Provider>` renders the
 //   context. `Component.pendingRenders` keeps the elements that stay
-//   unresolved (library components such as `<Link>`).
+//   unresolved (library components such as `<Link>`). A `lazy` component
+//   RENDERS the component its dynamic import loads.
 // - USES_HOOK: a component's function or a custom hook (`use*`) to the hook
 //   function its call resolves to; built-in hooks have no Function and are
 //   only listed in `Component.hooks`.
@@ -53,6 +54,19 @@ export function addComponentRelationships(graph: IGraphContributor): void {
     resolveDeclaration(name, fileId, contextsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId);
 
   const added: GraphRelationship[] = [];
+  for (const [componentId, fileId] of fileByComponentId) {
+    const component = nodesById.get(componentId)!;
+    const { lazySource, lazyExport } = component.properties;
+    if (typeof lazySource !== "string" || typeof lazyExport !== "string") continue;
+    const importNode = (importNodesByFile.get(fileId) ?? []).find((node) => node.properties.isDynamic === true && node.properties.source === lazySource);
+    const targetFileId = importNode ? relationshipIndex.resolvedFileByImportId.get(importNode.id) : undefined;
+    const target = targetFileId
+      ? resolveDeclaration(lazyExport, targetFileId, componentsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId)
+      : null;
+    if (target) {
+      added.push({ from: componentId, to: target, type: "RENDERS", properties: { props: "", line: Number(component.properties.line) } });
+    }
+  }
   for (const [componentId, fileId] of fileByComponentId) {
     const component = nodesById.get(componentId)!;
     const renders = parsePendingRenders(component.properties.pendingRenders);
