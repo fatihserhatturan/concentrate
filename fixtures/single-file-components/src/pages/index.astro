@@ -1,0 +1,19 @@
+---
+import CartButton from '../components/CartButton.vue';
+import Total from '../components/Total.svelte';
+import { formatTotal } from '../lib/cart';
+
+const items: Array<{ id: string; cents: number }> = [{ id: 'a', cents: 1999 }];
+const total = formatTotal(items.reduce((sum, item) => sum + item.cents, 0));
+---
+<html>
+  <body>
+    {items.map((item) => <CartButton id={item.id} label="Lamp" />)}
+    <Total cents={1999} />
+    <p>{total}</p>
+    <script>
+      import { addToCart } from '../lib/cart';
+      document.querySelector('p')?.addEventListener('click', () => addToCart('a'));
+    </script>
+  </body>
+</html>

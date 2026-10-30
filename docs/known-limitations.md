@@ -235,8 +235,19 @@ Blocks or informs: future query server design.
   attributes is not parsed: only the event and the handler name are read
   (see Entrypoints).
 
-Blocks or informs: ROADMAP Phase 10 (single-file components) and Phase 11
-(React).
+- Single-file components (`.vue`, `.svelte`, `.astro`) are split into their
+  scripts and markup. All `<script>` blocks of a file (Vue's `<script>` and
+  `<script setup>`, Svelte's `context="module"` one) and Astro's `---`
+  frontmatter are parsed together as the file's JS/TS, TypeScript when one
+  block has `lang="ts"` (always for Astro). The template is only parsed with
+  the HTML grammar: directives (`@click`, `v-if`, `on:click`), blocks
+  (`{#if}`) and `{expressions}` are not read as code yet, and a component
+  rendered in a template is no `RENDERS` relationship yet (Phases 11–15).
+  Svelte `$:` reactive statements are labelled statements, so their calls
+  have no caller.
+
+Blocks or informs: ROADMAP Phases 11–15 (components, React, Vue, Svelte,
+Astro).
 
 ## Review Process
 

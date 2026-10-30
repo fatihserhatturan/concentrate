@@ -4,7 +4,8 @@ const absoluteModuleLanguages = new Set(["python"]);
 
 export function isJsTsFile(fileId: string): boolean {
   const extension = fileExtension(fileId);
-  return [".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs"].includes(extension);
+  // Markup files import with JS/TS rules too (`@/components/Card.vue`).
+  return [".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs", ".html", ".htm", ".vue", ".svelte", ".astro"].includes(extension);
 }
 
 export function isGoFile(fileId: string): boolean {

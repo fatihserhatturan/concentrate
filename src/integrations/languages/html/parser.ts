@@ -1,14 +1,19 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { parseSyntaxTree, type SyntaxNode } from "../syntax/tree-sitter.js";
+import { parseSyntaxTree, type GrammarName, type SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { ILanguageParser } from "../../../core/contracts/language-parser.js";
 import { parseJsTsSource, type JsTsFrameworkPlugin } from "../js-ts/parser.js";
 
-// HTML pages: `<script src>` becomes an Import of the page, and inline scripts
-// are parsed as JavaScript of the page itself. The scripts are parsed from the
-// page text with everything else blanked out, so their positions point into
-// the .html file.
+// Markup files: HTML pages and single-file components (.vue, .svelte,
+// .astro). `<script src>` becomes an Import of the file, and inline scripts
+// (plus Astro's `---` frontmatter) are parsed as JS/TS of the file itself. The
+// scripts are parsed from the file text with everything else blanked out, so
+// their positions point into the original file; the markup is parsed with the
+// HTML grammar, where template syntax (directives, `{#if}` blocks, `{expr}`)
+// reads as attributes and text.
+
+export type MarkupLanguage = "html" | "vue" | "svelte" | "astro";
 
 // `type` values a browser runs as JavaScript; anything else (JSON, templates,
 // import maps) is data.
@@ -16,10 +21,14 @@ const scriptTypes = new Set(["", "module", "text/javascript", "application/javas
 
 type ScriptElement = {
   src: { value: string; line: number; text: string } | null;
-  body: { start: number; end: number } | null;
-  // Start of `</script>`, where an inline script ends.
-  end: number | null;
+  body: CodeRange | null;
+  // The `lang` attribute of a component script (`ts`, `tsx`, …).
+  lang: string;
 };
+
+// Code to keep; `end` is where a `;` goes (the start of `</script>` or of the
+// closing `---`), so two blocks never run into one statement.
+type CodeRange = { start: number; end: number; separator: number | null };
 
 // Semantics of the markup itself (event attributes, for example). Page
 // plugins run after the scripts are parsed, on the HTML tree, and add to
@@ -29,26 +38,38 @@ export interface HtmlPagePlugin {
   onPage(page: { fileNodeId: string; documentNode: SyntaxNode; parsed: ParsedSourceFile }): void;
 }
 
-export function createHtmlParser(
+export function createMarkupParser(
+  language: MarkupLanguage,
   plugins: readonly JsTsFrameworkPlugin[] = [],
   pagePlugins: readonly HtmlPagePlugin[] = [],
 ): ILanguageParser {
   return {
-    language: "html",
-    parse: (rootPath, filePath) => parseHtmlFile(rootPath, filePath, plugins, pagePlugins),
+    language,
+    parse: (rootPath, filePath) => parseMarkupFile(rootPath, filePath, language, plugins, pagePlugins),
   };
 }
 
-export async function parseHtmlFile(
+export function createHtmlParser(
+  plugins: readonly JsTsFrameworkPlugin[] = [],
+  pagePlugins: readonly HtmlPagePlugin[] = [],
+): ILanguageParser {
+  return createMarkupParser("html", plugins, pagePlugins);
+}
+
+export async function parseMarkupFile(
   rootPath: string,
   filePath: string,
+  language: MarkupLanguage,
   plugins: readonly JsTsFrameworkPlugin[] = [],
   pagePlugins: readonly HtmlPagePlugin[] = [],
 ): Promise<ParsedSourceFile> {
   const source = await readFile(filePath, "utf8");
-  const tree = await parseSyntaxTree("html", source);
+  const frontmatter = language === "astro" ? astroFrontmatter(source) : null;
+  // The markup without the frontmatter, whose `<` would read as tags.
+  const markup = frontmatter ? keepOnly(source, [], { start: 0, end: frontmatter.fenceEnd }) : source;
+  const tree = await parseSyntaxTree("html", markup);
   try {
-    const parsed = await parseHtmlPage(rootPath, filePath, source, tree.rootNode, plugins);
+    const parsed = await parseMarkup(rootPath, filePath, source, language, frontmatter?.code ?? null, tree.rootNode, plugins);
     for (const plugin of pagePlugins) plugin.onPage({ fileNodeId: parsed.fileNodeId, documentNode: tree.rootNode, parsed });
     return parsed;
   } finally {
@@ -56,10 +77,12 @@ export async function parseHtmlFile(
   }
 }
 
-async function parseHtmlPage(
+async function parseMarkup(
   rootPath: string,
   filePath: string,
   source: string,
+  language: MarkupLanguage,
+  frontmatter: CodeRange | null,
   documentNode: SyntaxNode,
   plugins: readonly JsTsFrameworkPlugin[],
 ): Promise<ParsedSourceFile> {
@@ -68,11 +91,24 @@ async function parseHtmlPage(
   const scripts = scriptElements(documentNode);
 
   const inline = scripts.filter((script) => !script.src && script.body);
-  const parsed: ParsedSourceFile = inline.length > 0
-    ? await parseJsTsSource(rootPath, filePath, scriptText(source, inline), "javascript", plugins, "html")
+  const code = [...(frontmatter ? [frontmatter] : []), ...inline.map((script) => script.body!)];
+  // Astro scripts are TypeScript; HTML scripts are JavaScript; component
+  // scripts say which in `lang`.
+  const langs = language === "astro" ? ["ts"] : inline.map((script) => script.lang);
+  const grammar = scriptGrammar(langs);
+  const parsed: ParsedSourceFile = code.length > 0
+    ? await parseJsTsSource(
+      rootPath,
+      filePath,
+      keepOnly(source, code),
+      grammar === "javascript" ? "javascript" : "typescript",
+      plugins,
+      language,
+      grammar,
+    )
     : {
       fileNodeId,
-      nodes: [{ id: fileNodeId, label: "File", properties: { path: filePath, relativePath, language: "html" } }],
+      nodes: [{ id: fileNodeId, label: "File", properties: { path: filePath, relativePath, language } }],
       relationships: [],
     };
 
@@ -126,8 +162,29 @@ function readScriptElement(node: SyntaxNode): ScriptElement | null {
 
   const raw = node.namedChildren.find((child) => child?.type === "raw_text");
   const endTag = node.namedChildren.find((child) => child?.type === "end_tag");
-  const body = raw && raw.text.trim() !== "" ? { start: raw.startIndex, end: raw.endIndex } : null;
-  return { src, body, end: endTag ? endTag.startIndex : null };
+  const body = raw && raw.text.trim() !== ""
+    ? { start: raw.startIndex, end: raw.endIndex, separator: endTag ? endTag.startIndex : null }
+    : null;
+  return { src, body, lang: attributeText(attributes.get("lang")).trim().toLowerCase() };
+}
+
+// The grammar for a file's scripts: TSX when one uses `lang="tsx"`, else
+// TypeScript when one is TypeScript, else JavaScript (whose grammar has JSX).
+function scriptGrammar(langs: readonly string[]): GrammarName {
+  if (langs.includes("tsx")) return "tsx";
+  return langs.some((lang) => lang === "ts" || lang === "typescript") ? "typescript" : "javascript";
+}
+
+// Astro's `---` fenced frontmatter at the start of the file: the code between
+// the fences, and the end of the closing fence.
+function astroFrontmatter(source: string): { code: CodeRange; fenceEnd: number } | null {
+  const opening = /^\s*---[ \t]*\r?\n/u.exec(source);
+  if (!opening) return null;
+  const start = opening[0].length;
+  const closing = /^---[ \t]*$/mu.exec(source.slice(start));
+  if (!closing) return null;
+  const end = start + closing.index;
+  return { code: { start, end, separator: end }, fenceEnd: end + closing[0].length };
 }
 
 // The value of an attribute, without the quotes of a quoted one.
@@ -139,15 +196,18 @@ function attributeText(value: SyntaxNode | null | undefined): string {
   return value.text;
 }
 
-// The page text with everything but the inline scripts blanked out (line
-// breaks kept). Each script ends with a `;` where its `</script>` starts, so
-// two scripts never run into one statement.
-function scriptText(source: string, scripts: ScriptElement[]): string {
+// `source` with everything but the `code` ranges blanked out (line breaks
+// kept), or, with `blank`, with only that range blanked out.
+function keepOnly(source: string, code: readonly CodeRange[], blank?: { start: number; end: number }): string {
   const keep = new Uint8Array(source.length);
   const separators = new Set<number>();
-  for (const script of scripts) {
-    keep.fill(1, script.body!.start, script.body!.end);
-    if (script.end !== null) separators.add(script.end);
+  if (blank) {
+    keep.fill(1);
+    keep.fill(0, blank.start, blank.end);
+  }
+  for (const range of code) {
+    keep.fill(1, range.start, range.end);
+    if (range.separator !== null) separators.add(range.separator);
   }
   let text = "";
   for (let index = 0; index < source.length; index += 1) {
