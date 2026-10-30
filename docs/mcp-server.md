@@ -141,7 +141,10 @@ These answer a whole question in one call instead of a chain of lookups.
   `changedThrough` names the functions) and the components that render them,
   following `RENDERS` up to `maxDepth` levels (`renders` names the child),
   `pages` that render any of those components (`renders` names it, `depth` is
-  its depth), and the `dataAccess`, `tables`, `envVars` and `config` of the seeds themselves.
+  its depth), `apiConsumers`: the frontend calls that reach the affected routes
+  (as in `api_consumers`), with `consumerComponents` and `consumerPages`, the
+  components and pages whose code makes those calls (callers followed up to
+  `maxDepth` levels), and the `dataAccess`, `tables`, `envVars` and `config` of the seeds themselves.
   For a route, use `route_details`.
 - `detect_changes({ base = "HEAD", maxDepth = 5, limit = 50 })`: runs
   `git diff --unified=0 <base>` (no shell; `base` must look like a revision)
@@ -161,7 +164,19 @@ These answer a whole question in one call instead of a chain of lookups.
   full or declared path matches: each with its `router`, `kind` and file, the
   `component` it renders, and the `callChain`, `dataAccess`, `tables`,
   `envVars` and `config` of the functions that implement that component.
-  `routes` may be empty when only pages match.
+  `routes` may be empty when only pages match. Each route also lists its
+  `consumers` (the frontend calls that reach it, as in `api_consumers`) and,
+  when their code implements components, `consumerComponents` and
+  `consumerPages`.
+- `api_consumers({ method?, path?, routeFile?, framework?, file?, client?, limit = 50 })`:
+  the calls linked to a route by `REQUESTS` (fetch, axios, ky, ofetch, SWR,
+  TanStack Query, tRPC), filtered by the route's method, path (resolved full
+  path or as declared), declaring file or framework, or by the calling `file`
+  or `client`; with no filter, every linked call. Each consumer has its
+  `route` (method, full path, framework, file, line), the `client`, the
+  `method` and `url` as resolved, the `match` kind (`exact`, `parameter`,
+  `catch-all`), and the calling `file`, `line`, `expression` and `function`
+  (null for a top-level call).
 - `get_symbol_source({ name, file?, kind?, limit = 5 })`: source text of a
   declaration, sliced from the file on disk with the span from the last scan
   (at most 400 lines each, `truncated: true` beyond). `Class.method` selects
@@ -272,7 +287,7 @@ verdicts.
 Every tool that returns a list pages one primary list: `definitions`,
 `callers`, `exports`, `routes`, `pages`, `entrypoints`, `envConfig`, `dataAccess`, and
 for the agent tools `callers` (`impact_of`), `changedFiles`
-(`detect_changes`), `routes` (`route_details`), `matches`
+(`detect_changes`), `routes` (`route_details`), `consumers` (`api_consumers`), `matches`
 (`get_symbol_source`), `outline` (`get_file_outline`, `limit` defaults to
 200), `components` (`component_tree`) and `usages` (`find_component_usages`),
 and for the analysis tools `symbols`, `references`, `cycles`,

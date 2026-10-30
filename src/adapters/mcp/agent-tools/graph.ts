@@ -152,7 +152,7 @@ export async function computeImpact(
     engine.query(`
       MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function)
       WHERE id(fn) IN $ids
-      RETURN route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework,
+      RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework,
         file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn
     `, { ids: affectedIds }),
     engine.query(`
@@ -164,6 +164,13 @@ export async function computeImpact(
     functionResources(engine, seeds),
     componentImpact(engine, affectedIds, maxDepth, name),
   ]) as [Row[], Row[], Row[], FunctionResources, Awaited<ReturnType<typeof componentImpact>>];
+
+  // Across the API boundary: the calls that reach the affected routes, and
+  // the components and pages whose code makes them.
+  const routeIds = [...new Set(routes.map((route) => String(route.routeId)))];
+  const consumers = routeIds.length > 0
+    ? await apiConsumers(engine, routeIds, maxDepth, functions, edges)
+    : { consumers: [], components: [], pages: [] };
 
   const via = (row: Row) => ({
     function: name(String(row.fn)).name,
@@ -184,13 +191,16 @@ export async function computeImpact(
       .map(({ fn, ...row }) => ({ ...row, calls: name(String(fn)).name, callsFile: name(String(fn)).file }))
       .sort(byFileAndLine)
       .slice(0, limit),
-    routes: mergeRows(routes, ["fn", "relType", "role"], "reachedThrough", via)
+    routes: mergeRows(routes.map(({ routeId: _routeId, ...route }) => route), ["fn", "relType", "role"], "reachedThrough", via)
       .map((route) => ({ ...route, reachedThrough: preferLifecycleRoles(route.reachedThrough as Row[]) }))
       .sort(byFileAndLine)
       .slice(0, limit),
     entrypoints: mergeRows(entrypoints, ["fn"], "reachedThrough", via).sort(byFileAndLine).slice(0, limit),
     components: components.components.slice(0, limit),
     pages: components.pages.slice(0, limit),
+    apiConsumers: consumers.consumers.map(describeConsumer).slice(0, limit),
+    consumerComponents: consumers.components.slice(0, limit),
+    consumerPages: consumers.pages.slice(0, limit),
     dataAccess: mergeRows(resources.dataAccess, ["fn"], "usedBy", via).slice(0, limit),
     tables: summarizeTables(resources.tables, via).slice(0, limit),
     envVars: mergeRows(resources.envVars, ["fn"], "usedBy", via).slice(0, limit),
@@ -570,4 +580,59 @@ export async function componentImpact(
     };
   }).sort((a, b) => a.depth - b.depth || byFileAndLine(a, b));
   return { components: impacted, pages };
+}
+
+// The calls that reach the `routeIds` routes through REQUESTS (every linked
+// call without ids), each with the function that makes it, or the file for a
+// top-level call, and the components and pages whose code reaches those
+// functions (callers followed up to `maxDepth` levels).
+export async function apiConsumers(
+  engine: IQueryEngine,
+  routeIds: readonly string[] | null,
+  maxDepth: number,
+  functions: Map<string, FunctionInfo>,
+  edges: readonly CallEdge[],
+) {
+  const rows = await engine.query(`
+    MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call)
+    WHERE ${routeIds ? "id(route) IN $ids" : "true"}
+    OPTIONAL MATCH (fn:Function)-[:CALLS]->(call)
+    RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath,
+      route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine,
+      id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client,
+      request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn
+  `, { ids: routeIds ?? [] }) as Row[];
+  const describe = (id: string) => describeFunction(functions.get(id), id);
+  const consumers = rows.map((row) => {
+    const caller = row.fn == null ? null : describe(String(row.fn));
+    return {
+      routeId: String(row.route),
+      route: { method: str(row.routeMethod), fullPath: str(row.routeFullPath), framework: str(row.routeFramework), file: str(row.routeFile), line: num(row.routeLine) },
+      client: str(row.client),
+      method: str(row.method),
+      url: str(row.url),
+      match: str(row.match),
+      file: caller?.file ?? callFile(String(row.call)),
+      line: num(row.line),
+      expression: str(row.expression),
+      function: caller?.name ?? null,
+      fn: row.fn == null ? null : String(row.fn),
+    };
+  }).sort((a, b) => String(a.route.fullPath).localeCompare(String(b.route.fullPath)) || String(a.route.method).localeCompare(String(b.route.method)) || byFileAndLine(a, b));
+
+  const callerIds = [...new Set(consumers.flatMap((consumer) => (consumer.fn ? [consumer.fn] : [])))];
+  const depth = walkCalls(edges, callerIds, "up", maxDepth);
+  const ui = callerIds.length > 0 ? await componentImpact(engine, [...depth.keys()], maxDepth, describe) : { components: [], pages: [] };
+  return { consumers, components: ui.components, pages: ui.pages };
+}
+
+// The file of a call from its id (`file:<path>:…:call:…`), for calls made
+// outside a function.
+function callFile(id: string): string | null {
+  return /^file:(.+?):(?:call|initializercall|variable|function|class):/u.exec(id)?.[1] ?? null;
+}
+
+// A consumer as listed in results, without internal ids.
+export function describeConsumer({ routeId: _routeId, fn: _fn, ...consumer }: Awaited<ReturnType<typeof apiConsumers>>["consumers"][number]) {
+  return consumer;
 }

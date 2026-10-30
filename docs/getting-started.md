@@ -40,7 +40,7 @@ The Cypher subset is described in [cypher.md](cypher.md).
 ## Connect an AI agent
 
 `concentrate mcp` serves the scanned graph to any MCP client over stdio. It
-offers 23 tools, a graph summary resource, and paged, structured results.
+offers 24 tools, a graph summary resource, and paged, structured results.
 [mcp-server.md](mcp-server.md#run) has the client configuration and
 [mcp-server.md](mcp-server.md#tools) the tool reference. Use an absolute
 `--database` path in client configurations.

@@ -1,0 +1,3009 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 53
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 3
+          },
+          {
+            "table": "File",
+            "count": 4
+          },
+          {
+            "table": "Import",
+            "count": 7
+          },
+          {
+            "table": "Function",
+            "count": 13
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 3
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 29
+          },
+          {
+            "table": "Route",
+            "count": 4
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 3
+          },
+          {
+            "table": "Page",
+            "count": 1
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 53,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 3
+        },
+        {
+          "table": "File",
+          "count": 4
+        },
+        {
+          "table": "Import",
+          "count": 7
+        },
+        {
+          "table": "Function",
+          "count": 13
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 3
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 29
+        },
+        {
+          "table": "Route",
+          "count": 4
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 3
+        },
+        {
+          "table": "Page",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "<app.get:/api/user:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.get:/api/todos:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.get:/api/todos/:id:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 7,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Named",
+            "kind": "Function",
+            "file": "web/query.tsx",
+            "line": 21,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "fetcher",
+            "kind": "Function",
+            "file": "web/swr.tsx",
+            "line": 4,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Profile",
+            "kind": "Function",
+            "file": "web/swr.tsx",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "TodoPage",
+            "kind": "Function",
+            "file": "web/todo-page.tsx",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "express",
+            "kind": "Variable",
+            "file": "server/app.js",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "userQuery",
+            "kind": "Variable",
+            "file": "web/query.tsx",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "<app.get:/api/user:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<app.get:/api/todos:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<app.get:/api/todos/:id:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 7,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Named",
+          "kind": "Function",
+          "file": "web/query.tsx",
+          "line": 21,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "fetcher",
+          "kind": "Function",
+          "file": "web/swr.tsx",
+          "line": 4,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Profile",
+          "kind": "Function",
+          "file": "web/swr.tsx",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "TodoPage",
+          "kind": "Function",
+          "file": "web/todo-page.tsx",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "express",
+          "kind": "Variable",
+          "file": "server/app.js",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "userQuery",
+          "kind": "Variable",
+          "file": "web/query.tsx",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 9
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "web/query.tsx",
+            "name": "Todos",
+            "kind": "Function",
+            "line": 5,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "web/query.tsx",
+            "name": "Todo",
+            "kind": "Function",
+            "line": 9,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "web/query.tsx",
+            "name": "OwnFn",
+            "kind": "Function",
+            "line": 16,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "web/query.tsx",
+            "name": "Named",
+            "kind": "Function",
+            "line": 21,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "web/swr.tsx",
+            "name": "Profile",
+            "kind": "Function",
+            "line": 6,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "web/todo-page.tsx",
+            "name": "TodoPage",
+            "kind": "Function",
+            "line": 9,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "web/todo-page.tsx",
+            "name": "App",
+            "kind": "Function",
+            "line": 13,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "web/query.tsx",
+            "name": "userQuery",
+            "kind": "Variable",
+            "line": 13,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "web/query.tsx",
+          "name": "Todos",
+          "kind": "Function",
+          "line": 5,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "web/query.tsx",
+          "name": "Todo",
+          "kind": "Function",
+          "line": 9,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "web/query.tsx",
+          "name": "OwnFn",
+          "kind": "Function",
+          "line": 16,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "web/query.tsx",
+          "name": "Named",
+          "kind": "Function",
+          "line": 21,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "web/swr.tsx",
+          "name": "Profile",
+          "kind": "Function",
+          "line": 6,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "web/todo-page.tsx",
+          "name": "TodoPage",
+          "kind": "Function",
+          "line": 9,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "web/todo-page.tsx",
+          "name": "App",
+          "kind": "Function",
+          "line": 13,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "web/query.tsx",
+          "name": "userQuery",
+          "kind": "Variable",
+          "line": 13,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "server/app.js",
+            "line": 5,
+            "method": "GET",
+            "path": "/api/user",
+            "fullPath": "/api/user",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:/api/user:arg1>"
+          },
+          {
+            "file": "server/app.js",
+            "line": 6,
+            "method": "GET",
+            "path": "/api/todos",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:/api/todos:arg1>"
+          },
+          {
+            "file": "server/app.js",
+            "line": 7,
+            "method": "GET",
+            "path": "/api/todos/:id",
+            "fullPath": "/api/todos/:id",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:/api/todos/:id:arg1>"
+          },
+          {
+            "file": "server/app.js",
+            "line": 8,
+            "method": "POST",
+            "path": "/api/todos",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.post:/api/todos:arg1>"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "server/app.js",
+          "line": 5,
+          "method": "GET",
+          "path": "/api/user",
+          "fullPath": "/api/user",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:/api/user:arg1>"
+        },
+        {
+          "file": "server/app.js",
+          "line": 6,
+          "method": "GET",
+          "path": "/api/todos",
+          "fullPath": "/api/todos",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:/api/todos:arg1>"
+        },
+        {
+          "file": "server/app.js",
+          "line": 7,
+          "method": "GET",
+          "path": "/api/todos/:id",
+          "fullPath": "/api/todos/:id",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:/api/todos/:id:arg1>"
+        },
+        {
+          "file": "server/app.js",
+          "line": 8,
+          "method": "POST",
+          "path": "/api/todos",
+          "fullPath": "/api/todos",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.post:/api/todos:arg1>"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 4
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "method": "get",
+      "path": "/api/todos/:id"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "name": "<app.get:/api/user:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "name": "<app.get:/api/todos:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "name": "<app.get:/api/todos/:id:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:server/app.js:function:8:<app.post:/api/todos:arg1>",
+            "name": "<app.post:/api/todos:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:web/query.tsx:function:5:Todos",
+            "name": "Todos",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:web/query.tsx:function:9:Todo",
+            "name": "Todo",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:web/query.tsx:function:16:OwnFn",
+            "name": "OwnFn",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:web/query.tsx:function:21:Named",
+            "name": "Named",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 21,
+            "endLine": 23
+          },
+          {
+            "id": "file:web/swr.tsx:function:4:fetcher",
+            "name": "fetcher",
+            "className": null,
+            "file": "web/swr.tsx",
+            "line": 4,
+            "endLine": 4
+          },
+          {
+            "id": "file:web/swr.tsx:function:6:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "web/swr.tsx",
+            "line": 6,
+            "endLine": 14
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:4:TodoList",
+            "name": "TodoList",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 4,
+            "endLine": 7
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:9:TodoPage",
+            "name": "TodoPage",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:13:App",
+            "name": "App",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 13,
+            "endLine": 19
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id",
+        "params": {
+          "method": "get",
+          "path": "/api/todos/:id",
+          "routeFile": "",
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:server/app.js:route:7:0:GET:/api/todos/:id"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:7:0:GET:/api/todos/:id"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos/:id",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 7,
+            "call": "file:web/query.tsx:function:9:Todo:call:10:9:useLegacyQuery",
+            "line": 10,
+            "expression": "useLegacyQuery",
+            "client": "tanstack-query",
+            "method": "GET",
+            "url": "/api/todos/${id}",
+            "match": "parameter",
+            "fn": "file:web/query.tsx:function:9:Todo"
+          },
+          {
+            "route": "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos/:id",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 7,
+            "call": "file:web/swr.tsx:function:6:Profile:call:10:25:useSWR",
+            "line": 10,
+            "expression": "useSWR",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/todos/${token}",
+            "match": "parameter",
+            "fn": "file:web/swr.tsx:function:6:Profile"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:9:Todo",
+            "file:web/swr.tsx:function:6:Profile"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:9:Todo",
+            "file:web/swr.tsx:function:6:Profile"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": "get",
+        "path": "/api/todos/:id",
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos/:id",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 7
+          },
+          "client": "tanstack-query",
+          "method": "GET",
+          "url": "/api/todos/${id}",
+          "match": "parameter",
+          "file": "web/query.tsx",
+          "line": 10,
+          "expression": "useLegacyQuery",
+          "function": "Todo"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos/:id",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 7
+          },
+          "client": "swr",
+          "method": "GET",
+          "url": "/api/todos/${token}",
+          "match": "parameter",
+          "file": "web/swr.tsx",
+          "line": 10,
+          "expression": "useSWR",
+          "function": "Profile"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "client": "swr"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "name": "<app.get:/api/user:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "name": "<app.get:/api/todos:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "name": "<app.get:/api/todos/:id:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:server/app.js:function:8:<app.post:/api/todos:arg1>",
+            "name": "<app.post:/api/todos:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:web/query.tsx:function:5:Todos",
+            "name": "Todos",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:web/query.tsx:function:9:Todo",
+            "name": "Todo",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:web/query.tsx:function:16:OwnFn",
+            "name": "OwnFn",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:web/query.tsx:function:21:Named",
+            "name": "Named",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 21,
+            "endLine": 23
+          },
+          {
+            "id": "file:web/swr.tsx:function:4:fetcher",
+            "name": "fetcher",
+            "className": null,
+            "file": "web/swr.tsx",
+            "line": 4,
+            "endLine": 4
+          },
+          {
+            "id": "file:web/swr.tsx:function:6:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "web/swr.tsx",
+            "line": 6,
+            "endLine": 14
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:4:TodoList",
+            "name": "TodoList",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 4,
+            "endLine": 7
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:9:TodoPage",
+            "name": "TodoPage",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:13:App",
+            "name": "App",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 13,
+            "endLine": 19
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "",
+          "routeFile": "",
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:server/app.js:route:5:0:GET:/api/user"
+          },
+          {
+            "id": "file:server/app.js:route:6:0:GET:/api/todos"
+          },
+          {
+            "id": "file:server/app.js:route:7:0:GET:/api/todos/:id"
+          },
+          {
+            "id": "file:server/app.js:route:8:0:POST:/api/todos"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:5:0:GET:/api/user",
+            "file:server/app.js:route:6:0:GET:/api/todos",
+            "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "file:server/app.js:route:8:0:POST:/api/todos"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/app.js:route:5:0:GET:/api/user",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/user",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 5,
+            "call": "file:web/query.tsx:initializercall:13:25:queryOptions",
+            "line": 13,
+            "expression": "queryOptions",
+            "client": "tanstack-query",
+            "method": "GET",
+            "url": "/api/user",
+            "match": "exact",
+            "fn": null
+          },
+          {
+            "route": "file:server/app.js:route:5:0:GET:/api/user",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/user",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 5,
+            "call": "file:web/swr.tsx:function:6:Profile:call:7:25:useSWR",
+            "line": 7,
+            "expression": "useSWR",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/user",
+            "match": "exact",
+            "fn": "file:web/swr.tsx:function:6:Profile"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/query.tsx:function:5:Todos:call:6:9:useQuery",
+            "line": 6,
+            "expression": "useQuery",
+            "client": "tanstack-query",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/query.tsx:function:5:Todos"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/query.tsx:function:16:OwnFn:call:17:56:fetch",
+            "line": 17,
+            "expression": "fetch",
+            "client": "fetch",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/query.tsx:function:16:OwnFn"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/swr.tsx:function:6:Profile:call:8:26:useSWRImmutable",
+            "line": 8,
+            "expression": "useSWRImmutable",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/swr.tsx:function:6:Profile"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/todo-page.tsx:function:4:TodoList:call:5:19:useSWR",
+            "line": 5,
+            "expression": "useSWR",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/todo-page.tsx:function:4:TodoList"
+          },
+          {
+            "route": "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos/:id",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 7,
+            "call": "file:web/query.tsx:function:9:Todo:call:10:9:useLegacyQuery",
+            "line": 10,
+            "expression": "useLegacyQuery",
+            "client": "tanstack-query",
+            "method": "GET",
+            "url": "/api/todos/${id}",
+            "match": "parameter",
+            "fn": "file:web/query.tsx:function:9:Todo"
+          },
+          {
+            "route": "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos/:id",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 7,
+            "call": "file:web/swr.tsx:function:6:Profile:call:10:25:useSWR",
+            "line": 10,
+            "expression": "useSWR",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/todos/${token}",
+            "match": "parameter",
+            "fn": "file:web/swr.tsx:function:6:Profile"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:5:Todos",
+            "file:web/query.tsx:function:16:OwnFn",
+            "file:web/swr.tsx:function:6:Profile",
+            "file:web/todo-page.tsx:function:4:TodoList",
+            "file:web/query.tsx:function:9:Todo"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:web/todo-page.tsx:component:4:TodoList",
+            "fn": "file:web/todo-page.tsx:function:4:TodoList"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:5:Todos",
+            "file:web/query.tsx:function:16:OwnFn",
+            "file:web/swr.tsx:function:6:Profile",
+            "file:web/todo-page.tsx:function:4:TodoList",
+            "file:web/query.tsx:function:9:Todo"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:web/todo-page.tsx:component:4:TodoList",
+            "name": "TodoList",
+            "kind": "function",
+            "framework": "react",
+            "file": "web/todo-page.tsx",
+            "line": 4,
+            "endLine": 7,
+            "isExported": false,
+            "tagName": null,
+            "hooks": "useSWR",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:web/todo-page.tsx:component:9:TodoPage",
+            "name": "TodoPage",
+            "kind": "function",
+            "framework": "react",
+            "file": "web/todo-page.tsx",
+            "line": 9,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:web/todo-page.tsx:component:13:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "web/todo-page.tsx",
+            "line": 13,
+            "endLine": 19,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Routes\",\"props\":[],\"line\":15},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":16}]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:web/todo-page.tsx:component:9:TodoPage",
+            "child": "file:web/todo-page.tsx:component:4:TodoList",
+            "line": 10,
+            "props": ""
+          },
+          {
+            "parent": "file:web/todo-page.tsx:component:13:App",
+            "child": "file:web/todo-page.tsx:component:9:TodoPage",
+            "line": 16,
+            "props": ""
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:web/todo-page.tsx:component:4:TodoList"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": null,
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": "swr",
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 6
+          },
+          "client": "swr",
+          "method": "GET",
+          "url": "/api/todos",
+          "match": "exact",
+          "file": "web/swr.tsx",
+          "line": 8,
+          "expression": "useSWRImmutable",
+          "function": "Profile"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 6
+          },
+          "client": "swr",
+          "method": "GET",
+          "url": "/api/todos",
+          "match": "exact",
+          "file": "web/todo-page.tsx",
+          "line": 5,
+          "expression": "useSWR",
+          "function": "TodoList"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos/:id",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 7
+          },
+          "client": "swr",
+          "method": "GET",
+          "url": "/api/todos/${token}",
+          "match": "parameter",
+          "file": "web/swr.tsx",
+          "line": 10,
+          "expression": "useSWR",
+          "function": "Profile"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/user",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 5
+          },
+          "client": "swr",
+          "method": "GET",
+          "url": "/api/user",
+          "match": "exact",
+          "file": "web/swr.tsx",
+          "line": 7,
+          "expression": "useSWR",
+          "function": "Profile"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 4
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "get",
+      "path": "/api/todos"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "get",
+          "path": "/api/todos"
+        },
+        "rows": [
+          {
+            "id": "file:server/app.js:route:6:0:GET:/api/todos",
+            "method": "GET",
+            "path": "/api/todos",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "handlerName": null,
+            "file": "server/app.js",
+            "line": 6
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE page.fullPath = $path OR page.path = $path OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component) RETURN id(page) AS id, page.path AS path, page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, id(component) AS component, component.name AS componentName ORDER BY file, line LIMIT 5",
+        "params": {
+          "path": "/api/todos"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "name": "<app.get:/api/user:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "name": "<app.get:/api/todos:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "name": "<app.get:/api/todos/:id:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:server/app.js:function:8:<app.post:/api/todos:arg1>",
+            "name": "<app.post:/api/todos:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:web/query.tsx:function:5:Todos",
+            "name": "Todos",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:web/query.tsx:function:9:Todo",
+            "name": "Todo",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:web/query.tsx:function:16:OwnFn",
+            "name": "OwnFn",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:web/query.tsx:function:21:Named",
+            "name": "Named",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 21,
+            "endLine": 23
+          },
+          {
+            "id": "file:web/swr.tsx:function:4:fetcher",
+            "name": "fetcher",
+            "className": null,
+            "file": "web/swr.tsx",
+            "line": 4,
+            "endLine": 4
+          },
+          {
+            "id": "file:web/swr.tsx:function:6:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "web/swr.tsx",
+            "line": 6,
+            "endLine": 14
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:4:TodoList",
+            "name": "TodoList",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 4,
+            "endLine": 7
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:9:TodoPage",
+            "name": "TodoPage",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:13:App",
+            "name": "App",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 13,
+            "endLine": 19
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:6:0:GET:/api/todos"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "fn": "file:server/app.js:function:6:<app.get:/api/todos:arg1>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:6:0:GET:/api/todos"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "fn": "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "role": "handler",
+            "scope": "route",
+            "hook": "handler",
+            "orderIndex": 0
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:6:0:GET:/api/todos"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE id(route) IN $ids RETURN id(route) AS route, id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:6:0:GET:/api/todos"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:USES_ENV_ROUTE]->(env:EnvVar) WHERE id(route) IN $ids RETURN id(route) AS route, env.name AS name, rel.access AS access, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:6:0:GET:/api/todos"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:CONSUMES_CONFIG_ROUTE]->(config:ConfigValue) WHERE id(route) IN $ids RETURN id(route) AS route, config.name AS name, rel.localName AS localName",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:6:0:GET:/api/todos"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:6:0:GET:/api/todos"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/query.tsx:function:5:Todos:call:6:9:useQuery",
+            "line": 6,
+            "expression": "useQuery",
+            "client": "tanstack-query",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/query.tsx:function:5:Todos"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/query.tsx:function:16:OwnFn:call:17:56:fetch",
+            "line": 17,
+            "expression": "fetch",
+            "client": "fetch",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/query.tsx:function:16:OwnFn"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/swr.tsx:function:6:Profile:call:8:26:useSWRImmutable",
+            "line": 8,
+            "expression": "useSWRImmutable",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/swr.tsx:function:6:Profile"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/todo-page.tsx:function:4:TodoList:call:5:19:useSWR",
+            "line": 5,
+            "expression": "useSWR",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/todo-page.tsx:function:4:TodoList"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:5:Todos",
+            "file:web/query.tsx:function:16:OwnFn",
+            "file:web/swr.tsx:function:6:Profile",
+            "file:web/todo-page.tsx:function:4:TodoList"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:web/todo-page.tsx:component:4:TodoList",
+            "fn": "file:web/todo-page.tsx:function:4:TodoList"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:5:Todos",
+            "file:web/query.tsx:function:16:OwnFn",
+            "file:web/swr.tsx:function:6:Profile",
+            "file:web/todo-page.tsx:function:4:TodoList"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:web/todo-page.tsx:component:4:TodoList",
+            "name": "TodoList",
+            "kind": "function",
+            "framework": "react",
+            "file": "web/todo-page.tsx",
+            "line": 4,
+            "endLine": 7,
+            "isExported": false,
+            "tagName": null,
+            "hooks": "useSWR",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:web/todo-page.tsx:component:9:TodoPage",
+            "name": "TodoPage",
+            "kind": "function",
+            "framework": "react",
+            "file": "web/todo-page.tsx",
+            "line": 9,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:web/todo-page.tsx:component:13:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "web/todo-page.tsx",
+            "line": 13,
+            "endLine": 19,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Routes\",\"props\":[],\"line\":15},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":16}]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:web/todo-page.tsx:component:9:TodoPage",
+            "child": "file:web/todo-page.tsx:component:4:TodoList",
+            "line": 10,
+            "props": ""
+          },
+          {
+            "parent": "file:web/todo-page.tsx:component:13:App",
+            "child": "file:web/todo-page.tsx:component:9:TodoPage",
+            "line": 16,
+            "props": ""
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:web/todo-page.tsx:component:4:TodoList",
+            "file:web/todo-page.tsx:component:9:TodoPage",
+            "file:web/todo-page.tsx:component:13:App"
+          ]
+        },
+        "rows": [
+          {
+            "fullPath": "/todos",
+            "framework": "react-router",
+            "router": "jsx",
+            "kind": "page",
+            "file": "web/todo-page.tsx",
+            "line": 16,
+            "component": "file:web/todo-page.tsx:component:9:TodoPage"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "method": "get",
+      "path": "/api/todos",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/todos",
+          "fullPath": "/api/todos",
+          "framework": "express-koa",
+          "handlerName": null,
+          "file": "server/app.js",
+          "line": 6,
+          "handlers": [
+            {
+              "name": "<app.get:/api/todos:arg1>",
+              "className": null,
+              "file": "server/app.js",
+              "line": 6,
+              "endLine": 6
+            }
+          ],
+          "lifecycle": [
+            {
+              "role": "handler",
+              "scope": "route",
+              "hook": "handler",
+              "orderIndex": 0,
+              "name": "<app.get:/api/todos:arg1>",
+              "className": null,
+              "file": "server/app.js",
+              "line": 6,
+              "endLine": 6
+            }
+          ],
+          "callChain": [],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": [],
+          "consumers": [
+            {
+              "client": "tanstack-query",
+              "method": "GET",
+              "url": "/api/todos",
+              "match": "exact",
+              "file": "web/query.tsx",
+              "line": 6,
+              "expression": "useQuery",
+              "function": "Todos"
+            },
+            {
+              "client": "fetch",
+              "method": "GET",
+              "url": "/api/todos",
+              "match": "exact",
+              "file": "web/query.tsx",
+              "line": 17,
+              "expression": "fetch",
+              "function": "OwnFn"
+            },
+            {
+              "client": "swr",
+              "method": "GET",
+              "url": "/api/todos",
+              "match": "exact",
+              "file": "web/swr.tsx",
+              "line": 8,
+              "expression": "useSWRImmutable",
+              "function": "Profile"
+            },
+            {
+              "client": "swr",
+              "method": "GET",
+              "url": "/api/todos",
+              "match": "exact",
+              "file": "web/todo-page.tsx",
+              "line": 5,
+              "expression": "useSWR",
+              "function": "TodoList"
+            }
+          ],
+          "consumerComponents": [
+            {
+              "name": "TodoList",
+              "kind": "function",
+              "file": "web/todo-page.tsx",
+              "line": 4,
+              "depth": 0,
+              "changedThrough": [
+                "TodoList"
+              ]
+            },
+            {
+              "name": "TodoPage",
+              "kind": "function",
+              "file": "web/todo-page.tsx",
+              "line": 9,
+              "depth": 1,
+              "renders": [
+                "TodoList"
+              ]
+            },
+            {
+              "name": "App",
+              "kind": "function",
+              "file": "web/todo-page.tsx",
+              "line": 13,
+              "depth": 2,
+              "renders": [
+                "TodoPage"
+              ]
+            }
+          ],
+          "consumerPages": [
+            {
+              "fullPath": "/todos",
+              "framework": "react-router",
+              "router": "jsx",
+              "kind": "page",
+              "file": "web/todo-page.tsx",
+              "line": 16,
+              "renders": "TodoPage",
+              "depth": 1
+            }
+          ]
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "file": "server/app.js"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "name": "<app.get:/api/user:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "name": "<app.get:/api/todos:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "name": "<app.get:/api/todos/:id:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:server/app.js:function:8:<app.post:/api/todos:arg1>",
+            "name": "<app.post:/api/todos:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:web/query.tsx:function:5:Todos",
+            "name": "Todos",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:web/query.tsx:function:9:Todo",
+            "name": "Todo",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:web/query.tsx:function:16:OwnFn",
+            "name": "OwnFn",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:web/query.tsx:function:21:Named",
+            "name": "Named",
+            "className": null,
+            "file": "web/query.tsx",
+            "line": 21,
+            "endLine": 23
+          },
+          {
+            "id": "file:web/swr.tsx:function:4:fetcher",
+            "name": "fetcher",
+            "className": null,
+            "file": "web/swr.tsx",
+            "line": 4,
+            "endLine": 4
+          },
+          {
+            "id": "file:web/swr.tsx:function:6:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "web/swr.tsx",
+            "line": 6,
+            "endLine": 14
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:4:TodoList",
+            "name": "TodoList",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 4,
+            "endLine": 7
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:9:TodoPage",
+            "name": "TodoPage",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:web/todo-page.tsx:function:13:App",
+            "name": "App",
+            "className": null,
+            "file": "web/todo-page.tsx",
+            "line": 13,
+            "endLine": 19
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": [
+          {
+            "routeId": "file:server/app.js:route:5:0:GET:/api/user",
+            "method": "GET",
+            "path": "/api/user",
+            "fullPath": "/api/user",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 5,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:server/app.js:function:5:<app.get:/api/user:arg1>"
+          },
+          {
+            "routeId": "file:server/app.js:route:5:0:GET:/api/user",
+            "method": "GET",
+            "path": "/api/user",
+            "fullPath": "/api/user",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 5,
+            "relType": "ROUTE_LIFECYCLE_STEP",
+            "role": "handler",
+            "fn": "file:server/app.js:function:5:<app.get:/api/user:arg1>"
+          },
+          {
+            "routeId": "file:server/app.js:route:6:0:GET:/api/todos",
+            "method": "GET",
+            "path": "/api/todos",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 6,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:server/app.js:function:6:<app.get:/api/todos:arg1>"
+          },
+          {
+            "routeId": "file:server/app.js:route:6:0:GET:/api/todos",
+            "method": "GET",
+            "path": "/api/todos",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 6,
+            "relType": "ROUTE_LIFECYCLE_STEP",
+            "role": "handler",
+            "fn": "file:server/app.js:function:6:<app.get:/api/todos:arg1>"
+          },
+          {
+            "routeId": "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "method": "GET",
+            "path": "/api/todos/:id",
+            "fullPath": "/api/todos/:id",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 7,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>"
+          },
+          {
+            "routeId": "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "method": "GET",
+            "path": "/api/todos/:id",
+            "fullPath": "/api/todos/:id",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 7,
+            "relType": "ROUTE_LIFECYCLE_STEP",
+            "role": "handler",
+            "fn": "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>"
+          },
+          {
+            "routeId": "file:server/app.js:route:8:0:POST:/api/todos",
+            "method": "POST",
+            "path": "/api/todos",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 8,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          },
+          {
+            "routeId": "file:server/app.js:route:8:0:POST:/api/todos",
+            "method": "POST",
+            "path": "/api/todos",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 8,
+            "relType": "ROUTE_LIFECYCLE_STEP",
+            "role": "handler",
+            "fn": "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:5:0:GET:/api/user",
+            "file:server/app.js:route:6:0:GET:/api/todos",
+            "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "file:server/app.js:route:8:0:POST:/api/todos"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/app.js:route:5:0:GET:/api/user",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/user",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 5,
+            "call": "file:web/query.tsx:initializercall:13:25:queryOptions",
+            "line": 13,
+            "expression": "queryOptions",
+            "client": "tanstack-query",
+            "method": "GET",
+            "url": "/api/user",
+            "match": "exact",
+            "fn": null
+          },
+          {
+            "route": "file:server/app.js:route:5:0:GET:/api/user",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/user",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 5,
+            "call": "file:web/swr.tsx:function:6:Profile:call:7:25:useSWR",
+            "line": 7,
+            "expression": "useSWR",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/user",
+            "match": "exact",
+            "fn": "file:web/swr.tsx:function:6:Profile"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/query.tsx:function:5:Todos:call:6:9:useQuery",
+            "line": 6,
+            "expression": "useQuery",
+            "client": "tanstack-query",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/query.tsx:function:5:Todos"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/query.tsx:function:16:OwnFn:call:17:56:fetch",
+            "line": 17,
+            "expression": "fetch",
+            "client": "fetch",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/query.tsx:function:16:OwnFn"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/swr.tsx:function:6:Profile:call:8:26:useSWRImmutable",
+            "line": 8,
+            "expression": "useSWRImmutable",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/swr.tsx:function:6:Profile"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:GET:/api/todos",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:web/todo-page.tsx:function:4:TodoList:call:5:19:useSWR",
+            "line": 5,
+            "expression": "useSWR",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/todos",
+            "match": "exact",
+            "fn": "file:web/todo-page.tsx:function:4:TodoList"
+          },
+          {
+            "route": "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos/:id",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 7,
+            "call": "file:web/query.tsx:function:9:Todo:call:10:9:useLegacyQuery",
+            "line": 10,
+            "expression": "useLegacyQuery",
+            "client": "tanstack-query",
+            "method": "GET",
+            "url": "/api/todos/${id}",
+            "match": "parameter",
+            "fn": "file:web/query.tsx:function:9:Todo"
+          },
+          {
+            "route": "file:server/app.js:route:7:0:GET:/api/todos/:id",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/todos/:id",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 7,
+            "call": "file:web/swr.tsx:function:6:Profile:call:10:25:useSWR",
+            "line": 10,
+            "expression": "useSWR",
+            "client": "swr",
+            "method": "GET",
+            "url": "/api/todos/${token}",
+            "match": "parameter",
+            "fn": "file:web/swr.tsx:function:6:Profile"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:5:Todos",
+            "file:web/query.tsx:function:16:OwnFn",
+            "file:web/swr.tsx:function:6:Profile",
+            "file:web/todo-page.tsx:function:4:TodoList",
+            "file:web/query.tsx:function:9:Todo"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:web/todo-page.tsx:component:4:TodoList",
+            "fn": "file:web/todo-page.tsx:function:4:TodoList"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:5:Todos",
+            "file:web/query.tsx:function:16:OwnFn",
+            "file:web/swr.tsx:function:6:Profile",
+            "file:web/todo-page.tsx:function:4:TodoList",
+            "file:web/query.tsx:function:9:Todo"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:web/todo-page.tsx:component:4:TodoList",
+            "name": "TodoList",
+            "kind": "function",
+            "framework": "react",
+            "file": "web/todo-page.tsx",
+            "line": 4,
+            "endLine": 7,
+            "isExported": false,
+            "tagName": null,
+            "hooks": "useSWR",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:web/todo-page.tsx:component:9:TodoPage",
+            "name": "TodoPage",
+            "kind": "function",
+            "framework": "react",
+            "file": "web/todo-page.tsx",
+            "line": 9,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:web/todo-page.tsx:component:13:App",
+            "name": "App",
+            "kind": "function",
+            "framework": "react",
+            "file": "web/todo-page.tsx",
+            "line": 13,
+            "endLine": 19,
+            "isExported": true,
+            "tagName": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"Routes\",\"props\":[],\"line\":15},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":16}]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:web/todo-page.tsx:component:9:TodoPage",
+            "child": "file:web/todo-page.tsx:component:4:TodoList",
+            "line": 10,
+            "props": ""
+          },
+          {
+            "parent": "file:web/todo-page.tsx:component:13:App",
+            "child": "file:web/todo-page.tsx:component:9:TodoPage",
+            "line": 16,
+            "props": ""
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:web/todo-page.tsx:component:4:TodoList",
+            "file:web/todo-page.tsx:component:9:TodoPage",
+            "file:web/todo-page.tsx:component:13:App"
+          ]
+        },
+        "rows": [
+          {
+            "fullPath": "/todos",
+            "framework": "react-router",
+            "router": "jsx",
+            "kind": "page",
+            "file": "web/todo-page.tsx",
+            "line": 16,
+            "component": "file:web/todo-page.tsx:component:9:TodoPage"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "symbol": null,
+      "file": "server/app.js",
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "<app.get:/api/user:arg1>",
+          "className": null,
+          "file": "server/app.js",
+          "line": 5,
+          "endLine": 5
+        },
+        {
+          "name": "<app.get:/api/todos:arg1>",
+          "className": null,
+          "file": "server/app.js",
+          "line": 6,
+          "endLine": 6
+        },
+        {
+          "name": "<app.get:/api/todos/:id:arg1>",
+          "className": null,
+          "file": "server/app.js",
+          "line": 7,
+          "endLine": 7
+        },
+        {
+          "name": "<app.post:/api/todos:arg1>",
+          "className": null,
+          "file": "server/app.js",
+          "line": 8,
+          "endLine": 8
+        }
+      ],
+      "callers": [],
+      "moduleCallers": [],
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/user",
+          "fullPath": "/api/user",
+          "framework": "express-koa",
+          "file": "server/app.js",
+          "line": 5,
+          "reachedThrough": [
+            {
+              "function": "<app.get:/api/user:arg1>",
+              "functionFile": "server/app.js",
+              "as": "handler"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "path": "/api/todos",
+          "fullPath": "/api/todos",
+          "framework": "express-koa",
+          "file": "server/app.js",
+          "line": 6,
+          "reachedThrough": [
+            {
+              "function": "<app.get:/api/todos:arg1>",
+              "functionFile": "server/app.js",
+              "as": "handler"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "path": "/api/todos/:id",
+          "fullPath": "/api/todos/:id",
+          "framework": "express-koa",
+          "file": "server/app.js",
+          "line": 7,
+          "reachedThrough": [
+            {
+              "function": "<app.get:/api/todos/:id:arg1>",
+              "functionFile": "server/app.js",
+              "as": "handler"
+            }
+          ]
+        },
+        {
+          "method": "POST",
+          "path": "/api/todos",
+          "fullPath": "/api/todos",
+          "framework": "express-koa",
+          "file": "server/app.js",
+          "line": 8,
+          "reachedThrough": [
+            {
+              "function": "<app.post:/api/todos:arg1>",
+              "functionFile": "server/app.js",
+              "as": "handler"
+            }
+          ]
+        }
+      ],
+      "entrypoints": [],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 6
+          },
+          "client": "tanstack-query",
+          "method": "GET",
+          "url": "/api/todos",
+          "match": "exact",
+          "file": "web/query.tsx",
+          "line": 6,
+          "expression": "useQuery",
+          "function": "Todos"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 6
+          },
+          "client": "fetch",
+          "method": "GET",
+          "url": "/api/todos",
+          "match": "exact",
+          "file": "web/query.tsx",
+          "line": 17,
+          "expression": "fetch",
+          "function": "OwnFn"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 6
+          },
+          "client": "swr",
+          "method": "GET",
+          "url": "/api/todos",
+          "match": "exact",
+          "file": "web/swr.tsx",
+          "line": 8,
+          "expression": "useSWRImmutable",
+          "function": "Profile"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 6
+          },
+          "client": "swr",
+          "method": "GET",
+          "url": "/api/todos",
+          "match": "exact",
+          "file": "web/todo-page.tsx",
+          "line": 5,
+          "expression": "useSWR",
+          "function": "TodoList"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos/:id",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 7
+          },
+          "client": "tanstack-query",
+          "method": "GET",
+          "url": "/api/todos/${id}",
+          "match": "parameter",
+          "file": "web/query.tsx",
+          "line": 10,
+          "expression": "useLegacyQuery",
+          "function": "Todo"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/todos/:id",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 7
+          },
+          "client": "swr",
+          "method": "GET",
+          "url": "/api/todos/${token}",
+          "match": "parameter",
+          "file": "web/swr.tsx",
+          "line": 10,
+          "expression": "useSWR",
+          "function": "Profile"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/user",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 5
+          },
+          "client": "tanstack-query",
+          "method": "GET",
+          "url": "/api/user",
+          "match": "exact",
+          "file": "web/query.tsx",
+          "line": 13,
+          "expression": "queryOptions",
+          "function": null
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/user",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 5
+          },
+          "client": "swr",
+          "method": "GET",
+          "url": "/api/user",
+          "match": "exact",
+          "file": "web/swr.tsx",
+          "line": 7,
+          "expression": "useSWR",
+          "function": "Profile"
+        }
+      ],
+      "consumerComponents": [
+        {
+          "name": "TodoList",
+          "kind": "function",
+          "file": "web/todo-page.tsx",
+          "line": 4,
+          "depth": 0,
+          "changedThrough": [
+            "TodoList"
+          ]
+        },
+        {
+          "name": "TodoPage",
+          "kind": "function",
+          "file": "web/todo-page.tsx",
+          "line": 9,
+          "depth": 1,
+          "renders": [
+            "TodoList"
+          ]
+        },
+        {
+          "name": "App",
+          "kind": "function",
+          "file": "web/todo-page.tsx",
+          "line": 13,
+          "depth": 2,
+          "renders": [
+            "TodoPage"
+          ]
+        }
+      ],
+      "consumerPages": [
+        {
+          "fullPath": "/todos",
+          "framework": "react-router",
+          "router": "jsx",
+          "kind": "page",
+          "file": "web/todo-page.tsx",
+          "line": 16,
+          "renders": "TodoPage",
+          "depth": 1
+        }
+      ],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  }
+]
