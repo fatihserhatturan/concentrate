@@ -115,6 +115,17 @@ Blocks or informs: MCP `find_callers` and dependency impact analysis.
   handlers imported from other files are not linked.
   `on*` attributes of HTML pages are entrypoints too; the handler is the first
   function the attribute calls, linked when the page itself defines it.
+- Vue template listeners (`@click="save"`, `@submit.prevent="send($event)"`,
+  `v-on:keyup.enter="next"`) on HTML elements are entrypoints (kind
+  `dom-event`, library `vue`, trigger the event without modifiers). The
+  handler is the function the listener names or calls first, linked when the
+  `.vue` file declares a function of that name (in `<script setup>`, an
+  options object's `methods` under `export default {…}`, or a variable in
+  `setup()`). Inline code (`@click="n++"`) names no handler; listeners on
+  components (`<UserCard @select="…">`) are component events and no
+  entrypoints; dynamic event names (`@[name]`) are not read. `methods`
+  inside `defineComponent({…})` have no Function nodes, so their listeners
+  stay unlinked.
 - `customElements.define('x-tag', Class)` becomes a `Component` (framework
   `web-components`); `COMPONENT_DEFINED_BY` links the class only when it is
   declared in the same file.
@@ -330,8 +341,18 @@ Astro).
   `<slot>` and other lowercase tags are elements. Global registrations
   (`app.component('UserCard', UserCard)`), Nuxt auto-imports and library
   components (`<RouterView>`, `<router-link>`) stay in
-  `Component.pendingRenders`; composables and event handlers are not read
-  yet (Phase 14).
+  `Component.pendingRenders`.
+- Vue component code: `<script setup>` is a Function named `<script setup>`
+  (kind `script_setup`, the lines of the block) that the Component is
+  `COMPONENT_DEFINED_BY_FUNCTION`; it owns the block's top-level calls,
+  including calls in destructuring (`const { a } = useA()`) and anonymous
+  callbacks, so they have a caller in `find_callers` and `impact_of`. In an
+  options object the Component is defined by its `setup()` (a Function made
+  for it inside `defineComponent({…})` too). `Component.hooks` lists the
+  `use*` calls of that function, and `USES_HOOK` links the composables of
+  the repository. Options API components without `setup()` have no
+  function, so their `methods`, `computed` and lifecycle hooks are not tied
+  to the component.
 
 ## Pages
 

@@ -679,6 +679,12 @@
         "args": {
           "file": "src/components/UserList.vue"
         }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "useApi"
+        }
       }
     ],
     "vanilla-html": [

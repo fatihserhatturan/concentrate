@@ -339,7 +339,13 @@ export type JsTsParsedFile = {
   rootNode: SyntaxNode;
   parsed: ParsedSourceFile;
   state: WalkState;
+  // The inline `<script>` blocks of a markup file, in file order.
+  scriptBlocks: readonly ScriptBlock[];
 };
+
+// An inline script of a markup file: its code range (source offsets), the
+// lines of the element and the attribute names of its start tag.
+export type ScriptBlock = { start: number; end: number; line: number; endLine: number; attributes: readonly string[] };
 
 // Framework semantics (routes, entrypoints, ...) hook into the one JS/TS
 // parser through plugins; the language layer itself stays framework-agnostic.
@@ -373,6 +379,7 @@ export async function parseJsTsSource(
   plugins: readonly JsTsFrameworkPlugin[] = [],
   fileLanguage: SupportedLanguage = language,
   grammar: GrammarName = grammarFor(language, filePath),
+  scriptBlocks: readonly ScriptBlock[] = [],
 ): Promise<ParsedSourceFile> {
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
@@ -392,7 +399,7 @@ export async function parseJsTsSource(
     const parsed = finalizeLanguageLevel(fileNodeId, tree, state);
     if (warnings.length > 0) parsed.warnings = warnings;
     for (const plugin of plugins) {
-      plugin.onFile({ fileNodeId, rootNode: tree.rootNode, parsed, state });
+      plugin.onFile({ fileNodeId, rootNode: tree.rootNode, parsed, state, scriptBlocks });
     }
     return parsed;
   } finally {
