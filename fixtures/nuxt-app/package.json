@@ -1,0 +1,5 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "devDependencies": { "nuxt": "3.13.2" }
+}

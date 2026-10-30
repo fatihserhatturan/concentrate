@@ -4,6 +4,7 @@
 {"kind":"node","id":"file:anonymous-function.ts:variable:1:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":1,"name":"default"}}
 {"kind":"node","id":"file:call.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/call.ts","relativePath":"call.ts","sourceType":"production"}}
 {"kind":"node","id":"file:call.ts:import:1:express","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"express\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"express","specifier":"import express from 'express'"}}
+{"kind":"node","id":"file:call.ts:initializercall:3:15:express","label":"Call","properties":{"args":"[]","callee":"express","columnNumber":15,"expression":"express","line":3,"name":"express","receiver":null}}
 {"kind":"node","id":"file:call.ts:variable:3:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":3,"name":"default"}}
 {"kind":"node","id":"file:identifier.ts","label":"File","properties":{"defaultExport":"router","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/identifier.ts","relativePath":"identifier.ts","sourceType":"production"}}
 {"kind":"node","id":"file:identifier.ts:initializercall:1:15:createRouter","label":"Call","properties":{"args":"[]","callee":"createRouter","columnNumber":15,"expression":"createRouter","line":1,"name":"createRouter","receiver":null}}
@@ -19,6 +20,7 @@
 {"kind":"rel","from":"file:anonymous-function.ts","type":"DEFINES_VARIABLE","to":"file:anonymous-function.ts:variable:1:default","properties":{}}
 {"kind":"rel","from":"file:call.ts","type":"DEFINES_VARIABLE","to":"file:call.ts:variable:3:default","properties":{}}
 {"kind":"rel","from":"file:call.ts","type":"IMPORTS","to":"file:call.ts:import:1:express","properties":{}}
+{"kind":"rel","from":"file:call.ts:variable:3:default","type":"INITIALIZED_BY","to":"file:call.ts:initializercall:3:15:express","properties":{}}
 {"kind":"rel","from":"file:identifier.ts","type":"DEFINES_VARIABLE","to":"file:identifier.ts:variable:1:router","properties":{}}
 {"kind":"rel","from":"file:identifier.ts","type":"DEFINES_VARIABLE","to":"file:identifier.ts:variable:3:default","properties":{}}
 {"kind":"rel","from":"file:identifier.ts:variable:1:router","type":"INITIALIZED_BY","to":"file:identifier.ts:initializercall:1:15:createRouter","properties":{}}

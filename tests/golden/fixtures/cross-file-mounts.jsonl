@@ -59,6 +59,7 @@
 {"kind":"node","id":"file:routes.ts:import:2:./users","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"users\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./users","specifier":"import users from './users';"}}
 {"kind":"node","id":"file:routes.ts:import:3:./admin","label":"Import","properties":{"bindings":"[{\"imported\":\"admin\",\"local\":\"admin\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"./admin","specifier":"import { admin } from './admin';"}}
 {"kind":"node","id":"file:routes.ts:initializercall:5:12:Router()\n  .use(users)\n  .use","label":"Call","properties":{"args":"[\"/admin\",\"admin\"]","callee":"use","columnNumber":12,"expression":"Router()\n  .use(users)\n  .use","line":5,"name":"Router()\n  .use(users)\n  .use","receiver":"Router"}}
+{"kind":"node","id":"file:routes.ts:initializercall:9:15:Router().use","label":"Call","properties":{"args":"[\"/api\",\"api\"]","callee":"use","columnNumber":15,"expression":"Router().use","line":9,"name":"Router().use","receiver":"Router"}}
 {"kind":"node","id":"file:routes.ts:variable:5:api","label":"Variable","properties":{"isExported":false,"kind":"const","line":5,"name":"api","stringValue":null}}
 {"kind":"node","id":"file:routes.ts:variable:9:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":9,"name":"default"}}
 {"kind":"node","id":"file:users.ts","label":"File","properties":{"defaultExport":"router","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/users.ts","relativePath":"users.ts","sourceType":"production"}}
@@ -149,6 +150,7 @@
 {"kind":"rel","from":"file:routes.ts:variable:5:api","type":"INITIALIZED_BY","to":"file:routes.ts:initializercall:5:12:Router()\n  .use(users)\n  .use","properties":{}}
 {"kind":"rel","from":"file:routes.ts:variable:5:api","type":"MOUNTS","to":"file:admin.ts:variable:7:admin","properties":{"line":7,"path":"/admin","pathExpression":"'/admin'"}}
 {"kind":"rel","from":"file:routes.ts:variable:5:api","type":"MOUNTS","to":"file:users.ts:variable:3:router","properties":{"line":6,"path":null,"pathExpression":null}}
+{"kind":"rel","from":"file:routes.ts:variable:9:default","type":"INITIALIZED_BY","to":"file:routes.ts:initializercall:9:15:Router().use","properties":{}}
 {"kind":"rel","from":"file:routes.ts:variable:9:default","type":"MOUNTS","to":"file:routes.ts:variable:5:api","properties":{"line":9,"path":"/api","pathExpression":"'/api'"}}
 {"kind":"rel","from":"file:users.ts","type":"DECLARES_ROUTE","to":"file:users.ts:route:5:0:GET:/users","properties":{}}
 {"kind":"rel","from":"file:users.ts","type":"DEFINES_FUNCTION","to":"file:users.ts:function:5:<router.get:/users:arg1>","properties":{}}

@@ -56,6 +56,7 @@
 {"kind":"node","id":"file:src/pages/about.tsx:variable:3:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":3,"name":"default"}}
 {"kind":"node","id":"file:src/pages/api/auth/[...nextauth].ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/pages/api/auth/[...nextauth].ts","relativePath":"src/pages/api/auth/[...nextauth].ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/pages/api/auth/[...nextauth].ts:import:1:next-auth","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"NextAuth\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"next-auth","specifier":"import NextAuth from 'next-auth';"}}
+{"kind":"node","id":"file:src/pages/api/auth/[...nextauth].ts:initializercall:4:15:NextAuth","label":"Call","properties":{"args":"[]","callee":"NextAuth","columnNumber":15,"expression":"NextAuth","line":4,"name":"NextAuth","receiver":null}}
 {"kind":"node","id":"file:src/pages/api/auth/[...nextauth].ts:route:4:0:ALL:/api/auth/[...nextauth]","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/auth/[...nextauth]","handlerName":null,"line":4,"method":"ALL","path":"/api/auth/[...nextauth]","pathExpression":null,"receiverName":null}}
 {"kind":"node","id":"file:src/pages/api/auth/[...nextauth].ts:variable:4:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":4,"name":"default"}}
 {"kind":"node","id":"file:src/pages/api/secure.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/pages/api/secure.ts","relativePath":"src/pages/api/secure.ts","sourceType":"production"}}
@@ -64,6 +65,7 @@
 {"kind":"node","id":"file:src/pages/api/secure.ts:function:5:handler:call:6:2:res.status(200).json","label":"Call","properties":{"args":"[]","callee":"json","columnNumber":2,"expression":"res.status(200).json","line":6,"name":"res.status(200).json","receiver":"res"}}
 {"kind":"node","id":"file:src/pages/api/secure.ts:import:1:next","label":"Import","properties":{"bindings":"[{\"imported\":\"NextApiHandler\",\"local\":\"NextApiHandler\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":1,"source":"next","specifier":"import type { NextApiHandler } from 'next';"}}
 {"kind":"node","id":"file:src/pages/api/secure.ts:import:2:../../lib/auth","label":"Import","properties":{"bindings":"[{\"imported\":\"withAuth\",\"local\":\"withAuth\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"../../lib/auth","specifier":"import { withAuth } from '../../lib/auth';"}}
+{"kind":"node","id":"file:src/pages/api/secure.ts:initializercall:9:15:withAuth","label":"Call","properties":{"args":"[\"handler\"]","callee":"withAuth","columnNumber":15,"expression":"withAuth","line":9,"name":"withAuth","receiver":null}}
 {"kind":"node","id":"file:src/pages/api/secure.ts:route:9:0:ALL:/api/secure","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/secure","handlerName":"handler","line":9,"method":"ALL","path":"/api/secure","pathExpression":null,"receiverName":null}}
 {"kind":"node","id":"file:src/pages/api/secure.ts:variable:9:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":9,"name":"default"}}
 {"kind":"node","id":"file:src/pages/api/users.ts","label":"File","properties":{"defaultExport":"handler","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/pages/api/users.ts","relativePath":"src/pages/api/users.ts","sourceType":"production"}}
@@ -173,6 +175,7 @@
 {"kind":"rel","from":"file:src/pages/api/auth/[...nextauth].ts","type":"DECLARES_ROUTE","to":"file:src/pages/api/auth/[...nextauth].ts:route:4:0:ALL:/api/auth/[...nextauth]","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/auth/[...nextauth].ts","type":"DEFINES_VARIABLE","to":"file:src/pages/api/auth/[...nextauth].ts:variable:4:default","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/auth/[...nextauth].ts","type":"IMPORTS","to":"file:src/pages/api/auth/[...nextauth].ts:import:1:next-auth","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/auth/[...nextauth].ts:variable:4:default","type":"INITIALIZED_BY","to":"file:src/pages/api/auth/[...nextauth].ts:initializercall:4:15:NextAuth","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/secure.ts","type":"DECLARES_ROUTE","to":"file:src/pages/api/secure.ts:route:9:0:ALL:/api/secure","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/secure.ts","type":"DEFINES_FUNCTION","to":"file:src/pages/api/secure.ts:function:5:handler","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/secure.ts","type":"DEFINES_VARIABLE","to":"file:src/pages/api/secure.ts:variable:9:default","properties":{}}
@@ -182,7 +185,9 @@
 {"kind":"rel","from":"file:src/pages/api/secure.ts:function:5:handler","type":"CALLS","to":"file:src/pages/api/secure.ts:function:5:handler:call:6:2:res.status(200).json","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/secure.ts:import:2:../../lib/auth","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/secure.ts:import:2:../../lib/auth","type":"RESOLVES_TO","to":"file:src/lib/auth.ts","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts:initializercall:9:15:withAuth","type":"CALL_RESOLVES_TO","to":"file:src/lib/auth.ts:function:3:withAuth","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/secure.ts:route:9:0:ALL:/api/secure","type":"ROUTE_HANDLED_BY","to":"file:src/pages/api/secure.ts:function:5:handler","properties":{}}
+{"kind":"rel","from":"file:src/pages/api/secure.ts:variable:9:default","type":"INITIALIZED_BY","to":"file:src/pages/api/secure.ts:initializercall:9:15:withAuth","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/users.ts","type":"DECLARES_ROUTE","to":"file:src/pages/api/users.ts:route:4:0:ALL:/api/users","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/users.ts","type":"DEFINES_FUNCTION","to":"file:src/pages/api/users.ts:function:4:handler","properties":{}}
 {"kind":"rel","from":"file:src/pages/api/users.ts","type":"IMPORTS","to":"file:src/pages/api/users.ts:import:1:next","properties":{}}

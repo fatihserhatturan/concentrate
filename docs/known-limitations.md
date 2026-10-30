@@ -338,10 +338,17 @@ Astro).
   Props are the attributes and bindings (`title`, `:user`, `v-bind:user`,
   `v-model` as `modelValue`, `v-model:title`); event listeners (`@click`),
   slots (`#item`) and other directives are not. `<component :is>`,
-  `<slot>` and other lowercase tags are elements. Global registrations
-  (`app.component('UserCard', UserCard)`), Nuxt auto-imports and library
-  components (`<RouterView>`, `<router-link>`) stay in
-  `Component.pendingRenders`.
+  `<slot>` and other lowercase tags are elements. A tag no import resolves
+  renders the component registered globally under that name in the same
+  package: `app.component('UserCard', UserCard)` with a literal name and a
+  component the file declares or imports, in a file that imports `vue` or on
+  a receiver ending in `vueApp` (`nuxtApp.vueApp.component(…)`). A name two
+  components claim, registrations in loops or through a helper, and
+  `app.use(plugin)` that registers components inside a library are not
+  followed. Library components (`<RouterView>`, `<router-link>`,
+  `<NuxtLink>`) stay in `Component.pendingRenders`.
+- `const app = createApp(App)` (or `createSSRApp`) is a Vue app, so
+  `app.use(router)` is not taken for Express middleware.
 - Vue component code: `<script setup>` is a Function named `<script setup>`
   (kind `script_setup`, the lines of the block) that the Component is
   `COMPONENT_DEFINED_BY_FUNCTION`; it owns the block's top-level calls,
@@ -380,9 +387,10 @@ Astro).
   `pages/api/` gives one `Route` of method `ALL` handled by its default
   export, since the handler branches on `req.method` itself. A default export
   that wraps a file function (`withAuth(handler)`, or a named function passed
-  inline) is handled by that function; one built by a library call
-  (`NextAuth(options)`), held in such a variable, or wrapping an anonymous
-  arrow (which has no Function node) gives a `Route` without a handler.
+  inline, or an anonymous arrow, which becomes a Function such as
+  `<withAuth:arg0>`) is handled by that function; one built by a library
+  call (`NextAuth(options)`) or held in such a variable gives a `Route`
+  without a handler.
   Paths follow the page rules above.
 - Server actions: a module whose directive prologue has `"use server"` makes
   each exported function an `EntryPoint` of kind `server-action` (library
@@ -446,6 +454,36 @@ Astro).
   component. Records spread in (`...routes`), built by functions or held in
   untyped arrays of another file, named views other than `default`, `alias`
   paths and `defineAsyncComponent` loaders are not read.
+- Nuxt is detected per package: a `package.json` that depends on `nuxt`. The
+  source directory is the package root, or `app/` when `app/pages`,
+  `app/layouts`, `app/components` or `app/app.vue` exists (Nuxt 4); a custom
+  `srcDir`, `dir` or `components` option in `nuxt.config` is not read.
+- Nuxt pages: each `.vue` file under `pages/` is a `Page` (framework `nuxt`,
+  router `file`, no line) whose path is the file path in Vue Router syntax:
+  `index` stands for its folder, `[id]` is `:id`, `[[id]]` `:id?`,
+  `[...slug]` `:slug(.*)*`, `user-[id]` `user-:id`, and route groups
+  `(group)` leave the URL. A page with a folder of the same name
+  (`users.vue` and `users/`) is a `layout`, and that folder's `index.vue`
+  its `index`. `layouts/*.vue` are `Page`s of kind `layout` without a path
+  (which pages use them through `definePageMeta({ layout })` is not
+  linked); `app.vue` and `error.vue` are kinds `app` and `error` at `/`.
+  `PAGE_RENDERS` goes to the file's component. `definePageMeta({ path })`
+  overrides, `.js` / `.tsx` pages and pages added by modules or the
+  `pages:extend` hook are not read.
+- Nuxt auto-imports: a call to a name its file neither declares nor imports
+  resolves to the function exported under that name from a top-level file
+  of `composables/` or `utils/` (or their `<dir>/index.*`), when one file
+  exports it; default exports, re-exports (`export { x } from`) and
+  `imports.dirs` from `nuxt.config` are not read, nor are Nuxt's and Vue's
+  own auto-imports (`useFetch`, `ref`), which stay unresolved. A tag no import
+  resolves renders the component of `components/<path>.vue` named by its
+  path in PascalCase (`components/base/Button.vue` → `BaseButton`, a file
+  that already starts with the folder prefix keeps its name:
+  `components/base/BaseInput.vue` → `BaseInput`; `forms/index.vue` →
+  `Forms`; `.client` / `.server` dropped), also with the `Lazy` prefix
+  (`<LazyUserCard>`). Components of `components/global/` with
+  `pathPrefix: false`, component islands and module-provided components
+  are not read.
 
 ## API Calls
 

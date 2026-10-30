@@ -376,7 +376,7 @@ type MountIndexes = {
 
 function createMountRelationships(
   callExpr: SyntaxNode,
-  moduleReceivers: Map<string, FrameworkFilter>,
+  moduleReceivers: Map<string, FrameworkFilter | null>,
   indexes: MountIndexes,
   frameworkFilter: FrameworkFilter,
 ): GraphRelationship[] {
@@ -528,7 +528,7 @@ function createRouteNodes(
   callExpr: SyntaxNode,
   stringConstantsByName: Map<string, string>,
   frameworkFilter: FrameworkFilter,
-  scopeOrModuleReceivers: FunctionRouteScope | Map<string, FrameworkFilter>,
+  scopeOrModuleReceivers: FunctionRouteScope | Map<string, FrameworkFilter | null>,
 ): RouteCandidate[] {
   const parts = analyzeMemberCallExpression(callExpr.childForFieldName("function")?.text);
   if (!parts) return [];
@@ -536,7 +536,7 @@ function createRouteNodes(
   const scope = scopeOrModuleReceivers instanceof Map ? null : scopeOrModuleReceivers;
   const framework = scope
     ? scope.receivers.get(routeReceiverName(parts.receiver) ?? "")
-    : moduleReceiverFramework(parts.receiver, scopeOrModuleReceivers as Map<string, FrameworkFilter>);
+    : moduleReceiverFramework(parts.receiver, scopeOrModuleReceivers as Map<string, FrameworkFilter | null>);
   if (framework !== frameworkFilter) {
     return [];
   }
@@ -893,22 +893,26 @@ function functionRouteReceivers(functionNode: SyntaxNode): Map<string, Framework
 }
 
 // Module-level variables created by an app or router factory, whatever their
-// name: `const apiv1 = express.Router()`, `var main = express()`.
-function factoryReceivers(programNode: SyntaxNode): Map<string, FrameworkFilter> {
-  const receivers = new Map<string, FrameworkFilter>();
+// name: `const apiv1 = express.Router()`, `var main = express()`. A Vue app
+// (`const app = createApp(App)`) maps to null: `app.use(router)` installs a
+// plugin, not middleware.
+function factoryReceivers(programNode: SyntaxNode): Map<string, FrameworkFilter | null> {
+  const receivers = new Map<string, FrameworkFilter | null>();
   for (const [name, callee] of scopeCallInitializers(programNode)) {
     const framework = appFactoryFramework(callee);
     if (framework) receivers.set(name, framework);
+    else if (/^create(SSR)?App$/u.test(callee)) receivers.set(name, null);
   }
   return receivers;
 }
 
 // The framework of a module-level receiver: from the factory that created it,
 // else from its name (`app`, `router`, `fastify`, `…Router`).
-function moduleReceiverFramework(receiver: string | null, moduleReceivers: Map<string, FrameworkFilter>): FrameworkFilter | undefined {
+function moduleReceiverFramework(receiver: string | null, moduleReceivers: Map<string, FrameworkFilter | null>): FrameworkFilter | undefined {
   const root = routeReceiverName(receiver);
   if (!root) return undefined;
-  return moduleReceivers.get(root) ?? (isRouteReceiver(root) ? routeFramework(root) : undefined);
+  if (moduleReceivers.has(root)) return moduleReceivers.get(root) ?? undefined;
+  return isRouteReceiver(root) ? routeFramework(root) : undefined;
 }
 
 // The framework an app or router factory belongs to, from the called
