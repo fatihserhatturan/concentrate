@@ -19,14 +19,16 @@ type ModelHint = {
   library: string;
 };
 
-// ORM and query-builder methods by the operation they perform: Prisma,
-// Sequelize, Knex and Drizzle, the TypeORM Repository / EntityManager API
+// ORM and query-builder methods by the operation they perform: Prisma
+// (including `findUniqueOrThrow`, `groupBy`), Sequelize (`findAndCountAll`,
+// `bulkCreate`), Knex and Drizzle, the TypeORM Repository / EntityManager API
 // (`findOneBy`, `softDelete`, `increment`, …) and the Mongoose Model API
 // (`findByIdAndUpdate`, `findOneAndDelete`, `countDocuments`, …). Only calls on
 // a receiver known to be a model or repository are classified.
 const operationByMethod = new Map<string, string>([
   ["aggregate", "aggregate"],
   ["average", "aggregate"],
+  ["bulkCreate", "create"],
   ["clear", "delete"],
   ["count", "read"],
   ["countBy", "read"],
@@ -46,6 +48,7 @@ const operationByMethod = new Map<string, string>([
   ["find", "read"],
   ["findAll", "read"],
   ["findAndCount", "read"],
+  ["findAndCountAll", "read"],
   ["findAndCountBy", "read"],
   ["findBy", "read"],
   ["findById", "read"],
@@ -55,6 +58,7 @@ const operationByMethod = new Map<string, string>([
   ["findByIds", "read"],
   ["findByPk", "read"],
   ["findFirst", "read"],
+  ["findFirstOrThrow", "read"],
   ["findMany", "read"],
   ["findOne", "read"],
   ["findOneAndDelete", "delete"],
@@ -65,6 +69,8 @@ const operationByMethod = new Map<string, string>([
   ["findOneByOrFail", "read"],
   ["findOneOrFail", "read"],
   ["findUnique", "read"],
+  ["findUniqueOrThrow", "read"],
+  ["groupBy", "aggregate"],
   ["increment", "update"],
   ["insert", "create"],
   ["insertMany", "create"],

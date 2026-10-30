@@ -25,15 +25,15 @@
           },
           {
             "table": "File",
-            "count": 5
+            "count": 7
           },
           {
             "table": "Import",
-            "count": 10
+            "count": 12
           },
           {
             "table": "Function",
-            "count": 16
+            "count": 20
           },
           {
             "table": "Class",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 2
+            "count": 6
           },
           {
             "table": "Decorator",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 30
+            "count": 42
           },
           {
             "table": "Route",
@@ -85,7 +85,7 @@
           },
           {
             "table": "DataModel",
-            "count": 2
+            "count": 5
           },
           {
             "table": "Table",
@@ -111,15 +111,15 @@
         },
         {
           "table": "File",
-          "count": 5
+          "count": 7
         },
         {
           "table": "Import",
-          "count": 10
+          "count": 12
         },
         {
           "table": "Function",
-          "count": 16
+          "count": 20
         },
         {
           "table": "Class",
@@ -131,7 +131,7 @@
         },
         {
           "table": "Variable",
-          "count": 2
+          "count": 6
         },
         {
           "table": "Decorator",
@@ -151,7 +151,7 @@
         },
         {
           "table": "Call",
-          "count": 30
+          "count": 42
         },
         {
           "table": "Route",
@@ -171,7 +171,7 @@
         },
         {
           "table": "DataModel",
-          "count": 2
+          "count": 5
         },
         {
           "table": "Table",
@@ -195,6 +195,30 @@
             "kind": "Function",
             "file": "cache.ts",
             "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "listOrders",
+            "kind": "Function",
+            "file": "orders.service.ts",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "importOrders",
+            "kind": "Function",
+            "file": "orders.service.ts",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "getReport",
+            "kind": "Function",
+            "file": "reports.service.ts",
+            "line": 5,
             "isExported": true,
             "relationship": "DEFINES_FUNCTION"
           }
@@ -249,6 +273,30 @@
             "line": 12,
             "isExported": true,
             "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "sequelize",
+            "kind": "Variable",
+            "file": "orders.service.ts",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Order",
+            "kind": "Variable",
+            "file": "orders.service.ts",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Invoice",
+            "kind": "Variable",
+            "file": "orders.service.ts",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
           }
         ]
       },
@@ -280,6 +328,30 @@
           "kind": "Function",
           "file": "cache.ts",
           "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "listOrders",
+          "kind": "Function",
+          "file": "orders.service.ts",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "importOrders",
+          "kind": "Function",
+          "file": "orders.service.ts",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "getReport",
+          "kind": "Function",
+          "file": "reports.service.ts",
+          "line": 5,
           "isExported": true,
           "relationship": "DEFINES_FUNCTION"
         },
@@ -322,11 +394,35 @@
           "line": 12,
           "isExported": true,
           "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "sequelize",
+          "kind": "Variable",
+          "file": "orders.service.ts",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "Order",
+          "kind": "Variable",
+          "file": "orders.service.ts",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "Invoice",
+          "kind": "Variable",
+          "file": "orders.service.ts",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 6
+        "returned": 12
       }
     }
   },
@@ -343,6 +439,34 @@
             "name": "resetCache",
             "kind": "Function",
             "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "orders.service.ts",
+            "name": "listOrders",
+            "kind": "Function",
+            "line": 8,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "orders.service.ts",
+            "name": "importOrders",
+            "kind": "Function",
+            "line": 12,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "orders.service.ts",
+            "name": "groupRows",
+            "kind": "Function",
+            "line": 18,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "reports.service.ts",
+            "name": "getReport",
+            "kind": "Function",
+            "line": 5,
             "relationship": "DEFINES_FUNCTION"
           }
         ]
@@ -443,6 +567,34 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "file": "orders.service.ts",
+          "name": "listOrders",
+          "kind": "Function",
+          "line": 8,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "orders.service.ts",
+          "name": "importOrders",
+          "kind": "Function",
+          "line": 12,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "orders.service.ts",
+          "name": "groupRows",
+          "kind": "Function",
+          "line": 18,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "reports.service.ts",
+          "name": "getReport",
+          "kind": "Function",
+          "line": 5,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "file": "cat.schema.ts",
           "name": "Cat",
           "kind": "Class",
@@ -480,7 +632,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 6
+        "returned": 10
       }
     }
   },
@@ -570,6 +722,72 @@
         "method": "query",
         "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "listOrders",
+            "file": "orders.service.ts",
+            "line": 9,
+            "model": "Order",
+            "library": "sequelize",
+            "table": null,
+            "operation": "read",
+            "expression": "Order.findAndCountAll"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "importOrders",
+            "file": "orders.service.ts",
+            "line": 13,
+            "model": "Order",
+            "library": "sequelize",
+            "table": null,
+            "operation": "create",
+            "expression": "Order.bulkCreate"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "importOrders",
+            "file": "orders.service.ts",
+            "line": 14,
+            "model": "Invoice",
+            "library": "sequelize",
+            "table": null,
+            "operation": "create",
+            "expression": "Invoice.bulkCreate"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "getReport",
+            "file": "reports.service.ts",
+            "line": 6,
+            "model": "report",
+            "library": "prisma",
+            "table": null,
+            "operation": "read",
+            "expression": "prisma.report.findUniqueOrThrow"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "getReport",
+            "file": "reports.service.ts",
+            "line": 7,
+            "model": "report",
+            "library": "prisma",
+            "table": null,
+            "operation": "read",
+            "expression": "prisma.report.findFirstOrThrow"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "getReport",
+            "file": "reports.service.ts",
+            "line": 8,
+            "model": "report",
+            "library": "prisma",
+            "table": null,
+            "operation": "aggregate",
+            "expression": "prisma.report.groupBy"
+          },
           {
             "sourceKind": "Function",
             "sourceName": "update",
@@ -777,6 +995,72 @@
       "dataAccess": [
         {
           "sourceKind": "Function",
+          "sourceName": "listOrders",
+          "file": "orders.service.ts",
+          "line": 9,
+          "model": "Order",
+          "library": "sequelize",
+          "table": null,
+          "operation": "read",
+          "expression": "Order.findAndCountAll"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "importOrders",
+          "file": "orders.service.ts",
+          "line": 13,
+          "model": "Order",
+          "library": "sequelize",
+          "table": null,
+          "operation": "create",
+          "expression": "Order.bulkCreate"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "importOrders",
+          "file": "orders.service.ts",
+          "line": 14,
+          "model": "Invoice",
+          "library": "sequelize",
+          "table": null,
+          "operation": "create",
+          "expression": "Invoice.bulkCreate"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "getReport",
+          "file": "reports.service.ts",
+          "line": 6,
+          "model": "report",
+          "library": "prisma",
+          "table": null,
+          "operation": "read",
+          "expression": "prisma.report.findUniqueOrThrow"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "getReport",
+          "file": "reports.service.ts",
+          "line": 7,
+          "model": "report",
+          "library": "prisma",
+          "table": null,
+          "operation": "read",
+          "expression": "prisma.report.findFirstOrThrow"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "getReport",
+          "file": "reports.service.ts",
+          "line": 8,
+          "model": "report",
+          "library": "prisma",
+          "table": null,
+          "operation": "aggregate",
+          "expression": "prisma.report.groupBy"
+        },
+        {
+          "sourceKind": "Function",
           "sourceName": "update",
           "file": null,
           "line": 11,
@@ -965,7 +1249,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 17
+        "returned": 23
       }
     }
   },
@@ -1573,6 +1857,220 @@
       "page": {
         "offset": 0,
         "returned": 5
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "library": "prisma"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND model.library = \"prisma\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND model.library = \"prisma\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "getReport",
+            "file": "reports.service.ts",
+            "line": 6,
+            "model": "report",
+            "library": "prisma",
+            "table": null,
+            "operation": "read",
+            "expression": "prisma.report.findUniqueOrThrow"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "getReport",
+            "file": "reports.service.ts",
+            "line": 7,
+            "model": "report",
+            "library": "prisma",
+            "table": null,
+            "operation": "read",
+            "expression": "prisma.report.findFirstOrThrow"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "getReport",
+            "file": "reports.service.ts",
+            "line": 8,
+            "model": "report",
+            "library": "prisma",
+            "table": null,
+            "operation": "aggregate",
+            "expression": "prisma.report.groupBy"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND model.library = \"prisma\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND model.library = \"prisma\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "library": "prisma",
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "getReport",
+          "file": "reports.service.ts",
+          "line": 6,
+          "model": "report",
+          "library": "prisma",
+          "table": null,
+          "operation": "read",
+          "expression": "prisma.report.findUniqueOrThrow"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "getReport",
+          "file": "reports.service.ts",
+          "line": 7,
+          "model": "report",
+          "library": "prisma",
+          "table": null,
+          "operation": "read",
+          "expression": "prisma.report.findFirstOrThrow"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "getReport",
+          "file": "reports.service.ts",
+          "line": 8,
+          "model": "report",
+          "library": "prisma",
+          "table": null,
+          "operation": "aggregate",
+          "expression": "prisma.report.groupBy"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "library": "sequelize"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND model.library = \"sequelize\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND model.library = \"sequelize\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "listOrders",
+            "file": "orders.service.ts",
+            "line": 9,
+            "model": "Order",
+            "library": "sequelize",
+            "table": null,
+            "operation": "read",
+            "expression": "Order.findAndCountAll"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "importOrders",
+            "file": "orders.service.ts",
+            "line": 13,
+            "model": "Order",
+            "library": "sequelize",
+            "table": null,
+            "operation": "create",
+            "expression": "Order.bulkCreate"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "importOrders",
+            "file": "orders.service.ts",
+            "line": 14,
+            "model": "Invoice",
+            "library": "sequelize",
+            "table": null,
+            "operation": "create",
+            "expression": "Invoice.bulkCreate"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND model.library = \"sequelize\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND model.library = \"sequelize\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "library": "sequelize",
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "listOrders",
+          "file": "orders.service.ts",
+          "line": 9,
+          "model": "Order",
+          "library": "sequelize",
+          "table": null,
+          "operation": "read",
+          "expression": "Order.findAndCountAll"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "importOrders",
+          "file": "orders.service.ts",
+          "line": 13,
+          "model": "Order",
+          "library": "sequelize",
+          "table": null,
+          "operation": "create",
+          "expression": "Order.bulkCreate"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "importOrders",
+          "file": "orders.service.ts",
+          "line": 14,
+          "model": "Invoice",
+          "library": "sequelize",
+          "table": null,
+          "operation": "create",
+          "expression": "Invoice.bulkCreate"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
       }
     }
   }

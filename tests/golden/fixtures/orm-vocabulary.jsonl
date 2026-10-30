@@ -1,5 +1,8 @@
-{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":5,"parsedFiles":5,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":7,"supportedFiles":7,"parsedFiles":7,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"datamodel:mongoose:cat.schema.ts:Cat","label":"DataModel","properties":{"declaredIn":"cat.schema.ts","library":"mongoose","line":4,"name":"Cat"}}
+{"kind":"node","id":"datamodel:prisma:report","label":"DataModel","properties":{"library":"prisma","name":"report"}}
+{"kind":"node","id":"datamodel:sequelize:Invoice","label":"DataModel","properties":{"library":"sequelize","name":"Invoice"}}
+{"kind":"node","id":"datamodel:sequelize:Order","label":"DataModel","properties":{"library":"sequelize","name":"Order"}}
 {"kind":"node","id":"datamodel:typeorm:user.entity.ts:User","label":"DataModel","properties":{"declaredIn":"user.entity.ts","library":"typeorm","line":4,"name":"User"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"orm-vocabulary","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"file:cache.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/cache.ts","relativePath":"cache.ts","sourceType":"production"}}
@@ -47,6 +50,30 @@
 {"kind":"node","id":"file:cats.service.ts:import:2:@nestjs/mongoose","label":"Import","properties":{"bindings":"[{\"imported\":\"InjectModel\",\"local\":\"InjectModel\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"@nestjs/mongoose","specifier":"import { InjectModel } from '@nestjs/mongoose';"}}
 {"kind":"node","id":"file:cats.service.ts:import:3:mongoose","label":"Import","properties":{"bindings":"[{\"imported\":\"Model\",\"local\":\"Model\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"mongoose","specifier":"import { Model } from 'mongoose';"}}
 {"kind":"node","id":"file:cats.service.ts:import:4:./cat.schema","label":"Import","properties":{"bindings":"[{\"imported\":\"Cat\",\"local\":\"Cat\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":4,"source":"./cat.schema","specifier":"import { Cat } from './cat.schema';"}}
+{"kind":"node","id":"file:orders.service.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/orders.service.ts","relativePath":"orders.service.ts","sourceType":"production"}}
+{"kind":"node","id":"file:orders.service.ts:function:12:importOrders","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_declaration","line":12,"methodKind":null,"name":"importOrders","parameters":"[{\"name\":\"rows\",\"type\":\"Array<{ total: number }>\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:orders.service.ts:function:12:importOrders:call:13:8:Order.bulkCreate","label":"Call","properties":{"args":"[\"rows\"]","callee":"bulkCreate","columnNumber":8,"expression":"Order.bulkCreate","line":13,"name":"Order.bulkCreate","receiver":"Order"}}
+{"kind":"node","id":"file:orders.service.ts:function:12:importOrders:call:14:28:rows.map","label":"Call","properties":{"args":"[]","callee":"map","columnNumber":28,"expression":"rows.map","line":14,"name":"rows.map","receiver":"rows"}}
+{"kind":"node","id":"file:orders.service.ts:function:12:importOrders:call:14:9:Invoice.bulkCreate","label":"Call","properties":{"args":"[]","callee":"bulkCreate","columnNumber":9,"expression":"Invoice.bulkCreate","line":14,"name":"Invoice.bulkCreate","receiver":"Invoice"}}
+{"kind":"node","id":"file:orders.service.ts:function:18:groupRows","label":"Function","properties":{"className":null,"endLine":20,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":18,"methodKind":null,"name":"groupRows","parameters":"[{\"name\":\"rows\",\"type\":\"Array<{ total: number }>\"},{\"name\":\"grouper\",\"type\":\"{ groupBy(rows: unknown[]): unknown }\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:orders.service.ts:function:18:groupRows:call:19:9:grouper.groupBy","label":"Call","properties":{"args":"[\"rows\"]","callee":"groupBy","columnNumber":9,"expression":"grouper.groupBy","line":19,"name":"grouper.groupBy","receiver":"grouper"}}
+{"kind":"node","id":"file:orders.service.ts:function:8:listOrders","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_declaration","line":8,"methodKind":null,"name":"listOrders","parameters":"[{\"name\":\"page\",\"type\":\"number\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:orders.service.ts:function:8:listOrders:call:9:9:Order.findAndCountAll","label":"Call","properties":{"args":"[]","callee":"findAndCountAll","columnNumber":9,"expression":"Order.findAndCountAll","line":9,"name":"Order.findAndCountAll","receiver":"Order"}}
+{"kind":"node","id":"file:orders.service.ts:import:1:sequelize","label":"Import","properties":{"bindings":"[{\"imported\":\"DataTypes\",\"local\":\"DataTypes\",\"kind\":\"named\"},{\"imported\":\"Sequelize\",\"local\":\"Sequelize\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"sequelize","specifier":"import { DataTypes, Sequelize } from 'sequelize';"}}
+{"kind":"node","id":"file:orders.service.ts:initializercall:3:18:new Sequelize","label":"Call","properties":{"args":"[\"sqlite::memory:\"]","callee":"Sequelize","columnNumber":18,"expression":"new Sequelize","line":3,"name":"new Sequelize","receiver":null}}
+{"kind":"node","id":"file:orders.service.ts:initializercall:5:14:sequelize.define","label":"Call","properties":{"args":"[\"Order\"]","callee":"define","columnNumber":14,"expression":"sequelize.define","line":5,"name":"sequelize.define","receiver":"sequelize"}}
+{"kind":"node","id":"file:orders.service.ts:initializercall:6:16:sequelize.define","label":"Call","properties":{"args":"[\"Invoice\"]","callee":"define","columnNumber":16,"expression":"sequelize.define","line":6,"name":"sequelize.define","receiver":"sequelize"}}
+{"kind":"node","id":"file:orders.service.ts:variable:3:sequelize","label":"Variable","properties":{"isExported":false,"kind":"const","line":3,"name":"sequelize","stringValue":null}}
+{"kind":"node","id":"file:orders.service.ts:variable:5:Order","label":"Variable","properties":{"isExported":false,"kind":"const","line":5,"name":"Order","stringValue":null}}
+{"kind":"node","id":"file:orders.service.ts:variable:6:Invoice","label":"Variable","properties":{"isExported":false,"kind":"const","line":6,"name":"Invoice","stringValue":null}}
+{"kind":"node","id":"file:reports.service.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/reports.service.ts","relativePath":"reports.service.ts","sourceType":"production"}}
+{"kind":"node","id":"file:reports.service.ts:function:5:getReport","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"getReport","parameters":"[{\"name\":\"id\",\"type\":\"string\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:reports.service.ts:function:5:getReport:call:6:23:prisma.report.findUniqueOrThrow","label":"Call","properties":{"args":"[]","callee":"findUniqueOrThrow","columnNumber":23,"expression":"prisma.report.findUniqueOrThrow","line":6,"name":"prisma.report.findUniqueOrThrow","receiver":"prisma.report"}}
+{"kind":"node","id":"file:reports.service.ts:function:5:getReport:call:7:23:prisma.report.findFirstOrThrow","label":"Call","properties":{"args":"[]","callee":"findFirstOrThrow","columnNumber":23,"expression":"prisma.report.findFirstOrThrow","line":7,"name":"prisma.report.findFirstOrThrow","receiver":"prisma.report"}}
+{"kind":"node","id":"file:reports.service.ts:function:5:getReport:call:8:23:prisma.report.groupBy","label":"Call","properties":{"args":"[]","callee":"groupBy","columnNumber":23,"expression":"prisma.report.groupBy","line":8,"name":"prisma.report.groupBy","receiver":"prisma.report"}}
+{"kind":"node","id":"file:reports.service.ts:import:1:@prisma/client","label":"Import","properties":{"bindings":"[{\"imported\":\"PrismaClient\",\"local\":\"PrismaClient\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"@prisma/client","specifier":"import { PrismaClient } from '@prisma/client';"}}
+{"kind":"node","id":"file:reports.service.ts:initializercall:3:15:new PrismaClient","label":"Call","properties":{"args":"[]","callee":"PrismaClient","columnNumber":15,"expression":"new PrismaClient","line":3,"name":"new PrismaClient","receiver":null}}
+{"kind":"node","id":"file:reports.service.ts:variable:3:prisma","label":"Variable","properties":{"isExported":false,"kind":"const","line":3,"name":"prisma","stringValue":null}}
 {"kind":"node","id":"file:user.entity.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/user.entity.ts","relativePath":"user.entity.ts","sourceType":"production"}}
 {"kind":"node","id":"file:user.entity.ts:class:4:User","label":"Class","properties":{"endLine":19,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":4,"name":"User","visibility":"public"}}
 {"kind":"node","id":"file:user.entity.ts:class:4:User:decorator:3:Entity","label":"Decorator","properties":{"args":"[]","expression":"@Entity()","line":3,"name":"Entity"}}
@@ -90,6 +117,8 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:cache.ts","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:cat.schema.ts","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:cats.service.ts","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:orders.service.ts","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:reports.service.ts","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:user.entity.ts","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:users.service.ts","properties":{}}
 {"kind":"rel","from":"file:cache.ts","type":"DEFINES_FUNCTION","to":"file:cache.ts:function:3:resetCache","properties":{}}
@@ -149,6 +178,34 @@
 {"kind":"rel","from":"file:cats.service.ts:function:34:count","type":"READS","to":"table:mongoose:cat.schema.ts:cats","properties":{"expression":"this.catModel.countDocuments","line":35,"model":"Cat","operation":"read"}}
 {"kind":"rel","from":"file:cats.service.ts:function:8:constructor","type":"CALLS","to":"file:cats.service.ts:function:8:constructor:call:8:15:InjectModel","properties":{}}
 {"kind":"rel","from":"file:cats.service.ts:import:4:./cat.schema","type":"RESOLVES_TO","to":"file:cat.schema.ts","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts","type":"DEFINES_FUNCTION","to":"file:orders.service.ts:function:12:importOrders","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts","type":"DEFINES_FUNCTION","to":"file:orders.service.ts:function:18:groupRows","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts","type":"DEFINES_FUNCTION","to":"file:orders.service.ts:function:8:listOrders","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts","type":"DEFINES_VARIABLE","to":"file:orders.service.ts:variable:3:sequelize","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts","type":"DEFINES_VARIABLE","to":"file:orders.service.ts:variable:5:Order","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts","type":"DEFINES_VARIABLE","to":"file:orders.service.ts:variable:6:Invoice","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts","type":"IMPORTS","to":"file:orders.service.ts:import:1:sequelize","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts:function:12:importOrders","type":"ACCESSES_DATA","to":"datamodel:sequelize:Invoice","properties":{"expression":"Invoice.bulkCreate","library":"sequelize","line":14,"operation":"create"}}
+{"kind":"rel","from":"file:orders.service.ts:function:12:importOrders","type":"ACCESSES_DATA","to":"datamodel:sequelize:Order","properties":{"expression":"Order.bulkCreate","library":"sequelize","line":13,"operation":"create"}}
+{"kind":"rel","from":"file:orders.service.ts:function:12:importOrders","type":"CALLS","to":"file:orders.service.ts:function:12:importOrders:call:13:8:Order.bulkCreate","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts:function:12:importOrders","type":"CALLS","to":"file:orders.service.ts:function:12:importOrders:call:14:28:rows.map","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts:function:12:importOrders","type":"CALLS","to":"file:orders.service.ts:function:12:importOrders:call:14:9:Invoice.bulkCreate","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts:function:18:groupRows","type":"CALLS","to":"file:orders.service.ts:function:18:groupRows:call:19:9:grouper.groupBy","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts:function:8:listOrders","type":"ACCESSES_DATA","to":"datamodel:sequelize:Order","properties":{"expression":"Order.findAndCountAll","library":"sequelize","line":9,"operation":"read"}}
+{"kind":"rel","from":"file:orders.service.ts:function:8:listOrders","type":"CALLS","to":"file:orders.service.ts:function:8:listOrders:call:9:9:Order.findAndCountAll","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts:variable:3:sequelize","type":"INITIALIZED_BY","to":"file:orders.service.ts:initializercall:3:18:new Sequelize","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts:variable:5:Order","type":"INITIALIZED_BY","to":"file:orders.service.ts:initializercall:5:14:sequelize.define","properties":{}}
+{"kind":"rel","from":"file:orders.service.ts:variable:6:Invoice","type":"INITIALIZED_BY","to":"file:orders.service.ts:initializercall:6:16:sequelize.define","properties":{}}
+{"kind":"rel","from":"file:reports.service.ts","type":"DEFINES_FUNCTION","to":"file:reports.service.ts:function:5:getReport","properties":{}}
+{"kind":"rel","from":"file:reports.service.ts","type":"DEFINES_VARIABLE","to":"file:reports.service.ts:variable:3:prisma","properties":{}}
+{"kind":"rel","from":"file:reports.service.ts","type":"IMPORTS","to":"file:reports.service.ts:import:1:@prisma/client","properties":{}}
+{"kind":"rel","from":"file:reports.service.ts:function:5:getReport","type":"ACCESSES_DATA","to":"datamodel:prisma:report","properties":{"expression":"prisma.report.findFirstOrThrow","library":"prisma","line":7,"operation":"read"}}
+{"kind":"rel","from":"file:reports.service.ts:function:5:getReport","type":"ACCESSES_DATA","to":"datamodel:prisma:report","properties":{"expression":"prisma.report.findUniqueOrThrow","library":"prisma","line":6,"operation":"read"}}
+{"kind":"rel","from":"file:reports.service.ts:function:5:getReport","type":"ACCESSES_DATA","to":"datamodel:prisma:report","properties":{"expression":"prisma.report.groupBy","library":"prisma","line":8,"operation":"aggregate"}}
+{"kind":"rel","from":"file:reports.service.ts:function:5:getReport","type":"CALLS","to":"file:reports.service.ts:function:5:getReport:call:6:23:prisma.report.findUniqueOrThrow","properties":{}}
+{"kind":"rel","from":"file:reports.service.ts:function:5:getReport","type":"CALLS","to":"file:reports.service.ts:function:5:getReport:call:7:23:prisma.report.findFirstOrThrow","properties":{}}
+{"kind":"rel","from":"file:reports.service.ts:function:5:getReport","type":"CALLS","to":"file:reports.service.ts:function:5:getReport:call:8:23:prisma.report.groupBy","properties":{}}
+{"kind":"rel","from":"file:reports.service.ts:variable:3:prisma","type":"INITIALIZED_BY","to":"file:reports.service.ts:initializercall:3:15:new PrismaClient","properties":{}}
 {"kind":"rel","from":"file:user.entity.ts","type":"DEFINES_CLASS","to":"file:user.entity.ts:class:4:User","properties":{}}
 {"kind":"rel","from":"file:user.entity.ts","type":"IMPORTS","to":"file:user.entity.ts:import:1:typeorm","properties":{}}
 {"kind":"rel","from":"file:user.entity.ts:class:4:User","type":"DEFINES_FIELD","to":"file:user.entity.ts:class:4:User:field:11:active","properties":{}}
