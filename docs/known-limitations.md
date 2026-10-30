@@ -392,8 +392,18 @@ Astro).
   file and through imports (`httpReceiver` names the binding). Instances
   created inside functions, stored on objects or classes, extended from
   another instance, or given interceptors that rewrite the URL are not
-  followed, nor are wrapper functions around a client and SWR / TanStack
-  Query fetchers.
+  followed, nor are wrapper functions around a client.
+- Data-fetching hooks: `useSWR` / `useSWRImmutable` (client `swr`) and
+  TanStack Query's `useQuery`, `useSuspenseQuery`, `useInfiniteQuery` and
+  `queryOptions` without a `queryFn` (client `tanstack-query`, the default
+  query function fetching the key, object or v3 positional form) are a GET
+  of their key when the key, or the first element of an array key, is a
+  string or template starting with `/` or `http` (or a template starting
+  with a substitution); `cond ? key : null` is read too. A query with its
+  own `queryFn` is linked through the calls inside it; a `queryFn` or SWR
+  fetcher that builds a different URL than the key (`fetch(API + key)`),
+  `useSWRInfinite`, `useSWRMutation`, `useMutation` and
+  `queryClient.fetchQuery` are not read.
 - The method is the member name or a literal `method` option (GET without
   one); options held in a variable or spreading another object leave it
   unknown, and the call is not linked.
