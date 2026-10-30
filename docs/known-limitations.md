@@ -267,6 +267,17 @@ Astro).
   through barrels. Elements that stay unresolved (library components such as
   `<Link>`, components passed as props) remain in `Component.pendingRenders`.
   Props are the attribute names; spread props (`{...rest}`) are not listed.
+- Hooks: a call named `use*` (or `React.use*`, or React 19's `use`) in a
+  component's function is listed in `Component.hooks`, built-in hooks
+  included. `USES_HOOK` links a component's function or a custom hook
+  (a function named `use*`) to the hook function the call resolves to, so
+  only hooks of the repository get an edge. Hooks called in class components
+  or in nested callbacks are not listed.
+- Contexts: `createContext(...)` assigned to a variable is a Component of
+  kind `context`. `<Ctx.Provider>` / `<Ctx.Consumer>` (and React 19's
+  `<Ctx>`) are `RENDERS` of it, and `useContext(Ctx)` / `use(Ctx)` in a
+  component or custom hook is `USES_CONTEXT` (Function → Component) when the
+  context resolves by name or import.
 
 ## Review Process
 

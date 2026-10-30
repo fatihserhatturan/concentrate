@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { Avatar, Card } from './components';
 import { Input } from './components/Input';
 import { Legacy } from './components/Legacy';
+import { CartBadge } from './components/CartBadge';
+import { CartProvider } from './cart/CartContext';
 
 type User = { name: string; avatarUrl?: string };
 
@@ -26,11 +28,14 @@ function renderRow(user: User) {
 
 export default function App({ users }: { users: User[] }) {
   return (
+    <CartProvider>
     <main>
+      <CartBadge />
       <ul>{users.map(renderRow)}</ul>
       {users.map((user) => <Profile key={user.name} user={user} />)}
       <Input name="search" />
       <Legacy ready onGo={() => FormatDate(new Date())} />
     </main>
+    </CartProvider>
   );
 }

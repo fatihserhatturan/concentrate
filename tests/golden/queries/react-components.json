@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 43
+        "result": 44
       },
       {
         "method": "stats",
@@ -21,19 +21,19 @@
           },
           {
             "table": "Directory",
-            "count": 3
+            "count": 4
           },
           {
             "table": "File",
-            "count": 7
+            "count": 10
           },
           {
             "table": "Import",
-            "count": 13
+            "count": 20
           },
           {
             "table": "Function",
-            "count": 9
+            "count": 14
           },
           {
             "table": "Class",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 3
+            "count": 4
           },
           {
             "table": "Decorator",
@@ -57,7 +57,7 @@
           },
           {
             "table": "TypeAlias",
-            "count": 2
+            "count": 3
           },
           {
             "table": "Enum",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 7
+            "count": 16
           },
           {
             "table": "Route",
@@ -93,13 +93,13 @@
           },
           {
             "table": "Component",
-            "count": 7
+            "count": 10
           }
         ]
       }
     ],
     "output": {
-      "schemaVersion": 43,
+      "schemaVersion": 44,
       "stats": [
         {
           "table": "Repo",
@@ -111,19 +111,19 @@
         },
         {
           "table": "Directory",
-          "count": 3
+          "count": 4
         },
         {
           "table": "File",
-          "count": 7
+          "count": 10
         },
         {
           "table": "Import",
-          "count": 13
+          "count": 20
         },
         {
           "table": "Function",
-          "count": 9
+          "count": 14
         },
         {
           "table": "Class",
@@ -135,7 +135,7 @@
         },
         {
           "table": "Variable",
-          "count": 3
+          "count": 4
         },
         {
           "table": "Decorator",
@@ -147,7 +147,7 @@
         },
         {
           "table": "TypeAlias",
-          "count": 2
+          "count": 3
         },
         {
           "table": "Enum",
@@ -155,7 +155,7 @@
         },
         {
           "table": "Call",
-          "count": 7
+          "count": 16
         },
         {
           "table": "Route",
@@ -183,7 +183,7 @@
         },
         {
           "table": "Component",
-          "count": 7
+          "count": 10
         }
       ]
     }
@@ -202,7 +202,7 @@
             "name": "Profile",
             "kind": "Function",
             "file": "src/App.tsx",
-            "line": 8,
+            "line": 10,
             "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           },
@@ -210,7 +210,7 @@
             "name": "FormatDate",
             "kind": "Function",
             "file": "src/App.tsx",
-            "line": 18,
+            "line": 20,
             "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           },
@@ -218,8 +218,40 @@
             "name": "renderRow",
             "kind": "Function",
             "file": "src/App.tsx",
-            "line": 23,
+            "line": 25,
             "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "CartProvider",
+            "kind": "Function",
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "useCart",
+            "kind": "Function",
+            "file": "src/cart/useCart.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "useCartCount",
+            "kind": "Function",
+            "file": "src/cart/useCart.ts",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "CartBadge",
+            "kind": "Function",
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "isExported": true,
             "relationship": "DEFINES_FUNCTION"
           },
           {
@@ -251,6 +283,14 @@
         "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": [
           {
+            "name": "CartContext",
+            "kind": "Variable",
+            "file": "src/cart/CartContext.tsx",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
             "name": "default",
             "kind": "Variable",
             "file": "src/components/Avatar.tsx",
@@ -273,7 +313,7 @@
             "name": "User",
             "kind": "TypeAlias",
             "file": "src/App.tsx",
-            "line": 6,
+            "line": 8,
             "isExported": false,
             "relationship": "DEFINES_TYPE_ALIAS"
           }
@@ -296,7 +336,7 @@
           "name": "Profile",
           "kind": "Function",
           "file": "src/App.tsx",
-          "line": 8,
+          "line": 10,
           "isExported": false,
           "relationship": "DEFINES_FUNCTION"
         },
@@ -304,7 +344,7 @@
           "name": "FormatDate",
           "kind": "Function",
           "file": "src/App.tsx",
-          "line": 18,
+          "line": 20,
           "isExported": false,
           "relationship": "DEFINES_FUNCTION"
         },
@@ -312,8 +352,40 @@
           "name": "renderRow",
           "kind": "Function",
           "file": "src/App.tsx",
-          "line": 23,
+          "line": 25,
           "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "CartProvider",
+          "kind": "Function",
+          "file": "src/cart/CartContext.tsx",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "useCart",
+          "kind": "Function",
+          "file": "src/cart/useCart.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "useCartCount",
+          "kind": "Function",
+          "file": "src/cart/useCart.ts",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "CartBadge",
+          "kind": "Function",
+          "file": "src/components/CartBadge.tsx",
+          "line": 4,
+          "isExported": true,
           "relationship": "DEFINES_FUNCTION"
         },
         {
@@ -333,6 +405,14 @@
           "relationship": "DEFINES_CLASS"
         },
         {
+          "name": "CartContext",
+          "kind": "Variable",
+          "file": "src/cart/CartContext.tsx",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
           "name": "default",
           "kind": "Variable",
           "file": "src/components/Avatar.tsx",
@@ -344,14 +424,14 @@
           "name": "User",
           "kind": "TypeAlias",
           "file": "src/App.tsx",
-          "line": 6,
+          "line": 8,
           "isExported": false,
           "relationship": "DEFINES_TYPE_ALIAS"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 7
+        "returned": 12
       }
     }
   },
@@ -367,7 +447,28 @@
             "file": "src/App.tsx",
             "name": "App",
             "kind": "Function",
-            "line": 27,
+            "line": 29,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/cart/CartContext.tsx",
+            "name": "CartProvider",
+            "kind": "Function",
+            "line": 7,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/cart/useCart.ts",
+            "name": "useCart",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/cart/useCart.ts",
+            "name": "useCartCount",
+            "kind": "Function",
+            "line": 10,
             "relationship": "DEFINES_FUNCTION"
           },
           {
@@ -375,6 +476,13 @@
             "name": "Button",
             "kind": "Function",
             "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/components/CartBadge.tsx",
+            "name": "CartBadge",
+            "kind": "Function",
+            "line": 4,
             "relationship": "DEFINES_FUNCTION"
           }
         ]
@@ -396,6 +504,13 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
         "rows": [
+          {
+            "file": "src/cart/CartContext.tsx",
+            "name": "CartContext",
+            "kind": "Variable",
+            "line": 5,
+            "relationship": "DEFINES_VARIABLE"
+          },
           {
             "file": "src/components/Avatar.tsx",
             "name": "default",
@@ -427,7 +542,15 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
-        "rows": []
+        "rows": [
+          {
+            "file": "src/cart/CartContext.tsx",
+            "name": "Cart",
+            "kind": "TypeAlias",
+            "line": 3,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          }
+        ]
       },
       {
         "method": "query",
@@ -464,7 +587,28 @@
           "file": "src/App.tsx",
           "name": "App",
           "kind": "Function",
-          "line": 27,
+          "line": 29,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/cart/CartContext.tsx",
+          "name": "CartProvider",
+          "kind": "Function",
+          "line": 7,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/cart/useCart.ts",
+          "name": "useCart",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/cart/useCart.ts",
+          "name": "useCartCount",
+          "kind": "Function",
+          "line": 10,
           "relationship": "DEFINES_FUNCTION"
         },
         {
@@ -475,11 +619,25 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "file": "src/components/CartBadge.tsx",
+          "name": "CartBadge",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "file": "src/components/Legacy.jsx",
           "name": "Legacy",
           "kind": "Class",
           "line": 4,
           "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/cart/CartContext.tsx",
+          "name": "CartContext",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
         },
         {
           "file": "src/components/Avatar.tsx",
@@ -501,11 +659,18 @@
           "kind": "Variable",
           "line": 3,
           "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/cart/CartContext.tsx",
+          "name": "Cart",
+          "kind": "TypeAlias",
+          "line": 3,
+          "relationship": "DEFINES_TYPE_ALIAS"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 6
+        "returned": 12
       }
     }
   },
@@ -632,6 +797,12 @@
             "file": "src/App.tsx"
           },
           {
+            "file": "src/cart/CartContext.tsx"
+          },
+          {
+            "file": "src/cart/useCart.ts"
+          },
+          {
             "file": "src/components/Avatar.tsx"
           },
           {
@@ -639,6 +810,9 @@
           },
           {
             "file": "src/components/Card.tsx"
+          },
+          {
+            "file": "src/components/CartBadge.tsx"
           },
           {
             "file": "src/components/Input.tsx"
@@ -662,40 +836,40 @@
         },
         "rows": [
           {
-            "id": "file:src/App.tsx:function:8:Profile",
+            "id": "file:src/App.tsx:function:10:Profile",
             "name": "Profile",
             "className": null,
             "file": "src/App.tsx",
             "path": "<root>/src/App.tsx",
-            "line": 8,
-            "endLine": 15
+            "line": 10,
+            "endLine": 17
           },
           {
-            "id": "file:src/App.tsx:function:18:FormatDate",
+            "id": "file:src/App.tsx:function:20:FormatDate",
             "name": "FormatDate",
             "className": null,
             "file": "src/App.tsx",
             "path": "<root>/src/App.tsx",
-            "line": 18,
-            "endLine": 20
+            "line": 20,
+            "endLine": 22
           },
           {
-            "id": "file:src/App.tsx:function:23:renderRow",
+            "id": "file:src/App.tsx:function:25:renderRow",
             "name": "renderRow",
             "className": null,
             "file": "src/App.tsx",
             "path": "<root>/src/App.tsx",
-            "line": 23,
-            "endLine": 25
+            "line": 25,
+            "endLine": 27
           },
           {
-            "id": "file:src/App.tsx:function:27:App",
+            "id": "file:src/App.tsx:function:29:App",
             "name": "App",
             "className": null,
             "file": "src/App.tsx",
             "path": "<root>/src/App.tsx",
-            "line": 27,
-            "endLine": 36
+            "line": 29,
+            "endLine": 41
           }
         ]
       },
@@ -743,12 +917,12 @@
         },
         "rows": [
           {
-            "id": "file:src/App.tsx:type-alias:6:User",
+            "id": "file:src/App.tsx:type-alias:8:User",
             "name": "User",
             "file": "src/App.tsx",
             "path": "<root>/src/App.tsx",
-            "line": 6,
-            "endLine": 6
+            "line": 8,
+            "endLine": 8
           }
         ]
       },
@@ -819,6 +993,16 @@
             "source": "./components/Legacy",
             "line": 4,
             "isTypeOnly": false
+          },
+          {
+            "source": "./components/CartBadge",
+            "line": 5,
+            "isTypeOnly": false
+          },
+          {
+            "source": "./cart/CartContext",
+            "line": 6,
+            "isTypeOnly": false
           }
         ]
       },
@@ -853,38 +1037,48 @@
           "source": "./components/Legacy",
           "line": 4,
           "isTypeOnly": false
+        },
+        {
+          "source": "./components/CartBadge",
+          "line": 5,
+          "isTypeOnly": false
+        },
+        {
+          "source": "./cart/CartContext",
+          "line": 6,
+          "isTypeOnly": false
         }
       ],
       "outline": [
         {
           "kind": "type",
           "name": "User",
-          "line": 6,
-          "endLine": 6
+          "line": 8,
+          "endLine": 8
         },
         {
           "kind": "function",
           "name": "Profile",
-          "line": 8,
-          "endLine": 15
+          "line": 10,
+          "endLine": 17
         },
         {
           "kind": "function",
           "name": "FormatDate",
-          "line": 18,
-          "endLine": 20
+          "line": 20,
+          "endLine": 22
         },
         {
           "kind": "function",
           "name": "renderRow",
-          "line": 23,
-          "endLine": 25
+          "line": 25,
+          "endLine": 27
         },
         {
           "kind": "function",
           "name": "App",
-          "line": 27,
-          "endLine": 36
+          "line": 29,
+          "endLine": 41
         }
       ],
       "page": {
@@ -909,35 +1103,67 @@
         "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
         "rows": [
           {
-            "id": "file:src/App.tsx:function:8:Profile",
+            "id": "file:src/App.tsx:function:10:Profile",
             "name": "Profile",
             "className": null,
             "file": "src/App.tsx",
-            "line": 8,
+            "line": 10,
             "isExported": false
           },
           {
-            "id": "file:src/App.tsx:function:18:FormatDate",
+            "id": "file:src/App.tsx:function:20:FormatDate",
             "name": "FormatDate",
             "className": null,
             "file": "src/App.tsx",
-            "line": 18,
+            "line": 20,
             "isExported": false
           },
           {
-            "id": "file:src/App.tsx:function:23:renderRow",
+            "id": "file:src/App.tsx:function:25:renderRow",
             "name": "renderRow",
             "className": null,
             "file": "src/App.tsx",
-            "line": 23,
+            "line": 25,
             "isExported": false
           },
           {
-            "id": "file:src/App.tsx:function:27:App",
+            "id": "file:src/App.tsx:function:29:App",
             "name": "App",
             "className": null,
             "file": "src/App.tsx",
-            "line": 27,
+            "line": 29,
+            "isExported": true
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:7:CartProvider",
+            "name": "CartProvider",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 7,
+            "isExported": true
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:function:9:add",
+            "name": "add",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 9,
+            "isExported": false
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:4:useCart",
+            "name": "useCart",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 4,
+            "isExported": true
+          },
+          {
+            "id": "file:src/cart/useCart.ts:function:10:useCartCount",
+            "name": "useCartCount",
+            "className": null,
+            "file": "src/cart/useCart.ts",
+            "line": 10,
             "isExported": true
           },
           {
@@ -963,6 +1189,14 @@
             "file": "src/components/Card.tsx",
             "line": 4,
             "isExported": false
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:function:4:CartBadge",
+            "name": "CartBadge",
+            "className": null,
+            "file": "src/components/CartBadge.tsx",
+            "line": 4,
+            "isExported": true
           },
           {
             "id": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>",
@@ -1012,12 +1246,20 @@
         "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
         "rows": [
           {
-            "id": "file:src/App.tsx:type-alias:6:User",
+            "id": "file:src/App.tsx:type-alias:8:User",
             "name": "User",
             "className": null,
             "file": "src/App.tsx",
-            "line": 6,
+            "line": 8,
             "isExported": false
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:type-alias:3:Cart",
+            "name": "Cart",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 3,
+            "isExported": true
           },
           {
             "id": "file:src/components/Button.tsx:type-alias:1:ButtonProps",
@@ -1038,6 +1280,14 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
         "rows": [
+          {
+            "id": "file:src/cart/CartContext.tsx:variable:5:CartContext",
+            "name": "CartContext",
+            "className": null,
+            "file": "src/cart/CartContext.tsx",
+            "line": 5,
+            "isExported": true
+          },
           {
             "id": "file:src/components/Avatar.tsx:variable:5:default",
             "name": "default",
@@ -1125,6 +1375,76 @@
             "bindings": "[{\"imported\":\"Legacy\",\"local\":\"Legacy\",\"kind\":\"named\"}]"
           },
           {
+            "id": "file:src/App.tsx:import:5:./components/CartBadge",
+            "file": "src/App.tsx",
+            "target": "src/components/CartBadge.tsx",
+            "source": "./components/CartBadge",
+            "specifier": "import { CartBadge } from './components/CartBadge';",
+            "line": 5,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"CartBadge\",\"local\":\"CartBadge\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/App.tsx:import:6:./cart/CartContext",
+            "file": "src/App.tsx",
+            "target": "src/cart/CartContext.tsx",
+            "source": "./cart/CartContext",
+            "specifier": "import { CartProvider } from './cart/CartContext';",
+            "line": 6,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"CartProvider\",\"local\":\"CartProvider\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/cart/CartContext.tsx:import:1:react",
+            "file": "src/cart/CartContext.tsx",
+            "target": null,
+            "source": "react",
+            "specifier": "import { createContext, useState, type ReactNode } from 'react';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"createContext\",\"local\":\"createContext\",\"kind\":\"named\"},{\"imported\":\"useState\",\"local\":\"useState\",\"kind\":\"named\"},{\"imported\":\"ReactNode\",\"local\":\"ReactNode\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/cart/useCart.ts:import:1:react",
+            "file": "src/cart/useCart.ts",
+            "target": null,
+            "source": "react",
+            "specifier": "import { useContext, useMemo } from 'react';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"useContext\",\"local\":\"useContext\",\"kind\":\"named\"},{\"imported\":\"useMemo\",\"local\":\"useMemo\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/cart/useCart.ts:import:2:./CartContext",
+            "file": "src/cart/useCart.ts",
+            "target": "src/cart/CartContext.tsx",
+            "source": "./CartContext",
+            "specifier": "import { CartContext } from './CartContext';",
+            "line": 2,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"CartContext\",\"local\":\"CartContext\",\"kind\":\"named\"}]"
+          },
+          {
             "id": "file:src/components/Avatar.tsx:import:1:react",
             "file": "src/components/Avatar.tsx",
             "target": null,
@@ -1165,6 +1485,34 @@
             "isCjs": false,
             "isTypeOnly": false,
             "bindings": "[{\"imported\":\"Button\",\"local\":\"Button\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:import:1:react",
+            "file": "src/components/CartBadge.tsx",
+            "target": null,
+            "source": "react",
+            "specifier": "import { useEffect } from 'react';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"useEffect\",\"local\":\"useEffect\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/CartBadge.tsx:import:2:../cart/useCart",
+            "file": "src/components/CartBadge.tsx",
+            "target": "src/cart/useCart.ts",
+            "source": "../cart/useCart",
+            "specifier": "import { useCartCount } from '../cart/useCart';",
+            "line": 2,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"useCartCount\",\"local\":\"useCartCount\",\"kind\":\"named\"}]"
           },
           {
             "id": "file:src/components/Input.tsx:import:1:react",

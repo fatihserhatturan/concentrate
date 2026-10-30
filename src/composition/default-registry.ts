@@ -15,7 +15,7 @@ import { routePathContributor } from "../integrations/frameworks/js-ts/fastify.j
 import { routeHandlerContributor } from "../integrations/frameworks/js-ts/express-koa.js";
 import { envConfigContributor } from "../integrations/frameworks/js-ts/env-config.js";
 import { dataAccessContributor } from "../integrations/frameworks/js-ts/data-access.js";
-import { componentRendersContributor } from "../integrations/frameworks/js-ts/resolution/component-renders.js";
+import { componentGraphContributor } from "../integrations/frameworks/js-ts/resolution/component-graph.js";
 import type { ILanguageResolver } from "../core/contracts/language-resolver.js";
 import { CoreIntegrationRegistry } from "../core/integrations/registry.js";
 
@@ -40,7 +40,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     routePathContributor,
     envConfigContributor,
     dataAccessContributor,
-    componentRendersContributor,
+    componentGraphContributor,
   ]) {
     registry.registerSemanticContributor(contributor);
   }
