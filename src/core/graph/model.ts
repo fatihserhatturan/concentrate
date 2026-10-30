@@ -19,7 +19,8 @@ export type GraphNodeLabel =
   | "ConfigValue"
   | "DataModel"
   | "Table"
-  | "Component";
+  | "Component"
+  | "Page";
 
 export type GraphRelationshipType =
   | "CONTAINS_ROOT"
@@ -71,6 +72,8 @@ export type GraphRelationshipType =
   | "RENDERS"
   | "USES_HOOK"
   | "USES_CONTEXT"
+  | "DECLARES_PAGE"
+  | "PAGE_RENDERS"
   | "ACCESSES_DATA"
   | "MAPS_TO_TABLE"
   | "RELATES_TO"

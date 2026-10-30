@@ -289,6 +289,24 @@ Astro).
   component or custom hook is `USES_CONTEXT` (Function → Component) when the
   context resolves by name or import.
 
+## Pages
+
+- Next.js is detected per package: a `package.json` that depends on `next`.
+  Projects without a manifest get no pages.
+- App Router: `page`, `layout`, `template`, `loading`, `error`,
+  `global-error`, `not-found` and `default` files under `app/` (or
+  `src/app/` when there is no `app/`) are `Page` nodes of that kind. The path
+  is the folder: route groups `(group)` and parallel-route slots `@slot`
+  (kept in `Page.slot`) leave the URL, dynamic and catch-all segments keep
+  Next's syntax (`[id]`, `[...slug]`, `[[...slug]]`). Private folders (`_x`)
+  and intercepting routes (`(.)x`) are skipped; `basePath`, `i18n` and
+  rewrites from `next.config` are not applied, so `fullPath` equals `path`.
+  `.mdx` pages are not scanned.
+- `PAGE_RENDERS` links a page to the component its file exports as default.
+  A default export that is not a component (a lowercase function, or one
+  that only returns `null`) has no `PAGE_RENDERS`.
+- The Pages Router, React Router and TanStack Router are not mapped yet.
+
 ## Review Process
 
 - Smoke reports include empty `falsePositiveFindings`,

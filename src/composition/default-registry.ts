@@ -16,6 +16,7 @@ import { routeHandlerContributor } from "../integrations/frameworks/js-ts/expres
 import { envConfigContributor } from "../integrations/frameworks/js-ts/env-config.js";
 import { dataAccessContributor } from "../integrations/frameworks/js-ts/data-access.js";
 import { componentGraphContributor } from "../integrations/frameworks/js-ts/resolution/component-graph.js";
+import { nextjsPagesContributor } from "../integrations/frameworks/js-ts/nextjs.js";
 import type { ILanguageResolver } from "../core/contracts/language-resolver.js";
 import { CoreIntegrationRegistry } from "../core/integrations/registry.js";
 
@@ -41,6 +42,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     envConfigContributor,
     dataAccessContributor,
     componentGraphContributor,
+    nextjsPagesContributor,
   ]) {
     registry.registerSemanticContributor(contributor);
   }
