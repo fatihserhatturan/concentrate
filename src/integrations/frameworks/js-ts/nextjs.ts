@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
+import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 
 // Next.js App Router pages: in a package that depends on `next`, each
@@ -32,13 +33,6 @@ const specialPages = new Map([
 export const nextjsPagesContributor: ISemanticContributor = {
   async contribute(graph) {
     const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
-    const filesByPackage = new Map<string, GraphNode[]>();
-    for (const rel of graph.relationships) {
-      if (rel.type !== "PACKAGE_CONTAINS_FILE") continue;
-      const file = nodesById.get(rel.to);
-      if (file?.label === "File") filesByPackage.set(rel.from, [...filesByPackage.get(rel.from) ?? [], file]);
-    }
-
     const componentsByFile = new Map<string, GraphNode[]>();
     for (const rel of graph.relationships) {
       if (rel.type !== "DECLARES_COMPONENT") continue;
@@ -48,58 +42,162 @@ export const nextjsPagesContributor: ISemanticContributor = {
 
     const nodes: GraphNode[] = [];
     const relationships: GraphRelationship[] = [];
-    for (const [packageId, files] of filesByPackage) {
-      const packageNode = nodesById.get(packageId);
-      const packagePath = packageNode?.properties.path;
-      const packageRelativePath = packageNode?.properties.relativePath;
-      if (typeof packagePath !== "string" || typeof packageRelativePath !== "string") continue;
-      if (!await dependsOnNext(packagePath)) continue;
+    const addPage = (file: GraphNode, properties: GraphNode["properties"]) => {
+      const page: GraphNode = { id: `${file.id}:page`, label: "Page", properties: { ...properties, fullPath: properties.path } };
+      nodes.push(page);
+      relationships.push({ from: file.id, to: page.id, type: "DECLARES_PAGE", properties: {} });
+      const component = defaultExportComponent(file, componentsByFile.get(file.id) ?? []);
+      if (component) relationships.push({ from: page.id, to: component.id, type: "PAGE_RENDERS", properties: {} });
+    };
 
-      const prefix = packageRelativePath === "." || packageRelativePath === "" ? "" : `${packageRelativePath}/`;
-      const inPackage = files.flatMap((file) => {
-        const relativePath = file.properties.relativePath;
-        return typeof relativePath === "string" && relativePath.startsWith(prefix)
-          ? [{ file, path: relativePath.slice(prefix.length) }]
-          : [];
-      });
-      const appDirectory = inPackage.some((entry) => entry.path.startsWith("app/")) ? "app/" : "src/app/";
-      const pagesDirectory = inPackage.some((entry) => entry.path.startsWith("pages/")) ? "pages/" : "src/pages/";
-      const addPage = (file: GraphNode, properties: GraphNode["properties"]) => {
-        const page: GraphNode = { id: `${file.id}:page`, label: "Page", properties: { ...properties, fullPath: properties.path } };
-        nodes.push(page);
-        relationships.push({ from: file.id, to: page.id, type: "DECLARES_PAGE", properties: {} });
-        const component = defaultExportComponent(file, componentsByFile.get(file.id) ?? []);
-        if (component) relationships.push({ from: page.id, to: component.id, type: "PAGE_RENDERS", properties: {} });
-      };
-
-      for (const { file, path: filePath } of inPackage) {
-        if (!filePath.startsWith(pagesDirectory) || file.properties.isTest === true || !sourceExtension.test(filePath)) continue;
-        const segments = filePath.slice(pagesDirectory.length).replace(sourceExtension, "").split("/");
+    for (const project of await nextProjects(graph, nodesById)) {
+      for (const { file, segments } of project.pagesFiles) {
         if (segments[0] === "api") continue;
         const special = segments.length === 1 ? specialPages.get(segments[0]!) : undefined;
         if (special) {
           addPage(file, { path: special.path, framework: "nextjs", router: "pages", kind: special.kind, slot: null });
           continue;
         }
-        if (segments.at(-1) === "index") segments.pop();
-        addPage(file, { path: `/${segments.join("/")}`, framework: "nextjs", router: "pages", kind: "page", slot: null });
+        addPage(file, { path: pagesRouterPath(segments), framework: "nextjs", router: "pages", kind: "page", slot: null });
       }
 
-      for (const { file, path: filePath } of inPackage) {
-        if (!filePath.startsWith(appDirectory)) continue;
-        const segments = filePath.slice(appDirectory.length).split("/");
-        const kind = pageFile.exec(segments.pop()!)?.[1];
-        if (!kind || segments.some((segment) => segment.startsWith("_") || segment.startsWith("(."))) continue;
-
+      for (const { file, segments, name } of project.appFiles) {
+        const kind = pageFile.exec(name)?.[1];
+        if (!kind) continue;
         const slot = [...segments].reverse().find((segment) => segment.startsWith("@"))?.slice(1) ?? null;
-        const urlSegments = segments.filter((segment) => !/^\(.+\)$/u.test(segment) && !segment.startsWith("@"));
-        addPage(file, { path: `/${urlSegments.join("/")}`, framework: "nextjs", router: "app", kind, slot });
+        addPage(file, { path: appRouterPath(segments), framework: "nextjs", router: "app", kind, slot });
       }
     }
     graph.addNodes(nodes);
     graph.addRelationships(relationships);
   },
 };
+
+// Route handlers: the `GET`, `POST`, ... functions a `route` file under
+// `app/` exports, one Route per method, and the default export of each file
+// under `pages/api/`, a Route of method ALL (the handler branches on
+// `req.method` itself). Both are handled by the exported function, so env,
+// config and data access reach the route like any other.
+const routeFile = /^route\.(jsx?|tsx?|mjs|cjs)$/u;
+const handlerMethods = new Set(["GET", "HEAD", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]);
+
+export const nextjsRoutesContributor: ISemanticContributor = {
+  async contribute(graph) {
+    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
+    const functionsByFile = new Map<string, GraphNode[]>();
+    for (const rel of graph.relationships) {
+      if (rel.type !== "DEFINES_FUNCTION") continue;
+      const fn = nodesById.get(rel.to);
+      if (fn && fn.properties.className == null) functionsByFile.set(rel.from, [...functionsByFile.get(rel.from) ?? [], fn]);
+    }
+
+    const nodes: GraphNode[] = [];
+    const relationships: GraphRelationship[] = [];
+    const addRoute = (file: GraphNode, method: string, routePath: string, handler: GraphNode) => {
+      const line = Number(handler.properties.line);
+      const route: GraphNode = {
+        id: `${file.id}:route:${line}:0:${method}:${routePath}`,
+        label: "Route",
+        properties: {
+          method,
+          path: routePath,
+          fullPath: routePath,
+          pathExpression: null,
+          receiverName: null,
+          line,
+          framework: "nextjs",
+          handlerName: String(handler.properties.name),
+        },
+      };
+      nodes.push(route);
+      relationships.push(
+        { from: file.id, to: route.id, type: "DECLARES_ROUTE", properties: {} },
+        { from: route.id, to: handler.id, type: "ROUTE_HANDLED_BY", properties: {} },
+      );
+    };
+
+    for (const project of await nextProjects(graph, nodesById)) {
+      for (const { file, segments, name } of project.appFiles) {
+        if (!routeFile.test(name)) continue;
+        const routePath = appRouterPath(segments);
+        for (const fn of functionsByFile.get(file.id) ?? []) {
+          const method = String(fn.properties.name);
+          if (fn.properties.isExported === true && handlerMethods.has(method)) addRoute(file, method, routePath, fn);
+        }
+      }
+
+      for (const { file, segments } of project.pagesFiles) {
+        if (segments[0] !== "api") continue;
+        const defaultExport = file.properties.defaultExport;
+        const handler = typeof defaultExport === "string"
+          ? (functionsByFile.get(file.id) ?? []).find((fn) => fn.properties.name === defaultExport)
+          : undefined;
+        if (handler) addRoute(file, "ALL", pagesRouterPath(segments), handler);
+      }
+    }
+    graph.addNodes(nodes);
+    graph.addRelationships(relationships);
+  },
+};
+
+type RouterFile = { file: GraphNode; segments: string[]; name: string };
+type NextProject = { appFiles: RouterFile[]; pagesFiles: RouterFile[] };
+
+// The routable files of each package that depends on `next`. App Router
+// files keep their folder segments and file name, minus private folders and
+// intercepting routes; Pages Router files keep their path without the
+// extension, minus tests.
+async function nextProjects(graph: IGraphContributor, nodesById: Map<string, GraphNode>): Promise<NextProject[]> {
+  const filesByPackage = new Map<string, GraphNode[]>();
+  for (const rel of graph.relationships) {
+    if (rel.type !== "PACKAGE_CONTAINS_FILE") continue;
+    const file = nodesById.get(rel.to);
+    if (file?.label === "File") filesByPackage.set(rel.from, [...filesByPackage.get(rel.from) ?? [], file]);
+  }
+
+  const projects: NextProject[] = [];
+  for (const [packageId, files] of filesByPackage) {
+    const packageNode = nodesById.get(packageId);
+    const packagePath = packageNode?.properties.path;
+    const packageRelativePath = packageNode?.properties.relativePath;
+    if (typeof packagePath !== "string" || typeof packageRelativePath !== "string") continue;
+    if (!await dependsOnNext(packagePath)) continue;
+
+    const prefix = packageRelativePath === "." || packageRelativePath === "" ? "" : `${packageRelativePath}/`;
+    const inPackage = files.flatMap((file) => {
+      const relativePath = file.properties.relativePath;
+      return typeof relativePath === "string" && relativePath.startsWith(prefix)
+        ? [{ file, path: relativePath.slice(prefix.length) }]
+        : [];
+    });
+    const appDirectory = inPackage.some((entry) => entry.path.startsWith("app/")) ? "app/" : "src/app/";
+    const pagesDirectory = inPackage.some((entry) => entry.path.startsWith("pages/")) ? "pages/" : "src/pages/";
+
+    const project: NextProject = { appFiles: [], pagesFiles: [] };
+    for (const { file, path: filePath } of inPackage) {
+      if (filePath.startsWith(appDirectory)) {
+        const segments = filePath.slice(appDirectory.length).split("/");
+        const name = segments.pop()!;
+        if (!segments.some((segment) => segment.startsWith("_") || segment.startsWith("(."))) project.appFiles.push({ file, segments, name });
+      } else if (filePath.startsWith(pagesDirectory) && file.properties.isTest !== true && sourceExtension.test(filePath)) {
+        const segments = filePath.slice(pagesDirectory.length).replace(sourceExtension, "").split("/");
+        project.pagesFiles.push({ file, segments, name: segments.at(-1)! });
+      }
+    }
+    projects.push(project);
+  }
+  return projects;
+}
+
+// Route groups and parallel-route slots leave the URL.
+function appRouterPath(segments: readonly string[]): string {
+  return `/${segments.filter((segment) => !/^\(.+\)$/u.test(segment) && !segment.startsWith("@")).join("/")}`;
+}
+
+// `index` stands for its folder.
+function pagesRouterPath(segments: readonly string[]): string {
+  return `/${(segments.at(-1) === "index" ? segments.slice(0, -1) : segments).join("/")}`;
+}
 
 // The component a file exports as default: `export default function Page()`,
 // `export default Page`, or one exported through a wrapper.

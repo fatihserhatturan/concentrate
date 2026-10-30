@@ -770,6 +770,15 @@
           "name": "Reports"
         }
       }
+    ],
+    "nextjs-app-router": [
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "POST",
+          "path": "/api/users"
+        }
+      }
     ]
   }
 }

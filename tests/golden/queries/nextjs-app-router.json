@@ -1,0 +1,1464 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 47
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 23
+          },
+          {
+            "table": "File",
+            "count": 21
+          },
+          {
+            "table": "Import",
+            "count": 6
+          },
+          {
+            "table": "Function",
+            "count": 24
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 1
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 9
+          },
+          {
+            "table": "Route",
+            "count": 3
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 2
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 17
+          },
+          {
+            "table": "Page",
+            "count": 14
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 47,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 23
+        },
+        {
+          "table": "File",
+          "count": 21
+        },
+        {
+          "table": "Import",
+          "count": 6
+        },
+        {
+          "table": "Function",
+          "count": 24
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 1
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 9
+        },
+        {
+          "table": "Route",
+          "count": 3
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 2
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 17
+        },
+        {
+          "table": "Page",
+          "count": 14
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "DELETE",
+            "kind": "Function",
+            "file": "app/(marketing)/api/items/[id]/route.ts",
+            "line": 2,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "revalidate",
+            "kind": "Function",
+            "file": "app/(marketing)/api/items/[id]/route.ts",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "NotARoute",
+            "kind": "Function",
+            "file": "app/_components/page.tsx",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "authorize",
+            "kind": "Function",
+            "file": "app/api/users/route.ts",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "GET",
+            "kind": "Function",
+            "file": "app/api/users/route.ts",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "BlogError",
+            "kind": "Function",
+            "file": "app/blog/[slug]/error.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "TeamDefault",
+            "kind": "Function",
+            "file": "app/dashboard/@team/default.tsx",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Team",
+            "kind": "Function",
+            "file": "app/dashboard/@team/page.tsx",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Home",
+            "kind": "Function",
+            "file": "app/page.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "ShopTemplate",
+            "kind": "Function",
+            "file": "app/shop/[[...filters]]/template.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Hero",
+            "kind": "Function",
+            "file": "components/Hero.tsx",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "users",
+            "kind": "Variable",
+            "file": "app/api/users/route.ts",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "DELETE",
+          "kind": "Function",
+          "file": "app/(marketing)/api/items/[id]/route.ts",
+          "line": 2,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "revalidate",
+          "kind": "Function",
+          "file": "app/(marketing)/api/items/[id]/route.ts",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "NotARoute",
+          "kind": "Function",
+          "file": "app/_components/page.tsx",
+          "line": 1,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "authorize",
+          "kind": "Function",
+          "file": "app/api/users/route.ts",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "GET",
+          "kind": "Function",
+          "file": "app/api/users/route.ts",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "BlogError",
+          "kind": "Function",
+          "file": "app/blog/[slug]/error.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "TeamDefault",
+          "kind": "Function",
+          "file": "app/dashboard/@team/default.tsx",
+          "line": 1,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Team",
+          "kind": "Function",
+          "file": "app/dashboard/@team/page.tsx",
+          "line": 1,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Home",
+          "kind": "Function",
+          "file": "app/page.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "ShopTemplate",
+          "kind": "Function",
+          "file": "app/shop/[[...filters]]/template.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Hero",
+          "kind": "Function",
+          "file": "components/Hero.tsx",
+          "line": 1,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "users",
+          "kind": "Variable",
+          "file": "app/api/users/route.ts",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 12
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "app/(marketing)/about/page.tsx",
+            "name": "About",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/(marketing)/api/items/[id]/route.ts",
+            "name": "DELETE",
+            "kind": "Function",
+            "line": 2,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/(marketing)/api/items/[id]/route.ts",
+            "name": "revalidate",
+            "kind": "Function",
+            "line": 8,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/_components/Nav.tsx",
+            "name": "Nav",
+            "kind": "Function",
+            "line": 2,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/_components/page.tsx",
+            "name": "NotARoute",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/api/users/route.ts",
+            "name": "GET",
+            "kind": "Function",
+            "line": 7,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/api/users/route.ts",
+            "name": "POST",
+            "kind": "Function",
+            "line": 11,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/blog/[slug]/error.tsx",
+            "name": "BlogError",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/blog/[slug]/loading.tsx",
+            "name": "Loading",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/blog/[slug]/page.tsx",
+            "name": "BlogPost",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/dashboard/@analytics/page.tsx",
+            "name": "Analytics",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/dashboard/@team/default.tsx",
+            "name": "TeamDefault",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/dashboard/@team/page.tsx",
+            "name": "Team",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/dashboard/layout.tsx",
+            "name": "DashboardLayout",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/docs/[...slug]/page.tsx",
+            "name": "Docs",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/feed/(.)photo/[id]/page.tsx",
+            "name": "PhotoModal",
+            "kind": "Function",
+            "line": 2,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/layout.tsx",
+            "name": "RootLayout",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/not-found.tsx",
+            "name": "NotFound",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/page.tsx",
+            "name": "Home",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/shop/[[...filters]]/page.tsx",
+            "name": "shop",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "app/shop/[[...filters]]/template.tsx",
+            "name": "ShopTemplate",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "components/Hero.tsx",
+            "name": "Hero",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "components/page.tsx",
+            "name": "Stray",
+            "kind": "Function",
+            "line": 2,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "app/(marketing)/about/page.tsx",
+          "name": "About",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/(marketing)/api/items/[id]/route.ts",
+          "name": "DELETE",
+          "kind": "Function",
+          "line": 2,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/(marketing)/api/items/[id]/route.ts",
+          "name": "revalidate",
+          "kind": "Function",
+          "line": 8,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/_components/Nav.tsx",
+          "name": "Nav",
+          "kind": "Function",
+          "line": 2,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/_components/page.tsx",
+          "name": "NotARoute",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/api/users/route.ts",
+          "name": "GET",
+          "kind": "Function",
+          "line": 7,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/api/users/route.ts",
+          "name": "POST",
+          "kind": "Function",
+          "line": 11,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/blog/[slug]/error.tsx",
+          "name": "BlogError",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/blog/[slug]/loading.tsx",
+          "name": "Loading",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/blog/[slug]/page.tsx",
+          "name": "BlogPost",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/dashboard/@analytics/page.tsx",
+          "name": "Analytics",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/dashboard/@team/default.tsx",
+          "name": "TeamDefault",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/dashboard/@team/page.tsx",
+          "name": "Team",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/dashboard/layout.tsx",
+          "name": "DashboardLayout",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/docs/[...slug]/page.tsx",
+          "name": "Docs",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/feed/(.)photo/[id]/page.tsx",
+          "name": "PhotoModal",
+          "kind": "Function",
+          "line": 2,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/layout.tsx",
+          "name": "RootLayout",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/not-found.tsx",
+          "name": "NotFound",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/page.tsx",
+          "name": "Home",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/shop/[[...filters]]/page.tsx",
+          "name": "shop",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "app/shop/[[...filters]]/template.tsx",
+          "name": "ShopTemplate",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "components/Hero.tsx",
+          "name": "Hero",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "components/page.tsx",
+          "name": "Stray",
+          "kind": "Function",
+          "line": 2,
+          "relationship": "DEFINES_FUNCTION"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 23
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "app/(marketing)/api/items/[id]/route.ts",
+            "line": 2,
+            "method": "DELETE",
+            "path": "/api/items/[id]",
+            "fullPath": "/api/items/[id]",
+            "framework": "nextjs",
+            "handlerName": "DELETE",
+            "handler": "DELETE"
+          },
+          {
+            "file": "app/api/users/route.ts",
+            "line": 7,
+            "method": "GET",
+            "path": "/api/users",
+            "fullPath": "/api/users",
+            "framework": "nextjs",
+            "handlerName": "GET",
+            "handler": "GET"
+          },
+          {
+            "file": "app/api/users/route.ts",
+            "line": 11,
+            "method": "POST",
+            "path": "/api/users",
+            "fullPath": "/api/users",
+            "framework": "nextjs",
+            "handlerName": "POST",
+            "handler": "POST"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "app/(marketing)/api/items/[id]/route.ts",
+          "line": 2,
+          "method": "DELETE",
+          "path": "/api/items/[id]",
+          "fullPath": "/api/items/[id]",
+          "framework": "nextjs",
+          "handlerName": "DELETE",
+          "handler": "DELETE"
+        },
+        {
+          "file": "app/api/users/route.ts",
+          "line": 7,
+          "method": "GET",
+          "path": "/api/users",
+          "fullPath": "/api/users",
+          "framework": "nextjs",
+          "handlerName": "GET",
+          "handler": "GET"
+        },
+        {
+          "file": "app/api/users/route.ts",
+          "line": 11,
+          "method": "POST",
+          "path": "/api/users",
+          "fullPath": "/api/users",
+          "framework": "nextjs",
+          "handlerName": "POST",
+          "handler": "POST"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "app/api/users/route.ts",
+            "line": 4,
+            "name": "API_TOKEN",
+            "value": "member",
+            "valueType": null,
+            "consumer": "app/api/users/route.ts",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "app/api/users/route.ts",
+            "line": 8,
+            "name": "PAGE_SIZE",
+            "value": "member",
+            "valueType": null,
+            "consumer": "app/api/users/route.ts",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "app/api/users/route.ts",
+          "line": 4,
+          "name": "API_TOKEN",
+          "value": "member",
+          "valueType": null,
+          "consumer": "app/api/users/route.ts",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "app/api/users/route.ts",
+          "line": 8,
+          "name": "PAGE_SIZE",
+          "value": "member",
+          "valueType": null,
+          "consumer": "app/api/users/route.ts",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "POST",
+      "path": "/api/users"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "POST",
+          "path": "/api/users"
+        },
+        "rows": [
+          {
+            "id": "file:app/api/users/route.ts:route:11:0:POST:/api/users",
+            "method": "POST",
+            "path": "/api/users",
+            "fullPath": "/api/users",
+            "framework": "nextjs",
+            "handlerName": "POST",
+            "file": "app/api/users/route.ts",
+            "line": 11
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:app/(marketing)/about/page.tsx:function:4:About",
+            "name": "About",
+            "className": null,
+            "file": "app/(marketing)/about/page.tsx",
+            "line": 4,
+            "endLine": 6
+          },
+          {
+            "id": "file:app/(marketing)/api/items/[id]/route.ts:function:2:DELETE",
+            "name": "DELETE",
+            "className": null,
+            "file": "app/(marketing)/api/items/[id]/route.ts",
+            "line": 2,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/(marketing)/api/items/[id]/route.ts:function:8:revalidate",
+            "name": "revalidate",
+            "className": null,
+            "file": "app/(marketing)/api/items/[id]/route.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:app/_components/Nav.tsx:function:2:Nav",
+            "name": "Nav",
+            "className": null,
+            "file": "app/_components/Nav.tsx",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:app/_components/page.tsx:function:1:NotARoute",
+            "name": "NotARoute",
+            "className": null,
+            "file": "app/_components/page.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/api/users/route.ts:function:3:authorize",
+            "name": "authorize",
+            "className": null,
+            "file": "app/api/users/route.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/api/users/route.ts:function:7:GET",
+            "name": "GET",
+            "className": null,
+            "file": "app/api/users/route.ts",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:app/api/users/route.ts:function:11:POST",
+            "name": "POST",
+            "className": null,
+            "file": "app/api/users/route.ts",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:app/blog/[slug]/error.tsx:function:3:BlogError",
+            "name": "BlogError",
+            "className": null,
+            "file": "app/blog/[slug]/error.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/blog/[slug]/loading.tsx:function:1:Loading",
+            "name": "Loading",
+            "className": null,
+            "file": "app/blog/[slug]/loading.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/blog/[slug]/page.tsx:function:1:BlogPost",
+            "name": "BlogPost",
+            "className": null,
+            "file": "app/blog/[slug]/page.tsx",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:app/dashboard/@analytics/page.tsx:function:1:Analytics",
+            "name": "Analytics",
+            "className": null,
+            "file": "app/dashboard/@analytics/page.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/dashboard/@team/default.tsx:function:1:TeamDefault",
+            "name": "TeamDefault",
+            "className": null,
+            "file": "app/dashboard/@team/default.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/dashboard/@team/page.tsx:function:1:Team",
+            "name": "Team",
+            "className": null,
+            "file": "app/dashboard/@team/page.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/dashboard/layout.tsx:function:3:DashboardLayout",
+            "name": "DashboardLayout",
+            "className": null,
+            "file": "app/dashboard/layout.tsx",
+            "line": 3,
+            "endLine": 10
+          },
+          {
+            "id": "file:app/docs/[...slug]/page.tsx:function:1:Docs",
+            "name": "Docs",
+            "className": null,
+            "file": "app/docs/[...slug]/page.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/feed/(.)photo/[id]/page.tsx:function:2:PhotoModal",
+            "name": "PhotoModal",
+            "className": null,
+            "file": "app/feed/(.)photo/[id]/page.tsx",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:app/layout.tsx:function:4:RootLayout",
+            "name": "RootLayout",
+            "className": null,
+            "file": "app/layout.tsx",
+            "line": 4,
+            "endLine": 13
+          },
+          {
+            "id": "file:app/not-found.tsx:function:1:NotFound",
+            "name": "NotFound",
+            "className": null,
+            "file": "app/not-found.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:app/page.tsx:function:3:Home",
+            "name": "Home",
+            "className": null,
+            "file": "app/page.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/shop/[[...filters]]/page.tsx:function:3:shop",
+            "name": "shop",
+            "className": null,
+            "file": "app/shop/[[...filters]]/page.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:app/shop/[[...filters]]/template.tsx:function:3:ShopTemplate",
+            "name": "ShopTemplate",
+            "className": null,
+            "file": "app/shop/[[...filters]]/template.tsx",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:components/Hero.tsx:function:1:Hero",
+            "name": "Hero",
+            "className": null,
+            "file": "components/Hero.tsx",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:components/page.tsx:function:2:Stray",
+            "name": "Stray",
+            "className": null,
+            "file": "components/page.tsx",
+            "line": 2,
+            "endLine": 4
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:app/api/users/route.ts:function:11:POST",
+            "callee": "file:app/api/users/route.ts:function:3:authorize",
+            "line": 12
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:route:11:0:POST:/api/users"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:app/api/users/route.ts:route:11:0:POST:/api/users",
+            "fn": "file:app/api/users/route.ts:function:11:POST"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:route:11:0:POST:/api/users"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:route:11:0:POST:/api/users"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE id(route) IN $ids RETURN id(route) AS route, id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:route:11:0:POST:/api/users"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:USES_ENV_ROUTE]->(env:EnvVar) WHERE id(route) IN $ids RETURN id(route) AS route, env.name AS name, rel.access AS access, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:route:11:0:POST:/api/users"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:CONSUMES_CONFIG_ROUTE]->(config:ConfigValue) WHERE id(route) IN $ids RETURN id(route) AS route, config.name AS name, rel.localName AS localName",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:route:11:0:POST:/api/users"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:function:11:POST",
+            "file:app/api/users/route.ts:function:3:authorize"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:function:11:POST",
+            "file:app/api/users/route.ts:function:3:authorize"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:function:11:POST",
+            "file:app/api/users/route.ts:function:3:authorize"
+          ]
+        },
+        "rows": [
+          {
+            "name": "API_TOKEN",
+            "access": "member",
+            "line": 4,
+            "fn": "file:app/api/users/route.ts:function:3:authorize"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:app/api/users/route.ts:function:11:POST",
+            "file:app/api/users/route.ts:function:3:authorize"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "method": "POST",
+      "path": "/api/users",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/api/users",
+          "fullPath": "/api/users",
+          "framework": "nextjs",
+          "handlerName": "POST",
+          "file": "app/api/users/route.ts",
+          "line": 11,
+          "handlers": [
+            {
+              "name": "POST",
+              "className": null,
+              "file": "app/api/users/route.ts",
+              "line": 11,
+              "endLine": 14
+            }
+          ],
+          "lifecycle": [],
+          "callChain": [
+            {
+              "depth": 1,
+              "caller": "POST",
+              "callerFile": "app/api/users/route.ts",
+              "line": 12,
+              "callee": "authorize",
+              "calleeClass": null,
+              "calleeFile": "app/api/users/route.ts"
+            }
+          ],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [
+            {
+              "name": "API_TOKEN",
+              "access": "member",
+              "line": 4,
+              "usedBy": [
+                {
+                  "function": "authorize",
+                  "functionFile": "app/api/users/route.ts"
+                }
+              ]
+            }
+          ],
+          "config": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  }
+]
