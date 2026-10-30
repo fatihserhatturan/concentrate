@@ -10,6 +10,7 @@ import { applyDomAttributeSemantics, applyDomParseSemantics } from "./dom.js";
 import { applyReactParseSemantics } from "./react.js";
 import { applyReactRouterSemantics } from "./react-router.js";
 import { applyServerFunctionSemantics } from "./server-functions.js";
+import { applyTanStackRouterSemantics } from "./tanstack-router.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
 // the nodes earlier ones added (NestJS routes, for example, read decorators).
@@ -79,6 +80,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // React Router <Route> trees and route objects.
     name: "react-router",
     onFile: applyReactRouterSemantics,
+  },
+  {
+    // TanStack Router file and code routes.
+    name: "tanstack-router",
+    onFile: applyTanStackRouterSemantics,
   },
   {
     // "use server" functions (server actions).

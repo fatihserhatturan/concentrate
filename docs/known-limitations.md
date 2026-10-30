@@ -343,7 +343,26 @@ Astro).
   arrays from another file, routes built at runtime (`.map`), `lazy` routes,
   v5 `render` props, and descendant `<Routes>` inside a routed component,
   whose paths start again from `/` instead of the parent route's.
-- TanStack Router is not mapped yet.
+- TanStack Router: in a file that imports `@tanstack/react-router` or
+  `@tanstack/solid-router`, each `createFileRoute('/id')(…)` and the root
+  route of `__root.*` is a `Page` of router `file`, and each
+  `createRootRoute` / `createRootRouteWithContext` / `createRoute` elsewhere
+  one of router `code` (framework `tanstack-router`). File routes take their
+  path from the route id the generator wrote, not from the file name, so a
+  route id that is out of date is taken as written; `fullPath` drops
+  pathless (`_auth`) and group (`(marketing)`) segments and un-nests
+  `posts_`. File-route kinds come from the id alone: `layout` for the root
+  and pathless routes, `index` for an id ending in `/`, otherwise `page`
+  (`/posts` stays a `page` even when `/posts/$postId` nests in it).
+  `createLazyFileRoute` gives a separate `Page` of kind `lazy` at the same
+  path, holding the code-split component. Code routes join their `path` onto
+  the route `getParentRoute` returns, when that is a route variable of the
+  same file (otherwise from `/`); `path: '/'` is an index route, an `id`
+  without a `path` a pathless layout. `Page.component` and `PAGE_RENDERS`
+  follow the `component` option when it names a component; an inline arrow
+  has none. Generated files (`routeTree.gen.ts`) repeat the routes and are
+  skipped; `createLazyRoute` and virtual file routes (`virtualRouteConfig`)
+  are not read.
 
 ## Review Process
 

@@ -1,0 +1,5 @@
+{
+  "name": "tanstack-router-fixture",
+  "private": true,
+  "dependencies": { "react": "18.3.1", "@tanstack/react-router": "1.58.3" }
+}
