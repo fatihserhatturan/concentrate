@@ -302,10 +302,16 @@ Astro).
   and intercepting routes (`(.)x`) are skipped; `basePath`, `i18n` and
   rewrites from `next.config` are not applied, so `fullPath` equals `path`.
   `.mdx` pages are not scanned.
+- Pages Router: every source file under `pages/` (or `src/pages/` when there
+  is no `pages/`) is a page whose path is the file path without the
+  extension, `index` standing for its folder. `_app`, `_document` and
+  `_error` are pages of kind `app`, `document` and `error` at `/`; `404` and
+  `500` are `not-found` and `error`. `pages/api/` and test files are not
+  pages; a custom `pageExtensions` in `next.config` is not read.
 - `PAGE_RENDERS` links a page to the component its file exports as default.
   A default export that is not a component (a lowercase function, or one
   that only returns `null`) has no `PAGE_RENDERS`.
-- The Pages Router, React Router and TanStack Router are not mapped yet.
+- React Router and TanStack Router are not mapped yet.
 
 ## Review Process
 
