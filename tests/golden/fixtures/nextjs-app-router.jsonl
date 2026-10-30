@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":20,"supportedFiles":19,"parsedFiles":19,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":22,"supportedFiles":21,"parsedFiles":21,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"nextjs-app-router","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"nextjs-app-router","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
@@ -6,7 +6,12 @@
 {"kind":"node","id":"dir:app","label":"Directory","properties":{"name":"app","path":"<root>/app","relativePath":"app"}}
 {"kind":"node","id":"dir:app/(marketing)","label":"Directory","properties":{"name":"(marketing)","path":"<root>/app/(marketing)","relativePath":"app/(marketing)"}}
 {"kind":"node","id":"dir:app/(marketing)/about","label":"Directory","properties":{"name":"about","path":"<root>/app/(marketing)/about","relativePath":"app/(marketing)/about"}}
+{"kind":"node","id":"dir:app/(marketing)/api","label":"Directory","properties":{"name":"api","path":"<root>/app/(marketing)/api","relativePath":"app/(marketing)/api"}}
+{"kind":"node","id":"dir:app/(marketing)/api/items","label":"Directory","properties":{"name":"items","path":"<root>/app/(marketing)/api/items","relativePath":"app/(marketing)/api/items"}}
+{"kind":"node","id":"dir:app/(marketing)/api/items/[id]","label":"Directory","properties":{"name":"[id]","path":"<root>/app/(marketing)/api/items/[id]","relativePath":"app/(marketing)/api/items/[id]"}}
 {"kind":"node","id":"dir:app/_components","label":"Directory","properties":{"name":"_components","path":"<root>/app/_components","relativePath":"app/_components"}}
+{"kind":"node","id":"dir:app/api","label":"Directory","properties":{"name":"api","path":"<root>/app/api","relativePath":"app/api"}}
+{"kind":"node","id":"dir:app/api/users","label":"Directory","properties":{"name":"users","path":"<root>/app/api/users","relativePath":"app/api/users"}}
 {"kind":"node","id":"dir:app/blog","label":"Directory","properties":{"name":"blog","path":"<root>/app/blog","relativePath":"app/blog"}}
 {"kind":"node","id":"dir:app/blog/[slug]","label":"Directory","properties":{"name":"[slug]","path":"<root>/app/blog/[slug]","relativePath":"app/blog/[slug]"}}
 {"kind":"node","id":"dir:app/dashboard","label":"Directory","properties":{"name":"dashboard","path":"<root>/app/dashboard","relativePath":"app/dashboard"}}
@@ -20,17 +25,39 @@
 {"kind":"node","id":"dir:app/shop","label":"Directory","properties":{"name":"shop","path":"<root>/app/shop","relativePath":"app/shop"}}
 {"kind":"node","id":"dir:app/shop/[[...filters]]","label":"Directory","properties":{"name":"[[...filters]]","path":"<root>/app/shop/[[...filters]]","relativePath":"app/shop/[[...filters]]"}}
 {"kind":"node","id":"dir:components","label":"Directory","properties":{"name":"components","path":"<root>/components","relativePath":"components"}}
+{"kind":"node","id":"env:API_TOKEN","label":"EnvVar","properties":{"name":"API_TOKEN"}}
+{"kind":"node","id":"env:PAGE_SIZE","label":"EnvVar","properties":{"name":"PAGE_SIZE"}}
 {"kind":"node","id":"file:app/(marketing)/about/page.tsx","label":"File","properties":{"defaultExport":"About","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app/(marketing)/about/page.tsx","relativePath":"app/(marketing)/about/page.tsx","sourceType":"production"}}
 {"kind":"node","id":"file:app/(marketing)/about/page.tsx:component:4:About","label":"Component","properties":{"defaultExportWrapper":null,"endLine":6,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":4,"name":"About","pendingRenders":null}}
 {"kind":"node","id":"file:app/(marketing)/about/page.tsx:function:4:About","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":4,"methodKind":null,"name":"About","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:app/(marketing)/about/page.tsx:import:1:../../../components/Hero","label":"Import","properties":{"bindings":"[{\"imported\":\"Hero\",\"local\":\"Hero\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"../../../components/Hero","specifier":"import { Hero } from '../../../components/Hero';"}}
 {"kind":"node","id":"file:app/(marketing)/about/page.tsx:page","label":"Page","properties":{"framework":"nextjs","fullPath":"/about","kind":"page","path":"/about","router":"app","slot":null}}
+{"kind":"node","id":"file:app/(marketing)/api/items/[id]/route.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app/(marketing)/api/items/[id]/route.ts","relativePath":"app/(marketing)/api/items/[id]/route.ts","sourceType":"production"}}
+{"kind":"node","id":"file:app/(marketing)/api/items/[id]/route.ts:function:2:DELETE","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"arrow_function","line":2,"methodKind":null,"name":"DELETE","parameters":"[{\"name\":\"_request\",\"type\":\"Request\"},{\"name\":\"{ params }\",\"type\":\"{ params: Promise<{ id: string }> }\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/(marketing)/api/items/[id]/route.ts:function:2:DELETE:call:4:9:new Response","label":"Call","properties":{"args":"[\"id\"]","callee":"Response","columnNumber":9,"expression":"new Response","line":4,"name":"new Response","receiver":null}}
+{"kind":"node","id":"file:app/(marketing)/api/items/[id]/route.ts:function:8:revalidate","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":8,"methodKind":null,"name":"revalidate","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/(marketing)/api/items/[id]/route.ts:route:2:0:DELETE:/api/items/[id]","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/items/[id]","handlerName":"DELETE","line":2,"method":"DELETE","path":"/api/items/[id]","pathExpression":null,"receiverName":null}}
 {"kind":"node","id":"file:app/_components/Nav.tsx","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app/_components/Nav.tsx","relativePath":"app/_components/Nav.tsx","sourceType":"production"}}
 {"kind":"node","id":"file:app/_components/Nav.tsx:component:2:Nav","label":"Component","properties":{"defaultExportWrapper":null,"endLine":4,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":2,"name":"Nav","pendingRenders":null}}
 {"kind":"node","id":"file:app/_components/Nav.tsx:function:2:Nav","label":"Function","properties":{"className":null,"endLine":4,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":2,"methodKind":null,"name":"Nav","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:app/_components/page.tsx","label":"File","properties":{"defaultExport":"NotARoute","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app/_components/page.tsx","relativePath":"app/_components/page.tsx","sourceType":"production"}}
 {"kind":"node","id":"file:app/_components/page.tsx:component:1:NotARoute","label":"Component","properties":{"defaultExportWrapper":null,"endLine":3,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":1,"name":"NotARoute","pendingRenders":null}}
 {"kind":"node","id":"file:app/_components/page.tsx:function:1:NotARoute","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"NotARoute","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/api/users/route.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app/api/users/route.ts","relativePath":"app/api/users/route.ts","sourceType":"production"}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:11:POST","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_declaration","line":11,"methodKind":null,"name":"POST","parameters":"[{\"name\":\"request\",\"type\":\"Request\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:11:POST:call:12:34:new Response","label":"Call","properties":{"args":"[]","callee":"Response","columnNumber":34,"expression":"new Response","line":12,"name":"new Response","receiver":null}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:11:POST:call:12:7:authorize","label":"Call","properties":{"args":"[\"request\"]","callee":"authorize","columnNumber":7,"expression":"authorize","line":12,"name":"authorize","receiver":null}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:11:POST:call:13:29:request.json","label":"Call","properties":{"args":"[]","callee":"json","columnNumber":29,"expression":"request.json","line":13,"name":"request.json","receiver":"request"}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:11:POST:call:13:9:Response.json","label":"Call","properties":{"args":"[]","callee":"json","columnNumber":9,"expression":"Response.json","line":13,"name":"Response.json","receiver":"Response"}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:3:authorize","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":3,"methodKind":null,"name":"authorize","parameters":"[{\"name\":\"request\",\"type\":\"Request\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:3:authorize:call:4:9:request.headers.get","label":"Call","properties":{"args":"[\"authorization\"]","callee":"get","columnNumber":9,"expression":"request.headers.get","line":4,"name":"request.headers.get","receiver":"request.headers"}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:7:GET","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_declaration","line":7,"methodKind":null,"name":"GET","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:7:GET:call:8:23:users.slice","label":"Call","properties":{"args":"[\"0\"]","callee":"slice","columnNumber":23,"expression":"users.slice","line":8,"name":"users.slice","receiver":"users"}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:7:GET:call:8:38:Number","label":"Call","properties":{"args":"[]","callee":"Number","columnNumber":38,"expression":"Number","line":8,"name":"Number","receiver":null}}
+{"kind":"node","id":"file:app/api/users/route.ts:function:7:GET:call:8:9:Response.json","label":"Call","properties":{"args":"[]","callee":"json","columnNumber":9,"expression":"Response.json","line":8,"name":"Response.json","receiver":"Response"}}
+{"kind":"node","id":"file:app/api/users/route.ts:route:11:0:POST:/api/users","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/users","handlerName":"POST","line":11,"method":"POST","path":"/api/users","pathExpression":null,"receiverName":null}}
+{"kind":"node","id":"file:app/api/users/route.ts:route:7:0:GET:/api/users","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/users","handlerName":"GET","line":7,"method":"GET","path":"/api/users","pathExpression":null,"receiverName":null}}
+{"kind":"node","id":"file:app/api/users/route.ts:variable:1:users","label":"Variable","properties":{"isExported":false,"kind":"const","line":1,"name":"users","stringValue":null}}
 {"kind":"node","id":"file:app/blog/[slug]/error.tsx","label":"File","properties":{"defaultExport":"BlogError","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app/blog/[slug]/error.tsx","relativePath":"app/blog/[slug]/error.tsx","sourceType":"production"}}
 {"kind":"node","id":"file:app/blog/[slug]/error.tsx:component:3:BlogError","label":"Component","properties":{"defaultExportWrapper":null,"endLine":5,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":3,"name":"BlogError","pendingRenders":null}}
 {"kind":"node","id":"file:app/blog/[slug]/error.tsx:function:3:BlogError","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"BlogError","parameters":"[{\"name\":\"{ reset }\",\"type\":\"{ reset: () => void }\"}]","returnType":null,"visibility":"public"}}
@@ -101,6 +128,7 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:components","properties":{}}
 {"kind":"rel","from":"dir:app","type":"CONTAINS_DIRECTORY","to":"dir:app/(marketing)","properties":{}}
 {"kind":"rel","from":"dir:app","type":"CONTAINS_DIRECTORY","to":"dir:app/_components","properties":{}}
+{"kind":"rel","from":"dir:app","type":"CONTAINS_DIRECTORY","to":"dir:app/api","properties":{}}
 {"kind":"rel","from":"dir:app","type":"CONTAINS_DIRECTORY","to":"dir:app/blog","properties":{}}
 {"kind":"rel","from":"dir:app","type":"CONTAINS_DIRECTORY","to":"dir:app/dashboard","properties":{}}
 {"kind":"rel","from":"dir:app","type":"CONTAINS_DIRECTORY","to":"dir:app/docs","properties":{}}
@@ -110,9 +138,15 @@
 {"kind":"rel","from":"dir:app","type":"CONTAINS_FILE","to":"file:app/not-found.tsx","properties":{}}
 {"kind":"rel","from":"dir:app","type":"CONTAINS_FILE","to":"file:app/page.tsx","properties":{}}
 {"kind":"rel","from":"dir:app/(marketing)","type":"CONTAINS_DIRECTORY","to":"dir:app/(marketing)/about","properties":{}}
+{"kind":"rel","from":"dir:app/(marketing)","type":"CONTAINS_DIRECTORY","to":"dir:app/(marketing)/api","properties":{}}
 {"kind":"rel","from":"dir:app/(marketing)/about","type":"CONTAINS_FILE","to":"file:app/(marketing)/about/page.tsx","properties":{}}
+{"kind":"rel","from":"dir:app/(marketing)/api","type":"CONTAINS_DIRECTORY","to":"dir:app/(marketing)/api/items","properties":{}}
+{"kind":"rel","from":"dir:app/(marketing)/api/items","type":"CONTAINS_DIRECTORY","to":"dir:app/(marketing)/api/items/[id]","properties":{}}
+{"kind":"rel","from":"dir:app/(marketing)/api/items/[id]","type":"CONTAINS_FILE","to":"file:app/(marketing)/api/items/[id]/route.ts","properties":{}}
 {"kind":"rel","from":"dir:app/_components","type":"CONTAINS_FILE","to":"file:app/_components/Nav.tsx","properties":{}}
 {"kind":"rel","from":"dir:app/_components","type":"CONTAINS_FILE","to":"file:app/_components/page.tsx","properties":{}}
+{"kind":"rel","from":"dir:app/api","type":"CONTAINS_DIRECTORY","to":"dir:app/api/users","properties":{}}
+{"kind":"rel","from":"dir:app/api/users","type":"CONTAINS_FILE","to":"file:app/api/users/route.ts","properties":{}}
 {"kind":"rel","from":"dir:app/blog","type":"CONTAINS_DIRECTORY","to":"dir:app/blog/[slug]","properties":{}}
 {"kind":"rel","from":"dir:app/blog/[slug]","type":"CONTAINS_FILE","to":"file:app/blog/[slug]/error.tsx","properties":{}}
 {"kind":"rel","from":"dir:app/blog/[slug]","type":"CONTAINS_FILE","to":"file:app/blog/[slug]/loading.tsx","properties":{}}
@@ -142,12 +176,39 @@
 {"kind":"rel","from":"file:app/(marketing)/about/page.tsx:import:1:../../../components/Hero","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:app/(marketing)/about/page.tsx:import:1:../../../components/Hero","type":"RESOLVES_TO","to":"file:components/Hero.tsx","properties":{}}
 {"kind":"rel","from":"file:app/(marketing)/about/page.tsx:page","type":"PAGE_RENDERS","to":"file:app/(marketing)/about/page.tsx:component:4:About","properties":{}}
+{"kind":"rel","from":"file:app/(marketing)/api/items/[id]/route.ts","type":"DECLARES_ROUTE","to":"file:app/(marketing)/api/items/[id]/route.ts:route:2:0:DELETE:/api/items/[id]","properties":{}}
+{"kind":"rel","from":"file:app/(marketing)/api/items/[id]/route.ts","type":"DEFINES_FUNCTION","to":"file:app/(marketing)/api/items/[id]/route.ts:function:2:DELETE","properties":{}}
+{"kind":"rel","from":"file:app/(marketing)/api/items/[id]/route.ts","type":"DEFINES_FUNCTION","to":"file:app/(marketing)/api/items/[id]/route.ts:function:8:revalidate","properties":{}}
+{"kind":"rel","from":"file:app/(marketing)/api/items/[id]/route.ts:function:2:DELETE","type":"CALLS","to":"file:app/(marketing)/api/items/[id]/route.ts:function:2:DELETE:call:4:9:new Response","properties":{}}
+{"kind":"rel","from":"file:app/(marketing)/api/items/[id]/route.ts:route:2:0:DELETE:/api/items/[id]","type":"ROUTE_HANDLED_BY","to":"file:app/(marketing)/api/items/[id]/route.ts:function:2:DELETE","properties":{}}
 {"kind":"rel","from":"file:app/_components/Nav.tsx","type":"DECLARES_COMPONENT","to":"file:app/_components/Nav.tsx:component:2:Nav","properties":{}}
 {"kind":"rel","from":"file:app/_components/Nav.tsx","type":"DEFINES_FUNCTION","to":"file:app/_components/Nav.tsx:function:2:Nav","properties":{}}
 {"kind":"rel","from":"file:app/_components/Nav.tsx:component:2:Nav","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:app/_components/Nav.tsx:function:2:Nav","properties":{}}
 {"kind":"rel","from":"file:app/_components/page.tsx","type":"DECLARES_COMPONENT","to":"file:app/_components/page.tsx:component:1:NotARoute","properties":{}}
 {"kind":"rel","from":"file:app/_components/page.tsx","type":"DEFINES_FUNCTION","to":"file:app/_components/page.tsx:function:1:NotARoute","properties":{}}
 {"kind":"rel","from":"file:app/_components/page.tsx:component:1:NotARoute","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:app/_components/page.tsx:function:1:NotARoute","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts","type":"DECLARES_ROUTE","to":"file:app/api/users/route.ts:route:11:0:POST:/api/users","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts","type":"DECLARES_ROUTE","to":"file:app/api/users/route.ts:route:7:0:GET:/api/users","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts","type":"DEFINES_FUNCTION","to":"file:app/api/users/route.ts:function:11:POST","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts","type":"DEFINES_FUNCTION","to":"file:app/api/users/route.ts:function:3:authorize","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts","type":"DEFINES_FUNCTION","to":"file:app/api/users/route.ts:function:7:GET","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts","type":"DEFINES_VARIABLE","to":"file:app/api/users/route.ts:variable:1:users","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts","type":"USES_ENV","to":"env:API_TOKEN","properties":{"access":"member","line":4}}
+{"kind":"rel","from":"file:app/api/users/route.ts","type":"USES_ENV","to":"env:PAGE_SIZE","properties":{"access":"member","line":8}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:11:POST","type":"CALLS","to":"file:app/api/users/route.ts:function:11:POST:call:12:34:new Response","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:11:POST","type":"CALLS","to":"file:app/api/users/route.ts:function:11:POST:call:12:7:authorize","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:11:POST","type":"CALLS","to":"file:app/api/users/route.ts:function:11:POST:call:13:29:request.json","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:11:POST","type":"CALLS","to":"file:app/api/users/route.ts:function:11:POST:call:13:9:Response.json","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:11:POST:call:12:7:authorize","type":"CALL_RESOLVES_TO","to":"file:app/api/users/route.ts:function:3:authorize","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:3:authorize","type":"CALLS","to":"file:app/api/users/route.ts:function:3:authorize:call:4:9:request.headers.get","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:3:authorize","type":"USES_ENV","to":"env:API_TOKEN","properties":{"access":"member","line":4}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:7:GET","type":"CALLS","to":"file:app/api/users/route.ts:function:7:GET:call:8:23:users.slice","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:7:GET","type":"CALLS","to":"file:app/api/users/route.ts:function:7:GET:call:8:38:Number","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:7:GET","type":"CALLS","to":"file:app/api/users/route.ts:function:7:GET:call:8:9:Response.json","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:function:7:GET","type":"USES_ENV","to":"env:PAGE_SIZE","properties":{"access":"member","line":8}}
+{"kind":"rel","from":"file:app/api/users/route.ts:route:11:0:POST:/api/users","type":"ROUTE_HANDLED_BY","to":"file:app/api/users/route.ts:function:11:POST","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:route:7:0:GET:/api/users","type":"ROUTE_HANDLED_BY","to":"file:app/api/users/route.ts:function:7:GET","properties":{}}
+{"kind":"rel","from":"file:app/api/users/route.ts:route:7:0:GET:/api/users","type":"USES_ENV","to":"env:PAGE_SIZE","properties":{"access":"member","line":8}}
 {"kind":"rel","from":"file:app/blog/[slug]/error.tsx","type":"DECLARES_COMPONENT","to":"file:app/blog/[slug]/error.tsx:component:3:BlogError","properties":{}}
 {"kind":"rel","from":"file:app/blog/[slug]/error.tsx","type":"DECLARES_PAGE","to":"file:app/blog/[slug]/error.tsx:page","properties":{}}
 {"kind":"rel","from":"file:app/blog/[slug]/error.tsx","type":"DEFINES_FUNCTION","to":"file:app/blog/[slug]/error.tsx:function:3:BlogError","properties":{}}
@@ -228,8 +289,10 @@
 {"kind":"rel","from":"file:components/page.tsx","type":"DEFINES_FUNCTION","to":"file:components/page.tsx:function:2:Stray","properties":{}}
 {"kind":"rel","from":"file:components/page.tsx:component:2:Stray","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:components/page.tsx:function:2:Stray","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/(marketing)/about/page.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/(marketing)/api/items/[id]/route.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/_components/Nav.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/_components/page.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/api/users/route.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/blog/[slug]/error.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/blog/[slug]/loading.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/blog/[slug]/page.tsx","properties":{}}

@@ -308,6 +308,13 @@ Astro).
   `_error` are pages of kind `app`, `document` and `error` at `/`; `404` and
   `500` are `not-found` and `error`. `pages/api/` and test files are not
   pages; a custom `pageExtensions` in `next.config` is not read.
+- Route handlers: a `route` file under `app/` gives one `Route` (framework
+  `nextjs`) per exported function named `GET`, `HEAD`, `POST`, `PUT`,
+  `DELETE`, `PATCH` or `OPTIONS` (declared or assigned an arrow); a
+  re-export (`export { handler as GET }`) is not followed. A file under
+  `pages/api/` gives one `Route` of method `ALL` handled by its default
+  export, since the handler branches on `req.method` itself. Paths follow the
+  page rules above.
 - `PAGE_RENDERS` links a page to the component its file exports as default.
   A default export that is not a component (a lowercase function, or one
   that only returns `null`) has no `PAGE_RENDERS`.
