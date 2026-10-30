@@ -315,6 +315,17 @@ Astro).
   `pages/api/` gives one `Route` of method `ALL` handled by its default
   export, since the handler branches on `req.method` itself. Paths follow the
   page rules above.
+- Server actions: a module whose directive prologue has `"use server"` makes
+  each exported function an `EntryPoint` of kind `server-action` (library
+  `react`); so does a function whose own body starts with the directive. Such
+  functions nested inside another function have no Function node and are not
+  listed. Which form or component calls an action is not linked.
+- Middleware: `middleware` (or Next 16's `proxy`) at the package root or in
+  `src/` is an `EntryPoint` of kind `middleware`, handled by its exported
+  `middleware` / `proxy` function or default export. The trigger lists the
+  literal `config.matcher` paths (strings and `{ source }` objects); a
+  computed matcher is not read, and no matcher (every request) leaves it
+  null.
 - `PAGE_RENDERS` links a page to the component its file exports as default.
   A default export that is not a component (a lowercase function, or one
   that only returns `null`) has no `PAGE_RENDERS`.
