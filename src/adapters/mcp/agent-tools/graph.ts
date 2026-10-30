@@ -126,7 +126,8 @@ export const byFileAndLine = (left: object, right: object) => {
 // callers (up to `maxDepth`), module-level code that calls them, the routes
 // and entrypoints that run any of those functions, and the data models, env
 // vars and config values the seeds themselves use. Components implemented by
-// any of those functions add the components that render them.
+// any of those functions add the components that render them, and the pages
+// that render any of those components.
 export async function computeImpact(
   engine: IQueryEngine,
   seedIds: readonly string[],
@@ -188,7 +189,8 @@ export async function computeImpact(
       .sort(byFileAndLine)
       .slice(0, limit),
     entrypoints: mergeRows(entrypoints, ["fn"], "reachedThrough", via).sort(byFileAndLine).slice(0, limit),
-    components: components.slice(0, limit),
+    components: components.components.slice(0, limit),
+    pages: components.pages.slice(0, limit),
     dataAccess: mergeRows(resources.dataAccess, ["fn"], "usedBy", via).slice(0, limit),
     tables: summarizeTables(resources.tables, via).slice(0, limit),
     envVars: mergeRows(resources.envVars, ["fn"], "usedBy", via).slice(0, limit),
@@ -510,7 +512,8 @@ export async function loadComponentFunctions(
 
 // The components implemented by the `affectedIds` functions, and every
 // component that renders them (up to `maxDepth` levels). Depth 0 is a
-// component whose own code is affected.
+// component whose own code is affected. `pages` are the pages that render
+// any of them, at the depth of the component they render.
 export async function componentImpact(
   engine: IQueryEngine,
   affectedIds: readonly string[],
@@ -518,7 +521,7 @@ export async function componentImpact(
   describe: (id: string) => ReturnType<typeof describeFunction>,
 ) {
   const implementations = await loadComponentFunctions(engine, affectedIds);
-  if (implementations.length === 0) return [];
+  if (implementations.length === 0) return { components: [], pages: [] };
   const [components, renders] = await Promise.all([loadComponents(engine), loadRenderEdges(engine)]);
 
   const changedThrough = new Map<string, Set<string>>();
@@ -536,7 +539,24 @@ export async function componentImpact(
     renderedChildren.set(edge.parent, children);
   }
 
-  return [...depth].map(([id, level]) => {
+  const pageRows = await engine.query(`
+    MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component)
+    WHERE id(component) IN $ids
+    RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind,
+      file.relativePath AS file, page.line AS line, id(component) AS component
+  `, { ids: [...depth.keys()] }) as Row[];
+  const pages = pageRows.map((row) => ({
+    fullPath: str(row.fullPath),
+    framework: str(row.framework),
+    router: str(row.router),
+    kind: str(row.kind),
+    file: str(row.file),
+    line: num(row.line),
+    renders: components.get(String(row.component))?.name ?? String(row.component),
+    depth: depth.get(String(row.component))!,
+  })).sort((a, b) => a.depth - b.depth || String(a.fullPath).localeCompare(String(b.fullPath)) || byFileAndLine(a, b));
+
+  const impacted = [...depth].map(([id, level]) => {
     const component = components.get(id);
     return {
       name: component?.name ?? id,
@@ -549,4 +569,5 @@ export async function componentImpact(
         : { renders: [...renderedChildren.get(id) ?? []].sort() }),
     };
   }).sort((a, b) => a.depth - b.depth || byFileAndLine(a, b));
+  return { components: impacted, pages };
 }

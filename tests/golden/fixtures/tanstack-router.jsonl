@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":14,"supportedFiles":13,"parsedFiles":13,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":15,"supportedFiles":14,"parsedFiles":14,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"tanstack-router-fixture","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"tanstack-router-fixture","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
@@ -9,6 +9,10 @@
 {"kind":"node","id":"dir:src/routes","label":"Directory","properties":{"name":"routes","path":"<root>/src/routes","relativePath":"src/routes"}}
 {"kind":"node","id":"dir:src/routes/(marketing)","label":"Directory","properties":{"name":"(marketing)","path":"<root>/src/routes/(marketing)","relativePath":"src/routes/(marketing)"}}
 {"kind":"node","id":"dir:src/routes/_auth","label":"Directory","properties":{"name":"_auth","path":"<root>/src/routes/_auth","relativePath":"src/routes/_auth"}}
+{"kind":"node","id":"env:API_URL","label":"EnvVar","properties":{"name":"API_URL"}}
+{"kind":"node","id":"file:src/api.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/api.ts","relativePath":"src/api.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/api.ts:function:1:loadPost","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"loadPost","parameters":"[{\"name\":\"id\",\"type\":\"string\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/api.ts:function:1:loadPost:call:2:9:fetch","label":"Call","properties":{"args":"[]","callee":"fetch","columnNumber":9,"expression":"fetch","line":2,"name":"fetch","receiver":null}}
 {"kind":"node","id":"file:src/code/local.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/code/local.ts","relativePath":"src/code/local.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/code/local.ts:function:2:createRoute","label":"Function","properties":{"className":null,"endLine":4,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":2,"methodKind":null,"name":"createRoute","parameters":"[{\"name\":\"options\",\"type\":\"{ path: string }\"}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/code/local.ts:initializercall:6:21:createRoute","label":"Call","properties":{"args":"[]","callee":"createRoute","columnNumber":21,"expression":"createRoute","line":6,"name":"createRoute","receiver":null}}
@@ -46,8 +50,10 @@
 {"kind":"node","id":"file:src/code/router.tsx:variable:50:routeTree","label":"Variable","properties":{"isExported":false,"kind":"const","line":50,"name":"routeTree","stringValue":null}}
 {"kind":"node","id":"file:src/code/router.tsx:variable:55:router","label":"Variable","properties":{"isExported":true,"kind":"const","line":55,"name":"router","stringValue":null}}
 {"kind":"node","id":"file:src/components/PostView.tsx","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/components/PostView.tsx","relativePath":"src/components/PostView.tsx","sourceType":"production"}}
-{"kind":"node","id":"file:src/components/PostView.tsx:component:1:PostView","label":"Component","properties":{"defaultExportWrapper":null,"endLine":3,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":1,"name":"PostView","pendingRenders":null}}
-{"kind":"node","id":"file:src/components/PostView.tsx:function:1:PostView","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"PostView","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/PostView.tsx:component:3:PostView","label":"Component","properties":{"defaultExportWrapper":null,"endLine":6,"framework":"react","hooks":null,"isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":3,"name":"PostView","pendingRenders":null}}
+{"kind":"node","id":"file:src/components/PostView.tsx:function:3:PostView","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"PostView","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/PostView.tsx:function:3:PostView:call:4:2:loadPost","label":"Call","properties":{"args":"[\"1\"]","callee":"loadPost","columnNumber":2,"expression":"loadPost","line":4,"name":"loadPost","receiver":null}}
+{"kind":"node","id":"file:src/components/PostView.tsx:import:1:../api","label":"Import","properties":{"bindings":"[{\"imported\":\"loadPost\",\"local\":\"loadPost\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"../api","specifier":"import { loadPost } from \"../api\";"}}
 {"kind":"node","id":"file:src/routeTree.gen.ts","label":"File","properties":{"isFixture":false,"isGenerated":true,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/routeTree.gen.ts","relativePath":"src/routeTree.gen.ts","sourceType":"generated"}}
 {"kind":"node","id":"file:src/routeTree.gen.ts:import:2:@tanstack/react-router","label":"Import","properties":{"bindings":"[{\"imported\":\"createFileRoute\",\"local\":\"createFileRoute\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"@tanstack/react-router","specifier":"import { createFileRoute } from \"@tanstack/react-router\";"}}
 {"kind":"node","id":"file:src/routeTree.gen.ts:import:3:./routes/__root","label":"Import","properties":{"bindings":"[{\"imported\":\"Route\",\"local\":\"rootRoute\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"./routes/__root","specifier":"import { Route as rootRoute } from \"./routes/__root\";"}}
@@ -119,6 +125,7 @@
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/code","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/components","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/routes","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/api.ts","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/routeTree.gen.ts","properties":{}}
 {"kind":"rel","from":"dir:src/code","type":"CONTAINS_FILE","to":"file:src/code/local.ts","properties":{}}
 {"kind":"rel","from":"dir:src/code","type":"CONTAINS_FILE","to":"file:src/code/router.tsx","properties":{}}
@@ -134,6 +141,10 @@
 {"kind":"rel","from":"dir:src/routes/(marketing)","type":"CONTAINS_FILE","to":"file:src/routes/(marketing)/pricing.lazy.tsx","properties":{}}
 {"kind":"rel","from":"dir:src/routes/(marketing)","type":"CONTAINS_FILE","to":"file:src/routes/(marketing)/pricing.tsx","properties":{}}
 {"kind":"rel","from":"dir:src/routes/_auth","type":"CONTAINS_FILE","to":"file:src/routes/_auth/dashboard.tsx","properties":{}}
+{"kind":"rel","from":"file:src/api.ts","type":"DEFINES_FUNCTION","to":"file:src/api.ts:function:1:loadPost","properties":{}}
+{"kind":"rel","from":"file:src/api.ts","type":"USES_ENV","to":"env:API_URL","properties":{"access":"member","line":2}}
+{"kind":"rel","from":"file:src/api.ts:function:1:loadPost","type":"CALLS","to":"file:src/api.ts:function:1:loadPost:call:2:9:fetch","properties":{}}
+{"kind":"rel","from":"file:src/api.ts:function:1:loadPost","type":"USES_ENV","to":"env:API_URL","properties":{"access":"member","line":2}}
 {"kind":"rel","from":"file:src/code/local.ts","type":"DEFINES_FUNCTION","to":"file:src/code/local.ts:function:2:createRoute","properties":{}}
 {"kind":"rel","from":"file:src/code/local.ts","type":"DEFINES_VARIABLE","to":"file:src/code/local.ts:variable:6:route","properties":{}}
 {"kind":"rel","from":"file:src/code/local.ts:initializercall:6:21:createRoute","type":"CALL_RESOLVES_TO","to":"file:src/code/local.ts:function:2:createRoute","properties":{}}
@@ -170,7 +181,7 @@
 {"kind":"rel","from":"file:src/code/router.tsx:page:21:22","type":"PAGE_RENDERS","to":"file:src/code/router.tsx:component:10:Settings","properties":{}}
 {"kind":"rel","from":"file:src/code/router.tsx:page:27:27","type":"PAGE_RENDERS","to":"file:src/code/router.tsx:component:10:Settings","properties":{}}
 {"kind":"rel","from":"file:src/code/router.tsx:page:38:21","type":"PAGE_RENDERS","to":"file:src/code/router.tsx:component:14:Profile","properties":{}}
-{"kind":"rel","from":"file:src/code/router.tsx:page:44:18","type":"PAGE_RENDERS","to":"file:src/components/PostView.tsx:component:1:PostView","properties":{}}
+{"kind":"rel","from":"file:src/code/router.tsx:page:44:18","type":"PAGE_RENDERS","to":"file:src/components/PostView.tsx:component:3:PostView","properties":{}}
 {"kind":"rel","from":"file:src/code/router.tsx:variable:19:rootRoute","type":"INITIALIZED_BY","to":"file:src/code/router.tsx:initializercall:19:18:createRootRouteWithContext<Context>()","properties":{}}
 {"kind":"rel","from":"file:src/code/router.tsx:variable:21:settingsRoute","type":"INITIALIZED_BY","to":"file:src/code/router.tsx:initializercall:21:22:createRoute","properties":{}}
 {"kind":"rel","from":"file:src/code/router.tsx:variable:27:settingsIndexRoute","type":"INITIALIZED_BY","to":"file:src/code/router.tsx:initializercall:27:27:createRoute","properties":{}}
@@ -179,9 +190,14 @@
 {"kind":"rel","from":"file:src/code/router.tsx:variable:44:postRoute","type":"INITIALIZED_BY","to":"file:src/code/router.tsx:initializercall:44:18:createRoute","properties":{}}
 {"kind":"rel","from":"file:src/code/router.tsx:variable:50:routeTree","type":"INITIALIZED_BY","to":"file:src/code/router.tsx:initializercall:50:18:rootRoute.addChildren","properties":{}}
 {"kind":"rel","from":"file:src/code/router.tsx:variable:55:router","type":"INITIALIZED_BY","to":"file:src/code/router.tsx:initializercall:55:22:createRouter","properties":{}}
-{"kind":"rel","from":"file:src/components/PostView.tsx","type":"DECLARES_COMPONENT","to":"file:src/components/PostView.tsx:component:1:PostView","properties":{}}
-{"kind":"rel","from":"file:src/components/PostView.tsx","type":"DEFINES_FUNCTION","to":"file:src/components/PostView.tsx:function:1:PostView","properties":{}}
-{"kind":"rel","from":"file:src/components/PostView.tsx:component:1:PostView","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/PostView.tsx:function:1:PostView","properties":{}}
+{"kind":"rel","from":"file:src/components/PostView.tsx","type":"DECLARES_COMPONENT","to":"file:src/components/PostView.tsx:component:3:PostView","properties":{}}
+{"kind":"rel","from":"file:src/components/PostView.tsx","type":"DEFINES_FUNCTION","to":"file:src/components/PostView.tsx:function:3:PostView","properties":{}}
+{"kind":"rel","from":"file:src/components/PostView.tsx","type":"IMPORTS","to":"file:src/components/PostView.tsx:import:1:../api","properties":{}}
+{"kind":"rel","from":"file:src/components/PostView.tsx:component:3:PostView","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/PostView.tsx:function:3:PostView","properties":{}}
+{"kind":"rel","from":"file:src/components/PostView.tsx:function:3:PostView","type":"CALLS","to":"file:src/components/PostView.tsx:function:3:PostView:call:4:2:loadPost","properties":{}}
+{"kind":"rel","from":"file:src/components/PostView.tsx:function:3:PostView:call:4:2:loadPost","type":"CALL_RESOLVES_TO","to":"file:src/api.ts:function:1:loadPost","properties":{}}
+{"kind":"rel","from":"file:src/components/PostView.tsx:import:1:../api","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/components/PostView.tsx:import:1:../api","type":"RESOLVES_TO","to":"file:src/api.ts","properties":{}}
 {"kind":"rel","from":"file:src/routeTree.gen.ts","type":"DEFINES_VARIABLE","to":"file:src/routeTree.gen.ts:variable:5:PricingImport","properties":{}}
 {"kind":"rel","from":"file:src/routeTree.gen.ts","type":"DEFINES_VARIABLE","to":"file:src/routeTree.gen.ts:variable:7:routeTree","properties":{}}
 {"kind":"rel","from":"file:src/routeTree.gen.ts","type":"IMPORTS","to":"file:src/routeTree.gen.ts:import:2:@tanstack/react-router","properties":{}}
@@ -240,7 +256,7 @@
 {"kind":"rel","from":"file:src/routes/posts.$postId.tsx","type":"IMPORTS","to":"file:src/routes/posts.$postId.tsx:import:2:../components/PostView","properties":{}}
 {"kind":"rel","from":"file:src/routes/posts.$postId.tsx:import:2:../components/PostView","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/routes/posts.$postId.tsx:import:2:../components/PostView","type":"RESOLVES_TO","to":"file:src/components/PostView.tsx","properties":{}}
-{"kind":"rel","from":"file:src/routes/posts.$postId.tsx:page:4:21","type":"PAGE_RENDERS","to":"file:src/components/PostView.tsx:component:1:PostView","properties":{}}
+{"kind":"rel","from":"file:src/routes/posts.$postId.tsx:page:4:21","type":"PAGE_RENDERS","to":"file:src/components/PostView.tsx:component:3:PostView","properties":{}}
 {"kind":"rel","from":"file:src/routes/posts.$postId.tsx:variable:4:Route","type":"INITIALIZED_BY","to":"file:src/routes/posts.$postId.tsx:initializercall:4:21:createFileRoute(\"/posts/$postId\")","properties":{}}
 {"kind":"rel","from":"file:src/routes/posts.tsx","type":"DECLARES_COMPONENT","to":"file:src/routes/posts.tsx:component:5:PostsLayout","properties":{}}
 {"kind":"rel","from":"file:src/routes/posts.tsx","type":"DECLARES_PAGE","to":"file:src/routes/posts.tsx:page:3:21","properties":{}}
@@ -254,6 +270,7 @@
 {"kind":"rel","from":"file:src/routes/posts_.$postId.edit.tsx","type":"DEFINES_VARIABLE","to":"file:src/routes/posts_.$postId.edit.tsx:variable:4:Route","properties":{}}
 {"kind":"rel","from":"file:src/routes/posts_.$postId.edit.tsx","type":"IMPORTS","to":"file:src/routes/posts_.$postId.edit.tsx:import:1:@tanstack/react-router","properties":{}}
 {"kind":"rel","from":"file:src/routes/posts_.$postId.edit.tsx:variable:4:Route","type":"INITIALIZED_BY","to":"file:src/routes/posts_.$postId.edit.tsx:initializercall:4:21:createFileRoute(\"/posts_/$postId/edit\")","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/api.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/code/local.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/code/router.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/PostView.tsx","properties":{}}

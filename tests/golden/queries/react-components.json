@@ -5705,6 +5705,24 @@
             "props": ""
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:src/components/Button.tsx:component:3:Button",
+            "file:src/components/Card.tsx:component:4:Card",
+            "file:src/components/Legacy.jsx:component:4:Legacy",
+            "file:src/components/Profile.jsx:component:9:ProfileView",
+            "file:src/pages/Reports.tsx:component:3:Reports",
+            "file:src/App.tsx:component:10:Profile",
+            "file:src/App.tsx:component:29:App",
+            "file:src/pages/routes.tsx:component:12:Pages",
+            "file:src/pages/routes.tsx:component:5:Reports"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -5816,6 +5834,7 @@
           ]
         }
       ],
+      "pages": [],
       "dataAccess": [],
       "tables": [],
       "envVars": [],
@@ -6496,6 +6515,17 @@
             "props": ""
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:src/components/CartBadge.tsx:component:4:CartBadge",
+            "file:src/App.tsx:component:29:App"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -6554,6 +6584,7 @@
           ]
         }
       ],
+      "pages": [],
       "dataAccess": [],
       "tables": [],
       "envVars": [],

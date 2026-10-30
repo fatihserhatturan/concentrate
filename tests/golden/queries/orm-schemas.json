@@ -3565,6 +3565,7 @@
       "routes": [],
       "entrypoints": [],
       "components": [],
+      "pages": [],
       "dataAccess": [
         {
           "model": "Photo",

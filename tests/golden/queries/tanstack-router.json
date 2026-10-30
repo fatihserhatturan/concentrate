@@ -1,0 +1,1729 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 48
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 7
+          },
+          {
+            "table": "File",
+            "count": 14
+          },
+          {
+            "table": "Import",
+            "count": 15
+          },
+          {
+            "table": "Function",
+            "count": 12
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 20
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 1
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 22
+          },
+          {
+            "table": "Route",
+            "count": 0
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 1
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 10
+          },
+          {
+            "table": "Page",
+            "count": 15
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 48,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 7
+        },
+        {
+          "table": "File",
+          "count": 14
+        },
+        {
+          "table": "Import",
+          "count": 15
+        },
+        {
+          "table": "Function",
+          "count": 12
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 20
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 1
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 22
+        },
+        {
+          "table": "Route",
+          "count": 0
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 1
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 10
+        },
+        {
+          "table": "Page",
+          "count": 15
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "createRoute",
+            "kind": "Function",
+            "file": "src/code/local.ts",
+            "line": 2,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Shell",
+            "kind": "Function",
+            "file": "src/code/router.tsx",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Settings",
+            "kind": "Function",
+            "file": "src/code/router.tsx",
+            "line": 10,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Profile",
+            "kind": "Function",
+            "file": "src/code/router.tsx",
+            "line": 14,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "PostView",
+            "kind": "Function",
+            "file": "src/components/PostView.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Home",
+            "kind": "Function",
+            "file": "src/routes/index.tsx",
+            "line": 7,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "route",
+            "kind": "Variable",
+            "file": "src/code/local.ts",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "rootRoute",
+            "kind": "Variable",
+            "file": "src/code/router.tsx",
+            "line": 19,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "settingsRoute",
+            "kind": "Variable",
+            "file": "src/code/router.tsx",
+            "line": 21,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "settingsIndexRoute",
+            "kind": "Variable",
+            "file": "src/code/router.tsx",
+            "line": 27,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "profileRoute",
+            "kind": "Variable",
+            "file": "src/code/router.tsx",
+            "line": 38,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "postRoute",
+            "kind": "Variable",
+            "file": "src/code/router.tsx",
+            "line": 44,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "routeTree",
+            "kind": "Variable",
+            "file": "src/code/router.tsx",
+            "line": 50,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "router",
+            "kind": "Variable",
+            "file": "src/code/router.tsx",
+            "line": 55,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "routeTree",
+            "kind": "Variable",
+            "file": "src/routeTree.gen.ts",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Route",
+            "kind": "Variable",
+            "file": "src/routes/(marketing)/pricing.lazy.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Route",
+            "kind": "Variable",
+            "file": "src/routes/(marketing)/pricing.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Route",
+            "kind": "Variable",
+            "file": "src/routes/__root.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Route",
+            "kind": "Variable",
+            "file": "src/routes/_auth.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Route",
+            "kind": "Variable",
+            "file": "src/routes/_auth/dashboard.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Route",
+            "kind": "Variable",
+            "file": "src/routes/index.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Route",
+            "kind": "Variable",
+            "file": "src/routes/posts.$postId.tsx",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Route",
+            "kind": "Variable",
+            "file": "src/routes/posts.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "Route",
+            "kind": "Variable",
+            "file": "src/routes/posts_.$postId.edit.tsx",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "Context",
+            "kind": "TypeAlias",
+            "file": "src/code/router.tsx",
+            "line": 4,
+            "isExported": false,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "createRoute",
+          "kind": "Function",
+          "file": "src/code/local.ts",
+          "line": 2,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Shell",
+          "kind": "Function",
+          "file": "src/code/router.tsx",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Settings",
+          "kind": "Function",
+          "file": "src/code/router.tsx",
+          "line": 10,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Profile",
+          "kind": "Function",
+          "file": "src/code/router.tsx",
+          "line": 14,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "PostView",
+          "kind": "Function",
+          "file": "src/components/PostView.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Home",
+          "kind": "Function",
+          "file": "src/routes/index.tsx",
+          "line": 7,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "route",
+          "kind": "Variable",
+          "file": "src/code/local.ts",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "rootRoute",
+          "kind": "Variable",
+          "file": "src/code/router.tsx",
+          "line": 19,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "settingsRoute",
+          "kind": "Variable",
+          "file": "src/code/router.tsx",
+          "line": 21,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "settingsIndexRoute",
+          "kind": "Variable",
+          "file": "src/code/router.tsx",
+          "line": 27,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "profileRoute",
+          "kind": "Variable",
+          "file": "src/code/router.tsx",
+          "line": 38,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "postRoute",
+          "kind": "Variable",
+          "file": "src/code/router.tsx",
+          "line": 44,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "routeTree",
+          "kind": "Variable",
+          "file": "src/code/router.tsx",
+          "line": 50,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "router",
+          "kind": "Variable",
+          "file": "src/code/router.tsx",
+          "line": 55,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "routeTree",
+          "kind": "Variable",
+          "file": "src/routeTree.gen.ts",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "Route",
+          "kind": "Variable",
+          "file": "src/routes/(marketing)/pricing.lazy.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "Route",
+          "kind": "Variable",
+          "file": "src/routes/(marketing)/pricing.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "Route",
+          "kind": "Variable",
+          "file": "src/routes/__root.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "Route",
+          "kind": "Variable",
+          "file": "src/routes/_auth.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "Route",
+          "kind": "Variable",
+          "file": "src/routes/_auth/dashboard.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/api.ts",
+            "name": "loadPost",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/components/PostView.tsx",
+            "name": "PostView",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/code/local.ts",
+            "name": "route",
+            "kind": "Variable",
+            "line": 6,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/code/router.tsx",
+            "name": "router",
+            "kind": "Variable",
+            "line": 55,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routeTree.gen.ts",
+            "name": "routeTree",
+            "kind": "Variable",
+            "line": 7,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routes/(marketing)/pricing.lazy.tsx",
+            "name": "Route",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routes/(marketing)/pricing.tsx",
+            "name": "Route",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routes/__root.tsx",
+            "name": "Route",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routes/_auth.tsx",
+            "name": "Route",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routes/_auth/dashboard.tsx",
+            "name": "Route",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routes/index.tsx",
+            "name": "Route",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routes/posts.$postId.tsx",
+            "name": "Route",
+            "kind": "Variable",
+            "line": 4,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routes/posts.tsx",
+            "name": "Route",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/routes/posts_.$postId.edit.tsx",
+            "name": "Route",
+            "kind": "Variable",
+            "line": 4,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/api.ts",
+          "name": "loadPost",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/components/PostView.tsx",
+          "name": "PostView",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/code/local.ts",
+          "name": "route",
+          "kind": "Variable",
+          "line": 6,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/code/router.tsx",
+          "name": "router",
+          "kind": "Variable",
+          "line": 55,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routeTree.gen.ts",
+          "name": "routeTree",
+          "kind": "Variable",
+          "line": 7,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routes/(marketing)/pricing.lazy.tsx",
+          "name": "Route",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routes/(marketing)/pricing.tsx",
+          "name": "Route",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routes/__root.tsx",
+          "name": "Route",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routes/_auth.tsx",
+          "name": "Route",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routes/_auth/dashboard.tsx",
+          "name": "Route",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routes/index.tsx",
+          "name": "Route",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routes/posts.$postId.tsx",
+          "name": "Route",
+          "kind": "Variable",
+          "line": 4,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routes/posts.tsx",
+          "name": "Route",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/routes/posts_.$postId.edit.tsx",
+          "name": "Route",
+          "kind": "Variable",
+          "line": 4,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 14
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "src/api.ts",
+            "line": 2,
+            "name": "API_URL",
+            "value": "member",
+            "valueType": null,
+            "consumer": "src/api.ts",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "src/api.ts",
+          "line": 2,
+          "name": "API_URL",
+          "value": "member",
+          "valueType": null,
+          "consumer": "src/api.ts",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_pages",
+    "args": {
+      "framework": "tanstack-router"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true AND page.framework = \"tanstack-router\" OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "rows": [
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "tanstack-router",
+            "router": "code",
+            "kind": "layout",
+            "slot": null,
+            "file": "src/code/router.tsx",
+            "line": 19,
+            "component": "Shell",
+            "componentFile": "src/code/router.tsx"
+          },
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "layout",
+            "slot": null,
+            "file": "src/routes/__root.tsx",
+            "line": 3,
+            "component": "RootLayout",
+            "componentFile": "src/routes/__root.tsx"
+          },
+          {
+            "fullPath": "/",
+            "path": "/_auth",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "layout",
+            "slot": null,
+            "file": "src/routes/_auth.tsx",
+            "line": 3,
+            "component": "AuthLayout",
+            "componentFile": "src/routes/_auth.tsx"
+          },
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "index",
+            "slot": null,
+            "file": "src/routes/index.tsx",
+            "line": 3,
+            "component": "Home",
+            "componentFile": "src/routes/index.tsx"
+          },
+          {
+            "fullPath": "/dashboard",
+            "path": "/_auth/dashboard",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/_auth/dashboard.tsx",
+            "line": 3,
+            "component": "Dashboard",
+            "componentFile": "src/routes/_auth/dashboard.tsx"
+          },
+          {
+            "fullPath": "/p/$postId",
+            "path": "/p/$postId",
+            "framework": "tanstack-router",
+            "router": "code",
+            "kind": "page",
+            "slot": null,
+            "file": "src/code/router.tsx",
+            "line": 44,
+            "component": "PostView",
+            "componentFile": "src/components/PostView.tsx"
+          },
+          {
+            "fullPath": "/posts",
+            "path": "/posts",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/posts.tsx",
+            "line": 3,
+            "component": "PostsLayout",
+            "componentFile": "src/routes/posts.tsx"
+          },
+          {
+            "fullPath": "/posts/$postId",
+            "path": "/posts/$postId",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/posts.$postId.tsx",
+            "line": 4,
+            "component": "PostView",
+            "componentFile": "src/components/PostView.tsx"
+          },
+          {
+            "fullPath": "/posts/$postId/edit",
+            "path": "/posts_/$postId/edit",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/posts_.$postId.edit.tsx",
+            "line": 4,
+            "component": null,
+            "componentFile": null
+          },
+          {
+            "fullPath": "/pricing",
+            "path": "/(marketing)/pricing",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "lazy",
+            "slot": null,
+            "file": "src/routes/(marketing)/pricing.lazy.tsx",
+            "line": 3,
+            "component": "Pricing",
+            "componentFile": "src/routes/(marketing)/pricing.lazy.tsx"
+          },
+          {
+            "fullPath": "/pricing",
+            "path": "/(marketing)/pricing",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/(marketing)/pricing.tsx",
+            "line": 3,
+            "component": null,
+            "componentFile": null
+          },
+          {
+            "fullPath": "/settings",
+            "path": "settings",
+            "framework": "tanstack-router",
+            "router": "code",
+            "kind": "layout",
+            "slot": null,
+            "file": "src/code/router.tsx",
+            "line": 21,
+            "component": "Settings",
+            "componentFile": "src/code/router.tsx"
+          },
+          {
+            "fullPath": "/settings",
+            "path": "/",
+            "framework": "tanstack-router",
+            "router": "code",
+            "kind": "index",
+            "slot": null,
+            "file": "src/code/router.tsx",
+            "line": 27,
+            "component": "Settings",
+            "componentFile": "src/code/router.tsx"
+          },
+          {
+            "fullPath": "/settings",
+            "path": null,
+            "framework": "tanstack-router",
+            "router": "code",
+            "kind": "layout",
+            "slot": null,
+            "file": "src/code/router.tsx",
+            "line": 33,
+            "component": null,
+            "componentFile": null
+          },
+          {
+            "fullPath": "/settings/profile/$userId",
+            "path": "profile/$userId",
+            "framework": "tanstack-router",
+            "router": "code",
+            "kind": "page",
+            "slot": null,
+            "file": "src/code/router.tsx",
+            "line": 38,
+            "component": "Profile",
+            "componentFile": "src/code/router.tsx"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "framework": "tanstack-router",
+        "limit": 50
+      },
+      "pages": [
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "tanstack-router",
+          "router": "code",
+          "kind": "layout",
+          "slot": null,
+          "file": "src/code/router.tsx",
+          "line": 19,
+          "component": "Shell",
+          "componentFile": "src/code/router.tsx"
+        },
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "layout",
+          "slot": null,
+          "file": "src/routes/__root.tsx",
+          "line": 3,
+          "component": "RootLayout",
+          "componentFile": "src/routes/__root.tsx"
+        },
+        {
+          "fullPath": "/",
+          "path": "/_auth",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "layout",
+          "slot": null,
+          "file": "src/routes/_auth.tsx",
+          "line": 3,
+          "component": "AuthLayout",
+          "componentFile": "src/routes/_auth.tsx"
+        },
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "index",
+          "slot": null,
+          "file": "src/routes/index.tsx",
+          "line": 3,
+          "component": "Home",
+          "componentFile": "src/routes/index.tsx"
+        },
+        {
+          "fullPath": "/dashboard",
+          "path": "/_auth/dashboard",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/_auth/dashboard.tsx",
+          "line": 3,
+          "component": "Dashboard",
+          "componentFile": "src/routes/_auth/dashboard.tsx"
+        },
+        {
+          "fullPath": "/p/$postId",
+          "path": "/p/$postId",
+          "framework": "tanstack-router",
+          "router": "code",
+          "kind": "page",
+          "slot": null,
+          "file": "src/code/router.tsx",
+          "line": 44,
+          "component": "PostView",
+          "componentFile": "src/components/PostView.tsx"
+        },
+        {
+          "fullPath": "/posts",
+          "path": "/posts",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/posts.tsx",
+          "line": 3,
+          "component": "PostsLayout",
+          "componentFile": "src/routes/posts.tsx"
+        },
+        {
+          "fullPath": "/posts/$postId",
+          "path": "/posts/$postId",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/posts.$postId.tsx",
+          "line": 4,
+          "component": "PostView",
+          "componentFile": "src/components/PostView.tsx"
+        },
+        {
+          "fullPath": "/posts/$postId/edit",
+          "path": "/posts_/$postId/edit",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/posts_.$postId.edit.tsx",
+          "line": 4,
+          "component": null,
+          "componentFile": null
+        },
+        {
+          "fullPath": "/pricing",
+          "path": "/(marketing)/pricing",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "lazy",
+          "slot": null,
+          "file": "src/routes/(marketing)/pricing.lazy.tsx",
+          "line": 3,
+          "component": "Pricing",
+          "componentFile": "src/routes/(marketing)/pricing.lazy.tsx"
+        },
+        {
+          "fullPath": "/pricing",
+          "path": "/(marketing)/pricing",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/(marketing)/pricing.tsx",
+          "line": 3,
+          "component": null,
+          "componentFile": null
+        },
+        {
+          "fullPath": "/settings",
+          "path": "settings",
+          "framework": "tanstack-router",
+          "router": "code",
+          "kind": "layout",
+          "slot": null,
+          "file": "src/code/router.tsx",
+          "line": 21,
+          "component": "Settings",
+          "componentFile": "src/code/router.tsx"
+        },
+        {
+          "fullPath": "/settings",
+          "path": "/",
+          "framework": "tanstack-router",
+          "router": "code",
+          "kind": "index",
+          "slot": null,
+          "file": "src/code/router.tsx",
+          "line": 27,
+          "component": "Settings",
+          "componentFile": "src/code/router.tsx"
+        },
+        {
+          "fullPath": "/settings",
+          "path": null,
+          "framework": "tanstack-router",
+          "router": "code",
+          "kind": "layout",
+          "slot": null,
+          "file": "src/code/router.tsx",
+          "line": 33,
+          "component": null,
+          "componentFile": null
+        },
+        {
+          "fullPath": "/settings/profile/$userId",
+          "path": "profile/$userId",
+          "framework": "tanstack-router",
+          "router": "code",
+          "kind": "page",
+          "slot": null,
+          "file": "src/code/router.tsx",
+          "line": 38,
+          "component": "Profile",
+          "componentFile": "src/code/router.tsx"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 15
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "get",
+      "path": "/posts/$postId"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "get",
+          "path": "/posts/$postId"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE page.fullPath = $path OR page.path = $path OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component) RETURN id(page) AS id, page.path AS path, page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, id(component) AS component, component.name AS componentName ORDER BY file, line LIMIT 5",
+        "params": {
+          "path": "/posts/$postId"
+        },
+        "rows": [
+          {
+            "id": "file:src/routes/posts.$postId.tsx:page:4:21",
+            "path": "/posts/$postId",
+            "fullPath": "/posts/$postId",
+            "framework": "tanstack-router",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/posts.$postId.tsx",
+            "line": 4,
+            "component": "file:src/components/PostView.tsx:component:3:PostView",
+            "componentName": "PostView"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/api.ts:function:1:loadPost",
+            "name": "loadPost",
+            "className": null,
+            "file": "src/api.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/code/local.ts:function:2:createRoute",
+            "name": "createRoute",
+            "className": null,
+            "file": "src/code/local.ts",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/code/router.tsx:function:6:Shell",
+            "name": "Shell",
+            "className": null,
+            "file": "src/code/router.tsx",
+            "line": 6,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/code/router.tsx:function:10:Settings",
+            "name": "Settings",
+            "className": null,
+            "file": "src/code/router.tsx",
+            "line": 10,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/code/router.tsx:function:14:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/code/router.tsx",
+            "line": 14,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/components/PostView.tsx:function:3:PostView",
+            "name": "PostView",
+            "className": null,
+            "file": "src/components/PostView.tsx",
+            "line": 3,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/routes/(marketing)/pricing.lazy.tsx:function:7:Pricing",
+            "name": "Pricing",
+            "className": null,
+            "file": "src/routes/(marketing)/pricing.lazy.tsx",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/routes/__root.tsx:function:7:RootLayout",
+            "name": "RootLayout",
+            "className": null,
+            "file": "src/routes/__root.tsx",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/routes/_auth.tsx:function:7:AuthLayout",
+            "name": "AuthLayout",
+            "className": null,
+            "file": "src/routes/_auth.tsx",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/routes/_auth/dashboard.tsx:function:7:Dashboard",
+            "name": "Dashboard",
+            "className": null,
+            "file": "src/routes/_auth/dashboard.tsx",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/routes/index.tsx:function:7:Home",
+            "name": "Home",
+            "className": null,
+            "file": "src/routes/index.tsx",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/routes/posts.tsx:function:5:PostsLayout",
+            "name": "PostsLayout",
+            "className": null,
+            "file": "src/routes/posts.tsx",
+            "line": 5,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/components/PostView.tsx:function:3:PostView",
+            "callee": "file:src/api.ts:function:1:loadPost",
+            "line": 4
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn",
+        "params": {},
+        "rows": [
+          {
+            "component": "file:src/code/router.tsx:component:6:Shell",
+            "fn": "file:src/code/router.tsx:function:6:Shell"
+          },
+          {
+            "component": "file:src/code/router.tsx:component:10:Settings",
+            "fn": "file:src/code/router.tsx:function:10:Settings"
+          },
+          {
+            "component": "file:src/code/router.tsx:component:14:Profile",
+            "fn": "file:src/code/router.tsx:function:14:Profile"
+          },
+          {
+            "component": "file:src/components/PostView.tsx:component:3:PostView",
+            "fn": "file:src/components/PostView.tsx:function:3:PostView"
+          },
+          {
+            "component": "file:src/routes/(marketing)/pricing.lazy.tsx:component:7:Pricing",
+            "fn": "file:src/routes/(marketing)/pricing.lazy.tsx:function:7:Pricing"
+          },
+          {
+            "component": "file:src/routes/__root.tsx:component:7:RootLayout",
+            "fn": "file:src/routes/__root.tsx:function:7:RootLayout"
+          },
+          {
+            "component": "file:src/routes/_auth.tsx:component:7:AuthLayout",
+            "fn": "file:src/routes/_auth.tsx:function:7:AuthLayout"
+          },
+          {
+            "component": "file:src/routes/_auth/dashboard.tsx:component:7:Dashboard",
+            "fn": "file:src/routes/_auth/dashboard.tsx:function:7:Dashboard"
+          },
+          {
+            "component": "file:src/routes/index.tsx:component:7:Home",
+            "fn": "file:src/routes/index.tsx:function:7:Home"
+          },
+          {
+            "component": "file:src/routes/posts.tsx:component:5:PostsLayout",
+            "fn": "file:src/routes/posts.tsx:function:5:PostsLayout"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) WHERE id(component) IN $ids RETURN id(component) AS id, file.relativePath AS file, component.line AS line",
+        "params": {
+          "ids": [
+            "file:src/components/PostView.tsx:component:3:PostView"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/components/PostView.tsx:component:3:PostView",
+            "file": "src/components/PostView.tsx",
+            "line": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/PostView.tsx:function:3:PostView",
+            "file:src/api.ts:function:1:loadPost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/PostView.tsx:function:3:PostView",
+            "file:src/api.ts:function:1:loadPost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/PostView.tsx:function:3:PostView",
+            "file:src/api.ts:function:1:loadPost"
+          ]
+        },
+        "rows": [
+          {
+            "name": "API_URL",
+            "access": "member",
+            "line": 2,
+            "fn": "file:src/api.ts:function:1:loadPost"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/PostView.tsx:function:3:PostView",
+            "file:src/api.ts:function:1:loadPost"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "method": "get",
+      "path": "/posts/$postId",
+      "routes": [],
+      "pages": [
+        {
+          "path": "/posts/$postId",
+          "fullPath": "/posts/$postId",
+          "framework": "tanstack-router",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/posts.$postId.tsx",
+          "line": 4,
+          "component": {
+            "name": "PostView",
+            "file": "src/components/PostView.tsx",
+            "line": 3
+          },
+          "callChain": [
+            {
+              "depth": 1,
+              "caller": "PostView",
+              "callerFile": "src/components/PostView.tsx",
+              "line": 4,
+              "callee": "loadPost",
+              "calleeClass": null,
+              "calleeFile": "src/api.ts"
+            }
+          ],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [
+            {
+              "name": "API_URL",
+              "access": "member",
+              "line": 2,
+              "usedBy": [
+                {
+                  "function": "loadPost",
+                  "functionFile": "src/api.ts"
+                }
+              ]
+            }
+          ],
+          "config": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  }
+]

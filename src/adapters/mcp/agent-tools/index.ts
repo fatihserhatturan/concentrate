@@ -18,7 +18,7 @@ const limit = (fallback: number) => ({ type: "number", description: `Maximum ite
 export const agentToolDefinitions = [
   {
     name: "impact_of",
-    description: `What is affected if a function, method, class or file changes: transitive callers with their call depth, module-level callers, the routes and entrypoints that run any of them, the UI components they implement and the components that render those, and the data models, env vars and config the changed code uses. For a route, use route_details instead. ${budgetNote}`,
+    description: `What is affected if a function, method, class or file changes: transitive callers with their call depth, module-level callers, the routes and entrypoints that run any of them, the UI components they implement, the components that render those and the pages that render any of them, and the data models, env vars and config the changed code uses. For a route, use route_details instead. ${budgetNote}`,
     inputSchema: objectSchema({
       symbol: { type: "string", description: "Function, method or class name (a class covers all its methods)." },
       file: { type: "string", description: "Scan-relative file path or path suffix. Alone, covers every function in the file; with symbol, narrows it." },
@@ -37,10 +37,10 @@ export const agentToolDefinitions = [
   },
   {
     name: "route_details",
-    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the downstream call chain (up to 4 levels), and the data access, env vars and config of the route and that chain. ${budgetNote}`,
+    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the downstream call chain (up to 4 levels), and the data access, env vars and config of the route and that chain. A GET also lists the UI pages at that path (Next.js, React Router, TanStack Router) with the component each renders and the same chain and resources for that component's code. ${budgetNote}`,
     inputSchema: objectSchema({
       method: { type: "string", description: "HTTP method, case-insensitive (GET, post, ...)." },
-      path: { type: "string", description: "Route path, matched against the resolved full path or the path as declared." },
+      path: { type: "string", description: "Route or page path, matched against the resolved full path or the path as declared." },
       limit: limit(5),
     }, ["method", "path"]),
   },
