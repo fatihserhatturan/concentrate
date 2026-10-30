@@ -1,6 +1,7 @@
 # Accuracy report
 
-How often the graph is right about routes, call targets and data access,
+How often the graph is right about routes, call targets, data access and UI
+components,
 measured against hand-written labels on the pinned sample repositories
 (`scripts/samples.json`).
 
@@ -26,6 +27,7 @@ chosen files); every target was decided by reading the code.
 | Routes | express, fastify, nestjs-starter, internet-node-express-realworld | every route declared with a literal path in the scoped files; tests excluded |
 | Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld | every call site in 4–9 chosen files per sample |
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma) | the services; the standing samples have no data layer |
+| Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend) | `src/components/`: every component and every element that renders one |
 
 Rules:
 
@@ -48,6 +50,15 @@ Rules:
   use the graph's categories (`save` is a create, `findOneBy` a read). Tables
   follow each library's default naming. Nested Prisma relation writes
   (`connectOrCreate` inside an `article.create`) are not labeled.
+- **Components.** `{ file, name, line }` for every React component: function
+  and class components, including a class that extends another component
+  (`ProfileFavorites extends Profile`).
+- **Renders.** `{ file, parent, line, child, childFile }` once per JSX
+  element that renders a component of the repository. Rendering a module's
+  `connect(...)(X)` default export counts as rendering X. Library elements
+  (`<Link>`, `<Route>`), components passed as props (`<Route
+  component={Home}>`) and elements in class methods other than `render()`
+  (which render library components only) are not labeled.
 
 ## Scoring
 
@@ -63,8 +74,11 @@ Rules:
   is over calls with a project target.
 - **Data access:** an access matches on file, function, model and operation,
   and on the table when the label names one.
+- **Components:** file, name and line (±1). **Renders:** the element's file,
+  line (±1) and component, and the rendered component's name and file; a
+  render linked to another component is an FP and an FN.
 
-## Results (2026-10-29, schema 41)
+## Results (2026-10-30, schema 45)
 
 ### Routes
 
@@ -98,10 +112,22 @@ Labels counts calls with a project target. Another 310 call sites are labeled
 | internet-node-express-realworld | 26 | 26 | 0 | 0 | 100.0% | 100.0% |
 | **all** | 43 | 43 | 0 | 0 | **100.0%** | **100.0%** |
 
+### Components
+
+| Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-react-realworld | 32 | 31 | 0 | 1 | 100.0% | 96.9% |
+
+### Component renders
+
+| Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-react-realworld | 29 | 23 | 0 | 6 | 100.0% | 79.3% |
+
 ## What the misses are
 
-Precision is 100% everywhere: no route, call target or data access the graph
-states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
+Precision is 100% everywhere: no route, call target, data access, component
+or render the graph states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
 resolve = path.resolve` in express's `lib/view.js`, is left unresolved since
 #48.) Every labeled route is found: routes registered inside plugin
 functions and `build()` factories (#41), fastify-decorators controllers
@@ -120,6 +146,12 @@ are, and they cluster:
   (Default imports, #45; constructors and static methods, #46; and
   module-level calls, `require('./x')(...)` and `module.exports = …`
   defaults, #47, resolve now.)
+
+- **Components behind a higher-order wrapper.** The six missed renders
+  are all of `export default connect(...)(X)` modules: the element renders
+  the module's default export, which the graph does not know is X. The one
+  missed component is `ProfileFavorites`, a class that extends another
+  component class (`Profile`) instead of `React.Component`.
 
 Every labeled data access is found since #49 (the TypeORM `*By` and Mongoose
 `findById*` / `findOneAnd*` methods, and calls on a receiver split over

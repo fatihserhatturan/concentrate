@@ -7,6 +7,7 @@
     { "name": "ky", "suite": "standing", "repo": "https://github.com/sindresorhus/ky", "sha": "e0fcf780de2bd69af2528e4b7b87ccae6bb727b1" },
     { "name": "internet-node-express-firebase-mongodb", "suite": "internet", "repo": "https://github.com/JDIZM/node-express-firebase-mongodb", "sha": "269ab2619cf320bb38eb821e95a35dd9ad772770" },
     { "name": "internet-node-express-realworld", "suite": "internet", "repo": "https://github.com/gothinkster/node-express-realworld-example-app", "sha": "30b68e1e881462b2f4164ea09ab4c4f5699c7b0b" },
-    { "name": "internet-nest", "suite": "internet", "repo": "https://github.com/nestjs/nest", "sha": "958ff952c00bd5a25efa04ffaafac28721af7827", "continueOnError": true }
+    { "name": "internet-nest", "suite": "internet", "repo": "https://github.com/nestjs/nest", "sha": "958ff952c00bd5a25efa04ffaafac28721af7827", "continueOnError": true },
+    { "name": "internet-react-realworld", "suite": "internet", "repo": "https://github.com/gothinkster/react-redux-realworld-example-app", "sha": "ee72eba4056392c95a27bc48d385d3f54ba38a18" }
   ]
 }

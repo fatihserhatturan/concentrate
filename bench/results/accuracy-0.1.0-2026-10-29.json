@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-29T13:35:13.566Z",
+  "recordedAt": "2026-10-30T13:20:46.245Z",
   "samples": [
     {
       "sample": "express",
@@ -82,6 +82,23 @@
       }
     },
     {
+      "sample": "internet-react-realworld",
+      "components": {
+        "tp": 31,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.96875
+      },
+      "renders": {
+        "tp": 23,
+        "fp": 0,
+        "fn": 6,
+        "precision": 1,
+        "recall": 0.7931034482758621
+      }
+    },
+    {
       "sample": "ky",
       "calls": {
         "tp": 13,
@@ -138,6 +155,20 @@
       "fn": 0,
       "precision": 1,
       "recall": 1
+    },
+    "components": {
+      "tp": 31,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.96875
+    },
+    "renders": {
+      "tp": 23,
+      "fp": 0,
+      "fn": 6,
+      "precision": 1,
+      "recall": 0.7931034482758621
     }
   }
 }

@@ -12,6 +12,9 @@ export type CallTarget = { file: string; name: string; className?: string } | nu
 // framework-set prototype); the call site is matched but not scored.
 export type CallLabel = { file: string; line: number; callee: string; target: CallTarget; dynamic?: true };
 export type DataAccessLabel = { file: string; function: string; model: string; operation: string; table?: string };
+export type ComponentLabel = { file: string; name: string; line: number };
+// `file` and `line` are the rendering element's; `parent` is the component it is in.
+export type RenderLabel = { file: string; parent: string; line: number; child: string; childFile: string };
 
 export type Labels = {
   sample: string;
@@ -22,6 +25,10 @@ export type Labels = {
   calls?: { files: string[]; items: CallLabel[] };
   // Direct accesses (the call is in the function's own body) in `scope`.
   dataAccess?: { scope: string[]; items: DataAccessLabel[] };
+  // UI components declared in `scope`.
+  components?: { scope: string[]; items: ComponentLabel[] };
+  // Elements in `scope` that render a component of the repository.
+  renders?: { scope: string[]; items: RenderLabel[] };
 };
 
 export type Score = {
@@ -270,6 +277,66 @@ export function compareDataAccess(graph: Graph, labels: NonNullable<Labels["data
   ));
   const describe = (access: { file: string; function: string; model: string; operation: string; table?: string | null }) =>
     `${access.file} ${access.function}: ${access.operation} ${access.model}${access.table ? ` (${access.table})` : ""}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+// Component nodes with their declaring file.
+export function scanComponents(graph: Graph): ComponentLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  return graph.relationships.flatMap((rel) => {
+    if (rel.type !== "DECLARES_COMPONENT") return [];
+    const file = byId.get(rel.from)?.properties.relativePath;
+    const component = byId.get(rel.to);
+    return typeof file === "string" && component
+      ? [{ file, name: String(component.properties.name), line: num(component.properties.line) }]
+      : [];
+  });
+}
+
+export function compareComponents(graph: Graph, labels: NonNullable<Labels["components"]>): Score {
+  const found = scanComponents(graph).filter((component) => inScope(component.file, labels.scope));
+  const result = pair(labels.items, found, (label, component) => (
+    label.file === component.file && label.name === component.name && nearLine(label.line, component.line)
+  ));
+  const describe = (component: ComponentLabel) => `${component.file}:${component.line} ${component.name}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+export function scanRenders(graph: Graph): RenderLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const fileOf = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    const file = rel.type === "DECLARES_COMPONENT" ? byId.get(rel.from)?.properties.relativePath : undefined;
+    if (typeof file === "string") fileOf.set(rel.to, file);
+  }
+  return graph.relationships.flatMap((rel) => {
+    if (rel.type !== "RENDERS") return [];
+    const file = fileOf.get(rel.from);
+    const childFile = fileOf.get(rel.to);
+    if (!file || !childFile) return [];
+    return [{
+      file,
+      parent: String(byId.get(rel.from)?.properties.name),
+      line: num(rel.properties.line),
+      child: String(byId.get(rel.to)?.properties.name),
+      childFile,
+    }];
+  });
+}
+
+// A render is right when the element (parent, line) links to the labeled
+// component; a link to another component is both a false positive and a
+// false negative.
+export function compareRenders(graph: Graph, labels: NonNullable<Labels["renders"]>): Score {
+  const found = scanRenders(graph).filter((render) => inScope(render.file, labels.scope));
+  const result = pair(labels.items, found, (label, render) => (
+    label.file === render.file
+    && label.parent === render.parent
+    && nearLine(label.line, render.line)
+    && label.child === render.child
+    && label.childFile === render.childFile
+  ));
+  const describe = (render: RenderLabel) => `${render.file}:${render.line} ${render.parent} -> ${render.childFile} ${render.child}`;
   return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
 }
 

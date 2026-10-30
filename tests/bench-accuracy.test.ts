@@ -6,7 +6,9 @@ import { samplesDirectory } from "../src/adapters/cli/smoke.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import {
   compareCalls,
+  compareComponents,
   compareDataAccess,
+  compareRenders,
   compareRoutes,
   fileOfNodeId,
   normalizePath,
@@ -202,6 +204,49 @@ it("finds the file of a node id", () => {
   assert.equal(fileOfNodeId("datamodel:x", known), null);
 });
 
+describe("accuracy comparator: components and renders", () => {
+  // Card (a.tsx:3) renders Button (b.tsx:1) at line 5 and Icon at line 6;
+  // Page (out/p.tsx) is out of scope.
+  const graph: Graph = { nodes: files("src/a.tsx", "src/b.tsx", "out/p.tsx"), relationships: [] };
+  const component = (file: string, name: string, line: number) => {
+    const id = `file:${file}:component:${line}:${name}`;
+    graph.nodes.push(node(id, "Component", { name, line }));
+    graph.relationships.push(rel(`file:${file}`, "DECLARES_COMPONENT", id));
+    return id;
+  };
+  const card = component("src/a.tsx", "Card", 3);
+  const button = component("src/b.tsx", "Button", 1);
+  const icon = component("src/b.tsx", "Icon", 9);
+  const page = component("out/p.tsx", "Page", 1);
+  graph.relationships.push(
+    rel(card, "RENDERS", button, { line: 5, props: "label" }),
+    rel(card, "RENDERS", icon, { line: 6, props: "" }),
+    rel(page, "RENDERS", card, { line: 2, props: "" }),
+  );
+
+  it("matches components by file, name and line ±1 within scope", () => {
+    const score = compareComponents(graph, {
+      scope: ["src/"],
+      items: [{ file: "src/a.tsx", name: "Card", line: 4 }, { file: "src/b.tsx", name: "Button", line: 1 }, { file: "src/b.tsx", name: "Badge", line: 20 }],
+    });
+    assert.deepEqual([score.tp, score.fp, score.fn], [2, 1, 1]);
+    assert.deepEqual(score.falsePositives, ["src/b.tsx:9 Icon"]);
+    assert.deepEqual(score.falseNegatives, ["src/b.tsx:20 Badge"]);
+  });
+
+  it("counts a render linked to the wrong component as a false positive and a false negative", () => {
+    const score = compareRenders(graph, {
+      scope: ["src/"],
+      items: [
+        { file: "src/a.tsx", parent: "Card", line: 5, child: "Button", childFile: "src/b.tsx" },
+        { file: "src/a.tsx", parent: "Card", line: 6, child: "Badge", childFile: "src/b.tsx" },
+      ],
+    });
+    assert.deepEqual([score.tp, score.fp, score.fn], [1, 1, 1]);
+    assert.deepEqual(score.falsePositives, ["src/a.tsx:6 Card -> src/b.tsx Icon"]);
+  });
+});
+
 describe("label files", () => {
   const labelsDirectory = path.join(import.meta.dirname, "../bench/labels");
   for (const labelFile of readdirSync(labelsDirectory).filter((file) => file.endsWith(".json"))) {
@@ -220,6 +265,12 @@ describe("label files", () => {
       for (const access of labels.dataAccess?.items ?? []) {
         assert.ok(access.file && access.function && access.model && access.operation, JSON.stringify(access));
       }
+      for (const component of labels.components?.items ?? []) {
+        assert.ok(component.file && component.name && Number.isInteger(component.line), JSON.stringify(component));
+      }
+      for (const render of labels.renders?.items ?? []) {
+        assert.ok(render.file && render.parent && render.child && render.childFile && Number.isInteger(render.line), JSON.stringify(render));
+      }
     });
 
     const projectPath = path.join(samplesDirectory(), labels.sample);
@@ -229,6 +280,8 @@ describe("label files", () => {
         ...(labels.calls?.files ?? []),
         ...(labels.calls?.items ?? []).flatMap((call) => (call.target ? [call.target.file] : [])),
         ...(labels.dataAccess?.items ?? []).map((access) => access.file),
+        ...(labels.components?.items ?? []).map((component) => component.file),
+        ...(labels.renders?.items ?? []).flatMap((render) => [render.file, render.childFile]),
       ]);
       for (const file of named) assert.ok(existsSync(path.join(projectPath, file)), `${file} is missing in ${labels.sample}`);
     });
