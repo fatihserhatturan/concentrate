@@ -1,5 +1,7 @@
 import type { GraphNode, GraphRelationship } from "../../../../core/graph/model.js";
 import type { ISemanticContributor } from "../../../../core/contracts/semantic-contributor.js";
+import { resolveDeclaration } from "../../../../core/scan/resolution/call-targets.js";
+import { createResolutionRelationshipIndex, indexImportNodesByFile } from "../../../../core/scan/resolution/indexes.js";
 
 // REQUESTS: an outbound HTTP call (`Call.httpMethod` / `httpUrl`, set by the
 // http-clients parse plugin) to the Route it reaches, matched on the method
@@ -11,14 +13,24 @@ import type { ISemanticContributor } from "../../../../core/contracts/semantic-c
 // segments over parameters over catch-alls); a tie between routes leaves the
 // call unlinked, as does a URL with a partly dynamic segment (`/u/${id}.json`).
 // `match` is `exact` when every segment matched a literal, `catch-all` when a
-// catch-all took the end, otherwise `parameter`. Routes of method ALL match any method; middleware mounts (USE)
-// match none.
+// catch-all took the end, otherwise `parameter`. Routes of method ALL match
+// any method; middleware mounts (USE) match none.
+//
+// Before matching, each call's URL is resolved in place: a call on a
+// receiver (`api.get(…)`, `httpReceiver`) takes the client and base URL of
+// the instance variable the receiver resolves to, in the file or through
+// imports, and loses its request otherwise; `${NAME}` placeholders become the
+// string constants they name (same file or imported); the base is joined to
+// a relative URL; and a local origin (`http://localhost:3000`, `127.0.0.1`,
+// `0.0.0.0`) is dropped, so the URL becomes a path. A URL that is a single
+// unresolved variable is left null.
 
 type RouteSegment = { kind: "literal"; value: string } | { kind: "param" } | { kind: "catch-all"; optional: boolean };
 type RouteEntry = { id: string; method: string; segments: RouteSegment[] };
 
 export const httpRequestsContributor: ISemanticContributor = {
   contribute(graph) {
+    resolveRequestUrls(graph.nodes, graph.relationships);
     const routes: RouteEntry[] = [];
     for (const node of graph.nodes) {
       if (node.label !== "Route" || typeof node.properties.fullPath !== "string") continue;
@@ -56,6 +68,76 @@ export const httpRequestsContributor: ISemanticContributor = {
     for (const rel of added) graph.addRelationship(rel);
   },
 };
+
+function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship[]): void {
+  const calls = nodes.filter((node) => node.label === "Call" && (node.properties.httpMethod !== undefined || node.properties.httpReceiver !== undefined));
+  if (calls.length === 0) return;
+  const index = createResolutionRelationshipIndex(relationships);
+  const importNodesByFile = indexImportNodesByFile(nodes, index.fileByImportId);
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  const fileByVariableId = new Map<string, string>();
+  const variablesByFileAndName = new Map<string, Map<string, string[]>>();
+  const addVariable = (fileId: string, name: string, id: string) => {
+    const byName = variablesByFileAndName.get(fileId) ?? new Map<string, string[]>();
+    byName.set(name, [...(byName.get(name) ?? []), id]);
+    variablesByFileAndName.set(fileId, byName);
+  };
+  for (const rel of relationships) {
+    const variable = rel.type === "DEFINES_VARIABLE" ? nodeById.get(rel.to) : undefined;
+    if (variable?.label !== "Variable" || typeof variable.properties.name !== "string") continue;
+    fileByVariableId.set(variable.id, rel.from);
+    addVariable(rel.from, variable.properties.name, variable.id);
+  }
+  // `export default api` / `module.exports = api`.
+  for (const [fileId, byName] of variablesByFileAndName) {
+    const name = nodeById.get(fileId)?.properties.defaultExport;
+    const ids = typeof name === "string" && !byName.has("default") ? byName.get(name) : undefined;
+    if (ids) byName.set("default", ids);
+  }
+  const variableOf = (name: string, fileId: string) => {
+    const id = resolveDeclaration(name, fileId, variablesByFileAndName, importNodesByFile, index.resolvedFileByImportId);
+    return id ? nodeById.get(id) : undefined;
+  };
+  const substitute = (text: string, fileId: string) => text.replace(/\$\{([A-Za-z_$][\w$]*)\}/gu, (placeholder, name: string) => {
+    const value = variableOf(name, fileId)?.properties.stringValue;
+    return typeof value === "string" ? value : placeholder;
+  });
+
+  for (const call of calls) {
+    const callerFunctionId = index.callerFunctionByCallId.get(call.id);
+    const fileId = index.callerFileByModuleCallId.get(call.id) ?? (callerFunctionId ? index.fileByFunctionId.get(callerFunctionId) : undefined);
+    let base: string | null = null;
+    const receiver = call.properties.httpReceiver;
+    if (typeof receiver === "string") {
+      const instance = fileId ? variableOf(receiver, fileId) : undefined;
+      if (typeof instance?.properties.httpClient !== "string") {
+        delete call.properties.httpReceiver;
+        delete call.properties.httpMethod;
+        delete call.properties.httpUrl;
+        continue;
+      }
+      call.properties.httpClient = instance.properties.httpClient;
+      const instanceBase = instance.properties.httpBaseUrl;
+      const instanceFileId = fileByVariableId.get(instance.id);
+      if (typeof instanceBase === "string") base = instanceFileId ? substitute(instanceBase, instanceFileId) : instanceBase;
+    }
+    const written = call.properties.httpUrl;
+    if (typeof written !== "string" || !fileId) continue;
+    const url = substitute(written, fileId);
+    call.properties.httpUrl = /^\$\{[^}]*\}$/u.test(url) && base === null ? null : localPath(joinBaseUrl(base, url));
+  }
+}
+
+function joinBaseUrl(base: string | null, url: string): string {
+  if (base === null || /^[a-z][a-z\d+.-]*:\/\//iu.test(url)) return url;
+  if (url === "") return base;
+  return `${base.replace(/\/+$/u, "")}/${url.replace(/^\/+/u, "")}`;
+}
+
+function localPath(url: string): string {
+  const match = /^https?:\/\/(?:localhost|127\.0\.0\.1|0\.0\.0\.0)(?::\d+)?(?=[/]|$)/iu.exec(url);
+  return match ? url.slice(match[0].length) || "/" : url;
+}
 
 // The method and URL segments of an HTTP call: `null` for a dynamic segment.
 function requestOf(call: GraphNode): { method: string; url: string; segments: Array<string | null> } | null {

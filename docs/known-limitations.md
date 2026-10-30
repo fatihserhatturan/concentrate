@@ -377,20 +377,31 @@ Astro).
   `globalThis.fetch`, unless the file declares or imports its own `fetch`),
   the default import of `axios` (`axios(…)`, `axios.request(…)`,
   `axios.get(…)` / `.post` / …), the default import of `ky` and `ofetch` /
-  `$fetch`. Instances (`axios.create`, `ky.create`, `ofetch.create`),
-  wrapper functions around a client and SWR / TanStack Query fetchers are not
-  followed yet.
+  `$fetch`.
+- Instances: `axios.create({ baseURL })`, `ky.create` / `ky.extend({ prefixUrl })`
+  and `ofetch.create({ baseURL })` assigned to a top-level variable or
+  default-exported mark that `Variable` (`httpClient`, `httpBaseUrl`); calls
+  on it (`api.get(…)`, `api.request(…)`, `api(…)`) are followed in the same
+  file and through imports (`httpReceiver` names the binding). Instances
+  created inside functions, stored on objects or classes, extended from
+  another instance, or given interceptors that rewrite the URL are not
+  followed, nor are wrapper functions around a client and SWR / TanStack
+  Query fetchers.
 - The method is the member name or a literal `method` option (GET without
   one); options held in a variable or spreading another object leave it
   unknown, and the call is not linked.
-- `REQUESTS` links a call to the `Route` its URL reaches when the URL is a
-  same-origin string or template literal (`/api/users/${id}`) and exactly one
-  route is the most specific match (literal segments over parameters over
-  catch-alls); `match` says `exact`, `parameter` or `catch-all`. URLs held in
-  variables or constants, built from a base URL or env var
-  (`${process.env.API_URL}/posts`), absolute URLs, partly dynamic segments
-  (`/u/${id}.json`) and ties between routes stay unlinked. Query strings are
-  ignored.
+- `httpUrl` is resolved before matching: `${NAME}` and a bare variable
+  argument become the string constant they name (a string or a template
+  without substitutions, in the same file or imported by name), the
+  instance base URL is joined in front, and a `localhost` / `127.0.0.1` /
+  `0.0.0.0` origin is dropped. Env vars (`${process.env.API_URL}/posts`),
+  other origins and computed values stay unresolved.
+- `REQUESTS` links a call to the `Route` its URL reaches when the resolved
+  URL is a path and exactly one route is the most specific match (literal
+  segments over parameters over catch-alls); `match` says `exact`,
+  `parameter` or `catch-all`. Unresolved or absolute URLs, partly dynamic
+  segments (`/u/${id}.json`) and ties between routes stay unlinked. Query
+  strings are ignored.
 
 ## Review Process
 

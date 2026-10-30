@@ -25,5 +25,9 @@ export function createVariableNode(fileNodeId: string, declarator: SyntaxNode): 
 }
 
 function extractStringValue(valueNode: SyntaxNode | null): string | null {
+  // A template literal counts when it has no substitutions.
+  if (valueNode?.type === "template_string" && !valueNode.namedChildren.some((child) => child?.type === "template_substitution")) {
+    return valueNode.text.slice(1, -1);
+  }
   return valueNode?.type === "string" ? valueNode.text.replace(/^["'`]|["'`]$/g, "") : null;
 }
