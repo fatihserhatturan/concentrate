@@ -700,6 +700,20 @@
           "to": "src/lib/cart.ts"
         }
       }
+    ],
+    "react-components": [
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "src/App.tsx"
+        }
+      },
+      {
+        "tool": "find_references",
+        "args": {
+          "symbol": "Card"
+        }
+      }
     ]
   }
 }

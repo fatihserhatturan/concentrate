@@ -1,0 +1,153 @@
+{"kind":"report","status":"success","discoveredFiles":8,"supportedFiles":7,"parsedFiles":7,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"react-components","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"react-components","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"react-components","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"dir:src/components","label":"Directory","properties":{"name":"components","path":"<root>/src/components","relativePath":"src/components"}}
+{"kind":"node","id":"file:src/App.tsx","label":"File","properties":{"defaultExport":"App","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/App.tsx","relativePath":"src/App.tsx","sourceType":"production"}}
+{"kind":"node","id":"file:src/App.tsx:component:27:App","label":"Component","properties":{"endLine":36,"framework":"react","isExported":true,"kind":"function","line":27,"name":"App","pendingRenders":null}}
+{"kind":"node","id":"file:src/App.tsx:component:8:Profile","label":"Component","properties":{"endLine":15,"framework":"react","isExported":false,"kind":"function","line":8,"name":"Profile","pendingRenders":"[{\"name\":\"Link\",\"props\":[\"to\"],\"line\":12}]"}}
+{"kind":"node","id":"file:src/App.tsx:function:18:FormatDate","label":"Function","properties":{"className":null,"endLine":20,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":18,"methodKind":null,"name":"FormatDate","parameters":"[{\"name\":\"date\",\"type\":\"Date\"}]","returnType":"string","visibility":"public"}}
+{"kind":"node","id":"file:src/App.tsx:function:18:FormatDate:call:19:9:date.toISOString","label":"Call","properties":{"args":"[]","callee":"toISOString","columnNumber":9,"expression":"date.toISOString","line":19,"name":"date.toISOString","receiver":"date"}}
+{"kind":"node","id":"file:src/App.tsx:function:23:renderRow","label":"Function","properties":{"className":null,"endLine":25,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":23,"methodKind":null,"name":"renderRow","parameters":"[{\"name\":\"user\",\"type\":\"User\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/App.tsx:function:27:App","label":"Function","properties":{"className":null,"endLine":36,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":27,"methodKind":null,"name":"App","parameters":"[{\"name\":\"{ users }\",\"type\":\"{ users: User[] }\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/App.tsx:function:27:App:call:30:11:users.map","label":"Call","properties":{"args":"[\"renderRow\"]","callee":"map","columnNumber":11,"expression":"users.map","line":30,"name":"users.map","receiver":"users"}}
+{"kind":"node","id":"file:src/App.tsx:function:27:App:call:31:7:users.map","label":"Call","properties":{"args":"[]","callee":"map","columnNumber":7,"expression":"users.map","line":31,"name":"users.map","receiver":"users"}}
+{"kind":"node","id":"file:src/App.tsx:function:27:App:call:33:32:FormatDate","label":"Call","properties":{"args":"[]","callee":"FormatDate","columnNumber":32,"expression":"FormatDate","line":33,"name":"FormatDate","receiver":null}}
+{"kind":"node","id":"file:src/App.tsx:function:27:App:call:33:43:new Date","label":"Call","properties":{"args":"[]","callee":"Date","columnNumber":43,"expression":"new Date","line":33,"name":"new Date","receiver":null}}
+{"kind":"node","id":"file:src/App.tsx:function:8:Profile","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":8,"methodKind":null,"name":"Profile","parameters":"[{\"name\":\"{ user }\",\"type\":\"{ user: User }\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/App.tsx:import:1:react-router-dom","label":"Import","properties":{"bindings":"[{\"imported\":\"Link\",\"local\":\"Link\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"react-router-dom","specifier":"import { Link } from 'react-router-dom';"}}
+{"kind":"node","id":"file:src/App.tsx:import:2:./components","label":"Import","properties":{"bindings":"[{\"imported\":\"Avatar\",\"local\":\"Avatar\",\"kind\":\"named\"},{\"imported\":\"Card\",\"local\":\"Card\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./components","specifier":"import { Avatar, Card } from './components';"}}
+{"kind":"node","id":"file:src/App.tsx:import:3:./components/Input","label":"Import","properties":{"bindings":"[{\"imported\":\"Input\",\"local\":\"Input\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"./components/Input","specifier":"import { Input } from './components/Input';"}}
+{"kind":"node","id":"file:src/App.tsx:import:4:./components/Legacy","label":"Import","properties":{"bindings":"[{\"imported\":\"Legacy\",\"local\":\"Legacy\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":4,"source":"./components/Legacy","specifier":"import { Legacy } from './components/Legacy';"}}
+{"kind":"node","id":"file:src/App.tsx:type-alias:6:User","label":"TypeAlias","properties":{"endLine":6,"isExported":false,"line":6,"name":"User"}}
+{"kind":"node","id":"file:src/components/Avatar.tsx","label":"File","properties":{"defaultExport":"Avatar","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/components/Avatar.tsx","relativePath":"src/components/Avatar.tsx","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/Avatar.tsx:component:3:Avatar","label":"Component","properties":{"endLine":3,"framework":"react","isExported":true,"kind":"function","line":3,"name":"Avatar","pendingRenders":null}}
+{"kind":"node","id":"file:src/components/Avatar.tsx:function:3:Avatar","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":3,"methodKind":null,"name":"Avatar","parameters":"[{\"name\":\"{ url }\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/Avatar.tsx:import:1:react","label":"Import","properties":{"bindings":"[{\"imported\":\"FC\",\"local\":\"FC\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":1,"source":"react","specifier":"import type { FC } from 'react';"}}
+{"kind":"node","id":"file:src/components/Avatar.tsx:variable:5:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":5,"name":"default"}}
+{"kind":"node","id":"file:src/components/Button.tsx","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/components/Button.tsx","relativePath":"src/components/Button.tsx","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/Button.tsx:component:3:Button","label":"Component","properties":{"endLine":5,"framework":"react","isExported":true,"kind":"function","line":3,"name":"Button","pendingRenders":null}}
+{"kind":"node","id":"file:src/components/Button.tsx:function:3:Button","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"Button","parameters":"[{\"name\":\"{ label, onClick }\",\"type\":\"ButtonProps\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/Button.tsx:type-alias:1:ButtonProps","label":"TypeAlias","properties":{"endLine":1,"isExported":false,"line":1,"name":"ButtonProps"}}
+{"kind":"node","id":"file:src/components/Card.tsx","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/components/Card.tsx","relativePath":"src/components/Card.tsx","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/Card.tsx:component:4:Card","label":"Component","properties":{"endLine":12,"framework":"react","isExported":true,"kind":"memo","line":4,"name":"Card","pendingRenders":null}}
+{"kind":"node","id":"file:src/components/Card.tsx:function:4:Card","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_expression","line":4,"methodKind":null,"name":"Card","parameters":"[{\"name\":\"{ title, children }\",\"type\":\"{ title: string; children: ReactNode }\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/Card.tsx:import:1:react","label":"Import","properties":{"bindings":"[{\"imported\":\"memo\",\"local\":\"memo\",\"kind\":\"named\"},{\"imported\":\"ReactNode\",\"local\":\"ReactNode\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"react","specifier":"import { memo, type ReactNode } from 'react';"}}
+{"kind":"node","id":"file:src/components/Card.tsx:import:2:./Button","label":"Import","properties":{"bindings":"[{\"imported\":\"Button\",\"local\":\"Button\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./Button","specifier":"import { Button } from './Button';"}}
+{"kind":"node","id":"file:src/components/Card.tsx:initializercall:4:20:memo","label":"Call","properties":{"args":"[]","callee":"memo","columnNumber":20,"expression":"memo","line":4,"name":"memo","receiver":null}}
+{"kind":"node","id":"file:src/components/Card.tsx:variable:4:Card","label":"Variable","properties":{"isExported":true,"kind":"const","line":4,"name":"Card","stringValue":null}}
+{"kind":"node","id":"file:src/components/Input.tsx","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/components/Input.tsx","relativePath":"src/components/Input.tsx","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/Input.tsx:component:3:Input","label":"Component","properties":{"endLine":5,"framework":"react","isExported":true,"kind":"forwardRef","line":3,"name":"Input","pendingRenders":null}}
+{"kind":"node","id":"file:src/components/Input.tsx:function:3:<forwardRef:arg0>","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":3,"methodKind":null,"name":"<forwardRef:arg0>","parameters":"[{\"name\":\"props\",\"type\":null},{\"name\":\"ref\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/Input.tsx:import:1:react","label":"Import","properties":{"bindings":"[{\"imported\":\"forwardRef\",\"local\":\"forwardRef\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"react","specifier":"import { forwardRef } from 'react';"}}
+{"kind":"node","id":"file:src/components/Input.tsx:initializercall:3:21:forwardRef","label":"Call","properties":{"args":"[]","callee":"forwardRef","columnNumber":21,"expression":"forwardRef","line":3,"name":"forwardRef","receiver":null}}
+{"kind":"node","id":"file:src/components/Input.tsx:variable:3:Input","label":"Variable","properties":{"isExported":true,"kind":"const","line":3,"name":"Input","stringValue":null}}
+{"kind":"node","id":"file:src/components/Legacy.jsx","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/src/components/Legacy.jsx","relativePath":"src/components/Legacy.jsx","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/Legacy.jsx:class:4:Legacy","label":"Class","properties":{"endLine":8,"extendsNames":"[\"React.Component\"]","implementsNames":null,"isAbstract":false,"isExported":true,"line":4,"name":"Legacy","visibility":"public"}}
+{"kind":"node","id":"file:src/components/Legacy.jsx:component:4:Legacy","label":"Component","properties":{"endLine":8,"framework":"react","isExported":true,"kind":"class","line":4,"name":"Legacy","pendingRenders":null}}
+{"kind":"node","id":"file:src/components/Legacy.jsx:function:5:render","label":"Function","properties":{"className":"Legacy","endLine":7,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"method_definition","line":5,"methodKind":"method","name":"render","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/Legacy.jsx:import:1:react","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"React\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"react","specifier":"import React from 'react';"}}
+{"kind":"node","id":"file:src/components/Legacy.jsx:import:2:./Button","label":"Import","properties":{"bindings":"[{\"imported\":\"Button\",\"local\":\"Button\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./Button","specifier":"import { Button } from './Button';"}}
+{"kind":"node","id":"file:src/components/index.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/components/index.ts","relativePath":"src/components/index.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/index.ts:import:1:./Button","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":true,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"./Button","specifier":"export { Button } from './Button';"}}
+{"kind":"node","id":"file:src/components/index.ts:import:2:./Card","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":true,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./Card","specifier":"export { Card } from './Card';"}}
+{"kind":"node","id":"file:src/components/index.ts:import:3:./Avatar","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":true,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"./Avatar","specifier":"export { default as Avatar } from './Avatar';"}}
+{"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"react-components","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"react-components","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/components","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/App.tsx","properties":{}}
+{"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Avatar.tsx","properties":{}}
+{"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Button.tsx","properties":{}}
+{"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Card.tsx","properties":{}}
+{"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Input.tsx","properties":{}}
+{"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/Legacy.jsx","properties":{}}
+{"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/index.ts","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"DECLARES_COMPONENT","to":"file:src/App.tsx:component:27:App","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"DECLARES_COMPONENT","to":"file:src/App.tsx:component:8:Profile","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"DEFINES_FUNCTION","to":"file:src/App.tsx:function:18:FormatDate","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"DEFINES_FUNCTION","to":"file:src/App.tsx:function:23:renderRow","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"DEFINES_FUNCTION","to":"file:src/App.tsx:function:27:App","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"DEFINES_FUNCTION","to":"file:src/App.tsx:function:8:Profile","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"DEFINES_TYPE_ALIAS","to":"file:src/App.tsx:type-alias:6:User","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"IMPORTS","to":"file:src/App.tsx:import:1:react-router-dom","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"IMPORTS","to":"file:src/App.tsx:import:2:./components","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"IMPORTS","to":"file:src/App.tsx:import:3:./components/Input","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx","type":"IMPORTS","to":"file:src/App.tsx:import:4:./components/Legacy","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:component:27:App","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/App.tsx:function:27:App","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:component:27:App","type":"RENDERS","to":"file:src/App.tsx:component:8:Profile","properties":{"line":31,"props":"key,user"}}
+{"kind":"rel","from":"file:src/App.tsx:component:27:App","type":"RENDERS","to":"file:src/components/Input.tsx:component:3:Input","properties":{"line":32,"props":"name"}}
+{"kind":"rel","from":"file:src/App.tsx:component:27:App","type":"RENDERS","to":"file:src/components/Legacy.jsx:component:4:Legacy","properties":{"line":33,"props":"ready,onGo"}}
+{"kind":"rel","from":"file:src/App.tsx:component:8:Profile","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/App.tsx:function:8:Profile","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:component:8:Profile","type":"RENDERS","to":"file:src/components/Avatar.tsx:component:3:Avatar","properties":{"line":11,"props":"url"}}
+{"kind":"rel","from":"file:src/App.tsx:component:8:Profile","type":"RENDERS","to":"file:src/components/Card.tsx:component:4:Card","properties":{"line":10,"props":"title"}}
+{"kind":"rel","from":"file:src/App.tsx:function:18:FormatDate","type":"CALLS","to":"file:src/App.tsx:function:18:FormatDate:call:19:9:date.toISOString","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:function:27:App","type":"CALLS","to":"file:src/App.tsx:function:27:App:call:30:11:users.map","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:function:27:App","type":"CALLS","to":"file:src/App.tsx:function:27:App:call:31:7:users.map","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:function:27:App","type":"CALLS","to":"file:src/App.tsx:function:27:App:call:33:32:FormatDate","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:function:27:App","type":"CALLS","to":"file:src/App.tsx:function:27:App:call:33:43:new Date","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:function:27:App:call:33:32:FormatDate","type":"CALL_RESOLVES_TO","to":"file:src/App.tsx:function:18:FormatDate","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:import:2:./components","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:import:2:./components","type":"RESOLVES_TO","to":"file:src/components/index.ts","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:import:3:./components/Input","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:import:3:./components/Input","type":"RESOLVES_TO","to":"file:src/components/Input.tsx","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:import:4:./components/Legacy","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/App.tsx:import:4:./components/Legacy","type":"RESOLVES_TO","to":"file:src/components/Legacy.jsx","properties":{}}
+{"kind":"rel","from":"file:src/components/Avatar.tsx","type":"DECLARES_COMPONENT","to":"file:src/components/Avatar.tsx:component:3:Avatar","properties":{}}
+{"kind":"rel","from":"file:src/components/Avatar.tsx","type":"DEFINES_FUNCTION","to":"file:src/components/Avatar.tsx:function:3:Avatar","properties":{}}
+{"kind":"rel","from":"file:src/components/Avatar.tsx","type":"DEFINES_VARIABLE","to":"file:src/components/Avatar.tsx:variable:5:default","properties":{}}
+{"kind":"rel","from":"file:src/components/Avatar.tsx","type":"IMPORTS","to":"file:src/components/Avatar.tsx:import:1:react","properties":{}}
+{"kind":"rel","from":"file:src/components/Avatar.tsx:component:3:Avatar","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/Avatar.tsx:function:3:Avatar","properties":{}}
+{"kind":"rel","from":"file:src/components/Button.tsx","type":"DECLARES_COMPONENT","to":"file:src/components/Button.tsx:component:3:Button","properties":{}}
+{"kind":"rel","from":"file:src/components/Button.tsx","type":"DEFINES_FUNCTION","to":"file:src/components/Button.tsx:function:3:Button","properties":{}}
+{"kind":"rel","from":"file:src/components/Button.tsx","type":"DEFINES_TYPE_ALIAS","to":"file:src/components/Button.tsx:type-alias:1:ButtonProps","properties":{}}
+{"kind":"rel","from":"file:src/components/Button.tsx:component:3:Button","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/Button.tsx:function:3:Button","properties":{}}
+{"kind":"rel","from":"file:src/components/Card.tsx","type":"DECLARES_COMPONENT","to":"file:src/components/Card.tsx:component:4:Card","properties":{}}
+{"kind":"rel","from":"file:src/components/Card.tsx","type":"DEFINES_FUNCTION","to":"file:src/components/Card.tsx:function:4:Card","properties":{}}
+{"kind":"rel","from":"file:src/components/Card.tsx","type":"DEFINES_VARIABLE","to":"file:src/components/Card.tsx:variable:4:Card","properties":{}}
+{"kind":"rel","from":"file:src/components/Card.tsx","type":"IMPORTS","to":"file:src/components/Card.tsx:import:1:react","properties":{}}
+{"kind":"rel","from":"file:src/components/Card.tsx","type":"IMPORTS","to":"file:src/components/Card.tsx:import:2:./Button","properties":{}}
+{"kind":"rel","from":"file:src/components/Card.tsx:component:4:Card","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/Card.tsx:function:4:Card","properties":{}}
+{"kind":"rel","from":"file:src/components/Card.tsx:component:4:Card","type":"RENDERS","to":"file:src/components/Button.tsx:component:3:Button","properties":{"line":9,"props":"label"}}
+{"kind":"rel","from":"file:src/components/Card.tsx:import:2:./Button","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/components/Card.tsx:import:2:./Button","type":"RESOLVES_TO","to":"file:src/components/Button.tsx","properties":{}}
+{"kind":"rel","from":"file:src/components/Card.tsx:variable:4:Card","type":"INITIALIZED_BY","to":"file:src/components/Card.tsx:initializercall:4:20:memo","properties":{}}
+{"kind":"rel","from":"file:src/components/Input.tsx","type":"DECLARES_COMPONENT","to":"file:src/components/Input.tsx:component:3:Input","properties":{}}
+{"kind":"rel","from":"file:src/components/Input.tsx","type":"DEFINES_FUNCTION","to":"file:src/components/Input.tsx:function:3:<forwardRef:arg0>","properties":{}}
+{"kind":"rel","from":"file:src/components/Input.tsx","type":"DEFINES_VARIABLE","to":"file:src/components/Input.tsx:variable:3:Input","properties":{}}
+{"kind":"rel","from":"file:src/components/Input.tsx","type":"IMPORTS","to":"file:src/components/Input.tsx:import:1:react","properties":{}}
+{"kind":"rel","from":"file:src/components/Input.tsx:component:3:Input","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/Input.tsx:function:3:<forwardRef:arg0>","properties":{}}
+{"kind":"rel","from":"file:src/components/Input.tsx:function:3:<forwardRef:arg0>","type":"PASSED_TO","to":"file:src/components/Input.tsx:initializercall:3:21:forwardRef","properties":{}}
+{"kind":"rel","from":"file:src/components/Input.tsx:variable:3:Input","type":"INITIALIZED_BY","to":"file:src/components/Input.tsx:initializercall:3:21:forwardRef","properties":{}}
+{"kind":"rel","from":"file:src/components/Legacy.jsx","type":"DECLARES_COMPONENT","to":"file:src/components/Legacy.jsx:component:4:Legacy","properties":{}}
+{"kind":"rel","from":"file:src/components/Legacy.jsx","type":"DEFINES_CLASS","to":"file:src/components/Legacy.jsx:class:4:Legacy","properties":{}}
+{"kind":"rel","from":"file:src/components/Legacy.jsx","type":"IMPORTS","to":"file:src/components/Legacy.jsx:import:1:react","properties":{}}
+{"kind":"rel","from":"file:src/components/Legacy.jsx","type":"IMPORTS","to":"file:src/components/Legacy.jsx:import:2:./Button","properties":{}}
+{"kind":"rel","from":"file:src/components/Legacy.jsx:class:4:Legacy","type":"DEFINES_METHOD","to":"file:src/components/Legacy.jsx:function:5:render","properties":{}}
+{"kind":"rel","from":"file:src/components/Legacy.jsx:component:4:Legacy","type":"COMPONENT_DEFINED_BY","to":"file:src/components/Legacy.jsx:class:4:Legacy","properties":{}}
+{"kind":"rel","from":"file:src/components/Legacy.jsx:component:4:Legacy","type":"RENDERS","to":"file:src/components/Button.tsx:component:3:Button","properties":{"line":6,"props":"label,onClick"}}
+{"kind":"rel","from":"file:src/components/Legacy.jsx:import:2:./Button","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/components/Legacy.jsx:import:2:./Button","type":"RESOLVES_TO","to":"file:src/components/Button.tsx","properties":{}}
+{"kind":"rel","from":"file:src/components/index.ts","type":"IMPORTS","to":"file:src/components/index.ts:import:1:./Button","properties":{}}
+{"kind":"rel","from":"file:src/components/index.ts","type":"IMPORTS","to":"file:src/components/index.ts:import:2:./Card","properties":{}}
+{"kind":"rel","from":"file:src/components/index.ts","type":"IMPORTS","to":"file:src/components/index.ts:import:3:./Avatar","properties":{}}
+{"kind":"rel","from":"file:src/components/index.ts:import:1:./Button","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/components/index.ts:import:1:./Button","type":"RESOLVES_TO","to":"file:src/components/Button.tsx","properties":{}}
+{"kind":"rel","from":"file:src/components/index.ts:import:2:./Card","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/components/index.ts:import:2:./Card","type":"RESOLVES_TO","to":"file:src/components/Card.tsx","properties":{}}
+{"kind":"rel","from":"file:src/components/index.ts:import:3:./Avatar","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/components/index.ts:import:3:./Avatar","type":"RESOLVES_TO","to":"file:src/components/Avatar.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/App.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Avatar.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Button.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Card.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Input.tsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Legacy.jsx","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/index.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_CONFIG","to":"config:package.json:name","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:.","properties":{}}

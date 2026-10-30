@@ -1,0 +1,1368 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 43
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 3
+          },
+          {
+            "table": "File",
+            "count": 7
+          },
+          {
+            "table": "Import",
+            "count": 13
+          },
+          {
+            "table": "Function",
+            "count": 9
+          },
+          {
+            "table": "Class",
+            "count": 1
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 3
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 2
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 7
+          },
+          {
+            "table": "Route",
+            "count": 0
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 7
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 43,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 3
+        },
+        {
+          "table": "File",
+          "count": 7
+        },
+        {
+          "table": "Import",
+          "count": 13
+        },
+        {
+          "table": "Function",
+          "count": 9
+        },
+        {
+          "table": "Class",
+          "count": 1
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 3
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 2
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 7
+        },
+        {
+          "table": "Route",
+          "count": 0
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 7
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "Profile",
+            "kind": "Function",
+            "file": "src/App.tsx",
+            "line": 8,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "FormatDate",
+            "kind": "Function",
+            "file": "src/App.tsx",
+            "line": 18,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "renderRow",
+            "kind": "Function",
+            "file": "src/App.tsx",
+            "line": 23,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<forwardRef:arg0>",
+            "kind": "Function",
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "Legacy",
+            "kind": "Class",
+            "file": "src/components/Legacy.jsx",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "src/components/Avatar.tsx",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "User",
+            "kind": "TypeAlias",
+            "file": "src/App.tsx",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "Profile",
+          "kind": "Function",
+          "file": "src/App.tsx",
+          "line": 8,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "FormatDate",
+          "kind": "Function",
+          "file": "src/App.tsx",
+          "line": 18,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "renderRow",
+          "kind": "Function",
+          "file": "src/App.tsx",
+          "line": 23,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<forwardRef:arg0>",
+          "kind": "Function",
+          "file": "src/components/Input.tsx",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Legacy",
+          "kind": "Class",
+          "file": "src/components/Legacy.jsx",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "default",
+          "kind": "Variable",
+          "file": "src/components/Avatar.tsx",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "User",
+          "kind": "TypeAlias",
+          "file": "src/App.tsx",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_TYPE_ALIAS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/App.tsx",
+            "name": "App",
+            "kind": "Function",
+            "line": 27,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/components/Button.tsx",
+            "name": "Button",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/components/Legacy.jsx",
+            "name": "Legacy",
+            "kind": "Class",
+            "line": 4,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/components/Avatar.tsx",
+            "name": "default",
+            "kind": "Variable",
+            "line": 5,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/components/Card.tsx",
+            "name": "Card",
+            "kind": "Variable",
+            "line": 4,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/components/Input.tsx",
+            "name": "Input",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/App.tsx",
+          "name": "App",
+          "kind": "Function",
+          "line": 27,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/components/Button.tsx",
+          "name": "Button",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/components/Legacy.jsx",
+          "name": "Legacy",
+          "kind": "Class",
+          "line": 4,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/components/Avatar.tsx",
+          "name": "default",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/components/Card.tsx",
+          "name": "Card",
+          "kind": "Variable",
+          "line": 4,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/components/Input.tsx",
+          "name": "Input",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 6
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "get_file_outline",
+    "args": {
+      "file": "src/App.tsx"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "rows": [
+          {
+            "file": "src/App.tsx"
+          },
+          {
+            "file": "src/components/Avatar.tsx"
+          },
+          {
+            "file": "src/components/Button.tsx"
+          },
+          {
+            "file": "src/components/Card.tsx"
+          },
+          {
+            "file": "src/components/Input.tsx"
+          },
+          {
+            "file": "src/components/Legacy.jsx"
+          },
+          {
+            "file": "src/components/index.ts"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/App.tsx"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/App.tsx:function:8:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/App.tsx",
+            "path": "<root>/src/App.tsx",
+            "line": 8,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/App.tsx:function:18:FormatDate",
+            "name": "FormatDate",
+            "className": null,
+            "file": "src/App.tsx",
+            "path": "<root>/src/App.tsx",
+            "line": 18,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/App.tsx:function:23:renderRow",
+            "name": "renderRow",
+            "className": null,
+            "file": "src/App.tsx",
+            "path": "<root>/src/App.tsx",
+            "line": 23,
+            "endLine": 25
+          },
+          {
+            "id": "file:src/App.tsx:function:27:App",
+            "name": "App",
+            "className": null,
+            "file": "src/App.tsx",
+            "path": "<root>/src/App.tsx",
+            "line": 27,
+            "endLine": 36
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/App.tsx"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/App.tsx"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/App.tsx"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/App.tsx"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/App.tsx:type-alias:6:User",
+            "name": "User",
+            "file": "src/App.tsx",
+            "path": "<root>/src/App.tsx",
+            "line": 6,
+            "endLine": 6
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/App.tsx"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/App.tsx"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(n:Route) WHERE file.relativePath IN $files RETURN id(n) AS id, n.method AS method, coalesce(n.fullPath, n.path) AS routePath, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/App.tsx"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_FIELD]->(field:Field) WHERE file.relativePath = $file RETURN class.name AS className, field.name AS name, field.typeName AS typeName, field.line AS line",
+        "params": {
+          "file": "src/App.tsx"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:IMPORTS]->(imp:Import) WHERE file.relativePath = $file RETURN imp.source AS source, imp.line AS line, imp.isTypeOnly AS isTypeOnly",
+        "params": {
+          "file": "src/App.tsx"
+        },
+        "rows": [
+          {
+            "source": "react-router-dom",
+            "line": 1,
+            "isTypeOnly": false
+          },
+          {
+            "source": "./components",
+            "line": 2,
+            "isTypeOnly": false
+          },
+          {
+            "source": "./components/Input",
+            "line": 3,
+            "isTypeOnly": false
+          },
+          {
+            "source": "./components/Legacy",
+            "line": 4,
+            "isTypeOnly": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE file.relativePath = $file RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.handlerName AS handlerName, entrypoint.line AS line",
+        "params": {
+          "file": "src/App.tsx"
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "file": "src/App.tsx",
+      "imports": [
+        {
+          "source": "react-router-dom",
+          "line": 1,
+          "isTypeOnly": false
+        },
+        {
+          "source": "./components",
+          "line": 2,
+          "isTypeOnly": false
+        },
+        {
+          "source": "./components/Input",
+          "line": 3,
+          "isTypeOnly": false
+        },
+        {
+          "source": "./components/Legacy",
+          "line": 4,
+          "isTypeOnly": false
+        }
+      ],
+      "outline": [
+        {
+          "kind": "type",
+          "name": "User",
+          "line": 6,
+          "endLine": 6
+        },
+        {
+          "kind": "function",
+          "name": "Profile",
+          "line": 8,
+          "endLine": 15
+        },
+        {
+          "kind": "function",
+          "name": "FormatDate",
+          "line": 18,
+          "endLine": 20
+        },
+        {
+          "kind": "function",
+          "name": "renderRow",
+          "line": 23,
+          "endLine": 25
+        },
+        {
+          "kind": "function",
+          "name": "App",
+          "line": 27,
+          "endLine": 36
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  },
+  {
+    "tool": "find_references",
+    "args": {
+      "symbol": "Card"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION|RE_EXPORTS_CLASS|RE_EXPORTS_VARIABLE]->(n) RETURN id(n) AS id",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:function:8:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 8,
+            "isExported": false
+          },
+          {
+            "id": "file:src/App.tsx:function:18:FormatDate",
+            "name": "FormatDate",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 18,
+            "isExported": false
+          },
+          {
+            "id": "file:src/App.tsx:function:23:renderRow",
+            "name": "renderRow",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 23,
+            "isExported": false
+          },
+          {
+            "id": "file:src/App.tsx:function:27:App",
+            "name": "App",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 27,
+            "isExported": true
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:function:3:Avatar",
+            "name": "Avatar",
+            "className": null,
+            "file": "src/components/Avatar.tsx",
+            "line": 3,
+            "isExported": false
+          },
+          {
+            "id": "file:src/components/Button.tsx:function:3:Button",
+            "name": "Button",
+            "className": null,
+            "file": "src/components/Button.tsx",
+            "line": 3,
+            "isExported": true
+          },
+          {
+            "id": "file:src/components/Card.tsx:function:4:Card",
+            "name": "Card",
+            "className": null,
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "isExported": false
+          },
+          {
+            "id": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>",
+            "name": "<forwardRef:arg0>",
+            "className": null,
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "isExported": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, n.line AS line, false AS isExported",
+        "rows": [
+          {
+            "id": "file:src/components/Legacy.jsx:function:5:render",
+            "name": "render",
+            "className": "Legacy",
+            "file": "src/components/Legacy.jsx",
+            "line": 5,
+            "isExported": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "rows": [
+          {
+            "id": "file:src/components/Legacy.jsx:class:4:Legacy",
+            "name": "Legacy",
+            "className": null,
+            "file": "src/components/Legacy.jsx",
+            "line": 4,
+            "isExported": true
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:type-alias:6:User",
+            "name": "User",
+            "className": null,
+            "file": "src/App.tsx",
+            "line": 6,
+            "isExported": false
+          },
+          {
+            "id": "file:src/components/Button.tsx:type-alias:1:ButtonProps",
+            "name": "ButtonProps",
+            "className": null,
+            "file": "src/components/Button.tsx",
+            "line": 1,
+            "isExported": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "rows": [
+          {
+            "id": "file:src/components/Avatar.tsx:variable:5:default",
+            "name": "default",
+            "className": null,
+            "file": "src/components/Avatar.tsx",
+            "line": 5,
+            "isExported": true
+          },
+          {
+            "id": "file:src/components/Card.tsx:variable:4:Card",
+            "name": "Card",
+            "className": null,
+            "file": "src/components/Card.tsx",
+            "line": 4,
+            "isExported": true
+          },
+          {
+            "id": "file:src/components/Input.tsx:variable:3:Input",
+            "name": "Input",
+            "className": null,
+            "file": "src/components/Input.tsx",
+            "line": 3,
+            "isExported": true
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:IMPORTS]->(imp:Import) OPTIONAL MATCH (imp)-[:RESOLVES_TO]->(target:File) RETURN id(imp) AS id, file.relativePath AS file, target.relativePath AS target, imp.source AS source, imp.specifier AS specifier, imp.line AS line, imp.isReExport AS isReExport, imp.isWildcard AS isWildcard, imp.isDynamic AS isDynamic, imp.isCjs AS isCjs, imp.isTypeOnly AS isTypeOnly, imp.bindings AS bindings",
+        "rows": [
+          {
+            "id": "file:src/App.tsx:import:1:react-router-dom",
+            "file": "src/App.tsx",
+            "target": null,
+            "source": "react-router-dom",
+            "specifier": "import { Link } from 'react-router-dom';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"Link\",\"local\":\"Link\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/App.tsx:import:2:./components",
+            "file": "src/App.tsx",
+            "target": "src/components/index.ts",
+            "source": "./components",
+            "specifier": "import { Avatar, Card } from './components';",
+            "line": 2,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"Avatar\",\"local\":\"Avatar\",\"kind\":\"named\"},{\"imported\":\"Card\",\"local\":\"Card\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/App.tsx:import:3:./components/Input",
+            "file": "src/App.tsx",
+            "target": "src/components/Input.tsx",
+            "source": "./components/Input",
+            "specifier": "import { Input } from './components/Input';",
+            "line": 3,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"Input\",\"local\":\"Input\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/App.tsx:import:4:./components/Legacy",
+            "file": "src/App.tsx",
+            "target": "src/components/Legacy.jsx",
+            "source": "./components/Legacy",
+            "specifier": "import { Legacy } from './components/Legacy';",
+            "line": 4,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"Legacy\",\"local\":\"Legacy\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/Avatar.tsx:import:1:react",
+            "file": "src/components/Avatar.tsx",
+            "target": null,
+            "source": "react",
+            "specifier": "import type { FC } from 'react';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": true,
+            "bindings": "[{\"imported\":\"FC\",\"local\":\"FC\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/Card.tsx:import:1:react",
+            "file": "src/components/Card.tsx",
+            "target": null,
+            "source": "react",
+            "specifier": "import { memo, type ReactNode } from 'react';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"memo\",\"local\":\"memo\",\"kind\":\"named\"},{\"imported\":\"ReactNode\",\"local\":\"ReactNode\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/Card.tsx:import:2:./Button",
+            "file": "src/components/Card.tsx",
+            "target": "src/components/Button.tsx",
+            "source": "./Button",
+            "specifier": "import { Button } from './Button';",
+            "line": 2,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"Button\",\"local\":\"Button\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/Input.tsx:import:1:react",
+            "file": "src/components/Input.tsx",
+            "target": null,
+            "source": "react",
+            "specifier": "import { forwardRef } from 'react';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"forwardRef\",\"local\":\"forwardRef\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/Legacy.jsx:import:1:react",
+            "file": "src/components/Legacy.jsx",
+            "target": null,
+            "source": "react",
+            "specifier": "import React from 'react';",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"default\",\"local\":\"React\",\"kind\":\"default\"}]"
+          },
+          {
+            "id": "file:src/components/Legacy.jsx:import:2:./Button",
+            "file": "src/components/Legacy.jsx",
+            "target": "src/components/Button.tsx",
+            "source": "./Button",
+            "specifier": "import { Button } from './Button';",
+            "line": 2,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"Button\",\"local\":\"Button\",\"kind\":\"named\"}]"
+          },
+          {
+            "id": "file:src/components/index.ts:import:1:./Button",
+            "file": "src/components/index.ts",
+            "target": "src/components/Button.tsx",
+            "source": "./Button",
+            "specifier": "export { Button } from './Button';",
+            "line": 1,
+            "isReExport": true,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": null
+          },
+          {
+            "id": "file:src/components/index.ts:import:2:./Card",
+            "file": "src/components/index.ts",
+            "target": "src/components/Card.tsx",
+            "source": "./Card",
+            "specifier": "export { Card } from './Card';",
+            "line": 2,
+            "isReExport": true,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": null
+          },
+          {
+            "id": "file:src/components/index.ts:import:3:./Avatar",
+            "file": "src/components/index.ts",
+            "target": "src/components/Avatar.tsx",
+            "source": "./Avatar",
+            "specifier": "export { default as Avatar } from './Avatar';",
+            "line": 3,
+            "isReExport": true,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS target, id(caller) AS caller, call.line AS line, call.expression AS expression",
+        "params": {
+          "ids": [
+            "file:src/components/Card.tsx:function:4:Card"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS target, file.relativePath AS file, call.line AS line, call.expression AS expression",
+        "params": {
+          "ids": [
+            "file:src/components/Card.tsx:function:4:Card"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[:PASSED_TO]->(call:Call) WHERE id(fn) IN $ids OPTIONAL MATCH (caller:Function)-[:CALLS]->(call) OPTIONAL MATCH (file:File)-[:MODULE_CALLS]->(call) RETURN id(fn) AS target, id(caller) AS caller, file.relativePath AS file, call.line AS line, call.expression AS expression",
+        "params": {
+          "ids": [
+            "file:src/components/Card.tsx:function:4:Card"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS target, file.relativePath AS file, route.line AS line, route.method AS method, coalesce(route.fullPath, route.path) AS path, label(rel) AS relType, rel.role AS role",
+        "params": {
+          "ids": [
+            "file:src/components/Card.tsx:function:4:Card"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS target, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS entrypointKind, entrypoint.trigger AS trigger",
+        "params": {
+          "ids": [
+            "file:src/components/Card.tsx:function:4:Card"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "symbol": "Card",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "Card",
+          "file": "src/components/Card.tsx",
+          "line": 4,
+          "isExported": false
+        },
+        {
+          "kind": "variable",
+          "name": "Card",
+          "file": "src/components/Card.tsx",
+          "line": 4,
+          "isExported": true
+        }
+      ],
+      "total": 2,
+      "counts": {
+        "import": 1,
+        "re-export": 1
+      },
+      "references": [
+        {
+          "kind": "import",
+          "file": "src/App.tsx",
+          "line": 2,
+          "detail": "Card",
+          "target": "src/components/Card.tsx:4"
+        },
+        {
+          "kind": "re-export",
+          "file": "src/components/index.ts",
+          "line": 2,
+          "detail": "Card",
+          "target": "src/components/Card.tsx:4"
+        }
+      ],
+      "note": "Calls come from resolved call edges, so calls the scanner could not resolve are missing; possible: true marks namespace and dynamic imports that may not use the declaration.",
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  }
+]
