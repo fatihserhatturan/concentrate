@@ -487,16 +487,6 @@
             "framework": "fastify",
             "handlerName": "<fastify.route:/object-inline:handler>",
             "handler": "<fastify.route:/object-inline:handler>"
-          },
-          {
-            "file": "server.ts",
-            "line": 32,
-            "method": "GET",
-            "path": "/object-inline",
-            "fullPath": "/object-inline",
-            "framework": "fastify",
-            "handlerName": "<fastify.route:/object-inline:handler>",
-            "handler": "<fastify.route:/object-inline:preHandler>"
           }
         ]
       }
@@ -575,21 +565,11 @@
           "framework": "fastify",
           "handlerName": "<fastify.route:/object-inline:handler>",
           "handler": "<fastify.route:/object-inline:handler>"
-        },
-        {
-          "file": "server.ts",
-          "line": 32,
-          "method": "GET",
-          "path": "/object-inline",
-          "fullPath": "/object-inline",
-          "framework": "fastify",
-          "handlerName": "<fastify.route:/object-inline:handler>",
-          "handler": "<fastify.route:/object-inline:preHandler>"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 8
+        "returned": 7
       }
     }
   },
@@ -760,16 +740,6 @@
             "framework": "fastify",
             "handlerName": "<fastify.route:/object-inline:handler>",
             "handler": "<fastify.route:/object-inline:handler>"
-          },
-          {
-            "file": "server.ts",
-            "line": 32,
-            "method": "GET",
-            "path": "/object-inline",
-            "fullPath": "/object-inline",
-            "framework": "fastify",
-            "handlerName": "<fastify.route:/object-inline:handler>",
-            "handler": "<fastify.route:/object-inline:preHandler>"
           }
         ]
       }
@@ -849,21 +819,11 @@
           "framework": "fastify",
           "handlerName": "<fastify.route:/object-inline:handler>",
           "handler": "<fastify.route:/object-inline:handler>"
-        },
-        {
-          "file": "server.ts",
-          "line": 32,
-          "method": "GET",
-          "path": "/object-inline",
-          "fullPath": "/object-inline",
-          "framework": "fastify",
-          "handlerName": "<fastify.route:/object-inline:handler>",
-          "handler": "<fastify.route:/object-inline:preHandler>"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 8
+        "returned": 7
       }
     }
   }

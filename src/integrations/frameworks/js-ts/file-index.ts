@@ -159,6 +159,23 @@ export function indexPassedToHandlers(relationships: GraphRelationship[]): Map<s
   return handlers;
 }
 
+// Every function passed inline to a call, by call node id and then by its
+// (synthetic) name: `<app.use:arg0>` names the same thing at every `app.use`
+// call of a file, so steps are looked up at their own call first.
+export function indexPassedToFunctions(nodes: GraphNode[], relationships: GraphRelationship[]): Map<string, Map<string, string>> {
+  const nameById = new Map(nodes.filter((node) => node.label === "Function").map((node) => [node.id, node.properties.name]));
+  const functions = new Map<string, Map<string, string>>();
+  for (const rel of relationships) {
+    if (rel.type !== "PASSED_TO") continue;
+    const name = nameById.get(rel.from);
+    if (typeof name !== "string") continue;
+    const byName = functions.get(rel.to) ?? new Map<string, string>();
+    if (!byName.has(name)) byName.set(name, rel.from);
+    functions.set(rel.to, byName);
+  }
+  return functions;
+}
+
 export function firstDecoratorArg(decoratorNode: GraphNode): string | null {
   const args = decoratorNode.properties.args;
   if (typeof args !== "string") return null;
