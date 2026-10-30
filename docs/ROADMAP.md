@@ -255,7 +255,7 @@ Extractors use only a narrow tree-sitter API: `type`, `id`, `text`, `startPositi
 
 ### Error tolerance (behavior improvement)
 
-- [ ] Produce a partial graph plus a scan warning instead of rejecting a file whose tree has `ERROR` nodes. Moved to Phase 10 ([#75](https://github.com/fatihserhatturan/concentrate/issues/75)).
+- [x] Produce a partial graph plus a scan warning instead of rejecting a file whose tree has `ERROR` nodes (JS/TS, done in Phase 10, [#75](https://github.com/fatihserhatturan/concentrate/issues/75)).
 - [ ] Document the resulting golden diffs
 
 ### Integration
@@ -265,7 +265,7 @@ Extractors use only a narrow tree-sitter API: `type`, `id`, `text`, `startPositi
 ### Acceptance criteria
 
 - [ ] Golden diffs are reviewed and explained in the PR
-- [ ] `internet-nest` files that fail today on syntax errors produce partial graphs
+- [x] `internet-nest` files that fail today on syntax errors produce partial graphs (the 2 microservices decorator specs)
 
 ## Phase 3e: Parser performance ([#9](https://github.com/fatihserhatturan/concentrate/issues/9))
 
@@ -554,7 +554,7 @@ Today `.tsx` is parsed with the TypeScript grammar, which has no JSX (`src/core/
 
 - [x] Parse `.tsx` with the TSX grammar (built from the pinned `tree-sitter-typescript` package, `tsx` directory)
 - [ ] Vendor the official `tree-sitter-html` grammar as `.wasm` through `npm run grammars:build`
-- [ ] Produce a partial graph plus a scan warning instead of rejecting a file whose tree has `ERROR` nodes; review the golden diffs
+- [x] Produce a partial graph plus a scan warning instead of rejecting a file whose tree has `ERROR` nodes; review the golden diffs
 
 ### Single-file components
 
@@ -571,7 +571,7 @@ Today `.tsx` is parsed with the TypeScript grammar, which has no JSX (`src/core/
 ### Acceptance criteria
 
 - [ ] Fixtures for TSX, a file with a syntax error, each SFC format and a vanilla HTML page, with golden coverage
-- [ ] `internet-nest` files that failed on syntax errors produce partial graphs
+- [x] `internet-nest` files that failed on syntax errors produce partial graphs (the 2 microservices decorator specs)
 - [ ] Precision stays at 100% in `bench:accuracy`; parse time per file is reported in `docs/benchmarks.md`
 
 ## Phase 11: Component model and React ([#76](https://github.com/fatihserhatturan/concentrate/issues/76))

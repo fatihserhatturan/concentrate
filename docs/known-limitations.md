@@ -204,11 +204,14 @@ Blocks or informs: future query server design.
   handlers create no nodes of their own, so a call inside
   `onClick={() => track()}` is attributed to the enclosing component
   (Phase 11).
-- A file whose tree contains an `ERROR` node is reported as a failed file
-  instead of producing a partial graph (`--continue-on-error` keeps the rest of
-  the scan).
+- A JS/TS file with syntax errors produces a partial graph: each statement or
+  class member that contains an `ERROR` or `MISSING` node is left out (the
+  file is parsed again with that text blanked), and the scan reports a warning
+  with the lines left out. A file that stays broken after four rounds fails
+  as before. Python, Go and Rust files with syntax errors are still reported
+  as failed files (`--continue-on-error` keeps the rest of the scan).
 
-Blocks or informs: ROADMAP Phase 10 (error tolerance) and Phase 11 (React).
+Blocks or informs: ROADMAP Phase 11 (React).
 
 ## Review Process
 

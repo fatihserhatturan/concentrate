@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { parseSyntaxTree, type SyntaxNode, type SyntaxTree } from "../syntax/tree-sitter.js";
+import { parseSyntaxTree, parseSyntaxTreeSkippingErrors, type GrammarName, type SyntaxNode, type SyntaxTree } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { SupportedLanguage } from "../../../core/scan/language.js";
 import {
@@ -280,8 +280,30 @@ export function finalizeLanguageLevel(
 // The caller owns the tree and must delete() it. `.tsx` files need the TSX
 // grammar: the TypeScript one has no JSX and reads `<T>x` as a type assertion.
 export function parseTree(source: string, language: SupportedLanguage, filePath = ""): Promise<SyntaxTree> {
-  if (language !== "typescript") return parseSyntaxTree("javascript", source);
-  return parseSyntaxTree(path.extname(filePath) === ".tsx" ? "tsx" : "typescript", source);
+  return parseSyntaxTree(grammarFor(language, filePath), source);
+}
+
+function grammarFor(language: SupportedLanguage, filePath: string): GrammarName {
+  if (language !== "typescript") return "javascript";
+  return path.extname(filePath) === ".tsx" ? "tsx" : "typescript";
+}
+
+// Node types whose children are statements or class members: a statement with
+// a syntax error is left out on its own, and the rest of the file is kept.
+const statementParents = new Set(["program", "statement_block", "class_body", "switch_case", "switch_default"]);
+
+// Parses a file, leaving out the statements that contain syntax errors. The
+// caller owns the tree and must delete() it.
+async function parseTolerantTree(
+  source: string,
+  language: SupportedLanguage,
+  filePath: string,
+): Promise<{ tree: SyntaxTree; warnings: string[] }> {
+  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors(grammarFor(language, filePath), source, statementParents);
+  const warnings = skippedLines.length === 0
+    ? []
+    : [`Syntax error: left out the statement${skippedLines.length === 1 ? "" : "s"} at line${skippedLines.length === 1 ? "" : "s"} ${skippedLines.join(", ")}`];
+  return { tree, warnings };
 }
 
 // A parsed file as framework plugins see it: the language-level graph plus the
@@ -321,17 +343,14 @@ export async function parseJsTsFile(
     properties: { path: filePath, relativePath, language },
   };
 
-  const tree = await parseTree(source, language, filePath);
+  const { tree, warnings } = await parseTolerantTree(source, language, filePath);
   try {
-    if (tree.rootNode.hasError) {
-      throw new Error("Syntax error");
-    }
-
     const callbackKeys = new Set(plugins.flatMap((plugin) => plugin.callbackPropertyNames ?? []));
     const state = walkJsTsNodes(fileNodeId, tree, language, callbackKeys);
     state.nodes.unshift(fileNode);
 
     const parsed = finalizeLanguageLevel(fileNodeId, tree, state);
+    if (warnings.length > 0) parsed.warnings = warnings;
     for (const plugin of plugins) {
       plugin.onFile({ fileNodeId, rootNode: tree.rootNode, parsed, state });
     }
@@ -359,11 +378,7 @@ export async function parseJsTsWithRootNode(
   };
 
   // The tree stays alive for the caller's root node; this helper is for tests.
-  const tree = await parseTree(source, language, filePath);
-  if (tree.rootNode.hasError) {
-    tree.delete();
-    throw new Error("Syntax error");
-  }
+  const { tree } = await parseTolerantTree(source, language, filePath);
 
   const state = walkJsTsNodes(fileNodeId, tree, language);
   state.nodes.unshift(fileNode);

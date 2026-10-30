@@ -3,7 +3,7 @@ import { GraphBuilder } from "../graph/builder.js";
 import { addDirectoryChain } from "./directory-graph.js";
 import { classifyFile } from "./file-classification.js";
 import type { ParseResult } from "./parse-source.js";
-import { createScanFailure, type ScanReport } from "./report.js";
+import { addUniqueScanWarning, createScanFailure, type ScanReport } from "./report.js";
 
 export function addParseResultsToGraph(
   graph: GraphBuilder,
@@ -48,6 +48,9 @@ function addParsedFileToGraph(
     break;
   }
   report.fileClassifications[classification.sourceType] += 1;
+  for (const message of result.parsed.warnings ?? []) {
+    addUniqueScanWarning(report, { path: relativePath, message });
+  }
   graph.addNodes(result.parsed.nodes);
   graph.addRelationships(result.parsed.relationships);
   graph.addRelationship({

@@ -1,0 +1,38 @@
+{"kind":"report","status":"success","discoveredFiles":3,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[{"path":"src/orders.ts","message":"Syntax error: left out the statements at lines 5, 15, 20"}]}
+{"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"syntax-errors","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"syntax-errors","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"syntax-errors","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"file:src/orders.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/orders.ts","relativePath":"src/orders.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/orders.ts:class:9:OrderService","label":"Class","properties":{"endLine":17,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":9,"name":"OrderService","visibility":"public"}}
+{"kind":"node","id":"file:src/orders.ts:function:10:list","label":"Function","properties":{"className":"OrderService","endLine":12,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"method_definition","line":10,"methodKind":"method","name":"list","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/orders.ts:function:10:list:call:11:11:save","label":"Call","properties":{"args":"[]","callee":"save","columnNumber":11,"expression":"save","line":11,"name":"save","receiver":null}}
+{"kind":"node","id":"file:src/orders.ts:function:3:createOrder","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"createOrder","parameters":"[{\"name\":\"total\",\"type\":\"number\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/orders.ts:function:3:createOrder:call:6:9:save","label":"Call","properties":{"args":"[]","callee":"save","columnNumber":9,"expression":"save","line":6,"name":"save","receiver":null}}
+{"kind":"node","id":"file:src/orders.ts:import:1:./store","label":"Import","properties":{"bindings":"[{\"imported\":\"save\",\"local\":\"save\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"./store","specifier":"import { save } from './store';"}}
+{"kind":"node","id":"file:src/store.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/store.ts","relativePath":"src/store.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/store.ts:function:1:save","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"save","parameters":"[{\"name\":\"order\",\"type\":\"{ total: number }\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"syntax-errors","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"syntax-errors","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/orders.ts","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/store.ts","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts","type":"DEFINES_CLASS","to":"file:src/orders.ts:class:9:OrderService","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts","type":"DEFINES_FUNCTION","to":"file:src/orders.ts:function:3:createOrder","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts","type":"IMPORTS","to":"file:src/orders.ts:import:1:./store","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts:class:9:OrderService","type":"DEFINES_METHOD","to":"file:src/orders.ts:function:10:list","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts:function:10:list","type":"CALLS","to":"file:src/orders.ts:function:10:list:call:11:11:save","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts:function:10:list:call:11:11:save","type":"CALL_RESOLVES_TO","to":"file:src/store.ts:function:1:save","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts:function:3:createOrder","type":"CALLS","to":"file:src/orders.ts:function:3:createOrder:call:6:9:save","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts:function:3:createOrder:call:6:9:save","type":"CALL_RESOLVES_TO","to":"file:src/store.ts:function:1:save","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts:import:1:./store","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/orders.ts:import:1:./store","type":"RESOLVES_TO","to":"file:src/store.ts","properties":{}}
+{"kind":"rel","from":"file:src/store.ts","type":"DEFINES_FUNCTION","to":"file:src/store.ts:function:1:save","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/orders.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/store.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_CONFIG","to":"config:package.json:name","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:.","properties":{}}

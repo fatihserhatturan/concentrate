@@ -66,12 +66,13 @@ describe("watch", () => {
       assert.ok((scan.result?.report.parseCache.misses ?? 0) >= 1);
 
       from = scans.length;
-      await writeFile(path.join(root, "src/b.ts"), "export function three( {\n");
+      await writeFile(path.join(root, "src/c.py"), "def broken(:\n");
       scan = await scanWhere(handle, scans, from, async (last) => last.result?.report.status === "failed");
       assert.deepEqual(await functionNames(reader), ["three", "two"], "a failed scan keeps the last graph");
 
       from = scans.length;
       await rm(path.join(root, "src/b.ts"));
+      await rm(path.join(root, "src/c.py"));
       scan = await scanWhere(handle, scans, from, async () => await names() === "two");
       assert.equal(scan.result?.report.status, "success");
 
