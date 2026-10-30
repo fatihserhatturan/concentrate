@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 52
+        "result": 53
       },
       {
         "method": "stats",
@@ -103,7 +103,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 52,
+      "schemaVersion": 53,
       "stats": [
         {
           "table": "Repo",
@@ -477,7 +477,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 52
+        "result": 53
       },
       {
         "method": "stats",
@@ -513,7 +513,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 52,
+      "schemaVersion": 53,
       "packageName": "@sample/core",
       "stats": [
         {

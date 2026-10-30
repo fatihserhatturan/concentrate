@@ -1,0 +1,1363 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 53
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 6
+          },
+          {
+            "table": "File",
+            "count": 6
+          },
+          {
+            "table": "Import",
+            "count": 13
+          },
+          {
+            "table": "Function",
+            "count": 5
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 13
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 1
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 23
+          },
+          {
+            "table": "Route",
+            "count": 7
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 4
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 53,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 6
+        },
+        {
+          "table": "File",
+          "count": 6
+        },
+        {
+          "table": "Import",
+          "count": 13
+        },
+        {
+          "table": "Function",
+          "count": 5
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 13
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 1
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 23
+        },
+        {
+          "table": "Route",
+          "count": 7
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 4
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "Me",
+            "kind": "Function",
+            "file": "src/app/posts.tsx",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "health",
+            "kind": "Function",
+            "file": "src/app/posts.tsx",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<t.procedure.use:arg0>",
+            "kind": "Function",
+            "file": "src/server/trpc.ts",
+            "line": 7,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "appRouter",
+            "kind": "Variable",
+            "file": "src/server/root.ts",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "settings",
+            "kind": "Variable",
+            "file": "src/server/root.ts",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "postRouter",
+            "kind": "Variable",
+            "file": "src/server/routers/post.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "userRouter",
+            "kind": "Variable",
+            "file": "src/server/routers/user.ts",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "src/server/routers/user.ts",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "createTRPCRouter",
+            "kind": "Variable",
+            "file": "src/server/trpc.ts",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "publicProcedure",
+            "kind": "Variable",
+            "file": "src/server/trpc.ts",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "protectedProcedure",
+            "kind": "Variable",
+            "file": "src/server/trpc.ts",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "client",
+            "kind": "Variable",
+            "file": "src/trpc/react.ts",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "AppRouter",
+            "kind": "TypeAlias",
+            "file": "src/server/root.ts",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "Me",
+          "kind": "Function",
+          "file": "src/app/posts.tsx",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "health",
+          "kind": "Function",
+          "file": "src/app/posts.tsx",
+          "line": 20,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<t.procedure.use:arg0>",
+          "kind": "Function",
+          "file": "src/server/trpc.ts",
+          "line": 7,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "appRouter",
+          "kind": "Variable",
+          "file": "src/server/root.ts",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "settings",
+          "kind": "Variable",
+          "file": "src/server/root.ts",
+          "line": 14,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "postRouter",
+          "kind": "Variable",
+          "file": "src/server/routers/post.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "userRouter",
+          "kind": "Variable",
+          "file": "src/server/routers/user.ts",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "default",
+          "kind": "Variable",
+          "file": "src/server/routers/user.ts",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "createTRPCRouter",
+          "kind": "Variable",
+          "file": "src/server/trpc.ts",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "publicProcedure",
+          "kind": "Variable",
+          "file": "src/server/trpc.ts",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "protectedProcedure",
+          "kind": "Variable",
+          "file": "src/server/trpc.ts",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "client",
+          "kind": "Variable",
+          "file": "src/trpc/react.ts",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "AppRouter",
+          "kind": "TypeAlias",
+          "file": "src/server/root.ts",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_TYPE_ALIAS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 13
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/app/posts.tsx",
+            "name": "Posts",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/app/posts.tsx",
+            "name": "Me",
+            "kind": "Function",
+            "line": 15,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/app/posts.tsx",
+            "name": "health",
+            "kind": "Function",
+            "line": 20,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/app/posts.tsx",
+            "name": "wrong",
+            "kind": "Function",
+            "line": 26,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/app/posts.tsx",
+            "name": "fromLocal",
+            "kind": "Variable",
+            "line": 33,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/server/root.ts",
+            "name": "appRouter",
+            "kind": "Variable",
+            "line": 5,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/server/root.ts",
+            "name": "settings",
+            "kind": "Variable",
+            "line": 14,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "name": "postRouter",
+            "kind": "Variable",
+            "line": 4,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/server/routers/user.ts",
+            "name": "default",
+            "kind": "Variable",
+            "line": 7,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/server/trpc.ts",
+            "name": "createTRPCRouter",
+            "kind": "Variable",
+            "line": 5,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/server/trpc.ts",
+            "name": "publicProcedure",
+            "kind": "Variable",
+            "line": 6,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/server/trpc.ts",
+            "name": "protectedProcedure",
+            "kind": "Variable",
+            "line": 7,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/trpc/react.ts",
+            "name": "api",
+            "kind": "Variable",
+            "line": 6,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/trpc/react.ts",
+            "name": "client",
+            "kind": "Variable",
+            "line": 7,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/server/root.ts",
+            "name": "AppRouter",
+            "kind": "TypeAlias",
+            "line": 11,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/app/posts.tsx",
+          "name": "Posts",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/app/posts.tsx",
+          "name": "Me",
+          "kind": "Function",
+          "line": 15,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/app/posts.tsx",
+          "name": "health",
+          "kind": "Function",
+          "line": 20,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/app/posts.tsx",
+          "name": "wrong",
+          "kind": "Function",
+          "line": 26,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/app/posts.tsx",
+          "name": "fromLocal",
+          "kind": "Variable",
+          "line": 33,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/server/root.ts",
+          "name": "appRouter",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/server/root.ts",
+          "name": "settings",
+          "kind": "Variable",
+          "line": 14,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "name": "postRouter",
+          "kind": "Variable",
+          "line": 4,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/server/routers/user.ts",
+          "name": "default",
+          "kind": "Variable",
+          "line": 7,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/server/trpc.ts",
+          "name": "createTRPCRouter",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/server/trpc.ts",
+          "name": "publicProcedure",
+          "kind": "Variable",
+          "line": 6,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/server/trpc.ts",
+          "name": "protectedProcedure",
+          "kind": "Variable",
+          "line": 7,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/trpc/react.ts",
+          "name": "api",
+          "kind": "Variable",
+          "line": 6,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/trpc/react.ts",
+          "name": "client",
+          "kind": "Variable",
+          "line": 7,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/server/root.ts",
+          "name": "AppRouter",
+          "kind": "TypeAlias",
+          "line": 11,
+          "relationship": "DEFINES_TYPE_ALIAS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 15
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/server/root.ts",
+            "line": 8,
+            "method": "QUERY",
+            "path": "health",
+            "fullPath": "health",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 5,
+            "method": "QUERY",
+            "path": "all",
+            "fullPath": "post.all",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 6,
+            "method": "QUERY",
+            "path": "byId",
+            "fullPath": "post.byId",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 7,
+            "method": "MUTATION",
+            "path": "create",
+            "fullPath": "post.create",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 9,
+            "method": "QUERY",
+            "path": "comments.list",
+            "fullPath": "post.comments.list",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 11,
+            "method": "SUBSCRIPTION",
+            "path": "onAdd",
+            "fullPath": "post.onAdd",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/user.ts",
+            "line": 4,
+            "method": "QUERY",
+            "path": "me",
+            "fullPath": "user.me",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/server/root.ts",
+          "line": 8,
+          "method": "QUERY",
+          "path": "health",
+          "fullPath": "health",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 5,
+          "method": "QUERY",
+          "path": "all",
+          "fullPath": "post.all",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 6,
+          "method": "QUERY",
+          "path": "byId",
+          "fullPath": "post.byId",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 7,
+          "method": "MUTATION",
+          "path": "create",
+          "fullPath": "post.create",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 9,
+          "method": "QUERY",
+          "path": "comments.list",
+          "fullPath": "post.comments.list",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 11,
+          "method": "SUBSCRIPTION",
+          "path": "onAdd",
+          "fullPath": "post.onAdd",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/user.ts",
+          "line": 4,
+          "method": "QUERY",
+          "path": "me",
+          "fullPath": "user.me",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {
+      "framework": "trpc"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND route.framework = \"trpc\" OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/server/root.ts",
+            "line": 8,
+            "method": "QUERY",
+            "path": "health",
+            "fullPath": "health",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 5,
+            "method": "QUERY",
+            "path": "all",
+            "fullPath": "post.all",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 6,
+            "method": "QUERY",
+            "path": "byId",
+            "fullPath": "post.byId",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 7,
+            "method": "MUTATION",
+            "path": "create",
+            "fullPath": "post.create",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 9,
+            "method": "QUERY",
+            "path": "comments.list",
+            "fullPath": "post.comments.list",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/post.ts",
+            "line": 11,
+            "method": "SUBSCRIPTION",
+            "path": "onAdd",
+            "fullPath": "post.onAdd",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/server/routers/user.ts",
+            "line": 4,
+            "method": "QUERY",
+            "path": "me",
+            "fullPath": "user.me",
+            "framework": "trpc",
+            "handlerName": null,
+            "handler": null
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "framework": "trpc",
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/server/root.ts",
+          "line": 8,
+          "method": "QUERY",
+          "path": "health",
+          "fullPath": "health",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 5,
+          "method": "QUERY",
+          "path": "all",
+          "fullPath": "post.all",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 6,
+          "method": "QUERY",
+          "path": "byId",
+          "fullPath": "post.byId",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 7,
+          "method": "MUTATION",
+          "path": "create",
+          "fullPath": "post.create",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 9,
+          "method": "QUERY",
+          "path": "comments.list",
+          "fullPath": "post.comments.list",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/post.ts",
+          "line": 11,
+          "method": "SUBSCRIPTION",
+          "path": "onAdd",
+          "fullPath": "post.onAdd",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/server/routers/user.ts",
+          "line": 4,
+          "method": "QUERY",
+          "path": "me",
+          "fullPath": "user.me",
+          "framework": "trpc",
+          "handlerName": null,
+          "handler": null
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "query",
+      "path": "user.me"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "query",
+          "path": "user.me"
+        },
+        "rows": [
+          {
+            "id": "file:src/server/routers/user.ts:route:4:6:QUERY:me",
+            "method": "QUERY",
+            "path": "me",
+            "fullPath": "user.me",
+            "framework": "trpc",
+            "handlerName": null,
+            "file": "src/server/routers/user.ts",
+            "line": 4
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/app/posts.tsx:function:4:Posts",
+            "name": "Posts",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 4,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:15:Me",
+            "name": "Me",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 15,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:20:health",
+            "name": "health",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 20,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/app/posts.tsx:function:26:wrong",
+            "name": "wrong",
+            "className": null,
+            "file": "src/app/posts.tsx",
+            "line": 26,
+            "endLine": 29
+          },
+          {
+            "id": "file:src/server/trpc.ts:function:7:<t.procedure.use:arg0>",
+            "name": "<t.procedure.use:arg0>",
+            "className": null,
+            "file": "src/server/trpc.ts",
+            "line": 7,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/server/routers/user.ts:route:4:6:QUERY:me"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "params": {
+          "ids": [
+            "file:src/server/routers/user.ts:route:4:6:QUERY:me"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "params": {
+          "ids": [
+            "file:src/server/routers/user.ts:route:4:6:QUERY:me"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE id(route) IN $ids RETURN id(route) AS route, id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation",
+        "params": {
+          "ids": [
+            "file:src/server/routers/user.ts:route:4:6:QUERY:me"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:USES_ENV_ROUTE]->(env:EnvVar) WHERE id(route) IN $ids RETURN id(route) AS route, env.name AS name, rel.access AS access, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:src/server/routers/user.ts:route:4:6:QUERY:me"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:CONSUMES_CONFIG_ROUTE]->(config:ConfigValue) WHERE id(route) IN $ids RETURN id(route) AS route, config.name AS name, rel.localName AS localName",
+        "params": {
+          "ids": [
+            "file:src/server/routers/user.ts:route:4:6:QUERY:me"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "method": "query",
+      "path": "user.me",
+      "routes": [
+        {
+          "method": "QUERY",
+          "path": "me",
+          "fullPath": "user.me",
+          "framework": "trpc",
+          "handlerName": null,
+          "file": "src/server/routers/user.ts",
+          "line": 4,
+          "handlers": [],
+          "lifecycle": [],
+          "callChain": [],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  }
+]

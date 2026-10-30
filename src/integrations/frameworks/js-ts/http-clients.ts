@@ -263,7 +263,7 @@ function urlOf(node: SyntaxNode | undefined): string | null {
 
 // Local name → `source:imported` for default (`imported` = "default") and
 // named imports of the file.
-function defaultAndNamedImports(nodes: GraphNode[], relationships: JsTsParsedFile["parsed"]["relationships"], fileNodeId: string): Map<string, string> {
+export function defaultAndNamedImports(nodes: GraphNode[], relationships: JsTsParsedFile["parsed"]["relationships"], fileNodeId: string): Map<string, string> {
   const importIds = new Set(relationships.filter((rel) => rel.from === fileNodeId && rel.type === "IMPORTS").map((rel) => rel.to));
   const imported = new Map<string, string>();
   for (const node of nodes) {
