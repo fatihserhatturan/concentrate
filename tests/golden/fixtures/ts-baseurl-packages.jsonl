@@ -1,0 +1,36 @@
+{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"config:tsconfig.json:compilerOptions.baseUrl","label":"ConfigValue","properties":{"line":0,"name":"tsconfig.json:compilerOptions.baseUrl","value":".","valueType":"string"}}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"ts-baseurl-packages","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"dir:types","label":"Directory","properties":{"name":"types","path":"<root>/types","relativePath":"types"}}
+{"kind":"node","id":"file:src/index.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/index.ts","relativePath":"src/index.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/index.ts:import:2:next/link","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"Link\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"next/link","specifier":"import Link from \"next/link\";"}}
+{"kind":"node","id":"file:src/index.ts:import:3:src/util","label":"Import","properties":{"bindings":"[{\"imported\":\"util\",\"local\":\"util\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"src/util","specifier":"import { util } from \"src/util\";"}}
+{"kind":"node","id":"file:src/index.ts:import:4:@/missing","label":"Import","properties":{"bindings":"[{\"imported\":\"missing\",\"local\":\"missing\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":4,"source":"@/missing","specifier":"import { missing } from \"@/missing\";"}}
+{"kind":"node","id":"file:src/index.ts:import:5:./gone","label":"Import","properties":{"bindings":"[{\"imported\":\"gone\",\"local\":\"gone\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":5,"source":"./gone","specifier":"import { gone } from \"./gone\";"}}
+{"kind":"node","id":"file:src/index.ts:import:6:types","label":"Import","properties":{"bindings":"[{\"imported\":\"Shared\",\"local\":\"Shared\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":6,"source":"types","specifier":"import type { Shared } from \"types\";"}}
+{"kind":"node","id":"file:src/index.ts:variable:8:all","label":"Variable","properties":{"isExported":true,"kind":"const","line":8,"name":"all","stringValue":null}}
+{"kind":"node","id":"file:src/util.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/util.ts","relativePath":"src/util.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/util.ts:config:1:util","label":"ConfigValue","properties":{"line":1,"name":"util","value":"1","valueType":"number"}}
+{"kind":"node","id":"file:src/util.ts:variable:1:util","label":"Variable","properties":{"isExported":true,"kind":"const","line":1,"name":"util","stringValue":null}}
+{"kind":"node","id":"file:types/index.d.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/types/index.d.ts","relativePath":"types/index.d.ts","sourceType":"production"}}
+{"kind":"node","id":"file:types/index.d.ts:type-alias:1:Shared","label":"TypeAlias","properties":{"endLine":1,"isExported":true,"line":1,"name":"Shared"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"ts-baseurl-packages","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:types","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/index.ts","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/util.ts","properties":{}}
+{"kind":"rel","from":"dir:types","type":"CONTAINS_FILE","to":"file:types/index.d.ts","properties":{}}
+{"kind":"rel","from":"file:src/index.ts","type":"CONSUMES_CONFIG","to":"file:src/util.ts:config:1:util","properties":{"localName":"util"}}
+{"kind":"rel","from":"file:src/index.ts","type":"DEFINES_VARIABLE","to":"file:src/index.ts:variable:8:all","properties":{}}
+{"kind":"rel","from":"file:src/index.ts","type":"IMPORTS","to":"file:src/index.ts:import:2:next/link","properties":{}}
+{"kind":"rel","from":"file:src/index.ts","type":"IMPORTS","to":"file:src/index.ts:import:3:src/util","properties":{}}
+{"kind":"rel","from":"file:src/index.ts","type":"IMPORTS","to":"file:src/index.ts:import:4:@/missing","properties":{}}
+{"kind":"rel","from":"file:src/index.ts","type":"IMPORTS","to":"file:src/index.ts:import:5:./gone","properties":{}}
+{"kind":"rel","from":"file:src/index.ts","type":"IMPORTS","to":"file:src/index.ts:import:6:types","properties":{}}
+{"kind":"rel","from":"file:src/index.ts:import:3:src/util","type":"RESOLVES_TO","to":"file:src/util.ts","properties":{}}
+{"kind":"rel","from":"file:src/util.ts","type":"DECLARES_CONFIG","to":"file:src/util.ts:config:1:util","properties":{}}
+{"kind":"rel","from":"file:src/util.ts","type":"DEFINES_VARIABLE","to":"file:src/util.ts:variable:1:util","properties":{}}
+{"kind":"rel","from":"file:types/index.d.ts","type":"DEFINES_TYPE_ALIAS","to":"file:types/index.d.ts:type-alias:1:Shared","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_CONFIG","to":"config:tsconfig.json:compilerOptions.baseUrl","properties":{}}

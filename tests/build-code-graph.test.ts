@@ -309,6 +309,19 @@ describe("buildCodeGraph", () => {
     );
   });
 
+  it("does not count package imports tried against baseUrl as unresolved", async () => {
+    const graph = await buildCodeGraph(path.join(fixturesRoot, "ts-baseurl-packages"), {
+      continueOnError: false,
+    });
+
+    // src/util resolves through baseUrl; next/link is a package import. The
+    // @/ alias, the relative import and `types` (a folder under baseUrl whose
+    // .d.ts is not scanned) resolve to no file and are counted.
+    assert.equal(graph.report.resolvedImports, 1);
+    assert.equal(graph.report.unresolvedRelativeImports, 3);
+    assertRelationship(graph.relationships, "file:src/index.ts:import:3:src/util", "RESOLVES_TO", "file:src/util.ts");
+  });
+
   it("resolves TS path aliases and baseUrl imports", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "ts-paths"), {
       continueOnError: false,
