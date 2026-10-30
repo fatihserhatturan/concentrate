@@ -7,28 +7,23 @@ import { describe, it } from "node:test";
 import { startWatch, type WatchScan } from "../src/adapters/cli/watch.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 
-// Collects watch scans and lets a test wait for the next one.
-function scanRecorder() {
-  const scans: WatchScan[] = [];
-  let waiters: Array<(scan: WatchScan) => void> = [];
-  return {
-    scans,
-    onScan(scan: WatchScan) {
-      scans.push(scan);
-      const ready = waiters;
-      waiters = [];
-      for (const resolve of ready) resolve(scan);
-    },
-    next(): Promise<WatchScan> {
-      return new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => reject(new Error("no watch scan within 10 s")), 10_000);
-        waiters.push((scan) => {
-          clearTimeout(timeout);
-          resolve(scan);
-        });
-      });
-    },
-  };
+// fs.watch can deliver events late, split one burst of writes over two scans,
+// or report a write made just before the watcher started. idle() only knows
+// about events already delivered, so wait until a scan after `from` matches.
+async function scanWhere(
+  handle: { idle(): Promise<void> },
+  scans: WatchScan[],
+  from: number,
+  matches: (scan: WatchScan) => Promise<boolean>,
+): Promise<WatchScan> {
+  const deadline = Date.now() + 10_000;
+  for (;;) {
+    await handle.idle();
+    const scan = scans.at(-1);
+    if (scans.length > from && scan && await matches(scan)) return scan;
+    if (Date.now() > deadline) throw new Error("no matching watch scan within 10 s");
+    await sleep(25);
+  }
 }
 
 async function functionNames(store: GraphStore): Promise<string[]> {
@@ -54,40 +49,35 @@ describe("watch", () => {
       debounce: 50,
     };
 
-    const recorder = scanRecorder();
-    const firstScan = recorder.next();
-    const handle = startWatch(root, options, (scan) => recorder.onScan(scan));
+    const scans: WatchScan[] = [];
+    const handle = startWatch(root, options, (scan) => scans.push(scan));
     try {
-      assert.equal((await firstScan).result?.report.status, "success");
+      let scan = await scanWhere(handle, scans, 0, async () => true);
+      assert.equal(scan.result?.report.status, "success");
       // A reader opened once, like a running MCP server, sees every new graph.
       const reader = await GraphStore.open(options.database);
       assert.deepEqual(await functionNames(reader), ["one"]);
+      const names = async () => (await functionNames(reader)).join(",");
 
-      let next = recorder.next();
+      let from = scans.length;
       await writeFile(path.join(root, "src/a.ts"), "export function two() { return 2; }\n");
       await writeFile(path.join(root, "src/b.ts"), "export function three() { return 3; }\n");
-      let scan = await next;
-      await handle.idle();
-      assert.deepEqual(await functionNames(reader), ["three", "two"]);
+      scan = await scanWhere(handle, scans, from, async () => await names() === "three,two");
       assert.ok((scan.result?.report.parseCache.misses ?? 0) >= 1);
 
-      next = recorder.next();
+      from = scans.length;
       await writeFile(path.join(root, "src/b.ts"), "export function three( {\n");
-      scan = await next;
-      await handle.idle();
-      assert.equal(scan.result?.report.status, "failed");
+      scan = await scanWhere(handle, scans, from, async (last) => last.result?.report.status === "failed");
       assert.deepEqual(await functionNames(reader), ["three", "two"], "a failed scan keeps the last graph");
 
-      next = recorder.next();
+      from = scans.length;
       await rm(path.join(root, "src/b.ts"));
-      scan = await next;
-      await handle.idle();
+      scan = await scanWhere(handle, scans, from, async () => await names() === "two");
       assert.equal(scan.result?.report.status, "success");
-      assert.deepEqual(await functionNames(reader), ["two"]);
 
-      const scansSoFar = recorder.scans.length;
+      const scansSoFar = scans.length;
       await sleep(400);
-      assert.equal(recorder.scans.length, scansSoFar, "writing the store must not trigger another scan");
+      assert.equal(scans.length, scansSoFar, "writing the store must not trigger another scan");
       await reader.close();
     } finally {
       await handle.close();
