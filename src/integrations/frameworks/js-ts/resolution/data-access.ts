@@ -267,6 +267,7 @@ function createDataAccessContext(nodes: GraphNode[], relationships: GraphRelatio
   modelHintByFieldByClassId: Map<string, Map<string, ModelHint>>;
   classIdByMethodId: Map<string, string>;
   resolvedFunctionByCallId: Map<string, string>;
+  sequelizeModelClasses: Set<string>;
 } {
   const callerFunctionByCallId = new Map<string, string>();
   const moduleFileByCallId = new Map<string, string>();
@@ -327,6 +328,7 @@ function createDataAccessContext(nodes: GraphNode[], relationships: GraphRelatio
   }
 
   const prismaClientClasses = prismaClientSubclasses(nodes);
+  const sequelizeModelClasses = sequelizeModelSubclasses(nodes, relationships, nodesById);
   for (const rel of relationships) {
     if (rel.type !== "DEFINES_FIELD") continue;
 
@@ -359,6 +361,7 @@ function createDataAccessContext(nodes: GraphNode[], relationships: GraphRelatio
     modelHintByFieldByClassId,
     classIdByMethodId,
     resolvedFunctionByCallId,
+    sequelizeModelClasses,
   };
 }
 
@@ -411,6 +414,17 @@ function classifyDataAccessCall(
     return {
       modelName: fieldHint.modelName,
       library: fieldHint.library,
+      operation,
+      line: safeLine,
+      expression,
+    };
+  }
+
+  // `Customer.findAll()` on a class-based model (`class Customer extends Model`).
+  if (receiverParts.length === 1 && context.sequelizeModelClasses.has(root)) {
+    return {
+      modelName: root,
+      library: "sequelize",
       operation,
       line: safeLine,
       expression,
@@ -728,6 +742,68 @@ function inferLibraryFromImport(source: string, imported: string, kind: string):
     return "drizzle";
   }
   return null;
+}
+
+// Names of class-based Sequelize models: classes that extend the `Model` their
+// file imports from sequelize or sequelize-typescript, directly or through
+// other model classes (`class Customer extends Model` + `Customer.init(…)`,
+// or a `@Table` class).
+function sequelizeModelSubclasses(
+  nodes: readonly GraphNode[],
+  relationships: readonly GraphRelationship[],
+  nodesById: ReadonlyMap<string, GraphNode>,
+): Set<string> {
+  const modelBasesByFile = new Map<string, Set<string>>();
+  const fileByClassId = new Map<string, string>();
+  for (const rel of relationships) {
+    if (rel.type === "DEFINES_CLASS") {
+      fileByClassId.set(rel.to, rel.from);
+      continue;
+    }
+    if (rel.type !== "IMPORTS") continue;
+    const importNode = nodesById.get(rel.to);
+    const source = importNode?.properties.source;
+    const bindings = importNode?.properties.bindings;
+    if (source !== "sequelize" && source !== "sequelize-typescript") continue;
+    if (typeof bindings !== "string") continue;
+    try {
+      for (const binding of JSON.parse(bindings) as Array<{ imported: string; local: string }>) {
+        if (binding.imported !== "Model") continue;
+        const bases = modelBasesByFile.get(rel.from) ?? new Set<string>();
+        bases.add(binding.local);
+        modelBasesByFile.set(rel.from, bases);
+      }
+    } catch {
+      // Unreadable bindings: no model base from this import.
+    }
+  }
+
+  const parentsByClass = new Map<string, { parents: string[]; bases: ReadonlySet<string> }>();
+  for (const node of nodes) {
+    if (node.label !== "Class" || typeof node.properties.name !== "string" || typeof node.properties.extendsNames !== "string") continue;
+    try {
+      const parents = JSON.parse(node.properties.extendsNames) as unknown;
+      if (!Array.isArray(parents)) continue;
+      const fileId = fileByClassId.get(node.id);
+      const bases = (fileId ? modelBasesByFile.get(fileId) : undefined) ?? new Set<string>();
+      parentsByClass.set(node.properties.name, { parents: parents.map(String), bases });
+    } catch {
+      // Not a name list: no parents.
+    }
+  }
+  const models = new Set<string>();
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const [name, { parents, bases }] of parentsByClass) {
+      if (models.has(name)) continue;
+      if (parents.some((parent) => bases.has(parent) || models.has(parent))) {
+        models.add(name);
+        changed = true;
+      }
+    }
+  }
+  return models;
 }
 
 // Names of classes that extend PrismaClient, directly or through other

@@ -21,35 +21,35 @@
           },
           {
             "table": "Directory",
-            "count": 1
+            "count": 2
           },
           {
             "table": "File",
-            "count": 7
+            "count": 10
           },
           {
             "table": "Import",
-            "count": 12
+            "count": 16
           },
           {
             "table": "Function",
-            "count": 20
+            "count": 25
           },
           {
             "table": "Class",
-            "count": 4
+            "count": 8
           },
           {
             "table": "Field",
-            "count": 9
+            "count": 12
           },
           {
             "table": "Variable",
-            "count": 6
+            "count": 7
           },
           {
             "table": "Decorator",
-            "count": 4
+            "count": 5
           },
           {
             "table": "Interface",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 42
+            "count": 49
           },
           {
             "table": "Route",
@@ -85,7 +85,7 @@
           },
           {
             "table": "DataModel",
-            "count": 5
+            "count": 8
           },
           {
             "table": "Table",
@@ -107,35 +107,35 @@
         },
         {
           "table": "Directory",
-          "count": 1
+          "count": 2
         },
         {
           "table": "File",
-          "count": 7
+          "count": 10
         },
         {
           "table": "Import",
-          "count": 12
+          "count": 16
         },
         {
           "table": "Function",
-          "count": 20
+          "count": 25
         },
         {
           "table": "Class",
-          "count": 4
+          "count": 8
         },
         {
           "table": "Field",
-          "count": 9
+          "count": 12
         },
         {
           "table": "Variable",
-          "count": 6
+          "count": 7
         },
         {
           "table": "Decorator",
-          "count": 4
+          "count": 5
         },
         {
           "table": "Interface",
@@ -151,7 +151,7 @@
         },
         {
           "table": "Call",
-          "count": 42
+          "count": 49
         },
         {
           "table": "Route",
@@ -171,7 +171,7 @@
         },
         {
           "table": "DataModel",
-          "count": 5
+          "count": 8
         },
         {
           "table": "Table",
@@ -195,6 +195,38 @@
             "kind": "Function",
             "file": "cache.ts",
             "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "listCustomers",
+            "kind": "Function",
+            "file": "customers.service.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "renameCustomer",
+            "kind": "Function",
+            "file": "customers.service.ts",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "shipOrder",
+            "kind": "Function",
+            "file": "customers.service.ts",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "ledgerEntries",
+            "kind": "Function",
+            "file": "customers.service.ts",
+            "line": 24,
             "isExported": true,
             "relationship": "DEFINES_FUNCTION"
           },
@@ -237,6 +269,38 @@
             "relationship": "DEFINES_CLASS"
           },
           {
+            "name": "Ledger",
+            "kind": "Class",
+            "file": "customers.service.ts",
+            "line": 18,
+            "isExported": false,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Customer",
+            "kind": "Class",
+            "file": "models/customer.ts",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Shipment",
+            "kind": "Class",
+            "file": "models/shipment.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "ExpressShipment",
+            "kind": "Class",
+            "file": "models/shipment.ts",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
             "name": "User",
             "kind": "Class",
             "file": "user.entity.ts",
@@ -272,6 +336,14 @@
             "file": "cat.schema.ts",
             "line": 12,
             "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "sequelize",
+            "kind": "Variable",
+            "file": "models/customer.ts",
+            "line": 3,
+            "isExported": false,
             "relationship": "DEFINES_VARIABLE"
           },
           {
@@ -332,6 +404,38 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "name": "listCustomers",
+          "kind": "Function",
+          "file": "customers.service.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "renameCustomer",
+          "kind": "Function",
+          "file": "customers.service.ts",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "shipOrder",
+          "kind": "Function",
+          "file": "customers.service.ts",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "ledgerEntries",
+          "kind": "Function",
+          "file": "customers.service.ts",
+          "line": 24,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "listOrders",
           "kind": "Function",
           "file": "orders.service.ts",
@@ -360,6 +464,38 @@
           "kind": "Class",
           "file": "cats.service.ts",
           "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Ledger",
+          "kind": "Class",
+          "file": "customers.service.ts",
+          "line": 18,
+          "isExported": false,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Customer",
+          "kind": "Class",
+          "file": "models/customer.ts",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Shipment",
+          "kind": "Class",
+          "file": "models/shipment.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "ExpressShipment",
+          "kind": "Class",
+          "file": "models/shipment.ts",
+          "line": 10,
           "isExported": true,
           "relationship": "DEFINES_CLASS"
         },
@@ -398,6 +534,14 @@
         {
           "name": "sequelize",
           "kind": "Variable",
+          "file": "models/customer.ts",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "sequelize",
+          "kind": "Variable",
           "file": "orders.service.ts",
           "line": 3,
           "isExported": false,
@@ -410,19 +554,12 @@
           "line": 5,
           "isExported": false,
           "relationship": "DEFINES_VARIABLE"
-        },
-        {
-          "name": "Invoice",
-          "kind": "Variable",
-          "file": "orders.service.ts",
-          "line": 6,
-          "isExported": false,
-          "relationship": "DEFINES_VARIABLE"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 12
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
       }
     }
   },
@@ -439,6 +576,34 @@
             "name": "resetCache",
             "kind": "Function",
             "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "customers.service.ts",
+            "name": "listCustomers",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "customers.service.ts",
+            "name": "renameCustomer",
+            "kind": "Function",
+            "line": 8,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "customers.service.ts",
+            "name": "shipOrder",
+            "kind": "Function",
+            "line": 12,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "customers.service.ts",
+            "name": "ledgerEntries",
+            "kind": "Function",
+            "line": 24,
             "relationship": "DEFINES_FUNCTION"
           },
           {
@@ -487,6 +652,27 @@
             "name": "CatsService",
             "kind": "Class",
             "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "models/customer.ts",
+            "name": "Customer",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "models/shipment.ts",
+            "name": "Shipment",
+            "kind": "Class",
+            "line": 4,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "models/shipment.ts",
+            "name": "ExpressShipment",
+            "kind": "Class",
+            "line": 10,
             "relationship": "DEFINES_CLASS"
           },
           {
@@ -567,6 +753,34 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "file": "customers.service.ts",
+          "name": "listCustomers",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "customers.service.ts",
+          "name": "renameCustomer",
+          "kind": "Function",
+          "line": 8,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "customers.service.ts",
+          "name": "shipOrder",
+          "kind": "Function",
+          "line": 12,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "customers.service.ts",
+          "name": "ledgerEntries",
+          "kind": "Function",
+          "line": 24,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "file": "orders.service.ts",
           "name": "listOrders",
           "kind": "Function",
@@ -609,6 +823,27 @@
           "relationship": "DEFINES_CLASS"
         },
         {
+          "file": "models/customer.ts",
+          "name": "Customer",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "models/shipment.ts",
+          "name": "Shipment",
+          "kind": "Class",
+          "line": 4,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "models/shipment.ts",
+          "name": "ExpressShipment",
+          "kind": "Class",
+          "line": 10,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
           "file": "user.entity.ts",
           "name": "User",
           "kind": "Class",
@@ -632,7 +867,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 10
+        "returned": 17
       }
     }
   },
@@ -722,6 +957,50 @@
         "method": "query",
         "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "listCustomers",
+            "file": "customers.service.ts",
+            "line": 5,
+            "model": "Customer",
+            "library": "sequelize",
+            "table": null,
+            "operation": "read",
+            "expression": "Customer.findAll"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "renameCustomer",
+            "file": "customers.service.ts",
+            "line": 9,
+            "model": "Customer",
+            "library": "sequelize",
+            "table": null,
+            "operation": "update",
+            "expression": "Customer.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "shipOrder",
+            "file": "customers.service.ts",
+            "line": 13,
+            "model": "Shipment",
+            "library": "sequelize",
+            "table": null,
+            "operation": "create",
+            "expression": "Shipment.create"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "shipOrder",
+            "file": "customers.service.ts",
+            "line": 14,
+            "model": "ExpressShipment",
+            "library": "sequelize",
+            "table": null,
+            "operation": "read",
+            "expression": "ExpressShipment.count"
+          },
           {
             "sourceKind": "Function",
             "sourceName": "listOrders",
@@ -995,6 +1274,50 @@
       "dataAccess": [
         {
           "sourceKind": "Function",
+          "sourceName": "listCustomers",
+          "file": "customers.service.ts",
+          "line": 5,
+          "model": "Customer",
+          "library": "sequelize",
+          "table": null,
+          "operation": "read",
+          "expression": "Customer.findAll"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "renameCustomer",
+          "file": "customers.service.ts",
+          "line": 9,
+          "model": "Customer",
+          "library": "sequelize",
+          "table": null,
+          "operation": "update",
+          "expression": "Customer.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "shipOrder",
+          "file": "customers.service.ts",
+          "line": 13,
+          "model": "Shipment",
+          "library": "sequelize",
+          "table": null,
+          "operation": "create",
+          "expression": "Shipment.create"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "shipOrder",
+          "file": "customers.service.ts",
+          "line": 14,
+          "model": "ExpressShipment",
+          "library": "sequelize",
+          "table": null,
+          "operation": "read",
+          "expression": "ExpressShipment.count"
+        },
+        {
+          "sourceKind": "Function",
           "sourceName": "listOrders",
           "file": "orders.service.ts",
           "line": 9,
@@ -1249,7 +1572,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 23
+        "returned": 27
       }
     }
   },
@@ -1984,6 +2307,50 @@
         "rows": [
           {
             "sourceKind": "Function",
+            "sourceName": "listCustomers",
+            "file": "customers.service.ts",
+            "line": 5,
+            "model": "Customer",
+            "library": "sequelize",
+            "table": null,
+            "operation": "read",
+            "expression": "Customer.findAll"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "renameCustomer",
+            "file": "customers.service.ts",
+            "line": 9,
+            "model": "Customer",
+            "library": "sequelize",
+            "table": null,
+            "operation": "update",
+            "expression": "Customer.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "shipOrder",
+            "file": "customers.service.ts",
+            "line": 13,
+            "model": "Shipment",
+            "library": "sequelize",
+            "table": null,
+            "operation": "create",
+            "expression": "Shipment.create"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "shipOrder",
+            "file": "customers.service.ts",
+            "line": 14,
+            "model": "ExpressShipment",
+            "library": "sequelize",
+            "table": null,
+            "operation": "read",
+            "expression": "ExpressShipment.count"
+          },
+          {
+            "sourceKind": "Function",
             "sourceName": "listOrders",
             "file": "orders.service.ts",
             "line": 9,
@@ -2036,6 +2403,50 @@
       "dataAccess": [
         {
           "sourceKind": "Function",
+          "sourceName": "listCustomers",
+          "file": "customers.service.ts",
+          "line": 5,
+          "model": "Customer",
+          "library": "sequelize",
+          "table": null,
+          "operation": "read",
+          "expression": "Customer.findAll"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "renameCustomer",
+          "file": "customers.service.ts",
+          "line": 9,
+          "model": "Customer",
+          "library": "sequelize",
+          "table": null,
+          "operation": "update",
+          "expression": "Customer.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "shipOrder",
+          "file": "customers.service.ts",
+          "line": 13,
+          "model": "Shipment",
+          "library": "sequelize",
+          "table": null,
+          "operation": "create",
+          "expression": "Shipment.create"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "shipOrder",
+          "file": "customers.service.ts",
+          "line": 14,
+          "model": "ExpressShipment",
+          "library": "sequelize",
+          "table": null,
+          "operation": "read",
+          "expression": "ExpressShipment.count"
+        },
+        {
+          "sourceKind": "Function",
           "sourceName": "listOrders",
           "file": "orders.service.ts",
           "line": 9,
@@ -2070,7 +2481,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 3
+        "returned": 7
       }
     }
   }
