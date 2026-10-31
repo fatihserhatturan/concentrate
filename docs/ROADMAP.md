@@ -707,12 +707,12 @@ Builds on the SFC splitter (Phase 10), the component schema (Phase 11), the page
 
 ### Stores
 
-- [ ] `Store` label (name, library) with `READS_STORE` / `WRITES_STORE`; bump `SCHEMA_VERSION`
-- [ ] Pinia `defineStore` (options and setup stores)
+- [x] `Store` label (name, library) with `READS_STORE` / `WRITES_STORE`; bump `SCHEMA_VERSION`
+- [x] Pinia `defineStore` (options and setup stores)
 
 ### Acceptance criteria
 
-- [ ] Fixtures and golden coverage for each component style, Nuxt pages and server routes, and Pinia
+- [x] Fixtures and golden coverage for each component style, Nuxt pages and server routes, and Pinia
 - [ ] A pinned Vue or Nuxt sample (candidate: a RealWorld Vue frontend) with hand labels in `bench:accuracy`
 - [x] Precision stays at 100%; recall is reported
 

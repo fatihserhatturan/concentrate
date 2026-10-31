@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 55;
+export const SCHEMA_VERSION = 56;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -32,7 +32,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Interface", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
   { label: "TypeAlias", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
   { label: "Enum", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
-  { label: "Call", properties: { name: "STRING", expression: "STRING", callee: "STRING", receiver: "STRING", requireSource: "STRING", line: "INT64", columnNumber: "INT64", args: "STRING", httpClient: "STRING", httpReceiver: "STRING", httpMethod: "STRING", httpUrl: "STRING" } },
+  { label: "Call", properties: { name: "STRING", expression: "STRING", callee: "STRING", receiver: "STRING", requireSource: "STRING", line: "INT64", columnNumber: "INT64", args: "STRING", httpClient: "STRING", httpReceiver: "STRING", httpMethod: "STRING", httpUrl: "STRING", storeAccess: "STRING" } },
   { label: "Field", properties: { name: "STRING", typeName: "STRING", isStatic: "BOOLEAN", isReadonly: "BOOLEAN", visibility: "STRING", line: "INT64", isInjected: "BOOLEAN" } },
   { label: "Variable", properties: { name: "STRING", kind: "STRING", isExported: "BOOLEAN", line: "INT64", stringValue: "STRING", stringTemplate: "STRING", httpClient: "STRING", httpBaseUrl: "STRING", trpcRouter: "BOOLEAN", trpcMounts: "STRING" } },
   { label: "Decorator", properties: { name: "STRING", expression: "STRING", line: "INT64", args: "STRING" } },
@@ -41,6 +41,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "EnvVar", properties: { name: "STRING", isPublic: "BOOLEAN" } },
   { label: "Page", properties: { path: "STRING", fullPath: "STRING", framework: "STRING", router: "STRING", kind: "STRING", slot: "STRING", line: "INT64", component: "STRING", componentSource: "STRING" } },
   { label: "Component", properties: { name: "STRING", framework: "STRING", kind: "STRING", tagName: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", props: "STRING", pendingRenders: "STRING", hooks: "STRING", lazySource: "STRING", lazyExport: "STRING", defaultExportWrapper: "STRING" } },
+  { label: "Store", properties: { name: "STRING", library: "STRING", kind: "STRING", hook: "STRING", state: "STRING", getters: "STRING", actions: "STRING", line: "INT64", endLine: "INT64" } },
   { label: "ConfigValue", properties: { name: "STRING", value: "STRING", valueType: "STRING", line: "INT64" } },
   { label: "DataModel", properties: { name: "STRING", library: "STRING", declaredIn: "STRING", line: "INT64" } },
   { label: "Table", properties: { name: "STRING", kind: "STRING", library: "STRING", schemaName: "STRING", provider: "STRING", declaredIn: "STRING", line: "INT64", columns: "STRING" } },
@@ -85,6 +86,11 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "DECLARES_COMPONENT", from: "File", to: "Component", properties: {} },
   { type: "DECLARES_PAGE", from: "File", to: "Page", properties: {} },
   { type: "PAGE_RENDERS", from: "Page", to: "Component", properties: {} },
+  { type: "DECLARES_STORE", from: "File", to: "Store", properties: {} },
+  { type: "STORE_DEFINED_BY_FUNCTION", from: "Store", to: "Function", properties: {} },
+  { type: "STORE_ACTION", from: "Store", to: "Function", properties: {} },
+  { type: "READS_STORE", from: "Function", to: "Store", properties: { line: "INT64", members: "STRING" } },
+  { type: "WRITES_STORE", from: "Function", to: "Store", properties: { line: "INT64", members: "STRING" } },
   { type: "REQUESTS", from: "Call", to: "Route", properties: { method: "STRING", url: "STRING", match: "STRING" } },
   { type: "COMPONENT_DEFINED_BY", from: "Component", to: "Class", properties: {} },
   { type: "COMPONENT_DEFINED_BY_FUNCTION", from: "Component", to: "Function", properties: {} },
@@ -148,6 +154,7 @@ export const nodeLabels = [
   "Table",
   "Component",
   "Page",
+  "Store",
 ] as const;
 export const relationshipTypes = relationshipTables.map((table) => table.type);
 

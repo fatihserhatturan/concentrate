@@ -753,6 +753,26 @@
         }
       }
     ],
+    "pinia-stores": [
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "add"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "clear"
+        }
+      },
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "src/stores/cart.ts"
+        }
+      }
+    ],
     "vanilla-html": [
       {
         "tool": "find_callers",

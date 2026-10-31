@@ -18,6 +18,7 @@ import { dataAccessContributor } from "../integrations/frameworks/js-ts/data-acc
 import { componentGraphContributor } from "../integrations/frameworks/js-ts/resolution/component-graph.js";
 import { nextjsPagesContributor, nextjsRoutesContributor } from "../integrations/frameworks/js-ts/nextjs.js";
 import { nuxtAutoImportsContributor, nuxtPagesContributor, nuxtServerRoutesContributor, vueGlobalComponentsContributor } from "../integrations/frameworks/js-ts/nuxt.js";
+import { storeAccessContributor } from "../integrations/frameworks/js-ts/resolution/store-access.js";
 import { httpRequestsContributor } from "../integrations/frameworks/js-ts/resolution/http-requests.js";
 import { trpcRoutesContributor } from "../integrations/frameworks/js-ts/resolution/trpc-routes.js";
 import type { ILanguageResolver } from "../core/contracts/language-resolver.js";
@@ -49,6 +50,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     envConfigContributor,
     dataAccessContributor,
     nuxtAutoImportsContributor,
+    storeAccessContributor,
     componentGraphContributor,
     vueGlobalComponentsContributor,
     nextjsPagesContributor,
