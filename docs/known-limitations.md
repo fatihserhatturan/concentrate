@@ -575,6 +575,40 @@ Astro).
   (`createCaller`, `createHydrationHelpers`), cache helpers (`invalidate`,
   `setData`) and clients passed as arguments are not read.
 
+## Stores
+
+- Pinia: in a file that imports `defineStore` from `pinia`, each top-level
+  `const useX = defineStore('id', …)` (also exported, the old
+  `defineStore({ id, … })` form, or the default export) is a `Store`
+  (library `pinia`) named by its id, with the variable in `hook`. Stores
+  built in functions, ids that are not string literals and store factories
+  wrapping `defineStore` are not read.
+- Options stores: `state` lists the keys of the object the `state` function
+  returns, `getters` and `actions` the keys of those objects. Getters and
+  actions written as functions become Functions that own their calls, and
+  each action is a `STORE_ACTION`. `this.items.push(…)` inside an action is
+  not tracked as a write; nor are state keys added later or plugin state.
+- Setup stores: the setup function is `STORE_DEFINED_BY_FUNCTION`. Of the
+  names it returns, a function declared in it is an action (`STORE_ACTION`),
+  a `computed(…)` value a getter and anything else state; a returned value
+  built another way (a composable's result) is listed as state.
+- Use: a call to a hook named `use…Store` that resolves to a store (declared
+  in the file or imported, through barrels) gives `READS_STORE` from the
+  calling function, with the state and getters it reads in `members`
+  (possibly empty), and `WRITES_STORE` when the code assigns state
+  (`cart.coupon = x`, `cart.count++`, `cart.items.push(x)`), calls an action,
+  `$patch` or `$reset`, or destructures an action (`const { login } =
+  useUserStore()`). Uses are followed through a variable holding the store
+  (anywhere in its scope, nested functions included, with the edge from the
+  function that called the hook), `storeToRefs(store)` destructuring, and
+  chained calls (`useCartStore().clear()`). An action call also gets
+  `CALL_RESOLVES_TO` to the action's Function, so `find_callers` and
+  `impact_of` reach the components that call it. Not followed: hooks with
+  other names, a store passed to another function, template-only use
+  (`{{ cart.count }}`), Options API helpers (`mapState`, `mapActions`,
+  `mapStores`), and calls at the top level of a module (they have no
+  function). A `<script setup>` block counts as one function.
+
 ## Review Process
 
 - Smoke reports include empty `falsePositiveFindings`,

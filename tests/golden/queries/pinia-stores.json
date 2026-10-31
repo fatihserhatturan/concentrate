@@ -1,0 +1,1395 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 56
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 5
+          },
+          {
+            "table": "File",
+            "count": 7
+          },
+          {
+            "table": "Import",
+            "count": 12
+          },
+          {
+            "table": "Function",
+            "count": 16
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 5
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 20
+          },
+          {
+            "table": "Route",
+            "count": 0
+          },
+          {
+            "table": "EntryPoint",
+            "count": 2
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 2
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 2
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 56,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 5
+        },
+        {
+          "table": "File",
+          "count": 7
+        },
+        {
+          "table": "Import",
+          "count": 12
+        },
+        {
+          "table": "Function",
+          "count": 16
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 5
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 20
+        },
+        {
+          "table": "Route",
+          "count": 0
+        },
+        {
+          "table": "EntryPoint",
+          "count": 2
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 2
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 2
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "<script setup>",
+            "kind": "Function",
+            "file": "src/components/CartView.vue",
+            "line": 8,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "addSample",
+            "kind": "Function",
+            "file": "src/components/CartView.vue",
+            "line": 14,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<script setup>",
+            "kind": "Function",
+            "file": "src/components/LoginForm.vue",
+            "line": 8,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "saveCart",
+            "kind": "Function",
+            "file": "src/composables/storage.ts",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "useCheckout",
+            "kind": "Function",
+            "file": "src/composables/useCheckout.ts",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "useStore",
+            "kind": "Function",
+            "file": "src/composables/useCheckout.ts",
+            "line": 16,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "useLocal",
+            "kind": "Function",
+            "file": "src/composables/useCheckout.ts",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "clear",
+            "kind": "Function",
+            "file": "src/stores/cart.ts",
+            "line": 17,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<defineStore:user:arg1>",
+            "kind": "Function",
+            "file": "src/stores/user.ts",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "username",
+            "kind": "Variable",
+            "file": "src/components/LoginForm.vue",
+            "line": 12,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "shared",
+            "kind": "Variable",
+            "file": "src/composables/useCheckout.ts",
+            "line": 4,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "useCartStore",
+            "kind": "Variable",
+            "file": "src/stores/cart.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "useUserStore",
+            "kind": "Variable",
+            "file": "src/stores/user.ts",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "<script setup>",
+          "kind": "Function",
+          "file": "src/components/CartView.vue",
+          "line": 8,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "addSample",
+          "kind": "Function",
+          "file": "src/components/CartView.vue",
+          "line": 14,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<script setup>",
+          "kind": "Function",
+          "file": "src/components/LoginForm.vue",
+          "line": 8,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "saveCart",
+          "kind": "Function",
+          "file": "src/composables/storage.ts",
+          "line": 1,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "useCheckout",
+          "kind": "Function",
+          "file": "src/composables/useCheckout.ts",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "useStore",
+          "kind": "Function",
+          "file": "src/composables/useCheckout.ts",
+          "line": 16,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "useLocal",
+          "kind": "Function",
+          "file": "src/composables/useCheckout.ts",
+          "line": 20,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "clear",
+          "kind": "Function",
+          "file": "src/stores/cart.ts",
+          "line": 17,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<defineStore:user:arg1>",
+          "kind": "Function",
+          "file": "src/stores/user.ts",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "username",
+          "kind": "Variable",
+          "file": "src/components/LoginForm.vue",
+          "line": 12,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "shared",
+          "kind": "Variable",
+          "file": "src/composables/useCheckout.ts",
+          "line": 4,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "useCartStore",
+          "kind": "Variable",
+          "file": "src/stores/cart.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "useUserStore",
+          "kind": "Variable",
+          "file": "src/stores/user.ts",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 13
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/composables/storage.ts",
+            "name": "saveCart",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/composables/useCheckout.ts",
+            "name": "useCheckout",
+            "kind": "Function",
+            "line": 6,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/composables/useCheckout.ts",
+            "name": "useLocal",
+            "kind": "Function",
+            "line": 20,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/stores/cart.ts",
+            "name": "useCartStore",
+            "kind": "Variable",
+            "line": 4,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/stores/user.ts",
+            "name": "useUserStore",
+            "kind": "Variable",
+            "line": 5,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/composables/storage.ts",
+          "name": "saveCart",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/composables/useCheckout.ts",
+          "name": "useCheckout",
+          "kind": "Function",
+          "line": 6,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/composables/useCheckout.ts",
+          "name": "useLocal",
+          "kind": "Function",
+          "line": 20,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/stores/cart.ts",
+          "name": "useCartStore",
+          "kind": "Variable",
+          "line": 4,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/stores/user.ts",
+          "name": "useUserStore",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/components/CartView.vue",
+            "line": 5,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "vue",
+            "handlerName": "addSample",
+            "handler": "addSample"
+          },
+          {
+            "file": "src/components/LoginForm.vue",
+            "line": 2,
+            "kind": "dom-event",
+            "trigger": "submit",
+            "library": "vue",
+            "handlerName": "login",
+            "handler": null
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [
+        {
+          "file": "src/components/CartView.vue",
+          "line": 5,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "vue",
+          "handlerName": "addSample",
+          "handler": "addSample"
+        },
+        {
+          "file": "src/components/LoginForm.vue",
+          "line": 2,
+          "kind": "dom-event",
+          "trigger": "submit",
+          "library": "vue",
+          "handlerName": "login",
+          "handler": null
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "add"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/CartView.vue:function:14:addSample",
+            "name": "addSample",
+            "className": null,
+            "file": "src/components/CartView.vue",
+            "line": 14,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/components/CartView.vue:function:8:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/CartView.vue",
+            "line": 8,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/components/LoginForm.vue:function:8:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/LoginForm.vue",
+            "line": 8,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/composables/storage.ts:function:1:saveCart",
+            "name": "saveCart",
+            "className": null,
+            "file": "src/composables/storage.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/composables/useCheckout.ts:function:6:useCheckout",
+            "name": "useCheckout",
+            "className": null,
+            "file": "src/composables/useCheckout.ts",
+            "line": 6,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/composables/useCheckout.ts:function:8:applyCoupon",
+            "name": "applyCoupon",
+            "className": null,
+            "file": "src/composables/useCheckout.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/composables/useCheckout.ts:function:11:total",
+            "name": "total",
+            "className": null,
+            "file": "src/composables/useCheckout.ts",
+            "line": 11,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/composables/useCheckout.ts:function:16:useStore",
+            "name": "useStore",
+            "className": null,
+            "file": "src/composables/useCheckout.ts",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/composables/useCheckout.ts:function:20:useLocal",
+            "name": "useLocal",
+            "className": null,
+            "file": "src/composables/useCheckout.ts",
+            "line": 20,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/stores/cart.ts:function:7:count",
+            "name": "count",
+            "className": null,
+            "file": "src/stores/cart.ts",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/stores/cart.ts:function:8:hasCoupon",
+            "name": "hasCoupon",
+            "className": null,
+            "file": "src/stores/cart.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/stores/cart.ts:function:13:add",
+            "name": "add",
+            "className": null,
+            "file": "src/stores/cart.ts",
+            "line": 13,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/stores/cart.ts:function:17:clear",
+            "name": "clear",
+            "className": null,
+            "file": "src/stores/cart.ts",
+            "line": 17,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/stores/user.ts:function:5:<defineStore:user:arg1>",
+            "name": "<defineStore:user:arg1>",
+            "className": null,
+            "file": "src/stores/user.ts",
+            "line": 5,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/stores/user.ts:function:8:login",
+            "name": "login",
+            "className": null,
+            "file": "src/stores/user.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/stores/user.ts:function:11:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/stores/user.ts",
+            "line": 11,
+            "endLine": 14
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/components/CartView.vue:function:14:addSample",
+            "callee": "file:src/stores/cart.ts:function:13:add",
+            "line": 15
+          },
+          {
+            "caller": "file:src/composables/useCheckout.ts:function:20:useLocal",
+            "callee": "file:src/composables/useCheckout.ts:function:16:useStore",
+            "line": 21
+          },
+          {
+            "caller": "file:src/stores/cart.ts:function:13:add",
+            "callee": "file:src/composables/storage.ts:function:1:saveCart",
+            "line": 15
+          },
+          {
+            "caller": "file:src/stores/user.ts:function:11:logout",
+            "callee": "file:src/stores/cart.ts:function:17:clear",
+            "line": 13
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add",
+            "file:src/components/CartView.vue:function:14:addSample"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add",
+            "file:src/components/CartView.vue:function:14:addSample"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add",
+            "file:src/components/CartView.vue:function:14:addSample"
+          ]
+        },
+        "rows": [
+          {
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "vue",
+            "file": "src/components/CartView.vue",
+            "line": 5,
+            "fn": "file:src/components/CartView.vue:function:14:addSample"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add",
+            "file:src/components/CartView.vue:function:14:addSample"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add",
+            "file:src/components/CartView.vue:function:14:addSample"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "symbol": "add",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "add",
+          "className": null,
+          "file": "src/stores/cart.ts",
+          "line": 13,
+          "endLine": 16
+        }
+      ],
+      "callers": [
+        {
+          "name": "addSample",
+          "className": null,
+          "file": "src/components/CartView.vue",
+          "line": 14,
+          "endLine": 17,
+          "depth": 1
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [],
+      "entrypoints": [
+        {
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "vue",
+          "file": "src/components/CartView.vue",
+          "line": 5,
+          "reachedThrough": [
+            {
+              "function": "addSample",
+              "functionFile": "src/components/CartView.vue"
+            }
+          ]
+        }
+      ],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "find_callers",
+    "args": {
+      "name": "clear"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"clear\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "clear",
+            "caller": "logout",
+            "callerKind": "Function",
+            "file": "src/stores/user.ts",
+            "line": 13,
+            "expression": "useCartStore().clear",
+            "relationship": "CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"clear\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"clear\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "clear",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [
+        {
+          "target": "clear",
+          "caller": "logout",
+          "callerKind": "Function",
+          "file": "src/stores/user.ts",
+          "line": 13,
+          "expression": "useCartStore().clear",
+          "relationship": "CALLS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "get_file_outline",
+    "args": {
+      "file": "src/stores/cart.ts"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "rows": [
+          {
+            "file": "src/components/CartView.vue"
+          },
+          {
+            "file": "src/components/LoginForm.vue"
+          },
+          {
+            "file": "src/composables/storage.ts"
+          },
+          {
+            "file": "src/composables/useCheckout.ts"
+          },
+          {
+            "file": "src/stores/cart.ts"
+          },
+          {
+            "file": "src/stores/index.ts"
+          },
+          {
+            "file": "src/stores/user.ts"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/cart.ts"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/stores/cart.ts:function:7:count",
+            "name": "count",
+            "className": null,
+            "file": "src/stores/cart.ts",
+            "path": "<root>/src/stores/cart.ts",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/stores/cart.ts:function:8:hasCoupon",
+            "name": "hasCoupon",
+            "className": null,
+            "file": "src/stores/cart.ts",
+            "path": "<root>/src/stores/cart.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/stores/cart.ts:function:13:add",
+            "name": "add",
+            "className": null,
+            "file": "src/stores/cart.ts",
+            "path": "<root>/src/stores/cart.ts",
+            "line": 13,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/stores/cart.ts:function:17:clear",
+            "name": "clear",
+            "className": null,
+            "file": "src/stores/cart.ts",
+            "path": "<root>/src/stores/cart.ts",
+            "line": 17,
+            "endLine": 19
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/cart.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/cart.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/cart.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/cart.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/cart.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/stores/cart.ts"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/stores/cart.ts:variable:4:useCartStore",
+            "name": "useCartStore",
+            "file": "src/stores/cart.ts",
+            "path": "<root>/src/stores/cart.ts",
+            "line": 4
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(n:Route) WHERE file.relativePath IN $files RETURN id(n) AS id, n.method AS method, coalesce(n.fullPath, n.path) AS routePath, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/stores/cart.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_FIELD]->(field:Field) WHERE file.relativePath = $file RETURN class.name AS className, field.name AS name, field.typeName AS typeName, field.line AS line",
+        "params": {
+          "file": "src/stores/cart.ts"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:IMPORTS]->(imp:Import) WHERE file.relativePath = $file RETURN imp.source AS source, imp.line AS line, imp.isTypeOnly AS isTypeOnly",
+        "params": {
+          "file": "src/stores/cart.ts"
+        },
+        "rows": [
+          {
+            "source": "pinia",
+            "line": 1,
+            "isTypeOnly": false
+          },
+          {
+            "source": "../composables/storage",
+            "line": 2,
+            "isTypeOnly": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE file.relativePath = $file RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.handlerName AS handlerName, entrypoint.line AS line",
+        "params": {
+          "file": "src/stores/cart.ts"
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "file": "src/stores/cart.ts",
+      "imports": [
+        {
+          "source": "pinia",
+          "line": 1,
+          "isTypeOnly": false
+        },
+        {
+          "source": "../composables/storage",
+          "line": 2,
+          "isTypeOnly": false
+        }
+      ],
+      "outline": [
+        {
+          "kind": "variable",
+          "name": "useCartStore",
+          "line": 4
+        },
+        {
+          "kind": "function",
+          "name": "count",
+          "line": 7,
+          "endLine": 7
+        },
+        {
+          "kind": "function",
+          "name": "hasCoupon",
+          "line": 8,
+          "endLine": 10
+        },
+        {
+          "kind": "function",
+          "name": "add",
+          "line": 13,
+          "endLine": 16
+        },
+        {
+          "kind": "function",
+          "name": "clear",
+          "line": 17,
+          "endLine": 19
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  }
+]

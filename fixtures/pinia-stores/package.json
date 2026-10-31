@@ -1,0 +1,5 @@
+{
+  "name": "pinia-stores",
+  "private": true,
+  "dependencies": { "pinia": "2.2.4", "vue": "3.5.12" }
+}

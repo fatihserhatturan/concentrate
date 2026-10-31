@@ -15,6 +15,7 @@ import { applyServerFunctionSemantics } from "./server-functions.js";
 import { applyTanStackRouterSemantics } from "./tanstack-router.js";
 import { applyVueScriptSemantics, applyVueTemplateSemantics } from "./vue.js";
 import { applyVueRouterSemantics } from "./vue-router.js";
+import { applyPiniaSemantics } from "./pinia.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
 // the nodes earlier ones added (NestJS routes, for example, read decorators).
@@ -84,6 +85,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // The options, props and component registrations of a .vue file's script.
     name: "vue",
     onFile: applyVueScriptSemantics,
+  },
+  {
+    // Pinia stores and the use of `use…Store()` hooks.
+    name: "pinia",
+    onFile: applyPiniaSemantics,
   },
   {
     // React Router <Route> trees and route objects.
