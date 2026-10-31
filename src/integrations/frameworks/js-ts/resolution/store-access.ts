@@ -10,8 +10,8 @@ import type { StoreAccess } from "../pinia.js";
 // state and getters it reads. It writes the store when it assigns state,
 // changes it through a mutating method, calls an action, `$patch` or
 // `$reset`, or takes an action by destructuring; `members` lists those. An
-// action call (`cart.add(item)`) also gets CALL_RESOLVES_TO to the action's
-// Function. Calls at the top level of a module have no function and are
+// action call (`cart.add(item)`, or `add(item)` after `const { add } =
+// useCartStore()`) also gets CALL_RESOLVES_TO to the action's Function. Calls at the top level of a module have no function and are
 // left out.
 
 const writeMethods = new Set(["$patch", "$reset"]);
@@ -68,10 +68,10 @@ export const storeAccessContributor: ISemanticContributor = {
       const reads = new Set(access.reads);
       const writes = new Set(access.writes);
       for (const name of access.destructured) (actionNames.has(name) ? writes : reads).add(name);
-      for (const { name, line, column } of access.calls) {
+      for (const { name, line, column, callee } of access.calls) {
         if (actionNames.has(name) || writeMethods.has(name)) writes.add(name);
         const actionId = actions.get(name);
-        const callId = actionId ? callsByPosition.get(`${fileId}:${line}:${column}:${name}`) : undefined;
+        const callId = actionId ? callsByPosition.get(`${fileId}:${line}:${column}:${callee ?? name}`) : undefined;
         if (actionId && callId && !resolved.has(callId)) added.push({ from: callId, to: actionId, type: "CALL_RESOLVES_TO", properties: {} });
       }
       const line = Number(call.properties.line);

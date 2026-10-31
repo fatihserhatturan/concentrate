@@ -1,0 +1,250 @@
+{
+  "recordedAt": "2026-10-31T04:56:27.719Z",
+  "samples": [
+    {
+      "sample": "express",
+      "routes": {
+        "tp": 59,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 59,
+          "total": 59
+        }
+      },
+      "calls": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 20,
+        "precision": 1,
+        "recall": 0.2857142857142857
+      }
+    },
+    {
+      "sample": "fastify",
+      "routes": {
+        "tp": 14,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 14,
+          "total": 14
+        }
+      },
+      "calls": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-nest",
+      "dataAccess": {
+        "tp": 17,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-nextjs-taxonomy",
+      "routes": {
+        "tp": 9,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 9,
+          "total": 9
+        }
+      },
+      "pages": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-node-express-realworld",
+      "routes": {
+        "tp": 20,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 20,
+          "total": 20
+        }
+      },
+      "calls": {
+        "tp": 24,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "dataAccess": {
+        "tp": 26,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-react-realworld",
+      "components": {
+        "tp": 31,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.96875
+      },
+      "renders": {
+        "tp": 29,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-fullstack",
+      "requests": {
+        "tp": 31,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.96875
+      }
+    },
+    {
+      "sample": "internet-vue-realworld",
+      "calls": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1,
+        "recall": 0.7857142857142857
+      },
+      "components": {
+        "tp": 22,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "renders": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "pages": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "ky",
+      "calls": {
+        "tp": 13,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "nestjs-starter",
+      "routes": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 1,
+          "total": 1
+        }
+      },
+      "calls": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    }
+  ],
+  "totals": {
+    "routes": {
+      "tp": 103,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "fullPath": {
+        "correct": 103,
+        "total": 103
+      }
+    },
+    "calls": {
+      "tp": 64,
+      "fp": 0,
+      "fn": 23,
+      "precision": 1,
+      "recall": 0.735632183908046
+    },
+    "dataAccess": {
+      "tp": 43,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "components": {
+      "tp": 53,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.9814814814814815
+    },
+    "renders": {
+      "tp": 62,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "pages": {
+      "tp": 39,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "requests": {
+      "tp": 31,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.96875
+    }
+  }
+}

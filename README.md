@@ -74,9 +74,9 @@ Every number below comes from pinned open-source repositories and can be reprodu
 <p align="center"><img src="docs/assets/precision.svg" alt="Precision by relation type: HTTP routes 100%, call targets 100%, data access 100%" width="640"></p>
 
 **The graph is trustworthy.**
-- Against hand-written labels, 100% of reported routes, call targets, database accesses, React components, component renders, pages and frontend → backend API requests are correct.
-- Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React frontend) are 100%.
-- Call recall (72.6%) is still growing; see [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
+- Against hand-written labels, 100% of reported routes, call targets, database accesses, React and Vue components, component renders, pages and frontend → backend API requests are correct.
+- Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React and Vue frontends) are 100%.
+- Call recall (73.6%) is still growing; see [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 
 <p align="center"><img src="docs/assets/agent-hard.svg" alt="Agent benchmark on nestjs/nest, 3 runs per question: correct 12/18 to 18/18, input tokens −24%, tool calls −33%, turns −25%, wall time −25%; import-cycle questions use 2 to 4.6 times fewer tokens" width="860"></p>
 

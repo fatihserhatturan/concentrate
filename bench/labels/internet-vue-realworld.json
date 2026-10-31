@@ -1,0 +1,678 @@
+{
+  "sample": "internet-vue-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Components: every .vue file under src/ outside tests (App.vue, src/components/, src/pages/), one script-setup or template component each, named after its file. Renders: every element in a template that renders a component of the repository, one label per element; <AppLink> renders src/components/AppLink.vue through app.component('AppLink', AppLink) in src/plugins/global-components.ts. RouterLink, RouterView and Suspense are library components. Pages: every route record in src/router.ts; lazy components (() => import('./pages/Home.vue')) count as the component the page renders. Calls: every call site in the listed files; generated API client methods (api.users.login) and Vue/Pinia functions stay unresolved, a destructured store action (updateUser) resolves to the setup store's function, and HttpClient.setSecurityData is a class field holding an arrow function.",
+  "components": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/App.vue",
+        "name": "App",
+        "line": 1
+      },
+      {
+        "file": "src/components/AppFooter.vue",
+        "name": "AppFooter",
+        "line": 1
+      },
+      {
+        "file": "src/components/AppLink.vue",
+        "name": "AppLink",
+        "line": 1
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "name": "AppNavigation",
+        "line": 1
+      },
+      {
+        "file": "src/components/AppPagination.vue",
+        "name": "AppPagination",
+        "line": 1
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "name": "ArticleDetail",
+        "line": 1
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "name": "ArticleDetailComment",
+        "line": 1
+      },
+      {
+        "file": "src/components/ArticleDetailComments.vue",
+        "name": "ArticleDetailComments",
+        "line": 1
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "name": "ArticleDetailCommentsForm",
+        "line": 1
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "name": "ArticleDetailMeta",
+        "line": 1
+      },
+      {
+        "file": "src/components/ArticlesList.vue",
+        "name": "ArticlesList",
+        "line": 1
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "name": "ArticlesListArticlePreview",
+        "line": 1
+      },
+      {
+        "file": "src/components/ArticlesListNavigation.vue",
+        "name": "ArticlesListNavigation",
+        "line": 1
+      },
+      {
+        "file": "src/components/PopularTags.vue",
+        "name": "PopularTags",
+        "line": 1
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "name": "Article",
+        "line": 1
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "name": "EditArticle",
+        "line": 1
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "name": "Home",
+        "line": 1
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "name": "Login",
+        "line": 1
+      },
+      {
+        "file": "src/pages/NotFound.vue",
+        "name": "NotFound",
+        "line": 1
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "name": "Profile",
+        "line": 1
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "name": "Register",
+        "line": 1
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "name": "Settings",
+        "line": 1
+      }
+    ]
+  },
+  "renders": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/App.vue",
+        "parent": "App",
+        "line": 2,
+        "child": "AppNavigation",
+        "childFile": "src/components/AppNavigation.vue"
+      },
+      {
+        "file": "src/App.vue",
+        "parent": "App",
+        "line": 4,
+        "child": "AppFooter",
+        "childFile": "src/components/AppFooter.vue"
+      },
+      {
+        "file": "src/components/AppFooter.vue",
+        "parent": "AppFooter",
+        "line": 4,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "parent": "AppNavigation",
+        "line": 4,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "parent": "AppNavigation",
+        "line": 17,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "parent": "ArticleDetail",
+        "line": 6,
+        "child": "ArticleDetailMeta",
+        "childFile": "src/components/ArticleDetailMeta.vue"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "parent": "ArticleDetail",
+        "line": 41,
+        "child": "ArticleDetailMeta",
+        "childFile": "src/components/ArticleDetailMeta.vue"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "parent": "ArticleDetailComment",
+        "line": 10,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "parent": "ArticleDetailComment",
+        "line": 24,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticleDetailComments.vue",
+        "parent": "ArticleDetailComments",
+        "line": 2,
+        "child": "ArticleDetailCommentsForm",
+        "childFile": "src/components/ArticleDetailCommentsForm.vue"
+      },
+      {
+        "file": "src/components/ArticleDetailComments.vue",
+        "parent": "ArticleDetailComments",
+        "line": 7,
+        "child": "ArticleDetailComment",
+        "childFile": "src/components/ArticleDetailComment.vue"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "parent": "ArticleDetailCommentsForm",
+        "line": 3,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "parent": "ArticleDetailCommentsForm",
+        "line": 5,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "parent": "ArticleDetailMeta",
+        "line": 3,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "parent": "ArticleDetailMeta",
+        "line": 11,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "parent": "ArticleDetailMeta",
+        "line": 45,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticlesList.vue",
+        "parent": "ArticlesList",
+        "line": 2,
+        "child": "ArticlesListNavigation",
+        "childFile": "src/components/ArticlesListNavigation.vue"
+      },
+      {
+        "file": "src/components/ArticlesList.vue",
+        "parent": "ArticlesList",
+        "line": 23,
+        "child": "ArticlesListArticlePreview",
+        "childFile": "src/components/ArticlesListArticlePreview.vue"
+      },
+      {
+        "file": "src/components/ArticlesList.vue",
+        "parent": "ArticlesList",
+        "line": 30,
+        "child": "AppPagination",
+        "childFile": "src/components/AppPagination.vue"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "parent": "ArticlesListArticlePreview",
+        "line": 4,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "parent": "ArticlesListArticlePreview",
+        "line": 11,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "parent": "ArticlesListArticlePreview",
+        "line": 31,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/ArticlesListNavigation.vue",
+        "parent": "ArticlesListNavigation",
+        "line": 9,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/components/PopularTags.vue",
+        "parent": "PopularTags",
+        "line": 5,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "parent": "Article",
+        "line": 4,
+        "child": "ArticleDetail",
+        "childFile": "src/components/ArticleDetail.vue"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "parent": "Article",
+        "line": 15,
+        "child": "ArticleDetailComments",
+        "childFile": "src/components/ArticleDetailComments.vue"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "parent": "Home",
+        "line": 16,
+        "child": "ArticlesList",
+        "childFile": "src/components/ArticlesList.vue"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "parent": "Home",
+        "line": 30,
+        "child": "PopularTags",
+        "childFile": "src/components/PopularTags.vue"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "parent": "Login",
+        "line": 10,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/pages/NotFound.vue",
+        "parent": "NotFound",
+        "line": 7,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "parent": "Profile",
+        "line": 26,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "parent": "Profile",
+        "line": 55,
+        "child": "ArticlesList",
+        "childFile": "src/components/ArticlesList.vue"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "parent": "Register",
+        "line": 10,
+        "child": "AppLink",
+        "childFile": "src/components/AppLink.vue"
+      }
+    ]
+  },
+  "pages": {
+    "scope": [
+      "src/router.ts"
+    ],
+    "items": [
+      {
+        "file": "src/router.ts",
+        "fullPath": "/",
+        "kind": "page",
+        "component": "Home"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/my-feeds",
+        "kind": "page",
+        "component": "Home"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/tag/:tag",
+        "kind": "page",
+        "component": "Home"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/article/:slug",
+        "kind": "page",
+        "component": "Article"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/article/:slug/edit",
+        "kind": "page",
+        "component": "EditArticle"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/article/create",
+        "kind": "page",
+        "component": "EditArticle"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/login",
+        "kind": "page",
+        "component": "Login"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/register",
+        "kind": "page",
+        "component": "Register"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/profile/:username",
+        "kind": "page",
+        "component": "Profile"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/profile/:username/favorites",
+        "kind": "page",
+        "component": "Profile"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/settings",
+        "kind": "page",
+        "component": "Settings"
+      },
+      {
+        "file": "src/router.ts",
+        "fullPath": "/:pathMatch(.*)*",
+        "kind": "page",
+        "component": "NotFound"
+      }
+    ]
+  },
+  "calls": {
+    "files": [
+      "src/store/user.ts",
+      "src/pages/Login.vue",
+      "src/utils/use-async.ts",
+      "src/composable/use-favorite-article.ts"
+    ],
+    "items": [
+      {
+        "file": "src/store/user.ts",
+        "line": 7,
+        "callee": "Storage",
+        "target": {
+          "file": "src/utils/storage.ts",
+          "name": "constructor",
+          "className": "Storage"
+        }
+      },
+      {
+        "file": "src/store/user.ts",
+        "line": 9,
+        "callee": "get",
+        "target": {
+          "file": "src/utils/storage.ts",
+          "name": "get",
+          "className": "Storage"
+        }
+      },
+      {
+        "file": "src/store/user.ts",
+        "line": 11,
+        "callee": "defineStore",
+        "target": null
+      },
+      {
+        "file": "src/store/user.ts",
+        "line": 12,
+        "callee": "ref",
+        "target": null
+      },
+      {
+        "file": "src/store/user.ts",
+        "line": 12,
+        "callee": "get",
+        "target": {
+          "file": "src/utils/storage.ts",
+          "name": "get",
+          "className": "Storage"
+        }
+      },
+      {
+        "file": "src/store/user.ts",
+        "line": 13,
+        "callee": "computed",
+        "target": null
+      },
+      {
+        "file": "src/store/user.ts",
+        "line": 17,
+        "callee": "set",
+        "target": {
+          "file": "src/utils/storage.ts",
+          "name": "set",
+          "className": "Storage"
+        }
+      },
+      {
+        "file": "src/store/user.ts",
+        "line": 18,
+        "callee": "setSecurityData",
+        "target": {
+          "file": "src/services/api.ts",
+          "name": "setSecurityData",
+          "className": "HttpClient"
+        }
+      },
+      {
+        "file": "src/store/user.ts",
+        "line": 22,
+        "callee": "remove",
+        "target": {
+          "file": "src/utils/storage.ts",
+          "name": "remove",
+          "className": "Storage"
+        }
+      },
+      {
+        "file": "src/store/user.ts",
+        "line": 23,
+        "callee": "setSecurityData",
+        "target": {
+          "file": "src/services/api.ts",
+          "name": "setSecurityData",
+          "className": "HttpClient"
+        }
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 71,
+        "callee": "ref",
+        "target": null
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 72,
+        "callee": "reactive",
+        "target": null
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 77,
+        "callee": "useUserStore",
+        "target": null
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 79,
+        "callee": "ref",
+        "target": null
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 84,
+        "callee": "checkValidity",
+        "target": null
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 88,
+        "callee": "login",
+        "target": null
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 89,
+        "callee": "updateUser",
+        "target": {
+          "file": "src/store/user.ts",
+          "name": "updateUser"
+        }
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 90,
+        "callee": "routerPush",
+        "target": {
+          "file": "src/router.ts",
+          "name": "routerPush"
+        }
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 93,
+        "callee": "isFetchError",
+        "target": {
+          "file": "src/services/index.ts",
+          "name": "isFetchError"
+        }
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 97,
+        "callee": "error",
+        "target": null
+      },
+      {
+        "file": "src/utils/use-async.ts",
+        "line": 13,
+        "callee": "ref",
+        "target": null
+      },
+      {
+        "file": "src/utils/use-async.ts",
+        "line": 18,
+        "callee": "fn",
+        "target": null
+      },
+      {
+        "file": "src/utils/use-async.ts",
+        "line": 22,
+        "callee": "isFetchError",
+        "target": {
+          "file": "src/services/index.ts",
+          "name": "isFetchError"
+        }
+      },
+      {
+        "file": "src/utils/use-async.ts",
+        "line": 23,
+        "callee": "remove",
+        "target": {
+          "file": "src/utils/storage.ts",
+          "name": "remove",
+          "className": "Storage"
+        }
+      },
+      {
+        "file": "src/utils/use-async.ts",
+        "line": 24,
+        "callee": "routerPush",
+        "target": {
+          "file": "src/router.ts",
+          "name": "routerPush"
+        }
+      },
+      {
+        "file": "src/utils/use-async.ts",
+        "line": 25,
+        "callee": "Error",
+        "target": null
+      },
+      {
+        "file": "src/composable/use-favorite-article.ts",
+        "line": 15,
+        "callee": "requestor",
+        "target": null
+      },
+      {
+        "file": "src/composable/use-favorite-article.ts",
+        "line": 15,
+        "callee": "then",
+        "target": null
+      },
+      {
+        "file": "src/composable/use-favorite-article.ts",
+        "line": 16,
+        "callee": "onUpdate",
+        "target": null
+      },
+      {
+        "file": "src/composable/use-favorite-article.ts",
+        "line": 19,
+        "callee": "useAsync",
+        "target": {
+          "file": "src/utils/use-async.ts",
+          "name": "useAsync"
+        }
+      }
+    ]
+  }
+}

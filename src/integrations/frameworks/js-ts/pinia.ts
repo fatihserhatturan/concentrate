@@ -29,7 +29,8 @@ import { routerImports, unwrap } from "./react-router.js";
 export type StoreAccess = {
   reads: string[];
   writes: string[];
-  calls: Array<{ name: string; line: number; column: number }>;
+  // `callee` is the local name of a destructured action (`const { add: put }`).
+  calls: Array<{ name: string; line: number; column: number; callee?: string }>;
   destructured: string[];
 };
 
@@ -232,28 +233,43 @@ function recordStoreAccess(root: SyntaxNode, nodes: GraphNode[]): void {
 function storeAccess(hookCall: SyntaxNode): StoreAccess {
   const access: StoreAccess = { reads: [], writes: [], calls: [], destructured: [] };
   const parent = hookCall.parent;
+  refsDestructuring(hookCall, access);
   if (parent?.type === "member_expression" && parent.childForFieldName("object")?.id === hookCall.id) {
     memberUse(parent, access);
   } else if (parent?.type === "variable_declarator" && parent.childForFieldName("value")?.id === hookCall.id) {
     const name = parent.childForFieldName("name");
-    if (name?.type === "object_pattern") access.destructured.push(...patternNames(name));
+    if (name?.type === "object_pattern") {
+      access.destructured.push(...patternNames(name));
+      // Calls of destructured members: `const { add } = useCartStore(); add(x)`.
+      const scope = scopeOf(parent);
+      for (const [member, local] of patternBindings(name)) {
+        for (const use of identifierUses(scope, local.text, local.id)) {
+          const call = use.parent;
+          if (call?.type === "call_expression" && call.childForFieldName("function")?.id === use.id) {
+            access.calls.push({ name: member, line: call.startPosition.row + 1, column: call.startPosition.column, ...(member !== local.text ? { callee: local.text } : {}) });
+          }
+        }
+      }
+    }
     if (name?.type === "identifier") {
       for (const use of identifierUses(scopeOf(parent), name.text, name.id)) {
         const usage = use.parent;
         if (usage?.type === "member_expression" && usage.childForFieldName("object")?.id === use.id) memberUse(usage, access);
-        // `const { items } = storeToRefs(cart)`.
-        const args = usage?.type === "arguments" ? usage : null;
-        const refsCall = args?.parent;
-        if (refsCall?.type === "call_expression" && refsCall.childForFieldName("function")?.text === "storeToRefs") {
-          const declarator = refsCall.parent;
-          const pattern = declarator?.type === "variable_declarator" ? declarator.childForFieldName("name") : null;
-          if (pattern?.type === "object_pattern") access.reads.push(...patternNames(pattern));
-        }
+        refsDestructuring(use, access);
       }
     }
   }
   for (const key of ["reads", "writes", "destructured"] as const) access[key] = [...new Set(access[key])];
   return access;
+}
+
+// `const { items } = storeToRefs(cart)` or `storeToRefs(useCartStore())`.
+function refsDestructuring(store: SyntaxNode, access: StoreAccess): void {
+  const refsCall = store.parent?.type === "arguments" ? store.parent.parent : null;
+  if (refsCall?.type !== "call_expression" || refsCall.childForFieldName("function")?.text !== "storeToRefs") return;
+  const declarator = refsCall.parent;
+  const pattern = declarator?.type === "variable_declarator" ? declarator.childForFieldName("name") : null;
+  if (pattern?.type === "object_pattern") access.reads.push(...patternNames(pattern));
 }
 
 // `store.member` in use: a call, an assignment or update (also of a nested
@@ -297,6 +313,19 @@ function identifierUses(scope: SyntaxNode, name: string, declarationId: number):
   };
   visit(scope);
   return uses;
+}
+
+// `{ add, items: list }` → member → the identifier it is bound to.
+function patternBindings(pattern: SyntaxNode): Array<[string, SyntaxNode]> {
+  return pattern.namedChildren.flatMap((entry): Array<[string, SyntaxNode]> => {
+    if (entry?.type === "shorthand_property_identifier_pattern") return [[entry.text, entry]];
+    if (entry?.type === "pair_pattern") {
+      const key = entry.childForFieldName("key");
+      const value = entry.childForFieldName("value");
+      return key && value?.type === "identifier" ? [[key.type === "string" ? key.text.slice(1, -1) : key.text, value]] : [];
+    }
+    return [];
+  });
 }
 
 // `{ add, items: list, ...rest }` → the store members taken: add, items.
