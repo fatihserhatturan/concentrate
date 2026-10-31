@@ -9,6 +9,7 @@
     { "name": "internet-node-express-realworld", "suite": "internet", "repo": "https://github.com/gothinkster/node-express-realworld-example-app", "sha": "30b68e1e881462b2f4164ea09ab4c4f5699c7b0b" },
     { "name": "internet-nest", "suite": "internet", "repo": "https://github.com/nestjs/nest", "sha": "958ff952c00bd5a25efa04ffaafac28721af7827", "continueOnError": true },
     { "name": "internet-react-realworld", "suite": "internet", "repo": "https://github.com/gothinkster/react-redux-realworld-example-app", "sha": "ee72eba4056392c95a27bc48d385d3f54ba38a18" },
+    { "name": "internet-vue-realworld", "suite": "internet", "repo": "https://github.com/mutoe/vue3-realworld-example-app", "sha": "741c215ef0f674f90fcb03c5493a1b3a3a7f1b03" },
     { "name": "internet-nextjs-taxonomy", "suite": "internet", "repo": "https://github.com/shadcn-ui/taxonomy", "sha": "298a8857c7128a0d121e7f699dfd729f23b3966d" },
     { "name": "internet-realworld-fullstack", "suite": "internet", "parts": [
       { "dir": "backend", "repo": "https://github.com/gothinkster/node-express-realworld-example-app", "sha": "30b68e1e881462b2f4164ea09ab4c4f5699c7b0b" },

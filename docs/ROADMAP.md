@@ -713,7 +713,7 @@ Builds on the SFC splitter (Phase 10), the component schema (Phase 11), the page
 ### Acceptance criteria
 
 - [x] Fixtures and golden coverage for each component style, Nuxt pages and server routes, and Pinia
-- [ ] A pinned Vue or Nuxt sample (candidate: a RealWorld Vue frontend) with hand labels in `bench:accuracy`
+- [x] A pinned Vue or Nuxt sample (candidate: a RealWorld Vue frontend) with hand labels in `bench:accuracy`
 - [x] Precision stays at 100%; recall is reported
 
 ## Phase 15: Svelte, SvelteKit and Astro ([#80](https://github.com/fatihserhatturan/concentrate/issues/80))

@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":8,"supportedFiles":7,"parsedFiles":7,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":9,"supportedFiles":8,"parsedFiles":8,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"pinia-stores","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"pinia-stores","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
@@ -7,6 +7,13 @@
 {"kind":"node","id":"dir:src/components","label":"Directory","properties":{"name":"components","path":"<root>/src/components","relativePath":"src/components"}}
 {"kind":"node","id":"dir:src/composables","label":"Directory","properties":{"name":"composables","path":"<root>/src/composables","relativePath":"src/composables"}}
 {"kind":"node","id":"dir:src/stores","label":"Directory","properties":{"name":"stores","path":"<root>/src/stores","relativePath":"src/stores"}}
+{"kind":"node","id":"file:src/components/CartBadge.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/components/CartBadge.vue","relativePath":"src/components/CartBadge.vue","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/CartBadge.vue:component:1:CartBadge","label":"Component","properties":{"endLine":10,"framework":"vue","hooks":"useCartStore","isExported":true,"kind":"script-setup","line":1,"name":"CartBadge","pendingRenders":null,"props":null}}
+{"kind":"node","id":"file:src/components/CartBadge.vue:function:5:<script setup>","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"script_setup","line":5,"methodKind":null,"name":"<script setup>","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/CartBadge.vue:function:5:<script setup>:call:9:18:storeToRefs","label":"Call","properties":{"args":"[]","callee":"storeToRefs","columnNumber":18,"expression":"storeToRefs","line":9,"name":"storeToRefs","receiver":null}}
+{"kind":"node","id":"file:src/components/CartBadge.vue:function:5:<script setup>:call:9:30:useCartStore","label":"Call","properties":{"args":"[]","callee":"useCartStore","columnNumber":30,"expression":"useCartStore","line":9,"name":"useCartStore","receiver":null,"storeAccess":"{\"reads\":[\"count\"],\"writes\":[],\"calls\":[],\"destructured\":[]}"}}
+{"kind":"node","id":"file:src/components/CartBadge.vue:import:6:pinia","label":"Import","properties":{"bindings":"[{\"imported\":\"storeToRefs\",\"local\":\"storeToRefs\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":6,"source":"pinia","specifier":"import { storeToRefs } from 'pinia';"}}
+{"kind":"node","id":"file:src/components/CartBadge.vue:import:7:../stores/cart","label":"Import","properties":{"bindings":"[{\"imported\":\"useCartStore\",\"local\":\"useCartStore\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":7,"source":"../stores/cart","specifier":"import { useCartStore } from '../stores/cart';"}}
 {"kind":"node","id":"file:src/components/CartView.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/components/CartView.vue","relativePath":"src/components/CartView.vue","sourceType":"production"}}
 {"kind":"node","id":"file:src/components/CartView.vue:component:1:CartView","label":"Component","properties":{"endLine":18,"framework":"vue","hooks":"useCartStore","isExported":true,"kind":"script-setup","line":1,"name":"CartView","pendingRenders":null,"props":null}}
 {"kind":"node","id":"file:src/components/CartView.vue:entrypoint:5:10:dom-event:click","label":"EntryPoint","properties":{"handlerName":"addSample","kind":"dom-event","library":"vue","line":5,"receiverName":"button","trigger":"click"}}
@@ -19,10 +26,12 @@
 {"kind":"node","id":"file:src/components/CartView.vue:initializercall:12:13:useCartStore","label":"Call","properties":{"args":"[]","callee":"useCartStore","columnNumber":13,"expression":"useCartStore","line":12,"name":"useCartStore","receiver":null,"storeAccess":"{\"reads\":[\"items\",\"count\"],\"writes\":[\"coupon\"],\"calls\":[{\"name\":\"add\",\"line\":15,\"column\":2}],\"destructured\":[]}"}}
 {"kind":"node","id":"file:src/components/CartView.vue:variable:12:cart","label":"Variable","properties":{"isExported":false,"kind":"const","line":12,"name":"cart","stringValue":null}}
 {"kind":"node","id":"file:src/components/LoginForm.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/components/LoginForm.vue","relativePath":"src/components/LoginForm.vue","sourceType":"production"}}
-{"kind":"node","id":"file:src/components/LoginForm.vue:component:1:LoginForm","label":"Component","properties":{"endLine":14,"framework":"vue","hooks":"useUserStore","isExported":true,"kind":"script-setup","line":1,"name":"LoginForm","pendingRenders":null,"props":null}}
-{"kind":"node","id":"file:src/components/LoginForm.vue:entrypoint:2:8:dom-event:submit","label":"EntryPoint","properties":{"handlerName":"login","kind":"dom-event","library":"vue","line":2,"receiverName":"form","trigger":"submit"}}
-{"kind":"node","id":"file:src/components/LoginForm.vue:function:8:<script setup>","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"script_setup","line":8,"methodKind":null,"name":"<script setup>","parameters":"[]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:src/components/LoginForm.vue:function:8:<script setup>:call:13:28:useUserStore","label":"Call","properties":{"args":"[]","callee":"useUserStore","columnNumber":28,"expression":"useUserStore","line":13,"name":"useUserStore","receiver":null,"storeAccess":"{\"reads\":[],\"writes\":[],\"calls\":[],\"destructured\":[\"login\",\"loggedIn\"]}"}}
+{"kind":"node","id":"file:src/components/LoginForm.vue:component:1:LoginForm","label":"Component","properties":{"endLine":17,"framework":"vue","hooks":"useUserStore","isExported":true,"kind":"script-setup","line":1,"name":"LoginForm","pendingRenders":null,"props":null}}
+{"kind":"node","id":"file:src/components/LoginForm.vue:entrypoint:2:8:dom-event:submit","label":"EntryPoint","properties":{"handlerName":"submit","kind":"dom-event","library":"vue","line":2,"receiverName":"form","trigger":"submit"}}
+{"kind":"node","id":"file:src/components/LoginForm.vue:function:14:submit","label":"Function","properties":{"className":null,"endLine":16,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":14,"methodKind":null,"name":"submit","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/LoginForm.vue:function:14:submit:call:15:2:signIn","label":"Call","properties":{"args":"[\"username.value\"]","callee":"signIn","columnNumber":2,"expression":"signIn","line":15,"name":"signIn","receiver":null}}
+{"kind":"node","id":"file:src/components/LoginForm.vue:function:8:<script setup>","label":"Function","properties":{"className":null,"endLine":17,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"script_setup","line":8,"methodKind":null,"name":"<script setup>","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/LoginForm.vue:function:8:<script setup>:call:13:36:useUserStore","label":"Call","properties":{"args":"[]","callee":"useUserStore","columnNumber":36,"expression":"useUserStore","line":13,"name":"useUserStore","receiver":null,"storeAccess":"{\"reads\":[],\"writes\":[],\"calls\":[{\"name\":\"login\",\"line\":15,\"column\":2,\"callee\":\"signIn\"}],\"destructured\":[\"login\",\"loggedIn\"]}"}}
 {"kind":"node","id":"file:src/components/LoginForm.vue:import:10:../stores","label":"Import","properties":{"bindings":"[{\"imported\":\"useUserStore\",\"local\":\"useUserStore\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":10,"source":"../stores","specifier":"import { useUserStore } from '../stores';"}}
 {"kind":"node","id":"file:src/components/LoginForm.vue:import:9:vue","label":"Import","properties":{"bindings":"[{\"imported\":\"ref\",\"local\":\"ref\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":9,"source":"vue","specifier":"import { ref } from 'vue';"}}
 {"kind":"node","id":"file:src/components/LoginForm.vue:initializercall:12:17:ref","label":"Call","properties":{"args":"[\"\"]","callee":"ref","columnNumber":17,"expression":"ref","line":12,"name":"ref","receiver":null}}
@@ -79,6 +88,7 @@
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/components","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/composables","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/stores","properties":{}}
+{"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/CartBadge.vue","properties":{}}
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/CartView.vue","properties":{}}
 {"kind":"rel","from":"dir:src/components","type":"CONTAINS_FILE","to":"file:src/components/LoginForm.vue","properties":{}}
 {"kind":"rel","from":"dir:src/composables","type":"CONTAINS_FILE","to":"file:src/composables/storage.ts","properties":{}}
@@ -86,6 +96,16 @@
 {"kind":"rel","from":"dir:src/stores","type":"CONTAINS_FILE","to":"file:src/stores/cart.ts","properties":{}}
 {"kind":"rel","from":"dir:src/stores","type":"CONTAINS_FILE","to":"file:src/stores/index.ts","properties":{}}
 {"kind":"rel","from":"dir:src/stores","type":"CONTAINS_FILE","to":"file:src/stores/user.ts","properties":{}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue","type":"DECLARES_COMPONENT","to":"file:src/components/CartBadge.vue:component:1:CartBadge","properties":{}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue","type":"DEFINES_FUNCTION","to":"file:src/components/CartBadge.vue:function:5:<script setup>","properties":{}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue","type":"IMPORTS","to":"file:src/components/CartBadge.vue:import:6:pinia","properties":{}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue","type":"IMPORTS","to":"file:src/components/CartBadge.vue:import:7:../stores/cart","properties":{}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue:component:1:CartBadge","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/CartBadge.vue:function:5:<script setup>","properties":{}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue:function:5:<script setup>","type":"CALLS","to":"file:src/components/CartBadge.vue:function:5:<script setup>:call:9:18:storeToRefs","properties":{}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue:function:5:<script setup>","type":"CALLS","to":"file:src/components/CartBadge.vue:function:5:<script setup>:call:9:30:useCartStore","properties":{}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue:function:5:<script setup>","type":"READS_STORE","to":"file:src/stores/cart.ts:store:4:cart","properties":{"line":9,"members":"count"}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue:import:7:../stores/cart","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/components/CartBadge.vue:import:7:../stores/cart","type":"RESOLVES_TO","to":"file:src/stores/cart.ts","properties":{}}
 {"kind":"rel","from":"file:src/components/CartView.vue","type":"DECLARES_COMPONENT","to":"file:src/components/CartView.vue:component:1:CartView","properties":{}}
 {"kind":"rel","from":"file:src/components/CartView.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/components/CartView.vue:entrypoint:5:10:dom-event:click","properties":{}}
 {"kind":"rel","from":"file:src/components/CartView.vue","type":"DEFINES_FUNCTION","to":"file:src/components/CartView.vue:function:14:addSample","properties":{}}
@@ -106,12 +126,16 @@
 {"kind":"rel","from":"file:src/components/CartView.vue:variable:12:cart","type":"INITIALIZED_BY","to":"file:src/components/CartView.vue:initializercall:12:13:useCartStore","properties":{}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue","type":"DECLARES_COMPONENT","to":"file:src/components/LoginForm.vue:component:1:LoginForm","properties":{}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/components/LoginForm.vue:entrypoint:2:8:dom-event:submit","properties":{}}
+{"kind":"rel","from":"file:src/components/LoginForm.vue","type":"DEFINES_FUNCTION","to":"file:src/components/LoginForm.vue:function:14:submit","properties":{}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue","type":"DEFINES_FUNCTION","to":"file:src/components/LoginForm.vue:function:8:<script setup>","properties":{}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue","type":"DEFINES_VARIABLE","to":"file:src/components/LoginForm.vue:variable:12:username","properties":{}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue","type":"IMPORTS","to":"file:src/components/LoginForm.vue:import:10:../stores","properties":{}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue","type":"IMPORTS","to":"file:src/components/LoginForm.vue:import:9:vue","properties":{}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue:component:1:LoginForm","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/LoginForm.vue:function:8:<script setup>","properties":{}}
-{"kind":"rel","from":"file:src/components/LoginForm.vue:function:8:<script setup>","type":"CALLS","to":"file:src/components/LoginForm.vue:function:8:<script setup>:call:13:28:useUserStore","properties":{}}
+{"kind":"rel","from":"file:src/components/LoginForm.vue:entrypoint:2:8:dom-event:submit","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/components/LoginForm.vue:function:14:submit","properties":{}}
+{"kind":"rel","from":"file:src/components/LoginForm.vue:function:14:submit","type":"CALLS","to":"file:src/components/LoginForm.vue:function:14:submit:call:15:2:signIn","properties":{}}
+{"kind":"rel","from":"file:src/components/LoginForm.vue:function:14:submit:call:15:2:signIn","type":"CALL_RESOLVES_TO","to":"file:src/stores/user.ts:function:8:login","properties":{}}
+{"kind":"rel","from":"file:src/components/LoginForm.vue:function:8:<script setup>","type":"CALLS","to":"file:src/components/LoginForm.vue:function:8:<script setup>:call:13:36:useUserStore","properties":{}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue:function:8:<script setup>","type":"CALLS","to":"file:src/components/LoginForm.vue:initializercall:12:17:ref","properties":{}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue:function:8:<script setup>","type":"READS_STORE","to":"file:src/stores/user.ts:store:5:user","properties":{"line":13,"members":"loggedIn"}}
 {"kind":"rel","from":"file:src/components/LoginForm.vue:function:8:<script setup>","type":"WRITES_STORE","to":"file:src/stores/user.ts:store:5:user","properties":{"line":13,"members":"login"}}
@@ -183,6 +207,7 @@
 {"kind":"rel","from":"file:src/stores/user.ts:store:5:user","type":"STORE_ACTION","to":"file:src/stores/user.ts:function:8:login","properties":{}}
 {"kind":"rel","from":"file:src/stores/user.ts:store:5:user","type":"STORE_DEFINED_BY_FUNCTION","to":"file:src/stores/user.ts:function:5:<defineStore:user:arg1>","properties":{}}
 {"kind":"rel","from":"file:src/stores/user.ts:variable:5:useUserStore","type":"INITIALIZED_BY","to":"file:src/stores/user.ts:initializercall:5:28:defineStore","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/CartBadge.vue","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/CartView.vue","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/LoginForm.vue","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/composables/storage.ts","properties":{}}

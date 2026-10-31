@@ -27,6 +27,7 @@ sample test (`tests/golden-samples.test.ts`) all read from there.
 | internet-node-express-firebase-mongodb | internet | JDIZM/node-express-firebase-mongodb | `269ab2619cf320bb38eb821e95a35dd9ad772770` |
 | internet-node-express-realworld | internet | gothinkster/node-express-realworld-example-app | `30b68e1e881462b2f4164ea09ab4c4f5699c7b0b` |
 | internet-nest | internet | nestjs/nest | `958ff952c00bd5a25efa04ffaafac28721af7827` |
+| internet-vue-realworld | internet | mutoe/vue3-realworld-example-app | `741c215ef0f674f90fcb03c5493a1b3a3a7f1b03` |
 | internet-realworld-fullstack | internet | gothinkster/node-express-realworld-example-app in `backend/`, reck1ess/next-realworld-example-app in `frontend/` | `30b68e1e881462b2f4164ea09ab4c4f5699c7b0b`, `be9ef569bc395975d98c1973fac23ba9277797e7` |
 
 A sample with `parts` is assembled from several repositories, each cloned
@@ -231,6 +232,22 @@ standing smoke samples.
 - Expected smoke counts: schema version 36, 26 `Route` nodes, 4 `EnvVar`
   nodes, 9 `ConfigValue` nodes, 4 `DataModel` nodes, 4 `Table` nodes (from
   `src/prisma/schema.prisma`).
+
+### Vue RealWorld
+
+- Scale: small
+- Repository: `https://github.com/mutoe/vue3-realworld-example-app` (Vue 3
+  `<script setup>`, Vue Router with lazy route components, a Pinia setup
+  store, a global `app.component` registration and a generated API client).
+- Local path: `.concentrate/samples/internet-vue-realworld`
+- Last scan result, 2026-10-31: 125 discovered files, 93 supported files,
+  93 parsed files, 0 failed files, 198 resolved imports, 2197 nodes, 3066
+  relationships.
+- File classification counts: 61 production files, 31 test files, 0 fixture
+  files, 1 support file, 0 generated files.
+- Expected smoke counts: no `Route` nodes and 18 `EntryPoint` nodes
+  (template listeners); the hand labels for components, renders, pages and
+  calls are in [accuracy.md](accuracy.md).
 
 ### RealWorld Fullstack
 

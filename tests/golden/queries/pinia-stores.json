@@ -25,15 +25,15 @@
           },
           {
             "table": "File",
-            "count": 7
+            "count": 8
           },
           {
             "table": "Import",
-            "count": 12
+            "count": 14
           },
           {
             "table": "Function",
-            "count": 16
+            "count": 18
           },
           {
             "table": "Class",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 20
+            "count": 23
           },
           {
             "table": "Route",
@@ -93,7 +93,7 @@
           },
           {
             "table": "Component",
-            "count": 2
+            "count": 3
           },
           {
             "table": "Page",
@@ -123,15 +123,15 @@
         },
         {
           "table": "File",
-          "count": 7
+          "count": 8
         },
         {
           "table": "Import",
-          "count": 12
+          "count": 14
         },
         {
           "table": "Function",
-          "count": 16
+          "count": 18
         },
         {
           "table": "Class",
@@ -163,7 +163,7 @@
         },
         {
           "table": "Call",
-          "count": 20
+          "count": 23
         },
         {
           "table": "Route",
@@ -191,7 +191,7 @@
         },
         {
           "table": "Component",
-          "count": 2
+          "count": 3
         },
         {
           "table": "Page",
@@ -214,6 +214,14 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": [
+          {
+            "name": "<script setup>",
+            "kind": "Function",
+            "file": "src/components/CartBadge.vue",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
           {
             "name": "<script setup>",
             "kind": "Function",
@@ -357,6 +365,14 @@
         {
           "name": "<script setup>",
           "kind": "Function",
+          "file": "src/components/CartBadge.vue",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<script setup>",
+          "kind": "Function",
           "file": "src/components/CartView.vue",
           "line": 8,
           "isExported": false,
@@ -461,7 +477,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 13
+        "returned": 14
       }
     }
   },
@@ -648,8 +664,8 @@
             "kind": "dom-event",
             "trigger": "submit",
             "library": "vue",
-            "handlerName": "login",
-            "handler": null
+            "handlerName": "submit",
+            "handler": "submit"
           }
         ]
       }
@@ -674,8 +690,8 @@
           "kind": "dom-event",
           "trigger": "submit",
           "library": "vue",
-          "handlerName": "login",
-          "handler": null
+          "handlerName": "submit",
+          "handler": "submit"
         }
       ],
       "page": {
@@ -763,6 +779,14 @@
         "params": {},
         "rows": [
           {
+            "id": "file:src/components/CartBadge.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "src/components/CartBadge.vue",
+            "line": 5,
+            "endLine": 10
+          },
+          {
             "id": "file:src/components/CartView.vue:function:14:addSample",
             "name": "addSample",
             "className": null,
@@ -779,12 +803,20 @@
             "endLine": 18
           },
           {
+            "id": "file:src/components/LoginForm.vue:function:14:submit",
+            "name": "submit",
+            "className": null,
+            "file": "src/components/LoginForm.vue",
+            "line": 14,
+            "endLine": 16
+          },
+          {
             "id": "file:src/components/LoginForm.vue:function:8:<script setup>",
             "name": "<script setup>",
             "className": null,
             "file": "src/components/LoginForm.vue",
             "line": 8,
-            "endLine": 14
+            "endLine": 17
           },
           {
             "id": "file:src/composables/storage.ts:function:1:saveCart",
@@ -905,6 +937,11 @@
           {
             "caller": "file:src/components/CartView.vue:function:14:addSample",
             "callee": "file:src/stores/cart.ts:function:13:add",
+            "line": 15
+          },
+          {
+            "caller": "file:src/components/LoginForm.vue:function:14:submit",
+            "callee": "file:src/stores/user.ts:function:8:login",
             "line": 15
           },
           {
@@ -1140,6 +1177,61 @@
     }
   },
   {
+    "tool": "find_callers",
+    "args": {
+      "name": "login"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"login\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "login",
+            "caller": "submit",
+            "callerKind": "Function",
+            "file": "src/components/LoginForm.vue",
+            "line": 15,
+            "expression": "signIn",
+            "relationship": "CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"login\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"login\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "login",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [
+        {
+          "target": "login",
+          "caller": "submit",
+          "callerKind": "Function",
+          "file": "src/components/LoginForm.vue",
+          "line": 15,
+          "expression": "signIn",
+          "relationship": "CALLS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
     "tool": "get_file_outline",
     "args": {
       "file": "src/stores/cart.ts"
@@ -1149,6 +1241,9 @@
         "method": "query",
         "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
         "rows": [
+          {
+            "file": "src/components/CartBadge.vue"
+          },
           {
             "file": "src/components/CartView.vue"
           },

@@ -391,6 +391,26 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     },
   },
   {
+    name: "internet-vue-realworld",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 125,
+      supportedFiles: 93,
+      parsedFiles: 93,
+      failedFiles: 0,
+      resolvedImports: 198,
+      unresolvedRelativeImports: 0,
+      nodes: 2197,
+      relationships: 3066,
+      fileClassifications: { production: 61, test: 31, fixture: 0, support: 1, generated: 0 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 0,
+        entrypoints: 18,
+      },
+    },
+  },
+  {
     name: "internet-nextjs-taxonomy",
     suite: "internet",
     expected: {

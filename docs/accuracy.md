@@ -12,7 +12,7 @@ npm run bench:accuracy -- [--sample name] [--details] [--json out.json]
 
 `--details` lists every false positive (FP), false negative (FN) and wrong
 route path. The latest run is in
-[`bench/results/accuracy-0.1.0-2026-10-29.json`](../bench/results/accuracy-0.1.0-2026-10-29.json).
+[`bench/results/accuracy-0.1.0-2026-10-31.json`](../bench/results/accuracy-0.1.0-2026-10-31.json).
 
 ## Labels
 
@@ -25,10 +25,10 @@ chosen files); every target was decided by reading the code.
 | Kind | Samples | Scope |
 | --- | --- | --- |
 | Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy | every route declared with a literal path in the scoped files; tests excluded |
-| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld | every call site in 4–9 chosen files per sample |
+| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld | every call site in 4–9 chosen files per sample |
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma) | the services; the standing samples have no data layer |
-| Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend) | `src/components/`: every component and every element that renders one |
-| Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app) | `app/` and `pages/`: every page, layout, loading and not-found file |
+| Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia) | `src/components/` (React); every `.vue` file under `src/` (Vue): every component and every element that renders one |
+| Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue) |
 | Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project) | `frontend/`: every HTTP call that reaches a backend route |
 
 Rules:
@@ -103,7 +103,7 @@ Rules:
 - **Requests:** the call's file and line (±1), the route and its declaring
   file all match; a call linked to another route is an FP and an FN.
 
-## Results (2026-10-30, schema 53)
+## Results (2026-10-31, schema 56)
 
 ### Routes
 
@@ -123,11 +123,12 @@ Rules:
 | express | 28 | 8 | 0 | 20 | 100.0% | 28.6% |
 | fastify | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
+| internet-vue-realworld | 14 | 11 | 0 | 3 | 100.0% | 78.6% |
 | ky | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | nestjs-starter | 2 | 2 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 73 | 53 | 0 | 20 | **100.0%** | **72.6%** |
+| **all** | 87 | 64 | 0 | 23 | **100.0%** | **73.6%** |
 
-Labels counts calls with a project target. Another 310 call sites are labeled
+Labels counts calls with a project target. Another 326 call sites are labeled
 `null`, and 35 are `dynamic`.
 
 ### Data access
@@ -143,18 +144,24 @@ Labels counts calls with a project target. Another 310 call sites are labeled
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-react-realworld | 32 | 31 | 0 | 1 | 100.0% | 96.9% |
+| internet-vue-realworld | 22 | 22 | 0 | 0 | 100.0% | 100.0% |
+| **all** | 54 | 53 | 0 | 1 | **100.0%** | **98.1%** |
 
 ### Component renders
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-react-realworld | 29 | 29 | 0 | 0 | 100.0% | 100.0% |
+| internet-vue-realworld | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
+| **all** | 62 | 62 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Pages
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-nextjs-taxonomy | 27 | 27 | 0 | 0 | 100.0% | 100.0% |
+| internet-vue-realworld | 12 | 12 | 0 | 0 | 100.0% | 100.0% |
+| **all** | 39 | 39 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### API requests
 
@@ -182,15 +189,28 @@ are, and they cluster:
   `lib/application.js` through `merge-descriptors`; the 20 `app.set` /
   `app.use` / `app.listen` labels in the examples point there. They are left
   in the labels as the ground truth a reader would expect, and are all of
-  express's remaining call misses, and so all misses left in the call labels.
-  (Default imports, #45; constructors and static methods, #46; and
-  module-level calls, `require('./x')(...)` and `module.exports = …`
-  defaults, #47, resolve now.)
+  express's remaining call misses. (Default imports, #45; constructors and
+  static methods, #46; and module-level calls, `require('./x')(...)` and
+  `module.exports = …` defaults, #47, resolve now.)
+
+- **Class fields and imported instances (Vue sample).** Two of the three
+  Vue call misses are `api.setSecurityData(…)`: `api` is an instance of a
+  generated client whose base class declares `setSecurityData` as a class
+  field holding an arrow function, which has no Function node. The third is
+  `userStorage.remove()` in `src/utils/use-async.ts`, where `userStorage` is
+  a `new Storage(…)` instance imported from another module; the same call in
+  the module that creates it resolves. The destructured Pinia action
+  (`const { updateUser } = useUserStore(); updateUser(…)`) resolves to the
+  setup store's function.
 
 - **Component class hierarchies.** The one missed component is
   `ProfileFavorites`, a class that extends another component class
   (`Profile`) instead of `React.Component`. Every labeled render is found:
-  renders of `export default connect(...)(X)` modules resolve to X.
+  renders of `export default connect(...)(X)` modules resolve to X, and in
+  the Vue sample `<AppLink>`, which no component imports, resolves through
+  the global `app.component('AppLink', AppLink)` registration. Every Vue
+  Router record is a page, its lazy `() => import('./pages/Home.vue')`
+  linked to the page component.
 
 - **SWR keys in local variables.** The one missed request is
   `components/article/ArticleList.tsx`, which passes `useSWR` a local

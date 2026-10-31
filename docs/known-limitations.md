@@ -600,8 +600,10 @@ Astro).
   `$patch` or `$reset`, or destructures an action (`const { login } =
   useUserStore()`). Uses are followed through a variable holding the store
   (anywhere in its scope, nested functions included, with the edge from the
-  function that called the hook), `storeToRefs(store)` destructuring, and
-  chained calls (`useCartStore().clear()`). An action call also gets
+  function that called the hook), `storeToRefs(store)` and
+  `storeToRefs(useCartStore())` destructuring, and chained calls
+  (`useCartStore().clear()`). An action call, also of a destructured action
+  (`const { login: signIn } = useUserStore(); signIn()`), also gets
   `CALL_RESOLVES_TO` to the action's Function, so `find_callers` and
   `impact_of` reach the components that call it. Not followed: hooks with
   other names, a store passed to another function, template-only use
