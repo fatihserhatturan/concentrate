@@ -731,6 +731,26 @@
         "args": {
           "name": "formatName"
         }
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "GET",
+          "path": "/api/users/:id"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "listUsers"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "POST",
+          "path": "/api/users"
+        }
       }
     ],
     "vanilla-html": [

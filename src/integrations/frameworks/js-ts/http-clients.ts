@@ -12,6 +12,9 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 // - ky: `ky(url, options?)` and `ky.get(url)` / … on the default import of `ky`;
 // - ofetch: `ofetch(url, options?)` imported from `ofetch`, and `$fetch`
 //   (Nuxt's global) unless the file declares one;
+// - Nuxt's `useFetch(url, options?)` and `useLazyFetch` (client `nuxt`),
+//   global or imported from `#app`, `#imports` or `nuxt/app`, unless the file
+//   declares or imports its own;
 // - data-fetching hooks whose key is the URL (GET): `useSWR(key, fetcher?)`
 //   and `useSWRImmutable` (client `swr`), and TanStack Query's `useQuery`,
 //   `useSuspenseQuery`, `useInfiniteQuery` and `queryOptions` without a
@@ -48,6 +51,8 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
   const ky = new Set([...imported].filter(([, from]) => from === "ky:default").map(([name]) => name));
   const ofetch = new Set([...imported].filter(([, from]) => from === "ofetch:ofetch" || from === "ofetch:$fetch").map(([name]) => name));
   if (!local("$fetch")) ofetch.add("$fetch");
+  const nuxt = new Set([...imported].filter(([, from]) => nuxtFetch.test(from)).map(([name]) => name));
+  for (const name of ["useFetch", "useLazyFetch"]) if (!local(name)) nuxt.add(name);
   const swr = new Set([...imported].filter(([, from]) => from === "swr:default" || from === "swr/immutable:default").map(([name]) => name));
   const query = new Set([...imported].filter(([, from]) => queryHook.test(from)).map(([name]) => name));
 
@@ -63,7 +68,7 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
 
   const visit = (node: SyntaxNode) => {
     if (node.type === "call_expression") {
-      const request = httpRequest(node, { fetch: !local("fetch"), axios, ky, ofetch }) ?? keyRequest(node, swr, query) ?? instanceRequest(node, bindings);
+      const request = httpRequest(node, { fetch: !local("fetch"), axios, ky, ofetch, nuxt }) ?? keyRequest(node, swr, query) ?? instanceRequest(node, bindings);
       const call = request ? callsByPosition.get(`${node.startPosition.row + 1}:${node.startPosition.column}`) : undefined;
       if (request && call) {
         if (request.client) call.properties.httpClient = request.client;
@@ -76,6 +81,8 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
   };
   visit(rootNode);
 }
+
+const nuxtFetch = /^(?:#app|#imports|nuxt\/app):(?:useFetch|useLazyFetch)$/u;
 
 const queryHook = /^(?:@tanstack\/(?:react|vue|solid|svelte|angular)-query(?:-experimental)?|react-query):(?:useQuery|useSuspenseQuery|useInfiniteQuery|useSuspenseInfiniteQuery|queryOptions)$/u;
 
@@ -119,7 +126,7 @@ function urlKey(key: SyntaxNode | undefined): string | null {
   return url !== null && /^(?:\/|https?:\/\/|\$\{)/u.test(url) && !(url.startsWith("${") && key.type === "string") ? url : null;
 }
 
-type Clients = { fetch: boolean; axios: Set<string>; ky: Set<string>; ofetch: Set<string> };
+type Clients = { fetch: boolean; axios: Set<string>; ky: Set<string>; ofetch: Set<string>; nuxt: Set<string> };
 type Request = { client?: string; receiver?: string; method: string | null; url: string | null };
 
 // `api.get(url)`, `api.request(config)` and `api(url | config)` on a binding
@@ -141,7 +148,7 @@ function instanceRequest(call: SyntaxNode, bindings: ReadonlySet<string>): Reque
 }
 
 // `const api = axios.create({ baseURL })` and `export default axios.create(…)`.
-function markInstances(root: SyntaxNode, nodes: GraphNode[], clients: Omit<Clients, "fetch">): void {
+function markInstances(root: SyntaxNode, nodes: GraphNode[], clients: Omit<Clients, "fetch" | "nuxt">): void {
   const variables = new Map(nodes.filter((node) => node.label === "Variable").map((node) => [`${node.properties.line}:${node.properties.name}`, node]));
   for (const statement of root.namedChildren) {
     if (!statement) continue;
@@ -166,7 +173,7 @@ function markInstances(root: SyntaxNode, nodes: GraphNode[], clients: Omit<Clien
   }
 }
 
-function clientInstance(value: SyntaxNode, clients: Omit<Clients, "fetch">): { client: string; baseUrl: string | null } | null {
+function clientInstance(value: SyntaxNode, clients: Omit<Clients, "fetch" | "nuxt">): { client: string; baseUrl: string | null } | null {
   if (value.type !== "call_expression") return null;
   const callee = value.childForFieldName("function");
   if (callee?.type !== "member_expression") return null;
@@ -196,6 +203,7 @@ function httpRequest(call: SyntaxNode, clients: Clients): Request | null {
     if (name === "fetch" && clients.fetch) return { client: "fetch", ...urlAndOptions(args) };
     if (clients.ky.has(name)) return { client: "ky", ...urlAndOptions(args) };
     if (clients.ofetch.has(name)) return { client: "ofetch", ...urlAndOptions(args) };
+    if (clients.nuxt.has(name)) return { client: "nuxt", ...urlAndOptions(args) };
     if (clients.axios.has(name)) {
       return args[0]?.type === "object" ? { client: "axios", ...configObject(args[0]) } : { client: "axios", ...urlAndOptions(args) };
     }

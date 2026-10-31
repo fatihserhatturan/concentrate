@@ -22,12 +22,19 @@ import type { PendingRender } from "./react.js";
 //
 // Auto-imports: a call to a name the file neither declares nor imports at its
 // top level resolves to the function exported under that name by a file of
-// `composables/` or `utils/` (top level, or `<dir>/index`); a name exported
-// twice is left alone. Component tags no import resolves render the
+// `composables/` or `utils/` (top level, or `<dir>/index`), or, in code under
+// `server/`, of `server/utils/`; a name exported twice is left alone. Component tags no import resolves render the
 // component of `components/<path>.vue`, named by its path in PascalCase
 // (`components/base/Button.vue` → `BaseButton`, without repeating a prefix
 // the file name already has: `components/base/BaseButton.vue` →
 // `BaseButton`), also with a `Lazy` prefix.
+//
+// Server routes: each file of `server/api/` (at `/api/…`) and
+// `server/routes/` (at `/…`), at the package root, is a Route (framework
+// `nuxt`) with the page path rules; a method suffix (`users.post.ts`) gives
+// its method, otherwise it is ALL. The handler is the function passed to the
+// call the file exports as default (`defineEventHandler((event) => …)`,
+// also a function named there), or the function exported as default.
 //
 // Vue global registrations, in any package: `app.component('UserCard',
 // UserCard)` (also on `nuxtApp.vueApp`) in a file that imports `vue` makes
@@ -47,18 +54,19 @@ export const nuxtAutoImportsContributor: ISemanticContributor = {
 
     const added: GraphRelationship[] = [];
     for (const project of await nuxtProjects(graph, nodesById)) {
-      const exported = new Map<string, string[]>();
+      const exported = { app: new Map<string, string[]>(), server: new Map<string, string[]>() };
       for (const { file, path: filePath } of project.files) {
-        if (!isAutoImportFile(filePath, project.srcDir)) continue;
+        const scope = autoImportScope(filePath, project.srcDir);
+        if (!scope) continue;
         for (const fn of functionsByFile.get(file.id) ?? []) {
           if (fn.properties.isExported !== true || fn.properties.className != null) continue;
           const name = String(fn.properties.name);
-          exported.set(name, [...exported.get(name) ?? [], fn.id]);
+          exported[scope].set(name, [...exported[scope].get(name) ?? [], fn.id]);
         }
       }
-      if (exported.size === 0) continue;
+      if (exported.app.size === 0 && exported.server.size === 0) continue;
 
-      const projectFiles = new Set(project.files.map(({ file }) => file.id));
+      const pathByFile = new Map(project.files.map(({ file, path: filePath }) => [file.id, filePath]));
       const topLevelNames = new Map<string, Set<string>>();
       const namesOf = (fileId: string) => {
         let names = topLevelNames.get(fileId);
@@ -75,11 +83,12 @@ export const nuxtAutoImportsContributor: ISemanticContributor = {
       for (const node of graph.nodes) {
         if (node.label !== "Call" || resolved.has(node.id) || node.properties.receiver != null) continue;
         const callee = String(node.properties.callee);
-        const targets = exported.get(callee);
-        if (targets?.length !== 1) continue;
         const caller = index.callerFunctionByCallId.get(node.id);
         const fileId = caller ? index.fileByFunctionId.get(caller) : index.callerFileByModuleCallId.get(node.id);
-        if (!fileId || !projectFiles.has(fileId) || namesOf(fileId).has(callee)) continue;
+        const filePath = fileId ? pathByFile.get(fileId) : undefined;
+        if (filePath === undefined) continue;
+        const targets = exported[filePath.startsWith("server/") ? "server" : "app"].get(callee);
+        if (targets?.length !== 1 || namesOf(fileId!).has(callee)) continue;
         added.push({ from: node.id, to: targets[0]!, type: "CALL_RESOLVES_TO", properties: {} });
       }
     }
@@ -130,6 +139,61 @@ export const nuxtPagesContributor: ISemanticContributor = {
         if (filePath.startsWith(`${project.srcDir}layouts/`)) addPage(file, "layout", null);
         else if (filePath === `${project.srcDir}app.vue`) addPage(file, "app", "/");
         else if (filePath === `${project.srcDir}error.vue`) addPage(file, "error", "/");
+      }
+    }
+    graph.addNodes(nodes);
+    graph.addRelationships(relationships);
+  },
+};
+
+const serverRouteFile = /^server\/(api|routes)\/(.+?)(?:\.(get|post|put|patch|delete|head|options))?\.(?:ts|js|mjs|mts)$/u;
+
+export const nuxtServerRoutesContributor: ISemanticContributor = {
+  async contribute(graph) {
+    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
+    const functionsByFile = groupBy(graph.relationships, "DEFINES_FUNCTION", nodesById);
+    const variablesByFile = groupBy(graph.relationships, "DEFINES_VARIABLE", nodesById);
+    const initializerByVariable = new Map<string, string>();
+    const passedToCall = new Map<string, string[]>();
+    for (const rel of graph.relationships) {
+      if (rel.type === "INITIALIZED_BY") initializerByVariable.set(rel.from, rel.to);
+      if (rel.type === "PASSED_TO") passedToCall.set(rel.to, [...passedToCall.get(rel.to) ?? [], rel.from]);
+    }
+
+    const nodes: GraphNode[] = [];
+    const relationships: GraphRelationship[] = [];
+    for (const project of await nuxtProjects(graph, nodesById)) {
+      for (const { file, path: filePath } of project.files) {
+        const match = serverRouteFile.exec(filePath);
+        if (!match || file.properties.isTest === true) continue;
+        const [, dir, route, method] = match;
+        const routePath = nuxtPath(dir === "api" ? `api/${route}` : route!);
+        const functions = (functionsByFile.get(file.id) ?? []).filter((fn) => fn.properties.className == null);
+        const exported = (variablesByFile.get(file.id) ?? []).find((variable) => variable.properties.name === "default");
+        const call = exported ? nodesById.get(initializerByVariable.get(exported.id) ?? "") : undefined;
+        const passed = call ? (passedToCall.get(call.id) ?? []).map((id) => nodesById.get(id)).find((fn) => fn?.label === "Function") : undefined;
+        const named = call ? parseArgs(call.properties.args).flatMap((arg) => functions.filter((fn) => fn.properties.name === arg))[0] : undefined;
+        const defaultName = file.properties.defaultExport;
+        const handler = passed ?? named ?? functions.find((fn) => typeof defaultName === "string" && fn.properties.name === defaultName) ?? null;
+        const line = exported ? Number(exported.properties.line) : handler ? Number(handler.properties.line) : 1;
+        const upper = (method ?? "all").toUpperCase();
+        const node: GraphNode = {
+          id: `${file.id}:route:${line}:0:${upper}:${routePath}`,
+          label: "Route",
+          properties: {
+            method: upper,
+            path: routePath,
+            fullPath: routePath,
+            pathExpression: null,
+            receiverName: null,
+            line,
+            framework: "nuxt",
+            handlerName: handler ? String(handler.properties.name) : null,
+          },
+        };
+        nodes.push(node);
+        relationships.push({ from: file.id, to: node.id, type: "DECLARES_ROUTE", properties: {} });
+        if (handler) relationships.push({ from: node.id, to: handler.id, type: "ROUTE_HANDLED_BY", properties: {} });
       }
     }
     graph.addNodes(nodes);
@@ -250,16 +314,17 @@ async function dependsOnNuxt(packagePath: string): Promise<boolean> {
   }
 }
 
-// `composables/useCart.ts`, `utils/format.ts`, `composables/cart/index.ts`.
-function isAutoImportFile(filePath: string, srcDir: string): boolean {
-  for (const dir of ["composables/", "utils/"]) {
-    if (!filePath.startsWith(`${srcDir}${dir}`)) continue;
-    const rest = filePath.slice(srcDir.length + dir.length);
-    if (!scriptExtension.test(rest)) return false;
+// `composables/useCart.ts`, `utils/format.ts`, `composables/cart/index.ts`
+// for the app; `server/utils/db.ts` (at the package root) for server code.
+function autoImportScope(filePath: string, srcDir: string): "app" | "server" | null {
+  for (const [dir, scope] of [[`${srcDir}composables/`, "app"], [`${srcDir}utils/`, "app"], ["server/utils/", "server"]] as const) {
+    if (!filePath.startsWith(dir)) continue;
+    const rest = filePath.slice(dir.length);
+    if (!scriptExtension.test(rest)) return null;
     const parts = rest.split("/");
-    return parts.length === 1 || (parts.length === 2 && /^index\./u.test(parts[1]!));
+    return parts.length === 1 || (parts.length === 2 && /^index\./u.test(parts[1]!)) ? scope : null;
   }
-  return false;
+  return null;
 }
 
 // `users/[id]` → `/users/:id`, `index` → its folder, `(group)` left out.
@@ -317,6 +382,16 @@ function groupBy(relationships: readonly GraphRelationship[], type: GraphRelatio
     if (node) grouped.set(rel.from, [...grouped.get(rel.from) ?? [], node]);
   }
   return grouped;
+}
+
+function parseArgs(value: GraphNode["properties"][string]): string[] {
+  if (typeof value !== "string") return [];
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    return Array.isArray(parsed) ? parsed.map(String) : [];
+  } catch {
+    return [];
+  }
 }
 
 function parsePendingRenders(value: GraphNode["properties"][string]): PendingRender[] {

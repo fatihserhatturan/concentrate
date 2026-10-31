@@ -21,11 +21,11 @@
           },
           {
             "table": "Directory",
-            "count": 15
+            "count": 20
           },
           {
             "table": "File",
-            "count": 23
+            "count": 29
           },
           {
             "table": "Import",
@@ -33,7 +33,7 @@
           },
           {
             "table": "Function",
-            "count": 16
+            "count": 24
           },
           {
             "table": "Class",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 4
+            "count": 9
           },
           {
             "table": "Decorator",
@@ -65,11 +65,11 @@
           },
           {
             "table": "Call",
-            "count": 18
+            "count": 30
           },
           {
             "table": "Route",
-            "count": 0
+            "count": 5
           },
           {
             "table": "EntryPoint",
@@ -115,11 +115,11 @@
         },
         {
           "table": "Directory",
-          "count": 15
+          "count": 20
         },
         {
           "table": "File",
-          "count": 23
+          "count": 29
         },
         {
           "table": "Import",
@@ -127,7 +127,7 @@
         },
         {
           "table": "Function",
-          "count": 16
+          "count": 24
         },
         {
           "table": "Class",
@@ -139,7 +139,7 @@
         },
         {
           "table": "Variable",
-          "count": 4
+          "count": 9
         },
         {
           "table": "Decorator",
@@ -159,11 +159,11 @@
         },
         {
           "table": "Call",
-          "count": 18
+          "count": 30
         },
         {
           "table": "Route",
-          "count": 0
+          "count": 5
         },
         {
           "table": "EntryPoint",
@@ -311,6 +311,14 @@
             "relationship": "DEFINES_FUNCTION"
           },
           {
+            "name": "<script setup>",
+            "kind": "Function",
+            "file": "pages/users/index.vue",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
             "name": "<defineNuxtPlugin:arg0>",
             "kind": "Function",
             "file": "plugins/components.ts",
@@ -319,17 +327,49 @@
             "relationship": "DEFINES_FUNCTION"
           },
           {
-            "name": "<script setup>",
+            "name": "<eventHandler:arg0>",
             "kind": "Function",
-            "file": "shared/GlobalBadge.vue",
-            "line": 5,
+            "file": "server/api/[...path].ts",
+            "line": 1,
             "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           },
           {
-            "name": "formatName",
+            "name": "getUser",
             "kind": "Function",
-            "file": "utils/format.ts",
+            "file": "server/api/users/[id].get.ts",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<defineEventHandler:arg0>",
+            "kind": "Function",
+            "file": "server/api/users/index.get.ts",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<defineEventHandler:arg0>",
+            "kind": "Function",
+            "file": "server/api/users/index.post.ts",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<defineEventHandler:arg0>",
+            "kind": "Function",
+            "file": "server/routes/health.ts",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "listUsers",
+            "kind": "Function",
+            "file": "server/utils/db.ts",
             "line": 1,
             "isExported": true,
             "relationship": "DEFINES_FUNCTION"
@@ -366,6 +406,46 @@
             "kind": "Variable",
             "file": "plugins/components.ts",
             "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "server/api/[...path].ts",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "server/api/users/[id].get.ts",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "server/api/users/index.get.ts",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "server/api/users/index.post.ts",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "server/routes/health.ts",
+            "line": 1,
             "isExported": true,
             "relationship": "DEFINES_VARIABLE"
           }
@@ -499,6 +579,14 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "name": "<script setup>",
+          "kind": "Function",
+          "file": "pages/users/index.vue",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "<defineNuxtPlugin:arg0>",
           "kind": "Function",
           "file": "plugins/components.ts",
@@ -507,49 +595,50 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
-          "name": "<script setup>",
+          "name": "<eventHandler:arg0>",
           "kind": "Function",
-          "file": "shared/GlobalBadge.vue",
-          "line": 5,
-          "isExported": false,
-          "relationship": "DEFINES_FUNCTION"
-        },
-        {
-          "name": "formatName",
-          "kind": "Function",
-          "file": "utils/format.ts",
+          "file": "server/api/[...path].ts",
           "line": 1,
-          "isExported": true,
+          "isExported": false,
           "relationship": "DEFINES_FUNCTION"
         },
         {
-          "name": "title",
-          "kind": "Variable",
-          "file": "pages/blog/[...slug].vue",
-          "line": 10,
+          "name": "getUser",
+          "kind": "Function",
+          "file": "server/api/users/[id].get.ts",
+          "line": 1,
           "isExported": false,
-          "relationship": "DEFINES_VARIABLE"
+          "relationship": "DEFINES_FUNCTION"
         },
         {
-          "name": "route",
-          "kind": "Variable",
-          "file": "pages/users/[id].vue",
-          "line": 6,
+          "name": "<defineEventHandler:arg0>",
+          "kind": "Function",
+          "file": "server/api/users/index.get.ts",
+          "line": 1,
           "isExported": false,
-          "relationship": "DEFINES_VARIABLE"
+          "relationship": "DEFINES_FUNCTION"
         },
         {
-          "name": "default",
-          "kind": "Variable",
-          "file": "plugins/components.ts",
-          "line": 3,
-          "isExported": true,
-          "relationship": "DEFINES_VARIABLE"
+          "name": "<defineEventHandler:arg0>",
+          "kind": "Function",
+          "file": "server/api/users/index.post.ts",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<defineEventHandler:arg0>",
+          "kind": "Function",
+          "file": "server/routes/health.ts",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 19
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
       }
     }
   },
@@ -583,6 +672,13 @@
             "relationship": "DEFINES_FUNCTION"
           },
           {
+            "file": "server/utils/db.ts",
+            "name": "listUsers",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
             "file": "utils/format.ts",
             "name": "formatName",
             "kind": "Function",
@@ -605,6 +701,41 @@
             "name": "default",
             "kind": "Variable",
             "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "server/api/[...path].ts",
+            "name": "default",
+            "kind": "Variable",
+            "line": 1,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "server/api/users/[id].get.ts",
+            "name": "default",
+            "kind": "Variable",
+            "line": 5,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "server/api/users/index.get.ts",
+            "name": "default",
+            "kind": "Variable",
+            "line": 1,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "server/api/users/index.post.ts",
+            "name": "default",
+            "kind": "Variable",
+            "line": 1,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "server/routes/health.ts",
+            "name": "default",
+            "kind": "Variable",
+            "line": 1,
             "relationship": "DEFINES_VARIABLE"
           }
         ]
@@ -672,6 +803,13 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "file": "server/utils/db.ts",
+          "name": "listUsers",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "file": "utils/format.ts",
           "name": "formatName",
           "kind": "Function",
@@ -684,11 +822,46 @@
           "kind": "Variable",
           "line": 3,
           "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "server/api/[...path].ts",
+          "name": "default",
+          "kind": "Variable",
+          "line": 1,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "server/api/users/[id].get.ts",
+          "name": "default",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "server/api/users/index.get.ts",
+          "name": "default",
+          "kind": "Variable",
+          "line": 1,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "server/api/users/index.post.ts",
+          "name": "default",
+          "kind": "Variable",
+          "line": 1,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "server/routes/health.ts",
+          "name": "default",
+          "kind": "Variable",
+          "line": 1,
+          "relationship": "DEFINES_VARIABLE"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 5
+        "returned": 11
       }
     }
   },
@@ -699,17 +872,119 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
-        "rows": []
+        "rows": [
+          {
+            "file": "server/api/[...path].ts",
+            "line": 1,
+            "method": "ALL",
+            "path": "/api/:path(.*)*",
+            "fullPath": "/api/:path(.*)*",
+            "framework": "nuxt",
+            "handlerName": "<eventHandler:arg0>",
+            "handler": "<eventHandler:arg0>"
+          },
+          {
+            "file": "server/api/users/[id].get.ts",
+            "line": 5,
+            "method": "GET",
+            "path": "/api/users/:id",
+            "fullPath": "/api/users/:id",
+            "framework": "nuxt",
+            "handlerName": "getUser",
+            "handler": "getUser"
+          },
+          {
+            "file": "server/api/users/index.get.ts",
+            "line": 1,
+            "method": "GET",
+            "path": "/api/users",
+            "fullPath": "/api/users",
+            "framework": "nuxt",
+            "handlerName": "<defineEventHandler:arg0>",
+            "handler": "<defineEventHandler:arg0>"
+          },
+          {
+            "file": "server/api/users/index.post.ts",
+            "line": 1,
+            "method": "POST",
+            "path": "/api/users",
+            "fullPath": "/api/users",
+            "framework": "nuxt",
+            "handlerName": "<defineEventHandler:arg0>",
+            "handler": "<defineEventHandler:arg0>"
+          },
+          {
+            "file": "server/routes/health.ts",
+            "line": 1,
+            "method": "ALL",
+            "path": "/health",
+            "fullPath": "/health",
+            "framework": "nuxt",
+            "handlerName": "<defineEventHandler:arg0>",
+            "handler": "<defineEventHandler:arg0>"
+          }
+        ]
       }
     ],
     "output": {
       "query": {
         "limit": 50
       },
-      "routes": [],
+      "routes": [
+        {
+          "file": "server/api/[...path].ts",
+          "line": 1,
+          "method": "ALL",
+          "path": "/api/:path(.*)*",
+          "fullPath": "/api/:path(.*)*",
+          "framework": "nuxt",
+          "handlerName": "<eventHandler:arg0>",
+          "handler": "<eventHandler:arg0>"
+        },
+        {
+          "file": "server/api/users/[id].get.ts",
+          "line": 5,
+          "method": "GET",
+          "path": "/api/users/:id",
+          "fullPath": "/api/users/:id",
+          "framework": "nuxt",
+          "handlerName": "getUser",
+          "handler": "getUser"
+        },
+        {
+          "file": "server/api/users/index.get.ts",
+          "line": 1,
+          "method": "GET",
+          "path": "/api/users",
+          "fullPath": "/api/users",
+          "framework": "nuxt",
+          "handlerName": "<defineEventHandler:arg0>",
+          "handler": "<defineEventHandler:arg0>"
+        },
+        {
+          "file": "server/api/users/index.post.ts",
+          "line": 1,
+          "method": "POST",
+          "path": "/api/users",
+          "fullPath": "/api/users",
+          "framework": "nuxt",
+          "handlerName": "<defineEventHandler:arg0>",
+          "handler": "<defineEventHandler:arg0>"
+        },
+        {
+          "file": "server/routes/health.ts",
+          "line": 1,
+          "method": "ALL",
+          "path": "/health",
+          "fullPath": "/health",
+          "framework": "nuxt",
+          "handlerName": "<defineEventHandler:arg0>",
+          "handler": "<defineEventHandler:arg0>"
+        }
+      ],
       "page": {
         "offset": 0,
-        "returned": 0
+        "returned": 5
       }
     }
   },
@@ -1343,25 +1618,25 @@
             "framework": "vue",
             "file": "pages/users/[id].vue",
             "line": 1,
-            "endLine": 8,
+            "endLine": 10,
             "isExported": true,
             "tagName": null,
             "props": null,
-            "hooks": "useRoute,useUser",
+            "hooks": "useAsyncData,useLazyFetch,useRoute,useUser",
             "pendingRenders": null
           },
           {
             "id": "file:pages/users/index.vue:component:1:Index",
             "name": "Index",
-            "kind": "template",
+            "kind": "script-setup",
             "framework": "vue",
             "file": "pages/users/index.vue",
             "line": 1,
-            "endLine": 3,
+            "endLine": 10,
             "isExported": true,
             "tagName": null,
             "props": null,
-            "hooks": null,
+            "hooks": "useFetch",
             "pendingRenders": null
           },
           {
@@ -1464,6 +1739,10 @@
           {
             "component": "file:pages/users/[id].vue:component:1:[id]",
             "fn": "file:pages/users/[id].vue:function:5:<script setup>"
+          },
+          {
+            "component": "file:pages/users/index.vue:component:1:Index",
+            "fn": "file:pages/users/index.vue:function:5:<script setup>"
           },
           {
             "component": "file:shared/GlobalBadge.vue:component:1:GlobalBadge",
@@ -1584,7 +1863,23 @@
             "className": null,
             "file": "pages/users/[id].vue",
             "line": 5,
-            "endLine": 8
+            "endLine": 10
+          },
+          {
+            "id": "file:pages/users/index.vue:function:7:add",
+            "name": "add",
+            "className": null,
+            "file": "pages/users/index.vue",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:pages/users/index.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/users/index.vue",
+            "line": 5,
+            "endLine": 10
           },
           {
             "id": "file:plugins/components.ts:function:3:<defineNuxtPlugin:arg0>",
@@ -1593,6 +1888,54 @@
             "file": "plugins/components.ts",
             "line": 3,
             "endLine": 5
+          },
+          {
+            "id": "file:server/api/[...path].ts:function:1:<eventHandler:arg0>",
+            "name": "<eventHandler:arg0>",
+            "className": null,
+            "file": "server/api/[...path].ts",
+            "line": 1,
+            "endLine": 1
+          },
+          {
+            "id": "file:server/api/users/[id].get.ts:function:1:getUser",
+            "name": "getUser",
+            "className": null,
+            "file": "server/api/users/[id].get.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:server/api/users/index.get.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/api/users/index.get.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:server/api/users/index.post.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/api/users/index.post.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:server/routes/health.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/routes/health.ts",
+            "line": 1,
+            "endLine": 1
+          },
+          {
+            "id": "file:server/utils/db.ts:function:1:listUsers",
+            "name": "listUsers",
+            "className": null,
+            "file": "server/utils/db.ts",
+            "line": 1,
+            "endLine": 3
           },
           {
             "id": "file:shared/GlobalBadge.vue:function:5:<script setup>",
@@ -1968,25 +2311,25 @@
             "framework": "vue",
             "file": "pages/users/[id].vue",
             "line": 1,
-            "endLine": 8,
+            "endLine": 10,
             "isExported": true,
             "tagName": null,
             "props": null,
-            "hooks": "useRoute,useUser",
+            "hooks": "useAsyncData,useLazyFetch,useRoute,useUser",
             "pendingRenders": null
           },
           {
             "id": "file:pages/users/index.vue:component:1:Index",
             "name": "Index",
-            "kind": "template",
+            "kind": "script-setup",
             "framework": "vue",
             "file": "pages/users/index.vue",
             "line": 1,
-            "endLine": 3,
+            "endLine": 10,
             "isExported": true,
             "tagName": null,
             "props": null,
-            "hooks": null,
+            "hooks": "useFetch",
             "pendingRenders": null
           },
           {
@@ -2206,7 +2549,23 @@
             "className": null,
             "file": "pages/users/[id].vue",
             "line": 5,
-            "endLine": 8
+            "endLine": 10
+          },
+          {
+            "id": "file:pages/users/index.vue:function:7:add",
+            "name": "add",
+            "className": null,
+            "file": "pages/users/index.vue",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:pages/users/index.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/users/index.vue",
+            "line": 5,
+            "endLine": 10
           },
           {
             "id": "file:plugins/components.ts:function:3:<defineNuxtPlugin:arg0>",
@@ -2215,6 +2574,54 @@
             "file": "plugins/components.ts",
             "line": 3,
             "endLine": 5
+          },
+          {
+            "id": "file:server/api/[...path].ts:function:1:<eventHandler:arg0>",
+            "name": "<eventHandler:arg0>",
+            "className": null,
+            "file": "server/api/[...path].ts",
+            "line": 1,
+            "endLine": 1
+          },
+          {
+            "id": "file:server/api/users/[id].get.ts:function:1:getUser",
+            "name": "getUser",
+            "className": null,
+            "file": "server/api/users/[id].get.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:server/api/users/index.get.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/api/users/index.get.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:server/api/users/index.post.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/api/users/index.post.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:server/routes/health.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/routes/health.ts",
+            "line": 1,
+            "endLine": 1
+          },
+          {
+            "id": "file:server/utils/db.ts:function:1:listUsers",
+            "name": "listUsers",
+            "className": null,
+            "file": "server/utils/db.ts",
+            "line": 1,
+            "endLine": 3
           },
           {
             "id": "file:shared/GlobalBadge.vue:function:5:<script setup>",
@@ -2273,6 +2680,11 @@
             "caller": "file:pages/users/[id].vue:function:5:<script setup>",
             "callee": "file:composables/useUser.ts:function:1:useUser",
             "line": 7
+          },
+          {
+            "caller": "file:server/api/users/index.get.ts:function:1:<defineEventHandler:arg0>",
+            "callee": "file:server/utils/db.ts:function:1:listUsers",
+            "line": 2
           }
         ]
       },
@@ -2611,25 +3023,25 @@
             "framework": "vue",
             "file": "pages/users/[id].vue",
             "line": 1,
-            "endLine": 8,
+            "endLine": 10,
             "isExported": true,
             "tagName": null,
             "props": null,
-            "hooks": "useRoute,useUser",
+            "hooks": "useAsyncData,useLazyFetch,useRoute,useUser",
             "pendingRenders": null
           },
           {
             "id": "file:pages/users/index.vue:component:1:Index",
             "name": "Index",
-            "kind": "template",
+            "kind": "script-setup",
             "framework": "vue",
             "file": "pages/users/index.vue",
             "line": 1,
-            "endLine": 3,
+            "endLine": 10,
             "isExported": true,
             "tagName": null,
             "props": null,
-            "hooks": null,
+            "hooks": "useFetch",
             "pendingRenders": null
           },
           {
@@ -2896,6 +3308,1248 @@
       "page": {
         "offset": 0,
         "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "GET",
+      "path": "/api/users/:id"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "GET",
+          "path": "/api/users/:id"
+        },
+        "rows": [
+          {
+            "id": "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id",
+            "method": "GET",
+            "path": "/api/users/:id",
+            "fullPath": "/api/users/:id",
+            "framework": "nuxt",
+            "handlerName": "getUser",
+            "file": "server/api/users/[id].get.ts",
+            "line": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE page.fullPath = $path OR page.path = $path OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component) RETURN id(page) AS id, page.path AS path, page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, id(component) AS component, component.name AS componentName ORDER BY file, line LIMIT 5",
+        "params": {
+          "path": "/api/users/:id"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:components/UserCard.client.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "components/UserCard.client.vue",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:components/base/BaseInput.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "components/base/BaseInput.vue",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:composables/cart/index.ts:function:1:useCartTotal",
+            "name": "useCartTotal",
+            "className": null,
+            "file": "composables/cart/index.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:composables/useCart.ts:function:1:useCart",
+            "name": "useCart",
+            "className": null,
+            "file": "composables/useCart.ts",
+            "line": 1,
+            "endLine": 5
+          },
+          {
+            "id": "file:composables/useUser.ts:function:1:useUser",
+            "name": "useUser",
+            "className": null,
+            "file": "composables/useUser.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:error.vue:function:8:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "error.vue",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:layouts/default.vue:function:9:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "layouts/default.vue",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:pages/(marketing)/about.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/(marketing)/about.vue",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:pages/blog/[...slug].vue:function:7:formatName",
+            "name": "formatName",
+            "className": null,
+            "file": "pages/blog/[...slug].vue",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:pages/blog/[...slug].vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/blog/[...slug].vue",
+            "line": 5,
+            "endLine": 11
+          },
+          {
+            "id": "file:pages/index.vue:function:11:checkout",
+            "name": "checkout",
+            "className": null,
+            "file": "pages/index.vue",
+            "line": 11,
+            "endLine": 11
+          },
+          {
+            "id": "file:pages/index.vue:function:9:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/index.vue",
+            "line": 9,
+            "endLine": 12
+          },
+          {
+            "id": "file:pages/users/[id].vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/users/[id].vue",
+            "line": 5,
+            "endLine": 10
+          },
+          {
+            "id": "file:pages/users/index.vue:function:7:add",
+            "name": "add",
+            "className": null,
+            "file": "pages/users/index.vue",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:pages/users/index.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/users/index.vue",
+            "line": 5,
+            "endLine": 10
+          },
+          {
+            "id": "file:plugins/components.ts:function:3:<defineNuxtPlugin:arg0>",
+            "name": "<defineNuxtPlugin:arg0>",
+            "className": null,
+            "file": "plugins/components.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:server/api/[...path].ts:function:1:<eventHandler:arg0>",
+            "name": "<eventHandler:arg0>",
+            "className": null,
+            "file": "server/api/[...path].ts",
+            "line": 1,
+            "endLine": 1
+          },
+          {
+            "id": "file:server/api/users/[id].get.ts:function:1:getUser",
+            "name": "getUser",
+            "className": null,
+            "file": "server/api/users/[id].get.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:server/api/users/index.get.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/api/users/index.get.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:server/api/users/index.post.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/api/users/index.post.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:server/routes/health.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/routes/health.ts",
+            "line": 1,
+            "endLine": 1
+          },
+          {
+            "id": "file:server/utils/db.ts:function:1:listUsers",
+            "name": "listUsers",
+            "className": null,
+            "file": "server/utils/db.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:shared/GlobalBadge.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "shared/GlobalBadge.vue",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:utils/format.ts:function:1:formatName",
+            "name": "formatName",
+            "className": null,
+            "file": "utils/format.ts",
+            "line": 1,
+            "endLine": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:composables/cart/index.ts:function:1:useCartTotal",
+            "callee": "file:composables/useCart.ts:function:1:useCart",
+            "line": 2
+          },
+          {
+            "caller": "file:composables/useUser.ts:function:1:useUser",
+            "callee": "file:utils/format.ts:function:1:formatName",
+            "line": 2
+          },
+          {
+            "caller": "file:layouts/default.vue:function:9:<script setup>",
+            "callee": "file:composables/useCart.ts:function:1:useCart",
+            "line": 10
+          },
+          {
+            "caller": "file:pages/blog/[...slug].vue:function:5:<script setup>",
+            "callee": "file:pages/blog/[...slug].vue:function:7:formatName",
+            "line": 10
+          },
+          {
+            "caller": "file:pages/index.vue:function:9:<script setup>",
+            "callee": "file:composables/cart/index.ts:function:1:useCartTotal",
+            "line": 10
+          },
+          {
+            "caller": "file:pages/users/[id].vue:function:5:<script setup>",
+            "callee": "file:composables/useUser.ts:function:1:useUser",
+            "line": 7
+          },
+          {
+            "caller": "file:server/api/users/index.get.ts:function:1:<defineEventHandler:arg0>",
+            "callee": "file:server/utils/db.ts:function:1:listUsers",
+            "line": 2
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id",
+            "fn": "file:server/api/users/[id].get.ts:function:1:getUser"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE id(route) IN $ids RETURN id(route) AS route, id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:USES_ENV_ROUTE]->(env:EnvVar) WHERE id(route) IN $ids RETURN id(route) AS route, env.name AS name, rel.access AS access, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:CONSUMES_CONFIG_ROUTE]->(config:ConfigValue) WHERE id(route) IN $ids RETURN id(route) AS route, config.name AS name, rel.localName AS localName",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:function:1:getUser"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:function:1:getUser"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:function:1:getUser"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:function:1:getUser"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/api/users/[id].get.ts:route:5:0:GET:/api/users/:id",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/users/:id",
+            "routeFramework": "nuxt",
+            "routeFile": "server/api/users/[id].get.ts",
+            "routeLine": 5,
+            "call": "file:pages/users/[id].vue:function:5:<script setup>:call:8:56:$fetch",
+            "line": 8,
+            "expression": "$fetch",
+            "client": "ofetch",
+            "method": "GET",
+            "url": "/api/users/${route.params.id}",
+            "match": "parameter",
+            "fn": "file:pages/users/[id].vue:function:5:<script setup>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:pages/users/[id].vue:function:5:<script setup>"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:pages/users/[id].vue:component:1:[id]",
+            "fn": "file:pages/users/[id].vue:function:5:<script setup>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:pages/users/[id].vue:function:5:<script setup>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:app.vue:component:1:App",
+            "name": "App",
+            "kind": "template",
+            "framework": "vue",
+            "file": "app.vue",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"NuxtLayout\",\"props\":[],\"line\":2},{\"name\":\"NuxtPage\",\"props\":[],\"line\":3}]"
+          },
+          {
+            "id": "file:components/AppHeader.vue:component:1:AppHeader",
+            "name": "AppHeader",
+            "kind": "template",
+            "framework": "vue",
+            "file": "components/AppHeader.vue",
+            "line": 1,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"NuxtLink\",\"props\":[\"to\"],\"line\":3}]"
+          },
+          {
+            "id": "file:components/UserCard.client.vue:component:1:UserCardClient",
+            "name": "UserCardClient",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "components/UserCard.client.vue",
+            "line": 1,
+            "endLine": 7,
+            "isExported": true,
+            "tagName": null,
+            "props": "name",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:components/base/BaseInput.vue:component:1:BaseInput",
+            "name": "BaseInput",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "components/base/BaseInput.vue",
+            "line": 1,
+            "endLine": 7,
+            "isExported": true,
+            "tagName": null,
+            "props": "modelValue",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:components/base/Button.vue:component:1:Button",
+            "name": "Button",
+            "kind": "template",
+            "framework": "vue",
+            "file": "components/base/Button.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:components/forms/index.vue:component:1:Index",
+            "name": "Index",
+            "kind": "template",
+            "framework": "vue",
+            "file": "components/forms/index.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:error.vue:component:1:Error",
+            "name": "Error",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "error.vue",
+            "line": 1,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "props": "error",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:layouts/auth.vue:component:1:Auth",
+            "name": "Auth",
+            "kind": "template",
+            "framework": "vue",
+            "file": "layouts/auth.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:layouts/default.vue:component:1:Default",
+            "name": "Default",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "layouts/default.vue",
+            "line": 1,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useCart",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:pages/(marketing)/about.vue:component:1:About",
+            "name": "About",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "pages/(marketing)/about.vue",
+            "line": 1,
+            "endLine": 7,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:pages/blog/[...slug].vue:component:1:[Slug]",
+            "name": "[Slug]",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "pages/blog/[...slug].vue",
+            "line": 1,
+            "endLine": 11,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:pages/index.vue:component:1:Index",
+            "name": "Index",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "pages/index.vue",
+            "line": 1,
+            "endLine": 12,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useCartTotal",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:pages/settings/[[tab]].vue:component:1:[[tab]]",
+            "name": "[[tab]]",
+            "kind": "template",
+            "framework": "vue",
+            "file": "pages/settings/[[tab]].vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:pages/user-[id]-profile.vue:component:1:User[id]Profile",
+            "name": "User[id]Profile",
+            "kind": "template",
+            "framework": "vue",
+            "file": "pages/user-[id]-profile.vue",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:pages/users.vue:component:1:Users",
+            "name": "Users",
+            "kind": "template",
+            "framework": "vue",
+            "file": "pages/users.vue",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"NuxtPage\",\"props\":[],\"line\":3}]"
+          },
+          {
+            "id": "file:pages/users/[id].vue:component:1:[id]",
+            "name": "[id]",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "pages/users/[id].vue",
+            "line": 1,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useAsyncData,useLazyFetch,useRoute,useUser",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:pages/users/index.vue:component:1:Index",
+            "name": "Index",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "pages/users/index.vue",
+            "line": 1,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useFetch",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:shared/GlobalBadge.vue:component:1:GlobalBadge",
+            "name": "GlobalBadge",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "shared/GlobalBadge.vue",
+            "line": 1,
+            "endLine": 7,
+            "isExported": true,
+            "tagName": null,
+            "props": "count",
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:components/AppHeader.vue:component:1:AppHeader",
+            "child": "file:components/forms/index.vue:component:1:Index",
+            "line": 4,
+            "props": ""
+          },
+          {
+            "parent": "file:components/forms/index.vue:component:1:Index",
+            "child": "file:components/base/BaseInput.vue:component:1:BaseInput",
+            "line": 2,
+            "props": "model-value"
+          },
+          {
+            "parent": "file:error.vue:component:1:Error",
+            "child": "file:components/base/Button.vue:component:1:Button",
+            "line": 4,
+            "props": ""
+          },
+          {
+            "parent": "file:layouts/default.vue:component:1:Default",
+            "child": "file:components/AppHeader.vue:component:1:AppHeader",
+            "line": 3,
+            "props": ""
+          },
+          {
+            "parent": "file:layouts/default.vue:component:1:Default",
+            "child": "file:shared/GlobalBadge.vue:component:1:GlobalBadge",
+            "line": 5,
+            "props": "count"
+          },
+          {
+            "parent": "file:pages/index.vue:component:1:Index",
+            "child": "file:components/base/Button.vue:component:1:Button",
+            "line": 5,
+            "props": ""
+          },
+          {
+            "parent": "file:pages/users/[id].vue:component:1:[id]",
+            "child": "file:components/UserCard.client.vue:component:1:UserCardClient",
+            "line": 2,
+            "props": "name"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:pages/users/[id].vue:component:1:[id]"
+          ]
+        },
+        "rows": [
+          {
+            "fullPath": "/users/:id",
+            "framework": "nuxt",
+            "router": "file",
+            "kind": "page",
+            "file": "pages/users/[id].vue",
+            "line": null,
+            "component": "file:pages/users/[id].vue:component:1:[id]"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "method": "GET",
+      "path": "/api/users/:id",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/users/:id",
+          "fullPath": "/api/users/:id",
+          "framework": "nuxt",
+          "handlerName": "getUser",
+          "file": "server/api/users/[id].get.ts",
+          "line": 5,
+          "handlers": [
+            {
+              "name": "getUser",
+              "className": null,
+              "file": "server/api/users/[id].get.ts",
+              "line": 1,
+              "endLine": 3
+            }
+          ],
+          "lifecycle": [],
+          "callChain": [],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": [],
+          "consumers": [
+            {
+              "client": "ofetch",
+              "method": "GET",
+              "url": "/api/users/${route.params.id}",
+              "match": "parameter",
+              "file": "pages/users/[id].vue",
+              "line": 8,
+              "expression": "$fetch",
+              "function": "<script setup>"
+            }
+          ],
+          "consumerComponents": [
+            {
+              "name": "[id]",
+              "kind": "script-setup",
+              "file": "pages/users/[id].vue",
+              "line": 1,
+              "depth": 0,
+              "changedThrough": [
+                "<script setup>"
+              ]
+            }
+          ],
+          "consumerPages": [
+            {
+              "fullPath": "/users/:id",
+              "framework": "nuxt",
+              "router": "file",
+              "kind": "page",
+              "file": "pages/users/[id].vue",
+              "line": null,
+              "renders": "[id]",
+              "depth": 0
+            }
+          ]
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "find_callers",
+    "args": {
+      "name": "listUsers"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"listUsers\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "listUsers",
+            "caller": "<defineEventHandler:arg0>",
+            "callerKind": "Function",
+            "file": "server/api/users/index.get.ts",
+            "line": 2,
+            "expression": "listUsers",
+            "relationship": "CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"listUsers\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"listUsers\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "listUsers",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [
+        {
+          "target": "listUsers",
+          "caller": "<defineEventHandler:arg0>",
+          "callerKind": "Function",
+          "file": "server/api/users/index.get.ts",
+          "line": 2,
+          "expression": "listUsers",
+          "relationship": "CALLS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "method": "POST",
+      "path": "/api/users"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:components/UserCard.client.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "components/UserCard.client.vue",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:components/base/BaseInput.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "components/base/BaseInput.vue",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:composables/cart/index.ts:function:1:useCartTotal",
+            "name": "useCartTotal",
+            "className": null,
+            "file": "composables/cart/index.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:composables/useCart.ts:function:1:useCart",
+            "name": "useCart",
+            "className": null,
+            "file": "composables/useCart.ts",
+            "line": 1,
+            "endLine": 5
+          },
+          {
+            "id": "file:composables/useUser.ts:function:1:useUser",
+            "name": "useUser",
+            "className": null,
+            "file": "composables/useUser.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:error.vue:function:8:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "error.vue",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:layouts/default.vue:function:9:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "layouts/default.vue",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:pages/(marketing)/about.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/(marketing)/about.vue",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:pages/blog/[...slug].vue:function:7:formatName",
+            "name": "formatName",
+            "className": null,
+            "file": "pages/blog/[...slug].vue",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:pages/blog/[...slug].vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/blog/[...slug].vue",
+            "line": 5,
+            "endLine": 11
+          },
+          {
+            "id": "file:pages/index.vue:function:11:checkout",
+            "name": "checkout",
+            "className": null,
+            "file": "pages/index.vue",
+            "line": 11,
+            "endLine": 11
+          },
+          {
+            "id": "file:pages/index.vue:function:9:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/index.vue",
+            "line": 9,
+            "endLine": 12
+          },
+          {
+            "id": "file:pages/users/[id].vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/users/[id].vue",
+            "line": 5,
+            "endLine": 10
+          },
+          {
+            "id": "file:pages/users/index.vue:function:7:add",
+            "name": "add",
+            "className": null,
+            "file": "pages/users/index.vue",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:pages/users/index.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "pages/users/index.vue",
+            "line": 5,
+            "endLine": 10
+          },
+          {
+            "id": "file:plugins/components.ts:function:3:<defineNuxtPlugin:arg0>",
+            "name": "<defineNuxtPlugin:arg0>",
+            "className": null,
+            "file": "plugins/components.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:server/api/[...path].ts:function:1:<eventHandler:arg0>",
+            "name": "<eventHandler:arg0>",
+            "className": null,
+            "file": "server/api/[...path].ts",
+            "line": 1,
+            "endLine": 1
+          },
+          {
+            "id": "file:server/api/users/[id].get.ts:function:1:getUser",
+            "name": "getUser",
+            "className": null,
+            "file": "server/api/users/[id].get.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:server/api/users/index.get.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/api/users/index.get.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:server/api/users/index.post.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/api/users/index.post.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:server/routes/health.ts:function:1:<defineEventHandler:arg0>",
+            "name": "<defineEventHandler:arg0>",
+            "className": null,
+            "file": "server/routes/health.ts",
+            "line": 1,
+            "endLine": 1
+          },
+          {
+            "id": "file:server/utils/db.ts:function:1:listUsers",
+            "name": "listUsers",
+            "className": null,
+            "file": "server/utils/db.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:shared/GlobalBadge.vue:function:5:<script setup>",
+            "name": "<script setup>",
+            "className": null,
+            "file": "shared/GlobalBadge.vue",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:utils/format.ts:function:1:formatName",
+            "name": "formatName",
+            "className": null,
+            "file": "utils/format.ts",
+            "line": 1,
+            "endLine": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:composables/cart/index.ts:function:1:useCartTotal",
+            "callee": "file:composables/useCart.ts:function:1:useCart",
+            "line": 2
+          },
+          {
+            "caller": "file:composables/useUser.ts:function:1:useUser",
+            "callee": "file:utils/format.ts:function:1:formatName",
+            "line": 2
+          },
+          {
+            "caller": "file:layouts/default.vue:function:9:<script setup>",
+            "callee": "file:composables/useCart.ts:function:1:useCart",
+            "line": 10
+          },
+          {
+            "caller": "file:pages/blog/[...slug].vue:function:5:<script setup>",
+            "callee": "file:pages/blog/[...slug].vue:function:7:formatName",
+            "line": 10
+          },
+          {
+            "caller": "file:pages/index.vue:function:9:<script setup>",
+            "callee": "file:composables/cart/index.ts:function:1:useCartTotal",
+            "line": 10
+          },
+          {
+            "caller": "file:pages/users/[id].vue:function:5:<script setup>",
+            "callee": "file:composables/useUser.ts:function:1:useUser",
+            "line": 7
+          },
+          {
+            "caller": "file:server/api/users/index.get.ts:function:1:<defineEventHandler:arg0>",
+            "callee": "file:server/utils/db.ts:function:1:listUsers",
+            "line": 2
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id",
+        "params": {
+          "method": "POST",
+          "path": "/api/users",
+          "routeFile": "",
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:server/api/users/index.post.ts:route:1:0:POST:/api/users"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/api/users/index.post.ts:route:1:0:POST:/api/users"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/api/users/index.post.ts:route:1:0:POST:/api/users",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/users",
+            "routeFramework": "nuxt",
+            "routeFile": "server/api/users/index.post.ts",
+            "routeLine": 1,
+            "call": "file:pages/users/index.vue:function:7:add:call:8:8:$fetch",
+            "line": 8,
+            "expression": "$fetch",
+            "client": "ofetch",
+            "method": "POST",
+            "url": "/api/users",
+            "match": "exact",
+            "fn": "file:pages/users/index.vue:function:7:add"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:pages/users/index.vue:function:7:add"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:pages/users/index.vue:function:7:add"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": "POST",
+        "path": "/api/users",
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "POST",
+            "fullPath": "/api/users",
+            "framework": "nuxt",
+            "file": "server/api/users/index.post.ts",
+            "line": 1
+          },
+          "client": "ofetch",
+          "method": "POST",
+          "url": "/api/users",
+          "match": "exact",
+          "file": "pages/users/index.vue",
+          "line": 8,
+          "expression": "$fetch",
+          "function": "add"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
       }
     }
   }

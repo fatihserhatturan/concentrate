@@ -702,8 +702,8 @@ Builds on the SFC splitter (Phase 10), the component schema (Phase 11), the page
 ### Nuxt
 
 - [x] `pages/` and `layouts/` become `Page` nodes; auto-imported components and composables resolve
-- [ ] `server/api` and `server/routes` become `Route` nodes
-- [ ] `useFetch`, `useAsyncData` and `$fetch` become `REQUESTS`
+- [x] `server/api` and `server/routes` become `Route` nodes
+- [x] `useFetch`, `useAsyncData` and `$fetch` become `REQUESTS`
 
 ### Stores
 
