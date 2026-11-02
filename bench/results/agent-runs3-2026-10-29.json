@@ -12,7 +12,29 @@
       "medianToolCalls": 2,
       "medianTurns": 3,
       "medianDurationMs": 15044,
-      "medianCostUsd": 0.0541
+      "medianCostUsd": 0.0541,
+      "spread": {
+        "inputTokens": {
+          "min": 63168,
+          "max": 171825
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 6
+        },
+        "durationMs": {
+          "min": 5795,
+          "max": 67683
+        },
+        "costUsd": {
+          "min": 0.0438,
+          "max": 0.1393
+        }
+      },
+      "totalCostUsd": 2.3028,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
     },
     "concentrate": {
       "runs": 39,
@@ -22,7 +44,36 @@
       "medianToolCalls": 2,
       "medianTurns": 3,
       "medianDurationMs": 14110,
-      "medianCostUsd": 0.0558
+      "medianCostUsd": 0.0558,
+      "spread": {
+        "inputTokens": {
+          "min": 64614,
+          "max": 132826
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 5
+        },
+        "durationMs": {
+          "min": 6247,
+          "max": 24065
+        },
+        "costUsd": {
+          "min": 0.0475,
+          "max": 0.0638
+        }
+      },
+      "totalCostUsd": 2.1469,
+      "mcpRuns": 21,
+      "mcpTools": {
+        "list_env_config": 6,
+        "find_callers": 3,
+        "find_import_cycles": 3,
+        "impact_of": 3,
+        "list_routes": 3,
+        "route_details": 3
+      },
+      "toolSearchCalls": 22
     }
   },
   "results": [
@@ -40,7 +91,29 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 10399,
-            "medianCostUsd": 0.0491
+            "medianCostUsd": 0.0491,
+            "spread": {
+              "inputTokens": {
+                "min": 95289,
+                "max": 95314
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 8393,
+                "max": 36211
+              },
+              "costUsd": {
+                "min": 0.0485,
+                "max": 0.1393
+              }
+            },
+            "totalCostUsd": 0.2369,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -105,7 +178,31 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 12062,
-            "medianCostUsd": 0.05
+            "medianCostUsd": 0.05,
+            "spread": {
+              "inputTokens": {
+                "min": 97227,
+                "max": 97962
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 11395,
+                "max": 14626
+              },
+              "costUsd": {
+                "min": 0.0498,
+                "max": 0.0526
+              }
+            },
+            "totalCostUsd": 0.1524,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "find_callers": 3
+            },
+            "toolSearchCalls": 3
           },
           "runs": [
             {
@@ -181,7 +278,29 @@
             "medianToolCalls": 4,
             "medianTurns": 5,
             "medianDurationMs": 17757,
-            "medianCostUsd": 0.0697
+            "medianCostUsd": 0.0697,
+            "spread": {
+              "inputTokens": {
+                "min": 131169,
+                "max": 168910
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 13846,
+                "max": 19539
+              },
+              "costUsd": {
+                "min": 0.067,
+                "max": 0.0792
+              }
+            },
+            "totalCostUsd": 0.2159,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -250,7 +369,31 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 16763,
-            "medianCostUsd": 0.0606
+            "medianCostUsd": 0.0606,
+            "spread": {
+              "inputTokens": {
+                "min": 99660,
+                "max": 100228
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 7356,
+                "max": 19027
+              },
+              "costUsd": {
+                "min": 0.0596,
+                "max": 0.0611
+              }
+            },
+            "totalCostUsd": 0.1813,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "impact_of": 3
+            },
+            "toolSearchCalls": 3
           },
           "runs": [
             {
@@ -325,7 +468,29 @@
             "medianToolCalls": 6,
             "medianTurns": 7,
             "medianDurationMs": 22369,
-            "medianCostUsd": 0.0777
+            "medianCostUsd": 0.0777,
+            "spread": {
+              "inputTokens": {
+                "min": 161752,
+                "max": 171825
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 16403,
+                "max": 67683
+              },
+              "costUsd": {
+                "min": 0.0692,
+                "max": 0.0868
+              }
+            },
+            "totalCostUsd": 0.2337,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -393,7 +558,31 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 14211,
-            "medianCostUsd": 0.0568
+            "medianCostUsd": 0.0568,
+            "spread": {
+              "inputTokens": {
+                "min": 98811,
+                "max": 98817
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 10910,
+                "max": 19676
+              },
+              "costUsd": {
+                "min": 0.0567,
+                "max": 0.0572
+              }
+            },
+            "totalCostUsd": 0.1706,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "route_details": 3
+            },
+            "toolSearchCalls": 3
           },
           "runs": [
             {
@@ -468,7 +657,29 @@
             "medianToolCalls": 3,
             "medianTurns": 4,
             "medianDurationMs": 13034,
-            "medianCostUsd": 0.0545
+            "medianCostUsd": 0.0545,
+            "spread": {
+              "inputTokens": {
+                "min": 95967,
+                "max": 96030
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 12327,
+                "max": 16650
+              },
+              "costUsd": {
+                "min": 0.0531,
+                "max": 0.056
+              }
+            },
+            "totalCostUsd": 0.1636,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -536,7 +747,31 @@
             "medianToolCalls": 4,
             "medianTurns": 5,
             "medianDurationMs": 14910,
-            "medianCostUsd": 0.0585
+            "medianCostUsd": 0.0585,
+            "spread": {
+              "inputTokens": {
+                "min": 98109,
+                "max": 98453
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 14110,
+                "max": 15952
+              },
+              "costUsd": {
+                "min": 0.0562,
+                "max": 0.0587
+              }
+            },
+            "totalCostUsd": 0.1735,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "list_env_config": 3
+            },
+            "toolSearchCalls": 3
           },
           "runs": [
             {
@@ -614,7 +849,29 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 8797,
-            "medianCostUsd": 0.0472
+            "medianCostUsd": 0.0472,
+            "spread": {
+              "inputTokens": {
+                "min": 63837,
+                "max": 94906
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 5795,
+                "max": 10108
+              },
+              "costUsd": {
+                "min": 0.0465,
+                "max": 0.0495
+              }
+            },
+            "totalCostUsd": 0.1431,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -679,7 +936,29 @@
             "medianToolCalls": 1,
             "medianTurns": 2,
             "medianDurationMs": 8578,
-            "medianCostUsd": 0.0487
+            "medianCostUsd": 0.0487,
+            "spread": {
+              "inputTokens": {
+                "min": 64996,
+                "max": 65209
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6247,
+                "max": 10815
+              },
+              "costUsd": {
+                "min": 0.0487,
+                "max": 0.0495
+              }
+            },
+            "totalCostUsd": 0.1469,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -751,7 +1030,29 @@
             "medianToolCalls": 4,
             "medianTurns": 5,
             "medianDurationMs": 14189,
-            "medianCostUsd": 0.0574
+            "medianCostUsd": 0.0574,
+            "spread": {
+              "inputTokens": {
+                "min": 96035,
+                "max": 128452
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 11809,
+                "max": 19792
+              },
+              "costUsd": {
+                "min": 0.0541,
+                "max": 0.0675
+              }
+            },
+            "totalCostUsd": 0.1791,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -825,7 +1126,31 @@
             "medianToolCalls": 5,
             "medianTurns": 6,
             "medianDurationMs": 11495,
-            "medianCostUsd": 0.0633
+            "medianCostUsd": 0.0633,
+            "spread": {
+              "inputTokens": {
+                "min": 98958,
+                "max": 132826
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 9875,
+                "max": 21810
+              },
+              "costUsd": {
+                "min": 0.0601,
+                "max": 0.0638
+              }
+            },
+            "totalCostUsd": 0.1871,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "list_routes": 3
+            },
+            "toolSearchCalls": 3
           },
           "runs": [
             {
@@ -906,7 +1231,29 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 12311,
-            "medianCostUsd": 0.0442
+            "medianCostUsd": 0.0442,
+            "spread": {
+              "inputTokens": {
+                "min": 63168,
+                "max": 63218
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 9804,
+                "max": 16668
+              },
+              "costUsd": {
+                "min": 0.0438,
+                "max": 0.0463
+              }
+            },
+            "totalCostUsd": 0.1343,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -974,7 +1321,31 @@
             "medianToolCalls": 3,
             "medianTurns": 4,
             "medianDurationMs": 12847,
-            "medianCostUsd": 0.0519
+            "medianCostUsd": 0.0519,
+            "spread": {
+              "inputTokens": {
+                "min": 97385,
+                "max": 97397
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 12566,
+                "max": 13595
+              },
+              "costUsd": {
+                "min": 0.0517,
+                "max": 0.0519
+              }
+            },
+            "totalCostUsd": 0.1555,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "list_env_config": 3
+            },
+            "toolSearchCalls": 3
           },
           "runs": [
             {
@@ -1052,7 +1423,29 @@
             "medianToolCalls": 1,
             "medianTurns": 2,
             "medianDurationMs": 9373,
-            "medianCostUsd": 0.0467
+            "medianCostUsd": 0.0467,
+            "spread": {
+              "inputTokens": {
+                "min": 63941,
+                "max": 63968
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7383,
+                "max": 9402
+              },
+              "costUsd": {
+                "min": 0.0465,
+                "max": 0.0554
+              }
+            },
+            "totalCostUsd": 0.1486,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1117,7 +1510,29 @@
             "medianToolCalls": 1,
             "medianTurns": 2,
             "medianDurationMs": 8265,
-            "medianCostUsd": 0.0481
+            "medianCostUsd": 0.0481,
+            "spread": {
+              "inputTokens": {
+                "min": 64614,
+                "max": 97637
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 7130,
+                "max": 12001
+              },
+              "costUsd": {
+                "min": 0.0475,
+                "max": 0.0551
+              }
+            },
+            "totalCostUsd": 0.1508,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1190,7 +1605,29 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 15283,
-            "medianCostUsd": 0.0494
+            "medianCostUsd": 0.0494,
+            "spread": {
+              "inputTokens": {
+                "min": 95253,
+                "max": 95268
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 12454,
+                "max": 18234
+              },
+              "costUsd": {
+                "min": 0.0492,
+                "max": 0.0515
+              }
+            },
+            "totalCostUsd": 0.15,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1258,7 +1695,29 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 17531,
-            "medianCostUsd": 0.0517
+            "medianCostUsd": 0.0517,
+            "spread": {
+              "inputTokens": {
+                "min": 96978,
+                "max": 96990
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 13391,
+                "max": 24065
+              },
+              "costUsd": {
+                "min": 0.0516,
+                "max": 0.0521
+              }
+            },
+            "totalCostUsd": 0.1555,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1333,7 +1792,29 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 11817,
-            "medianCostUsd": 0.0517
+            "medianCostUsd": 0.0517,
+            "spread": {
+              "inputTokens": {
+                "min": 63217,
+                "max": 95898
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 10850,
+                "max": 16590
+              },
+              "costUsd": {
+                "min": 0.0438,
+                "max": 0.0606
+              }
+            },
+            "totalCostUsd": 0.1561,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1400,7 +1881,29 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 14227,
-            "medianCostUsd": 0.0541
+            "medianCostUsd": 0.0541,
+            "spread": {
+              "inputTokens": {
+                "min": 97505,
+                "max": 98451
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 12801,
+                "max": 21840
+              },
+              "costUsd": {
+                "min": 0.0533,
+                "max": 0.0573
+              }
+            },
+            "totalCostUsd": 0.1647,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 1
           },
           "runs": [
             {
@@ -1476,7 +1979,29 @@
             "medianToolCalls": 3,
             "medianTurns": 4,
             "medianDurationMs": 15085,
-            "medianCostUsd": 0.0539
+            "medianCostUsd": 0.0539,
+            "spread": {
+              "inputTokens": {
+                "min": 96073,
+                "max": 96082
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 13022,
+                "max": 15636
+              },
+              "costUsd": {
+                "min": 0.0533,
+                "max": 0.0624
+              }
+            },
+            "totalCostUsd": 0.1696,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1544,7 +2069,29 @@
             "medianToolCalls": 3,
             "medianTurns": 4,
             "medianDurationMs": 13317,
-            "medianCostUsd": 0.0558
+            "medianCostUsd": 0.0558,
+            "spread": {
+              "inputTokens": {
+                "min": 97666,
+                "max": 98408
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 10871,
+                "max": 19862
+              },
+              "costUsd": {
+                "min": 0.0547,
+                "max": 0.0562
+              }
+            },
+            "totalCostUsd": 0.1667,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1618,7 +2165,29 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 15323,
-            "medianCostUsd": 0.0541
+            "medianCostUsd": 0.0541,
+            "spread": {
+              "inputTokens": {
+                "min": 95763,
+                "max": 96157
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 15044,
+                "max": 16421
+              },
+              "costUsd": {
+                "min": 0.052,
+                "max": 0.0559
+              }
+            },
+            "totalCostUsd": 0.162,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1684,7 +2253,29 @@
             "medianToolCalls": 3,
             "medianTurns": 4,
             "medianDurationMs": 14141,
-            "medianCostUsd": 0.0565
+            "medianCostUsd": 0.0565,
+            "spread": {
+              "inputTokens": {
+                "min": 97119,
+                "max": 97588
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 14138,
+                "max": 17312
+              },
+              "costUsd": {
+                "min": 0.0548,
+                "max": 0.0583
+              }
+            },
+            "totalCostUsd": 0.1697,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1761,7 +2352,29 @@
             "medianToolCalls": 4,
             "medianTurns": 5,
             "medianDurationMs": 24545,
-            "medianCostUsd": 0.068
+            "medianCostUsd": 0.068,
+            "spread": {
+              "inputTokens": {
+                "min": 99392,
+                "max": 132287
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 24288,
+                "max": 33612
+              },
+              "costUsd": {
+                "min": 0.068,
+                "max": 0.0737
+              }
+            },
+            "totalCostUsd": 0.2098,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
           },
           "runs": [
             {
@@ -1832,7 +2445,31 @@
             "medianToolCalls": 2,
             "medianTurns": 3,
             "medianDurationMs": 15000,
-            "medianCostUsd": 0.0575
+            "medianCostUsd": 0.0575,
+            "spread": {
+              "inputTokens": {
+                "min": 97695,
+                "max": 97698
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 14842,
+                "max": 16898
+              },
+              "costUsd": {
+                "min": 0.057,
+                "max": 0.0575
+              }
+            },
+            "totalCostUsd": 0.172,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "find_import_cycles": 3
+            },
+            "toolSearchCalls": 3
           },
           "runs": [
             {
@@ -1893,5 +2530,415 @@
         }
       }
     }
-  ]
+  ],
+  "categories": {
+    "callers": {
+      "baseline": {
+        "runs": 12,
+        "correct": 12,
+        "medianInputTokens": 95260.5,
+        "medianOutputTokens": 436,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 11333.5,
+        "medianCostUsd": 0.0493,
+        "spread": {
+          "inputTokens": {
+            "min": 63217,
+            "max": 95898
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 5795,
+            "max": 36211
+          },
+          "costUsd": {
+            "min": 0.0438,
+            "max": 0.1393
+          }
+        },
+        "totalCostUsd": 0.6861,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 12,
+        "correct": 12,
+        "medianInputTokens": 97108.5,
+        "medianOutputTokens": 415,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 13096,
+        "medianCostUsd": 0.0517,
+        "spread": {
+          "inputTokens": {
+            "min": 64996,
+            "max": 98451
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 6247,
+            "max": 24065
+          },
+          "costUsd": {
+            "min": 0.0487,
+            "max": 0.0573
+          }
+        },
+        "totalCostUsd": 0.6196,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "find_callers": 3
+        },
+        "toolSearchCalls": 4
+      }
+    },
+    "impact": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 132542,
+        "medianOutputTokens": 1067,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 17757,
+        "medianCostUsd": 0.0697,
+        "spread": {
+          "inputTokens": {
+            "min": 131169,
+            "max": 168910
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 6
+          },
+          "durationMs": {
+            "min": 13846,
+            "max": 19539
+          },
+          "costUsd": {
+            "min": 0.067,
+            "max": 0.0792
+          }
+        },
+        "totalCostUsd": 0.2159,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 100190,
+        "medianOutputTokens": 459,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 16763,
+        "medianCostUsd": 0.0606,
+        "spread": {
+          "inputTokens": {
+            "min": 99660,
+            "max": 100228
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 7356,
+            "max": 19027
+          },
+          "costUsd": {
+            "min": 0.0596,
+            "max": 0.0611
+          }
+        },
+        "totalCostUsd": 0.1813,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "impact_of": 3
+        },
+        "toolSearchCalls": 3
+      }
+    },
+    "data": {
+      "baseline": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 96082,
+        "medianOutputTokens": 645,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 15636,
+        "medianCostUsd": 0.0559,
+        "spread": {
+          "inputTokens": {
+            "min": 95763,
+            "max": 171825
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 6
+          },
+          "durationMs": {
+            "min": 13022,
+            "max": 67683
+          },
+          "costUsd": {
+            "min": 0.052,
+            "max": 0.0868
+          }
+        },
+        "totalCostUsd": 0.5653,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 97733,
+        "medianOutputTokens": 622,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 14141,
+        "medianCostUsd": 0.0565,
+        "spread": {
+          "inputTokens": {
+            "min": 97119,
+            "max": 98817
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 10871,
+            "max": 19862
+          },
+          "costUsd": {
+            "min": 0.0547,
+            "max": 0.0583
+          }
+        },
+        "totalCostUsd": 0.507,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "route_details": 3
+        },
+        "toolSearchCalls": 3
+      }
+    },
+    "env": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 79592.5,
+        "medianOutputTokens": 583.5,
+        "medianToolCalls": 2.5,
+        "medianTurns": 3.5,
+        "medianDurationMs": 12680.5,
+        "medianCostUsd": 0.0497,
+        "spread": {
+          "inputTokens": {
+            "min": 63168,
+            "max": 96030
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 9804,
+            "max": 16668
+          },
+          "costUsd": {
+            "min": 0.0438,
+            "max": 0.056
+          }
+        },
+        "totalCostUsd": 0.2979,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 97753,
+        "medianOutputTokens": 548,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 13852.5,
+        "medianCostUsd": 0.0541,
+        "spread": {
+          "inputTokens": {
+            "min": 97385,
+            "max": 98453
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 12566,
+            "max": 15952
+          },
+          "costUsd": {
+            "min": 0.0517,
+            "max": 0.0587
+          }
+        },
+        "totalCostUsd": 0.329,
+        "mcpRuns": 6,
+        "mcpTools": {
+          "list_env_config": 6
+        },
+        "toolSearchCalls": 6
+      }
+    },
+    "routes": {
+      "baseline": {
+        "runs": 6,
+        "correct": 5,
+        "medianInputTokens": 80001.5,
+        "medianOutputTokens": 547.5,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 10605.5,
+        "medianCostUsd": 0.0548,
+        "spread": {
+          "inputTokens": {
+            "min": 63941,
+            "max": 128452
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 7383,
+            "max": 19792
+          },
+          "costUsd": {
+            "min": 0.0465,
+            "max": 0.0675
+          }
+        },
+        "totalCostUsd": 0.3278,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 98297.5,
+        "medianOutputTokens": 611.5,
+        "medianToolCalls": 3.5,
+        "medianTurns": 4.5,
+        "medianDurationMs": 10685,
+        "medianCostUsd": 0.0576,
+        "spread": {
+          "inputTokens": {
+            "min": 64614,
+            "max": 132826
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 7130,
+            "max": 21810
+          },
+          "costUsd": {
+            "min": 0.0475,
+            "max": 0.0638
+          }
+        },
+        "totalCostUsd": 0.3379,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "list_routes": 3
+        },
+        "toolSearchCalls": 3
+      }
+    },
+    "cycles": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 131345,
+        "medianOutputTokens": 1319,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 24545,
+        "medianCostUsd": 0.068,
+        "spread": {
+          "inputTokens": {
+            "min": 99392,
+            "max": 132287
+          },
+          "toolCalls": {
+            "min": 4,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 24288,
+            "max": 33612
+          },
+          "costUsd": {
+            "min": 0.068,
+            "max": 0.0737
+          }
+        },
+        "totalCostUsd": 0.2098,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 97695,
+        "medianOutputTokens": 839,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 15000,
+        "medianCostUsd": 0.0575,
+        "spread": {
+          "inputTokens": {
+            "min": 97695,
+            "max": 97698
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 14842,
+            "max": 16898
+          },
+          "costUsd": {
+            "min": 0.057,
+            "max": 0.0575
+          }
+        },
+        "totalCostUsd": 0.172,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "find_import_cycles": 3
+        },
+        "toolSearchCalls": 3
+      }
+    }
+  }
 }

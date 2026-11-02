@@ -103,9 +103,28 @@ describe("agent benchmark: summaries", () => {
     const summary = summarize([run(true, 2), run(false, 8), run(true, 4)]);
     assert.deepEqual([summary.runs, summary.correct, summary.medianToolCalls, summary.medianInputTokens, summary.medianTurns], [3, 2, 4, 1000, 5]);
   });
+
+  it("reports the spread, the total cost and MCP use", () => {
+    const run = (toolCalls: number, costUsd: number, toolsByName: Record<string, number>) => ({
+      answer: "", isError: false, turns: 2, durationMs: toolCalls * 1000, costUsd, inputTokens: toolCalls * 100,
+      outputTokens: 10, cacheCreationTokens: 0, cacheReadTokens: 0, toolCalls, toolsByName, correct: true,
+    });
+    const summary = summarize([
+      run(2, 0.01, { ToolSearch: 1, mcp__concentrate__impact_of: 1 }),
+      run(5, 0.04, { Grep: 5 }),
+      run(3, 0.02, { ToolSearch: 1, mcp__concentrate__api_consumers: 1, mcp__concentrate__impact_of: 1 }),
+    ]);
+    assert.deepEqual(summary.spread.toolCalls, { min: 2, max: 5 });
+    assert.deepEqual(summary.spread.inputTokens, { min: 200, max: 500 });
+    assert.deepEqual(summary.spread.costUsd, { min: 0.01, max: 0.04 });
+    assert.equal(summary.totalCostUsd, 0.07);
+    assert.equal(summary.mcpRuns, 2);
+    assert.equal(summary.toolSearchCalls, 2);
+    assert.deepEqual(Object.entries(summary.mcpTools), [["impact_of", 2], ["api_consumers", 1]]);
+  });
 });
 
-for (const file of ["questions.json", "questions-hard.json"]) it(`${file} entries are complete and unique`, () => {
+for (const file of ["questions.json", "questions-hard.json", "questions-frontend.json"]) it(`${file} entries are complete and unique`, () => {
   const { questions } = JSON.parse(readFileSync(path.join(import.meta.dirname, "../bench/agent", file), "utf8")) as { questions: Question[] };
   assert.ok(questions.length >= 6);
   assert.equal(new Set(questions.map((question) => question.id)).size, questions.length);
