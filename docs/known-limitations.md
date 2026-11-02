@@ -564,6 +564,26 @@ Astro).
   component. Records spread in (`...routes`), built by functions or held in
   untyped arrays of another file, named views other than `default`, `alias`
   paths and `defineAsyncComponent` loaders are not read.
+- Angular Router: in a file that imports `@angular/router`, the routes of
+  arrays typed `Routes` / `Route[]` (annotation, `satisfies` or `as`) and of
+  the arrays (inline or of the same file) given to `RouterModule.forRoot`,
+  `RouterModule.forChild` or `provideRouter` are `Page`s (framework
+  `angular`, router `object`). `fullPath` joins a child's path onto its
+  parent's; `''` under a parent is `index`, `**` is `not-found`, a route with
+  `children` or `loadChildren` `layout`, one with only `redirectTo`
+  `redirect`. `component: Home` gives `Page.component`; `loadComponent: () =>
+  import('./login.component').then((m) => m.LoginComponent)` gives
+  `Page.componentSource` and the export in `Page.component` (without
+  `.then`, the default export), linked by `PAGE_RENDERS`. `loadChildren`
+  (`Page.loadChildren`, `source#Export`) mounts the loaded routes under the
+  loading route: an exported array of that name (or the file's default
+  export), or an NgModule whose file, or a module it imports
+  (`AdminRoutingModule`), passes routes to `RouterModule.forChild`
+  (`Page.routerScope` `child`; `Page.routes` names each route's array). A
+  route array nothing mounts is taken as a root: a child array loaded in a
+  way that is not read (string `loadChildren`, arrays built by functions or
+  spread in) keeps a path from `/`. Guards, resolvers, `matcher`s, named
+  outlets and `title`s are not read.
 - Nuxt is detected per package: a `package.json` that depends on `nuxt`. The
   source directory is the package root, or `app/` when `app/pages`,
   `app/layouts`, `app/components` or `app/app.vue` exists (Nuxt 4); a custom

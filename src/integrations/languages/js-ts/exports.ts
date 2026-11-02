@@ -13,7 +13,7 @@ export function createDefaultExportExpressionNode(fileNodeId: string, node: Synt
     return null;
   }
 
-  const exported = node.namedChildren[0];
+  const exported = defaultExported(node);
   if (!exported || isNamedDefaultDeclaration(exported)) {
     return null;
   }
@@ -33,13 +33,20 @@ export function createDefaultExportExpressionNode(fileNodeId: string, node: Synt
 // The local name an ES module's default export refers to: the declaration in
 // `export default function name()` / `export default class Name`, the
 // identifier in `export default name`, or `name` in `export { name as default }`.
+// What `export default` exports: the first named child that is no decorator
+// (`@Component(…) export default class X {}` puts the decorator first) or
+// comment.
+function defaultExported(node: SyntaxNode): SyntaxNode | null {
+  return node.namedChildren.find((child) => child.type !== "decorator" && child.type !== "comment") ?? null;
+}
+
 export function extractDefaultExportName(node: SyntaxNode): string | null {
   if (node.type !== "export_statement" || extractStringSource(node)) {
     return null;
   }
 
   if (node.children.some((child) => child.type === "default")) {
-    const exported = node.namedChildren[0];
+    const exported = defaultExported(node);
     if (!exported) return null;
     if (exported.type === "identifier") return exported.text;
     return isNamedDefaultDeclaration(exported) ? exported.childForFieldName("name")?.text ?? null : null;

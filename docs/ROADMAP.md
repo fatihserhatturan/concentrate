@@ -770,7 +770,7 @@ Angular is decorator-based like NestJS. The decorator route graph (`createDecora
 
 ### Routing and API
 
-- [ ] Angular Router `Routes` arrays (including lazy `loadComponent` / `loadChildren`) become `Page` nodes
+- [x] Angular Router `Routes` arrays (including lazy `loadComponent` / `loadChildren`) become `Page` nodes
 - [ ] `HttpClient` calls become `REQUESTS`
 
 ### Acceptance criteria

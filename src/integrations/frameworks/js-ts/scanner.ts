@@ -21,6 +21,7 @@ import { applySvelteKitParseSemantics } from "./sveltekit.js";
 import { applyAstroMarkupSemantics, applyAstroScriptSemantics } from "./astro.js";
 import { applyPiniaSemantics } from "./pinia.js";
 import { applyAngularParseSemantics } from "./angular.js";
+import { applyAngularRouterSemantics } from "./angular-router.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
 // the nodes earlier ones added (NestJS routes, for example, read decorators).
@@ -130,6 +131,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // Vue Router route records.
     name: "vue-router",
     onFile: applyVueRouterSemantics,
+  },
+  {
+    // Angular Router route arrays.
+    name: "angular-router",
+    onFile: applyAngularRouterSemantics,
   },
   {
     // TanStack Router file and code routes.

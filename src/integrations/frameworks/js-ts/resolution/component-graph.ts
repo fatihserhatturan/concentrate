@@ -20,9 +20,11 @@ import { isHookCall, type PendingRender } from "../react.js";
 //   only listed in `Component.hooks`.
 // - USES_CONTEXT: such a function to the context its `useContext(Ctx)` /
 //   `use(Ctx)` reads.
-// - PAGE_RENDERS: a React Router, TanStack Router or Vue Router Page to the
-//   component its route renders (`Page.component`), or to the default
-//   component of the module a lazy route loads (`Page.componentSource`).
+// - PAGE_RENDERS: a React Router, TanStack Router, Vue Router or Angular
+//   Router Page to the component its route renders (`Page.component`), or to
+//   the component of the module a lazy route loads (`Page.componentSource`):
+//   its export named `Page.component` (Angular's `.then((m) => m.X)`), or
+//   else its default export.
 export const componentGraphContributor: ISemanticContributor = {
   contribute(graph) {
     addComponentRelationships(graph);
@@ -109,11 +111,11 @@ export function addComponentRelationships(graph: IGraphContributor): void {
     const page = nodesById.get(rel.to);
     const name = page?.properties.component;
     const source = page?.properties.componentSource;
-    if (page && typeof name !== "string" && typeof source === "string") {
+    if (page && typeof source === "string") {
       const importNode = (importNodesByFile.get(rel.from) ?? []).find((node) => node.properties.isDynamic === true && node.properties.source === source);
       const targetFileId = importNode ? relationshipIndex.resolvedFileByImportId.get(importNode.id) : undefined;
       const target = targetFileId
-        ? resolveDeclaration("default", targetFileId, componentsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId)
+        ? resolveDeclaration(typeof name === "string" ? name : "default", targetFileId, componentsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId)
         : null;
       if (target) added.push({ from: page.id, to: target, type: "PAGE_RENDERS", properties: {} });
       continue;
