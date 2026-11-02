@@ -20,7 +20,7 @@
 {"kind":"node","id":"file:main.controller.ts:route:14:0:POST:/main/items","label":"Route","properties":{"framework":"fastify","fullPath":"/main/items","handlerName":"create","line":14,"method":"POST","path":"/main/items","pathExpression":"/main/items","receiverName":null}}
 {"kind":"node","id":"file:main.controller.ts:route:9:0:GET:/main","label":"Route","properties":{"framework":"fastify","fullPath":"/main","handlerName":"index","line":9,"method":"GET","path":"/main","pathExpression":"/main","receiverName":null}}
 {"kind":"node","id":"file:main.controller.ts:variable:3:ITEMS","label":"Variable","properties":{"isExported":false,"kind":"const","line":3,"name":"ITEMS","stringValue":"/items"}}
-{"kind":"node","id":"file:users.controller.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/users.controller.ts","relativePath":"users.controller.ts","sourceType":"production"}}
+{"kind":"node","id":"file:users.controller.ts","label":"File","properties":{"defaultExport":"UsersController","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/users.controller.ts","relativePath":"users.controller.ts","sourceType":"production"}}
 {"kind":"node","id":"file:users.controller.ts:class:4:UsersController","label":"Class","properties":{"endLine":19,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":4,"name":"UsersController","visibility":"public"}}
 {"kind":"node","id":"file:users.controller.ts:class:4:UsersController:decorator:3:Controller","label":"Decorator","properties":{"args":"[\"/users\"]","expression":"@Controller('/users')","line":3,"name":"Controller"}}
 {"kind":"node","id":"file:users.controller.ts:function:11:remove","label":"Function","properties":{"className":"UsersController","endLine":13,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"method_definition","line":11,"methodKind":"method","name":"remove","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -33,7 +33,6 @@
 {"kind":"node","id":"file:users.controller.ts:route:10:0:DELETE:/users/:id","label":"Route","properties":{"framework":"fastify","fullPath":"/users/:id","handlerName":"remove","line":10,"method":"DELETE","path":"/users/:id","pathExpression":"/users/:id","receiverName":null}}
 {"kind":"node","id":"file:users.controller.ts:route:15:0:PUT:/users","label":"Route","properties":{"framework":"fastify","fullPath":"/users","handlerName":"replace","line":15,"method":"PUT","path":"/users","pathExpression":"/users","receiverName":null}}
 {"kind":"node","id":"file:users.controller.ts:route:5:0:GET:/users/:id","label":"Route","properties":{"framework":"fastify","fullPath":"/users/:id","handlerName":"show","line":5,"method":"GET","path":"/users/:id","pathExpression":"/users/:id","receiverName":null}}
-{"kind":"node","id":"file:users.controller.ts:variable:3:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":3,"name":"default"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"fastify-decorators","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:local-decorators.ts","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.controller.ts","properties":{}}
@@ -62,7 +61,6 @@
 {"kind":"rel","from":"file:users.controller.ts","type":"DECLARES_ROUTE","to":"file:users.controller.ts:route:15:0:PUT:/users","properties":{}}
 {"kind":"rel","from":"file:users.controller.ts","type":"DECLARES_ROUTE","to":"file:users.controller.ts:route:5:0:GET:/users/:id","properties":{}}
 {"kind":"rel","from":"file:users.controller.ts","type":"DEFINES_CLASS","to":"file:users.controller.ts:class:4:UsersController","properties":{}}
-{"kind":"rel","from":"file:users.controller.ts","type":"DEFINES_VARIABLE","to":"file:users.controller.ts:variable:3:default","properties":{}}
 {"kind":"rel","from":"file:users.controller.ts","type":"IMPORTS","to":"file:users.controller.ts:import:1:fastify-decorators","properties":{}}
 {"kind":"rel","from":"file:users.controller.ts:class:4:UsersController","type":"DEFINES_METHOD","to":"file:users.controller.ts:function:11:remove","properties":{}}
 {"kind":"rel","from":"file:users.controller.ts:class:4:UsersController","type":"DEFINES_METHOD","to":"file:users.controller.ts:function:16:replace","properties":{}}

@@ -926,6 +926,17 @@
         "args": {
           "symbol": "UserStore"
         }
+      },
+      {
+        "tool": "list_pages",
+        "args": {}
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "GET",
+          "path": "/admin/users"
+        }
       }
     ],
     "vanilla-html": [

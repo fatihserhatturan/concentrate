@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 61
+        "result": 62
       },
       {
         "method": "stats",
@@ -45,7 +45,7 @@
           },
           {
             "table": "Variable",
-            "count": 2
+            "count": 1
           },
           {
             "table": "Decorator",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 61,
+      "schemaVersion": 62,
       "stats": [
         {
           "table": "Repo",
@@ -143,7 +143,7 @@
         },
         {
           "table": "Variable",
-          "count": 2
+          "count": 1
         },
         {
           "table": "Decorator",
@@ -273,14 +273,6 @@
             "line": 3,
             "isExported": false,
             "relationship": "DEFINES_VARIABLE"
-          },
-          {
-            "name": "default",
-            "kind": "Variable",
-            "file": "users.controller.ts",
-            "line": 3,
-            "isExported": true,
-            "relationship": "DEFINES_VARIABLE"
           }
         ]
       },
@@ -354,19 +346,11 @@
           "line": 3,
           "isExported": false,
           "relationship": "DEFINES_VARIABLE"
-        },
-        {
-          "name": "default",
-          "kind": "Variable",
-          "file": "users.controller.ts",
-          "line": 3,
-          "isExported": true,
-          "relationship": "DEFINES_VARIABLE"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 7
+        "returned": 6
       }
     }
   },
@@ -409,15 +393,7 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
-        "rows": [
-          {
-            "file": "users.controller.ts",
-            "name": "default",
-            "kind": "Variable",
-            "line": 3,
-            "relationship": "DEFINES_VARIABLE"
-          }
-        ]
+        "rows": []
       },
       {
         "method": "query",
@@ -480,18 +456,11 @@
           "kind": "Class",
           "line": 4,
           "relationship": "DEFINES_CLASS"
-        },
-        {
-          "file": "users.controller.ts",
-          "name": "default",
-          "kind": "Variable",
-          "line": 3,
-          "relationship": "DEFINES_VARIABLE"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 4
+        "returned": 3
       }
     }
   },
