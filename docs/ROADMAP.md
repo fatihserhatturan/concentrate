@@ -727,8 +727,8 @@ Reuses the SFC splitter (Phase 10), `Component` and `RENDERS` (Phase 11), `Page`
 
 ### Svelte
 
-- [ ] Components from `.svelte` files and template usage become `RENDERS`; props from `export let` and `$props()`
-- [ ] `on:click` and `onclick` handlers become `EntryPoint` (kind `dom-event`)
+- [x] Components from `.svelte` files and template usage become `RENDERS`; props from `export let` and `$props()`
+- [x] `on:click` and `onclick` handlers become `EntryPoint` (kind `dom-event`)
 - [ ] Svelte stores (`writable`, `readable`, `derived`) and runes (`$state`) become `Store`
 
 ### SvelteKit

@@ -1,0 +1,5 @@
+{
+  "name": "svelte-components",
+  "private": true,
+  "dependencies": { "svelte": "5.1.9" }
+}

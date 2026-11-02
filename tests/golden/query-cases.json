@@ -779,6 +779,37 @@
         }
       }
     ],
+    "svelte-components": [
+      {
+        "tool": "component_tree",
+        "args": {
+          "name": "App",
+          "depth": 3
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "Button"
+        }
+      },
+      {
+        "tool": "list_entrypoints",
+        "args": {}
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "track"
+        }
+      },
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "src/lib/components/TodoItem.svelte"
+        }
+      }
+    ],
     "vanilla-html": [
       {
         "tool": "find_callers",

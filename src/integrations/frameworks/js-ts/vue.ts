@@ -45,12 +45,7 @@ const scriptFacts = new WeakMap<ParsedSourceFile, ScriptFacts>();
 export function applyVueScriptSemantics({ fileNodeId, rootNode, parsed, state, scriptBlocks }: JsTsParsedFile): void {
   if (!isVueFile(fileNodeId, parsed)) return;
   const facts: ScriptFacts = { name: null, props: null, hasOptions: false, hasSetup: false, registered: new Map(), setupFunctionId: null };
-  // Calls inside functions that have a node of their own stay theirs.
-  const functionRanges = state.functionAstPairs.map((pair) => [pair.astNode.startIndex, pair.astNode.endIndex] as const);
-  const ownedElsewhere = (call: GraphNode, statement: SyntaxNode) => {
-    const index = startIndexOf(call, statement);
-    return index !== null && functionRanges.some(([start, end]) => start <= index && index < end);
-  };
+  const ownedElsewhere = callsOwnedElsewhere(state.functionAstPairs);
   const options = defaultExportOptions(rootNode);
   if (options) {
     facts.hasOptions = true;
@@ -81,27 +76,42 @@ export function applyVueScriptSemantics({ fileNodeId, rootNode, parsed, state, s
     }
   }
   const setupBlock = scriptBlocks.find((block) => block.attributes.includes("setup"));
-  if (setupBlock) facts.setupFunctionId = scriptSetupFunction(fileNodeId, rootNode, parsed, setupBlock, ownedElsewhere);
+  if (setupBlock) facts.setupFunctionId = scriptBlockFunction(fileNodeId, rootNode, parsed, setupBlock, ownedElsewhere);
   scriptFacts.set(parsed, facts);
 }
 
-// A Function for the `<script setup>` block that owns its top-level calls:
-// module-level calls move to it, initializer calls (`const n = ref(0)`) are
-// also its calls, and calls without a node of their own (in destructuring,
-// arguments or anonymous callbacks) are added.
-function scriptSetupFunction(
+// Whether a call made from a statement is inside a function that has a node
+// of its own, whose call it stays.
+export function callsOwnedElsewhere(
+  functionAstPairs: ReadonlyArray<{ astNode: SyntaxNode }>,
+): (call: GraphNode, statement: SyntaxNode) => boolean {
+  const functionRanges = functionAstPairs.map((pair) => [pair.astNode.startIndex, pair.astNode.endIndex] as const);
+  return (call, statement) => {
+    const index = startIndexOf(call, statement);
+    return index !== null && functionRanges.some(([start, end]) => start <= index && index < end);
+  };
+}
+
+// A Function for a component's script block (`<script setup>`, a Svelte
+// instance `<script>`) that owns its top-level calls: module-level calls move
+// to it, initializer calls (`const n = ref(0)`) are also its calls, and calls
+// without a node of their own (in destructuring, arguments or anonymous
+// callbacks) are added.
+export function scriptBlockFunction(
   fileNodeId: string,
   program: SyntaxNode,
   parsed: ParsedSourceFile,
   block: { start: number; end: number; line: number; endLine: number },
   ownedElsewhere: (call: GraphNode, statement: SyntaxNode) => boolean,
+  name = "<script setup>",
+  kind = "script_setup",
 ): string {
   const setup: GraphNode = {
-    id: `${fileNodeId}:function:${block.line}:<script setup>`,
+    id: `${fileNodeId}:function:${block.line}:${name}`,
     label: "Function",
     properties: {
-      name: "<script setup>",
-      kind: "script_setup",
+      name,
+      kind,
       methodKind: null,
       line: block.line,
       endLine: block.endLine,
@@ -167,15 +177,15 @@ function optionsSetupFunction(
   return node.id;
 }
 
-// The code of a top-level statement that runs: expressions and variable
-// declarations (also exported); imports and declared functions, classes and
-// types do not.
+// The code of a top-level statement that runs: expressions, variable
+// declarations (also exported) and Svelte's `$:` reactive statements; imports
+// and declared functions, classes and types do not.
 function statementCode(statement: SyntaxNode): SyntaxNode | null {
   if (statement.type === "export_statement") {
     const declaration = statement.childForFieldName("declaration");
     return declaration ? statementCode(declaration) : null;
   }
-  return ["expression_statement", "lexical_declaration", "variable_declaration"].includes(statement.type) ? statement : null;
+  return ["expression_statement", "lexical_declaration", "variable_declaration", "labeled_statement"].includes(statement.type) ? statement : null;
 }
 
 // The source offset of a call node created from `root`, found by its position.
@@ -466,6 +476,6 @@ function tagName(element: SyntaxNode): string | null {
 }
 
 // `user-card` / `user_card` / `userCard` → `UserCard`.
-function pascalCase(value: string): string {
+export function pascalCase(value: string): string {
   return value.split(/[-_.\s]+/u).filter(Boolean).map((part) => part[0]!.toUpperCase() + part.slice(1)).join("");
 }

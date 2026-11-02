@@ -79,13 +79,14 @@ export function applyDomParseSemantics(
 
 // `on*` attributes of an HTML page (`<button onclick="save()">`) are listeners
 // too. The handler is the function the attribute calls first, when the page
-// defines it.
+// defines it. A Svelte file's `onclick={…}` is Svelte's (see svelte.ts).
 export function applyDomAttributeSemantics(
   fileNodeId: string,
   documentNode: SyntaxNode,
   nodes: GraphNode[],
   relationships: GraphRelationship[],
 ): void {
+  if (nodes.find((node) => node.id === fileNodeId)?.properties.language === "svelte") return;
   const functionsByName = indexFileFunctions(fileNodeId, nodes, relationships);
   const visit = (node: SyntaxNode) => {
     if (node.type === "start_tag" || node.type === "self_closing_tag") {

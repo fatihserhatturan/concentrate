@@ -44,12 +44,13 @@ export function addComponentRelationships(graph: IGraphContributor): void {
 
   // `export default function App()` / `export default App`, a component
   // exported through a wrapper (`export default connect(...)(App)`), or the
-  // component of a `.vue` file.
+  // component of a `.vue` or `.svelte` file.
   for (const [fileId, byName] of componentsByFileAndName) {
     const file = nodesById.get(fileId);
     const defaultExport = file?.properties.defaultExport;
-    const ids = file?.properties.language === "vue"
-      ? [...byName.values()].flat().filter((id) => nodesById.get(id)?.properties.framework === "vue")
+    const language = file?.properties.language;
+    const ids = language === "vue" || language === "svelte"
+      ? [...byName.values()].flat().filter((id) => nodesById.get(id)?.properties.framework === language)
       : typeof defaultExport === "string"
       ? byName.get(defaultExport)
       : [...byName.values()].flat().filter((id) => typeof nodesById.get(id)?.properties.defaultExportWrapper === "string");
