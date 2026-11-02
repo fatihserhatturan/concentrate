@@ -431,6 +431,26 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     },
   },
   {
+    name: "internet-angular-realworld",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 107,
+      supportedFiles: 80,
+      parsedFiles: 80,
+      failedFiles: 0,
+      resolvedImports: 142,
+      unresolvedRelativeImports: 0,
+      nodes: 4909,
+      relationships: 5700,
+      fileClassifications: { production: 61, test: 18, fixture: 0, support: 1, generated: 0 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 0,
+        entrypoints: 13,
+      },
+    },
+  },
+  {
     name: "internet-nextjs-taxonomy",
     suite: "internet",
     expected: {

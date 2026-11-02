@@ -1,0 +1,980 @@
+{
+  "sample": "internet-angular-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. There is no backend in the repository, so no routes. Components: every @Component class under src/ (the @Directive and @Pipe classes are not components), at its class line. Renders: every element of a template (inline or templateUrl) whose tag is the selector of a component the parent imports, one label per element, at its line in the template; app-root in src/index.html has no parent component. Pages: every route object of src/app/app.routes.ts and of src/app/features/profile/profile.routes.ts, which app.routes.ts lazy-loads under profile (loadChildren, default export), with kind layout for children/loadChildren, index for an empty child path, and the component it renders (loadComponent default exports, component). Calls: every call site in the method bodies of the listed files (field initializers there call only rxjs); constructor-injected services (private readonly x: Service) resolve to the service class's methods, and rxjs, Angular signals and Router calls stay unresolved.",
+  "components": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/app/app.component.ts",
+        "name": "AppComponent",
+        "line": 12
+      },
+      {
+        "file": "src/app/core/auth/auth.component.ts",
+        "name": "AuthComponent",
+        "line": 21
+      },
+      {
+        "file": "src/app/core/layout/footer.component.ts",
+        "name": "FooterComponent",
+        "line": 11
+      },
+      {
+        "file": "src/app/core/layout/header.component.ts",
+        "name": "HeaderComponent",
+        "line": 13
+      },
+      {
+        "file": "src/app/features/article/components/article-comment.component.ts",
+        "name": "ArticleCommentComponent",
+        "line": 43
+      },
+      {
+        "file": "src/app/features/article/components/article-list.component.ts",
+        "name": "ArticleListComponent",
+        "line": 64
+      },
+      {
+        "file": "src/app/features/article/components/article-meta.component.ts",
+        "name": "ArticleMetaComponent",
+        "line": 30
+      },
+      {
+        "file": "src/app/features/article/components/article-preview.component.ts",
+        "name": "ArticlePreviewComponent",
+        "line": 35
+      },
+      {
+        "file": "src/app/features/article/components/favorite-button.component.ts",
+        "name": "FavoriteButtonComponent",
+        "line": 37
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "name": "ArticleComponent",
+        "line": 45
+      },
+      {
+        "file": "src/app/features/article/pages/editor/editor.component.ts",
+        "name": "EditorComponent",
+        "line": 23
+      },
+      {
+        "file": "src/app/features/article/pages/home/home.component.ts",
+        "name": "HomeComponent",
+        "line": 21
+      },
+      {
+        "file": "src/app/features/profile/components/follow-button.component.ts",
+        "name": "FollowButtonComponent",
+        "line": 40
+      },
+      {
+        "file": "src/app/features/profile/components/profile-articles.component.ts",
+        "name": "ProfileArticlesComponent",
+        "line": 17
+      },
+      {
+        "file": "src/app/features/profile/components/profile-favorites.component.ts",
+        "name": "ProfileFavoritesComponent",
+        "line": 17
+      },
+      {
+        "file": "src/app/features/profile/pages/profile/profile.component.ts",
+        "name": "ProfileComponent",
+        "line": 28
+      },
+      {
+        "file": "src/app/features/settings/settings.component.ts",
+        "name": "SettingsComponent",
+        "line": 24
+      },
+      {
+        "file": "src/app/shared/components/list-errors.component.ts",
+        "name": "ListErrorsComponent",
+        "line": 9
+      }
+    ]
+  },
+  "renders": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/app/app.component.ts",
+        "parent": "AppComponent",
+        "line": 1,
+        "child": "HeaderComponent",
+        "childFile": "src/app/core/layout/header.component.ts"
+      },
+      {
+        "file": "src/app/app.component.ts",
+        "parent": "AppComponent",
+        "line": 5,
+        "child": "FooterComponent",
+        "childFile": "src/app/core/layout/footer.component.ts"
+      },
+      {
+        "file": "src/app/core/auth/auth.component.ts",
+        "parent": "AuthComponent",
+        "line": 15,
+        "child": "ListErrorsComponent",
+        "childFile": "src/app/shared/components/list-errors.component.ts"
+      },
+      {
+        "file": "src/app/features/settings/settings.component.ts",
+        "parent": "SettingsComponent",
+        "line": 7,
+        "child": "ListErrorsComponent",
+        "childFile": "src/app/shared/components/list-errors.component.ts"
+      },
+      {
+        "file": "src/app/features/profile/components/profile-articles.component.ts",
+        "parent": "ProfileArticlesComponent",
+        "line": 12,
+        "child": "ArticleListComponent",
+        "childFile": "src/app/features/article/components/article-list.component.ts"
+      },
+      {
+        "file": "src/app/features/profile/components/profile-favorites.component.ts",
+        "parent": "ProfileFavoritesComponent",
+        "line": 12,
+        "child": "ArticleListComponent",
+        "childFile": "src/app/features/article/components/article-list.component.ts"
+      },
+      {
+        "file": "src/app/features/profile/pages/profile/profile.component.ts",
+        "parent": "ProfileComponent",
+        "line": 6,
+        "child": "ListErrorsComponent",
+        "childFile": "src/app/shared/components/list-errors.component.ts"
+      },
+      {
+        "file": "src/app/features/profile/pages/profile/profile.component.ts",
+        "parent": "ProfileComponent",
+        "line": 20,
+        "child": "FollowButtonComponent",
+        "childFile": "src/app/features/profile/components/follow-button.component.ts"
+      },
+      {
+        "file": "src/app/features/article/components/article-list.component.ts",
+        "parent": "ArticleListComponent",
+        "line": 31,
+        "child": "ArticlePreviewComponent",
+        "childFile": "src/app/features/article/components/article-preview.component.ts"
+      },
+      {
+        "file": "src/app/features/article/components/article-preview.component.ts",
+        "parent": "ArticlePreviewComponent",
+        "line": 12,
+        "child": "ArticleMetaComponent",
+        "childFile": "src/app/features/article/components/article-meta.component.ts"
+      },
+      {
+        "file": "src/app/features/article/components/article-preview.component.ts",
+        "parent": "ArticlePreviewComponent",
+        "line": 13,
+        "child": "FavoriteButtonComponent",
+        "childFile": "src/app/features/article/components/favorite-button.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/home/home.component.ts",
+        "parent": "HomeComponent",
+        "line": 46,
+        "child": "ArticleListComponent",
+        "childFile": "src/app/features/article/components/article-list.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/editor/editor.component.ts",
+        "parent": "EditorComponent",
+        "line": 5,
+        "child": "ListErrorsComponent",
+        "childFile": "src/app/shared/components/list-errors.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 6,
+        "child": "ListErrorsComponent",
+        "childFile": "src/app/shared/components/list-errors.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 16,
+        "child": "ArticleMetaComponent",
+        "childFile": "src/app/features/article/components/article-meta.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 33,
+        "child": "FollowButtonComponent",
+        "childFile": "src/app/features/profile/components/follow-button.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 35,
+        "child": "FavoriteButtonComponent",
+        "childFile": "src/app/features/article/components/favorite-button.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 63,
+        "child": "ArticleMetaComponent",
+        "childFile": "src/app/features/article/components/article-meta.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 80,
+        "child": "FollowButtonComponent",
+        "childFile": "src/app/features/profile/components/follow-button.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 82,
+        "child": "FavoriteButtonComponent",
+        "childFile": "src/app/features/article/components/favorite-button.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 94,
+        "child": "ListErrorsComponent",
+        "childFile": "src/app/shared/components/list-errors.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 118,
+        "child": "ListErrorsComponent",
+        "childFile": "src/app/shared/components/list-errors.component.ts"
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "parent": "ArticleComponent",
+        "line": 121,
+        "child": "ArticleCommentComponent",
+        "childFile": "src/app/features/article/components/article-comment.component.ts"
+      }
+    ]
+  },
+  "pages": {
+    "scope": [
+      "src/app/"
+    ],
+    "items": [
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/",
+        "kind": "page",
+        "component": "HomeComponent"
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/tag/:tag",
+        "kind": "page",
+        "component": "HomeComponent"
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/login",
+        "kind": "page",
+        "component": "AuthComponent"
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/register",
+        "kind": "page",
+        "component": "AuthComponent"
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/settings",
+        "kind": "page",
+        "component": "SettingsComponent"
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/profile",
+        "kind": "layout",
+        "component": null
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/editor",
+        "kind": "layout",
+        "component": null
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/editor",
+        "kind": "index",
+        "component": "EditorComponent"
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/editor/:slug",
+        "kind": "page",
+        "component": "EditorComponent"
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "fullPath": "/article/:slug",
+        "kind": "page",
+        "component": "ArticleComponent"
+      },
+      {
+        "file": "src/app/features/profile/profile.routes.ts",
+        "fullPath": "/profile",
+        "kind": "layout",
+        "component": null
+      },
+      {
+        "file": "src/app/features/profile/profile.routes.ts",
+        "fullPath": "/profile/:username",
+        "kind": "layout",
+        "component": "ProfileComponent"
+      },
+      {
+        "file": "src/app/features/profile/profile.routes.ts",
+        "fullPath": "/profile/:username",
+        "kind": "index",
+        "component": "ProfileArticlesComponent"
+      },
+      {
+        "file": "src/app/features/profile/profile.routes.ts",
+        "fullPath": "/profile/:username/favorites",
+        "kind": "page",
+        "component": "ProfileFavoritesComponent"
+      }
+    ]
+  },
+  "calls": {
+    "files": [
+      "src/app/core/auth/services/user.service.ts",
+      "src/app/features/article/pages/article/article.component.ts"
+    ],
+    "items": [
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 62,
+        "callee": "getValue",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 75,
+        "callee": "post",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 75,
+        "callee": "pipe",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 77,
+        "callee": "tap",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 77,
+        "callee": "setAuth",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "setAuth",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 81,
+        "callee": "post",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 81,
+        "callee": "pipe",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 81,
+        "callee": "tap",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 81,
+        "callee": "setAuth",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "setAuth",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 85,
+        "callee": "purgeAuth",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "purgeAuth",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 86,
+        "callee": "navigate",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 90,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 90,
+        "callee": "pipe",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 91,
+        "callee": "tap",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 92,
+        "callee": "setAuth",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "setAuth",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 93,
+        "callee": "handleAuthError",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "handleAuthError",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 95,
+        "callee": "shareReplay",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 96,
+        "callee": "catchError",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 110,
+        "callee": "purgeAuth",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "purgeAuth",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 113,
+        "callee": "setAuthUnavailable",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "setAuthUnavailable",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 121,
+        "callee": "next",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 122,
+        "callee": "next",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 123,
+        "callee": "scheduleRetry",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "scheduleRetry",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 130,
+        "callee": "cancelRetry",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "cancelRetry",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 132,
+        "callee": "getToken",
+        "target": {
+          "file": "src/app/core/auth/services/jwt.service.ts",
+          "name": "getToken",
+          "className": "JwtService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 137,
+        "callee": "min",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 137,
+        "callee": "pow",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 140,
+        "callee": "timer",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 140,
+        "callee": "subscribe",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 141,
+        "callee": "getToken",
+        "target": {
+          "file": "src/app/core/auth/services/jwt.service.ts",
+          "name": "getToken",
+          "className": "JwtService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 142,
+        "callee": "next",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 143,
+        "callee": "getCurrentUser",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "getCurrentUser",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 143,
+        "callee": "subscribe",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 153,
+        "callee": "unsubscribe",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 159,
+        "callee": "put",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 159,
+        "callee": "pipe",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 160,
+        "callee": "tap",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 161,
+        "callee": "next",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 167,
+        "callee": "cancelRetry",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "cancelRetry",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 169,
+        "callee": "saveToken",
+        "target": {
+          "file": "src/app/core/auth/services/jwt.service.ts",
+          "name": "saveToken",
+          "className": "JwtService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 170,
+        "callee": "next",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 171,
+        "callee": "next",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 175,
+        "callee": "cancelRetry",
+        "target": {
+          "file": "src/app/core/auth/services/user.service.ts",
+          "name": "cancelRetry",
+          "className": "UserService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 177,
+        "callee": "destroyToken",
+        "target": {
+          "file": "src/app/core/auth/services/jwt.service.ts",
+          "name": "destroyToken",
+          "className": "JwtService"
+        }
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 178,
+        "callee": "next",
+        "target": null
+      },
+      {
+        "file": "src/app/core/auth/services/user.service.ts",
+        "line": 179,
+        "callee": "next",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 70,
+        "callee": "combineLatest",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 70,
+        "callee": "get",
+        "target": {
+          "file": "src/app/features/article/services/articles.service.ts",
+          "name": "get",
+          "className": "ArticlesService"
+        }
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 70,
+        "callee": "getAll",
+        "target": {
+          "file": "src/app/features/article/services/comments.service.ts",
+          "name": "getAll",
+          "className": "CommentsService"
+        }
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 70,
+        "callee": "pipe",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 70,
+        "callee": "subscribe",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 72,
+        "callee": "catchError",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 73,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 76,
+        "callee": "takeUntilDestroyed",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 79,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 80,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 81,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 82,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 87,
+        "callee": "update",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 98,
+        "callee": "update",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 108,
+        "callee": "article",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 111,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 113,
+        "callee": "delete",
+        "target": {
+          "file": "src/app/features/article/services/articles.service.ts",
+          "name": "delete",
+          "className": "ArticlesService"
+        }
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 113,
+        "callee": "pipe",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 113,
+        "callee": "subscribe",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 115,
+        "callee": "takeUntilDestroyed",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 117,
+        "callee": "navigate",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 122,
+        "callee": "article",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 125,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 126,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 128,
+        "callee": "add",
+        "target": {
+          "file": "src/app/features/article/services/comments.service.ts",
+          "name": "add",
+          "className": "CommentsService"
+        }
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 128,
+        "callee": "pipe",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 128,
+        "callee": "subscribe",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 130,
+        "callee": "takeUntilDestroyed",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 133,
+        "callee": "update",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 134,
+        "callee": "reset",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 135,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 138,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 139,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 145,
+        "callee": "article",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 148,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 149,
+        "callee": "delete",
+        "target": {
+          "file": "src/app/features/article/services/comments.service.ts",
+          "name": "delete",
+          "className": "CommentsService"
+        }
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 149,
+        "callee": "pipe",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 149,
+        "callee": "subscribe",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 151,
+        "callee": "takeUntilDestroyed",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 154,
+        "callee": "update",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 154,
+        "callee": "filter",
+        "target": null
+      },
+      {
+        "file": "src/app/features/article/pages/article/article.component.ts",
+        "line": 157,
+        "callee": "set",
+        "target": null
+      }
+    ]
+  }
+}
