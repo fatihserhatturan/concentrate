@@ -674,5 +674,140 @@
         }
       }
     ]
+  },
+  "stores": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/store/user.ts",
+        "name": "user",
+        "library": "pinia",
+        "kind": "setup"
+      }
+    ]
+  },
+  "storeAccess": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 51,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [
+          "user"
+        ],
+        "writes": []
+      },
+      {
+        "file": "src/components/ArticleDetailComments.vue",
+        "line": 29,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [
+          "user"
+        ],
+        "writes": []
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 58,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [
+          "user"
+        ],
+        "writes": []
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 87,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [
+          "user",
+          "isAuthorized"
+        ],
+        "writes": []
+      },
+      {
+        "file": "src/components/ArticlesListNavigation.vue",
+        "line": 91,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [
+          "isAuthorized"
+        ],
+        "writes": []
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 77,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [],
+        "writes": [
+          "updateUser"
+        ]
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 86,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [],
+        "writes": [
+          "updateUser"
+        ]
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 90,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [
+          "user",
+          "isAuthorized"
+        ],
+        "writes": []
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 97,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [
+          "user",
+          "isAuthorized"
+        ],
+        "writes": [
+          "updateUser"
+        ]
+      },
+      {
+        "file": "src/pages/Login.spec.ts",
+        "line": 17,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [
+          "updateUser"
+        ],
+        "writes": []
+      },
+      {
+        "file": "src/pages/Settings.spec.ts",
+        "line": 39,
+        "store": "user",
+        "storeFile": "src/store/user.ts",
+        "reads": [
+          "isAuthorized"
+        ],
+        "writes": []
+      }
+    ]
   }
 }
