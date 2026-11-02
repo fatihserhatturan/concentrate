@@ -20,6 +20,7 @@ import { applySvelteStoreSemantics, applySvelteTemplateStoreRefs } from "./svelt
 import { applySvelteKitParseSemantics } from "./sveltekit.js";
 import { applyAstroMarkupSemantics, applyAstroScriptSemantics } from "./astro.js";
 import { applyPiniaSemantics } from "./pinia.js";
+import { applyReduxSemantics } from "./redux.js";
 import { applyAngularParseSemantics } from "./angular.js";
 import { applyAngularRouterSemantics } from "./angular-router.js";
 
@@ -121,6 +122,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // Pinia stores and the use of `use…Store()` hooks.
     name: "pinia",
     onFile: applyPiniaSemantics,
+  },
+  {
+    // Redux Toolkit slices and stores, selectors and dispatched actions.
+    name: "redux",
+    onFile: applyReduxSemantics,
   },
   {
     // React Router <Route> trees and route objects.

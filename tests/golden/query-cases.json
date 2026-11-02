@@ -779,6 +779,26 @@
         }
       }
     ],
+    "redux-toolkit": [
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "recalculate"
+        }
+      },
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "src/features/cart/cartSlice.ts"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "selectItems"
+        }
+      }
+    ],
     "svelte-components": [
       {
         "tool": "component_tree",
