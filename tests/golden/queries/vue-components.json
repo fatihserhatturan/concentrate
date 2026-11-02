@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 57
+        "result": 58
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 57,
+      "schemaVersion": 58,
       "stats": [
         {
           "table": "Repo",
@@ -2511,6 +2511,20 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/composables/useApi.ts:function:1:useApi",
+            "file:src/composables/useUsers.ts:function:4:useUsers",
+            "file:src/App.vue:function:19:<script setup>",
+            "file:src/components/ListItem.vue:function:17:setup",
+            "file:src/components/SearchBox.vue:function:10:setup"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
@@ -3086,6 +3100,16 @@
             "line": 1
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (page:Page)-[load:PAGE_LOADS]->(fn:Function) WHERE id(page) IN $ids RETURN id(page) AS page, id(fn) AS fn, load.server AS server",
+        "params": {
+          "ids": [
+            "file:src/router/routes.ts:page:13:6"
+          ]
+        },
+        "rows": []
       },
       {
         "method": "query",

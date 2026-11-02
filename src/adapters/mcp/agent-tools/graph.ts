@@ -526,15 +526,34 @@ export async function loadComponentFunctions(
 // The components implemented by the `affectedIds` functions, and every
 // component that renders them (up to `maxDepth` levels). Depth 0 is a
 // component whose own code is affected. `pages` are the pages that render
-// any of them, at the depth of the component they render.
+// any of them, at the depth of the component they render, and the pages
+// whose data loading (`load`, PAGE_LOADS) is affected, at depth 0.
 export async function componentImpact(
   engine: IQueryEngine,
   affectedIds: readonly string[],
   maxDepth: number,
   describe: (id: string) => ReturnType<typeof describeFunction>,
 ) {
-  const implementations = await loadComponentFunctions(engine, affectedIds);
-  if (implementations.length === 0) return { components: [], pages: [] };
+  const [implementations, loadRows] = await Promise.all([
+    loadComponentFunctions(engine, affectedIds),
+    engine.query(`
+      MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function)
+      WHERE id(fn) IN $ids
+      RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind,
+        file.relativePath AS file, page.line AS line, id(fn) AS fn
+    `, { ids: [...affectedIds] }) as Promise<Row[]>,
+  ]);
+  const loadPages = loadRows.map((row) => ({
+    fullPath: str(row.fullPath),
+    framework: str(row.framework),
+    router: str(row.router),
+    kind: str(row.kind),
+    file: str(row.file),
+    line: num(row.line),
+    loadedBy: describe(String(row.fn)).name,
+    depth: 0,
+  }));
+  if (implementations.length === 0) return { components: [], pages: loadPages.sort((a, b) => String(a.fullPath).localeCompare(String(b.fullPath)) || byFileAndLine(a, b)) };
   const [components, renders] = await Promise.all([loadComponents(engine), loadRenderEdges(engine)]);
 
   const changedThrough = new Map<string, Set<string>>();
@@ -558,7 +577,7 @@ export async function componentImpact(
     RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind,
       file.relativePath AS file, page.line AS line, id(component) AS component
   `, { ids: [...depth.keys()] }) as Row[];
-  const pages = pageRows.map((row) => ({
+  const renderPages = pageRows.map((row) => ({
     fullPath: str(row.fullPath),
     framework: str(row.framework),
     router: str(row.router),
@@ -567,7 +586,8 @@ export async function componentImpact(
     line: num(row.line),
     renders: components.get(String(row.component))?.name ?? String(row.component),
     depth: depth.get(String(row.component))!,
-  })).sort((a, b) => a.depth - b.depth || String(a.fullPath).localeCompare(String(b.fullPath)) || byFileAndLine(a, b));
+  }));
+  const pages = [...renderPages, ...loadPages].sort((a, b) => a.depth - b.depth || String(a.fullPath).localeCompare(String(b.fullPath)) || byFileAndLine(a, b));
 
   const impacted = [...depth].map(([id, level]) => {
     const component = components.get(id);

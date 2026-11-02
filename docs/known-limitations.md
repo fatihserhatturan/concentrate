@@ -9,6 +9,10 @@ review or feed a future long-term task.
 - Package and workspace resolution covers common npm, pnpm, yarn, `exports`,
   `main`, `types`, `baseUrl`, and `paths` cases, but does not yet model every
   conditional export branch or runtime-specific resolver rule.
+- SvelteKit's `$lib` alias resolves to `src/lib` when the root package
+  depends on `@sveltejs/kit` and the paths do not map `$lib` (its generated
+  `.svelte-kit/tsconfig.json` is usually not checked in); `kit.alias` from
+  `svelte.config.js` and `$lib` in workspace packages are not read.
 - Dynamic imports with non-literal specifiers are represented as imports only
   when a literal source is visible.
 - Cross-language imports are not semantically resolved beyond the language
@@ -78,6 +82,10 @@ tools.
   objects with a `get` in one file share the first); named imports of the
   object (`import { TagAPI }`) and objects built inside functions, returned
   or passed to calls are not followed.
+- A bare call of a name the file imports (`logout()` after `import { logout }
+  from '$lib/server/session'`) resolves only through the import: a module
+  cannot also declare that name, so an object property function of the file
+  with it (`actions = { logout: async () => … }`) is never the target.
 - Parameter decorators such as `@Param()` or `@InjectRepository()` are recorded
   as `Call` nodes of their method; class and method decorators are `Decorator`
   nodes.
@@ -527,6 +535,34 @@ Astro).
   (`<LazyUserCard>`). Components of `components/global/` with
   `pathPrefix: false`, component islands and module-provided components
   are not read.
+- SvelteKit is detected per package: a `package.json` that depends on
+  `@sveltejs/kit`. Routes come from `src/routes/` (a custom `kit.files.routes`
+  is not read). A file's route path is its folder with route groups
+  `(group)` left out and parameters kept in SvelteKit's syntax (`[slug]`,
+  `[[lang]]`, `[...rest]`, `[id=integer]`); `REQUESTS` matches them like
+  other bracket parameters (an optional `[[lang]]` counts as a required one).
+- SvelteKit pages: `+page.svelte`, `+layout.svelte` and `+error.svelte` (also
+  `+page@.svelte` / `+layout@group.svelte` layout resets) are `Page`s
+  (framework `sveltekit`, router `file`, no line) of kind `page`, `layout`
+  and `error`, with `PAGE_RENDERS` to the file's component (named `Page`,
+  `Layout`, `Error`). The exported `load` of `+page.ts` / `+page.server.ts`
+  (`+layout.ts` / `+layout.server.ts` for a layout) is `PAGE_LOADS` from the
+  page of the same folder (`server` set for `.server` files), so
+  `route_details` follows a page's loaders as well as its component, and
+  `fetch` in `load` (the `fetch` of its event) is a `REQUESTS` whose consumer
+  pages are the pages it loads for. Which layouts wrap which pages, and
+  `load` without a page or layout file next to it, are not linked.
+- SvelteKit routes: each `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`
+  and `HEAD` function a `+server.ts` exports (`export function GET`, `export
+  const POST: RequestHandler = …`) is a `Route` (framework `sveltekit`) of
+  that method, and its `fallback` one of method `ALL`. Each form action of
+  `+page.server.ts` (`export const actions = { default, login }`, also under
+  `satisfies Actions`; an action written inline, as a method, or naming a
+  function of the file) is a `POST` route at the page's path, `/login` for
+  `default` and `/login?/name` for a named action, handled by the action's
+  Function (`Function.formAction` holds the name). Hooks (`hooks.server.ts`
+  `handle`), `+server.ts` handlers re-exported from another file and actions
+  built elsewhere are not read.
 
 ## API Calls
 

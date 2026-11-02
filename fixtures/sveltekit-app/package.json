@@ -1,0 +1,6 @@
+{
+  "name": "sveltekit-app",
+  "private": true,
+  "type": "module",
+  "devDependencies": { "@sveltejs/kit": "2.8.0", "svelte": "5.1.9" }
+}

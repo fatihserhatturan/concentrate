@@ -824,6 +824,39 @@
         }
       }
     ],
+    "sveltekit-app": [
+      {
+        "tool": "list_pages",
+        "args": {}
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "GET",
+          "path": "/api/posts"
+        }
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "POST",
+          "path": "/login?/logout"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "DELETE",
+          "path": "/api/posts/[id]"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "getPost"
+        }
+      }
+    ],
     "vanilla-html": [
       {
         "tool": "find_callers",
