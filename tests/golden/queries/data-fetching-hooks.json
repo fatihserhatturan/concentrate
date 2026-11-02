@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 59
+        "result": 60
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 59,
+      "schemaVersion": 60,
       "stats": [
         {
           "table": "Repo",
@@ -1389,7 +1389,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:web/todo-page.tsx:component:4:TodoList",
@@ -1401,6 +1401,7 @@
             "endLine": 7,
             "isExported": false,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": "useSWR",
             "pendingRenders": null
@@ -1415,6 +1416,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1429,6 +1431,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Routes\",\"props\":[],\"line\":15},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":16}]"
@@ -1437,21 +1440,23 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:web/todo-page.tsx:component:9:TodoPage",
             "child": "file:web/todo-page.tsx:component:4:TodoList",
             "line": 10,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:web/todo-page.tsx:component:13:App",
             "child": "file:web/todo-page.tsx:component:9:TodoPage",
             "line": 16,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       },
@@ -1944,7 +1949,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:web/todo-page.tsx:component:4:TodoList",
@@ -1956,6 +1961,7 @@
             "endLine": 7,
             "isExported": false,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": "useSWR",
             "pendingRenders": null
@@ -1970,6 +1976,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1984,6 +1991,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Routes\",\"props\":[],\"line\":15},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":16}]"
@@ -1992,21 +2000,23 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:web/todo-page.tsx:component:9:TodoPage",
             "child": "file:web/todo-page.tsx:component:4:TodoList",
             "line": 10,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:web/todo-page.tsx:component:13:App",
             "child": "file:web/todo-page.tsx:component:9:TodoPage",
             "line": 16,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       },
@@ -2712,7 +2722,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:web/todo-page.tsx:component:4:TodoList",
@@ -2724,6 +2734,7 @@
             "endLine": 7,
             "isExported": false,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": "useSWR",
             "pendingRenders": null
@@ -2738,6 +2749,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -2752,6 +2764,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Routes\",\"props\":[],\"line\":15},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":16}]"
@@ -2760,21 +2773,23 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:web/todo-page.tsx:component:9:TodoPage",
             "child": "file:web/todo-page.tsx:component:4:TodoList",
             "line": 10,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:web/todo-page.tsx:component:13:App",
             "child": "file:web/todo-page.tsx:component:9:TodoPage",
             "line": 16,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       },

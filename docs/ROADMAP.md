@@ -759,9 +759,9 @@ Angular is decorator-based like NestJS. The decorator route graph (`createDecora
 
 ### Components
 
-- [ ] `@Component` (module-based and standalone) becomes `Component`, with its selector and `@Input` / `input()` props
-- [ ] Template usage by selector (inline `template` and `templateUrl` files) becomes `RENDERS`
-- [ ] `(click)` bindings and `@HostListener` become `EntryPoint` (kind `dom-event`)
+- [x] `@Component` (module-based and standalone) becomes `Component`, with its selector and `@Input` / `input()` props
+- [x] Template usage by selector (inline `template` and `templateUrl` files) becomes `RENDERS`
+- [x] `(click)` bindings and `@HostListener` become `EntryPoint` (kind `dom-event`)
 
 ### Services and DI
 

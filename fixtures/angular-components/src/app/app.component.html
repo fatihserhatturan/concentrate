@@ -1,0 +1,11 @@
+<header>
+  <app-user-card [user]="current" heading="Me" (select)="pick($event)"></app-user-card>
+</header>
+@if (users.length > 0 && query.length < 10) {
+  <app-user-list [users]="users" />
+}
+<p>{{ users.length < 2 ? 'one' : 'many' }}</p>
+<button type="button" (click)="save()">Save</button>
+<input [(ngModel)]="query" (keyup.enter)="search(query)" />
+<mat-icon>home</mat-icon>
+<ng-container *ngIf="current">{{ current.name }}</ng-container>

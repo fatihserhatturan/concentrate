@@ -418,6 +418,38 @@ Astro).
   `<Fragment>`, `<Code>` and other library components stay in
   `pendingRenders`; `<script>` blocks are client code of the file, not of the
   component.
+- Angular: in a file importing from `@angular/core`, each class decorated
+  with `@Component({…})` is a Component (framework `angular`, kind
+  `component`) named after the class, `COMPONENT_DEFINED_BY` it, with its
+  `selector` and `templateUrl` as written (`Component.selector`,
+  `Component.templateUrl`). Props are its inputs: `@Input()` fields and
+  setters, by their alias (`@Input('heading')`, `@Input({ alias })`), and
+  `input()`, `input.required()` and `model()` fields, by `alias` too.
+  `@Output()` and `output()` are not read. Templates: the inline `template`
+  (a string or a template literal without `${…}`) and the `templateUrl` file
+  next to the component. An element whose tag has a hyphen RENDERS the one
+  Angular component whose selector lists that tag (`'app-user'`, or
+  `'app-user, [appUser]'`); props passed are `[input]` and `[(input)]`
+  bindings and plain attributes, not events, `*structural` directives,
+  `#refs`, `[attr.x]` / `[class.x]` / `[style.x]` or animations. A render
+  from a `templateUrl` file keeps that file in `RENDERS.template` (its line
+  is a line of that file). A tag that two components select (copies in two
+  apps of a workspace), library elements (`<mat-icon>`) and Angular's
+  `ng-template`, `ng-container` and `ng-content` stay in `pendingRenders`;
+  attribute and class selectors (`[appUserList]`, `button[appBtn]`) and
+  standalone `imports` / NgModule declarations are not used to resolve tags.
+  `{{ … }}` interpolations and `@if (…)` / `@for (…)` conditions are masked
+  before the HTML grammar reads the template.
+- Angular listeners: `(click)="save()"` (also `(keyup.enter)`, trigger
+  `keyup`) on an element without a hyphen is an EntryPoint (kind
+  `dom-event`, library `angular`), declared by the file holding the template
+  (the `templateUrl` file only when it was scanned) and handled by the
+  component's method the code calls first; code that starts with a statement
+  or a member call (`zoom.set(1)`) names no handler. Events on components
+  (`(select)` on `<app-user-card>`) are outputs, not entrypoints.
+  `@HostListener('click')` methods and `host: { '(click)': 'toggle()' }`
+  entries are entrypoints with receiver `host`, or `window` / `document`
+  for `window:resize` / `document:keydown.escape`.
 - Svelte component code: the instance `<script>` (not `<script module>` or
   `context="module"`) is a Function named `<script>` (kind
   `script_instance`) that the Component is `COMPONENT_DEFINED_BY_FUNCTION`;

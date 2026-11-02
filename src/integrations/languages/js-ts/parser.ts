@@ -365,7 +365,9 @@ export interface JsTsFrameworkPlugin {
   // Object-literal keys whose function values are callbacks the framework
   // calls (`handler`, hooks). Such functions get a Function node of their own.
   readonly callbackPropertyNames?: readonly string[];
-  onFile(file: JsTsParsedFile): void;
+  // A plugin may parse embedded text (an Angular inline template) on the
+  // way, so it may be async; the tree lives until it settles.
+  onFile(file: JsTsParsedFile): void | Promise<void>;
 }
 
 export async function parseJsTsFile(
@@ -409,7 +411,7 @@ export async function parseJsTsSource(
     const parsed = finalizeLanguageLevel(fileNodeId, tree, state);
     if (warnings.length > 0) parsed.warnings = warnings;
     for (const plugin of plugins) {
-      plugin.onFile({ fileNodeId, rootNode: tree.rootNode, parsed, state, scriptBlocks });
+      await plugin.onFile({ fileNodeId, rootNode: tree.rootNode, parsed, state, scriptBlocks });
     }
     return parsed;
   } finally {

@@ -20,6 +20,7 @@ import { applySvelteStoreSemantics, applySvelteTemplateStoreRefs } from "./svelt
 import { applySvelteKitParseSemantics } from "./sveltekit.js";
 import { applyAstroMarkupSemantics, applyAstroScriptSemantics } from "./astro.js";
 import { applyPiniaSemantics } from "./pinia.js";
+import { applyAngularParseSemantics } from "./angular.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
 // the nodes earlier ones added (NestJS routes, for example, read decorators).
@@ -109,6 +110,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // The props and frontmatter of an .astro file.
     name: "astro",
     onFile: applyAstroScriptSemantics,
+  },
+  {
+    // Angular components, their inline templates and host listeners.
+    name: "angular",
+    onFile: applyAngularParseSemantics,
   },
   {
     // Pinia stores and the use of `use…Store()` hooks.

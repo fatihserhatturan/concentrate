@@ -1,0 +1,8 @@
+<ul>
+  @for (user of items; track user.name) {
+    <li>
+      <app-user-card [user]="user"></app-user-card>
+      <button (click)="remove($index)">Remove</button>
+    </li>
+  }
+</ul>

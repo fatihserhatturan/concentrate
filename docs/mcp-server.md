@@ -193,11 +193,14 @@ These answer a whole question in one call instead of a chain of lookups.
   directly or `through` a custom hook (followed through hooks that use other
   hooks), `renders` and `renderedBy` (render edges with `depth`, `parent`,
   `component`, the render `line` and the `props` passed, up to `depth` levels
-  each way) and `unresolvedRenders` (elements that resolved to no component,
-  such as library components).
+  each way; an Astro island's `client` directive, and the `template` file of
+  a render in an Angular `templateUrl`) and `unresolvedRenders` (elements that
+  resolved to no component, such as library components). An Angular
+  component also has its `selector`.
 - `find_component_usages({ name, file?, limit = 50 })`: every `render` of a
   component with that name (`from` is the rendering component, plus the file,
-  line and `props`), and for a context the functions that read it (`kind:
+  which is the template file for an Angular `templateUrl`, line and `props`),
+  and for a context the functions that read it (`kind:
   "context"`). Elements of that name that resolved to no component, such as
   `<Link>` from a library, are listed with `resolved: false` unless `file` is
   given. `counts` sums the usages by kind.

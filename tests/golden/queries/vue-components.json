@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 59
+        "result": 60
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 59,
+      "schemaVersion": 60,
       "stats": [
         {
           "table": "Repo",
@@ -924,7 +924,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.vue:component:1:App",
@@ -936,6 +936,7 @@
             "endLine": 36,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "title,query",
             "hooks": "useUsers",
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8}]"
@@ -950,6 +951,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -964,6 +966,7 @@
             "endLine": 22,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "item",
             "hooks": "useUsers",
             "pendingRenders": null
@@ -978,6 +981,7 @@
             "endLine": 17,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": "useUsers",
             "pendingRenders": null
@@ -992,6 +996,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "label,color",
             "hooks": null,
             "pendingRenders": null
@@ -1006,6 +1011,7 @@
             "endLine": 15,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "user,title",
             "hooks": null,
             "pendingRenders": null
@@ -1020,6 +1026,7 @@
             "endLine": 18,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "modelValue,filter",
             "hooks": null,
             "pendingRenders": null
@@ -1034,6 +1041,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1048,6 +1056,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1062,6 +1071,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":3}]"
@@ -1076,6 +1086,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1090,6 +1101,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1104,6 +1116,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1112,56 +1125,63 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/UserCard.vue:component:1:UserCard",
             "line": 3,
             "props": "user,title",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/UserList.vue:component:1:UserList",
             "line": 4,
             "props": "modelValue,filter",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/Tag.vue:component:1:TagChip",
             "line": 5,
             "props": "label",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
             "line": 15,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 9,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/components/ListItem.vue:component:1:ListItem",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 4,
             "props": "count",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/components/UserList.vue:component:1:UserList",
             "child": "file:src/components/ListItem.vue:component:1:ListItem",
             "line": 3,
             "props": "key,item",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       },
@@ -1487,7 +1507,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.vue:component:1:App",
@@ -1499,6 +1519,7 @@
             "endLine": 36,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "title,query",
             "hooks": "useUsers",
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8}]"
@@ -1513,6 +1534,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1527,6 +1549,7 @@
             "endLine": 22,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "item",
             "hooks": "useUsers",
             "pendingRenders": null
@@ -1541,6 +1564,7 @@
             "endLine": 17,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": "useUsers",
             "pendingRenders": null
@@ -1555,6 +1579,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "label,color",
             "hooks": null,
             "pendingRenders": null
@@ -1569,6 +1594,7 @@
             "endLine": 15,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "user,title",
             "hooks": null,
             "pendingRenders": null
@@ -1583,6 +1609,7 @@
             "endLine": 18,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "modelValue,filter",
             "hooks": null,
             "pendingRenders": null
@@ -1597,6 +1624,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1611,6 +1639,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1625,6 +1654,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":3}]"
@@ -1639,6 +1669,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1653,6 +1684,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1667,6 +1699,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1675,56 +1708,63 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/UserCard.vue:component:1:UserCard",
             "line": 3,
             "props": "user,title",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/UserList.vue:component:1:UserList",
             "line": 4,
             "props": "modelValue,filter",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/Tag.vue:component:1:TagChip",
             "line": 5,
             "props": "label",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
             "line": 15,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 9,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/components/ListItem.vue:component:1:ListItem",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 4,
             "props": "count",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/components/UserList.vue:component:1:UserList",
             "child": "file:src/components/ListItem.vue:component:1:ListItem",
             "line": 3,
             "props": "key,item",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       }
@@ -1776,7 +1816,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.vue:component:1:App",
@@ -1788,6 +1828,7 @@
             "endLine": 36,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "title,query",
             "hooks": "useUsers",
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8}]"
@@ -1802,6 +1843,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1816,6 +1858,7 @@
             "endLine": 22,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "item",
             "hooks": "useUsers",
             "pendingRenders": null
@@ -1830,6 +1873,7 @@
             "endLine": 17,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": "useUsers",
             "pendingRenders": null
@@ -1844,6 +1888,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "label,color",
             "hooks": null,
             "pendingRenders": null
@@ -1858,6 +1903,7 @@
             "endLine": 15,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "user,title",
             "hooks": null,
             "pendingRenders": null
@@ -1872,6 +1918,7 @@
             "endLine": 18,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "modelValue,filter",
             "hooks": null,
             "pendingRenders": null
@@ -1886,6 +1933,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1900,6 +1948,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1914,6 +1963,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":3}]"
@@ -1928,6 +1978,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1942,6 +1993,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1956,6 +2008,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1964,56 +2017,63 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/UserCard.vue:component:1:UserCard",
             "line": 3,
             "props": "user,title",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/UserList.vue:component:1:UserList",
             "line": 4,
             "props": "modelValue,filter",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/Tag.vue:component:1:TagChip",
             "line": 5,
             "props": "label",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
             "line": 15,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 9,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/components/ListItem.vue:component:1:ListItem",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 4,
             "props": "count",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/components/UserList.vue:component:1:UserList",
             "child": "file:src/components/ListItem.vue:component:1:ListItem",
             "line": 3,
             "props": "key,item",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       }
@@ -2564,7 +2624,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.vue:component:1:App",
@@ -2576,6 +2636,7 @@
             "endLine": 36,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "title,query",
             "hooks": "useUsers",
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":8}]"
@@ -2590,6 +2651,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -2604,6 +2666,7 @@
             "endLine": 22,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "item",
             "hooks": "useUsers",
             "pendingRenders": null
@@ -2618,6 +2681,7 @@
             "endLine": 17,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": "useUsers",
             "pendingRenders": null
@@ -2632,6 +2696,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "label,color",
             "hooks": null,
             "pendingRenders": null
@@ -2646,6 +2711,7 @@
             "endLine": 15,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "user,title",
             "hooks": null,
             "pendingRenders": null
@@ -2660,6 +2726,7 @@
             "endLine": 18,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "modelValue,filter",
             "hooks": null,
             "pendingRenders": null
@@ -2674,6 +2741,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -2688,6 +2756,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -2702,6 +2771,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"RouterView\",\"props\":[],\"line\":3}]"
@@ -2716,6 +2786,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -2730,6 +2801,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -2744,6 +2816,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -2752,56 +2825,63 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/UserCard.vue:component:1:UserCard",
             "line": 3,
             "props": "user,title",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/UserList.vue:component:1:UserList",
             "line": 4,
             "props": "modelValue,filter",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/Tag.vue:component:1:TagChip",
             "line": 5,
             "props": "label",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/SearchBox.vue:component:1:SearchBox",
             "line": 15,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.vue:component:1:App",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 9,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/components/ListItem.vue:component:1:ListItem",
             "child": "file:src/components/Badge.vue:component:1:Badge",
             "line": 4,
             "props": "count",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/components/UserList.vue:component:1:UserList",
             "child": "file:src/components/ListItem.vue:component:1:ListItem",
             "line": 3,
             "props": "key,item",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       },
