@@ -771,11 +771,11 @@ Angular is decorator-based like NestJS. The decorator route graph (`createDecora
 ### Routing and API
 
 - [x] Angular Router `Routes` arrays (including lazy `loadComponent` / `loadChildren`) become `Page` nodes
-- [ ] `HttpClient` calls become `REQUESTS`
+- [x] `HttpClient` calls become `REQUESTS`
 
 ### Acceptance criteria
 
-- [ ] Fixtures and golden coverage for components, DI, routes and `HttpClient`
+- [x] Fixtures and golden coverage for components, DI, routes and `HttpClient`
 - [ ] A pinned Angular sample (candidate: a RealWorld Angular frontend) with hand labels in `bench:accuracy`
 - [x] Precision stays at 100%; recall is reported
 

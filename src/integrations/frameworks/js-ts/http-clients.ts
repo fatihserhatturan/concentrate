@@ -40,6 +40,13 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 // `api(url | config)` on an imported or local binding, are recorded with
 // `httpReceiver` and no `httpClient`; the contributor resolves the receiver
 // through imports and drops the request when it is not an instance.
+//
+// Angular: in a class, `this.http.get(url)` / `.post` / … and
+// `this.http.request('GET', url)` on a field typed with `HttpClient` from
+// `@angular/common/http` (a constructor parameter property or an
+// `inject(HttpClient)` field) are recorded with client `angular`. A
+// `${this.baseUrl}` in the URL, or a URL that is `this.baseUrl`, takes the
+// string or template the class initializes that field with.
 
 const methods = new Set(["get", "post", "put", "patch", "delete", "head", "options"]);
 
@@ -58,6 +65,7 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
 
   const bindings = new Set([...imported.keys(), ...parsed.nodes.filter((node) => node.label === "Variable").map((node) => String(node.properties.name))]);
   markInstances(rootNode, parsed.nodes, { axios, ky, ofetch });
+  const angularClient = [...imported].find(([, from]) => from === "@angular/common/http:HttpClient")?.[0];
 
   const callsByPosition = new Map<string, GraphNode>();
   for (const node of parsed.nodes) {
@@ -66,9 +74,11 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
     }
   }
 
-  const visit = (node: SyntaxNode) => {
+  const visit = (node: SyntaxNode, angular: AngularClass | null) => {
+    if (node.type === "class_declaration" && angularClient) angular = angularClass(node, fileNodeId, parsed.nodes, angularClient);
     if (node.type === "call_expression") {
-      const request = httpRequest(node, { fetch: !local("fetch"), axios, ky, ofetch, nuxt }) ?? keyRequest(node, swr, query) ?? instanceRequest(node, bindings);
+      const request = (angular ? angularRequest(node, angular) : null)
+        ?? httpRequest(node, { fetch: !local("fetch"), axios, ky, ofetch, nuxt }) ?? keyRequest(node, swr, query) ?? instanceRequest(node, bindings);
       const call = request ? callsByPosition.get(`${node.startPosition.row + 1}:${node.startPosition.column}`) : undefined;
       if (request && call) {
         if (request.client) call.properties.httpClient = request.client;
@@ -77,9 +87,58 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
         call.properties.httpUrl = request.url;
       }
     }
-    for (const child of node.namedChildren) if (child) visit(child);
+    for (const child of node.namedChildren) if (child) visit(child, angular);
   };
-  visit(rootNode);
+  visit(rootNode, null);
+}
+
+// The `HttpClient` fields of an Angular class and the string or template
+// each field is initialized with.
+type AngularClass = { clients: Set<string>; strings: Map<string, SyntaxNode> };
+
+function angularClass(declaration: SyntaxNode, fileNodeId: string, nodes: readonly GraphNode[], clientName: string): AngularClass | null {
+  const name = declaration.childForFieldName("name")?.text;
+  if (!name) return null;
+  const prefix = `${fileNodeId}:class:${declaration.startPosition.row + 1}:${name}:field:`;
+  const clients = new Set(nodes
+    .filter((node) => node.label === "Field" && node.id.startsWith(prefix) && node.properties.typeName === clientName)
+    .map((node) => String(node.properties.name)));
+  if (clients.size === 0) return null;
+  const strings = new Map<string, SyntaxNode>();
+  for (const member of declaration.childForFieldName("body")?.namedChildren ?? []) {
+    if (member?.type !== "public_field_definition") continue;
+    const field = member.childForFieldName("name")?.text;
+    const value = member.childForFieldName("value");
+    if (field && (value?.type === "string" || value?.type === "template_string")) strings.set(field, value);
+  }
+  return { clients, strings };
+}
+
+// `this.http.get<User>(url)`, `this.http.request('POST', url)`.
+function angularRequest(call: SyntaxNode, angular: AngularClass): Request | null {
+  const callee = call.childForFieldName("function");
+  if (callee?.type !== "member_expression") return null;
+  const receiver = callee.childForFieldName("object");
+  if (receiver?.type !== "member_expression" || receiver.childForFieldName("object")?.type !== "this") return null;
+  if (!angular.clients.has(receiver.childForFieldName("property")?.text ?? "")) return null;
+  const member = callee.childForFieldName("property")?.text ?? "";
+  const args = call.childForFieldName("arguments")?.namedChildren.filter((arg): arg is SyntaxNode => arg !== null) ?? [];
+  if (member === "request") {
+    const method = args[0]?.type === "string" ? args[0].text.slice(1, -1).toLowerCase() : null;
+    return { client: "angular", method: method && methods.has(method) ? method.toUpperCase() : null, url: angularUrl(args[1], angular) };
+  }
+  return methods.has(member) ? { client: "angular", method: member.toUpperCase(), url: angularUrl(args[0], angular) } : null;
+}
+
+function angularUrl(node: SyntaxNode | undefined, angular: AngularClass): string | null {
+  const field = (expression: string) => /^this\.(#?[A-Za-z_$][\w$]*)$/u.exec(expression.trim())?.[1];
+  const named = node?.type === "member_expression" ? field(node.text) : undefined;
+  const url = named !== undefined ? urlOf(angular.strings.get(named)) : urlOf(node);
+  return url?.replace(/\$\{([^{}]*)\}/gu, (placeholder, expression: string) => {
+    const name = field(expression);
+    const value = name !== undefined ? angular.strings.get(name) : undefined;
+    return value ? value.text.slice(1, -1) : placeholder;
+  }) ?? null;
 }
 
 const nuxtFetch = /^(?:#app|#imports|nuxt\/app):(?:useFetch|useLazyFetch)$/u;

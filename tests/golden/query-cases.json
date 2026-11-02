@@ -939,6 +939,19 @@
         }
       }
     ],
+    "angular-http": [
+      {
+        "tool": "api_consumers",
+        "args": {}
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "PUT",
+          "path": "/api/articles/:slug"
+        }
+      }
+    ],
     "vanilla-html": [
       {
         "tool": "find_callers",

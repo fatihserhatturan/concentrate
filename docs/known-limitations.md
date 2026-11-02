@@ -698,6 +698,15 @@ Astro).
   fetcher that builds a different URL than the key (`fetch(API + key)`),
   `useSWRInfinite`, `useSWRMutation`, `useMutation` and
   `queryClient.fetchQuery` are not read.
+- Angular `HttpClient` (client `angular`): `this.http.get(…)` / `.post` / …
+  and `this.http.request('PUT', url)` on a field of the class typed with
+  `HttpClient` from `@angular/common/http` (a constructor parameter property
+  or an `inject(HttpClient)` field). `${this.baseUrl}`, or a URL that is
+  `this.baseUrl`, takes the string or template the class initializes the
+  field with. A client passed around or held outside the class, a base URL
+  set in the constructor or read from another object
+  (`${environment.apiUrl}`), and interceptors that rewrite the URL are not
+  followed, so such calls stay unlinked.
 - The method is the member name or a literal `method` option (GET without
   one); options held in a variable or spreading another object leave it
   unknown, and the call is not linked.

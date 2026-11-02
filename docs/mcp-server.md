@@ -170,7 +170,7 @@ These answer a whole question in one call instead of a chain of lookups.
   `consumerPages`.
 - `api_consumers({ method?, path?, routeFile?, framework?, file?, client?, limit = 50 })`:
   the calls linked to a route by `REQUESTS` (fetch, axios, ky, ofetch, SWR,
-  TanStack Query, tRPC), filtered by the route's method, path (resolved full
+  TanStack Query, Angular `HttpClient`, tRPC), filtered by the route's method, path (resolved full
   path or as declared), declaring file or framework, or by the calling `file`
   or `client`; with no filter, every linked call. Each consumer has its
   `route` (method, full path, framework, file, line), the `client`, the
