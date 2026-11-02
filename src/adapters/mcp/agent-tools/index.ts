@@ -18,9 +18,9 @@ const limit = (fallback: number) => ({ type: "number", description: `Maximum ite
 export const agentToolDefinitions = [
   {
     name: "impact_of",
-    description: `What is affected if a function, method, class or file changes: transitive callers with their call depth, module-level callers, the routes and entrypoints that run any of them, the UI components they implement, the components that render those and the pages that render any of them, the frontend calls that reach the affected routes (apiConsumers) with the components and pages whose code makes them, and the data models, env vars and config the changed code uses. For a route, use route_details instead. ${budgetNote}`,
+    description: `What is affected if a function, method, class or file changes: transitive callers with their call depth, module-level callers, the routes and entrypoints that run any of them, the UI components they implement, the components that render those and the pages that render any of them, the frontend calls that reach the affected routes (apiConsumers) with the components and pages whose code makes them, the state stores the change writes (Pinia, Redux Toolkit, Zustand, Jotai, Svelte) with the functions that read them and the components and pages those reach (storeComponents, storePages), and the data models, env vars and config the changed code uses. A store's name or hook as symbol asks what reading that store reaches. For a route, use route_details instead. ${budgetNote}`,
     inputSchema: objectSchema({
-      symbol: { type: "string", description: "Function, method or class name (a class covers all its methods)." },
+      symbol: { type: "string", description: "Function, method or class name (a class covers all its methods), or a store's name or hook." },
       file: { type: "string", description: "Scan-relative file path or path suffix. Alone, covers every function in the file; with symbol, narrows it." },
       maxDepth,
       limit: limit(50),

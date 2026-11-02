@@ -127,7 +127,9 @@ export const byFileAndLine = (left: object, right: object) => {
 // and entrypoints that run any of those functions, and the data models, env
 // vars and config values the seeds themselves use. Components implemented by
 // any of those functions add the components that render them, and the pages
-// that render any of those components.
+// that render any of those components. Stores the change writes (or that
+// are `seedStoreIds`) add the functions that read them and, through those,
+// `storeComponents` and `storePages`.
 export async function computeImpact(
   engine: IQueryEngine,
   seedIds: readonly string[],
@@ -136,6 +138,8 @@ export async function computeImpact(
   loaded?: Map<string, FunctionInfo>,
   // Pages the callers list; without it, callers are capped at `limit` like the other lists.
   callersWindow?: PageWindow,
+  // Stores that count as changed (impact_of on a store's name).
+  seedStoreIds: readonly string[] = [],
 ) {
   const [functions, edges] = await Promise.all([loaded ?? loadFunctions(engine), loadCallEdges(engine)]);
   const depth = walkCalls(edges, seedIds, "up", maxDepth);
@@ -171,6 +175,8 @@ export async function computeImpact(
   const consumers = routeIds.length > 0
     ? await apiConsumers(engine, routeIds, maxDepth, functions, edges)
     : { consumers: [], components: [], pages: [] };
+  // Across stores: the code that reads a store the change writes.
+  const stores = await storeImpact(engine, affectedIds, seedStoreIds, maxDepth, functions, edges, limit);
 
   const via = (row: Row) => ({
     function: name(String(row.fn)).name,
@@ -201,6 +207,9 @@ export async function computeImpact(
     apiConsumers: consumers.consumers.map(describeConsumer).slice(0, limit),
     consumerComponents: consumers.components.slice(0, limit),
     consumerPages: consumers.pages.slice(0, limit),
+    stores: stores.stores.slice(0, limit),
+    storeComponents: stores.components.slice(0, limit),
+    storePages: stores.pages.slice(0, limit),
     dataAccess: mergeRows(resources.dataAccess, ["fn"], "usedBy", via).slice(0, limit),
     tables: summarizeTables(resources.tables, via).slice(0, limit),
     envVars: mergeRows(resources.envVars, ["fn"], "usedBy", via).slice(0, limit),
@@ -670,4 +679,108 @@ function callFile(id: string): string | null {
 // A consumer as listed in results, without internal ids.
 export function describeConsumer({ routeId: _routeId, fn: _fn, ...consumer }: Awaited<ReturnType<typeof apiConsumers>>["consumers"][number]) {
   return consumer;
+}
+
+// Stores reached by a change, and the code that reads them: a store changes
+// when an affected function writes it (WRITES_STORE), is one of its actions
+// (STORE_ACTION) or defines it (STORE_DEFINED_BY_FUNCTION), or when it is in
+// `seedStoreIds`; a store whose definition reads a changed store (a derived
+// atom, a selector function) changes in turn. The functions that read the
+// changed stores, and their callers up to `maxDepth`, add the components and
+// pages they implement or load.
+export async function storeImpact(
+  engine: IQueryEngine,
+  affectedIds: readonly string[],
+  seedStoreIds: readonly string[],
+  maxDepth: number,
+  functions: Map<string, FunctionInfo>,
+  edges: readonly CallEdge[],
+  limit: number,
+) {
+  const describe = (id: string) => describeFunction(functions.get(id), id);
+  const [writes, definitions, reads, stores] = await Promise.all([
+    engine.query(`
+      MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store)
+      WHERE id(fn) IN $ids
+      RETURN id(store) AS store, id(fn) AS fn, rel.members AS members
+    `, { ids: [...affectedIds] }),
+    engine.query(`
+      MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function)
+      RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType
+    `),
+    engine.query(`
+      MATCH (fn:Function)-[rel:READS_STORE]->(store:Store)
+      RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members
+    `),
+    engine.query(`
+      MATCH (file:File)-[:DECLARES_STORE]->(store:Store)
+      RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind,
+        file.relativePath AS file, store.line AS line
+    `),
+  ]) as Row[][];
+
+  const affected = new Set(affectedIds);
+  const changedBy = new Map<string, Row[]>();
+  const change = (store: string, item: Row | null) => {
+    const items = changedBy.get(store) ?? [];
+    if (item && !items.some((existing) => JSON.stringify(existing) === JSON.stringify(item))) items.push(item);
+    changedBy.set(store, items);
+  };
+  for (const store of seedStoreIds) change(store, null);
+  for (const row of writes!) {
+    const members = str(row.members);
+    change(String(row.store), { function: describe(String(row.fn)).name, functionFile: describe(String(row.fn)).file, as: "writes", ...(members ? { members: members.split(",") } : {}) });
+  }
+  const storesDefinedBy = new Map<string, string[]>();
+  for (const row of definitions!) {
+    const fn = String(row.fn);
+    if (row.relType === "STORE_DEFINED_BY_FUNCTION") storesDefinedBy.set(fn, [...storesDefinedBy.get(fn) ?? [], String(row.store)]);
+    if (affected.has(fn)) {
+      change(String(row.store), { function: describe(fn).name, functionFile: describe(fn).file, as: row.relType === "STORE_ACTION" ? "action" : "definition" });
+    }
+  }
+  // Derived stores: a definition that reads a changed store.
+  for (let round = 0; round < maxDepth; round++) {
+    let grew = false;
+    for (const row of reads!) {
+      if (!changedBy.has(String(row.store))) continue;
+      for (const derived of storesDefinedBy.get(String(row.fn)) ?? []) {
+        if (changedBy.has(derived)) continue;
+        change(derived, { store: storeName(stores!, String(row.store)), as: "derived" });
+        grew = true;
+      }
+    }
+    if (!grew) break;
+  }
+
+  const readers = reads!.filter((row) => changedBy.has(String(row.store)));
+  const readerIds = [...new Set(readers.map((row) => String(row.fn)))];
+  const depth = walkCalls(edges, readerIds, "up", maxDepth);
+  const ui = readerIds.length > 0 ? await componentImpact(engine, [...depth.keys()], maxDepth, describe) : { components: [], pages: [] };
+  const storesById = new Map(stores!.map((row) => [String(row.id), row]));
+  return {
+    stores: [...changedBy].flatMap(([id, items]) => {
+      const store = storesById.get(id);
+      if (!store) return [];
+      const storeReaders = readers.filter((row) => String(row.store) === id).map((row) => {
+        const members = str(row.members);
+        return { function: describe(String(row.fn)).name, file: describe(String(row.fn)).file, line: num(row.line), ...(members ? { members: members.split(",") } : {}) };
+      }).sort(byFileAndLine);
+      return [{
+        name: str(store.name),
+        library: str(store.library),
+        kind: str(store.kind),
+        file: str(store.file),
+        line: num(store.line),
+        changedBy: items,
+        readBy: storeReaders.slice(0, limit),
+      }];
+    }).sort(byFileAndLine),
+    components: ui.components,
+    pages: ui.pages,
+  };
+}
+
+function storeName(stores: readonly Row[], id: string): string | null {
+  return str(stores.find((row) => String(row.id) === id)?.name);
 }

@@ -6,6 +6,7 @@ import { asObject, objectSchema, optionalBoolean, optionalLimit, optionalString,
 import { fitToBudget } from "./budget.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
 import { pagedResult, pageWindow, type PageWindow } from "./paging.js";
+import { listStores } from "./stores.js";
 import { listTables } from "./tables.js";
 
 export type McpToolContent = {
@@ -45,6 +46,7 @@ const graphTools: Record<string, McpTool> = {
   list_env_config: { handler: listEnvConfig, listKey: "envConfig", defaultLimit: 50 },
   list_data_access: { handler: listDataAccess, listKey: "dataAccess", defaultLimit: 50 },
   list_tables: { handler: listTables, listKey: "tables", defaultLimit: 20 },
+  list_stores: { handler: listStores, listKey: "stores", defaultLimit: 20 },
 };
 const tools: Record<string, McpTool> = { ...graphTools, ...agentTools, ...analysisTools };
 
@@ -60,6 +62,7 @@ const titles: Record<string, string> = {
   list_env_config: "List env vars and config",
   list_data_access: "List data access",
   list_tables: "List database tables",
+  list_stores: "List state stores",
   impact_of: "Impact of a change",
   detect_changes: "Detect working-tree changes",
   route_details: "Route details",
@@ -278,6 +281,16 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       name: { type: "string", description: "Optional table name substring." },
       library: { type: "string", description: "Optional library filter: prisma, typeorm, mongoose, drizzle or knex." },
+      limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
+    }),
+  },
+  {
+    name: "list_stores",
+    description: "Frontend state stores (Pinia defineStore, Redux Toolkit slices and configureStore, Zustand create, Jotai atoms, Svelte stores) with their state, getters and actions, the functions that define them, and the functions that read or write them (with the members they use). Answers \"what reads the cart store?\"; for what a store change reaches (components, pages), use impact_of with the store's name.",
+    inputSchema: objectSchema({
+      name: { type: "string", description: "Optional store name or hook substring." },
+      library: { type: "string", description: "Optional library filter: pinia, redux, zustand, jotai or svelte." },
+      file: { type: "string", description: "Optional declaring file relative path." },
       limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
     }),
   },

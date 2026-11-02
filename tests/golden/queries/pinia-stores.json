@@ -768,6 +768,321 @@
     }
   },
   {
+    "tool": "list_stores",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, store.hook AS hook, file.relativePath AS file, store.line AS line, store.state AS state, store.getters AS getters, store.actions AS actions, store.slices AS slices",
+        "params": {
+          "name": "",
+          "library": "",
+          "file": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/stores/cart.ts:store:4:cart",
+            "name": "cart",
+            "library": "pinia",
+            "kind": "options",
+            "hook": "useCartStore",
+            "file": "src/stores/cart.ts",
+            "line": 4,
+            "state": "items,coupon",
+            "getters": "count,hasCoupon",
+            "actions": "add,clear",
+            "slices": null
+          },
+          {
+            "id": "file:src/stores/user.ts:store:5:user",
+            "name": "user",
+            "library": "pinia",
+            "kind": "setup",
+            "hook": "useUserStore",
+            "file": "src/stores/user.ts",
+            "line": 5,
+            "state": "name",
+            "getters": "loggedIn",
+            "actions": "login,logout",
+            "slices": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store)<-[rel:READS_STORE|WRITES_STORE]-(fn:Function) OPTIONAL MATCH (fnFile:File)-[:DEFINES_FUNCTION]->(fn) RETURN id(store) AS store, id(fn) AS fn, fn.name AS function, fnFile.relativePath AS file, rel.line AS line, label(rel) AS relType, rel.members AS members",
+        "params": {
+          "name": "",
+          "library": "",
+          "file": ""
+        },
+        "rows": [
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/components/CartBadge.vue:function:5:<script setup>",
+            "function": "<script setup>",
+            "file": "src/components/CartBadge.vue",
+            "line": 9,
+            "relType": "READS_STORE",
+            "members": "count"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/components/CartView.vue:function:8:<script setup>",
+            "function": "<script setup>",
+            "file": "src/components/CartView.vue",
+            "line": 12,
+            "relType": "READS_STORE",
+            "members": "items,count"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/components/CartView.vue:function:8:<script setup>",
+            "function": "<script setup>",
+            "file": "src/components/CartView.vue",
+            "line": 12,
+            "relType": "WRITES_STORE",
+            "members": "coupon,add"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/composables/useCheckout.ts:function:6:useCheckout",
+            "function": "useCheckout",
+            "file": "src/composables/useCheckout.ts",
+            "line": 7,
+            "relType": "READS_STORE",
+            "members": "count"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/composables/useCheckout.ts:function:6:useCheckout",
+            "function": "useCheckout",
+            "file": "src/composables/useCheckout.ts",
+            "line": 7,
+            "relType": "WRITES_STORE",
+            "members": "$patch"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/stores/user.ts:function:11:logout",
+            "function": "logout",
+            "file": "src/stores/user.ts",
+            "line": 13,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/stores/user.ts:function:11:logout",
+            "function": "logout",
+            "file": "src/stores/user.ts",
+            "line": 13,
+            "relType": "WRITES_STORE",
+            "members": "clear"
+          },
+          {
+            "store": "file:src/stores/user.ts:store:5:user",
+            "fn": "file:src/components/LoginForm.vue:function:8:<script setup>",
+            "function": "<script setup>",
+            "file": "src/components/LoginForm.vue",
+            "line": 13,
+            "relType": "READS_STORE",
+            "members": "loggedIn"
+          },
+          {
+            "store": "file:src/stores/user.ts:store:5:user",
+            "fn": "file:src/components/LoginForm.vue:function:8:<script setup>",
+            "function": "<script setup>",
+            "file": "src/components/LoginForm.vue",
+            "line": 13,
+            "relType": "WRITES_STORE",
+            "members": "login"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, fn.name AS function, fn.line AS line, label(rel) AS relType",
+        "params": {
+          "name": "",
+          "library": "",
+          "file": ""
+        },
+        "rows": [
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "function": "add",
+            "line": 13,
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "function": "clear",
+            "line": 17,
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/user.ts:store:5:user",
+            "function": "<defineStore:user:arg1>",
+            "line": 5,
+            "relType": "STORE_DEFINED_BY_FUNCTION"
+          },
+          {
+            "store": "file:src/stores/user.ts:store:5:user",
+            "function": "login",
+            "line": 8,
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/user.ts:store:5:user",
+            "function": "logout",
+            "line": 11,
+            "relType": "STORE_ACTION"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {},
+      "totalStores": 2,
+      "stores": [
+        {
+          "name": "cart",
+          "library": "pinia",
+          "kind": "options",
+          "hook": "useCartStore",
+          "file": "src/stores/cart.ts",
+          "line": 4,
+          "state": [
+            "items",
+            "coupon"
+          ],
+          "getters": [
+            "count",
+            "hasCoupon"
+          ],
+          "actions": [
+            "add",
+            "clear"
+          ],
+          "definedBy": [],
+          "readBy": 4,
+          "writtenBy": 3,
+          "readers": [
+            {
+              "function": "<script setup>",
+              "file": "src/components/CartBadge.vue",
+              "line": 9,
+              "members": [
+                "count"
+              ]
+            },
+            {
+              "function": "<script setup>",
+              "file": "src/components/CartView.vue",
+              "line": 12,
+              "members": [
+                "count",
+                "items"
+              ]
+            },
+            {
+              "function": "useCheckout",
+              "file": "src/composables/useCheckout.ts",
+              "line": 7,
+              "members": [
+                "count"
+              ]
+            },
+            {
+              "function": "logout",
+              "file": "src/stores/user.ts",
+              "line": 13
+            }
+          ],
+          "writers": [
+            {
+              "function": "<script setup>",
+              "file": "src/components/CartView.vue",
+              "line": 12,
+              "members": [
+                "add",
+                "coupon"
+              ]
+            },
+            {
+              "function": "useCheckout",
+              "file": "src/composables/useCheckout.ts",
+              "line": 7,
+              "members": [
+                "$patch"
+              ]
+            },
+            {
+              "function": "logout",
+              "file": "src/stores/user.ts",
+              "line": 13,
+              "members": [
+                "clear"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "user",
+          "library": "pinia",
+          "kind": "setup",
+          "hook": "useUserStore",
+          "file": "src/stores/user.ts",
+          "line": 5,
+          "state": [
+            "name"
+          ],
+          "getters": [
+            "loggedIn"
+          ],
+          "actions": [
+            "login",
+            "logout"
+          ],
+          "definedBy": [
+            {
+              "function": "<defineStore:user:arg1>",
+              "line": 5
+            }
+          ],
+          "readBy": 1,
+          "writtenBy": 1,
+          "readers": [
+            {
+              "function": "<script setup>",
+              "file": "src/components/LoginForm.vue",
+              "line": 13,
+              "members": [
+                "loggedIn"
+              ]
+            }
+          ],
+          "writers": [
+            {
+              "function": "<script setup>",
+              "file": "src/components/LoginForm.vue",
+              "line": 13,
+              "members": [
+                "login"
+              ]
+            }
+          ]
+        }
+      ],
+      "note": "Stores come from Pinia defineStore, Redux Toolkit createSlice / configureStore, Zustand create, Jotai atoms and Svelte stores. readBy / writtenBy count distinct functions; each store lists up to 20 readers and writers. A Redux root store's slices map its state keys to their reducers.",
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
     "tool": "impact_of",
     "args": {
       "symbol": "add"
@@ -932,6 +1247,14 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
+        "params": {
+          "symbol": "add"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
         "rows": [
           {
@@ -1075,6 +1398,221 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store) WHERE id(fn) IN $ids RETURN id(store) AS store, id(fn) AS fn, rel.members AS members",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add",
+            "file:src/components/CartView.vue:function:14:addSample"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType",
+        "rows": [
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/stores/cart.ts:function:13:add",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/stores/cart.ts:function:17:clear",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/user.ts:store:5:user",
+            "fn": "file:src/stores/user.ts:function:5:<defineStore:user:arg1>",
+            "relType": "STORE_DEFINED_BY_FUNCTION"
+          },
+          {
+            "store": "file:src/stores/user.ts:store:5:user",
+            "fn": "file:src/stores/user.ts:function:8:login",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/user.ts:store:5:user",
+            "fn": "file:src/stores/user.ts:function:11:logout",
+            "relType": "STORE_ACTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_STORE]->(store:Store) RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members",
+        "rows": [
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/components/CartBadge.vue:function:5:<script setup>",
+            "line": 9,
+            "members": "count"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/components/CartView.vue:function:8:<script setup>",
+            "line": 12,
+            "members": "items,count"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/composables/useCheckout.ts:function:6:useCheckout",
+            "line": 7,
+            "members": "count"
+          },
+          {
+            "store": "file:src/stores/cart.ts:store:4:cart",
+            "fn": "file:src/stores/user.ts:function:11:logout",
+            "line": 13,
+            "members": ""
+          },
+          {
+            "store": "file:src/stores/user.ts:store:5:user",
+            "fn": "file:src/components/LoginForm.vue:function:8:<script setup>",
+            "line": 13,
+            "members": "loggedIn"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": [
+          {
+            "id": "file:src/stores/cart.ts:store:4:cart",
+            "name": "cart",
+            "library": "pinia",
+            "kind": "options",
+            "file": "src/stores/cart.ts",
+            "line": 4
+          },
+          {
+            "id": "file:src/stores/user.ts:store:5:user",
+            "name": "user",
+            "library": "pinia",
+            "kind": "setup",
+            "file": "src/stores/user.ts",
+            "line": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/CartBadge.vue:function:5:<script setup>",
+            "file:src/components/CartView.vue:function:8:<script setup>",
+            "file:src/composables/useCheckout.ts:function:6:useCheckout",
+            "file:src/stores/user.ts:function:11:logout"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:src/components/CartBadge.vue:component:1:CartBadge",
+            "fn": "file:src/components/CartBadge.vue:function:5:<script setup>"
+          },
+          {
+            "component": "file:src/components/CartView.vue:component:1:CartView",
+            "fn": "file:src/components/CartView.vue:function:8:<script setup>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/components/CartBadge.vue:function:5:<script setup>",
+            "file:src/components/CartView.vue:function:8:<script setup>",
+            "file:src/composables/useCheckout.ts:function:6:useCheckout",
+            "file:src/stores/user.ts:function:11:logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/CartBadge.vue:function:5:<script setup>",
+            "file:src/components/CartView.vue:function:8:<script setup>",
+            "file:src/composables/useCheckout.ts:function:6:useCheckout",
+            "file:src/stores/user.ts:function:11:logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/components/CartBadge.vue:component:1:CartBadge",
+            "name": "CartBadge",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/CartBadge.vue",
+            "line": 1,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "selector": null,
+            "props": null,
+            "hooks": "useCartStore",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/CartView.vue:component:1:CartView",
+            "name": "CartView",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/CartView.vue",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "selector": null,
+            "props": null,
+            "hooks": "useCartStore",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/LoginForm.vue:component:1:LoginForm",
+            "name": "LoginForm",
+            "kind": "script-setup",
+            "framework": "vue",
+            "file": "src/components/LoginForm.vue",
+            "line": 1,
+            "endLine": 17,
+            "isExported": true,
+            "tagName": null,
+            "selector": null,
+            "props": null,
+            "hooks": "useUserStore",
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:src/components/CartBadge.vue:component:1:CartBadge",
+            "file:src/components/CartView.vue:component:1:CartView"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1122,6 +1660,77 @@
       "apiConsumers": [],
       "consumerComponents": [],
       "consumerPages": [],
+      "stores": [
+        {
+          "name": "cart",
+          "library": "pinia",
+          "kind": "options",
+          "file": "src/stores/cart.ts",
+          "line": 4,
+          "changedBy": [
+            {
+              "function": "add",
+              "functionFile": "src/stores/cart.ts",
+              "as": "action"
+            }
+          ],
+          "readBy": [
+            {
+              "function": "<script setup>",
+              "file": "src/components/CartBadge.vue",
+              "line": 9,
+              "members": [
+                "count"
+              ]
+            },
+            {
+              "function": "<script setup>",
+              "file": "src/components/CartView.vue",
+              "line": 12,
+              "members": [
+                "items",
+                "count"
+              ]
+            },
+            {
+              "function": "useCheckout",
+              "file": "src/composables/useCheckout.ts",
+              "line": 7,
+              "members": [
+                "count"
+              ]
+            },
+            {
+              "function": "logout",
+              "file": "src/stores/user.ts",
+              "line": 13
+            }
+          ]
+        }
+      ],
+      "storeComponents": [
+        {
+          "name": "CartBadge",
+          "kind": "script-setup",
+          "file": "src/components/CartBadge.vue",
+          "line": 1,
+          "depth": 0,
+          "changedThrough": [
+            "<script setup>"
+          ]
+        },
+        {
+          "name": "CartView",
+          "kind": "script-setup",
+          "file": "src/components/CartView.vue",
+          "line": 1,
+          "depth": 0,
+          "changedThrough": [
+            "<script setup>"
+          ]
+        }
+      ],
+      "storePages": [],
       "dataAccess": [],
       "tables": [],
       "envVars": [],

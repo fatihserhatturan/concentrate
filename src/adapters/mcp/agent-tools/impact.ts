@@ -10,8 +10,9 @@ import { computeImpact, loadFunctions, loadSymbols, matchesFile, type SymbolInfo
 const run = promisify(execFile);
 
 // impact_of: a symbol name selects the functions with that name plus the
-// methods of a class with that name; a file selects every function in it.
-// Both together narrow the symbol to that file.
+// methods of a class with that name, and the stores with that name or hook;
+// a file selects every function in it. Both together narrow the symbol to
+// that file.
 export async function impactOf(engine: IQueryEngine, args: Record<string, unknown>, window: PageWindow) {
   const symbol = optionalString(args.symbol);
   const file = optionalString(args.file);
@@ -23,15 +24,23 @@ export async function impactOf(engine: IQueryEngine, args: Record<string, unknow
     .filter((fn) => !symbol || fn.name === symbol || fn.className === symbol)
     .filter((fn) => !file || matchesFile(fn.file, file))
     .map((fn) => fn.id);
-  if (seedIds.length === 0) {
+  const storeRows = symbol
+    ? await engine.query(`
+      MATCH (file:File)-[:DECLARES_STORE]->(store:Store)
+      WHERE store.name = $symbol OR store.hook = $symbol
+      RETURN id(store) AS id, file.relativePath AS file
+    `, { symbol }) as Array<{ id?: unknown; file?: unknown }>
+    : [];
+  const storeIds = storeRows.filter((row) => !file || matchesFile(String(row.file), file)).map((row) => String(row.id));
+  if (seedIds.length === 0 && storeIds.length === 0) {
     return {
       symbol: symbol ?? null,
       file: file ?? null,
       seeds: [],
-      note: "No function, method or class matched. Use find_definitions to look the name up; for routes use route_details.",
+      note: "No function, method, class or store matched. Use find_definitions to look the name up; for routes use route_details.",
     };
   }
-  return { symbol: symbol ?? null, file: file ?? null, maxDepth, ...await computeImpact(engine, seedIds, maxDepth, window.limit, functions, window) };
+  return { symbol: symbol ?? null, file: file ?? null, maxDepth, ...await computeImpact(engine, seedIds, maxDepth, window.limit, functions, window, storeIds) };
 }
 
 // Revisions are passed to git as a single argv entry, never through a shell;
@@ -122,7 +131,7 @@ export async function detectChanges(engine: IQueryEngine, args: Record<string, u
     ...(unscannedFiles.length > 0
       ? { note: "Some changed files are not in the graph (new, unsupported or excluded). Rescan, or keep `concentrate watch` running, to include new files." }
       : {}),
-    impact: impact && { callers: impact.callers, moduleCallers: impact.moduleCallers, routes: impact.routes, entrypoints: impact.entrypoints, components: impact.components, pages: impact.pages, apiConsumers: impact.apiConsumers, consumerComponents: impact.consumerComponents, consumerPages: impact.consumerPages, dataAccess: impact.dataAccess, envVars: impact.envVars, config: impact.config },
+    impact: impact && { callers: impact.callers, moduleCallers: impact.moduleCallers, routes: impact.routes, entrypoints: impact.entrypoints, components: impact.components, pages: impact.pages, apiConsumers: impact.apiConsumers, consumerComponents: impact.consumerComponents, consumerPages: impact.consumerPages, stores: impact.stores, storeComponents: impact.storeComponents, storePages: impact.storePages, dataAccess: impact.dataAccess, envVars: impact.envVars, config: impact.config },
   };
 }
 

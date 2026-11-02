@@ -13,8 +13,9 @@ import { addStoreRefs, emptyRef, owningFunction, type StoreRef } from "./svelte-
 // for a value, `derived` for a read function, `writable` for a read function
 // and a write function, `write-only` for `atom(null, write)`, or the helper's
 // name (`atomWithStorage`). `state` lists the keys of an object literal
-// value (the second argument of `atomWithStorage`). The read and write
-// functions, when they have Functions, are STORE_DEFINED_BY_FUNCTION.
+// value (the second argument of `atomWithStorage`). The read function, when
+// it has a Function, is STORE_DEFINED_BY_FUNCTION and the write function a
+// STORE_ACTION.
 //
 // Atom use is recorded on the Function it happens in (`storeRefs`, as for
 // Svelte stores), with the atom's binding: `useAtomValue(a)` reads,
@@ -71,9 +72,9 @@ export function applyJotaiSemantics({ fileNodeId, rootNode, parsed, state }: JsT
       };
       parsed.nodes.push(store);
       parsed.relationships.push({ from: fileNodeId, to: store.id, type: "DECLARES_STORE", properties: {} });
-      for (const fn of [read, write]) {
+      for (const [fn, type] of [[read, "STORE_DEFINED_BY_FUNCTION"], [write, "STORE_ACTION"]] as const) {
         const functionId = fn ? functionIdByAst.get(fn.id) : undefined;
-        if (functionId) parsed.relationships.push({ from: store.id, to: functionId, type: "STORE_DEFINED_BY_FUNCTION", properties: {} });
+        if (functionId) parsed.relationships.push({ from: store.id, to: functionId, type, properties: {} });
       }
       if (read) recordGetSet(read, parsed, functionIdByAst);
       if (write) recordGetSet(write, parsed, functionIdByAst);

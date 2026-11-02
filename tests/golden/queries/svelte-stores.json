@@ -922,6 +922,500 @@
     }
   },
   {
+    "tool": "list_stores",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, store.hook AS hook, file.relativePath AS file, store.line AS line, store.state AS state, store.getters AS getters, store.actions AS actions, store.slices AS slices",
+        "params": {
+          "name": "",
+          "library": "",
+          "file": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/lib/cart.svelte.ts:store:1:cart",
+            "name": "cart",
+            "library": "svelte",
+            "kind": "state",
+            "hook": "cart",
+            "file": "src/lib/cart.svelte.ts",
+            "line": 1,
+            "state": "items,coupon",
+            "getters": null,
+            "actions": null,
+            "slices": null
+          },
+          {
+            "id": "file:src/lib/stores.ts:store:3:count",
+            "name": "count",
+            "library": "svelte",
+            "kind": "writable",
+            "hook": "count",
+            "file": "src/lib/stores.ts",
+            "line": 3,
+            "state": null,
+            "getters": null,
+            "actions": null,
+            "slices": null
+          },
+          {
+            "id": "file:src/lib/stores.ts:store:5:time",
+            "name": "time",
+            "library": "svelte",
+            "kind": "readable",
+            "hook": "time",
+            "file": "src/lib/stores.ts",
+            "line": 5,
+            "state": null,
+            "getters": null,
+            "actions": null,
+            "slices": null
+          },
+          {
+            "id": "file:src/lib/stores.ts:store:10:doubled",
+            "name": "doubled",
+            "library": "svelte",
+            "kind": "derived",
+            "hook": "doubled",
+            "file": "src/lib/stores.ts",
+            "line": 10,
+            "state": null,
+            "getters": null,
+            "actions": null,
+            "slices": null
+          },
+          {
+            "id": "file:src/lib/stores.ts:store:26:counter",
+            "name": "counter",
+            "library": "svelte",
+            "kind": "custom",
+            "hook": "counter",
+            "file": "src/lib/stores.ts",
+            "line": 26,
+            "state": null,
+            "getters": null,
+            "actions": "increment,reset",
+            "slices": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store)<-[rel:READS_STORE|WRITES_STORE]-(fn:Function) OPTIONAL MATCH (fnFile:File)-[:DEFINES_FUNCTION]->(fn) RETURN id(store) AS store, id(fn) AS fn, fn.name AS function, fnFile.relativePath AS file, rel.line AS line, label(rel) AS relType, rel.members AS members",
+        "params": {
+          "name": "",
+          "library": "",
+          "file": ""
+        },
+        "rows": [
+          {
+            "store": "file:src/lib/cart.svelte.ts:store:1:cart",
+            "fn": "file:src/App.svelte:function:16:coupon",
+            "function": "coupon",
+            "file": "src/App.svelte",
+            "line": 17,
+            "relType": "WRITES_STORE",
+            "members": "coupon"
+          },
+          {
+            "store": "file:src/lib/cart.svelte.ts:store:1:cart",
+            "fn": "file:src/App.svelte:function:1:<script>",
+            "function": "<script>",
+            "file": "src/App.svelte",
+            "line": 27,
+            "relType": "READS_STORE",
+            "members": "items"
+          },
+          {
+            "store": "file:src/lib/cart.svelte.ts:store:1:cart",
+            "fn": "file:src/lib/cart.svelte.ts:function:3:addItem",
+            "function": "addItem",
+            "file": "src/lib/cart.svelte.ts",
+            "line": 4,
+            "relType": "WRITES_STORE",
+            "members": "items"
+          },
+          {
+            "store": "file:src/lib/cart.svelte.ts:store:1:cart",
+            "fn": "file:src/lib/cart.svelte.ts:function:7:itemCount",
+            "function": "itemCount",
+            "file": "src/lib/cart.svelte.ts",
+            "line": 8,
+            "relType": "READS_STORE",
+            "members": "items"
+          },
+          {
+            "store": "file:src/lib/cart.svelte.ts:store:1:cart",
+            "fn": "file:src/lib/logger.ts:function:9:logCart",
+            "function": "logCart",
+            "file": "src/lib/logger.ts",
+            "line": 10,
+            "relType": "READS_STORE",
+            "members": "items"
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:3:count",
+            "fn": "file:src/App.svelte:function:7:bump",
+            "function": "bump",
+            "file": "src/App.svelte",
+            "line": 8,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:3:count",
+            "fn": "file:src/App.svelte:function:7:bump",
+            "function": "bump",
+            "file": "src/App.svelte",
+            "line": 8,
+            "relType": "WRITES_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:3:count",
+            "fn": "file:src/App.svelte:function:12:reset",
+            "function": "reset",
+            "file": "src/App.svelte",
+            "line": 13,
+            "relType": "WRITES_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:3:count",
+            "fn": "file:src/App.svelte:function:1:<script>",
+            "function": "<script>",
+            "file": "src/App.svelte",
+            "line": 21,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:3:count",
+            "fn": "file:src/App.svelte:function:1:<script>",
+            "function": "<script>",
+            "file": "src/App.svelte",
+            "line": 21,
+            "relType": "WRITES_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:3:count",
+            "fn": "file:src/lib/logger.ts:function:5:logCount",
+            "function": "logCount",
+            "file": "src/lib/logger.ts",
+            "line": 6,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:5:time",
+            "fn": "file:src/Clock.svelte:function:1:<script>",
+            "function": "<script>",
+            "file": "src/Clock.svelte",
+            "line": 5,
+            "relType": "READS_STORE",
+            "members": "toLocaleTimeString"
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:5:time",
+            "fn": "file:src/lib/logger.ts:function:13:watchTime",
+            "function": "watchTime",
+            "file": "src/lib/logger.ts",
+            "line": 14,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:10:doubled",
+            "fn": "file:src/App.svelte:function:1:<script>",
+            "function": "<script>",
+            "file": "src/App.svelte",
+            "line": 21,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:26:counter",
+            "fn": "file:src/App.svelte:function:1:<script>",
+            "function": "<script>",
+            "file": "src/App.svelte",
+            "line": 25,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:26:counter",
+            "fn": "file:src/App.svelte:function:1:<script>",
+            "function": "<script>",
+            "file": "src/App.svelte",
+            "line": 25,
+            "relType": "WRITES_STORE",
+            "members": "increment,reset"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, fn.name AS function, fn.line AS line, label(rel) AS relType",
+        "params": {
+          "name": "",
+          "library": "",
+          "file": ""
+        },
+        "rows": [
+          {
+            "store": "file:src/lib/stores.ts:store:5:time",
+            "function": "<readable:arg1>",
+            "line": 5,
+            "relType": "STORE_DEFINED_BY_FUNCTION"
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:10:doubled",
+            "function": "<derived:arg1>",
+            "line": 10,
+            "relType": "STORE_DEFINED_BY_FUNCTION"
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:26:counter",
+            "function": "createCounter",
+            "line": 12,
+            "relType": "STORE_DEFINED_BY_FUNCTION"
+          },
+          {
+            "store": "file:src/lib/stores.ts:store:26:counter",
+            "function": "reset",
+            "line": 15,
+            "relType": "STORE_ACTION"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {},
+      "totalStores": 5,
+      "stores": [
+        {
+          "name": "cart",
+          "library": "svelte",
+          "kind": "state",
+          "hook": "cart",
+          "file": "src/lib/cart.svelte.ts",
+          "line": 1,
+          "state": [
+            "items",
+            "coupon"
+          ],
+          "getters": [],
+          "actions": [],
+          "definedBy": [],
+          "readBy": 3,
+          "writtenBy": 2,
+          "readers": [
+            {
+              "function": "<script>",
+              "file": "src/App.svelte",
+              "line": 27,
+              "members": [
+                "items"
+              ]
+            },
+            {
+              "function": "itemCount",
+              "file": "src/lib/cart.svelte.ts",
+              "line": 8,
+              "members": [
+                "items"
+              ]
+            },
+            {
+              "function": "logCart",
+              "file": "src/lib/logger.ts",
+              "line": 10,
+              "members": [
+                "items"
+              ]
+            }
+          ],
+          "writers": [
+            {
+              "function": "coupon",
+              "file": "src/App.svelte",
+              "line": 17,
+              "members": [
+                "coupon"
+              ]
+            },
+            {
+              "function": "addItem",
+              "file": "src/lib/cart.svelte.ts",
+              "line": 4,
+              "members": [
+                "items"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "count",
+          "library": "svelte",
+          "kind": "writable",
+          "hook": "count",
+          "file": "src/lib/stores.ts",
+          "line": 3,
+          "state": [],
+          "getters": [],
+          "actions": [],
+          "definedBy": [],
+          "readBy": 3,
+          "writtenBy": 3,
+          "readers": [
+            {
+              "function": "bump",
+              "file": "src/App.svelte",
+              "line": 8
+            },
+            {
+              "function": "<script>",
+              "file": "src/App.svelte",
+              "line": 21
+            },
+            {
+              "function": "logCount",
+              "file": "src/lib/logger.ts",
+              "line": 6
+            }
+          ],
+          "writers": [
+            {
+              "function": "bump",
+              "file": "src/App.svelte",
+              "line": 8
+            },
+            {
+              "function": "reset",
+              "file": "src/App.svelte",
+              "line": 13
+            },
+            {
+              "function": "<script>",
+              "file": "src/App.svelte",
+              "line": 21
+            }
+          ]
+        },
+        {
+          "name": "time",
+          "library": "svelte",
+          "kind": "readable",
+          "hook": "time",
+          "file": "src/lib/stores.ts",
+          "line": 5,
+          "state": [],
+          "getters": [],
+          "actions": [],
+          "definedBy": [
+            {
+              "function": "<readable:arg1>",
+              "line": 5
+            }
+          ],
+          "readBy": 2,
+          "writtenBy": 0,
+          "readers": [
+            {
+              "function": "<script>",
+              "file": "src/Clock.svelte",
+              "line": 5,
+              "members": [
+                "toLocaleTimeString"
+              ]
+            },
+            {
+              "function": "watchTime",
+              "file": "src/lib/logger.ts",
+              "line": 14
+            }
+          ],
+          "writers": []
+        },
+        {
+          "name": "doubled",
+          "library": "svelte",
+          "kind": "derived",
+          "hook": "doubled",
+          "file": "src/lib/stores.ts",
+          "line": 10,
+          "state": [],
+          "getters": [],
+          "actions": [],
+          "definedBy": [
+            {
+              "function": "<derived:arg1>",
+              "line": 10
+            }
+          ],
+          "readBy": 1,
+          "writtenBy": 0,
+          "readers": [
+            {
+              "function": "<script>",
+              "file": "src/App.svelte",
+              "line": 21
+            }
+          ],
+          "writers": []
+        },
+        {
+          "name": "counter",
+          "library": "svelte",
+          "kind": "custom",
+          "hook": "counter",
+          "file": "src/lib/stores.ts",
+          "line": 26,
+          "state": [],
+          "getters": [],
+          "actions": [
+            "increment",
+            "reset"
+          ],
+          "definedBy": [
+            {
+              "function": "createCounter",
+              "line": 12
+            }
+          ],
+          "readBy": 1,
+          "writtenBy": 1,
+          "readers": [
+            {
+              "function": "<script>",
+              "file": "src/App.svelte",
+              "line": 25
+            }
+          ],
+          "writers": [
+            {
+              "function": "<script>",
+              "file": "src/App.svelte",
+              "line": 25,
+              "members": [
+                "increment",
+                "reset"
+              ]
+            }
+          ]
+        }
+      ],
+      "note": "Stores come from Pinia defineStore, Redux Toolkit createSlice / configureStore, Zustand create, Jotai atoms and Svelte stores. readBy / writtenBy count distinct functions; each store lists up to 20 readers and writers. A Redux root store's slices map its state keys to their reducers.",
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  },
+  {
     "tool": "get_file_outline",
     "args": {
       "file": "src/lib/stores.ts"
