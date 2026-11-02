@@ -1,0 +1,1693 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 63
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 8
+          },
+          {
+            "table": "File",
+            "count": 8
+          },
+          {
+            "table": "Import",
+            "count": 17
+          },
+          {
+            "table": "Function",
+            "count": 14
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 11
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 3
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 34
+          },
+          {
+            "table": "Route",
+            "count": 0
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 2
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 4
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 63,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 8
+        },
+        {
+          "table": "File",
+          "count": 8
+        },
+        {
+          "table": "Import",
+          "count": 17
+        },
+        {
+          "table": "Function",
+          "count": 14
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 11
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 3
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 34
+        },
+        {
+          "table": "Route",
+          "count": 0
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 2
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 4
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "setToken",
+            "kind": "Function",
+            "file": "src/app/store.ts",
+            "line": 9,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "Profile",
+            "kind": "Function",
+            "file": "src/components/Profile.tsx",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "recalculate",
+            "kind": "Function",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 11,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "addItem",
+            "kind": "Function",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 19,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "removeItem",
+            "kind": "Function",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 23,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "clear",
+            "kind": "Function",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 28,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "selectItems",
+            "kind": "Function",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 41,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "fetchProfile",
+            "kind": "Function",
+            "file": "src/lib/api.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "createSlice",
+            "kind": "Function",
+            "file": "src/lib/slices.ts",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "useAppDispatch",
+            "kind": "Variable",
+            "file": "src/app/hooks.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "useAppSelector",
+            "kind": "Variable",
+            "file": "src/app/hooks.ts",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "sessionSlice",
+            "kind": "Variable",
+            "file": "src/app/store.ts",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "rootReducer",
+            "kind": "Variable",
+            "file": "src/app/store.ts",
+            "line": 17,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "store",
+            "kind": "Variable",
+            "file": "src/app/store.ts",
+            "line": 23,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "initialState",
+            "kind": "Variable",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "cartSlice",
+            "kind": "Variable",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 43,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "userSlice",
+            "kind": "Variable",
+            "file": "src/features/user/userSlice.ts",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "userReducer",
+            "kind": "Variable",
+            "file": "src/features/user/userSlice.ts",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "fake",
+            "kind": "Variable",
+            "file": "src/lib/api.ts",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "RootState",
+            "kind": "TypeAlias",
+            "file": "src/app/store.ts",
+            "line": 25,
+            "isExported": true,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          },
+          {
+            "name": "Item",
+            "kind": "TypeAlias",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 4,
+            "isExported": false,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "setToken",
+          "kind": "Function",
+          "file": "src/app/store.ts",
+          "line": 9,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "Profile",
+          "kind": "Function",
+          "file": "src/components/Profile.tsx",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "recalculate",
+          "kind": "Function",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 11,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "addItem",
+          "kind": "Function",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 19,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "removeItem",
+          "kind": "Function",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 23,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "clear",
+          "kind": "Function",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 28,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "selectItems",
+          "kind": "Function",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 41,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "fetchProfile",
+          "kind": "Function",
+          "file": "src/lib/api.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "createSlice",
+          "kind": "Function",
+          "file": "src/lib/slices.ts",
+          "line": 1,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "useAppDispatch",
+          "kind": "Variable",
+          "file": "src/app/hooks.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "useAppSelector",
+          "kind": "Variable",
+          "file": "src/app/hooks.ts",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "sessionSlice",
+          "kind": "Variable",
+          "file": "src/app/store.ts",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "rootReducer",
+          "kind": "Variable",
+          "file": "src/app/store.ts",
+          "line": 17,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "store",
+          "kind": "Variable",
+          "file": "src/app/store.ts",
+          "line": 23,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "initialState",
+          "kind": "Variable",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "cartSlice",
+          "kind": "Variable",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "default",
+          "kind": "Variable",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 43,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "userSlice",
+          "kind": "Variable",
+          "file": "src/features/user/userSlice.ts",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "userReducer",
+          "kind": "Variable",
+          "file": "src/features/user/userSlice.ts",
+          "line": 20,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "fake",
+          "kind": "Variable",
+          "file": "src/lib/api.ts",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/components/Cart.tsx",
+            "name": "Cart",
+            "kind": "Function",
+            "line": 6,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/components/Profile.tsx",
+            "name": "Profile",
+            "kind": "Function",
+            "line": 6,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/features/cart/cartSlice.ts",
+            "name": "selectItems",
+            "kind": "Function",
+            "line": 41,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/api.ts",
+            "name": "fetchProfile",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/slices.ts",
+            "name": "createSlice",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/app/hooks.ts",
+            "name": "useAppDispatch",
+            "kind": "Variable",
+            "line": 4,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/app/hooks.ts",
+            "name": "useAppSelector",
+            "kind": "Variable",
+            "line": 5,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/app/store.ts",
+            "name": "store",
+            "kind": "Variable",
+            "line": 23,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/features/cart/cartSlice.ts",
+            "name": "cartSlice",
+            "kind": "Variable",
+            "line": 15,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/features/cart/cartSlice.ts",
+            "name": "default",
+            "kind": "Variable",
+            "line": 43,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/features/user/userSlice.ts",
+            "name": "userSlice",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/features/user/userSlice.ts",
+            "name": "userReducer",
+            "kind": "Variable",
+            "line": 20,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/lib/api.ts",
+            "name": "fake",
+            "kind": "Variable",
+            "line": 6,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/app/store.ts",
+            "name": "RootState",
+            "kind": "TypeAlias",
+            "line": 25,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          },
+          {
+            "file": "src/app/store.ts",
+            "name": "AppDispatch",
+            "kind": "TypeAlias",
+            "line": 26,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/components/Cart.tsx",
+          "name": "Cart",
+          "kind": "Function",
+          "line": 6,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/components/Profile.tsx",
+          "name": "Profile",
+          "kind": "Function",
+          "line": 6,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/features/cart/cartSlice.ts",
+          "name": "selectItems",
+          "kind": "Function",
+          "line": 41,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/api.ts",
+          "name": "fetchProfile",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/slices.ts",
+          "name": "createSlice",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/app/hooks.ts",
+          "name": "useAppDispatch",
+          "kind": "Variable",
+          "line": 4,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/app/hooks.ts",
+          "name": "useAppSelector",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/app/store.ts",
+          "name": "store",
+          "kind": "Variable",
+          "line": 23,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/features/cart/cartSlice.ts",
+          "name": "cartSlice",
+          "kind": "Variable",
+          "line": 15,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/features/cart/cartSlice.ts",
+          "name": "default",
+          "kind": "Variable",
+          "line": 43,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/features/user/userSlice.ts",
+          "name": "userSlice",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/features/user/userSlice.ts",
+          "name": "userReducer",
+          "kind": "Variable",
+          "line": 20,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/lib/api.ts",
+          "name": "fake",
+          "kind": "Variable",
+          "line": 6,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/app/store.ts",
+          "name": "RootState",
+          "kind": "TypeAlias",
+          "line": 25,
+          "relationship": "DEFINES_TYPE_ALIAS"
+        },
+        {
+          "file": "src/app/store.ts",
+          "name": "AppDispatch",
+          "kind": "TypeAlias",
+          "line": 26,
+          "relationship": "DEFINES_TYPE_ALIAS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 15
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "find_callers",
+    "args": {
+      "name": "recalculate"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"recalculate\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "recalculate",
+            "caller": "addItem",
+            "callerKind": "Function",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 21,
+            "expression": "recalculate",
+            "relationship": "CALLS"
+          },
+          {
+            "target": "recalculate",
+            "caller": "removeItem",
+            "callerKind": "Function",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 25,
+            "expression": "recalculate",
+            "relationship": "CALLS"
+          },
+          {
+            "target": "recalculate",
+            "caller": "clear",
+            "callerKind": "Function",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 30,
+            "expression": "recalculate",
+            "relationship": "CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"recalculate\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"recalculate\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "recalculate",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [
+        {
+          "target": "recalculate",
+          "caller": "addItem",
+          "callerKind": "Function",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 21,
+          "expression": "recalculate",
+          "relationship": "CALLS"
+        },
+        {
+          "target": "recalculate",
+          "caller": "removeItem",
+          "callerKind": "Function",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 25,
+          "expression": "recalculate",
+          "relationship": "CALLS"
+        },
+        {
+          "target": "recalculate",
+          "caller": "clear",
+          "callerKind": "Function",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 30,
+          "expression": "recalculate",
+          "relationship": "CALLS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "get_file_outline",
+    "args": {
+      "file": "src/features/cart/cartSlice.ts"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "rows": [
+          {
+            "file": "src/app/hooks.ts"
+          },
+          {
+            "file": "src/app/store.ts"
+          },
+          {
+            "file": "src/components/Cart.tsx"
+          },
+          {
+            "file": "src/components/Profile.tsx"
+          },
+          {
+            "file": "src/features/cart/cartSlice.ts"
+          },
+          {
+            "file": "src/features/user/userSlice.ts"
+          },
+          {
+            "file": "src/lib/api.ts"
+          },
+          {
+            "file": "src/lib/slices.ts"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/features/cart/cartSlice.ts"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:11:recalculate",
+            "name": "recalculate",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "path": "<root>/src/features/cart/cartSlice.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:41:selectItems",
+            "name": "selectItems",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "path": "<root>/src/features/cart/cartSlice.ts",
+            "line": 41,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:19:addItem",
+            "name": "addItem",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "path": "<root>/src/features/cart/cartSlice.ts",
+            "line": 19,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:23:removeItem",
+            "name": "removeItem",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "path": "<root>/src/features/cart/cartSlice.ts",
+            "line": 23,
+            "endLine": 26
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:28:clear",
+            "name": "clear",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "path": "<root>/src/features/cart/cartSlice.ts",
+            "line": 28,
+            "endLine": 31
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/features/cart/cartSlice.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/features/cart/cartSlice.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/features/cart/cartSlice.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/features/cart/cartSlice.ts"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/features/cart/cartSlice.ts:type-alias:4:Item",
+            "name": "Item",
+            "file": "src/features/cart/cartSlice.ts",
+            "path": "<root>/src/features/cart/cartSlice.ts",
+            "line": 4,
+            "endLine": 4
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/features/cart/cartSlice.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/features/cart/cartSlice.ts"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/features/cart/cartSlice.ts:variable:6:initialState",
+            "name": "initialState",
+            "file": "src/features/cart/cartSlice.ts",
+            "path": "<root>/src/features/cart/cartSlice.ts",
+            "line": 6
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:variable:15:cartSlice",
+            "name": "cartSlice",
+            "file": "src/features/cart/cartSlice.ts",
+            "path": "<root>/src/features/cart/cartSlice.ts",
+            "line": 15
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:variable:43:default",
+            "name": "default",
+            "file": "src/features/cart/cartSlice.ts",
+            "path": "<root>/src/features/cart/cartSlice.ts",
+            "line": 43
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(n:Route) WHERE file.relativePath IN $files RETURN id(n) AS id, n.method AS method, coalesce(n.fullPath, n.path) AS routePath, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/features/cart/cartSlice.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_FIELD]->(field:Field) WHERE file.relativePath = $file RETURN class.name AS className, field.name AS name, field.typeName AS typeName, field.line AS line",
+        "params": {
+          "file": "src/features/cart/cartSlice.ts"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:IMPORTS]->(imp:Import) WHERE file.relativePath = $file RETURN imp.source AS source, imp.line AS line, imp.isTypeOnly AS isTypeOnly",
+        "params": {
+          "file": "src/features/cart/cartSlice.ts"
+        },
+        "rows": [
+          {
+            "source": "@reduxjs/toolkit",
+            "line": 1,
+            "isTypeOnly": false
+          },
+          {
+            "source": "../../app/store",
+            "line": 2,
+            "isTypeOnly": true
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE file.relativePath = $file RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.handlerName AS handlerName, entrypoint.line AS line",
+        "params": {
+          "file": "src/features/cart/cartSlice.ts"
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "file": "src/features/cart/cartSlice.ts",
+      "imports": [
+        {
+          "source": "@reduxjs/toolkit",
+          "line": 1,
+          "isTypeOnly": false
+        },
+        {
+          "source": "../../app/store",
+          "line": 2,
+          "isTypeOnly": true
+        }
+      ],
+      "outline": [
+        {
+          "kind": "type",
+          "name": "Item",
+          "line": 4,
+          "endLine": 4
+        },
+        {
+          "kind": "variable",
+          "name": "initialState",
+          "line": 6
+        },
+        {
+          "kind": "function",
+          "name": "recalculate",
+          "line": 11,
+          "endLine": 13
+        },
+        {
+          "kind": "variable",
+          "name": "cartSlice",
+          "line": 15
+        },
+        {
+          "kind": "function",
+          "name": "addItem",
+          "line": 19,
+          "endLine": 22
+        },
+        {
+          "kind": "function",
+          "name": "removeItem",
+          "line": 23,
+          "endLine": 26
+        },
+        {
+          "kind": "function",
+          "name": "clear",
+          "line": 28,
+          "endLine": 31
+        },
+        {
+          "kind": "function",
+          "name": "selectItems",
+          "line": 41,
+          "endLine": 41
+        },
+        {
+          "kind": "variable",
+          "name": "default",
+          "line": 43
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 9
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "selectItems"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/app/store.ts:function:9:setToken",
+            "name": "setToken",
+            "className": null,
+            "file": "src/app/store.ts",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/components/Cart.tsx:function:6:Cart",
+            "name": "Cart",
+            "className": null,
+            "file": "src/components/Cart.tsx",
+            "line": 6,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/components/Cart.tsx:function:11:add",
+            "name": "add",
+            "className": null,
+            "file": "src/components/Cart.tsx",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/Profile.tsx:function:6:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/components/Profile.tsx",
+            "line": 6,
+            "endLine": 21
+          },
+          {
+            "id": "file:src/components/Profile.tsx:function:13:signOut",
+            "name": "signOut",
+            "className": null,
+            "file": "src/components/Profile.tsx",
+            "line": 13,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:11:recalculate",
+            "name": "recalculate",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:41:selectItems",
+            "name": "selectItems",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 41,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:19:addItem",
+            "name": "addItem",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 19,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:23:removeItem",
+            "name": "removeItem",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 23,
+            "endLine": 26
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:28:clear",
+            "name": "clear",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 28,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/features/user/userSlice.ts:function:7:login",
+            "name": "login",
+            "className": null,
+            "file": "src/features/user/userSlice.ts",
+            "line": 7,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/features/user/userSlice.ts:function:11:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/features/user/userSlice.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/lib/api.ts:function:4:fetchProfile",
+            "name": "fetchProfile",
+            "className": null,
+            "file": "src/lib/api.ts",
+            "line": 4,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/lib/slices.ts:function:1:createSlice",
+            "name": "createSlice",
+            "className": null,
+            "file": "src/lib/slices.ts",
+            "line": 1,
+            "endLine": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/components/Cart.tsx:function:6:Cart",
+            "callee": "file:src/features/cart/cartSlice.ts:function:23:removeItem",
+            "line": 20
+          },
+          {
+            "caller": "file:src/components/Cart.tsx:function:11:add",
+            "callee": "file:src/features/cart/cartSlice.ts:function:19:addItem",
+            "line": 12
+          },
+          {
+            "caller": "file:src/components/Profile.tsx:function:13:signOut",
+            "callee": "file:src/app/store.ts:function:9:setToken",
+            "line": 15
+          },
+          {
+            "caller": "file:src/components/Profile.tsx:function:13:signOut",
+            "callee": "file:src/lib/api.ts:function:4:fetchProfile",
+            "line": 17
+          },
+          {
+            "caller": "file:src/features/cart/cartSlice.ts:function:19:addItem",
+            "callee": "file:src/features/cart/cartSlice.ts:function:11:recalculate",
+            "line": 21
+          },
+          {
+            "caller": "file:src/features/cart/cartSlice.ts:function:23:removeItem",
+            "callee": "file:src/features/cart/cartSlice.ts:function:11:recalculate",
+            "line": 25
+          },
+          {
+            "caller": "file:src/features/cart/cartSlice.ts:function:28:clear",
+            "callee": "file:src/features/cart/cartSlice.ts:function:11:recalculate",
+            "line": 30
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "symbol": "selectItems",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "selectItems",
+          "className": null,
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 41,
+          "endLine": 41
+        }
+      ],
+      "callers": [],
+      "moduleCallers": [],
+      "routes": [],
+      "entrypoints": [],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  }
+]

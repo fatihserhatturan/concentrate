@@ -822,6 +822,36 @@ Astro).
   action calls in the markup have no Call node and no `CALL_RESOLVES_TO`.
   Shadowing (a local variable or parameter with a store's name) is not
   checked, and a store passed to another function is not followed.
+- Redux Toolkit: in a file that imports from `@reduxjs/toolkit`, each
+  top-level `const xSlice = createSlice({ name, initialState, reducers })`
+  is a `Store` (library `redux`, kind `slice`) named by its `name`, with the
+  variable in `hook`; `state` lists the keys of `initialState` (an object
+  literal, or a constant of the file holding one), `actions` the keys of
+  `reducers` and `getters` those of `selectors`. Reducers written as
+  functions (also `{ reducer, prepare }`) become Functions that own their
+  calls and are `STORE_ACTION`s. `reducer` lists the names the file gives
+  the slice's reducer (`default`, `cartReducer`). Each top-level
+  `const store = configureStore({ reducer: { … } })` (the object inline,
+  `combineReducers({ … })`, or a constant of the file holding either) is a
+  `Store` (kind `store`) whose `state` lists the reducer keys and `slices`
+  maps each key to its reducer as written. Slices built in functions,
+  `createReducer`, `extraReducers`, the legacy `createStore` and
+  hand-written reducers are not read.
+- Redux use: a selector passed to `useSelector` or a `use…Selector` hook
+  (`useAppSelector`) that reads its state parameter (`(state) =>
+  state.cart.items`, `({ cart }) => cart.items`) gives `READS_STORE` from
+  the calling function to the slice under that key, with the members read;
+  the key maps to a slice through the `configureStore` reducers (a key
+  given no slice, or different slices by different stores, is left out). A
+  top-level `select…` function that reads its first parameter the same way
+  `READS_STORE` the slice itself, and passing it by name to a selector hook
+  (`useAppSelector(selectItems)`) reads what it reads, through imports. An
+  action creator called inside `dispatch(…)` (`dispatch(addItem(x))`,
+  declared with the slice and imported, or
+  `dispatch(cartSlice.actions.addItem(x))`) gives `WRITES_STORE` to its
+  slice; thunks (`createAsyncThunk`), `createSelector`, the slice's own
+  `selectors`, `connect` / `mapStateToProps`, RTK Query and calls at the top
+  level of a module are not followed.
 
 ## Review Process
 

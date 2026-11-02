@@ -111,7 +111,7 @@ export function applyPiniaSemantics({ fileNodeId, rootNode, parsed, state }: JsT
 
 // The Function of a getter or action: the one the file has for it, or one
 // made here with its calls (methods of the options object have none).
-function ownFunction(
+export function ownFunction(
   fileNodeId: string,
   name: string,
   value: SyntaxNode,

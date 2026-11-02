@@ -790,7 +790,7 @@ Completes M8: React-side stores on the `Store` node from Phase 14, store-aware M
 
 ### Stores
 
-- [ ] Redux Toolkit: `createSlice`, `configureStore`, `useSelector` and `dispatch` of slice actions
+- [x] Redux Toolkit: `createSlice`, `configureStore`, `useSelector` and `dispatch` of slice actions
 - [ ] Zustand `create` stores and their selectors
 - [ ] Jotai atoms
 
