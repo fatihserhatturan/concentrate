@@ -875,6 +875,22 @@ Astro).
   the keys it sets. Hooks with other names (`useBears`), vanilla stores read
   through `useStore(store, selector)` and stores passed around are not
   followed.
+- Jotai: in a file that imports `atom` from `jotai` / `jotai/vanilla` or an
+  `atomWith…` helper from `jotai/utils`, each top-level `const xAtom =
+  atom(…)` (also exported) is a `Store` (library `jotai`) named by its
+  variable, which is also its `hook`; `kind` is `primitive`, `derived` (a
+  read function), `writable` (read and write functions), `write-only`
+  (`atom(null, write)`) or the helper's name, and `state` lists the keys of
+  an object literal value. The read and write functions are
+  `STORE_DEFINED_BY_FUNCTION`. Atoms made in functions, `atomFamily`,
+  `selectAtom`, `splitAtom` and atoms in other atom libraries are not read.
+- Jotai use: `useAtomValue(a)` reads, `useSetAtom(a)` writes and
+  `useAtom(a)` reads (and writes when its setter is destructured), and in an
+  atom's read or write function `get(a)` reads and `set(a, …)` writes; the
+  atom binding resolves through imports (also a default export) to its
+  Store. `members` is empty (an atom is one value). The store API
+  (`store.get`, `store.set`, `useStore`), atoms passed as arguments and
+  hooks used at the top level of a module are not followed.
 
 ## Review Process
 

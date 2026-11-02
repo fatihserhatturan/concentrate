@@ -819,6 +819,20 @@
         }
       }
     ],
+    "jotai-atoms": [
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "src/atoms/counter.ts"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "Counter"
+        }
+      }
+    ],
     "svelte-components": [
       {
         "tool": "component_tree",

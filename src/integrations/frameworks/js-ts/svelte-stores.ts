@@ -317,7 +317,7 @@ function isDeclarationName(node: SyntaxNode): boolean {
 }
 
 // The nearest enclosing function that has a node.
-function owningFunction(node: SyntaxNode, functionIdByAst: ReadonlyMap<number, string>): string | null {
+export function owningFunction(node: SyntaxNode, functionIdByAst: ReadonlyMap<number, string>): string | null {
   for (let current = node.parent; current; current = current.parent) {
     const functionId = functionIdByAst.get(current.id);
     if (functionId) return functionId;
@@ -357,11 +357,11 @@ function importsSvelte(fileNodeId: string, parsed: ParsedSourceFile): boolean {
   return parsed.nodes.some((node) => importIds.has(node.id) && /^svelte(?:\/|$)/u.test(String(node.properties.source)));
 }
 
-function emptyRef(binding: string, line: number): StoreRef {
+export function emptyRef(binding: string, line: number): StoreRef {
   return { binding, line, read: false, write: false, reads: [], writes: [], calls: [], destructured: [] };
 }
 
-function addStoreRefs(parsed: ParsedSourceFile, functionId: string, refs: StoreRef[]): void {
+export function addStoreRefs(parsed: ParsedSourceFile, functionId: string, refs: StoreRef[]): void {
   const fn = parsed.nodes.find((node) => node.id === functionId);
   if (!fn) return;
   const existing = typeof fn.properties.storeRefs === "string" ? JSON.parse(fn.properties.storeRefs) as StoreRef[] : [];
