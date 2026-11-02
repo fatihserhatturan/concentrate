@@ -1,0 +1,5 @@
+{
+  "name": "svelte-stores",
+  "private": true,
+  "dependencies": { "svelte": "5.1.9" }
+}

@@ -176,7 +176,7 @@ function setupMembers(setup: SyntaxNode, functionIdByAst: Map<number, string>) {
 
 // What a function returns: an arrow's expression body, or the value of the
 // last top-level `return` of its block.
-function returnedValue(fn: SyntaxNode): SyntaxNode | null {
+export function returnedValue(fn: SyntaxNode): SyntaxNode | null {
   const body = fn.childForFieldName("body");
   if (!body) return null;
   if (body.type !== "statement_block") return unwrap(body);
@@ -185,7 +185,7 @@ function returnedValue(fn: SyntaxNode): SyntaxNode | null {
 }
 
 // Key → value of an object literal (shorthand values are the identifier).
-function objectEntries(object: SyntaxNode): Map<string, SyntaxNode | null> {
+export function objectEntries(object: SyntaxNode): Map<string, SyntaxNode | null> {
   const entries = new Map<string, SyntaxNode | null>();
   for (const entry of object.namedChildren) {
     if (entry?.type === "shorthand_property_identifier") entries.set(entry.text, entry);
@@ -274,7 +274,7 @@ function refsDestructuring(store: SyntaxNode, access: StoreAccess): void {
 
 // `store.member` in use: a call, an assignment or update (also of a nested
 // property, or through a mutating method such as `push`), else a read.
-function memberUse(member: SyntaxNode, access: StoreAccess): void {
+export function memberUse(member: SyntaxNode, access: StoreAccess): void {
   const name = member.childForFieldName("property")?.text;
   if (!name) return;
   const parent = member.parent;
