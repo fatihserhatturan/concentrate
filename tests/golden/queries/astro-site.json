@@ -1,0 +1,2611 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 59
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 10
+          },
+          {
+            "table": "File",
+            "count": 13
+          },
+          {
+            "table": "Import",
+            "count": 14
+          },
+          {
+            "table": "Function",
+            "count": 15
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 6
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 1
+          },
+          {
+            "table": "TypeAlias",
+            "count": 2
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 22
+          },
+          {
+            "table": "Route",
+            "count": 3
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 4
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 9
+          },
+          {
+            "table": "Page",
+            "count": 3
+          },
+          {
+            "table": "Store",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 59,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 10
+        },
+        {
+          "table": "File",
+          "count": 13
+        },
+        {
+          "table": "Import",
+          "count": 14
+        },
+        {
+          "table": "Function",
+          "count": 15
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 6
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 1
+        },
+        {
+          "table": "TypeAlias",
+          "count": 2
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 22
+        },
+        {
+          "table": "Route",
+          "count": 3
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 4
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 9
+        },
+        {
+          "table": "Page",
+          "count": 3
+        },
+        {
+          "table": "Store",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "Counter",
+            "kind": "Function",
+            "file": "src/components/Counter.tsx",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<frontmatter>",
+            "kind": "Function",
+            "file": "src/components/Header.astro",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<frontmatter>",
+            "kind": "Function",
+            "file": "src/components/ui/Card.astro",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<frontmatter>",
+            "kind": "Function",
+            "file": "src/layouts/Base.astro",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "savePost",
+            "kind": "Function",
+            "file": "src/lib/posts.ts",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<frontmatter>",
+            "kind": "Function",
+            "file": "src/pages/404.astro",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "GET",
+            "kind": "Function",
+            "file": "src/pages/api/posts.json.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<frontmatter>",
+            "kind": "Function",
+            "file": "src/pages/blog/[slug].astro",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "getStaticPaths",
+            "kind": "Function",
+            "file": "src/pages/blog/[slug].astro",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<frontmatter>",
+            "kind": "Function",
+            "file": "src/pages/index.astro",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "query",
+            "kind": "Variable",
+            "file": "src/components/Search.svelte",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "response",
+            "kind": "Variable",
+            "file": "src/pages/index.astro",
+            "line": 9,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "Counter",
+          "kind": "Function",
+          "file": "src/components/Counter.tsx",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<frontmatter>",
+          "kind": "Function",
+          "file": "src/components/Header.astro",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<frontmatter>",
+          "kind": "Function",
+          "file": "src/components/ui/Card.astro",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<frontmatter>",
+          "kind": "Function",
+          "file": "src/layouts/Base.astro",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "savePost",
+          "kind": "Function",
+          "file": "src/lib/posts.ts",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<frontmatter>",
+          "kind": "Function",
+          "file": "src/pages/404.astro",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "GET",
+          "kind": "Function",
+          "file": "src/pages/api/posts.json.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<frontmatter>",
+          "kind": "Function",
+          "file": "src/pages/blog/[slug].astro",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "getStaticPaths",
+          "kind": "Function",
+          "file": "src/pages/blog/[slug].astro",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<frontmatter>",
+          "kind": "Function",
+          "file": "src/pages/index.astro",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "query",
+          "kind": "Variable",
+          "file": "src/components/Search.svelte",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "response",
+          "kind": "Variable",
+          "file": "src/pages/index.astro",
+          "line": 9,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 12
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/components/Counter.tsx",
+            "name": "Counter",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/posts.ts",
+            "name": "listPosts",
+            "kind": "Function",
+            "line": 5,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/posts.ts",
+            "name": "findPost",
+            "kind": "Function",
+            "line": 9,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/posts.ts",
+            "name": "savePost",
+            "kind": "Function",
+            "line": 13,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/pages/api/[slug].ts",
+            "name": "ALL",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/pages/api/posts.json.ts",
+            "name": "GET",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/pages/api/posts.json.ts",
+            "name": "POST",
+            "kind": "Function",
+            "line": 6,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/pages/blog/[slug].astro",
+            "name": "getStaticPaths",
+            "kind": "Function",
+            "line": 5,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/lib/posts.ts",
+            "name": "Post",
+            "kind": "TypeAlias",
+            "line": 1,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/components/Counter.tsx",
+          "name": "Counter",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/posts.ts",
+          "name": "listPosts",
+          "kind": "Function",
+          "line": 5,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/posts.ts",
+          "name": "findPost",
+          "kind": "Function",
+          "line": 9,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/posts.ts",
+          "name": "savePost",
+          "kind": "Function",
+          "line": 13,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/pages/api/[slug].ts",
+          "name": "ALL",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/pages/api/posts.json.ts",
+          "name": "GET",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/pages/api/posts.json.ts",
+          "name": "POST",
+          "kind": "Function",
+          "line": 6,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/pages/blog/[slug].astro",
+          "name": "getStaticPaths",
+          "kind": "Function",
+          "line": 5,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/posts.ts",
+          "name": "Post",
+          "kind": "TypeAlias",
+          "line": 1,
+          "relationship": "DEFINES_TYPE_ALIAS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 9
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/pages/api/[slug].ts",
+            "line": 3,
+            "method": "ALL",
+            "path": "/api/[slug]",
+            "fullPath": "/api/[slug]",
+            "framework": "astro",
+            "handlerName": "ALL",
+            "handler": "ALL"
+          },
+          {
+            "file": "src/pages/api/posts.json.ts",
+            "line": 4,
+            "method": "GET",
+            "path": "/api/posts.json",
+            "fullPath": "/api/posts.json",
+            "framework": "astro",
+            "handlerName": "GET",
+            "handler": "GET"
+          },
+          {
+            "file": "src/pages/api/posts.json.ts",
+            "line": 6,
+            "method": "POST",
+            "path": "/api/posts.json",
+            "fullPath": "/api/posts.json",
+            "framework": "astro",
+            "handlerName": "POST",
+            "handler": "POST"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/pages/api/[slug].ts",
+          "line": 3,
+          "method": "ALL",
+          "path": "/api/[slug]",
+          "fullPath": "/api/[slug]",
+          "framework": "astro",
+          "handlerName": "ALL",
+          "handler": "ALL"
+        },
+        {
+          "file": "src/pages/api/posts.json.ts",
+          "line": 4,
+          "method": "GET",
+          "path": "/api/posts.json",
+          "fullPath": "/api/posts.json",
+          "framework": "astro",
+          "handlerName": "GET",
+          "handler": "GET"
+        },
+        {
+          "file": "src/pages/api/posts.json.ts",
+          "line": 6,
+          "method": "POST",
+          "path": "/api/posts.json",
+          "fullPath": "/api/posts.json",
+          "framework": "astro",
+          "handlerName": "POST",
+          "handler": "POST"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "component_tree",
+    "args": {
+      "name": "Index",
+      "depth": 2
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/components/Counter.tsx:component:3:Counter",
+            "name": "Counter",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Counter.tsx",
+            "line": 3,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Header.astro:component:1:Header",
+            "name": "Header",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/components/Header.astro",
+            "line": 1,
+            "endLine": 7,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,links",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Search.svelte:component:1:Search",
+            "name": "Search",
+            "kind": "runes",
+            "framework": "svelte",
+            "file": "src/components/Search.svelte",
+            "line": 1,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "props": "placeholder",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/ui/Card.astro:component:1:Card",
+            "name": "Card",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/components/ui/Card.astro",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,href",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/layouts/Base.astro:component:1:Base",
+            "name": "Base",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/layouts/Base.astro",
+            "line": 1,
+            "endLine": 17,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,description",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/404.astro:component:1:404",
+            "name": "404",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/404.astro",
+            "line": 1,
+            "endLine": 4,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/_drafts/wip.astro:component:1:Wip",
+            "name": "Wip",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/_drafts/wip.astro",
+            "line": 1,
+            "endLine": 1,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:component:1:Slug",
+            "name": "Slug",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/blog/[slug].astro",
+            "line": 1,
+            "endLine": 13,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/index.astro:component:1:Index",
+            "name": "Index",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/index.astro",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "rows": [
+          {
+            "parent": "file:src/layouts/Base.astro:component:1:Base",
+            "child": "file:src/components/Header.astro:component:1:Header",
+            "line": 14,
+            "props": "title",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/404.astro:component:1:404",
+            "child": "file:src/layouts/Base.astro:component:1:Base",
+            "line": 4,
+            "props": "title",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/blog/[slug].astro:component:1:Slug",
+            "child": "file:src/layouts/Base.astro:component:1:Base",
+            "line": 11,
+            "props": "title",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/layouts/Base.astro:component:1:Base",
+            "line": 12,
+            "props": "title,description",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/components/Counter.tsx:component:3:Counter",
+            "line": 13,
+            "props": "start",
+            "client": "visible"
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/components/Search.svelte:component:1:Search",
+            "line": 14,
+            "props": "placeholder",
+            "client": "load"
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/components/ui/Card.astro:component:1:Card",
+            "line": 16,
+            "props": "title,href",
+            "client": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn",
+        "params": {},
+        "rows": [
+          {
+            "component": "file:src/components/Counter.tsx:component:3:Counter",
+            "fn": "file:src/components/Counter.tsx:function:3:Counter"
+          },
+          {
+            "component": "file:src/components/Header.astro:component:1:Header",
+            "fn": "file:src/components/Header.astro:function:1:<frontmatter>"
+          },
+          {
+            "component": "file:src/components/Search.svelte:component:1:Search",
+            "fn": "file:src/components/Search.svelte:function:1:<script>"
+          },
+          {
+            "component": "file:src/components/ui/Card.astro:component:1:Card",
+            "fn": "file:src/components/ui/Card.astro:function:1:<frontmatter>"
+          },
+          {
+            "component": "file:src/layouts/Base.astro:component:1:Base",
+            "fn": "file:src/layouts/Base.astro:function:1:<frontmatter>"
+          },
+          {
+            "component": "file:src/pages/404.astro:component:1:404",
+            "fn": "file:src/pages/404.astro:function:1:<frontmatter>"
+          },
+          {
+            "component": "file:src/pages/blog/[slug].astro:component:1:Slug",
+            "fn": "file:src/pages/blog/[slug].astro:function:1:<frontmatter>"
+          },
+          {
+            "component": "file:src/pages/index.astro:component:1:Index",
+            "fn": "file:src/pages/index.astro:function:1:<frontmatter>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/Counter.tsx:function:3:Counter",
+            "name": "Counter",
+            "className": null,
+            "file": "src/components/Counter.tsx",
+            "line": 3,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/components/Header.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/components/Header.astro",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/components/Search.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/components/Search.svelte",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/components/ui/Card.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/components/ui/Card.astro",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/layouts/Base.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/layouts/Base.astro",
+            "line": 1,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/lib/posts.ts:function:5:listPosts",
+            "name": "listPosts",
+            "className": null,
+            "file": "src/lib/posts.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/lib/posts.ts:function:9:findPost",
+            "name": "findPost",
+            "className": null,
+            "file": "src/lib/posts.ts",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/lib/posts.ts:function:13:savePost",
+            "name": "savePost",
+            "className": null,
+            "file": "src/lib/posts.ts",
+            "line": 13,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/pages/404.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/404.astro",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/pages/api/[slug].ts:function:3:ALL",
+            "name": "ALL",
+            "className": null,
+            "file": "src/pages/api/[slug].ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/pages/api/posts.json.ts:function:4:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/pages/api/posts.json.ts",
+            "line": 4,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/pages/api/posts.json.ts:function:6:POST",
+            "name": "POST",
+            "className": null,
+            "file": "src/pages/api/posts.json.ts",
+            "line": 6,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "name": "getStaticPaths",
+            "className": null,
+            "file": "src/pages/blog/[slug].astro",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/blog/[slug].astro",
+            "line": 1,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/pages/index.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/index.astro",
+            "line": 1,
+            "endLine": 11
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_HOOK]->(hook:Function) RETURN id(user) AS user, id(hook) AS hook, rel.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_CONTEXT]->(context:Component) RETURN id(user) AS user, id(context) AS context, rel.line AS line",
+        "rows": []
+      }
+    ],
+    "output": {
+      "name": "Index",
+      "file": null,
+      "depth": 2,
+      "components": [
+        {
+          "name": "Index",
+          "kind": "astro",
+          "framework": "astro",
+          "file": "src/pages/index.astro",
+          "line": 1,
+          "endLine": 18,
+          "isExported": true,
+          "definedBy": {
+            "kind": "function",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/index.astro",
+            "line": 1,
+            "endLine": 11
+          },
+          "hooks": [],
+          "customHooks": [],
+          "contexts": [],
+          "renders": [
+            {
+              "depth": 1,
+              "parent": "Index",
+              "parentFile": "src/pages/index.astro",
+              "line": 12,
+              "component": "Base",
+              "componentKind": "astro",
+              "componentFile": "src/layouts/Base.astro",
+              "props": [
+                "title",
+                "description"
+              ]
+            },
+            {
+              "depth": 1,
+              "parent": "Index",
+              "parentFile": "src/pages/index.astro",
+              "line": 13,
+              "component": "Counter",
+              "componentKind": "function",
+              "componentFile": "src/components/Counter.tsx",
+              "props": [
+                "start"
+              ],
+              "client": "visible"
+            },
+            {
+              "depth": 1,
+              "parent": "Index",
+              "parentFile": "src/pages/index.astro",
+              "line": 14,
+              "component": "Search",
+              "componentKind": "runes",
+              "componentFile": "src/components/Search.svelte",
+              "props": [
+                "placeholder"
+              ],
+              "client": "load"
+            },
+            {
+              "depth": 1,
+              "parent": "Index",
+              "parentFile": "src/pages/index.astro",
+              "line": 16,
+              "component": "Card",
+              "componentKind": "astro",
+              "componentFile": "src/components/ui/Card.astro",
+              "props": [
+                "title",
+                "href"
+              ]
+            },
+            {
+              "depth": 2,
+              "parent": "Base",
+              "parentFile": "src/layouts/Base.astro",
+              "line": 14,
+              "component": "Header",
+              "componentKind": "astro",
+              "componentFile": "src/components/Header.astro",
+              "props": [
+                "title"
+              ]
+            }
+          ],
+          "unresolvedRenders": [],
+          "renderedBy": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "find_component_usages",
+    "args": {
+      "name": "Counter"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/components/Counter.tsx:component:3:Counter",
+            "name": "Counter",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Counter.tsx",
+            "line": 3,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Header.astro:component:1:Header",
+            "name": "Header",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/components/Header.astro",
+            "line": 1,
+            "endLine": 7,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,links",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Search.svelte:component:1:Search",
+            "name": "Search",
+            "kind": "runes",
+            "framework": "svelte",
+            "file": "src/components/Search.svelte",
+            "line": 1,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "props": "placeholder",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/ui/Card.astro:component:1:Card",
+            "name": "Card",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/components/ui/Card.astro",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,href",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/layouts/Base.astro:component:1:Base",
+            "name": "Base",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/layouts/Base.astro",
+            "line": 1,
+            "endLine": 17,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,description",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/404.astro:component:1:404",
+            "name": "404",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/404.astro",
+            "line": 1,
+            "endLine": 4,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/_drafts/wip.astro:component:1:Wip",
+            "name": "Wip",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/_drafts/wip.astro",
+            "line": 1,
+            "endLine": 1,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:component:1:Slug",
+            "name": "Slug",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/blog/[slug].astro",
+            "line": 1,
+            "endLine": 13,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/index.astro:component:1:Index",
+            "name": "Index",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/index.astro",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "rows": [
+          {
+            "parent": "file:src/layouts/Base.astro:component:1:Base",
+            "child": "file:src/components/Header.astro:component:1:Header",
+            "line": 14,
+            "props": "title",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/404.astro:component:1:404",
+            "child": "file:src/layouts/Base.astro:component:1:Base",
+            "line": 4,
+            "props": "title",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/blog/[slug].astro:component:1:Slug",
+            "child": "file:src/layouts/Base.astro:component:1:Base",
+            "line": 11,
+            "props": "title",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/layouts/Base.astro:component:1:Base",
+            "line": 12,
+            "props": "title,description",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/components/Counter.tsx:component:3:Counter",
+            "line": 13,
+            "props": "start",
+            "client": "visible"
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/components/Search.svelte:component:1:Search",
+            "line": 14,
+            "props": "placeholder",
+            "client": "load"
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/components/ui/Card.astro:component:1:Card",
+            "line": 16,
+            "props": "title,href",
+            "client": null
+          }
+        ]
+      }
+    ],
+    "output": {
+      "name": "Counter",
+      "file": null,
+      "components": [
+        {
+          "name": "Counter",
+          "kind": "function",
+          "framework": "react",
+          "file": "src/components/Counter.tsx",
+          "line": 3,
+          "endLine": 6,
+          "isExported": true
+        }
+      ],
+      "counts": {
+        "render": 1
+      },
+      "usages": [
+        {
+          "kind": "render",
+          "file": "src/pages/index.astro",
+          "line": 13,
+          "from": "Index",
+          "props": [
+            "start"
+          ],
+          "client": "visible"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_pages",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "rows": [
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "astro",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/pages/index.astro",
+            "line": null,
+            "component": "Index",
+            "componentFile": "src/pages/index.astro"
+          },
+          {
+            "fullPath": "/404",
+            "path": "/404",
+            "framework": "astro",
+            "router": "file",
+            "kind": "not-found",
+            "slot": null,
+            "file": "src/pages/404.astro",
+            "line": null,
+            "component": "404",
+            "componentFile": "src/pages/404.astro"
+          },
+          {
+            "fullPath": "/blog/[slug]",
+            "path": "/blog/[slug]",
+            "framework": "astro",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/pages/blog/[slug].astro",
+            "line": null,
+            "component": "Slug",
+            "componentFile": "src/pages/blog/[slug].astro"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "pages": [
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "astro",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/pages/index.astro",
+          "line": null,
+          "component": "Index",
+          "componentFile": "src/pages/index.astro"
+        },
+        {
+          "fullPath": "/404",
+          "path": "/404",
+          "framework": "astro",
+          "router": "file",
+          "kind": "not-found",
+          "slot": null,
+          "file": "src/pages/404.astro",
+          "line": null,
+          "component": "404",
+          "componentFile": "src/pages/404.astro"
+        },
+        {
+          "fullPath": "/blog/[slug]",
+          "path": "/blog/[slug]",
+          "framework": "astro",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/pages/blog/[slug].astro",
+          "line": null,
+          "component": "Slug",
+          "componentFile": "src/pages/blog/[slug].astro"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "POST",
+      "path": "/api/posts.json"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "POST",
+          "path": "/api/posts.json"
+        },
+        "rows": [
+          {
+            "id": "file:src/pages/api/posts.json.ts:route:6:0:POST:/api/posts.json",
+            "method": "POST",
+            "path": "/api/posts.json",
+            "fullPath": "/api/posts.json",
+            "framework": "astro",
+            "handlerName": "POST",
+            "file": "src/pages/api/posts.json.ts",
+            "line": 6
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/Counter.tsx:function:3:Counter",
+            "name": "Counter",
+            "className": null,
+            "file": "src/components/Counter.tsx",
+            "line": 3,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/components/Header.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/components/Header.astro",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/components/Search.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/components/Search.svelte",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/components/ui/Card.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/components/ui/Card.astro",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/layouts/Base.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/layouts/Base.astro",
+            "line": 1,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/lib/posts.ts:function:5:listPosts",
+            "name": "listPosts",
+            "className": null,
+            "file": "src/lib/posts.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/lib/posts.ts:function:9:findPost",
+            "name": "findPost",
+            "className": null,
+            "file": "src/lib/posts.ts",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/lib/posts.ts:function:13:savePost",
+            "name": "savePost",
+            "className": null,
+            "file": "src/lib/posts.ts",
+            "line": 13,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/pages/404.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/404.astro",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/pages/api/[slug].ts:function:3:ALL",
+            "name": "ALL",
+            "className": null,
+            "file": "src/pages/api/[slug].ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/pages/api/posts.json.ts:function:4:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/pages/api/posts.json.ts",
+            "line": 4,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/pages/api/posts.json.ts:function:6:POST",
+            "name": "POST",
+            "className": null,
+            "file": "src/pages/api/posts.json.ts",
+            "line": 6,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "name": "getStaticPaths",
+            "className": null,
+            "file": "src/pages/blog/[slug].astro",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/blog/[slug].astro",
+            "line": 1,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/pages/index.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/index.astro",
+            "line": 1,
+            "endLine": 11
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/pages/api/[slug].ts:function:3:ALL",
+            "callee": "file:src/lib/posts.ts:function:9:findPost",
+            "line": 4
+          },
+          {
+            "caller": "file:src/pages/api/posts.json.ts:function:4:GET",
+            "callee": "file:src/lib/posts.ts:function:5:listPosts",
+            "line": 4
+          },
+          {
+            "caller": "file:src/pages/api/posts.json.ts:function:6:POST",
+            "callee": "file:src/lib/posts.ts:function:13:savePost",
+            "line": 8
+          },
+          {
+            "caller": "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "callee": "file:src/lib/posts.ts:function:5:listPosts",
+            "line": 6
+          },
+          {
+            "caller": "file:src/pages/blog/[slug].astro:function:1:<frontmatter>",
+            "callee": "file:src/lib/posts.ts:function:9:findPost",
+            "line": 9
+          },
+          {
+            "caller": "file:src/pages/index.astro:function:1:<frontmatter>",
+            "callee": "file:src/lib/posts.ts:function:5:listPosts",
+            "line": 8
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:route:6:0:POST:/api/posts.json"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/pages/api/posts.json.ts:route:6:0:POST:/api/posts.json",
+            "fn": "file:src/pages/api/posts.json.ts:function:6:POST"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:route:6:0:POST:/api/posts.json"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:route:6:0:POST:/api/posts.json"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE id(route) IN $ids RETURN id(route) AS route, id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:route:6:0:POST:/api/posts.json"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:USES_ENV_ROUTE]->(env:EnvVar) WHERE id(route) IN $ids RETURN id(route) AS route, env.name AS name, rel.access AS access, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:route:6:0:POST:/api/posts.json"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:CONSUMES_CONFIG_ROUTE]->(config:ConfigValue) WHERE id(route) IN $ids RETURN id(route) AS route, config.name AS name, rel.localName AS localName",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:route:6:0:POST:/api/posts.json"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:function:6:POST",
+            "file:src/lib/posts.ts:function:13:savePost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:function:6:POST",
+            "file:src/lib/posts.ts:function:13:savePost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:function:6:POST",
+            "file:src/lib/posts.ts:function:13:savePost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:function:6:POST",
+            "file:src/lib/posts.ts:function:13:savePost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:route:6:0:POST:/api/posts.json"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "method": "POST",
+      "path": "/api/posts.json",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/api/posts.json",
+          "fullPath": "/api/posts.json",
+          "framework": "astro",
+          "handlerName": "POST",
+          "file": "src/pages/api/posts.json.ts",
+          "line": 6,
+          "handlers": [
+            {
+              "name": "POST",
+              "className": null,
+              "file": "src/pages/api/posts.json.ts",
+              "line": 6,
+              "endLine": 9
+            }
+          ],
+          "lifecycle": [],
+          "callChain": [
+            {
+              "depth": 1,
+              "caller": "POST",
+              "callerFile": "src/pages/api/posts.json.ts",
+              "line": 8,
+              "callee": "savePost",
+              "calleeClass": null,
+              "calleeFile": "src/lib/posts.ts"
+            }
+          ],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": [],
+          "consumers": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "listPosts"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/Counter.tsx:function:3:Counter",
+            "name": "Counter",
+            "className": null,
+            "file": "src/components/Counter.tsx",
+            "line": 3,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/components/Header.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/components/Header.astro",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/components/Search.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/components/Search.svelte",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/components/ui/Card.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/components/ui/Card.astro",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/layouts/Base.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/layouts/Base.astro",
+            "line": 1,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/lib/posts.ts:function:5:listPosts",
+            "name": "listPosts",
+            "className": null,
+            "file": "src/lib/posts.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/lib/posts.ts:function:9:findPost",
+            "name": "findPost",
+            "className": null,
+            "file": "src/lib/posts.ts",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/lib/posts.ts:function:13:savePost",
+            "name": "savePost",
+            "className": null,
+            "file": "src/lib/posts.ts",
+            "line": 13,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/pages/404.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/404.astro",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/pages/api/[slug].ts:function:3:ALL",
+            "name": "ALL",
+            "className": null,
+            "file": "src/pages/api/[slug].ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/pages/api/posts.json.ts:function:4:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/pages/api/posts.json.ts",
+            "line": 4,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/pages/api/posts.json.ts:function:6:POST",
+            "name": "POST",
+            "className": null,
+            "file": "src/pages/api/posts.json.ts",
+            "line": 6,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "name": "getStaticPaths",
+            "className": null,
+            "file": "src/pages/blog/[slug].astro",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/blog/[slug].astro",
+            "line": 1,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/pages/index.astro:function:1:<frontmatter>",
+            "name": "<frontmatter>",
+            "className": null,
+            "file": "src/pages/index.astro",
+            "line": 1,
+            "endLine": 11
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/pages/api/[slug].ts:function:3:ALL",
+            "callee": "file:src/lib/posts.ts:function:9:findPost",
+            "line": 4
+          },
+          {
+            "caller": "file:src/pages/api/posts.json.ts:function:4:GET",
+            "callee": "file:src/lib/posts.ts:function:5:listPosts",
+            "line": 4
+          },
+          {
+            "caller": "file:src/pages/api/posts.json.ts:function:6:POST",
+            "callee": "file:src/lib/posts.ts:function:13:savePost",
+            "line": 8
+          },
+          {
+            "caller": "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "callee": "file:src/lib/posts.ts:function:5:listPosts",
+            "line": 6
+          },
+          {
+            "caller": "file:src/pages/blog/[slug].astro:function:1:<frontmatter>",
+            "callee": "file:src/lib/posts.ts:function:9:findPost",
+            "line": 9
+          },
+          {
+            "caller": "file:src/pages/index.astro:function:1:<frontmatter>",
+            "callee": "file:src/lib/posts.ts:function:5:listPosts",
+            "line": 8
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts",
+            "file:src/pages/api/posts.json.ts:function:4:GET",
+            "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "file:src/pages/index.astro:function:1:<frontmatter>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts",
+            "file:src/pages/api/posts.json.ts:function:4:GET",
+            "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "file:src/pages/index.astro:function:1:<frontmatter>"
+          ]
+        },
+        "rows": [
+          {
+            "routeId": "file:src/pages/api/posts.json.ts:route:4:0:GET:/api/posts.json",
+            "method": "GET",
+            "path": "/api/posts.json",
+            "fullPath": "/api/posts.json",
+            "framework": "astro",
+            "file": "src/pages/api/posts.json.ts",
+            "line": 4,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:src/pages/api/posts.json.ts:function:4:GET"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts",
+            "file:src/pages/api/posts.json.ts:function:4:GET",
+            "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "file:src/pages/index.astro:function:1:<frontmatter>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts",
+            "file:src/pages/api/posts.json.ts:function:4:GET",
+            "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "file:src/pages/index.astro:function:1:<frontmatter>"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:src/pages/index.astro:component:1:Index",
+            "fn": "file:src/pages/index.astro:function:1:<frontmatter>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts",
+            "file:src/pages/api/posts.json.ts:function:4:GET",
+            "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "file:src/pages/index.astro:function:1:<frontmatter>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/posts.ts:function:5:listPosts",
+            "file:src/pages/api/posts.json.ts:function:4:GET",
+            "file:src/pages/blog/[slug].astro:function:5:getStaticPaths",
+            "file:src/pages/index.astro:function:1:<frontmatter>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/components/Counter.tsx:component:3:Counter",
+            "name": "Counter",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Counter.tsx",
+            "line": 3,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": "useState",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Header.astro:component:1:Header",
+            "name": "Header",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/components/Header.astro",
+            "line": 1,
+            "endLine": 7,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,links",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Search.svelte:component:1:Search",
+            "name": "Search",
+            "kind": "runes",
+            "framework": "svelte",
+            "file": "src/components/Search.svelte",
+            "line": 1,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "props": "placeholder",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/ui/Card.astro:component:1:Card",
+            "name": "Card",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/components/ui/Card.astro",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,href",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/layouts/Base.astro:component:1:Base",
+            "name": "Base",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/layouts/Base.astro",
+            "line": 1,
+            "endLine": 17,
+            "isExported": true,
+            "tagName": null,
+            "props": "title,description",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/404.astro:component:1:404",
+            "name": "404",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/404.astro",
+            "line": 1,
+            "endLine": 4,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/_drafts/wip.astro:component:1:Wip",
+            "name": "Wip",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/_drafts/wip.astro",
+            "line": 1,
+            "endLine": 1,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:component:1:Slug",
+            "name": "Slug",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/blog/[slug].astro",
+            "line": 1,
+            "endLine": 13,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/pages/index.astro:component:1:Index",
+            "name": "Index",
+            "kind": "astro",
+            "framework": "astro",
+            "file": "src/pages/index.astro",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "rows": [
+          {
+            "parent": "file:src/layouts/Base.astro:component:1:Base",
+            "child": "file:src/components/Header.astro:component:1:Header",
+            "line": 14,
+            "props": "title",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/404.astro:component:1:404",
+            "child": "file:src/layouts/Base.astro:component:1:Base",
+            "line": 4,
+            "props": "title",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/blog/[slug].astro:component:1:Slug",
+            "child": "file:src/layouts/Base.astro:component:1:Base",
+            "line": 11,
+            "props": "title",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/layouts/Base.astro:component:1:Base",
+            "line": 12,
+            "props": "title,description",
+            "client": null
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/components/Counter.tsx:component:3:Counter",
+            "line": 13,
+            "props": "start",
+            "client": "visible"
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/components/Search.svelte:component:1:Search",
+            "line": 14,
+            "props": "placeholder",
+            "client": "load"
+          },
+          {
+            "parent": "file:src/pages/index.astro:component:1:Index",
+            "child": "file:src/components/ui/Card.astro:component:1:Card",
+            "line": 16,
+            "props": "title,href",
+            "client": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:src/pages/index.astro:component:1:Index"
+          ]
+        },
+        "rows": [
+          {
+            "fullPath": "/",
+            "framework": "astro",
+            "router": "file",
+            "kind": "page",
+            "file": "src/pages/index.astro",
+            "line": null,
+            "component": "file:src/pages/index.astro:component:1:Index"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/pages/api/posts.json.ts:route:4:0:GET:/api/posts.json"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "symbol": "listPosts",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "listPosts",
+          "className": null,
+          "file": "src/lib/posts.ts",
+          "line": 5,
+          "endLine": 7
+        }
+      ],
+      "callers": [
+        {
+          "name": "GET",
+          "className": null,
+          "file": "src/pages/api/posts.json.ts",
+          "line": 4,
+          "endLine": 4,
+          "depth": 1
+        },
+        {
+          "name": "getStaticPaths",
+          "className": null,
+          "file": "src/pages/blog/[slug].astro",
+          "line": 5,
+          "endLine": 7,
+          "depth": 1
+        },
+        {
+          "name": "<frontmatter>",
+          "className": null,
+          "file": "src/pages/index.astro",
+          "line": 1,
+          "endLine": 11,
+          "depth": 1
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/posts.json",
+          "fullPath": "/api/posts.json",
+          "framework": "astro",
+          "file": "src/pages/api/posts.json.ts",
+          "line": 4,
+          "reachedThrough": [
+            {
+              "function": "GET",
+              "functionFile": "src/pages/api/posts.json.ts",
+              "as": "handler"
+            }
+          ]
+        }
+      ],
+      "entrypoints": [],
+      "components": [
+        {
+          "name": "Index",
+          "kind": "astro",
+          "file": "src/pages/index.astro",
+          "line": 1,
+          "depth": 0,
+          "changedThrough": [
+            "<frontmatter>"
+          ]
+        }
+      ],
+      "pages": [
+        {
+          "fullPath": "/",
+          "framework": "astro",
+          "router": "file",
+          "kind": "page",
+          "file": "src/pages/index.astro",
+          "line": null,
+          "renders": "Index",
+          "depth": 0
+        }
+      ],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  }
+]

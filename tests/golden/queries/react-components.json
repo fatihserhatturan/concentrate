@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 58
+        "result": 59
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 58,
+      "schemaVersion": 59,
       "stats": [
         {
           "table": "Repo",
@@ -2479,115 +2479,133 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Card.tsx:component:4:Card",
             "line": 12,
-            "props": "title"
+            "props": "title",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Avatar.tsx:component:3:Avatar",
             "line": 13,
-            "props": "url"
+            "props": "url",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "line": 31,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
             "line": 33,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/App.tsx:component:10:Profile",
             "line": 35,
-            "props": "key,user"
+            "props": "key,user",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Input.tsx:component:3:Input",
             "line": 36,
-            "props": "name"
+            "props": "name",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Legacy.jsx:component:4:Legacy",
             "line": 37,
-            "props": "ready,onGo"
+            "props": "ready,onGo",
+            "client": null
           },
           {
             "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
             "line": 10,
-            "props": "value"
+            "props": "value",
+            "client": null
           },
           {
             "parent": "file:src/components/Card.tsx:component:4:Card",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 6,
-            "props": "label,onClick"
+            "props": "label,onClick",
+            "client": null
           },
           {
             "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:5:Reports",
             "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:4:Settings",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:5:Reports",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:10:Archive",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/components/Profile.jsx:component:9:ProfileView",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       },
@@ -3231,115 +3249,133 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Card.tsx:component:4:Card",
             "line": 12,
-            "props": "title"
+            "props": "title",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Avatar.tsx:component:3:Avatar",
             "line": 13,
-            "props": "url"
+            "props": "url",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "line": 31,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
             "line": 33,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/App.tsx:component:10:Profile",
             "line": 35,
-            "props": "key,user"
+            "props": "key,user",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Input.tsx:component:3:Input",
             "line": 36,
-            "props": "name"
+            "props": "name",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Legacy.jsx:component:4:Legacy",
             "line": 37,
-            "props": "ready,onGo"
+            "props": "ready,onGo",
+            "client": null
           },
           {
             "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
             "line": 10,
-            "props": "value"
+            "props": "value",
+            "client": null
           },
           {
             "parent": "file:src/components/Card.tsx:component:4:Card",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 6,
-            "props": "label,onClick"
+            "props": "label,onClick",
+            "client": null
           },
           {
             "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:5:Reports",
             "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:4:Settings",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:5:Reports",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:10:Archive",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/components/Profile.jsx:component:9:ProfileView",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       },
@@ -3953,115 +3989,133 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Card.tsx:component:4:Card",
             "line": 12,
-            "props": "title"
+            "props": "title",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Avatar.tsx:component:3:Avatar",
             "line": 13,
-            "props": "url"
+            "props": "url",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "line": 31,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
             "line": 33,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/App.tsx:component:10:Profile",
             "line": 35,
-            "props": "key,user"
+            "props": "key,user",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Input.tsx:component:3:Input",
             "line": 36,
-            "props": "name"
+            "props": "name",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Legacy.jsx:component:4:Legacy",
             "line": 37,
-            "props": "ready,onGo"
+            "props": "ready,onGo",
+            "client": null
           },
           {
             "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
             "line": 10,
-            "props": "value"
+            "props": "value",
+            "client": null
           },
           {
             "parent": "file:src/components/Card.tsx:component:4:Card",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 6,
-            "props": "label,onClick"
+            "props": "label,onClick",
+            "client": null
           },
           {
             "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:5:Reports",
             "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:4:Settings",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:5:Reports",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:10:Archive",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/components/Profile.jsx:component:9:ProfileView",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       }
@@ -4380,115 +4434,133 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Card.tsx:component:4:Card",
             "line": 12,
-            "props": "title"
+            "props": "title",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Avatar.tsx:component:3:Avatar",
             "line": 13,
-            "props": "url"
+            "props": "url",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "line": 31,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
             "line": 33,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/App.tsx:component:10:Profile",
             "line": 35,
-            "props": "key,user"
+            "props": "key,user",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Input.tsx:component:3:Input",
             "line": 36,
-            "props": "name"
+            "props": "name",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Legacy.jsx:component:4:Legacy",
             "line": 37,
-            "props": "ready,onGo"
+            "props": "ready,onGo",
+            "client": null
           },
           {
             "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
             "line": 10,
-            "props": "value"
+            "props": "value",
+            "client": null
           },
           {
             "parent": "file:src/components/Card.tsx:component:4:Card",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 6,
-            "props": "label,onClick"
+            "props": "label,onClick",
+            "client": null
           },
           {
             "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:5:Reports",
             "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:4:Settings",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:5:Reports",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:10:Archive",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/components/Profile.jsx:component:9:ProfileView",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       },
@@ -5000,115 +5072,133 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Card.tsx:component:4:Card",
             "line": 12,
-            "props": "title"
+            "props": "title",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Avatar.tsx:component:3:Avatar",
             "line": 13,
-            "props": "url"
+            "props": "url",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "line": 31,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
             "line": 33,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/App.tsx:component:10:Profile",
             "line": 35,
-            "props": "key,user"
+            "props": "key,user",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Input.tsx:component:3:Input",
             "line": 36,
-            "props": "name"
+            "props": "name",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Legacy.jsx:component:4:Legacy",
             "line": 37,
-            "props": "ready,onGo"
+            "props": "ready,onGo",
+            "client": null
           },
           {
             "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
             "line": 10,
-            "props": "value"
+            "props": "value",
+            "client": null
           },
           {
             "parent": "file:src/components/Card.tsx:component:4:Card",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 6,
-            "props": "label,onClick"
+            "props": "label,onClick",
+            "client": null
           },
           {
             "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:5:Reports",
             "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:4:Settings",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:5:Reports",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:10:Archive",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/components/Profile.jsx:component:9:ProfileView",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       }
@@ -5714,115 +5804,133 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Card.tsx:component:4:Card",
             "line": 12,
-            "props": "title"
+            "props": "title",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Avatar.tsx:component:3:Avatar",
             "line": 13,
-            "props": "url"
+            "props": "url",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "line": 31,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
             "line": 33,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/App.tsx:component:10:Profile",
             "line": 35,
-            "props": "key,user"
+            "props": "key,user",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Input.tsx:component:3:Input",
             "line": 36,
-            "props": "name"
+            "props": "name",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Legacy.jsx:component:4:Legacy",
             "line": 37,
-            "props": "ready,onGo"
+            "props": "ready,onGo",
+            "client": null
           },
           {
             "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
             "line": 10,
-            "props": "value"
+            "props": "value",
+            "client": null
           },
           {
             "parent": "file:src/components/Card.tsx:component:4:Card",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 6,
-            "props": "label,onClick"
+            "props": "label,onClick",
+            "client": null
           },
           {
             "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:5:Reports",
             "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:4:Settings",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:5:Reports",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:10:Archive",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/components/Profile.jsx:component:9:ProfileView",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       },
@@ -6556,115 +6664,133 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Card.tsx:component:4:Card",
             "line": 12,
-            "props": "title"
+            "props": "title",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Avatar.tsx:component:3:Avatar",
             "line": 13,
-            "props": "url"
+            "props": "url",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "line": 31,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
             "line": 33,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/App.tsx:component:10:Profile",
             "line": 35,
-            "props": "key,user"
+            "props": "key,user",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Input.tsx:component:3:Input",
             "line": 36,
-            "props": "name"
+            "props": "name",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Legacy.jsx:component:4:Legacy",
             "line": 37,
-            "props": "ready,onGo"
+            "props": "ready,onGo",
+            "client": null
           },
           {
             "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
             "line": 10,
-            "props": "value"
+            "props": "value",
+            "client": null
           },
           {
             "parent": "file:src/components/Card.tsx:component:4:Card",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 6,
-            "props": "label,onClick"
+            "props": "label,onClick",
+            "client": null
           },
           {
             "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:5:Reports",
             "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:4:Settings",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:5:Reports",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:10:Archive",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/components/Profile.jsx:component:9:ProfileView",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       },
@@ -7003,115 +7129,133 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Card.tsx:component:4:Card",
             "line": 12,
-            "props": "title"
+            "props": "title",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Avatar.tsx:component:3:Avatar",
             "line": 13,
-            "props": "url"
+            "props": "url",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "line": 31,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
             "line": 33,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/App.tsx:component:10:Profile",
             "line": 35,
-            "props": "key,user"
+            "props": "key,user",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Input.tsx:component:3:Input",
             "line": 36,
-            "props": "name"
+            "props": "name",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Legacy.jsx:component:4:Legacy",
             "line": 37,
-            "props": "ready,onGo"
+            "props": "ready,onGo",
+            "client": null
           },
           {
             "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
             "line": 10,
-            "props": "value"
+            "props": "value",
+            "client": null
           },
           {
             "parent": "file:src/components/Card.tsx:component:4:Card",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 6,
-            "props": "label,onClick"
+            "props": "label,onClick",
+            "client": null
           },
           {
             "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:5:Reports",
             "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:4:Settings",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:5:Reports",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:10:Archive",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/components/Profile.jsx:component:9:ProfileView",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       },
@@ -7788,115 +7932,133 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Card.tsx:component:4:Card",
             "line": 12,
-            "props": "title"
+            "props": "title",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:10:Profile",
             "child": "file:src/components/Avatar.tsx:component:3:Avatar",
             "line": 13,
-            "props": "url"
+            "props": "url",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "line": 31,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/CartBadge.tsx:component:4:CartBadge",
             "line": 33,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/App.tsx:component:10:Profile",
             "line": 35,
-            "props": "key,user"
+            "props": "key,user",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Input.tsx:component:3:Input",
             "line": 36,
-            "props": "name"
+            "props": "name",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:29:App",
             "child": "file:src/components/Legacy.jsx:component:4:Legacy",
             "line": 37,
-            "props": "ready,onGo"
+            "props": "ready,onGo",
+            "client": null
           },
           {
             "parent": "file:src/cart/CartContext.tsx:component:7:CartProvider",
             "child": "file:src/cart/CartContext.tsx:component:5:CartContext",
             "line": 10,
-            "props": "value"
+            "props": "value",
+            "client": null
           },
           {
             "parent": "file:src/components/Card.tsx:component:4:Card",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/components/Legacy.jsx:component:4:Legacy",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 6,
-            "props": "label,onClick"
+            "props": "label,onClick",
+            "client": null
           },
           {
             "parent": "file:src/components/Profile.jsx:component:9:ProfileView",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 9,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/Reports.tsx:component:3:Reports",
             "child": "file:src/components/Button.tsx:component:3:Button",
             "line": 4,
-            "props": "label"
+            "props": "label",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:4:Settings",
             "child": "file:src/pages/Settings.tsx:component:1:Settings",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:5:Reports",
             "child": "file:src/pages/Reports.tsx:component:3:Reports",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:4:Settings",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:5:Reports",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/pages/routes.tsx:component:10:Archive",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/pages/routes.tsx:component:12:Pages",
             "child": "file:src/components/Profile.jsx:component:9:ProfileView",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       }

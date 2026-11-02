@@ -74,6 +74,7 @@ export async function parseMarkupFile(
   // The markup without the frontmatter, whose `<` would read as tags.
   let markup = frontmatter ? keepOnly(source, [], { start: 0, end: frontmatter.fenceEnd }) : source;
   if (language === "svelte") markup = maskSvelteExpressions(markup);
+  if (language === "astro") markup = maskAstroAttributeExpressions(markup);
   const tree = await parseSyntaxTree("html", markup);
   try {
     const parsed = await parseMarkup(rootPath, filePath, source, language, frontmatter?.code ?? null, tree.rootNode, plugins);
@@ -110,6 +111,11 @@ async function parseMarkup(
     endLine: script.endLine,
     attributes: script.attributeNames,
   }));
+  if (frontmatter) {
+    // From the opening `---` to the closing one.
+    const lineOf = (offset: number) => source.slice(0, offset).split("\n").length;
+    blocks.unshift({ start: frontmatter.start, end: frontmatter.end, line: lineOf(frontmatter.start) - 1, endLine: lineOf(frontmatter.end), attributes: ["frontmatter"] });
+  }
   const parsed: ParsedSourceFile = code.length > 0
     ? await parseJsTsSource(
       rootPath,
@@ -251,6 +257,39 @@ export function svelteExpressions(source: string): Array<{ start: number; end: n
     if (end === null) break;
     expressions.push({ start: index, end });
     index = end + 1;
+  }
+  return expressions;
+}
+
+// Astro attribute values written as expressions (`title={a + b}`,
+// `onClick={() => go(x)}`), with their inside masked like Svelte's, so a
+// space or `>` in them does not end the attribute or the tag. Expressions in
+// text are left as they are: they can hold markup (`{items.map((item) =>
+// <Card {...item} />)}`) whose components the template renders.
+function maskAstroAttributeExpressions(source: string): string {
+  const chars = source.split("");
+  for (const { start, end } of astroAttributeExpressions(source)) {
+    for (let inside = start + 1; inside < end; inside += 1) {
+      if (source[inside] !== "\n" && source[inside] !== "\r") chars[inside] = "_";
+    }
+    chars[start] = "\"";
+    chars[end] = "\"";
+  }
+  return chars.join("");
+}
+
+// The `={…}` attribute expressions of Astro markup: the offsets of their
+// braces. Scripts, styles and comments are skipped.
+export function astroAttributeExpressions(source: string): Array<{ start: number; end: number }> {
+  const expressions: Array<{ start: number; end: number }> = [];
+  const pattern = /<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>|<!--[\s\S]*?-->|=\s*\{/giu;
+  for (let match = pattern.exec(source); match; match = pattern.exec(source)) {
+    if (!match[0].endsWith("{")) continue;
+    const start = match.index + match[0].length - 1;
+    const end = closingBrace(source, start + 1);
+    if (end === null) continue;
+    expressions.push({ start, end });
+    pattern.lastIndex = end + 1;
   }
   return expressions;
 }

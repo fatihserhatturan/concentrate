@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import { findPost, listPosts } from '../../lib/posts';
+
+export function getStaticPaths() {
+  return listPosts().map((post) => ({ params: { slug: post.slug } }));
+}
+
+const post = findPost(Astro.params.slug!);
+---
+<Base title={post?.title ?? 'Not found'}>
+  <article>{post?.title}</article>
+</Base>

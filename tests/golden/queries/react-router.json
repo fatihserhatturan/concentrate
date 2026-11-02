@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 58
+        "result": 59
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 58,
+      "schemaVersion": 59,
       "stats": [
         {
           "table": "Repo",
@@ -1178,43 +1178,49 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/Layout.tsx:component:3:Layout",
             "line": 11,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/Home.tsx:component:1:Home",
             "line": 12,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/users.tsx:component:1:UserList",
             "line": 14,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/users.tsx:component:5:UserDetail",
             "line": 15,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/NotFound.tsx:component:1:NotFound",
             "line": 17,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/Fake.tsx:component:6:Fake",
             "child": "file:src/Fake.tsx:component:2:Route",
             "line": 7,
-            "props": "path"
+            "props": "path",
+            "client": null
           }
         ]
       },

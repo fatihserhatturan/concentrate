@@ -857,6 +857,38 @@
         }
       }
     ],
+    "astro-site": [
+      {
+        "tool": "component_tree",
+        "args": {
+          "name": "Index",
+          "depth": 2
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "Counter"
+        }
+      },
+      {
+        "tool": "list_pages",
+        "args": {}
+      },
+      {
+        "tool": "route_details",
+        "args": {
+          "method": "POST",
+          "path": "/api/posts.json"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "listPosts"
+        }
+      }
+    ],
     "vanilla-html": [
       {
         "tool": "find_callers",

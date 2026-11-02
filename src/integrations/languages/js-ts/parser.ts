@@ -348,7 +348,8 @@ export type JsTsParsedFile = {
   rootNode: SyntaxNode;
   parsed: ParsedSourceFile;
   state: WalkState;
-  // The inline `<script>` blocks of a markup file, in file order.
+  // The inline `<script>` blocks of a markup file, in file order, after an
+  // Astro file's `---` frontmatter (attribute `frontmatter`).
   scriptBlocks: readonly ScriptBlock[];
 };
 

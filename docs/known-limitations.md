@@ -287,11 +287,13 @@ Blocks or informs: future query server design.
   block has `lang="ts"` (always for Astro). The template is only parsed with
   the HTML grammar: directives (`@click`, `v-if`, `on:click`), blocks
   (`{#if}`) and `{expressions}` are not read as code, so calls inside the
-  template have no node, and a component rendered in an Astro template is no
-  `RENDERS` relationship yet (Phase 15; Vue and Svelte templates: see
-  Components). In a Svelte file the inside of each `{…}` is masked before
-  the HTML grammar reads it, so `onclick={() => go(item)}` stays one
-  attribute; the expressions are read from the file text by position.
+  template have no node (Vue, Svelte and Astro templates: see Components).
+  In a Svelte file the inside of each `{…}` is masked before the HTML
+  grammar reads it, so `onclick={() => go(item)}` stays one attribute; in an
+  Astro file only attribute values (`title={a + b}`) are, since text
+  expressions hold markup (`{posts.map((post) => <Card {...post} />)}`).
+  The expressions are read from the file text by position. An Astro text
+  expression with a bare `<` (`{a < b}`) can still end in a tag.
 
 Blocks or informs: ROADMAP Phases 11–15 (components, React, Vue, Svelte,
 Astro).
@@ -395,6 +397,24 @@ Astro).
   is a prop. Component events (`on:toggle` on a component,
   `createEventDispatcher`) and snippets (`{#snippet}`, `{@render}`) are not
   read.
+- Astro: every `.astro` file is one Component (framework `astro`, kind
+  `astro`) named by its file name in PascalCase (`index.astro` → `Index`,
+  `[slug].astro` → `Slug`, `404.astro` → `404`). Props are the members of
+  `interface Props` / `type Props = { … }` in the frontmatter, or else the
+  names destructured from `Astro.props`. The frontmatter is a Function named
+  `<frontmatter>` (kind `frontmatter`, from the opening to the closing `---`)
+  that the Component is `COMPONENT_DEFINED_BY_FUNCTION`; it owns the
+  frontmatter's top-level calls, and its `fetch` calls are requests like any
+  other. Tags in PascalCase or dotted (`<Ui.Card>`), also inside text
+  expressions, are `RENDERS` of the imported component of any framework
+  (`.astro`, React, Vue, Svelte); an island keeps its hydration directive in
+  `RENDERS.client` (`client:visible` → `visible`), shown by
+  `component_tree` and `find_component_usages`. Props passed are the
+  attributes and `{title}` shorthands; `client:`, `server:`, `set:`, `is:`,
+  `transition:`, `define:` directives, spreads and `slot` are not. Astro's
+  `<Fragment>`, `<Code>` and other library components stay in
+  `pendingRenders`; `<script>` blocks are client code of the file, not of the
+  component.
 - Svelte component code: the instance `<script>` (not `<script module>` or
   `context="module"`) is a Function named `<script>` (kind
   `script_instance`) that the Component is `COMPONENT_DEFINED_BY_FUNCTION`;
@@ -535,6 +555,18 @@ Astro).
   (`<LazyUserCard>`). Components of `components/global/` with
   `pathPrefix: false`, component islands and module-provided components
   are not read.
+- Astro is detected per package: a `package.json` that depends on `astro`.
+  Each `.astro` file under `src/pages/` is a `Page` (framework `astro`,
+  router `file`, no line; kind `page`, or `not-found` / `error` for `404` /
+  `500`) with `PAGE_RENDERS` to its component, and each `GET`, `POST`,
+  `PUT`, `PATCH`, `DELETE`, `OPTIONS`, `HEAD` and `ALL` function a `.ts` /
+  `.js` file there exports (`export const GET: APIRoute = …` too) is a
+  `Route` (framework `astro`). The path is the file path without the
+  extension (`api/posts.json.ts` → `/api/posts.json`), `index` standing for
+  its folder, with `[slug]` and `[...path]` kept; files and folders starting
+  with `_` are left out. `.md` / `.mdx` / `.html` pages, `getStaticPaths`
+  params, `redirects` and `srcDir` / `trailingSlash` / `base` from
+  `astro.config` are not read, nor are Astro actions and middleware.
 - SvelteKit is detected per package: a `package.json` that depends on
   `@sveltejs/kit`. Routes come from `src/routes/` (a custom `kit.files.routes`
   is not read). A file's route path is its folder with route groups

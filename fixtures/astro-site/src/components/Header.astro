@@ -1,0 +1,7 @@
+---
+const { title, links = [] } = Astro.props;
+---
+<header>
+  <h1 class:list={['title', { long: title.length > 20 }]}>{title}</h1>
+  <nav>{links.map((link) => <a href={link.href}>{link.label}</a>)}</nav>
+</header>

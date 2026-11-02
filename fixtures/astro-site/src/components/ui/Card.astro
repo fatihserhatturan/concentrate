@@ -1,0 +1,5 @@
+---
+type Props = { title: string; href: string };
+const { title, href } = Astro.props;
+---
+<a class="card" href={href}>{title}</a>

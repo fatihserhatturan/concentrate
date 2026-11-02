@@ -18,6 +18,7 @@ import { dataAccessContributor } from "../integrations/frameworks/js-ts/data-acc
 import { componentGraphContributor } from "../integrations/frameworks/js-ts/resolution/component-graph.js";
 import { nextjsPagesContributor, nextjsRoutesContributor } from "../integrations/frameworks/js-ts/nextjs.js";
 import { svelteKitContributor } from "../integrations/frameworks/js-ts/sveltekit.js";
+import { astroPagesContributor } from "../integrations/frameworks/js-ts/astro.js";
 import { nuxtAutoImportsContributor, nuxtPagesContributor, nuxtServerRoutesContributor, vueGlobalComponentsContributor } from "../integrations/frameworks/js-ts/nuxt.js";
 import { storeAccessContributor } from "../integrations/frameworks/js-ts/resolution/store-access.js";
 import { httpRequestsContributor } from "../integrations/frameworks/js-ts/resolution/http-requests.js";
@@ -48,6 +49,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     trpcRoutesContributor,
     nuxtServerRoutesContributor,
     svelteKitContributor,
+    astroPagesContributor,
     httpRequestsContributor,
     envConfigContributor,
     dataAccessContributor,

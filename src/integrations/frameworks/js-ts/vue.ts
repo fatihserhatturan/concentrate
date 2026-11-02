@@ -327,7 +327,7 @@ function defaultExportOptions(program: SyntaxNode): SyntaxNode | null {
   return null;
 }
 
-function unwrap(node: SyntaxNode | null): SyntaxNode | null {
+export function unwrap(node: SyntaxNode | null): SyntaxNode | null {
   while (node && (node.type === "parenthesized_expression" || node.type === "as_expression" || node.type === "satisfies_expression")) {
     node = node.namedChildren[0] ?? null;
   }
@@ -388,7 +388,7 @@ function typeProps(type: SyntaxNode, program: SyntaxNode): string[] {
   return [];
 }
 
-function typeMembers(body: SyntaxNode): string[] {
+export function typeMembers(body: SyntaxNode): string[] {
   return body.namedChildren.flatMap((member) => {
     if (member?.type !== "property_signature") return [];
     const name = member.childForFieldName("name");

@@ -79,7 +79,7 @@ function declarators(declaration: SyntaxNode): SyntaxNode[] {
   return declaration.namedChildren.filter((child): child is SyntaxNode => child?.type === "variable_declarator");
 }
 
-function patternKeys(pattern: SyntaxNode): string[] {
+export function patternKeys(pattern: SyntaxNode): string[] {
   return pattern.namedChildren.flatMap((property) => {
     if (property?.type === "shorthand_property_identifier_pattern") return [property.text];
     if (property?.type === "object_assignment_pattern") {

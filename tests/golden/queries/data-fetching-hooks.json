@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 58
+        "result": 59
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 58,
+      "schemaVersion": 59,
       "stats": [
         {
           "table": "Repo",
@@ -1437,19 +1437,21 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:web/todo-page.tsx:component:9:TodoPage",
             "child": "file:web/todo-page.tsx:component:4:TodoList",
             "line": 10,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:web/todo-page.tsx:component:13:App",
             "child": "file:web/todo-page.tsx:component:9:TodoPage",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       },
@@ -1990,19 +1992,21 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:web/todo-page.tsx:component:9:TodoPage",
             "child": "file:web/todo-page.tsx:component:4:TodoList",
             "line": 10,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:web/todo-page.tsx:component:13:App",
             "child": "file:web/todo-page.tsx:component:9:TodoPage",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       },
@@ -2756,19 +2760,21 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:web/todo-page.tsx:component:9:TodoPage",
             "child": "file:web/todo-page.tsx:component:4:TodoList",
             "line": 10,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:web/todo-page.tsx:component:13:App",
             "child": "file:web/todo-page.tsx:component:9:TodoPage",
             "line": 16,
-            "props": ""
+            "props": "",
+            "client": null
           }
         ]
       },
