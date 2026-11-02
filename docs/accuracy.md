@@ -12,7 +12,7 @@ npm run bench:accuracy -- [--sample name] [--details] [--json out.json]
 
 `--details` lists every false positive (FP), false negative (FN) and wrong
 route path. The latest run is in
-[`bench/results/accuracy-0.1.0-2026-10-31.json`](../bench/results/accuracy-0.1.0-2026-10-31.json).
+[`bench/results/accuracy-0.1.0-2026-11-02.json`](../bench/results/accuracy-0.1.0-2026-11-02.json).
 
 ## Labels
 
@@ -24,11 +24,11 @@ chosen files); every target was decided by reading the code.
 
 | Kind | Samples | Scope |
 | --- | --- | --- |
-| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy | every route declared with a literal path in the scoped files; tests excluded |
-| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld | every call site in 4–9 chosen files per sample |
+| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld | every route declared with a literal path in the scoped files; tests excluded |
+| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld | every call site in 4–9 chosen files per sample |
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma) | the services; the standing samples have no data layer |
-| Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia) | `src/components/` (React); every `.vue` file under `src/` (Vue): every component and every element that renders one |
-| Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue) |
+| Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte): every component and every element that renders one |
+| Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit) |
 | Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project) | `frontend/`: every HTTP call that reaches a backend route |
 
 Rules:
@@ -43,6 +43,9 @@ Rules:
   `export default` line when that is a library call (`NextAuth(options)`).
   `app/api/auth/[...nextauth]/_route.ts` is not a route file (Next only
   serves files named `route`), so its handlers are not labeled.
+  SvelteKit form actions are POST routes at the page's path, `?/name` for a
+  named action (`/article/[slug]?/createComment`), labeled at the action's
+  function.
 - **Calls.** `{ file, line, callee, target }`, where `callee` is the called
   name (the last member, or the class of `new X`). `target` is the project
   declaration the call runs (`{ file, name, className? }`; `new X` targets X's
@@ -103,7 +106,7 @@ Rules:
 - **Requests:** the call's file and line (±1), the route and its declaring
   file all match; a call linked to another route is an FP and an FN.
 
-## Results (2026-10-31, schema 56)
+## Results (2026-11-02, schema 59)
 
 ### Routes
 
@@ -113,8 +116,9 @@ Rules:
 | fastify | 14 | 14 | 0 | 0 | 100.0% | 100.0% | 100.0% (14/14) |
 | internet-nextjs-taxonomy | 9 | 9 | 0 | 0 | 100.0% | 100.0% | 100.0% (9/9) |
 | internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
+| internet-sveltekit-realworld | 11 | 11 | 0 | 0 | 100.0% | 100.0% | 100.0% (11/11) |
 | nestjs-starter | 1 | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% (1/1) |
-| **all** | 103 | 103 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (103/103)** |
+| **all** | 114 | 114 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (114/114)** |
 
 ### Call resolution
 
@@ -123,12 +127,13 @@ Rules:
 | express | 28 | 8 | 0 | 20 | 100.0% | 28.6% |
 | fastify | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
+| internet-sveltekit-realworld | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 14 | 11 | 0 | 3 | 100.0% | 78.6% |
 | ky | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | nestjs-starter | 2 | 2 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 87 | 64 | 0 | 23 | **100.0%** | **73.6%** |
+| **all** | 104 | 81 | 0 | 23 | **100.0%** | **77.9%** |
 
-Labels counts calls with a project target. Another 326 call sites are labeled
+Labels counts calls with a project target. Another 366 call sites are labeled
 `null`, and 35 are `dynamic`.
 
 ### Data access
@@ -144,24 +149,27 @@ Labels counts calls with a project target. Another 326 call sites are labeled
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-react-realworld | 32 | 31 | 0 | 1 | 100.0% | 96.9% |
+| internet-sveltekit-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 22 | 22 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 54 | 53 | 0 | 1 | **100.0%** | **98.1%** |
+| **all** | 78 | 77 | 0 | 1 | **100.0%** | **98.7%** |
 
 ### Component renders
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-react-realworld | 29 | 29 | 0 | 0 | 100.0% | 100.0% |
+| internet-sveltekit-realworld | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 62 | 62 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 79 | 79 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Pages
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-nextjs-taxonomy | 27 | 27 | 0 | 0 | 100.0% | 100.0% |
+| internet-sveltekit-realworld | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 12 | 12 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 39 | 39 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 52 | 52 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### API requests
 
@@ -210,7 +218,9 @@ are, and they cluster:
   the Vue sample `<AppLink>`, which no component imports, resolves through
   the global `app.component('AppLink', AppLink)` registration. Every Vue
   Router record is a page, its lazy `() => import('./pages/Home.vue')`
-  linked to the page component.
+  linked to the page component. In the SvelteKit sample every component,
+  render, page and form action is found, `$lib` imports resolved through
+  SvelteKit's default alias.
 
 - **SWR keys in local variables.** The one missed request is
   `components/article/ArticleList.tsx`, which passes `useSWR` a local

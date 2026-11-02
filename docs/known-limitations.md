@@ -122,14 +122,16 @@ Blocks or informs: MCP `find_callers` and dependency impact analysis.
   (`this.addEventListener('click', () => …)` in `connectedCallback`) and
   handlers imported from other files are not linked.
   `on*` attributes of HTML pages are entrypoints too; the handler is the first
-  function the attribute calls, linked when the page itself defines it.
+  function the attribute calls, linked when the page itself defines it, and
+  none when the code starts with a statement (`if (confirm(…)) remove()`).
 - Vue template listeners (`@click="save"`, `@submit.prevent="send($event)"`,
   `v-on:keyup.enter="next"`) on HTML elements are entrypoints (kind
   `dom-event`, library `vue`, trigger the event without modifiers). The
   handler is the function the listener names or calls first, linked when the
   `.vue` file declares a function of that name (in `<script setup>`, an
   options object's `methods` under `export default {…}`, or a variable in
-  `setup()`). Inline code (`@click="n++"`) names no handler; listeners on
+  `setup()`). Inline code (`@click="n++"`) and code that starts with a
+  statement (`@keydown="if (ok) save()"`) name no handler; listeners on
   components (`<UserCard @select="…">`) are component events and no
   entrypoints; dynamic event names (`@[name]`) are not read. `methods`
   inside `defineComponent({…})` have no Function nodes, so their listeners
@@ -139,7 +141,8 @@ Blocks or informs: MCP `find_callers` and dependency impact analysis.
   entrypoints (kind `dom-event`, library `svelte`, trigger the event without
   modifiers). The handler is the function the listener names, or the one an
   arrow function calls first, linked when the `.svelte` file declares it.
-  Inline code (`onclick={() => count++}`) names no handler; `on:click`
+  Inline code (`onclick={() => count++}`) and code that starts with a
+  statement (`onkeydown={(e) => { if (…) … }}`) name no handler; `on:click`
   without a value forwards the event and is no listener; listeners on
   components are component events or props and no entrypoints.
 - `customElements.define('x-tag', Class)` becomes a `Component` (framework

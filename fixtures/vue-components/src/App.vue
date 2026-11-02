@@ -10,7 +10,7 @@
     <slot name="footer" />
     <button type="button" @click="select">Pick</button>
     <form @submit.prevent="save($event)">
-      <input v-on:keyup.enter="save" @input="query = $event.target.value" />
+      <input v-on:keyup.enter="save" @keydown.esc="if (query) save()" @input="query = $event.target.value" />
     </form>
     <SearchBox />
   </main>

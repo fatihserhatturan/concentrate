@@ -28,6 +28,7 @@ sample test (`tests/golden-samples.test.ts`) all read from there.
 | internet-node-express-realworld | internet | gothinkster/node-express-realworld-example-app | `30b68e1e881462b2f4164ea09ab4c4f5699c7b0b` |
 | internet-nest | internet | nestjs/nest | `958ff952c00bd5a25efa04ffaafac28721af7827` |
 | internet-vue-realworld | internet | mutoe/vue3-realworld-example-app | `741c215ef0f674f90fcb03c5493a1b3a3a7f1b03` |
+| internet-sveltekit-realworld | internet | sveltejs/realworld | `df796708040f5200ec572b28ab7f88ecee5794dd` |
 | internet-realworld-fullstack | internet | gothinkster/node-express-realworld-example-app in `backend/`, reck1ess/next-realworld-example-app in `frontend/` | `30b68e1e881462b2f4164ea09ab4c4f5699c7b0b`, `be9ef569bc395975d98c1973fac23ba9277797e7` |
 
 A sample with `parts` is assembled from several repositories, each cloned
@@ -248,6 +249,24 @@ standing smoke samples.
 - Expected smoke counts: no `Route` nodes and 18 `EntryPoint` nodes
   (template listeners); the hand labels for components, renders, pages and
   calls are in [accuracy.md](accuracy.md).
+
+### SvelteKit RealWorld
+
+- Scale: small
+- Repository: `https://github.com/sveltejs/realworld` (the official SvelteKit
+  Conduit app in JavaScript: Svelte 5 components, `+page.server.js` `load`
+  functions and form actions, `$lib` imports, a `jsconfig.json`).
+- Local path: `.concentrate/samples/internet-sveltekit-realworld`
+- Last scan result, 2026-11-02: 62 discovered files, 43 supported files,
+  43 parsed files, 0 failed files, 32 resolved imports, 3 unresolved
+  relative imports (`$lib/assets/*.svg` / `.ico` assets), 423 nodes, 644
+  relationships.
+- File classification counts: 43 production files, 0 test files, 0 fixture
+  files, 0 support files, 0 generated files.
+- Expected smoke counts: 11 `Route` nodes (form actions; the app has no
+  `+server.js`) and 2 `EntryPoint` nodes (markup listeners); the hand labels
+  for routes, components, renders, pages and calls are in
+  [accuracy.md](accuracy.md).
 
 ### RealWorld Fullstack
 

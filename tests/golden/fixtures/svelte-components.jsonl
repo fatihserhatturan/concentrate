@@ -9,7 +9,8 @@
 {"kind":"node","id":"dir:src/lib/ui","label":"Directory","properties":{"name":"ui","path":"<root>/src/lib/ui","relativePath":"src/lib/ui"}}
 {"kind":"node","id":"file:src/App.svelte","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"svelte","path":"<root>/src/App.svelte","relativePath":"src/App.svelte","sourceType":"production"}}
 {"kind":"node","id":"file:src/App.svelte:component:1:App","label":"Component","properties":{"endLine":30,"framework":"svelte","hooks":null,"isExported":true,"kind":"runes","line":1,"name":"App","pendingRenders":"[{\"name\":\"view\",\"props\":[\"todos\"],\"line\":23}]","props":null}}
-{"kind":"node","id":"file:src/App.svelte:entrypoint:25:12:dom-event:click","label":"EntryPoint","properties":{"handlerName":"clearDone","kind":"dom-event","library":"svelte","line":25,"receiverName":"button","trigger":"click"}}
+{"kind":"node","id":"file:src/App.svelte:entrypoint:25:12:dom-event:keydown","label":"EntryPoint","properties":{"handlerName":null,"kind":"dom-event","library":"svelte","line":25,"receiverName":"button","trigger":"keydown"}}
+{"kind":"node","id":"file:src/App.svelte:entrypoint:25:72:dom-event:click","label":"EntryPoint","properties":{"handlerName":"clearDone","kind":"dom-event","library":"svelte","line":25,"receiverName":"button","trigger":"click"}}
 {"kind":"node","id":"file:src/App.svelte:function:14:clearDone","label":"Function","properties":{"className":null,"endLine":16,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":14,"methodKind":null,"name":"clearDone","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/App.svelte:function:14:clearDone:call:15:12:todos.filter","label":"Call","properties":{"args":"[]","callee":"filter","columnNumber":12,"expression":"todos.filter","line":15,"name":"todos.filter","receiver":"todos"}}
 {"kind":"node","id":"file:src/App.svelte:function:1:<script>","label":"Function","properties":{"className":null,"endLine":17,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"script_instance","line":1,"methodKind":null,"name":"<script>","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -94,7 +95,8 @@
 {"kind":"rel","from":"dir:src/lib/ui","type":"CONTAINS_FILE","to":"file:src/lib/ui/Button.svelte","properties":{}}
 {"kind":"rel","from":"dir:src/lib/ui","type":"CONTAINS_FILE","to":"file:src/lib/ui/index.ts","properties":{}}
 {"kind":"rel","from":"file:src/App.svelte","type":"DECLARES_COMPONENT","to":"file:src/App.svelte:component:1:App","properties":{}}
-{"kind":"rel","from":"file:src/App.svelte","type":"DECLARES_ENTRYPOINT","to":"file:src/App.svelte:entrypoint:25:12:dom-event:click","properties":{}}
+{"kind":"rel","from":"file:src/App.svelte","type":"DECLARES_ENTRYPOINT","to":"file:src/App.svelte:entrypoint:25:12:dom-event:keydown","properties":{}}
+{"kind":"rel","from":"file:src/App.svelte","type":"DECLARES_ENTRYPOINT","to":"file:src/App.svelte:entrypoint:25:72:dom-event:click","properties":{}}
 {"kind":"rel","from":"file:src/App.svelte","type":"DEFINES_FUNCTION","to":"file:src/App.svelte:function:14:clearDone","properties":{}}
 {"kind":"rel","from":"file:src/App.svelte","type":"DEFINES_FUNCTION","to":"file:src/App.svelte:function:1:<script>","properties":{}}
 {"kind":"rel","from":"file:src/App.svelte","type":"DEFINES_VARIABLE","to":"file:src/App.svelte:variable:10:view","properties":{}}
@@ -110,7 +112,7 @@
 {"kind":"rel","from":"file:src/App.svelte:component:1:App","type":"RENDERS","to":"file:src/lib/components/Footer.svelte:component:1:Footer","properties":{"line":29,"props":""}}
 {"kind":"rel","from":"file:src/App.svelte:component:1:App","type":"RENDERS","to":"file:src/lib/components/TodoList.svelte:component:1:TodoList","properties":{"line":20,"props":"todos,filter,onremove"}}
 {"kind":"rel","from":"file:src/App.svelte:component:1:App","type":"RENDERS","to":"file:src/lib/ui/Button.svelte:component:1:Button","properties":{"line":22,"props":"variant,onclick"}}
-{"kind":"rel","from":"file:src/App.svelte:entrypoint:25:12:dom-event:click","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/App.svelte:function:14:clearDone","properties":{}}
+{"kind":"rel","from":"file:src/App.svelte:entrypoint:25:72:dom-event:click","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/App.svelte:function:14:clearDone","properties":{}}
 {"kind":"rel","from":"file:src/App.svelte:function:14:clearDone","type":"CALLS","to":"file:src/App.svelte:function:14:clearDone:call:15:12:todos.filter","properties":{}}
 {"kind":"rel","from":"file:src/App.svelte:function:1:<script>","type":"CALLS","to":"file:src/App.svelte:initializercall:10:13:$derived","properties":{}}
 {"kind":"rel","from":"file:src/App.svelte:function:1:<script>","type":"CALLS","to":"file:src/App.svelte:initializercall:8:14:$state","properties":{}}

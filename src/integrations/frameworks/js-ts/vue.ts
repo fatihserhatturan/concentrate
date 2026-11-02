@@ -3,7 +3,7 @@ import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import { createCallNodes, createFunctionNode, type JsTsParsedFile } from "../../languages/js-ts/index.js";
 import { isHookCall, type PendingRender } from "./react.js";
-import { createEntrypointNode } from "./entrypoint-graph.js";
+import { createEntrypointNode, listenerHandlerName } from "./entrypoint-graph.js";
 import { indexFileFunctions, stripStringQuotes } from "./file-index.js";
 
 // Vue single-file components: every `.vue` file is one Component (framework
@@ -292,7 +292,7 @@ function addListener(
     ? valueNode.namedChildren.find((child) => child?.type === "attribute_value")?.text ?? ""
     : valueNode?.text ?? "";
   // `save` or `save(…)`: the function the listener calls.
-  const handlerName = /^\s*([A-Za-z_$][\w$]*)\s*(?:\(|$)/u.exec(value)?.[1] ?? null;
+  const handlerName = listenerHandlerName(/^\s*([A-Za-z_$][\w$]*)\s*(?:\(|$)/u.exec(value)?.[1]);
   const entrypoint = createEntrypointNode({
     fileNodeId,
     row: attribute.startPosition.row + 1,

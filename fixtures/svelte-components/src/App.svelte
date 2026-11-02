@@ -22,7 +22,7 @@
   <Ui.Button variant="ghost" onclick={() => clearDone()}>Clear</Ui.Button>
   <svelte:component this={view} {todos} />
   {#if todos.length > 0}
-    <button onclick={() => {
+    <button onkeydown={(e) => { if (e.key === 'Escape') clearDone(); }} onclick={() => {
       clearDone();
     }}>Clear done</button>
   {/if}
