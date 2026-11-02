@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 57;
+export const SCHEMA_VERSION = 58;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -27,7 +27,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Directory", properties: { path: "STRING", relativePath: "STRING", name: "STRING" } },
   { label: "File", properties: { path: "STRING", relativePath: "STRING", language: "STRING", defaultExport: "STRING", defaultExportFrom: "STRING", sourceType: "STRING", isTest: "BOOLEAN", isFixture: "BOOLEAN", isSupport: "BOOLEAN", isGenerated: "BOOLEAN" } },
   { label: "Import", properties: { source: "STRING", specifier: "STRING", line: "INT64", isReExport: "BOOLEAN", isWildcard: "BOOLEAN", isDynamic: "BOOLEAN", isCjs: "BOOLEAN", isTypeOnly: "BOOLEAN", bindings: "STRING" } },
-  { label: "Function", properties: { name: "STRING", kind: "STRING", methodKind: "STRING", line: "INT64", endLine: "INT64", className: "STRING", isExported: "BOOLEAN", isAsync: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", parameters: "STRING", returnType: "STRING", storeRefs: "STRING" } },
+  { label: "Function", properties: { name: "STRING", kind: "STRING", methodKind: "STRING", line: "INT64", endLine: "INT64", className: "STRING", isExported: "BOOLEAN", isAsync: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", parameters: "STRING", returnType: "STRING", storeRefs: "STRING", formAction: "STRING" } },
   { label: "Class", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", extendsNames: "STRING", implementsNames: "STRING" } },
   { label: "Interface", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
   { label: "TypeAlias", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
@@ -86,6 +86,7 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "DECLARES_COMPONENT", from: "File", to: "Component", properties: {} },
   { type: "DECLARES_PAGE", from: "File", to: "Page", properties: {} },
   { type: "PAGE_RENDERS", from: "Page", to: "Component", properties: {} },
+  { type: "PAGE_LOADS", from: "Page", to: "Function", properties: { server: "BOOLEAN" } },
   { type: "DECLARES_STORE", from: "File", to: "Store", properties: {} },
   { type: "STORE_DEFINED_BY_FUNCTION", from: "Store", to: "Function", properties: {} },
   { type: "STORE_ACTION", from: "Store", to: "Function", properties: {} },

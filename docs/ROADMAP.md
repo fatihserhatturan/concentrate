@@ -733,9 +733,9 @@ Reuses the SFC splitter (Phase 10), `Component` and `RENDERS` (Phase 11), `Page`
 
 ### SvelteKit
 
-- [ ] `+page` and `+layout` files become `Page` nodes, with route parameters
-- [ ] `+server.ts` handlers become `Route` nodes
-- [ ] `load` functions and form actions; `fetch` inside `load` becomes `REQUESTS`
+- [x] `+page` and `+layout` files become `Page` nodes, with route parameters
+- [x] `+server.ts` handlers become `Route` nodes
+- [x] `load` functions and form actions; `fetch` inside `load` becomes `REQUESTS`
 
 ### Astro
 

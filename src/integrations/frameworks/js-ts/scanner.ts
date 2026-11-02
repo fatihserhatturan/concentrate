@@ -17,6 +17,7 @@ import { applyVueScriptSemantics, applyVueTemplateSemantics } from "./vue.js";
 import { applyVueRouterSemantics } from "./vue-router.js";
 import { applySvelteMarkupSemantics, applySvelteScriptSemantics } from "./svelte.js";
 import { applySvelteStoreSemantics, applySvelteTemplateStoreRefs } from "./svelte-stores.js";
+import { applySvelteKitParseSemantics } from "./sveltekit.js";
 import { applyPiniaSemantics } from "./pinia.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
@@ -97,6 +98,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // Svelte stores and runes modules' `$state`, and their use.
     name: "svelte-stores",
     onFile: applySvelteStoreSemantics,
+  },
+  {
+    // The form actions of SvelteKit `+page.server` files.
+    name: "sveltekit",
+    onFile: applySvelteKitParseSemantics,
   },
   {
     // Pinia stores and the use of `use…Store()` hooks.

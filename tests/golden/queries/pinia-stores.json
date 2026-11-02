@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 57
+        "result": 58
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 57,
+      "schemaVersion": 58,
       "stats": [
         {
           "table": "Repo",
@@ -1057,6 +1057,17 @@
       {
         "method": "query",
         "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/stores/cart.ts:function:13:add",
+            "file:src/components/CartView.vue:function:14:addSample"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
         "params": {
           "ids": [
             "file:src/stores/cart.ts:function:13:add",

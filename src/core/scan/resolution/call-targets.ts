@@ -32,7 +32,7 @@ export function resolveDeclaration(
     ?? resolveImportedFreeCall(name, fileId, declarationsByFileAndName, importNodesByFile, resolvedFileByImportId);
 }
 
-function resolveImportedFreeCall(
+export function resolveImportedFreeCall(
   callee: string,
   callerFileId: string,
   functionsByFileAndName: Map<string, Map<string, string[]>>,

@@ -17,6 +17,7 @@ import { envConfigContributor } from "../integrations/frameworks/js-ts/env-confi
 import { dataAccessContributor } from "../integrations/frameworks/js-ts/data-access.js";
 import { componentGraphContributor } from "../integrations/frameworks/js-ts/resolution/component-graph.js";
 import { nextjsPagesContributor, nextjsRoutesContributor } from "../integrations/frameworks/js-ts/nextjs.js";
+import { svelteKitContributor } from "../integrations/frameworks/js-ts/sveltekit.js";
 import { nuxtAutoImportsContributor, nuxtPagesContributor, nuxtServerRoutesContributor, vueGlobalComponentsContributor } from "../integrations/frameworks/js-ts/nuxt.js";
 import { storeAccessContributor } from "../integrations/frameworks/js-ts/resolution/store-access.js";
 import { httpRequestsContributor } from "../integrations/frameworks/js-ts/resolution/http-requests.js";
@@ -46,6 +47,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     nextjsRoutesContributor,
     trpcRoutesContributor,
     nuxtServerRoutesContributor,
+    svelteKitContributor,
     httpRequestsContributor,
     envConfigContributor,
     dataAccessContributor,

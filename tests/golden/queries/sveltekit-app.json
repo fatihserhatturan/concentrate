@@ -1,0 +1,2960 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 58
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 16
+          },
+          {
+            "table": "File",
+            "count": 18
+          },
+          {
+            "table": "Import",
+            "count": 14
+          },
+          {
+            "table": "Function",
+            "count": 23
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 2
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 34
+          },
+          {
+            "table": "Route",
+            "count": 6
+          },
+          {
+            "table": "EntryPoint",
+            "count": 1
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 4
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 10
+          },
+          {
+            "table": "Page",
+            "count": 9
+          },
+          {
+            "table": "Store",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 58,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 16
+        },
+        {
+          "table": "File",
+          "count": 18
+        },
+        {
+          "table": "Import",
+          "count": 14
+        },
+        {
+          "table": "Function",
+          "count": 23
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 2
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 34
+        },
+        {
+          "table": "Route",
+          "count": 6
+        },
+        {
+          "table": "EntryPoint",
+          "count": 1
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 4
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 10
+        },
+        {
+          "table": "Page",
+          "count": 9
+        },
+        {
+          "table": "Store",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "getPost",
+            "kind": "Function",
+            "file": "src/lib/server/db.ts",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "createPost",
+            "kind": "Function",
+            "file": "src/lib/server/db.ts",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "deletePost",
+            "kind": "Function",
+            "file": "src/lib/server/db.ts",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "GET",
+            "kind": "Function",
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "GET",
+            "kind": "Function",
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "DELETE",
+            "kind": "Function",
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "default",
+            "kind": "Function",
+            "file": "src/routes/login/+page.server.ts",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "remove",
+            "kind": "Function",
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 2,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "getPost",
+          "kind": "Function",
+          "file": "src/lib/server/db.ts",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "createPost",
+          "kind": "Function",
+          "file": "src/lib/server/db.ts",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "deletePost",
+          "kind": "Function",
+          "file": "src/lib/server/db.ts",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "GET",
+          "kind": "Function",
+          "file": "src/routes/api/posts/+server.ts",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "GET",
+          "kind": "Function",
+          "file": "src/routes/api/posts/[id]/+server.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "DELETE",
+          "kind": "Function",
+          "file": "src/routes/api/posts/[id]/+server.ts",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "default",
+          "kind": "Function",
+          "file": "src/routes/login/+page.server.ts",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "remove",
+          "kind": "Function",
+          "file": "src/routes/settings/profile/+page@.svelte",
+          "line": 2,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/lib/server/db.ts",
+            "name": "listPosts",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/server/db.ts",
+            "name": "getPost",
+            "kind": "Function",
+            "line": 7,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/server/db.ts",
+            "name": "createPost",
+            "kind": "Function",
+            "line": 11,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/server/db.ts",
+            "name": "deletePost",
+            "kind": "Function",
+            "line": 17,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/server/session.ts",
+            "name": "login",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/server/session.ts",
+            "name": "logout",
+            "kind": "Function",
+            "line": 5,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/routes/+layout.ts",
+            "name": "load",
+            "kind": "Function",
+            "line": 3,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/routes/api/posts/+server.ts",
+            "name": "GET",
+            "kind": "Function",
+            "line": 5,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/routes/api/posts/+server.ts",
+            "name": "POST",
+            "kind": "Function",
+            "line": 9,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "name": "GET",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "name": "DELETE",
+            "kind": "Function",
+            "line": 8,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/routes/blog/+page.ts",
+            "name": "load",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/routes/blog/[slug]/+page.server.ts",
+            "name": "load",
+            "kind": "Function",
+            "line": 5,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/routes/login/+page.server.ts",
+            "name": "actions",
+            "kind": "Variable",
+            "line": 5,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/lib/server/db.ts",
+          "name": "listPosts",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/server/db.ts",
+          "name": "getPost",
+          "kind": "Function",
+          "line": 7,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/server/db.ts",
+          "name": "createPost",
+          "kind": "Function",
+          "line": 11,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/server/db.ts",
+          "name": "deletePost",
+          "kind": "Function",
+          "line": 17,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/server/session.ts",
+          "name": "login",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/server/session.ts",
+          "name": "logout",
+          "kind": "Function",
+          "line": 5,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/routes/+layout.ts",
+          "name": "load",
+          "kind": "Function",
+          "line": 3,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/routes/api/posts/+server.ts",
+          "name": "GET",
+          "kind": "Function",
+          "line": 5,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/routes/api/posts/+server.ts",
+          "name": "POST",
+          "kind": "Function",
+          "line": 9,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/routes/api/posts/[id]/+server.ts",
+          "name": "GET",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/routes/api/posts/[id]/+server.ts",
+          "name": "DELETE",
+          "kind": "Function",
+          "line": 8,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/routes/blog/+page.ts",
+          "name": "load",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/routes/blog/[slug]/+page.server.ts",
+          "name": "load",
+          "kind": "Function",
+          "line": 5,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/routes/login/+page.server.ts",
+          "name": "actions",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 14
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 5,
+            "method": "GET",
+            "path": "/api/posts",
+            "fullPath": "/api/posts",
+            "framework": "sveltekit",
+            "handlerName": "GET",
+            "handler": "GET"
+          },
+          {
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 9,
+            "method": "POST",
+            "path": "/api/posts",
+            "fullPath": "/api/posts",
+            "framework": "sveltekit",
+            "handlerName": "POST",
+            "handler": "POST"
+          },
+          {
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 4,
+            "method": "GET",
+            "path": "/api/posts/[id]",
+            "fullPath": "/api/posts/[id]",
+            "framework": "sveltekit",
+            "handlerName": "GET",
+            "handler": "GET"
+          },
+          {
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 8,
+            "method": "DELETE",
+            "path": "/api/posts/[id]",
+            "fullPath": "/api/posts/[id]",
+            "framework": "sveltekit",
+            "handlerName": "DELETE",
+            "handler": "DELETE"
+          },
+          {
+            "file": "src/routes/login/+page.server.ts",
+            "line": 6,
+            "method": "POST",
+            "path": "/login",
+            "fullPath": "/login",
+            "framework": "sveltekit",
+            "handlerName": "default",
+            "handler": "default"
+          },
+          {
+            "file": "src/routes/login/+page.server.ts",
+            "line": 11,
+            "method": "POST",
+            "path": "/login?/logout",
+            "fullPath": "/login?/logout",
+            "framework": "sveltekit",
+            "handlerName": "logout",
+            "handler": "logout"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/routes/api/posts/+server.ts",
+          "line": 5,
+          "method": "GET",
+          "path": "/api/posts",
+          "fullPath": "/api/posts",
+          "framework": "sveltekit",
+          "handlerName": "GET",
+          "handler": "GET"
+        },
+        {
+          "file": "src/routes/api/posts/+server.ts",
+          "line": 9,
+          "method": "POST",
+          "path": "/api/posts",
+          "fullPath": "/api/posts",
+          "framework": "sveltekit",
+          "handlerName": "POST",
+          "handler": "POST"
+        },
+        {
+          "file": "src/routes/api/posts/[id]/+server.ts",
+          "line": 4,
+          "method": "GET",
+          "path": "/api/posts/[id]",
+          "fullPath": "/api/posts/[id]",
+          "framework": "sveltekit",
+          "handlerName": "GET",
+          "handler": "GET"
+        },
+        {
+          "file": "src/routes/api/posts/[id]/+server.ts",
+          "line": 8,
+          "method": "DELETE",
+          "path": "/api/posts/[id]",
+          "fullPath": "/api/posts/[id]",
+          "framework": "sveltekit",
+          "handlerName": "DELETE",
+          "handler": "DELETE"
+        },
+        {
+          "file": "src/routes/login/+page.server.ts",
+          "line": 6,
+          "method": "POST",
+          "path": "/login",
+          "fullPath": "/login",
+          "framework": "sveltekit",
+          "handlerName": "default",
+          "handler": "default"
+        },
+        {
+          "file": "src/routes/login/+page.server.ts",
+          "line": 11,
+          "method": "POST",
+          "path": "/login?/logout",
+          "fullPath": "/login?/logout",
+          "framework": "sveltekit",
+          "handlerName": "logout",
+          "handler": "logout"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 6
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 7,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "remove",
+            "handler": "remove"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [
+        {
+          "file": "src/routes/settings/profile/+page@.svelte",
+          "line": 7,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "remove",
+          "handler": "remove"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_pages",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "rows": [
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "error",
+            "slot": null,
+            "file": "src/routes/+error.svelte",
+            "line": null,
+            "component": "Error",
+            "componentFile": "src/routes/+error.svelte"
+          },
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "layout",
+            "slot": null,
+            "file": "src/routes/+layout.svelte",
+            "line": null,
+            "component": "Layout",
+            "componentFile": "src/routes/+layout.svelte"
+          },
+          {
+            "fullPath": "/",
+            "path": "/",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/+page.svelte",
+            "line": null,
+            "component": "Page",
+            "componentFile": "src/routes/+page.svelte"
+          },
+          {
+            "fullPath": "/about",
+            "path": "/about",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/(marketing)/about/+page.svelte",
+            "line": null,
+            "component": "Page",
+            "componentFile": "src/routes/(marketing)/about/+page.svelte"
+          },
+          {
+            "fullPath": "/blog",
+            "path": "/blog",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/blog/+page.svelte",
+            "line": null,
+            "component": "Page",
+            "componentFile": "src/routes/blog/+page.svelte"
+          },
+          {
+            "fullPath": "/blog/[slug]",
+            "path": "/blog/[slug]",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/blog/[slug]/+page.svelte",
+            "line": null,
+            "component": "Page",
+            "componentFile": "src/routes/blog/[slug]/+page.svelte"
+          },
+          {
+            "fullPath": "/login",
+            "path": "/login",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/login/+page.svelte",
+            "line": null,
+            "component": "Page",
+            "componentFile": "src/routes/login/+page.svelte"
+          },
+          {
+            "fullPath": "/settings",
+            "path": "/settings",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "layout",
+            "slot": null,
+            "file": "src/routes/settings/+layout.svelte",
+            "line": null,
+            "component": "Layout",
+            "componentFile": "src/routes/settings/+layout.svelte"
+          },
+          {
+            "fullPath": "/settings/profile",
+            "path": "/settings/profile",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "page",
+            "slot": null,
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": null,
+            "component": "Page",
+            "componentFile": "src/routes/settings/profile/+page@.svelte"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "pages": [
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "error",
+          "slot": null,
+          "file": "src/routes/+error.svelte",
+          "line": null,
+          "component": "Error",
+          "componentFile": "src/routes/+error.svelte"
+        },
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "layout",
+          "slot": null,
+          "file": "src/routes/+layout.svelte",
+          "line": null,
+          "component": "Layout",
+          "componentFile": "src/routes/+layout.svelte"
+        },
+        {
+          "fullPath": "/",
+          "path": "/",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/+page.svelte",
+          "line": null,
+          "component": "Page",
+          "componentFile": "src/routes/+page.svelte"
+        },
+        {
+          "fullPath": "/about",
+          "path": "/about",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/(marketing)/about/+page.svelte",
+          "line": null,
+          "component": "Page",
+          "componentFile": "src/routes/(marketing)/about/+page.svelte"
+        },
+        {
+          "fullPath": "/blog",
+          "path": "/blog",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/blog/+page.svelte",
+          "line": null,
+          "component": "Page",
+          "componentFile": "src/routes/blog/+page.svelte"
+        },
+        {
+          "fullPath": "/blog/[slug]",
+          "path": "/blog/[slug]",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/blog/[slug]/+page.svelte",
+          "line": null,
+          "component": "Page",
+          "componentFile": "src/routes/blog/[slug]/+page.svelte"
+        },
+        {
+          "fullPath": "/login",
+          "path": "/login",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/login/+page.svelte",
+          "line": null,
+          "component": "Page",
+          "componentFile": "src/routes/login/+page.svelte"
+        },
+        {
+          "fullPath": "/settings",
+          "path": "/settings",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "layout",
+          "slot": null,
+          "file": "src/routes/settings/+layout.svelte",
+          "line": null,
+          "component": "Layout",
+          "componentFile": "src/routes/settings/+layout.svelte"
+        },
+        {
+          "fullPath": "/settings/profile",
+          "path": "/settings/profile",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "page",
+          "slot": null,
+          "file": "src/routes/settings/profile/+page@.svelte",
+          "line": null,
+          "component": "Page",
+          "componentFile": "src/routes/settings/profile/+page@.svelte"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 9
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "GET",
+      "path": "/api/posts"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "GET",
+          "path": "/api/posts"
+        },
+        "rows": [
+          {
+            "id": "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts",
+            "method": "GET",
+            "path": "/api/posts",
+            "fullPath": "/api/posts",
+            "framework": "sveltekit",
+            "handlerName": "GET",
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE page.fullPath = $path OR page.path = $path OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component) RETURN id(page) AS id, page.path AS path, page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, id(component) AS component, component.name AS componentName ORDER BY file, line LIMIT 5",
+        "params": {
+          "path": "/api/posts"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/lib/components/PostCard.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/lib/components/PostCard.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:3:listPosts",
+            "name": "listPosts",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:7:getPost",
+            "name": "getPost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:11:createPost",
+            "name": "createPost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 11,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:17:deletePost",
+            "name": "deletePost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 17,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/lib/server/session.ts:function:1:login",
+            "name": "login",
+            "className": null,
+            "file": "src/lib/server/session.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/lib/server/session.ts:function:5:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/lib/server/session.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/routes/+error.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/+error.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/+layout.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/+layout.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/+layout.ts:function:3:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/+layout.ts",
+            "line": 3,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/routes/api/posts/+server.ts:function:9:POST",
+            "name": "POST",
+            "className": null,
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 9,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 4,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/routes/api/posts/[id]/+server.ts:function:8:DELETE",
+            "name": "DELETE",
+            "className": null,
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/routes/blog/+page.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/blog/+page.svelte",
+            "line": 1,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/routes/blog/+page.ts:function:1:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/blog/+page.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/routes/blog/[slug]/+page.server.ts:function:5:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/blog/[slug]/+page.server.ts",
+            "line": 5,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/routes/blog/[slug]/+page.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/blog/[slug]/+page.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/login/+page.server.ts:function:6:default",
+            "name": "default",
+            "className": null,
+            "file": "src/routes/login/+page.server.ts",
+            "line": 6,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/routes/login/+page.server.ts:function:11:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/routes/login/+page.server.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/routes/settings/+layout.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/settings/+layout.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/settings/profile/+page@.svelte:function:2:remove",
+            "name": "remove",
+            "className": null,
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/routes/settings/profile/+page@.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 1,
+            "endLine": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "callee": "file:src/lib/server/db.ts:function:3:listPosts",
+            "line": 6
+          },
+          {
+            "caller": "file:src/routes/api/posts/+server.ts:function:9:POST",
+            "callee": "file:src/lib/server/db.ts:function:11:createPost",
+            "line": 11
+          },
+          {
+            "caller": "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "callee": "file:src/lib/server/db.ts:function:7:getPost",
+            "line": 5
+          },
+          {
+            "caller": "file:src/routes/api/posts/[id]/+server.ts:function:8:DELETE",
+            "callee": "file:src/lib/server/db.ts:function:17:deletePost",
+            "line": 9
+          },
+          {
+            "caller": "file:src/routes/blog/[slug]/+page.server.ts:function:5:load",
+            "callee": "file:src/lib/server/db.ts:function:7:getPost",
+            "line": 6
+          },
+          {
+            "caller": "file:src/routes/login/+page.server.ts:function:6:default",
+            "callee": "file:src/lib/server/session.ts:function:1:login",
+            "line": 8
+          },
+          {
+            "caller": "file:src/routes/login/+page.server.ts:function:11:logout",
+            "callee": "file:src/lib/server/session.ts:function:5:logout",
+            "line": 12
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts",
+            "fn": "file:src/routes/api/posts/+server.ts:function:5:GET"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE id(route) IN $ids RETURN id(route) AS route, id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:USES_ENV_ROUTE]->(env:EnvVar) WHERE id(route) IN $ids RETURN id(route) AS route, env.name AS name, rel.access AS access, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:CONSUMES_CONFIG_ROUTE]->(config:ConfigValue) WHERE id(route) IN $ids RETURN id(route) AS route, config.name AS name, rel.localName AS localName",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "file:src/lib/server/db.ts:function:3:listPosts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "file:src/lib/server/db.ts:function:3:listPosts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "file:src/lib/server/db.ts:function:3:listPosts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "file:src/lib/server/db.ts:function:3:listPosts"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/posts",
+            "routeFramework": "sveltekit",
+            "routeFile": "src/routes/api/posts/+server.ts",
+            "routeLine": 5,
+            "call": "file:src/routes/+layout.ts:function:3:load:call:4:25:fetch",
+            "line": 4,
+            "expression": "fetch",
+            "client": "fetch",
+            "method": "GET",
+            "url": "/api/posts",
+            "match": "exact",
+            "fn": "file:src/routes/+layout.ts:function:3:load"
+          },
+          {
+            "route": "file:src/routes/api/posts/+server.ts:route:5:0:GET:/api/posts",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/posts",
+            "routeFramework": "sveltekit",
+            "routeFile": "src/routes/api/posts/+server.ts",
+            "routeLine": 5,
+            "call": "file:src/routes/blog/+page.ts:function:1:load:call:2:25:fetch",
+            "line": 2,
+            "expression": "fetch",
+            "client": "fetch",
+            "method": "GET",
+            "url": "/api/posts",
+            "match": "exact",
+            "fn": "file:src/routes/blog/+page.ts:function:1:load"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/+layout.ts:function:3:load",
+            "file:src/routes/blog/+page.ts:function:1:load"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/routes/+layout.ts:function:3:load",
+            "file:src/routes/blog/+page.ts:function:1:load"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/+layout.ts:function:3:load",
+            "file:src/routes/blog/+page.ts:function:1:load"
+          ]
+        },
+        "rows": [
+          {
+            "fullPath": "/",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "layout",
+            "file": "src/routes/+layout.svelte",
+            "line": null,
+            "fn": "file:src/routes/+layout.ts:function:3:load"
+          },
+          {
+            "fullPath": "/blog",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "page",
+            "file": "src/routes/blog/+page.svelte",
+            "line": null,
+            "fn": "file:src/routes/blog/+page.ts:function:1:load"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "method": "GET",
+      "path": "/api/posts",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/posts",
+          "fullPath": "/api/posts",
+          "framework": "sveltekit",
+          "handlerName": "GET",
+          "file": "src/routes/api/posts/+server.ts",
+          "line": 5,
+          "handlers": [
+            {
+              "name": "GET",
+              "className": null,
+              "file": "src/routes/api/posts/+server.ts",
+              "line": 5,
+              "endLine": 7
+            }
+          ],
+          "lifecycle": [],
+          "callChain": [
+            {
+              "depth": 1,
+              "caller": "GET",
+              "callerFile": "src/routes/api/posts/+server.ts",
+              "line": 6,
+              "callee": "listPosts",
+              "calleeClass": null,
+              "calleeFile": "src/lib/server/db.ts"
+            }
+          ],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": [],
+          "consumers": [
+            {
+              "client": "fetch",
+              "method": "GET",
+              "url": "/api/posts",
+              "match": "exact",
+              "file": "src/routes/+layout.ts",
+              "line": 4,
+              "expression": "fetch",
+              "function": "load"
+            },
+            {
+              "client": "fetch",
+              "method": "GET",
+              "url": "/api/posts",
+              "match": "exact",
+              "file": "src/routes/blog/+page.ts",
+              "line": 2,
+              "expression": "fetch",
+              "function": "load"
+            }
+          ],
+          "consumerComponents": [],
+          "consumerPages": [
+            {
+              "fullPath": "/",
+              "framework": "sveltekit",
+              "router": "file",
+              "kind": "layout",
+              "file": "src/routes/+layout.svelte",
+              "line": null,
+              "loadedBy": "load",
+              "depth": 0
+            },
+            {
+              "fullPath": "/blog",
+              "framework": "sveltekit",
+              "router": "file",
+              "kind": "page",
+              "file": "src/routes/blog/+page.svelte",
+              "line": null,
+              "loadedBy": "load",
+              "depth": 0
+            }
+          ]
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "route_details",
+    "args": {
+      "method": "POST",
+      "path": "/login?/logout"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, file.relativePath AS file, route.line AS line ORDER BY file, line LIMIT 6",
+        "params": {
+          "method": "POST",
+          "path": "/login?/logout"
+        },
+        "rows": [
+          {
+            "id": "file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout",
+            "method": "POST",
+            "path": "/login?/logout",
+            "fullPath": "/login?/logout",
+            "framework": "sveltekit",
+            "handlerName": "logout",
+            "file": "src/routes/login/+page.server.ts",
+            "line": 11
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/lib/components/PostCard.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/lib/components/PostCard.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:3:listPosts",
+            "name": "listPosts",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:7:getPost",
+            "name": "getPost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:11:createPost",
+            "name": "createPost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 11,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:17:deletePost",
+            "name": "deletePost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 17,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/lib/server/session.ts:function:1:login",
+            "name": "login",
+            "className": null,
+            "file": "src/lib/server/session.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/lib/server/session.ts:function:5:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/lib/server/session.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/routes/+error.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/+error.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/+layout.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/+layout.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/+layout.ts:function:3:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/+layout.ts",
+            "line": 3,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/routes/api/posts/+server.ts:function:9:POST",
+            "name": "POST",
+            "className": null,
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 9,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 4,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/routes/api/posts/[id]/+server.ts:function:8:DELETE",
+            "name": "DELETE",
+            "className": null,
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/routes/blog/+page.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/blog/+page.svelte",
+            "line": 1,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/routes/blog/+page.ts:function:1:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/blog/+page.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/routes/blog/[slug]/+page.server.ts:function:5:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/blog/[slug]/+page.server.ts",
+            "line": 5,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/routes/blog/[slug]/+page.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/blog/[slug]/+page.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/login/+page.server.ts:function:6:default",
+            "name": "default",
+            "className": null,
+            "file": "src/routes/login/+page.server.ts",
+            "line": 6,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/routes/login/+page.server.ts:function:11:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/routes/login/+page.server.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/routes/settings/+layout.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/settings/+layout.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/settings/profile/+page@.svelte:function:2:remove",
+            "name": "remove",
+            "className": null,
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/routes/settings/profile/+page@.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 1,
+            "endLine": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "callee": "file:src/lib/server/db.ts:function:3:listPosts",
+            "line": 6
+          },
+          {
+            "caller": "file:src/routes/api/posts/+server.ts:function:9:POST",
+            "callee": "file:src/lib/server/db.ts:function:11:createPost",
+            "line": 11
+          },
+          {
+            "caller": "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "callee": "file:src/lib/server/db.ts:function:7:getPost",
+            "line": 5
+          },
+          {
+            "caller": "file:src/routes/api/posts/[id]/+server.ts:function:8:DELETE",
+            "callee": "file:src/lib/server/db.ts:function:17:deletePost",
+            "line": 9
+          },
+          {
+            "caller": "file:src/routes/blog/[slug]/+page.server.ts:function:5:load",
+            "callee": "file:src/lib/server/db.ts:function:7:getPost",
+            "line": 6
+          },
+          {
+            "caller": "file:src/routes/login/+page.server.ts:function:6:default",
+            "callee": "file:src/lib/server/session.ts:function:1:login",
+            "line": 8
+          },
+          {
+            "caller": "file:src/routes/login/+page.server.ts:function:11:logout",
+            "callee": "file:src/lib/server/session.ts:function:5:logout",
+            "line": 12
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout",
+            "fn": "file:src/routes/login/+page.server.ts:function:11:logout"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE id(route) IN $ids RETURN id(route) AS route, id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:USES_ENV_ROUTE]->(env:EnvVar) WHERE id(route) IN $ids RETURN id(route) AS route, env.name AS name, rel.access AS access, rel.line AS line",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:CONSUMES_CONFIG_ROUTE]->(config:ConfigValue) WHERE id(route) IN $ids RETURN id(route) AS route, config.name AS name, rel.localName AS localName",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:function:11:logout",
+            "file:src/lib/server/session.ts:function:5:logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:function:11:logout",
+            "file:src/lib/server/session.ts:function:5:logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:function:11:logout",
+            "file:src/lib/server/session.ts:function:5:logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:function:11:logout",
+            "file:src/lib/server/session.ts:function:5:logout"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "method": "POST",
+      "path": "/login?/logout",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/login?/logout",
+          "fullPath": "/login?/logout",
+          "framework": "sveltekit",
+          "handlerName": "logout",
+          "file": "src/routes/login/+page.server.ts",
+          "line": 11,
+          "handlers": [
+            {
+              "name": "logout",
+              "className": null,
+              "file": "src/routes/login/+page.server.ts",
+              "line": 11,
+              "endLine": 13
+            }
+          ],
+          "lifecycle": [],
+          "callChain": [
+            {
+              "depth": 1,
+              "caller": "logout",
+              "callerFile": "src/routes/login/+page.server.ts",
+              "line": 12,
+              "callee": "logout",
+              "calleeClass": null,
+              "calleeFile": "src/lib/server/session.ts"
+            }
+          ],
+          "dataAccess": [],
+          "tables": [],
+          "envVars": [],
+          "config": [],
+          "consumers": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "method": "DELETE",
+      "path": "/api/posts/[id]"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/lib/components/PostCard.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/lib/components/PostCard.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:3:listPosts",
+            "name": "listPosts",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:7:getPost",
+            "name": "getPost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:11:createPost",
+            "name": "createPost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 11,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:17:deletePost",
+            "name": "deletePost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 17,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/lib/server/session.ts:function:1:login",
+            "name": "login",
+            "className": null,
+            "file": "src/lib/server/session.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/lib/server/session.ts:function:5:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/lib/server/session.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/routes/+error.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/+error.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/+layout.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/+layout.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/+layout.ts:function:3:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/+layout.ts",
+            "line": 3,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/routes/api/posts/+server.ts:function:9:POST",
+            "name": "POST",
+            "className": null,
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 9,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 4,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/routes/api/posts/[id]/+server.ts:function:8:DELETE",
+            "name": "DELETE",
+            "className": null,
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/routes/blog/+page.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/blog/+page.svelte",
+            "line": 1,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/routes/blog/+page.ts:function:1:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/blog/+page.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/routes/blog/[slug]/+page.server.ts:function:5:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/blog/[slug]/+page.server.ts",
+            "line": 5,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/routes/blog/[slug]/+page.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/blog/[slug]/+page.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/login/+page.server.ts:function:6:default",
+            "name": "default",
+            "className": null,
+            "file": "src/routes/login/+page.server.ts",
+            "line": 6,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/routes/login/+page.server.ts:function:11:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/routes/login/+page.server.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/routes/settings/+layout.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/settings/+layout.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/settings/profile/+page@.svelte:function:2:remove",
+            "name": "remove",
+            "className": null,
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/routes/settings/profile/+page@.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 1,
+            "endLine": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "callee": "file:src/lib/server/db.ts:function:3:listPosts",
+            "line": 6
+          },
+          {
+            "caller": "file:src/routes/api/posts/+server.ts:function:9:POST",
+            "callee": "file:src/lib/server/db.ts:function:11:createPost",
+            "line": 11
+          },
+          {
+            "caller": "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "callee": "file:src/lib/server/db.ts:function:7:getPost",
+            "line": 5
+          },
+          {
+            "caller": "file:src/routes/api/posts/[id]/+server.ts:function:8:DELETE",
+            "callee": "file:src/lib/server/db.ts:function:17:deletePost",
+            "line": 9
+          },
+          {
+            "caller": "file:src/routes/blog/[slug]/+page.server.ts:function:5:load",
+            "callee": "file:src/lib/server/db.ts:function:7:getPost",
+            "line": 6
+          },
+          {
+            "caller": "file:src/routes/login/+page.server.ts:function:6:default",
+            "callee": "file:src/lib/server/session.ts:function:1:login",
+            "line": 8
+          },
+          {
+            "caller": "file:src/routes/login/+page.server.ts:function:11:logout",
+            "callee": "file:src/lib/server/session.ts:function:5:logout",
+            "line": 12
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id",
+        "params": {
+          "method": "DELETE",
+          "path": "/api/posts/[id]",
+          "routeFile": "",
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/routes/api/posts/[id]/+server.ts:route:8:0:DELETE:/api/posts/[id]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/[id]/+server.ts:route:8:0:DELETE:/api/posts/[id]"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/routes/api/posts/[id]/+server.ts:route:8:0:DELETE:/api/posts/[id]",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/posts/[id]",
+            "routeFramework": "sveltekit",
+            "routeFile": "src/routes/api/posts/[id]/+server.ts",
+            "routeLine": 8,
+            "call": "file:src/routes/settings/profile/+page@.svelte:function:2:remove:call:3:10:fetch",
+            "line": 3,
+            "expression": "fetch",
+            "client": "fetch",
+            "method": "DELETE",
+            "url": "/api/posts/${id}",
+            "match": "parameter",
+            "fn": "file:src/routes/settings/profile/+page@.svelte:function:2:remove"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/settings/profile/+page@.svelte:function:2:remove"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/routes/settings/profile/+page@.svelte:function:2:remove"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/settings/profile/+page@.svelte:function:2:remove"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": "DELETE",
+        "path": "/api/posts/[id]",
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "DELETE",
+            "fullPath": "/api/posts/[id]",
+            "framework": "sveltekit",
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 8
+          },
+          "client": "fetch",
+          "method": "DELETE",
+          "url": "/api/posts/${id}",
+          "match": "parameter",
+          "file": "src/routes/settings/profile/+page@.svelte",
+          "line": 3,
+          "expression": "fetch",
+          "function": "remove"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "getPost"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/lib/components/PostCard.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/lib/components/PostCard.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:3:listPosts",
+            "name": "listPosts",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:7:getPost",
+            "name": "getPost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 7,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:11:createPost",
+            "name": "createPost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 11,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/lib/server/db.ts:function:17:deletePost",
+            "name": "deletePost",
+            "className": null,
+            "file": "src/lib/server/db.ts",
+            "line": 17,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/lib/server/session.ts:function:1:login",
+            "name": "login",
+            "className": null,
+            "file": "src/lib/server/session.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/lib/server/session.ts:function:5:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/lib/server/session.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/routes/+error.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/+error.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/+layout.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/+layout.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/+layout.ts:function:3:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/+layout.ts",
+            "line": 3,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/routes/api/posts/+server.ts:function:9:POST",
+            "name": "POST",
+            "className": null,
+            "file": "src/routes/api/posts/+server.ts",
+            "line": 9,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "name": "GET",
+            "className": null,
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 4,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/routes/api/posts/[id]/+server.ts:function:8:DELETE",
+            "name": "DELETE",
+            "className": null,
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/routes/blog/+page.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/blog/+page.svelte",
+            "line": 1,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/routes/blog/+page.ts:function:1:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/blog/+page.ts",
+            "line": 1,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/routes/blog/[slug]/+page.server.ts:function:5:load",
+            "name": "load",
+            "className": null,
+            "file": "src/routes/blog/[slug]/+page.server.ts",
+            "line": 5,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/routes/blog/[slug]/+page.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/blog/[slug]/+page.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/login/+page.server.ts:function:6:default",
+            "name": "default",
+            "className": null,
+            "file": "src/routes/login/+page.server.ts",
+            "line": 6,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/routes/login/+page.server.ts:function:11:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/routes/login/+page.server.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/routes/settings/+layout.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/settings/+layout.svelte",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/routes/settings/profile/+page@.svelte:function:2:remove",
+            "name": "remove",
+            "className": null,
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 2,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/routes/settings/profile/+page@.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/routes/settings/profile/+page@.svelte",
+            "line": 1,
+            "endLine": 5
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/routes/api/posts/+server.ts:function:5:GET",
+            "callee": "file:src/lib/server/db.ts:function:3:listPosts",
+            "line": 6
+          },
+          {
+            "caller": "file:src/routes/api/posts/+server.ts:function:9:POST",
+            "callee": "file:src/lib/server/db.ts:function:11:createPost",
+            "line": 11
+          },
+          {
+            "caller": "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "callee": "file:src/lib/server/db.ts:function:7:getPost",
+            "line": 5
+          },
+          {
+            "caller": "file:src/routes/api/posts/[id]/+server.ts:function:8:DELETE",
+            "callee": "file:src/lib/server/db.ts:function:17:deletePost",
+            "line": 9
+          },
+          {
+            "caller": "file:src/routes/blog/[slug]/+page.server.ts:function:5:load",
+            "callee": "file:src/lib/server/db.ts:function:7:getPost",
+            "line": 6
+          },
+          {
+            "caller": "file:src/routes/login/+page.server.ts:function:6:default",
+            "callee": "file:src/lib/server/session.ts:function:1:login",
+            "line": 8
+          },
+          {
+            "caller": "file:src/routes/login/+page.server.ts:function:11:logout",
+            "callee": "file:src/lib/server/session.ts:function:5:logout",
+            "line": 12
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost",
+            "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "file:src/routes/blog/[slug]/+page.server.ts:function:5:load"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost",
+            "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "file:src/routes/blog/[slug]/+page.server.ts:function:5:load"
+          ]
+        },
+        "rows": [
+          {
+            "routeId": "file:src/routes/api/posts/[id]/+server.ts:route:4:0:GET:/api/posts/[id]",
+            "method": "GET",
+            "path": "/api/posts/[id]",
+            "fullPath": "/api/posts/[id]",
+            "framework": "sveltekit",
+            "file": "src/routes/api/posts/[id]/+server.ts",
+            "line": 4,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:src/routes/api/posts/[id]/+server.ts:function:4:GET"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost",
+            "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "file:src/routes/blog/[slug]/+page.server.ts:function:5:load"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost",
+            "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "file:src/routes/blog/[slug]/+page.server.ts:function:5:load"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost",
+            "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "file:src/routes/blog/[slug]/+page.server.ts:function:5:load"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/lib/server/db.ts:function:7:getPost",
+            "file:src/routes/api/posts/[id]/+server.ts:function:4:GET",
+            "file:src/routes/blog/[slug]/+page.server.ts:function:5:load"
+          ]
+        },
+        "rows": [
+          {
+            "fullPath": "/blog/[slug]",
+            "framework": "sveltekit",
+            "router": "file",
+            "kind": "page",
+            "file": "src/routes/blog/[slug]/+page.svelte",
+            "line": null,
+            "fn": "file:src/routes/blog/[slug]/+page.server.ts:function:5:load"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/routes/api/posts/[id]/+server.ts:route:4:0:GET:/api/posts/[id]"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "symbol": "getPost",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "getPost",
+          "className": null,
+          "file": "src/lib/server/db.ts",
+          "line": 7,
+          "endLine": 9
+        }
+      ],
+      "callers": [
+        {
+          "name": "GET",
+          "className": null,
+          "file": "src/routes/api/posts/[id]/+server.ts",
+          "line": 4,
+          "endLine": 6,
+          "depth": 1
+        },
+        {
+          "name": "load",
+          "className": null,
+          "file": "src/routes/blog/[slug]/+page.server.ts",
+          "line": 5,
+          "endLine": 9,
+          "depth": 1
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/posts/[id]",
+          "fullPath": "/api/posts/[id]",
+          "framework": "sveltekit",
+          "file": "src/routes/api/posts/[id]/+server.ts",
+          "line": 4,
+          "reachedThrough": [
+            {
+              "function": "GET",
+              "functionFile": "src/routes/api/posts/[id]/+server.ts",
+              "as": "handler"
+            }
+          ]
+        }
+      ],
+      "entrypoints": [],
+      "components": [],
+      "pages": [
+        {
+          "fullPath": "/blog/[slug]",
+          "framework": "sveltekit",
+          "router": "file",
+          "kind": "page",
+          "file": "src/routes/blog/[slug]/+page.svelte",
+          "line": null,
+          "loadedBy": "load",
+          "depth": 0
+        }
+      ],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  }
+]

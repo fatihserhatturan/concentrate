@@ -75,6 +75,7 @@ export type GraphRelationshipType =
   | "USES_CONTEXT"
   | "DECLARES_PAGE"
   | "PAGE_RENDERS"
+  | "PAGE_LOADS"
   | "DECLARES_STORE"
   | "STORE_DEFINED_BY_FUNCTION"
   | "STORE_ACTION"

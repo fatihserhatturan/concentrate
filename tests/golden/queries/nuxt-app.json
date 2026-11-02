@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 57
+        "result": 58
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 57,
+      "schemaVersion": 58,
       "stats": [
         {
           "table": "Repo",
@@ -2812,6 +2812,19 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:composables/useCart.ts:function:1:useCart",
+            "file:composables/cart/index.ts:function:1:useCartTotal",
+            "file:layouts/default.vue:function:9:<script setup>",
+            "file:pages/index.vue:function:9:<script setup>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
@@ -3759,6 +3772,16 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:pages/users/[id].vue:function:5:<script setup>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
@@ -4518,6 +4541,16 @@
       {
         "method": "query",
         "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:pages/users/index.vue:function:7:add"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
         "params": {
           "ids": [
             "file:pages/users/index.vue:function:7:add"

@@ -275,39 +275,49 @@ export const vueGlobalComponentsContributor: ISemanticContributor = {
 
 type NuxtProject = { packageId: string; srcDir: string; files: Array<{ file: GraphNode; path: string }> };
 
-// The files of each package that depends on `nuxt`, with their paths
-// relative to the package.
 async function nuxtProjects(graph: IGraphContributor, nodesById: Map<string, GraphNode>): Promise<NuxtProject[]> {
+  return (await dependentPackages(graph, nodesById, "nuxt")).map((project) => {
+    const srcDir = project.files.some(({ path: filePath }) => /^app\/(?:pages|layouts|components)\/|^app\/app\.vue$/u.test(filePath)) ? "app/" : "";
+    return { ...project, srcDir };
+  });
+}
+
+// The files of each package that depends on `dependency`, with their paths
+// relative to the package.
+export async function dependentPackages(
+  graph: IGraphContributor,
+  nodesById: Map<string, GraphNode>,
+  dependency: string,
+): Promise<Array<{ packageId: string; files: Array<{ file: GraphNode; path: string }> }>> {
   const filesByPackage = new Map<string, GraphNode[]>();
   for (const rel of graph.relationships) {
     if (rel.type !== "PACKAGE_CONTAINS_FILE") continue;
     const file = nodesById.get(rel.to);
     if (file?.label === "File") filesByPackage.set(rel.from, [...filesByPackage.get(rel.from) ?? [], file]);
   }
-  const projects: NuxtProject[] = [];
+  const projects: Array<{ packageId: string; files: Array<{ file: GraphNode; path: string }> }> = [];
   for (const [packageId, files] of filesByPackage) {
     const packageNode = nodesById.get(packageId);
     const packagePath = packageNode?.properties.path;
     const packageRelativePath = packageNode?.properties.relativePath;
     if (typeof packagePath !== "string" || typeof packageRelativePath !== "string") continue;
-    if (!await dependsOnNuxt(packagePath)) continue;
+    if (!await dependsOn(packagePath, dependency)) continue;
     const prefix = packageRelativePath === "." || packageRelativePath === "" ? "" : `${packageRelativePath}/`;
     const inPackage = files.flatMap((file) => {
       const relativePath = file.properties.relativePath;
       return typeof relativePath === "string" && relativePath.startsWith(prefix) ? [{ file, path: relativePath.slice(prefix.length) }] : [];
     });
-    const srcDir = inPackage.some(({ path: filePath }) => /^app\/(?:pages|layouts|components)\/|^app\/app\.vue$/u.test(filePath)) ? "app/" : "";
-    projects.push({ packageId, srcDir, files: inPackage });
+    projects.push({ packageId, files: inPackage });
   }
   return projects;
 }
 
-async function dependsOnNuxt(packagePath: string): Promise<boolean> {
+async function dependsOn(packagePath: string, dependency: string): Promise<boolean> {
   try {
     const manifest = JSON.parse(await readFile(path.join(packagePath, "package.json"), "utf8")) as Record<string, unknown>;
     return ["dependencies", "devDependencies", "peerDependencies"].some((field) => {
       const dependencies = manifest[field];
-      return typeof dependencies === "object" && dependencies !== null && "nuxt" in dependencies;
+      return typeof dependencies === "object" && dependencies !== null && dependency in dependencies;
     });
   } catch {
     return false;

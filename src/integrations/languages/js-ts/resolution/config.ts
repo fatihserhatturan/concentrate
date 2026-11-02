@@ -102,6 +102,7 @@ export async function readJsTsResolutionConfigWithWarnings(
     if (code === "ENOENT") {
       return {
         ...emptyConfig,
+        paths: await svelteKitAliases(rootPath, []),
         packageJson: await readJsTsPackageJsonResolutionConfig(rootPath, onWarning),
         workspacePackages: await readJsTsWorkspacePackageResolutionConfigs(rootPath, onWarning),
       };
@@ -118,8 +119,28 @@ export async function readJsTsResolutionConfigWithWarnings(
 
   return {
     baseUrl: tsconfig.baseUrl,
-    paths: tsconfig.paths,
+    paths: await svelteKitAliases(rootPath, tsconfig.paths),
     packageJson,
     workspacePackages,
   };
+}
+
+// SvelteKit's `$lib` alias (`src/lib`), which its generated
+// `.svelte-kit/tsconfig.json` declares: added when the root package depends
+// on `@sveltejs/kit` and the paths do not map `$lib` already.
+async function svelteKitAliases(rootPath: string, paths: JsTsPathMapping[]): Promise<JsTsPathMapping[]> {
+  if (paths.some((mapping) => mapping.pattern === "$lib" || mapping.pattern === "$lib/*")) return paths;
+  let manifest: Record<string, unknown>;
+  try {
+    manifest = JSON.parse(await readFile(path.join(rootPath, "package.json"), "utf8")) as Record<string, unknown>;
+  } catch {
+    return paths;
+  }
+  const dependsOnKit = ["dependencies", "devDependencies"].some((field) => {
+    const dependencies = manifest[field];
+    return typeof dependencies === "object" && dependencies !== null && "@sveltejs/kit" in dependencies;
+  });
+  return dependsOnKit
+    ? [...paths, { pattern: "$lib", targets: ["src/lib"] }, { pattern: "$lib/*", targets: ["src/lib/*"] }]
+    : paths;
 }

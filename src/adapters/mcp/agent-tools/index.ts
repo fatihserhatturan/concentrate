@@ -37,7 +37,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "route_details",
-    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the downstream call chain (up to 4 levels), and the data access, env vars and config of the route and that chain. Each route lists its consumers (the frontend calls that reach it) with the components and pages whose code makes them. A GET also lists the UI pages at that path (Next.js, React Router, TanStack Router, Vue Router, Nuxt) with the component each renders and the same chain and resources for that component's code. ${budgetNote}`,
+    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the downstream call chain (up to 4 levels), and the data access, env vars and config of the route and that chain. Each route lists its consumers (the frontend calls that reach it) with the components and pages whose code makes them. A GET also lists the UI pages at that path (Next.js, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit) with the component each renders, its load functions, and the same chain and resources for that code. ${budgetNote}`,
     inputSchema: objectSchema({
       method: { type: "string", description: "HTTP method, case-insensitive (GET, post, ...)." },
       path: { type: "string", description: "Route or page path, matched against the resolved full path or the path as declared." },
@@ -51,7 +51,7 @@ export const agentToolDefinitions = [
       method: { type: "string", description: "Optional route method, case-insensitive (GET, post, query, mutation, ...)." },
       path: { type: "string", description: "Optional route path, matched against the resolved full path or the path as declared (/api/users/:id, post.byId)." },
       routeFile: { type: "string", description: "Optional scan-relative file of the route declaration." },
-      framework: { type: "string", description: "Optional route framework, such as express-koa, nextjs, nuxt or trpc." },
+      framework: { type: "string", description: "Optional route framework, such as express-koa, nextjs, nuxt, sveltekit or trpc." },
       file: { type: "string", description: "Optional scan-relative file of the calling code." },
       client: { type: "string", description: "Optional client: fetch, axios, ky, ofetch, nuxt, swr, tanstack-query or trpc." },
       limit: limit(50),

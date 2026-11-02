@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 57
+        "result": 58
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 57,
+      "schemaVersion": 58,
       "stats": [
         {
           "table": "Repo",
@@ -981,6 +981,17 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:9:Todo",
+            "file:web/swr.tsx:function:6:Profile"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1351,6 +1362,20 @@
       {
         "method": "query",
         "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:5:Todos",
+            "file:web/query.tsx:function:16:OwnFn",
+            "file:web/swr.tsx:function:6:Profile",
+            "file:web/todo-page.tsx:function:4:TodoList",
+            "file:web/query.tsx:function:9:Todo"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
         "params": {
           "ids": [
             "file:web/query.tsx:function:5:Todos",
@@ -1892,6 +1917,19 @@
       {
         "method": "query",
         "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:5:Todos",
+            "file:web/query.tsx:function:16:OwnFn",
+            "file:web/swr.tsx:function:6:Profile",
+            "file:web/todo-page.tsx:function:4:TodoList"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
         "params": {
           "ids": [
             "file:web/query.tsx:function:5:Todos",
@@ -2468,6 +2506,19 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:function:5:<app.get:/api/user:arg1>",
+            "file:server/app.js:function:6:<app.get:/api/todos:arg1>",
+            "file:server/app.js:function:7:<app.get:/api/todos/:id:arg1>",
+            "file:server/app.js:function:8:<app.post:/api/todos:arg1>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
         "params": {
           "ids": [
@@ -2630,6 +2681,20 @@
       {
         "method": "query",
         "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:web/query.tsx:function:5:Todos",
+            "file:web/query.tsx:function:16:OwnFn",
+            "file:web/swr.tsx:function:6:Profile",
+            "file:web/todo-page.tsx:function:4:TodoList",
+            "file:web/query.tsx:function:9:Todo"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
         "params": {
           "ids": [
             "file:web/query.tsx:function:5:Todos",

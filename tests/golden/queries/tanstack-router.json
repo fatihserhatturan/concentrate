@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 57
+        "result": 58
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 57,
+      "schemaVersion": 58,
       "stats": [
         {
           "table": "Repo",
@@ -1627,6 +1627,16 @@
             "line": 3
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (page:Page)-[load:PAGE_LOADS]->(fn:Function) WHERE id(page) IN $ids RETURN id(page) AS page, id(fn) AS fn, load.server AS server",
+        "params": {
+          "ids": [
+            "file:src/routes/posts.$postId.tsx:page:4:21"
+          ]
+        },
+        "rows": []
       },
       {
         "method": "query",

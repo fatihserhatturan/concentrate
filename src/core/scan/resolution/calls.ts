@@ -1,6 +1,6 @@
 import type { IGraphContributor } from "../../contracts/graph-contributor.js";
 import type { GraphNode } from "../../graph/model.js";
-import { resolveCall, resolveDeclaration } from "./call-targets.js";
+import { resolveCall, resolveDeclaration, resolveImportedFreeCall } from "./call-targets.js";
 import {
   createResolutionRelationshipIndex,
   indexImportNodesByFile,
@@ -69,14 +69,20 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
       continue;
     }
 
-    const targetFunctionId = resolveCall(
-      callee,
-      receiver,
-      callerFileId,
-      functionsByFileAndName,
-      importNodesByFile,
-      relationshipIndex.resolvedFileByImportId,
-    ) ?? resolveClassCall(node, callee, receiver, callerFileId, classes);
+    // A bare call of an imported name is the import's: a module cannot also
+    // declare that name, so a function of the file with it is an object's
+    // property (`actions = { logout() { logout() } }`).
+    const importedName = !receiver && scopes.importedNamesByFile.get(callerFileId)?.has(callee) === true;
+    const targetFunctionId = (importedName
+      ? resolveImportedFreeCall(callee, callerFileId, functionsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId)
+      : resolveCall(
+        callee,
+        receiver,
+        callerFileId,
+        functionsByFileAndName,
+        importNodesByFile,
+        relationshipIndex.resolvedFileByImportId,
+      )) ?? resolveClassCall(node, callee, receiver, callerFileId, classes);
 
     if (!targetFunctionId) {
       unresolved++;

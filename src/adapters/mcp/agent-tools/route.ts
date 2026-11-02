@@ -109,8 +109,9 @@ export async function routeDetails(engine: IQueryEngine, args: Record<string, un
 }
 
 // The pages at `pagePath` (full path or as written), each with its
-// component and the downstream calls, data access, env vars and config of
-// the functions that implement the component.
+// component, its data loading functions (`load`) and the downstream calls,
+// data access, env vars and config of the functions that implement the
+// component or load its data.
 async function pageDetails(engine: IQueryEngine, pagePath: string, limit: number) {
   const pages = await engine.query(`
     MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)
@@ -125,7 +126,7 @@ async function pageDetails(engine: IQueryEngine, pagePath: string, limit: number
   if (pages.length === 0) return [];
 
   const componentIds = [...new Set(pages.flatMap((page) => (page.component == null ? [] : [String(page.component)])))];
-  const [functions, edges, implementations, componentFiles] = await Promise.all([
+  const [functions, edges, implementations, componentFiles, loads] = await Promise.all([
     loadFunctions(engine),
     loadCallEdges(engine),
     loadComponentFunctions(engine),
@@ -134,19 +135,26 @@ async function pageDetails(engine: IQueryEngine, pagePath: string, limit: number
       WHERE id(component) IN $ids
       RETURN id(component) AS id, file.relativePath AS file, component.line AS line
     `, { ids: componentIds }),
-  ]) as [Awaited<ReturnType<typeof loadFunctions>>, Awaited<ReturnType<typeof loadCallEdges>>, Awaited<ReturnType<typeof loadComponentFunctions>>, Row[]];
+    engine.query(`
+      MATCH (page:Page)-[load:PAGE_LOADS]->(fn:Function)
+      WHERE id(page) IN $ids
+      RETURN id(page) AS page, id(fn) AS fn, load.server AS server
+    `, { ids: pages.map((page) => String(page.id)) }),
+  ]) as [Awaited<ReturnType<typeof loadFunctions>>, Awaited<ReturnType<typeof loadCallEdges>>, Awaited<ReturnType<typeof loadComponentFunctions>>, Row[], Row[]];
   const describe = (id: unknown) => describeFunction(functions.get(String(id)), String(id));
 
   const details = [];
-  for (const { id: _id, component, componentName, ...page } of pages) {
+  for (const { id, component, componentName, ...page } of pages) {
     const location = componentFiles.find((row) => row.id === component);
-    const roots = implementations.filter((row) => row.component === component).map((row) => row.fn);
+    const pageLoads = loads.filter((row) => row.page === id);
+    const roots = [...implementations.filter((row) => row.component === component).map((row) => row.fn), ...pageLoads.map((row) => String(row.fn))];
     const depth = walkCalls(edges, roots, "down", CHAIN_DEPTH);
     const resources = await functionResources(engine, [...depth.keys()]);
     const usedBy = (row: Row) => ({ function: describe(row.fn).name, functionFile: describe(row.fn).file });
     details.push({
       ...page,
       component: component == null ? null : { name: componentName, file: location?.file ?? null, line: location?.line ?? null },
+      ...(pageLoads.length > 0 ? { loads: pageLoads.map((row) => ({ ...describe(row.fn), server: row.server === true })) } : {}),
       callChain: downstreamCalls(edges, depth, describe).slice(0, 100),
       dataAccess: mergeRows(resources.dataAccess, ["fn"], "usedBy", usedBy),
       tables: summarizeTables(resources.tables, usedBy),
@@ -183,7 +191,7 @@ async function routeConsumers(engine: IQueryEngine, routeId: string, functions: 
   const { consumers, components, pages } = await loadApiConsumers(engine, [routeId], CHAIN_DEPTH, functions, edges);
   return {
     consumers: consumers.map(describeConsumer).map(({ route: _route, ...consumer }) => consumer),
-    ...(components.length > 0 ? { consumerComponents: components, consumerPages: pages } : {}),
+    ...(components.length > 0 || pages.length > 0 ? { consumerComponents: components, consumerPages: pages } : {}),
   };
 }
 
