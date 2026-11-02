@@ -197,6 +197,10 @@ describe("analysis MCP tools", () => {
     assert.ok(withTests.unusedExports.some((entry: any) => entry.name === "sample"));
     const scoped = await tool("find_unused_exports", { file: "helpers.ts" });
     assert.deepEqual(scoped.unusedExports.map((entry: any) => entry.name), ["unusedHelper"]);
+    for (const directory of ["packages/app/src", "packages/app/src/", "app/src"]) {
+      const inDirectory = await tool("find_unused_exports", { file: directory });
+      assert.deepEqual(inDirectory.unusedExports.map((entry: any) => entry.name).sort(), ["Base", "Shape", "main", "unusedHelper"], directory);
+    }
   });
 
   it("architecture_overview groups packages and directories", async () => {

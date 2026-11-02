@@ -1,0 +1,29 @@
+diff --git a/sample/01-cats-app/src/cats/cats.service.ts b/sample/01-cats-app/src/cats/cats.service.ts
+index 955f564..138734e 100644
+--- a/sample/01-cats-app/src/cats/cats.service.ts
++++ b/sample/01-cats-app/src/cats/cats.service.ts
+@@ -6,6 +6,9 @@ export class CatsService {
+   private readonly cats: Cat[] = [];
+ 
+   create(cat: Cat) {
++    if (this.cats.some((existing) => existing.name === cat.name)) {
++      return;
++    }
+     this.cats.push(cat);
+   }
+ 
+diff --git a/sample/05-sql-typeorm/src/users/users.service.ts b/sample/05-sql-typeorm/src/users/users.service.ts
+index ac82eb7..c032711 100644
+--- a/sample/05-sql-typeorm/src/users/users.service.ts
++++ b/sample/05-sql-typeorm/src/users/users.service.ts
+@@ -28,6 +28,9 @@ export class UsersService {
+   }
+ 
+   async remove(id: string): Promise<void> {
+-    await this.usersRepository.delete(id);
++    const result = await this.usersRepository.delete(id);
++    if (result.affected === 0) {
++      throw new Error(`User ${id} not found`);
++    }
+   }
+ }

@@ -1,0 +1,158 @@
+{
+  "$comment": "Agent benchmark v2 questions (#73): call resolution, multi-hop and diff impact, unused exports, and graph gaps (answers the graph does not fully have). Expected answers were written by reading the pinned source, not from Concentrate output. patch (relative to this file) is applied to the sample before each run and reverted after it. Scoring as in questions.json.",
+  "questions": [
+    {
+      "id": "v2-nest-normalize-path-callers",
+      "sample": "internet-nest",
+      "category": "calls",
+      "question": "Which non-test files in packages/ call the normalizePath utility function exported by packages/common/utils/shared.utils.ts? Methods of other classes that happen to be named normalizePath do not count.",
+      "expected": {
+        "mustInclude": [
+          "router-module.ts",
+          "flatten-route-paths.util.ts",
+          "ws-adapter.ts"
+        ]
+      }
+    },
+    {
+      "id": "v2-nest-uuid-factory-callers",
+      "sample": "internet-nest",
+      "category": "calls",
+      "question": "Which non-test files in packages/ call UuidFactory.get, the static method of packages/core/inspector/uuid-factory.ts?",
+      "expected": {
+        "mustInclude": [
+          "instance-wrapper.ts",
+          "module.ts",
+          "scanner.ts"
+        ]
+      }
+    },
+    {
+      "id": "v2-nest-auth-findone-routes",
+      "sample": "internet-nest",
+      "category": "impact",
+      "question": "In sample/19-auth-jwt, if UsersService.findOne changes, which HTTP routes are affected, directly or through other functions?",
+      "expected": {
+        "mustInclude": [
+          "/auth/login"
+        ],
+        "anyOf": [
+          [
+            "POST"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "v2-nest-diff-routes",
+      "sample": "internet-nest",
+      "category": "diff",
+      "patch": "patches/nest-two-services.patch",
+      "extraTools": [
+        "Bash(git diff:*)",
+        "Bash(git status:*)"
+      ],
+      "question": "The working tree of this repository has uncommitted changes. Which HTTP routes do they affect? Give the method and path of each.",
+      "expected": {
+        "mustInclude": [
+          "/cats",
+          "/users/:id"
+        ],
+        "anyOf": [
+          [
+            "POST /cats",
+            "POST"
+          ],
+          [
+            "DELETE /users/:id",
+            "DELETE"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "v2-nest-common-utils-unused",
+      "sample": "internet-nest",
+      "category": "unused",
+      "question": "Which exports (functions, classes, constants or types) of the files in packages/common/utils are not imported or used by any other file of the repository, test files included?",
+      "expected": {
+        "mustInclude": [
+          "INVALID_MODULE_CONFIG_MESSAGE"
+        ],
+        "anyOf": [
+          [
+            "Constructor<T>",
+            "type Constructor",
+            "Constructor type",
+            "Constructor (type"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "v2-express-app-listen",
+      "sample": "express",
+      "category": "gap",
+      "question": "examples/hello-world/index.js calls app.listen. In which file of the express repository is that listen method implemented, and what server does it create?",
+      "expected": {
+        "mustInclude": [
+          "lib/application.js"
+        ],
+        "anyOf": [
+          [
+            "createServer"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "v2-express-route-map",
+      "sample": "express",
+      "category": "gap",
+      "question": "List every HTTP route (method and path) that examples/route-map/index.js registers.",
+      "expected": {
+        "mustInclude": [
+          "/users/:uid/pets/:pid",
+          "/users/:uid/pets",
+          "/users/:uid"
+        ],
+        "anyOf": [
+          [
+            "DELETE /users/:uid/pets/:pid"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "v2-vue-set-security-data",
+      "sample": "internet-vue-realworld",
+      "category": "gap",
+      "question": "src/store/user.ts calls api.setSecurityData. Which class declares setSecurityData, in which file, and how is it declared?",
+      "expected": {
+        "mustInclude": [
+          "HttpClient",
+          "src/services/api.ts"
+        ],
+        "anyOf": [
+          [
+            "arrow function",
+            "class field",
+            "property"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "v2-fs-article-list-requests",
+      "sample": "internet-realworld-fullstack",
+      "category": "gap",
+      "question": "Which backend routes can frontend/components/article/ArticleList.tsx request, and which backend file declares them?",
+      "expected": {
+        "mustInclude": [
+          "articles/feed",
+          "article.controller"
+        ]
+      }
+    }
+  ]
+}

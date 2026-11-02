@@ -266,7 +266,8 @@ Example:
   `cycle` runs through the first of them. Use it to see which files of one
   directory are in a large cycle.
 - `find_unused_exports({ file?, includeTests = false, limit = 50 })`:
-  candidate dead code in JavaScript and TypeScript files.
+  candidate dead code in JavaScript and TypeScript files. `file` is a file,
+  a directory (`packages/common/utils`) or a path suffix of either.
   - `unusedExports`: exported declarations that no other file imports by name
     (through barrels too), calls, passes as a callback, extends, implements,
     injects or lists in a NestJS module. `usedInFile: true` marks exports only

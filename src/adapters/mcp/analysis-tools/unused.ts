@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalBoolean, optionalString } from "../args.js";
-import { loadFunctions, matchesFile } from "../agent-tools/graph.js";
+import { loadFunctions, matchesFileOrDirectory } from "../agent-tools/graph.js";
 import type { PageWindow } from "../paging.js";
 import { type Declaration, describeDeclaration, ExportIndex, type FileInfo, loadDeclarations, loadFiles, loadImports } from "./model.js";
 
@@ -88,7 +88,7 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
 
   const inScope = (declaration: Declaration) => {
     const info = files.get(declaration.file);
-    return info !== undefined && LANGUAGES.has(info.language ?? "") && (!file || matchesFile(declaration.file, file));
+    return info !== undefined && LANGUAGES.has(info.language ?? "") && (!file || matchesFileOrDirectory(declaration.file, file));
   };
   const skipped: Record<string, number> = { packageEntry: 0, wholeFileImported: 0, defaultExports: 0, tests: 0, generated: 0, handlers: 0 };
   const skipReason = (declaration: Declaration, info: FileInfo): string | null => {

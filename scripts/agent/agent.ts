@@ -12,6 +12,12 @@ export type Question = {
   question: string;
   // Relative to the sample directory; the sample root when absent.
   cwd?: string;
+  // A patch (relative to bench/agent/) applied to the sample's working tree
+  // before each run and reverted after it, for questions about a change.
+  patch?: string;
+  // Tools both modes may use on top of the defaults, such as `Bash(git diff:*)`
+  // for a question about the working tree.
+  extraTools?: string[];
   expected: { mustInclude: string[]; anyOf?: string[][] };
 };
 
@@ -121,12 +127,13 @@ export function mcpConfig(mode: Mode, cliPath: string, databasePath: string) {
   };
 }
 
-export type CommandOptions = { mcpConfigPath: string; model?: string; maxTurns: number };
+export type CommandOptions = { mcpConfigPath: string; model?: string; maxTurns: number; extraTools?: readonly string[] };
 
 // `claude -p` arguments for one run. --strict-mcp-config keeps the user's own
 // MCP servers out of both modes.
 export function claudeArgs(mode: Mode, question: string, options: CommandOptions): string[] {
-  const allowed = mode === "concentrate" ? [...baselineTools, `mcp__${mcpServerName}`] : baselineTools;
+  const base = [...baselineTools, ...(options.extraTools ?? [])];
+  const allowed = mode === "concentrate" ? [...base, `mcp__${mcpServerName}`] : base;
   return [
     "-p", question,
     "--output-format", "stream-json",
