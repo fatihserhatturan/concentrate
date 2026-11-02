@@ -147,6 +147,12 @@ export function median(values: readonly number[]): number {
   return sorted.length % 2 === 1 ? sorted[middle]! : (sorted[middle - 1]! + sorted[middle]!) / 2;
 }
 
+export type Range = { min: number; max: number };
+
+export function range(values: readonly number[]): Range {
+  return values.length === 0 ? { min: 0, max: 0 } : { min: Math.min(...values), max: Math.max(...values) };
+}
+
 export type ModeSummary = {
   runs: number;
   correct: number;
@@ -156,10 +162,38 @@ export type ModeSummary = {
   medianTurns: number;
   medianDurationMs: number;
   medianCostUsd: number;
+  // Lowest and highest value over the runs, next to the medians.
+  spread: { inputTokens: Range; toolCalls: Range; durationMs: Range; costUsd: Range };
+  totalCostUsd: number;
+  // Runs that called at least one tool of the concentrate MCP server, and
+  // the calls per tool (without the `mcp__concentrate__` prefix).
+  mcpRuns: number;
+  mcpTools: Record<string, number>;
+  // ToolSearch calls: Claude Code loads deferred MCP tool schemas through it.
+  toolSearchCalls: number;
 };
+
+const mcpPrefix = `mcp__${mcpServerName}__`;
+const roundCost = (value: number) => Math.round(value * 10000) / 10000;
 
 export function summarize(runs: ReadonlyArray<RunMetrics & { correct: boolean }>): ModeSummary {
   const of = (pick: (run: RunMetrics) => number) => median(runs.map(pick));
+  const spreadOf = (pick: (run: RunMetrics) => number) => range(runs.map(pick));
+  const mcpTools: Record<string, number> = {};
+  let mcpRuns = 0;
+  let toolSearchCalls = 0;
+  for (const run of runs) {
+    let usedMcp = false;
+    for (const [name, count] of Object.entries(run.toolsByName)) {
+      if (name === "ToolSearch") toolSearchCalls += count;
+      if (!name.startsWith(mcpPrefix)) continue;
+      usedMcp = true;
+      const tool = name.slice(mcpPrefix.length);
+      mcpTools[tool] = (mcpTools[tool] ?? 0) + count;
+    }
+    if (usedMcp) mcpRuns += 1;
+  }
+  const cost = spreadOf((run) => run.costUsd);
   return {
     runs: runs.length,
     correct: runs.filter((run) => run.correct).length,
@@ -168,6 +202,16 @@ export function summarize(runs: ReadonlyArray<RunMetrics & { correct: boolean }>
     medianToolCalls: of((run) => run.toolCalls),
     medianTurns: of((run) => run.turns),
     medianDurationMs: of((run) => run.durationMs),
-    medianCostUsd: Math.round(of((run) => run.costUsd) * 10000) / 10000,
+    medianCostUsd: roundCost(of((run) => run.costUsd)),
+    spread: {
+      inputTokens: spreadOf(totalInputTokens),
+      toolCalls: spreadOf((run) => run.toolCalls),
+      durationMs: spreadOf((run) => run.durationMs),
+      costUsd: { min: roundCost(cost.min), max: roundCost(cost.max) },
+    },
+    totalCostUsd: roundCost(runs.reduce((total, run) => total + run.costUsd, 0)),
+    mcpRuns,
+    mcpTools: Object.fromEntries(Object.entries(mcpTools).sort(([a, countA], [b, countB]) => countB - countA || a.localeCompare(b))),
+    toolSearchCalls,
   };
 }

@@ -66,8 +66,19 @@ medians of:
 - **turns, duration and cost,** as `claude -p --output-format stream-json`
   reports them.
 
-The totals line gives the same medians over all runs of a mode. Results go to
-`bench/results/agent-<date>.json` with every run's answer and tool counts.
+Each median comes with the lowest and highest run, `median (min–max)`. The
+report then gives:
+
+- **per category,** the same figures over all runs of the category and its
+  total cost, so a gain in one category is not read as an overall one;
+- **all runs,** per mode, with the total cost;
+- **MCP use** in concentrate mode: how many runs called a `concentrate` tool,
+  the `ToolSearch` calls that load the tool schemas, and the calls per tool.
+
+Results go to `bench/results/agent-<date>.json` with every run's answer and
+tool counts, and the per-mode, per-category and total summaries. `--rescore`
+rebuilds the summaries of an older results file without new runs; the files
+in `bench/results/` have been rescored this way.
 
 
 ## Results
@@ -105,7 +116,8 @@ What this run shows:
 - **Overall, about the same.** The questions are narrow and the samples
   small, so one or two greps answer most of them, and the medians over all
   runs barely move.
-- **The agent used the MCP tools in 21 of 39 runs** (`list_env_config`,
+- **The agent used the MCP tools in 21 of 39 runs** (in every run of seven
+  questions and in none of the other six; `list_env_config`,
   `find_callers`, `impact_of`, `route_details`, `list_routes`,
   `find_import_cycles`). Claude Code loads MCP tools on demand, so each of
   those runs paid for a `ToolSearch` call first.
@@ -172,9 +184,26 @@ Recorded 2026-10-29, same CLI and model, three runs each, `--max-turns 25`
   agent called its answer incomplete. The tool has since gained a `path`
   filter (`{ path: "packages/core/injector" }` lists exactly the 14 injector
   files), and the question went from 0/1 to 3/3.
-- **Repository-wide listings get a little cheaper:** the env question took
-  two calls instead of three at about 25% fewer tokens. For models and
-  DELETE routes the agent used grep in both modes and costs were close.
+- **Repository-wide listings cost about the same.** The env question's
+  median took two calls instead of three at about 25% fewer tokens, but no
+  run of it called a `concentrate` tool, so that gap is run-to-run variance,
+  not the graph. For models (`list_tables` in all three runs) and DELETE
+  routes (grep in both modes) costs were within a few percent.
+
+Per category and MCP use, from the rescored results file:
+
+| Category | Runs | Correct (base / conc.) | Input tokens, median (min–max) | Tool calls | Total cost |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| cycles | 6 | 0/6 / 6/6 | 320.4k (208.9k–521.7k) → 97.5k (97.5k–97.6k) (−70%) | 10.5 (5–22) → 2 (2–2) | $1.05 → $0.33 |
+| impact | 3 | 3/3 / 3/3 | 65.7k (64.3k–100.1k) → 66.9k (66.3k–100.4k) (+2%) | 1 (1–2) → 1 (1–2) | $0.21 → $0.21 |
+| data | 3 | 3/3 / 3/3 | 98.5k (98.3k–133.1k) → 101.3k (99.8k–137.5k) (+3%) | 3 (3–5) → 4 (3–5) | $0.22 → $0.21 |
+| routes | 3 | 3/3 / 3/3 | 98.0k (97.6k–102.4k) → 100.2k (100.1k–101.7k) (+2%) | 3 (3–3) → 3 (3–3) | $0.19 → $0.19 |
+| env | 3 | 3/3 / 3/3 | 128.1k (128.0k–128.1k) → 97.3k (97.3k–130.6k) (−24%) | 3 (3–3) → 2 (2–3) | $0.18 → $0.17 |
+
+The agent called a `concentrate` tool in 9 of 18 runs: `find_import_cycles`
+in all six cycle runs and `list_tables` in the three model runs. The whole
+gain of the hard set comes from the cycles category; outside it the two
+modes are within a few percent.
 
 The one-run measurement of this set
 ([`bench/results/agent-hard-2026-10-29.json`](../bench/results/agent-hard-2026-10-29.json))

@@ -36,7 +36,9 @@ import {
   scoreAnswer,
   summarize,
   type Mode,
+  type ModeSummary,
   type Question,
+  type Range,
   type RunMetrics,
 } from "./agent/agent.js";
 
@@ -71,14 +73,28 @@ if (questions.length === 0) throw new Error("No questions match --question / --s
 
 type Run = RunMetrics & { correct: boolean; missing: string[] };
 type QuestionResult = { id: string; sample: string; category: string; modes: Record<Mode, { summary: ReturnType<typeof summarize>; runs: Run[] }> };
-type AgentReport = { recordedAt: string; model: string; runs: number; maxTurns: number; totals: Record<string, ReturnType<typeof summarize>>; results: QuestionResult[] };
+type Summaries = Record<Mode, ReturnType<typeof summarize>>;
+type AgentReport = {
+  recordedAt: string;
+  model: string;
+  runs: number;
+  maxTurns: number;
+  totals: Summaries;
+  // Per category, so a gain in one category is not read as an overall one.
+  categories: Record<string, Summaries>;
+  results: QuestionResult[];
+};
 
 const scoreRun = (metrics: RunMetrics, question: Question): Run => {
   const score = scoreAnswer(metrics.answer, question.expected);
   return { ...metrics, correct: score.correct && !metrics.isError, missing: score.missing };
 };
 const totalsOf = (results: readonly QuestionResult[]) =>
-  Object.fromEntries(modes.map((mode) => [mode, summarize(results.flatMap((result) => result.modes[mode].runs))]));
+  Object.fromEntries(modes.map((mode) => [mode, summarize(results.flatMap((result) => result.modes[mode].runs))])) as Summaries;
+const categoriesOf = (results: readonly QuestionResult[]) =>
+  Object.fromEntries([...new Set(results.map((result) => result.category))].map((category) => (
+    [category, totalsOf(results.filter((result) => result.category === category))]
+  )));
 
 if (values.rescore) {
   const report = JSON.parse(await readFile(values.rescore, "utf8")) as AgentReport;
@@ -91,6 +107,7 @@ if (values.rescore) {
     }
   }
   report.totals = totalsOf(report.results);
+  report.categories = categoriesOf(report.results);
   await writeFile(values.out ?? values.rescore, `${JSON.stringify(report, null, 2)}\n`);
   printReport(report);
   process.exit(0);
@@ -178,21 +195,56 @@ if (dryRun) process.exit(0);
 const recordedAt = new Date().toISOString();
 const outPath = values.out ?? path.join(root, "bench/results", `agent-${recordedAt.slice(0, 10)}.json`);
 await mkdir(path.dirname(outPath), { recursive: true });
-const report: AgentReport = { recordedAt, model: values.model ?? "default", runs, maxTurns, totals: totalsOf(results), results };
+const report: AgentReport = { recordedAt, model: values.model ?? "default", runs, maxTurns, totals: totalsOf(results), categories: categoriesOf(results), results };
 await writeFile(outPath, `${JSON.stringify(report, null, 2)}\n`);
 console.error(`wrote ${outPath}`);
 printReport(report);
 
-function printReport({ model, runs: runCount, totals, results: rows }: AgentReport) {
+function printReport({ model, runs: runCount, totals, categories, results: rows }: AgentReport) {
   const k = (tokens: number) => `${(tokens / 1000).toFixed(1)}k`;
-  console.log(`### Agent benchmark (${model}, ${runCount} runs per question and mode; medians)\n`);
+  const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} s`;
+  const usd = (value: number) => `${Math.round(value * 10000) / 10000}`;
+  // "median (min–max)"
+  const spread = (medianValue: number, { min, max }: Range, format: (value: number) => string) =>
+    `${format(medianValue)} (${format(min)}–${format(max)})`;
+  const change = (before: number, after: number) => (before === 0 ? "–" : `${after >= before ? "+" : "−"}${Math.abs(Math.round(((after - before) / before) * 100))}%`);
+  const pair = (summaries: Summaries, cell: (summary: ModeSummary) => string) => modes.map((mode) => cell(summaries[mode])).join(" → ");
+  const correct = (summary: ModeSummary) => `${summary.correct}/${summary.runs}`;
+
+  console.log(`### Agent benchmark (${model}, ${runCount} runs per question and mode; median (min–max))\n`);
   console.log("| Question | Category | Correct (base / conc.) | Input tokens | Output tokens | Tool calls | Cost USD |");
   console.log("| --- | --- | ---: | ---: | ---: | ---: | ---: |");
   for (const result of rows) {
-    const [base, conc] = modes.map((mode) => result.modes[mode].summary);
-    console.log(`| ${result.id} | ${result.category} | ${base!.correct}/${base!.runs} / ${conc!.correct}/${conc!.runs} | ${k(base!.medianInputTokens)} → ${k(conc!.medianInputTokens)} | ${k(base!.medianOutputTokens)} → ${k(conc!.medianOutputTokens)} | ${base!.medianToolCalls} → ${conc!.medianToolCalls} | ${base!.medianCostUsd} → ${conc!.medianCostUsd} |`);
+    const summaries = Object.fromEntries(modes.map((mode) => [mode, result.modes[mode].summary])) as Summaries;
+    console.log(`| ${result.id} | ${result.category} | ${modes.map((mode) => correct(summaries[mode])).join(" / ")} | ${pair(summaries, (s) => spread(s.medianInputTokens, s.spread.inputTokens, k))} | ${pair(summaries, (s) => k(s.medianOutputTokens))} | ${pair(summaries, (s) => spread(s.medianToolCalls, s.spread.toolCalls, String))} | ${pair(summaries, (s) => usd(s.medianCostUsd))} |`);
   }
+
+  console.log("\n### By category (all runs of the category; cost is the sum)\n");
+  console.log("| Category | Runs | Correct (base / conc.) | Input tokens | Tool calls | Total cost |");
+  console.log("| --- | ---: | ---: | ---: | ---: | ---: |");
+  for (const [category, summaries] of Object.entries(categories)) {
+    const [base, conc] = modes.map((mode) => summaries[mode]);
+    console.log(`| ${category} | ${base!.runs} | ${correct(base!)} / ${correct(conc!)} | ${pair(summaries, (s) => spread(s.medianInputTokens, s.spread.inputTokens, k))} (${change(base!.medianInputTokens, conc!.medianInputTokens)}) | ${pair(summaries, (s) => spread(s.medianToolCalls, s.spread.toolCalls, String))} | ${pair(summaries, (s) => `$${s.totalCostUsd.toFixed(2)}`)} |`);
+  }
+
   const [base, conc] = modes.map((mode) => totals[mode]!);
-  const change = (before: number, after: number) => (before === 0 ? "–" : `${Math.round(((after - before) / before) * 100)}%`);
-  console.log(`\nAll runs: correct ${base!.correct}/${base!.runs} → ${conc!.correct}/${conc!.runs}; median input tokens ${k(base!.medianInputTokens)} → ${k(conc!.medianInputTokens)} (${change(base!.medianInputTokens, conc!.medianInputTokens)}); median tool calls ${base!.medianToolCalls} → ${conc!.medianToolCalls} (${change(base!.medianToolCalls, conc!.medianToolCalls)}).`);
+  console.log("\n### All runs\n");
+  console.log("| | Baseline | Concentrate |");
+  console.log("| --- | ---: | ---: |");
+  console.log(`| Correct | ${correct(base!)} | ${correct(conc!)} |`);
+  console.log(`| Median input tokens | ${spread(base!.medianInputTokens, base!.spread.inputTokens, k)} | ${spread(conc!.medianInputTokens, conc!.spread.inputTokens, k)} (${change(base!.medianInputTokens, conc!.medianInputTokens)}) |`);
+  console.log(`| Median tool calls | ${spread(base!.medianToolCalls, base!.spread.toolCalls, String)} | ${spread(conc!.medianToolCalls, conc!.spread.toolCalls, String)} (${change(base!.medianToolCalls, conc!.medianToolCalls)}) |`);
+  console.log(`| Median turns | ${base!.medianTurns} | ${conc!.medianTurns} (${change(base!.medianTurns, conc!.medianTurns)}) |`);
+  console.log(`| Median wall time | ${spread(base!.medianDurationMs, base!.spread.durationMs, seconds)} | ${spread(conc!.medianDurationMs, conc!.spread.durationMs, seconds)} (${change(base!.medianDurationMs, conc!.medianDurationMs)}) |`);
+  console.log(`| Total cost (CLI estimate) | $${base!.totalCostUsd.toFixed(2)} | $${conc!.totalCostUsd.toFixed(2)} |`);
+
+  console.log("\n### MCP use (concentrate mode)\n");
+  console.log("| Question | Runs with an MCP call | ToolSearch calls | MCP calls by tool |");
+  console.log("| --- | ---: | ---: | --- |");
+  const toolList = (tools: Record<string, number>) => Object.entries(tools).map(([tool, count]) => `\`${tool}\` ${count}`).join(", ") || "–";
+  for (const result of rows) {
+    const summary = result.modes.concentrate.summary;
+    console.log(`| ${result.id} | ${summary.mcpRuns}/${summary.runs} | ${summary.toolSearchCalls} | ${toolList(summary.mcpTools)} |`);
+  }
+  console.log(`| **all** | ${conc!.mcpRuns}/${conc!.runs} | ${conc!.toolSearchCalls} | ${toolList(conc!.mcpTools)} |`);
 }
