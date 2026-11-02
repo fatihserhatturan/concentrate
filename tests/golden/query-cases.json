@@ -799,6 +799,26 @@
         }
       }
     ],
+    "zustand-stores": [
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "log"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "reset"
+        }
+      },
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "src/stores/bears.ts"
+        }
+      }
+    ],
     "svelte-components": [
       {
         "tool": "component_tree",

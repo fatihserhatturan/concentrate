@@ -10,11 +10,13 @@ import type { ReduxAccess } from "../redux.js";
 // declared in the file or imported, through barrels) links the function that
 // makes it to the Store. Every such call reads the store; `members` lists the
 // state and getters it reads. It writes the store when it assigns state,
-// changes it through a mutating method, calls an action, `$patch` or
-// `$reset`, or takes an action by destructuring; `members` lists those. An
-// action call (`cart.add(item)`, or `add(item)` after `const { add } =
-// useCartStore()`) also gets CALL_RESOLVES_TO to the action's Function. Calls at the top level of a module have no function and are
-// left out.
+// changes it through a mutating method, calls an action, `$patch`,
+// `$reset` or Zustand's `setState`, or takes an action by destructuring (or
+// with a Zustand selector); `members` lists those. An action call
+// (`cart.add(item)`, or `add(item)` after `const { add } = useCartStore()`)
+// also gets CALL_RESOLVES_TO to the action's Function. Calls at the top
+// level of a module have no function and are left out. A call that is not
+// to the hook itself (`useBearStore.getState()`) names it in `hook`.
 //
 // Svelte stores: the bindings a function uses as stores (`Function.storeRefs`)
 // resolve the same way to the Store declared under that name. `$count`,
@@ -31,7 +33,7 @@ import type { ReduxAccess } from "../redux.js";
 // action creator (`dispatch(addItem())`, imported from or declared next to
 // the slice, or `cartSlice.actions.addItem()`) WRITES_STORE its slice.
 
-const writeMethods = new Set(["$patch", "$reset"]);
+const writeMethods = new Set(["$patch", "$reset", "setState"]);
 
 export const storeAccessContributor: ISemanticContributor = {
   contribute(graph) {
@@ -48,6 +50,10 @@ export const storeAccessContributor: ISemanticContributor = {
         const byName = index.get(rel.from) ?? new Map<string, string[]>();
         const hook = String(target.properties.hook);
         byName.set(hook, [...byName.get(hook) ?? [], target.id]);
+        // `export default useCounterStore` after the declaration.
+        if (hook !== "default" && nodesById.get(rel.from)?.properties.defaultExport === hook) {
+          byName.set("default", [...byName.get("default") ?? [], target.id]);
+        }
         index.set(rel.from, byName);
       }
       if (rel.type === "STORE_ACTION" && target) {
@@ -79,11 +85,11 @@ export const storeAccessContributor: ISemanticContributor = {
       const functionId = index.callerFunctionByCallId.get(call.id);
       const fileId = functionId ? index.fileByFunctionId.get(functionId) : undefined;
       if (!functionId || !fileId) continue;
-      const storeId = resolveDeclaration(String(call.properties.callee), fileId, storesByFileAndName, importNodesByFile, index.resolvedFileByImportId);
+      const access = parseAccess(call.properties.storeAccess);
+      const storeId = resolveDeclaration(access.hook ?? String(call.properties.callee), fileId, storesByFileAndName, importNodesByFile, index.resolvedFileByImportId);
       const store = storeId ? nodesById.get(storeId) : undefined;
       if (!store) continue;
 
-      const access = parseAccess(call.properties.storeAccess);
       const actions = actionsByStore.get(store.id) ?? new Map<string, string>();
       const actionNames = new Set(String(store.properties.actions ?? "").split(",").filter(Boolean));
       const reads = new Set(access.reads);

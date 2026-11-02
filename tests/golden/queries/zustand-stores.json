@@ -1,0 +1,1147 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 63
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 4
+          },
+          {
+            "table": "File",
+            "count": 4
+          },
+          {
+            "table": "Import",
+            "count": 8
+          },
+          {
+            "table": "Function",
+            "count": 11
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 5
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 1
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 22
+          },
+          {
+            "table": "Route",
+            "count": 0
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 2
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 4
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 63,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 4
+        },
+        {
+          "table": "File",
+          "count": 4
+        },
+        {
+          "table": "Import",
+          "count": 8
+        },
+        {
+          "table": "Function",
+          "count": 11
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 5
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 1
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 22
+        },
+        {
+          "table": "Route",
+          "count": 0
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 2
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 4
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "BearCounter",
+            "kind": "Function",
+            "file": "src/components/BearCounter.tsx",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "resetAll",
+            "kind": "Function",
+            "file": "src/components/BearCounter.tsx",
+            "line": 22,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "bearCount",
+            "kind": "Function",
+            "file": "src/components/BearCounter.tsx",
+            "line": 27,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "increase",
+            "kind": "Function",
+            "file": "src/stores/bears.ts",
+            "line": 21,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "reset",
+            "kind": "Function",
+            "file": "src/stores/bears.ts",
+            "line": 25,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<createStore:arg0>",
+            "kind": "Function",
+            "file": "src/stores/vanilla.ts",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<createStore:arg0>",
+            "kind": "Function",
+            "file": "src/stores/vanilla.ts",
+            "line": 7,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "toggle",
+            "kind": "Function",
+            "file": "src/stores/vanilla.ts",
+            "line": 9,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "useBearStore",
+            "kind": "Variable",
+            "file": "src/stores/bears.ts",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "useCounterStore",
+            "kind": "Variable",
+            "file": "src/stores/counter.ts",
+            "line": 4,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "default",
+            "kind": "Variable",
+            "file": "src/stores/counter.ts",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "settingsStore",
+            "kind": "Variable",
+            "file": "src/stores/vanilla.ts",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "themeStore",
+            "kind": "Variable",
+            "file": "src/stores/vanilla.ts",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "BearState",
+            "kind": "TypeAlias",
+            "file": "src/stores/bears.ts",
+            "line": 4,
+            "isExported": false,
+            "relationship": "DEFINES_TYPE_ALIAS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "BearCounter",
+          "kind": "Function",
+          "file": "src/components/BearCounter.tsx",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "resetAll",
+          "kind": "Function",
+          "file": "src/components/BearCounter.tsx",
+          "line": 22,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "bearCount",
+          "kind": "Function",
+          "file": "src/components/BearCounter.tsx",
+          "line": 27,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "increase",
+          "kind": "Function",
+          "file": "src/stores/bears.ts",
+          "line": 21,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "reset",
+          "kind": "Function",
+          "file": "src/stores/bears.ts",
+          "line": 25,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<createStore:arg0>",
+          "kind": "Function",
+          "file": "src/stores/vanilla.ts",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<createStore:arg0>",
+          "kind": "Function",
+          "file": "src/stores/vanilla.ts",
+          "line": 7,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "toggle",
+          "kind": "Function",
+          "file": "src/stores/vanilla.ts",
+          "line": 9,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "useBearStore",
+          "kind": "Variable",
+          "file": "src/stores/bears.ts",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "useCounterStore",
+          "kind": "Variable",
+          "file": "src/stores/counter.ts",
+          "line": 4,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "default",
+          "kind": "Variable",
+          "file": "src/stores/counter.ts",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "settingsStore",
+          "kind": "Variable",
+          "file": "src/stores/vanilla.ts",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "themeStore",
+          "kind": "Variable",
+          "file": "src/stores/vanilla.ts",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "BearState",
+          "kind": "TypeAlias",
+          "file": "src/stores/bears.ts",
+          "line": 4,
+          "isExported": false,
+          "relationship": "DEFINES_TYPE_ALIAS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 14
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/components/BearCounter.tsx",
+            "name": "BearCounter",
+            "kind": "Function",
+            "line": 5,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/components/BearCounter.tsx",
+            "name": "Controls",
+            "kind": "Function",
+            "line": 17,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/components/BearCounter.tsx",
+            "name": "resetAll",
+            "kind": "Function",
+            "line": 22,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/components/BearCounter.tsx",
+            "name": "bearCount",
+            "kind": "Function",
+            "line": 27,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/stores/bears.ts",
+            "name": "useBearStore",
+            "kind": "Variable",
+            "line": 15,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/stores/counter.ts",
+            "name": "default",
+            "kind": "Variable",
+            "line": 10,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/stores/vanilla.ts",
+            "name": "settingsStore",
+            "kind": "Variable",
+            "line": 3,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/stores/vanilla.ts",
+            "name": "themeStore",
+            "kind": "Variable",
+            "line": 7,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/components/BearCounter.tsx",
+          "name": "BearCounter",
+          "kind": "Function",
+          "line": 5,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/components/BearCounter.tsx",
+          "name": "Controls",
+          "kind": "Function",
+          "line": 17,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/components/BearCounter.tsx",
+          "name": "resetAll",
+          "kind": "Function",
+          "line": 22,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/components/BearCounter.tsx",
+          "name": "bearCount",
+          "kind": "Function",
+          "line": 27,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/stores/bears.ts",
+          "name": "useBearStore",
+          "kind": "Variable",
+          "line": 15,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/stores/counter.ts",
+          "name": "default",
+          "kind": "Variable",
+          "line": 10,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/stores/vanilla.ts",
+          "name": "settingsStore",
+          "kind": "Variable",
+          "line": 3,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/stores/vanilla.ts",
+          "name": "themeStore",
+          "kind": "Variable",
+          "line": 7,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "find_callers",
+    "args": {
+      "name": "log"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"log\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "log",
+            "caller": "increase",
+            "callerKind": "Function",
+            "file": "src/stores/bears.ts",
+            "line": 22,
+            "expression": "log",
+            "relationship": "CALLS"
+          },
+          {
+            "target": "log",
+            "caller": "reset",
+            "callerKind": "Function",
+            "file": "src/stores/bears.ts",
+            "line": 26,
+            "expression": "log",
+            "relationship": "CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"log\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"log\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "log",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [
+        {
+          "target": "log",
+          "caller": "increase",
+          "callerKind": "Function",
+          "file": "src/stores/bears.ts",
+          "line": 22,
+          "expression": "log",
+          "relationship": "CALLS"
+        },
+        {
+          "target": "log",
+          "caller": "reset",
+          "callerKind": "Function",
+          "file": "src/stores/bears.ts",
+          "line": 26,
+          "expression": "log",
+          "relationship": "CALLS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "find_callers",
+    "args": {
+      "name": "reset"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"reset\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "reset",
+            "caller": "resetAll",
+            "callerKind": "Function",
+            "file": "src/components/BearCounter.tsx",
+            "line": 23,
+            "expression": "useBearStore.getState().reset",
+            "relationship": "CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"reset\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"reset\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "reset",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [
+        {
+          "target": "reset",
+          "caller": "resetAll",
+          "callerKind": "Function",
+          "file": "src/components/BearCounter.tsx",
+          "line": 23,
+          "expression": "useBearStore.getState().reset",
+          "relationship": "CALLS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "get_file_outline",
+    "args": {
+      "file": "src/stores/bears.ts"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "rows": [
+          {
+            "file": "src/components/BearCounter.tsx"
+          },
+          {
+            "file": "src/stores/bears.ts"
+          },
+          {
+            "file": "src/stores/counter.ts"
+          },
+          {
+            "file": "src/stores/vanilla.ts"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/bears.ts"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/stores/bears.ts:function:11:log",
+            "name": "log",
+            "className": null,
+            "file": "src/stores/bears.ts",
+            "path": "<root>/src/stores/bears.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/stores/bears.ts:function:21:increase",
+            "name": "increase",
+            "className": null,
+            "file": "src/stores/bears.ts",
+            "path": "<root>/src/stores/bears.ts",
+            "line": 21,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/stores/bears.ts:function:25:reset",
+            "name": "reset",
+            "className": null,
+            "file": "src/stores/bears.ts",
+            "path": "<root>/src/stores/bears.ts",
+            "line": 25,
+            "endLine": 28
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/bears.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/bears.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/bears.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/bears.ts"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/stores/bears.ts:type-alias:4:BearState",
+            "name": "BearState",
+            "file": "src/stores/bears.ts",
+            "path": "<root>/src/stores/bears.ts",
+            "line": 4,
+            "endLine": 9
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/stores/bears.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/stores/bears.ts"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/stores/bears.ts:variable:15:useBearStore",
+            "name": "useBearStore",
+            "file": "src/stores/bears.ts",
+            "path": "<root>/src/stores/bears.ts",
+            "line": 15
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(n:Route) WHERE file.relativePath IN $files RETURN id(n) AS id, n.method AS method, coalesce(n.fullPath, n.path) AS routePath, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/stores/bears.ts"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_FIELD]->(field:Field) WHERE file.relativePath = $file RETURN class.name AS className, field.name AS name, field.typeName AS typeName, field.line AS line",
+        "params": {
+          "file": "src/stores/bears.ts"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:IMPORTS]->(imp:Import) WHERE file.relativePath = $file RETURN imp.source AS source, imp.line AS line, imp.isTypeOnly AS isTypeOnly",
+        "params": {
+          "file": "src/stores/bears.ts"
+        },
+        "rows": [
+          {
+            "source": "zustand",
+            "line": 1,
+            "isTypeOnly": false
+          },
+          {
+            "source": "zustand/middleware",
+            "line": 2,
+            "isTypeOnly": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE file.relativePath = $file RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.handlerName AS handlerName, entrypoint.line AS line",
+        "params": {
+          "file": "src/stores/bears.ts"
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "file": "src/stores/bears.ts",
+      "imports": [
+        {
+          "source": "zustand",
+          "line": 1,
+          "isTypeOnly": false
+        },
+        {
+          "source": "zustand/middleware",
+          "line": 2,
+          "isTypeOnly": false
+        }
+      ],
+      "outline": [
+        {
+          "kind": "type",
+          "name": "BearState",
+          "line": 4,
+          "endLine": 9
+        },
+        {
+          "kind": "function",
+          "name": "log",
+          "line": 11,
+          "endLine": 13
+        },
+        {
+          "kind": "variable",
+          "name": "useBearStore",
+          "line": 15
+        },
+        {
+          "kind": "function",
+          "name": "increase",
+          "line": 21,
+          "endLine": 24
+        },
+        {
+          "kind": "function",
+          "name": "reset",
+          "line": 25,
+          "endLine": 28
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  }
+]
