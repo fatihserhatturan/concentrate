@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 60;
+export const SCHEMA_VERSION = 61;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -106,6 +106,7 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "MODULE_PROVIDES", from: "Class", to: "Class", properties: {} },
   { type: "MODULE_CONTROLS", from: "Class", to: "Class", properties: {} },
   { type: "MODULE_EXPORTS", from: "Class", to: "Class", properties: {} },
+  { type: "MODULE_DECLARES", from: "Class", to: "Class", properties: {} },
   { type: "INJECTS", from: "Class", to: "Class", properties: { fieldName: "STRING" } },
   { type: "USES_ENV_FILE", from: "File", to: "EnvVar", properties: { line: "INT64", access: "STRING" } },
   { type: "USES_ENV_FUNCTION", from: "Function", to: "EnvVar", properties: { line: "INT64", access: "STRING" } },

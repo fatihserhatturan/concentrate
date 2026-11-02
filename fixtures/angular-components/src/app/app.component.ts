@@ -1,4 +1,6 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
+import { LoggerService } from './logger.service';
+import { UserService } from './user.service';
 import { UserCardComponent } from './user-card.component';
 import { UserListComponent } from './user-list.component';
 
@@ -12,6 +14,14 @@ export class AppComponent {
   users = [{ name: 'Ada' }];
   current = this.users[0];
   query = '';
+  private readonly userService = inject(UserService);
+
+  constructor(private logger: LoggerService) {}
+
+  refresh() {
+    this.logger.log('refresh');
+    return this.userService.load();
+  }
 
   pick(user: { name: string }) {
     this.current = user;

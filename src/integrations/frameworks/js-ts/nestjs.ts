@@ -19,9 +19,11 @@ export function applyNestJsParseSemantics(
   relationships.push(...result.relationships);
 }
 
-// Post-parse NestJS module graph: resolves @Module({imports, providers,
-// controllers, exports}) declarations into MODULE_IMPORTS / MODULE_PROVIDES /
-// MODULE_CONTROLS / MODULE_EXPORTS relationships.
+// Post-parse module graph: resolves NestJS @Module({imports, providers,
+// controllers, exports}) and Angular @NgModule({declarations, imports,
+// providers, exports}) declarations, and an Angular standalone component's
+// `imports` / `providers`, into MODULE_IMPORTS / MODULE_PROVIDES /
+// MODULE_CONTROLS / MODULE_EXPORTS / MODULE_DECLARES relationships.
 export const nestjsModulesContributor: ISemanticContributor = {
   contribute(graph) {
     addNestJsModuleRelationships(graph);
