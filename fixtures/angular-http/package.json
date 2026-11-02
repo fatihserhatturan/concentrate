@@ -1,0 +1,9 @@
+{
+  "name": "angular-http-fixture",
+  "private": true,
+  "dependencies": {
+    "@angular/core": "^19.0.0",
+    "@angular/common": "^19.0.0",
+    "express": "4.21.1"
+  }
+}

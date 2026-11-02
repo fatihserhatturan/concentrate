@@ -1,0 +1,1575 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 62
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 4
+          },
+          {
+            "table": "File",
+            "count": 4
+          },
+          {
+            "table": "Import",
+            "count": 5
+          },
+          {
+            "table": "Function",
+            "count": 16
+          },
+          {
+            "table": "Class",
+            "count": 3
+          },
+          {
+            "table": "Field",
+            "count": 5
+          },
+          {
+            "table": "Variable",
+            "count": 2
+          },
+          {
+            "table": "Decorator",
+            "count": 2
+          },
+          {
+            "table": "Interface",
+            "count": 1
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 27
+          },
+          {
+            "table": "Route",
+            "count": 7
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 62,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 4
+        },
+        {
+          "table": "File",
+          "count": 4
+        },
+        {
+          "table": "Import",
+          "count": 5
+        },
+        {
+          "table": "Function",
+          "count": 16
+        },
+        {
+          "table": "Class",
+          "count": 3
+        },
+        {
+          "table": "Field",
+          "count": 5
+        },
+        {
+          "table": "Variable",
+          "count": 2
+        },
+        {
+          "table": "Decorator",
+          "count": 2
+        },
+        {
+          "table": "Interface",
+          "count": 1
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 27
+        },
+        {
+          "table": "Route",
+          "count": 7
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "<app.get:/api/articles:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.post:/api/articles:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.get:/api/articles/:slug:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 7,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.put:/api/articles/:slug:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 8,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.delete:/api/articles/:slug:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 9,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.get:/api/tags:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 10,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<app.post:/api/users/login:arg1>",
+            "kind": "Function",
+            "file": "server/app.js",
+            "line": 11,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "ArticlesService",
+            "kind": "Class",
+            "file": "src/app/articles.service.ts",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "UserService",
+            "kind": "Class",
+            "file": "src/app/user.service.ts",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "express",
+            "kind": "Variable",
+            "file": "server/app.js",
+            "line": 1,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "Article",
+            "kind": "Interface",
+            "file": "src/app/articles.service.ts",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "<app.get:/api/articles:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<app.post:/api/articles:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<app.get:/api/articles/:slug:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 7,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<app.put:/api/articles/:slug:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 8,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<app.delete:/api/articles/:slug:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 9,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<app.get:/api/tags:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 10,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "<app.post:/api/users/login:arg1>",
+          "kind": "Function",
+          "file": "server/app.js",
+          "line": 11,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "ArticlesService",
+          "kind": "Class",
+          "file": "src/app/articles.service.ts",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "UserService",
+          "kind": "Class",
+          "file": "src/app/user.service.ts",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "express",
+          "kind": "Variable",
+          "file": "server/app.js",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "Article",
+          "kind": "Interface",
+          "file": "src/app/articles.service.ts",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 11
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/app/articles.service.ts",
+            "name": "ArticlesService",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/app/plain.ts",
+            "name": "Plain",
+            "kind": "Class",
+            "line": 2,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/app/user.service.ts",
+            "name": "UserService",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/app/articles.service.ts",
+            "name": "Article",
+            "kind": "Interface",
+            "line": 4,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/app/articles.service.ts",
+          "name": "ArticlesService",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/app/plain.ts",
+          "name": "Plain",
+          "kind": "Class",
+          "line": 2,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/app/user.service.ts",
+          "name": "UserService",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/app/articles.service.ts",
+          "name": "Article",
+          "kind": "Interface",
+          "line": 4,
+          "relationship": "DEFINES_INTERFACE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 4
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "server/app.js",
+            "line": 5,
+            "method": "GET",
+            "path": "/api/articles",
+            "fullPath": "/api/articles",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:/api/articles:arg1>"
+          },
+          {
+            "file": "server/app.js",
+            "line": 6,
+            "method": "POST",
+            "path": "/api/articles",
+            "fullPath": "/api/articles",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.post:/api/articles:arg1>"
+          },
+          {
+            "file": "server/app.js",
+            "line": 7,
+            "method": "GET",
+            "path": "/api/articles/:slug",
+            "fullPath": "/api/articles/:slug",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:/api/articles/:slug:arg1>"
+          },
+          {
+            "file": "server/app.js",
+            "line": 8,
+            "method": "PUT",
+            "path": "/api/articles/:slug",
+            "fullPath": "/api/articles/:slug",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.put:/api/articles/:slug:arg1>"
+          },
+          {
+            "file": "server/app.js",
+            "line": 9,
+            "method": "DELETE",
+            "path": "/api/articles/:slug",
+            "fullPath": "/api/articles/:slug",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.delete:/api/articles/:slug:arg1>"
+          },
+          {
+            "file": "server/app.js",
+            "line": 10,
+            "method": "GET",
+            "path": "/api/tags",
+            "fullPath": "/api/tags",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:/api/tags:arg1>"
+          },
+          {
+            "file": "server/app.js",
+            "line": 11,
+            "method": "POST",
+            "path": "/api/users/login",
+            "fullPath": "/api/users/login",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.post:/api/users/login:arg1>"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "server/app.js",
+          "line": 5,
+          "method": "GET",
+          "path": "/api/articles",
+          "fullPath": "/api/articles",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:/api/articles:arg1>"
+        },
+        {
+          "file": "server/app.js",
+          "line": 6,
+          "method": "POST",
+          "path": "/api/articles",
+          "fullPath": "/api/articles",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.post:/api/articles:arg1>"
+        },
+        {
+          "file": "server/app.js",
+          "line": 7,
+          "method": "GET",
+          "path": "/api/articles/:slug",
+          "fullPath": "/api/articles/:slug",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:/api/articles/:slug:arg1>"
+        },
+        {
+          "file": "server/app.js",
+          "line": 8,
+          "method": "PUT",
+          "path": "/api/articles/:slug",
+          "fullPath": "/api/articles/:slug",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.put:/api/articles/:slug:arg1>"
+        },
+        {
+          "file": "server/app.js",
+          "line": 9,
+          "method": "DELETE",
+          "path": "/api/articles/:slug",
+          "fullPath": "/api/articles/:slug",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.delete:/api/articles/:slug:arg1>"
+        },
+        {
+          "file": "server/app.js",
+          "line": 10,
+          "method": "GET",
+          "path": "/api/tags",
+          "fullPath": "/api/tags",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:/api/tags:arg1>"
+        },
+        {
+          "file": "server/app.js",
+          "line": 11,
+          "method": "POST",
+          "path": "/api/users/login",
+          "fullPath": "/api/users/login",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.post:/api/users/login:arg1>"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:server/app.js:function:5:<app.get:/api/articles:arg1>",
+            "name": "<app.get:/api/articles:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:server/app.js:function:6:<app.post:/api/articles:arg1>",
+            "name": "<app.post:/api/articles:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:server/app.js:function:7:<app.get:/api/articles/:slug:arg1>",
+            "name": "<app.get:/api/articles/:slug:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:server/app.js:function:8:<app.put:/api/articles/:slug:arg1>",
+            "name": "<app.put:/api/articles/:slug:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:server/app.js:function:9:<app.delete:/api/articles/:slug:arg1>",
+            "name": "<app.delete:/api/articles/:slug:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:server/app.js:function:10:<app.get:/api/tags:arg1>",
+            "name": "<app.get:/api/tags:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:server/app.js:function:11:<app.post:/api/users/login:arg1>",
+            "name": "<app.post:/api/users/login:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 11,
+            "endLine": 11
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/app/articles.service.ts:function:13:list",
+            "name": "list",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 13,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/app/articles.service.ts:function:17:get",
+            "name": "get",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 17,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/app/articles.service.ts:function:21:create",
+            "name": "create",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 21,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/app/articles.service.ts:function:25:update",
+            "name": "update",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 25,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/app/articles.service.ts:function:29:remove",
+            "name": "remove",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 29,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/app/plain.ts:function:5:load",
+            "name": "load",
+            "className": "Plain",
+            "file": "src/app/plain.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/app/user.service.ts:function:6:constructor",
+            "name": "constructor",
+            "className": "UserService",
+            "file": "src/app/user.service.ts",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/app/user.service.ts:function:8:login",
+            "name": "login",
+            "className": "UserService",
+            "file": "src/app/user.service.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/app/user.service.ts:function:12:tags",
+            "name": "tags",
+            "className": "UserService",
+            "file": "src/app/user.service.ts",
+            "line": 12,
+            "endLine": 16
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "",
+          "routeFile": "",
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:server/app.js:route:5:0:GET:/api/articles"
+          },
+          {
+            "id": "file:server/app.js:route:6:0:POST:/api/articles"
+          },
+          {
+            "id": "file:server/app.js:route:7:0:GET:/api/articles/:slug"
+          },
+          {
+            "id": "file:server/app.js:route:8:0:PUT:/api/articles/:slug"
+          },
+          {
+            "id": "file:server/app.js:route:9:0:DELETE:/api/articles/:slug"
+          },
+          {
+            "id": "file:server/app.js:route:10:0:GET:/api/tags"
+          },
+          {
+            "id": "file:server/app.js:route:11:0:POST:/api/users/login"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:5:0:GET:/api/articles",
+            "file:server/app.js:route:6:0:POST:/api/articles",
+            "file:server/app.js:route:7:0:GET:/api/articles/:slug",
+            "file:server/app.js:route:8:0:PUT:/api/articles/:slug",
+            "file:server/app.js:route:9:0:DELETE:/api/articles/:slug",
+            "file:server/app.js:route:10:0:GET:/api/tags",
+            "file:server/app.js:route:11:0:POST:/api/users/login"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/app.js:route:5:0:GET:/api/articles",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/articles",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 5,
+            "call": "file:src/app/articles.service.ts:function:13:list:call:14:11:this.http.get",
+            "line": 14,
+            "expression": "this.http.get",
+            "client": "angular",
+            "method": "GET",
+            "url": "/api/articles",
+            "match": "exact",
+            "fn": "file:src/app/articles.service.ts:function:13:list"
+          },
+          {
+            "route": "file:server/app.js:route:6:0:POST:/api/articles",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/articles",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 6,
+            "call": "file:src/app/articles.service.ts:function:21:create:call:22:11:this.http.post",
+            "line": 22,
+            "expression": "this.http.post",
+            "client": "angular",
+            "method": "POST",
+            "url": "/api/articles",
+            "match": "exact",
+            "fn": "file:src/app/articles.service.ts:function:21:create"
+          },
+          {
+            "route": "file:server/app.js:route:7:0:GET:/api/articles/:slug",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/articles/:slug",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 7,
+            "call": "file:src/app/articles.service.ts:function:17:get:call:18:11:this.http.get",
+            "line": 18,
+            "expression": "this.http.get",
+            "client": "angular",
+            "method": "GET",
+            "url": "/api/articles/${slug}",
+            "match": "parameter",
+            "fn": "file:src/app/articles.service.ts:function:17:get"
+          },
+          {
+            "route": "file:server/app.js:route:8:0:PUT:/api/articles/:slug",
+            "routeMethod": "PUT",
+            "routeFullPath": "/api/articles/:slug",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 8,
+            "call": "file:src/app/articles.service.ts:function:25:update:call:26:11:this.http.request",
+            "line": 26,
+            "expression": "this.http.request",
+            "client": "angular",
+            "method": "PUT",
+            "url": "/api/articles/${article.slug}",
+            "match": "parameter",
+            "fn": "file:src/app/articles.service.ts:function:25:update"
+          },
+          {
+            "route": "file:server/app.js:route:9:0:DELETE:/api/articles/:slug",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/articles/:slug",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 9,
+            "call": "file:src/app/articles.service.ts:function:29:remove:call:30:11:this.http.delete",
+            "line": 30,
+            "expression": "this.http.delete",
+            "client": "angular",
+            "method": "DELETE",
+            "url": "/api/articles/${slug}",
+            "match": "parameter",
+            "fn": "file:src/app/articles.service.ts:function:29:remove"
+          },
+          {
+            "route": "file:server/app.js:route:10:0:GET:/api/tags",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/tags",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 10,
+            "call": "file:src/app/user.service.ts:function:12:tags:call:15:11:this.http.get",
+            "line": 15,
+            "expression": "this.http.get",
+            "client": "angular",
+            "method": "GET",
+            "url": "/api/tags",
+            "match": "exact",
+            "fn": "file:src/app/user.service.ts:function:12:tags"
+          },
+          {
+            "route": "file:server/app.js:route:11:0:POST:/api/users/login",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/users/login",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 11,
+            "call": "file:src/app/user.service.ts:function:8:login:call:9:11:this.http.post",
+            "line": 9,
+            "expression": "this.http.post",
+            "client": "angular",
+            "method": "POST",
+            "url": "/api/users/login",
+            "match": "exact",
+            "fn": "file:src/app/user.service.ts:function:8:login"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/articles.service.ts:function:13:list",
+            "file:src/app/articles.service.ts:function:21:create",
+            "file:src/app/articles.service.ts:function:29:remove",
+            "file:src/app/articles.service.ts:function:17:get",
+            "file:src/app/articles.service.ts:function:25:update",
+            "file:src/app/user.service.ts:function:12:tags",
+            "file:src/app/user.service.ts:function:8:login"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/app/articles.service.ts:function:13:list",
+            "file:src/app/articles.service.ts:function:21:create",
+            "file:src/app/articles.service.ts:function:29:remove",
+            "file:src/app/articles.service.ts:function:17:get",
+            "file:src/app/articles.service.ts:function:25:update",
+            "file:src/app/user.service.ts:function:12:tags",
+            "file:src/app/user.service.ts:function:8:login"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/articles.service.ts:function:13:list",
+            "file:src/app/articles.service.ts:function:21:create",
+            "file:src/app/articles.service.ts:function:29:remove",
+            "file:src/app/articles.service.ts:function:17:get",
+            "file:src/app/articles.service.ts:function:25:update",
+            "file:src/app/user.service.ts:function:12:tags",
+            "file:src/app/user.service.ts:function:8:login"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": null,
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/articles",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 5
+          },
+          "client": "angular",
+          "method": "GET",
+          "url": "/api/articles",
+          "match": "exact",
+          "file": "src/app/articles.service.ts",
+          "line": 14,
+          "expression": "this.http.get",
+          "function": "list"
+        },
+        {
+          "route": {
+            "method": "POST",
+            "fullPath": "/api/articles",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 6
+          },
+          "client": "angular",
+          "method": "POST",
+          "url": "/api/articles",
+          "match": "exact",
+          "file": "src/app/articles.service.ts",
+          "line": 22,
+          "expression": "this.http.post",
+          "function": "create"
+        },
+        {
+          "route": {
+            "method": "DELETE",
+            "fullPath": "/api/articles/:slug",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 9
+          },
+          "client": "angular",
+          "method": "DELETE",
+          "url": "/api/articles/${slug}",
+          "match": "parameter",
+          "file": "src/app/articles.service.ts",
+          "line": 30,
+          "expression": "this.http.delete",
+          "function": "remove"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/articles/:slug",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 7
+          },
+          "client": "angular",
+          "method": "GET",
+          "url": "/api/articles/${slug}",
+          "match": "parameter",
+          "file": "src/app/articles.service.ts",
+          "line": 18,
+          "expression": "this.http.get",
+          "function": "get"
+        },
+        {
+          "route": {
+            "method": "PUT",
+            "fullPath": "/api/articles/:slug",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 8
+          },
+          "client": "angular",
+          "method": "PUT",
+          "url": "/api/articles/${article.slug}",
+          "match": "parameter",
+          "file": "src/app/articles.service.ts",
+          "line": 26,
+          "expression": "this.http.request",
+          "function": "update"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/tags",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 10
+          },
+          "client": "angular",
+          "method": "GET",
+          "url": "/api/tags",
+          "match": "exact",
+          "file": "src/app/user.service.ts",
+          "line": 15,
+          "expression": "this.http.get",
+          "function": "tags"
+        },
+        {
+          "route": {
+            "method": "POST",
+            "fullPath": "/api/users/login",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 11
+          },
+          "client": "angular",
+          "method": "POST",
+          "url": "/api/users/login",
+          "match": "exact",
+          "file": "src/app/user.service.ts",
+          "line": 9,
+          "expression": "this.http.post",
+          "function": "login"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "method": "PUT",
+      "path": "/api/articles/:slug"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:server/app.js:function:5:<app.get:/api/articles:arg1>",
+            "name": "<app.get:/api/articles:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:server/app.js:function:6:<app.post:/api/articles:arg1>",
+            "name": "<app.post:/api/articles:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:server/app.js:function:7:<app.get:/api/articles/:slug:arg1>",
+            "name": "<app.get:/api/articles/:slug:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:server/app.js:function:8:<app.put:/api/articles/:slug:arg1>",
+            "name": "<app.put:/api/articles/:slug:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:server/app.js:function:9:<app.delete:/api/articles/:slug:arg1>",
+            "name": "<app.delete:/api/articles/:slug:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:server/app.js:function:10:<app.get:/api/tags:arg1>",
+            "name": "<app.get:/api/tags:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:server/app.js:function:11:<app.post:/api/users/login:arg1>",
+            "name": "<app.post:/api/users/login:arg1>",
+            "className": null,
+            "file": "server/app.js",
+            "line": 11,
+            "endLine": 11
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/app/articles.service.ts:function:13:list",
+            "name": "list",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 13,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/app/articles.service.ts:function:17:get",
+            "name": "get",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 17,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/app/articles.service.ts:function:21:create",
+            "name": "create",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 21,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/app/articles.service.ts:function:25:update",
+            "name": "update",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 25,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/app/articles.service.ts:function:29:remove",
+            "name": "remove",
+            "className": "ArticlesService",
+            "file": "src/app/articles.service.ts",
+            "line": 29,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/app/plain.ts:function:5:load",
+            "name": "load",
+            "className": "Plain",
+            "file": "src/app/plain.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/app/user.service.ts:function:6:constructor",
+            "name": "constructor",
+            "className": "UserService",
+            "file": "src/app/user.service.ts",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/app/user.service.ts:function:8:login",
+            "name": "login",
+            "className": "UserService",
+            "file": "src/app/user.service.ts",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/app/user.service.ts:function:12:tags",
+            "name": "tags",
+            "className": "UserService",
+            "file": "src/app/user.service.ts",
+            "line": 12,
+            "endLine": 16
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id",
+        "params": {
+          "method": "PUT",
+          "path": "/api/articles/:slug",
+          "routeFile": "",
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:server/app.js:route:8:0:PUT:/api/articles/:slug"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:server/app.js:route:8:0:PUT:/api/articles/:slug"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:server/app.js:route:8:0:PUT:/api/articles/:slug",
+            "routeMethod": "PUT",
+            "routeFullPath": "/api/articles/:slug",
+            "routeFramework": "express-koa",
+            "routeFile": "server/app.js",
+            "routeLine": 8,
+            "call": "file:src/app/articles.service.ts:function:25:update:call:26:11:this.http.request",
+            "line": 26,
+            "expression": "this.http.request",
+            "client": "angular",
+            "method": "PUT",
+            "url": "/api/articles/${article.slug}",
+            "match": "parameter",
+            "fn": "file:src/app/articles.service.ts:function:25:update"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/articles.service.ts:function:25:update"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/app/articles.service.ts:function:25:update"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/articles.service.ts:function:25:update"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": "PUT",
+        "path": "/api/articles/:slug",
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "PUT",
+            "fullPath": "/api/articles/:slug",
+            "framework": "express-koa",
+            "file": "server/app.js",
+            "line": 8
+          },
+          "client": "angular",
+          "method": "PUT",
+          "url": "/api/articles/${article.slug}",
+          "match": "parameter",
+          "file": "src/app/articles.service.ts",
+          "line": 26,
+          "expression": "this.http.request",
+          "function": "update"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  }
+]
