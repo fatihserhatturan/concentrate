@@ -318,6 +318,15 @@ export function matchesFile(relativePath: string | null, file: string): boolean 
   return relativePath === wanted || relativePath.endsWith(`/${wanted}`);
 }
 
+// A file as matchesFile takes it, or a directory: `packages/common/utils`
+// (with or without a trailing slash) or a directory path suffix.
+export function matchesFileOrDirectory(relativePath: string | null, file: string): boolean {
+  if (!relativePath) return false;
+  const wanted = file.replace(/\\/g, "/").replace(/^\.\//, "").replace(/\/+$/, "");
+  if (wanted === "") return true;
+  return matchesFile(relativePath, wanted) || relativePath.startsWith(`${wanted}/`) || relativePath.includes(`/${wanted}/`);
+}
+
 export type SymbolKind = "function" | "method" | "class" | "interface" | "type" | "enum" | "variable" | "route";
 
 export type SymbolInfo = {

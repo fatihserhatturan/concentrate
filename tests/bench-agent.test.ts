@@ -124,7 +124,7 @@ describe("agent benchmark: summaries", () => {
   });
 });
 
-for (const file of ["questions.json", "questions-hard.json", "questions-frontend.json"]) it(`${file} entries are complete and unique`, () => {
+for (const file of ["questions.json", "questions-hard.json", "questions-frontend.json", "questions-v2.json"]) it(`${file} entries are complete and unique`, () => {
   const { questions } = JSON.parse(readFileSync(path.join(import.meta.dirname, "../bench/agent", file), "utf8")) as { questions: Question[] };
   assert.ok(questions.length >= 6);
   assert.equal(new Set(questions.map((question) => question.id)).size, questions.length);

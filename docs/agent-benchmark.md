@@ -209,6 +209,35 @@ The one-run measurement of this set
 ([`bench/results/agent-hard-2026-10-29.json`](../bench/results/agent-hard-2026-10-29.json))
 had 4/6 → 5/6 correct, −23% median input tokens and −43% median tool calls.
 
+### v2 questions (#73)
+
+[`bench/agent/questions-v2.json`](../bench/agent/questions-v2.json) has nine
+questions for the parts of the graph the earlier sets do not test:
+
+| Category | Questions | What it needs |
+| --- | ---: | --- |
+| calls | 2 | callers of `normalizePath` in `internet-nest` packages, where grep also finds four unrelated methods of that name; callers of the static `UuidFactory.get` |
+| impact | 1 | the route a service method reaches two calls up (`UsersService.findOne` → `AuthService.signIn` → `POST /auth/login`) |
+| diff | 1 | the routes an uncommitted change to two services affects (`detect_changes`) |
+| unused | 1 | the exports of `packages/common/utils` nothing imports (`find_unused_exports`) |
+| gap | 4 | answers the graph does not have: express's `app.listen` (mixed into `app` at runtime), the routes `examples/route-map` registers in a loop, a method declared as a class field (`setSecurityData`), and requests whose URL a `switch` picks |
+
+The gap questions check that the agent does not stop at an empty or partial
+graph answer; on each of them the matching tool returns nothing.
+
+Two question fields support them. `patch` (relative to the questions file)
+is applied to the sample with `git apply` before each run and reverted after
+it, so the graph, scanned before, is the base of the diff. `extraTools` adds
+tools to both modes; the diff question allows `Bash(git diff:*)` and
+`Bash(git status:*)`, so the baseline can see the change too.
+
+```bash
+npm run bench:agent -- --questions bench/agent/questions-v2.json --runs 3 --model sonnet --max-turns 25
+```
+
+No results yet: the runs (sonnet and a second model) follow in the next
+step of #73.
+
 ### Frontend and full-stack questions
 
 [`bench/agent/questions-frontend.json`](../bench/agent/questions-frontend.json)

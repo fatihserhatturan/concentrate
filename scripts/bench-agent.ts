@@ -169,20 +169,44 @@ function runClaude(args: string[], cwd: string): Promise<string> {
   });
 }
 
+// Applies the question's patch to the sample for one run and always reverts
+// it, so the graph (scanned before) is the base the diff is taken against.
+async function withPatch<T>(sampleRoot: string, patchPath: string | null, run: () => Promise<T>): Promise<T> {
+  if (!patchPath) return run();
+  const git = (args: string[]) => {
+    const result = spawnSync("git", ["-C", sampleRoot, ...args], { encoding: "utf8" });
+    if (result.status !== 0) throw new Error(`git ${args.join(" ")} failed in ${sampleRoot}: ${result.stderr}`);
+  };
+  git(["apply", patchPath]);
+  try {
+    return await run();
+  } finally {
+    git(["apply", "-R", patchPath]);
+  }
+}
+
 const results: QuestionResult[] = [];
 
 for (const question of questions) {
-  const cwd = path.join(samplesDirectory(), question.sample, question.cwd ?? "");
+  const sampleRoot = path.join(samplesDirectory(), question.sample);
+  const cwd = path.join(sampleRoot, question.cwd ?? "");
+  const patchPath = question.patch ? path.resolve(path.dirname(questionsPath), question.patch) : null;
   const perMode = {} as QuestionResult["modes"];
   for (const mode of modes) {
-    const args = claudeArgs(mode, question.question, { mcpConfigPath: configPaths.get(`${question.sample}\0${mode}`)!, model: values.model, maxTurns });
+    const args = claudeArgs(mode, question.question, {
+      mcpConfigPath: configPaths.get(`${question.sample}\0${mode}`)!,
+      model: values.model,
+      maxTurns,
+      extraTools: question.extraTools,
+    });
     if (dryRun) {
+      if (question.patch) console.log(`# git -C ${sampleRoot} apply ${patchPath}  (reverted after each run)`);
       console.log(`# ${question.id} [${mode}] (cd ${cwd})\nclaude ${args.map((arg) => (/^[\w.,:/=@()-]+$/.test(arg) ? arg : JSON.stringify(arg))).join(" ")}\n`);
       continue;
     }
     const modeRuns: Run[] = [];
     for (let run = 0; run < runs; run += 1) {
-      const scored = scoreRun(parseStreamJson(await runClaude(args, cwd)), question);
+      const scored = scoreRun(parseStreamJson(await withPatch(sampleRoot, patchPath, () => runClaude(args, cwd))), question);
       modeRuns.push(scored);
       console.error(`${question.id} [${mode}] run ${run + 1}: ${scored.correct ? "correct" : `missing ${scored.missing.join(", ")}`}, ${scored.toolCalls} tool calls`);
     }
