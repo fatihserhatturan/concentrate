@@ -25,10 +25,10 @@ chosen files); every target was decided by reading the code.
 | Kind | Samples | Scope |
 | --- | --- | --- |
 | Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld | every route declared with a literal path in the scoped files; tests excluded |
-| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld | every call site in 4–9 chosen files per sample |
+| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | every call site in 2–9 chosen files per sample |
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma) | the services; the standing samples have no data layer |
-| Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte): every component and every element that renders one |
-| Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit) |
+| Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
+| Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
 | Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project) | `frontend/`: every HTTP call that reaches a backend route |
 
 Rules:
@@ -106,7 +106,7 @@ Rules:
 - **Requests:** the call's file and line (±1), the route and its declaring
   file all match; a call linked to another route is an FP and an FN.
 
-## Results (2026-11-02, schema 59)
+## Results (2026-11-02, schema 62)
 
 ### Routes
 
@@ -126,14 +126,15 @@ Rules:
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | express | 28 | 8 | 0 | 20 | 100.0% | 28.6% |
 | fastify | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
+| internet-angular-realworld | 21 | 21 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
 | internet-sveltekit-realworld | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 14 | 11 | 0 | 3 | 100.0% | 78.6% |
 | ky | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | nestjs-starter | 2 | 2 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 104 | 81 | 0 | 23 | **100.0%** | **77.9%** |
+| **all** | 125 | 102 | 0 | 23 | **100.0%** | **81.6%** |
 
-Labels counts calls with a project target. Another 366 call sites are labeled
+Labels counts calls with a project target. Another 433 call sites are labeled
 `null`, and 35 are `dynamic`.
 
 ### Data access
@@ -148,28 +149,31 @@ Labels counts calls with a project target. Another 366 call sites are labeled
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-angular-realworld | 18 | 18 | 0 | 0 | 100.0% | 100.0% |
 | internet-react-realworld | 32 | 31 | 0 | 1 | 100.0% | 96.9% |
 | internet-sveltekit-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 22 | 22 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 78 | 77 | 0 | 1 | **100.0%** | **98.7%** |
+| **all** | 96 | 95 | 0 | 1 | **100.0%** | **99.0%** |
 
 ### Component renders
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-angular-realworld | 23 | 23 | 0 | 0 | 100.0% | 100.0% |
 | internet-react-realworld | 29 | 29 | 0 | 0 | 100.0% | 100.0% |
 | internet-sveltekit-realworld | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 79 | 79 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 102 | 102 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Pages
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-angular-realworld | 14 | 14 | 0 | 0 | 100.0% | 100.0% |
 | internet-nextjs-taxonomy | 27 | 27 | 0 | 0 | 100.0% | 100.0% |
 | internet-sveltekit-realworld | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 12 | 12 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 52 | 52 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 66 | 66 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### API requests
 
@@ -220,7 +224,10 @@ are, and they cluster:
   Router record is a page, its lazy `() => import('./pages/Home.vue')`
   linked to the page component. In the SvelteKit sample every component,
   render, page and form action is found, `$lib` imports resolved through
-  SvelteKit's default alias.
+  SvelteKit's default alias. In the Angular sample every component, template
+  render (by selector, through each component's `imports`) and Router page
+  is found, including the profile routes lazy-loaded with `loadChildren`, and
+  calls on constructor-injected services resolve to the service methods.
 
 - **SWR keys in local variables.** The one missed request is
   `components/article/ArticleList.tsx`, which passes `useSWR` a local

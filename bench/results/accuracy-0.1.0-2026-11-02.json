@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-02T11:41:58.488Z",
+  "recordedAt": "2026-11-02T12:28:40.020Z",
   "samples": [
     {
       "sample": "express",
@@ -37,6 +37,37 @@
       },
       "calls": {
         "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-angular-realworld",
+      "calls": {
+        "tp": 21,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "components": {
+        "tp": 18,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "renders": {
+        "tp": 23,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "pages": {
+        "tp": 14,
         "fp": 0,
         "fn": 0,
         "precision": 1,
@@ -247,11 +278,11 @@
       }
     },
     "calls": {
-      "tp": 81,
+      "tp": 102,
       "fp": 0,
       "fn": 23,
       "precision": 1,
-      "recall": 0.7788461538461539
+      "recall": 0.816
     },
     "dataAccess": {
       "tp": 43,
@@ -261,21 +292,21 @@
       "recall": 1
     },
     "components": {
-      "tp": 77,
+      "tp": 95,
       "fp": 0,
       "fn": 1,
       "precision": 1,
-      "recall": 0.9871794871794872
+      "recall": 0.9895833333333334
     },
     "renders": {
-      "tp": 79,
+      "tp": 102,
       "fp": 0,
       "fn": 0,
       "precision": 1,
       "recall": 1
     },
     "pages": {
-      "tp": 52,
+      "tp": 66,
       "fp": 0,
       "fn": 0,
       "precision": 1,

@@ -776,7 +776,7 @@ Angular is decorator-based like NestJS. The decorator route graph (`createDecora
 ### Acceptance criteria
 
 - [x] Fixtures and golden coverage for components, DI, routes and `HttpClient`
-- [ ] A pinned Angular sample (candidate: a RealWorld Angular frontend) with hand labels in `bench:accuracy`
+- [x] A pinned Angular sample (candidate: a RealWorld Angular frontend) with hand labels in `bench:accuracy`
 - [x] Precision stays at 100%; recall is reported
 
 ## Phase 17: State libraries and ecosystem measurement ([#82](https://github.com/fatihserhatturan/concentrate/issues/82))

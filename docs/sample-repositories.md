@@ -29,6 +29,7 @@ sample test (`tests/golden-samples.test.ts`) all read from there.
 | internet-nest | internet | nestjs/nest | `958ff952c00bd5a25efa04ffaafac28721af7827` |
 | internet-vue-realworld | internet | mutoe/vue3-realworld-example-app | `741c215ef0f674f90fcb03c5493a1b3a3a7f1b03` |
 | internet-sveltekit-realworld | internet | sveltejs/realworld | `df796708040f5200ec572b28ab7f88ecee5794dd` |
+| internet-angular-realworld | internet | gothinkster/angular-realworld-example-app | `f39866e5241477f3b891a045edfaedf82792be5e` |
 | internet-realworld-fullstack | internet | gothinkster/node-express-realworld-example-app in `backend/`, reck1ess/next-realworld-example-app in `frontend/` | `30b68e1e881462b2f4164ea09ab4c4f5699c7b0b`, `be9ef569bc395975d98c1973fac23ba9277797e7` |
 
 A sample with `parts` is assembled from several repositories, each cloned
@@ -267,6 +268,25 @@ standing smoke samples.
   `+server.js`) and 2 `EntryPoint` nodes (markup listeners); the hand labels
   for routes, components, renders, pages and calls are in
   [accuracy.md](accuracy.md).
+
+### Angular RealWorld
+
+- Scale: small
+- Repository: `https://github.com/gothinkster/angular-realworld-example-app`
+  (the Conduit Angular frontend: standalone components with `templateUrl`
+  and inline templates, signals, constructor and `inject()` injection,
+  `HttpClient` services, lazy `loadComponent` / `loadChildren` routes,
+  Playwright e2e tests).
+- Local path: `.concentrate/samples/internet-angular-realworld`
+- Last scan result, 2026-11-02: 107 discovered files, 80 supported files,
+  80 parsed files, 0 failed files, 142 resolved imports, 0 unresolved
+  relative imports, 4909 nodes, 5700 relationships.
+- File classification counts: 61 production files, 18 test files, 0 fixture
+  files, 1 support file, 0 generated files.
+- Expected smoke counts: 0 `Route` nodes (no backend in the repository; the
+  services call a remote API through an interceptor) and 13 `EntryPoint`
+  nodes (template listeners); the hand labels for components, renders, pages
+  and calls are in [accuracy.md](accuracy.md).
 
 ### RealWorld Fullstack
 
