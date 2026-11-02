@@ -32,6 +32,8 @@ export type StoreAccess = {
   // `callee` is the local name of a destructured action (`const { add: put }`).
   calls: Array<{ name: string; line: number; column: number; callee?: string }>;
   destructured: string[];
+  // The hook when the call is not to the hook itself (`useBearStore.getState()`).
+  hook?: string;
 };
 
 const storeHook = /^use\w*Store$/u;

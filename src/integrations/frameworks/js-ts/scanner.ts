@@ -21,6 +21,7 @@ import { applySvelteKitParseSemantics } from "./sveltekit.js";
 import { applyAstroMarkupSemantics, applyAstroScriptSemantics } from "./astro.js";
 import { applyPiniaSemantics } from "./pinia.js";
 import { applyReduxSemantics } from "./redux.js";
+import { applyZustandSemantics } from "./zustand.js";
 import { applyAngularParseSemantics } from "./angular.js";
 import { applyAngularRouterSemantics } from "./angular-router.js";
 
@@ -127,6 +128,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // Redux Toolkit slices and stores, selectors and dispatched actions.
     name: "redux",
     onFile: applyReduxSemantics,
+  },
+  {
+    // Zustand stores and their selectors.
+    name: "zustand",
+    onFile: applyZustandSemantics,
   },
   {
     // React Router <Route> trees and route objects.

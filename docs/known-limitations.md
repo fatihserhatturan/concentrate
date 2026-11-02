@@ -852,6 +852,29 @@ Astro).
   slice; thunks (`createAsyncThunk`), `createSelector`, the slice's own
   `selectors`, `connect` / `mapStateToProps`, RTK Query and calls at the top
   level of a module are not followed.
+- Zustand: in a file that imports `create` from `zustand` (also zustand 3's
+  default import, `createWithEqualityFn` from `zustand/traditional`, or
+  `createStore` from `zustand` / `zustand/vanilla`), each top-level
+  `const useBearStore = create(…)` (also exported, the default export, the
+  curried `create<State>()(…)`, or with the creator wrapped in middleware
+  such as `devtools(persist(…))`) is a `Store` (library `zustand`, kind
+  `hook`, or `vanilla` for `createStore`) named by its variable, which is
+  also its `hook`. Of the keys of the object the creator returns, functions
+  are `actions` (Functions that own their calls, `STORE_ACTION`) and the rest
+  `state`; `combine(state, creator)` adds the keys of its first argument.
+  Slices pattern stores (`create((...a) => ({ ...createBearSlice(...a) }))`),
+  creators that build the object in a variable, and stores made in functions
+  are not read.
+- Zustand use goes through the Pinia `use…Store` rules: a hook named
+  `use…Store` (declared in the file or imported, also as the default
+  export) gives `READS_STORE`. A selector (`(state) => state.bears`,
+  `({ bears }) => bears`, inside `useShallow`) takes the members it selects:
+  state is read, an action taken is a `WRITES_STORE`.
+  `useBearStore.getState().reset()` reads or calls a member (an action call
+  also gets `CALL_RESOLVES_TO`), and `useBearStore.setState({ … })` writes
+  the keys it sets. Hooks with other names (`useBears`), vanilla stores read
+  through `useStore(store, selector)` and stores passed around are not
+  followed.
 
 ## Review Process
 

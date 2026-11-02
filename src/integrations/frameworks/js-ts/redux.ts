@@ -254,7 +254,7 @@ function recordSelectorFunctions(root: SyntaxNode, nodes: GraphNode[], functionA
 // The state a selector reads through its first parameter: `state.cart.items`
 // → [cart, items], `state.cart` alone → [cart, null]; for `({ cart }) =>`,
 // `cart.items` → [cart, items].
-function stateReads(fn: SyntaxNode): Array<[string, string | null]> {
+export function stateReads(fn: SyntaxNode): Array<[string, string | null]> {
   const parameters = fn.childForFieldName("parameters");
   const first = fn.childForFieldName("parameter") ?? parameters?.namedChildren[0] ?? null;
   const pattern = first?.type === "required_parameter" || first?.type === "optional_parameter" ? first.childForFieldName("pattern") : first;
@@ -287,7 +287,7 @@ function stateReads(fn: SyntaxNode): Array<[string, string | null]> {
         add(object.text, property);
         return;
       }
-    } else if (node.type === "identifier" && keys.has(node.text)) {
+    } else if ((node.type === "identifier" || node.type === "shorthand_property_identifier") && keys.has(node.text)) {
       add(node.text, null);
     }
     for (const child of node.namedChildren) if (child) visit(child);
