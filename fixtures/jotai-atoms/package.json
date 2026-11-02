@@ -1,0 +1,8 @@
+{
+  "name": "jotai-atoms-fixture",
+  "private": true,
+  "dependencies": {
+    "jotai": "^2.10.3",
+    "react": "^18.3.1"
+  }
+}

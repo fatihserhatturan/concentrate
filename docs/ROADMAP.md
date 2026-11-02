@@ -792,7 +792,7 @@ Completes M8: React-side stores on the `Store` node from Phase 14, store-aware M
 
 - [x] Redux Toolkit: `createSlice`, `configureStore`, `useSelector` and `dispatch` of slice actions
 - [x] Zustand `create` stores and their selectors
-- [ ] Jotai atoms
+- [x] Jotai atoms
 
 ### MCP
 
@@ -807,7 +807,7 @@ Completes M8: React-side stores on the `Store` node from Phase 14, store-aware M
 
 ### Acceptance criteria
 
-- [ ] Fixtures and golden coverage for each store library
+- [x] Fixtures and golden coverage for each store library
 - [ ] Agent benchmark results with the frontend questions, per category, are committed and documented
 - [ ] README and `docs/accuracy.md` report the M8 coverage
 

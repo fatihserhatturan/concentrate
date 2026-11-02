@@ -22,6 +22,8 @@ import type { ReduxAccess } from "../redux.js";
 // resolve the same way to the Store declared under that name. `$count`,
 // `get(count)`, `subscribe` and members read are reads; assigning `$count`,
 // `set`, `update`, members assigned or mutated and action calls are writes.
+// Jotai atoms are recorded the same way (`useAtomValue(a)` and `get(a)` read,
+// `useSetAtom(a)` and `set(a, …)` write) and resolve to the atom's Store.
 //
 // Redux: each `configureStore` reducer key maps to the slice whose reducer it
 // is given (`cartSlice.reducer`, or a name the slice's file gives it,
@@ -46,7 +48,8 @@ export const storeAccessContributor: ISemanticContributor = {
       const target = nodesById.get(rel.to);
       if (rel.type === "DECLARES_STORE" && target) fileByStoreId.set(target.id, rel.from);
       if (rel.type === "DECLARES_STORE" && target && target.properties.library !== "redux") {
-        const index = target.properties.library === "svelte" ? svelteStoresByFileAndName : storesByFileAndName;
+        // Svelte stores and Jotai atoms are used by their binding.
+        const index = target.properties.library === "svelte" || target.properties.library === "jotai" ? svelteStoresByFileAndName : storesByFileAndName;
         const byName = index.get(rel.from) ?? new Map<string, string[]>();
         const hook = String(target.properties.hook);
         byName.set(hook, [...byName.get(hook) ?? [], target.id]);

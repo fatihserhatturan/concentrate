@@ -22,6 +22,7 @@ import { applyAstroMarkupSemantics, applyAstroScriptSemantics } from "./astro.js
 import { applyPiniaSemantics } from "./pinia.js";
 import { applyReduxSemantics } from "./redux.js";
 import { applyZustandSemantics } from "./zustand.js";
+import { applyJotaiSemantics } from "./jotai.js";
 import { applyAngularParseSemantics } from "./angular.js";
 import { applyAngularRouterSemantics } from "./angular-router.js";
 
@@ -133,6 +134,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     // Zustand stores and their selectors.
     name: "zustand",
     onFile: applyZustandSemantics,
+  },
+  {
+    // Jotai atoms and their use.
+    name: "jotai",
+    onFile: applyJotaiSemantics,
   },
   {
     // React Router <Route> trees and route objects.
