@@ -1,6 +1,7 @@
 /**
  * Accuracy report: precision and recall of routes, call resolution, data
- * access, UI components, their renders, UI pages and frontend requests
+ * access, UI components, their renders, UI pages, frontend requests, state
+ * stores and their uses
  * against hand-written labels in bench/labels/<sample>.json.
  *
  *   npm run bench:accuracy -- [--sample name] [--details] [--json out.json]
@@ -14,7 +15,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { readSampleManifest, samplesDirectory } from "../src/adapters/cli/smoke.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
-import { compareCalls, compareComponents, compareDataAccess, comparePages, compareRenders, compareRequests, compareRoutes, sumScores, type Labels, type RouteScore, type Score } from "./accuracy/compare.js";
+import { compareCalls, compareComponents, compareDataAccess, comparePages, compareRenders, compareRequests, compareRoutes, compareStoreAccess, compareStores, sumScores, type Labels, type RouteScore, type Score } from "./accuracy/compare.js";
 
 const { values } = parseArgs({
   options: {
@@ -25,12 +26,12 @@ const { values } = parseArgs({
 });
 
 const labelsDirectory = new URL("../bench/labels/", import.meta.url);
-const kinds = ["routes", "calls", "dataAccess", "components", "renders", "pages", "requests"] as const;
+const kinds = ["routes", "calls", "dataAccess", "components", "renders", "pages", "requests", "stores", "storeAccess"] as const;
 type Kind = (typeof kinds)[number];
 
 const labelFiles = (await readdir(labelsDirectory)).filter((file) => file.endsWith(".json")).sort();
 const manifest = await readSampleManifest();
-type Scores = { routes?: RouteScore; calls?: Score; dataAccess?: Score; components?: Score; renders?: Score; pages?: Score; requests?: Score };
+type Scores = { routes?: RouteScore; calls?: Score; dataAccess?: Score; components?: Score; renders?: Score; pages?: Score; requests?: Score; stores?: Score; storeAccess?: Score };
 const results: Array<{ sample: string; scores: Scores }> = [];
 
 for (const labelFile of labelFiles) {
@@ -51,6 +52,8 @@ for (const labelFile of labelFiles) {
   if (labels.renders) scores.renders = compareRenders(graph, labels.renders);
   if (labels.pages) scores.pages = comparePages(graph, labels.pages);
   if (labels.requests) scores.requests = compareRequests(graph, labels.requests);
+  if (labels.stores) scores.stores = compareStores(graph, labels.stores);
+  if (labels.storeAccess) scores.storeAccess = compareStoreAccess(graph, labels.storeAccess);
   results.push({ sample: labels.sample, scores });
 }
 
@@ -63,6 +66,8 @@ const titles: Record<Kind, string> = {
   renders: "Component renders",
   pages: "Pages",
   requests: "API requests",
+  stores: "Stores",
+  storeAccess: "Store reads and writes",
 };
 
 // Routes get one more column: detected routes whose full path is right.

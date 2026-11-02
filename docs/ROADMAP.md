@@ -802,14 +802,14 @@ Completes M8: React-side stores on the `Store` node from Phase 14, store-aware M
 ### Measurement
 
 - [ ] Frontend and full-stack questions in the agent benchmark: which component calls this endpoint, what a component change affects, which pages a store reaches
-- [ ] Accuracy report section for each M8 relation type
-- [ ] README "What it sees" table and languages line cover the frontend
+- [x] Accuracy report section for each M8 relation type
+- [x] README "What it sees" table and languages line cover the frontend
 
 ### Acceptance criteria
 
 - [x] Fixtures and golden coverage for each store library
 - [ ] Agent benchmark results with the frontend questions, per category, are committed and documented
-- [ ] README and `docs/accuracy.md` report the M8 coverage
+- [x] README and `docs/accuracy.md` report the M8 coverage
 
 ## Verification (every milestone)
 

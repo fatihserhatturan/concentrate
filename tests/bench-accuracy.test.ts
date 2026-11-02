@@ -12,6 +12,8 @@ import {
   compareRenders,
   compareRequests,
   compareRoutes,
+  compareStoreAccess,
+  compareStores,
   fileOfNodeId,
   normalizePath,
   type Labels,
@@ -314,6 +316,43 @@ describe("accuracy comparator: requests", () => {
   });
 });
 
+describe("accuracy comparator: stores", () => {
+  // src/store.ts declares the Pinia store cart; src/a.vue line 4 reads items
+  // and writes add, line 9 only reads total.
+  const graph: Graph = { nodes: files("src/store.ts", "src/a.vue"), relationships: [] };
+  const cart = "file:src/store.ts:store:1:cart";
+  const fn = "file:src/a.vue:function:1:<script setup>";
+  graph.nodes.push(node(cart, "Store", { name: "cart", library: "pinia", kind: "setup" }));
+  graph.relationships.push(
+    rel("file:src/store.ts", "DECLARES_STORE", cart),
+    rel(fn, "READS_STORE", cart, { line: 4, members: "items" }),
+    rel(fn, "WRITES_STORE", cart, { line: 4, members: "add" }),
+    rel(fn, "READS_STORE", cart, { line: 9, members: "total" }),
+  );
+
+  it("matches stores by file, name, library and kind", () => {
+    const score = compareStores(graph, {
+      scope: ["src/"],
+      items: [{ file: "src/store.ts", name: "cart", library: "pinia", kind: "options" }],
+    });
+    assert.deepEqual([score.tp, score.fp, score.fn], [0, 1, 1]);
+    assert.deepEqual(score.falsePositives, ["src/store.ts pinia setup cart"]);
+  });
+
+  it("matches a use by file, line ±1, store and the members read and written", () => {
+    const score = compareStoreAccess(graph, {
+      scope: ["src/"],
+      items: [
+        { file: "src/a.vue", line: 5, store: "cart", storeFile: "src/store.ts", reads: ["items"], writes: ["add"] },
+        { file: "src/a.vue", line: 9, store: "cart", storeFile: "src/store.ts", reads: ["total", "items"], writes: [] },
+      ],
+    });
+    assert.deepEqual([score.tp, score.fp, score.fn], [1, 1, 1]);
+    assert.deepEqual(score.falsePositives, ["src/a.vue:9 -> src/store.ts cart reads [total] writes []"]);
+    assert.deepEqual(score.falseNegatives, ["src/a.vue:9 -> src/store.ts cart reads [items,total] writes []"]);
+  });
+});
+
 describe("label files", () => {
   const labelsDirectory = path.join(import.meta.dirname, "../bench/labels");
   for (const labelFile of readdirSync(labelsDirectory).filter((file) => file.endsWith(".json"))) {
@@ -344,6 +383,12 @@ describe("label files", () => {
       for (const request of labels.requests?.items ?? []) {
         assert.ok(request.file && Number.isInteger(request.line) && /^[A-Z]+ \//.test(request.route) && request.routeFile, JSON.stringify(request));
       }
+      for (const store of labels.stores?.items ?? []) {
+        assert.ok(store.file && store.name && store.library && store.kind, JSON.stringify(store));
+      }
+      for (const use of labels.storeAccess?.items ?? []) {
+        assert.ok(use.file && Number.isInteger(use.line) && use.store && use.storeFile && Array.isArray(use.reads) && Array.isArray(use.writes), JSON.stringify(use));
+      }
     });
 
     const projectPath = path.join(samplesDirectory(), labels.sample);
@@ -357,6 +402,8 @@ describe("label files", () => {
         ...(labels.renders?.items ?? []).flatMap((render) => [render.file, render.childFile]),
         ...(labels.pages?.items ?? []).map((page) => page.file),
         ...(labels.requests?.items ?? []).flatMap((request) => [request.file, request.routeFile]),
+        ...(labels.stores?.items ?? []).map((store) => store.file),
+        ...(labels.storeAccess?.items ?? []).flatMap((use) => [use.file, use.storeFile]),
       ]);
       for (const file of named) assert.ok(existsSync(path.join(projectPath, file)), `${file} is missing in ${labels.sample}`);
     });

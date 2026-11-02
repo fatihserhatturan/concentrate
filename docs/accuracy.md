@@ -1,8 +1,8 @@
 # Accuracy report
 
 How often the graph is right about routes, call targets, data access, UI
-components, UI pages and frontend → backend requests,
-measured against hand-written labels on the pinned sample repositories
+components, UI pages, frontend → backend requests and state stores with
+their reads and writes, measured against hand-written labels on the pinned sample repositories
 (`scripts/samples.json`).
 
 ```bash
@@ -30,6 +30,7 @@ chosen files); every target was decided by reading the code.
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
 | Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project) | `frontend/`: every HTTP call that reaches a backend route |
+| Stores, store reads and writes | internet-vue-realworld (its Pinia setup store) | `src/`: every store and every call of a store's hook, tests included |
 
 Rules:
 
@@ -83,6 +84,12 @@ Rules:
   call whose URL is a variable reassigned in branches is labeled with the
   route most branches request; calls to the frontend's own origin (`/user`),
   through a wrapper's URL parameter, or to local storage are not labeled.
+- **Stores.** `{ file, name, library, kind }` for every store declaration.
+  **Store reads and writes:** `{ file, line, store, storeFile, reads,
+  writes }` once per use of a store (a `useUserStore()` call), with the
+  state, getters and actions it reads (`storeToRefs(useUserStore())`
+  destructuring, `userStore.user`, a reference to an action without calling
+  it) and the actions and write methods it calls or destructures.
 
 ## Scoring
 
@@ -105,8 +112,13 @@ Rules:
   page with the wrong path or component is an FP and an FN.
 - **Requests:** the call's file and line (±1), the route and its declaring
   file all match; a call linked to another route is an FP and an FN.
+- **Stores:** file, name, library and kind all match. **Store reads and
+  writes:** the READS_STORE and WRITES_STORE edges of one function, line and
+  store are one use; it matches when file, line (±1), store and its file,
+  and both member sets match, so a missed or extra member is an FP and an
+  FN.
 
-## Results (2026-11-02, schema 62)
+## Results (2026-11-02, schema 63)
 
 ### Routes
 
@@ -181,10 +193,29 @@ Labels counts calls with a project target. Another 433 call sites are labeled
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-realworld-fullstack | 32 | 31 | 0 | 1 | 100.0% | 96.9% |
 
+### Stores
+
+| Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-vue-realworld | 1 | 1 | 0 | 0 | 100.0% | 100.0% |
+
+### Store reads and writes
+
+| Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-vue-realworld | 11 | 11 | 0 | 0 | 100.0% | 100.0% |
+
+Only one standing sample uses a store library, so these two tables are
+small: Redux Toolkit, Zustand, Jotai and Svelte stores are covered by their
+fixtures and golden queries (`fixtures/redux-toolkit`, `zustand-stores`,
+`jotai-atoms`, `svelte-stores`), not by labels on a real repository. The
+React RealWorld sample uses `connect()` with hand-written reducers, which is
+not a Redux Toolkit store.
+
 ## What the misses are
 
 Precision is 100% everywhere: no route, call target, data access, component,
-render, page or request the graph states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
+render, page, request, store or store use the graph states is wrong. (The one wrong call target, a bare `resolve()` bound by `var
 resolve = path.resolve` in express's `lib/view.js`, is left unresolved since
 #48.) Every labeled route is found: routes registered inside plugin
 functions and `build()` factories (#41), fastify-decorators controllers

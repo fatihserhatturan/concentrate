@@ -27,13 +27,17 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 | --- | --- |
 | **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints |
 | **Calls** | call sites resolved to their target declaration across files, barrels and re-exports |
-| **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers |
+| **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers; Next.js, Nuxt, SvelteKit and Astro server routes, and tRPC procedures |
+| **Components** | React, Vue, Svelte, Astro, Angular and web components, and which component renders which, with the props passed |
+| **Pages** | Next.js, Nuxt, SvelteKit and Astro file routes; React Router, TanStack Router, Vue Router and Angular Router records, each linked to the component it renders |
+| **Frontend requests** | fetch, axios, ky, ofetch, SWR, TanStack Query, Angular `HttpClient` and tRPC calls, linked to the backend route they reach |
+| **State stores** | Pinia, Redux Toolkit, Zustand, Jotai and Svelte stores: their state and actions, and the functions and components that read and write them |
 | **Dependency injection** | NestJS constructor and property injection chains |
 | **Configuration** | `process.env.*` reads, linked to the functions and routes that use them |
 | **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle: models, tables, and read and write operations |
 | **Workspaces** | packages and the dependencies between them, both declared and used in source |
 
-Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics are currently strongest for Node.js and TypeScript backends.
+Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend; the other languages get structure, imports and calls.
 
 ## How it works
 
@@ -74,7 +78,7 @@ Every number below comes from pinned open-source repositories and can be reprodu
 <p align="center"><img src="docs/assets/precision.svg" alt="Precision by relation type: HTTP routes 100%, call targets 100%, data access 100%" width="640"></p>
 
 **The graph is trustworthy.**
-- Against hand-written labels, 100% of reported routes, call targets, database accesses, React, Vue, Svelte and Angular components, component renders, pages and frontend → backend API requests are correct.
+- Against hand-written labels, 100% of reported routes, call targets, database accesses, React, Vue, Svelte and Angular components, component renders, pages, frontend → backend API requests and Pinia store reads and writes are correct.
 - Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React, Vue, SvelteKit and Angular frontends) are 100%.
 - Call recall (81.6%) is still growing; see [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 

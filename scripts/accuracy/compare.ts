@@ -20,6 +20,10 @@ export type PageLabel = { file: string; fullPath: string; kind: string; componen
 // A frontend call (file, line) that reaches the route `route` ("METHOD /path")
 // declared in `routeFile`.
 export type RequestLabel = { file: string; line: number; route: string; routeFile: string };
+export type StoreLabel = { file: string; name: string; library: string; kind: string };
+// A use of the store `store` declared in `storeFile` at (file, line), with
+// the members it reads and writes (READS_STORE / WRITES_STORE of that line).
+export type StoreAccessLabel = { file: string; line: number; store: string; storeFile: string; reads: string[]; writes: string[] };
 
 export type Labels = {
   sample: string;
@@ -38,6 +42,10 @@ export type Labels = {
   pages?: { scope: string[]; items: PageLabel[] };
   // Calls in `scope` that request a route of the repository (REQUESTS).
   requests?: { scope: string[]; items: RequestLabel[] };
+  // State stores declared in `scope`.
+  stores?: { scope: string[]; items: StoreLabel[] };
+  // Store uses in `scope` (hook calls, store references, selectors, dispatches).
+  storeAccess?: { scope: string[]; items: StoreAccessLabel[] };
 };
 
 export type Score = {
@@ -409,6 +417,74 @@ export function compareRequests(graph: Graph, labels: NonNullable<Labels["reques
     label.file === request.file && nearLine(label.line, request.line) && label.route === request.route && label.routeFile === request.routeFile
   ));
   const describe = (request: RequestLabel) => `${request.file}:${request.line} -> ${request.route} (${request.routeFile})`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+// Store nodes with their declaring file.
+export function scanStores(graph: Graph): StoreLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  return graph.relationships.flatMap((rel) => {
+    const file = rel.type === "DECLARES_STORE" ? byId.get(rel.from)?.properties.relativePath : undefined;
+    const store = byId.get(rel.to);
+    if (typeof file !== "string" || !store) return [];
+    return [{ file, name: String(store.properties.name), library: String(store.properties.library), kind: String(store.properties.kind) }];
+  });
+}
+
+export function compareStores(graph: Graph, labels: NonNullable<Labels["stores"]>): Score {
+  const found = scanStores(graph).filter((store) => inScope(store.file, labels.scope));
+  const result = pair(labels.items, found, (label, store) => (
+    label.file === store.file && label.name === store.name && label.library === store.library && label.kind === store.kind
+  ));
+  const describe = (store: StoreLabel) => `${store.file} ${store.library} ${store.kind} ${store.name}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+// READS_STORE and WRITES_STORE edges, merged per function, line and store.
+export function scanStoreAccess(graph: Graph): StoreAccessLabel[] {
+  const files = filePaths(graph);
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const fileOfStore = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    const file = rel.type === "DECLARES_STORE" ? byId.get(rel.from)?.properties.relativePath : undefined;
+    if (typeof file === "string") fileOfStore.set(rel.to, file);
+  }
+  const uses = new Map<string, StoreAccessLabel>();
+  for (const rel of graph.relationships) {
+    if (rel.type !== "READS_STORE" && rel.type !== "WRITES_STORE") continue;
+    const file = fileOfNodeId(rel.from, files);
+    const storeFile = fileOfStore.get(rel.to);
+    if (!file || !storeFile) continue;
+    const line = num(rel.properties.line);
+    const key = `${rel.from}\0${line}\0${rel.to}`;
+    const use = uses.get(key) ?? { file, line, store: String(byId.get(rel.to)?.properties.name), storeFile, reads: [], writes: [] };
+    const members = String(rel.properties.members ?? "").split(",").filter(Boolean);
+    (rel.type === "READS_STORE" ? use.reads : use.writes).push(...members);
+    uses.set(key, use);
+  }
+  return [...uses.values()];
+}
+
+const sameMembers = (a: readonly string[], b: readonly string[]) => {
+  const left = new Set(a);
+  const right = new Set(b);
+  return left.size === right.size && [...left].every((member) => right.has(member));
+};
+
+// A use is right when (file, line ±1) reaches the labeled store with the
+// labeled members read and written; other members are an FP and an FN.
+export function compareStoreAccess(graph: Graph, labels: NonNullable<Labels["storeAccess"]>): Score {
+  const found = scanStoreAccess(graph).filter((use) => inScope(use.file, labels.scope));
+  const result = pair(labels.items, found, (label, use) => (
+    label.file === use.file
+    && nearLine(label.line, use.line)
+    && label.store === use.store
+    && label.storeFile === use.storeFile
+    && sameMembers(label.reads, use.reads)
+    && sameMembers(label.writes, use.writes)
+  ));
+  const describe = (use: StoreAccessLabel) =>
+    `${use.file}:${use.line} -> ${use.storeFile} ${use.store} reads [${[...new Set(use.reads)].sort().join(",")}] writes [${[...new Set(use.writes)].sort().join(",")}]`;
   return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
 }
 
