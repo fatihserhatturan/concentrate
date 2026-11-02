@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 59
+        "result": 60
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 59,
+      "schemaVersion": 60,
       "stats": [
         {
           "table": "Repo",
@@ -928,7 +928,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.svelte:component:1:App",
@@ -940,6 +940,7 @@
             "endLine": 30,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"view\",\"props\":[\"todos\"],\"line\":23}]"
@@ -954,6 +955,7 @@
             "endLine": 18,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "start",
             "hooks": null,
             "pendingRenders": null
@@ -968,6 +970,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -982,6 +985,7 @@
             "endLine": 22,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "todo,remove",
             "hooks": null,
             "pendingRenders": null
@@ -996,6 +1000,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "todos,filter,onremove",
             "hooks": null,
             "pendingRenders": null
@@ -1010,6 +1015,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "variant,onclick,children",
             "hooks": null,
             "pendingRenders": null
@@ -1018,42 +1024,47 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
             "line": 20,
             "props": "todos,filter,onremove",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/Counter.svelte:component:1:Counter",
             "line": 21,
             "props": "start",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/ui/Button.svelte:component:1:Button",
             "line": 22,
             "props": "variant,onclick",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/Footer.svelte:component:1:Footer",
             "line": 29,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
             "child": "file:src/lib/components/TodoItem.svelte:component:1:TodoItem",
             "line": 15,
             "props": "todo,remove",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       },
@@ -1324,7 +1335,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.svelte:component:1:App",
@@ -1336,6 +1347,7 @@
             "endLine": 30,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"view\",\"props\":[\"todos\"],\"line\":23}]"
@@ -1350,6 +1362,7 @@
             "endLine": 18,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "start",
             "hooks": null,
             "pendingRenders": null
@@ -1364,6 +1377,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1378,6 +1392,7 @@
             "endLine": 22,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "todo,remove",
             "hooks": null,
             "pendingRenders": null
@@ -1392,6 +1407,7 @@
             "endLine": 19,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "todos,filter,onremove",
             "hooks": null,
             "pendingRenders": null
@@ -1406,6 +1422,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": "variant,onclick,children",
             "hooks": null,
             "pendingRenders": null
@@ -1414,42 +1431,47 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
             "line": 20,
             "props": "todos,filter,onremove",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/Counter.svelte:component:1:Counter",
             "line": 21,
             "props": "start",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/ui/Button.svelte:component:1:Button",
             "line": 22,
             "props": "variant,onclick",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/Footer.svelte:component:1:Footer",
             "line": 29,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
             "child": "file:src/lib/components/TodoItem.svelte:component:1:TodoItem",
             "line": 15,
             "props": "todo,remove",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       }

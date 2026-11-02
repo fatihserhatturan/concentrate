@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 59
+        "result": 60
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 59,
+      "schemaVersion": 60,
       "stats": [
         {
           "table": "Repo",
@@ -1018,7 +1018,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
             "id": "file:src/App.tsx:component:8:App",
@@ -1030,6 +1030,7 @@
             "endLine": 21,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Routes\",\"props\":[],\"line\":10},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":11},{\"name\":\"Route\",\"props\":[\"index\",\"element\"],\"line\":12},{\"name\":\"Route\",\"props\":[\"path\"],\"line\":13},{\"name\":\"Route\",\"props\":[\"index\",\"element\"],\"line\":14},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":15},{\"name\":\"Route\",\"props\":[\"path\",\"element\"],\"line\":17}]"
@@ -1044,6 +1045,7 @@
             "endLine": 4,
             "isExported": false,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1058,6 +1060,7 @@
             "endLine": 8,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1072,6 +1075,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1086,6 +1090,7 @@
             "endLine": 5,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": "[{\"name\":\"Outlet\",\"props\":[],\"line\":4}]"
@@ -1100,6 +1105,7 @@
             "endLine": 1,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1114,6 +1120,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1128,6 +1135,7 @@
             "endLine": 7,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1142,6 +1150,7 @@
             "endLine": 11,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1156,6 +1165,7 @@
             "endLine": 3,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1170,6 +1180,7 @@
             "endLine": 7,
             "isExported": true,
             "tagName": null,
+            "selector": null,
             "props": null,
             "hooks": null,
             "pendingRenders": null
@@ -1178,49 +1189,55 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/Layout.tsx:component:3:Layout",
             "line": 11,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/Home.tsx:component:1:Home",
             "line": 12,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/users.tsx:component:1:UserList",
             "line": 14,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/users.tsx:component:5:UserDetail",
             "line": 15,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/App.tsx:component:8:App",
             "child": "file:src/pages/NotFound.tsx:component:1:NotFound",
             "line": 17,
             "props": "",
-            "client": null
+            "client": null,
+            "template": null
           },
           {
             "parent": "file:src/Fake.tsx:component:6:Fake",
             "child": "file:src/Fake.tsx:component:2:Route",
             "line": 7,
             "props": "path",
-            "client": null
+            "client": null,
+            "template": null
           }
         ]
       },

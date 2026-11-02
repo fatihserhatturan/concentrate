@@ -425,16 +425,20 @@ export type ComponentInfo = {
   endLine: number | null;
   isExported: boolean | null;
   tagName: string | null;
+  // An Angular component's selector (`app-user`).
+  selector: string | null;
   // Declared prop names (Vue), in order.
   props: string[];
   // Built-in and custom hooks the component calls, by name.
   hooks: string[];
   // Rendered elements that resolved to no Component (library components).
-  unresolvedRenders: Array<{ name: string; props: string[]; line: number | null }>;
+  unresolvedRenders: Array<{ name: string; props: string[]; line: number | null; template?: string }>;
 };
 
-// `client`: an Astro island's hydration directive (`load`, `visible`, …).
-export type RenderEdge = { parent: string; child: string; line: number | null; props: string[]; client: string | null };
+// `client`: an Astro island's hydration directive (`load`, `visible`, …);
+// `template`: the template file the render is in (an Angular `templateUrl`),
+// when it is not the parent's file.
+export type RenderEdge = { parent: string; child: string; line: number | null; props: string[]; client: string | null; template: string | null };
 
 // Every component with its declaring file.
 export async function loadComponents(engine: IQueryEngine): Promise<Map<string, ComponentInfo>> {
@@ -442,7 +446,7 @@ export async function loadComponents(engine: IQueryEngine): Promise<Map<string, 
     MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component)
     RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework,
       file.relativePath AS file, component.line AS line, component.endLine AS endLine,
-      component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks,
+      component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks,
       component.pendingRenders AS pendingRenders
   `) as Row[];
   const components = new Map<string, ComponentInfo>();
@@ -459,6 +463,7 @@ export async function loadComponents(engine: IQueryEngine): Promise<Map<string, 
       endLine: num(row.endLine),
       isExported: typeof row.isExported === "boolean" ? row.isExported : null,
       tagName: str(row.tagName),
+      selector: str(row.selector),
       props: str(row.props)?.split(",").filter(Boolean) ?? [],
       hooks: str(row.hooks)?.split(",").filter(Boolean) ?? [],
       unresolvedRenders: parseRenders(row.pendingRenders),
@@ -472,9 +477,14 @@ function parseRenders(value: unknown): ComponentInfo["unresolvedRenders"] {
   try {
     const parsed = JSON.parse(value) as unknown;
     if (!Array.isArray(parsed)) return [];
-    return parsed.flatMap((item: { name?: unknown; props?: unknown; line?: unknown }) =>
+    return parsed.flatMap((item: { name?: unknown; props?: unknown; line?: unknown; template?: unknown }) =>
       typeof item?.name === "string"
-        ? [{ name: item.name, props: Array.isArray(item.props) ? item.props.filter((prop): prop is string => typeof prop === "string") : [], line: num(item.line) }]
+        ? [{
+          name: item.name,
+          props: Array.isArray(item.props) ? item.props.filter((prop): prop is string => typeof prop === "string") : [],
+          line: num(item.line),
+          ...(typeof item.template === "string" ? { template: item.template } : {}),
+        }]
         : []);
   } catch {
     return [];
@@ -485,13 +495,14 @@ function parseRenders(value: unknown): ComponentInfo["unresolvedRenders"] {
 export async function loadRenderEdges(engine: IQueryEngine): Promise<RenderEdge[]> {
   const rows = await engine.query(`
     MATCH (parent:Component)-[rel:RENDERS]->(child:Component)
-    RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client
+    RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client,
+      rel.template AS template
   `) as Row[];
   return rows.flatMap((row) => {
     const parent = str(row.parent);
     const child = str(row.child);
     return parent && child
-      ? [{ parent, child, line: num(row.line), props: str(row.props)?.split(",").filter(Boolean) ?? [], client: str(row.client) }]
+      ? [{ parent, child, line: num(row.line), props: str(row.props)?.split(",").filter(Boolean) ?? [], client: str(row.client), template: str(row.template) }]
       : [];
   });
 }

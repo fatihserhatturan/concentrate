@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 59;
+export const SCHEMA_VERSION = 60;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -40,7 +40,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "EntryPoint", properties: { kind: "STRING", trigger: "STRING", receiverName: "STRING", library: "STRING", line: "INT64", handlerName: "STRING" } },
   { label: "EnvVar", properties: { name: "STRING", isPublic: "BOOLEAN" } },
   { label: "Page", properties: { path: "STRING", fullPath: "STRING", framework: "STRING", router: "STRING", kind: "STRING", slot: "STRING", line: "INT64", component: "STRING", componentSource: "STRING" } },
-  { label: "Component", properties: { name: "STRING", framework: "STRING", kind: "STRING", tagName: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", props: "STRING", pendingRenders: "STRING", hooks: "STRING", lazySource: "STRING", lazyExport: "STRING", defaultExportWrapper: "STRING" } },
+  { label: "Component", properties: { name: "STRING", framework: "STRING", kind: "STRING", tagName: "STRING", selector: "STRING", templateUrl: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", props: "STRING", pendingRenders: "STRING", hooks: "STRING", lazySource: "STRING", lazyExport: "STRING", defaultExportWrapper: "STRING" } },
   { label: "Store", properties: { name: "STRING", library: "STRING", kind: "STRING", hook: "STRING", state: "STRING", getters: "STRING", actions: "STRING", line: "INT64", endLine: "INT64" } },
   { label: "ConfigValue", properties: { name: "STRING", value: "STRING", valueType: "STRING", line: "INT64" } },
   { label: "DataModel", properties: { name: "STRING", library: "STRING", declaredIn: "STRING", line: "INT64" } },
@@ -95,7 +95,7 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "REQUESTS", from: "Call", to: "Route", properties: { method: "STRING", url: "STRING", match: "STRING" } },
   { type: "COMPONENT_DEFINED_BY", from: "Component", to: "Class", properties: {} },
   { type: "COMPONENT_DEFINED_BY_FUNCTION", from: "Component", to: "Function", properties: {} },
-  { type: "RENDERS", from: "Component", to: "Component", properties: { props: "STRING", line: "INT64", client: "STRING" } },
+  { type: "RENDERS", from: "Component", to: "Component", properties: { props: "STRING", line: "INT64", client: "STRING", template: "STRING" } },
   { type: "USES_HOOK", from: "Function", to: "Function", properties: { line: "INT64" } },
   { type: "USES_CONTEXT", from: "Function", to: "Component", properties: { line: "INT64" } },
   { type: "ROUTE_LIFECYCLE_STEP", from: "Route", to: "Function", properties: { role: "STRING", scope: "STRING", hook: "STRING", orderIndex: "INT64" } },

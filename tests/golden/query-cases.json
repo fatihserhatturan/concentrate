@@ -889,6 +889,39 @@
         }
       }
     ],
+    "angular-components": [
+      {
+        "tool": "component_tree",
+        "args": {
+          "name": "AppComponent",
+          "depth": 2
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "UserCardComponent"
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "app-badge"
+        }
+      },
+      {
+        "tool": "find_component_usages",
+        "args": {
+          "name": "mat-icon"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "AvatarComponent"
+        }
+      }
+    ],
     "vanilla-html": [
       {
         "tool": "find_callers",

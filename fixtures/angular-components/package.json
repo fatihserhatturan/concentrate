@@ -1,0 +1,9 @@
+{
+  "name": "angular-components-fixture",
+  "private": true,
+  "dependencies": {
+    "@angular/core": "^19.0.0",
+    "@angular/common": "^19.0.0",
+    "vue-class-component": "^7.2.6"
+  }
+}

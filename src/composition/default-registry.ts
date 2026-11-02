@@ -19,6 +19,7 @@ import { componentGraphContributor } from "../integrations/frameworks/js-ts/reso
 import { nextjsPagesContributor, nextjsRoutesContributor } from "../integrations/frameworks/js-ts/nextjs.js";
 import { svelteKitContributor } from "../integrations/frameworks/js-ts/sveltekit.js";
 import { astroPagesContributor } from "../integrations/frameworks/js-ts/astro.js";
+import { angularTemplatesContributor } from "../integrations/frameworks/js-ts/angular.js";
 import { nuxtAutoImportsContributor, nuxtPagesContributor, nuxtServerRoutesContributor, vueGlobalComponentsContributor } from "../integrations/frameworks/js-ts/nuxt.js";
 import { storeAccessContributor } from "../integrations/frameworks/js-ts/resolution/store-access.js";
 import { httpRequestsContributor } from "../integrations/frameworks/js-ts/resolution/http-requests.js";
@@ -56,6 +57,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     nuxtAutoImportsContributor,
     storeAccessContributor,
     componentGraphContributor,
+    angularTemplatesContributor,
     vueGlobalComponentsContributor,
     nextjsPagesContributor,
     nuxtPagesContributor,

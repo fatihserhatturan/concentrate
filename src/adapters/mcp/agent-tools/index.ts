@@ -77,7 +77,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "component_tree",
-    description: `A UI component's tree: what it renders and what renders it (each with the props passed, the render line and an Astro island's client directive, up to depth levels), elements that resolved to no component (library components), the function or class that defines it, its hooks, and the contexts it reads directly or through custom hooks. ${budgetNote}`,
+    description: `A UI component's tree: what it renders and what renders it (each with the props passed, the render line, an Astro island's client directive and an Angular templateUrl's template file, up to depth levels), elements that resolved to no component (library components), the function or class that defines it, its hooks, and the contexts it reads directly or through custom hooks. ${budgetNote}`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
       file: { type: "string", description: "Optional scan-relative file path or path suffix of the component." },
@@ -87,7 +87,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "find_component_usages",
-    description: `Where a UI component is rendered: each render site with the rendering component, file, line, props passed and an Astro island's client directive; for a context, also the functions that read it (useContext / use). Elements of that name that resolved to no component (library components such as Link) are listed with resolved: false. ${budgetNote}`,
+    description: `Where a UI component is rendered: each render site with the rendering component, file (an Angular component's template file), line, props passed and an Astro island's client directive; for a context, also the functions that read it (useContext / use). Elements of that name that resolved to no component (library components such as Link) are listed with resolved: false. ${budgetNote}`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
       file: { type: "string", description: "Optional scan-relative file path or path suffix of the component; leaves out unresolved elements." },
