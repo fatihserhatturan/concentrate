@@ -214,9 +214,24 @@ function astroFrontmatter(source: string): { code: CodeRange; fenceEnd: number }
 // one attribute or text: `onclick={() => go(item)}` would end the tag at `=>`.
 // The inside becomes `_`, line breaks kept so positions stay; an attribute
 // value's braces become quotes, so a line break in it does not end it.
-// Scripts, styles and comments are left as they are.
 function maskSvelteExpressions(source: string): string {
   const chars = source.split("");
+  for (const { start, end } of svelteExpressions(source)) {
+    for (let inside = start + 1; inside < end; inside += 1) {
+      if (source[inside] !== "\n" && source[inside] !== "\r") chars[inside] = "_";
+    }
+    if (/=\s*$/u.test(source.slice(Math.max(0, start - 8), start))) {
+      chars[start] = "\"";
+      chars[end] = "\"";
+    }
+  }
+  return chars.join("");
+}
+
+// The `{…}` expressions of a Svelte file's markup: the offsets of their
+// braces. Scripts, styles and comments are skipped.
+export function svelteExpressions(source: string): Array<{ start: number; end: number }> {
+  const expressions: Array<{ start: number; end: number }> = [];
   const skip = /<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>|<!--[\s\S]*?-->/giu;
   let index = 0;
   while (index < source.length) {
@@ -234,16 +249,10 @@ function maskSvelteExpressions(source: string): string {
     }
     const end = closingBrace(source, index + 1);
     if (end === null) break;
-    for (let inside = index + 1; inside < end; inside += 1) {
-      if (source[inside] !== "\n" && source[inside] !== "\r") chars[inside] = "_";
-    }
-    if (/=\s*$/u.test(source.slice(Math.max(0, index - 8), index))) {
-      chars[index] = "\"";
-      chars[end] = "\"";
-    }
+    expressions.push({ start: index, end });
     index = end + 1;
   }
-  return chars.join("");
+  return expressions;
 }
 
 // The `}` that closes an expression whose code starts at `start`, past nested

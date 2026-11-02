@@ -642,6 +642,39 @@ Astro).
   (`{{ cart.count }}`), Options API helpers (`mapState`, `mapActions`,
   `mapStores`), and calls at the top level of a module (they have no
   function). A `<script setup>` block counts as one function.
+- Svelte stores: each top-level `const x = writable(…)` / `readable(…)` /
+  `derived(…)` with the factory imported from `svelte/store` (also in a
+  component's script) is a `Store` (library `svelte`, kind the factory)
+  named by the variable, which is also its `hook`; the start function or
+  `derived` callback, when it has a Function, is `STORE_DEFINED_BY_FUNCTION`.
+  A custom store, `const counter = createCounter()` where `createCounter` is
+  a function of the same file that calls a factory and returns an object
+  with `subscribe`, is kind `custom`: the factory is
+  `STORE_DEFINED_BY_FUNCTION`, the other returned names (not `set` and
+  `update`) are its `actions`, and an action declared as a function in the
+  factory is a `STORE_ACTION` (inline arrows in the returned object have no
+  Function). In a runes module (`.svelte.js` / `.svelte.ts`) a top-level
+  `$state(…)` is kind `state`, with an object literal's keys as `state`;
+  `$state` inside components and classes with `$state` fields are not
+  stores. Stores made in functions, `export default writable(…)` and
+  factories from other files are not read.
+- Svelte store use: a function's uses of a store binding are recorded on its
+  Function (`storeRefs`) and resolve, through imports and barrels, to the
+  store declared under that name. `$count`, `get(count)`, `subscribe` and
+  members read (`cart.items.length`) are `READS_STORE`; assigning or updating
+  `$count`, `set`, `update`, `bind:value={$count}`, members assigned or
+  mutated (`cart.items.push(x)`) and action calls (`counter.increment()`) are
+  `WRITES_STORE`, with the members in `members`. A binding counts when the
+  file declares the store, uses it as `$name`, imports it by name from a
+  runes module (`./cart.svelte.js`, `./cart.svelte`), or, in a component, a
+  runes module or a file importing from `svelte`, calls its `set` /
+  `update` / `subscribe` or passes it to `get`; so `count.set(1)` in a plain
+  `.ts` file that imports nothing from Svelte is not seen. The markup's uses
+  (`{$count}`, `onclick={counter.reset}`, `{cart.items.length}`) belong to
+  the instance `<script>` Function and are read from the expression text;
+  action calls in the markup have no Call node and no `CALL_RESOLVES_TO`.
+  Shadowing (a local variable or parameter with a store's name) is not
+  checked, and a store passed to another function is not followed.
 
 ## Review Process
 
