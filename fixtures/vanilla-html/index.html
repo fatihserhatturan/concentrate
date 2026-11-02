@@ -10,7 +10,7 @@
   <script type="application/ld+json">{ "@type": "WebSite" }</script>
 </head>
 <body>
-  <ul id="todos"></ul>
+  <ul id="todos" ondblclick="if (confirm('Clear?')) renderTodos()"></ul>
   <button id="add" onclick="renderTodos()">Add</button>
   <form onsubmit="return false">
     <todo-item></todo-item>

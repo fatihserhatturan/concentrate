@@ -1,7 +1,7 @@
 import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import { analyzeMemberCallExpression } from "../../languages/tree-sitter-utils.js";
-import { createEntrypointNode } from "./entrypoint-graph.js";
+import { createEntrypointNode, listenerHandlerName } from "./entrypoint-graph.js";
 import { indexFileFunctions, indexPassedToHandlers, stripStringQuotes } from "./file-index.js";
 
 // Browser DOM semantics: event listeners become EntryPoints (kind
@@ -101,7 +101,7 @@ export function applyDomAttributeSemantics(
           : valueNode?.text ?? "";
         if (value.trim() === "") continue;
 
-        const handlerName = /^\s*([A-Za-z_$][\w$]*)\s*\(/u.exec(value)?.[1] ?? null;
+        const handlerName = listenerHandlerName(/^\s*([A-Za-z_$][\w$]*)\s*\(/u.exec(value)?.[1]);
         const entrypoint = createEntrypointNode({
           fileNodeId,
           row: attribute.startPosition.row + 1,

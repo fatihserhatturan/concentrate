@@ -3,7 +3,7 @@ import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
 import type { GraphNode, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 import type { PendingRender } from "./react.js";
-import { createEntrypointNode } from "./entrypoint-graph.js";
+import { createEntrypointNode, listenerHandlerName } from "./entrypoint-graph.js";
 import { indexFileFunctions } from "./file-index.js";
 import { callsOwnedElsewhere, pascalCase, scriptBlockFunction } from "./vue.js";
 
@@ -200,7 +200,7 @@ function addListener(
   const expression = /^\{([\s\S]*)\}$/u.exec(value)?.[1]?.trim() ?? value;
   const handlerName = /^[A-Za-z_$][\w$]*$/u.test(expression)
     ? expression
-    : /^(?:async\s+)?(?:\([^()]*\)|[A-Za-z_$][\w$]*)\s*=>\s*\{?\s*(?:await\s+)?([A-Za-z_$][\w$]*)\s*\(/u.exec(expression)?.[1] ?? null;
+    : listenerHandlerName(/^(?:async\s+)?(?:\([^()]*\)|[A-Za-z_$][\w$]*)\s*=>\s*\{?\s*(?:await\s+)?([A-Za-z_$][\w$]*)\s*\(/u.exec(expression)?.[1]);
   const entrypoint = createEntrypointNode({
     fileNodeId,
     row: attribute.startPosition.row + 1,

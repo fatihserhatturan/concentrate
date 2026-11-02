@@ -73,7 +73,7 @@
           },
           {
             "table": "EntryPoint",
-            "count": 6
+            "count": 7
           },
           {
             "table": "EnvVar",
@@ -171,7 +171,7 @@
         },
         {
           "table": "EntryPoint",
-          "count": 6
+          "count": 7
         },
         {
           "table": "EnvVar",
@@ -448,6 +448,15 @@
         "rows": [
           {
             "file": "index.html",
+            "line": 13,
+            "kind": "dom-event",
+            "trigger": "dblclick",
+            "library": "dom",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "index.html",
             "line": 14,
             "kind": "dom-event",
             "trigger": "click",
@@ -510,6 +519,15 @@
       "entrypoints": [
         {
           "file": "index.html",
+          "line": 13,
+          "kind": "dom-event",
+          "trigger": "dblclick",
+          "library": "dom",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "index.html",
           "line": 14,
           "kind": "dom-event",
           "trigger": "click",
@@ -565,7 +583,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 6
+        "returned": 7
       }
     }
   },
@@ -931,6 +949,12 @@
         "rows": [
           {
             "kind": "dom-event",
+            "trigger": "dblclick",
+            "handlerName": null,
+            "line": 13
+          },
+          {
+            "kind": "dom-event",
             "trigger": "click",
             "handlerName": "renderTodos",
             "line": 14
@@ -976,6 +1000,12 @@
       "outline": [
         {
           "kind": "entrypoint:dom-event",
+          "trigger": "dblclick",
+          "handlerName": null,
+          "line": 13
+        },
+        {
+          "kind": "entrypoint:dom-event",
           "trigger": "click",
           "handlerName": "renderTodos",
           "line": 14
@@ -1001,7 +1031,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 4
+        "returned": 5
       }
     }
   }

@@ -73,7 +73,7 @@
           },
           {
             "table": "EntryPoint",
-            "count": 5
+            "count": 6
           },
           {
             "table": "EnvVar",
@@ -171,7 +171,7 @@
         },
         {
           "table": "EntryPoint",
-          "count": 5
+          "count": 6
         },
         {
           "table": "EnvVar",
@@ -756,6 +756,15 @@
             "file": "src/App.vue",
             "line": 13,
             "kind": "dom-event",
+            "trigger": "keydown",
+            "library": "vue",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/App.vue",
+            "line": 13,
+            "kind": "dom-event",
             "trigger": "keyup",
             "library": "vue",
             "handlerName": "save",
@@ -809,6 +818,15 @@
           "file": "src/App.vue",
           "line": 13,
           "kind": "dom-event",
+          "trigger": "keydown",
+          "library": "vue",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/App.vue",
+          "line": 13,
+          "kind": "dom-event",
           "trigger": "keyup",
           "library": "vue",
           "handlerName": "save",
@@ -826,7 +844,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 5
+        "returned": 6
       }
     }
   },

@@ -411,6 +411,26 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     },
   },
   {
+    name: "internet-sveltekit-realworld",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 62,
+      supportedFiles: 43,
+      parsedFiles: 43,
+      failedFiles: 0,
+      resolvedImports: 32,
+      unresolvedRelativeImports: 3,
+      nodes: 423,
+      relationships: 644,
+      fileClassifications: { production: 43, test: 0, fixture: 0, support: 0, generated: 0 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 11,
+        entrypoints: 2,
+      },
+    },
+  },
+  {
     name: "internet-nextjs-taxonomy",
     suite: "internet",
     expected: {

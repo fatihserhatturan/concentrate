@@ -73,7 +73,7 @@
           },
           {
             "table": "EntryPoint",
-            "count": 8
+            "count": 9
           },
           {
             "table": "EnvVar",
@@ -171,7 +171,7 @@
         },
         {
           "table": "EntryPoint",
-          "count": 8
+          "count": 9
         },
         {
           "table": "EnvVar",
@@ -623,6 +623,15 @@
             "handler": "clearDone"
           },
           {
+            "file": "src/App.svelte",
+            "line": 25,
+            "kind": "dom-event",
+            "trigger": "keydown",
+            "library": "svelte",
+            "handlerName": null,
+            "handler": null
+          },
+          {
             "file": "src/lib/components/Counter.svelte",
             "line": 17,
             "kind": "dom-event",
@@ -703,6 +712,15 @@
           "handler": "clearDone"
         },
         {
+          "file": "src/App.svelte",
+          "line": 25,
+          "kind": "dom-event",
+          "trigger": "keydown",
+          "library": "svelte",
+          "handlerName": null,
+          "handler": null
+        },
+        {
           "file": "src/lib/components/Counter.svelte",
           "line": 17,
           "kind": "dom-event",
@@ -768,7 +786,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 8
+        "returned": 9
       }
     }
   },
@@ -1494,6 +1512,15 @@
             "handler": "clearDone"
           },
           {
+            "file": "src/App.svelte",
+            "line": 25,
+            "kind": "dom-event",
+            "trigger": "keydown",
+            "library": "svelte",
+            "handlerName": null,
+            "handler": null
+          },
+          {
             "file": "src/lib/components/Counter.svelte",
             "line": 17,
             "kind": "dom-event",
@@ -1574,6 +1601,15 @@
           "handler": "clearDone"
         },
         {
+          "file": "src/App.svelte",
+          "line": 25,
+          "kind": "dom-event",
+          "trigger": "keydown",
+          "library": "svelte",
+          "handlerName": null,
+          "handler": null
+        },
+        {
           "file": "src/lib/components/Counter.svelte",
           "line": 17,
           "kind": "dom-event",
@@ -1639,7 +1675,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 8
+        "returned": 9
       }
     }
   },

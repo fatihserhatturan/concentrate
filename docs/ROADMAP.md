@@ -745,7 +745,7 @@ Reuses the SFC splitter (Phase 10), `Component` and `RENDERS` (Phase 11), `Page`
 ### Acceptance criteria
 
 - [x] Fixtures and golden coverage for Svelte components and stores, SvelteKit routes and Astro pages and islands
-- [ ] A pinned Svelte or SvelteKit sample with hand labels in `bench:accuracy`
+- [x] A pinned Svelte or SvelteKit sample with hand labels in `bench:accuracy`
 - [x] Precision stays at 100%; recall is reported
 
 ## Phase 16: Angular ([#81](https://github.com/fatihserhatturan/concentrate/issues/81))

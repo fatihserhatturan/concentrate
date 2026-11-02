@@ -13,7 +13,8 @@
 {"kind":"node","id":"file:src/App.vue:entrypoint:11:26:dom-event:click","label":"EntryPoint","properties":{"handlerName":"select","kind":"dom-event","library":"vue","line":11,"receiverName":"button","trigger":"click"}}
 {"kind":"node","id":"file:src/App.vue:entrypoint:12:10:dom-event:submit","label":"EntryPoint","properties":{"handlerName":"save","kind":"dom-event","library":"vue","line":12,"receiverName":"form","trigger":"submit"}}
 {"kind":"node","id":"file:src/App.vue:entrypoint:13:13:dom-event:keyup","label":"EntryPoint","properties":{"handlerName":"save","kind":"dom-event","library":"vue","line":13,"receiverName":"input","trigger":"keyup"}}
-{"kind":"node","id":"file:src/App.vue:entrypoint:13:37:dom-event:input","label":"EntryPoint","properties":{"handlerName":null,"kind":"dom-event","library":"vue","line":13,"receiverName":"input","trigger":"input"}}
+{"kind":"node","id":"file:src/App.vue:entrypoint:13:37:dom-event:keydown","label":"EntryPoint","properties":{"handlerName":null,"kind":"dom-event","library":"vue","line":13,"receiverName":"input","trigger":"keydown"}}
+{"kind":"node","id":"file:src/App.vue:entrypoint:13:70:dom-event:input","label":"EntryPoint","properties":{"handlerName":null,"kind":"dom-event","library":"vue","line":13,"receiverName":"input","trigger":"input"}}
 {"kind":"node","id":"file:src/App.vue:function:19:<script setup>","label":"Function","properties":{"className":null,"endLine":36,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"script_setup","line":19,"methodKind":null,"name":"<script setup>","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/App.vue:function:19:<script setup>:call:29:24:useUsers","label":"Call","properties":{"args":"[]","callee":"useUsers","columnNumber":24,"expression":"useUsers","line":29,"name":"useUsers","receiver":null}}
 {"kind":"node","id":"file:src/App.vue:function:31:<onMounted:arg0>","label":"Function","properties":{"className":null,"endLine":31,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":31,"methodKind":null,"name":"<onMounted:arg0>","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -155,7 +156,8 @@
 {"kind":"rel","from":"file:src/App.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/App.vue:entrypoint:11:26:dom-event:click","properties":{}}
 {"kind":"rel","from":"file:src/App.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/App.vue:entrypoint:12:10:dom-event:submit","properties":{}}
 {"kind":"rel","from":"file:src/App.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/App.vue:entrypoint:13:13:dom-event:keyup","properties":{}}
-{"kind":"rel","from":"file:src/App.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/App.vue:entrypoint:13:37:dom-event:input","properties":{}}
+{"kind":"rel","from":"file:src/App.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/App.vue:entrypoint:13:37:dom-event:keydown","properties":{}}
+{"kind":"rel","from":"file:src/App.vue","type":"DECLARES_ENTRYPOINT","to":"file:src/App.vue:entrypoint:13:70:dom-event:input","properties":{}}
 {"kind":"rel","from":"file:src/App.vue","type":"DEFINES_FUNCTION","to":"file:src/App.vue:function:19:<script setup>","properties":{}}
 {"kind":"rel","from":"file:src/App.vue","type":"DEFINES_FUNCTION","to":"file:src/App.vue:function:31:<onMounted:arg0>","properties":{}}
 {"kind":"rel","from":"file:src/App.vue","type":"DEFINES_FUNCTION","to":"file:src/App.vue:function:32:select","properties":{}}

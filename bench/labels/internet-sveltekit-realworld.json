@@ -1,0 +1,820 @@
+{
+  "sample": "internet-sveltekit-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Routes: every form action of a +page.server.js under src/routes/ (export const actions = { \u2026 }), a POST to the page's path, ?/name for a named action; there is no +server.js. Components: every .svelte file under src/, one component each, named after its file in PascalCase (+page.svelte is Page, index.svelte is Index). Renders: every element in markup that renders a component of the repository, one label per element; $lib resolves to src/lib through the SvelteKit default. Pages: every +page, +layout and +error .svelte file under src/routes/, with the path of its folder. Calls: every call site in the listed files; the api namespace import ($lib/api, also without extension) resolves to src/lib/api.js, and URL, FormData, Headers and @sveltejs/kit helpers (error, redirect, fail) stay unresolved.",
+  "routes": {
+    "scope": [
+      "src/routes/"
+    ],
+    "items": [
+      {
+        "method": "POST",
+        "path": "/article/[slug]?/createComment",
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 21
+      },
+      {
+        "method": "POST",
+        "path": "/article/[slug]?/deleteComment",
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 37
+      },
+      {
+        "method": "POST",
+        "path": "/article/[slug]?/deleteArticle",
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 46
+      },
+      {
+        "method": "POST",
+        "path": "/article/[slug]?/toggleFavorite",
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 53
+      },
+      {
+        "method": "POST",
+        "path": "/editor",
+        "file": "src/routes/editor/+page.server.js",
+        "line": 11
+      },
+      {
+        "method": "POST",
+        "path": "/editor/[slug]",
+        "file": "src/routes/editor/[slug]/+page.server.js",
+        "line": 13
+      },
+      {
+        "method": "POST",
+        "path": "/login",
+        "file": "src/routes/login/+page.server.js",
+        "line": 11
+      },
+      {
+        "method": "POST",
+        "path": "/register",
+        "file": "src/routes/register/+page.server.js",
+        "line": 12
+      },
+      {
+        "method": "POST",
+        "path": "/profile/@[user]?/toggleFollow",
+        "file": "src/routes/profile/@[user]/+page.server.js",
+        "line": 13
+      },
+      {
+        "method": "POST",
+        "path": "/settings?/logout",
+        "file": "src/routes/settings/+page.server.js",
+        "line": 10
+      },
+      {
+        "method": "POST",
+        "path": "/settings?/save",
+        "file": "src/routes/settings/+page.server.js",
+        "line": 15
+      }
+    ]
+  },
+  "components": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/lib/ArticleList/ArticlePreview.svelte",
+        "name": "ArticlePreview",
+        "line": 1
+      },
+      {
+        "file": "src/lib/ArticleList/index.svelte",
+        "name": "Index",
+        "line": 1
+      },
+      {
+        "file": "src/lib/ListErrors.svelte",
+        "name": "ListErrors",
+        "line": 1
+      },
+      {
+        "file": "src/routes/+error.svelte",
+        "name": "Error",
+        "line": 1
+      },
+      {
+        "file": "src/routes/+layout.svelte",
+        "name": "Layout",
+        "line": 1
+      },
+      {
+        "file": "src/routes/+page.svelte",
+        "name": "Page",
+        "line": 1
+      },
+      {
+        "file": "src/routes/Nav.svelte",
+        "name": "Nav",
+        "line": 1
+      },
+      {
+        "file": "src/routes/Pagination.svelte",
+        "name": "Pagination",
+        "line": 1
+      },
+      {
+        "file": "src/routes/PreloadingIndicator.svelte",
+        "name": "PreloadingIndicator",
+        "line": 1
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.svelte",
+        "name": "Page",
+        "line": 1
+      },
+      {
+        "file": "src/routes/article/[slug]/ArticleMeta.svelte",
+        "name": "ArticleMeta",
+        "line": 1
+      },
+      {
+        "file": "src/routes/article/[slug]/Comment.svelte",
+        "name": "Comment",
+        "line": 1
+      },
+      {
+        "file": "src/routes/article/[slug]/CommentContainer.svelte",
+        "name": "CommentContainer",
+        "line": 1
+      },
+      {
+        "file": "src/routes/article/[slug]/CommentInput.svelte",
+        "name": "CommentInput",
+        "line": 1
+      },
+      {
+        "file": "src/routes/editor/+page.svelte",
+        "name": "Page",
+        "line": 1
+      },
+      {
+        "file": "src/routes/editor/Editor.svelte",
+        "name": "Editor",
+        "line": 1
+      },
+      {
+        "file": "src/routes/editor/[slug]/+page.svelte",
+        "name": "Page",
+        "line": 1
+      },
+      {
+        "file": "src/routes/login/+page.svelte",
+        "name": "Page",
+        "line": 1
+      },
+      {
+        "file": "src/routes/profile/+page.svelte",
+        "name": "Page",
+        "line": 1
+      },
+      {
+        "file": "src/routes/profile/@[user]/+layout.svelte",
+        "name": "Layout",
+        "line": 1
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.svelte",
+        "name": "Page",
+        "line": 1
+      },
+      {
+        "file": "src/routes/profile/@[user]/favorites/+page.svelte",
+        "name": "Page",
+        "line": 1
+      },
+      {
+        "file": "src/routes/register/+page.svelte",
+        "name": "Page",
+        "line": 1
+      },
+      {
+        "file": "src/routes/settings/+page.svelte",
+        "name": "Page",
+        "line": 1
+      }
+    ]
+  },
+  "renders": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/lib/ArticleList/index.svelte",
+        "parent": "Index",
+        "line": 13,
+        "child": "ArticlePreview",
+        "childFile": "src/lib/ArticleList/ArticlePreview.svelte"
+      },
+      {
+        "file": "src/routes/+layout.svelte",
+        "parent": "Layout",
+        "line": 15,
+        "child": "PreloadingIndicator",
+        "childFile": "src/routes/PreloadingIndicator.svelte"
+      },
+      {
+        "file": "src/routes/+layout.svelte",
+        "parent": "Layout",
+        "line": 18,
+        "child": "Nav",
+        "childFile": "src/routes/Nav.svelte"
+      },
+      {
+        "file": "src/routes/+page.svelte",
+        "parent": "Page",
+        "line": 63,
+        "child": "Index",
+        "childFile": "src/lib/ArticleList/index.svelte"
+      },
+      {
+        "file": "src/routes/+page.svelte",
+        "parent": "Page",
+        "line": 64,
+        "child": "Pagination",
+        "childFile": "src/routes/Pagination.svelte"
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.svelte",
+        "parent": "Page",
+        "line": 16,
+        "child": "ArticleMeta",
+        "childFile": "src/routes/article/[slug]/ArticleMeta.svelte"
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.svelte",
+        "parent": "Page",
+        "line": 40,
+        "child": "CommentContainer",
+        "childFile": "src/routes/article/[slug]/CommentContainer.svelte"
+      },
+      {
+        "file": "src/routes/article/[slug]/CommentContainer.svelte",
+        "parent": "CommentContainer",
+        "line": 11,
+        "child": "CommentInput",
+        "childFile": "src/routes/article/[slug]/CommentInput.svelte"
+      },
+      {
+        "file": "src/routes/article/[slug]/CommentContainer.svelte",
+        "parent": "CommentContainer",
+        "line": 23,
+        "child": "Comment",
+        "childFile": "src/routes/article/[slug]/Comment.svelte"
+      },
+      {
+        "file": "src/routes/editor/+page.svelte",
+        "parent": "Page",
+        "line": 7,
+        "child": "Editor",
+        "childFile": "src/routes/editor/Editor.svelte"
+      },
+      {
+        "file": "src/routes/editor/Editor.svelte",
+        "parent": "Editor",
+        "line": 16,
+        "child": "ListErrors",
+        "childFile": "src/lib/ListErrors.svelte"
+      },
+      {
+        "file": "src/routes/editor/[slug]/+page.svelte",
+        "parent": "Page",
+        "line": 7,
+        "child": "Editor",
+        "childFile": "src/routes/editor/Editor.svelte"
+      },
+      {
+        "file": "src/routes/login/+page.svelte",
+        "parent": "Page",
+        "line": 21,
+        "child": "ListErrors",
+        "childFile": "src/lib/ListErrors.svelte"
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.svelte",
+        "parent": "Page",
+        "line": 7,
+        "child": "Index",
+        "childFile": "src/lib/ArticleList/index.svelte"
+      },
+      {
+        "file": "src/routes/profile/@[user]/favorites/+page.svelte",
+        "parent": "Page",
+        "line": 7,
+        "child": "Index",
+        "childFile": "src/lib/ArticleList/index.svelte"
+      },
+      {
+        "file": "src/routes/register/+page.svelte",
+        "parent": "Page",
+        "line": 21,
+        "child": "ListErrors",
+        "childFile": "src/lib/ListErrors.svelte"
+      },
+      {
+        "file": "src/routes/settings/+page.svelte",
+        "parent": "Page",
+        "line": 18,
+        "child": "ListErrors",
+        "childFile": "src/lib/ListErrors.svelte"
+      }
+    ]
+  },
+  "pages": {
+    "scope": [
+      "src/routes/"
+    ],
+    "items": [
+      {
+        "file": "src/routes/+error.svelte",
+        "fullPath": "/",
+        "kind": "error",
+        "component": "Error"
+      },
+      {
+        "file": "src/routes/+layout.svelte",
+        "fullPath": "/",
+        "kind": "layout",
+        "component": "Layout"
+      },
+      {
+        "file": "src/routes/+page.svelte",
+        "fullPath": "/",
+        "kind": "page",
+        "component": "Page"
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.svelte",
+        "fullPath": "/article/[slug]",
+        "kind": "page",
+        "component": "Page"
+      },
+      {
+        "file": "src/routes/editor/+page.svelte",
+        "fullPath": "/editor",
+        "kind": "page",
+        "component": "Page"
+      },
+      {
+        "file": "src/routes/editor/[slug]/+page.svelte",
+        "fullPath": "/editor/[slug]",
+        "kind": "page",
+        "component": "Page"
+      },
+      {
+        "file": "src/routes/login/+page.svelte",
+        "fullPath": "/login",
+        "kind": "page",
+        "component": "Page"
+      },
+      {
+        "file": "src/routes/profile/+page.svelte",
+        "fullPath": "/profile",
+        "kind": "page",
+        "component": "Page"
+      },
+      {
+        "file": "src/routes/profile/@[user]/+layout.svelte",
+        "fullPath": "/profile/@[user]",
+        "kind": "layout",
+        "component": "Layout"
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.svelte",
+        "fullPath": "/profile/@[user]",
+        "kind": "page",
+        "component": "Page"
+      },
+      {
+        "file": "src/routes/profile/@[user]/favorites/+page.svelte",
+        "fullPath": "/profile/@[user]/favorites",
+        "kind": "page",
+        "component": "Page"
+      },
+      {
+        "file": "src/routes/register/+page.svelte",
+        "fullPath": "/register",
+        "kind": "page",
+        "component": "Page"
+      },
+      {
+        "file": "src/routes/settings/+page.svelte",
+        "fullPath": "/settings",
+        "kind": "page",
+        "component": "Page"
+      }
+    ]
+  },
+  "calls": {
+    "scope": null,
+    "files": [
+      "src/lib/api.js",
+      "src/routes/+page.server.js",
+      "src/routes/article/[slug]/+page.server.js",
+      "src/routes/profile/@[user]/+page.server.js",
+      "src/routes/profile/@[user]/get_articles.js"
+    ],
+    "items": [
+      {
+        "file": "src/lib/api.js",
+        "line": 10,
+        "callee": "stringify",
+        "target": null
+      },
+      {
+        "file": "src/lib/api.js",
+        "line": 17,
+        "callee": "fetch",
+        "target": null
+      },
+      {
+        "file": "src/lib/api.js",
+        "line": 19,
+        "callee": "text",
+        "target": null
+      },
+      {
+        "file": "src/lib/api.js",
+        "line": 20,
+        "callee": "parse",
+        "target": null
+      },
+      {
+        "file": "src/lib/api.js",
+        "line": 23,
+        "callee": "error",
+        "target": null
+      },
+      {
+        "file": "src/lib/api.js",
+        "line": 27,
+        "callee": "send",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "send"
+        }
+      },
+      {
+        "file": "src/lib/api.js",
+        "line": 31,
+        "callee": "send",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "send"
+        }
+      },
+      {
+        "file": "src/lib/api.js",
+        "line": 35,
+        "callee": "send",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "send"
+        }
+      },
+      {
+        "file": "src/lib/api.js",
+        "line": 39,
+        "callee": "send",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "send"
+        }
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 6,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 7,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 8,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 12,
+        "callee": "URLSearchParams",
+        "target": null
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 14,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 15,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 16,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 18,
+        "callee": "all",
+        "target": null
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 19,
+        "callee": "get",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "get"
+        }
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 20,
+        "callee": "get",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "get"
+        }
+      },
+      {
+        "file": "src/routes/+page.server.js",
+        "line": 25,
+        "callee": "ceil",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 8,
+        "callee": "all",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 9,
+        "callee": "get",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "get"
+        }
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 10,
+        "callee": "get",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "get"
+        }
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 13,
+        "callee": "marked",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 14,
+        "callee": "sanitizeHtml",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 22,
+        "callee": "error",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 24,
+        "callee": "formData",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 26,
+        "callee": "post",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "post"
+        }
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 30,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 38,
+        "callee": "error",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 40,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 41,
+        "callee": "del",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "del"
+        }
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 43,
+        "callee": "error",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 47,
+        "callee": "error",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 49,
+        "callee": "del",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "del"
+        }
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 50,
+        "callee": "redirect",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 54,
+        "callee": "error",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 56,
+        "callee": "formData",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 57,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 60,
+        "callee": "post",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "post"
+        }
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 62,
+        "callee": "del",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "del"
+        }
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 65,
+        "callee": "redirect",
+        "target": null
+      },
+      {
+        "file": "src/routes/article/[slug]/+page.server.js",
+        "line": 65,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.server.js",
+        "line": 7,
+        "callee": "get_articles",
+        "target": {
+          "file": "src/routes/profile/@[user]/get_articles.js",
+          "name": "get_articles"
+        }
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.server.js",
+        "line": 14,
+        "callee": "error",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.server.js",
+        "line": 16,
+        "callee": "formData",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.server.js",
+        "line": 17,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.server.js",
+        "line": 20,
+        "callee": "post",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "post"
+        }
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.server.js",
+        "line": 21,
+        "callee": "del",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "del"
+        }
+      },
+      {
+        "file": "src/routes/profile/@[user]/+page.server.js",
+        "line": 24,
+        "callee": "fail",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/get_articles.js",
+        "line": 5,
+        "callee": "get",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/get_articles.js",
+        "line": 7,
+        "callee": "URLSearchParams",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/get_articles.js",
+        "line": 8,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/get_articles.js",
+        "line": 9,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/get_articles.js",
+        "line": 10,
+        "callee": "set",
+        "target": null
+      },
+      {
+        "file": "src/routes/profile/@[user]/get_articles.js",
+        "line": 12,
+        "callee": "get",
+        "target": {
+          "file": "src/lib/api.js",
+          "name": "get"
+        }
+      },
+      {
+        "file": "src/routes/profile/@[user]/get_articles.js",
+        "line": 19,
+        "callee": "ceil",
+        "target": null
+      }
+    ]
+  }
+}

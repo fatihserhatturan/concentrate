@@ -221,3 +221,12 @@ export function createEntrypointNode(input: {
     },
   };
 }
+
+const statementKeywords = new Set(["if", "for", "while", "switch", "with", "return", "typeof", "void", "delete"]);
+
+// The name an inline listener's code calls first (`save(…)` in
+// `onclick="save(…)"`); code that starts with a statement
+// (`if (confirm(…)) remove()`) names no handler.
+export function listenerHandlerName(name: string | undefined): string | null {
+  return name && !statementKeywords.has(name) ? name : null;
+}

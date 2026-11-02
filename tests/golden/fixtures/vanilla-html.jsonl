@@ -5,6 +5,7 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"vanilla-html","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:js","label":"Directory","properties":{"name":"js","path":"<root>/js","relativePath":"js"}}
 {"kind":"node","id":"file:index.html","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"html","path":"<root>/index.html","relativePath":"index.html","sourceType":"production"}}
+{"kind":"node","id":"file:index.html:entrypoint:13:17:dom-event:dblclick","label":"EntryPoint","properties":{"handlerName":null,"kind":"dom-event","library":"dom","line":13,"receiverName":"ul","trigger":"dblclick"}}
 {"kind":"node","id":"file:index.html:entrypoint:14:19:dom-event:click","label":"EntryPoint","properties":{"handlerName":"renderTodos","kind":"dom-event","library":"dom","line":14,"receiverName":"button","trigger":"click"}}
 {"kind":"node","id":"file:index.html:entrypoint:15:8:dom-event:submit","label":"EntryPoint","properties":{"handlerName":null,"kind":"dom-event","library":"dom","line":15,"receiverName":"form","trigger":"submit"}}
 {"kind":"node","id":"file:index.html:function:18:renderTodos","label":"Function","properties":{"className":null,"endLine":18,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":18,"methodKind":null,"name":"renderTodos","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -56,6 +57,7 @@
 {"kind":"rel","from":"dir:js","type":"CONTAINS_FILE","to":"file:js/store.js","properties":{}}
 {"kind":"rel","from":"dir:js","type":"CONTAINS_FILE","to":"file:js/todo-item.js","properties":{}}
 {"kind":"rel","from":"dir:js","type":"CONTAINS_FILE","to":"file:js/vendor.js","properties":{}}
+{"kind":"rel","from":"file:index.html","type":"DECLARES_ENTRYPOINT","to":"file:index.html:entrypoint:13:17:dom-event:dblclick","properties":{}}
 {"kind":"rel","from":"file:index.html","type":"DECLARES_ENTRYPOINT","to":"file:index.html:entrypoint:14:19:dom-event:click","properties":{}}
 {"kind":"rel","from":"file:index.html","type":"DECLARES_ENTRYPOINT","to":"file:index.html:entrypoint:15:8:dom-event:submit","properties":{}}
 {"kind":"rel","from":"file:index.html","type":"DEFINES_FUNCTION","to":"file:index.html:function:18:renderTodos","properties":{}}
