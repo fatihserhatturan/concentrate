@@ -765,8 +765,8 @@ Angular is decorator-based like NestJS. The decorator route graph (`createDecora
 
 ### Services and DI
 
-- [ ] `@Injectable` services and constructor or `inject()` injection, reusing the NestJS DI resolution
-- [ ] `@NgModule` declarations, imports and providers
+- [x] `@Injectable` services and constructor or `inject()` injection, reusing the NestJS DI resolution
+- [x] `@NgModule` declarations, imports and providers
 
 ### Routing and API
 

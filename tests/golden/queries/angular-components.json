@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 60
+        "result": 61
       },
       {
         "method": "stats",
@@ -25,35 +25,35 @@
           },
           {
             "table": "File",
-            "count": 9
+            "count": 13
           },
           {
             "table": "Import",
-            "count": 11
+            "count": 21
           },
           {
             "table": "Function",
-            "count": 9
+            "count": 14
           },
           {
             "table": "Class",
-            "count": 8
+            "count": 14
           },
           {
             "table": "Field",
-            "count": 12
+            "count": 16
           },
           {
             "table": "Variable",
-            "count": 0
+            "count": 1
           },
           {
             "table": "Decorator",
-            "count": 11
+            "count": 17
           },
           {
             "table": "Interface",
-            "count": 0
+            "count": 1
           },
           {
             "table": "TypeAlias",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 5
+            "count": 9
           },
           {
             "table": "Route",
@@ -93,7 +93,7 @@
           },
           {
             "table": "Component",
-            "count": 6
+            "count": 8
           },
           {
             "table": "Page",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 60,
+      "schemaVersion": 61,
       "stats": [
         {
           "table": "Repo",
@@ -123,35 +123,35 @@
         },
         {
           "table": "File",
-          "count": 9
+          "count": 13
         },
         {
           "table": "Import",
-          "count": 11
+          "count": 21
         },
         {
           "table": "Function",
-          "count": 9
+          "count": 14
         },
         {
           "table": "Class",
-          "count": 8
+          "count": 14
         },
         {
           "table": "Field",
-          "count": 12
+          "count": 16
         },
         {
           "table": "Variable",
-          "count": 0
+          "count": 1
         },
         {
           "table": "Decorator",
-          "count": 11
+          "count": 17
         },
         {
           "table": "Interface",
-          "count": 0
+          "count": 1
         },
         {
           "table": "TypeAlias",
@@ -163,7 +163,7 @@
         },
         {
           "table": "Call",
-          "count": 5
+          "count": 9
         },
         {
           "table": "Route",
@@ -191,7 +191,7 @@
         },
         {
           "table": "Component",
-          "count": 6
+          "count": 8
         },
         {
           "table": "Page",
@@ -223,7 +223,15 @@
             "name": "AppComponent",
             "kind": "Class",
             "file": "src/app/app.component.ts",
-            "line": 11,
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "LoggerService",
+            "kind": "Class",
+            "file": "src/app/logger.service.ts",
+            "line": 4,
             "isExported": true,
             "relationship": "DEFINES_CLASS"
           },
@@ -247,7 +255,7 @@
             "name": "UserCardComponent",
             "kind": "Class",
             "file": "src/app/user-card.component.ts",
-            "line": 15,
+            "line": 16,
             "isExported": true,
             "relationship": "DEFINES_CLASS"
           },
@@ -255,7 +263,7 @@
             "name": "UserListComponent",
             "kind": "Class",
             "file": "src/app/user-list.component.ts",
-            "line": 9,
+            "line": 10,
             "isExported": true,
             "relationship": "DEFINES_CLASS"
           },
@@ -263,7 +271,23 @@
             "name": "UserListModule",
             "kind": "Class",
             "file": "src/app/user-list.component.ts",
-            "line": 26,
+            "line": 29,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "UserService",
+            "kind": "Class",
+            "file": "src/app/user.service.ts",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "UserStore",
+            "kind": "Class",
+            "file": "src/app/user.store.ts",
+            "line": 4,
             "isExported": true,
             "relationship": "DEFINES_CLASS"
           },
@@ -271,7 +295,31 @@
             "name": "LegacyBadgeComponent",
             "kind": "Class",
             "file": "src/legacy/badge.component.ts",
-            "line": 5,
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "LegacyListComponent",
+            "kind": "Class",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "LegacyPanelComponent",
+            "kind": "Class",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "LegacyModule",
+            "kind": "Class",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 13,
             "isExported": true,
             "relationship": "DEFINES_CLASS"
           },
@@ -317,7 +365,15 @@
           "name": "AppComponent",
           "kind": "Class",
           "file": "src/app/app.component.ts",
-          "line": 11,
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "LoggerService",
+          "kind": "Class",
+          "file": "src/app/logger.service.ts",
+          "line": 4,
           "isExported": true,
           "relationship": "DEFINES_CLASS"
         },
@@ -341,7 +397,7 @@
           "name": "UserCardComponent",
           "kind": "Class",
           "file": "src/app/user-card.component.ts",
-          "line": 15,
+          "line": 16,
           "isExported": true,
           "relationship": "DEFINES_CLASS"
         },
@@ -349,7 +405,7 @@
           "name": "UserListComponent",
           "kind": "Class",
           "file": "src/app/user-list.component.ts",
-          "line": 9,
+          "line": 10,
           "isExported": true,
           "relationship": "DEFINES_CLASS"
         },
@@ -357,7 +413,23 @@
           "name": "UserListModule",
           "kind": "Class",
           "file": "src/app/user-list.component.ts",
-          "line": 26,
+          "line": 29,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "UserService",
+          "kind": "Class",
+          "file": "src/app/user.service.ts",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "UserStore",
+          "kind": "Class",
+          "file": "src/app/user.store.ts",
+          "line": 4,
           "isExported": true,
           "relationship": "DEFINES_CLASS"
         },
@@ -365,7 +437,31 @@
           "name": "LegacyBadgeComponent",
           "kind": "Class",
           "file": "src/legacy/badge.component.ts",
-          "line": 5,
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "LegacyListComponent",
+          "kind": "Class",
+          "file": "src/legacy/legacy.module.ts",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "LegacyPanelComponent",
+          "kind": "Class",
+          "file": "src/legacy/legacy.module.ts",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "LegacyModule",
+          "kind": "Class",
+          "file": "src/legacy/legacy.module.ts",
+          "line": 13,
           "isExported": true,
           "relationship": "DEFINES_CLASS"
         },
@@ -380,7 +476,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 8
+        "returned": 14
       }
     }
   },
@@ -401,7 +497,14 @@
             "file": "src/app/app.component.ts",
             "name": "AppComponent",
             "kind": "Class",
-            "line": 11,
+            "line": 13,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/app/logger.service.ts",
+            "name": "LoggerService",
+            "kind": "Class",
+            "line": 4,
             "relationship": "DEFINES_CLASS"
           },
           {
@@ -422,28 +525,63 @@
             "file": "src/app/user-card.component.ts",
             "name": "UserCardComponent",
             "kind": "Class",
-            "line": 15,
+            "line": 16,
             "relationship": "DEFINES_CLASS"
           },
           {
             "file": "src/app/user-list.component.ts",
             "name": "UserListComponent",
             "kind": "Class",
-            "line": 9,
+            "line": 10,
             "relationship": "DEFINES_CLASS"
           },
           {
             "file": "src/app/user-list.component.ts",
             "name": "UserListModule",
             "kind": "Class",
-            "line": 26,
+            "line": 29,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/app/user.service.ts",
+            "name": "UserService",
+            "kind": "Class",
+            "line": 11,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/app/user.store.ts",
+            "name": "UserStore",
+            "kind": "Class",
+            "line": 4,
             "relationship": "DEFINES_CLASS"
           },
           {
             "file": "src/legacy/badge.component.ts",
             "name": "LegacyBadgeComponent",
             "kind": "Class",
-            "line": 5,
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/legacy/legacy.module.ts",
+            "name": "LegacyListComponent",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/legacy/legacy.module.ts",
+            "name": "LegacyPanelComponent",
+            "kind": "Class",
+            "line": 10,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/legacy/legacy.module.ts",
+            "name": "LegacyModule",
+            "kind": "Class",
+            "line": 13,
             "relationship": "DEFINES_CLASS"
           },
           {
@@ -458,12 +596,28 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
-        "rows": []
+        "rows": [
+          {
+            "file": "src/app/user.service.ts",
+            "name": "APP_CONFIG",
+            "kind": "Variable",
+            "line": 8,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
       },
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
-        "rows": []
+        "rows": [
+          {
+            "file": "src/app/user.service.ts",
+            "name": "AppConfig",
+            "kind": "Interface",
+            "line": 4,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
       },
       {
         "method": "query",
@@ -505,7 +659,14 @@
           "file": "src/app/app.component.ts",
           "name": "AppComponent",
           "kind": "Class",
-          "line": 11,
+          "line": 13,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/app/logger.service.ts",
+          "name": "LoggerService",
+          "kind": "Class",
+          "line": 4,
           "relationship": "DEFINES_CLASS"
         },
         {
@@ -526,28 +687,63 @@
           "file": "src/app/user-card.component.ts",
           "name": "UserCardComponent",
           "kind": "Class",
-          "line": 15,
+          "line": 16,
           "relationship": "DEFINES_CLASS"
         },
         {
           "file": "src/app/user-list.component.ts",
           "name": "UserListComponent",
           "kind": "Class",
-          "line": 9,
+          "line": 10,
           "relationship": "DEFINES_CLASS"
         },
         {
           "file": "src/app/user-list.component.ts",
           "name": "UserListModule",
           "kind": "Class",
-          "line": 26,
+          "line": 29,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/app/user.service.ts",
+          "name": "UserService",
+          "kind": "Class",
+          "line": 11,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/app/user.store.ts",
+          "name": "UserStore",
+          "kind": "Class",
+          "line": 4,
           "relationship": "DEFINES_CLASS"
         },
         {
           "file": "src/legacy/badge.component.ts",
           "name": "LegacyBadgeComponent",
           "kind": "Class",
-          "line": 5,
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/legacy/legacy.module.ts",
+          "name": "LegacyListComponent",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/legacy/legacy.module.ts",
+          "name": "LegacyPanelComponent",
+          "kind": "Class",
+          "line": 10,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/legacy/legacy.module.ts",
+          "name": "LegacyModule",
+          "kind": "Class",
+          "line": 13,
           "relationship": "DEFINES_CLASS"
         },
         {
@@ -556,11 +752,25 @@
           "kind": "Class",
           "line": 5,
           "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/app/user.service.ts",
+          "name": "APP_CONFIG",
+          "kind": "Variable",
+          "line": 8,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/app/user.service.ts",
+          "name": "AppConfig",
+          "kind": "Interface",
+          "line": 4,
+          "relationship": "DEFINES_INTERFACE"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 8
+        "returned": 16
       }
     }
   },
@@ -613,7 +823,7 @@
           },
           {
             "file": "src/app/app.component.ts",
-            "line": 28,
+            "line": 38,
             "kind": "dom-event",
             "trigger": "resize",
             "library": "angular",
@@ -640,7 +850,7 @@
           },
           {
             "file": "src/app/user-card.component.ts",
-            "line": 8,
+            "line": 9,
             "kind": "dom-event",
             "trigger": "click",
             "library": "angular",
@@ -649,7 +859,7 @@
           },
           {
             "file": "src/app/user-card.component.ts",
-            "line": 11,
+            "line": 12,
             "kind": "dom-event",
             "trigger": "mouseenter",
             "library": "angular",
@@ -658,7 +868,7 @@
           },
           {
             "file": "src/app/user-card.component.ts",
-            "line": 25,
+            "line": 26,
             "kind": "dom-event",
             "trigger": "mouseleave",
             "library": "angular",
@@ -702,7 +912,7 @@
         },
         {
           "file": "src/app/app.component.ts",
-          "line": 28,
+          "line": 38,
           "kind": "dom-event",
           "trigger": "resize",
           "library": "angular",
@@ -729,7 +939,7 @@
         },
         {
           "file": "src/app/user-card.component.ts",
-          "line": 8,
+          "line": 9,
           "kind": "dom-event",
           "trigger": "click",
           "library": "angular",
@@ -738,7 +948,7 @@
         },
         {
           "file": "src/app/user-card.component.ts",
-          "line": 11,
+          "line": 12,
           "kind": "dom-event",
           "trigger": "mouseenter",
           "library": "angular",
@@ -747,7 +957,7 @@
         },
         {
           "file": "src/app/user-card.component.ts",
-          "line": 25,
+          "line": 26,
           "kind": "dom-event",
           "trigger": "mouseleave",
           "library": "angular",
@@ -849,13 +1059,13 @@
         "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
-            "id": "file:src/app/app.component.ts:component:11:AppComponent",
+            "id": "file:src/app/app.component.ts:component:13:AppComponent",
             "name": "AppComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/app.component.ts",
-            "line": 11,
-            "endLine": 32,
+            "line": 13,
+            "endLine": 42,
             "isExported": true,
             "tagName": null,
             "selector": "app-root",
@@ -894,28 +1104,28 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "id": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "name": "UserCardComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-card.component.ts",
-            "line": 15,
-            "endLine": 29,
+            "line": 16,
+            "endLine": 30,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-card",
             "props": "user,heading",
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[\"count\"],\"line\":10}]"
+            "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "id": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "name": "UserListComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-list.component.ts",
-            "line": 9,
-            "endLine": 20,
+            "line": 10,
+            "endLine": 21,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-list, [appUserList]",
@@ -924,19 +1134,49 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/legacy/badge.component.ts:component:5:LegacyBadgeComponent",
+            "id": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
             "name": "LegacyBadgeComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/legacy/badge.component.ts",
-            "line": 5,
-            "endLine": 5,
+            "line": 6,
+            "endLine": 6,
             "isExported": true,
             "tagName": null,
             "selector": "app-badge",
             "props": null,
             "hooks": null,
             "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "name": "LegacyListComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 6,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-list",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:10:LegacyPanelComponent",
+            "name": "LegacyPanelComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 10,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-panel",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[],\"line\":9}]"
           }
         ]
       },
@@ -945,36 +1185,52 @@
         "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 2,
             "props": "user,heading",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "line": 5,
             "props": "users",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "child": "file:src/app/shared/avatar.component.ts:component:8:AvatarComponent",
-            "line": 9,
+            "line": 10,
             "props": "src,size",
             "client": null,
             "template": null
           },
           {
-            "parent": "file:src/app/user-list.component.ts:component:9:UserListComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "child": "file:src/app/shared/badge.component.ts:component:4:BadgeComponent",
+            "line": 11,
+            "props": "count",
+            "client": null,
+            "template": null
+          },
+          {
+            "parent": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 4,
             "props": "user",
             "client": null,
             "template": "src/app/user-list.component.html"
+          },
+          {
+            "parent": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "child": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
+            "line": 5,
+            "props": "",
+            "client": null,
+            "template": null
           }
         ]
       },
@@ -990,23 +1246,33 @@
         "params": {},
         "rows": [
           {
-            "component": "file:src/app/app.component.ts:component:11:AppComponent",
-            "fn": "file:src/app/app.component.ts:function:16:pick",
+            "component": "file:src/app/app.component.ts:component:13:AppComponent",
+            "fn": "file:src/app/app.component.ts:function:19:constructor",
             "className": "AppComponent"
           },
           {
-            "component": "file:src/app/app.component.ts:component:11:AppComponent",
-            "fn": "file:src/app/app.component.ts:function:20:save",
+            "component": "file:src/app/app.component.ts:component:13:AppComponent",
+            "fn": "file:src/app/app.component.ts:function:21:refresh",
             "className": "AppComponent"
           },
           {
-            "component": "file:src/app/app.component.ts:component:11:AppComponent",
-            "fn": "file:src/app/app.component.ts:function:24:search",
+            "component": "file:src/app/app.component.ts:component:13:AppComponent",
+            "fn": "file:src/app/app.component.ts:function:26:pick",
             "className": "AppComponent"
           },
           {
-            "component": "file:src/app/app.component.ts:component:11:AppComponent",
-            "fn": "file:src/app/app.component.ts:function:29:onResize",
+            "component": "file:src/app/app.component.ts:component:13:AppComponent",
+            "fn": "file:src/app/app.component.ts:function:30:save",
+            "className": "AppComponent"
+          },
+          {
+            "component": "file:src/app/app.component.ts:component:13:AppComponent",
+            "fn": "file:src/app/app.component.ts:function:34:search",
+            "className": "AppComponent"
+          },
+          {
+            "component": "file:src/app/app.component.ts:component:13:AppComponent",
+            "fn": "file:src/app/app.component.ts:function:39:onResize",
             "className": "AppComponent"
           },
           {
@@ -1015,23 +1281,23 @@
             "className": "AvatarComponent"
           },
           {
-            "component": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
-            "fn": "file:src/app/user-card.component.ts:function:21:choose",
+            "component": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "fn": "file:src/app/user-card.component.ts:function:22:choose",
             "className": "UserCardComponent"
           },
           {
-            "component": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
-            "fn": "file:src/app/user-card.component.ts:function:26:onLeave",
+            "component": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "fn": "file:src/app/user-card.component.ts:function:27:onLeave",
             "className": "UserCardComponent"
           },
           {
-            "component": "file:src/app/user-list.component.ts:component:9:UserListComponent",
-            "fn": "file:src/app/user-list.component.ts:function:13:users",
+            "component": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "fn": "file:src/app/user-list.component.ts:function:14:users",
             "className": "UserListComponent"
           },
           {
-            "component": "file:src/app/user-list.component.ts:component:9:UserListComponent",
-            "fn": "file:src/app/user-list.component.ts:function:17:remove",
+            "component": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "fn": "file:src/app/user-list.component.ts:function:18:remove",
             "className": "UserListComponent"
           }
         ]
@@ -1048,36 +1314,60 @@
         "params": {},
         "rows": [
           {
-            "id": "file:src/app/app.component.ts:function:16:pick",
+            "id": "file:src/app/app.component.ts:function:19:constructor",
+            "name": "constructor",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 19,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/app/app.component.ts:function:21:refresh",
+            "name": "refresh",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 21,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/app/app.component.ts:function:26:pick",
             "name": "pick",
             "className": "AppComponent",
             "file": "src/app/app.component.ts",
-            "line": 16,
-            "endLine": 18
+            "line": 26,
+            "endLine": 28
           },
           {
-            "id": "file:src/app/app.component.ts:function:20:save",
+            "id": "file:src/app/app.component.ts:function:30:save",
             "name": "save",
             "className": "AppComponent",
             "file": "src/app/app.component.ts",
-            "line": 20,
-            "endLine": 22
+            "line": 30,
+            "endLine": 32
           },
           {
-            "id": "file:src/app/app.component.ts:function:24:search",
+            "id": "file:src/app/app.component.ts:function:34:search",
             "name": "search",
             "className": "AppComponent",
             "file": "src/app/app.component.ts",
-            "line": 24,
-            "endLine": 26
+            "line": 34,
+            "endLine": 36
           },
           {
-            "id": "file:src/app/app.component.ts:function:29:onResize",
+            "id": "file:src/app/app.component.ts:function:39:onResize",
             "name": "onResize",
             "className": "AppComponent",
             "file": "src/app/app.component.ts",
-            "line": 29,
-            "endLine": 31
+            "line": 39,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/app/logger.service.ts:function:5:log",
+            "name": "log",
+            "className": "LoggerService",
+            "file": "src/app/logger.service.ts",
+            "line": 5,
+            "endLine": 7
           },
           {
             "id": "file:src/app/shared/avatar.component.ts:function:13:toggle",
@@ -1088,36 +1378,52 @@
             "endLine": 15
           },
           {
-            "id": "file:src/app/user-card.component.ts:function:21:choose",
+            "id": "file:src/app/user-card.component.ts:function:22:choose",
             "name": "choose",
             "className": "UserCardComponent",
             "file": "src/app/user-card.component.ts",
-            "line": 21,
-            "endLine": 23
+            "line": 22,
+            "endLine": 24
           },
           {
-            "id": "file:src/app/user-card.component.ts:function:26:onLeave",
+            "id": "file:src/app/user-card.component.ts:function:27:onLeave",
             "name": "onLeave",
             "className": "UserCardComponent",
             "file": "src/app/user-card.component.ts",
-            "line": 26,
-            "endLine": 28
+            "line": 27,
+            "endLine": 29
           },
           {
-            "id": "file:src/app/user-list.component.ts:function:13:users",
+            "id": "file:src/app/user-list.component.ts:function:14:users",
             "name": "users",
             "className": "UserListComponent",
             "file": "src/app/user-list.component.ts",
-            "line": 13,
-            "endLine": 15
+            "line": 14,
+            "endLine": 16
           },
           {
-            "id": "file:src/app/user-list.component.ts:function:17:remove",
+            "id": "file:src/app/user-list.component.ts:function:18:remove",
             "name": "remove",
             "className": "UserListComponent",
             "file": "src/app/user-list.component.ts",
-            "line": 17,
-            "endLine": 19
+            "line": 18,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/app/user.service.ts:function:15:load",
+            "name": "load",
+            "className": "UserService",
+            "file": "src/app/user.service.ts",
+            "line": 15,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/app/user.store.ts:function:5:all",
+            "name": "all",
+            "className": "UserStore",
+            "file": "src/app/user.store.ts",
+            "line": 5,
+            "endLine": 7
           }
         ]
       },
@@ -1142,8 +1448,8 @@
           "kind": "component",
           "framework": "angular",
           "file": "src/app/app.component.ts",
-          "line": 11,
-          "endLine": 32,
+          "line": 13,
+          "endLine": 42,
           "isExported": true,
           "selector": "app-root",
           "definedBy": {
@@ -1185,13 +1491,25 @@
               "depth": 2,
               "parent": "UserCardComponent",
               "parentFile": "src/app/user-card.component.ts",
-              "line": 9,
+              "line": 10,
               "component": "AvatarComponent",
               "componentKind": "component",
               "componentFile": "src/app/shared/avatar.component.ts",
               "props": [
                 "src",
                 "size"
+              ]
+            },
+            {
+              "depth": 2,
+              "parent": "UserCardComponent",
+              "parentFile": "src/app/user-card.component.ts",
+              "line": 11,
+              "component": "BadgeComponent",
+              "componentKind": "component",
+              "componentFile": "src/app/shared/badge.component.ts",
+              "props": [
+                "count"
               ]
             },
             {
@@ -1236,13 +1554,13 @@
         "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
-            "id": "file:src/app/app.component.ts:component:11:AppComponent",
+            "id": "file:src/app/app.component.ts:component:13:AppComponent",
             "name": "AppComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/app.component.ts",
-            "line": 11,
-            "endLine": 32,
+            "line": 13,
+            "endLine": 42,
             "isExported": true,
             "tagName": null,
             "selector": "app-root",
@@ -1281,28 +1599,28 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "id": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "name": "UserCardComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-card.component.ts",
-            "line": 15,
-            "endLine": 29,
+            "line": 16,
+            "endLine": 30,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-card",
             "props": "user,heading",
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[\"count\"],\"line\":10}]"
+            "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "id": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "name": "UserListComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-list.component.ts",
-            "line": 9,
-            "endLine": 20,
+            "line": 10,
+            "endLine": 21,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-list, [appUserList]",
@@ -1311,19 +1629,49 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/legacy/badge.component.ts:component:5:LegacyBadgeComponent",
+            "id": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
             "name": "LegacyBadgeComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/legacy/badge.component.ts",
-            "line": 5,
-            "endLine": 5,
+            "line": 6,
+            "endLine": 6,
             "isExported": true,
             "tagName": null,
             "selector": "app-badge",
             "props": null,
             "hooks": null,
             "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "name": "LegacyListComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 6,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-list",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:10:LegacyPanelComponent",
+            "name": "LegacyPanelComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 10,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-panel",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[],\"line\":9}]"
           }
         ]
       },
@@ -1332,36 +1680,52 @@
         "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 2,
             "props": "user,heading",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "line": 5,
             "props": "users",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "child": "file:src/app/shared/avatar.component.ts:component:8:AvatarComponent",
-            "line": 9,
+            "line": 10,
             "props": "src,size",
             "client": null,
             "template": null
           },
           {
-            "parent": "file:src/app/user-list.component.ts:component:9:UserListComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "child": "file:src/app/shared/badge.component.ts:component:4:BadgeComponent",
+            "line": 11,
+            "props": "count",
+            "client": null,
+            "template": null
+          },
+          {
+            "parent": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 4,
             "props": "user",
             "client": null,
             "template": "src/app/user-list.component.html"
+          },
+          {
+            "parent": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "child": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
+            "line": 5,
+            "props": "",
+            "client": null,
+            "template": null
           }
         ]
       }
@@ -1375,8 +1739,8 @@
           "kind": "component",
           "framework": "angular",
           "file": "src/app/user-card.component.ts",
-          "line": 15,
-          "endLine": 29,
+          "line": 16,
+          "endLine": 30,
           "isExported": true,
           "selector": "app-user-card",
           "props": [
@@ -1426,13 +1790,13 @@
         "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
-            "id": "file:src/app/app.component.ts:component:11:AppComponent",
+            "id": "file:src/app/app.component.ts:component:13:AppComponent",
             "name": "AppComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/app.component.ts",
-            "line": 11,
-            "endLine": 32,
+            "line": 13,
+            "endLine": 42,
             "isExported": true,
             "tagName": null,
             "selector": "app-root",
@@ -1471,28 +1835,28 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "id": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "name": "UserCardComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-card.component.ts",
-            "line": 15,
-            "endLine": 29,
+            "line": 16,
+            "endLine": 30,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-card",
             "props": "user,heading",
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[\"count\"],\"line\":10}]"
+            "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "id": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "name": "UserListComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-list.component.ts",
-            "line": 9,
-            "endLine": 20,
+            "line": 10,
+            "endLine": 21,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-list, [appUserList]",
@@ -1501,19 +1865,49 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/legacy/badge.component.ts:component:5:LegacyBadgeComponent",
+            "id": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
             "name": "LegacyBadgeComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/legacy/badge.component.ts",
-            "line": 5,
-            "endLine": 5,
+            "line": 6,
+            "endLine": 6,
             "isExported": true,
             "tagName": null,
             "selector": "app-badge",
             "props": null,
             "hooks": null,
             "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "name": "LegacyListComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 6,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-list",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:10:LegacyPanelComponent",
+            "name": "LegacyPanelComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 10,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-panel",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[],\"line\":9}]"
           }
         ]
       },
@@ -1522,36 +1916,52 @@
         "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 2,
             "props": "user,heading",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "line": 5,
             "props": "users",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "child": "file:src/app/shared/avatar.component.ts:component:8:AvatarComponent",
-            "line": 9,
+            "line": 10,
             "props": "src,size",
             "client": null,
             "template": null
           },
           {
-            "parent": "file:src/app/user-list.component.ts:component:9:UserListComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "child": "file:src/app/shared/badge.component.ts:component:4:BadgeComponent",
+            "line": 11,
+            "props": "count",
+            "client": null,
+            "template": null
+          },
+          {
+            "parent": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 4,
             "props": "user",
             "client": null,
             "template": "src/app/user-list.component.html"
+          },
+          {
+            "parent": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "child": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
+            "line": 5,
+            "props": "",
+            "client": null,
+            "template": null
           }
         ]
       }
@@ -1566,12 +1976,10 @@
       "usages": [
         {
           "kind": "render",
-          "file": "src/app/user-card.component.ts",
-          "line": 10,
-          "from": "UserCardComponent",
-          "props": [
-            "count"
-          ],
+          "file": "src/legacy/legacy.module.ts",
+          "line": 9,
+          "from": "LegacyPanelComponent",
+          "props": [],
           "resolved": false
         }
       ],
@@ -1592,13 +2000,13 @@
         "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
-            "id": "file:src/app/app.component.ts:component:11:AppComponent",
+            "id": "file:src/app/app.component.ts:component:13:AppComponent",
             "name": "AppComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/app.component.ts",
-            "line": 11,
-            "endLine": 32,
+            "line": 13,
+            "endLine": 42,
             "isExported": true,
             "tagName": null,
             "selector": "app-root",
@@ -1637,28 +2045,28 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "id": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "name": "UserCardComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-card.component.ts",
-            "line": 15,
-            "endLine": 29,
+            "line": 16,
+            "endLine": 30,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-card",
             "props": "user,heading",
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[\"count\"],\"line\":10}]"
+            "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "id": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "name": "UserListComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-list.component.ts",
-            "line": 9,
-            "endLine": 20,
+            "line": 10,
+            "endLine": 21,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-list, [appUserList]",
@@ -1667,19 +2075,49 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/legacy/badge.component.ts:component:5:LegacyBadgeComponent",
+            "id": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
             "name": "LegacyBadgeComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/legacy/badge.component.ts",
-            "line": 5,
-            "endLine": 5,
+            "line": 6,
+            "endLine": 6,
             "isExported": true,
             "tagName": null,
             "selector": "app-badge",
             "props": null,
             "hooks": null,
             "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "name": "LegacyListComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 6,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-list",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:10:LegacyPanelComponent",
+            "name": "LegacyPanelComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 10,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-panel",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[],\"line\":9}]"
           }
         ]
       },
@@ -1688,36 +2126,52 @@
         "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 2,
             "props": "user,heading",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "line": 5,
             "props": "users",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "child": "file:src/app/shared/avatar.component.ts:component:8:AvatarComponent",
-            "line": 9,
+            "line": 10,
             "props": "src,size",
             "client": null,
             "template": null
           },
           {
-            "parent": "file:src/app/user-list.component.ts:component:9:UserListComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "child": "file:src/app/shared/badge.component.ts:component:4:BadgeComponent",
+            "line": 11,
+            "props": "count",
+            "client": null,
+            "template": null
+          },
+          {
+            "parent": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 4,
             "props": "user",
             "client": null,
             "template": "src/app/user-list.component.html"
+          },
+          {
+            "parent": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "child": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
+            "line": 5,
+            "props": "",
+            "client": null,
+            "template": null
           }
         ]
       }
@@ -1763,36 +2217,60 @@
         "params": {},
         "rows": [
           {
-            "id": "file:src/app/app.component.ts:function:16:pick",
+            "id": "file:src/app/app.component.ts:function:19:constructor",
+            "name": "constructor",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 19,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/app/app.component.ts:function:21:refresh",
+            "name": "refresh",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 21,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/app/app.component.ts:function:26:pick",
             "name": "pick",
             "className": "AppComponent",
             "file": "src/app/app.component.ts",
-            "line": 16,
-            "endLine": 18
+            "line": 26,
+            "endLine": 28
           },
           {
-            "id": "file:src/app/app.component.ts:function:20:save",
+            "id": "file:src/app/app.component.ts:function:30:save",
             "name": "save",
             "className": "AppComponent",
             "file": "src/app/app.component.ts",
-            "line": 20,
-            "endLine": 22
+            "line": 30,
+            "endLine": 32
           },
           {
-            "id": "file:src/app/app.component.ts:function:24:search",
+            "id": "file:src/app/app.component.ts:function:34:search",
             "name": "search",
             "className": "AppComponent",
             "file": "src/app/app.component.ts",
-            "line": 24,
-            "endLine": 26
+            "line": 34,
+            "endLine": 36
           },
           {
-            "id": "file:src/app/app.component.ts:function:29:onResize",
+            "id": "file:src/app/app.component.ts:function:39:onResize",
             "name": "onResize",
             "className": "AppComponent",
             "file": "src/app/app.component.ts",
-            "line": 29,
-            "endLine": 31
+            "line": 39,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/app/logger.service.ts:function:5:log",
+            "name": "log",
+            "className": "LoggerService",
+            "file": "src/app/logger.service.ts",
+            "line": 5,
+            "endLine": 7
           },
           {
             "id": "file:src/app/shared/avatar.component.ts:function:13:toggle",
@@ -1803,43 +2281,75 @@
             "endLine": 15
           },
           {
-            "id": "file:src/app/user-card.component.ts:function:21:choose",
+            "id": "file:src/app/user-card.component.ts:function:22:choose",
             "name": "choose",
             "className": "UserCardComponent",
             "file": "src/app/user-card.component.ts",
-            "line": 21,
-            "endLine": 23
+            "line": 22,
+            "endLine": 24
           },
           {
-            "id": "file:src/app/user-card.component.ts:function:26:onLeave",
+            "id": "file:src/app/user-card.component.ts:function:27:onLeave",
             "name": "onLeave",
             "className": "UserCardComponent",
             "file": "src/app/user-card.component.ts",
-            "line": 26,
-            "endLine": 28
+            "line": 27,
+            "endLine": 29
           },
           {
-            "id": "file:src/app/user-list.component.ts:function:13:users",
+            "id": "file:src/app/user-list.component.ts:function:14:users",
             "name": "users",
             "className": "UserListComponent",
             "file": "src/app/user-list.component.ts",
-            "line": 13,
-            "endLine": 15
+            "line": 14,
+            "endLine": 16
           },
           {
-            "id": "file:src/app/user-list.component.ts:function:17:remove",
+            "id": "file:src/app/user-list.component.ts:function:18:remove",
             "name": "remove",
             "className": "UserListComponent",
             "file": "src/app/user-list.component.ts",
-            "line": 17,
-            "endLine": 19
+            "line": 18,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/app/user.service.ts:function:15:load",
+            "name": "load",
+            "className": "UserService",
+            "file": "src/app/user.service.ts",
+            "line": 15,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/app/user.store.ts:function:5:all",
+            "name": "all",
+            "className": "UserStore",
+            "file": "src/app/user.store.ts",
+            "line": 5,
+            "endLine": 7
           }
         ]
       },
       {
         "method": "query",
         "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
-        "rows": []
+        "rows": [
+          {
+            "caller": "file:src/app/app.component.ts:function:21:refresh",
+            "callee": "file:src/app/logger.service.ts:function:5:log",
+            "line": 22
+          },
+          {
+            "caller": "file:src/app/app.component.ts:function:21:refresh",
+            "callee": "file:src/app/user.service.ts:function:15:load",
+            "line": 23
+          },
+          {
+            "caller": "file:src/app/user.service.ts:function:15:load",
+            "callee": "file:src/app/user.store.ts:function:5:all",
+            "line": 16
+          }
+        ]
       },
       {
         "method": "query",
@@ -1961,13 +2471,13 @@
         "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
         "rows": [
           {
-            "id": "file:src/app/app.component.ts:component:11:AppComponent",
+            "id": "file:src/app/app.component.ts:component:13:AppComponent",
             "name": "AppComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/app.component.ts",
-            "line": 11,
-            "endLine": 32,
+            "line": 13,
+            "endLine": 42,
             "isExported": true,
             "tagName": null,
             "selector": "app-root",
@@ -2006,28 +2516,28 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "id": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "name": "UserCardComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-card.component.ts",
-            "line": 15,
-            "endLine": 29,
+            "line": 16,
+            "endLine": 30,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-card",
             "props": "user,heading",
             "hooks": null,
-            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[\"count\"],\"line\":10}]"
+            "pendingRenders": null
           },
           {
-            "id": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "id": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "name": "UserListComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/app/user-list.component.ts",
-            "line": 9,
-            "endLine": 20,
+            "line": 10,
+            "endLine": 21,
             "isExported": true,
             "tagName": null,
             "selector": "app-user-list, [appUserList]",
@@ -2036,19 +2546,49 @@
             "pendingRenders": null
           },
           {
-            "id": "file:src/legacy/badge.component.ts:component:5:LegacyBadgeComponent",
+            "id": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
             "name": "LegacyBadgeComponent",
             "kind": "component",
             "framework": "angular",
             "file": "src/legacy/badge.component.ts",
-            "line": 5,
-            "endLine": 5,
+            "line": 6,
+            "endLine": 6,
             "isExported": true,
             "tagName": null,
             "selector": "app-badge",
             "props": null,
             "hooks": null,
             "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "name": "LegacyListComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 6,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-list",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:10:LegacyPanelComponent",
+            "name": "LegacyPanelComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 10,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-panel",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[],\"line\":9}]"
           }
         ]
       },
@@ -2057,36 +2597,52 @@
         "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
         "rows": [
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 2,
             "props": "user,heading",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/app.component.ts:component:11:AppComponent",
-            "child": "file:src/app/user-list.component.ts:component:9:UserListComponent",
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-list.component.ts:component:10:UserListComponent",
             "line": 5,
             "props": "users",
             "client": null,
             "template": "src/app/app.component.html"
           },
           {
-            "parent": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "child": "file:src/app/shared/avatar.component.ts:component:8:AvatarComponent",
-            "line": 9,
+            "line": 10,
             "props": "src,size",
             "client": null,
             "template": null
           },
           {
-            "parent": "file:src/app/user-list.component.ts:component:9:UserListComponent",
-            "child": "file:src/app/user-card.component.ts:component:15:UserCardComponent",
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "child": "file:src/app/shared/badge.component.ts:component:4:BadgeComponent",
+            "line": 11,
+            "props": "count",
+            "client": null,
+            "template": null
+          },
+          {
+            "parent": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
             "line": 4,
             "props": "user",
             "client": null,
             "template": "src/app/user-list.component.html"
+          },
+          {
+            "parent": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "child": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
+            "line": 5,
+            "props": "",
+            "client": null,
+            "template": null
           }
         ]
       },
@@ -2096,9 +2652,9 @@
         "params": {
           "ids": [
             "file:src/app/shared/avatar.component.ts:component:8:AvatarComponent",
-            "file:src/app/user-card.component.ts:component:15:UserCardComponent",
-            "file:src/app/app.component.ts:component:11:AppComponent",
-            "file:src/app/user-list.component.ts:component:9:UserListComponent"
+            "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "file:src/app/app.component.ts:component:13:AppComponent",
+            "file:src/app/user-list.component.ts:component:10:UserListComponent"
           ]
         },
         "rows": []
@@ -2150,7 +2706,7 @@
           "name": "UserCardComponent",
           "kind": "component",
           "file": "src/app/user-card.component.ts",
-          "line": 15,
+          "line": 16,
           "depth": 1,
           "renders": [
             "AvatarComponent"
@@ -2160,7 +2716,7 @@
           "name": "AppComponent",
           "kind": "component",
           "file": "src/app/app.component.ts",
-          "line": 11,
+          "line": 13,
           "depth": 2,
           "renders": [
             "UserCardComponent"
@@ -2170,7 +2726,7 @@
           "name": "UserListComponent",
           "kind": "component",
           "file": "src/app/user-list.component.ts",
-          "line": 9,
+          "line": 10,
           "depth": 2,
           "renders": [
             "UserCardComponent"
@@ -2188,6 +2744,527 @@
       "page": {
         "offset": 0,
         "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "UserStore"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/app/app.component.ts:function:19:constructor",
+            "name": "constructor",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 19,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/app/app.component.ts:function:21:refresh",
+            "name": "refresh",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 21,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/app/app.component.ts:function:26:pick",
+            "name": "pick",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 26,
+            "endLine": 28
+          },
+          {
+            "id": "file:src/app/app.component.ts:function:30:save",
+            "name": "save",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 30,
+            "endLine": 32
+          },
+          {
+            "id": "file:src/app/app.component.ts:function:34:search",
+            "name": "search",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 34,
+            "endLine": 36
+          },
+          {
+            "id": "file:src/app/app.component.ts:function:39:onResize",
+            "name": "onResize",
+            "className": "AppComponent",
+            "file": "src/app/app.component.ts",
+            "line": 39,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/app/logger.service.ts:function:5:log",
+            "name": "log",
+            "className": "LoggerService",
+            "file": "src/app/logger.service.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/app/shared/avatar.component.ts:function:13:toggle",
+            "name": "toggle",
+            "className": "AvatarComponent",
+            "file": "src/app/shared/avatar.component.ts",
+            "line": 13,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/app/user-card.component.ts:function:22:choose",
+            "name": "choose",
+            "className": "UserCardComponent",
+            "file": "src/app/user-card.component.ts",
+            "line": 22,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/app/user-card.component.ts:function:27:onLeave",
+            "name": "onLeave",
+            "className": "UserCardComponent",
+            "file": "src/app/user-card.component.ts",
+            "line": 27,
+            "endLine": 29
+          },
+          {
+            "id": "file:src/app/user-list.component.ts:function:14:users",
+            "name": "users",
+            "className": "UserListComponent",
+            "file": "src/app/user-list.component.ts",
+            "line": 14,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/app/user-list.component.ts:function:18:remove",
+            "name": "remove",
+            "className": "UserListComponent",
+            "file": "src/app/user-list.component.ts",
+            "line": 18,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/app/user.service.ts:function:15:load",
+            "name": "load",
+            "className": "UserService",
+            "file": "src/app/user.service.ts",
+            "line": 15,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/app/user.store.ts:function:5:all",
+            "name": "all",
+            "className": "UserStore",
+            "file": "src/app/user.store.ts",
+            "line": 5,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/app/app.component.ts:function:21:refresh",
+            "callee": "file:src/app/logger.service.ts:function:5:log",
+            "line": 22
+          },
+          {
+            "caller": "file:src/app/app.component.ts:function:21:refresh",
+            "callee": "file:src/app/user.service.ts:function:15:load",
+            "line": 23
+          },
+          {
+            "caller": "file:src/app/user.service.ts:function:15:load",
+            "callee": "file:src/app/user.store.ts:function:5:all",
+            "line": 16
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all",
+            "file:src/app/user.service.ts:function:15:load",
+            "file:src/app/app.component.ts:function:21:refresh"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all",
+            "file:src/app/user.service.ts:function:15:load",
+            "file:src/app/app.component.ts:function:21:refresh"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all",
+            "file:src/app/user.service.ts:function:15:load",
+            "file:src/app/app.component.ts:function:21:refresh"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all",
+            "file:src/app/user.service.ts:function:15:load",
+            "file:src/app/app.component.ts:function:21:refresh"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all",
+            "file:src/app/user.service.ts:function:15:load",
+            "file:src/app/app.component.ts:function:21:refresh"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:src/app/app.component.ts:component:13:AppComponent",
+            "fn": "file:src/app/app.component.ts:function:21:refresh",
+            "className": "AppComponent"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/app/user.store.ts:function:5:all",
+            "file:src/app/user.service.ts:function:15:load",
+            "file:src/app/app.component.ts:function:21:refresh"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/app/app.component.ts:component:13:AppComponent",
+            "name": "AppComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/app/app.component.ts",
+            "line": 13,
+            "endLine": 42,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-root",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"mat-icon\",\"props\":[],\"line\":10,\"template\":\"src/app/app.component.html\"}]"
+          },
+          {
+            "id": "file:src/app/shared/avatar.component.ts:component:8:AvatarComponent",
+            "name": "AvatarComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/app/shared/avatar.component.ts",
+            "line": 8,
+            "endLine": 16,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-avatar",
+            "props": "src,size,zoom",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/app/shared/badge.component.ts:component:4:BadgeComponent",
+            "name": "BadgeComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/app/shared/badge.component.ts",
+            "line": 4,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-badge",
+            "props": "count",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "name": "UserCardComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/app/user-card.component.ts",
+            "line": 16,
+            "endLine": 30,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-user-card",
+            "props": "user,heading",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "name": "UserListComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/app/user-list.component.ts",
+            "line": 10,
+            "endLine": 21,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-user-list, [appUserList]",
+            "props": "users",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
+            "name": "LegacyBadgeComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/badge.component.ts",
+            "line": 6,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-badge",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "name": "LegacyListComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 6,
+            "endLine": 6,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-list",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/legacy/legacy.module.ts:component:10:LegacyPanelComponent",
+            "name": "LegacyPanelComponent",
+            "kind": "component",
+            "framework": "angular",
+            "file": "src/legacy/legacy.module.ts",
+            "line": 10,
+            "endLine": 10,
+            "isExported": true,
+            "tagName": null,
+            "selector": "app-legacy-panel",
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"app-badge\",\"props\":[],\"line\":9}]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
+        "rows": [
+          {
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "line": 2,
+            "props": "user,heading",
+            "client": null,
+            "template": "src/app/app.component.html"
+          },
+          {
+            "parent": "file:src/app/app.component.ts:component:13:AppComponent",
+            "child": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "line": 5,
+            "props": "users",
+            "client": null,
+            "template": "src/app/app.component.html"
+          },
+          {
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "child": "file:src/app/shared/avatar.component.ts:component:8:AvatarComponent",
+            "line": 10,
+            "props": "src,size",
+            "client": null,
+            "template": null
+          },
+          {
+            "parent": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "child": "file:src/app/shared/badge.component.ts:component:4:BadgeComponent",
+            "line": 11,
+            "props": "count",
+            "client": null,
+            "template": null
+          },
+          {
+            "parent": "file:src/app/user-list.component.ts:component:10:UserListComponent",
+            "child": "file:src/app/user-card.component.ts:component:16:UserCardComponent",
+            "line": 4,
+            "props": "user",
+            "client": null,
+            "template": "src/app/user-list.component.html"
+          },
+          {
+            "parent": "file:src/legacy/legacy.module.ts:component:6:LegacyListComponent",
+            "child": "file:src/legacy/badge.component.ts:component:6:LegacyBadgeComponent",
+            "line": 5,
+            "props": "",
+            "client": null,
+            "template": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:src/app/app.component.ts:component:13:AppComponent"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "symbol": "UserStore",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "all",
+          "className": "UserStore",
+          "file": "src/app/user.store.ts",
+          "line": 5,
+          "endLine": 7
+        }
+      ],
+      "callers": [
+        {
+          "name": "load",
+          "className": "UserService",
+          "file": "src/app/user.service.ts",
+          "line": 15,
+          "endLine": 17,
+          "depth": 1
+        },
+        {
+          "name": "refresh",
+          "className": "AppComponent",
+          "file": "src/app/app.component.ts",
+          "line": 21,
+          "endLine": 24,
+          "depth": 2
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [],
+      "entrypoints": [],
+      "components": [
+        {
+          "name": "AppComponent",
+          "kind": "component",
+          "file": "src/app/app.component.ts",
+          "line": 13,
+          "depth": 0,
+          "changedThrough": [
+            "refresh"
+          ]
+        }
+      ],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 2
       }
     }
   }

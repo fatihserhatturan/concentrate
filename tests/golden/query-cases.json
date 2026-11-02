@@ -920,6 +920,12 @@
         "args": {
           "symbol": "AvatarComponent"
         }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "UserStore"
+        }
       }
     ],
     "vanilla-html": [

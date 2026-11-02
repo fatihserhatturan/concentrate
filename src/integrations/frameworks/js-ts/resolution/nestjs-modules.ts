@@ -6,13 +6,23 @@ import {
   indexNodesByFileAndName,
 } from "../../../../core/scan/resolution/indexes.js";
 
-type ModuleMetadataKey = "imports" | "providers" | "controllers" | "exports";
+type ModuleMetadataKey = "imports" | "providers" | "controllers" | "exports" | "declarations";
 
 const relationshipByMetadataKey: Record<ModuleMetadataKey, GraphRelationshipType> = {
   imports: "MODULE_IMPORTS",
   providers: "MODULE_PROVIDES",
   controllers: "MODULE_CONTROLS",
   exports: "MODULE_EXPORTS",
+  declarations: "MODULE_DECLARES",
+};
+
+// The metadata keys each decorator's module graph reads: NestJS `@Module`,
+// Angular `@NgModule`, and an Angular standalone `@Component`, which imports
+// and provides like a module of its own.
+const keysByDecorator: Record<string, ReadonlySet<ModuleMetadataKey>> = {
+  Module: new Set(["imports", "providers", "controllers", "exports"]),
+  NgModule: new Set(["declarations", "imports", "providers", "exports"]),
+  Component: new Set(["imports", "providers"]),
 };
 
 export function addNestJsModuleRelationships(graph: IGraphContributor): void {
@@ -20,6 +30,9 @@ export function addNestJsModuleRelationships(graph: IGraphContributor): void {
   const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
   const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+  const angularComponentClasses = new Set(graph.relationships
+    .filter((rel) => rel.type === "COMPONENT_DEFINED_BY" && nodeById.get(rel.from)?.properties.framework === "angular")
+    .map((rel) => rel.to));
 
   for (const rel of graph.relationships) {
     if (rel.type !== "HAS_DECORATOR") continue;
@@ -27,13 +40,15 @@ export function addNestJsModuleRelationships(graph: IGraphContributor): void {
     const moduleClass = nodeById.get(rel.from);
     const decorator = nodeById.get(rel.to);
     if (moduleClass?.label !== "Class" || decorator?.label !== "Decorator") continue;
-    if (decorator.properties.name !== "Module") continue;
+    const keys = keysByDecorator[String(decorator.properties.name)];
+    if (!keys || (decorator.properties.name === "Component" && !angularComponentClasses.has(moduleClass.id))) continue;
 
     const fileId = relationshipIndex.fileByClassId.get(moduleClass.id);
     if (!fileId) continue;
 
     const metadata = parseModuleDecoratorMetadata(decorator.properties.expression);
     for (const [key, names] of metadata) {
+      if (!keys.has(key)) continue;
       for (const name of names) {
         const targetClassId = resolveClassName(
           name,

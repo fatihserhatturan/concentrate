@@ -1,9 +1,10 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { AvatarComponent } from './shared/avatar.component';
+import { BadgeComponent } from './shared/badge.component';
 
 @Component({
   selector: 'app-user-card',
-  imports: [AvatarComponent],
+  imports: [AvatarComponent, BadgeComponent],
   template: `
     <div class="card" (click)="choose()">
       <app-avatar [src]="user.avatar" size="32" />

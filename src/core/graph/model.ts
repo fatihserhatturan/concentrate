@@ -61,6 +61,7 @@ export type GraphRelationshipType =
   | "MODULE_PROVIDES"
   | "MODULE_CONTROLS"
   | "MODULE_EXPORTS"
+  | "MODULE_DECLARES"
   | "INJECTS"
   | "USES_ENV"
   | "DECLARES_CONFIG"

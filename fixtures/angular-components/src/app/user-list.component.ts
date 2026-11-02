@@ -1,5 +1,6 @@
 import { Component, Input, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-user-list, [appUserList]',
@@ -22,5 +23,7 @@ export class UserListComponent {
 @NgModule({
   declarations: [UserListComponent],
   imports: [CommonModule],
+  providers: [UserService],
+  exports: [UserListComponent],
 })
 export class UserListModule {}

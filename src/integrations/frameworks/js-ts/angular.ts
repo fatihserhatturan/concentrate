@@ -26,6 +26,11 @@ import { stripStringQuotes } from "./file-index.js";
 // first. `@HostListener('click')` methods and `host: { '(click)': 'onClick()' }`
 // entries are entrypoints on the host (`window:` / `document:` targets as the
 // receiver).
+//
+// DI: a field initialized with `inject(UserService)` (any class of the file
+// importing `inject`) is an injected field of that type, like a constructor
+// parameter property, so the injection resolver adds INJECTS and resolves
+// `this.users.load()`.
 
 type InlineFacts = { renders: PendingRender[]; listeners: TemplateListener[] };
 type TemplateListener = { row: number; column: number; trigger: string; tag: string; handlerName: string | null };
@@ -36,6 +41,7 @@ export async function applyAngularParseSemantics({ fileNodeId, rootNode, parsed 
   const local = (name: string) => [...core].find(([, imported]) => imported === name)?.[0];
   const decoratorNames = { component: local("Component"), input: local("Input"), hostListener: local("HostListener") };
   const signalInputs = new Set([local("input"), local("model")].filter((name): name is string => name !== undefined));
+  const injectName = local("inject");
 
   for (const statement of rootNode.namedChildren) {
     const declaration = statement?.type === "export_statement" ? statement.childForFieldName("declaration") : statement;
@@ -86,6 +92,14 @@ export async function applyAngularParseSemantics({ fileNodeId, rootNode, parsed 
         if (signalInputs.has(callee.replace(/\.required$/u, ""))) {
           const args = value!.childForFieldName("arguments")?.namedChildren ?? [];
           props.push(inputAlias(args.filter((arg): arg is SyntaxNode => arg !== null)) ?? name);
+        }
+        if (callee !== "" && callee === injectName) {
+          const field = parsed.nodes.find((node) => node.id === `${classId}:field:${member.startPosition.row + 1}:${name}`);
+          const token = injectedType(value!);
+          if (field && token) {
+            field.properties.typeName = token;
+            field.properties.isInjected = true;
+          }
         }
       }
       if (member.type !== "method_definition") continue;
@@ -167,6 +181,16 @@ function decoratorCall(decorator: SyntaxNode | null | undefined): { name: string
   const name = call.childForFieldName("function");
   if (name?.type !== "identifier") return null;
   return { name: name.text, args: (call.childForFieldName("arguments")?.namedChildren ?? []).filter((arg): arg is SyntaxNode => arg !== null) };
+}
+
+// `inject(UserService)` → `UserService`; `inject<Config>(CONFIG)`, whose
+// token is no class, → its type argument `Config`.
+function injectedType(call: SyntaxNode): string | null {
+  const token = call.childForFieldName("arguments")?.namedChildren[0];
+  if (token?.type === "identifier" && /^[A-Z]/u.test(token.text) && token.text !== token.text.toUpperCase()) return token.text;
+  if (token?.type === "member_expression") return token.childForFieldName("property")?.text ?? null;
+  const typeArgument = call.childForFieldName("type_arguments")?.namedChildren[0];
+  return typeArgument?.type === "type_identifier" ? typeArgument.text : null;
 }
 
 // `'alias'` or `{ alias: 'alias' }` among an input's arguments.
@@ -292,14 +316,29 @@ function maskTemplateSyntax(source: string): string {
 // template file, when it was scanned, the renders noting it in `template`).
 // Then each component's pending render whose tag is the element selector of
 // exactly one Angular component (`selector: 'app-user'`, also in a list
-// `'app-user, [appUser]'`) RENDERS it; the rest stay in `pendingRenders`.
+// `'app-user, [appUser]'`) RENDERS it. When several components select the
+// tag, the one the rendering component can see wins, if it is one: what a
+// standalone component `imports`, or what the NgModules declaring it declare
+// and import (an imported NgModule's `exports`). The rest stay in
+// `pendingRenders`.
 export const angularTemplatesContributor: ISemanticContributor = {
   async contribute(graph) {
     const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
     const components: Array<{ component: GraphNode; file: GraphNode }> = [];
     const classOf = new Map<string, string>();
     const methodsOfClass = new Map<string, Map<string, string>>();
+    const moduleEdges = {
+      MODULE_IMPORTS: new Map<string, string[]>(),
+      MODULE_EXPORTS: new Map<string, string[]>(),
+      MODULE_DECLARES: new Map<string, string[]>(),
+    };
+    const declaredBy = new Map<string, string[]>();
     for (const rel of graph.relationships) {
+      if (rel.type === "MODULE_IMPORTS" || rel.type === "MODULE_EXPORTS" || rel.type === "MODULE_DECLARES") {
+        const edges = moduleEdges[rel.type];
+        edges.set(rel.from, [...edges.get(rel.from) ?? [], rel.to]);
+        if (rel.type === "MODULE_DECLARES") declaredBy.set(rel.to, [...declaredBy.get(rel.to) ?? [], rel.from]);
+      }
       const target = nodesById.get(rel.to);
       if (rel.type === "DECLARES_COMPONENT" && target?.properties.framework === "angular") {
         const file = nodesById.get(rel.from);
@@ -359,7 +398,11 @@ export const angularTemplatesContributor: ISemanticContributor = {
 
       const unresolved: Render[] = [];
       for (const render of renders) {
-        const targets = bySelector.get(render.name) ?? [];
+        let targets = bySelector.get(render.name) ?? [];
+        if (targets.length > 1) {
+          const visible = visibleClasses(classOf.get(component.id) ?? "", moduleEdges, declaredBy);
+          targets = targets.filter((target) => visible.has(classOf.get(target) ?? ""));
+        }
         if (targets.length !== 1) {
           unresolved.push(render);
           continue;
@@ -377,6 +420,29 @@ export const angularTemplatesContributor: ISemanticContributor = {
     graph.addRelationships(relationships);
   },
 };
+
+// The classes a component's template can use: its standalone `imports`, and
+// the declarations and imports of the NgModules declaring it; an imported
+// NgModule contributes itself and its `exports`.
+function visibleClasses(
+  classId: string,
+  edges: Record<"MODULE_IMPORTS" | "MODULE_EXPORTS" | "MODULE_DECLARES", ReadonlyMap<string, readonly string[]>>,
+  declaredBy: ReadonlyMap<string, readonly string[]>,
+): Set<string> {
+  const visible = new Set<string>();
+  const addImports = (owner: string) => {
+    for (const imported of edges.MODULE_IMPORTS.get(owner) ?? []) {
+      visible.add(imported);
+      for (const exported of edges.MODULE_EXPORTS.get(imported) ?? []) visible.add(exported);
+    }
+  };
+  addImports(classId);
+  for (const module of declaredBy.get(classId) ?? []) {
+    for (const declared of edges.MODULE_DECLARES.get(module) ?? []) visible.add(declared);
+    addImports(module);
+  }
+  return visible;
+}
 
 function parsePending(value: GraphNode["properties"][string]): PendingRender[] {
   if (typeof value !== "string") return [];

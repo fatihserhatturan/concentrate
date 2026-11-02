@@ -91,9 +91,22 @@ tools.
   nodes.
 - `INJECTS` comes from constructor parameter properties
   (`constructor(private readonly users: UsersService)`) and from properties
-  decorated with `@Inject...()`, recorded as `Field.isInjected`. Constructor
-  parameters without an access modifier are not modelled. Every typed field
-  still resolves `this.field.method()` calls.
+  decorated with `@Inject...()`, recorded as `Field.isInjected`, and from
+  Angular `inject()` fields (`private users = inject(UsersService)`, in a
+  file importing `inject` from `@angular/core`): the field takes the class
+  as its type, or the type argument of `inject<Config>(CONFIG)` when the
+  token is a constant. `inject()` inside functions and constructors
+  (functional guards and interceptors: `const auth = inject(AuthService)`)
+  is not followed. Constructor parameters without an access modifier are not
+  modelled. Every typed field still resolves `this.field.method()` calls.
+- Module graph: NestJS `@Module` (`imports`, `providers`, `controllers`,
+  `exports`), Angular `@NgModule` (`declarations` → `MODULE_DECLARES`,
+  `imports`, `providers`, `exports`) and an Angular standalone component's
+  `imports` / `providers` become `MODULE_*` relationships between classes;
+  elements may be names, `forwardRef(() => X)`, `X.forRoot(…)` (X) or
+  provider objects (their class values). Providers given by functions
+  (`provideHttpClient()`), `bootstrap`, `entryComponents` and
+  `bootstrapApplication(AppComponent, { providers })` are not read.
 - Found by the accuracy report ([accuracy.md](accuracy.md)), unresolved today:
   - `new X()` of a class with no constructor in its chain (calls resolve to
     functions, so there is nothing to point at);
@@ -433,11 +446,13 @@ Astro).
   bindings and plain attributes, not events, `*structural` directives,
   `#refs`, `[attr.x]` / `[class.x]` / `[style.x]` or animations. A render
   from a `templateUrl` file keeps that file in `RENDERS.template` (its line
-  is a line of that file). A tag that two components select (copies in two
-  apps of a workspace), library elements (`<mat-icon>`) and Angular's
+  is a line of that file). A tag that two components select, library elements (`<mat-icon>`) and Angular's
   `ng-template`, `ng-container` and `ng-content` stay in `pendingRenders`;
-  attribute and class selectors (`[appUserList]`, `button[appBtn]`) and
-  standalone `imports` / NgModule declarations are not used to resolve tags.
+  attribute and class selectors (`[appUserList]`, `button[appBtn]`) are not
+  read. When several components select a tag, the one the rendering
+  component can see wins: a class its standalone `imports` list (or an
+  imported NgModule exports), or one its NgModules declare or import;
+  otherwise the tag stays in `pendingRenders`.
   `{{ … }}` interpolations and `@if (…)` / `@for (…)` conditions are masked
   before the HTML grammar reads the template.
 - Angular listeners: `(click)="save()"` (also `(keyup.enter)`, trigger
