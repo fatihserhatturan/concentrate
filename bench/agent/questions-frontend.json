@@ -1,0 +1,104 @@
+{
+  "$comment": "Frontend and full-stack agent benchmark questions over the RealWorld frontends: which component calls an endpoint, what a component change reaches, which pages a store reaches. Expected answers were written by reading the pinned source (imports, JSX and template elements, router records, HTTP calls, store hook calls), not from Concentrate output. Scoring as in questions.json.",
+  "questions": [
+    {
+      "id": "fs-favorite-consumers",
+      "sample": "internet-realworld-fullstack",
+      "category": "frontend-api",
+      "question": "Which frontend component sends the requests that favorite and unfavorite an article, and which backend service functions do the routes that receive those requests call?",
+      "expected": {
+        "mustInclude": [
+          "ArticlePreview",
+          "favoriteArticle",
+          "unfavoriteArticle"
+        ]
+      }
+    },
+    {
+      "id": "fs-comment-submit",
+      "sample": "internet-realworld-fullstack",
+      "category": "frontend-api",
+      "question": "When a comment is submitted in the frontend's CommentInput component, which backend route handles the request, which service function does it call, and which database model does that function create a record in?",
+      "expected": {
+        "mustInclude": [
+          "/articles/:slug/comments",
+          "addComment"
+        ],
+        "anyOf": [
+          [
+            "comment.create",
+            "Comment model",
+            "prisma.comment"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "fs-article-preview-pages",
+      "sample": "internet-realworld-fullstack",
+      "category": "frontend-impact",
+      "question": "If frontend/components/article/ArticlePreview.tsx changes, which Next.js pages (files under frontend/pages) render it, directly or through other components?",
+      "expected": {
+        "mustInclude": [
+          "index"
+        ],
+        "anyOf": [
+          [
+            "profile/[pid]",
+            "profile page"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ng-article-list-routes",
+      "sample": "internet-angular-realworld",
+      "category": "frontend-impact",
+      "question": "If ArticleListComponent changes, which URL routes of the app display it, directly or through the components they load?",
+      "expected": {
+        "mustInclude": [
+          "tag/:tag",
+          "favorites"
+        ],
+        "anyOf": [
+          [
+            "profile/:username",
+            ":username"
+          ],
+          [
+            "home"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "vue-user-store-pages",
+      "sample": "internet-vue-realworld",
+      "category": "store",
+      "question": "Which page components in src/pages use the Pinia user store, either directly or through a component they render (at any depth)?",
+      "expected": {
+        "mustInclude": [
+          "Home",
+          "Article.vue",
+          "Login",
+          "Register",
+          "Profile",
+          "Settings"
+        ]
+      }
+    },
+    {
+      "id": "vue-user-store-writers",
+      "sample": "internet-vue-realworld",
+      "category": "store",
+      "question": "Which components or pages in src change the Pinia user store's state through its updateUser action? Tests excluded.",
+      "expected": {
+        "mustInclude": [
+          "Login",
+          "Register",
+          "Settings"
+        ]
+      }
+    }
+  ]
+}
