@@ -125,6 +125,14 @@ even for large repositories; read it first to decide which tools to call.
   `relationName`, `onDelete`), `readBy` / `writtenBy` counts of routes,
   entrypoints and functions, and up to 20 `routes` and `entrypoints` with the
   operations they perform. Answers "which endpoints write the users table?".
+- `list_stores({ name?, library?, file?, limit = 20 })`: frontend state stores
+  (Pinia, Redux Toolkit, Zustand, Jotai, Svelte), filtered by a substring of
+  the name or hook, the `library` or the declaring file. Each store has its
+  `kind`, `hook`, `file` and `line`, its `state`, `getters` and `actions`,
+  `slices` for a Redux root store (state key → reducer), `definedBy` (the
+  setup, creator or atom functions), `readBy` / `writtenBy` counts of
+  functions and up to 20 `readers` and `writers` with the `members` they use.
+  Answers "what reads the cart store?".
 
 ### Agent tools
 
@@ -144,8 +152,13 @@ These answer a whole question in one call instead of a chain of lookups.
   its depth), `apiConsumers`: the frontend calls that reach the affected routes
   (as in `api_consumers`), with `consumerComponents` and `consumerPages`, the
   components and pages whose code makes those calls (callers followed up to
-  `maxDepth` levels), and the `dataAccess`, `tables`, `envVars` and `config` of the seeds themselves.
-  For a route, use `route_details`.
+  `maxDepth` levels), `stores`: the state stores the change reaches (written
+  by an affected function, one of its actions or definitions, or derived from
+  such a store; `changedBy` says how) with the functions that read them
+  (`readBy`), and `storeComponents` / `storePages`, the components and pages
+  those readers (and their callers) reach, and the `dataAccess`, `tables`,
+  `envVars` and `config` of the seeds themselves. A store's name or hook as
+  `symbol` makes that store the change. For a route, use `route_details`.
 - `detect_changes({ base = "HEAD", maxDepth = 5, limit = 50 })`: runs
   `git diff --unified=0 <base>` (no shell; `base` must look like a revision)
   plus untracked files, maps the changed lines onto declarations whose

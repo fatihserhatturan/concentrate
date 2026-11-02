@@ -755,6 +755,10 @@
     ],
     "pinia-stores": [
       {
+        "tool": "list_stores",
+        "args": {}
+      },
+      {
         "tool": "impact_of",
         "args": {
           "symbol": "add"
@@ -781,6 +785,18 @@
     ],
     "redux-toolkit": [
       {
+        "tool": "list_stores",
+        "args": {
+          "library": "redux"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "cart"
+        }
+      },
+      {
         "tool": "find_callers",
         "args": {
           "name": "recalculate"
@@ -801,6 +817,18 @@
     ],
     "zustand-stores": [
       {
+        "tool": "list_stores",
+        "args": {
+          "name": "bear"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "increase"
+        }
+      },
+      {
         "tool": "find_callers",
         "args": {
           "name": "log"
@@ -820,6 +848,16 @@
       }
     ],
     "jotai-atoms": [
+      {
+        "tool": "list_stores",
+        "args": {}
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "countAtom"
+        }
+      },
       {
         "tool": "get_file_outline",
         "args": {
@@ -865,6 +903,10 @@
       }
     ],
     "svelte-stores": [
+      {
+        "tool": "list_stores",
+        "args": {}
+      },
       {
         "tool": "get_file_outline",
         "args": {

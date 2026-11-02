@@ -796,8 +796,8 @@ Completes M8: React-side stores on the `Store` node from Phase 14, store-aware M
 
 ### MCP
 
-- [ ] `list_stores`
-- [ ] `impact_of` follows store reads and writes
+- [x] `list_stores`
+- [x] `impact_of` follows store reads and writes
 
 ### Measurement
 

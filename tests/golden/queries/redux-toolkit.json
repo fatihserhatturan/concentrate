@@ -985,6 +985,938 @@
     }
   },
   {
+    "tool": "list_stores",
+    "args": {
+      "library": "redux"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.library = $library RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, store.hook AS hook, file.relativePath AS file, store.line AS line, store.state AS state, store.getters AS getters, store.actions AS actions, store.slices AS slices",
+        "params": {
+          "name": "",
+          "library": "redux",
+          "file": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/app/store.ts:store:5:session",
+            "name": "session",
+            "library": "redux",
+            "kind": "slice",
+            "hook": "sessionSlice",
+            "file": "src/app/store.ts",
+            "line": 5,
+            "state": "token",
+            "getters": null,
+            "actions": "setToken",
+            "slices": null
+          },
+          {
+            "id": "file:src/app/store.ts:store:23:store",
+            "name": "store",
+            "library": "redux",
+            "kind": "store",
+            "hook": "store",
+            "file": "src/app/store.ts",
+            "line": 23,
+            "state": "cart,user,auth",
+            "getters": null,
+            "actions": null,
+            "slices": "{\"cart\":\"cartReducer\",\"user\":\"userReducer\",\"auth\":\"sessionSlice.reducer\"}"
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "name": "cart",
+            "library": "redux",
+            "kind": "slice",
+            "hook": "cartSlice",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 15,
+            "state": "items,total",
+            "getters": null,
+            "actions": "addItem,removeItem,clear",
+            "slices": null
+          },
+          {
+            "id": "file:src/features/user/userSlice.ts:store:3:user",
+            "name": "user",
+            "library": "redux",
+            "kind": "slice",
+            "hook": "userSlice",
+            "file": "src/features/user/userSlice.ts",
+            "line": 3,
+            "state": "name,loggedIn",
+            "getters": "selectName",
+            "actions": "login,logout",
+            "slices": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store)<-[rel:READS_STORE|WRITES_STORE]-(fn:Function) WHERE store.library = $library OPTIONAL MATCH (fnFile:File)-[:DEFINES_FUNCTION]->(fn) RETURN id(store) AS store, id(fn) AS fn, fn.name AS function, fnFile.relativePath AS file, rel.line AS line, label(rel) AS relType, rel.members AS members",
+        "params": {
+          "name": "",
+          "library": "redux",
+          "file": ""
+        },
+        "rows": [
+          {
+            "store": "file:src/app/store.ts:store:5:session",
+            "fn": "file:src/components/Profile.tsx:function:6:Profile",
+            "function": "Profile",
+            "file": "src/components/Profile.tsx",
+            "line": 8,
+            "relType": "READS_STORE",
+            "members": "token"
+          },
+          {
+            "store": "file:src/app/store.ts:store:5:session",
+            "fn": "file:src/components/Profile.tsx:function:13:signOut",
+            "function": "signOut",
+            "file": "src/components/Profile.tsx",
+            "line": 15,
+            "relType": "WRITES_STORE",
+            "members": "setToken"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/features/cart/cartSlice.ts:function:41:selectItems",
+            "function": "selectItems",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 41,
+            "relType": "READS_STORE",
+            "members": "items"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/components/Cart.tsx:function:6:Cart",
+            "function": "Cart",
+            "file": "src/components/Cart.tsx",
+            "line": 7,
+            "relType": "READS_STORE",
+            "members": "items"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/components/Cart.tsx:function:6:Cart",
+            "function": "Cart",
+            "file": "src/components/Cart.tsx",
+            "line": 8,
+            "relType": "READS_STORE",
+            "members": "total"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/components/Cart.tsx:function:6:Cart",
+            "function": "Cart",
+            "file": "src/components/Cart.tsx",
+            "line": 20,
+            "relType": "WRITES_STORE",
+            "members": "removeItem"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/components/Cart.tsx:function:11:add",
+            "function": "add",
+            "file": "src/components/Cart.tsx",
+            "line": 12,
+            "relType": "WRITES_STORE",
+            "members": "addItem"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "fn": "file:src/components/Profile.tsx:function:6:Profile",
+            "function": "Profile",
+            "file": "src/components/Profile.tsx",
+            "line": 7,
+            "relType": "READS_STORE",
+            "members": "name"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "fn": "file:src/components/Profile.tsx:function:13:signOut",
+            "function": "signOut",
+            "file": "src/components/Profile.tsx",
+            "line": 14,
+            "relType": "WRITES_STORE",
+            "members": "logout"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) WHERE store.library = $library RETURN id(store) AS store, fn.name AS function, fn.line AS line, label(rel) AS relType",
+        "params": {
+          "name": "",
+          "library": "redux",
+          "file": ""
+        },
+        "rows": [
+          {
+            "store": "file:src/app/store.ts:store:5:session",
+            "function": "setToken",
+            "line": 9,
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "function": "addItem",
+            "line": 19,
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "function": "removeItem",
+            "line": 23,
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "function": "clear",
+            "line": 28,
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "function": "login",
+            "line": 7,
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "function": "logout",
+            "line": 11,
+            "relType": "STORE_ACTION"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "library": "redux"
+      },
+      "totalStores": 4,
+      "stores": [
+        {
+          "name": "session",
+          "library": "redux",
+          "kind": "slice",
+          "hook": "sessionSlice",
+          "file": "src/app/store.ts",
+          "line": 5,
+          "state": [
+            "token"
+          ],
+          "getters": [],
+          "actions": [
+            "setToken"
+          ],
+          "definedBy": [],
+          "readBy": 1,
+          "writtenBy": 1,
+          "readers": [
+            {
+              "function": "Profile",
+              "file": "src/components/Profile.tsx",
+              "line": 8,
+              "members": [
+                "token"
+              ]
+            }
+          ],
+          "writers": [
+            {
+              "function": "signOut",
+              "file": "src/components/Profile.tsx",
+              "line": 15,
+              "members": [
+                "setToken"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "store",
+          "library": "redux",
+          "kind": "store",
+          "hook": "store",
+          "file": "src/app/store.ts",
+          "line": 23,
+          "state": [
+            "cart",
+            "user",
+            "auth"
+          ],
+          "getters": [],
+          "actions": [],
+          "slices": {
+            "cart": "cartReducer",
+            "user": "userReducer",
+            "auth": "sessionSlice.reducer"
+          },
+          "definedBy": [],
+          "readBy": 0,
+          "writtenBy": 0,
+          "readers": [],
+          "writers": []
+        },
+        {
+          "name": "cart",
+          "library": "redux",
+          "kind": "slice",
+          "hook": "cartSlice",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 15,
+          "state": [
+            "items",
+            "total"
+          ],
+          "getters": [],
+          "actions": [
+            "addItem",
+            "removeItem",
+            "clear"
+          ],
+          "definedBy": [],
+          "readBy": 2,
+          "writtenBy": 2,
+          "readers": [
+            {
+              "function": "Cart",
+              "file": "src/components/Cart.tsx",
+              "line": 7,
+              "members": [
+                "items",
+                "total"
+              ]
+            },
+            {
+              "function": "selectItems",
+              "file": "src/features/cart/cartSlice.ts",
+              "line": 41,
+              "members": [
+                "items"
+              ]
+            }
+          ],
+          "writers": [
+            {
+              "function": "add",
+              "file": "src/components/Cart.tsx",
+              "line": 12,
+              "members": [
+                "addItem"
+              ]
+            },
+            {
+              "function": "Cart",
+              "file": "src/components/Cart.tsx",
+              "line": 20,
+              "members": [
+                "removeItem"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "user",
+          "library": "redux",
+          "kind": "slice",
+          "hook": "userSlice",
+          "file": "src/features/user/userSlice.ts",
+          "line": 3,
+          "state": [
+            "name",
+            "loggedIn"
+          ],
+          "getters": [
+            "selectName"
+          ],
+          "actions": [
+            "login",
+            "logout"
+          ],
+          "definedBy": [],
+          "readBy": 1,
+          "writtenBy": 1,
+          "readers": [
+            {
+              "function": "Profile",
+              "file": "src/components/Profile.tsx",
+              "line": 7,
+              "members": [
+                "name"
+              ]
+            }
+          ],
+          "writers": [
+            {
+              "function": "signOut",
+              "file": "src/components/Profile.tsx",
+              "line": 14,
+              "members": [
+                "logout"
+              ]
+            }
+          ]
+        }
+      ],
+      "note": "Stores come from Pinia defineStore, Redux Toolkit createSlice / configureStore, Zustand create, Jotai atoms and Svelte stores. readBy / writtenBy count distinct functions; each store lists up to 20 readers and writers. A Redux root store's slices map its state keys to their reducers.",
+      "page": {
+        "offset": 0,
+        "returned": 4
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "cart"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/app/store.ts:function:9:setToken",
+            "name": "setToken",
+            "className": null,
+            "file": "src/app/store.ts",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/components/Cart.tsx:function:6:Cart",
+            "name": "Cart",
+            "className": null,
+            "file": "src/components/Cart.tsx",
+            "line": 6,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/components/Cart.tsx:function:11:add",
+            "name": "add",
+            "className": null,
+            "file": "src/components/Cart.tsx",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/components/Profile.tsx:function:6:Profile",
+            "name": "Profile",
+            "className": null,
+            "file": "src/components/Profile.tsx",
+            "line": 6,
+            "endLine": 21
+          },
+          {
+            "id": "file:src/components/Profile.tsx:function:13:signOut",
+            "name": "signOut",
+            "className": null,
+            "file": "src/components/Profile.tsx",
+            "line": 13,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:11:recalculate",
+            "name": "recalculate",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:41:selectItems",
+            "name": "selectItems",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 41,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:19:addItem",
+            "name": "addItem",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 19,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:23:removeItem",
+            "name": "removeItem",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 23,
+            "endLine": 26
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:function:28:clear",
+            "name": "clear",
+            "className": null,
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 28,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/features/user/userSlice.ts:function:7:login",
+            "name": "login",
+            "className": null,
+            "file": "src/features/user/userSlice.ts",
+            "line": 7,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/features/user/userSlice.ts:function:11:logout",
+            "name": "logout",
+            "className": null,
+            "file": "src/features/user/userSlice.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/lib/api.ts:function:4:fetchProfile",
+            "name": "fetchProfile",
+            "className": null,
+            "file": "src/lib/api.ts",
+            "line": 4,
+            "endLine": 4
+          },
+          {
+            "id": "file:src/lib/slices.ts:function:1:createSlice",
+            "name": "createSlice",
+            "className": null,
+            "file": "src/lib/slices.ts",
+            "line": 1,
+            "endLine": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
+        "params": {
+          "symbol": "cart"
+        },
+        "rows": [
+          {
+            "id": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "file": "src/features/cart/cartSlice.ts"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/components/Cart.tsx:function:6:Cart",
+            "callee": "file:src/features/cart/cartSlice.ts:function:23:removeItem",
+            "line": 20
+          },
+          {
+            "caller": "file:src/components/Cart.tsx:function:11:add",
+            "callee": "file:src/features/cart/cartSlice.ts:function:19:addItem",
+            "line": 12
+          },
+          {
+            "caller": "file:src/components/Profile.tsx:function:13:signOut",
+            "callee": "file:src/app/store.ts:function:9:setToken",
+            "line": 15
+          },
+          {
+            "caller": "file:src/components/Profile.tsx:function:13:signOut",
+            "callee": "file:src/lib/api.ts:function:4:fetchProfile",
+            "line": 17
+          },
+          {
+            "caller": "file:src/features/cart/cartSlice.ts:function:19:addItem",
+            "callee": "file:src/features/cart/cartSlice.ts:function:11:recalculate",
+            "line": 21
+          },
+          {
+            "caller": "file:src/features/cart/cartSlice.ts:function:23:removeItem",
+            "callee": "file:src/features/cart/cartSlice.ts:function:11:recalculate",
+            "line": 25
+          },
+          {
+            "caller": "file:src/features/cart/cartSlice.ts:function:28:clear",
+            "callee": "file:src/features/cart/cartSlice.ts:function:11:recalculate",
+            "line": 30
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store) WHERE id(fn) IN $ids RETURN id(store) AS store, id(fn) AS fn, rel.members AS members",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType",
+        "rows": [
+          {
+            "store": "file:src/app/store.ts:store:5:session",
+            "fn": "file:src/app/store.ts:function:9:setToken",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/features/cart/cartSlice.ts:function:19:addItem",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/features/cart/cartSlice.ts:function:23:removeItem",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/features/cart/cartSlice.ts:function:28:clear",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "fn": "file:src/features/user/userSlice.ts:function:7:login",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "fn": "file:src/features/user/userSlice.ts:function:11:logout",
+            "relType": "STORE_ACTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_STORE]->(store:Store) RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members",
+        "rows": [
+          {
+            "store": "file:src/app/store.ts:store:5:session",
+            "fn": "file:src/components/Profile.tsx:function:6:Profile",
+            "line": 8,
+            "members": "token"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/features/cart/cartSlice.ts:function:41:selectItems",
+            "line": 41,
+            "members": "items"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/components/Cart.tsx:function:6:Cart",
+            "line": 7,
+            "members": "items"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/components/Cart.tsx:function:6:Cart",
+            "line": 8,
+            "members": "total"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "fn": "file:src/components/Profile.tsx:function:6:Profile",
+            "line": 7,
+            "members": "name"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": [
+          {
+            "id": "file:src/app/store.ts:store:5:session",
+            "name": "session",
+            "library": "redux",
+            "kind": "slice",
+            "file": "src/app/store.ts",
+            "line": 5
+          },
+          {
+            "id": "file:src/app/store.ts:store:23:store",
+            "name": "store",
+            "library": "redux",
+            "kind": "store",
+            "file": "src/app/store.ts",
+            "line": 23
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "name": "cart",
+            "library": "redux",
+            "kind": "slice",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 15
+          },
+          {
+            "id": "file:src/features/user/userSlice.ts:store:3:user",
+            "name": "user",
+            "library": "redux",
+            "kind": "slice",
+            "file": "src/features/user/userSlice.ts",
+            "line": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems",
+            "file:src/components/Cart.tsx:function:6:Cart"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:src/components/Cart.tsx:component:6:Cart",
+            "fn": "file:src/components/Cart.tsx:function:6:Cart"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems",
+            "file:src/components/Cart.tsx:function:6:Cart"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems",
+            "file:src/components/Cart.tsx:function:6:Cart"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/components/Cart.tsx:component:6:Cart",
+            "name": "Cart",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Cart.tsx",
+            "line": 6,
+            "endLine": 24,
+            "isExported": true,
+            "tagName": null,
+            "selector": null,
+            "props": null,
+            "hooks": "useAppDispatch,useAppSelector,useSelector",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/Profile.tsx:component:6:Profile",
+            "name": "Profile",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/Profile.tsx",
+            "line": 6,
+            "endLine": 21,
+            "isExported": true,
+            "tagName": null,
+            "selector": null,
+            "props": null,
+            "hooks": "useDispatch,useSelector",
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:src/components/Cart.tsx:component:6:Cart"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "symbol": "cart",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [],
+      "callers": [],
+      "moduleCallers": [],
+      "routes": [],
+      "entrypoints": [],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "stores": [
+        {
+          "name": "cart",
+          "library": "redux",
+          "kind": "slice",
+          "file": "src/features/cart/cartSlice.ts",
+          "line": 15,
+          "changedBy": [],
+          "readBy": [
+            {
+              "function": "Cart",
+              "file": "src/components/Cart.tsx",
+              "line": 7,
+              "members": [
+                "items"
+              ]
+            },
+            {
+              "function": "Cart",
+              "file": "src/components/Cart.tsx",
+              "line": 8,
+              "members": [
+                "total"
+              ]
+            },
+            {
+              "function": "selectItems",
+              "file": "src/features/cart/cartSlice.ts",
+              "line": 41,
+              "members": [
+                "items"
+              ]
+            }
+          ]
+        }
+      ],
+      "storeComponents": [
+        {
+          "name": "Cart",
+          "kind": "function",
+          "file": "src/components/Cart.tsx",
+          "line": 6,
+          "depth": 0,
+          "changedThrough": [
+            "Cart"
+          ]
+        }
+      ],
+      "storePages": [],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
     "tool": "find_callers",
     "args": {
       "name": "recalculate"
@@ -1518,6 +2450,14 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
+        "params": {
+          "symbol": "selectItems"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
         "rows": [
           {
@@ -1656,6 +2596,126 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store) WHERE id(fn) IN $ids RETURN id(store) AS store, id(fn) AS fn, rel.members AS members",
+        "params": {
+          "ids": [
+            "file:src/features/cart/cartSlice.ts:function:41:selectItems"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType",
+        "rows": [
+          {
+            "store": "file:src/app/store.ts:store:5:session",
+            "fn": "file:src/app/store.ts:function:9:setToken",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/features/cart/cartSlice.ts:function:19:addItem",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/features/cart/cartSlice.ts:function:23:removeItem",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/features/cart/cartSlice.ts:function:28:clear",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "fn": "file:src/features/user/userSlice.ts:function:7:login",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "fn": "file:src/features/user/userSlice.ts:function:11:logout",
+            "relType": "STORE_ACTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_STORE]->(store:Store) RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members",
+        "rows": [
+          {
+            "store": "file:src/app/store.ts:store:5:session",
+            "fn": "file:src/components/Profile.tsx:function:6:Profile",
+            "line": 8,
+            "members": "token"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/features/cart/cartSlice.ts:function:41:selectItems",
+            "line": 41,
+            "members": "items"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/components/Cart.tsx:function:6:Cart",
+            "line": 7,
+            "members": "items"
+          },
+          {
+            "store": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "fn": "file:src/components/Cart.tsx:function:6:Cart",
+            "line": 8,
+            "members": "total"
+          },
+          {
+            "store": "file:src/features/user/userSlice.ts:store:3:user",
+            "fn": "file:src/components/Profile.tsx:function:6:Profile",
+            "line": 7,
+            "members": "name"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": [
+          {
+            "id": "file:src/app/store.ts:store:5:session",
+            "name": "session",
+            "library": "redux",
+            "kind": "slice",
+            "file": "src/app/store.ts",
+            "line": 5
+          },
+          {
+            "id": "file:src/app/store.ts:store:23:store",
+            "name": "store",
+            "library": "redux",
+            "kind": "store",
+            "file": "src/app/store.ts",
+            "line": 23
+          },
+          {
+            "id": "file:src/features/cart/cartSlice.ts:store:15:cart",
+            "name": "cart",
+            "library": "redux",
+            "kind": "slice",
+            "file": "src/features/cart/cartSlice.ts",
+            "line": 15
+          },
+          {
+            "id": "file:src/features/user/userSlice.ts:store:3:user",
+            "name": "user",
+            "library": "redux",
+            "kind": "slice",
+            "file": "src/features/user/userSlice.ts",
+            "line": 3
+          }
+        ]
       }
     ],
     "output": {
@@ -1680,6 +2740,9 @@
       "apiConsumers": [],
       "consumerComponents": [],
       "consumerPages": [],
+      "stores": [],
+      "storeComponents": [],
+      "storePages": [],
       "dataAccess": [],
       "tables": [],
       "envVars": [],

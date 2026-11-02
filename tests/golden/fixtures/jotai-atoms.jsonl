@@ -91,9 +91,9 @@
 {"kind":"rel","from":"file:src/atoms/counter.ts:function:8:<atom:arg0>","type":"CALLS","to":"file:src/atoms/counter.ts:function:8:<atom:arg0>:call:8:41:get","properties":{}}
 {"kind":"rel","from":"file:src/atoms/counter.ts:function:8:<atom:arg0>","type":"PASSED_TO","to":"file:src/atoms/counter.ts:initializercall:8:27:atom","properties":{}}
 {"kind":"rel","from":"file:src/atoms/counter.ts:function:8:<atom:arg0>","type":"READS_STORE","to":"file:src/atoms/counter.ts:store:4:countAtom","properties":{"line":8,"members":""}}
-{"kind":"rel","from":"file:src/atoms/counter.ts:store:10:incrementAtom","type":"STORE_DEFINED_BY_FUNCTION","to":"file:src/atoms/counter.ts:function:10:<atom:arg1>","properties":{}}
+{"kind":"rel","from":"file:src/atoms/counter.ts:store:10:incrementAtom","type":"STORE_ACTION","to":"file:src/atoms/counter.ts:function:10:<atom:arg1>","properties":{}}
+{"kind":"rel","from":"file:src/atoms/counter.ts:store:14:resetAtom","type":"STORE_ACTION","to":"file:src/atoms/counter.ts:function:16:<atom:arg1>","properties":{}}
 {"kind":"rel","from":"file:src/atoms/counter.ts:store:14:resetAtom","type":"STORE_DEFINED_BY_FUNCTION","to":"file:src/atoms/counter.ts:function:15:<atom:arg0>","properties":{}}
-{"kind":"rel","from":"file:src/atoms/counter.ts:store:14:resetAtom","type":"STORE_DEFINED_BY_FUNCTION","to":"file:src/atoms/counter.ts:function:16:<atom:arg1>","properties":{}}
 {"kind":"rel","from":"file:src/atoms/counter.ts:store:8:doubledAtom","type":"STORE_DEFINED_BY_FUNCTION","to":"file:src/atoms/counter.ts:function:8:<atom:arg0>","properties":{}}
 {"kind":"rel","from":"file:src/atoms/counter.ts:variable:10:incrementAtom","type":"INITIALIZED_BY","to":"file:src/atoms/counter.ts:initializercall:10:29:atom","properties":{}}
 {"kind":"rel","from":"file:src/atoms/counter.ts:variable:14:resetAtom","type":"INITIALIZED_BY","to":"file:src/atoms/counter.ts:initializercall:14:25:atom","properties":{}}

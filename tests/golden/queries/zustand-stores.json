@@ -773,6 +773,809 @@
     }
   },
   {
+    "tool": "list_stores",
+    "args": {
+      "name": "bear"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE (contains(lower(store.name), lower($name)) OR contains(lower(store.hook), lower($name))) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, store.hook AS hook, file.relativePath AS file, store.line AS line, store.state AS state, store.getters AS getters, store.actions AS actions, store.slices AS slices",
+        "params": {
+          "name": "bear",
+          "library": "",
+          "file": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/stores/bears.ts:store:15:useBearStore",
+            "name": "useBearStore",
+            "library": "zustand",
+            "kind": "hook",
+            "hook": "useBearStore",
+            "file": "src/stores/bears.ts",
+            "line": 15,
+            "state": "bears,honey",
+            "getters": null,
+            "actions": "increase,reset",
+            "slices": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store)<-[rel:READS_STORE|WRITES_STORE]-(fn:Function) WHERE (contains(lower(store.name), lower($name)) OR contains(lower(store.hook), lower($name))) OPTIONAL MATCH (fnFile:File)-[:DEFINES_FUNCTION]->(fn) RETURN id(store) AS store, id(fn) AS fn, fn.name AS function, fnFile.relativePath AS file, rel.line AS line, label(rel) AS relType, rel.members AS members",
+        "params": {
+          "name": "bear",
+          "library": "",
+          "file": ""
+        },
+        "rows": [
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "function": "BearCounter",
+            "file": "src/components/BearCounter.tsx",
+            "line": 6,
+            "relType": "READS_STORE",
+            "members": "bears"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "function": "BearCounter",
+            "file": "src/components/BearCounter.tsx",
+            "line": 7,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "function": "BearCounter",
+            "file": "src/components/BearCounter.tsx",
+            "line": 7,
+            "relType": "WRITES_STORE",
+            "members": "increase"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "function": "BearCounter",
+            "file": "src/components/BearCounter.tsx",
+            "line": 8,
+            "relType": "READS_STORE",
+            "members": "honey"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "function": "BearCounter",
+            "file": "src/components/BearCounter.tsx",
+            "line": 8,
+            "relType": "WRITES_STORE",
+            "members": "reset"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "function": "resetAll",
+            "file": "src/components/BearCounter.tsx",
+            "line": 23,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "function": "resetAll",
+            "file": "src/components/BearCounter.tsx",
+            "line": 23,
+            "relType": "WRITES_STORE",
+            "members": "reset"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "function": "resetAll",
+            "file": "src/components/BearCounter.tsx",
+            "line": 24,
+            "relType": "READS_STORE",
+            "members": ""
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "function": "resetAll",
+            "file": "src/components/BearCounter.tsx",
+            "line": 24,
+            "relType": "WRITES_STORE",
+            "members": "honey,setState"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:27:bearCount",
+            "function": "bearCount",
+            "file": "src/components/BearCounter.tsx",
+            "line": 28,
+            "relType": "READS_STORE",
+            "members": "bears"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) WHERE (contains(lower(store.name), lower($name)) OR contains(lower(store.hook), lower($name))) RETURN id(store) AS store, fn.name AS function, fn.line AS line, label(rel) AS relType",
+        "params": {
+          "name": "bear",
+          "library": "",
+          "file": ""
+        },
+        "rows": [
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "function": "increase",
+            "line": 21,
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "function": "reset",
+            "line": 25,
+            "relType": "STORE_ACTION"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "bear"
+      },
+      "totalStores": 1,
+      "stores": [
+        {
+          "name": "useBearStore",
+          "library": "zustand",
+          "kind": "hook",
+          "hook": "useBearStore",
+          "file": "src/stores/bears.ts",
+          "line": 15,
+          "state": [
+            "bears",
+            "honey"
+          ],
+          "getters": [],
+          "actions": [
+            "increase",
+            "reset"
+          ],
+          "definedBy": [],
+          "readBy": 3,
+          "writtenBy": 2,
+          "readers": [
+            {
+              "function": "BearCounter",
+              "file": "src/components/BearCounter.tsx",
+              "line": 6,
+              "members": [
+                "bears",
+                "honey"
+              ]
+            },
+            {
+              "function": "resetAll",
+              "file": "src/components/BearCounter.tsx",
+              "line": 23
+            },
+            {
+              "function": "bearCount",
+              "file": "src/components/BearCounter.tsx",
+              "line": 28,
+              "members": [
+                "bears"
+              ]
+            }
+          ],
+          "writers": [
+            {
+              "function": "BearCounter",
+              "file": "src/components/BearCounter.tsx",
+              "line": 7,
+              "members": [
+                "increase",
+                "reset"
+              ]
+            },
+            {
+              "function": "resetAll",
+              "file": "src/components/BearCounter.tsx",
+              "line": 23,
+              "members": [
+                "honey",
+                "reset",
+                "setState"
+              ]
+            }
+          ]
+        }
+      ],
+      "note": "Stores come from Pinia defineStore, Redux Toolkit createSlice / configureStore, Zustand create, Jotai atoms and Svelte stores. readBy / writtenBy count distinct functions; each store lists up to 20 readers and writers. A Redux root store's slices map its state keys to their reducers.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "increase"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "name": "BearCounter",
+            "className": null,
+            "file": "src/components/BearCounter.tsx",
+            "line": 5,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/components/BearCounter.tsx:function:17:Controls",
+            "name": "Controls",
+            "className": null,
+            "file": "src/components/BearCounter.tsx",
+            "line": 17,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "name": "resetAll",
+            "className": null,
+            "file": "src/components/BearCounter.tsx",
+            "line": 22,
+            "endLine": 25
+          },
+          {
+            "id": "file:src/components/BearCounter.tsx:function:27:bearCount",
+            "name": "bearCount",
+            "className": null,
+            "file": "src/components/BearCounter.tsx",
+            "line": 27,
+            "endLine": 29
+          },
+          {
+            "id": "file:src/stores/bears.ts:function:11:log",
+            "name": "log",
+            "className": null,
+            "file": "src/stores/bears.ts",
+            "line": 11,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/stores/bears.ts:function:21:increase",
+            "name": "increase",
+            "className": null,
+            "file": "src/stores/bears.ts",
+            "line": 21,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/stores/bears.ts:function:25:reset",
+            "name": "reset",
+            "className": null,
+            "file": "src/stores/bears.ts",
+            "line": 25,
+            "endLine": 28
+          },
+          {
+            "id": "file:src/stores/counter.ts:function:6:inc",
+            "name": "inc",
+            "className": null,
+            "file": "src/stores/counter.ts",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/stores/vanilla.ts:function:3:<createStore:arg0>",
+            "name": "<createStore:arg0>",
+            "className": null,
+            "file": "src/stores/vanilla.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/stores/vanilla.ts:function:7:<createStore:arg0>",
+            "name": "<createStore:arg0>",
+            "className": null,
+            "file": "src/stores/vanilla.ts",
+            "line": 7,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/stores/vanilla.ts:function:9:toggle",
+            "name": "toggle",
+            "className": null,
+            "file": "src/stores/vanilla.ts",
+            "line": 9,
+            "endLine": 9
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
+        "params": {
+          "symbol": "increase"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "callee": "file:src/stores/bears.ts:function:25:reset",
+            "line": 23
+          },
+          {
+            "caller": "file:src/stores/bears.ts:function:21:increase",
+            "callee": "file:src/stores/bears.ts:function:11:log",
+            "line": 22
+          },
+          {
+            "caller": "file:src/stores/bears.ts:function:25:reset",
+            "callee": "file:src/stores/bears.ts:function:11:log",
+            "line": 26
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store) WHERE id(fn) IN $ids RETURN id(store) AS store, id(fn) AS fn, rel.members AS members",
+        "params": {
+          "ids": [
+            "file:src/stores/bears.ts:function:21:increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType",
+        "rows": [
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/stores/bears.ts:function:21:increase",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/stores/bears.ts:function:25:reset",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/counter.ts:store:4:useCounterStore",
+            "fn": "file:src/stores/counter.ts:function:6:inc",
+            "relType": "STORE_ACTION"
+          },
+          {
+            "store": "file:src/stores/vanilla.ts:store:3:settingsStore",
+            "fn": "file:src/stores/vanilla.ts:function:3:<createStore:arg0>",
+            "relType": "STORE_DEFINED_BY_FUNCTION"
+          },
+          {
+            "store": "file:src/stores/vanilla.ts:store:7:themeStore",
+            "fn": "file:src/stores/vanilla.ts:function:7:<createStore:arg0>",
+            "relType": "STORE_DEFINED_BY_FUNCTION"
+          },
+          {
+            "store": "file:src/stores/vanilla.ts:store:7:themeStore",
+            "fn": "file:src/stores/vanilla.ts:function:9:toggle",
+            "relType": "STORE_ACTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_STORE]->(store:Store) RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members",
+        "rows": [
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "line": 6,
+            "members": "bears"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "line": 7,
+            "members": ""
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "line": 8,
+            "members": "honey"
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "line": 23,
+            "members": ""
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "line": 24,
+            "members": ""
+          },
+          {
+            "store": "file:src/stores/bears.ts:store:15:useBearStore",
+            "fn": "file:src/components/BearCounter.tsx:function:27:bearCount",
+            "line": 28,
+            "members": "bears"
+          },
+          {
+            "store": "file:src/stores/counter.ts:store:4:useCounterStore",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "line": 9,
+            "members": "count"
+          },
+          {
+            "store": "file:src/stores/counter.ts:store:4:useCounterStore",
+            "fn": "file:src/components/BearCounter.tsx:function:17:Controls",
+            "line": 18,
+            "members": ""
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": [
+          {
+            "id": "file:src/stores/bears.ts:store:15:useBearStore",
+            "name": "useBearStore",
+            "library": "zustand",
+            "kind": "hook",
+            "file": "src/stores/bears.ts",
+            "line": 15
+          },
+          {
+            "id": "file:src/stores/counter.ts:store:4:useCounterStore",
+            "name": "useCounterStore",
+            "library": "zustand",
+            "kind": "hook",
+            "file": "src/stores/counter.ts",
+            "line": 4
+          },
+          {
+            "id": "file:src/stores/vanilla.ts:store:3:settingsStore",
+            "name": "settingsStore",
+            "library": "zustand",
+            "kind": "vanilla",
+            "file": "src/stores/vanilla.ts",
+            "line": 3
+          },
+          {
+            "id": "file:src/stores/vanilla.ts:store:7:themeStore",
+            "name": "themeStore",
+            "library": "zustand",
+            "kind": "vanilla",
+            "file": "src/stores/vanilla.ts",
+            "line": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "file:src/components/BearCounter.tsx:function:27:bearCount"
+          ]
+        },
+        "rows": [
+          {
+            "component": "file:src/components/BearCounter.tsx:component:5:BearCounter",
+            "fn": "file:src/components/BearCounter.tsx:function:5:BearCounter"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "file:src/components/BearCounter.tsx:function:27:bearCount"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/components/BearCounter.tsx:function:5:BearCounter",
+            "file:src/components/BearCounter.tsx:function:22:resetAll",
+            "file:src/components/BearCounter.tsx:function:27:bearCount"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/components/BearCounter.tsx:component:5:BearCounter",
+            "name": "BearCounter",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/BearCounter.tsx",
+            "line": 5,
+            "endLine": 15,
+            "isExported": true,
+            "tagName": null,
+            "selector": null,
+            "props": null,
+            "hooks": "useBearStore,useCounterStore,useShallow",
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/components/BearCounter.tsx:component:17:Controls",
+            "name": "Controls",
+            "kind": "function",
+            "framework": "react",
+            "file": "src/components/BearCounter.tsx",
+            "line": 17,
+            "endLine": 20,
+            "isExported": true,
+            "tagName": null,
+            "selector": null,
+            "props": null,
+            "hooks": "useCounterStore",
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client, rel.template AS template",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_RENDERS]->(component:Component) WHERE id(component) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(component) AS component",
+        "params": {
+          "ids": [
+            "file:src/components/BearCounter.tsx:component:5:BearCounter"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "symbol": "increase",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "increase",
+          "className": null,
+          "file": "src/stores/bears.ts",
+          "line": 21,
+          "endLine": 24
+        }
+      ],
+      "callers": [],
+      "moduleCallers": [],
+      "routes": [],
+      "entrypoints": [],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "stores": [
+        {
+          "name": "useBearStore",
+          "library": "zustand",
+          "kind": "hook",
+          "file": "src/stores/bears.ts",
+          "line": 15,
+          "changedBy": [
+            {
+              "function": "increase",
+              "functionFile": "src/stores/bears.ts",
+              "as": "action"
+            }
+          ],
+          "readBy": [
+            {
+              "function": "BearCounter",
+              "file": "src/components/BearCounter.tsx",
+              "line": 6,
+              "members": [
+                "bears"
+              ]
+            },
+            {
+              "function": "BearCounter",
+              "file": "src/components/BearCounter.tsx",
+              "line": 7
+            },
+            {
+              "function": "BearCounter",
+              "file": "src/components/BearCounter.tsx",
+              "line": 8,
+              "members": [
+                "honey"
+              ]
+            },
+            {
+              "function": "resetAll",
+              "file": "src/components/BearCounter.tsx",
+              "line": 23
+            },
+            {
+              "function": "resetAll",
+              "file": "src/components/BearCounter.tsx",
+              "line": 24
+            },
+            {
+              "function": "bearCount",
+              "file": "src/components/BearCounter.tsx",
+              "line": 28,
+              "members": [
+                "bears"
+              ]
+            }
+          ]
+        }
+      ],
+      "storeComponents": [
+        {
+          "name": "BearCounter",
+          "kind": "function",
+          "file": "src/components/BearCounter.tsx",
+          "line": 5,
+          "depth": 0,
+          "changedThrough": [
+            "BearCounter"
+          ]
+        }
+      ],
+      "storePages": [],
+      "dataAccess": [],
+      "tables": [],
+      "envVars": [],
+      "config": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
     "tool": "find_callers",
     "args": {
       "name": "log"

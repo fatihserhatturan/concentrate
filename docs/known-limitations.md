@@ -881,8 +881,8 @@ Astro).
   variable, which is also its `hook`; `kind` is `primitive`, `derived` (a
   read function), `writable` (read and write functions), `write-only`
   (`atom(null, write)`) or the helper's name, and `state` lists the keys of
-  an object literal value. The read and write functions are
-  `STORE_DEFINED_BY_FUNCTION`. Atoms made in functions, `atomFamily`,
+  an object literal value. The read function is `STORE_DEFINED_BY_FUNCTION`
+  and the write function a `STORE_ACTION`. Atoms made in functions, `atomFamily`,
   `selectAtom`, `splitAtom` and atoms in other atom libraries are not read.
 - Jotai use: `useAtomValue(a)` reads, `useSetAtom(a)` writes and
   `useAtom(a)` reads (and writes when its setter is destructured), and in an
