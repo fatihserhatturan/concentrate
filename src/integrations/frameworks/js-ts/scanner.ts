@@ -18,6 +18,7 @@ import { applyVueRouterSemantics } from "./vue-router.js";
 import { applySvelteMarkupSemantics, applySvelteScriptSemantics } from "./svelte.js";
 import { applySvelteStoreSemantics, applySvelteTemplateStoreRefs } from "./svelte-stores.js";
 import { applySvelteKitParseSemantics } from "./sveltekit.js";
+import { applyAstroMarkupSemantics, applyAstroScriptSemantics } from "./astro.js";
 import { applyPiniaSemantics } from "./pinia.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
@@ -105,6 +106,11 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     onFile: applySvelteKitParseSemantics,
   },
   {
+    // The props and frontmatter of an .astro file.
+    name: "astro",
+    onFile: applyAstroScriptSemantics,
+  },
+  {
     // Pinia stores and the use of `use…Store()` hooks.
     name: "pinia",
     onFile: applyPiniaSemantics,
@@ -167,6 +173,12 @@ const markupPlugins: readonly HtmlPagePlugin[] = [
     // Store use in Svelte markup (`{$count}`).
     name: "svelte-stores",
     onPage: applySvelteTemplateStoreRefs,
+  },
+  {
+    // The component of an .astro file and the components (islands too) it
+    // renders.
+    name: "astro-components",
+    onPage: applyAstroMarkupSemantics,
   },
 ];
 

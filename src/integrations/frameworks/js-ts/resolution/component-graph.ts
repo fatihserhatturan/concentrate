@@ -7,9 +7,11 @@ import { isHookCall, type PendingRender } from "../react.js";
 
 // Cross-file component relationships:
 // - RENDERS: the JSX a component renders (`<UserCard name={…} />`), or the
-//   component tags of a Vue template, to the rendered Component, declared in
-//   the same file or imported by name or as the default export (the
-//   component of a `.vue` file), through barrels. `<CartContext.Provider>` renders the
+//   component tags of a Vue, Svelte or Astro template, to the rendered
+//   Component, declared in the same file or imported by name or as the
+//   default export (the component of a `.vue`, `.svelte` or `.astro` file),
+//   through barrels; an Astro island keeps its `client:*` directive in
+//   `client`. `<CartContext.Provider>` renders the
 //   context. `Component.pendingRenders` keeps the elements that stay
 //   unresolved (library components such as `<Link>`). A `lazy` component
 //   RENDERS the component its dynamic import loads.
@@ -44,12 +46,12 @@ export function addComponentRelationships(graph: IGraphContributor): void {
 
   // `export default function App()` / `export default App`, a component
   // exported through a wrapper (`export default connect(...)(App)`), or the
-  // component of a `.vue` or `.svelte` file.
+  // component of a `.vue`, `.svelte` or `.astro` file.
   for (const [fileId, byName] of componentsByFileAndName) {
     const file = nodesById.get(fileId);
     const defaultExport = file?.properties.defaultExport;
     const language = file?.properties.language;
-    const ids = language === "vue" || language === "svelte"
+    const ids = language === "vue" || language === "svelte" || language === "astro"
       ? [...byName.values()].flat().filter((id) => nodesById.get(id)?.properties.framework === language)
       : typeof defaultExport === "string"
       ? byName.get(defaultExport)
@@ -94,7 +96,7 @@ export function addComponentRelationships(graph: IGraphContributor): void {
           ? resolveContext(render.name.slice(0, dot), fileId)
           : resolveCall(member, render.name.slice(0, dot), fileId, componentsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId);
       if (target) {
-        added.push({ from: componentId, to: target, type: "RENDERS", properties: { props: render.props.join(","), line: render.line } });
+        added.push({ from: componentId, to: target, type: "RENDERS", properties: { props: render.props.join(","), line: render.line, ...(render.client ? { client: render.client } : {}) } });
       } else {
         unresolved.push(render);
       }

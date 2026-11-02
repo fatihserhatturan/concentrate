@@ -13,7 +13,8 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 // recorded on it as `pendingRenders` and the hooks it calls as `hooks`; the
 // component-graph contributor links them across files.
 
-export type PendingRender = { name: string; props: string[]; line: number };
+// `client`: an Astro island's hydration directive (`client:load` → `load`).
+export type PendingRender = { name: string; props: string[]; line: number; client?: string };
 
 type ComponentCandidate = {
   name: string;

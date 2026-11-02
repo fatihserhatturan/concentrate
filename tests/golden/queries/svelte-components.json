@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 58
+        "result": 59
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 58,
+      "schemaVersion": 59,
       "stats": [
         {
           "table": "Repo",
@@ -1000,37 +1000,42 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
             "line": 20,
-            "props": "todos,filter,onremove"
+            "props": "todos,filter,onremove",
+            "client": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/Counter.svelte:component:1:Counter",
             "line": 21,
-            "props": "start"
+            "props": "start",
+            "client": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/ui/Button.svelte:component:1:Button",
             "line": 22,
-            "props": "variant,onclick"
+            "props": "variant,onclick",
+            "client": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/Footer.svelte:component:1:Footer",
             "line": 29,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
             "child": "file:src/lib/components/TodoItem.svelte:component:1:TodoItem",
             "line": 15,
-            "props": "todo,remove"
+            "props": "todo,remove",
+            "client": null
           }
         ]
       },
@@ -1391,37 +1396,42 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
             "line": 20,
-            "props": "todos,filter,onremove"
+            "props": "todos,filter,onremove",
+            "client": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/Counter.svelte:component:1:Counter",
             "line": 21,
-            "props": "start"
+            "props": "start",
+            "client": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/ui/Button.svelte:component:1:Button",
             "line": 22,
-            "props": "variant,onclick"
+            "props": "variant,onclick",
+            "client": null
           },
           {
             "parent": "file:src/App.svelte:component:1:App",
             "child": "file:src/lib/components/Footer.svelte:component:1:Footer",
             "line": 29,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
             "child": "file:src/lib/components/TodoItem.svelte:component:1:TodoItem",
             "line": 15,
-            "props": "todo,remove"
+            "props": "todo,remove",
+            "client": null
           }
         ]
       }

@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 58
+        "result": 59
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 58,
+      "schemaVersion": 59,
       "stats": [
         {
           "table": "Repo",
@@ -1665,49 +1665,56 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:components/AppHeader.vue:component:1:AppHeader",
             "child": "file:components/forms/index.vue:component:1:Index",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:components/forms/index.vue:component:1:Index",
             "child": "file:components/base/BaseInput.vue:component:1:BaseInput",
             "line": 2,
-            "props": "model-value"
+            "props": "model-value",
+            "client": null
           },
           {
             "parent": "file:error.vue:component:1:Error",
             "child": "file:components/base/Button.vue:component:1:Button",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:layouts/default.vue:component:1:Default",
             "child": "file:components/AppHeader.vue:component:1:AppHeader",
             "line": 3,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:layouts/default.vue:component:1:Default",
             "child": "file:shared/GlobalBadge.vue:component:1:GlobalBadge",
             "line": 5,
-            "props": "count"
+            "props": "count",
+            "client": null
           },
           {
             "parent": "file:pages/index.vue:component:1:Index",
             "child": "file:components/base/Button.vue:component:1:Button",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:pages/users/[id].vue:component:1:[id]",
             "child": "file:components/UserCard.client.vue:component:1:UserCardClient",
             "line": 2,
-            "props": "name"
+            "props": "name",
+            "client": null
           }
         ]
       },
@@ -2358,49 +2365,56 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:components/AppHeader.vue:component:1:AppHeader",
             "child": "file:components/forms/index.vue:component:1:Index",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:components/forms/index.vue:component:1:Index",
             "child": "file:components/base/BaseInput.vue:component:1:BaseInput",
             "line": 2,
-            "props": "model-value"
+            "props": "model-value",
+            "client": null
           },
           {
             "parent": "file:error.vue:component:1:Error",
             "child": "file:components/base/Button.vue:component:1:Button",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:layouts/default.vue:component:1:Default",
             "child": "file:components/AppHeader.vue:component:1:AppHeader",
             "line": 3,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:layouts/default.vue:component:1:Default",
             "child": "file:shared/GlobalBadge.vue:component:1:GlobalBadge",
             "line": 5,
-            "props": "count"
+            "props": "count",
+            "client": null
           },
           {
             "parent": "file:pages/index.vue:component:1:Index",
             "child": "file:components/base/Button.vue:component:1:Button",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:pages/users/[id].vue:component:1:[id]",
             "child": "file:components/UserCard.client.vue:component:1:UserCardClient",
             "line": 2,
-            "props": "name"
+            "props": "name",
+            "client": null
           }
         ]
       }
@@ -3083,49 +3097,56 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:components/AppHeader.vue:component:1:AppHeader",
             "child": "file:components/forms/index.vue:component:1:Index",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:components/forms/index.vue:component:1:Index",
             "child": "file:components/base/BaseInput.vue:component:1:BaseInput",
             "line": 2,
-            "props": "model-value"
+            "props": "model-value",
+            "client": null
           },
           {
             "parent": "file:error.vue:component:1:Error",
             "child": "file:components/base/Button.vue:component:1:Button",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:layouts/default.vue:component:1:Default",
             "child": "file:components/AppHeader.vue:component:1:AppHeader",
             "line": 3,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:layouts/default.vue:component:1:Default",
             "child": "file:shared/GlobalBadge.vue:component:1:GlobalBadge",
             "line": 5,
-            "props": "count"
+            "props": "count",
+            "client": null
           },
           {
             "parent": "file:pages/index.vue:component:1:Index",
             "child": "file:components/base/Button.vue:component:1:Button",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:pages/users/[id].vue:component:1:[id]",
             "child": "file:components/UserCard.client.vue:component:1:UserCardClient",
             "line": 2,
-            "props": "name"
+            "props": "name",
+            "client": null
           }
         ]
       },
@@ -4040,49 +4061,56 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
         "rows": [
           {
             "parent": "file:components/AppHeader.vue:component:1:AppHeader",
             "child": "file:components/forms/index.vue:component:1:Index",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:components/forms/index.vue:component:1:Index",
             "child": "file:components/base/BaseInput.vue:component:1:BaseInput",
             "line": 2,
-            "props": "model-value"
+            "props": "model-value",
+            "client": null
           },
           {
             "parent": "file:error.vue:component:1:Error",
             "child": "file:components/base/Button.vue:component:1:Button",
             "line": 4,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:layouts/default.vue:component:1:Default",
             "child": "file:components/AppHeader.vue:component:1:AppHeader",
             "line": 3,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:layouts/default.vue:component:1:Default",
             "child": "file:shared/GlobalBadge.vue:component:1:GlobalBadge",
             "line": 5,
-            "props": "count"
+            "props": "count",
+            "client": null
           },
           {
             "parent": "file:pages/index.vue:component:1:Index",
             "child": "file:components/base/Button.vue:component:1:Button",
             "line": 5,
-            "props": ""
+            "props": "",
+            "client": null
           },
           {
             "parent": "file:pages/users/[id].vue:component:1:[id]",
             "child": "file:components/UserCard.client.vue:component:1:UserCardClient",
             "line": 2,
-            "props": "name"
+            "props": "name",
+            "client": null
           }
         ]
       },

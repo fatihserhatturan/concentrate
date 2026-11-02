@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 58
+        "result": 59
       },
       {
         "method": "stats",
@@ -33,7 +33,7 @@
           },
           {
             "table": "Function",
-            "count": 7
+            "count": 8
           },
           {
             "table": "Class",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 9
+            "count": 10
           },
           {
             "table": "Route",
@@ -93,7 +93,7 @@
           },
           {
             "table": "Component",
-            "count": 2
+            "count": 3
           },
           {
             "table": "Page",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 58,
+      "schemaVersion": 59,
       "stats": [
         {
           "table": "Repo",
@@ -131,7 +131,7 @@
         },
         {
           "table": "Function",
-          "count": 7
+          "count": 8
         },
         {
           "table": "Class",
@@ -163,7 +163,7 @@
         },
         {
           "table": "Call",
-          "count": 9
+          "count": 10
         },
         {
           "table": "Route",
@@ -191,7 +191,7 @@
         },
         {
           "table": "Component",
-          "count": 2
+          "count": 3
         },
         {
           "table": "Page",
@@ -227,6 +227,14 @@
             "kind": "Function",
             "file": "src/components/Total.svelte",
             "line": 11,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "<frontmatter>",
+            "kind": "Function",
+            "file": "src/pages/index.astro",
+            "line": 1,
             "isExported": false,
             "relationship": "DEFINES_FUNCTION"
           },
@@ -323,6 +331,14 @@
           "relationship": "DEFINES_FUNCTION"
         },
         {
+          "name": "<frontmatter>",
+          "kind": "Function",
+          "file": "src/pages/index.astro",
+          "line": 1,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
           "name": "<document.querySelector('p')?.addEventListener:click:arg1>",
           "kind": "Function",
           "file": "src/pages/index.astro",
@@ -365,7 +381,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 7
+        "returned": 8
       }
     }
   },
@@ -742,6 +758,15 @@
             "line": 12,
             "expression": "formatTotal",
             "relationship": "CALLS"
+          },
+          {
+            "target": "formatTotal",
+            "caller": "<frontmatter>",
+            "callerKind": "Function",
+            "file": "src/pages/index.astro",
+            "line": 7,
+            "expression": "formatTotal",
+            "relationship": "CALLS"
           }
         ]
       },
@@ -780,11 +805,20 @@
           "line": 12,
           "expression": "formatTotal",
           "relationship": "CALLS"
+        },
+        {
+          "target": "formatTotal",
+          "caller": "<frontmatter>",
+          "callerKind": "Function",
+          "file": "src/pages/index.astro",
+          "line": 7,
+          "expression": "formatTotal",
+          "relationship": "CALLS"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 2
+        "returned": 3
       }
     }
   },

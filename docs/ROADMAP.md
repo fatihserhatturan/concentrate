@@ -739,12 +739,12 @@ Reuses the SFC splitter (Phase 10), `Component` and `RENDERS` (Phase 11), `Page`
 
 ### Astro
 
-- [ ] `src/pages` files become `Page` nodes; endpoint files become `Route` nodes
-- [ ] Components rendered from `.astro` templates, including islands (`client:*`) of other frameworks, become `RENDERS`
+- [x] `src/pages` files become `Page` nodes; endpoint files become `Route` nodes
+- [x] Components rendered from `.astro` templates, including islands (`client:*`) of other frameworks, become `RENDERS`
 
 ### Acceptance criteria
 
-- [ ] Fixtures and golden coverage for Svelte components and stores, SvelteKit routes and Astro pages and islands
+- [x] Fixtures and golden coverage for Svelte components and stores, SvelteKit routes and Astro pages and islands
 - [ ] A pinned Svelte or SvelteKit sample with hand labels in `bench:accuracy`
 - [x] Precision stays at 100%; recall is reported
 

@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Counter from '../components/Counter';
+import Search from '../components/Search.svelte';
+import * as Ui from '../components/ui';
+import { listPosts } from '../lib/posts';
+
+const posts = listPosts();
+const response = await fetch('https://example.com/api/stats');
+const stats = await response.json();
+---
+<Base title="Home" description={`${posts.length} posts and ${stats.views > 10 ? 'many' : 'few'} views`}>
+  <Counter client:visible start={posts.length} />
+  <Search client:load placeholder="Find a post" />
+  {posts.map((post) => (
+    <Ui.Card title={post.title} href={`/blog/${post.slug}`} />
+  ))}
+</Base>

@@ -138,7 +138,7 @@
   "MATCH (package:Package) RETURN package.path AS path, package.relativePath AS relativePath",
   "MATCH (package:Package)-[:PACKAGE_CONTAINS_FILE]->(file:File) RETURN file.relativePath AS file, coalesce(package.name, package.relativePath) AS package",
   "MATCH (page:Page)-[load:PAGE_LOADS]->(fn:Function) WHERE id(page) IN $ids RETURN id(page) AS page, id(fn) AS fn, load.server AS server",
-  "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+  "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client",
   "MATCH (repo:Repo) RETURN repo.path AS path LIMIT $num",
   "MATCH (route:Route)-[:ROUTE_HANDLED_BY]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn",
   "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",

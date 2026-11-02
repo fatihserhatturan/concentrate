@@ -37,7 +37,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "route_details",
-    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the downstream call chain (up to 4 levels), and the data access, env vars and config of the route and that chain. Each route lists its consumers (the frontend calls that reach it) with the components and pages whose code makes them. A GET also lists the UI pages at that path (Next.js, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit) with the component each renders, its load functions, and the same chain and resources for that code. ${budgetNote}`,
+    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the downstream call chain (up to 4 levels), and the data access, env vars and config of the route and that chain. Each route lists its consumers (the frontend calls that reach it) with the components and pages whose code makes them. A GET also lists the UI pages at that path (Next.js, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit, Astro) with the component each renders, its load functions, and the same chain and resources for that code. ${budgetNote}`,
     inputSchema: objectSchema({
       method: { type: "string", description: "HTTP method, case-insensitive (GET, post, ...)." },
       path: { type: "string", description: "Route or page path, matched against the resolved full path or the path as declared." },
@@ -51,7 +51,7 @@ export const agentToolDefinitions = [
       method: { type: "string", description: "Optional route method, case-insensitive (GET, post, query, mutation, ...)." },
       path: { type: "string", description: "Optional route path, matched against the resolved full path or the path as declared (/api/users/:id, post.byId)." },
       routeFile: { type: "string", description: "Optional scan-relative file of the route declaration." },
-      framework: { type: "string", description: "Optional route framework, such as express-koa, nextjs, nuxt, sveltekit or trpc." },
+      framework: { type: "string", description: "Optional route framework, such as express-koa, nextjs, nuxt, sveltekit, astro or trpc." },
       file: { type: "string", description: "Optional scan-relative file of the calling code." },
       client: { type: "string", description: "Optional client: fetch, axios, ky, ofetch, nuxt, swr, tanstack-query or trpc." },
       limit: limit(50),
@@ -77,7 +77,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "component_tree",
-    description: `A UI component's tree: what it renders and what renders it (each with the props passed and the render line, up to depth levels), elements that resolved to no component (library components), the function or class that defines it, its hooks, and the contexts it reads directly or through custom hooks. ${budgetNote}`,
+    description: `A UI component's tree: what it renders and what renders it (each with the props passed, the render line and an Astro island's client directive, up to depth levels), elements that resolved to no component (library components), the function or class that defines it, its hooks, and the contexts it reads directly or through custom hooks. ${budgetNote}`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
       file: { type: "string", description: "Optional scan-relative file path or path suffix of the component." },
@@ -87,7 +87,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "find_component_usages",
-    description: `Where a UI component is rendered: each render site with the rendering component, file, line and props passed; for a context, also the functions that read it (useContext / use). Elements of that name that resolved to no component (library components such as Link) are listed with resolved: false. ${budgetNote}`,
+    description: `Where a UI component is rendered: each render site with the rendering component, file, line, props passed and an Astro island's client directive; for a context, also the functions that read it (useContext / use). Elements of that name that resolved to no component (library components such as Link) are listed with resolved: false. ${budgetNote}`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
       file: { type: "string", description: "Optional scan-relative file path or path suffix of the component; leaves out unresolved elements." },

@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 58;
+export const SCHEMA_VERSION = 59;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -95,7 +95,7 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "REQUESTS", from: "Call", to: "Route", properties: { method: "STRING", url: "STRING", match: "STRING" } },
   { type: "COMPONENT_DEFINED_BY", from: "Component", to: "Class", properties: {} },
   { type: "COMPONENT_DEFINED_BY_FUNCTION", from: "Component", to: "Function", properties: {} },
-  { type: "RENDERS", from: "Component", to: "Component", properties: { props: "STRING", line: "INT64" } },
+  { type: "RENDERS", from: "Component", to: "Component", properties: { props: "STRING", line: "INT64", client: "STRING" } },
   { type: "USES_HOOK", from: "Function", to: "Function", properties: { line: "INT64" } },
   { type: "USES_CONTEXT", from: "Function", to: "Component", properties: { line: "INT64" } },
   { type: "ROUTE_LIFECYCLE_STEP", from: "Route", to: "Function", properties: { role: "STRING", scope: "STRING", hook: "STRING", orderIndex: "INT64" } },

@@ -111,7 +111,7 @@ export async function findComponentUsages(engine: IQueryEngine, args: Record<str
     .filter((edge) => ids.has(edge.child))
     .map((edge) => {
       const parent = components.get(edge.parent);
-      return { kind: "render", file: parent?.file ?? null, line: edge.line, from: parent?.name ?? edge.parent, props: edge.props, ...target(edge.child) };
+      return { kind: "render", file: parent?.file ?? null, line: edge.line, from: parent?.name ?? edge.parent, props: edge.props, ...(edge.client ? { client: edge.client } : {}), ...target(edge.child) };
     });
 
   const contextIds = matches.filter((match) => match.kind === "context").map((match) => match.id);
@@ -198,6 +198,7 @@ function renderLevels(
         componentKind: child?.kind ?? null,
         componentFile: child?.file ?? null,
         props: edge.props,
+        ...(edge.client ? { client: edge.client } : {}),
       };
     })
     .sort((a, b) => a.depth - b.depth || String(a.parentFile).localeCompare(String(b.parentFile)) || (a.line ?? 0) - (b.line ?? 0));

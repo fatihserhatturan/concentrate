@@ -433,7 +433,8 @@ export type ComponentInfo = {
   unresolvedRenders: Array<{ name: string; props: string[]; line: number | null }>;
 };
 
-export type RenderEdge = { parent: string; child: string; line: number | null; props: string[] };
+// `client`: an Astro island's hydration directive (`load`, `visible`, …).
+export type RenderEdge = { parent: string; child: string; line: number | null; props: string[]; client: string | null };
 
 // Every component with its declaring file.
 export async function loadComponents(engine: IQueryEngine): Promise<Map<string, ComponentInfo>> {
@@ -484,13 +485,13 @@ function parseRenders(value: unknown): ComponentInfo["unresolvedRenders"] {
 export async function loadRenderEdges(engine: IQueryEngine): Promise<RenderEdge[]> {
   const rows = await engine.query(`
     MATCH (parent:Component)-[rel:RENDERS]->(child:Component)
-    RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props
+    RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props, rel.client AS client
   `) as Row[];
   return rows.flatMap((row) => {
     const parent = str(row.parent);
     const child = str(row.child);
     return parent && child
-      ? [{ parent, child, line: num(row.line), props: str(row.props)?.split(",").filter(Boolean) ?? [] }]
+      ? [{ parent, child, line: num(row.line), props: str(row.props)?.split(",").filter(Boolean) ?? [], client: str(row.client) }]
       : [];
   });
 }
