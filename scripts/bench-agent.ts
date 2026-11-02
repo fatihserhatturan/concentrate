@@ -124,6 +124,7 @@ for (const sample of samples) {
       "--manifest", path.join(sampleWork, "manifest.json"), "--cache-dir", path.join(sampleWork, "cache"),
       ...(entry?.continueOnError ? ["--continue-on-error"] : []),
       ...(entry?.exclude ?? []).flatMap((pattern) => ["--exclude", pattern]),
+      ...(entry?.apiOrigins ?? []).flatMap((origin) => ["--api-origin", origin]),
     ], { encoding: "utf8" });
     // Exit 1 is a scan that skipped unparsable files, expected for continueOnError samples.
     if (scan.status !== 0 && !(entry?.continueOnError && scan.status === 1)) {

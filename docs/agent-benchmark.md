@@ -179,3 +179,73 @@ Recorded 2026-10-29, same CLI and model, three runs each, `--max-turns 25`
 The one-run measurement of this set
 ([`bench/results/agent-hard-2026-10-29.json`](../bench/results/agent-hard-2026-10-29.json))
 had 4/6 → 5/6 correct, −23% median input tokens and −43% median tool calls.
+
+### Frontend and full-stack questions
+
+[`bench/agent/questions-frontend.json`](../bench/agent/questions-frontend.json)
+has six questions over the RealWorld frontends, two per category:
+
+- **frontend-api:** which component sends the favorite requests and which
+  backend service functions those routes call; which route, service function
+  and model a submitted comment reaches (`internet-realworld-fullstack`);
+- **frontend-impact:** which Next.js pages render `ArticlePreview` through
+  other components; which Angular routes display `ArticleListComponent`,
+  lazy-loaded profile routes included;
+- **store:** which Vue pages use the Pinia user store directly or through a
+  component at any depth; which components write it through `updateUser`.
+
+Expected answers were written from the source (JSX and template elements,
+router records, HTTP calls, store hook calls). The benchmark now passes a
+sample's `apiOrigins` to the scan, so the full-stack graph links the
+frontend calls to the backend routes as `bench:accuracy` does.
+
+```bash
+npm run bench:agent -- --questions bench/agent/questions-frontend.json --runs 3 --model sonnet --max-turns 25
+```
+
+Recorded 2026-11-02 with Claude Code 2.1.309, `--model sonnet`, three runs
+each, `--max-turns 25`
+([`bench/results/agent-frontend-runs3-2026-11-02.json`](../bench/results/agent-frontend-runs3-2026-11-02.json)):
+
+| Question | Category | Correct (base / conc.) | Input tokens | Output tokens | Tool calls | Cost USD |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| fs-favorite-consumers | frontend-api | 3/3 / 3/3 | 100.0k → 143.4k | 1.0k → 1.0k | 4 → 5 | 0.0712 → 0.0851 |
+| fs-comment-submit | frontend-api | 3/3 / 3/3 | 101.1k → 140.6k | 1.2k → 1.1k | 6 → 5 | 0.0696 → 0.0753 |
+| fs-article-preview-pages | frontend-impact | 3/3 / 3/3 | 131.4k → 101.7k | 1.0k → 0.6k | 3 → 2 | 0.0599 → 0.0584 |
+| ng-article-list-routes | frontend-impact | 3/3 / 3/3 | 99.0k → 101.9k | 1.1k → 0.7k | 5 → 3 | 0.071 → 0.0644 |
+| vue-user-store-pages | store | 3/3 / 3/3 | 73.6k → 108.0k | 1.3k → 1.6k | 2 → 4 | 0.0727 → 0.0799 |
+| vue-user-store-writers | store | 3/3 / 3/3 | 66.4k → 67.8k | 0.5k → 0.5k | 1 → 1 | 0.0454 → 0.0482 |
+
+Per category (medians over six runs; cost is the sum):
+
+| Category | Correct (base / conc.) | Input tokens | Tool calls | Cost USD |
+| --- | ---: | ---: | ---: | ---: |
+| frontend-api | 6/6 / 6/6 | 101.0k → 142.0k | 5 → 5 | 0.50 → 0.48 |
+| frontend-impact | 6/6 / 6/6 | 131.4k → 101.9k | 3.5 → 3 | 0.39 → 0.38 |
+| store | 6/6 / 6/6 | 67.9k → 87.3k | 1.5 → 2 | 0.38 → 0.39 |
+
+| | Baseline | Concentrate |
+| --- | ---: | ---: |
+| Correct | 18/18 | 18/18 |
+| Median input tokens | 100.4k | 107.4k (+7%) |
+| Median tool calls | 3.5 | 3.5 |
+| Median turns | 4.5 | 4.5 |
+| Median wall time | 14.2 s | 17.2 s (+20%) |
+| Total cost (CLI estimate) | $1.27 | $1.25 |
+
+- **No accuracy difference.** The RealWorld frontends are small and name
+  things plainly, so grep answered every question in both
+  modes.
+- **Impact questions got cheaper.** `impact_of` returned the pages and routes
+  in one call: the Next.js page question used 23% fewer input tokens, and
+  the Angular route question, which needs the lazy `loadChildren` profile
+  routes, took 3 tool calls instead of 5.
+- **API questions cost more input.** The agent used `api_consumers` and
+  `route_details` in five of six runs; their results, plus the `ToolSearch`
+  that loads them, are larger than the two or three grep hits the baseline
+  needed.
+- **The store tools went unused.** In all six store runs the agent grepped
+  for `useUserStore` / `updateUser` instead of calling `list_stores` or
+  `impact_of`; with a single store and a distinctive hook name, grep is the
+  shorter path. A repository with several stores, or slices reached through
+  selectors, would be the fairer test.

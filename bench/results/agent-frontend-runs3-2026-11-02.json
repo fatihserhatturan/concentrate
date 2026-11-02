@@ -1,0 +1,890 @@
+{
+  "recordedAt": "2026-11-02T16:21:12.511Z",
+  "model": "sonnet",
+  "runs": 3,
+  "maxTurns": 25,
+  "totals": {
+    "baseline": {
+      "runs": 18,
+      "correct": 18,
+      "medianInputTokens": 100424.5,
+      "medianOutputTokens": 1117.5,
+      "medianToolCalls": 3.5,
+      "medianTurns": 4.5,
+      "medianDurationMs": 14242.5,
+      "medianCostUsd": 0.067
+    },
+    "concentrate": {
+      "runs": 18,
+      "correct": 18,
+      "medianInputTokens": 107449.5,
+      "medianOutputTokens": 819.5,
+      "medianToolCalls": 3.5,
+      "medianTurns": 4.5,
+      "medianDurationMs": 17160,
+      "medianCostUsd": 0.0692
+    }
+  },
+  "results": [
+    {
+      "id": "fs-favorite-consumers",
+      "sample": "internet-realworld-fullstack",
+      "category": "frontend-api",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 99984,
+            "medianOutputTokens": 1045,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 13785,
+            "medianCostUsd": 0.0712
+          },
+          "runs": [
+            {
+              "answer": "**Frontend component:** `ArticlePreview` in `frontend/components/article/ArticlePreview.tsx`. The heart button's `onClick` calls `handleClickFavorite(slug)`, which sends the request with axios directly.\n- If the article is already favorited, it sends `DELETE ${SERVER_BASE_URL}/articles/${slug}/favorite` (line 43).\n- Otherwise it sends `POST` to the same URL (line 50).\n\n`frontend/lib/api/article.ts` also defines `favorite` and `unfavorite` helpers for these two URLs (lines 32 and 47). My search found no component using them, so `ArticlePreview` is the only sender I found.\n\n**Backend routes and service functions:** both routes are in `backend/src/app/routes/article/article.controller.ts` and require auth. Each calls a function from `article.service.ts`, passing the slug and the current user's id (`req.auth?.user?.id`).\n- `POST /articles/:slug/favorite` (line 211) calls `favoriteArticle(req.params.slug, req.auth?.user?.id)`.\n- `DELETE /articles/:slug/favorite` (line 231) calls `unfavoriteArticle(req.params.slug, req.auth?.user?.id)`.\n\nI did not open `article.service.ts`, so I haven't checked what those two functions do internally.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12938,
+              "costUsd": 0.1565811,
+              "inputTokens": 6,
+              "outputTokens": 981,
+              "cacheCreationTokens": 35067,
+              "cacheReadTokens": 64911,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The `ArticlePreview` component sends the requests, and the backend routes call `favoriteArticle` and `unfavoriteArticle`.\n\n**Frontend: `ArticlePreview`** (`frontend/components/article/ArticlePreview.tsx`)\n- The heart button's `onClick` calls `handleClickFavorite(preview.slug)` (line 103).\n- If the article is already favorited, the handler sends `DELETE ${SERVER_BASE_URL}/articles/${slug}/favorite` (line 43).\n- Otherwise it sends a `POST` to the same URL (line 50).\n- It also updates `favorited` and `favoritesCount` optimistically.\n- `frontend/lib/api/article.ts` has matching `favorite` and `unfavorite` helpers (lines 32 and 47). `ArticlePreview` calls `axios` directly instead of using them.\n\n**Backend routes** (`backend/src/app/routes/article/article.controller.ts`)\n- `POST /articles/:slug/favorite` (line 210) requires auth and calls `favoriteArticle(req.params.slug, req.auth?.user?.id)` (line 215).\n- `DELETE /articles/:slug/favorite` (line 230) requires auth and calls `unfavoriteArticle(req.params.slug, req.auth?.user?.id)` (line 235).\n\nBoth functions are imported from `./article.service` (`backend/src/app/routes/article/article.service.ts`). I didn't open that file, so I haven't checked what they do inside.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 13785,
+              "costUsd": 0.06360009999999999,
+              "inputTokens": 6,
+              "outputTokens": 1045,
+              "cacheCreationTokens": 11063,
+              "cacheReadTokens": 88861,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 4
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend component:** `ArticlePreview` in `frontend/components/article/ArticlePreview.tsx`. Its `handleClickFavorite(slug)` handler runs when the heart button is clicked.\n- If `preview.favorited` is true, it sends `axios.delete(`${SERVER_BASE_URL}/articles/${slug}/favorite`)`, which unfavorites the article.\n- Otherwise it sends a POST to the same URL, which favorites it.\n- It also updates `favorited` and `favoritesCount` optimistically.\n\n`frontend/lib/api/article.ts` has `favorite` and `unfavorite` helpers for the same two requests, but I didn't check whether anything calls them. `ArticlePreview` builds the requests inline instead.\n\n**Backend routes and the service functions they call** (routes in `backend/src/app/routes/article/article.controller.ts`):\n\n| Request | Route | Service function (`article.service.ts`) |\n|---|---|---|\n| POST | `/articles/:slug/favorite` | `favoriteArticle(slug, userId)` (line 562) |\n| DELETE | `/articles/:slug/favorite` | `unfavoriteArticle(slug, userId)` (line 608) |\n\n- **`favoriteArticle`** runs a Prisma `article.update` that does `favoritedBy: { connect: { id } }`.\n- **`unfavoriteArticle`** runs the same update with `favoritedBy: { disconnect: { id } }`.\n- **Return value:** both return the article with `tagList`, `author` (through `profileMapper`), `favorited` and `favoritesCount`.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 33423,
+              "costUsd": 0.0711506,
+              "inputTokens": 8,
+              "outputTokens": 1221,
+              "cacheCreationTokens": 11645,
+              "cacheReadTokens": 123446,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 5
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 143442,
+            "medianOutputTokens": 1010,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 17917,
+            "medianCostUsd": 0.0851
+          },
+          "runs": [
+            {
+              "answer": "**Frontend component:** `ArticlePreview` (`frontend/components/article/ArticlePreview.tsx:17`). Its `handleClickFavorite` function calls axios directly:\n- `axios.post` on `/api/articles/${slug}/favorite` at line 49 to favorite.\n- `axios.delete` on the same URL at line 43 to unfavorite.\n\n`frontend/lib/api/article.ts` also has `favorite` (line 33) and `unfavorite` (line 48) helpers that hit the same two endpoints. These are plain functions, not components. `ArticlePreview` doesn't go through them.\n\n`ArticleList` renders `ArticlePreview`. `ArticleList` is used by `MainView`, which `Home` renders (`pages/index.tsx`), and by the `Profile` page (`pages/profile/[pid].tsx`).\n\n**Backend routes and service functions** (both routes are in `backend/src/app/routes/article/article.controller.ts`):\n\n| Request | Route handler | Service function in `article.service.ts` |\n|---|---|---|\n| `POST /api/articles/:slug/favorite` (line 210) | handler at lines 213–220 | `favoriteArticle` |\n| `DELETE /api/articles/:slug/favorite` (line 230) | handler at lines 233–240 | `unfavoriteArticle` |\n\nEach service function updates the `Article` table with `prisma.article.update`, at line 563 for `favoriteArticle` and line 609 for `unfavoriteArticle`. Each then calls `profileMapper` from `profile/profile.utils.ts` to build the response. `profileMapper` is the only other function in the call chain.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 21468,
+              "costUsd": 0.0918735,
+              "inputTokens": 10,
+              "outputTokens": 1010,
+              "cacheCreationTokens": 17191,
+              "cacheReadTokens": 129895,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__list_routes": 1,
+                "mcp__concentrate__route_details": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend component:** `ArticlePreview` (`frontend/components/article/ArticlePreview.tsx:17`). Its `handleClickFavorite` handler sends both requests with axios:\n- `axios.delete` to `/api/articles/${slug}/favorite` (line 43) to unfavorite.\n- `axios.post` to the same URL (line 49) to favorite.\n\n`frontend/lib/api/article.ts` has `favorite` (line 33) and `unfavorite` (line 48) helpers that call the same two endpoints. The graph shows no component calling those helpers. `ArticlePreview` is rendered by `ArticleList`, which `MainView` (home page) and the profile page `[pid].tsx` render.\n\n**Backend:** both routes are in `backend/src/app/routes/article/article.controller.ts`, and each handler calls one function in `article.service.ts`:\n\n| Request | Route (controller line) | Service function |\n|---|---|---|\n| `POST /api/articles/:slug/favorite` | line 210 | `favoriteArticle` |\n| `DELETE /api/articles/:slug/favorite` | line 230 | `unfavoriteArticle` |\n\nEach service function updates the `Article` row with `prisma.article.update` (lines 563 and 609). It then calls `profileMapper` from `backend/src/app/routes/profile/profile.utils.ts` to shape the response.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 17917,
+              "costUsd": 0.0795889,
+              "inputTokens": 10,
+              "outputTokens": 847,
+              "cacheCreationTokens": 14592,
+              "cacheReadTokens": 127309,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend component:** `ArticlePreview` in `frontend/components/article/ArticlePreview.tsx:17`. Its `handleClickFavorite` handler (line 27) sends both requests with axios:\n- `axios.post` to `/api/articles/${slug}/favorite` at line 49 favorites the article.\n- `axios.delete` to the same URL at line 43 unfavorites it.\n\n`frontend/lib/api/article.ts` also has `favorite` (line 33) and `unfavorite` (line 48), which send the same two requests. Those are plain API helpers, not components. I didn't check whether `ArticlePreview` or anything else calls them.\n\n**Backend routes and services:** both routes are in `backend/src/app/routes/article/article.controller.ts` (Express). Each handler calls one service function in `article.service.ts`:\n\n| Request | Route (controller line) | Service function |\n|---|---|---|\n| `POST /api/articles/:slug/favorite` | line 210 | `favoriteArticle` (`article.service.ts:562`) |\n| `DELETE /api/articles/:slug/favorite` | line 230 | `unfavoriteArticle` (`article.service.ts:608`) |\n\nBoth service functions run a Prisma `article.update`, then pass the result through `profileMapper` (`backend/src/app/routes/profile/profile.utils.ts`).\n\n`ArticlePreview` is rendered by `ArticleList`. `ArticleList` is used by `MainView`, which `Home` (`pages/index.tsx`) renders. `ArticleList` is also used by the `Profile` page (`pages/profile/[pid].tsx`).",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 16902,
+              "costUsd": 0.08511740000000001,
+              "inputTokens": 10,
+              "outputTokens": 1078,
+              "cacheCreationTokens": 15378,
+              "cacheReadTokens": 128054,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__search_symbols": 1,
+                "mcp__concentrate__route_details": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fs-comment-submit",
+      "sample": "internet-realworld-fullstack",
+      "category": "frontend-api",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 101080,
+            "medianOutputTokens": 1180,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 12913,
+            "medianCostUsd": 0.0696
+          },
+          "runs": [
+            {
+              "answer": "Submitting a comment in `CommentInput` ends up as a row in the Prisma `Comment` model, written by `addComment`.\n\n1. **Frontend.** `handleSubmit` in `frontend/components/comment/CommentInput.tsx:27` sends `POST ${SERVER_BASE_URL}/articles/${pid}/comments`. The body is `{ comment: { body } }` and the request carries an `Authorization: Token …` header.\n2. **Backend route.** The handler for `POST /articles/:slug/comments` is in `backend/src/app/routes/article/article.controller.ts:171`. It calls `addComment(req.body.comment.body, req.params.slug, req.auth?.user?.id)` and responds with `{ comment }`.\n3. **Service function.** `addComment` is in `backend/src/app/routes/article/article.service.ts:473`.\n4. **Database model.** `addComment` calls `prisma.comment.create(...)` at `article.service.ts:487`. That creates a record in the **`Comment`** model.\n\n`frontend/lib/api/comment.ts` also has a `CommentAPI.create` for the same endpoint, but `CommentInput` doesn't use it. It calls axios directly.\n\nI didn't open `schema.prisma`. The model name comes from the `prisma.comment` accessor, which Prisma generates from a model named `Comment`.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 16913,
+              "costUsd": 0.07436809999999999,
+              "inputTokens": 6,
+              "outputTokens": 1225,
+              "cacheCreationTokens": 13333,
+              "cacheReadTokens": 87741,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 4,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The comment is handled in three steps:\n\n1. **Route:** `CommentInput` posts to `POST /articles/:slug/comments`. The call is in `frontend/components/comment/CommentInput.tsx:30`, with the body `{ comment: { body } }` and a `Token` auth header. The backend route is in `backend/src/app/routes/article/article.controller.ts:171`.\n2. **Service function:** the route handler calls `addComment(req.body.comment.body, req.params.slug, req.auth?.user?.id)` (`article.controller.ts:175`). The function is in `backend/src/app/routes/article/article.service.ts:473`. It returns a 422 if the body is empty, then looks up the article by slug.\n3. **Database model:** `addComment` calls `prisma.comment.create(...)` (`article.service.ts:487`). That creates a record in the **`Comment`** model, connected to the article through `article` and to the user through `author`.\n\n`CommentInput` calls axios directly. It doesn't use `CommentAPI.create` in `frontend/lib/api/comment.ts`.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 9718,
+              "costUsd": 0.0673423,
+              "inputTokens": 6,
+              "outputTokens": 1163,
+              "cacheCreationTokens": 11696,
+              "cacheReadTokens": 89163,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 4,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "When a comment is submitted in `CommentInput`, the request goes through these steps:\n\n1. **Frontend.** `handleSubmit` in `frontend/components/comment/CommentInput.tsx:27-47` sends `POST ${SERVER_BASE_URL}/articles/${pid}/comments`. The body is `{ comment: { body: content } }`, and the request carries a `Token` authorization header.\n\n2. **Backend route.** `POST /articles/:slug/comments` in `backend/src/app/routes/article/article.controller.ts:171`. The handler calls `addComment(req.body.comment.body, req.params.slug, req.auth?.user?.id)` at line 175.\n\n3. **Service function.** `addComment` in `backend/src/app/routes/article/article.service.ts:473`. It throws a 422 if the body is empty. Otherwise it looks up the article by slug and calls `prisma.comment.create(...)` at line 487.\n\n4. **Database model.** The `Comment` model, accessed as `prisma.comment`. It is defined in `backend/src/prisma/schema.prisma`. The new record is connected to the article found by slug and to the authoring user.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 12913,
+              "costUsd": 0.06958439999999999,
+              "inputTokens": 8,
+              "outputTokens": 1180,
+              "cacheCreationTokens": 11374,
+              "cacheReadTokens": 122724,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 4,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 140636,
+            "medianOutputTokens": 1051,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 21717,
+            "medianCostUsd": 0.0753
+          },
+          "runs": [
+            {
+              "answer": "Submitting a comment in `CommentInput` ends with a new record in the **`Comment`** model.\n\n1. **Frontend call:** `handleSubmit` in `frontend/components/comment/CommentInput.tsx:30` runs `axios.post` to `${SERVER_BASE_URL}/articles/${pid}/comments`. The body is `{ comment: { body } }`, and the `Authorization: Token …` header carries the user's token.\n\n2. **Backend route:** `POST /api/articles/:slug/comments` handles the request. It is an Express router handler in `backend/src/app/routes/article/article.controller.ts:170-180`.\n\n3. **Service function:** the handler calls `addComment` in `backend/src/app/routes/article/article.service.ts`.\n\n4. **Database model:** `addComment` does two things with Prisma:\n   - It reads the article with `prisma.article.findUnique` (line 478). Just before that, at line 475, it can throw an `HttpException`.\n   - It creates the comment with `prisma.comment.create` (line 487). This is the only write.\n\nI got the route and call chain from the code graph, which shows the handler calling `addComment` and `addComment` calling `prisma.comment.create`. I only opened the frontend component directly, not the controller or service source.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 28433,
+              "costUsd": 0.07530629999999999,
+              "inputTokens": 10,
+              "outputTokens": 903,
+              "cacheCreationTokens": 13383,
+              "cacheReadTokens": 127243,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 1,
+                "ToolSearch": 1,
+                "Read": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Submitting a comment in `CommentInput` goes through these three steps:\n\n- **Route:** `POST /articles/:slug/comments`. The frontend's `handleSubmit` in `frontend/components/comment/CommentInput.tsx:30` sends `POST ${SERVER_BASE_URL}/articles/${pid}/comments` with the body `{ comment: { body } }`. The Express handler for it is in `backend/src/app/routes/article/article.controller.ts:171`.\n- **Service function:** `addComment(body, slug, id)` in `backend/src/app/routes/article/article.service.ts:473`. The route handler calls it as `addComment(req.body.comment.body, req.params.slug, req.auth?.user?.id)`. It throws a 422 if the body is empty. Otherwise it looks up the article by slug.\n- **Database model:** `Comment`. `addComment` calls `prisma.comment.create(...)` at `article.service.ts:487`. The new row has the `body` and is connected to the article (by the id found from the slug) and to the author (the authenticated user).\n\nThe route returns the created comment as `{ comment }`. The frontend then calls `trigger(...)` to refresh the comments list.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 21717,
+              "costUsd": 0.07300079999999999,
+              "inputTokens": 8,
+              "outputTokens": 1103,
+              "cacheCreationTokens": 12375,
+              "cacheReadTokens": 124548,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 4,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Submitting a comment in `CommentInput` creates a record in the **`Comment`** model.\n\n1. **Frontend call:** `handleSubmit` in `frontend/components/comment/CommentInput.tsx:30` does an `axios.post` to `${SERVER_BASE_URL}/articles/${pid}/comments`. The body is `{ comment: { body } }`.\n2. **Backend route:** `POST /api/articles/:slug/comments` is declared at `backend/src/app/routes/article/article.controller.ts:170`. It runs `auth.required` first, so the request must be authenticated.\n3. **Service function:** the handler calls `addComment(req.body.comment.body, req.params.slug, req.auth?.user?.id)` (line 175). `addComment` is in `backend/src/app/routes/article/article.service.ts`.\n4. **Database:** inside `addComment`:\n   - It reads the `Article` with `prisma.article.findUnique` (line 478).\n   - It creates the record with `prisma.comment.create` (line 487), which writes to `Comment`.\n\n`frontend/lib/api/comment.ts:8` (`create`) also calls this same route, so the route has two frontend callers.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 14051,
+              "costUsd": 0.0799561,
+              "inputTokens": 10,
+              "outputTokens": 1051,
+              "cacheCreationTokens": 14161,
+              "cacheReadTokens": 127821,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 1,
+                "ToolSearch": 1,
+                "Read": 2,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fs-article-preview-pages",
+      "sample": "internet-realworld-fullstack",
+      "category": "frontend-impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 131416,
+            "medianOutputTokens": 1004,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 14700,
+            "medianCostUsd": 0.0599
+          },
+          "runs": [
+            {
+              "answer": "Two pages under `frontend/pages` render `ArticlePreview`, both through `ArticleList`:\n\n1. **`frontend/pages/index.tsx`** (the home page). It renders `MainView`, which renders `ArticleList`, which renders `ArticlePreview`.\n   - Chain: `index.tsx` → `components/home/MainView.tsx` → `components/article/ArticleList.tsx` → `ArticlePreview.tsx`\n\n2. **`frontend/pages/profile/[pid].tsx`** (the profile page). It renders `ArticleList` directly.\n   - Chain: `profile/[pid].tsx` → `components/article/ArticleList.tsx` → `ArticlePreview.tsx`\n\n`ArticleList.tsx:5` is the only importer of `ArticlePreview`. Its only importers are `MainView.tsx` and `profile/[pid].tsx`, and `MainView`'s only importer is `pages/index.tsx`.\n\nI searched `.ts`, `.tsx`, `.js` and `.jsx` files under `frontend` by component name. That would catch barrel re-exports and aliased imports, and none exist. It would not catch a dynamic import that builds the path from a string.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 19742,
+              "costUsd": 0.06670119999999999,
+              "inputTokens": 8,
+              "outputTokens": 1120,
+              "cacheCreationTokens": 10857,
+              "cacheReadTokens": 120572,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two pages under `frontend/pages` render `ArticlePreview`, both through `ArticleList`:\n\n1. **`frontend/pages/index.tsx`** (the home page, route `/`). The chain is `index.tsx` → `components/home/MainView.tsx` → `components/article/ArticleList.tsx` → `components/article/ArticlePreview.tsx`.\n2. **`frontend/pages/profile/[pid].tsx`** (the profile page, route `/profile/[pid]`). The chain is `[pid].tsx` → `components/article/ArticleList.tsx` → `components/article/ArticlePreview.tsx`.\n\n`ArticleList.tsx:5` is the only importer of `ArticlePreview`. Only `MainView.tsx` and `profile/[pid].tsx` import `ArticleList`, and only `pages/index.tsx` imports `MainView`.\n\nI searched imports in `.ts`, `.tsx`, `.js` and `.jsx` files by component name. I did not look for dynamic imports, re-exports through an index file, or imports under a different alias. The name searches turned up none, so I expect the list is complete.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14700,
+              "costUsd": 0.059911400000000004,
+              "inputTokens": 8,
+              "outputTokens": 1004,
+              "cacheCreationTokens": 9414,
+              "cacheReadTokens": 121994,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two pages render `ArticlePreview`, both through `ArticleList`:\n\n1. **`frontend/pages/index.tsx`** (the home page). The chain is `index.tsx` → `components/home/MainView.tsx` → `components/article/ArticleList.tsx` → `components/article/ArticlePreview.tsx`.\n2. **`frontend/pages/profile/[pid].tsx`** (the profile page). The chain is `[pid].tsx` → `components/article/ArticleList.tsx` → `components/article/ArticlePreview.tsx`.\n\nThe only importer of `ArticlePreview` is `ArticleList.tsx` (line 5, used at line 85). `ArticleList` is imported by `MainView.tsx` and `profile/[pid].tsx`. `MainView` is imported only by `pages/index.tsx`.\n\nI searched `.ts`, `.tsx`, `.js` and `.jsx` files under `frontend/` for the names. I didn't check for dynamic imports or re-exports through barrel files, but the greps found none.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9773,
+              "costUsd": 0.059076000000000004,
+              "inputTokens": 8,
+              "outputTokens": 936,
+              "cacheCreationTokens": 9377,
+              "cacheReadTokens": 121920,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 101650,
+            "medianOutputTokens": 642,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 16488,
+            "medianCostUsd": 0.0584
+          },
+          "runs": [
+            {
+              "answer": "Two pages render it, both through `ArticleList`:\n\n| Page | Path to `ArticlePreview` |\n|---|---|\n| `frontend/pages/index.tsx` (`Home`) | `Home` → `MainView` (`components/home/MainView.tsx`) → `ArticleList` → `ArticlePreview` |\n| `frontend/pages/profile/[pid].tsx` (`Profile`) | `Profile` → `ArticleList` → `ArticlePreview` |\n\n`ArticleList` (`components/article/ArticleList.tsx`) is the only direct renderer of `ArticlePreview`.\n\nThe graph's `pages` field came back empty for this query. I got the two pages from the component chain, where both page components appear. The graph may not have flagged them as pages, so the list could be incomplete. I haven't checked the other files under `frontend/pages` for other ways of reaching `ArticleList`, such as dynamic imports.\n\nThe change also touches `handleClickFavorite`, which has no callers outside the component. No API consumers, stores, routes or data models turned up for it.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 13046,
+              "costUsd": 0.05840340000000001,
+              "inputTokens": 8,
+              "outputTokens": 642,
+              "cacheCreationTokens": 10719,
+              "cacheReadTokens": 90914,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two Next.js pages render `ArticlePreview`, both through `ArticleList`:\n\n| Page | Chain |\n|---|---|\n| `frontend/pages/index.tsx` (`Home`) | `Home` → `MainView` → `ArticleList` → `ArticlePreview` |\n| `frontend/pages/profile/[pid].tsx` (`Profile`) | `Profile` → `ArticleList` → `ArticlePreview` |\n\n`ArticleList` (`frontend/components/article/ArticleList.tsx`) is the only direct renderer of `ArticlePreview`. `MainView` (`frontend/components/home/MainView.tsx`) is the intermediate component on the home page.\n\nThe tool's `pages` field came back empty, so I read these two from the `components` chain. Both are files under `frontend/pages`, and `Home` and `Profile` are the top of each chain. I didn't check whether any other page renders `ArticleList` or `MainView` by a route the graph missed.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 17418,
+              "costUsd": 0.058116,
+              "inputTokens": 8,
+              "outputTokens": 612,
+              "cacheCreationTokens": 10722,
+              "cacheReadTokens": 90920,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two pages render `ArticlePreview`:\n\n1. **`frontend/pages/index.tsx`** (`Home`). It renders `MainView`, which renders `ArticleList`, which renders `ArticlePreview`.\n2. **`frontend/pages/profile/[pid].tsx`** (`Profile`). It renders `ArticleList` directly, at line 96.\n\nOnly one component renders `ArticlePreview` itself: `ArticleList`, at `ArticleList.tsx:85`. `ArticleList` has two render sites, `MainView` and `Profile`, so those are the only routes into it.\n\nThe `pages` field in the `impact_of` result came back empty. I got the pages from the component chain in the same result and confirmed each hop with `find_component_usages`. No other page reaches `ArticlePreview` through components. The check does not cover dynamic imports or renders that the graph can't resolve.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 16488,
+              "costUsd": 0.06549769999999999,
+              "inputTokens": 10,
+              "outputTokens": 722,
+              "cacheCreationTokens": 11423,
+              "cacheReadTokens": 125657,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_component_usages": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ng-article-list-routes",
+      "sample": "internet-angular-realworld",
+      "category": "frontend-impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 99024,
+            "medianOutputTokens": 1115,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 12955,
+            "medianCostUsd": 0.071
+          },
+          "runs": [
+            {
+              "answer": "Changes to `ArticleListComponent` (`src/app/features/article/components/article-list.component.ts`) would show up on these routes.\n\n**Through `HomeComponent`** (it renders `<app-article-list>` in `home.component.html:46`):\n- `/` is the global feed, and the personal feed when logged in.\n- `/tag/:tag` is the feed filtered by tag.\n\n**Through `ProfileArticlesComponent`** (in `profile-articles.component.ts`):\n- `/profile/:username` shows the user's own articles. It loads inside `ProfileComponent`'s router outlet.\n\n**Through `ProfileFavoritesComponent`** (in `profile-favorites.component.ts`):\n- `/profile/:username/favorites` shows the user's favorited articles.\n\n**Routes that don't show it:** `/login`, `/register`, `/settings`, `/editor`, `/editor/:slug` and `/article/:slug`.\n\nI didn't check whether the `<app-article-list>` at `home.component.html:46` sits inside a conditional block, such as a tab that only appears in some states. If it does, `/` and `/tag/:tag` may not always show the list.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 12955,
+              "costUsd": 0.0714012,
+              "inputTokens": 6,
+              "outputTokens": 998,
+              "cacheCreationTokens": 13215,
+              "cacheReadTokens": 85492,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`ArticleListComponent` (`app-article-list`) has three direct users. Together they cover these URL routes:\n\n| URL route | Route config | Loaded component | Uses the list |\n|---|---|---|---|\n| `/` | `app.routes.ts:15-18` | `HomeComponent` | Directly, in `home.component.html:46`. It shows the Your Feed and Global Feed tabs, which are the same list with a different `listConfig`. |\n| `/tag/:tag` | `app.routes.ts:19-22` | `HomeComponent` | Same component as `/`, with the list filtered by tag. |\n| `/profile/:username` | `profile.routes.ts:12-15` | `ProfileArticlesComponent` | Directly, as a child route of `ProfileComponent` (the author's articles). |\n| `/profile/:username/favorites` | `profile.routes.ts:16-19` | `ProfileFavoritesComponent` | Directly (the user's favorited articles). |\n\nThe `profile` prefix comes from `loadChildren` at `app.routes.ts:38-41`.\n\n**Routes that don't show it:** `/login`, `/register`, `/settings`, `/editor`, `/editor/:slug` and `/article/:slug` never load a component that renders the list.\n\n**Notes:**\n- The list sits inside `ProfileComponent`'s `<router-outlet>`, so `ProfileComponent` itself doesn't import it.\n- The home and profile children are lazy-loaded, so a change to `ArticleListComponent` ends up in the home chunk and the two profile-child chunks.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 14772,
+              "costUsd": 0.07095670000000001,
+              "inputTokens": 8,
+              "outputTokens": 1357,
+              "cacheCreationTokens": 11278,
+              "cacheReadTokens": 122587,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 2,
+                "Read": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changes to `ArticleListComponent` show up on these routes:\n\n| URL | Route component | Reaches the list through |\n|---|---|---|\n| `/` | `HomeComponent` | `<app-article-list>` in `home.component.html:46` (directly) |\n| `/tag/:tag` | `HomeComponent` | Same template as `/` |\n| `/profile/:username` | `ProfileArticlesComponent` | `<app-article-list>` in `profile-articles.component.ts:12`, as the default child route inside `ProfileComponent` |\n| `/profile/:username/favorites` | `ProfileFavoritesComponent` | `<app-article-list>` in `profile-favorites.component.ts:12`, as the `favorites` child route |\n\nOnly three components use it: `HomeComponent`, `ProfileArticlesComponent` and `ProfileFavoritesComponent`.\n\nThese routes don't show it: `/login`, `/register`, `/settings`, `/editor`, `/editor/:slug` and `/article/:slug`.\n\nI didn't check whether the `home.component.html:46` usage sits inside an `@if` or similar. If it does, some states of `/` and `/tag/:tag` might not render the list.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 12389,
+              "costUsd": 0.0627548,
+              "inputTokens": 6,
+              "outputTokens": 1115,
+              "cacheCreationTokens": 10690,
+              "cacheReadTokens": 88328,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 2,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 101935,
+            "medianOutputTokens": 749,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 11041,
+            "medianCostUsd": 0.0644
+          },
+          "runs": [
+            {
+              "answer": "A change to `ArticleListComponent` (`src/app/features/article/components/article-list.component.ts`) would show up on four URL routes. It is rendered in three places, and each of those is loaded by a route.\n\n| URL route | Route file | Route renders | Reaches `ArticleListComponent` through |\n|---|---|---|---|\n| `/` | `src/app/app.routes.ts:15` | `HomeComponent` | `home.component.html:46` |\n| `/tag/:tag` | `src/app/app.routes.ts:19` | `HomeComponent` | `home.component.html:46` |\n| `/profile/:username` (index route) | `src/app/features/profile/profile.routes.ts:12` | `ProfileArticlesComponent` | `profile-articles.component.ts:12` |\n| `/profile/:username/favorites` | `src/app/features/profile/profile.routes.ts:16` | `ProfileFavoritesComponent` | `profile-favorites.component.ts:12` |\n\n- **Home:** `HomeComponent` is the only place that passes `currentPage` and `isFollowingFeed`. The global feed, the \"your feed\" tab and the tag filter all use the `/` and `/tag/:tag` routes.\n- **Profile:** the profile components pass only `limit` and `config`. They show a user's own articles and their favorited articles.\n- **Other routes:** the article detail, editor, settings and auth pages don't render this component.\n\nI took these results from the code graph and didn't open the files. The graph found no other render sites. If the app builds the component dynamically (for example with `ViewContainerRef.createComponent`), the graph would miss it.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11041,
+              "costUsd": 0.0647793,
+              "inputTokens": 8,
+              "outputTokens": 792,
+              "cacheCreationTokens": 11962,
+              "cacheReadTokens": 89953,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_component_usages": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "A change to `ArticleListComponent` (`src/app/features/article/components/article-list.component.ts`) shows up on four URL routes. Three components render it, and the code graph traces each of them back to routes.\n\n| URL route | Route file | Component that loads it | Renders it from |\n|---|---|---|---|\n| `/` | `src/app/app.routes.ts:15` | `HomeComponent` | `home.component.html:46` |\n| `/tag/:tag` | `src/app/app.routes.ts:19` | `HomeComponent` | `home.component.html:46` |\n| `/profile/:username` | `src/app/features/profile/profile.routes.ts:12` (index route) | `ProfileArticlesComponent` | `profile-articles.component.ts:12` |\n| `/profile/:username/favorites` | `src/app/features/profile/profile.routes.ts:16` | `ProfileFavoritesComponent` | `profile-favorites.component.ts:12` |\n\n- **Home and tag pages:** `HomeComponent` is reused for `/` and `/tag/:tag`. It is the only place that passes `currentPage` and `isFollowingFeed`, so the following-feed and pagination behavior only appears on these two routes.\n- **Profile pages:** `ProfileArticlesComponent` and `ProfileFavoritesComponent` pass only `limit` and `config`.\n- **Other routes:** No other component renders `<app-article-list>`, so the article, editor, settings, and auth routes are not affected.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9213,
+              "costUsd": 0.0643745,
+              "inputTokens": 8,
+              "outputTokens": 749,
+              "cacheCreationTokens": 11968,
+              "cacheReadTokens": 89965,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_component_usages": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four URL routes display `ArticleListComponent` (selector `app-article-list`). Three components render it.\n\n| URL route | Route file | Component loaded | Renders `ArticleListComponent` from |\n|---|---|---|---|\n| `/` | `src/app/app.routes.ts:15` | `HomeComponent` | `home.component.html:46` |\n| `/tag/:tag` | `src/app/app.routes.ts:19` | `HomeComponent` | `home.component.html:46` |\n| `/profile/:username` | `src/app/features/profile/profile.routes.ts:12` (index route) | `ProfileArticlesComponent` | `profile-articles.component.ts:12` |\n| `/profile/:username/favorites` | `src/app/features/profile/profile.routes.ts:16` | `ProfileFavoritesComponent` | `profile-favorites.component.ts:12` |\n\n- **Home:** `/` and `/tag/:tag` share `HomeComponent`. It passes `limit`, `config`, `currentPage` and `isFollowingFeed`.\n- **Profile:** the two profile components pass only `limit` and `config`.\n- **Not affected:** no other route reaches it. The tool found no API routes or stores involved.\n\nThe profile routes are children of `/profile/:username`. I took the full paths from the tool's output and didn't open the route files to check them.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 21730,
+              "costUsd": 0.0639061,
+              "inputTokens": 8,
+              "outputTokens": 703,
+              "cacheCreationTokens": 11966,
+              "cacheReadTokens": 89961,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_component_usages": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "vue-user-store-pages",
+      "sample": "internet-vue-realworld",
+      "category": "store",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 73638,
+            "medianOutputTokens": 1319,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 17920,
+            "medianCostUsd": 0.0727
+          },
+          "runs": [
+            {
+              "answer": "Six of the eight pages use the Pinia user store (`useUserStore`), four directly and two through child components. `EditArticle` and `NotFound` don't.\n\n**Directly (`useUserStore` in the page itself)**\n- `Login.vue` calls `updateUser`.\n- `Register.vue` calls `updateUser`.\n- `Settings.vue` reads `userStore.isAuthorized`.\n- `Profile.vue` reads `user` and `isAuthorized`. It also renders `ArticlesList`, which uses the store too (see Home below).\n\n**Through a rendered component**\n- `Article.vue` reaches the store two ways:\n  - It renders `ArticleDetail`, which renders `ArticleDetailMeta`, which uses the store.\n  - It renders `ArticleDetailComments`, which uses the store. That component also renders `ArticleDetailCommentsForm`, which uses it as well.\n- `Home.vue` renders `ArticlesList`, which renders `ArticlesListNavigation`, which uses the store.\n\n**No store use**\n- `EditArticle.vue` imports only `api` and types, and renders no store-using components.\n- `NotFound.vue` has no relevant imports.\n\n`AppNavigation` also uses the store, but `App.vue` renders it, not any page.\n\n`src/utils/use-async.ts` and `src/plugins/set-authorization-token.ts` import `userStorage` from the store module. That is the raw localStorage wrapper, not the Pinia store, so I didn't count it. No page imports `use-async` directly, but the composables that do (`use-articles`, `use-profile` and others) are pulled in by pages. If you count `userStorage` as store use, most pages would qualify through those composables.\n\nI worked this out from import statements only. I didn't open the templates to check for dynamic or globally registered components. The only global component is `AppLink`, which doesn't touch the store.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 18212,
+              "costUsd": 0.0975396,
+              "inputTokens": 4,
+              "outputTokens": 1319,
+              "cacheCreationTokens": 19738,
+              "cacheReadTokens": 53896,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Seven of the nine page components use the Pinia user store (`useUserStore` in `src/store/user.ts`), four directly and three through a child component.\n\n**Directly (call `useUserStore()` in the page)**\n- `Login.vue`\n- `Register.vue`\n- `Settings.vue`\n- `Profile.vue`\n\n**Through a rendered component**\n- `Article.vue`\n  - Renders `ArticleDetail`, which renders `ArticleDetailMeta`, and that uses the store.\n  - Also renders `ArticleDetailComments`, which uses the store and renders `ArticleDetailCommentsForm`, which uses it too.\n- `Home.vue`: renders `ArticlesList`, which renders `ArticlesListNavigation`, and that uses the store.\n- `Profile.vue` also gets it through `ArticlesList` → `ArticlesListNavigation`, on top of its direct use.\n\n**No use of the store**\n- `EditArticle.vue`\n- `NotFound.vue`\n\nI found these with a grep of `import` lines, so a component pulled in some other way, such as a multi-line or dynamic import, could be missing.\n\nTwo things outside `src/pages` also touch the store but don't affect this answer:\n- `AppNavigation` uses it, but `App.vue` renders it, not a page.\n- `use-async.ts`, `set-authorization-token.ts` and `router.ts` import only `userStorage` or `isAuthorized` from the store file, not the Pinia store itself.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 15197,
+              "costUsd": 0.06430259999999999,
+              "inputTokens": 4,
+              "outputTokens": 1232,
+              "cacheCreationTokens": 11550,
+              "cacheReadTokens": 57746,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Seven of the eight page components use the user store. Only `NotFound.vue` doesn't.\n\n**Directly (import `useUserStore`)**\n- `Login.vue` calls `updateUser`.\n- `Register.vue` calls `updateUser`.\n- `Settings.vue` reads `userStore.isAuthorized`.\n- `Profile.vue` reads `user` and `isAuthorized`.\n\n**Through a rendered component**\n- `Article.vue` uses it two ways:\n  - It renders `ArticleDetail`, which renders `ArticleDetailMeta`, and that uses the store.\n  - It also renders `ArticleDetailComments`, which uses the store and renders `ArticleDetailCommentsForm`, which uses it too.\n- `Home.vue` renders `ArticlesList`, which renders `ArticlesListNavigation`, and that uses the store.\n- `Profile.vue` also gets it through `ArticlesList` → `ArticlesListNavigation`.\n\n**No store use**\n- `EditArticle.vue` imports no components and doesn't touch the store.\n- `NotFound.vue` only renders `AppLink`, which I didn't open. I'm assuming it doesn't use the store, because it didn't show up in the grep for store imports.\n\n`AppNavigation` also uses the store, but `App.vue` renders it rather than any page. I didn't check `App.vue`, so that part is an assumption.\n\nRouter guards in `src/router.ts` call `isAuthorized()`. That is a plain function that reads storage, not the Pinia store, so I didn't count it.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 17920,
+              "costUsd": 0.0726799,
+              "inputTokens": 6,
+              "outputTokens": 1487,
+              "cacheCreationTokens": 12111,
+              "cacheReadTokens": 93539,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 4
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 108021,
+            "medianOutputTokens": 1586,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 20065,
+            "medianCostUsd": 0.0799
+          },
+          "runs": [
+            {
+              "answer": "Seven of the nine pages use the user store. Only `EditArticle` and `NotFound` don't.\n\n**Directly** (they call `useUserStore()`):\n- `Login.vue` uses `updateUser`.\n- `Register.vue` uses `updateUser`.\n- `Settings.vue` uses `userStore.isAuthorized`.\n- `Profile.vue` uses `user` and `isAuthorized`. It also reaches the store through `ArticlesList` (see below).\n\n**Through a rendered component:**\n- `Article.vue` reaches the store two ways:\n  - `ArticleDetail` renders `ArticleDetailMeta`, which uses `user` and `isAuthorized`.\n  - `ArticleDetailComments` uses `user` itself and renders `ArticleDetailCommentsForm`, which also uses `user`.\n- `Home.vue` renders `ArticlesList`, which renders `ArticlesListNavigation`, which uses `isAuthorized`.\n- `Profile.vue` also renders `ArticlesList`, so it gets the same path as `Home`.\n\n**No store use:**\n- `EditArticle.vue` imports only the API, router and Vue.\n- `NotFound.vue` renders only `AppLink`, which doesn't touch the store.\n\n`AppNavigation` also uses the store, but no page renders it. I didn't open `App.vue` to confirm that's where it's mounted.\n\n`router.ts` imports the standalone `isAuthorized()` function from `store/user.ts` for route guards. That's separate from the Pinia store, so I didn't count it.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 17894,
+              "costUsd": 0.0799163,
+              "inputTokens": 6,
+              "outputTokens": 1586,
+              "cacheCreationTokens": 13652,
+              "cacheReadTokens": 94363,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 3,
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Six of the seven page components in `src/pages` use the Pinia user store (`useUserStore` in `src/store/user.ts`). Only `EditArticle.vue` doesn't.\n\n**Direct use**\n- `Login.vue` calls `updateUser`.\n- `Register.vue` calls `updateUser`.\n- `Settings.vue` uses `userStore.isAuthorized`.\n- `Profile.vue` reads `user` and `isAuthorized` via `storeToRefs`.\n\n**Through a rendered component**\n- `Home.vue` renders `ArticlesList`, which renders `ArticlesListNavigation`. That component reads `isAuthorized`.\n- `Article.vue` renders two components that use the store:\n  - `ArticleDetail`, which renders `ArticleDetailMeta`. That component reads `user` and `isAuthorized`.\n  - `ArticleDetailComments`, which reads `user` and also renders `ArticleDetailCommentsForm`. The form reads `user` too.\n- `Profile.vue` also gets the store through `ArticlesList`, but it already uses it directly.\n\n**No use**\n- `EditArticle.vue` doesn't import the store or any component that does.\n\n`src/utils/use-async.ts` imports `userStorage` from `store/user.ts`. That is the localStorage wrapper, not the Pinia store, so I didn't count it. It matters for none of the pages, since it is only used by composables.\n\n`AppNavigation.vue` also uses the store, but `App.vue` renders it, not a page. So it isn't part of any page's tree.\n\nI traced this with grep over the imports, not the code graph. Components registered globally (only `AppLink`) wouldn't show up as imports, but `AppLink` doesn't use the store.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 20445,
+              "costUsd": 0.0915333,
+              "inputTokens": 10,
+              "outputTokens": 2234,
+              "cacheCreationTokens": 13135,
+              "cacheReadTokens": 166333,
+              "toolCalls": 7,
+              "toolsByName": {
+                "Grep": 7
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Seven of the nine pages use the user store, four directly and three through a child component.\n\n**Directly (they import `useUserStore`)**\n- `Profile.vue` reads `user` and `isAuthorized`.\n- `Login.vue` calls `updateUser`.\n- `Register.vue` calls `updateUser`.\n- `Settings.vue` uses `userStore`.\n\n**Through rendered components**\n- `Home.vue` renders `ArticlesList`, which renders `ArticlesListNavigation`, which uses the store (`isAuthorized`).\n- `Article.vue` reaches the store in two ways:\n  - It renders `ArticleDetail`, which renders `ArticleDetailMeta`, which uses `user` and `isAuthorized`.\n  - It renders `ArticleDetailComments`, which uses the store itself and also renders `ArticleDetailCommentsForm`, which uses it too.\n- `Profile.vue` also renders `ArticlesList`, so it reaches the store through `ArticlesListNavigation` as well as directly.\n\n**Pages that don't use it**\n- `EditArticle.vue` has no store import and renders no child components.\n- `NotFound.vue` renders only the global `AppLink`, which doesn't touch the store.\n\n`AppNavigation.vue` also uses the store, but `App.vue` renders it, not any page, so it doesn't count here. The router guard (`src/router.ts`) uses the `isAuthorized` export, but that isn't a page component either.\n\nI traced this with grep over imports and template tags. I didn't use the code-graph tools.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 20065,
+              "costUsd": 0.0746957,
+              "inputTokens": 6,
+              "outputTokens": 1199,
+              "cacheCreationTokens": 13335,
+              "cacheReadTokens": 93537,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "vue-user-store-writers",
+      "sample": "internet-vue-realworld",
+      "category": "store",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66423,
+            "medianOutputTokens": 471,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 8750,
+            "medianCostUsd": 0.0454
+          },
+          "runs": [
+            {
+              "answer": "Three pages call `updateUser` outside the tests:\n\n- **`src/pages/Login.vue`** (line 89): after a successful login, it calls `updateUser(result.data.user)`.\n- **`src/pages/Register.vue`** (line 98): after a successful registration, it calls `updateUser(result.data.user)`.\n- **`src/pages/Settings.vue`**:\n  - Line 107: `userStore.updateUser(userData)` saves the updated profile data.\n  - Line 117: `userStore.updateUser(null)` clears the user, which is the logout path.\n\nThe action itself is defined at `src/store/user.ts:15`. No components, composables or plugins call it. That includes `src/plugins/set-authorization-token.ts`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8750,
+              "costUsd": 0.0536741,
+              "inputTokens": 4,
+              "outputTokens": 471,
+              "cacheCreationTokens": 10850,
+              "cacheReadTokens": 55561,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three pages call `updateUser`, and nothing else in `src` does (spec files excluded).\n\n- **`src/pages/Register.vue:98`**: after a successful registration, it calls `updateUser(result.data.user)` to store the new user.\n- **`src/pages/Login.vue:89`**: after a successful login, it calls `updateUser(result.data.user)`.\n- **`src/pages/Settings.vue`**: it calls `userStore.updateUser(userData)` at line 107 and `userStore.updateUser(null)` at line 117. Line 107 stores the updated profile. Line 117 clears the user, which looks like the logout path, though I didn't open the file to confirm.\n\nThe action is defined at `src/store/user.ts:15` and exported at line 31. No composables, plugins or other components call it.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8008,
+              "costUsd": 0.0453519,
+              "inputTokens": 4,
+              "outputTokens": 485,
+              "cacheCreationTokens": 8680,
+              "cacheReadTokens": 57739,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three pages call `updateUser` outside the tests:\n\n- **`src/pages/Register.vue:98`** calls `updateUser(result.data.user)` after a successful registration.\n- **`src/pages/Login.vue:89`** calls `updateUser(result.data.user)` after a successful login.\n- **`src/pages/Settings.vue`** calls it twice:\n  - Line 107: `userStore.updateUser(userData)` after the profile is saved.\n  - Line 117: `userStore.updateUser(null)`, which clears the user on logout.\n\nThe action is defined at `src/store/user.ts:15` and takes `User | null`. No component or composable outside these three pages calls it. That includes the `set-authorization-token.ts` plugin.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 15318,
+              "costUsd": 0.044966000000000006,
+              "inputTokens": 4,
+              "outputTokens": 446,
+              "cacheCreationTokens": 8681,
+              "cacheReadTokens": 57740,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 67767,
+            "medianOutputTokens": 494,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 11406,
+            "medianCostUsd": 0.0482
+          },
+          "runs": [
+            {
+              "answer": "Three pages call `updateUser`, all in `src/pages/`:\n\n- **`Register.vue`** (line 98): after a successful registration, it calls `updateUser(result.data.user)` to store the new user.\n- **`Login.vue`** (line 89): after a successful login, it calls `updateUser(result.data.user)`.\n- **`Settings.vue`**:\n  - Line 107: `userStore.updateUser(userData)` saves the edited profile.\n  - Line 117: `userStore.updateUser(null)` clears the user on logout.\n\nThe action itself is defined at `src/store/user.ts:15` and exported at line 31. No other non-test file in `src` references it. I searched by name, so a call through an alias or destructured rename would not show up.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 11406,
+              "costUsd": 0.048091,
+              "inputTokens": 4,
+              "outputTokens": 483,
+              "cacheCreationTokens": 9353,
+              "cacheReadTokens": 58410,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three pages call `updateUser` outside the tests: Login, Register and Settings. The action is defined at `src/store/user.ts:15`.\n\n| Page | Call | What it does |\n|---|---|---|\n| `src/pages/Login.vue:89` | `updateUser(result.data.user)` | Stores the user returned by a successful login. |\n| `src/pages/Register.vue:98` | `updateUser(result.data.user)` | Stores the newly registered user. |\n| `src/pages/Settings.vue:107` | `userStore.updateUser(userData)` | Stores the updated profile after the settings form is saved. |\n| `src/pages/Settings.vue:117` | `userStore.updateUser(null)` | Clears the user on logout. |\n\nLogin and Register destructure `updateUser` from `useUserStore()`. Settings calls it through the `userStore` object.\n\nI searched for the name `updateUser` only, so a call through a different alias would not show up. No components, composables or plugins turned up, including `set-authorization-token.ts`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 12206,
+              "costUsd": 0.048990500000000006,
+              "inputTokens": 4,
+              "outputTokens": 575,
+              "cacheCreationTokens": 9348,
+              "cacheReadTokens": 58405,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three pages call `updateUser`, outside of tests:\n\n- **`src/pages/Login.vue`** calls `updateUser(result.data.user)` at line 89 after a successful login.\n- **`src/pages/Register.vue`** calls `updateUser(result.data.user)` at line 98 after a successful registration.\n- **`src/pages/Settings.vue`** calls it in two places:\n  - Line 107: `userStore.updateUser(userData)` saves the updated profile.\n  - Line 117: `userStore.updateUser(null)` clears the user on logout.\n\nThe action itself is defined at `src/store/user.ts:15`. No other component, composable or plugin calls it. That includes `src/plugins/set-authorization-token.ts`, which restores the token on app init.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 5489,
+              "costUsd": 0.04819709999999999,
+              "inputTokens": 4,
+              "outputTokens": 494,
+              "cacheCreationTokens": 9352,
+              "cacheReadTokens": 58411,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
