@@ -33,7 +33,7 @@
           },
           {
             "table": "Function",
-            "count": 6
+            "count": 7
           },
           {
             "table": "Class",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 8
+            "count": 9
           },
           {
             "table": "Route",
@@ -73,7 +73,7 @@
           },
           {
             "table": "EntryPoint",
-            "count": 2
+            "count": 3
           },
           {
             "table": "EnvVar",
@@ -93,7 +93,7 @@
           },
           {
             "table": "Component",
-            "count": 1
+            "count": 2
           },
           {
             "table": "Page",
@@ -131,7 +131,7 @@
         },
         {
           "table": "Function",
-          "count": 6
+          "count": 7
         },
         {
           "table": "Class",
@@ -163,7 +163,7 @@
         },
         {
           "table": "Call",
-          "count": 8
+          "count": 9
         },
         {
           "table": "Route",
@@ -171,7 +171,7 @@
         },
         {
           "table": "EntryPoint",
-          "count": 2
+          "count": 3
         },
         {
           "table": "EnvVar",
@@ -191,7 +191,7 @@
         },
         {
           "table": "Component",
-          "count": 1
+          "count": 2
         },
         {
           "table": "Page",
@@ -547,6 +547,15 @@
             "handler": "add"
           },
           {
+            "file": "src/components/Total.svelte",
+            "line": 17,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "refresh",
+            "handler": "refresh"
+          },
+          {
             "file": "src/pages/index.astro",
             "line": 16,
             "kind": "dom-event",
@@ -573,6 +582,15 @@
           "handler": "add"
         },
         {
+          "file": "src/components/Total.svelte",
+          "line": 17,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "refresh",
+          "handler": "refresh"
+        },
+        {
           "file": "src/pages/index.astro",
           "line": 16,
           "kind": "dom-event",
@@ -584,7 +602,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 2
+        "returned": 3
       }
     }
   },
@@ -709,6 +727,15 @@
         "rows": [
           {
             "target": "formatTotal",
+            "caller": "<script>",
+            "callerKind": "Function",
+            "file": "src/components/Total.svelte",
+            "line": 9,
+            "expression": "formatTotal",
+            "relationship": "CALLS"
+          },
+          {
+            "target": "formatTotal",
             "caller": "refresh",
             "callerKind": "Function",
             "file": "src/components/Total.svelte",
@@ -738,6 +765,15 @@
       "callers": [
         {
           "target": "formatTotal",
+          "caller": "<script>",
+          "callerKind": "Function",
+          "file": "src/components/Total.svelte",
+          "line": 9,
+          "expression": "formatTotal",
+          "relationship": "CALLS"
+        },
+        {
+          "target": "formatTotal",
           "caller": "refresh",
           "callerKind": "Function",
           "file": "src/components/Total.svelte",
@@ -748,7 +784,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 1
+        "returned": 2
       }
     }
   },

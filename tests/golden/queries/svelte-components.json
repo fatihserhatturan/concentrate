@@ -1,0 +1,2011 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 56
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 5
+          },
+          {
+            "table": "File",
+            "count": 8
+          },
+          {
+            "table": "Import",
+            "count": 10
+          },
+          {
+            "table": "Function",
+            "count": 12
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 10
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 15
+          },
+          {
+            "table": "Route",
+            "count": 0
+          },
+          {
+            "table": "EntryPoint",
+            "count": 8
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 6
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 6
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 56,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 5
+        },
+        {
+          "table": "File",
+          "count": 8
+        },
+        {
+          "table": "Import",
+          "count": 10
+        },
+        {
+          "table": "Function",
+          "count": 12
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 10
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 15
+        },
+        {
+          "table": "Route",
+          "count": 0
+        },
+        {
+          "table": "EntryPoint",
+          "count": 8
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 6
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 6
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "clearDone",
+            "kind": "Function",
+            "file": "src/App.svelte",
+            "line": 14,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "saveTodo",
+            "kind": "Function",
+            "file": "src/lib/api.ts",
+            "line": 1,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "increment",
+            "kind": "Function",
+            "file": "src/lib/components/Counter.svelte",
+            "line": 11,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "remove",
+            "kind": "Function",
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "save",
+            "kind": "Function",
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 11,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "select",
+            "kind": "Function",
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 8,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "filter",
+            "kind": "Variable",
+            "file": "src/App.svelte",
+            "line": 9,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "view",
+            "kind": "Variable",
+            "file": "src/App.svelte",
+            "line": 10,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "label",
+            "kind": "Variable",
+            "file": "src/lib/components/Counter.svelte",
+            "line": 2,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "visible",
+            "kind": "Variable",
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "clearDone",
+          "kind": "Function",
+          "file": "src/App.svelte",
+          "line": 14,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "saveTodo",
+          "kind": "Function",
+          "file": "src/lib/api.ts",
+          "line": 1,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "increment",
+          "kind": "Function",
+          "file": "src/lib/components/Counter.svelte",
+          "line": 11,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "remove",
+          "kind": "Function",
+          "file": "src/lib/components/TodoItem.svelte",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "save",
+          "kind": "Function",
+          "file": "src/lib/components/TodoItem.svelte",
+          "line": 11,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "select",
+          "kind": "Function",
+          "file": "src/lib/components/TodoList.svelte",
+          "line": 8,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "filter",
+          "kind": "Variable",
+          "file": "src/App.svelte",
+          "line": 9,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "view",
+          "kind": "Variable",
+          "file": "src/App.svelte",
+          "line": 10,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "label",
+          "kind": "Variable",
+          "file": "src/lib/components/Counter.svelte",
+          "line": 2,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "visible",
+          "kind": "Variable",
+          "file": "src/lib/components/TodoList.svelte",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 10
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/lib/api.ts",
+            "name": "saveTodo",
+            "kind": "Function",
+            "line": 1,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/api.ts",
+            "name": "track",
+            "kind": "Function",
+            "line": 5,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte",
+            "name": "remove",
+            "kind": "Function",
+            "line": 6,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/lib/components/Counter.svelte",
+            "name": "label",
+            "kind": "Variable",
+            "line": 2,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/lib/components/Counter.svelte",
+            "name": "start",
+            "kind": "Variable",
+            "line": 8,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte",
+            "name": "todo",
+            "kind": "Variable",
+            "line": 5,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte",
+            "name": "kind",
+            "kind": "Variable",
+            "line": 7,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/lib/api.ts",
+          "name": "saveTodo",
+          "kind": "Function",
+          "line": 1,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/api.ts",
+          "name": "track",
+          "kind": "Function",
+          "line": 5,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/components/TodoItem.svelte",
+          "name": "remove",
+          "kind": "Function",
+          "line": 6,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "src/lib/components/Counter.svelte",
+          "name": "label",
+          "kind": "Variable",
+          "line": 2,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/lib/components/Counter.svelte",
+          "name": "start",
+          "kind": "Variable",
+          "line": 8,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/lib/components/TodoItem.svelte",
+          "name": "todo",
+          "kind": "Variable",
+          "line": 5,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "src/lib/components/TodoItem.svelte",
+          "name": "kind",
+          "kind": "Variable",
+          "line": 7,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/App.svelte",
+            "line": 25,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "clearDone",
+            "handler": "clearDone"
+          },
+          {
+            "file": "src/lib/components/Counter.svelte",
+            "line": 17,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "increment",
+            "handler": "increment"
+          },
+          {
+            "file": "src/lib/components/Counter.svelte",
+            "line": 18,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 18,
+            "kind": "dom-event",
+            "trigger": "change",
+            "library": "svelte",
+            "handlerName": "save",
+            "handler": "save"
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 19,
+            "kind": "dom-event",
+            "trigger": "dblclick",
+            "library": "svelte",
+            "handlerName": "save",
+            "handler": "save"
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 20,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "remove",
+            "handler": "remove"
+          },
+          {
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 18,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "select",
+            "handler": "select"
+          },
+          {
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 19,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "select",
+            "handler": "select"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [
+        {
+          "file": "src/App.svelte",
+          "line": 25,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "clearDone",
+          "handler": "clearDone"
+        },
+        {
+          "file": "src/lib/components/Counter.svelte",
+          "line": 17,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "increment",
+          "handler": "increment"
+        },
+        {
+          "file": "src/lib/components/Counter.svelte",
+          "line": 18,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/lib/components/TodoItem.svelte",
+          "line": 18,
+          "kind": "dom-event",
+          "trigger": "change",
+          "library": "svelte",
+          "handlerName": "save",
+          "handler": "save"
+        },
+        {
+          "file": "src/lib/components/TodoItem.svelte",
+          "line": 19,
+          "kind": "dom-event",
+          "trigger": "dblclick",
+          "library": "svelte",
+          "handlerName": "save",
+          "handler": "save"
+        },
+        {
+          "file": "src/lib/components/TodoItem.svelte",
+          "line": 20,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "remove",
+          "handler": "remove"
+        },
+        {
+          "file": "src/lib/components/TodoList.svelte",
+          "line": 18,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "select",
+          "handler": "select"
+        },
+        {
+          "file": "src/lib/components/TodoList.svelte",
+          "line": 19,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "select",
+          "handler": "select"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "src/lib/components/Counter.svelte",
+            "line": 2,
+            "name": "label",
+            "value": "counter",
+            "valueType": "string",
+            "consumer": "src/lib/components/Counter.svelte",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/lib/components/Counter.svelte",
+            "line": 8,
+            "name": "start",
+            "value": "0",
+            "valueType": "number",
+            "consumer": "src/lib/components/Counter.svelte",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 7,
+            "name": "kind",
+            "value": "todo",
+            "valueType": "string",
+            "consumer": "src/lib/components/TodoItem.svelte",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "config",
+          "file": "src/lib/components/Counter.svelte",
+          "line": 2,
+          "name": "label",
+          "value": "counter",
+          "valueType": "string",
+          "consumer": "src/lib/components/Counter.svelte",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/lib/components/Counter.svelte",
+          "line": 8,
+          "name": "start",
+          "value": "0",
+          "valueType": "number",
+          "consumer": "src/lib/components/Counter.svelte",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/lib/components/TodoItem.svelte",
+          "line": 7,
+          "name": "kind",
+          "value": "todo",
+          "valueType": "string",
+          "consumer": "src/lib/components/TodoItem.svelte",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "component_tree",
+    "args": {
+      "name": "App",
+      "depth": 3
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.svelte:component:1:App",
+            "name": "App",
+            "kind": "runes",
+            "framework": "svelte",
+            "file": "src/App.svelte",
+            "line": 1,
+            "endLine": 30,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"view\",\"props\":[\"todos\"],\"line\":23}]"
+          },
+          {
+            "id": "file:src/lib/components/Counter.svelte:component:1:Counter",
+            "name": "Counter",
+            "kind": "legacy",
+            "framework": "svelte",
+            "file": "src/lib/components/Counter.svelte",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "props": "start",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/lib/components/Footer.svelte:component:1:Footer",
+            "name": "Footer",
+            "kind": "template",
+            "framework": "svelte",
+            "file": "src/lib/components/Footer.svelte",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:component:1:TodoItem",
+            "name": "TodoItem",
+            "kind": "legacy",
+            "framework": "svelte",
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 1,
+            "endLine": 22,
+            "isExported": true,
+            "tagName": null,
+            "props": "todo,remove",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
+            "name": "TodoList",
+            "kind": "runes",
+            "framework": "svelte",
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 1,
+            "endLine": 19,
+            "isExported": true,
+            "tagName": null,
+            "props": "todos,filter,onremove",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/lib/ui/Button.svelte:component:1:Button",
+            "name": "Button",
+            "kind": "runes",
+            "framework": "svelte",
+            "file": "src/lib/ui/Button.svelte",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": "variant,onclick,children",
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.svelte:component:1:App",
+            "child": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
+            "line": 20,
+            "props": "todos,filter,onremove"
+          },
+          {
+            "parent": "file:src/App.svelte:component:1:App",
+            "child": "file:src/lib/components/Counter.svelte:component:1:Counter",
+            "line": 21,
+            "props": "start"
+          },
+          {
+            "parent": "file:src/App.svelte:component:1:App",
+            "child": "file:src/lib/ui/Button.svelte:component:1:Button",
+            "line": 22,
+            "props": "variant,onclick"
+          },
+          {
+            "parent": "file:src/App.svelte:component:1:App",
+            "child": "file:src/lib/components/Footer.svelte:component:1:Footer",
+            "line": 29,
+            "props": ""
+          },
+          {
+            "parent": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
+            "child": "file:src/lib/components/TodoItem.svelte:component:1:TodoItem",
+            "line": 15,
+            "props": "todo,remove"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn",
+        "params": {},
+        "rows": [
+          {
+            "component": "file:src/App.svelte:component:1:App",
+            "fn": "file:src/App.svelte:function:1:<script>"
+          },
+          {
+            "component": "file:src/lib/components/Counter.svelte:component:1:Counter",
+            "fn": "file:src/lib/components/Counter.svelte:function:5:<script>"
+          },
+          {
+            "component": "file:src/lib/components/TodoItem.svelte:component:1:TodoItem",
+            "fn": "file:src/lib/components/TodoItem.svelte:function:1:<script>"
+          },
+          {
+            "component": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
+            "fn": "file:src/lib/components/TodoList.svelte:function:1:<script>"
+          },
+          {
+            "component": "file:src/lib/ui/Button.svelte:component:1:Button",
+            "fn": "file:src/lib/ui/Button.svelte:function:1:<script>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/App.svelte:function:14:clearDone",
+            "name": "clearDone",
+            "className": null,
+            "file": "src/App.svelte",
+            "line": 14,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/App.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/App.svelte",
+            "line": 1,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/lib/api.ts:function:1:saveTodo",
+            "name": "saveTodo",
+            "className": null,
+            "file": "src/lib/api.ts",
+            "line": 1,
+            "endLine": 3
+          },
+          {
+            "id": "file:src/lib/api.ts:function:5:track",
+            "name": "track",
+            "className": null,
+            "file": "src/lib/api.ts",
+            "line": 5,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/lib/components/Counter.svelte:function:11:increment",
+            "name": "increment",
+            "className": null,
+            "file": "src/lib/components/Counter.svelte",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/lib/components/Counter.svelte:function:5:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/lib/components/Counter.svelte",
+            "line": 5,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:function:6:remove",
+            "name": "remove",
+            "className": null,
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:function:11:save",
+            "name": "save",
+            "className": null,
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 1,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/lib/components/TodoList.svelte:function:8:select",
+            "name": "select",
+            "className": null,
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/lib/components/TodoList.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 1,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/lib/ui/Button.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/lib/ui/Button.svelte",
+            "line": 1,
+            "endLine": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_HOOK]->(hook:Function) RETURN id(user) AS user, id(hook) AS hook, rel.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (user:Function)-[rel:USES_CONTEXT]->(context:Component) RETURN id(user) AS user, id(context) AS context, rel.line AS line",
+        "rows": []
+      }
+    ],
+    "output": {
+      "name": "App",
+      "file": null,
+      "depth": 3,
+      "components": [
+        {
+          "name": "App",
+          "kind": "runes",
+          "framework": "svelte",
+          "file": "src/App.svelte",
+          "line": 1,
+          "endLine": 30,
+          "isExported": true,
+          "definedBy": {
+            "kind": "function",
+            "name": "<script>",
+            "className": null,
+            "file": "src/App.svelte",
+            "line": 1,
+            "endLine": 17
+          },
+          "hooks": [],
+          "customHooks": [],
+          "contexts": [],
+          "renders": [
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.svelte",
+              "line": 20,
+              "component": "TodoList",
+              "componentKind": "runes",
+              "componentFile": "src/lib/components/TodoList.svelte",
+              "props": [
+                "todos",
+                "filter",
+                "onremove"
+              ]
+            },
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.svelte",
+              "line": 21,
+              "component": "Counter",
+              "componentKind": "legacy",
+              "componentFile": "src/lib/components/Counter.svelte",
+              "props": [
+                "start"
+              ]
+            },
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.svelte",
+              "line": 22,
+              "component": "Button",
+              "componentKind": "runes",
+              "componentFile": "src/lib/ui/Button.svelte",
+              "props": [
+                "variant",
+                "onclick"
+              ]
+            },
+            {
+              "depth": 1,
+              "parent": "App",
+              "parentFile": "src/App.svelte",
+              "line": 29,
+              "component": "Footer",
+              "componentKind": "template",
+              "componentFile": "src/lib/components/Footer.svelte",
+              "props": []
+            },
+            {
+              "depth": 2,
+              "parent": "TodoList",
+              "parentFile": "src/lib/components/TodoList.svelte",
+              "line": 15,
+              "component": "TodoItem",
+              "componentKind": "legacy",
+              "componentFile": "src/lib/components/TodoItem.svelte",
+              "props": [
+                "todo",
+                "remove"
+              ]
+            }
+          ],
+          "unresolvedRenders": [
+            {
+              "name": "view",
+              "props": [
+                "todos"
+              ],
+              "line": 23
+            }
+          ],
+          "renderedBy": []
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "find_component_usages",
+    "args": {
+      "name": "Button"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
+        "rows": [
+          {
+            "id": "file:src/App.svelte:component:1:App",
+            "name": "App",
+            "kind": "runes",
+            "framework": "svelte",
+            "file": "src/App.svelte",
+            "line": 1,
+            "endLine": 30,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": "[{\"name\":\"view\",\"props\":[\"todos\"],\"line\":23}]"
+          },
+          {
+            "id": "file:src/lib/components/Counter.svelte:component:1:Counter",
+            "name": "Counter",
+            "kind": "legacy",
+            "framework": "svelte",
+            "file": "src/lib/components/Counter.svelte",
+            "line": 1,
+            "endLine": 18,
+            "isExported": true,
+            "tagName": null,
+            "props": "start",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/lib/components/Footer.svelte:component:1:Footer",
+            "name": "Footer",
+            "kind": "template",
+            "framework": "svelte",
+            "file": "src/lib/components/Footer.svelte",
+            "line": 1,
+            "endLine": 3,
+            "isExported": true,
+            "tagName": null,
+            "props": null,
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:component:1:TodoItem",
+            "name": "TodoItem",
+            "kind": "legacy",
+            "framework": "svelte",
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 1,
+            "endLine": 22,
+            "isExported": true,
+            "tagName": null,
+            "props": "todo,remove",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
+            "name": "TodoList",
+            "kind": "runes",
+            "framework": "svelte",
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 1,
+            "endLine": 19,
+            "isExported": true,
+            "tagName": null,
+            "props": "todos,filter,onremove",
+            "hooks": null,
+            "pendingRenders": null
+          },
+          {
+            "id": "file:src/lib/ui/Button.svelte:component:1:Button",
+            "name": "Button",
+            "kind": "runes",
+            "framework": "svelte",
+            "file": "src/lib/ui/Button.svelte",
+            "line": 1,
+            "endLine": 5,
+            "isExported": true,
+            "tagName": null,
+            "props": "variant,onclick,children",
+            "hooks": null,
+            "pendingRenders": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (parent:Component)-[rel:RENDERS]->(child:Component) RETURN id(parent) AS parent, id(child) AS child, rel.line AS line, rel.props AS props",
+        "rows": [
+          {
+            "parent": "file:src/App.svelte:component:1:App",
+            "child": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
+            "line": 20,
+            "props": "todos,filter,onremove"
+          },
+          {
+            "parent": "file:src/App.svelte:component:1:App",
+            "child": "file:src/lib/components/Counter.svelte:component:1:Counter",
+            "line": 21,
+            "props": "start"
+          },
+          {
+            "parent": "file:src/App.svelte:component:1:App",
+            "child": "file:src/lib/ui/Button.svelte:component:1:Button",
+            "line": 22,
+            "props": "variant,onclick"
+          },
+          {
+            "parent": "file:src/App.svelte:component:1:App",
+            "child": "file:src/lib/components/Footer.svelte:component:1:Footer",
+            "line": 29,
+            "props": ""
+          },
+          {
+            "parent": "file:src/lib/components/TodoList.svelte:component:1:TodoList",
+            "child": "file:src/lib/components/TodoItem.svelte:component:1:TodoItem",
+            "line": 15,
+            "props": "todo,remove"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "name": "Button",
+      "file": null,
+      "components": [
+        {
+          "name": "Button",
+          "kind": "runes",
+          "framework": "svelte",
+          "file": "src/lib/ui/Button.svelte",
+          "line": 1,
+          "endLine": 5,
+          "isExported": true,
+          "props": [
+            "variant",
+            "onclick",
+            "children"
+          ]
+        }
+      ],
+      "counts": {
+        "render": 1
+      },
+      "usages": [
+        {
+          "kind": "render",
+          "file": "src/App.svelte",
+          "line": 22,
+          "from": "App",
+          "props": [
+            "variant",
+            "onclick"
+          ]
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/App.svelte",
+            "line": 25,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "clearDone",
+            "handler": "clearDone"
+          },
+          {
+            "file": "src/lib/components/Counter.svelte",
+            "line": 17,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "increment",
+            "handler": "increment"
+          },
+          {
+            "file": "src/lib/components/Counter.svelte",
+            "line": 18,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 18,
+            "kind": "dom-event",
+            "trigger": "change",
+            "library": "svelte",
+            "handlerName": "save",
+            "handler": "save"
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 19,
+            "kind": "dom-event",
+            "trigger": "dblclick",
+            "library": "svelte",
+            "handlerName": "save",
+            "handler": "save"
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte",
+            "line": 20,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "remove",
+            "handler": "remove"
+          },
+          {
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 18,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "select",
+            "handler": "select"
+          },
+          {
+            "file": "src/lib/components/TodoList.svelte",
+            "line": 19,
+            "kind": "dom-event",
+            "trigger": "click",
+            "library": "svelte",
+            "handlerName": "select",
+            "handler": "select"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [
+        {
+          "file": "src/App.svelte",
+          "line": 25,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "clearDone",
+          "handler": "clearDone"
+        },
+        {
+          "file": "src/lib/components/Counter.svelte",
+          "line": 17,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "increment",
+          "handler": "increment"
+        },
+        {
+          "file": "src/lib/components/Counter.svelte",
+          "line": 18,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": null,
+          "handler": null
+        },
+        {
+          "file": "src/lib/components/TodoItem.svelte",
+          "line": 18,
+          "kind": "dom-event",
+          "trigger": "change",
+          "library": "svelte",
+          "handlerName": "save",
+          "handler": "save"
+        },
+        {
+          "file": "src/lib/components/TodoItem.svelte",
+          "line": 19,
+          "kind": "dom-event",
+          "trigger": "dblclick",
+          "library": "svelte",
+          "handlerName": "save",
+          "handler": "save"
+        },
+        {
+          "file": "src/lib/components/TodoItem.svelte",
+          "line": 20,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "remove",
+          "handler": "remove"
+        },
+        {
+          "file": "src/lib/components/TodoList.svelte",
+          "line": 18,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "select",
+          "handler": "select"
+        },
+        {
+          "file": "src/lib/components/TodoList.svelte",
+          "line": 19,
+          "kind": "dom-event",
+          "trigger": "click",
+          "library": "svelte",
+          "handlerName": "select",
+          "handler": "select"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "find_callers",
+    "args": {
+      "name": "track"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"track\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "track",
+            "caller": "<script>",
+            "callerKind": "Function",
+            "file": "src/App.svelte",
+            "line": 12,
+            "expression": "track",
+            "relationship": "CALLS"
+          },
+          {
+            "target": "track",
+            "caller": "increment",
+            "callerKind": "Function",
+            "file": "src/lib/components/Counter.svelte",
+            "line": 13,
+            "expression": "track",
+            "relationship": "CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"track\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"track\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "track",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [
+        {
+          "target": "track",
+          "caller": "<script>",
+          "callerKind": "Function",
+          "file": "src/App.svelte",
+          "line": 12,
+          "expression": "track",
+          "relationship": "CALLS"
+        },
+        {
+          "target": "track",
+          "caller": "increment",
+          "callerKind": "Function",
+          "file": "src/lib/components/Counter.svelte",
+          "line": 13,
+          "expression": "track",
+          "relationship": "CALLS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "get_file_outline",
+    "args": {
+      "file": "src/lib/components/TodoItem.svelte"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "rows": [
+          {
+            "file": "src/App.svelte"
+          },
+          {
+            "file": "src/lib/api.ts"
+          },
+          {
+            "file": "src/lib/components/Counter.svelte"
+          },
+          {
+            "file": "src/lib/components/Footer.svelte"
+          },
+          {
+            "file": "src/lib/components/TodoItem.svelte"
+          },
+          {
+            "file": "src/lib/components/TodoList.svelte"
+          },
+          {
+            "file": "src/lib/ui/Button.svelte"
+          },
+          {
+            "file": "src/lib/ui/index.ts"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/lib/components/TodoItem.svelte"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:function:6:remove",
+            "name": "remove",
+            "className": null,
+            "file": "src/lib/components/TodoItem.svelte",
+            "path": "<root>/src/lib/components/TodoItem.svelte",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:function:11:save",
+            "name": "save",
+            "className": null,
+            "file": "src/lib/components/TodoItem.svelte",
+            "path": "<root>/src/lib/components/TodoItem.svelte",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:function:1:<script>",
+            "name": "<script>",
+            "className": null,
+            "file": "src/lib/components/TodoItem.svelte",
+            "path": "<root>/src/lib/components/TodoItem.svelte",
+            "line": 1,
+            "endLine": 15
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/lib/components/TodoItem.svelte"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/lib/components/TodoItem.svelte"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/lib/components/TodoItem.svelte"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/lib/components/TodoItem.svelte"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line, n.endLine AS endLine",
+        "params": {
+          "files": [
+            "src/lib/components/TodoItem.svelte"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE file.relativePath IN $files RETURN id(n) AS id, n.name AS name, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/lib/components/TodoItem.svelte"
+          ],
+          "name": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:variable:5:todo",
+            "name": "todo",
+            "file": "src/lib/components/TodoItem.svelte",
+            "path": "<root>/src/lib/components/TodoItem.svelte",
+            "line": 5
+          },
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:variable:7:kind",
+            "name": "kind",
+            "file": "src/lib/components/TodoItem.svelte",
+            "path": "<root>/src/lib/components/TodoItem.svelte",
+            "line": 7
+          },
+          {
+            "id": "file:src/lib/components/TodoItem.svelte:variable:9:dispatch",
+            "name": "dispatch",
+            "file": "src/lib/components/TodoItem.svelte",
+            "path": "<root>/src/lib/components/TodoItem.svelte",
+            "line": 9
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(n:Route) WHERE file.relativePath IN $files RETURN id(n) AS id, n.method AS method, coalesce(n.fullPath, n.path) AS routePath, file.relativePath AS file, file.path AS path, n.line AS line",
+        "params": {
+          "files": [
+            "src/lib/components/TodoItem.svelte"
+          ],
+          "name": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_FIELD]->(field:Field) WHERE file.relativePath = $file RETURN class.name AS className, field.name AS name, field.typeName AS typeName, field.line AS line",
+        "params": {
+          "file": "src/lib/components/TodoItem.svelte"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:IMPORTS]->(imp:Import) WHERE file.relativePath = $file RETURN imp.source AS source, imp.line AS line, imp.isTypeOnly AS isTypeOnly",
+        "params": {
+          "file": "src/lib/components/TodoItem.svelte"
+        },
+        "rows": [
+          {
+            "source": "svelte",
+            "line": 2,
+            "isTypeOnly": false
+          },
+          {
+            "source": "../api",
+            "line": 3,
+            "isTypeOnly": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE file.relativePath = $file RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.handlerName AS handlerName, entrypoint.line AS line",
+        "params": {
+          "file": "src/lib/components/TodoItem.svelte"
+        },
+        "rows": [
+          {
+            "kind": "dom-event",
+            "trigger": "change",
+            "handlerName": "save",
+            "line": 18
+          },
+          {
+            "kind": "dom-event",
+            "trigger": "dblclick",
+            "handlerName": "save",
+            "line": 19
+          },
+          {
+            "kind": "dom-event",
+            "trigger": "click",
+            "handlerName": "remove",
+            "line": 20
+          }
+        ]
+      }
+    ],
+    "output": {
+      "file": "src/lib/components/TodoItem.svelte",
+      "imports": [
+        {
+          "source": "svelte",
+          "line": 2,
+          "isTypeOnly": false
+        },
+        {
+          "source": "../api",
+          "line": 3,
+          "isTypeOnly": false
+        }
+      ],
+      "outline": [
+        {
+          "kind": "function",
+          "name": "<script>",
+          "line": 1,
+          "endLine": 15
+        },
+        {
+          "kind": "variable",
+          "name": "todo",
+          "line": 5
+        },
+        {
+          "kind": "function",
+          "name": "remove",
+          "line": 6,
+          "endLine": 6
+        },
+        {
+          "kind": "variable",
+          "name": "kind",
+          "line": 7
+        },
+        {
+          "kind": "variable",
+          "name": "dispatch",
+          "line": 9
+        },
+        {
+          "kind": "function",
+          "name": "save",
+          "line": 11,
+          "endLine": 14
+        },
+        {
+          "kind": "entrypoint:dom-event",
+          "trigger": "change",
+          "handlerName": "save",
+          "line": 18
+        },
+        {
+          "kind": "entrypoint:dom-event",
+          "trigger": "dblclick",
+          "handlerName": "save",
+          "line": 19
+        },
+        {
+          "kind": "entrypoint:dom-event",
+          "trigger": "click",
+          "handlerName": "remove",
+          "line": 20
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 9
+      }
+    }
+  }
+]

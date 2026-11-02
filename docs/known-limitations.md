@@ -126,6 +126,14 @@ Blocks or informs: MCP `find_callers` and dependency impact analysis.
   entrypoints; dynamic event names (`@[name]`) are not read. `methods`
   inside `defineComponent({…})` have no Function nodes, so their listeners
   stay unlinked.
+- Svelte listeners on HTML elements (`onclick={save}`, `on:click={save}`,
+  `on:submit|preventDefault={send}`, `onclick={() => select('all')}`) are
+  entrypoints (kind `dom-event`, library `svelte`, trigger the event without
+  modifiers). The handler is the function the listener names, or the one an
+  arrow function calls first, linked when the `.svelte` file declares it.
+  Inline code (`onclick={() => count++}`) names no handler; `on:click`
+  without a value forwards the event and is no listener; listeners on
+  components are component events or props and no entrypoints.
 - `customElements.define('x-tag', Class)` becomes a `Component` (framework
   `web-components`); `COMPONENT_DEFINED_BY` links the class only when it is
   declared in the same file.
@@ -270,11 +278,12 @@ Blocks or informs: future query server design.
   frontmatter are parsed together as the file's JS/TS, TypeScript when one
   block has `lang="ts"` (always for Astro). The template is only parsed with
   the HTML grammar: directives (`@click`, `v-if`, `on:click`), blocks
-  (`{#if}`) and `{expressions}` are not read as code yet, and a component
-  rendered in a Svelte or Astro template is no `RENDERS` relationship yet
-  (Phase 15; Vue templates: see Components).
-  Svelte `$:` reactive statements are labelled statements, so their calls
-  have no caller.
+  (`{#if}`) and `{expressions}` are not read as code, so calls inside the
+  template have no node, and a component rendered in an Astro template is no
+  `RENDERS` relationship yet (Phase 15; Vue and Svelte templates: see
+  Components). In a Svelte file the inside of each `{…}` is masked before
+  the HTML grammar reads it, so `onclick={() => go(item)}` stays one
+  attribute; the expressions are read from the file text by position.
 
 Blocks or informs: ROADMAP Phases 11–15 (components, React, Vue, Svelte,
 Astro).
@@ -360,6 +369,29 @@ Astro).
   the repository. Options API components without `setup()` have no
   function, so their `methods`, `computed` and lifecycle hooks are not tied
   to the component.
+- Svelte: every `.svelte` file is one Component (framework `svelte`) named
+  by its file name in PascalCase, of kind `runes` (its instance script calls
+  `$props`, `$state`, `$derived`, `$effect`, …), `legacy` (an instance script
+  without runes) or `template` (none). Props are the `export let`
+  declarations (not `export const` or `export function`) and the names
+  destructured from `$props()` (`let { a, b = 1, ...rest } = $props()`,
+  without the rest); `let props = $props()` and props typed only through an
+  interface give no names. Tags in PascalCase (`<TodoItem>`), dotted tags
+  (`<Ui.Button>`, through `import * as Ui`) and `<svelte:component
+  this={TodoItem}>` are `RENDERS` of the component the file imports;
+  `<svelte:component this={view}>` with a variable stays in
+  `pendingRenders`, and `<svelte:self>` and `<svelte:element>` are not
+  renders. Props passed are the attributes, `{user}` shorthands and
+  `bind:value` bindings (`bind:this`, `on:`, `class:`, `use:`, transitions,
+  `let:`, spreads and `slot` are not); Svelte 5 `onclick={…}` on a component
+  is a prop. Component events (`on:toggle` on a component,
+  `createEventDispatcher`) and snippets (`{#snippet}`, `{@render}`) are not
+  read.
+- Svelte component code: the instance `<script>` (not `<script module>` or
+  `context="module"`) is a Function named `<script>` (kind
+  `script_instance`) that the Component is `COMPONENT_DEFINED_BY_FUNCTION`;
+  it owns the block's top-level calls, including `$:` reactive statements,
+  rune calls (`$state(…)`, kept as calls) and anonymous callbacks.
 
 ## Pages
 

@@ -22,9 +22,13 @@
 {"kind":"node","id":"file:src/components/CartButton.vue:variable:16:count","label":"Variable","properties":{"isExported":false,"kind":"const","line":16,"name":"count","stringValue":null}}
 {"kind":"node","id":"file:src/components/CartButton.vue:variable:8:name","label":"Variable","properties":{"isExported":true,"kind":"const","line":8,"name":"name","stringValue":"CartButton"}}
 {"kind":"node","id":"file:src/components/Total.svelte","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"svelte","path":"<root>/src/components/Total.svelte","relativePath":"src/components/Total.svelte","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/Total.svelte:component:1:Total","label":"Component","properties":{"endLine":20,"framework":"svelte","hooks":null,"isExported":true,"kind":"legacy","line":1,"name":"Total","pendingRenders":null,"props":"cents"}}
 {"kind":"node","id":"file:src/components/Total.svelte:config:2:currency","label":"ConfigValue","properties":{"line":2,"name":"currency","value":"USD","valueType":"string"}}
+{"kind":"node","id":"file:src/components/Total.svelte:entrypoint:17:5:dom-event:click","label":"EntryPoint","properties":{"handlerName":"refresh","kind":"dom-event","library":"svelte","line":17,"receiverName":"p","trigger":"click"}}
 {"kind":"node","id":"file:src/components/Total.svelte:function:11:refresh","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":11,"methodKind":null,"name":"refresh","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/components/Total.svelte:function:11:refresh:call:12:11:formatTotal","label":"Call","properties":{"args":"[]","callee":"formatTotal","columnNumber":11,"expression":"formatTotal","line":12,"name":"formatTotal","receiver":null}}
+{"kind":"node","id":"file:src/components/Total.svelte:function:5:<script>","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"script_instance","line":5,"methodKind":null,"name":"<script>","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/components/Total.svelte:function:5:<script>:call:9:13:formatTotal","label":"Call","properties":{"args":"[\"cents\"]","callee":"formatTotal","columnNumber":13,"expression":"formatTotal","line":9,"name":"formatTotal","receiver":null}}
 {"kind":"node","id":"file:src/components/Total.svelte:import:6:../lib/cart","label":"Import","properties":{"bindings":"[{\"imported\":\"formatTotal\",\"local\":\"formatTotal\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":6,"source":"../lib/cart","specifier":"import { formatTotal } from '../lib/cart';"}}
 {"kind":"node","id":"file:src/components/Total.svelte:variable:2:currency","label":"Variable","properties":{"isExported":true,"kind":"const","line":2,"name":"currency","stringValue":"USD"}}
 {"kind":"node","id":"file:src/components/Total.svelte:variable:8:cents","label":"Variable","properties":{"isExported":true,"kind":"let","line":8,"name":"cents","stringValue":null}}
@@ -74,13 +78,20 @@
 {"kind":"rel","from":"file:src/components/CartButton.vue:import:13:../lib/cart","type":"RESOLVES_TO","to":"file:src/lib/cart.ts","properties":{}}
 {"kind":"rel","from":"file:src/components/CartButton.vue:variable:15:props","type":"INITIALIZED_BY","to":"file:src/components/CartButton.vue:initializercall:15:14:defineProps","properties":{}}
 {"kind":"rel","from":"file:src/components/CartButton.vue:variable:16:count","type":"INITIALIZED_BY","to":"file:src/components/CartButton.vue:initializercall:16:14:ref","properties":{}}
+{"kind":"rel","from":"file:src/components/Total.svelte","type":"DECLARES_COMPONENT","to":"file:src/components/Total.svelte:component:1:Total","properties":{}}
 {"kind":"rel","from":"file:src/components/Total.svelte","type":"DECLARES_CONFIG","to":"file:src/components/Total.svelte:config:2:currency","properties":{}}
+{"kind":"rel","from":"file:src/components/Total.svelte","type":"DECLARES_ENTRYPOINT","to":"file:src/components/Total.svelte:entrypoint:17:5:dom-event:click","properties":{}}
 {"kind":"rel","from":"file:src/components/Total.svelte","type":"DEFINES_FUNCTION","to":"file:src/components/Total.svelte:function:11:refresh","properties":{}}
+{"kind":"rel","from":"file:src/components/Total.svelte","type":"DEFINES_FUNCTION","to":"file:src/components/Total.svelte:function:5:<script>","properties":{}}
 {"kind":"rel","from":"file:src/components/Total.svelte","type":"DEFINES_VARIABLE","to":"file:src/components/Total.svelte:variable:2:currency","properties":{}}
 {"kind":"rel","from":"file:src/components/Total.svelte","type":"DEFINES_VARIABLE","to":"file:src/components/Total.svelte:variable:8:cents","properties":{}}
 {"kind":"rel","from":"file:src/components/Total.svelte","type":"IMPORTS","to":"file:src/components/Total.svelte:import:6:../lib/cart","properties":{}}
+{"kind":"rel","from":"file:src/components/Total.svelte:component:1:Total","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/components/Total.svelte:function:5:<script>","properties":{}}
+{"kind":"rel","from":"file:src/components/Total.svelte:entrypoint:17:5:dom-event:click","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/components/Total.svelte:function:11:refresh","properties":{}}
 {"kind":"rel","from":"file:src/components/Total.svelte:function:11:refresh","type":"CALLS","to":"file:src/components/Total.svelte:function:11:refresh:call:12:11:formatTotal","properties":{}}
 {"kind":"rel","from":"file:src/components/Total.svelte:function:11:refresh:call:12:11:formatTotal","type":"CALL_RESOLVES_TO","to":"file:src/lib/cart.ts:function:5:formatTotal","properties":{}}
+{"kind":"rel","from":"file:src/components/Total.svelte:function:5:<script>","type":"CALLS","to":"file:src/components/Total.svelte:function:5:<script>:call:9:13:formatTotal","properties":{}}
+{"kind":"rel","from":"file:src/components/Total.svelte:function:5:<script>:call:9:13:formatTotal","type":"CALL_RESOLVES_TO","to":"file:src/lib/cart.ts:function:5:formatTotal","properties":{}}
 {"kind":"rel","from":"file:src/components/Total.svelte:import:6:../lib/cart","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/components/Total.svelte:import:6:../lib/cart","type":"RESOLVES_TO","to":"file:src/lib/cart.ts","properties":{}}
 {"kind":"rel","from":"file:src/lib/cart.ts","type":"DEFINES_FUNCTION","to":"file:src/lib/cart.ts:function:1:addToCart","properties":{}}

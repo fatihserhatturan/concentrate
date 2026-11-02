@@ -36,10 +36,12 @@ type CodeRange = { start: number; end: number; separator: number | null };
 
 // Semantics of the markup itself (event attributes, for example). Page
 // plugins run after the scripts are parsed, on the HTML tree, and add to
-// `parsed`; the tree is freed afterwards.
+// `parsed`; the tree is freed afterwards. `source` is the file text: in a
+// Svelte file the tree's `{expressions}` are masked, and their text is read
+// from it by position.
 export interface HtmlPagePlugin {
   readonly name: string;
-  onPage(page: { fileNodeId: string; documentNode: SyntaxNode; parsed: ParsedSourceFile }): void;
+  onPage(page: { fileNodeId: string; documentNode: SyntaxNode; parsed: ParsedSourceFile; source: string }): void;
 }
 
 export function createMarkupParser(
@@ -70,11 +72,12 @@ export async function parseMarkupFile(
   const source = await readFile(filePath, "utf8");
   const frontmatter = language === "astro" ? astroFrontmatter(source) : null;
   // The markup without the frontmatter, whose `<` would read as tags.
-  const markup = frontmatter ? keepOnly(source, [], { start: 0, end: frontmatter.fenceEnd }) : source;
+  let markup = frontmatter ? keepOnly(source, [], { start: 0, end: frontmatter.fenceEnd }) : source;
+  if (language === "svelte") markup = maskSvelteExpressions(markup);
   const tree = await parseSyntaxTree("html", markup);
   try {
     const parsed = await parseMarkup(rootPath, filePath, source, language, frontmatter?.code ?? null, tree.rootNode, plugins);
-    for (const plugin of pagePlugins) plugin.onPage({ fileNodeId: parsed.fileNodeId, documentNode: tree.rootNode, parsed });
+    for (const plugin of pagePlugins) plugin.onPage({ fileNodeId: parsed.fileNodeId, documentNode: tree.rootNode, parsed, source });
     return parsed;
   } finally {
     tree.delete();
@@ -204,6 +207,83 @@ function astroFrontmatter(source: string): { code: CodeRange; fenceEnd: number }
   if (!closing) return null;
   const end = start + closing.index;
   return { code: { start, end, separator: end }, fenceEnd: end + closing[0].length };
+}
+
+// Svelte's `{expressions}` (attribute values, `{name}` shorthands, `{#each}`
+// blocks, text) with their inside masked, so the HTML grammar reads each as
+// one attribute or text: `onclick={() => go(item)}` would end the tag at `=>`.
+// The inside becomes `_`, line breaks kept so positions stay; an attribute
+// value's braces become quotes, so a line break in it does not end it.
+// Scripts, styles and comments are left as they are.
+function maskSvelteExpressions(source: string): string {
+  const chars = source.split("");
+  const skip = /<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>|<!--[\s\S]*?-->/giu;
+  let index = 0;
+  while (index < source.length) {
+    if (source[index] === "<") {
+      skip.lastIndex = index;
+      const match = skip.exec(source);
+      if (match?.index === index) {
+        index += match[0].length;
+        continue;
+      }
+    }
+    if (source[index] !== "{") {
+      index += 1;
+      continue;
+    }
+    const end = closingBrace(source, index + 1);
+    if (end === null) break;
+    for (let inside = index + 1; inside < end; inside += 1) {
+      if (source[inside] !== "\n" && source[inside] !== "\r") chars[inside] = "_";
+    }
+    if (/=\s*$/u.test(source.slice(Math.max(0, index - 8), index))) {
+      chars[index] = "\"";
+      chars[end] = "\"";
+    }
+    index = end + 1;
+  }
+  return chars.join("");
+}
+
+// The `}` that closes an expression whose code starts at `start`, past nested
+// braces, strings and template literals.
+function closingBrace(source: string, start: number): number | null {
+  let depth = 0;
+  for (let index = start; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === "'" || char === "\"" || char === "`") {
+      const end = stringEnd(source, index);
+      if (end === null) return null;
+      index = end;
+    } else if (char === "{") {
+      depth += 1;
+    } else if (char === "}") {
+      if (depth === 0) return index;
+      depth -= 1;
+    }
+  }
+  return null;
+}
+
+// The closing quote of the string or template literal opening at `start`.
+function stringEnd(source: string, start: number): number | null {
+  const quote = source[start];
+  for (let index = start + 1; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === "\\") {
+      index += 1;
+    } else if (char === quote) {
+      return index;
+    } else if (quote === "`" && char === "$" && source[index + 1] === "{") {
+      const end = closingBrace(source, index + 2);
+      if (end === null) return null;
+      index = end;
+    } else if (quote !== "`" && char === "\n") {
+      return null;
+    }
+  }
+  return null;
 }
 
 // The value of an attribute, without the quotes of a quoted one.
