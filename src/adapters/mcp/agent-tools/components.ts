@@ -8,7 +8,7 @@ import {
   loadComponents,
   loadFunctions,
   loadRenderEdges,
-  matchesFile,
+  matchesFileOrDirectory,
   walkCalls,
   type ComponentInfo,
   type RenderEdge,
@@ -154,7 +154,7 @@ export async function findComponentUsages(engine: IQueryEngine, args: Record<str
 
 function matchComponents(components: Map<string, ComponentInfo>, name: string, file: string | undefined): ComponentInfo[] {
   return [...components.values()]
-    .filter((component) => component.name === name && (!file || matchesFile(component.file, file)))
+    .filter((component) => component.name === name && (!file || matchesFileOrDirectory(component.file, file)))
     .sort(byFileAndLine);
 }
 

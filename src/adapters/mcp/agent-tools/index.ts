@@ -21,7 +21,7 @@ export const agentToolDefinitions = [
     description: `What is affected if a function, method, class or file changes: transitive callers with their call depth, module-level callers, the routes and entrypoints that run any of them, the UI components they implement, the components that render those and the pages that render any of them, the frontend calls that reach the affected routes (apiConsumers) with the components and pages whose code makes them, the state stores the change writes (Pinia, Redux Toolkit, Zustand, Jotai, Svelte) with the functions that read them and the components and pages those reach (storeComponents, storePages), and the data models, env vars and config the changed code uses. A store's name or hook as symbol asks what reading that store reaches. For a route, use route_details instead. ${budgetNote}`,
     inputSchema: objectSchema({
       symbol: { type: "string", description: "Function, method or class name (a class covers all its methods), or a store's name or hook." },
-      file: { type: "string", description: "Scan-relative file path or path suffix. Alone, covers every function in the file; with symbol, narrows it." },
+      file: { type: "string", description: "Scan-relative file or directory path, or a path suffix. Alone, covers every function in it; with symbol, narrows it." },
       maxDepth,
       limit: limit(50),
     }),
@@ -50,9 +50,9 @@ export const agentToolDefinitions = [
     inputSchema: objectSchema({
       method: { type: "string", description: "Optional route method, case-insensitive (GET, post, query, mutation, ...)." },
       path: { type: "string", description: "Optional route path, matched against the resolved full path or the path as declared (/api/users/:id, post.byId)." },
-      routeFile: { type: "string", description: "Optional scan-relative file of the route declaration." },
+      routeFile: { type: "string", description: "Optional scan-relative file or directory of the route declaration, or a path suffix." },
       framework: { type: "string", description: "Optional route framework, such as express-koa, nextjs, nuxt, sveltekit, astro or trpc." },
-      file: { type: "string", description: "Optional scan-relative file of the calling code." },
+      file: { type: "string", description: "Optional scan-relative file or directory of the calling code, or a path suffix." },
       client: { type: "string", description: "Optional client: fetch, axios, ky, ofetch, nuxt, swr, tanstack-query, angular or trpc." },
       limit: limit(50),
     }),
@@ -62,7 +62,7 @@ export const agentToolDefinitions = [
     description: `Source code of a declaration, read from disk with the line span from the last scan (at most 400 lines each). ${budgetNote}`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact declaration name; Class.method selects one class's method." },
-      file: { type: "string", description: "Optional scan-relative file path or path suffix." },
+      file: { type: "string", description: "Optional scan-relative file or directory path, or a path suffix." },
       kind: { type: "string", description: "Optional kind: function, method, class, interface, type, enum or variable." },
       limit: limit(5),
     }, ["name"]),
@@ -80,7 +80,7 @@ export const agentToolDefinitions = [
     description: `A UI component's tree: what it renders and what renders it (each with the props passed, the render line, an Astro island's client directive and an Angular templateUrl's template file, up to depth levels), elements that resolved to no component (library components), the function or class that defines it, its hooks, and the contexts it reads directly or through custom hooks. ${budgetNote}`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
-      file: { type: "string", description: "Optional scan-relative file path or path suffix of the component." },
+      file: { type: "string", description: "Optional scan-relative file or directory path, or a path suffix, of the component." },
       depth: { type: "number", description: "How many render levels to follow each way. Defaults to 2, at most 10." },
       limit: limit(5),
     }, ["name"]),
@@ -90,7 +90,7 @@ export const agentToolDefinitions = [
     description: `Where a UI component is rendered: each render site with the rendering component, file (an Angular component's template file), line, props passed and an Astro island's client directive; for a context, also the functions that read it (useContext / use). Elements of that name that resolved to no component (library components such as Link) are listed with resolved: false. ${budgetNote}`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
-      file: { type: "string", description: "Optional scan-relative file path or path suffix of the component; leaves out unresolved elements." },
+      file: { type: "string", description: "Optional scan-relative file or directory path, or a path suffix, of the component; leaves out unresolved elements." },
       limit: limit(50),
     }, ["name"]),
   },

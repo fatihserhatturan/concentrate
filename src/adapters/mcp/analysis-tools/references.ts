@@ -1,6 +1,6 @@
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalString, requiredString } from "../args.js";
-import { loadFunctions, matchesFile } from "../agent-tools/graph.js";
+import { loadFunctions, matchesFileOrDirectory } from "../agent-tools/graph.js";
 import type { PageWindow } from "../paging.js";
 import { byFileAndLine, type Declaration, type DeclarationKind, describeDeclaration, ExportIndex, loadDeclarations, loadImports } from "./model.js";
 import { DECLARATION_KINDS } from "./search.js";
@@ -41,7 +41,7 @@ export async function findReferences(engine: IQueryEngine, args: Record<string, 
   const targets = declarations.filter((declaration) =>
     declaration.name === name
     && (!className || (declaration.kind === "method" && declaration.className === className))
-    && (!file || matchesFile(declaration.file, file))
+    && (!file || matchesFileOrDirectory(declaration.file, file))
     && (!kind || declaration.kind === kind));
   if (targets.length === 0) {
     return { symbol, declarations: [], note: "No declaration matched. Use search_symbols for a fuzzy search." };

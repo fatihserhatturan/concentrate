@@ -6,6 +6,7 @@ import { asObject, objectSchema, optionalBoolean, optionalLimit, optionalString,
 import { fitToBudget } from "./budget.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
 import { pagedResult, pageWindow, type PageWindow } from "./paging.js";
+import { filesMatching, NO_FILE_MATCHED } from "./agent-tools/graph.js";
 import { listStores } from "./stores.js";
 import { listTables } from "./tables.js";
 
@@ -147,11 +148,11 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_exports",
-    description: "List exported symbols and re-exports, optionally scoped to one file path.",
+    description: "List exported symbols and re-exports, optionally scoped to a file or directory.",
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "Optional file relative path.",
+        description: "Optional scan-relative file or directory path, or a path suffix.",
       },
       limit: {
         type: "number",
@@ -183,7 +184,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "Optional file relative path.",
+        description: "Optional scan-relative file or directory path, or a path suffix.",
       },
       framework: {
         type: "string",
@@ -201,7 +202,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "Optional file relative path.",
+        description: "Optional scan-relative file or directory path, or a path suffix.",
       },
       framework: {
         type: "string",
@@ -227,7 +228,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       file: {
         type: "string",
-        description: "Optional file relative path.",
+        description: "Optional scan-relative file or directory path, or a path suffix.",
       },
       limit: {
         type: "number",
@@ -241,7 +242,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "Optional file relative path.",
+        description: "Optional scan-relative file or directory path, or a path suffix.",
       },
       name: {
         type: "string",
@@ -290,7 +291,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       name: { type: "string", description: "Optional store name or hook substring." },
       library: { type: "string", description: "Optional library filter: pinia, redux, zustand, jotai or svelte." },
-      file: { type: "string", description: "Optional declaring file relative path." },
+      file: { type: "string", description: "Optional scan-relative declaring file or directory path, or a path suffix." },
       limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
     }),
   },
@@ -420,7 +421,7 @@ async function listExports(
 ): Promise<Record<string, unknown>> {
   const file = optionalString(args.file);
   const { limit, fetch } = window;
-  const fileFilter = file ? `AND file.relativePath = ${quote(file)}` : "";
+  const { fileFilter, fileNote } = await fileScope(engine, file);
   const queries = [
     exportQuery("Function", "DEFINES_FUNCTION", fileFilter, fetch),
     exportQuery("Class", "DEFINES_CLASS", fileFilter, fetch),
@@ -438,6 +439,7 @@ async function listExports(
   return {
     query: { file, limit },
     exports: window.take(rows),
+    ...fileNote,
   };
 }
 
@@ -469,7 +471,7 @@ async function listRoutes(
   const file = optionalString(args.file);
   const framework = optionalString(args.framework);
   const { limit, fetch } = window;
-  const fileFilter = file ? `AND file.relativePath = ${quote(file)}` : "";
+  const { fileFilter, fileNote } = await fileScope(engine, file);
   const frameworkFilter = framework ? `AND route.framework = ${quote(framework)}` : "";
   const rows = await engine.query(`
     MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)
@@ -489,7 +491,7 @@ async function listRoutes(
     LIMIT ${fetch}
   `);
 
-  return { query: { file, framework, limit }, routes: window.take(rows) };
+  return { query: { file, framework, limit }, routes: window.take(rows), ...fileNote };
 }
 
 async function listPages(
@@ -501,7 +503,7 @@ async function listPages(
   const framework = optionalString(args.framework);
   const path = optionalString(args.path);
   const { limit, fetch } = window;
-  const fileFilter = file ? `AND file.relativePath = ${quote(file)}` : "";
+  const { fileFilter, fileNote } = await fileScope(engine, file);
   const frameworkFilter = framework ? `AND page.framework = ${quote(framework)}` : "";
   // A prefix of whole segments: /users matches /users and /users/:id, not /usersettings.
   const prefix = path?.replace(/\/+$/u, "");
@@ -527,7 +529,7 @@ async function listPages(
     LIMIT ${fetch}
   `);
 
-  return { query: { file, framework, path, limit }, pages: window.take(rows) };
+  return { query: { file, framework, path, limit }, pages: window.take(rows), ...fileNote };
 }
 
 async function listEntrypoints(
@@ -539,7 +541,7 @@ async function listEntrypoints(
   const file = optionalString(args.file);
   const { limit, fetch } = window;
   const kindFilter = kind ? `AND entrypoint.kind = ${quote(kind)}` : "";
-  const fileFilter = file ? `AND file.relativePath = ${quote(file)}` : "";
+  const { fileFilter, fileNote } = await fileScope(engine, file);
   const rows = await engine.query(`
     MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)
     WHERE true
@@ -557,7 +559,7 @@ async function listEntrypoints(
     LIMIT ${fetch}
   `);
 
-  return { query: { kind, file, limit }, entrypoints: window.take(rows) };
+  return { query: { kind, file, limit }, entrypoints: window.take(rows), ...fileNote };
 }
 
 async function listEnvConfig(
@@ -568,7 +570,7 @@ async function listEnvConfig(
   const file = optionalString(args.file);
   const name = optionalString(args.name);
   const { limit, fetch } = window;
-  const fileFilter = file ? `AND file.relativePath = ${quote(file)}` : "";
+  const { fileFilter, fileNote } = await fileScope(engine, file);
   const envNameFilter = name ? `AND contains(lower(env.name), lower(${quote(name)}))` : "";
   const configNameFilter = name ? `AND contains(lower(config.name), lower(${quote(name)}))` : "";
   const envRows = await engine.query(`
@@ -623,6 +625,7 @@ async function listEnvConfig(
   return {
     query: { file, name, limit },
     envConfig: window.take([...envRows, ...configRows, ...consumedRows]),
+    ...fileNote,
   };
 }
 
@@ -726,6 +729,16 @@ function definitionQuery(
     ORDER BY file.relativePath, n.line, n.name
     LIMIT ${limit}
   `;
+}
+
+// A file argument as a Cypher filter on `file.relativePath`: the files it
+// selects as a file, a directory or a path suffix, with a note when none.
+async function fileScope(engine: GraphQueryEngine, file: string | undefined) {
+  if (!file) return { fileFilter: "", fileNote: {} };
+  const files = await filesMatching(engine, file);
+  return files.length === 0
+    ? { fileFilter: "AND false", fileNote: { note: NO_FILE_MATCHED } }
+    : { fileFilter: `AND file.relativePath IN [${files.map(quote).join(", ")}]`, fileNote: {} };
 }
 
 function exportQuery(label: string, relationship: string, fileFilter: string, limit: number): string {

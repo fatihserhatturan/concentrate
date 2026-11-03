@@ -996,7 +996,7 @@
         "params": {
           "name": "",
           "library": "redux",
-          "file": ""
+          "files": []
         },
         "rows": [
           {
@@ -1059,7 +1059,7 @@
         "params": {
           "name": "",
           "library": "redux",
-          "file": ""
+          "files": []
         },
         "rows": [
           {
@@ -1151,7 +1151,7 @@
         "params": {
           "name": "",
           "library": "redux",
-          "file": ""
+          "files": []
         },
         "rows": [
           {

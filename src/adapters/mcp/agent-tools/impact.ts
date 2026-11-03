@@ -5,7 +5,7 @@ import { promisify } from "node:util";
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalInteger, optionalString } from "../args.js";
 import type { PageWindow } from "../paging.js";
-import { computeImpact, loadFunctions, loadSymbols, matchesFile, type SymbolInfo } from "./graph.js";
+import { computeImpact, loadFunctions, loadSymbols, matchesFileOrDirectory, type SymbolInfo } from "./graph.js";
 
 const run = promisify(execFile);
 
@@ -22,7 +22,7 @@ export async function impactOf(engine: IQueryEngine, args: Record<string, unknow
   const functions = await loadFunctions(engine);
   const seedIds = [...functions.values()]
     .filter((fn) => !symbol || fn.name === symbol || fn.className === symbol)
-    .filter((fn) => !file || matchesFile(fn.file, file))
+    .filter((fn) => !file || matchesFileOrDirectory(fn.file, file))
     .map((fn) => fn.id);
   const storeRows = symbol
     ? await engine.query(`
@@ -31,7 +31,7 @@ export async function impactOf(engine: IQueryEngine, args: Record<string, unknow
       RETURN id(store) AS id, file.relativePath AS file
     `, { symbol }) as Array<{ id?: unknown; file?: unknown }>
     : [];
-  const storeIds = storeRows.filter((row) => !file || matchesFile(String(row.file), file)).map((row) => String(row.id));
+  const storeIds = storeRows.filter((row) => !file || matchesFileOrDirectory(String(row.file), file)).map((row) => String(row.id));
   if (seedIds.length === 0 && storeIds.length === 0) {
     return {
       symbol: symbol ?? null,

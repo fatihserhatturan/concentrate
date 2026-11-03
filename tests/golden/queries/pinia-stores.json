@@ -777,7 +777,7 @@
         "params": {
           "name": "",
           "library": "",
-          "file": ""
+          "files": []
         },
         "rows": [
           {
@@ -814,7 +814,7 @@
         "params": {
           "name": "",
           "library": "",
-          "file": ""
+          "files": []
         },
         "rows": [
           {
@@ -906,7 +906,7 @@
         "params": {
           "name": "",
           "library": "",
-          "file": ""
+          "files": []
         },
         "rows": [
           {

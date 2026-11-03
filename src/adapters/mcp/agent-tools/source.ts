@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalString, requiredString } from "../args.js";
 import type { PageWindow } from "../paging.js";
-import { byFileAndLine, loadSymbols, matchesFile, type SymbolInfo, type SymbolKind } from "./graph.js";
+import { byFileAndLine, loadSymbols, matchesFile, matchesFileOrDirectory, type SymbolInfo, type SymbolKind } from "./graph.js";
 
 const MAX_SOURCE_LINES = 400;
 const SYMBOL_KINDS: readonly SymbolKind[] = ["function", "method", "class", "interface", "type", "enum", "variable"];
@@ -22,7 +22,7 @@ export async function getSymbolSource(engine: IQueryEngine, args: Record<string,
   const [className, member] = dot > 0 ? [name.slice(0, dot), name.slice(dot + 1)] : [null, name];
   const symbols = (await loadSymbols(engine, { name: member }))
     .filter((symbol) => !className || (symbol.kind === "method" && symbol.className === className))
-    .filter((symbol) => !file || matchesFile(symbol.file, file))
+    .filter((symbol) => !file || matchesFileOrDirectory(symbol.file, file))
     .filter((symbol) => !kind || symbol.kind === kind);
 
   const contents = new Map<string, Promise<string[] | null>>();

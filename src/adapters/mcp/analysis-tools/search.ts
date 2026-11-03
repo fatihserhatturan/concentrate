@@ -1,6 +1,6 @@
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalString, requiredString } from "../args.js";
-import { matchesFile } from "../agent-tools/graph.js";
+import { matchesFileOrDirectory } from "../agent-tools/graph.js";
 import type { PageWindow } from "../paging.js";
 import { byFileAndLine, type DeclarationKind, describeDeclaration, loadDeclarations } from "./model.js";
 
@@ -31,7 +31,7 @@ export async function searchSymbols(engine: IQueryEngine, args: Record<string, u
 
   const qualified = query.includes(".");
   const ranked = (await loadDeclarations(engine))
-    .filter((declaration) => (!kind || declaration.kind === kind) && (!file || matchesFile(declaration.file, file)))
+    .filter((declaration) => (!kind || declaration.kind === kind) && (!file || matchesFileOrDirectory(declaration.file, file)))
     .flatMap((declaration) => {
       const name = qualified && declaration.className ? `${declaration.className}.${declaration.name}` : declaration.name;
       const match = matchName(name, query);

@@ -1,4 +1,5 @@
 import type { IQueryEngine } from "../../core/contracts/query-engine.js";
+import { filesMatching, NO_FILE_MATCHED } from "./agent-tools/graph.js";
 import { optionalString } from "./args.js";
 import type { PageWindow } from "./paging.js";
 
@@ -17,13 +18,14 @@ export async function listStores(engine: IQueryEngine, args: Record<string, unkn
   const name = optionalString(args.name);
   const library = optionalString(args.library);
   const file = optionalString(args.file);
+  const files = file ? await filesMatching(engine, file) : [];
   const conditions = [
     name ? "(contains(lower(store.name), lower($name)) OR contains(lower(store.hook), lower($name)))" : null,
     library ? "store.library = $library" : null,
-    file ? "file.relativePath = $file" : null,
+    file ? "file.relativePath IN $files" : null,
   ].filter(Boolean);
   const where = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
-  const params = { name: name ?? "", library: library ?? "", file: file ?? "" };
+  const params = { name: name ?? "", library: library ?? "", files };
 
   const [stores, access, actions] = await Promise.all([
     engine.query(`
@@ -85,6 +87,6 @@ export async function listStores(engine: IQueryEngine, args: Record<string, unkn
     query: { name, library, file },
     totalStores: result.length,
     stores: window.take(result),
-    note: `Stores come from Pinia defineStore, Redux Toolkit createSlice / configureStore, Zustand create, Jotai atoms and Svelte stores. readBy / writtenBy count distinct functions; each store lists up to ${USERS_PER_STORE} readers and writers. A Redux root store's slices map its state keys to their reducers.`,
+    note: `${file && files.length === 0 ? `${NO_FILE_MATCHED} ` : ""}Stores come from Pinia defineStore, Redux Toolkit createSlice / configureStore, Zustand create, Jotai atoms and Svelte stores. readBy / writtenBy count distinct functions; each store lists up to ${USERS_PER_STORE} readers and writers. A Redux root store's slices map its state keys to their reducers.`,
   };
 }

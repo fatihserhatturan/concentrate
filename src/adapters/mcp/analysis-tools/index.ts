@@ -19,7 +19,7 @@ export const analysisToolDefinitions = [
     inputSchema: objectSchema({
       query: { type: "string", description: "Name or fragment to search for." },
       kind,
-      file: { type: "string", description: "Optional scan-relative file path or path suffix." },
+      file: { type: "string", description: "Optional scan-relative file or directory path, or a path suffix." },
       limit: limit(20),
     }, ["query"]),
   },
@@ -28,7 +28,7 @@ export const analysisToolDefinitions = [
     description: "Where a declaration is used: calls and callbacks (resolved call edges), imports and re-exports (followed through barrels by name; namespace and dynamic imports are marked possible), subclasses, implementations and injection sites, and the routes and entrypoints a function handles. Each reference has a kind, file and line.",
     inputSchema: objectSchema({
       symbol: { type: "string", description: "Exact declaration name; Class.method selects one class's method." },
-      file: { type: "string", description: "Optional scan-relative file path or path suffix of the declaration." },
+      file: { type: "string", description: "Optional scan-relative file or directory path, or a path suffix, of the declaration." },
       kind,
       limit: limit(50),
     }, ["symbol"]),

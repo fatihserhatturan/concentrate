@@ -1537,7 +1537,7 @@
         "params": {
           "method": "",
           "path": "",
-          "routeFile": "",
+          "routeFiles": [],
           "framework": ""
         },
         "rows": [
@@ -1946,7 +1946,7 @@
         "params": {
           "method": "",
           "path": "post.create",
-          "routeFile": "",
+          "routeFiles": [],
           "framework": "trpc"
         },
         "rows": [
