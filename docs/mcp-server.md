@@ -96,7 +96,8 @@ even for large repositories; read it first to decide which tools to call.
 
 - `graph_stats`: returns schema version and node counts.
 - `find_definitions`: finds symbols across functions, classes, variables,
-  interfaces, type aliases, and enums.
+  interfaces, type aliases and enums, then class methods (`kind: "Method"`
+  with `className`, including class fields that hold a function).
 - `find_callers`: finds call sites that resolve to a named function.
 - `list_exports`: lists exported definitions and re-exports, optionally scoped
   to one file.

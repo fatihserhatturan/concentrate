@@ -1,6 +1,7 @@
 import type { SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import {
+  classFieldFunction,
   extractName,
   extractTypeScriptVisibility,
   isTypeScriptAbstract,
@@ -95,6 +96,19 @@ export function appendClassMembers(
           type: "DEFINES_FIELD",
           properties: {},
         });
+        // A field holding a function is also a method, with the field's name
+        // and visibility: `setSecurityData = (data) => { … }`.
+        const value = classFieldFunction(child);
+        const methodNode = value && createFunctionNode(fileNodeId, value, className, String(fieldNode.properties.name));
+        if (value && methodNode) {
+          methodNode.properties.visibility = fieldNode.properties.visibility;
+          nodes.push(methodNode);
+          relationships.push({ from: classNode.id, to: methodNode.id, type: "DEFINES_METHOD", properties: {} });
+          const callNodes = createCallNodes(methodNode.id, value, callbackKeys);
+          nodes.push(...callNodes);
+          relationships.push(...callNodes.map((callNode) => ({ from: methodNode.id, to: callNode.id, type: "CALLS" as const, properties: {} })));
+          functionAstPairs.push({ functionNodeId: methodNode.id, astNode: value });
+        }
       }
       pendingDecorators = [];
       continue;

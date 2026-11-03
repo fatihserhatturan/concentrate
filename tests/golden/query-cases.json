@@ -1281,6 +1281,32 @@
           "file": "server/app.js"
         }
       }
+    ],
+    "class-field-methods": [
+      {
+        "tool": "find_definitions",
+        "args": {
+          "name": "setSecurityData"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "setSecurityData"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "send"
+        }
+      },
+      {
+        "tool": "get_file_outline",
+        "args": {
+          "file": "api.ts"
+        }
+      }
     ]
   }
 }

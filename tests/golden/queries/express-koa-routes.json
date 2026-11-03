@@ -329,6 +329,11 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
       }
     ],
     "output": {

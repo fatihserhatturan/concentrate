@@ -82,6 +82,11 @@ tools.
   objects with a `get` in one file share the first); named imports of the
   object (`import { TagAPI }`) and objects built inside functions, returned
   or passed to calls are not followed.
+- A class field holding an arrow function or function expression
+  (`setSecurityData = (data) => { … }`, `#log = function () { … }`,
+  `static create = () => …`) is a method of its class as well as a `Field`:
+  a `Function` node with the field's name and visibility, owning its calls,
+  so `this.setSecurityData()` and `HttpClient.create()` resolve to it.
 - A bare call of a name the file imports (`logout()` after `import { logout }
   from '$lib/server/session'`) resolves only through the import: a module
   cannot also declare that name, so an object property function of the file
@@ -111,7 +116,10 @@ tools.
   - `new X()` of a class with no constructor in its chain (calls resolve to
     functions, so there is nothing to point at);
   - methods of objects assembled at runtime (Express's `app`, mixed in from
-    `lib/application.js`).
+    `lib/application.js`);
+  - calls on an instance created in another module and imported
+    (`import { api } from 'src/services'; api.setSecurityData(…)`), and on a
+    parameter typed as a class (`(client: HttpClient) => client.x()`).
 - A bare call is left unresolved when a parameter of the calling function or a
   file-level `var` / `let` / `const` binds the same name (`var resolve =
   path.resolve`), unless that binding is an import. Variables declared inside

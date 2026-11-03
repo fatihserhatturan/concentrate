@@ -56,6 +56,19 @@ export function serializeNameList(names: string[]): string | null {
   return names.length > 0 ? JSON.stringify(names) : null;
 }
 
+// The value of a class field that is a function, and the field's node:
+// `setData = (data) => { … }` or `handler = function () { … }` in a class
+// body. Such a field is a method of the class.
+export function classFieldFunction(field: SyntaxNode): SyntaxNode | null {
+  if (field.type !== "public_field_definition" && field.type !== "field_definition") return null;
+  const value = field.childForFieldName("value");
+  return value?.type === "arrow_function" || value?.type === "function_expression" ? value : null;
+}
+
+export function isClassFieldFunction(node: SyntaxNode): boolean {
+  return node.parent !== null && classFieldFunction(node.parent)?.id === node.id;
+}
+
 // A function stored under a property of a module-level object literal, and
 // that property's name: `const api = { get: (id) => …, list() { … } }`,
 // `export default { … }`, `module.exports = { … }`, nested objects too.

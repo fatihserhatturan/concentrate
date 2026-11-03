@@ -236,13 +236,13 @@ are, and they cluster:
   static methods, #46; and module-level calls, `require('./x')(...)` and
   `module.exports = …` defaults, #47, resolve now.)
 
-- **Class fields and imported instances (Vue sample).** Two of the three
-  Vue call misses are `api.setSecurityData(…)`: `api` is an instance of a
-  generated client whose base class declares `setSecurityData` as a class
-  field holding an arrow function, which has no Function node. The third is
-  `userStorage.remove()` in `src/utils/use-async.ts`, where `userStorage` is
-  a `new Storage(…)` instance imported from another module; the same call in
-  the module that creates it resolves. The destructured Pinia action
+- **Imported instances (Vue sample).** All three Vue call misses are calls
+  on an instance created in another module and imported. Two are
+  `api.setSecurityData(…)`: `api` is a `new Api(…)` from `src/services`, and
+  `setSecurityData` is a class field holding an arrow function in its base
+  class (a method of the class since #146). The third is
+  `userStorage.remove()` in `src/utils/use-async.ts`, a `new Storage(…)`
+  instance; the same call in the module that creates it resolves. The destructured Pinia action
   (`const { updateUser } = useUserStore(); updateUser(…)`) resolves to the
   setup store's function.
 

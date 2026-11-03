@@ -393,6 +393,93 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "refresh",
+            "kind": "Method",
+            "file": "src/app/app.component.ts",
+            "line": 21,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppComponent"
+          },
+          {
+            "name": "save",
+            "kind": "Method",
+            "file": "src/app/app.component.ts",
+            "line": 30,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppComponent"
+          },
+          {
+            "name": "search",
+            "kind": "Method",
+            "file": "src/app/app.component.ts",
+            "line": 34,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppComponent"
+          },
+          {
+            "name": "onResize",
+            "kind": "Method",
+            "file": "src/app/app.component.ts",
+            "line": 39,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppComponent"
+          },
+          {
+            "name": "toggle",
+            "kind": "Method",
+            "file": "src/app/shared/avatar.component.ts",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AvatarComponent"
+          },
+          {
+            "name": "choose",
+            "kind": "Method",
+            "file": "src/app/user-card.component.ts",
+            "line": 22,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserCardComponent"
+          },
+          {
+            "name": "onLeave",
+            "kind": "Method",
+            "file": "src/app/user-card.component.ts",
+            "line": 27,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserCardComponent"
+          },
+          {
+            "name": "users",
+            "kind": "Method",
+            "file": "src/app/user-list.component.ts",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserListComponent"
+          },
+          {
+            "name": "remove",
+            "kind": "Method",
+            "file": "src/app/user-list.component.ts",
+            "line": 18,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserListComponent"
+          }
+        ]
       }
     ],
     "output": {
@@ -553,11 +640,21 @@
           "line": 5,
           "isExported": false,
           "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "refresh",
+          "kind": "Method",
+          "file": "src/app/app.component.ts",
+          "line": 21,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AppComponent"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 19
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
       }
     }
   },
