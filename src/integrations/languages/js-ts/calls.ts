@@ -271,10 +271,37 @@ export function extractCallArgs(callExpr: SyntaxNode): string {
   return JSON.stringify(args);
 }
 
+// The statements a module runs at load time: its top-level statements and
+// those inside top-level `if` / `else`, `try` / `catch` / `finally` and bare
+// blocks (`if (!module.parent) { app.listen(3000) }`). Loops and function
+// bodies are left out.
+function* moduleLevelStatements(statements: readonly SyntaxNode[]): Generator<SyntaxNode> {
+  for (const stmt of statements) {
+    if (stmt.type === "if_statement") {
+      yield* moduleLevelStatements(branchStatements(stmt.childForFieldName("consequence")));
+      const alternative = stmt.childForFieldName("alternative");
+      yield* moduleLevelStatements(alternative?.type === "else_clause" ? alternative.namedChildren.flatMap(branchStatements) : branchStatements(alternative));
+    } else if (stmt.type === "statement_block") {
+      yield* moduleLevelStatements(stmt.namedChildren);
+    } else if (stmt.type === "try_statement") {
+      for (const part of [stmt.childForFieldName("body"), stmt.childForFieldName("handler")?.childForFieldName("body"), stmt.childForFieldName("finalizer")?.childForFieldName("body")]) {
+        yield* moduleLevelStatements(branchStatements(part));
+      }
+    } else {
+      yield stmt;
+    }
+  }
+}
+
+function branchStatements(node: SyntaxNode | null | undefined): SyntaxNode[] {
+  if (!node) return [];
+  return node.type === "statement_block" ? node.namedChildren : [node];
+}
+
 export function createModuleLevelCallNodes(fileNodeId: string, programNode: SyntaxNode): GraphNode[] {
   const calls: GraphNode[] = [];
 
-  for (const stmt of programNode.namedChildren) {
+  for (const stmt of moduleLevelStatements(programNode.namedChildren)) {
     if (stmt.type !== "expression_statement") continue;
 
     let expr = stmt.namedChildren[0];

@@ -1347,6 +1347,26 @@
           "name": "init"
         }
       }
+    ],
+    "module-block-calls": [
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "start"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "stop"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "inLoop"
+        }
+      }
     ]
   }
 }

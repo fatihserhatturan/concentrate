@@ -20,6 +20,7 @@
 {"kind":"node","id":"file:main.js:import:9:./conditional","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"conditional\",\"kind\":\"default\"}]","isCjs":true,"isDynamic":true,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":9,"source":"./conditional","specifier":"require('./conditional')"}}
 {"kind":"node","id":"file:main.js:initializercall:14:12:require","label":"Call","properties":{"args":"[\"utils.name\"]","callee":"require","columnNumber":12,"expression":"require","line":14,"name":"require","receiver":null}}
 {"kind":"node","id":"file:main.js:initializercall:2:14:require","label":"Call","properties":{"args":"[\"./utils\"]","callee":"require","columnNumber":14,"expression":"require","line":2,"name":"require","receiver":null}}
+{"kind":"node","id":"file:main.js:modulecall:10:2:conditional.extra","label":"Call","properties":{"args":"[]","callee":"extra","columnNumber":2,"expression":"conditional.extra","line":10,"name":"conditional.extra","receiver":"conditional"}}
 {"kind":"node","id":"file:main.js:variable:14:mod","label":"Variable","properties":{"isExported":false,"kind":"const","line":14,"name":"mod","stringValue":null}}
 {"kind":"node","id":"file:main.js:variable:2:utils","label":"Variable","properties":{"isExported":false,"kind":"const","line":2,"name":"utils","stringValue":null}}
 {"kind":"node","id":"file:main.js:variable:3:helper","label":"Variable","properties":{"isExported":false,"kind":"const","line":3,"name":"helper","stringValue":null}}
@@ -43,6 +44,7 @@
 {"kind":"rel","from":"file:main.js","type":"IMPORTS","to":"file:main.js:import:3:./utils","properties":{}}
 {"kind":"rel","from":"file:main.js","type":"IMPORTS","to":"file:main.js:import:6:./lib","properties":{}}
 {"kind":"rel","from":"file:main.js","type":"IMPORTS","to":"file:main.js:import:9:./conditional","properties":{}}
+{"kind":"rel","from":"file:main.js","type":"MODULE_CALLS","to":"file:main.js:modulecall:10:2:conditional.extra","properties":{}}
 {"kind":"rel","from":"file:main.js","type":"USES_ENV","to":"env:LOAD_EXTRA","properties":{"access":"member","line":8}}
 {"kind":"rel","from":"file:main.js:function:16:run","type":"CALLS","to":"file:main.js:function:16:run:call:17:2:utils.helper","properties":{}}
 {"kind":"rel","from":"file:main.js:function:16:run","type":"CALLS","to":"file:main.js:function:16:run:call:18:2:helper","properties":{}}
@@ -58,6 +60,7 @@
 {"kind":"rel","from":"file:main.js:import:3:./utils","type":"RESOLVES_TO","to":"file:utils.js","properties":{}}
 {"kind":"rel","from":"file:main.js:import:6:./lib","type":"RESOLVES_TO","to":"file:lib.js","properties":{}}
 {"kind":"rel","from":"file:main.js:import:9:./conditional","type":"RESOLVES_TO","to":"file:conditional.js","properties":{}}
+{"kind":"rel","from":"file:main.js:modulecall:10:2:conditional.extra","type":"CALL_RESOLVES_TO","to":"file:conditional.js:function:1:extra","properties":{}}
 {"kind":"rel","from":"file:main.js:variable:14:mod","type":"INITIALIZED_BY","to":"file:main.js:initializercall:14:12:require","properties":{}}
 {"kind":"rel","from":"file:main.js:variable:2:utils","type":"INITIALIZED_BY","to":"file:main.js:initializercall:2:14:require","properties":{}}
 {"kind":"rel","from":"file:utils.js","type":"DEFINES_FUNCTION","to":"file:utils.js:function:1:helper","properties":{}}
