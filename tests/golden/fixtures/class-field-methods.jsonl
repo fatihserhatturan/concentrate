@@ -1,0 +1,62 @@
+{"kind":"report","status":"success","discoveredFiles":2,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"class-field-methods","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"file:api.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/api.ts","relativePath":"api.ts","sourceType":"production"}}
+{"kind":"node","id":"file:api.ts:class:3:HttpClient","label":"Class","properties":{"endLine":24,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":3,"name":"HttpClient","visibility":"public"}}
+{"kind":"node","id":"file:api.ts:class:3:HttpClient:field:11:request","label":"Field","properties":{"isInjected":false,"isReadonly":false,"isStatic":false,"line":11,"name":"request","typeName":null,"visibility":"protected"}}
+{"kind":"node","id":"file:api.ts:class:3:HttpClient:field:13:#log","label":"Field","properties":{"isInjected":false,"isReadonly":false,"isStatic":false,"line":13,"name":"#log","typeName":null,"visibility":"private"}}
+{"kind":"node","id":"file:api.ts:class:3:HttpClient:field:17:create","label":"Field","properties":{"isInjected":false,"isReadonly":false,"isStatic":true,"line":17,"name":"create","typeName":null,"visibility":"public"}}
+{"kind":"node","id":"file:api.ts:class:3:HttpClient:field:4:securityData","label":"Field","properties":{"isInjected":false,"isReadonly":false,"isStatic":false,"line":4,"name":"securityData","typeName":"string | null","visibility":"private"}}
+{"kind":"node","id":"file:api.ts:class:3:HttpClient:field:5:timeout","label":"Field","properties":{"isInjected":false,"isReadonly":false,"isStatic":false,"line":5,"name":"timeout","typeName":null,"visibility":"public"}}
+{"kind":"node","id":"file:api.ts:class:3:HttpClient:field:7:setSecurityData","label":"Field","properties":{"isInjected":false,"isReadonly":false,"isStatic":false,"line":7,"name":"setSecurityData","typeName":null,"visibility":"public"}}
+{"kind":"node","id":"file:api.ts:function:11:request","label":"Function","properties":{"className":"HttpClient","endLine":11,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"arrow_function","line":11,"methodKind":null,"name":"request","parameters":"[{\"name\":\"path\",\"type\":\"string\"}]","returnType":null,"visibility":"protected"}}
+{"kind":"node","id":"file:api.ts:function:11:request:call:11:46:send","label":"Call","properties":{"args":"[\"path\",\"this.securityData\"]","callee":"send","columnNumber":46,"expression":"send","line":11,"name":"send","receiver":null}}
+{"kind":"node","id":"file:api.ts:function:13:#log","label":"Function","properties":{"className":"HttpClient","endLine":15,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_expression","line":13,"methodKind":null,"name":"#log","parameters":"[{\"name\":\"message\",\"type\":\"string\"}]","returnType":null,"visibility":"private"}}
+{"kind":"node","id":"file:api.ts:function:13:#log:call:14:4:console.log","label":"Call","properties":{"args":"[\"message\"]","callee":"log","columnNumber":4,"expression":"console.log","line":14,"name":"console.log","receiver":"console"}}
+{"kind":"node","id":"file:api.ts:function:17:create","label":"Function","properties":{"className":"HttpClient","endLine":17,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":17,"methodKind":null,"name":"create","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:api.ts:function:17:create:call:17:24:new HttpClient","label":"Call","properties":{"args":"[]","callee":"HttpClient","columnNumber":24,"expression":"new HttpClient","line":17,"name":"new HttpClient","receiver":null}}
+{"kind":"node","id":"file:api.ts:function:19:login","label":"Function","properties":{"className":"HttpClient","endLine":23,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"method_definition","line":19,"methodKind":"method","name":"login","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:api.ts:function:19:login:call:20:4:this.setSecurityData","label":"Call","properties":{"args":"[\"token\"]","callee":"setSecurityData","columnNumber":4,"expression":"this.setSecurityData","line":20,"name":"this.setSecurityData","receiver":"this"}}
+{"kind":"node","id":"file:api.ts:function:19:login:call:21:4:this.#log","label":"Call","properties":{"args":"[\"login\"]","callee":"#log","columnNumber":4,"expression":"this.#log","line":21,"name":"this.#log","receiver":"this"}}
+{"kind":"node","id":"file:api.ts:function:19:login:call:22:11:this.request","label":"Call","properties":{"args":"[\"/login\"]","callee":"request","columnNumber":11,"expression":"this.request","line":22,"name":"this.request","receiver":"this"}}
+{"kind":"node","id":"file:api.ts:function:26:connect","label":"Function","properties":{"className":null,"endLine":29,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":26,"methodKind":null,"name":"connect","parameters":"[{\"name\":\"client\",\"type\":\"HttpClient\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:api.ts:function:26:connect:call:27:2:client.setSecurityData","label":"Call","properties":{"args":"[]","callee":"setSecurityData","columnNumber":2,"expression":"client.setSecurityData","line":27,"name":"client.setSecurityData","receiver":"client"}}
+{"kind":"node","id":"file:api.ts:function:26:connect:call:28:9:HttpClient.create","label":"Call","properties":{"args":"[]","callee":"create","columnNumber":9,"expression":"HttpClient.create","line":28,"name":"HttpClient.create","receiver":"HttpClient"}}
+{"kind":"node","id":"file:api.ts:function:7:setSecurityData","label":"Function","properties":{"className":"HttpClient","endLine":9,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":7,"methodKind":null,"name":"setSecurityData","parameters":"[{\"name\":\"data\",\"type\":\"string | null\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:api.ts:import:1:./http","label":"Import","properties":{"bindings":"[{\"imported\":\"send\",\"local\":\"send\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"./http","specifier":"import { send } from \"./http\";"}}
+{"kind":"node","id":"file:http.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/http.ts","relativePath":"http.ts","sourceType":"production"}}
+{"kind":"node","id":"file:http.ts:function:1:send","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"send","parameters":"[{\"name\":\"path\",\"type\":\"string\"},{\"name\":\"token\",\"type\":\"string | null\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:http.ts:function:1:send:call:2:9:fetch","label":"Call","properties":{"args":"[\"path\"]","callee":"fetch","columnNumber":9,"expression":"fetch","httpClient":"fetch","httpMethod":"GET","httpUrl":null,"line":2,"name":"fetch","receiver":null}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"class-field-methods","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:api.ts","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:http.ts","properties":{}}
+{"kind":"rel","from":"file:api.ts","type":"DEFINES_CLASS","to":"file:api.ts:class:3:HttpClient","properties":{}}
+{"kind":"rel","from":"file:api.ts","type":"DEFINES_FUNCTION","to":"file:api.ts:function:26:connect","properties":{}}
+{"kind":"rel","from":"file:api.ts","type":"IMPORTS","to":"file:api.ts:import:1:./http","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_FIELD","to":"file:api.ts:class:3:HttpClient:field:11:request","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_FIELD","to":"file:api.ts:class:3:HttpClient:field:13:#log","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_FIELD","to":"file:api.ts:class:3:HttpClient:field:17:create","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_FIELD","to":"file:api.ts:class:3:HttpClient:field:4:securityData","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_FIELD","to":"file:api.ts:class:3:HttpClient:field:5:timeout","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_FIELD","to":"file:api.ts:class:3:HttpClient:field:7:setSecurityData","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_METHOD","to":"file:api.ts:function:11:request","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_METHOD","to":"file:api.ts:function:13:#log","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_METHOD","to":"file:api.ts:function:17:create","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_METHOD","to":"file:api.ts:function:19:login","properties":{}}
+{"kind":"rel","from":"file:api.ts:class:3:HttpClient","type":"DEFINES_METHOD","to":"file:api.ts:function:7:setSecurityData","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:11:request","type":"CALLS","to":"file:api.ts:function:11:request:call:11:46:send","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:11:request:call:11:46:send","type":"CALL_RESOLVES_TO","to":"file:http.ts:function:1:send","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:13:#log","type":"CALLS","to":"file:api.ts:function:13:#log:call:14:4:console.log","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:17:create","type":"CALLS","to":"file:api.ts:function:17:create:call:17:24:new HttpClient","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:19:login","type":"CALLS","to":"file:api.ts:function:19:login:call:20:4:this.setSecurityData","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:19:login","type":"CALLS","to":"file:api.ts:function:19:login:call:21:4:this.#log","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:19:login","type":"CALLS","to":"file:api.ts:function:19:login:call:22:11:this.request","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:19:login:call:20:4:this.setSecurityData","type":"CALL_RESOLVES_TO","to":"file:api.ts:function:7:setSecurityData","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:19:login:call:21:4:this.#log","type":"CALL_RESOLVES_TO","to":"file:api.ts:function:13:#log","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:19:login:call:22:11:this.request","type":"CALL_RESOLVES_TO","to":"file:api.ts:function:11:request","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:26:connect","type":"CALLS","to":"file:api.ts:function:26:connect:call:27:2:client.setSecurityData","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:26:connect","type":"CALLS","to":"file:api.ts:function:26:connect:call:28:9:HttpClient.create","properties":{}}
+{"kind":"rel","from":"file:api.ts:function:26:connect:call:28:9:HttpClient.create","type":"CALL_RESOLVES_TO","to":"file:api.ts:function:17:create","properties":{}}
+{"kind":"rel","from":"file:api.ts:import:1:./http","type":"RESOLVES_TO","to":"file:http.ts","properties":{}}
+{"kind":"rel","from":"file:http.ts","type":"DEFINES_FUNCTION","to":"file:http.ts:function:1:send","properties":{}}
+{"kind":"rel","from":"file:http.ts:function:1:send","type":"CALLS","to":"file:http.ts:function:1:send:call:2:9:fetch","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

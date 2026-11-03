@@ -112,7 +112,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "find_definitions",
-    description: "Find definitions by symbol name across functions, classes, variables, interfaces, type aliases, and enums.",
+    description: "Find definitions by symbol name across functions, classes, variables, interfaces, type aliases, enums, and class methods (listed last, with className).",
     inputSchema: objectSchema({
       name: {
         type: "string",
@@ -349,6 +349,8 @@ async function findDefinitions(
       definitionQuery("Interface", "DEFINES_INTERFACE", symbolName, exactMatch, rowLimit),
       definitionQuery("TypeAlias", "DEFINES_TYPE_ALIAS", symbolName, exactMatch, rowLimit),
       definitionQuery("Enum", "DEFINES_ENUM", symbolName, exactMatch, rowLimit),
+      // Last, so methods never push declarations off the first page.
+      methodDefinitionQuery(symbolName, exactMatch, rowLimit),
     ];
     const results = await Promise.all(queries.map((query) => engine.query(query)));
     return results.flat();
@@ -726,6 +728,24 @@ function definitionQuery(
       n.line AS line,
       n.isExported AS isExported,
       '${relationship}' AS relationship
+    ORDER BY file.relativePath, n.line, n.name
+    LIMIT ${limit}
+  `;
+}
+
+// Methods of classes, including class fields that hold a function. A method
+// is exported when its class is.
+function methodDefinitionQuery(value: string, exact: boolean, limit: number): string {
+  return `
+    MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function)
+    WHERE ${namePredicate("n.name", value, exact)}
+    RETURN n.name AS name,
+      'Method' AS kind,
+      file.relativePath AS file,
+      n.line AS line,
+      cls.isExported AS isExported,
+      'DEFINES_METHOD' AS relationship,
+      cls.name AS className
     ORDER BY file.relativePath, n.line, n.name
     LIMIT ${limit}
   `;

@@ -290,6 +290,66 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "handle",
+            "kind": "Method",
+            "file": "local-decorators.ts",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "NotARoute"
+          },
+          {
+            "name": "index",
+            "kind": "Method",
+            "file": "main.controller.ts",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "MainController"
+          },
+          {
+            "name": "create",
+            "kind": "Method",
+            "file": "main.controller.ts",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "MainController"
+          },
+          {
+            "name": "poweredBy",
+            "kind": "Method",
+            "file": "main.controller.ts",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "MainController"
+          },
+          {
+            "name": "remove",
+            "kind": "Method",
+            "file": "users.controller.ts",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UsersController"
+          },
+          {
+            "name": "replace",
+            "kind": "Method",
+            "file": "users.controller.ts",
+            "line": 16,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UsersController"
+          }
+        ]
       }
     ],
     "output": {
@@ -346,11 +406,65 @@
           "line": 3,
           "isExported": false,
           "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "handle",
+          "kind": "Method",
+          "file": "local-decorators.ts",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "NotARoute"
+        },
+        {
+          "name": "index",
+          "kind": "Method",
+          "file": "main.controller.ts",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "MainController"
+        },
+        {
+          "name": "create",
+          "kind": "Method",
+          "file": "main.controller.ts",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "MainController"
+        },
+        {
+          "name": "poweredBy",
+          "kind": "Method",
+          "file": "main.controller.ts",
+          "line": 20,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "MainController"
+        },
+        {
+          "name": "remove",
+          "kind": "Method",
+          "file": "users.controller.ts",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "UsersController"
+        },
+        {
+          "name": "replace",
+          "kind": "Method",
+          "file": "users.controller.ts",
+          "line": 16,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "UsersController"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 6
+        "returned": 12
       }
     }
   },

@@ -264,6 +264,30 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "create",
+            "kind": "Method",
+            "file": "client.ts",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "Client"
+          },
+          {
+            "name": "make",
+            "kind": "Method",
+            "file": "main.ts",
+            "line": 4,
+            "isExported": false,
+            "relationship": "DEFINES_METHOD",
+            "className": "Local"
+          }
+        ]
       }
     ],
     "output": {
@@ -296,11 +320,29 @@
           "line": 1,
           "isExported": true,
           "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "create",
+          "kind": "Method",
+          "file": "client.ts",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "Client"
+        },
+        {
+          "name": "make",
+          "kind": "Method",
+          "file": "main.ts",
+          "line": 4,
+          "isExported": false,
+          "relationship": "DEFINES_METHOD",
+          "className": "Local"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 3
+        "returned": 5
       }
     }
   },

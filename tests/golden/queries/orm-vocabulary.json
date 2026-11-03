@@ -410,6 +410,102 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "update",
+            "kind": "Method",
+            "file": "cats.service.ts",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CatsService"
+          },
+          {
+            "name": "replace",
+            "kind": "Method",
+            "file": "cats.service.ts",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CatsService"
+          },
+          {
+            "name": "rename",
+            "kind": "Method",
+            "file": "cats.service.ts",
+            "line": 18,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CatsService"
+          },
+          {
+            "name": "delete",
+            "kind": "Method",
+            "file": "cats.service.ts",
+            "line": 22,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CatsService"
+          },
+          {
+            "name": "deleteByName",
+            "kind": "Method",
+            "file": "cats.service.ts",
+            "line": 26,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CatsService"
+          },
+          {
+            "name": "deleteOldest",
+            "kind": "Method",
+            "file": "cats.service.ts",
+            "line": 30,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CatsService"
+          },
+          {
+            "name": "findOne",
+            "kind": "Method",
+            "file": "users.service.ts",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UsersService"
+          },
+          {
+            "name": "page",
+            "kind": "Method",
+            "file": "users.service.ts",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UsersService"
+          },
+          {
+            "name": "remove",
+            "kind": "Method",
+            "file": "users.service.ts",
+            "line": 35,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UsersService"
+          },
+          {
+            "name": "reset",
+            "kind": "Method",
+            "file": "users.service.ts",
+            "line": 39,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UsersService"
+          }
+        ]
       }
     ],
     "output": {

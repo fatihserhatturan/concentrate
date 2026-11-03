@@ -331,6 +331,48 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "get",
+            "kind": "Method",
+            "file": "src/app/articles.service.ts",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ArticlesService"
+          },
+          {
+            "name": "create",
+            "kind": "Method",
+            "file": "src/app/articles.service.ts",
+            "line": 21,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ArticlesService"
+          },
+          {
+            "name": "update",
+            "kind": "Method",
+            "file": "src/app/articles.service.ts",
+            "line": 25,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ArticlesService"
+          },
+          {
+            "name": "remove",
+            "kind": "Method",
+            "file": "src/app/articles.service.ts",
+            "line": 29,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ArticlesService"
+          }
+        ]
       }
     ],
     "output": {
@@ -427,11 +469,47 @@
           "line": 4,
           "isExported": true,
           "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "get",
+          "kind": "Method",
+          "file": "src/app/articles.service.ts",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "ArticlesService"
+        },
+        {
+          "name": "create",
+          "kind": "Method",
+          "file": "src/app/articles.service.ts",
+          "line": 21,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "ArticlesService"
+        },
+        {
+          "name": "update",
+          "kind": "Method",
+          "file": "src/app/articles.service.ts",
+          "line": 25,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "ArticlesService"
+        },
+        {
+          "name": "remove",
+          "kind": "Method",
+          "file": "src/app/articles.service.ts",
+          "line": 29,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "ArticlesService"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 11
+        "returned": 15
       }
     }
   },
