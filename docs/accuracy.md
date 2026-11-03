@@ -12,7 +12,7 @@ npm run bench:accuracy -- [--sample name] [--details] [--json out.json]
 
 `--details` lists every false positive (FP), false negative (FN) and wrong
 route path. The latest run is in
-[`bench/results/accuracy-0.1.0-2026-11-02.json`](../bench/results/accuracy-0.1.0-2026-11-02.json).
+[`bench/results/accuracy-0.1.0-2026-11-03.json`](../bench/results/accuracy-0.1.0-2026-11-03.json).
 
 ## Labels
 
@@ -118,7 +118,7 @@ Rules:
   and both member sets match, so a missed or extra member is an FP and an
   FN.
 
-## Results (2026-11-02, schema 63)
+## Results (2026-11-03, schema 63)
 
 ### Routes
 
@@ -141,10 +141,10 @@ Rules:
 | internet-angular-realworld | 21 | 21 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
 | internet-sveltekit-realworld | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
-| internet-vue-realworld | 14 | 11 | 0 | 3 | 100.0% | 78.6% |
+| internet-vue-realworld | 14 | 14 | 0 | 0 | 100.0% | 100.0% |
 | ky | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | nestjs-starter | 2 | 2 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 125 | 102 | 0 | 23 | **100.0%** | **81.6%** |
+| **all** | 125 | 105 | 0 | 20 | **100.0%** | **84.0%** |
 
 Labels counts calls with a project target. Another 433 call sites are labeled
 `null`, and 35 are `dynamic`.
@@ -236,13 +236,12 @@ are, and they cluster:
   static methods, #46; and module-level calls, `require('./x')(...)` and
   `module.exports = …` defaults, #47, resolve now.)
 
-- **Imported instances (Vue sample).** All three Vue call misses are calls
-  on an instance created in another module and imported. Two are
-  `api.setSecurityData(…)`: `api` is a `new Api(…)` from `src/services`, and
-  `setSecurityData` is a class field holding an arrow function in its base
-  class (a method of the class since #146). The third is
-  `userStorage.remove()` in `src/utils/use-async.ts`, a `new Storage(…)`
-  instance; the same call in the module that creates it resolves. The destructured Pinia action
+- **Imported instances (Vue sample).** Every Vue call resolves. The last
+  three were calls on an instance created in another module and imported:
+  `api.setSecurityData(…)`, where `api` is a `new Api(…)` from
+  `src/services` and `setSecurityData` a class field holding an arrow
+  function in its base class, and `userStorage.remove()` on a
+  `new Storage(…)` instance (#146). The destructured Pinia action
   (`const { updateUser } = useUserStore(); updateUser(…)`) resolves to the
   setup store's function.
 

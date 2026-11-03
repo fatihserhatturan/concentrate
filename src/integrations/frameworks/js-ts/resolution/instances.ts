@@ -1,15 +1,22 @@
 import type { IGraphContributor } from "../../../../core/contracts/graph-contributor.js";
 import type { GraphNode, GraphRelationship } from "../../../../core/graph/model.js";
+import { resolveImportedFreeCall } from "../../../../core/scan/resolution/call-targets.js";
 import {
   createResolutionRelationshipIndex,
   indexImportNodesByFile,
   indexNodesByFileAndName,
 } from "../../../../core/scan/resolution/indexes.js";
 
+// `x.method()` where x is a module-level variable initialized with `new C()`:
+// in the calling file, or imported from the file that declares it (named
+// imports, through re-exports too). The method is looked up on C and then
+// its base classes. A parameter of the calling function with the same name
+// hides the variable.
 export function addInstanceMethodResolutionRelationships(graph: IGraphContributor): void {
   const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
   const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
   const methodsByClassAndName = indexMethodsByClassAndName(graph.nodes, graph.relationships);
+  const baseClassesByClass = indexBaseClasses(graph.relationships);
   const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const fileIdByVariableId = indexFileIdByVariableId(graph.relationships);
@@ -60,10 +67,13 @@ export function addInstanceMethodResolutionRelationships(graph: IGraphContributo
     const callerFileId = relationshipIndex.fileByFunctionId.get(callerFunctionId);
     if (!callerFileId) continue;
 
-    const classId = classIdByVariableNameByFile.get(callerFileId)?.get(receiver);
+    if (parameterNames(nodeById.get(callerFunctionId)?.properties.parameters).has(receiver)) continue;
+
+    const classId = classIdByVariableNameByFile.get(callerFileId)?.get(receiver)?.[0]
+      ?? resolveImportedFreeCall(receiver, callerFileId, classIdByVariableNameByFile, importsByFile, relationshipIndex.resolvedFileByImportId);
     if (!classId) continue;
 
-    const methodId = methodsByClassAndName.get(classId)?.get(callee)?.[0];
+    const methodId = findMethod(classId, callee, methodsByClassAndName, baseClassesByClass, new Set());
     if (!methodId) continue;
 
     graph.addRelationship({
@@ -89,8 +99,8 @@ function indexClassIdsByVariableNameByFile(
   nodes: GraphNode[],
   classIdByVariableId: Map<string, string>,
   fileIdByVariableId: Map<string, string>,
-): Map<string, Map<string, string>> {
-  const result = new Map<string, Map<string, string>>();
+): Map<string, Map<string, string[]>> {
+  const result = new Map<string, Map<string, string[]>>();
 
   for (const node of nodes) {
     if (node.label !== "Variable") continue;
@@ -105,7 +115,7 @@ function indexClassIdsByVariableNameByFile(
       variables = new Map();
       result.set(fileId, variables);
     }
-    variables.set(name, classId);
+    variables.set(name, [classId]);
   }
 
   return result;
@@ -134,6 +144,42 @@ function indexMethodsByClassAndName(
   }
 
   return methods;
+}
+
+function indexBaseClasses(relationships: GraphRelationship[]): Map<string, string[]> {
+  const bases = new Map<string, string[]>();
+  for (const rel of relationships) {
+    if (rel.type === "EXTENDS") bases.set(rel.from, [...bases.get(rel.from) ?? [], rel.to]);
+  }
+  return bases;
+}
+
+function findMethod(
+  classId: string,
+  name: string,
+  methodsByClassAndName: Map<string, Map<string, string[]>>,
+  baseClassesByClass: Map<string, string[]>,
+  visited: Set<string>,
+): string | null {
+  if (visited.has(classId)) return null;
+  visited.add(classId);
+  const own = methodsByClassAndName.get(classId)?.get(name)?.[0];
+  if (own) return own;
+  for (const baseId of baseClassesByClass.get(classId) ?? []) {
+    const inherited = findMethod(baseId, name, methodsByClassAndName, baseClassesByClass, visited);
+    if (inherited) return inherited;
+  }
+  return null;
+}
+
+function parameterNames(raw: unknown): Set<string> {
+  if (typeof raw !== "string") return new Set();
+  try {
+    const parameters = JSON.parse(raw) as Array<{ name?: unknown }>;
+    return new Set(parameters.flatMap((parameter) => typeof parameter.name === "string" ? [parameter.name] : []));
+  } catch {
+    return new Set();
+  }
 }
 
 function resolveClassName(

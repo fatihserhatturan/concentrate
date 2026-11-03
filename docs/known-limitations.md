@@ -117,9 +117,14 @@ tools.
     functions, so there is nothing to point at);
   - methods of objects assembled at runtime (Express's `app`, mixed in from
     `lib/application.js`);
-  - calls on an instance created in another module and imported
-    (`import { api } from 'src/services'; api.setSecurityData(…)`), and on a
-    parameter typed as a class (`(client: HttpClient) => client.x()`).
+  - calls on a parameter typed as a class (`(client: HttpClient) =>
+    client.x()`).
+- `x.method()` resolves when x is a module-level variable initialized with
+  `new C()`, in the calling file or imported from the file that declares it
+  (named imports, aliases and re-exports: `import { api } from
+  'src/services'`). The method is looked up on C and then its base classes.
+  A parameter of the calling function with the same name hides the variable;
+  default imports of an instance are not followed.
 - A bare call is left unresolved when a parameter of the calling function or a
   file-level `var` / `let` / `const` binds the same name (`var resolve =
   path.resolve`), unless that binding is an import. Variables declared inside
