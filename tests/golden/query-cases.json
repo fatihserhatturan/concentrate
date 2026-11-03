@@ -1397,6 +1397,24 @@
           "path": "/api/profiles/:username"
         }
       }
+    ],
+    "dynamic-routes": [
+      {
+        "tool": "list_routes",
+        "args": {}
+      },
+      {
+        "tool": "list_routes",
+        "args": {
+          "file": "web.js"
+        }
+      },
+      {
+        "tool": "list_routes",
+        "args": {
+          "framework": "fastify"
+        }
+      }
     ]
   }
 }

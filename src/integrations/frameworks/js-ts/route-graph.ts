@@ -229,8 +229,78 @@ function createHttpRouteGraph(
   }
 
   routeRelationships.push(...createChainedMountRelationships(programNode, mountIndexes, frameworkFilter));
+  recordDynamicRouteCalls(nodes.find((node) => node.id === fileNodeId), programNode, moduleReceivers, frameworkFilter);
 
   return { nodes: routeNodes, relationships: routeRelationships };
+}
+
+type DynamicRouteCall = { line: number; expression: string; framework: FrameworkFilter };
+
+// Route registrations whose method or path is only known at runtime, so no
+// Route is made for them; the File keeps them in `dynamicRouteCalls` (a JSON
+// list of `{ line, expression, framework }`) so list_routes can say what it
+// does not list:
+// - `app[method](url, handler)` on an app or router (a module-level one, or a
+//   parameter or local of the enclosing function), with a computed member;
+// - `this.get(path, …)` / `.post` / … in a function assigned to a member of a
+//   module-level app (`app.resource = function (path, obj) { … }`).
+function recordDynamicRouteCalls(
+  fileNode: GraphNode | undefined,
+  programNode: SyntaxNode,
+  moduleReceivers: Map<string, FrameworkFilter | null>,
+  frameworkFilter: FrameworkFilter,
+): void {
+  if (!fileNode) return;
+  const found: DynamicRouteCall[] = [];
+  type Scope = { receivers: Map<string, FrameworkFilter>; parameters: Set<string> };
+  const receiverFramework = (name: string, scopes: Scope[]): FrameworkFilter | undefined => {
+    for (let i = scopes.length - 1; i >= 0; i -= 1) {
+      const scope = scopes[i]!;
+      if (scope.receivers.has(name)) return scope.receivers.get(name);
+      if (scope.parameters.has(name)) return undefined;
+    }
+    return moduleReceiverFramework(name, moduleReceivers);
+  };
+  const visit = (node: SyntaxNode, scopes: Scope[], thisApp: FrameworkFilter | undefined) => {
+    let inner = scopes;
+    let innerThis = thisApp;
+    if (functionTypes.has(node.type)) {
+      inner = [...scopes, { receivers: functionRouteReceivers(node), parameters: new Set(functionParameterNames(node)) }];
+      if (node.type !== "arrow_function") innerThis = assignedAppMemberFramework(node, moduleReceivers);
+    } else if (node.type === "call_expression") {
+      const callee = node.childForFieldName("function");
+      const args = node.childForFieldName("arguments")?.namedChildren ?? [];
+      const object = callee?.childForFieldName("object");
+      let framework: FrameworkFilter | undefined;
+      if (callee?.type === "subscript_expression" && object?.type === "identifier" && callee.childForFieldName("index")?.type !== "string" && args.length > 0) {
+        framework = receiverFramework(object.text, scopes);
+      } else if (callee?.type === "member_expression" && object?.type === "this" && routeMethods.has(callee.childForFieldName("property")?.text ?? "") && args.length >= 2) {
+        framework = thisApp;
+      }
+      if (framework === frameworkFilter) {
+        found.push({ line: node.startPosition.row + 1, expression: callee!.text, framework });
+      }
+    }
+    for (const child of node.namedChildren) if (child) visit(child, inner, innerThis);
+  };
+  visit(programNode, [], undefined);
+  if (found.length === 0) return;
+  const existing = typeof fileNode.properties.dynamicRouteCalls === "string"
+    ? JSON.parse(fileNode.properties.dynamicRouteCalls) as DynamicRouteCall[]
+    : [];
+  fileNode.properties.dynamicRouteCalls = JSON.stringify([...existing, ...found].sort((a, b) => a.line - b.line));
+}
+
+const functionTypes = new Set(["function_declaration", "function_expression", "function", "arrow_function", "method_definition", "generator_function_declaration"]);
+
+// The framework of the module-level app whose member a function is assigned
+// to: `app.resource = function (…) { … }`.
+function assignedAppMemberFramework(functionNode: SyntaxNode, moduleReceivers: Map<string, FrameworkFilter | null>): FrameworkFilter | undefined {
+  const parent = functionNode.parent;
+  if (parent?.type !== "assignment_expression" || parent.childForFieldName("right")?.id !== functionNode.id) return undefined;
+  const left = parent.childForFieldName("left");
+  const object = left?.type === "member_expression" ? left.childForFieldName("object") : null;
+  return object?.type === "identifier" ? moduleReceiverFramework(object.text, moduleReceivers) : undefined;
 }
 
 export function createNestJsRouteGraph(

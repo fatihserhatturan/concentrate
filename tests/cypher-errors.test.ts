@@ -69,7 +69,7 @@ describe("Cypher semantics outside the Kuzu corpus", () => {
   it("returns nodes and relationships with their schema properties", () => {
     const [row] = run("MATCH (f:File)-[r:DEFINES_FUNCTION]->(fn:Function {name: 'run'}) RETURN f, r");
     assert.deepEqual(row, {
-      f: { _label: "File", id: "file:a.ts", path: null, relativePath: "a.ts", language: null, defaultExport: null, defaultExportFrom: null, sourceType: null, isTest: null, isFixture: null, isSupport: null, isGenerated: null },
+      f: { _label: "File", id: "file:a.ts", path: null, relativePath: "a.ts", language: null, defaultExport: null, defaultExportFrom: null, sourceType: null, isTest: null, isFixture: null, isSupport: null, isGenerated: null, dynamicRouteCalls: null },
       r: { _label: "DEFINES_FUNCTION", _src: "file:a.ts", _dst: "file:a.ts:function:run" },
     });
   });

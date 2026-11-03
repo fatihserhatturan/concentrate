@@ -104,6 +104,11 @@ even for large repositories; read it first to decide which tools to call.
 - `trace_import_chain`: returns a resolved import path between two files when
   one exists.
 - `list_routes`: lists detected HTTP route declarations and handlers.
+  Registrations with a method or path computed at runtime
+  (`app[method](url, fn)`, `this.get(path, …)` in an `app.resource = function`
+  helper) are not routes; they come back in `dynamicRouteCalls` (`file`,
+  `line`, `expression`, `framework`, at most 20) with a `dynamicNote`
+  giving their count.
 - `list_pages({ file?, framework?, path?, limit = 50 })`: UI pages from the
   Next.js App and Pages Router, React Router and TanStack Router, ordered by
   `fullPath`: the declaring `file` and `line`, `path` as declared, `router`,

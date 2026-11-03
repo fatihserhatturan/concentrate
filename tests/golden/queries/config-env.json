@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 64
+        "result": 65
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 64,
+      "schemaVersion": 65,
       "stats": [
         {
           "table": "Repo",
@@ -518,6 +518,11 @@
             "handler": "listUsers"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
       }
     ],
     "output": {
@@ -1020,6 +1025,11 @@
             "handler": "listUsers"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
       }
     ],
     "output": {
@@ -1053,7 +1063,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 64
+        "result": 65
       },
       {
         "method": "stats",
@@ -1089,7 +1099,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 64,
+      "schemaVersion": 65,
       "packageName": "config-env-fixture",
       "stats": [
         {

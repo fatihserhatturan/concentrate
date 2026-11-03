@@ -18,6 +18,8 @@
   "MATCH (file:File) RETURN file.relativePath AS file",
   "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest",
   "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated",
+  "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL AND file.relativePath IN [$str] RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+  "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
   "MATCH (file:File)-[:ACCESSES_DATA_FILE]->(model:DataModel) RETURN DISTINCT file.relativePath AS file, model.name AS model",
   "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(component) AS id, component.name AS name, component.kind AS kind, component.framework AS framework, file.relativePath AS file, component.line AS line, component.endLine AS endLine, component.isExported AS isExported, component.tagName AS tagName, component.selector AS selector, component.props AS props, component.hooks AS hooks, component.pendingRenders AS pendingRenders",
   "MATCH (file:File)-[:DECLARES_COMPONENT]->(component:Component) WHERE id(component) IN $ids RETURN id(component) AS id, file.relativePath AS file, component.line AS line",
