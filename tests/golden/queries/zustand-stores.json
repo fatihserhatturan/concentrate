@@ -784,7 +784,7 @@
         "params": {
           "name": "bear",
           "library": "",
-          "file": ""
+          "files": []
         },
         "rows": [
           {
@@ -808,7 +808,7 @@
         "params": {
           "name": "bear",
           "library": "",
-          "file": ""
+          "files": []
         },
         "rows": [
           {
@@ -909,7 +909,7 @@
         "params": {
           "name": "bear",
           "library": "",
-          "file": ""
+          "files": []
         },
         "rows": [
           {

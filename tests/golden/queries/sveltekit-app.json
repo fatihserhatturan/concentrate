@@ -2389,7 +2389,7 @@
         "params": {
           "method": "DELETE",
           "path": "/api/posts/[id]",
-          "routeFile": "",
+          "routeFiles": [],
           "framework": ""
         },
         "rows": [

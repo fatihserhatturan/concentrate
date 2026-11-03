@@ -908,7 +908,7 @@
         "params": {
           "method": "get",
           "path": "/api/todos/:id",
-          "routeFile": "",
+          "routeFiles": [],
           "framework": ""
         },
         "rows": [
@@ -1180,7 +1180,7 @@
         "params": {
           "method": "",
           "path": "",
-          "routeFile": "",
+          "routeFiles": [],
           "framework": ""
         },
         "rows": [

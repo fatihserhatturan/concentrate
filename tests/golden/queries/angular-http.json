@@ -968,7 +968,7 @@
         "params": {
           "method": "",
           "path": "",
-          "routeFile": "",
+          "routeFiles": [],
           "framework": ""
         },
         "rows": [
@@ -1470,7 +1470,7 @@
         "params": {
           "method": "PUT",
           "path": "/api/articles/:slug",
-          "routeFile": "",
+          "routeFiles": [],
           "framework": ""
         },
         "rows": [

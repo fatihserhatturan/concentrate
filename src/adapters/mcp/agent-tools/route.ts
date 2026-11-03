@@ -2,7 +2,7 @@ import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { requiredString } from "../args.js";
 import type { PageWindow } from "../paging.js";
 import { optionalString } from "../args.js";
-import { apiConsumers as loadApiConsumers, describeConsumer, describeFunction, functionResources, loadCallEdges, loadComponentFunctions, loadFunctions, mergeRows, summarizeTables, tableAccessColumns, walkCalls } from "./graph.js";
+import { apiConsumers as loadApiConsumers, describeConsumer, describeFunction, filesMatching, functionResources, loadCallEdges, loadComponentFunctions, loadFunctions, matchesFileOrDirectory, mergeRows, summarizeTables, tableAccessColumns, walkCalls } from "./graph.js";
 
 type Row = Record<string, unknown>;
 
@@ -213,13 +213,13 @@ export async function apiConsumers(engine: IQueryEngine, args: Record<string, un
     WHERE true
       ${method ? "AND lower(route.method) = lower($method)" : ""}
       ${routePath ? "AND (route.fullPath = $path OR route.path = $path)" : ""}
-      ${routeFile ? "AND routeFile.relativePath = $routeFile" : ""}
+      ${routeFile ? "AND routeFile.relativePath IN $routeFiles" : ""}
       ${framework ? "AND route.framework = $framework" : ""}
     RETURN id(route) AS id
-  `, { method: method ?? "", path: routePath ?? "", routeFile: routeFile ?? "", framework: framework ?? "" }) as Row[];
+  `, { method: method ?? "", path: routePath ?? "", routeFiles: routeFile ? await filesMatching(engine, routeFile) : [], framework: framework ?? "" }) as Row[];
   const { consumers } = await loadApiConsumers(engine, routes.map((route) => String(route.id)), 0, functions, edges);
   const rows = consumers
-    .filter((consumer) => (!file || consumer.file === file) && (!client || consumer.client === client))
+    .filter((consumer) => (!file || matchesFileOrDirectory(consumer.file, file)) && (!client || consumer.client === client))
     .map(describeConsumer);
   return {
     query: { method: method ?? null, path: routePath ?? null, routeFile: routeFile ?? null, framework: framework ?? null, file: file ?? null, client: client ?? null, limit: window.limit },

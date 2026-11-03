@@ -218,8 +218,11 @@ These answer a whole question in one call instead of a chain of lookups.
   `<Link>` from a library, are listed with `resolved: false` unless `file` is
   given. `counts` sums the usages by kind.
 
-`file` arguments accept the scan-relative path or a path suffix
-(`users/service.ts` matches `src/users/service.ts`).
+`file` arguments accept the scan-relative path, a directory (`src/users`,
+with or without a trailing slash) or a path suffix of either
+(`users/service.ts` matches `src/users/service.ts`). `get_file_outline`
+needs one file. When a `file` filter matches no scanned file, list tools
+return a `note` saying so instead of an empty list alone.
 
 Example:
 

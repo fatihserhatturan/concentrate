@@ -112,6 +112,17 @@ describe("MCP tools", () => {
       assert.equal(routes.routes[0].path, "/users");
       assert.equal(routes.routes[0].handler, "listUsers");
 
+      for (const file of ["src", "src/", "service.ts"]) {
+        const scoped = await callJsonTool(writer, "list_routes", { file });
+        assert.equal(scoped.routes[0]?.path, "/users", file);
+        assert.equal(scoped.note, undefined, file);
+      }
+      const directoryExports = await callJsonTool(writer, "list_exports", { file: "src" });
+      assert.ok(directoryExports.exports.some((row: any) => row.name === "target"));
+      const missing = await callJsonTool(writer, "list_routes", { file: "lib" });
+      assert.deepEqual(missing.routes, []);
+      assert.match(missing.note, /No scanned file or directory matched/);
+
       const entrypoints = await callJsonTool(writer, "list_entrypoints", {
         kind: "queue",
       });

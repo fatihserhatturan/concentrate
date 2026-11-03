@@ -327,6 +327,15 @@ export function matchesFileOrDirectory(relativePath: string | null, file: string
   return matchesFile(relativePath, wanted) || relativePath.startsWith(`${wanted}/`) || relativePath.includes(`/${wanted}/`);
 }
 
+// The scanned files a file argument selects, as matchesFileOrDirectory takes
+// it: a file, a directory or a path suffix of either.
+export async function filesMatching(engine: IQueryEngine, file: string): Promise<string[]> {
+  const rows = await engine.query("MATCH (file:File) RETURN file.relativePath AS file") as Array<{ file?: unknown }>;
+  return rows.map((row) => String(row.file)).filter((relativePath) => matchesFileOrDirectory(relativePath, file)).sort();
+}
+
+export const NO_FILE_MATCHED = "No scanned file or directory matched the file argument; pass a scan-relative path or a path suffix.";
+
 export type SymbolKind = "function" | "method" | "class" | "interface" | "type" | "enum" | "variable" | "route";
 
 export type SymbolInfo = {
