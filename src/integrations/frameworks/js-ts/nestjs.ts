@@ -3,6 +3,7 @@ import { createNestJsRouteGraph } from "./route-graph.js";
 import { addNestJsModuleRelationships } from "./resolution/nestjs-modules.js";
 import { addInjectionRelationships } from "./resolution/injections.js";
 import { addInstanceMethodResolutionRelationships } from "./resolution/instances.js";
+import { addMixinMethodResolutionRelationships } from "./resolution/mixins.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 
 // Parse-time NestJS route semantic module.
@@ -39,9 +40,11 @@ export const nestjsInjectionContributor: ISemanticContributor = {
 };
 
 // Post-parse instance method resolution: resolves this.service.method() calls
-// through variables initialized with `new ClassName()`.
+// through variables initialized with `new ClassName()`, and calls on objects
+// a factory builds by mixing a module in (Express's `app`).
 export const instanceMethodContributor: ISemanticContributor = {
   contribute(graph) {
     addInstanceMethodResolutionRelationships(graph);
+    addMixinMethodResolutionRelationships(graph);
   },
 };
