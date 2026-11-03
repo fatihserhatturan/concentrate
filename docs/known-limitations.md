@@ -115,8 +115,8 @@ tools.
 - Found by the accuracy report ([accuracy.md](accuracy.md)), unresolved today:
   - `new X()` of a class with no constructor in its chain (calls resolve to
     functions, so there is nothing to point at);
-  - methods of objects assembled at runtime (Express's `app`, mixed in from
-    `lib/application.js`);
+  - calls inside module-level blocks (`if (!module.parent) { app.listen() }`),
+    which record no `Call` node;
   - calls on a parameter typed as a class (`(client: HttpClient) =>
     client.x()`).
 - `x.method()` resolves when x is a module-level variable initialized with
@@ -125,6 +125,15 @@ tools.
   'src/services'`). The method is looked up on C and then its base classes.
   A parameter of the calling function with the same name hides the variable;
   default imports of an instance are not followed.
+- Objects a factory builds by mixing a module in, as Express does
+  (`function createApplication() { var app = …; mixin(app, proto); return
+  app }` with `proto = require('./application')`): `mixin` imported from
+  `merge-descriptors` or `utils-merge`, or `Object.assign(target, source)`,
+  with `source` imported from a scanned file. `app.listen()` on a file-level
+  variable initialized by calling the factory, and calls on the target
+  inside the factory, resolve to the module-level function of that file
+  with the called name (`app.listen = function listen`). Members added one
+  by one at runtime (`methods.forEach(m => app[m] = …)`) are not seen.
 - A bare call is left unresolved when a parameter of the calling function or a
   file-level `var` / `let` / `const` binds the same name (`var resolve =
   path.resolve`), unless that binding is an import. Variables declared inside

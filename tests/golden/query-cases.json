@@ -1327,6 +1327,26 @@
           "name": "users"
         }
       }
+    ],
+    "factory-mixins": [
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "listen"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "handle"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "init"
+        }
+      }
     ]
   }
 }

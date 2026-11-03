@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-03T20:08:05.296Z",
+  "recordedAt": "2026-11-03T20:12:41.850Z",
   "samples": [
     {
       "sample": "express",
@@ -15,11 +15,11 @@
         }
       },
       "calls": {
-        "tp": 8,
+        "tp": 24,
         "fp": 0,
-        "fn": 20,
+        "fn": 4,
         "precision": 1,
-        "recall": 0.2857142857142857
+        "recall": 0.8571428571428571
       }
     },
     {
@@ -292,11 +292,11 @@
       }
     },
     "calls": {
-      "tp": 105,
+      "tp": 121,
       "fp": 0,
-      "fn": 20,
+      "fn": 4,
       "precision": 1,
-      "recall": 0.84
+      "recall": 0.968
     },
     "dataAccess": {
       "tp": 43,
