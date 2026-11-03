@@ -235,8 +235,85 @@ tools to both modes; the diff question allows `Bash(git diff:*)` and
 npm run bench:agent -- --questions bench/agent/questions-v2.json --runs 3 --model sonnet --max-turns 25
 ```
 
-No results yet: the runs (sonnet and a second model) follow in the next
-step of #73.
+Recorded 2026-11-02 with sonnet and haiku, same CLI, three runs each,
+`--max-turns 25` ([`agent-v2-sonnet-runs3-2026-11-02.json`](../bench/results/agent-v2-sonnet-runs3-2026-11-02.json),
+[`agent-v2-haiku-runs3-2026-11-02.json`](../bench/results/agent-v2-haiku-runs3-2026-11-02.json)).
+Per category, median input tokens (min–max) over all runs of the category:
+
+| Category | Runs | sonnet: correct | sonnet: input tokens | haiku: correct | haiku: input tokens |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| calls | 6 | 6/6 / 6/6 | 63.6k → 64.8k (+2%) | 6/6 / 6/6 | 66.2k → 101.5k (+53%) |
+| impact | 3 | 3/3 / 3/3 | 97.2k → 99.7k (+3%) | 3/3 / 3/3 | 136.1k → 205.0k (+51%) |
+| diff | 3 | 3/3 / 3/3 | 97.2k → 99.5k (+2%) | 3/3 / 3/3 | 134.8k → 138.8k (+3%) |
+| unused | 3 | 3/3 / 3/3 | 468.2k (427.4k–689.3k) → 132.5k (132.5k–244.4k) (−72%) | 3/3 / 3/3 | 847.9k (653.6k–862.7k) → 175.0k (136.5k–260.0k) (−79%) |
+| gap | 12 | 12/12 / 12/12 | 82.1k → 100.0k (+22%) | 12/12 / 12/12 | 133.7k → 136.8k (+2%) |
+
+| | sonnet: baseline | sonnet: Concentrate | haiku: baseline | haiku: Concentrate |
+| --- | ---: | ---: | ---: | ---: |
+| Correct | 27/27 | 27/27 | 27/27 | 27/27 |
+| Median input tokens | 97.2k | 99.5k (+2%) | 134.8k | 137.6k (+2%) |
+| Median tool calls | 2 | 2 | 4 | 4 |
+| Median wall time | 10.9 s | 8.7 s (−20%) | 9.5 s | 12.1 s (+27%) |
+| Total cost (CLI estimate) | $1.97 | $1.59 | $0.19 | $0.12 |
+| Runs with an MCP call | – | 9/27 | – | 7/27 |
+
+- **Unused exports are the one clear gain.** Grep cannot prove that nothing
+  imports a name, so the baseline read the whole package: 26 (sonnet) and
+  36 (haiku) median tool calls against 4 and 6 with `find_unused_exports`,
+  at a quarter of the cost.
+- **The other categories cost the same or more.** Both models answered the
+  caller questions with grep (no MCP call in any run). Haiku answered the
+  impact question with `impact_of`, `find_definitions` and `list_routes` in
+  seven calls instead of three, at 51% more tokens; sonnet took two.
+- **The agent does not stop at a graph gap.** All 24 gap runs were correct
+  in both modes. Only the full-stack request question called a tool
+  (`api_consumers`, `list_routes`); with the empty answer the agent read the
+  source, which cost sonnet 72% more tokens on that question.
+- One key was widened after the runs: two correct answers to the unused
+  question called `Constructor` "a type" in words the first `anyOf` did not
+  match. All four result files were rescored with `--rescore`.
+
+### Hard questions on two models (2026-11-02)
+
+The hard set was rerun with the same settings on sonnet and haiku
+([`agent-hard-sonnet-runs3-2026-11-02.json`](../bench/results/agent-hard-sonnet-runs3-2026-11-02.json),
+[`agent-hard-haiku-runs3-2026-11-02.json`](../bench/results/agent-hard-haiku-runs3-2026-11-02.json)):
+
+| Category | Runs | sonnet: correct | sonnet: input tokens | haiku: correct | haiku: input tokens |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| cycles | 6 | 2/6 / 6/6 | 419.9k → 97.8k (−77%) | 1/6 / 6/6 | 664.2k → 100.6k (−85%) |
+| impact | 3 | 3/3 / 3/3 | 64.3k → 65.6k (+2%) | 3/3 / 3/3 | 67.4k → 68.9k (+2%) |
+| data | 3 | 3/3 / 3/3 | 98.2k → 137.6k (+40%) | 3/3 / 3/3 | 267.4k → 306.9k (+15%) |
+| routes | 3 | 3/3 / 3/3 | 99.5k → 101.4k (+2%) | 3/3 / 3/3 | 181.7k → 141.9k (−22%) |
+| env | 3 | 3/3 / 3/3 | 128.1k → 97.6k (−24%) | 3/3 / 3/3 | 97.9k → 135.0k (+38%) |
+
+| | sonnet: baseline | sonnet: Concentrate | haiku: baseline | haiku: Concentrate |
+| --- | ---: | ---: | ---: | ---: |
+| Correct | 14/18 | 18/18 | 13/18 | 18/18 |
+| Median input tokens | 128.0k | 97.9k (−24%) | 216.3k | 103.8k (−52%) |
+| Median tool calls | 3 | 2 (−33%) | 8.5 | 2 (−76%) |
+| Median wall time | 20.4 s | 13.5 s (−34%) | 23.5 s | 18.7 s (−20%) |
+| Total cost (CLI estimate) | $2.22 | $1.12 | $0.21 | $0.09 |
+| Runs with an MCP call | – | 9/18 | – | 6/18 |
+
+- **The cycle result holds on both models.** `find_import_cycles` answered
+  both cycle questions in two calls in all twelve runs; without it sonnet
+  got 2 of 6 and haiku 1 of 6, at 4–7× the tokens.
+- **Haiku gains more overall** (−52% median tokens, −76% tool calls),
+  because its baseline searches longer on every question.
+- **Outside cycles the signs flip between models.** The env question is
+  −24% on sonnet and +38% on haiku with no MCP call on either, and the data
+  question costs more on both (sonnet called `list_tables`, then read the
+  entities anyway). These differences are run-to-run variance and extra
+  verification, not the graph.
+
+### Conclusion of v2
+
+Across 15 questions, two models and 180 runs, the graph changes the result
+where grep cannot see the answer: import cycles (correct 3/12 → 12/12) and
+unused exports (−72% to −79% tokens). Everywhere else, including callers,
+impact and diffs, an agent that can grep reaches the same answer at about
+the same cost, and sometimes spends more checking the graph's answer.
 
 ### Frontend and full-stack questions
 

@@ -1,0 +1,1567 @@
+{
+  "recordedAt": "2026-11-03T03:14:31.228Z",
+  "model": "haiku",
+  "runs": 3,
+  "maxTurns": 25,
+  "totals": {
+    "baseline": {
+      "runs": 18,
+      "correct": 13,
+      "medianInputTokens": 216306,
+      "medianOutputTokens": 3201,
+      "medianToolCalls": 8.5,
+      "medianTurns": 9.5,
+      "medianDurationMs": 23453.5,
+      "medianCostUsd": 0.0066,
+      "spread": {
+        "inputTokens": {
+          "min": 65797,
+          "max": 1189784
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 37
+        },
+        "durationMs": {
+          "min": 14044,
+          "max": 189092
+        },
+        "costUsd": {
+          "min": 0.0031,
+          "max": 0.0387
+        }
+      },
+      "totalCostUsd": 0.2061,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
+    },
+    "concentrate": {
+      "runs": 18,
+      "correct": 18,
+      "medianInputTokens": 103845.5,
+      "medianOutputTokens": 1393,
+      "medianToolCalls": 2,
+      "medianTurns": 3.5,
+      "medianDurationMs": 18659.5,
+      "medianCostUsd": 0.004,
+      "spread": {
+        "inputTokens": {
+          "min": 68900,
+          "max": 372446
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 9
+        },
+        "durationMs": {
+          "min": 8514,
+          "max": 65036
+        },
+        "costUsd": {
+          "min": 0.0034,
+          "max": 0.0094
+        }
+      },
+      "totalCostUsd": 0.087,
+      "mcpRuns": 6,
+      "mcpTools": {
+        "find_import_cycles": 6
+      },
+      "toolSearchCalls": 6
+    }
+  },
+  "categories": {
+    "cycles": {
+      "baseline": {
+        "runs": 6,
+        "correct": 1,
+        "medianInputTokens": 664211,
+        "medianOutputTokens": 14090.5,
+        "medianToolCalls": 17.5,
+        "medianTurns": 18.5,
+        "medianDurationMs": 82041,
+        "medianCostUsd": 0.0221,
+        "spread": {
+          "inputTokens": {
+            "min": 304211,
+            "max": 1189784
+          },
+          "toolCalls": {
+            "min": 6,
+            "max": 37
+          },
+          "durationMs": {
+            "min": 35388,
+            "max": 189092
+          },
+          "costUsd": {
+            "min": 0.0102,
+            "max": 0.0387
+          }
+        },
+        "totalCostUsd": 0.1391,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 100589.5,
+        "medianOutputTokens": 953,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 15544.5,
+        "medianCostUsd": 0.0034,
+        "spread": {
+          "inputTokens": {
+            "min": 100536,
+            "max": 101331
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 8514,
+            "max": 52093
+          },
+          "costUsd": {
+            "min": 0.0034,
+            "max": 0.0036
+          }
+        },
+        "totalCostUsd": 0.0207,
+        "mcpRuns": 6,
+        "mcpTools": {
+          "find_import_cycles": 6
+        },
+        "toolSearchCalls": 6
+      }
+    },
+    "impact": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 67447,
+        "medianOutputTokens": 2616,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 17391,
+        "medianCostUsd": 0.0041,
+        "spread": {
+          "inputTokens": {
+            "min": 67398,
+            "max": 100773
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 17258,
+            "max": 20038
+          },
+          "costUsd": {
+            "min": 0.0041,
+            "max": 0.005
+          }
+        },
+        "totalCostUsd": 0.0132,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 68916,
+        "medianOutputTokens": 2930,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 15204,
+        "medianCostUsd": 0.0051,
+        "spread": {
+          "inputTokens": {
+            "min": 68900,
+            "max": 106360
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 12429,
+            "max": 18780
+          },
+          "costUsd": {
+            "min": 0.0039,
+            "max": 0.0053
+          }
+        },
+        "totalCostUsd": 0.0143,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "data": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 267436,
+        "medianOutputTokens": 4208,
+        "medianToolCalls": 16,
+        "medianTurns": 17,
+        "medianDurationMs": 27008,
+        "medianCostUsd": 0.0092,
+        "spread": {
+          "inputTokens": {
+            "min": 228139,
+            "max": 272134
+          },
+          "toolCalls": {
+            "min": 10,
+            "max": 16
+          },
+          "durationMs": {
+            "min": 20900,
+            "max": 36681
+          },
+          "costUsd": {
+            "min": 0.0073,
+            "max": 0.0099
+          }
+        },
+        "totalCostUsd": 0.0264,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 306871,
+        "medianOutputTokens": 3377,
+        "medianToolCalls": 5,
+        "medianTurns": 9,
+        "medianDurationMs": 45194,
+        "medianCostUsd": 0.0088,
+        "spread": {
+          "inputTokens": {
+            "min": 213894,
+            "max": 372446
+          },
+          "toolCalls": {
+            "min": 5,
+            "max": 9
+          },
+          "durationMs": {
+            "min": 34994,
+            "max": 65036
+          },
+          "costUsd": {
+            "min": 0.0065,
+            "max": 0.0094
+          }
+        },
+        "totalCostUsd": 0.0246,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "routes": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 181667,
+        "medianOutputTokens": 2195,
+        "medianToolCalls": 8,
+        "medianTurns": 9,
+        "medianDurationMs": 20350,
+        "medianCostUsd": 0.006,
+        "spread": {
+          "inputTokens": {
+            "min": 140057,
+            "max": 181676
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 10
+          },
+          "durationMs": {
+            "min": 14229,
+            "max": 22265
+          },
+          "costUsd": {
+            "min": 0.0045,
+            "max": 0.006
+          }
+        },
+        "totalCostUsd": 0.0164,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 141939,
+        "medianOutputTokens": 2055,
+        "medianToolCalls": 6,
+        "medianTurns": 7,
+        "medianDurationMs": 20115,
+        "medianCostUsd": 0.0052,
+        "spread": {
+          "inputTokens": {
+            "min": 141321,
+            "max": 212806
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 7
+          },
+          "durationMs": {
+            "min": 18539,
+            "max": 27439
+          },
+          "costUsd": {
+            "min": 0.005,
+            "max": 0.0057
+          }
+        },
+        "totalCostUsd": 0.0158,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "env": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 97917,
+        "medianOutputTokens": 1049,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 14806,
+        "medianCostUsd": 0.0031,
+        "spread": {
+          "inputTokens": {
+            "min": 65797,
+            "max": 204473
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 14044,
+            "max": 24642
+          },
+          "costUsd": {
+            "min": 0.0031,
+            "max": 0.0048
+          }
+        },
+        "totalCostUsd": 0.011,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 134986,
+        "medianOutputTokens": 1114,
+        "medianToolCalls": 2,
+        "medianTurns": 4,
+        "medianDurationMs": 14189,
+        "medianCostUsd": 0.0039,
+        "spread": {
+          "inputTokens": {
+            "min": 100897,
+            "max": 136300
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 12717,
+            "max": 14753
+          },
+          "costUsd": {
+            "min": 0.0036,
+            "max": 0.004
+          }
+        },
+        "totalCostUsd": 0.0115,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "nest-injector-cycles",
+      "sample": "internet-nest",
+      "category": "cycles",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 1,
+            "medianInputTokens": 1072284,
+            "medianOutputTokens": 28954,
+            "medianToolCalls": 33,
+            "medianTurns": 35,
+            "medianDurationMs": 151210,
+            "medianCostUsd": 0.0352,
+            "spread": {
+              "inputTokens": {
+                "min": 966715,
+                "max": 1189784
+              },
+              "toolCalls": {
+                "min": 22,
+                "max": 37
+              },
+              "durationMs": {
+                "min": 112232,
+                "max": 189092
+              },
+              "costUsd": {
+                "min": 0.033,
+                "max": 0.0387
+              }
+            },
+            "totalCostUsd": 0.1069,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**No file in `packages/core/injector` takes part in a runtime import cycle.** I traced the value-level edges by hand, not with a tool. Running a cycle detector needed approval and was denied.\n\nUnder default TypeScript import elision, the only edges that would close a loop are type-only, and those are excluded:\n\n- **`constants.ts` ↔ `instance-wrapper.ts`:** `constants.ts` imports `ContextId` (an interface) and `instance-wrapper.ts` imports `STATIC_CONTEXT`. The back-edge is type-only.\n- **`module.ts` ↔ `instance-wrapper.ts`:** `instance-wrapper.ts` uses `Module` only as the type of `host`. `module.ts` does construct `InstanceWrapper` at runtime.\n- **`module.ts` ↔ `container.ts`:** `module.ts` uses `NestContainer` only as a constructor parameter type. `container.ts` does `new Module(...)`.\n- **`module-ref.ts` → `module.ts`:** the `Module` reference is a parameter type only. `module.ts` does value-import `ModuleRef`, so this is one-directional.\n- **`abstract-instance-resolver.ts` → `injector.ts`, `instance-links-host.ts`:** these are type-only. The abstract class has no runtime dependency on the concrete injector.\n\nThe remaining runtime edges form a DAG. Roughly:\n\n- `container` → `module`, `modules-container`, `compiler`, `internal-core-module`, `internal-providers-storage`, `inspector/serialized-graph`\n- `module` → `module-ref`, `instance-wrapper`, `constants`\n- `module-ref` → `injector`, `instance-links-host`, `instance-wrapper`, `abstract-instance-resolver`\n- `injector` → `instance-wrapper`, `settlement-signal`, `constants`, `inquirer`\n- `internal-core-module-factory` → `injector`, `instance-loader`, `lazy-module-loader`, `external-context-creator`\n\nCross-directory, `container` → `serialized-graph` → `module-ref` and `lazy-module-loader` are value edges. I checked that none of their back-paths into `container` or `scanner` are value imports.\n\n**Caveat:** this is a manual trace, not a full run of a cycle detector. I checked every edge that could plausibly close a loop, but I did not read every import line in every file. If you want a machine-verified answer, run `npx madge --circular --ts-config tsconfig.json packages/core/injector` locally. Note that madge follows type-only imports unless you pass `--ts-config` and it honours elision, so check its output against the type-only edges above.\n\nIf `tsconfig` sets `verbatimModuleSyntax` or `importsNotUsedAsValues: preserve`, type-only imports are kept at runtime. Several of the edges above would then become real cycles, most notably `module` ↔ `instance-wrapper`, `module` ↔ `container`, and `constants` ↔ `instance-wrapper`. I did not check the project's tsconfig for those flags.",
+              "isError": false,
+              "turns": 23,
+              "durationMs": 112232,
+              "costUsd": 0.03303855,
+              "inputTokens": 40,
+              "outputTokens": 22995,
+              "cacheCreationTokens": 56919,
+              "cacheReadTokens": 1015325,
+              "toolCalls": 22,
+              "toolsByName": {
+                "Bash": 15,
+                "Grep": 4,
+                "Read": 3
+              },
+              "correct": false,
+              "missing": [
+                "instance-loader.ts",
+                "modules-container.ts"
+              ]
+            },
+            {
+              "answer": "**Answer: I found no runtime import cycle that includes a file in `packages/core/injector`.** This is a manual trace, not a full scan, so treat it as likely but not proven.\n\nI could not run the scripted analysis. The Python run was blocked for approval, so I traced the imports by hand with grep. The script is saved at `/private/tmp/claude-501/-Users-fatihserhatturan-Desktop-projeler-concentrate--concentrate-samples-internet-nest/106a61f7-2aa2-44af-b105-4c36f2ab6560/scratchpad/graph.py`. If you approve running it, it will give a definitive SCC list over all of `packages/core`.\n\nWhat the trace covered:\n\n- **Type-only edges are elided.** Several apparent back-edges are constructor-parameter or annotation uses in undecorated classes, so TypeScript drops them. Examples: `module.ts`/`module-ref.ts`/`instance-links-host.ts` → `container.ts`, `abstract-instance-resolver.ts` → `injector.ts`, `graph-inspector.ts` → `container.ts`, `lazy-module-loader.ts` → `scanner.ts`, `internal-core-module-factory.ts` → `scanner.ts`, and `partial-graph.host.ts` → `serialized-graph.ts`.\n- **Decorators do not create a cycle here.** `guards-context-creator.ts`, `pipes-context-creator.ts` and `external-context-creator.ts` have no `@Injectable`, so their `NestContainer` parameters are not emitted as runtime metadata. `internal-core-module.ts` is decorated, but its constructor does not reach back into the injector.\n- **The main runtime chains are one-directional.**\n  - `container.ts` → `inspector/serialized-graph.ts` → `helpers/external-context-creator.ts` → guards/pipes (no return to `container.ts`).\n  - `container.ts` → `inspector/serialized-graph.ts` → `injector/lazy-module-loader/lazy-module-loader.ts` → `instance-loader.ts` → `internal-core-module.ts`, and `lazy-module-loader.ts` → `module-ref.ts` → `injector.ts` → `instance-wrapper.ts`.\n  - `scanner.ts` → `internal-core-module-factory.ts` → `instance-loader.ts` and `lazy-module-loader.ts`, with no edge back to `scanner.ts`.\n  - `module.ts` → `module-ref.ts` → `instance-wrapper.ts` → `constants.ts`, with no return edge to `module.ts`.\n\nWhat I did not check: the remaining leaves (`helpers/provider-classifier.ts`, `helpers/silent-logger.ts`, `inspector/uuid-factory.ts`, `inspector/deterministic-uuid-registry.ts`, `injector/compiler.ts`, `injector/modules-container.ts`, `inspector/initialize-on-preview.allowlist.ts`) and the transitive guard/pipe/exception files beyond `*-context-creator.ts`. A cycle through one of those would be missed.",
+              "isError": false,
+              "turns": 39,
+              "durationMs": 189092,
+              "costUsd": 0.038689299999999996,
+              "inputTokens": 44,
+              "outputTokens": 30452,
+              "cacheCreationTokens": 60850,
+              "cacheReadTokens": 1128890,
+              "toolCalls": 37,
+              "toolsByName": {
+                "Bash": 10,
+                "Grep": 26,
+                "Write": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**No file in `packages/core/injector` takes part in a runtime import cycle** once type-only imports are excluded.\n\nI checked this by hand with Grep, since I couldn't run a script or the TypeScript compiler here. For each relative import in the injector files I checked whether the imported name is used as a value (instantiated with `new`, used as a token, `extends`ed, or read via `.name`) or only as a type. I then followed the value edges out of the directory, including into `router`, `inspector`, `errors`, `helpers`, `services` and `scanner`. None of those paths leads back into an injector file.\n\nSeveral cycles exist only in the type graph, and those are the ones the exclusion removes:\n- `container.ts` ↔ `module.ts`, `module-ref.ts`, `instance-links-host.ts`, `instance-wrapper.ts`: the back-edges are constructor-parameter or field types.\n- `module.ts` ↔ `instance-wrapper.ts`: `Module` is only a type in `instance-wrapper.ts`.\n- `constants.ts` → `instance-wrapper.ts`: `ContextId` is an interface, so the import is erased.\n- `abstract-instance-resolver.ts` → `injector.ts`, `module.ts`, `instance-links-host.ts`: all type-only.\n- `injector.ts` → `module.ts`: type-only.\n\nTwo caveats:\n- Grep can't see every value use, so a symbol used as a value in a form my patterns didn't match could be missed. I'd expect that to be rare here.\n- No `import()` or `require()` calls exist in the injector files.\n\nTo confirm mechanically, run `npx madge --circular --extensions ts --ts-config packages/core/tsconfig.json packages/core/injector` (madge's TypeScript detection skips type-only imports by default). I haven't run it.",
+              "isError": false,
+              "turns": 35,
+              "durationMs": 151210,
+              "costUsd": 0.035178219999999996,
+              "inputTokens": 36,
+              "outputTokens": 28954,
+              "cacheCreationTokens": 58057,
+              "cacheReadTokens": 908622,
+              "toolCalls": 33,
+              "toolsByName": {
+                "Bash": 5,
+                "Write": 1,
+                "Grep": 27
+              },
+              "correct": false,
+              "missing": [
+                "instance-loader.ts",
+                "modules-container.ts"
+              ]
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 100571,
+            "medianOutputTokens": 906,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 11634,
+            "medianCostUsd": 0.0034,
+            "spread": {
+              "inputTokens": {
+                "min": 100536,
+                "max": 100608
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 8514,
+                "max": 12260
+              },
+              "costUsd": {
+                "min": 0.0034,
+                "max": 0.0034
+              }
+            },
+            "totalCostUsd": 0.0102,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "find_import_cycles": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "Fourteen files in `packages/core/injector` take part in a runtime import cycle. They form one group, and the group also includes 38 files outside that folder. Type-only imports are excluded, and the tool marks this group as `typeOnly: false`.\n\nThe 14 files:\n\n- `abstract-instance-resolver.ts`\n- `constants.ts`\n- `container.ts`\n- `index.ts`\n- `injector.ts`\n- `instance-links-host.ts`\n- `instance-loader.ts`\n- `instance-wrapper.ts`\n- `internal-core-module/internal-core-module-factory.ts`\n- `lazy-module-loader/lazy-module-loader.ts`\n- `module-ref.ts`\n- `module.ts`\n- `modules-container.ts`\n- `topology-tree/topology-tree.ts`\n\nOne example loop is `abstract-instance-resolver.ts` → `module.ts` → `module-ref.ts` → `abstract-instance-resolver.ts`. This is only the shortest loop the tool found. The other members reach the cycle through other paths.\n\nThis comes from the concentrate code graph, and I did not check the import statements by hand.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12260,
+              "costUsd": 0.00335199,
+              "inputTokens": 6,
+              "outputTokens": 817,
+              "cacheCreationTokens": 10196,
+              "cacheReadTokens": 90369,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_import_cycles": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Fourteen files in `packages/core/injector` take part in a runtime import cycle. Type-only imports are excluded, and the cycle is not marked type-only.\n\nThey are:\n\n- `abstract-instance-resolver.ts`\n- `constants.ts`\n- `container.ts`\n- `index.ts`\n- `injector.ts`\n- `instance-links-host.ts`\n- `instance-loader.ts`\n- `instance-wrapper.ts`\n- `internal-core-module/internal-core-module-factory.ts`\n- `lazy-module-loader/lazy-module-loader.ts`\n- `module-ref.ts`\n- `module.ts`\n- `modules-container.ts`\n- `topology-tree/topology-tree.ts`\n\nThe tool reports these as one strongly connected group of 52 files in total, so the remaining 38 members sit outside `injector`. The shortest loop it found runs through four of the injector files:\n\n`abstract-instance-resolver.ts` → `module.ts` → `module-ref.ts` → `abstract-instance-resolver.ts`\n\nThe tool only lists group members that match the path you gave. If other files in `injector` don't import anything in this group, they're not in the list. I didn't check that against the full directory listing.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 11634,
+              "costUsd": 0.00339291,
+              "inputTokens": 6,
+              "outputTokens": 906,
+              "cacheCreationTokens": 10179,
+              "cacheReadTokens": 90351,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_import_cycles": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Fourteen files in `packages/core/injector` take part in a runtime import cycle. The concentrate code graph reports one cycle group for this directory, with no type-only exceptions:\n\n- `abstract-instance-resolver.ts`\n- `constants.ts`\n- `container.ts`\n- `index.ts`\n- `injector.ts`\n- `instance-links-host.ts`\n- `instance-loader.ts`\n- `instance-wrapper.ts`\n- `internal-core-module/internal-core-module-factory.ts`\n- `lazy-module-loader/lazy-module-loader.ts`\n- `module-ref.ts`\n- `module.ts`\n- `modules-container.ts`\n- `topology-tree/topology-tree.ts`\n\nThe group is larger than these 14 files. It has 52 members in total, and the other 38 live outside `packages/core/injector`. The tool's shortest example loop runs through three of the injector files:\n\n`abstract-instance-resolver.ts` → `module.ts` → `module-ref.ts` → `abstract-instance-resolver.ts`\n\nI took this from the graph and did not re-check the import statements in the source. If you want to confirm the example loop, the imports to look at are in those three files.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8514,
+              "costUsd": 0.00341435,
+              "inputTokens": 6,
+              "outputTokens": 933,
+              "cacheCreationTokens": 10217,
+              "cacheReadTokens": 90385,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_import_cycles": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "nest-instance-wrapper-importers",
+      "sample": "internet-nest",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 67447,
+            "medianOutputTokens": 2616,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 17391,
+            "medianCostUsd": 0.0041,
+            "spread": {
+              "inputTokens": {
+                "min": 67398,
+                "max": 100773
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 17258,
+                "max": 20038
+              },
+              "costUsd": {
+                "min": 0.0041,
+                "max": 0.005
+              }
+            },
+            "totalCostUsd": 0.0132,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**28 non-test files** in `packages/core` outside `injector/` import `instance-wrapper` directly:\n\n1. `application-config.ts`\n2. `scanner.ts`\n3. `nest-application-context.ts`\n4. `inspector/graph-inspector.ts`\n5. `inspector/interfaces/enhancer-metadata-cache-entry.interface.ts`\n6. `router/routes-resolver.ts`\n7. `router/router-explorer.ts`\n8. `router/router-exception-filters.ts`\n9. `router/interfaces/exceptions-filter.interface.ts`\n10. `hooks/before-app-shutdown.hook.ts`\n11. `hooks/on-app-bootstrap.hook.ts`\n12. `hooks/on-app-shutdown.hook.ts`\n13. `hooks/on-module-destroy.hook.ts`\n14. `hooks/on-module-init.hook.ts`\n15. `interceptors/interceptors-context-creator.ts`\n16. `pipes/pipes-context-creator.ts`\n17. `guards/guards-context-creator.ts`\n18. `exceptions/base-exception-filter-context.ts`\n19. `exceptions/external-exception-filter-context.ts`\n20. `middleware/container.ts`\n21. `middleware/middleware-module.ts`\n22. `middleware/resolver.ts`\n23. `helpers/context-creator.ts`\n24. `helpers/context-id-factory.ts`\n25. `helpers/external-context-creator.ts`\n26. `helpers/handler-metadata-storage.ts`\n27. `discovery/discovery-service.ts`\n28. `discovery/discoverable-meta-host-collection.ts`\n\n**Test files** (under `packages/core/test/`, outside `injector/`) also import it, 18 in total:\n\n- `test/scanner.spec.ts`\n- `test/router/routes-resolver.spec.ts`\n- `test/router/router-explorer.spec.ts`\n- `test/router/router-exception-filters.spec.ts`\n- `test/inspector/graph-inspector.spec.ts`\n- `test/interceptors/interceptors-context-creator.spec.ts`\n- `test/pipes/pipes-context-creator.spec.ts`\n- `test/guards/guards-context-creator.spec.ts`\n- `test/exceptions/external-exception-filter-context.spec.ts`\n- `test/middleware/container.spec.ts`\n- `test/middleware/middleware-module.spec.ts`\n- `test/discovery/discovery-service.spec.ts`\n- `test/discovery/discoverable-meta-host-collection.spec.ts`\n- `test/injector/injector.spec.ts`, `module.spec.ts`, `instance-loader.spec.ts`, `instance-wrapper.spec.ts`, `nested-transient-isolation.spec.ts`\n\nI searched for any reference to `instance-wrapper` in `packages/core`, so this also covers type-only imports and re-exports. The one exception is `packages/core/injector/index.ts`, which re-exports `ContextId` and `HostComponentInfo`; it sits inside `injector/`, so I left it out.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 20038,
+              "costUsd": 0.00504897,
+              "inputTokens": 6,
+              "outputTokens": 3396,
+              "cacheCreationTokens": 12330,
+              "cacheReadTokens": 88437,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**28 non-test files** in `packages/core` outside `injector/` import `instance-wrapper` directly:\n\n**Runtime code (28)**\n- `router/interfaces/exceptions-filter.interface.ts`\n- `router/router-explorer.ts`\n- `router/routes-resolver.ts`\n- `router/router-exception-filters.ts`\n- `hooks/before-app-shutdown.hook.ts`\n- `hooks/on-module-destroy.hook.ts`\n- `hooks/on-module-init.hook.ts`\n- `hooks/on-app-bootstrap.hook.ts`\n- `hooks/on-app-shutdown.hook.ts`\n- `application-config.ts`\n- `exceptions/base-exception-filter-context.ts`\n- `exceptions/external-exception-filter-context.ts`\n- `helpers/context-id-factory.ts`\n- `helpers/context-creator.ts`\n- `helpers/external-context-creator.ts`\n- `helpers/handler-metadata-storage.ts`\n- `middleware/container.ts`\n- `middleware/resolver.ts`\n- `middleware/middleware-module.ts`\n- `inspector/graph-inspector.ts`\n- `inspector/interfaces/enhancer-metadata-cache-entry.interface.ts`\n- `interceptors/interceptors-context-creator.ts`\n- `pipes/pipes-context-creator.ts`\n- `guards/guards-context-creator.ts`\n- `discovery/discovery-service.ts`\n- `discovery/discoverable-meta-host-collection.ts`\n- `scanner.ts`\n- `nest-application-context.ts`\n\n**Spec files (18, also outside `injector/`)** under `packages/core/test/`: `router/routes-resolver.spec.ts`, `router/router-explorer.spec.ts`, `router/router-exception-filters.spec.ts`, `interceptors/interceptors-context-creator.spec.ts`, `pipes/pipes-context-creator.spec.ts`, `guards/guards-context-creator.spec.ts`, `exceptions/external-exception-filter-context.spec.ts`, `inspector/graph-inspector.spec.ts`, `discovery/discovery-service.spec.ts`, `discovery/discoverable-meta-host-collection.spec.ts`, `middleware/container.spec.ts`, `middleware/middleware-module.spec.ts`, `scanner.spec.ts`, `injector/module.spec.ts`, `injector/injector.spec.ts`, `injector/instance-loader.spec.ts`, `injector/instance-wrapper.spec.ts`, `injector/nested-transient-isolation.spec.ts`.\n\nThese are matches on the literal path `instance-wrapper`, so files that import through the `injector/index.ts` barrel are not included. Nothing outside `packages/core` was searched.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 17391,
+              "costUsd": 0.00409951,
+              "inputTokens": 4,
+              "outputTokens": 2616,
+              "cacheCreationTokens": 11143,
+              "cacheReadTokens": 56251,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Outside `packages/core/injector/`, 28 source files import `instance-wrapper` directly, and 18 test files do too.\n\n**Source files (28):**\n- `router/interfaces/exceptions-filter.interface.ts`\n- `router/router-explorer.ts`\n- `router/routes-resolver.ts`\n- `router/router-exception-filters.ts`\n- `scanner.ts`\n- `application-config.ts`\n- `nest-application-context.ts`\n- `hooks/before-app-shutdown.hook.ts`\n- `hooks/on-app-bootstrap.hook.ts`\n- `hooks/on-app-shutdown.hook.ts`\n- `hooks/on-module-destroy.hook.ts`\n- `hooks/on-module-init.hook.ts`\n- `exceptions/base-exception-filter-context.ts`\n- `exceptions/external-exception-filter-context.ts`\n- `guards/guards-context-creator.ts`\n- `interceptors/interceptors-context-creator.ts`\n- `pipes/pipes-context-creator.ts`\n- `middleware/middleware-module.ts`\n- `middleware/container.ts`\n- `middleware/resolver.ts`\n- `discovery/discovery-service.ts`\n- `discovery/discoverable-meta-host-collection.ts`\n- `helpers/context-creator.ts`\n- `helpers/context-id-factory.ts`\n- `helpers/external-context-creator.ts`\n- `helpers/handler-metadata-storage.ts`\n- `inspector/graph-inspector.ts`\n- `inspector/interfaces/enhancer-metadata-cache-entry.interface.ts`\n\n**Test files (18), under `packages/core/test/`:**\n- `router/routes-resolver.spec.ts`\n- `router/router-explorer.spec.ts`\n- `router/router-exception-filters.spec.ts`\n- `scanner.spec.ts`\n- `middleware/middleware-module.spec.ts`\n- `middleware/container.spec.ts`\n- `interceptors/interceptors-context-creator.spec.ts`\n- `guards/guards-context-creator.spec.ts`\n- `pipes/pipes-context-creator.spec.ts`\n- `discovery/discovery-service.spec.ts`\n- `discovery/discoverable-meta-host-collection.spec.ts`\n- `exceptions/external-exception-filter-context.spec.ts`\n- `inspector/graph-inspector.spec.ts`\n- `injector/instance-wrapper.spec.ts`\n- `injector/instance-loader.spec.ts`\n- `injector/module.spec.ts`\n- `injector/injector.spec.ts`\n- `injector/nested-transient-isolation.spec.ts`\n\nThis comes from a text search for `instance-wrapper` across `packages/core`. It catches every import path, including type-only imports and re-exports. It does not catch files that reach `InstanceWrapper` only through another module, such as `injector/index.ts` or `injector/container.ts`, because those are inside the injector directory or import it indirectly.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 17258,
+              "costUsd": 0.00407381,
+              "inputTokens": 4,
+              "outputTokens": 2545,
+              "cacheCreationTokens": 11192,
+              "cacheReadTokens": 56251,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 68916,
+            "medianOutputTokens": 2930,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 15204,
+            "medianCostUsd": 0.0051,
+            "spread": {
+              "inputTokens": {
+                "min": 68900,
+                "max": 106360
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 12429,
+                "max": 18780
+              },
+              "costUsd": {
+                "min": 0.0039,
+                "max": 0.0053
+              }
+            },
+            "totalCostUsd": 0.0143,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**28 non-test files** in `packages/core` outside `injector/` import `instance-wrapper` directly:\n\n1. `router/interfaces/exceptions-filter.interface.ts`\n2. `router/router-exception-filters.ts`\n3. `router/router-explorer.ts`\n4. `router/routes-resolver.ts`\n5. `hooks/before-app-shutdown.hook.ts`\n6. `hooks/on-app-shutdown.hook.ts`\n7. `hooks/on-app-bootstrap.hook.ts`\n8. `hooks/on-module-destroy.hook.ts`\n9. `hooks/on-module-init.hook.ts`\n10. `nest-application-context.ts`\n11. `scanner.ts`\n12. `application-config.ts`\n13. `pipes/pipes-context-creator.ts`\n14. `interceptors/interceptors-context-creator.ts`\n15. `guards/guards-context-creator.ts`\n16. `exceptions/base-exception-filter-context.ts`\n17. `exceptions/external-exception-filter-context.ts`\n18. `helpers/context-creator.ts`\n19. `helpers/context-id-factory.ts`\n20. `helpers/external-context-creator.ts`\n21. `helpers/handler-metadata-storage.ts`\n22. `inspector/graph-inspector.ts`\n23. `inspector/interfaces/enhancer-metadata-cache-entry.interface.ts`\n24. `middleware/container.ts`\n25. `middleware/middleware-module.ts`\n26. `middleware/resolver.ts`\n27. `discovery/discoverable-meta-host-collection.ts`\n28. `discovery/discovery-service.ts`\n\nI left out the `packages/core/test/**` specs, which also import it directly. Those are the only importers under `test/`, and they're the ones to check if you want to include tests.\n\nThe search was a regex over `from '…instance-wrapper'` lines in `packages/core`. It would miss dynamic `import()` or `require()` calls, though I didn't see any for this module. Re-export chains are also not followed, so a file that imports `ContextId` through `injector/index.ts` isn't listed.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 12429,
+              "costUsd": 0.0038727400000000004,
+              "inputTokens": 4,
+              "outputTokens": 1811,
+              "cacheCreationTokens": 11988,
+              "cacheReadTokens": 56924,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Non-test files:** 28 files in `packages/core` outside `injector/` import `instance-wrapper` directly:\n\n- `router/interfaces/exceptions-filter.interface.ts`\n- `router/routes-resolver.ts`\n- `router/router-exception-filters.ts`\n- `router/router-explorer.ts`\n- `hooks/before-app-shutdown.hook.ts`\n- `hooks/on-app-bootstrap.hook.ts`\n- `hooks/on-app-shutdown.hook.ts`\n- `hooks/on-module-destroy.hook.ts`\n- `hooks/on-module-init.hook.ts`\n- `interceptors/interceptors-context-creator.ts`\n- `exceptions/base-exception-filter-context.ts`\n- `exceptions/external-exception-filter-context.ts`\n- `guards/guards-context-creator.ts`\n- `middleware/container.ts`\n- `middleware/resolver.ts`\n- `middleware/middleware-module.ts`\n- `pipes/pipes-context-creator.ts`\n- `helpers/context-creator.ts`\n- `helpers/external-context-creator.ts`\n- `helpers/handler-metadata-storage.ts`\n- `helpers/context-id-factory.ts`\n- `discovery/discovery-service.ts`\n- `discovery/discoverable-meta-host-collection.ts`\n- `inspector/graph-inspector.ts`\n- `inspector/interfaces/enhancer-metadata-cache-entry.interface.ts`\n- `nest-application-context.ts`\n- `scanner.ts`\n- `application-config.ts`\n\n**Spec files:** 18 test files also import it directly, all under `packages/core/test/`:\n\n- `test/router/routes-resolver.spec.ts`\n- `test/router/router-explorer.spec.ts`\n- `test/router/router-exception-filters.spec.ts`\n- `test/pipes/pipes-context-creator.spec.ts`\n- `test/discovery/discovery-service.spec.ts`\n- `test/discovery/discoverable-meta-host-collection.spec.ts`\n- `test/interceptors/interceptors-context-creator.spec.ts`\n- `test/inspector/graph-inspector.spec.ts`\n- `test/exceptions/external-exception-filter-context.spec.ts`\n- `test/middleware/middleware-module.spec.ts`\n- `test/middleware/container.spec.ts`\n- `test/guards/guards-context-creator.spec.ts`\n- `test/scanner.spec.ts`\n- `test/injector/instance-wrapper.spec.ts`\n- `test/injector/module.spec.ts`\n- `test/injector/instance-loader.spec.ts`\n- `test/injector/injector.spec.ts`\n- `test/injector/nested-transient-isolation.spec.ts`\n\nTest files sit in `test/injector/`, which is not the `injector/` source directory, so I counted them as outside it. Drop them if you only want production code.\n\nThe search was a text match on `instance-wrapper'` or `instance-wrapper\"` under `packages/core`, excluding `node_modules`. It covers `import`, `export … from`, and `require` forms, but it would miss an import built from a computed path. I did not use the code graph tools for this.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 18780,
+              "costUsd": 0.0053449199999999995,
+              "inputTokens": 4,
+              "outputTokens": 4761,
+              "cacheCreationTokens": 11974,
+              "cacheReadTokens": 56922,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Direct importers of `packages/core/injector/instance-wrapper.ts` outside `packages/core/injector/`, excluding tests (25 files):\n\n**Router**\n- `router/routes-resolver.ts`\n- `router/router-explorer.ts`\n- `router/router-exception-filters.ts`\n- `router/interfaces/exceptions-filter.interface.ts`\n\n**Hooks**\n- `hooks/before-app-shutdown.hook.ts`\n- `hooks/on-app-bootstrap.hook.ts`\n- `hooks/on-app-shutdown.hook.ts`\n- `hooks/on-module-destroy.hook.ts`\n- `hooks/on-module-init.hook.ts`\n\n**Context creators and exceptions**\n- `pipes/pipes-context-creator.ts`\n- `guards/guards-context-creator.ts`\n- `interceptors/interceptors-context-creator.ts`\n- `exceptions/base-exception-filter-context.ts`\n- `exceptions/external-exception-filter-context.ts`\n- `helpers/context-creator.ts`\n- `helpers/external-context-creator.ts`\n- `helpers/context-id-factory.ts`\n- `helpers/handler-metadata-storage.ts`\n\n**Middleware**\n- `middleware/container.ts`\n- `middleware/middleware-module.ts`\n- `middleware/resolver.ts`\n\n**Discovery and inspection**\n- `discovery/discovery-service.ts`\n- `discovery/discoverable-meta-host-collection.ts`\n- `inspector/graph-inspector.ts`\n- `inspector/interfaces/enhancer-metadata-cache-entry.interface.ts`\n\n**Core entry points**\n- `scanner.ts`\n- `nest-application-context.ts`\n- `application-config.ts`\n\nTest files under `packages/core/test/` also import it directly, 17 of them (for example `test/injector/injector.spec.ts` and `test/router/router-explorer.spec.ts`). Say if you want those listed too.\n\nThis is from a text search for `instance-wrapper` in `packages/core`, not a type-aware reference search. It catches the direct imports, but not files that reach it through `injector/index.ts`, which re-exports from it.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 15204,
+              "costUsd": 0.00508673,
+              "inputTokens": 6,
+              "outputTokens": 2930,
+              "cacheCreationTokens": 13461,
+              "cacheReadTokens": 92893,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "nest-microservices-client-cycle",
+      "sample": "internet-nest",
+      "category": "cycles",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 0,
+            "medianInputTokens": 349052,
+            "medianOutputTokens": 4835,
+            "medianToolCalls": 9,
+            "medianTurns": 10,
+            "medianDurationMs": 48392,
+            "medianCostUsd": 0.0108,
+            "spread": {
+              "inputTokens": {
+                "min": 304211,
+                "max": 361707
+              },
+              "toolCalls": {
+                "min": 6,
+                "max": 13
+              },
+              "durationMs": {
+                "min": 35388,
+                "max": 51850
+              },
+              "costUsd": {
+                "min": 0.0102,
+                "max": 0.0112
+              }
+            },
+            "totalCostUsd": 0.0322,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Short answer: none of the client implementations is in a runtime import cycle.** `ClientKafka` is the only one with a cycle at all, and that cycle is type-only, so TypeScript erases it from the emitted JavaScript.\n\nThe cycle, from reading the imports (I did not run a build or a cycle detector):\n\n1. `client/client-kafka.ts` imports `KafkaReplyPartitionAssigner` from `../helpers` (line 37). It is used as a value at line 159 (`new KafkaReplyPartitionAssigner(this, config)`), so this edge is a real runtime import.\n2. `helpers/index.ts:4` re-exports `./kafka-reply-partition-assigner`.\n3. `helpers/kafka-reply-partition-assigner.ts:3` imports `ClientKafka` from `../client/client-kafka`. `ClientKafka` appears only as a constructor parameter type (line 19), there are no decorators, and the tsconfig has no `verbatimModuleSyntax`, `isolatedModules` or `preserveValueImports`. So the import is elided and this edge does not exist at runtime.\n\nThe other client implementations are clean:\n\n- **ClientTCP, ClientRMQ, ClientNats, ClientMqtt, ClientRedis, ClientGrpcProxy**: each imports `./client-proxy` and things from `../helpers`, `../interfaces`, `../events`, `../serializers` or `../utils`. None of those modules imports back into `client/`. `client-proxy.ts` only imports `../utils`, `../deserializers`, `../errors`, `../interfaces`, `../serializers`, so it has no path back either.\n- **ClientProxyFactory** (`client-proxy-factory.ts`) imports the implementations, but nothing imports it back except `index.ts`.\n- **Other back-edges into `client/`** are type-only: `interfaces/client-metadata.interface.ts` and `interfaces/client-kafka-proxy.interface.ts` import `ClientProxy` from `../client`, used only in type positions.\n\nIf you want to confirm this against the compiled output, a tool like `madge` run on the built `dist` would show the picture directly. Nothing in the source needs to change to break a cycle, since it is already erased.",
+              "isError": false,
+              "turns": 14,
+              "durationMs": 51850,
+              "costUsd": 0.011159480000000003,
+              "inputTokens": 18,
+              "outputTokens": 5186,
+              "cacheCreationTokens": 26041,
+              "cacheReadTokens": 335648,
+              "toolCalls": 13,
+              "toolsByName": {
+                "Bash": 3,
+                "Grep": 8,
+                "Read": 2
+              },
+              "correct": false,
+              "missing": [
+                "client-grpc.ts",
+                "client-mqtt.ts",
+                "client-nats.ts",
+                "client-redis.ts",
+                "client-rmq.ts",
+                "client-tcp.ts"
+              ]
+            },
+            {
+              "answer": "**None of the client implementations in `packages/microservices/client` are in a runtime import cycle.** There are two import cycles, but both exist only at the type level, and TypeScript erases them when it compiles.\n\nI checked this by reading the imports. I did not run a tool like madge or inspect compiled output.\n\n**Cycle 1: `ClientProxy` through `interfaces/`**\n- `client/client-proxy.ts` imports `../interfaces`.\n- `interfaces/client-metadata.interface.ts` and `interfaces/client-kafka-proxy.interface.ts` import `ClientProxy` from `../client`, which re-exports `client-proxy`.\n- Both interface files use `ClientProxy` only as a type (`Type<ClientProxy>`, `Omit<ClientProxy<…>>`), so the import is dropped at runtime.\n\n**Cycle 2: `ClientKafka` through `helpers/`**\n- `client/client-kafka.ts` imports `../helpers`.\n- The helpers index re-exports `helpers/kafka-reply-partition-assigner.ts`, which imports `ClientKafka` from `../client/client-kafka`.\n- `ClientKafka` is used only as a constructor parameter type in that file. The class has no decorators, so `emitDecoratorMetadata` (enabled in the root `tsconfig.json`) emits no reference to it, and the import is dropped.\n\nThe client files themselves (`client-tcp`, `client-kafka`, `client-redis`, `client-nats`, `client-mqtt`, `client-rmq`, `client-grpc`) import only `./client-proxy` among the client files, and `client-proxy-factory` imports all of them without any of them importing it back. So the only runtime-relevant edges are one-way.\n\nIf the cycles were ever made runtime, the likely trigger is a value use of `ClientKafka` in `kafka-reply-partition-assigner.ts` or of `ClientProxy` in the interface files. To confirm on the current code, run `npx madge --circular --extensions ts packages/microservices/client` with a `--ts-config` pointed at the root `tsconfig.json`. Madge reports type-only edges unless it is configured to skip them, so expect the two type-level cycles above to show up.",
+              "isError": false,
+              "turns": 10,
+              "durationMs": 48392,
+              "costUsd": 0.010205425,
+              "inputTokens": 16,
+              "outputTokens": 4835,
+              "cacheCreationTokens": 31456,
+              "cacheReadTokens": 317580,
+              "toolCalls": 9,
+              "toolsByName": {
+                "Bash": 4,
+                "Grep": 3,
+                "Read": 2
+              },
+              "correct": false,
+              "missing": [
+                "client-grpc.ts",
+                "client-mqtt.ts",
+                "client-nats.ts",
+                "client-redis.ts",
+                "client-rmq.ts",
+                "client-tcp.ts"
+              ]
+            },
+            {
+              "answer": "**No client implementation is in a runtime import cycle.** I found three static cycles, and all of them are type-only, so TypeScript should erase them when it compiles. I checked this by reading the source. There is no `dist` build here to confirm the emitted JavaScript.\n\nThe type-only cycles, all under `packages/microservices`:\n\n1. **`client/client-kafka.ts` ↔ `helpers/kafka-reply-partition-assigner.ts`** (via `helpers/index.ts`). `client-kafka.ts` imports `KafkaReplyPartitionAssigner` as a value, through `../helpers`. The assigner imports `ClientKafka` from `../client/client-kafka`, but only as a constructor parameter type. That class has no decorators, so the import is elided. This is the only cycle that involves `ClientKafka`.\n\n2. **`interfaces/client-kafka-proxy.interface.ts` → `client/index.ts` → `client/client-kafka.ts` → `interfaces`**. The interface uses `ClientProxy` only inside `Omit<ClientProxy<…>>`.\n\n3. **`interfaces/client-metadata.interface.ts` → `client/index.ts` → all client files → `interfaces`**. The interface uses `ClientProxy` only in `Type<ClientProxy>`. Because `client/index.ts` re-exports every client, this edge places all of `client-grpc`, `client-kafka`, `client-mqtt`, `client-nats`, `client-redis`, `client-rmq` and `client-tcp` in the type-level cycle. `client-proxy-factory.ts` is also reachable through this graph.\n\nThe cycles would become runtime cycles if the import elision stopped applying. That could happen with `verbatimModuleSyntax`, `isolatedModules` without `import type`, or `importsNotUsedAsValues: \"preserve\"`, or if a decorator were added to one of these classes. To confirm the result on the real build, run `npx madge --circular --extensions ts packages/microservices` on the compiled output, or check the emitted JavaScript for `require('../client')` or `require('../helpers')` inside the interface and assigner modules.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 35388,
+              "costUsd": 0.010787825,
+              "inputTokens": 18,
+              "outputTokens": 4447,
+              "cacheCreationTokens": 33838,
+              "cacheReadTokens": 270355,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Bash": 4,
+                "Grep": 2
+              },
+              "correct": false,
+              "missing": [
+                "client-grpc.ts",
+                "client-mqtt.ts",
+                "client-nats.ts",
+                "client-redis.ts",
+                "client-rmq.ts",
+                "client-tcp.ts",
+                "client-proxy.ts"
+              ]
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 100910,
+            "medianOutputTokens": 993,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 20914,
+            "medianCostUsd": 0.0035,
+            "spread": {
+              "inputTokens": {
+                "min": 100563,
+                "max": 101331
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 18829,
+                "max": 52093
+              },
+              "costUsd": {
+                "min": 0.0035,
+                "max": 0.0036
+              }
+            },
+            "totalCostUsd": 0.0105,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "find_import_cycles": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "All seven concrete client implementations in `packages/microservices/client` are in one runtime import cycle:\n\n- `client-grpc.ts`\n- `client-kafka.ts`\n- `client-mqtt.ts`\n- `client-nats.ts`\n- `client-redis.ts`\n- `client-rmq.ts`\n- `client-tcp.ts`\n\nThe cycle also includes `client-proxy.ts`, `client-proxy-factory.ts`, and `index.ts`. The reported group has 29 files in total, and 10 of them are in this directory.\n\nThe shortest loop it reports goes through the interfaces barrel:\n\n`client-grpc.ts` → `interfaces/index.ts` → `interfaces/client-kafka-proxy.interface.ts` → `client/index.ts` → `client-grpc.ts`\n\nIt is not type-only (`typeOnly: false`), so the imports are not erased at runtime. This is from the concentrate code graph; I did not open the files to confirm the import statements.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 20914,
+              "costUsd": 0.0035140899999999997,
+              "inputTokens": 6,
+              "outputTokens": 993,
+              "cacheCreationTokens": 10546,
+              "cacheReadTokens": 90779,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_import_cycles": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Seven concrete client implementations are in a runtime import cycle:\n\n- `client-grpc.ts`\n- `client-kafka.ts`\n- `client-mqtt.ts`\n- `client-nats.ts`\n- `client-redis.ts`\n- `client-rmq.ts`\n- `client-tcp.ts`\n\nThe code graph reports one cycle group, with 29 files in total. Ten of them are in `packages/microservices/client`. Besides the seven implementations, the group also includes `client-proxy.ts` (the base class), `client-proxy-factory.ts`, and `index.ts`, the barrel file. The rest of the group lives in other packages, such as `packages/microservices/interfaces`. The cycle is not type-only, so it survives at runtime.\n\nThe shortest example loop is:\n\n`client-grpc.ts` → `interfaces/index.ts` → `interfaces/client-kafka-proxy.interface.ts` → `client/index.ts` → `client-grpc.ts`\n\nThis comes from the graph tool, and I did not check each import by reading the source. The likely cause is that `client/index.ts` re-exports the implementations and the interfaces barrel imports back into the client code. Importing the types from `interfaces` directly instead of through the barrels would probably break the cycle, but I have not tested that.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 52093,
+              "costUsd": 0.00356864,
+              "inputTokens": 6,
+              "outputTokens": 1263,
+              "cacheCreationTokens": 10163,
+              "cacheReadTokens": 90394,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_import_cycles": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "All seven concrete client implementations are in one runtime import cycle. The cycle is a single strongly connected group of 29 files, and 10 of its members are in `packages/microservices/client`:\n\n- `client-grpc.ts`\n- `client-kafka.ts`\n- `client-mqtt.ts`\n- `client-nats.ts`\n- `client-redis.ts`\n- `client-rmq.ts`\n- `client-tcp.ts`\n\nThe other three members are the shared plumbing: `client-proxy.ts`, `client-proxy-factory.ts`, and the `index.ts` barrel.\n\nThe shortest example loop goes through gRPC: `client-grpc.ts` → `interfaces/index.ts` → `interfaces/client-kafka-proxy.interface.ts` → `client/index.ts` → `client-grpc.ts`. The tool says every member reaches the others through the group, so the loop is not limited to gRPC. The cycle is not type-only, so it survives compilation.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 18829,
+              "costUsd": 0.00345979,
+              "inputTokens": 6,
+              "outputTokens": 973,
+              "cacheCreationTokens": 10335,
+              "cacheReadTokens": 90569,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_import_cycles": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "nest-sample-models",
+      "sample": "internet-nest",
+      "category": "data",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 267436,
+            "medianOutputTokens": 4208,
+            "medianToolCalls": 16,
+            "medianTurns": 17,
+            "medianDurationMs": 27008,
+            "medianCostUsd": 0.0092,
+            "spread": {
+              "inputTokens": {
+                "min": 228139,
+                "max": 272134
+              },
+              "toolCalls": {
+                "min": 10,
+                "max": 16
+              },
+              "durationMs": {
+                "min": 20900,
+                "max": 36681
+              },
+              "costUsd": {
+                "min": 0.0073,
+                "max": 0.0099
+              }
+            },
+            "totalCostUsd": 0.0264,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Six database models are declared across `sample/`, in four ORMs or ODMs:\n\n| Sample | Model | ORM / ODM | Store | Declared in |\n|---|---|---|---|---|\n| 05-sql-typeorm | `User` (id, firstName, lastName, isActive) | TypeORM | SQL | `sample/05-sql-typeorm/src/users/user.entity.ts` |\n| 06-mongoose | `Cat` (name, age, breed) | Mongoose via `@nestjs/mongoose` | MongoDB | `sample/06-mongoose/src/cats/schemas/cat.schema.ts` |\n| 07-sequelize | `User` (firstName, lastName, isActive) | Sequelize via `sequelize-typescript` | SQL | `sample/07-sequelize/src/users/models/user.model.ts` |\n| 13-mongo-typeorm | `Photo` (id, name, description, filename, isPublished) | TypeORM with `ObjectIdColumn` | MongoDB | `sample/13-mongo-typeorm/src/photo/photo.entity.ts` |\n| 14-mongoose-base | `Cat` (name, age, breed) | Mongoose, raw `new mongoose.Schema` | MongoDB | `sample/14-mongoose-base/src/cats/schemas/cat.schema.ts` |\n| 22-graphql-prisma | `Post` (id, title, text, isPublished) | Prisma | SQLite | `sample/22-graphql-prisma/prisma/schema.prisma` |\n\nSeveral files named like entities or models are not database models, so I left them out:\n- `sample/11-swagger/src/cats/entities/cat.entity.ts` is a plain `Cat` class for Swagger docs.\n- `sample/21-serializer/src/entities/user.entity.ts` and `role.entity.ts` are plain serializer classes.\n- `sample/30-event-emitter/src/orders/entities/order.entity.ts` is a plain `Order` class with no ORM decorators.\n- The `models/*.model.ts` files under `31-*`, `32-*` and `33-*` and `23-graphql-code-first` are GraphQL object types.\n\nThe grep covered `@Entity`, `@Schema`, `mongoose.model`, `sequelize.define`, `extends Model`, Drizzle's table builders, and `@Table`/`@Collection`. I did not check for MikroORM, Knex, or Objection models beyond those patterns.",
+              "isError": false,
+              "turns": 19,
+              "durationMs": 27008,
+              "costUsd": 0.009930000000000001,
+              "inputTokens": 14,
+              "outputTokens": 4208,
+              "cacheCreationTokens": 26860,
+              "cacheReadTokens": 245260,
+              "toolCalls": 16,
+              "toolsByName": {
+                "Bash": 2,
+                "Glob": 3,
+                "Grep": 1,
+                "Read": 10
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Eight database models are declared across the samples in `sample/`: six entities/schemas and two Prisma-style models. Here they are, with their ORM or ODM:\n\n| Sample | Model / entity | ORM / ODM | Fields |\n|---|---|---|---|\n| `05-sql-typeorm` | `User` (`src/users/user.entity.ts`) | TypeORM (`@Entity`) | `id` (generated), `firstName`, `lastName`, `isActive` (default `true`) |\n| `06-mongoose` | `Cat` (`src/cats/schemas/cat.schema.ts`) | Mongoose via `@nestjs/mongoose` (`@Schema`/`@Prop`) | `name`, `age`, `breed` |\n| `07-sequelize` | `User` (`src/users/models/user.model.ts`) | Sequelize via `sequelize-typescript` (`@Table`/`@Column`) | `firstName`, `lastName`, `isActive` (default `true`) |\n| `13-mongo-typeorm` | `Photo` (`src/photo/photo.entity.ts`) | TypeORM with MongoDB (`@Entity`, `@ObjectIdColumn`) | `id` (ObjectId), `name`, `description`, `filename`, `isPublished` |\n| `14-mongoose-base` | `Cat` (`src/cats/schemas/cat.schema.ts`) | Plain Mongoose (`new mongoose.Schema`, registered as `'Cat'` in `cats.providers.ts`) | `name`, `age`, `breed` |\n| `22-graphql-prisma` | `Post` (`prisma/schema.prisma`) | Prisma, SQLite datasource | `id` (uuid), `title`, `text`, `isPublished` (default `false`) |\n\nNotes:\n- `05` and `07` both model a `User` with almost the same fields, but they use different ORMs.\n- `06` and `14` both model a `Cat` with the same fields, but `06` uses the Nest decorator approach and `14` uses a raw Mongoose schema.\n- I left out the `@ObjectType` classes in `23-graphql-code-first`, `31`/`32` federation (`User`, `Post`), and `33-graphql-mercurius` (`Recipe`). Those are GraphQL schema types, not database models.",
+              "isError": false,
+              "turns": 12,
+              "durationMs": 20900,
+              "costUsd": 0.00726418,
+              "inputTokens": 12,
+              "outputTokens": 3006,
+              "cacheCreationTokens": 18309,
+              "cacheReadTokens": 209818,
+              "toolCalls": 10,
+              "toolsByName": {
+                "Bash": 2,
+                "Grep": 2,
+                "Read": 6
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Six database models are declared across `sample/`, in six different samples:\n\n| Sample | Model | ORM / database | Fields |\n|---|---|---|---|\n| `05-sql-typeorm` | `User` | TypeORM (`@Entity`), SQL | `id` (generated), `firstName`, `lastName`, `isActive` (default `true`) |\n| `06-mongoose` | `Cat` | Mongoose via `@nestjs/mongoose` (`@Schema`/`@Prop`, `SchemaFactory`), MongoDB | `name`, `age`, `breed` |\n| `07-sequelize` | `User` | Sequelize via `sequelize-typescript` (`@Table`, extends `Model`), SQL | `firstName`, `lastName`, `isActive` (default `true`) |\n| `13-mongo-typeorm` | `Photo` | TypeORM (`@Entity`) with `@ObjectIdColumn`, MongoDB | `id` (ObjectId), `name`, `description`, `filename`, `isPublished` |\n| `14-mongoose-base` | `Cat` | Raw Mongoose `Schema`, registered with `mongoose.model('Cat', CatSchema)` in `cats.providers.ts`, MongoDB | `name`, `age`, `breed` |\n| `22-graphql-prisma` | `Post` | Prisma (`schema.prisma`), SQLite | `id` (uuid string), `title`, `text`, `isPublished` (default `false`) |\n\nTwo `User` models and two `Cat` models exist, but they come from different ORMs, so each is listed separately.\n\nThe `@ObjectType` classes in `23-graphql-code-first`, `31`/`32` (federation) and `33-graphql-mercurius` (`Recipe`, `User`, `Post`) are GraphQL types, not database entities, so I left them out. The `User` in `32` is one example I read, and the others matched the same `@ObjectType` pattern. Samples that don't use an ORM, such as `01-cats-app`, are not included.",
+              "isError": false,
+              "turns": 17,
+              "durationMs": 36681,
+              "costUsd": 0.00917808,
+              "inputTokens": 14,
+              "outputTokens": 5563,
+              "cacheCreationTokens": 19584,
+              "cacheReadTokens": 247838,
+              "toolCalls": 16,
+              "toolsByName": {
+                "Bash": 4,
+                "Grep": 3,
+                "Read": 9
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 306871,
+            "medianOutputTokens": 3377,
+            "medianToolCalls": 5,
+            "medianTurns": 9,
+            "medianDurationMs": 45194,
+            "medianCostUsd": 0.0088,
+            "spread": {
+              "inputTokens": {
+                "min": 213894,
+                "max": 372446
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 9
+              },
+              "durationMs": {
+                "min": 34994,
+                "max": 65036
+              },
+              "costUsd": {
+                "min": 0.0065,
+                "max": 0.0094
+              }
+            },
+            "totalCostUsd": 0.0246,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Six samples under `internet-nest/sample/` declare persistence models. They declare seven models in total, using four ORMs/ODMs.\n\n| Sample | ORM / library | Model(s) | Declared in | Database |\n|---|---|---|---|---|\n| `05-sql-typeorm` | TypeORM | `User` (`id`, `firstName`, `lastName`, `isActive`) | `src/users/user.entity.ts` | MySQL (`type: 'mysql'`, `127.0.0.1`, db `test`) |\n| `06-mongoose` | Mongoose via `@nestjs/mongoose` | `Cat` (`name`, `age`, `breed`) | `src/cats/schemas/cat.schema.ts` | MongoDB (`mongodb://localhost:27017/test`) |\n| `07-sequelize` | Sequelize via `sequelize-typescript` | `User` (`firstName`, `lastName`, `isActive`) | `src/users/models/user.model.ts` | MySQL (`dialect: 'mysql'`, `127.0.0.1`, db `test`) |\n| `13-mongo-typeorm` | TypeORM (MongoDB driver) | `Photo` (`id`, `name`, `description`, `filename`, `isPublished`) | `src/photo/photo.entity.ts` | MongoDB, inferred from `ObjectIdColumn`; I did not read its connection config |\n| `14-mongoose-base` | Mongoose (plain, no Nest wrapper) | `Cat` (`name`, `age`, `breed`) | `src/cats/schemas/cat.schema.ts` | MongoDB (`mongodb://localhost/test`) |\n| `22-graphql-prisma` | Prisma | `Post` (`id` uuid, `title`, `text`, `isPublished`) | `prisma/schema.prisma` | SQLite |\n\nNotes:\n- `05` and `07` both define a `User` model with the same shape, but they are separate samples with separate ORMs.\n- `06` and `14` both define a `Cat` model. `06` uses the Nest decorator approach and `14` uses the raw Mongoose schema API.\n- The GraphQL `@ObjectType` classes (`Recipe` in `23` and `33`, and `User`/`Post` in `31` and `32`) are API output types, not database models. I left them out of the table.\n- I searched for `@Entity`, `@Table`, `@Schema`, `mongoose.model`, `sequelize.define`, `prisma` schema models, and `pgTable`-style declarations. The `sample/` tree has no other persistence models.",
+              "isError": false,
+              "turns": 11,
+              "durationMs": 65036,
+              "costUsd": 0.00940523,
+              "inputTokens": 20,
+              "outputTokens": 4247,
+              "cacheCreationTokens": 18713,
+              "cacheReadTokens": 353713,
+              "toolCalls": 9,
+              "toolsByName": {
+                "Bash": 5,
+                "Grep": 4
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Across `sample/`, there are 7 database models in 5 samples, using 4 ORMs (TypeORM, Mongoose, Sequelize, Prisma):\n\n| Sample | Model / entity | ORM | Storage | Declared in | Fields |\n|---|---|---|---|---|---|\n| 05-sql-typeorm | `User` | TypeORM (`@Entity`) | SQL | `05-sql-typeorm/src/users/user.entity.ts` | `id` (generated), `firstName`, `lastName`, `isActive` (default `true`) |\n| 06-mongoose | `Cat` | Mongoose (`@nestjs/mongoose` `@Schema`) | MongoDB | `06-mongoose/src/cats/schemas/cat.schema.ts` | `name`, `age`, `breed` |\n| 07-sequelize | `User` | Sequelize (`sequelize-typescript` `@Table`) | SQL | `07-sequelize/src/users/models/user.model.ts` | `firstName`, `lastName`, `isActive` (default `true`) |\n| 13-mongo-typeorm | `Photo` | TypeORM (`@Entity`, `ObjectIdColumn`) | MongoDB | `13-mongo-typeorm/src/photo/photo.entity.ts` | `id` (ObjectId), `name`, `description`, `filename`, `isPublished` |\n| 14-mongoose-base | `Cat` | Mongoose (raw `new mongoose.Schema`, registered as `mongoose.model('Cat', …)`) | MongoDB | `14-mongoose-base/src/cats/schemas/cat.schema.ts` and `cats.providers.ts` | `name`, `age`, `breed` |\n| 22-graphql-prisma | `Post` | Prisma (`schema.prisma`) | SQLite | `22-graphql-prisma/prisma/schema.prisma` | `id` (uuid), `title`, `text`, `isPublished` (default `false`) |\n\nNotes:\n- The `Cat` model appears twice: 06 uses the decorator-based schema and 14 uses a plain Mongoose schema with a provider.\n- Samples 05, 06, 07, 13 and 14 register their models with their Nest modules (`TypeOrmModule.forFeature`, `MongooseModule.forFeature`, `SequelizeModule.forFeature`). Sample 22 uses a `PrismaClient` subclass in `prisma/prisma.service.ts`.\n- I searched for ORM decorators, `forFeature`, `PrismaClient`, and Mongoose/Sequelize schema calls. I did not check GraphQL object types (e.g. in 23, 31, 32) because they are API types, not database models.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 34994,
+              "costUsd": 0.00645204,
+              "inputTokens": 12,
+              "outputTokens": 3377,
+              "cacheCreationTokens": 13808,
+              "cacheReadTokens": 200074,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Bash": 4,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Six samples declare database models or entities across four ORMs and one schema language. Each is a single table or collection, with two fields or fewer per entity beyond the id.\n\n| Sample | ORM / library | Declaration | Model / entity | Fields |\n|---|---|---|---|---|\n| `05-sql-typeorm` | TypeORM (SQL) | `src/users/user.entity.ts`, `@Entity()` class | `User` | `id` (generated), `firstName`, `lastName`, `isActive` |\n| `06-mongoose` | Mongoose via `@nestjs/mongoose` | `src/cats/schemas/cat.schema.ts`, `@Schema()` class | `Cat` | `name`, `age`, `breed` |\n| `07-sequelize` | Sequelize via `sequelize-typescript` | `src/users/models/user.model.ts`, `@Table` class | `User` | `firstName`, `lastName`, `isActive` (default `true`) |\n| `13-mongo-typeorm` | TypeORM (MongoDB) | `src/photo/photo.entity.ts`, `@Entity()` class | `Photo` | `id` (ObjectId), `name`, `description`, `filename`, `isPublished` |\n| `14-mongoose-base` | Mongoose (raw schema) | `src/cats/schemas/cat.schema.ts`, `new mongoose.Schema({...})` | `Cat` (registered as `'Cat'` in `cats.providers.ts`) | `name`, `age`, `breed` |\n| `22-graphql-prisma` | Prisma (SQLite) | `prisma/schema.prisma`, `model Post` | `Post` | `id` (uuid), `title`, `text`, `isPublished` |\n\nNotes:\n- `14-mongoose-base` has a `Cat` document interface in `src/cats/interfaces/cat.interface.ts`. It is a TypeScript type, not a second model.\n- `21-serializer` has `UserEntity` and `RoleEntity`, but these are plain classes with no ORM decorators or schema. I did not count them as database entities.\n- `05` and `13` share the `User`/`Photo` naming style from the TypeORM docs, but they are separate apps with separate databases.\n- The samples that use Mongoose or Sequelize with a `ModelDefinition`-style `forFeature` or `init` call (for example, `06-mongoose/src/cats/cats.module.ts`) register the models above. I did not read every module, so I can't confirm each registration path.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 45194,
+              "costUsd": 0.00875135,
+              "inputTokens": 18,
+              "outputTokens": 2999,
+              "cacheCreationTokens": 22008,
+              "cacheReadTokens": 284845,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Bash": 3,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "nest-sample-delete-routes",
+      "sample": "internet-nest",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 181667,
+            "medianOutputTokens": 2195,
+            "medianToolCalls": 8,
+            "medianTurns": 9,
+            "medianDurationMs": 20350,
+            "medianCostUsd": 0.006,
+            "spread": {
+              "inputTokens": {
+                "min": 140057,
+                "max": 181676
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 10
+              },
+              "durationMs": {
+                "min": 14229,
+                "max": 22265
+              },
+              "costUsd": {
+                "min": 0.0045,
+                "max": 0.006
+              }
+            },
+            "totalCostUsd": 0.0164,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Three HTTP routes under `sample/` handle DELETE, all as `@Delete(':id')` handlers on NestJS controllers:\n\n| Sample | Handler | Method and full path | Source |\n|---|---|---|---|\n| `05-sql-typeorm` | `UsersController.remove` | `DELETE /users/:id` | `sample/05-sql-typeorm/src/users/users.controller.ts:33` |\n| `06-mongoose` | `CatsController.delete` | `DELETE /cats/:id` | `sample/06-mongoose/src/cats/cats.controller.ts:31` |\n| `07-sequelize` | `UsersController.remove` | `DELETE /users/:id` | `sample/07-sequelize/src/users/users.controller.ts:25` |\n\nNone of these samples sets a global prefix or versioning, so the paths are exactly as shown. `24-serve-static` is the only sample with `setGlobalPrefix`, and it has no DELETE route.\n\nThe `22-graphql-prisma` sample has a `delete` mutation in its resolver, but that is a GraphQL operation served over POST, not an HTTP DELETE route, so I left it out.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 20350,
+              "costUsd": 0.0059773000000000005,
+              "inputTokens": 10,
+              "outputTokens": 2195,
+              "cacheCreationTokens": 16117,
+              "cacheReadTokens": 165540,
+              "toolCalls": 8,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 4,
+                "Read": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three sample apps define an HTTP DELETE route, each on a `:id` path:\n\n| Sample | Handler | Full path |\n|---|---|---|\n| `sample/05-sql-typeorm` | `UsersController.remove()` in `src/users/users.controller.ts:33-36` | `DELETE /users/:id` |\n| `sample/06-mongoose` | `CatsController.delete()` in `src/cats/cats.controller.ts:31-34` | `DELETE /cats/:id` |\n| `sample/07-sequelize` | `UsersController.remove()` in `src/users/users.controller.ts:25-28` | `DELETE /users/:id` |\n\nNone of these three samples sets a global prefix or versioning, so the controller path is the full path. `sample/05-sql-typeorm/test/users/users.e2e-spec.ts:67-68` confirms `DELETE /users/1` returns 200.\n\nI searched every sample for `@Delete`, `RequestMethod.DELETE`, `@All`, and `method: 'DELETE'`, and found no other HTTP DELETE handlers. `sample/22-graphql-prisma` has a delete mutation, but that is GraphQL, not an HTTP DELETE route.",
+              "isError": false,
+              "turns": 11,
+              "durationMs": 22265,
+              "costUsd": 0.0059602200000000004,
+              "inputTokens": 10,
+              "outputTokens": 2861,
+              "cacheCreationTokens": 14274,
+              "cacheReadTokens": 167392,
+              "toolCalls": 10,
+              "toolsByName": {
+                "Bash": 2,
+                "Grep": 5,
+                "Read": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three HTTP routes under `sample/` handle DELETE, all with the `:id` parameter:\n\n| Sample | Handler | Full route |\n|---|---|---|\n| `05-sql-typeorm` | `sample/05-sql-typeorm/src/users/users.controller.ts:33` | `DELETE /users/:id` |\n| `06-mongoose` | `sample/06-mongoose/src/cats/cats.controller.ts:31` | `DELETE /cats/:id` |\n| `07-sequelize` | `sample/07-sequelize/src/users/users.controller.ts:25` | `DELETE /users/:id` |\n\nThe full paths come from each controller's `@Controller(...)` prefix plus the `@Delete(':id')` method path. I did not check for a global prefix in each sample's `main.ts`. The `05-sql-typeorm` e2e test calls `DELETE /users/1` directly, which supports the path shown there.\n\n`sample/22-graphql-prisma` also has a delete operation, but it is a GraphQL resolver, not an HTTP DELETE route, so I left it out.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14229,
+              "costUsd": 0.00445318,
+              "inputTokens": 8,
+              "outputTokens": 1722,
+              "cacheCreationTokens": 11531,
+              "cacheReadTokens": 128518,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 141939,
+            "medianOutputTokens": 2055,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 20115,
+            "medianCostUsd": 0.0052,
+            "spread": {
+              "inputTokens": {
+                "min": 141321,
+                "max": 212806
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 7
+              },
+              "durationMs": {
+                "min": 18539,
+                "max": 27439
+              },
+              "costUsd": {
+                "min": 0.005,
+                "max": 0.0057
+              }
+            },
+            "totalCostUsd": 0.0158,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Three HTTP routes under `sample/` handle DELETE:\n\n| Sample | Method and full path | Handler |\n|---|---|---|\n| `sample/05-sql-typeorm` | `DELETE /users/:id` | `sample/05-sql-typeorm/src/users/users.controller.ts:33` |\n| `sample/06-mongoose` | `DELETE /cats/:id` | `sample/06-mongoose/src/cats/cats.controller.ts:31` |\n| `sample/07-sequelize` | `DELETE /users/:id` | `sample/07-sequelize/src/users/users.controller.ts:25` |\n\nNone of these controllers has a global prefix, so the paths above are the full paths. The only `setGlobalPrefix` under `sample/` is in `sample/24-serve-static`, which has no DELETE route.\n\n`sample/22-graphql-prisma` also has a delete operation (`posts.resolvers.ts:36`), but it is a GraphQL mutation served through the single GraphQL endpoint, not a DELETE HTTP route, so I left it out.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 18539,
+              "costUsd": 0.005185220000000001,
+              "inputTokens": 8,
+              "outputTokens": 1523,
+              "cacheCreationTokens": 15841,
+              "cacheReadTokens": 125472,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three HTTP routes under `sample/` handle DELETE. Each is `@Delete(':id')` on a controller mounted at `users` or `cats`, and none of these samples sets a global prefix:\n\n| Sample | Controller | Full path |\n|---|---|---|\n| `sample/05-sql-typeorm` | `src/users/users.controller.ts:33` | `DELETE /users/:id` |\n| `sample/06-mongoose` | `src/cats/cats.controller.ts:31` | `DELETE /cats/:id` |\n| `sample/07-sequelize` | `src/users/users.controller.ts:25` | `DELETE /users/:id` |\n\n`sample/05-sql-typeorm` has an e2e test that confirms the first route: `DELETE /users/1` returns 200.\n\n`sample/22-graphql-prisma` also has a delete, but it is a GraphQL resolver (`posts.resolvers.ts:36`), so it is not an HTTP DELETE route. It is served through the GraphQL endpoint.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 20115,
+              "costUsd": 0.00497195,
+              "inputTokens": 8,
+              "outputTokens": 2055,
+              "cacheCreationTokens": 13286,
+              "cacheReadTokens": 128645,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 5,
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three sample routes handle DELETE, all of them `DELETE /:id` under a controller prefix with no global prefix or versioning:\n\n1. **`sample/05-sql-typeorm`**: `DELETE /users/:id`\n   - Handler: `sample/05-sql-typeorm/src/users/users.controller.ts:33` (`@Delete(':id')` on `@Controller('users')`, line 14)\n   - The e2e test at `sample/05-sql-typeorm/test/users/users.e2e-spec.ts:68` calls `delete('/users/1')` and expects 200.\n\n2. **`sample/07-sequelize`**: `DELETE /users/:id`\n   - Handler: `sample/07-sequelize/src/users/users.controller.ts:25` (`@Delete(':id')` on `@Controller('users')`, line 6)\n\n3. **`sample/06-mongoose`**: `DELETE /cats/:id`\n   - Handler: `sample/06-mongoose/src/cats/cats.controller.ts:31` (`@Delete(':id')` on `@Controller('cats')`, line 7)\n\n`sample/22-graphql-prisma` also has a delete operation, but it is a GraphQL resolver, not an HTTP route, so I left it out.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 27439,
+              "costUsd": 0.005660050000000001,
+              "inputTokens": 12,
+              "outputTokens": 2259,
+              "cacheCreationTokens": 12639,
+              "cacheReadTokens": 200155,
+              "toolCalls": 7,
+              "toolsByName": {
+                "Grep": 6,
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "nest-sample-env",
+      "sample": "internet-nest",
+      "category": "env",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97917,
+            "medianOutputTokens": 1049,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 14806,
+            "medianCostUsd": 0.0031,
+            "spread": {
+              "inputTokens": {
+                "min": 65797,
+                "max": 204473
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 14044,
+                "max": 24642
+              },
+              "costUsd": {
+                "min": 0.0031,
+                "max": 0.0048
+              }
+            },
+            "totalCostUsd": 0.011,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Three samples read environment variables through `process.env`, five variables in total:\n\n| Sample | Variable(s) | Notes |\n|---|---|---|\n| `sample/36-hmr-esm/src/main.ts:11` | `PORT` | Falls back to `3000` via `??` |\n| `sample/25-dynamic-modules/src/config/config.service.ts:13` | `NODE_ENV` | Defaults to `'development'`; the value picks which `.env` file to load |\n| `sample/26-queues/src/app.module.ts:10-11` | `REDIS_HOST`, `REDIS_PORT` | Default to `localhost` and `6379`; the port is parsed with `parseInt` |\n\nI searched all of `sample/` for `process.env`, so this covers every direct read there. I did not check for bracket access like `process['env']`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 14044,
+              "costUsd": 0.0031235300000000002,
+              "inputTokens": 4,
+              "outputTokens": 1062,
+              "cacheCreationTokens": 10180,
+              "cacheReadTokens": 55613,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four `process.env` reads under `sample/`, in three samples:\n\n| Sample | File:line | Variable | Fallback |\n|---|---|---|---|\n| 25-dynamic-modules | `sample/25-dynamic-modules/src/config/config.service.ts:13` | `NODE_ENV` | `'development'` (used to build the `.env` filename) |\n| 26-queues | `sample/26-queues/src/app.module.ts:10` | `REDIS_HOST` | `'localhost'` |\n| 26-queues | `sample/26-queues/src/app.module.ts:11` | `REDIS_PORT` | `'6379'` (parsed with `parseInt`) |\n| 36-hmr-esm | `sample/36-hmr-esm/src/main.ts:11` | `PORT` | `3000` (via `??`) |\n\nSo the distinct variables are `NODE_ENV`, `REDIS_HOST`, `REDIS_PORT` and `PORT`. I also checked for bracket access (`process['env']`) and destructuring from `process`, and found none.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 14806,
+              "costUsd": 0.00312521,
+              "inputTokens": 6,
+              "outputTokens": 852,
+              "cacheCreationTokens": 9050,
+              "cacheReadTokens": 88861,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four environment variables are read through `process.env` under `sample/`, in three samples:\n\n| Variable | Default | File and line |\n|---|---|---|\n| `NODE_ENV` | `'development'` | `sample/25-dynamic-modules/src/config/config.service.ts:13` |\n| `REDIS_HOST` | `'localhost'` | `sample/26-queues/src/app.module.ts:10` |\n| `REDIS_PORT` | `'6379'` (parsed with `parseInt`) | `sample/26-queues/src/app.module.ts:11` |\n| `PORT` | `3000` | `sample/36-hmr-esm/src/main.ts:11` |\n\nI searched for `process.env` in all forms, including bracket access, and found no destructuring or other indirect reads.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 24642,
+              "costUsd": 0.00476823,
+              "inputTokens": 12,
+              "outputTokens": 1049,
+              "cacheCreationTokens": 11568,
+              "cacheReadTokens": 192893,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 134986,
+            "medianOutputTokens": 1114,
+            "medianToolCalls": 2,
+            "medianTurns": 4,
+            "medianDurationMs": 14189,
+            "medianCostUsd": 0.0039,
+            "spread": {
+              "inputTokens": {
+                "min": 100897,
+                "max": 136300
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 12717,
+                "max": 14753
+              },
+              "costUsd": {
+                "min": 0.0036,
+                "max": 0.004
+              }
+            },
+            "totalCostUsd": 0.0115,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Under `sample/`, four environment variables are read through `process.env`, in three samples:\n\n| Variable | Sample | File |\n|---|---|---|\n| `NODE_ENV` | `25-dynamic-modules` | `sample/25-dynamic-modules/src/config/config.service.ts:13` |\n| `REDIS_HOST` | `26-queues` | `sample/26-queues/src/app.module.ts:10` |\n| `REDIS_PORT` | `26-queues` | `sample/26-queues/src/app.module.ts:11` |\n| `PORT` | `36-hmr-esm` | `sample/36-hmr-esm/src/main.ts:11` |\n\nI searched for dot access and bracket access (`process.env['X']`), and for destructuring from `process.env`. The destructuring search found nothing under `sample/`. The other `process.env` reads in the repo (`NO_COLOR`, `NEST_DEBUG`, `RABBITMQ_*`) are in `packages/` and `scripts/`, outside `sample/`, so I left them out.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14189,
+              "costUsd": 0.0039927700000000005,
+              "inputTokens": 8,
+              "outputTokens": 1256,
+              "cacheCreationTokens": 10601,
+              "cacheReadTokens": 124377,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Under `sample/`, `process.env` is read in three samples, and only four lines in total:\n\n- **`sample/25-dynamic-modules/src/config/config.service.ts:13`**: `NODE_ENV` (defaults to `'development'`), used to pick the `.env` file name.\n- **`sample/26-queues/src/app.module.ts:10-11`**: `REDIS_HOST` (defaults to `'localhost'`) and `REDIS_PORT` (defaults to `'6379'`).\n- **`sample/36-hmr-esm/src/main.ts:11`**: `PORT` (defaults to `3000`).\n\nThis search only matched the literal text `process.env`. It would not catch bracket access like `process['env']`, though I didn't see any of that in the results.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14753,
+              "costUsd": 0.00361024,
+              "inputTokens": 6,
+              "outputTokens": 996,
+              "cacheCreationTokens": 11067,
+              "cacheReadTokens": 89824,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Under `sample/`, four environment variables are read through `process.env`, across three samples:\n\n| Variable | Default | Sample | File:line |\n|---|---|---|---|\n| `PORT` | `3000` | 36-hmr-esm | `sample/36-hmr-esm/src/main.ts:11` |\n| `NODE_ENV` | `'development'` | 25-dynamic-modules | `sample/25-dynamic-modules/src/config/config.service.ts:13` |\n| `REDIS_HOST` | `'localhost'` | 26-queues | `sample/26-queues/src/app.module.ts:10` |\n| `REDIS_PORT` | `'6379'` | 26-queues | `sample/26-queues/src/app.module.ts:11` |\n\n- `NODE_ENV` selects the env file name (`<NODE_ENV>.env`) to load.\n- `REDIS_PORT` is passed through `parseInt`.\n\nI searched the whole `sample/` tree for `process.env`, `process[...]`, and destructuring from `process`. The `NEST_DEBUG`, `NO_COLOR`, and `RABBITMQ_*` reads are outside `sample/` (in `packages/` and `scripts/`), so I left them out.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12717,
+              "costUsd": 0.003946120000000001,
+              "inputTokens": 8,
+              "outputTokens": 1114,
+              "cacheCreationTokens": 10660,
+              "cacheReadTokens": 125632,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
