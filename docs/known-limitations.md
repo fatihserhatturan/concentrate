@@ -115,8 +115,9 @@ tools.
 - Found by the accuracy report ([accuracy.md](accuracy.md)), unresolved today:
   - `new X()` of a class with no constructor in its chain (calls resolve to
     functions, so there is nothing to point at);
-  - calls inside module-level blocks (`if (!module.parent) { app.listen() }`),
-    which record no `Call` node;
+  - calls inside module-level loops (`for (const x of xs) { register(x) }`),
+    which record no `Call` node; top-level `if` / `else`, `try` / `catch` /
+    `finally` and bare blocks are module-level code;
   - calls on a parameter typed as a class (`(client: HttpClient) =>
     client.x()`).
 - `x.method()` resolves when x is a module-level variable initialized with

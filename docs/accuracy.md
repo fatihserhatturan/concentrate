@@ -136,7 +136,7 @@ Rules:
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| express | 28 | 24 | 0 | 4 | 100.0% | 85.7% |
+| express | 28 | 28 | 0 | 0 | 100.0% | 100.0% |
 | fastify | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
 | internet-angular-realworld | 21 | 21 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
@@ -144,7 +144,7 @@ Rules:
 | internet-vue-realworld | 14 | 14 | 0 | 0 | 100.0% | 100.0% |
 | ky | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | nestjs-starter | 2 | 2 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 125 | 121 | 0 | 4 | **100.0%** | **96.8%** |
+| **all** | 125 | 125 | 0 | 0 | **100.0%** | **100.0%** |
 
 Labels counts calls with a project target. Another 433 call sites are labeled
 `null`, and 35 are `dynamic`.
@@ -228,14 +228,14 @@ default-exported routers (`export default Router().use('/api', api)`) and
 `app.use('/api/v1', require('./api_v1'))` (#44). Recall is where the gaps
 are, and they cluster:
 
-- **Calls inside module-level blocks (express).** Express's `app` gets its
-  methods from `lib/application.js` through `merge-descriptors`, and since
-  #146 `app.set` / `app.use` / `app.listen` resolve there through the
-  `createApplication` factory. The four left are calls inside a module-level
-  `if (!module.parent) { … }` block, which records no `Call` node.
-  (Default imports, #45; constructors and static methods, #46; and
-  module-level calls, `require('./x')(...)` and `module.exports = …`
-  defaults, #47, resolve too.)
+- **Objects assembled at runtime (express).** Every express call resolves.
+  Express's `app` gets its methods from `lib/application.js` through
+  `merge-descriptors`; since #146 `app.set` / `app.use` / `app.listen`
+  resolve there through the `createApplication` factory, including the calls
+  inside a module-level `if (!module.parent) { … }` block. (Default imports,
+  #45; constructors and static methods, #46; and module-level calls,
+  `require('./x')(...)` and `module.exports = …` defaults, #47, resolve
+  too.)
 
 - **Imported instances (Vue sample).** Every Vue call resolves. The last
   three were calls on an instance created in another module and imported:
