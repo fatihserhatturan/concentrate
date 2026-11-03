@@ -118,7 +118,7 @@ Rules:
   and both member sets match, so a missed or extra member is an FP and an
   FN.
 
-## Results (2026-11-03, schema 63)
+## Results (2026-11-03, schema 64)
 
 ### Routes
 
@@ -191,7 +191,7 @@ Labels counts calls with a project target. Another 433 call sites are labeled
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| internet-realworld-fullstack | 32 | 31 | 0 | 1 | 100.0% | 96.9% |
+| internet-realworld-fullstack | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
 
 ### Stores
 
@@ -260,12 +260,12 @@ are, and they cluster:
   is found, including the profile routes lazy-loaded with `loadChildren`, and
   calls on constructor-injected services resolve to the service methods.
 
-- **SWR keys in local variables.** The one missed request is
-  `components/article/ArticleList.tsx`, which passes `useSWR` a local
-  `fetchURL` that a `switch` reassigns; a hook key is only read when it is a
-  string or template. Every other frontend call links to its route, through
+- **Requests.** Every labeled frontend call links to its route, through
   `SERVER_BASE_URL` template strings, `axios` calls in `lib/api/` and SWR
-  keys in components and pages.
+  keys in components and pages. `components/article/ArticleList.tsx` passes
+  `useSWR` a local `fetchURL` that a `switch` reassigns; since #146 the call
+  is linked to both routes it can request, `GET /api/articles` and
+  `GET /api/articles/feed`.
 
 Every labeled data access is found since #49 (the TypeORM `*By` and Mongoose
 `findById*` / `findOneAnd*` methods, and calls on a receiver split over

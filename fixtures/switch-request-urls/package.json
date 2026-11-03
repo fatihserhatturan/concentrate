@@ -1,0 +1,5 @@
+{
+  "name": "switch-request-urls",
+  "private": true,
+  "dependencies": { "express": "4.21.1", "swr": "2.2.5" }
+}

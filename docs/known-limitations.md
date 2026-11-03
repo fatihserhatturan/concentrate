@@ -715,8 +715,7 @@ Astro).
   query function fetching the key, object or v3 positional form) are a GET
   of their key when the key, or the first element of an array key, is a
   string or template starting with `/` or `http` (or a template starting
-  with a substitution); `cond ? key : null` is read too. A key held in a
-  local variable (`useSWR(fetchURL, fetcher)`) is not read. A query with its
+  with a substitution); `cond ? key : null` is read too. A query with its
   own `queryFn` is linked through the calls inside it; a `queryFn` or SWR
   fetcher that builds a different URL than the key (`fetch(API + key)`),
   `useSWRInfinite`, `useSWRMutation`, `useMutation` and
@@ -730,6 +729,15 @@ Astro).
   set in the constructor or read from another object
   (`${environment.apiUrl}`), and interceptors that rewrite the URL are not
   followed, so such calls stay unlinked.
+- A URL (or hook key) that is a variable declared in the calling function
+  (`let url = `/articles`; if (feed) url = `/articles/feed`;
+  useSWR(url, fetcher)`, or reassigned in a `switch`) takes every value the
+  function assigns to it: the first is `httpUrl`, the others
+  `httpUrlAlternatives` (a JSON list), and the call is linked to each route
+  one of them reaches. It is not read when the function declares the name
+  more than once, changes it with `+=`, assigns it in a nested function, or
+  assigns a value that is not a string or template URL; a `const` takes its
+  declaration only.
 - The method is the member name or a literal `method` option (GET without
   one); options held in a variable or spreading another object leave it
   unknown, and the call is not linked.
@@ -752,9 +760,9 @@ Astro).
   path; otherwise it stays as written and unlinked. Other origins and
   computed values (`API + "/posts"`, function calls) stay unresolved.
 - `REQUESTS` links a call to the `Route` its URL reaches when the resolved
-  URL is a path and exactly one route is the most specific match (literal
-  segments over parameters over catch-alls); `match` says `exact`,
-  `parameter` or `catch-all`. Unresolved or absolute URLs, partly dynamic
+  URL (each URL, for alternatives) is a path and exactly one route is the
+  most specific match (literal segments over parameters over catch-alls);
+  `match` says `exact`, `parameter` or `catch-all`. Unresolved or absolute URLs, partly dynamic
   segments (`/u/${id}.json`) and ties between routes stay unlinked. Query
   strings are ignored.
 - tRPC: procedures of a top-level `router({…})`, `t.router({…})` or

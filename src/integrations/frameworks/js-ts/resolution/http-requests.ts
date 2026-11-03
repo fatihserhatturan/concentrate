@@ -13,6 +13,8 @@ import { createVariableResolver } from "./variable-resolver.js";
 // the rest. Of the routes that match, the most specific one wins (literal
 // segments over parameters over catch-alls); a tie between routes leaves the
 // call unlinked, as does a URL with a partly dynamic segment (`/u/${id}.json`).
+// A call with `httpUrlAlternatives` (a URL variable assigned several values)
+// is matched once per URL and linked to each route one of them reaches.
 // `match` is `exact` when every segment matched a literal, `catch-all` when a
 // catch-all took the end, otherwise `parameter`. Routes of method ALL match
 // any method; middleware mounts (USE) match none. A tRPC call (`httpClient`
@@ -79,28 +81,30 @@ export const httpRequestsContributor: ISemanticContributor = {
 
     for (const call of graph.nodes) {
       if (call.properties.httpClient === "trpc") continue;
-      const request = requestOf(call);
-      if (!request) continue;
-      let best: { route: RouteEntry; score: number; match: string } | null = null;
-      let tied = false;
-      for (const route of routes) {
-        if (route.method !== request.method && route.method !== "ALL") continue;
-        const matched = matchSegments(request.segments, route.segments);
-        if (!matched) continue;
-        if (!best || matched.score > best.score) {
-          best = { route, ...matched };
-          tied = false;
-        } else if (matched.score === best.score) {
-          tied = true;
+      const linked = new Set<string>();
+      for (const request of requestsOf(call)) {
+        let best: { route: RouteEntry; score: number; match: string } | null = null;
+        let tied = false;
+        for (const route of routes) {
+          if (route.method !== request.method && route.method !== "ALL") continue;
+          const matched = matchSegments(request.segments, route.segments);
+          if (!matched) continue;
+          if (!best || matched.score > best.score) {
+            best = { route, ...matched };
+            tied = false;
+          } else if (matched.score === best.score) {
+            tied = true;
+          }
         }
+        if (!best || tied || linked.has(best.route.id)) continue;
+        linked.add(best.route.id);
+        added.push({
+          from: call.id,
+          to: best.route.id,
+          type: "REQUESTS",
+          properties: { method: request.method, url: request.url, match: best.match },
+        });
       }
-      if (!best || tied) continue;
-      added.push({
-        from: call.id,
-        to: best.route.id,
-        type: "REQUESTS",
-        properties: { method: request.method, url: request.url, match: best.match },
-      });
     }
     for (const rel of added) graph.addRelationship(rel);
   },
@@ -198,9 +202,17 @@ function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship
     }
     const written = call.properties.httpUrl;
     if (typeof written !== "string" || !fileId) continue;
-    const url = substitute(written, fileId);
-    const resolved = /^\$\{[^}]*\}$/u.test(url) && base === null ? null : localPath(joinBaseUrl(base, url), origins);
-    call.properties.httpUrl = usedEnv && !resolved?.startsWith("/") ? written : resolved;
+    const resolve = (text: string): string | null => {
+      usedEnv = false;
+      const url = substitute(text, fileId);
+      const resolved = /^\$\{[^}]*\}$/u.test(url) && base === null ? null : localPath(joinBaseUrl(base, url), origins);
+      return usedEnv && !resolved?.startsWith("/") ? text : resolved;
+    };
+    call.properties.httpUrl = resolve(written);
+    const alternatives = call.properties.httpUrlAlternatives;
+    if (typeof alternatives === "string") {
+      call.properties.httpUrlAlternatives = JSON.stringify((JSON.parse(alternatives) as string[]).map(resolve));
+    }
   }
 }
 
@@ -217,17 +229,30 @@ function localPath(url: string, origins: readonly string[]): string {
   return origin ? url.slice(origin.length) || "/" : url;
 }
 
-// The method and URL segments of an HTTP call: `null` for a dynamic segment.
-function requestOf(call: GraphNode): { method: string; url: string; segments: Array<string | null> } | null {
-  const { httpMethod, httpUrl } = call.properties;
-  if (call.label !== "Call" || typeof httpMethod !== "string" || typeof httpUrl !== "string" || !httpUrl.startsWith("/")) return null;
+type Request = { method: string; url: string; segments: Array<string | null> };
+
+// The requests of an HTTP call, one per URL (`httpUrl`, then each of
+// `httpUrlAlternatives`): its method and URL segments, `null` for a dynamic
+// segment.
+function requestsOf(call: GraphNode): Request[] {
+  const { httpMethod, httpUrl, httpUrlAlternatives } = call.properties;
+  if (call.label !== "Call" || typeof httpMethod !== "string") return [];
+  const alternatives = typeof httpUrlAlternatives === "string" ? JSON.parse(httpUrlAlternatives) as unknown[] : [];
+  return [httpUrl, ...alternatives].flatMap((url) => {
+    const request = typeof url === "string" ? requestOf(httpMethod, url) : null;
+    return request ? [request] : [];
+  });
+}
+
+function requestOf(method: string, url: string): Request | null {
+  if (!url.startsWith("/")) return null;
   const segments: Array<string | null> = [];
-  for (const segment of httpUrl.split("/").filter(Boolean)) {
+  for (const segment of url.split("/").filter(Boolean)) {
     if (/^\$\{[^}]*\}$/u.test(segment)) segments.push(null);
     else if (segment.includes("${")) return null;
     else segments.push(decodeSegment(segment));
   }
-  return { method: httpMethod, url: httpUrl, segments };
+  return { method, url, segments };
 }
 
 function routeSegments(fullPath: string): RouteSegment[] {

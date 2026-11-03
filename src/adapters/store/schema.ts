@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 63;
+export const SCHEMA_VERSION = 64;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -32,7 +32,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Interface", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
   { label: "TypeAlias", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
   { label: "Enum", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
-  { label: "Call", properties: { name: "STRING", expression: "STRING", callee: "STRING", receiver: "STRING", requireSource: "STRING", line: "INT64", columnNumber: "INT64", args: "STRING", httpClient: "STRING", httpReceiver: "STRING", httpMethod: "STRING", httpUrl: "STRING", storeAccess: "STRING", reduxAccess: "STRING" } },
+  { label: "Call", properties: { name: "STRING", expression: "STRING", callee: "STRING", receiver: "STRING", requireSource: "STRING", line: "INT64", columnNumber: "INT64", args: "STRING", httpClient: "STRING", httpReceiver: "STRING", httpMethod: "STRING", httpUrl: "STRING", httpUrlAlternatives: "STRING", storeAccess: "STRING", reduxAccess: "STRING" } },
   { label: "Field", properties: { name: "STRING", typeName: "STRING", isStatic: "BOOLEAN", isReadonly: "BOOLEAN", visibility: "STRING", line: "INT64", isInjected: "BOOLEAN" } },
   { label: "Variable", properties: { name: "STRING", kind: "STRING", isExported: "BOOLEAN", line: "INT64", stringValue: "STRING", stringTemplate: "STRING", httpClient: "STRING", httpBaseUrl: "STRING", trpcRouter: "BOOLEAN", trpcMounts: "STRING" } },
   { label: "Decorator", properties: { name: "STRING", expression: "STRING", line: "INT64", args: "STRING" } },

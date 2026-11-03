@@ -29,7 +29,11 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 // another object, leave it null. The URL is a string or template literal as
 // written, without its query string or hash, or `${NAME}` for a variable the
 // http-requests contributor may resolve to a string constant; anything else
-// (a call, a member expression) leaves it null.
+// (a call, a member expression) leaves it null. A URL that is a variable
+// declared in the calling function (`let url = `/articles`; if (feed) url =
+// `/articles/feed`; useSWR(url)`) takes every string or template the
+// function assigns to it: the declaration's value as `httpUrl`, the others
+// as `httpUrlAlternatives` (a JSON list), each linked to its route.
 //
 // Instances: `const api = axios.create({ baseURL })`, `ky.create` /
 // `ky.extend({ prefixUrl })` and `ofetch.create({ baseURL })` (also as the
@@ -79,12 +83,20 @@ export function applyHttpClientSemantics({ fileNodeId, rootNode, parsed }: JsTsP
     if (node.type === "call_expression") {
       const request = (angular ? angularRequest(node, angular) : null)
         ?? httpRequest(node, { fetch: !local("fetch"), axios, ky, ofetch, nuxt }) ?? keyRequest(node, swr, query) ?? instanceRequest(node, bindings);
+      // `fetch(url)` with url a variable of the calling function.
+      const variable = request?.url ? /^\$\{([A-Za-z_$][\w$]*)\}$/u.exec(request.url)?.[1] : undefined;
+      const urls = variable && !request!.alternatives ? localUrls(node, variable) : null;
+      if (request && urls) {
+        request.url = urls[0]!;
+        request.alternatives = urls.slice(1);
+      }
       const call = request ? callsByPosition.get(`${node.startPosition.row + 1}:${node.startPosition.column}`) : undefined;
       if (request && call) {
         if (request.client) call.properties.httpClient = request.client;
         if (request.receiver) call.properties.httpReceiver = request.receiver;
         call.properties.httpMethod = request.method;
         call.properties.httpUrl = request.url;
+        if (request.alternatives?.length) call.properties.httpUrlAlternatives = JSON.stringify(request.alternatives);
       }
     }
     for (const child of node.namedChildren) if (child) visit(child, angular);
@@ -167,9 +179,50 @@ function keyRequest(call: SyntaxNode, swr: ReadonlySet<string>, query: ReadonlyS
   } else {
     return null;
   }
+  if (key?.type === "identifier") {
+    const urls = localUrls(call, key.text);
+    return urls ? { client, method: "GET", url: urls[0]!, alternatives: urls.slice(1) } : null;
+  }
   const url = urlKey(key ?? undefined);
   return url ? { client, method: "GET", url } : null;
 }
+
+// The URLs a variable of the calling function is assigned: its declaration's
+// value, then every `name = value` in the function, as urlKey reads them.
+// Null when the function does not declare the name exactly once, when `+=`
+// or another compound assignment changes it, when a nested function assigns
+// it, or when a value is not a URL.
+function localUrls(call: SyntaxNode, name: string): string[] | null {
+  let scope = call.parent;
+  while (scope && !functionTypes.has(scope.type)) scope = scope.parent;
+  const body = scope?.childForFieldName("body");
+  if (!scope || !body) return null;
+  const declarators: SyntaxNode[] = [];
+  const assigned: SyntaxNode[] = [];
+  let unknown = false;
+  const walk = (node: SyntaxNode, nested: boolean) => {
+    const inner = nested || functionTypes.has(node.type);
+    if (!inner && node.type === "variable_declarator" && node.childForFieldName("name")?.type === "identifier" && node.childForFieldName("name")?.text === name) declarators.push(node);
+    const left = node.childForFieldName("left");
+    if (left?.type === "identifier" && left.text === name) {
+      // `+=`, or an assignment in a nested function, which may run at any time.
+      if (node.type === "augmented_assignment_expression" || (inner && node.type === "assignment_expression")) unknown = true;
+      else if (node.type === "assignment_expression") assigned.push(node.childForFieldName("right")!);
+    }
+    for (const child of node.namedChildren) if (child) walk(child, inner);
+  };
+  for (const child of body.namedChildren) if (child) walk(child, false);
+  if (declarators.length !== 1 || unknown) return null;
+  const isConst = declarators[0]!.parent?.child(0)?.text === "const";
+  const initial = declarators[0]!.childForFieldName("value");
+  const values = [...(initial ? [initial] : []), ...(isConst ? [] : assigned)];
+  const urls = values.map((value) => urlKey(value));
+  // Every value must be a URL, or the call may request something else.
+  if (urls.length === 0 || urls.includes(null)) return null;
+  return [...new Set(urls as string[])];
+}
+
+const functionTypes = new Set(["function_declaration", "generator_function_declaration", "function_expression", "arrow_function", "method_definition"]);
 
 function urlKey(key: SyntaxNode | undefined): string | null {
   if (key?.type === "array") return urlKey(key.namedChildren[0] ?? undefined);
@@ -186,7 +239,7 @@ function urlKey(key: SyntaxNode | undefined): string | null {
 }
 
 type Clients = { fetch: boolean; axios: Set<string>; ky: Set<string>; ofetch: Set<string>; nuxt: Set<string> };
-type Request = { client?: string; receiver?: string; method: string | null; url: string | null };
+type Request = { client?: string; receiver?: string; method: string | null; url: string | null; alternatives?: string[] };
 
 // `api.get(url)`, `api.request(config)` and `api(url | config)` on a binding
 // that may hold an instance.
