@@ -57,8 +57,8 @@ the only runtime dependency left is `web-tree-sitter`.
 | M7 – Niche depth | 6b, 7 | Deeper Node.js/TS backend semantics and the remaining MCP tools. |
 | M8 – Full JS/TS ecosystem | 10–17 | Frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular) and vanilla JS: components, pages, frontend → backend API links, stores and DOM events. |
 
-Order from here: the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73)), then M8, then
-the M6 release (Phase 9).
+M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
+per-category results) are done. Order from here: the M6 release (Phase 9).
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).

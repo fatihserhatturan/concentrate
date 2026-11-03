@@ -84,7 +84,8 @@
             "Constructor<T>",
             "type Constructor",
             "Constructor type",
-            "Constructor (type"
+            "Constructor (type",
+            "Constructor is a type"
           ]
         ]
       }

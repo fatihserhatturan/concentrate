@@ -1,0 +1,2140 @@
+{
+  "recordedAt": "2026-11-02T18:50:33.153Z",
+  "model": "haiku",
+  "runs": 3,
+  "maxTurns": 25,
+  "totals": {
+    "baseline": {
+      "runs": 27,
+      "correct": 27,
+      "medianInputTokens": 134820,
+      "medianOutputTokens": 1269,
+      "medianToolCalls": 4,
+      "medianTurns": 5,
+      "medianDurationMs": 9539,
+      "medianCostUsd": 0.0042,
+      "spread": {
+        "inputTokens": {
+          "min": 65083,
+          "max": 862653
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 53
+        },
+        "durationMs": {
+          "min": 4683,
+          "max": 98670
+        },
+        "costUsd": {
+          "min": 0.0027,
+          "max": 0.0279
+        }
+      },
+      "totalCostUsd": 0.1859,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
+    },
+    "concentrate": {
+      "runs": 27,
+      "correct": 27,
+      "medianInputTokens": 137643,
+      "medianOutputTokens": 1331,
+      "medianToolCalls": 4,
+      "medianTurns": 5,
+      "medianDurationMs": 12078,
+      "medianCostUsd": 0.0043,
+      "spread": {
+        "inputTokens": {
+          "min": 66750,
+          "max": 259992
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 8
+        },
+        "durationMs": {
+          "min": 6826,
+          "max": 25635
+        },
+        "costUsd": {
+          "min": 0.0027,
+          "max": 0.0081
+        }
+      },
+      "totalCostUsd": 0.1226,
+      "mcpRuns": 7,
+      "mcpTools": {
+        "impact_of": 5,
+        "find_definitions": 4,
+        "list_routes": 4,
+        "find_unused_exports": 3,
+        "find_callers": 2,
+        "list_exports": 2,
+        "api_consumers": 1
+      },
+      "toolSearchCalls": 7
+    }
+  },
+  "categories": {
+    "calls": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 66229,
+        "medianOutputTokens": 932.5,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 8209,
+        "medianCostUsd": 0.0032,
+        "spread": {
+          "inputTokens": {
+            "min": 65083,
+            "max": 132871
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 6099,
+            "max": 13706
+          },
+          "costUsd": {
+            "min": 0.0027,
+            "max": 0.0076
+          }
+        },
+        "totalCostUsd": 0.0235,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 101502.5,
+        "medianOutputTokens": 1083,
+        "medianToolCalls": 2.5,
+        "medianTurns": 3.5,
+        "medianDurationMs": 9080.5,
+        "medianCostUsd": 0.0035,
+        "spread": {
+          "inputTokens": {
+            "min": 67702,
+            "max": 135408
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 7369,
+            "max": 12416
+          },
+          "costUsd": {
+            "min": 0.0033,
+            "max": 0.0039
+          }
+        },
+        "totalCostUsd": 0.0216,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "impact": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 136066,
+        "medianOutputTokens": 1582,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 12105,
+        "medianCostUsd": 0.0044,
+        "spread": {
+          "inputTokens": {
+            "min": 135910,
+            "max": 171551
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 10
+          },
+          "durationMs": {
+            "min": 11663,
+            "max": 18597
+          },
+          "costUsd": {
+            "min": 0.0044,
+            "max": 0.0054
+          }
+        },
+        "totalCostUsd": 0.0141,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 205035,
+        "medianOutputTokens": 1592,
+        "medianToolCalls": 7,
+        "medianTurns": 8,
+        "medianDurationMs": 12344,
+        "medianCostUsd": 0.006,
+        "spread": {
+          "inputTokens": {
+            "min": 182013,
+            "max": 218969
+          },
+          "toolCalls": {
+            "min": 6,
+            "max": 8
+          },
+          "durationMs": {
+            "min": 12190,
+            "max": 17533
+          },
+          "costUsd": {
+            "min": 0.0054,
+            "max": 0.0081
+          }
+        },
+        "totalCostUsd": 0.0195,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "impact_of": 5,
+          "find_definitions": 4,
+          "list_routes": 3,
+          "find_callers": 2
+        },
+        "toolSearchCalls": 3
+      }
+    },
+    "diff": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 134820,
+        "medianOutputTokens": 1468,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 9226,
+        "medianCostUsd": 0.0042,
+        "spread": {
+          "inputTokens": {
+            "min": 99806,
+            "max": 178749
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 6
+          },
+          "durationMs": {
+            "min": 8575,
+            "max": 15807
+          },
+          "costUsd": {
+            "min": 0.0036,
+            "max": 0.0058
+          }
+        },
+        "totalCostUsd": 0.0136,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 138845,
+        "medianOutputTokens": 1807,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 15180,
+        "medianCostUsd": 0.0045,
+        "spread": {
+          "inputTokens": {
+            "min": 137643,
+            "max": 140924
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 11264,
+            "max": 16780
+          },
+          "costUsd": {
+            "min": 0.0044,
+            "max": 0.0054
+          }
+        },
+        "totalCostUsd": 0.0144,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "unused": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 847909,
+        "medianOutputTokens": 15492,
+        "medianToolCalls": 36,
+        "medianTurns": 37,
+        "medianDurationMs": 78304,
+        "medianCostUsd": 0.0276,
+        "spread": {
+          "inputTokens": {
+            "min": 653554,
+            "max": 862653
+          },
+          "toolCalls": {
+            "min": 20,
+            "max": 53
+          },
+          "durationMs": {
+            "min": 77663,
+            "max": 98670
+          },
+          "costUsd": {
+            "min": 0.0259,
+            "max": 0.0279
+          }
+        },
+        "totalCostUsd": 0.0814,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 175049,
+        "medianOutputTokens": 2029,
+        "medianToolCalls": 6,
+        "medianTurns": 7,
+        "medianDurationMs": 18869,
+        "medianCostUsd": 0.0053,
+        "spread": {
+          "inputTokens": {
+            "min": 136542,
+            "max": 259992
+          },
+          "toolCalls": {
+            "min": 4,
+            "max": 8
+          },
+          "durationMs": {
+            "min": 11544,
+            "max": 25635
+          },
+          "costUsd": {
+            "min": 0.0043,
+            "max": 0.008
+          }
+        },
+        "totalCostUsd": 0.0175,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "find_unused_exports": 3,
+          "list_exports": 2
+        },
+        "toolSearchCalls": 3
+      }
+    },
+    "gap": {
+      "baseline": {
+        "runs": 12,
+        "correct": 12,
+        "medianInputTokens": 133739.5,
+        "medianOutputTokens": 1237,
+        "medianToolCalls": 4.5,
+        "medianTurns": 5.5,
+        "medianDurationMs": 9256,
+        "medianCostUsd": 0.0042,
+        "spread": {
+          "inputTokens": {
+            "min": 65510,
+            "max": 268568
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 7
+          },
+          "durationMs": {
+            "min": 4683,
+            "max": 22213
+          },
+          "costUsd": {
+            "min": 0.0027,
+            "max": 0.0083
+          }
+        },
+        "totalCostUsd": 0.0532,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 12,
+        "correct": 12,
+        "medianInputTokens": 136754.5,
+        "medianOutputTokens": 1219.5,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 9726,
+        "medianCostUsd": 0.0041,
+        "spread": {
+          "inputTokens": {
+            "min": 66750,
+            "max": 224533
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 7
+          },
+          "durationMs": {
+            "min": 6826,
+            "max": 22171
+          },
+          "costUsd": {
+            "min": 0.0027,
+            "max": 0.0063
+          }
+        },
+        "totalCostUsd": 0.0496,
+        "mcpRuns": 1,
+        "mcpTools": {
+          "api_consumers": 1,
+          "list_routes": 1
+        },
+        "toolSearchCalls": 1
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "v2-nest-normalize-path-callers",
+      "sample": "internet-nest",
+      "category": "calls",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66223,
+            "medianOutputTokens": 949,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 8151,
+            "medianCostUsd": 0.003,
+            "spread": {
+              "inputTokens": {
+                "min": 65860,
+                "max": 66235
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 6099,
+                "max": 8267
+              },
+              "costUsd": {
+                "min": 0.0029,
+                "max": 0.0076
+              }
+            },
+            "totalCostUsd": 0.0136,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Three non-test files in `packages/` call the `normalizePath` from `shared.utils.ts`:\n\n1. **`packages/platform-ws/adapters/ws-adapter.ts`** (line 251): imports it on line 3 and calls `wsServer.path = normalizePath(path)`.\n2. **`packages/core/router/router-module.ts`** (line 61): imports it on line 3 and calls `normalizePath(route.path)`.\n3. **`packages/core/router/utils/flatten-route-paths.util.ts`** (lines 18–19): imports it on line 2 and calls `normalizePath(...)` twice, once around `item.path` and once around `child.path`.\n\nI excluded the `normalizePath` methods on `ExpressAdapter` (`packages/platform-express/adapters/express-adapter.ts:174`), `HttpAdapter` (`packages/core/adapters/http-adapter.ts:144`), and the optional `normalizePath?` on the `HttpServer` interface. `router-explorer.ts:234–235` calls `router.normalizePath`, which is also a method rather than this utility, so it isn't listed.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8267,
+              "costUsd": 0.007594719999999999,
+              "inputTokens": 4,
+              "outputTokens": 971,
+              "cacheCreationTokens": 33929,
+              "cacheReadTokens": 32302,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three non-test files in `packages/` call the utility:\n\n- `packages/platform-ws/adapters/ws-adapter.ts`: imports it at line 3 and calls it at line 251 (`wsServer.path = normalizePath(path)`).\n- `packages/core/router/router-module.ts`: imports it at line 3 and calls it at line 61 (`normalizePath(route.path)`).\n- `packages/core/router/utils/flatten-route-paths.util.ts`: imports it at line 2 and calls it at lines 18–19.\n\nThe utility is defined at `packages/common/utils/shared.utils.ts:33`. Its only other reference is the spec at `packages/common/test/utils/shared.utils.spec.ts`, which is excluded.\n\nExcluded because they are other classes' methods, not the utility:\n- `packages/platform-express/adapters/express-adapter.ts:174`\n- `packages/core/adapters/http-adapter.ts:144`\n- `packages/common/interfaces/http/http-server.interface.ts:101` (interface declaration)\n- `packages/core/router/router-explorer.ts:234-235` calls `router.normalizePath`, a method on the router object, and does not import the utility.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8151,
+              "costUsd": 0.0029348800000000004,
+              "inputTokens": 4,
+              "outputTokens": 916,
+              "cacheCreationTokens": 9568,
+              "cacheReadTokens": 56288,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three non-test files call the shared `normalizePath` utility:\n\n1. **`packages/platform-ws/adapters/ws-adapter.ts`**, line 251: `wsServer.path = normalizePath(path);`\n2. **`packages/core/router/router-module.ts`**, line 61: `const modulePath = normalizePath(route.path);`\n3. **`packages/core/router/utils/flatten-route-paths.util.ts`**, lines 18–19: calls it twice, on `item.path` and `child.path`, inside the path-flattening logic.\n\nExcluded because they are methods, not the utility:\n- `packages/platform-express/adapters/express-adapter.ts:174` and `packages/core/adapters/http-adapter.ts:144` define `normalizePath` methods.\n- `packages/common/interfaces/http/http-server.interface.ts:101` declares an optional `normalizePath` method on the interface.\n- `packages/core/router/router-explorer.ts:235` calls `router.normalizePath(path)`, which is the adapter method.\n\nThe test file `packages/common/test/utils/shared.utils.spec.ts` also uses it, but it is excluded as a test.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 6099,
+              "costUsd": 0.00302341,
+              "inputTokens": 4,
+              "outputTokens": 949,
+              "cacheCreationTokens": 9928,
+              "cacheReadTokens": 56291,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 67724,
+            "medianOutputTokens": 1239,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 10155,
+            "medianCostUsd": 0.0035,
+            "spread": {
+              "inputTokens": {
+                "min": 67702,
+                "max": 101965
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 7796,
+                "max": 12416
+              },
+              "costUsd": {
+                "min": 0.0033,
+                "max": 0.0035
+              }
+            },
+            "totalCostUsd": 0.0103,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Three non-test files in `packages/` call the `normalizePath` utility from `packages/common/utils/shared.utils.ts`:\n\n1. **`packages/core/router/router-module.ts`**: imports it at line 3 and calls it at line 61 (`normalizePath(route.path)`).\n2. **`packages/core/router/utils/flatten-route-paths.util.ts`**: imports it at line 2 and calls it at lines 18–19 (`normalizePath(item.path) + normalizePath(child.path)`).\n3. **`packages/platform-ws/adapters/ws-adapter.ts`**: imports it at line 3 and calls it at line 251 (`wsServer.path = normalizePath(path)`).\n\nExcluded because they are methods on other classes, not the utility:\n- `packages/platform-express/adapters/express-adapter.ts:174` and `packages/core/adapters/http-adapter.ts:144` define their own `normalizePath` methods.\n- `packages/core/router/router-explorer.ts:234–235` calls `router.normalizePath`, which is the adapter method, not the utility.\n- `packages/common/interfaces/http/http-server.interface.ts:101` declares the optional adapter method signature.\n\nThe only test file that uses the utility is `packages/common/test/utils/shared.utils.spec.ts`, which is excluded as requested.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 7796,
+              "costUsd": 0.0034559300000000003,
+              "inputTokens": 4,
+              "outputTokens": 1469,
+              "cacheCreationTokens": 10757,
+              "cacheReadTokens": 56963,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three non-test files in `packages/` call the `normalizePath` utility from `packages/common/utils/shared.utils.ts`:\n\n1. **`packages/platform-ws/adapters/ws-adapter.ts`** (line 251): `wsServer.path = normalizePath(path);`\n2. **`packages/core/router/router-module.ts`** (line 61): `const modulePath = normalizePath(route.path);`\n3. **`packages/core/router/utils/flatten-route-paths.util.ts`** (lines 18–19): `normalizePath(...)` is called twice, in `child.path = normalizePath(normalizePath(item.path) + normalizePath(child.path))`.\n\nThe `normalizePath` methods on `packages/platform-express/adapters/express-adapter.ts` and `packages/core/adapters/http-adapter.ts` are class methods, so I excluded them. `packages/core/router/router-explorer.ts` (line 234) also calls `normalizePath`, but it calls `router.normalizePath`, the optional method on the router, not the utility. The interface declaration in `http-server.interface.ts` is excluded for the same reason.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12416,
+              "costUsd": 0.00353701,
+              "inputTokens": 6,
+              "outputTokens": 957,
+              "cacheCreationTokens": 10728,
+              "cacheReadTokens": 91231,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three non-test files in `packages/` call the `normalizePath` utility from `packages/common/utils/shared.utils.ts`:\n\n1. **`packages/platform-ws/adapters/ws-adapter.ts`**, line 251: `wsServer.path = normalizePath(path);`\n2. **`packages/core/router/router-module.ts`**, line 61: `const modulePath = normalizePath(route.path);`\n3. **`packages/core/router/utils/flatten-route-paths.util.ts`**, lines 18–19: `normalizePath(item.path) + normalizePath(child.path)`, inside a `normalizePath(...)` call that wraps the concatenation.\n\nAll three import it as `@nestjs/common/utils/shared.utils`, which resolves to that file.\n\nI left out these same-named methods, which are not calls to the utility:\n- `packages/core/adapters/http-adapter.ts:144` and `packages/platform-express/adapters/express-adapter.ts:174`: class methods.\n- `packages/common/interfaces/http/http-server.interface.ts:101`: an optional interface method.\n- `packages/core/router/router-explorer.ts:234–235`: calls `router.normalizePath(path)`, the adapter's method, not the utility.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10155,
+              "costUsd": 0.0033371000000000004,
+              "inputTokens": 4,
+              "outputTokens": 1239,
+              "cacheCreationTokens": 10738,
+              "cacheReadTokens": 56960,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v2-nest-uuid-factory-callers",
+      "sample": "internet-nest",
+      "category": "calls",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 99183,
+            "medianOutputTokens": 845,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 8297,
+            "medianCostUsd": 0.0035,
+            "spread": {
+              "inputTokens": {
+                "min": 65083,
+                "max": 132871
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 7846,
+                "max": 13706
+              },
+              "costUsd": {
+                "min": 0.0027,
+                "max": 0.0038
+              }
+            },
+            "totalCostUsd": 0.0099,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Three non-test files in `packages/` call `UuidFactory.get`:\n\n- `packages/core/scanner.ts:450` — `UuidFactory.get(type.toString())`\n- `packages/core/injector/instance-wrapper.ts:542` — `key ? UuidFactory.get(key) : randomStringGenerator()`\n- `packages/core/injector/module.ts:670` — `key ? UuidFactory.get(\\`${prefix}_${key}\\`) : randomStringGenerator()`\n\nI searched for `UuidFactory.get` across `packages/`, excluding `node_modules`, and checked for aliased imports. The only other references are the `UuidFactory.mode` setters in `packages/core/nest-factory.ts` and `packages/testing/testing-module.builder.ts`, which don't call `get`. I didn't open the test files, since you asked for non-test callers only.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8297,
+              "costUsd": 0.00347048,
+              "inputTokens": 6,
+              "outputTokens": 845,
+              "cacheCreationTokens": 10819,
+              "cacheReadTokens": 88358,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three non-test files in `packages/` call `UuidFactory.get`:\n\n- `packages/core/injector/instance-wrapper.ts:542`: `return key ? UuidFactory.get(key) : randomStringGenerator();`\n- `packages/core/injector/module.ts:670`: `return key ? UuidFactory.get(`${prefix}_${key}`) : randomStringGenerator();`\n- `packages/core/scanner.ts:450`: `const uuid = UuidFactory.get(type.toString());`\n\nThis is a literal search for `UuidFactory.get`. A call made through a renamed import, such as `import { UuidFactory as U }`, would not show up here.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 7846,
+              "costUsd": 0.0026653199999999997,
+              "inputTokens": 4,
+              "outputTokens": 674,
+              "cacheCreationTokens": 8827,
+              "cacheReadTokens": 56252,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three non-test files under `packages/` call `UuidFactory.get`:\n\n1. **`packages/core/injector/instance-wrapper.ts:542`**: `return key ? UuidFactory.get(key) : randomStringGenerator();`\n2. **`packages/core/injector/module.ts:670`**: `return key ? UuidFactory.get(`${prefix}_${key}`) : randomStringGenerator();`\n3. **`packages/core/scanner.ts:450`**: `const uuid = UuidFactory.get(type.toString());`\n\nThe other references in `packages/` don't call `get`:\n- `packages/core/nest-factory.ts:214-216` sets `UuidFactory.mode`.\n- `packages/testing/testing-module.builder.ts:105,108` also sets `UuidFactory.mode`. It is in the `testing` package, but it isn't a test file.\n- `packages/core/inspector/uuid-factory.ts` is the definition itself.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 13706,
+              "costUsd": 0.0037752600000000008,
+              "inputTokens": 8,
+              "outputTokens": 994,
+              "cacheCreationTokens": 10257,
+              "cacheReadTokens": 122606,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 134270,
+            "medianOutputTokens": 1064,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 8006,
+            "medianCostUsd": 0.0038,
+            "spread": {
+              "inputTokens": {
+                "min": 101040,
+                "max": 135408
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 7369,
+                "max": 12200
+              },
+              "costUsd": {
+                "min": 0.0035,
+                "max": 0.0039
+              }
+            },
+            "totalCostUsd": 0.0112,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Three non-test files in `packages/` call `UuidFactory.get`, all in `packages/core`:\n\n- `packages/core/injector/instance-wrapper.ts:542` — `return key ? UuidFactory.get(key) : randomStringGenerator();`\n- `packages/core/injector/module.ts:670` — `return key ? UuidFactory.get(\\`${prefix}_${key}\\`) : randomStringGenerator();`\n- `packages/core/scanner.ts:450` — `const uuid = UuidFactory.get(type.toString());`\n\n`packages/testing/testing-module.builder.ts` also imports from `uuid-factory`, but it only sets `UuidFactory.mode`, so it doesn't call `get`.\n\nI searched for the literal `UuidFactory.get` text, so a call made through an alias or a destructured `get` would not show up. The import check found no such aliasing in `packages/`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8006,
+              "costUsd": 0.0037779500000000004,
+              "inputTokens": 8,
+              "outputTokens": 998,
+              "cacheCreationTokens": 10187,
+              "cacheReadTokens": 124075,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three non-test files in `packages/` call `UuidFactory.get`:\n\n- `packages/core/injector/instance-wrapper.ts:542` — `return key ? UuidFactory.get(key) : randomStringGenerator();`\n- `packages/core/injector/module.ts:670` — `return key ? UuidFactory.get(`${prefix}_${key}`) : randomStringGenerator();`\n- `packages/core/scanner.ts:450` — `const uuid = UuidFactory.get(type.toString());`\n\n`packages/testing/testing-module.builder.ts` imports `UuidFactory` but only sets `UuidFactory.mode`; it does not call `.get`. `packages/core/nest-factory.ts` imports it too, but has no `.get` call.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 12200,
+              "costUsd": 0.00392721,
+              "inputTokens": 8,
+              "outputTokens": 1064,
+              "cacheCreationTokens": 10739,
+              "cacheReadTokens": 124661,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three non-test files in `packages/` call `UuidFactory.get`:\n\n1. **`packages/core/injector/instance-wrapper.ts:542`**: `return key ? UuidFactory.get(key) : randomStringGenerator();`\n2. **`packages/core/injector/module.ts:670`**: `return key ? UuidFactory.get(`${prefix}_${key}`) : randomStringGenerator();`\n3. **`packages/core/scanner.ts:450`**: `const uuid = UuidFactory.get(type.toString());`\n\n`packages/core/nest-factory.ts` and `packages/testing/testing-module.builder.ts` import `UuidFactory`, but they only set `UuidFactory.mode` and never call `.get`. `packages/core/inspector/uuid-factory.ts` is the definition itself.\n\nI searched with a text grep on `UuidFactory\\s*\\.\\s*get\\b`, not the code graph. It would miss an aliased import or a destructured `get`, but none of the files that import `UuidFactory` use either form.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7369,
+              "costUsd": 0.0035331900000000003,
+              "inputTokens": 6,
+              "outputTokens": 1102,
+              "cacheCreationTokens": 10375,
+              "cacheReadTokens": 90659,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v2-nest-auth-findone-routes",
+      "sample": "internet-nest",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 136066,
+            "medianOutputTokens": 1582,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 12105,
+            "medianCostUsd": 0.0044,
+            "spread": {
+              "inputTokens": {
+                "min": 135910,
+                "max": 171551
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 10
+              },
+              "durationMs": {
+                "min": 11663,
+                "max": 18597
+              },
+              "costUsd": {
+                "min": 0.0044,
+                "max": 0.0054
+              }
+            },
+            "totalCostUsd": 0.0141,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Only one HTTP route is affected: **`POST /auth/login`**.\n\nThe call chain is:\n\n1. `UsersService.findOne(username)` (`src/users/users.service.ts:21`) looks up the user in the in-memory array.\n2. `AuthService.signIn` (`src/auth/auth.service.ts:13`) calls `findOne` and compares the password. It then signs a JWT.\n3. `AuthController.signIn` (`src/auth/auth.controller.ts`, `@Public() @Post('login')`) calls `AuthService.signIn`.\n\nNo other route reaches `findOne`:\n\n- **`GET /auth/profile`** returns `req.user`, which the guard fills from the JWT payload. It never reads the users list, so it is not affected.\n- **`AuthGuard`** (global via `APP_GUARD`) only verifies the token. It does not call `UsersService`.\n- **`UsersService.findOne` in `users.service.spec.ts`** is a unit test, not an HTTP route.\n\nNothing else in the app injects `UsersService`. The only consumer is `AuthService`, so a change to `findOne` only changes the behavior of `POST /auth/login`. There is no global prefix in `main.ts`, so the full path is `/auth/login`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11663,
+              "costUsd": 0.00435986,
+              "inputTokens": 8,
+              "outputTokens": 1269,
+              "cacheCreationTokens": 12442,
+              "cacheReadTokens": 123616,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Only `POST /auth/login` is affected.**\n\nThe call chain is:\n\n1. `UsersService.findOne` (`src/users/users.service.ts:21`) is called only by `AuthService.signIn` (`src/auth/auth.service.ts:13`).\n2. `AuthService.signIn` is called only by `AuthController.signIn` (`src/auth/auth.controller.ts:20-21`), which is mapped to `@Post('login')` under the `auth` prefix.\n\nNothing else in the sample reaches `findOne`:\n\n- **`GET /auth/profile`** is not affected. It returns `req.user`, which `AuthGuard` builds from the decoded JWT payload (`src/auth/auth.guard.ts:36-41`). The guard never touches `UsersService`, so a change to `findOne` doesn't change this route.\n- **The global `AuthGuard`** (registered via `APP_GUARD` in `auth.module.ts`) applies to every route, but it only verifies tokens. It doesn't call `UsersService`.\n- **`UsersService` is used by no other route.** `UsersModule` only provides and exports it.\n\nTests that would catch a change:\n\n- `e2e/app/app.e2e-spec.ts:20` exercises `POST /auth/login`, so it covers the affected route. Its `GET /auth/profile` check at line 26 is unaffected.\n- `src/users/users.service.spec.ts` tests `UsersService` directly, so it would catch a change in `findOne` itself.",
+              "isError": false,
+              "turns": 11,
+              "durationMs": 18597,
+              "costUsd": 0.00540584,
+              "inputTokens": 10,
+              "outputTokens": 2288,
+              "cacheCreationTokens": 13397,
+              "cacheReadTokens": 158144,
+              "toolCalls": 10,
+              "toolsByName": {
+                "Bash": 2,
+                "Read": 7,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**One HTTP route is affected: `POST /auth/login`.**\n\nThe call chain is:\n\n1. `UsersService.findOne` (`src/users/users.service.ts:21`)\n2. called by `AuthService.signIn` (`src/auth/auth.service.ts:13`)\n3. called by `AuthController.signIn` (`src/auth/auth.controller.ts`), mapped to `@Post('login')` under `@Controller('auth')`\n\nNothing else in `src/` or `e2e/` calls `findOne` or injects `UsersService`. `AuthGuard` doesn't use it either; it only verifies the JWT signature. So `GET /auth/profile` and any other guarded route are unaffected, because they never reach `findOne`.\n\nTwo side effects to be aware of:\n\n- **Unit test:** `src/users/users.service.spec.ts` exercises `UsersService` directly, so it's the test most likely to break. The e2e spec doesn't reference it.\n- **Latent bug on the affected route:** `signIn` checks `user?.password !== pass`. If `findOne` returns `undefined` and the request body has no `password`, then `undefined !== undefined` is false, so the check passes and `user.username` throws a TypeError. That gives a 500 rather than the intended 401. This is worth fixing if you change `findOne`'s contract, for example by checking `!user || user.password !== pass`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12105,
+              "costUsd": 0.00437458,
+              "inputTokens": 8,
+              "outputTokens": 1582,
+              "cacheCreationTokens": 11704,
+              "cacheReadTokens": 124198,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 2,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 205035,
+            "medianOutputTokens": 1592,
+            "medianToolCalls": 7,
+            "medianTurns": 8,
+            "medianDurationMs": 12344,
+            "medianCostUsd": 0.006,
+            "spread": {
+              "inputTokens": {
+                "min": 182013,
+                "max": 218969
+              },
+              "toolCalls": {
+                "min": 6,
+                "max": 8
+              },
+              "durationMs": {
+                "min": 12190,
+                "max": 17533
+              },
+              "costUsd": {
+                "min": 0.0054,
+                "max": 0.0081
+              }
+            },
+            "totalCostUsd": 0.0195,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "impact_of": 5,
+              "find_definitions": 4,
+              "list_routes": 3,
+              "find_callers": 2
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "Only one HTTP route is affected: **`POST /auth/login`**.\n\nThe call chain, from the bottom up:\n\n1. `UsersService.findOne` (`sample/19-auth-jwt/src/users/users.service.ts:21`) is called by `AuthService.signIn` at `sample/19-auth-jwt/src/auth/auth.service.ts:13`.\n2. `AuthService.signIn` is called by `AuthController.signIn` (`sample/19-auth-jwt/src/auth/auth.controller.ts:20`).\n3. `AuthController.signIn` is the handler for `POST /auth/login` (`sample/19-auth-jwt/src/auth/auth.controller.ts:19`).\n\nNothing else in the sample calls `findOne` on `UsersService`. No other routes, entrypoints, pages, or frontend consumers are reached. The sample has no `/users` controller, so `GET /users/:id` is not affected.\n\nTwo things that would break without being HTTP routes:\n- `sample/19-auth-jwt/src/users/users.service.spec.ts` tests `UsersService` directly, so a change to `findOne` can fail that spec even though no route is involved.\n- The `findOne` name also exists in other samples and integration apps, but those are separate `findOne` methods on other classes. The impact analysis above is scoped to this sample's `UsersService`.\n\nI confirmed the caller set with the code graph and a text search of `sample/19-auth-jwt/src`.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 12190,
+              "costUsd": 0.00807899,
+              "inputTokens": 10,
+              "outputTokens": 1930,
+              "cacheCreationTokens": 26646,
+              "cacheReadTokens": 178379,
+              "toolCalls": 8,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_definitions": 1,
+                "mcp__concentrate__impact_of": 2,
+                "mcp__concentrate__list_routes": 2,
+                "mcp__concentrate__find_callers": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Only one HTTP route is affected: **`POST /auth/login`**.\n\nThe chain is:\n\n1. `UsersService.findOne(username)` (`src/users/users.service.ts:21`) is called only from `AuthService.signIn` (`src/auth/auth.service.ts:13`).\n2. `AuthService.signIn` is called only from `AuthController.signIn` (`src/auth/auth.controller.ts`), which is bound to `@Post('login')`.\n\n`GET /auth/profile` does not reach `findOne`. It returns `req.user`, which the guard fills from the JWT payload, so it never queries the users list. The global `AuthGuard` also doesn't call `findOne`; it only verifies the token.\n\nThe concentrate code graph didn't resolve `findOne` for this sample. `impact_of` and `find_definitions` returned nothing for it, and `list_routes` returned no routes for the `sample/19-auth-jwt` path. I got this answer by reading the source and grepping for `findOne` in `sample/19-auth-jwt/src`, which found only the two call sites above.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 17533,
+              "costUsd": 0.006017080000000001,
+              "inputTokens": 12,
+              "outputTokens": 1592,
+              "cacheCreationTokens": 15949,
+              "cacheReadTokens": 203008,
+              "toolCalls": 7,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__list_routes": 1,
+                "mcp__concentrate__find_definitions": 2,
+                "Bash": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Only one HTTP route is affected: **`POST /auth/login`**.\n\nThe call chain, all in `sample/19-auth-jwt/src`:\n\n1. `UsersService.findOne(username)` (`users/users.service.ts:21`) is called by `AuthService.signIn` (`auth/auth.service.ts:13`).\n2. `AuthService.signIn` is called by `AuthController.signIn` (`auth/auth.controller.ts:20`).\n3. `AuthController.signIn` is the handler for `POST /auth/login` (`auth/auth.controller.ts:19`).\n\nNothing else in this sample calls `findOne`. The `UsersService` is only used by `auth.service.ts` and by its own module and spec files, so there are no `GET`/user-lookup routes to worry about here. The impact analysis also found no frontend consumers, stores, tables, env vars or config tied to this path.\n\nThe `findOne` callers from the rest of the repo (for example `sample/07-sequelize`, `sample/05-sql-typeorm`, and the `integration/` projects) are separate `UsersService` classes in other projects, so changes to the `sample/19` version don't reach them.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 12344,
+              "costUsd": 0.00540545,
+              "inputTokens": 10,
+              "outputTokens": 1310,
+              "cacheCreationTokens": 15418,
+              "cacheReadTokens": 166585,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 2,
+                "mcp__concentrate__find_definitions": 1,
+                "mcp__concentrate__find_callers": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v2-nest-diff-routes",
+      "sample": "internet-nest",
+      "category": "diff",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 134820,
+            "medianOutputTokens": 1468,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 9226,
+            "medianCostUsd": 0.0042,
+            "spread": {
+              "inputTokens": {
+                "min": 99806,
+                "max": 178749
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 8575,
+                "max": 15807
+              },
+              "costUsd": {
+                "min": 0.0036,
+                "max": 0.0058
+              }
+            },
+            "totalCostUsd": 0.0136,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The uncommitted changes affect two routes, one in each sample app:\n\n1. **`POST /cats`** (`sample/01-cats-app`). `CatsController.create` calls `CatsService.create`, which now returns early without adding a cat if one with the same `name` already exists. The response is the same as before, so a duplicate create silently succeeds without error.\n\n2. **`DELETE /users/:id`** (`sample/05-sql-typeorm`). `UsersController.remove` calls `UsersService.remove`, which now throws `Error(\"User <id> not found\")` when the delete affects zero rows. Nest turns a plain `Error` into a 500 response, not a 404, so a request for a missing user will now return 500 where it used to return 200/204.\n\nNo other routes are affected. `GET /cats`, `GET /cats/:id`, `GET /users`, `GET /users/:id`, and `POST /users` call methods that didn't change.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8575,
+              "costUsd": 0.00363223,
+              "inputTokens": 6,
+              "outputTokens": 1077,
+              "cacheCreationTokens": 11027,
+              "cacheReadTokens": 88773,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two HTTP routes are affected, one in each changed file:\n\n| Method | Path | Source | Change |\n|---|---|---|---|\n| `POST` | `/cats` | `sample/01-cats-app/src/cats/cats.controller.ts` (`@Controller('cats')` + `@Post()`) | `CatsService.create` now returns early without adding the cat if a cat with the same `name` already exists. |\n| `DELETE` | `/users/:id` | `sample/05-sql-typeorm/src/users/users.controller.ts` (`@Controller('users')` + `@Delete(':id')`) | `UsersService.remove` now throws `Error(\"User <id> not found\")` when the delete affects no rows. |\n\nNeither sample sets a global prefix, so the paths are as listed. The other routes in those controllers (`GET /cats`, `GET /cats/:id`, `POST /users`, `GET /users`, `GET /users/:id`) are not affected by the diff.\n\nTwo things to be aware of:\n\n- **`POST /cats` now returns 201 with no body for duplicates.** The controller ignores the service's return value, so a duplicate name looks like a success to the client.\n- **`DELETE /users/:id` for an unknown id now throws a plain `Error`.** I didn't check whether the samples have an exception filter. If not, Nest responds with a generic 500 rather than a 404, which is a behaviour change worth checking before you commit.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 9226,
+              "costUsd": 0.0041524,
+              "inputTokens": 8,
+              "outputTokens": 1468,
+              "cacheCreationTokens": 10892,
+              "cacheReadTokens": 123920,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two HTTP routes are affected, one in each changed sample.\n\n**1. `POST /cats`** (`sample/01-cats-app`, controller at `src/cats/cats.controller.ts:17`)\n- The change is in `CatsService.create`, which now returns early if a cat with the same `name` already exists.\n- The duplicate is silently dropped. The handler doesn't return the service's result, so the response is unchanged: still an empty body with the default status.\n\n**2. `DELETE /users/:id`** (`sample/05-sql-typeorm`, controller at `src/users/users.controller.ts:35`)\n- The change is in `UsersService.remove`, which now throws `Error(\"User <id> not found\")` when TypeORM reports `affected === 0`.\n- Nest doesn't map a plain `Error` to a 404, so a delete of a missing user will most likely return **500 Internal Server Error**. Throwing `NotFoundException` would give a 404 instead.\n\nNo other routes call these methods. The `.create(`/`.remove(` matches in the other sample directories are separate services with their own controllers. Neither sample sets a global prefix or versioning, so the paths are as listed.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 15807,
+              "costUsd": 0.00580311,
+              "inputTokens": 10,
+              "outputTokens": 2182,
+              "cacheCreationTokens": 15388,
+              "cacheReadTokens": 163351,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Bash": 3,
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 138845,
+            "medianOutputTokens": 1807,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 15180,
+            "medianCostUsd": 0.0045,
+            "spread": {
+              "inputTokens": {
+                "min": 137643,
+                "max": 140924
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 11264,
+                "max": 16780
+              },
+              "costUsd": {
+                "min": 0.0044,
+                "max": 0.0054
+              }
+            },
+            "totalCostUsd": 0.0144,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two HTTP routes are affected, one in each sample app.\n\n| Method | Path | Project | Changed code |\n|---|---|---|---|\n| `POST` | `/cats` | `sample/01-cats-app` | `CatsService.create` now skips a cat whose `name` already exists |\n| `DELETE` | `/users/:id` | `sample/05-sql-typeorm` | `UsersService.remove` now throws `Error(\"User <id> not found\")` when no row is deleted |\n\n- **`POST /cats`** is handled by `CatsController.create` (`cats.controller.ts:17`). The controller never returns the created cat, so the response looks the same. The only difference is that a duplicate name is silently not added.\n- **`DELETE /users/:id`** is handled by `UsersController.remove` (`users.controller.ts:35`). A successful delete behaves as before. An id that doesn't exist now throws a plain `Error`, which Nest turns into a 500 response rather than a 404, unless a filter maps it.\n\nNo other route calls these two methods. The other `create`/`remove` calls in the repo are in other sample projects or in the spec files.\n\nI didn't run the test suites. The existing `remove` test in `05-sql-typeorm/src/users/users.service.spec.ts:86` may depend on what its repository mock returns for `affected`, so it's worth running.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 16780,
+              "costUsd": 0.0054452500000000004,
+              "inputTokens": 8,
+              "outputTokens": 2336,
+              "cacheCreationTokens": 15091,
+              "cacheReadTokens": 125825,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Bash": 3,
+                "Read": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two HTTP routes are affected, both through service changes:\n\n| Method | Path | Handler | Changed code |\n|---|---|---|---|\n| `POST` | `/cats` | `CatsController.create` (`sample/01-cats-app/src/cats/cats.controller.ts:14`) | `CatsService.create` now returns early without adding the cat if one with the same `name` already exists. |\n| `DELETE` | `/users/:id` | `UsersController.remove` (`sample/05-sql-typeorm/src/users/users.controller.ts:33`) | `UsersService.remove` now throws `Error(\"User <id> not found\")` when the delete affects zero rows. |\n\nThe other routes in those controllers (`GET /cats`, `GET /cats/:id`, `POST /users`, `GET /users`, `GET /users/:id`) call methods that the diff doesn't touch, so they are unaffected. I found no global prefix or router configuration in either sample, so I took the paths from the `@Controller` and method decorators.\n\nOne thing to check: a plain `Error` thrown in a NestJS handler becomes a 500 response, not a 404. If `DELETE /users/:id` should return 404 for a missing user, the service should throw `NotFoundException` instead.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 15180,
+              "costUsd": 0.004484650000000001,
+              "inputTokens": 8,
+              "outputTokens": 1807,
+              "cacheCreationTokens": 11600,
+              "cacheReadTokens": 126035,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Bash": 1,
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The uncommitted changes affect two routes:\n\n- **`POST /cats`** (`01-cats-app`, `CatsController.create`). `CatsService.create` now returns early without adding a cat if one with the same `name` already exists. The route is still guarded by `@Roles(['admin'])`.\n- **`DELETE /users/:id`** (`05-sql-typeorm`, `UsersController.remove`). `UsersService.remove` now throws `Error(\"User <id> not found\")` when the delete affects no rows.\n\nBoth controllers are registered in their modules and no global prefix is set, so the paths above are the full routes. No other route calls these service methods.\n\nTwo behaviours worth knowing:\n- The cat duplicate check is silent. `POST /cats` with a duplicate name still returns success, but nothing is stored, and the controller doesn't return anything either way.\n- A plain `Error` isn't an `HttpException`, so Nest will answer a missing user with a 500, not a 404.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11264,
+              "costUsd": 0.004449069999999999,
+              "inputTokens": 8,
+              "outputTokens": 1404,
+              "cacheCreationTokens": 12410,
+              "cacheReadTokens": 126427,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 3
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v2-nest-common-utils-unused",
+      "sample": "internet-nest",
+      "category": "unused",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 847909,
+            "medianOutputTokens": 15492,
+            "medianToolCalls": 36,
+            "medianTurns": 37,
+            "medianDurationMs": 78304,
+            "medianCostUsd": 0.0276,
+            "spread": {
+              "inputTokens": {
+                "min": 653554,
+                "max": 862653
+              },
+              "toolCalls": {
+                "min": 20,
+                "max": 53
+              },
+              "durationMs": {
+                "min": 77663,
+                "max": 98670
+              },
+              "costUsd": {
+                "min": 0.0259,
+                "max": 0.0279
+              }
+            },
+            "totalCostUsd": 0.0814,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two exports in `packages/common/utils` are not imported or used by any other file:\n\n1. **`INVALID_MODULE_CONFIG_MESSAGE`** in `validate-module-keys.util.ts:3`. It is only referenced inside `validateModuleKeys` in the same file.\n2. **`Constructor`** (type) in `merge-with-values.util.ts:1`. It is only used as the constraint on `MergeWithValues` in the same file.\n\nEvery other export has at least one importer somewhere in the repo, including test files. Some are reached only through tests or barrels:\n- `MergeWithValues` is used only by `packages/common/test/utils/merge-with-values.util.spec.ts`.\n- `forwardRef` is re-exported through `packages/common/utils/index.ts` and `packages/common/index.ts`, and is used in integration tests.\n\nI checked this by searching for import statements whose path contains `utils` and matching their names, plus a search for each name. I did not use a TypeScript parser, because there are no installed dependencies and installing them needed approval. Dynamic `require` or `import()` calls with computed paths would not show up. A tool such as `knip` or `ts-prune` would confirm the result.",
+              "isError": false,
+              "turns": 21,
+              "durationMs": 98670,
+              "costUsd": 0.027920939999999998,
+              "inputTokens": 34,
+              "outputTokens": 15492,
+              "cacheCreationTokens": 60765,
+              "cacheReadTokens": 801854,
+              "toolCalls": 20,
+              "toolsByName": {
+                "Bash": 9,
+                "Grep": 9,
+                "Glob": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two exports in `packages/common/utils` are not imported or used anywhere else in the repository, test files included:\n\n1. **`INVALID_MODULE_CONFIG_MESSAGE`** in `validate-module-keys.util.ts:3`. It is only referenced inside its own file, at line 20. The message is not exposed through any other module.\n2. **`Constructor`** (type) in `merge-with-values.util.ts:1`. It is only used inside that file, by `MergeWithValues`. Nothing else imports it.\n\nEvery other export is used outside its file. A few are used only by specs, so they have no production caller:\n- `MergeWithValues` is used only by `packages/common/test/utils/merge-with-values.util.spec.ts`.\n- `forwardRef` is used in the test suite. It is also the only export that `utils/index.ts` re-exports, so it is part of the public `@nestjs/common` API.\n\nThe check was a whole-word text search of the repository, excluding the utils folder, and I read the matches for each name. That is reliable for \"not used\", since a reference would have to contain the name. A consumer that reaches the name dynamically, such as through a computed property, would not show up in the search.\n\nI did not change any files.",
+              "isError": false,
+              "turns": 37,
+              "durationMs": 77663,
+              "costUsd": 0.02763169,
+              "inputTokens": 30,
+              "outputTokens": 13615,
+              "cacheCreationTokens": 64960,
+              "cacheReadTokens": 782919,
+              "toolCalls": 36,
+              "toolsByName": {
+                "Bash": 6,
+                "Read": 1,
+                "Grep": 28,
+                "Write": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two exports in `packages/common/utils` are not imported or used anywhere else in the repository, test files included:\n\n1. **`Constructor`** (type, `merge-with-values.util.ts:1`). No references at all.\n2. **`INVALID_MODULE_CONFIG_MESSAGE`** (`validate-module-keys.util.ts:3`). Only used inside its own file by `validateModuleKeys`, never imported elsewhere.\n\nTwo others are only used by tests. I counted those as used, since you asked for test files to count:\n\n- **`MergeWithValues`** is used only in `packages/common/test/utils/merge-with-values.util.spec.ts`.\n- **`InvalidDecoratorItemException`** is used only by the decorator specs and internally by `validateEach`.\n\nEvery other export has at least one importing file outside the utils folder. I checked each name with a repo-wide search that excluded `packages/common/utils/**`, `node_modules` and `dist`.",
+              "isError": false,
+              "turns": 54,
+              "durationMs": 78304,
+              "costUsd": 0.02586396,
+              "inputTokens": 26,
+              "outputTokens": 19070,
+              "cacheCreationTokens": 51532,
+              "cacheReadTokens": 601996,
+              "toolCalls": 53,
+              "toolsByName": {
+                "Bash": 6,
+                "Read": 13,
+                "Grep": 34
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 175049,
+            "medianOutputTokens": 2029,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 18869,
+            "medianCostUsd": 0.0053,
+            "spread": {
+              "inputTokens": {
+                "min": 136542,
+                "max": 259992
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 8
+              },
+              "durationMs": {
+                "min": 11544,
+                "max": 25635
+              },
+              "costUsd": {
+                "min": 0.0043,
+                "max": 0.008
+              }
+            },
+            "totalCostUsd": 0.0175,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "find_unused_exports": 3,
+              "list_exports": 2
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "Two exports in `packages/common/utils` are not imported or used by any other file in the repository, test files included:\n\n1. **`Constructor`** (type), `packages/common/utils/merge-with-values.util.ts:1`. It is used only inside the same file, as the constraint on `MergeWithValues`.\n2. **`INVALID_MODULE_CONFIG_MESSAGE`** (function), `packages/common/utils/validate-module-keys.util.ts:3`. It is used only inside the same file, in the `throw` at line 20.\n\nBoth are exported but never consumed elsewhere. Removing the `export` keyword would keep the code working. I checked this with the code-graph tool `find_unused_exports` (test files included) and confirmed it with a repo-wide text search. The tool skips files that are imported whole (namespace, default or dynamic imports) and does not see uses outside the repo or string-based lookups. Neither export shows up in any of those places, so the result stands. I haven't changed any files.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 11544,
+              "costUsd": 0.004296670000000001,
+              "inputTokens": 8,
+              "outputTokens": 1610,
+              "cacheCreationTokens": 11187,
+              "cacheReadTokens": 125347,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Bash": 1,
+                "mcp__concentrate__find_unused_exports": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two exports in `packages/common/utils` are not imported or used by any other file in the repository, tests included:\n\n1. **`Constructor`** (type), `packages/common/utils/merge-with-values.util.ts:1`. It is only used inside its own file, by `MergeWithValues` on line 4.\n2. **`INVALID_MODULE_CONFIG_MESSAGE`** (function), `packages/common/utils/validate-module-keys.util.ts:3`. It is only used inside `validate-module-keys.util.ts`.\n\nI got this from the code graph's unused-exports check (with test files included), then confirmed with a repo-wide search for imports of both names. The only import of `merge-with-values.util` is `MergeWithValues` in its spec, and nothing imports either of the two names.\n\nEvery other export in the directory has at least one importer. The check found no unexported dead functions. Exports reached only through the `index.ts` barrel count as used, and the barrel re-exports only `forward-ref.util`.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 25635,
+              "costUsd": 0.007968870000000001,
+              "inputTokens": 14,
+              "outputTokens": 3306,
+              "cacheCreationTokens": 19551,
+              "cacheReadTokens": 240427,
+              "toolCalls": 8,
+              "toolsByName": {
+                "Bash": 3,
+                "ToolSearch": 1,
+                "mcp__concentrate__find_unused_exports": 1,
+                "mcp__concentrate__list_exports": 1,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two exports in `packages/common/utils` are not imported by any other file, tests included:\n\n1. **`Constructor`** (type), `packages/common/utils/merge-with-values.util.ts:1`. It is used only inside the same file, by `MergeWithValues`.\n2. **`INVALID_MODULE_CONFIG_MESSAGE`** (const), `packages/common/utils/validate-module-keys.util.ts:3`. It is used only inside the same file, by `validateModuleKeys` (line 20).\n\nFor both, the `export` keyword could be dropped without breaking anything in this repository.\n\nThe concentrate code graph reported these two and nothing else. I checked by grepping the repository for both names, excluding `node_modules`, and got the same result. Every other export in the directory is imported by at least one file.\n\nThis is a library package, though, so the repository is not the whole story. Consumers outside this repo, or code that imports the file by path, would not appear in this scan. Before removing the `export` keyword, check whether `packages/common/utils` files are reachable from the published package's public surface. `index.ts` only re-exports `forward-ref.util`, so the other files are reached by direct path imports.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 18869,
+              "costUsd": 0.00526629,
+              "inputTokens": 10,
+              "outputTokens": 2029,
+              "cacheCreationTokens": 13160,
+              "cacheReadTokens": 161879,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_unused_exports": 1,
+                "mcp__concentrate__list_exports": 1,
+                "Bash": 2,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v2-express-app-listen",
+      "sample": "express",
+      "category": "gap",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 135743,
+            "medianOutputTokens": 1370,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 9539,
+            "medianCostUsd": 0.0042,
+            "spread": {
+              "inputTokens": {
+                "min": 131736,
+                "max": 165800
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 7670,
+                "max": 10543
+              },
+              "costUsd": {
+                "min": 0.0041,
+                "max": 0.0043
+              }
+            },
+            "totalCostUsd": 0.0127,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`app.listen` is implemented in **`lib/application.js`**, at lines 598–606:\n\n```js\napp.listen = function listen() {\n  var server = http.createServer(this)\n  var args = slice.call(arguments)\n  if (typeof args[args.length - 1] === 'function') {\n    var done = args[args.length - 1] = once(args[args.length - 1])\n    server.once('error', done)\n  }\n  return server.listen.apply(server, args)\n}\n```\n\nIt creates a plain **Node.js `http.Server`** via `http.createServer(this)`, where `http` is `require('node:http')` (line 19). The Express app itself is passed as the request handler. The method does not create an HTTPS server.\n\nTwo details from the code:\n- If the last argument is a function, it is wrapped with `once()` and attached as an `'error'` listener on the server. It is not called as a \"listening\" callback here; `server.listen` receives that function and handles it normally.\n- It returns the `http.Server` instance, which is why `app.listen(3000)` in `examples/hello-world/index.js` gives you the server object back.\n\nFor HTTPS, the doc comment at lines 590–592 shows creating `https.createServer(..., app)` yourself.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7670,
+              "costUsd": 0.00418516,
+              "inputTokens": 8,
+              "outputTokens": 934,
+              "cacheCreationTokens": 12632,
+              "cacheReadTokens": 119096,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`app.listen` is implemented in `lib/application.js` at line 598. It creates a plain Node.js HTTP server, not an HTTPS one.\n\nThe implementation:\n\n```js\napp.listen = function listen() {\n  var server = http.createServer(this)\n  var args = slice.call(arguments)\n  if (typeof args[args.length - 1] === 'function') {\n    var done = args[args.length - 1] = once(args[args.length - 1])\n    server.once('error', done)\n  }\n  return server.listen.apply(server, args)\n}\n```\n\n- **Server type:** `http.createServer(this)` at line 599, where `http` is `require('node:http')` (line 19). The Express app itself is the request handler.\n- **Callback handling:** if the last argument is a function, it is wrapped in `once()` so it runs only once. It is also registered as a one-time `'error'` listener on the server, so a listen failure such as `EADDRINUSE` reaches the callback.\n- **Return value:** the `http.Server` from `server.listen(...)`, so callers can use it for `.close()` and similar.\n\nIn `examples/hello-world/index.js`, line 13 calls `app.listen(3000)` only when the file is run directly (`if (!module.parent)`). Because `app` is created with `express()`, that call goes to this function.\n\nThe doc comment at `lib/application.js:580-594` shows that HTTPS needs a separate `https.createServer(..., app)`, since `app.listen` does not cover it.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 9539,
+              "costUsd": 0.00412878,
+              "inputTokens": 8,
+              "outputTokens": 1370,
+              "cacheCreationTokens": 10977,
+              "cacheReadTokens": 124758,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The `listen` method is implemented in **`lib/application.js`** at lines 598–606:\n\n```js\napp.listen = function listen() {\n  var server = http.createServer(this)\n  var args = slice.call(arguments)\n  if (typeof args[args.length - 1] === 'function') {\n    var done = args[args.length - 1] = once(args[args.length - 1])\n    server.once('error', done)\n  }\n  return server.listen.apply(server, args)\n}\n```\n\nIt creates a **Node.js `http` server** (`http.createServer(this)`, with `http` loaded from `node:http` at line 19). The Express app itself is the request handler, so `this` is passed as the callback. The method then forwards all its arguments to `server.listen(...)` and returns the resulting `http.Server`. If the last argument is a function, it is wrapped with `once` and also attached as an `'error'` listener, so a startup failure calls that callback.\n\nIn `examples/hello-world/index.js`, `app.listen(3000)` therefore creates and starts a plain HTTP server on port 3000. It does not create an HTTPS server. The doc comment at lines 580–592 shows that you can use `http.createServer(app)` or `https.createServer(..., app)` directly if you need one.\n\nI did not open `lib/express.js` to confirm how `express()` attaches this method to `app`. The `app` in the example comes from `require('../../')`, so that link is inferred, not verified.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 10543,
+              "costUsd": 0.00433874,
+              "inputTokens": 10,
+              "outputTokens": 1451,
+              "cacheCreationTokens": 10286,
+              "cacheReadTokens": 155504,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Bash": 2,
+                "Grep": 1,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 135042,
+            "medianOutputTokens": 1047,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 9059,
+            "medianCostUsd": 0.0038,
+            "spread": {
+              "inputTokens": {
+                "min": 134992,
+                "max": 138467
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 7383,
+                "max": 14035
+              },
+              "costUsd": {
+                "min": 0.0038,
+                "max": 0.0043
+              }
+            },
+            "totalCostUsd": 0.0119,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`app.listen` is implemented in `lib/application.js` at line 598.\n\n```js\napp.listen = function listen() {\n  var server = http.createServer(this)\n  var args = slice.call(arguments)\n  if (typeof args[args.length - 1] === 'function') {\n    var done = args[args.length - 1] = once(args[args.length - 1])\n    server.once('error', done)\n  }\n  return server.listen.apply(server, args)\n}\n```\n\nIt creates a Node.js `http.Server` via `http.createServer(this)`, where `http` is `require('node:http')` (line 19). The Express app itself is passed as the request handler, so `this` is the app function. The method then:\n\n- If the last argument is a function, it wraps it in `once()` and registers it as an `'error'` listener on the server, so a startup error such as `EADDRINUSE` goes to that callback.\n- Forwards all arguments to `server.listen`, and returns the `http.Server`.\n\nSo `app.listen(3000)` in `examples/hello-world/index.js` is a plain HTTP server, not HTTPS. Express doesn't create an HTTPS server here; the doc comment at line 591–592 shows that you'd use `https.createServer` yourself for that.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 14035,
+              "costUsd": 0.00384558,
+              "inputTokens": 8,
+              "outputTokens": 1047,
+              "cacheCreationTokens": 10376,
+              "cacheReadTokens": 124608,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Read": 2,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`app.listen` is implemented in `lib/application.js`, at lines 598–606:\n\n```js\napp.listen = function listen() {\n  var server = http.createServer(this)\n  var args = slice.call(arguments)\n  if (typeof args[args.length - 1] === 'function') {\n    var done = args[args.length - 1] = once(args[args.length - 1])\n    server.once('error', done)\n  }\n  return server.listen.apply(server, args)\n}\n```\n\nIt creates a plain Node.js HTTP server, `http.createServer(this)`, where `http` is `require('node:http')` (line 19). The Express app is passed as the request handler. It does not create an HTTPS server. If the last argument is a callback, it is wrapped with `once` and also registered as an `'error'` listener on the server. Then it forwards all arguments to `server.listen` and returns the resulting `http.Server`.\n\n`examples/hello-world/index.js` line 13 calls `app.listen(3000)` inside an `if (!module.parent)` block, so the server starts only when the file is run directly, not when it is required.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 9059,
+              "costUsd": 0.0042737,
+              "inputTokens": 8,
+              "outputTokens": 1331,
+              "cacheCreationTokens": 11699,
+              "cacheReadTokens": 126760,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 3,
+                "Bash": 1,
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`app.listen` is implemented in **`lib/application.js`**, at lines 598–606:\n\n```js\napp.listen = function listen() {\n  var server = http.createServer(this)\n  var args = slice.call(arguments)\n  if (typeof args[args.length - 1] === 'function') {\n    var done = args[args.length - 1] = once(args[args.length - 1])\n    server.once('error', done)\n  }\n  return server.listen.apply(server, args)\n}\n```\n\nIt creates a plain Node.js HTTP server, `http.createServer(this)`, where `http` is `require('node:http')` (line 19). The Express app itself is passed as the request handler. The method then calls `listen` on that server with the arguments you gave it. If the last argument is a function, it is wrapped with `once` and also registered as an `error` listener on the server.\n\nSo in `examples/hello-world/index.js`, `app.listen(3000)` returns a `http.Server` listening on port 3000. The method does not create an HTTPS server. The doc comment at lines 580–594 shows how to create HTTPS yourself with `https.createServer(..., app)`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 7383,
+              "costUsd": 0.00382624,
+              "inputTokens": 8,
+              "outputTokens": 1002,
+              "cacheCreationTokens": 10390,
+              "cacheReadTokens": 124644,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Read": 2,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v2-express-route-map",
+      "sample": "express",
+      "category": "gap",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 65510,
+            "medianOutputTokens": 492,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 4748,
+            "medianCostUsd": 0.0027,
+            "spread": {
+              "inputTokens": {
+                "min": 65510,
+                "max": 65516
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 4683,
+                "max": 5652
+              },
+              "costUsd": {
+                "min": 0.0027,
+                "max": 0.0028
+              }
+            },
+            "totalCostUsd": 0.0081,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The file registers five routes, all through the `app.map` helper, which joins each nested key onto its parent path:\n\n1. `GET /users`\n2. `DELETE /users`\n3. `GET /users/:uid`\n4. `GET /users/:uid/pets`\n5. `DELETE /users/:uid/pets/:pid`\n\nOnly these methods are registered: `get` and `delete`. There are no `POST`, `PUT`, or `PATCH` routes.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 4683,
+              "costUsd": 0.0027820799999999997,
+              "inputTokens": 4,
+              "outputTokens": 492,
+              "cacheCreationTokens": 9898,
+              "cacheReadTokens": 55608,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The file registers five routes, all built by the nested `app.map(...)` call at lines 55–69. The `app.map` helper walks the object and joins each key onto its parent path. Method keys become route registrations:\n\n| Method | Path | Handler |\n|---|---|---|\n| GET | `/users` | `users.list` |\n| DELETE | `/users` | `users.delete` |\n| GET | `/users/:uid` | `users.get` |\n| GET | `/users/:uid/pets` | `pets.list` |\n| DELETE | `/users/:uid/pets/:pid` | `pets.delete` |",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 5652,
+              "costUsd": 0.0026619599999999997,
+              "inputTokens": 4,
+              "outputTokens": 488,
+              "cacheCreationTokens": 9276,
+              "cacheReadTokens": 56236,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The file registers five routes, all through the `app.map(...)` call at lines 55–69. `app.map` walks the nested object and treats each function key as an HTTP method, with the accumulated path prefix:\n\n| Method | Path | Handler |\n|---|---|---|\n| GET | `/users` | `users.list` |\n| DELETE | `/users` | `users.delete` |\n| GET | `/users/:uid` | `users.get` |\n| GET | `/users/:uid/pets` | `pets.list` |\n| DELETE | `/users/:uid/pets/:pid` | `pets.delete` |",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 4748,
+              "costUsd": 0.00269883,
+              "inputTokens": 4,
+              "outputTokens": 563,
+              "cacheCreationTokens": 9273,
+              "cacheReadTokens": 56233,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66828,
+            "medianOutputTokens": 561,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7788,
+            "medianCostUsd": 0.0028,
+            "spread": {
+              "inputTokens": {
+                "min": 66750,
+                "max": 66932
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6826,
+                "max": 8474
+              },
+              "costUsd": {
+                "min": 0.0027,
+                "max": 0.0029
+              }
+            },
+            "totalCostUsd": 0.0085,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The file registers five routes, all built by the `app.map(...)` call at lines 55–69:\n\n1. `GET /users`\n2. `DELETE /users`\n3. `GET /users/:uid`\n4. `GET /users/:uid/pets`\n5. `DELETE /users/:uid/pets/:pid`\n\n`app.map` walks the nested object and joins each key onto its parent path. Method keys become `app[key](route, handler)` calls, so `delete` maps to `app.delete`. The file has no other route registrations.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8474,
+              "costUsd": 0.00288624,
+              "inputTokens": 4,
+              "outputTokens": 624,
+              "cacheCreationTokens": 10024,
+              "cacheReadTokens": 56904,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The file registers five routes, all through the `app.map({...})` call at lines 55–69. Each nested key is appended to its parent path:\n\n| Method | Path |\n|---|---|\n| GET | `/users` |\n| DELETE | `/users` |\n| GET | `/users/:uid` |\n| GET | `/users/:uid/pets` |\n| DELETE | `/users/:uid/pets/:pid` |",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6826,
+              "costUsd": 0.0027421499999999996,
+              "inputTokens": 4,
+              "outputTokens": 409,
+              "cacheCreationTokens": 9841,
+              "cacheReadTokens": 56905,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The file registers five routes, all built by the `app.map({...})` call at lines 55–69:\n\n| Method | Path |\n|---|---|\n| GET | `/users` |\n| DELETE | `/users` |\n| GET | `/users/:uid` |\n| GET | `/users/:uid/pets` |\n| DELETE | `/users/:uid/pets/:pid` |\n\n`app.map` joins the nested keys into paths and calls `app[method](path, handler)` for each function it finds. `/users/:uid` has no DELETE route, since its object only contains `get` and `/pets`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7788,
+              "costUsd": 0.00283299,
+              "inputTokens": 4,
+              "outputTokens": 561,
+              "cacheCreationTokens": 9915,
+              "cacheReadTokens": 56909,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Read": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v2-vue-set-security-data",
+      "sample": "internet-vue-realworld",
+      "category": "gap",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 104756,
+            "medianOutputTokens": 1130,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 8973,
+            "medianCostUsd": 0.004,
+            "spread": {
+              "inputTokens": {
+                "min": 104497,
+                "max": 139383
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 7855,
+                "max": 11072
+              },
+              "costUsd": {
+                "min": 0.0036,
+                "max": 0.0045
+              }
+            },
+            "totalCostUsd": 0.0121,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`setSecurityData` is declared on **`HttpClient`**, in `src/services/api.ts` at line 168:\n\n```ts\nexport class HttpClient<SecurityDataType = unknown> {\n  // ...\n  public setSecurityData = (data: SecurityDataType | null) => {\n    this.securityData = data;\n  };\n}\n```\n\nIt's a public instance property initialized with an arrow function, not a prototype method, so `this` stays bound to the instance. It takes `SecurityDataType | null` and stores the value in the private `securityData` field, which the request code later passes to `securityWorker`.\n\n`Api<SecurityDataType>` (line 361) extends `HttpClient`, so the `api` object that `src/store/user.ts` imports from `src/services` inherits the method. I didn't open `src/services/index.ts` to confirm that `api` is constructed from `Api`, so that link is inferred from the class hierarchy.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 7855,
+              "costUsd": 0.00447419,
+              "inputTokens": 6,
+              "outputTokens": 1130,
+              "cacheCreationTokens": 15072,
+              "cacheReadTokens": 89419,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`setSecurityData` is declared in the `HttpClient` class in `src/services/api.ts`, at line 168.\n\nIt is a public instance property holding an arrow function, not a method:\n\n```ts\npublic setSecurityData = (data: SecurityDataType | null) => {\n  this.securityData = data;\n};\n```\n\nThe class is generic over `SecurityDataType` (`export class HttpClient<SecurityDataType = unknown>`, line 149). The arrow-function form means `this` stays bound to the instance when the function is passed around.\n\nThe `Api` class (line 361) extends `HttpClient<SecurityDataType>` and does not redeclare it. So `api.setSecurityData(...)` in `src/store/user.ts` (lines 18 and 23) resolves to this inherited property. The file is auto-generated by `swagger-typescript-api`, so changes belong in the generator, not in `api.ts`.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 8973,
+              "costUsd": 0.0040074,
+              "inputTokens": 8,
+              "outputTokens": 1344,
+              "cacheCreationTokens": 10215,
+              "cacheReadTokens": 129160,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`setSecurityData` is declared in the **`HttpClient<SecurityDataType>`** class in `src/services/api.ts`, at line 168:\n\n```ts\npublic setSecurityData = (data: SecurityDataType | null) => {\n  this.securityData = data;\n};\n```\n\nIt is a public instance property holding an arrow function, not a prototype method. The arrow function keeps `this` bound to the instance, so it works when passed around as a callback. The class is generic over `SecurityDataType`, and the assignment stores the value in the private `securityData` field (line 151).\n\n`Api<SecurityDataType>` (line 361) extends `HttpClient`, so the `api` object that `src/store/user.ts` imports from `src/services` inherits the method. I did not open `src/services/index.ts` to confirm that `api` is an `Api` instance, so that link is inferred from the class hierarchy.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 11072,
+              "costUsd": 0.00362018,
+              "inputTokens": 6,
+              "outputTokens": 1085,
+              "cacheCreationTokens": 10682,
+              "cacheReadTokens": 94068,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 143313,
+            "medianOutputTokens": 1310,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 10393,
+            "medianCostUsd": 0.0044,
+            "spread": {
+              "inputTokens": {
+                "min": 106524,
+                "max": 144448
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 7760,
+                "max": 12078
+              },
+              "costUsd": {
+                "min": 0.0037,
+                "max": 0.0044
+              }
+            },
+            "totalCostUsd": 0.0125,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`setSecurityData` is declared in the **`HttpClient`** class in `src/services/api.ts`, at line 168. The `Api` class (line 361) extends `HttpClient`, so the `api` instance used in `src/store/user.ts` inherits it.\n\nIt is declared as a public arrow-function class property, not a prototype method:\n\n```ts\npublic setSecurityData = (data: SecurityDataType | null) => {\n  this.securityData = data;\n};\n```\n\n- `SecurityDataType` is the class's generic parameter (`HttpClient<SecurityDataType = unknown>`, line 149). `Api` passes it through as `Api<SecurityDataType extends unknown>`.\n- It stores the value in the private `securityData` field (line 151). That field is later passed to the `securityWorker` config callback when a request is built.\n- Because it is an arrow function, `this` stays bound to the instance, so it works even if the method is detached from the object.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 7760,
+              "costUsd": 0.003740420000000001,
+              "inputTokens": 6,
+              "outputTokens": 1129,
+              "cacheCreationTokens": 11106,
+              "cacheReadTokens": 95412,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`setSecurityData` is declared on **`HttpClient`** in `src/services/api.ts`, line 168. The `Api` class that `src/store/user.ts` actually calls it on inherits it.\n\nIt is declared as a public instance property holding an arrow function, not as a prototype method:\n\n```ts\nexport class HttpClient<SecurityDataType = unknown> {\n  // ...\n  private securityData: SecurityDataType | null = null;\n  // ...\n  public setSecurityData = (data: SecurityDataType | null) => {\n    this.securityData = data;\n  };\n```\n\nThe chain from the call site:\n\n- `src/store/user.ts` imports `api` from `src/services`.\n- `src/services/index.ts` creates `api = new Api({...})`.\n- `Api` (`src/services/api.ts:361`) is declared as `export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType>`, so it inherits the property.\n\nBecause it is an arrow-function class field, `this` stays bound to the instance, and the method simply stores the token in the private `securityData` field. The `securityWorker` config in `src/services/index.ts` then reads that value on each request to build the `Authorization: Token ...` header.\n\n`api.ts` is auto-generated by swagger-typescript-api and has `@ts-nocheck`, so don't edit `HttpClient` there. Any change to this behavior would have to go through the generator or through the `securityWorker` config in `src/services/index.ts`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 12078,
+              "costUsd": 0.004359109999999999,
+              "inputTokens": 8,
+              "outputTokens": 1310,
+              "cacheCreationTokens": 11889,
+              "cacheReadTokens": 132551,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1,
+                "Bash": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`setSecurityData` is declared on the `HttpClient` class in `src/services/api.ts`, and `src/store/user.ts` reaches it through the `Api` subclass.\n\n- **Declaration:** `HttpClient<SecurityDataType = unknown>` at `src/services/api.ts:149`. Line 168 is `public setSecurityData = (data: SecurityDataType | null) => { this.securityData = data; };`.\n- **How it's declared:** it is a public instance property holding an arrow function, not a prototype method. The arrow function captures `this`, so it stays bound when it's called as `api.setSecurityData(...)` from outside the class.\n- **Inheritance:** `Api<SecurityDataType> extends HttpClient<SecurityDataType>` at `src/services/api.ts:361`. `api` is created as `new Api({...})` in `src/services/index.ts:7`, so `api.setSecurityData` resolves to the `HttpClient` property.\n\n`src/store/user.ts` calls it at lines 18 and 23, passing `userData.token` on login and `null` on logout. Because `api.ts` is auto-generated, this declaration should be treated as read-only; any change belongs in the generator's templates.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 10393,
+              "costUsd": 0.00437283,
+              "inputTokens": 8,
+              "outputTokens": 1549,
+              "cacheCreationTokens": 11392,
+              "cacheReadTokens": 131913,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 3
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v2-fs-article-list-requests",
+      "sample": "internet-realworld-fullstack",
+      "category": "gap",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 184216,
+            "medianOutputTokens": 2701,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 18916,
+            "medianCostUsd": 0.0061,
+            "spread": {
+              "inputTokens": {
+                "min": 179741,
+                "max": 268568
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 7
+              },
+              "durationMs": {
+                "min": 13481,
+                "max": 22213
+              },
+              "costUsd": {
+                "min": 0.0059,
+                "max": 0.0083
+              }
+            },
+            "totalCostUsd": 0.0203,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`ArticleList.tsx` only issues GET requests, and it can reach two backend routes directly, both declared in `backend/src/app/routes/article/article.controller.ts`:\n\n| Frontend condition | Request | Backend route | Declared at |\n|---|---|---|---|\n| `tag` in query | `/articles{asPath}&offset=…` | `GET /api/articles` | `article.controller.ts:30` |\n| Profile page with `favorite` | `/articles?favorited=<pid>&offset=…` | `GET /api/articles` | `article.controller.ts:30` |\n| Profile page without `favorite` | `/articles?author=<pid>&offset=…` | `GET /api/articles` | `article.controller.ts:30` |\n| `follow` query, not on a profile page | `/articles/feed?offset=…` | `GET /api/articles/feed` | `article.controller.ts:46` |\n| Default | `/articles?offset=…` | `GET /api/articles` | `article.controller.ts:30` |\n\nThe `/api` prefix comes from `backend/src/app/routes/routes.ts:13`, which mounts the article router under `/api`.\n\nThings to be aware of:\n- **Only two distinct paths are used.** `GET /api/articles` (with `tag`, `author`, `favorited`, `offset`, and `limit` as query params) and `GET /api/articles/feed`. The feed route requires auth (`auth.required`), while `/api/articles` uses `auth.optional`.\n- **The tag branch passes through the page's own query string.** It builds the URL from `asPath` rather than from the `tag` value, so any other query params on the current page are forwarded to the backend as well.\n- **Pagination reuses the same `fetchURL`.** `Pagination` is passed `fetchURL` and triggers the same routes, so it adds no new endpoints.\n- **The frontend does not call the local backend.** `SERVER_BASE_URL` in `frontend/lib/utils/constant.ts:1` is `https://conduit.productionready.io/api`, so these requests go to that hosted server. The routes above are the contract that server is expected to implement, and the local backend's declarations are the source for them.\n\nI did not check `ArticlePreview`, which is rendered per article and may make its own favorite requests (`POST`/`DELETE /articles/:slug/favorite`). Those are outside what `ArticleList.tsx` itself requests.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 18916,
+              "costUsd": 0.00830586,
+              "inputTokens": 14,
+              "outputTokens": 3099,
+              "cacheCreationTokens": 21418,
+              "cacheReadTokens": 247136,
+              "toolCalls": 7,
+              "toolsByName": {
+                "Bash": 4,
+                "Grep": 3
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`ArticleList.tsx` can request two backend routes, both declared in `backend/src/app/routes/article/article.controller.ts`:\n\n| Frontend request | Backend route | Declared at |\n|---|---|---|\n| `GET /api/articles?offset=…` (plus `tag`, `favorited` or `author` query params) | `GET /articles` | `article.controller.ts:30`, handler calls `getArticles` |\n| `GET /api/articles/feed?offset=…` | `GET /articles/feed` (auth required) | `article.controller.ts:46`, handler calls `getFeed` |\n\nThe `/api` prefix comes from `backend/src/app/routes/routes.ts`, which mounts all controllers under `Router().use('/api', api)`.\n\nThe component picks the URL in its `switch` (`ArticleList.tsx:33-58`):\n\n- **Tag filter** (`tag` in query): `/articles` followed by the page's `asPath`, so the tag goes through as a query param on `/articles`.\n- **Profile page, favorites tab**: `/articles?favorited=<pid>`.\n- **Profile page, other tab**: `/articles?author=<pid>`.\n- **Home page with `follow` set**: `/articles/feed`.\n- **Default**: `/articles`.\n\nThe `Pagination` component receives the same `fetchURL`, so it does not add any routes.\n\nTwo things to note:\n- The tag branch concatenates the raw `asPath`, which can include other query params and a trailing slash (`/articles/?tag=…`). Express's non-strict routing should still match it, but it is fragile.\n- `SERVER_BASE_URL` in `frontend/lib/utils/constant.ts:1` is hardcoded to `https://conduit.productionready.io/api`, a public host. So this checkout's frontend does not call the local backend unless that constant is changed.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 13481,
+              "costUsd": 0.00613651,
+              "inputTokens": 10,
+              "outputTokens": 2163,
+              "cacheCreationTokens": 16905,
+              "cacheReadTokens": 167301,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Bash": 2,
+                "Read": 1,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`ArticleList.tsx` can request two backend routes, both declared in `backend/src/app/routes/article/article.controller.ts`.\n\n**1. `GET /articles`** (optional auth), declared at line 30. The component picks a query shape based on the page:\n- **Default:** `/articles?offset=…`\n- **Tag page:** `/articles${asPath}&offset=…`, where `asPath` carries the page's own query string, so the tag filter reaches the server through that string.\n- **Profile favorites** (`/profile/...` with `favorite`): `/articles?favorited=<pid>&offset=…`\n- **Profile authored articles** (`/profile/...` without `favorite`): `/articles?author=<pid>&offset=…`\n\n**2. `GET /articles/feed`** (required auth), declared at lines 45–60. Requested when `follow` is set on a non-profile page, as `/articles/feed?offset=…`.\n\nThe handler for `/articles` passes `req.query` straight to `getArticles`, and the feed handler calls `getFeed`. Both live in `article.service.ts`. The router is mounted through `backend/src/app/routes/routes.ts:9`.\n\nTwo things I noticed but did not verify:\n- `SERVER_BASE_URL` in `frontend/lib/utils/constant.ts` points at `https://conduit.productionready.io/api`, not a local backend. So these requests go to that external host, and the `/api` prefix comes from that constant. I did not check how the server bootstrap mounts the routes.\n- `Pagination` re-triggers the same `fetchURL`, so it adds no new routes.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 22213,
+              "costUsd": 0.00590362,
+              "inputTokens": 10,
+              "outputTokens": 2701,
+              "cacheCreationTokens": 14499,
+              "cacheReadTokens": 165232,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Bash": 3,
+                "Read": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 148279,
+            "medianOutputTokens": 2031,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 21005,
+            "medianCostUsd": 0.0053,
+            "spread": {
+              "inputTokens": {
+                "min": 146039,
+                "max": 224533
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 7
+              },
+              "durationMs": {
+                "min": 13186,
+                "max": 22171
+              },
+              "costUsd": {
+                "min": 0.0051,
+                "max": 0.0063
+              }
+            },
+            "totalCostUsd": 0.0167,
+            "mcpRuns": 1,
+            "mcpTools": {
+              "api_consumers": 1,
+              "list_routes": 1
+            },
+            "toolSearchCalls": 1
+          },
+          "runs": [
+            {
+              "answer": "`ArticleList.tsx` can request two backend routes, both declared in `backend/src/app/routes/article/article.controller.ts`:\n\n1. **`GET /api/articles`** (line 30, `auth.optional`). This is the default, and it is also used for the tag, profile-author and profile-favorites views. The query string changes with the page state:\n   - Default: `?offset=…`\n   - Tag page (`tag` in the query): `/articles` + the page's `asPath` (which carries the `tag` param) + `&offset=…`\n   - Profile page, favorites on: `?favorited=<pid>&offset=…`\n   - Profile page, favorites off: `?author=<pid>&offset=…`\n\n2. **`GET /api/articles/feed`** (line 46, `auth.required`). This is used only on non-profile pages when the `follow` query param is set and no `tag` is set. Because it requires auth, the request needs a token. The shared `fetcher` adds an `Authorization: Token …` header from `localStorage.user`.\n\nThe `/api` prefix comes from `backend/src/app/routes/routes.ts`, which mounts the article controller under `/api`. The frontend's `SERVER_BASE_URL` in `frontend/lib/utils/constant.ts` already ends in `/api`, so the paths match.\n\nI did not check whether `Pagination` (which receives `fetchURL`) makes its own requests. The answer covers only what `ArticleList.tsx` itself requests.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 22171,
+              "costUsd": 0.006334650000000001,
+              "inputTokens": 12,
+              "outputTokens": 2668,
+              "cacheCreationTokens": 14496,
+              "cacheReadTokens": 210025,
+              "toolCalls": 7,
+              "toolsByName": {
+                "Read": 1,
+                "Grep": 2,
+                "Bash": 4
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`ArticleList.tsx` can request two backend routes, both declared in `backend/src/app/routes/article/article.controller.ts`:\n\n- **`GET /api/articles`**, declared at line 30. The component uses this for the default feed, the tag view, the profile author view, and the profile favorites view. Those variants differ only in query string: `?offset=`, the tag filter from `asPath`, `?author=`, or `?favorited=`.\n- **`GET /api/articles/feed`**, declared at line 45. The component uses this when `follow` is set on a non-profile page, with `?offset=`.\n\nThe URLs are built in `frontend/components/article/ArticleList.tsx:33-58` from `SERVER_BASE_URL`, and the graph's `api_consumers` returns no linked calls for this file because the URLs are dynamic template strings. The list above comes from reading the code, not from the graph.\n\nOne caveat: `SERVER_BASE_URL` in `frontend/lib/utils/constant.ts:1` is `https://conduit.productionready.io/api`, an external host, not the repo's local backend. The paths match the local backend's declarations, but the requests go to that external server. Nothing in this repo serves them to the frontend unless that host is changed.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 13186,
+              "costUsd": 0.005259130000000001,
+              "inputTokens": 8,
+              "outputTokens": 1662,
+              "cacheCreationTokens": 15498,
+              "cacheReadTokens": 132773,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Read": 1,
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__list_routes": 1,
+                "Grep": 1
+              },
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The component requests two backend routes, both declared in `backend/src/app/routes/article/article.controller.ts`:\n\n| Frontend request (`ArticleList.tsx`) | Backend route | Declared at |\n|---|---|---|\n| `GET /articles?offset=…` (default), plus `?tag=…` and `?author=…` / `?favorited=…` on profile pages | `GET /api/articles` (optional auth) | `article.controller.ts:30` |\n| `GET /articles/feed?offset=…` when `follow` is set on a non-profile page | `GET /api/articles/feed` (required auth) | `article.controller.ts:45` |\n\nNotes:\n\n- **Mount prefix:** `backend/src/app/routes/routes.ts:13` mounts the article controller under `/api`, so the full paths are `/api/articles` and `/api/articles/feed`.\n- **Tag case:** `ArticleList.tsx:37` builds the URL as `/articles${asPath}`, so it forwards the page's whole query string, not only `tag`.\n- **Base URL:** the frontend sends these requests to `SERVER_BASE_URL`, which is `https://conduit.productionready.io/api` (`frontend/lib/utils/constant.ts:1`). That is an external host, not this repo's backend. The requests only reach this code if that constant is changed to point at a locally running backend.\n- **Not checked:** `ArticlePreview` and `Pagination` are child components that receive data or `fetchURL` from this component. I did not check whether they make their own backend requests.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 21005,
+              "costUsd": 0.00512958,
+              "inputTokens": 8,
+              "outputTokens": 2031,
+              "cacheCreationTokens": 13963,
+              "cacheReadTokens": 132068,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Read": 3,
+                "Grep": 2
+              },
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

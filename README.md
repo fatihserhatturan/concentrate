@@ -82,14 +82,14 @@ Every number below comes from pinned open-source repositories and can be reprodu
 - Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React, Vue, SvelteKit and Angular frontends) are 100%.
 - Call recall (81.6%) is still growing; see [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 
-<p align="center"><img src="docs/assets/agent-hard.svg" alt="Agent benchmark on nestjs/nest, 3 runs per question: correct 12/18 to 18/18, input tokens −24%, tool calls −33%, turns −25%, wall time −25%; import-cycle questions use 2 to 4.6 times fewer tokens" width="860"></p>
+<p align="center"><img src="docs/assets/agent-hard.svg" alt="Agent benchmark, sonnet and haiku, 3 runs per question: median input tokens with Concentrate fall 77–85% on import-cycle questions and 72–79% on unused-export questions; other categories range from −24% to +53%" width="860"></p>
 
-**Agents answer whole-repository questions correctly, with less work.** Claude Code answered six questions about [nestjs/nest](https://github.com/nestjs/nest) (1,714 files) three times each, with and without Concentrate. With it:
-- 18 of 18 answers were correct, against 12 of 18 without;
-- the median answer used 24% fewer input tokens and 33% fewer tool calls;
-- on import-cycle questions, which grep cannot answer, every answer was complete, at 2–4.6× fewer tokens.
+**Agents answer what grep cannot see, at a fraction of the cost.** Claude Code (sonnet and haiku) answered 15 questions about [nestjs/nest](https://github.com/nestjs/nest) (1,714 files), express, Vue and a full-stack app three times each, with and without Concentrate. With it:
+- import-cycle questions were answered correctly in 12 of 12 runs, against 3 of 12 without, at 77–85% fewer input tokens;
+- unused-export questions took 4–6 tool calls instead of 26–36, at 72–79% fewer tokens;
+- on the six hard questions, 18 of 18 answers were correct on both models (14 and 13 without).
 
-On narrow questions over small repositories both setups do about equally well (39/39 against 38/39 correct); the full method and results are in [agent-benchmark.md](docs/agent-benchmark.md).
+On callers, impact, diffs and narrow questions an agent with grep reaches the same answers at about the same cost, sometimes more; the full method and per-category results are in [agent-benchmark.md](docs/agent-benchmark.md).
 
 <p align="center"><img src="docs/assets/scan-scaling.svg" alt="Cold scan time grows linearly with graph size: nestjs/nest, 52.7k nodes, in 1.7 s and 541 MB" width="820"></p>
 
