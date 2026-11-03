@@ -1307,6 +1307,26 @@
           "file": "api.ts"
         }
       }
+    ],
+    "imported-instances": [
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "setToken"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "get"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "users"
+        }
+      }
     ]
   }
 }
