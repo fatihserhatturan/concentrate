@@ -1367,6 +1367,36 @@
           "name": "inLoop"
         }
       }
+    ],
+    "switch-request-urls": [
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "GET",
+          "path": "/api/articles"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "GET",
+          "path": "/api/articles/feed"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "GET",
+          "path": "/api/tags"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "GET",
+          "path": "/api/profiles/:username"
+        }
+      }
     ]
   }
 }

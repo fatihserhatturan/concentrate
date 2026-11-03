@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-03T20:16:26.086Z",
+  "recordedAt": "2026-11-03T20:25:55.251Z",
   "samples": [
     {
       "sample": "express",
@@ -153,11 +153,11 @@
     {
       "sample": "internet-realworld-fullstack",
       "requests": {
-        "tp": 31,
+        "tp": 33,
         "fp": 0,
-        "fn": 1,
+        "fn": 0,
         "precision": 1,
-        "recall": 0.96875
+        "recall": 1
       }
     },
     {
@@ -327,11 +327,11 @@
       "recall": 1
     },
     "requests": {
-      "tp": 31,
+      "tp": 33,
       "fp": 0,
-      "fn": 1,
+      "fn": 0,
       "precision": 1,
-      "recall": 0.96875
+      "recall": 1
     },
     "stores": {
       "tp": 1,
