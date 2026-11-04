@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 65
+        "result": 66
       },
       {
         "method": "stats",
@@ -77,7 +77,7 @@
           },
           {
             "table": "EnvVar",
-            "count": 0
+            "count": 1
           },
           {
             "table": "ConfigValue",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 65,
+      "schemaVersion": 66,
       "stats": [
         {
           "table": "Repo",
@@ -175,7 +175,7 @@
         },
         {
           "table": "EnvVar",
-          "count": 0
+          "count": 1
         },
         {
           "table": "ConfigValue",

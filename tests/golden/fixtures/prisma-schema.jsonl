@@ -9,6 +9,7 @@
 {"kind":"node","id":"datamodel:prisma:prisma/schema.prisma:User","label":"DataModel","properties":{"declaredIn":"prisma/schema.prisma","library":"prisma","line":18,"name":"User"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"prisma-schema","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"env:DATABASE_URL","label":"EnvVar","properties":{"name":"DATABASE_URL"}}
 {"kind":"node","id":"file:src/routes.ts","label":"File","properties":{"defaultExport":"app","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/routes.ts","relativePath":"src/routes.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/routes.ts:function:10:<app.get:/users:arg1>","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"arrow_function","line":10,"methodKind":null,"name":"<app.get:/users:arg1>","parameters":"[{\"name\":\"req\",\"type\":null},{\"name\":\"res\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/routes.ts:function:10:<app.get:/users:arg1>:call:11:17:findUsers","label":"Call","properties":{"args":"[]","callee":"findUsers","columnNumber":17,"expression":"findUsers","line":11,"name":"findUsers","receiver":null}}
@@ -161,3 +162,4 @@
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"DECLARES_CONFIG","to":"config:package.json:name","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"USES_ENV","to":"env:DATABASE_URL","properties":{"access":"prisma env()","file":"prisma/schema.prisma","line":5}}

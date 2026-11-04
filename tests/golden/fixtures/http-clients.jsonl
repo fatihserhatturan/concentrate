@@ -93,6 +93,7 @@
 {"kind":"node","id":"file:web/client.ts:import:3:ofetch","label":"Import","properties":{"bindings":"[{\"imported\":\"ofetch\",\"local\":\"ofetch\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"ofetch","specifier":"import { ofetch } from 'ofetch';"}}
 {"kind":"node","id":"file:web/client.ts:import:4:./constants","label":"Import","properties":{"bindings":"[{\"imported\":\"API\",\"local\":\"API\",\"kind\":\"named\"},{\"imported\":\"API_ORIGIN\",\"local\":\"API_ORIGIN\",\"kind\":\"named\"},{\"imported\":\"REMOTE\",\"local\":\"REMOTE\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":4,"source":"./constants","specifier":"import { API, API_ORIGIN, REMOTE } from './constants';"}}
 {"kind":"node","id":"file:web/client.ts:initializercall:10:16:ofetch.create","label":"Call","properties":{"args":"[]","callee":"create","columnNumber":16,"expression":"ofetch.create","line":10,"name":"ofetch.create","receiver":"ofetch"}}
+{"kind":"node","id":"file:web/client.ts:initializercall:20:15:axios.create","label":"Call","properties":{"args":"[]","callee":"create","columnNumber":15,"expression":"axios.create","line":20,"name":"axios.create","receiver":"axios"}}
 {"kind":"node","id":"file:web/client.ts:initializercall:6:19:axios.create","label":"Call","properties":{"args":"[]","callee":"create","columnNumber":19,"expression":"axios.create","line":6,"name":"axios.create","receiver":"axios"}}
 {"kind":"node","id":"file:web/client.ts:initializercall:7:21:axios.create","label":"Call","properties":{"args":"[]","callee":"create","columnNumber":21,"expression":"axios.create","line":7,"name":"axios.create","receiver":"axios"}}
 {"kind":"node","id":"file:web/client.ts:initializercall:8:22:axios.create","label":"Call","properties":{"args":"[]","callee":"create","columnNumber":22,"expression":"axios.create","line":8,"name":"axios.create","receiver":"axios"}}
@@ -289,6 +290,7 @@
 {"kind":"rel","from":"file:web/client.ts:import:4:./constants","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:web/client.ts:import:4:./constants","type":"RESOLVES_TO","to":"file:web/constants.ts","properties":{}}
 {"kind":"rel","from":"file:web/client.ts:variable:10:nuxtApi","type":"INITIALIZED_BY","to":"file:web/client.ts:initializercall:10:16:ofetch.create","properties":{}}
+{"kind":"rel","from":"file:web/client.ts:variable:20:default","type":"INITIALIZED_BY","to":"file:web/client.ts:initializercall:20:15:axios.create","properties":{}}
 {"kind":"rel","from":"file:web/client.ts:variable:6:api","type":"INITIALIZED_BY","to":"file:web/client.ts:initializercall:6:19:axios.create","properties":{}}
 {"kind":"rel","from":"file:web/client.ts:variable:7:local","type":"INITIALIZED_BY","to":"file:web/client.ts:initializercall:7:21:axios.create","properties":{}}
 {"kind":"rel","from":"file:web/client.ts:variable:8:remote","type":"INITIALIZED_BY","to":"file:web/client.ts:initializercall:8:22:axios.create","properties":{}}

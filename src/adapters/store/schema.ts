@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 65;
+export const SCHEMA_VERSION = 66;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -111,6 +111,8 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "USES_ENV_FILE", from: "File", to: "EnvVar", properties: { line: "INT64", access: "STRING" } },
   { type: "USES_ENV_FUNCTION", from: "Function", to: "EnvVar", properties: { line: "INT64", access: "STRING" } },
   { type: "USES_ENV_ROUTE", from: "Route", to: "EnvVar", properties: { line: "INT64", access: "STRING" } },
+  { type: "DECLARES_ENV", from: "Repo", to: "EnvVar", properties: { file: "STRING", line: "INT64" } },
+  { type: "USES_ENV_REPO", from: "Repo", to: "EnvVar", properties: { file: "STRING", line: "INT64", access: "STRING" } },
   { type: "DECLARES_CONFIG_FILE", from: "File", to: "ConfigValue", properties: {} },
   { type: "DECLARES_CONFIG_REPO", from: "Repo", to: "ConfigValue", properties: {} },
   { type: "CONSUMES_CONFIG_FILE", from: "File", to: "ConfigValue", properties: { localName: "STRING" } },

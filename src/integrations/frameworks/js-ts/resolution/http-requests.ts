@@ -1,7 +1,7 @@
-import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { GraphNode, GraphRelationship } from "../../../../core/graph/model.js";
 import type { ISemanticContributor } from "../../../../core/contracts/semantic-contributor.js";
+import { ENV_VALUE_FILES, readEnvFiles, type EnvFiles } from "../env-files.js";
 import { createVariableResolver } from "./variable-resolver.js";
 
 // REQUESTS: an outbound HTTP call (`Call.httpMethod` / `httpUrl`, set by the
@@ -34,11 +34,9 @@ import { createVariableResolver } from "./variable-resolver.js";
 // Env reads (`${process.env.API_URL}`, `import.meta.env.VITE_API`, also
 // through a constant) take their value from the `.env*` files the scan
 // discovered (gitignored ones are not), nearest directory first, in the order
-// of `envFiles`, or else from a literal fallback (`?? "http://localhost:4000"`).
+// of `ENV_VALUE_FILES`, or else from a literal fallback (`?? "http://localhost:4000"`).
 // Only values that are URLs or paths are used, and a URL resolved through env
 // is kept only when it ends up a path; otherwise it stays as written.
-
-const envFiles = [".env.development.local", ".env.local", ".env.development", ".env", ".env.example", ".env.sample"];
 
 type RouteSegment = { kind: "literal"; value: string } | { kind: "param" } | { kind: "catch-all"; optional: boolean };
 type RouteEntry = { id: string; method: string; segments: RouteSegment[] };
@@ -110,41 +108,6 @@ export const httpRequestsContributor: ISemanticContributor = {
   },
 };
 
-// Directory (relative, "" for the root) → env file name → values.
-type EnvFiles = Map<string, Map<string, Map<string, string>>>;
-
-async function readEnvFiles(rootPath: string, files: readonly string[]): Promise<EnvFiles> {
-  const result: EnvFiles = new Map();
-  for (const file of files) {
-    const name = path.basename(file);
-    if (!envFiles.includes(name)) continue;
-    let content: string;
-    try {
-      content = await readFile(file, "utf8");
-    } catch {
-      continue;
-    }
-    const directory = path.relative(rootPath, path.dirname(file)).split(path.sep).join("/");
-    const byName = result.get(directory) ?? new Map<string, Map<string, string>>();
-    byName.set(name, parseEnvFile(content));
-    result.set(directory, byName);
-  }
-  return result;
-}
-
-// `KEY=value`, `export KEY="value"`; `#` comments.
-function parseEnvFile(content: string): Map<string, string> {
-  const values = new Map<string, string>();
-  for (const line of content.split(/\r?\n/u)) {
-    const match = /^\s*(?:export\s+)?([A-Za-z_]\w*)\s*=\s*(.*)$/u.exec(line);
-    if (!match) continue;
-    const raw = match[2]!.trim();
-    const quoted = /^(["'`])(.*)\1$/u.exec(raw);
-    values.set(match[1]!, quoted ? quoted[2]! : raw.replace(/\s+#.*$/u, ""));
-  }
-  return values;
-}
-
 function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship[], env: EnvFiles, origins: readonly string[]): void {
   const calls = nodes.filter((node) => node.label === "Call" && (node.properties.httpMethod !== undefined || node.properties.httpReceiver !== undefined));
   if (calls.length === 0) return;
@@ -155,7 +118,7 @@ function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship
     let directory = path.posix.dirname(relativePath);
     for (;;) {
       const byName = env.get(directory === "." ? "" : directory);
-      for (const file of envFiles) {
+      for (const file of ENV_VALUE_FILES) {
         const value = byName?.get(file)?.get(name);
         if (value !== undefined) return value;
       }

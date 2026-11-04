@@ -1426,6 +1426,12 @@
         "args": {
           "unconsumed": true
         }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "unread": true
+        }
       }
     ],
     "cjs-export-functions": [
@@ -1452,6 +1458,25 @@
         "args": {
           "file": "utils.js"
         }
+      }
+    ],
+    "env-files": [
+      {
+        "tool": "list_env_config",
+        "args": {
+          "unread": true
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "unread": true,
+          "name": "legacy"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {}
       }
     ]
   }

@@ -215,6 +215,14 @@ Blocks or informs: MCP `list_entrypoints` and future backend runtime summaries.
   `EXPO_PUBLIC_`, `GATSBY_`) are marked `isPublic`. Reads through an alias
   (`const env = process.env; env.PORT`), complex schema validators or config
   factories may need additional resolver logic.
+- Env files the scan discovers (`.env`, `.env.*`; gitignored ones are not
+  discovered) declare their variables: `DECLARES_ENV` from the Repo to the
+  `EnvVar`, with the file and line, never the value. Prisma schemas'
+  `env("NAME")` are reads (`USES_ENV` from the Repo, with the file).
+  `list_env_config { unread: true }` compares the two: a variable a library
+  reads by itself (`GOOGLE_APPLICATION_CREDENTIALS`, `NEXTAUTH_URL`) or that
+  only Docker Compose or a shell script uses shows as unread, and one set by
+  the CI or the shell (`CI`) as undeclared; `NODE_ENV` is never undeclared.
 - Project config parsing is warning-tolerant, but warnings are diagnostic only;
   they do not yet influence confidence scores in semantic samples.
 

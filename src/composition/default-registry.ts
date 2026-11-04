@@ -14,6 +14,7 @@ import {
 import { routePathContributor } from "../integrations/frameworks/js-ts/fastify.js";
 import { routeHandlerContributor } from "../integrations/frameworks/js-ts/express-koa.js";
 import { envConfigContributor } from "../integrations/frameworks/js-ts/env-config.js";
+import { envFilesContributor } from "../integrations/frameworks/js-ts/env-files.js";
 import { dataAccessContributor } from "../integrations/frameworks/js-ts/data-access.js";
 import { componentGraphContributor } from "../integrations/frameworks/js-ts/resolution/component-graph.js";
 import { nextjsPagesContributor, nextjsRoutesContributor } from "../integrations/frameworks/js-ts/nextjs.js";
@@ -55,6 +56,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     angularRouteMountsContributor,
     httpRequestsContributor,
     envConfigContributor,
+    envFilesContributor,
     dataAccessContributor,
     nuxtAutoImportsContributor,
     storeAccessContributor,

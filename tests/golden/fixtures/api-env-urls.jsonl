@@ -126,4 +126,7 @@
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"DECLARES_CONFIG","to":"config:package.json:name","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:NEXT_PUBLIC_REMOTE","properties":{"file":"web/.env.example","line":2}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:VITE_API_URL","properties":{"file":"web/.env.development","line":2}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:VITE_API_URL","properties":{"file":"web/.env.example","line":1}}
 {"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:.","properties":{}}
