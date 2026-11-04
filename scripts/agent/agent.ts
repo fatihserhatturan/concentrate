@@ -4,6 +4,8 @@
  * building the command for each mode. Kept apart so tests can run them
  * without the Claude Code CLI.
  */
+import { existsSync, readdirSync } from "node:fs";
+import path from "node:path";
 
 export type Question = {
   id: string;
@@ -57,7 +59,19 @@ export type RunMetrics = {
   cacheReadTokens: number;
   toolCalls: number;
   toolsByName: Record<string, number>;
+  // Every call of a concentrate MCP tool with its input and its result,
+  // truncated, so an empty or wrong graph answer shows without a rerun.
+  mcpCalls: McpCall[];
 };
+
+export type McpCall = { tool: string; input: unknown; result: string; isError: boolean };
+
+// Characters of an MCP tool result kept in the results file.
+export const MCP_RESULT_CHARS = 2000;
+
+export function truncateResult(text: string, limit = MCP_RESULT_CHARS): string {
+  return text.length <= limit ? text : `${text.slice(0, limit)}… (${text.length} chars)`;
+}
 
 // Every input token the model read: fresh, written to and read from the cache.
 export const totalInputTokens = (run: RunMetrics) => run.inputTokens + run.cacheCreationTokens + run.cacheReadTokens;
@@ -72,14 +86,30 @@ type StreamEvent = {
   duration_ms?: number;
   total_cost_usd?: number;
   usage?: Usage;
-  message?: { content?: Array<{ type?: string; name?: string }> };
+  message?: { content?: ContentBlock[] };
+};
+type ContentBlock = {
+  type?: string;
+  id?: string;
+  name?: string;
+  input?: unknown;
+  tool_use_id?: string;
+  content?: string | Array<{ type?: string; text?: string }>;
+  is_error?: boolean;
 };
 
+const resultText = (content: ContentBlock["content"]) => (
+  typeof content === "string" ? content : (content ?? []).map((part) => part.text ?? "").join("\n")
+);
+
 // Reads the newline-delimited events of one run: tool_use blocks of the
-// assistant messages, and the closing `result` event with the answer, turns,
+// assistant messages, the tool_result blocks of concentrate MCP calls in the
+// user messages, and the closing `result` event with the answer, turns,
 // duration, cost and token usage for the whole run.
 export function parseStreamJson(transcript: string): RunMetrics {
   const toolsByName: Record<string, number> = {};
+  const mcpCalls: McpCall[] = [];
+  const mcpCallById = new Map<string, McpCall>();
   let result: StreamEvent | undefined;
   for (const line of transcript.split("\n")) {
     if (!line.trim().startsWith("{")) continue;
@@ -91,7 +121,19 @@ export function parseStreamJson(transcript: string): RunMetrics {
     }
     if (event.type === "assistant") {
       for (const block of event.message?.content ?? []) {
-        if (block.type === "tool_use" && block.name) toolsByName[block.name] = (toolsByName[block.name] ?? 0) + 1;
+        if (block.type !== "tool_use" || !block.name) continue;
+        toolsByName[block.name] = (toolsByName[block.name] ?? 0) + 1;
+        if (!block.name.startsWith(mcpPrefix)) continue;
+        const call: McpCall = { tool: block.name.slice(mcpPrefix.length), input: block.input ?? {}, result: "", isError: false };
+        mcpCalls.push(call);
+        if (block.id) mcpCallById.set(block.id, call);
+      }
+    } else if (event.type === "user") {
+      for (const block of event.message?.content ?? []) {
+        const call = block.type === "tool_result" && block.tool_use_id ? mcpCallById.get(block.tool_use_id) : undefined;
+        if (!call) continue;
+        call.result = truncateResult(resultText(block.content));
+        call.isError = block.is_error === true;
       }
     } else if (event.type === "result") {
       result = event;
@@ -111,6 +153,7 @@ export function parseStreamJson(transcript: string): RunMetrics {
     cacheReadTokens: usage.cache_read_input_tokens ?? 0,
     toolCalls: Object.values(toolsByName).reduce((total, count) => total + count, 0),
     toolsByName,
+    mcpCalls,
   };
 }
 
@@ -145,6 +188,28 @@ export function claudeArgs(mode: Mode, question: string, options: CommandOptions
     "--max-turns", String(options.maxTurns),
     ...(options.model ? ["--model", options.model] : []),
   ];
+}
+
+// The Claude Code CLI the desktop app ships, newest version first:
+// <root>/<version>/<build>/claude.app/Contents/MacOS/claude, where root is
+// ~/Library/Application Support/Claude/claude-code on macOS.
+export function desktopClaudeBinaries(root: string): string[] {
+  if (!existsSync(root)) return [];
+  const versionParts = (version: string) => version.split(".").map((part) => Number.parseInt(part, 10) || 0);
+  const newer = (a: string, b: string) => {
+    const [partsA, partsB] = [versionParts(a), versionParts(b)];
+    for (let index = 0; index < Math.max(partsA.length, partsB.length); index += 1) {
+      const difference = (partsB[index] ?? 0) - (partsA[index] ?? 0);
+      if (difference !== 0) return difference;
+    }
+    return 0;
+  };
+  const subdirectories = (directory: string) => readdirSync(directory, { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+  return subdirectories(root).sort(newer).flatMap((version) => (
+    subdirectories(path.join(root, version))
+      .map((build) => path.join(root, version, build, "claude.app/Contents/MacOS/claude"))
+      .filter((binary) => existsSync(binary))
+  ));
 }
 
 export function median(values: readonly number[]): number {

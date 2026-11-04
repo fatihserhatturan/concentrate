@@ -18,11 +18,14 @@ npm run samples:fetch
 npm run bench:agent -- --dry-run          # print the commands, call nothing
 npm run bench:agent -- --runs 3           # every question, 3 runs per mode
 npm run bench:agent -- --question rw-env --runs 1 --model sonnet
-npm run bench:agent -- --rescore bench/results/agent-runs3-2026-10-29.json
+npm run bench:agent -- --rescore bench/results/agent-runs3-2026-10-29.json --details
 ```
 
-It needs the [Claude Code CLI](https://docs.claude.com/en/docs/claude-code)
-on `PATH` (or `--claude <path>`), signed in. Runs use that account: a
+It needs the [Claude Code CLI](https://docs.claude.com/en/docs/claude-code),
+signed in. `--claude <path>` or `CLAUDE_BIN` names it; otherwise `claude` on
+`PATH` is used and, when it is not there, the newest CLI the Claude desktop
+app ships (`~/Library/Application Support/Claude/claude-code/<version>/…/claude`
+on macOS). When none is found, the error lists where it looked. Runs use that account: a
 subscription's usage limits, or API billing when `ANTHROPIC_API_KEY` is set.
 13 questions × 2 modes × 3 runs is 78 sessions; `--runs 1` is 26.
 
@@ -75,8 +78,14 @@ report then gives:
 - **MCP use** in concentrate mode: how many runs called a `concentrate` tool,
   the `ToolSearch` calls that load the tool schemas, and the calls per tool.
 
-Results go to `bench/results/agent-<date>.json` with every run's answer and
-tool counts, and the per-mode, per-category and total summaries. `--rescore`
+`--details` adds two tables: each wrong run with the keys its answer missed
+(to tell a wrong answer from a key that rejects a right one), and every MCP
+call of concentrate mode with its input and the start of its result (to find
+empty or wrong graph answers).
+
+Results go to `bench/results/agent-<date>.json` with every run's answer,
+tool counts, missed keys and MCP calls (input and result, the result cut at
+2,000 characters), and the per-mode, per-category and total summaries. `--rescore`
 rebuilds the summaries of an older results file without new runs; the files
 in `bench/results/` have been rescored this way.
 
