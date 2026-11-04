@@ -34,7 +34,7 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 | **State stores** | Pinia, Redux Toolkit, Zustand, Jotai and Svelte stores: their state and actions, and the functions and components that read and write them |
 | **Dependency injection** | NestJS constructor and property injection chains |
 | **Configuration** | `process.env.*` and `import.meta.env` reads; Go `os.Getenv`, viper and env struct tags (caarlos0/env, envconfig); linked to the functions and routes that use them and to the variables `.env` files declare |
-| **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle; Go gorm, `database/sql` and sqlx (literal SQL): models, tables, and read and write operations |
+| **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle; Go gorm, ent, sqlc, `database/sql` and sqlx (literal SQL): models, tables, and read and write operations |
 | **Workspaces** | packages and the dependencies between them, both declared and used in source |
 
 Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux), entrypoints, env reads and data access; the other languages get structure, imports and calls.
