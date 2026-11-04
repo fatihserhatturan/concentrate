@@ -298,6 +298,19 @@ function isNamedDefaultDeclaration(node: SyntaxNode): boolean {
     || node.type === "abstract_class_declaration";
 }
 
+// The name of an anonymous function assigned to a module-level CommonJS
+// export, `exports.compileETag = function (val) { … }` (or `module.exports.x
+// = () => …`): the function is named by the property, so it gets a Function
+// node and importers' calls resolve to it.
+export function cjsExportFunctionName(node: SyntaxNode): string | null {
+  if ((node.type !== "function_expression" && node.type !== "arrow_function") || node.childForFieldName("name")) return null;
+  const assignment = node.parent;
+  if (assignment?.type !== "assignment_expression" || assignment.childForFieldName("right")?.id !== node.id) return null;
+  if (assignment.parent?.type !== "expression_statement" || assignment.parent.parent?.type !== "program") return null;
+  const left = assignment.childForFieldName("left");
+  return left ? extractModuleExportsPropertyName(left) : null;
+}
+
 function extractModuleExportsPropertyName(node: SyntaxNode): string | null {
   if (node.type !== "member_expression") {
     return null;

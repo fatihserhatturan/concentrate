@@ -25,6 +25,7 @@ import {
   createDefaultExportExpressionNode,
   createLocalReExportRelationships,
   extractCjsExportBindings,
+  cjsExportFunctionName,
   extractCjsDefaultExport,
   extractDefaultExportName,
   extractCjsObjectAssignExportBindings,
@@ -174,7 +175,7 @@ export function walkJsTsNodes(
 
     if (isFunctionNode(node) && node.type !== "abstract_method_signature" && (node.type !== "method_definition" || node.parent?.type === "object")) {
       // Functions of module-level object literals are named by their property.
-      const propertyName = moduleObjectPropertyFunctionName(node);
+      const propertyName = moduleObjectPropertyFunctionName(node) ?? cjsExportFunctionName(node);
       const functionNode = node.type === "method_definition"
         ? propertyName ? createFunctionNode(fileNodeId, node, undefined, propertyName) : null
         : createFunctionNode(fileNodeId, node) ?? (propertyName ? createFunctionNode(fileNodeId, node, undefined, propertyName) : null);

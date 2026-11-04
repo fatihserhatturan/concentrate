@@ -91,6 +91,13 @@ tools.
   objects with a `get` in one file share the first); named imports of the
   object (`import { TagAPI }`) and objects built inside functions, returned
   or passed to calls are not followed.
+- An anonymous function assigned to a module-level CommonJS export
+  (`exports.compileETag = function (val) { … }`, `module.exports.x = () =>
+  …`) is a `Function` named by the property, with its calls, so
+  `require('./utils').compileETag` bindings and `utils.compileETag()` calls
+  resolve to it. A named function expression keeps its own name
+  (`exports.x = function inner()` is `inner`), and assignments inside blocks
+  or functions stay variables.
 - A class field holding an arrow function or function expression
   (`setSecurityData = (data) => { … }`, `#log = function () { … }`,
   `static create = () => …`) is a method of its class as well as a `Field`:
