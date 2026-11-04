@@ -1,6 +1,8 @@
 import type { IGraphContributor } from "../../contracts/graph-contributor.js";
 import type { GraphNode } from "../../graph/model.js";
 import { resolveCall, resolveDeclaration, resolveImportedFreeCall } from "./call-targets.js";
+import { isGoFile } from "./file-kind.js";
+import { createGoCallIndex, resolveGoCall, type GoCallIndex } from "./go-calls.js";
 import {
   createResolutionRelationshipIndex,
   indexImportNodesByFile,
@@ -28,6 +30,7 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
     resolvedFileByImportId: relationshipIndex.resolvedFileByImportId,
   };
   const scopes = indexScopes(graph, functionsByFileAndName, importNodesByFile);
+  let goIndex: GoCallIndex | null = null;
 
   let resolved = 0;
   let unresolved = 0;
@@ -50,6 +53,18 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
       : relationshipIndex.callerFileByModuleCallId.get(node.id);
     if (!callerFileId) {
       unresolved++;
+      continue;
+    }
+
+    if (isGoFile(callerFileId)) {
+      goIndex ??= createGoCallIndex(graph, relationshipIndex);
+      const targetFunctionId = resolveGoCall(node, callerFileId, goIndex);
+      if (targetFunctionId) {
+        graph.addRelationship({ from: node.id, to: targetFunctionId, type: "CALL_RESOLVES_TO", properties: {} });
+        resolved++;
+      } else {
+        unresolved++;
+      }
       continue;
     }
 

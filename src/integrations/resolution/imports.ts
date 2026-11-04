@@ -4,7 +4,13 @@ import {
   readJsTsResolutionConfigWithWarnings,
   type JsTsResolutionConfig,
 } from "../languages/js-ts/resolution/config.js";
-import { readGoResolutionConfig, type GoResolutionConfig } from "../languages/go/resolution.js";
+import {
+  goPackageDirectory,
+  indexGoFilesByDirectory,
+  readGoResolutionConfig,
+  resolveGoImport,
+  type GoResolutionConfig,
+} from "../languages/go/resolution.js";
 import {
   isGoFile,
   isJsTsFile,
@@ -34,7 +40,8 @@ export async function addImportResolutionRelationships(
       message: error instanceof Error ? error.message : String(error),
     });
   });
-  const goConfig = await readGoResolutionConfig(rootPath);
+  const goConfig = await readGoResolutionConfig(rootPath, fileIdByRelativePath.keys());
+  const goFilesByDirectory = indexGoFilesByDirectory(fileIdByRelativePath);
   // A bare specifier tried only because of `baseUrl` (`next/link` against
   // `baseUrl: "."`) is a package import, not an unresolved one, unless its
   // first segment names a file or folder under baseUrl (`types` for
@@ -72,7 +79,18 @@ export async function addImportResolutionRelationships(
       continue;
     }
 
-    const targetFileId = resolveImport(source, importerFileId, fileIdByRelativePath, jsTsConfig, goConfig);
+    // A Go import is a package: every file of its directory.
+    if (isGoFile(importerFileId)) {
+      const targetFileIds = resolveGoImport(source, goFilesByDirectory, goConfig);
+      if (targetFileIds.length === 0) unresolved += 1;
+      for (const targetFileId of targetFileIds) {
+        graph.addRelationship({ from: node.id, to: targetFileId, type: "RESOLVES_TO", properties: {} });
+      }
+      if (targetFileIds.length > 0) resolved += 1;
+      continue;
+    }
+
+    const targetFileId = resolveImport(source, importerFileId, fileIdByRelativePath, jsTsConfig);
 
     if (!targetFileId) {
       if (!isPackageImport(source, importerFileId)) unresolved += 1;
@@ -106,8 +124,8 @@ function shouldAttemptResolution(
     return createJsTsConfiguredImportBasePaths(source, jsTsConfig).length > 0;
   }
 
-  if (isGoFile(importerFileId) && goConfig.moduleName) {
-    return source.startsWith(`${goConfig.moduleName}/`);
+  if (isGoFile(importerFileId)) {
+    return goPackageDirectory(source, goConfig) !== null;
   }
 
   if (isRustFile(importerFileId)) {

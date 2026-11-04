@@ -947,6 +947,28 @@ Astro).
   (`store.get`, `store.set`, `useStore`), atoms passed as arguments and
   hooks used at the top level of a module are not followed.
 
+## Go
+
+- Modules come from every `go.mod` above a Go file (nested modules
+  included), the directories a root `go.work` uses, and `replace`
+  directives that point at a local directory (in `go.mod` or `go.work`).
+  Imports of other modules (the standard library, dependencies) stay
+  unresolved, and `vendor/` next to a `go.mod` is not scanned.
+- An import names a package: it resolves (`RESOLVES_TO`) to every non-test
+  file of the package's directory. Build constraints (`//go:build`, `_linux.go`)
+  are not read, so every variant of a file is part of its package.
+- A call resolves by package: `f()` to a function of the caller's package or
+  of a `.` import, `pkg.F()` to a function of the imported package (by its
+  alias, else its package clause), and `x.M()` to a method when `x`'s type is
+  known: the method's receiver, a parameter, `var x T`, `x := T{}` / `&T{}` /
+  `new(T)`, or `x := NewT()` / `pkg.NewT()` (the type the function returns
+  first). Struct fields are followed (`h.repo.Find()`), and methods promoted
+  from embedded structs are found. Locals whose type is not visible (range
+  variables, results of other calls) leave the call unresolved, also when
+  they hide a package name. Package-level variables, closures, method values,
+  chained calls (`NewX().Run()`) and calls through interfaces are not
+  resolved yet.
+
 ## Review Process
 
 - Smoke reports include empty `falsePositiveFindings`,

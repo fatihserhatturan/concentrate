@@ -37,6 +37,12 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
       throw new Error("Syntax error");
     }
 
+    // A package is a directory's files with the same package clause.
+    const packageName = tree.rootNode.namedChildren
+      .find((child) => child.type === "package_clause")
+      ?.namedChildren.find((child) => child.type === "package_identifier")?.text;
+    if (packageName) nodes[0]!.properties.packageName = packageName;
+
     walk(tree.rootNode, (node) => {
       if (node.type === "import_spec") {
         const importNode = createImportNode(fileNodeId, node);
@@ -92,7 +98,7 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
         relationships.push({ from: fileNodeId, to: functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
       }
 
-      const callNodes = createCallNodes(functionNode.id, node);
+      const callNodes = createCallNodes(functionNode.id, node, localTypes(node));
       nodes.push(...callNodes);
       relationships.push(
         ...callNodes.map((callNode) => ({
@@ -121,6 +127,9 @@ function createImportNode(fileNodeId: string, node: SyntaxNode): GraphNode | nul
     return null;
   }
 
+  // `name "path"`: an alias, `_` (imported for its side effects) or `.`
+  // (its names used unqualified).
+  const alias = node.childForFieldName("name")?.text ?? null;
   return {
     id: `${fileNodeId}:import:${node.startPosition.row + 1}:${source}`,
     label: "Import",
@@ -128,6 +137,7 @@ function createImportNode(fileNodeId: string, node: SyntaxNode): GraphNode | nul
       source,
       specifier: node.text,
       line: node.startPosition.row + 1,
+      ...(alias === null ? {} : { alias }),
     },
   };
 }
@@ -152,10 +162,25 @@ function createFunctionNode(fileNodeId: string, node: SyntaxNode, className?: st
       isAsync: false,
       isAbstract: false,
       visibility: goVisibility(name),
-      parameters: null,
-      returnType: null,
+      parameters: JSON.stringify(goParameters(node.childForFieldName("parameters"))),
+      returnType: node.childForFieldName("result")?.text ?? null,
     },
   };
+}
+
+// `(a, b string, c *db.Store)` as [{name, type}]; unnamed parameters get a
+// null name.
+function goParameters(list: SyntaxNode | null): Array<{ name: string | null; type: string | null }> {
+  const parameters: Array<{ name: string | null; type: string | null }> = [];
+  for (const declaration of list?.namedChildren ?? []) {
+    if (declaration.type !== "parameter_declaration" && declaration.type !== "variadic_parameter_declaration") continue;
+    const typeNode = declaration.childForFieldName("type");
+    const type = typeNode ? `${declaration.type === "variadic_parameter_declaration" ? "..." : ""}${typeNode.text}` : null;
+    const names = declaration.childrenForFieldName("name");
+    if (names.length === 0) parameters.push({ name: null, type });
+    for (const name of names) parameters.push({ name: name.text, type });
+  }
+  return parameters;
 }
 
 function extractGoReceiverTypeName(node: SyntaxNode): string | null {
@@ -194,15 +219,90 @@ function createStructNode(fileNodeId: string, node: SyntaxNode): GraphNode | nul
       isExported: /^[A-Z]/.test(name),
       isAbstract: false,
       visibility: goVisibility(name),
+      fields: JSON.stringify(structFields(node.childForFieldName("type"))),
     },
   };
+}
+
+// A struct's fields as [{name, type}]; an embedded field is named after its
+// type (`*db.Store` → `Store`) and marked.
+function structFields(struct: SyntaxNode | null): Array<{ name: string; type: string; embedded?: true }> {
+  const fields: Array<{ name: string; type: string; embedded?: true }> = [];
+  const list = struct?.namedChildren.find((child) => child.type === "field_declaration_list");
+  for (const declaration of list?.namedChildren ?? []) {
+    if (declaration.type !== "field_declaration") continue;
+    const type = declaration.childForFieldName("type")?.text;
+    if (!type) continue;
+    const names = declaration.childrenForFieldName("name");
+    if (names.length === 0) fields.push({ name: baseTypeName(type), type, embedded: true });
+    for (const name of names) fields.push({ name: name.text, type });
+  }
+  return fields;
+}
+
+// `*db.Store[T]` → `Store`.
+function baseTypeName(type: string): string {
+  return type.replace(/^\*/u, "").replace(/\[.*$/u, "").split(".").pop()!;
+}
+
+// What the names in a function's scope are known to hold, from declarations
+// the parser can see: the receiver and parameters, `var x T`, and `x := T{}`,
+// `&T{}`, `new(T)` (a type) or `x := NewT()` (whatever NewT returns, found
+// once every file is parsed). Other locals are known only to be locals (null).
+type LocalType = { type: string } | { constructor: string };
+
+function localTypes(functionNode: SyntaxNode): Map<string, LocalType | null> {
+  const locals = new Map<string, LocalType | null>();
+  const declare = (name: SyntaxNode, local: LocalType | null) => {
+    if (name.type === "identifier" && name.text !== "_") locals.set(name.text, local);
+  };
+  for (const list of [functionNode.childForFieldName("receiver"), functionNode.childForFieldName("parameters")]) {
+    for (const parameter of goParameters(list)) {
+      if (parameter.name && parameter.type && !parameter.type.startsWith("...")) locals.set(parameter.name, { type: parameter.type });
+    }
+  }
+  walkScoped(functionNode, (node) => {
+    if (node.type === "var_spec") {
+      const type = node.childForFieldName("type")?.text;
+      const values = node.childForFieldName("value")?.namedChildren ?? [];
+      node.childrenForFieldName("name").forEach((name, index) => declare(name, type ? { type } : valueType(values[index])));
+    }
+    if (node.type === "short_var_declaration") {
+      const names = node.childForFieldName("left")?.namedChildren ?? [];
+      const values = node.childForFieldName("right")?.namedChildren ?? [];
+      // `x, err := NewT()`: one call yields every name, x its first result.
+      const local = values.length === 1 && names.length > 1 ? valueType(values[0]) : null;
+      names.forEach((name, index) => declare(name, local ? (index === 0 ? local : null) : values.length === names.length ? valueType(values[index]) : null));
+    }
+    if (node.type === "range_clause") {
+      for (const name of node.childForFieldName("left")?.namedChildren ?? []) declare(name, null);
+    }
+  }, (node) => node.type === "func_literal");
+  return locals;
+}
+
+function valueType(value: SyntaxNode | undefined): LocalType | null {
+  if (!value) return null;
+  if (value.type === "unary_expression" && value.childForFieldName("operator")?.text === "&") return valueType(value.childForFieldName("operand") ?? undefined);
+  if (value.type === "composite_literal") {
+    const type = value.childForFieldName("type");
+    return type && type.type !== "slice_type" && type.type !== "map_type" && type.type !== "array_type" ? { type: type.text } : null;
+  }
+  if (value.type !== "call_expression") return null;
+  const callee = value.childForFieldName("function");
+  if (!callee) return null;
+  if (callee.text === "new") {
+    const type = value.childForFieldName("arguments")?.namedChildren[0];
+    return type ? { type: type.text } : null;
+  }
+  return callee.type === "identifier" || callee.type === "selector_expression" ? { constructor: callee.text } : null;
 }
 
 function goVisibility(name: string): string {
   return /^[A-Z]/.test(name) ? "exported" : "unexported";
 }
 
-function createCallNodes(functionNodeId: string, node: SyntaxNode): GraphNode[] {
+function createCallNodes(functionNodeId: string, node: SyntaxNode, locals: Map<string, LocalType | null>): GraphNode[] {
   const calls: GraphNode[] = [];
 
   walkScoped(node, (child) => {
@@ -215,6 +315,7 @@ function createCallNodes(functionNodeId: string, node: SyntaxNode): GraphNode[] 
       return;
     }
 
+    const local = callExpression.receiver === null ? undefined : locals.get(callExpression.receiver.split(".")[0]!);
     calls.push({
       id: `${functionNodeId}:call:${child.startPosition.row + 1}:${child.startPosition.column}:${callExpression.expression}`,
       label: "Call",
@@ -225,6 +326,7 @@ function createCallNodes(functionNodeId: string, node: SyntaxNode): GraphNode[] 
         receiver: callExpression.receiver,
         line: child.startPosition.row + 1,
         columnNumber: child.startPosition.column,
+        ...(local === undefined ? {} : local === null ? { receiverIsLocal: true } : "type" in local ? { receiverType: local.type } : { receiverConstructor: local.constructor }),
       },
     });
   }, (child) => child.type === "function_declaration" || child.type === "method_declaration");

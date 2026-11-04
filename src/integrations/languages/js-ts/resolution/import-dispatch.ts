@@ -1,13 +1,10 @@
 import path from "node:path";
-import type { GoResolutionConfig } from "../../../../integrations/languages/go/resolution.js";
 import type { JsTsResolutionConfig } from "./config.js";
 import {
-  isGoFile,
   isJsTsFile,
   isRustFile,
   shouldResolveAbsoluteImport,
 } from "../../../../core/scan/resolution/file-kind.js";
-import { resolveGoImport } from "../../../../integrations/languages/go/resolution.js";
 import {
   createPythonModuleCandidates,
   createRelativeImportCandidates,
@@ -20,10 +17,9 @@ export function resolveImport(
   importerFileId: string,
   fileIdByRelativePath: Map<string, string>,
   jsTsConfig: JsTsResolutionConfig,
-  goConfig: GoResolutionConfig,
 ): string | null {
   if (!source.startsWith(".")) {
-    return resolveAbsoluteImport(source, importerFileId, fileIdByRelativePath, jsTsConfig, goConfig);
+    return resolveAbsoluteImport(source, importerFileId, fileIdByRelativePath, jsTsConfig);
   }
 
   const importerRelativePath = importerFileId.slice("file:".length);
@@ -43,14 +39,9 @@ function resolveAbsoluteImport(
   importerFileId: string,
   fileIdByRelativePath: Map<string, string>,
   jsTsConfig: JsTsResolutionConfig,
-  goConfig: GoResolutionConfig,
 ): string | null {
   if (isJsTsFile(importerFileId)) {
     return resolveJsTsConfiguredImport(source, fileIdByRelativePath, jsTsConfig);
-  }
-
-  if (isGoFile(importerFileId)) {
-    return resolveGoImport(source, fileIdByRelativePath, goConfig);
   }
 
   if (isRustFile(importerFileId)) {
