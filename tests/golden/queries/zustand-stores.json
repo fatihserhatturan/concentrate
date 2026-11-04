@@ -1481,6 +1481,59 @@
           ]
         },
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "increase"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/components/BearCounter.tsx:function:5:BearCounter:call:11:27:increase",
+            "resolved": 0
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "increase"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/components/BearCounter.tsx:function:5:BearCounter:call:11:27:increase",
+            "file": "src/components/BearCounter.tsx",
+            "line": 11,
+            "expression": "increase",
+            "caller": "BearCounter"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "increase"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
+        "params": {
+          "names": [
+            "increase"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1579,6 +1632,18 @@
       "tables": [],
       "envVars": [],
       "config": [],
+      "unresolvedCalls": {
+        "count": 1,
+        "sites": [
+          {
+            "file": "src/components/BearCounter.tsx",
+            "line": 11,
+            "expression": "increase",
+            "caller": "BearCounter"
+          }
+        ]
+      },
+      "completeness": "1 call named increase resolves to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.",
       "page": {
         "offset": 0,
         "returned": 0
@@ -1624,6 +1689,81 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"log\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "log"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/stores/bears.ts:function:11:log:call:12:2:console.log",
+            "resolved": 0
+          },
+          {
+            "id": "file:src/stores/bears.ts:function:21:increase:call:22:10:log",
+            "resolved": 1
+          },
+          {
+            "id": "file:src/stores/bears.ts:function:25:reset:call:26:10:log",
+            "resolved": 1
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "log"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/stores/bears.ts:function:11:log:call:12:2:console.log",
+            "file": "src/stores/bears.ts",
+            "line": 12,
+            "expression": "console.log",
+            "caller": "log"
+          },
+          {
+            "id": "file:src/stores/bears.ts:function:21:increase:call:22:10:log",
+            "file": "src/stores/bears.ts",
+            "line": 22,
+            "expression": "log",
+            "caller": "increase"
+          },
+          {
+            "id": "file:src/stores/bears.ts:function:25:reset:call:26:10:log",
+            "file": "src/stores/bears.ts",
+            "line": 26,
+            "expression": "log",
+            "caller": "reset"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "log"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
+        "params": {
+          "names": [
+            "log"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1652,6 +1792,18 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 1,
+        "sites": [
+          {
+            "file": "src/stores/bears.ts",
+            "line": 12,
+            "expression": "console.log",
+            "caller": "log"
+          }
+        ]
+      },
+      "completeness": "1 call named log resolves to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.",
       "page": {
         "offset": 0,
         "returned": 2
@@ -1688,6 +1840,21 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"reset\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "reset"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/components/BearCounter.tsx:function:22:resetAll:call:23:2:useBearStore.getState().reset",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -1707,6 +1874,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named reset in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 1

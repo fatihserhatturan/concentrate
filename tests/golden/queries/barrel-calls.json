@@ -622,6 +622,29 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"add\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "add"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:packages/app/src/main.ts:function:4:run:call:5:12:add",
+            "resolved": 1
+          },
+          {
+            "id": "file:packages/app/src/main.ts:function:4:run:call:5:56:core.add",
+            "resolved": 1
+          },
+          {
+            "id": "file:packages/core/src/report.ts:function:3:report:call:4:12:add",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -659,6 +682,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named add in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 3
@@ -704,6 +732,16 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"multiply\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "multiply"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -732,6 +770,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named multiply in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 2
@@ -1336,6 +1379,29 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "add"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:packages/app/src/main.ts:function:4:run:call:5:12:add",
+            "resolved": 1
+          },
+          {
+            "id": "file:packages/app/src/main.ts:function:4:run:call:5:56:core.add",
+            "resolved": 1
+          },
+          {
+            "id": "file:packages/core/src/report.ts:function:3:report:call:4:12:add",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -1384,6 +1450,11 @@
       "tables": [],
       "envVars": [],
       "config": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named add in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 2

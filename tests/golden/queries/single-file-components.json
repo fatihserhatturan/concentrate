@@ -789,6 +789,29 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"formatTotal\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "formatTotal"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/components/Total.svelte:function:11:refresh:call:12:11:formatTotal",
+            "resolved": 1
+          },
+          {
+            "id": "file:src/components/Total.svelte:function:5:<script>:call:9:13:formatTotal",
+            "resolved": 1
+          },
+          {
+            "id": "file:src/pages/index.astro:initializercall:7:14:formatTotal",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -826,6 +849,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named formatTotal in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 3
@@ -871,6 +899,25 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"addToCart\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "addToCart"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/components/CartButton.vue:function:18:add:call:19:16:addToCart",
+            "resolved": 1
+          },
+          {
+            "id": "file:src/pages/index.astro:function:16:<document.querySelector('p')?.addEventListener:click:arg1>:call:16:67:addToCart",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -899,6 +946,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named addToCart in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 2

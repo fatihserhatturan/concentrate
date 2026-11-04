@@ -2944,6 +2944,21 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "useApi"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/composables/useUsers.ts:function:4:useUsers:call:6:14:useApi",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -3049,6 +3064,11 @@
       "tables": [],
       "envVars": [],
       "config": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named useApi in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 4

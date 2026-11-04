@@ -653,6 +653,25 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"setToken\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "setToken"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:shadow.ts:function:7:logout:call:8:2:api.setToken",
+            "resolved": 1
+          },
+          {
+            "id": "file:store.ts:function:3:login:call:4:2:api.setToken",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -681,6 +700,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named setToken in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 2
@@ -717,6 +741,82 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"get\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "get"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:client.ts:function:4:users:call:5:11:this.get",
+            "resolved": 0
+          },
+          {
+            "id": "file:shadow.ts:function:3:withApi:call:4:9:api.get",
+            "resolved": 0
+          },
+          {
+            "id": "file:via-barrel.ts:function:3:load:call:4:9:client.get",
+            "resolved": 1
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "get"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:shadow.ts:function:3:withApi:call:4:9:api.get",
+            "file": "shadow.ts",
+            "line": 4,
+            "expression": "api.get",
+            "caller": "withApi"
+          },
+          {
+            "id": "file:via-barrel.ts:function:3:load:call:4:9:client.get",
+            "file": "via-barrel.ts",
+            "line": 4,
+            "expression": "client.get",
+            "caller": "load"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "get"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:client.ts:function:4:users:call:5:11:this.get",
+            "file": "client.ts",
+            "line": 5,
+            "expression": "this.get",
+            "caller": "users"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
+        "params": {
+          "names": [
+            "get"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -736,6 +836,24 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 2,
+        "sites": [
+          {
+            "file": "client.ts",
+            "line": 5,
+            "expression": "this.get",
+            "caller": "users"
+          },
+          {
+            "file": "shadow.ts",
+            "line": 4,
+            "expression": "api.get",
+            "caller": "withApi"
+          }
+        ]
+      },
+      "completeness": "2 calls named get resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.",
       "page": {
         "offset": 0,
         "returned": 1
@@ -772,6 +890,21 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"users\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "users"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:store.ts:function:3:login:call:5:9:api.users",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -791,6 +924,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named users in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 1

@@ -582,6 +582,70 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"resolve\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "resolve"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:view.js:function:6:lookup:call:7:12:resolve",
+            "resolved": 0
+          },
+          {
+            "id": "file:view.js:function:6:lookup:call:8:9:this.resolve",
+            "resolved": 1
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "resolve"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:view.js:function:6:lookup:call:7:12:resolve",
+            "file": "view.js",
+            "line": 7,
+            "expression": "resolve",
+            "caller": "lookup"
+          },
+          {
+            "id": "file:view.js:function:6:lookup:call:8:9:this.resolve",
+            "file": "view.js",
+            "line": 8,
+            "expression": "this.resolve",
+            "caller": "lookup"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "resolve"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
+        "params": {
+          "names": [
+            "resolve"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -601,6 +665,18 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 1,
+        "sites": [
+          {
+            "file": "view.js",
+            "line": 7,
+            "expression": "resolve",
+            "caller": "lookup"
+          }
+        ]
+      },
+      "completeness": "1 call named resolve resolves to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.",
       "page": {
         "offset": 0,
         "returned": 1
@@ -637,6 +713,70 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"helper\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "helper"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:helpers.js:function:3:run:call:4:9:helper",
+            "resolved": 0
+          },
+          {
+            "id": "file:helpers.js:function:7:direct:call:8:9:helper",
+            "resolved": 1
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "helper"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:helpers.js:function:3:run:call:4:9:helper",
+            "file": "helpers.js",
+            "line": 4,
+            "expression": "helper",
+            "caller": "run"
+          },
+          {
+            "id": "file:helpers.js:function:7:direct:call:8:9:helper",
+            "file": "helpers.js",
+            "line": 8,
+            "expression": "helper",
+            "caller": "direct"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "helper"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
+        "params": {
+          "names": [
+            "helper"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -656,6 +796,18 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 1,
+        "sites": [
+          {
+            "file": "helpers.js",
+            "line": 4,
+            "expression": "helper",
+            "caller": "run"
+          }
+        ]
+      },
+      "completeness": "1 call named helper resolves to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.",
       "page": {
         "offset": 0,
         "returned": 1
@@ -682,6 +834,21 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"build\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "build"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:main.js:initializercall:2:12:build",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -691,6 +858,11 @@
         "limit": 20
       },
       "callers": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named build in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 0

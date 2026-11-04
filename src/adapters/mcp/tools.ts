@@ -6,7 +6,7 @@ import { asObject, objectSchema, optionalBoolean, optionalLimit, optionalString,
 import { fitToBudget } from "./budget.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
 import { pagedResult, pageWindow, type PageWindow } from "./paging.js";
-import { filesMatching, NO_FILE_MATCHED } from "./agent-tools/graph.js";
+import { callerCompleteness, filesMatching, NO_FILE_MATCHED, unresolvedCalls } from "./agent-tools/graph.js";
 import { listStores } from "./stores.js";
 import { listTables } from "./tables.js";
 
@@ -130,7 +130,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "find_callers",
-    description: "Call sites that resolve to functions or methods of this name; a caller is a function, a method (with className) or module-level code.",
+    description: "Call sites that resolve to functions or methods of this name; a caller is a function, a method (with className) or module-level code. unresolvedCalls and completeness say whether any call by that name is left unresolved.",
     inputSchema: objectSchema({
       name: {
         type: "string",
@@ -413,8 +413,25 @@ async function findCallers(
     LIMIT ${fetch}
   `);
 
-  return { query: { name, exact, limit }, callers: window.take([...functionCallers, ...methodCallers, ...moduleCallers]) };
+  const names = exact
+    ? [name]
+    : [...new Set((await engine.query(`
+      MATCH (target:Function)
+      WHERE ${predicate}
+      RETURN DISTINCT target.name AS name
+      ORDER BY name
+      LIMIT ${CALLER_NAME_LIMIT}
+    `) as Array<{ name: string }>).map((row) => row.name))];
+
+  return {
+    query: { name, exact, limit },
+    callers: window.take([...functionCallers, ...methodCallers, ...moduleCallers]),
+    ...callerCompleteness(names, await unresolvedCalls(engine, names)),
+  };
 }
+
+// Function names a substring search checks for unresolved calls.
+const CALLER_NAME_LIMIT = 20;
 
 async function listExports(
   engine: GraphQueryEngine,
