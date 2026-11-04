@@ -24,7 +24,7 @@
   "MATCH (entrypoint:EntryPoint)-[rel:READS_ENTRYPOINT|WRITES_ENTRYPOINT]->(table:Table) WHERE table.library = $library OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint) RETURN id(table) AS table, id(entrypoint) AS id, entrypoint.kind AS kind, entrypoint.trigger AS trigger, file.relativePath AS file, entrypoint.line AS line, label(rel) AS relType, rel.operation AS operation",
   "MATCH (file:File) RETURN file.relativePath AS file",
   "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest",
-  "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated",
+  "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated, file.packageName AS packageName",
   "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL AND file.relativePath IN [$str] RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
   "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
   "MATCH (file:File)-[:ACCESSES_DATA_FILE]->(model:DataModel) RETURN DISTINCT file.relativePath AS file, model.name AS model",

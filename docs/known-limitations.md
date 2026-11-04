@@ -985,6 +985,18 @@ Astro).
 - `type ID = string` and `type Count int` are `TypeAlias` nodes (`aliasOf`,
   `isAlias`). Type parameters are kept as written (`typeParameters` on
   structs, interfaces, types and functions); instantiations are not tracked.
+- Package-level `var` and `const` are `Variable` nodes (`kind` `var` or
+  `const`, `stringValue` for plain string literals); their types and
+  initializer calls are not recorded, so calls on package variables
+  (`db.Query()`) stay unresolved.
+- `func main` of package `main` and `func init` are `EntryPoint` nodes (kind
+  `main` / `init`, library `go`). `TestX`, `BenchmarkX`, `FuzzX` and
+  `ExampleX` in `_test.go` files carry `testKind` (`test`, `benchmark`,
+  `fuzz`, `example`); `_test.go` files are test files.
+- `find_unused_exports` judges Go exports by package and counts any mention
+  of the name in another package's files as a use (comments and strings
+  included), so it can miss dead exports but rarely flags used ones. Uses
+  from outside the scan (a library's consumers) are not seen.
 
 ## Review Process
 

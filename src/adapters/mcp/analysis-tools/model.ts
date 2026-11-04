@@ -30,6 +30,8 @@ export type FileInfo = {
   isTest: boolean;
   isFixture: boolean;
   isGenerated: boolean;
+  // Go: the package clause.
+  packageName?: string | null;
 };
 
 export type ImportBinding = { imported: string; local: string; kind: string };
@@ -128,12 +130,12 @@ export async function loadFiles(engine: IQueryEngine): Promise<Map<string, FileI
   const rows = await engine.query(`
     MATCH (file:File)
     RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest, file.isFixture AS isFixture,
-      file.isGenerated AS isGenerated
+      file.isGenerated AS isGenerated, file.packageName AS packageName
   `) as Row[];
   return new Map(rows.flatMap((row) => {
     const file = str(row.file);
     return file
-      ? [[file, { file, language: str(row.language), isTest: row.isTest === true, isFixture: row.isFixture === true, isGenerated: row.isGenerated === true }]]
+      ? [[file, { file, language: str(row.language), isTest: row.isTest === true, isFixture: row.isFixture === true, isGenerated: row.isGenerated === true, packageName: str(row.packageName) }]]
       : [];
   }));
 }

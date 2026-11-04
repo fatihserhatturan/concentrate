@@ -8,6 +8,7 @@
 {"kind":"node","id":"dir:store","label":"Directory","properties":{"name":"store","path":"<root>/store","relativePath":"store"}}
 {"kind":"node","id":"dir:util","label":"Directory","properties":{"name":"util","path":"<root>/util","relativePath":"util"}}
 {"kind":"node","id":"file:api/cmd/server/main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/api/cmd/server/main.go","relativePath":"api/cmd/server/main.go","sourceType":"production"}}
+{"kind":"node","id":"file:api/cmd/server/main.go:entrypoint:11:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":11,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:api/cmd/server/main.go:function:11:main","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":11,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
 {"kind":"node","id":"file:api/cmd/server/main.go:function:11:main:call:12:14:db.NewRepo","label":"Call","properties":{"callee":"NewRepo","columnNumber":14,"expression":"db.NewRepo","line":12,"name":"db.NewRepo","receiver":"db"}}
 {"kind":"node","id":"file:api/cmd/server/main.go:function:11:main:call:14:2:log.Fatal","label":"Call","properties":{"callee":"Fatal","columnNumber":2,"expression":"log.Fatal","line":14,"name":"log.Fatal","receiver":"log"}}
@@ -41,7 +42,7 @@
 {"kind":"node","id":"file:api/internal/handler/handler.go:import:4:fmt","label":"Import","properties":{"line":4,"source":"fmt","specifier":"\"fmt\""}}
 {"kind":"node","id":"file:api/internal/handler/handler.go:import:6:example.com/store","label":"Import","properties":{"line":6,"source":"example.com/store","specifier":"\"example.com/store\""}}
 {"kind":"node","id":"file:api/internal/handler/handler_test.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":true,"language":"go","packageName":"handler","path":"<root>/api/internal/handler/handler_test.go","relativePath":"api/internal/handler/handler_test.go","sourceType":"test"}}
-{"kind":"node","id":"file:api/internal/handler/handler_test.go:function:5:TestServe","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"TestServe","parameters":"[{\"name\":\"t\",\"type\":\"*testing.T\"}]","returnType":null,"visibility":"exported"}}
+{"kind":"node","id":"file:api/internal/handler/handler_test.go:function:5:TestServe","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"TestServe","parameters":"[{\"name\":\"t\",\"type\":\"*testing.T\"}]","returnType":null,"testKind":"test","visibility":"exported"}}
 {"kind":"node","id":"file:api/internal/handler/handler_test.go:function:5:TestServe:call:7:1:h.audit","label":"Call","properties":{"callee":"audit","columnNumber":1,"expression":"h.audit","line":7,"name":"h.audit","receiver":"h","receiverType":"Handler"}}
 {"kind":"node","id":"file:api/internal/handler/handler_test.go:import:3:testing","label":"Import","properties":{"line":3,"source":"testing","specifier":"\"testing\""}}
 {"kind":"node","id":"file:store/find.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"store","path":"<root>/store/find.go","relativePath":"store/find.go","sourceType":"production"}}
@@ -71,11 +72,13 @@
 {"kind":"rel","from":"dir:store","type":"CONTAINS_FILE","to":"file:store/find.go","properties":{}}
 {"kind":"rel","from":"dir:store","type":"CONTAINS_FILE","to":"file:store/repo.go","properties":{}}
 {"kind":"rel","from":"dir:util","type":"CONTAINS_FILE","to":"file:util/strings.go","properties":{}}
+{"kind":"rel","from":"file:api/cmd/server/main.go","type":"DECLARES_ENTRYPOINT","to":"file:api/cmd/server/main.go:entrypoint:11:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:api/cmd/server/main.go","type":"DEFINES_FUNCTION","to":"file:api/cmd/server/main.go:function:11:main","properties":{}}
 {"kind":"rel","from":"file:api/cmd/server/main.go","type":"IMPORTS","to":"file:api/cmd/server/main.go:import:4:log","properties":{}}
 {"kind":"rel","from":"file:api/cmd/server/main.go","type":"IMPORTS","to":"file:api/cmd/server/main.go:import:6:example.com/api/internal/handler","properties":{}}
 {"kind":"rel","from":"file:api/cmd/server/main.go","type":"IMPORTS","to":"file:api/cmd/server/main.go:import:7:example.com/store","properties":{}}
 {"kind":"rel","from":"file:api/cmd/server/main.go","type":"IMPORTS","to":"file:api/cmd/server/main.go:import:8:github.com/lib/pq","properties":{}}
+{"kind":"rel","from":"file:api/cmd/server/main.go:entrypoint:11:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:api/cmd/server/main.go:function:11:main","properties":{}}
 {"kind":"rel","from":"file:api/cmd/server/main.go:function:11:main","type":"CALLS","to":"file:api/cmd/server/main.go:function:11:main:call:12:14:db.NewRepo","properties":{}}
 {"kind":"rel","from":"file:api/cmd/server/main.go:function:11:main","type":"CALLS","to":"file:api/cmd/server/main.go:function:11:main:call:14:2:log.Fatal","properties":{}}
 {"kind":"rel","from":"file:api/cmd/server/main.go:function:11:main","type":"CALLS","to":"file:api/cmd/server/main.go:function:11:main:call:16:6:handler.New","properties":{}}

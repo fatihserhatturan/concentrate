@@ -245,3 +245,29 @@ describe("analysis MCP tools", () => {
     }
   });
 });
+
+describe("analysis MCP tools on Go", () => {
+  let store: GraphStore;
+  const tool = async (name: string, args: Record<string, unknown>) => (await callMcpTool(store, name, args)).structuredContent as Record<string, any>;
+
+  before(async () => {
+    const graph = await buildCodeGraph(path.resolve("fixtures/go-entrypoints"), { continueOnError: false });
+    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-unused-")), "graph"));
+    await store.reset();
+    await store.write(graph.nodes, graph.relationships);
+  });
+  after(async () => {
+    await store.close();
+  });
+
+  it("find_unused_exports judges Go exports by package", async () => {
+    const result = await tool("find_unused_exports", {});
+    // Add is called and DefaultName / Verbose are named from package main;
+    // Subtract is only used by its own package's test.
+    assert.deepEqual(result.unusedExports.map((entry: any) => entry.name).sort(), ["Debug", "Options", "Subtract", "Unused", "Version"]);
+    assert.deepEqual(result.deadFunctions.map((entry: any) => entry.name), ["forgotten"]);
+    assert.equal(result.skipped.goMain, 1, "Run in package main");
+    assert.ok(result.skipped.tests >= 4);
+  });
+});
+

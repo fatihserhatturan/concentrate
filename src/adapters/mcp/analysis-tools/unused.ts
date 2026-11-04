@@ -13,7 +13,7 @@ type Row = Record<string, unknown>;
 // (namespace, dynamic or default imports, `export * as`).
 type SurfaceReason = "packageEntry" | "wholeFileImported";
 
-const LANGUAGES = new Set(["typescript", "javascript"]);
+const LANGUAGES = new Set(["typescript", "javascript", "go"]);
 const MAX_DEAD_FUNCTIONS = 100;
 
 // find_unused_exports: exported declarations nothing in another file uses,
@@ -77,22 +77,30 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     }
   }
 
-  // Uses through calls, callbacks and class relations from other files.
+  // Uses through calls, callbacks and class relations from other files (for
+  // Go, other packages: its exports are what a package offers others).
   const fileOf = (id: string) => declarationsById.get(id)?.file ?? functions.get(id)?.file ?? null;
+  const scopeOf = (file: string) => (isGo(file) ? path.posix.dirname(file) : file);
   const calledAnywhere = new Set<string>();
   for (const link of links.uses) {
     calledAnywhere.add(link.target);
     const from = link.fromFile ?? (link.from ? fileOf(link.from) : null);
-    if (from && from !== fileOf(link.target)) used.add(link.target);
+    const target = fileOf(link.target);
+    if (from && target && scopeOf(from) !== scopeOf(target)) used.add(link.target);
   }
 
   const inScope = (declaration: Declaration) => {
     const info = files.get(declaration.file);
     return info !== undefined && LANGUAGES.has(info.language ?? "") && (!file || matchesFileOrDirectory(declaration.file, file));
   };
-  const skipped: Record<string, number> = { packageEntry: 0, wholeFileImported: 0, defaultExports: 0, tests: 0, generated: 0, handlers: 0 };
+  const skipped: Record<string, number> = { packageEntry: 0, wholeFileImported: 0, defaultExports: 0, tests: 0, generated: 0, handlers: 0, goMain: 0 };
+  // Go names the graph has no edges for (types, variables, functions used as
+  // values) count as used when another package's Go file mentions them.
+  const goMentions = await goIdentifierIndex(links.rootPath, files, declarations.some((declaration) => isGo(declaration.file)));
   const skipReason = (declaration: Declaration, info: FileInfo): string | null => {
     if (!includeTests && (info.isTest || info.isFixture)) return "tests";
+    // Nothing imports a Go main package; init and main run without a caller.
+    if (isGo(declaration.file) && (info.packageName === "main" || declaration.name === "init")) return "goMain";
     if (info.isGenerated) return "generated";
     if (links.handlers.has(declaration.id)) return "handlers";
     // Default exports are what tools and frameworks load by convention (configs, pages).
@@ -103,6 +111,7 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
   const unused = [];
   for (const declaration of declarations) {
     if (!declaration.isExported || declaration.kind === "method" || used.has(declaration.id) || !inScope(declaration)) continue;
+    if (isGo(declaration.file) && mentionedOutside(goMentions, declaration.name, path.posix.dirname(declaration.file))) continue;
     const reason = skipReason(declaration, files.get(declaration.file)!);
     if (reason) {
       skipped[reason] = (skipped[reason] ?? 0) + 1;
@@ -128,6 +137,13 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
   const rootPath = links.rootPath;
   for (const declaration of deadCandidates) {
     if (deadFunctions.length >= MAX_DEAD_FUNCTIONS) break;
+    // A Go function is visible in every file of its package.
+    if (isGo(declaration.file)) {
+      if (declaration.name !== "init" && declaration.name !== "main" && (goMentions.get(declaration.name)?.get(path.posix.dirname(declaration.file)) ?? 0) <= 1) {
+        deadFunctions.push(describeDeclaration(declaration));
+      }
+      continue;
+    }
     let text = sources.get(declaration.file);
     if (!text) sources.set(declaration.file, text = rootPath ? readFile(path.join(rootPath, declaration.file), "utf8").catch(() => null) : Promise.resolve(null));
     const source = await text;
@@ -142,8 +158,37 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     unusedExports: window.take(unused),
     deadFunctions,
     skipped,
-    note: "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. JavaScript and TypeScript only.",
+    note: "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. JavaScript, TypeScript and Go.",
   };
+}
+
+function isGo(file: string): boolean {
+  return file.endsWith(".go");
+}
+
+// Identifier occurrences in the scan's Go files: name -> directory -> count.
+async function goIdentifierIndex(rootPath: string | null, files: ReadonlyMap<string, FileInfo>, needed: boolean): Promise<Map<string, Map<string, number>>> {
+  const index = new Map<string, Map<string, number>>();
+  if (!needed || !rootPath) return index;
+  for (const file of files.keys()) {
+    if (!isGo(file)) continue;
+    const source = await readFile(path.join(rootPath, file), "utf8").catch(() => null);
+    if (source === null) continue;
+    const dir = path.posix.dirname(file);
+    for (const name of source.match(/[A-Za-z_]\w*/gu) ?? []) {
+      let byDir = index.get(name);
+      if (!byDir) index.set(name, byDir = new Map());
+      byDir.set(dir, (byDir.get(dir) ?? 0) + 1);
+    }
+  }
+  return index;
+}
+
+function mentionedOutside(index: Map<string, Map<string, number>>, name: string, dir: string): boolean {
+  for (const mentionDir of index.get(name)?.keys() ?? []) {
+    if (mentionDir !== dir) return true;
+  }
+  return false;
 }
 
 type Links = {

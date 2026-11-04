@@ -324,7 +324,7 @@ Example:
   `cycle` runs through the first of them. Use it to see which files of one
   directory are in a large cycle.
 - `find_unused_exports({ file?, includeTests = false, limit = 50 })`:
-  candidate dead code in JavaScript and TypeScript files. `file` is a file,
+  candidate dead code in JavaScript, TypeScript and Go files. `file` is a file,
   a directory (`packages/common/utils`) or a path suffix of either.
   - `unusedExports`: exported declarations that no other file imports by name
     (through barrels too), calls, passes as a callback, extends, implements,
@@ -341,6 +341,12 @@ Example:
     such as a default export), exports named `default`, route and entrypoint
     handlers, generated files, and test and fixture files unless
     `includeTests` is set.
+  - Go is judged by package (a directory): an exported, capitalized name is
+    used when a function of another package calls it or another package's Go
+    file mentions the name (read from disk; this covers types, variables and
+    functions passed as values). Package `main` and `init` are skipped
+    (`skipped.goMain`), and a Go `deadFunctions` entry is an unexported
+    function whose name its package's files mention only once.
 - `architecture_overview({ level = "package", depth = 2, limit = 50 })`: the
   repository as `groups` (workspace packages, or with `level: "directory"`
   directories cut at `depth` path segments) with file, test file, language,

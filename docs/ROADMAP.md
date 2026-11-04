@@ -866,7 +866,7 @@ Go gets files, imports, structs, functions, methods and calls today (`src/integr
 
 - [x] Interfaces as `Interface` nodes; implicit `IMPLEMENTS` from method sets (struct and pointer receivers)
 - [x] Embedded structs and interfaces (promoted methods); type aliases and defined types as `TypeAlias`; generics (type parameters recorded)
-- [ ] Package-level `var` / `const` as `Variable` nodes; `parameters` and `returnType` on functions and methods
+- [x] Package-level `var` / `const` as `Variable` nodes; `parameters` and `returnType` on functions and methods
 
 ### Calls
 
@@ -875,12 +875,12 @@ Go gets files, imports, structs, functions, methods and calls today (`src/integr
 
 ### Entrypoints and tests
 
-- [ ] `func main` in `package main` and `func init` as `EntryPoint` nodes
-- [ ] `_test.go` files, `TestX` / `BenchmarkX` functions classified as tests
+- [x] `func main` in `package main` and `func init` as `EntryPoint` nodes
+- [x] `_test.go` files, `TestX` / `BenchmarkX` functions classified as tests
 
 ### MCP
 
-- [ ] `find_unused_exports` covers Go (capitalized names not used outside their package)
+- [x] `find_unused_exports` covers Go (capitalized names not used outside their package)
 
 ### Acceptance criteria
 

@@ -54,6 +54,21 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
       ?.namedChildren.find((child) => child.type === "package_identifier")?.text;
     if (packageName) nodes[0]!.properties.packageName = packageName;
 
+    // Package-level `var` and `const` (one node per name).
+    for (const declaration of tree.rootNode.namedChildren) {
+      if (declaration.type !== "var_declaration" && declaration.type !== "const_declaration") continue;
+      const specs = declaration.descendantsOfType(declaration.type === "var_declaration" ? "var_spec" : "const_spec");
+      for (const spec of specs) {
+        const values = spec.childForFieldName("value")?.namedChildren ?? [];
+        spec.childrenForFieldName("name").forEach((name, index) => {
+          if (name.text === "_") return;
+          const variable = createVariableNode(fileNodeId, declaration.type === "var_declaration" ? "var" : "const", name, values[index]);
+          nodes.push(variable);
+          relationships.push({ from: fileNodeId, to: variable.id, type: "DEFINES_VARIABLE", properties: {} });
+        });
+      }
+    }
+
     walk(tree.rootNode, (node) => {
       if (node.type === "import_spec") {
         const importNode = createImportNode(fileNodeId, node);
@@ -120,6 +135,25 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
       } else {
         relationships.push({ from: fileNodeId, to: functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
       }
+
+      // `func main` of package main and `func init` run without a caller.
+      const name = String(functionNode.properties.name);
+      if (node.type === "function_declaration" && node.parent?.type === "source_file"
+        && ((name === "main" && packageName === "main") || name === "init")) {
+        const line = node.startPosition.row + 1;
+        const entrypoint: GraphNode = {
+          id: `${fileNodeId}:entrypoint:${line}:${node.startPosition.column}:${name}:<none>`,
+          label: "EntryPoint",
+          properties: { kind: name, trigger: null, receiverName: null, library: "go", line, handlerName: name },
+        };
+        nodes.push(entrypoint);
+        relationships.push(
+          { from: fileNodeId, to: entrypoint.id, type: "DECLARES_ENTRYPOINT", properties: {} },
+          { from: entrypoint.id, to: functionNode.id, type: "ENTRYPOINT_HANDLED_BY", properties: {} },
+        );
+      }
+      const testKind = relativePath.endsWith("_test.go") && node.type === "function_declaration" ? goTestKind(name) : null;
+      if (testKind) functionNode.properties.testKind = testKind;
 
       const callNodes = createCallNodes(functionNode.id, node, localTypes(node));
       nodes.push(...callNodes);
@@ -282,6 +316,38 @@ function createInterfaceNode(fileNodeId: string, node: SyntaxNode): GraphNode {
       ...typeParameters(node),
     },
   };
+}
+
+function createVariableNode(fileNodeId: string, kind: "var" | "const", name: SyntaxNode, value: SyntaxNode | undefined): GraphNode {
+  const line = name.startPosition.row + 1;
+  const literal = value?.type === "interpreted_string_literal" || value?.type === "raw_string_literal" ? goStringValue(value) : null;
+  return {
+    id: `${fileNodeId}:variable:${line}:${name.text}`,
+    label: "Variable",
+    properties: {
+      name: name.text,
+      kind,
+      isExported: /^[A-Z]/.test(name.text),
+      line,
+      ...(literal === null ? {} : { stringValue: literal }),
+    },
+  };
+}
+
+// The text of a string literal; null when it has escapes the graph would
+// have to interpret.
+function goStringValue(node: SyntaxNode): string | null {
+  if (node.type === "raw_string_literal") return node.text.slice(1, -1);
+  const body = node.text.slice(1, -1);
+  return body.includes("\\") ? null : body;
+}
+
+// `TestX`, `BenchmarkX`, `FuzzX` and `ExampleX` of a _test.go file, which
+// `go test` runs: the name continues with an upper-case letter, a digit or
+// `_` (or is the prefix alone).
+function goTestKind(name: string): string | null {
+  const match = /^(Test|Benchmark|Fuzz|Example)(?:$|[^a-z])/u.exec(name);
+  return match ? match[1]!.toLowerCase() : null;
 }
 
 // `type ID = string` (an alias) and `type Count int` (a defined type).
