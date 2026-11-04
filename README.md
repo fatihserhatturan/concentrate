@@ -80,7 +80,7 @@ Every number below comes from pinned open-source repositories and can be reprodu
 **The graph is trustworthy.**
 - Against hand-written labels, 100% of reported routes, call targets, database accesses, React, Vue, Svelte and Angular components, component renders, pages, frontend → backend API requests and Pinia store reads and writes are correct.
 - Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React, Vue, SvelteKit and Angular frontends) are 100%.
-- Call recall is 100% on the 348 labeled call sites with a project target (223 of them in a Go gin backend); API requests are 100% on 33; the remaining gap (components 99%) is in [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
+- Call recall is 100% on the 497 labeled call sites with a project target (372 of them in two Go backends, gin and echo); API requests are 100% on 66 (the same Next.js frontend against an Express and a gin backend); the remaining gap (components 99%) is in [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 
 <p align="center"><img src="docs/assets/agent-hard.svg" alt="Agent benchmark, sonnet and haiku, 3 runs per question: median input tokens with Concentrate fall 77–85% on import-cycle questions and 72–79% on unused-export questions; other categories range from −24% to +53%" width="860"></p>
 

@@ -790,7 +790,9 @@ Astro).
   most specific match (literal segments over parameters over catch-alls);
   `match` says `exact`, `parameter` or `catch-all`. Unresolved or absolute
   URLs, partly dynamic segments (`/u/${id}.json`) and ties between routes
-  stay unlinked. Query strings are ignored.
+  stay unlinked, except two routes that differ only by a trailing slash
+  (gin's `/user` and `/user/`): the one whose slash matches the URL's wins.
+  Query strings are ignored.
 - tRPC: procedures of a top-level `router({…})`, `t.router({…})` or
   `createTRPCRouter({…})` (also default-exported) are `Route` nodes
   (framework `trpc`, method `QUERY` / `MUTATION` / `SUBSCRIPTION`,
@@ -967,9 +969,14 @@ Astro).
   first). Struct fields are followed (`h.repo.Find()`), and methods promoted
   from embedded structs are found, through anonymous struct fields too
   (`self.User.Email.IsInvalid()`). A type assertion types a local
-  (`m := c.MustGet("user").(UserModel)`). Locals whose type is not visible (range
-  variables, results of other calls) leave the call unresolved, also when
-  they hide a package name. Package-level variables, closures, method values
+  (`m := c.MustGet("user").(UserModel)`), and so does the result of a method
+  called on a typed value or field (`u, err := h.userStore.GetByEmail(e)`:
+  the method's first result, through fields; on an interface, the result
+  its implementations agree on), and a range over a typed slice, array or
+  map (`for _, a := range articles` with `articles []model.Article`). Locals
+  whose type is not visible (results of package functions without a
+  declared result, ranges over untyped expressions) leave the call
+  unresolved, also when they hide a package name. Package-level variables, closures, method values
   and chained calls (`NewX().Run()`) are not resolved yet.
 - Interfaces are `Interface` nodes with their method names and embedded
   interfaces. A struct `IMPLEMENTS` every interface of the scan whose methods
@@ -1037,9 +1044,12 @@ Astro).
 - A route on a field (`s.router.GET("/x", h)`) is taken as a root router's
   when the file imports one framework with that method. Routers stored in
   package variables or built in closures other than chi's and fiber's
-  callbacks are not followed, nor are routers a function of another file
-  returns when the caller registers routes on them directly
-  (`r := api.NewRouter(); r.Get(…)`).
+  callbacks are not followed. A router a function of another file returns
+  (`r := router.New()` with `func New() *echo.Echo`) is followed when the
+  caller's file declares no route of its own: that file is parsed again with
+  the call marked as a router constructor, so its routes, groups and the
+  routers it passes on get their paths. A file that already declares routes
+  is not parsed again, so a foreign router there stays unknown.
 - Middleware follows each framework's order. gin, chi, fiber and echo groups
   apply `Use` to what is registered after it; echo's root (`e.Use`, `e.Pre`)
   and gorilla/mux routers apply it to all their routes. The lifecycle steps

@@ -12,7 +12,8 @@ import { createVariableResolver } from "./variable-resolver.js";
 // parameter; a catch-all (`*`, `[...slug]`, `[[...slug]]`, `:path*`) takes
 // the rest. Of the routes that match, the most specific one wins (literal
 // segments over parameters over catch-alls); a tie between routes leaves the
-// call unlinked, as does a URL with a partly dynamic segment (`/u/${id}.json`).
+// call unlinked, unless the two routes differ only by a trailing slash
+// (`/users` and `/users/`), where the one written like the URL wins, as does a URL with a partly dynamic segment (`/u/${id}.json`).
 // A call with `httpUrlAlternatives` (a URL variable assigned several values)
 // is matched once per URL and linked to each route one of them reaches.
 // `match` is `exact` when every segment matched a literal, `catch-all` when a
@@ -39,7 +40,7 @@ import { createVariableResolver } from "./variable-resolver.js";
 // is kept only when it ends up a path; otherwise it stays as written.
 
 type RouteSegment = { kind: "literal"; value: string } | { kind: "param" } | { kind: "catch-all"; optional: boolean };
-type RouteEntry = { id: string; method: string; segments: RouteSegment[] };
+type RouteEntry = { id: string; method: string; segments: RouteSegment[]; trailingSlash: boolean };
 
 export const httpRequestsContributor: ISemanticContributor = {
   async contribute(graph, rootPath, _report, files, settings) {
@@ -63,7 +64,7 @@ export const httpRequestsContributor: ISemanticContributor = {
       }
       const method = String(node.properties.method).toUpperCase();
       if (method === "USE") continue;
-      routes.push({ id: node.id, method, segments: routeSegments(node.properties.fullPath) });
+      routes.push({ id: node.id, method, segments: routeSegments(node.properties.fullPath), trailingSlash: node.properties.fullPath.length > 1 && node.properties.fullPath.endsWith("/") });
     }
     const added: GraphRelationship[] = [];
     for (const call of graph.nodes) {
@@ -82,19 +83,29 @@ export const httpRequestsContributor: ISemanticContributor = {
       const linked = new Set<string>();
       for (const request of requestsOf(call)) {
         let best: { route: RouteEntry; score: number; match: string } | null = null;
-        let tied = false;
+        let tied: RouteEntry[] = [];
         for (const route of routes) {
           if (route.method !== request.method && route.method !== "ALL") continue;
           const matched = matchSegments(request.segments, route.segments);
           if (!matched) continue;
           if (!best || matched.score > best.score) {
             best = { route, ...matched };
-            tied = false;
+            tied = [route];
           } else if (matched.score === best.score) {
-            tied = true;
+            tied.push(route);
           }
         }
-        if (!best || tied || linked.has(best.route.id)) continue;
+        // Routes that differ only by a trailing slash (gin's `/users` and
+        // `/users/`): the one written like the URL.
+        if (best && tied.length > 1) {
+          const slash = request.url.length > 1 && request.url.endsWith("/");
+          const same = tied.filter((route) => route.trailingSlash === slash);
+          if (same.length === 1 && tied.length === 2 && tied[0]!.trailingSlash !== tied[1]!.trailingSlash) {
+            best = { ...best, route: same[0]! };
+            tied = [same[0]!];
+          }
+        }
+        if (!best || tied.length > 1 || linked.has(best.route.id)) continue;
         linked.add(best.route.id);
         added.push({
           from: call.id,

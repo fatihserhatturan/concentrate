@@ -448,14 +448,37 @@ export function localTypes(functionNode: SyntaxNode): Map<string, LocalType | nu
       const names = node.childForFieldName("left")?.namedChildren ?? [];
       const values = node.childForFieldName("right")?.namedChildren ?? [];
       // `x, err := NewT()`: one call yields every name, x its first result.
-      const local = values.length === 1 && names.length > 1 ? valueType(values[0]) : null;
-      names.forEach((name, index) => declare(name, local ? (index === 0 ? local : null) : values.length === names.length ? valueType(values[index]) : null));
+      const local = values.length === 1 && names.length > 1 ? onReceiver(valueType(values[0]), locals) : null;
+      names.forEach((name, index) => declare(name, local ? (index === 0 ? local : null) : values.length === names.length ? onReceiver(valueType(values[index]), locals) : null));
     }
     if (node.type === "range_clause") {
-      for (const name of node.childForFieldName("left")?.namedChildren ?? []) declare(name, null);
+      // `for _, c := range comments` over a `[]T` or `map[K]T`: c is a T.
+      const names = node.childForFieldName("left")?.namedChildren ?? [];
+      const right = node.childForFieldName("right");
+      const ranged = right?.type === "identifier" ? locals.get(right.text) : undefined;
+      const element = ranged && "type" in ranged ? elementType(ranged.type) : null;
+      names.forEach((name, index) => declare(name, index === 1 && element ? { type: element } : null));
     }
   }, (node) => node.type === "func_literal");
   return locals;
+}
+
+// `h.store.Get()` with h a local of a known type: `(*Handler).store.Get`,
+// which the resolver follows through the type's fields to the method's
+// result.
+function onReceiver(local: LocalType | null, locals: Map<string, LocalType | null>): LocalType | null {
+  if (!local || "type" in local) return local;
+  const [root, ...rest] = local.constructor.split(".");
+  const receiver = rest.length > 0 ? locals.get(root!) : undefined;
+  return receiver && "type" in receiver ? { constructor: `(${receiver.type}).${rest.join(".")}` } : local;
+}
+
+// `[]T`, `[4]T`, `map[K]T` → `T`.
+function elementType(type: string): string | null {
+  const slice = /^(?:\[\d*\])+(.+)$/u.exec(type);
+  if (slice) return slice[1]!.startsWith("[") ? null : slice[1]!;
+  const map = /^map\[[^\]]+\](.+)$/u.exec(type);
+  return map ? map[1]! : null;
 }
 
 function valueType(value: SyntaxNode | undefined): LocalType | null {
