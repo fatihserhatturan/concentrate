@@ -995,6 +995,30 @@ Astro).
   `main` / `init`, library `go`). `TestX`, `BenchmarkX`, `FuzzX` and
   `ExampleX` in `_test.go` files carry `testKind` (`test`, `benchmark`,
   `fuzz`, `example`); `_test.go` files are test files.
+- HTTP routes come from `net/http` and gin (`Route.framework` `net/http` /
+  `gin`). A router is known when a function builds it (`gin.Default()`,
+  `gin.New()`, `http.NewServeMux()`, `&http.ServeMux{}`), groups it
+  (`r.Group("/api", mw…)`), or takes it as a parameter typed `*gin.Engine`,
+  `*gin.RouterGroup`, `gin.IRouter`, `gin.IRoutes` or `*http.ServeMux`; a
+  route on a parameter gets the path and middleware of every call that passes
+  a router in, through up to 8 functions, one `Route` per distinct mount.
+  Mounts made in `_test.go` files apply only to test routes. A route on a
+  field (`s.router.GET("/x", h)`, `s.mux.HandleFunc("/x", h)`) is taken as a
+  root router's in a file that imports gin or `net/http`. Routers returned
+  from a function (`r := NewRouter()`), stored in package variables or built
+  in closures are not followed yet; echo, chi, fiber and gorilla/mux come in
+  later PRs of Phase 19.
+- gin's `Use` applies to what is registered after it on that router and to
+  groups made after it, so the lifecycle steps are the middleware in force at
+  the registration, then the route's own handlers (the last one is the
+  handler). A factory (`AuthMiddleware(true)`) is the step of the function
+  called. `ServeMux` patterns give the method (`GET /items/{id}`; `ALL`
+  without one) and drop the host; `http.StripPrefix("/api", sub)` mounts a
+  sub-mux's routes under `/api`, and `withAuth(http.HandlerFunc(h))` makes
+  `withAuth` a middleware step and `h` the handler. A closure handler is a
+  `Function` (`<v1.POST:/items:arg1>`, kind `func_literal`) that owns the
+  calls in its body. A path or method that is not a string literal or a
+  string constant of the file is reported in `dynamicRouteCalls`.
 - `find_unused_exports` judges Go exports by package and counts any mention
   of the name in another package's files as a use (comments and strings
   included), so it can miss dead exports but rarely flags used ones. Uses

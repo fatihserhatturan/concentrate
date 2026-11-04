@@ -1,6 +1,177 @@
 {
   "sample": "internet-go-gin-realworld",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Calls: every call site in the production Go files (tests, doc.go and test helpers excluded) whose callee is a function or method of this repository, with the function it runs; calls into the standard library, gin, gorm and other dependencies, and calls of local closures (buildQuery) are not labeled, so any target they get counts as a false positive. Methods promoted from embedded structs are labeled with the method's own type (ArticleSerializer.isFavoriteBy -> ArticleModel.isFavoriteBy).",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Routes: every route the production router files register, with the full path its group gets in hello.go (gin joins a group path and \"\" to the group path, and keeps a trailing slash); routes the tests register are out of scope. Calls: every call site in the production Go files (tests, doc.go and test helpers excluded) whose callee is a function or method of this repository, with the function it runs; calls into the standard library, gin, gorm and other dependencies, and calls of local closures (buildQuery) are not labeled, so any target they get counts as a false positive. Methods promoted from embedded structs are labeled with the method's own type (ArticleSerializer.isFavoriteBy -> ArticleModel.isFavoriteBy).",
+  "routes": {
+    "scope": [
+      "hello.go",
+      "articles/routers.go",
+      "users/routers.go"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/api/articles/feed",
+        "file": "articles/routers.go",
+        "line": 15
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles",
+        "file": "articles/routers.go",
+        "line": 16
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/",
+        "file": "articles/routers.go",
+        "line": 17
+      },
+      {
+        "method": "PUT",
+        "path": "/api/articles/:slug",
+        "file": "articles/routers.go",
+        "line": 18
+      },
+      {
+        "method": "PUT",
+        "path": "/api/articles/:slug/",
+        "file": "articles/routers.go",
+        "line": 19
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/:slug",
+        "file": "articles/routers.go",
+        "line": 20
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/:slug/favorite",
+        "file": "articles/routers.go",
+        "line": 21
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/:slug/favorite",
+        "file": "articles/routers.go",
+        "line": 22
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/:slug/comments",
+        "file": "articles/routers.go",
+        "line": 23
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/:slug/comments/:id",
+        "file": "articles/routers.go",
+        "line": 24
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles",
+        "file": "articles/routers.go",
+        "line": 28
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/",
+        "file": "articles/routers.go",
+        "line": 29
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/:slug",
+        "file": "articles/routers.go",
+        "line": 30
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/:slug/comments",
+        "file": "articles/routers.go",
+        "line": 31
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags",
+        "file": "articles/routers.go",
+        "line": 35
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags/",
+        "file": "articles/routers.go",
+        "line": 36
+      },
+      {
+        "method": "GET",
+        "path": "/api/ping/",
+        "file": "hello.go",
+        "line": 56
+      },
+      {
+        "method": "POST",
+        "path": "/api/users",
+        "file": "users/routers.go",
+        "line": 13
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/",
+        "file": "users/routers.go",
+        "line": 14
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/login",
+        "file": "users/routers.go",
+        "line": 15
+      },
+      {
+        "method": "GET",
+        "path": "/api/user",
+        "file": "users/routers.go",
+        "line": 19
+      },
+      {
+        "method": "GET",
+        "path": "/api/user/",
+        "file": "users/routers.go",
+        "line": 20
+      },
+      {
+        "method": "PUT",
+        "path": "/api/user",
+        "file": "users/routers.go",
+        "line": 21
+      },
+      {
+        "method": "PUT",
+        "path": "/api/user/",
+        "file": "users/routers.go",
+        "line": 22
+      },
+      {
+        "method": "GET",
+        "path": "/api/profiles/:username",
+        "file": "users/routers.go",
+        "line": 26
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/:username/follow",
+        "file": "users/routers.go",
+        "line": 30
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/profiles/:username/follow",
+        "file": "users/routers.go",
+        "line": 31
+      }
+    ]
+  },
   "calls": {
     "files": [
       "hello.go",

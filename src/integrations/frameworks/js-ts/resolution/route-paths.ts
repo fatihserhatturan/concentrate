@@ -20,7 +20,8 @@ export function resolveRouteFullPaths(graph: IGraphContributor): void {
     if (route.label !== "Route") continue;
 
     const fileId = context.fileIdByRouteId.get(route.id);
-    if (!fileId) continue;
+    // Go routes get their paths in frameworks/go/route-mounts.ts.
+    if (!fileId || fileId.endsWith(".go")) continue;
 
     const rawPath = resolveRoutePath(route, fileId, context.constantsByFileId);
     route.properties.path = rawPath;

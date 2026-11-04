@@ -23,12 +23,31 @@ const statementParents = new Set([
   "type_declaration",
 ]);
 
-export const goParser: LanguageParser = {
-  language: "go",
-  parse: (rootPath, filePath) => parseGoFile(rootPath, filePath),
-};
+// A function or method of the file with the syntax it was built from.
+export type GoParsedFunction = { syntax: SyntaxNode; node: GraphNode };
 
-async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSourceFile> {
+// Parse-time semantics a framework layer adds to a Go file once its
+// structure is built (routes, entrypoints): it may add nodes and
+// relationships, and move calls to a function it adds.
+export type GoParsePlugin = (file: {
+  fileNodeId: string;
+  relativePath: string;
+  root: SyntaxNode;
+  nodes: GraphNode[];
+  relationships: GraphRelationship[];
+  functions: GoParsedFunction[];
+}) => void;
+
+export function createGoParser(plugins: readonly GoParsePlugin[] = []): LanguageParser {
+  return {
+    language: "go",
+    parse: (rootPath, filePath) => parseGoFile(rootPath, filePath, plugins),
+  };
+}
+
+export const goParser: LanguageParser = createGoParser();
+
+async function parseGoFile(rootPath: string, filePath: string, plugins: readonly GoParsePlugin[]): Promise<ParsedSourceFile> {
   const source = await readFile(filePath, "utf8");
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
@@ -116,6 +135,7 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
         .map((n) => [String(n.properties.name), n.id]),
     );
 
+    const functions: GoParsedFunction[] = [];
     walk(tree.rootNode, (node) => {
       if (node.type !== "function_declaration" && node.type !== "method_declaration") return;
 
@@ -129,6 +149,7 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
       if (!functionNode) return;
 
       nodes.push(functionNode);
+      functions.push({ syntax: node, node: functionNode });
 
       if (classNodeId) {
         relationships.push({ from: classNodeId, to: functionNode.id, type: "DEFINES_METHOD", properties: {} });
@@ -166,6 +187,8 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
         })),
       );
     });
+
+    for (const plugin of plugins) plugin({ fileNodeId, relativePath: relativePath.replaceAll("\\", "/"), root: tree.rootNode, nodes, relationships, functions });
 
     const parsed: ParsedSourceFile = { fileNodeId, nodes, relationships };
     if (skippedLines.length > 0) {
@@ -232,7 +255,7 @@ function createFunctionNode(fileNodeId: string, node: SyntaxNode, className?: st
 
 // `(a, b string, c *db.Store)` as [{name, type}]; unnamed parameters get a
 // null name.
-function goParameters(list: SyntaxNode | null): Array<{ name: string | null; type: string | null }> {
+export function goParameters(list: SyntaxNode | null): Array<{ name: string | null; type: string | null }> {
   const parameters: Array<{ name: string | null; type: string | null }> = [];
   for (const declaration of list?.namedChildren ?? []) {
     if (declaration.type !== "parameter_declaration" && declaration.type !== "variadic_parameter_declaration") continue;
@@ -403,9 +426,9 @@ function baseTypeName(type: string): string {
 // the parser can see: the receiver and parameters, `var x T`, and `x := T{}`,
 // `&T{}`, `new(T)`, `v.(T)` (a type) or `x := NewT()` (whatever NewT returns, found
 // once every file is parsed). Other locals are known only to be locals (null).
-type LocalType = { type: string } | { constructor: string };
+export type LocalType = { type: string } | { constructor: string };
 
-function localTypes(functionNode: SyntaxNode): Map<string, LocalType | null> {
+export function localTypes(functionNode: SyntaxNode): Map<string, LocalType | null> {
   const locals = new Map<string, LocalType | null>();
   const declare = (name: SyntaxNode, local: LocalType | null) => {
     if (name.type === "identifier" && name.text !== "_") locals.set(name.text, local);
@@ -457,7 +480,7 @@ function valueType(value: SyntaxNode | undefined): LocalType | null {
   return callee.type === "identifier" || callee.type === "selector_expression" ? { constructor: callee.text } : null;
 }
 
-function goVisibility(name: string): string {
+export function goVisibility(name: string): string {
   return /^[A-Z]/.test(name) ? "exported" : "unexported";
 }
 
