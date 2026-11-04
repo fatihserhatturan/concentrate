@@ -188,7 +188,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       framework: {
         type: "string",
-        description: "Framework, such as express-koa, fastify, gin or net/http.",
+        description: "Framework, such as express-koa, fastify, gin, chi or net/http.",
       },
       unconsumed: {
         type: "boolean",

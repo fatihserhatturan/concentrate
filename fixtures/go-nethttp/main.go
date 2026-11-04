@@ -47,8 +47,16 @@ func main() {
 	api.HandleFunc("POST /orders", o.create)
 	mux.Handle("/api/", http.StripPrefix("/api", api))
 
+	mux.Handle("/v2/", http.StripPrefix("/v2", v2Routes()))
+
 	registerAdmin(mux)
 	http.HandleFunc("/health", health)
 
 	http.ListenAndServe(":8080", mux)
+}
+
+func v2Routes() http.Handler {
+	m := http.NewServeMux()
+	m.HandleFunc("GET /ping", health)
+	return m
 }
