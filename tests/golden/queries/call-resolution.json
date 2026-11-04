@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 68
+        "result": 69
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 68,
+      "schemaVersion": 69,
       "stats": [
         {
           "table": "Repo",
@@ -2216,21 +2216,23 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated, file.packageName AS packageName",
         "rows": [
           {
             "file": "main.ts",
             "language": "typescript",
             "isTest": false,
             "isFixture": false,
-            "isGenerated": false
+            "isGenerated": false,
+            "packageName": null
           },
           {
             "file": "utils.ts",
             "language": "typescript",
             "isTest": false,
             "isFixture": false,
-            "isGenerated": false
+            "isGenerated": false,
+            "packageName": null
           }
         ]
       },
@@ -2353,9 +2355,10 @@
         "defaultExports": 0,
         "tests": 0,
         "generated": 0,
-        "handlers": 0
+        "handlers": 0,
+        "goMain": 0
       },
-      "note": "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. JavaScript and TypeScript only.",
+      "note": "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. JavaScript, TypeScript and Go.",
       "page": {
         "offset": 0,
         "returned": 1

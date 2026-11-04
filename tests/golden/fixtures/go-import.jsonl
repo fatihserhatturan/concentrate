@@ -6,6 +6,7 @@
 {"kind":"node","id":"file:internal/service/service.go:class:3:Service","label":"Class","properties":{"endLine":5,"fields":"[{\"name\":\"Name\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":3,"name":"Service","visibility":"exported"}}
 {"kind":"node","id":"file:internal/service/service.go:function:7:New","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":7,"methodKind":null,"name":"New","parameters":"[{\"name\":\"name\",\"type\":\"string\"}]","returnType":"*Service","visibility":"exported"}}
 {"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
+{"kind":"node","id":"file:main.go:entrypoint:8:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":8,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:main.go:function:8:main","label":"Function","properties":{"className":null,"endLine":11,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":8,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
 {"kind":"node","id":"file:main.go:function:8:main:call:10:1:fmt.Println","label":"Call","properties":{"callee":"Println","columnNumber":1,"expression":"fmt.Println","line":10,"name":"fmt.Println","receiver":"fmt"}}
 {"kind":"node","id":"file:main.go:function:8:main:call:9:8:service.New","label":"Call","properties":{"callee":"New","columnNumber":8,"expression":"service.New","line":9,"name":"service.New","receiver":"service"}}
@@ -18,9 +19,11 @@
 {"kind":"rel","from":"dir:internal/service","type":"CONTAINS_FILE","to":"file:internal/service/service.go","properties":{}}
 {"kind":"rel","from":"file:internal/service/service.go","type":"DEFINES_CLASS","to":"file:internal/service/service.go:class:3:Service","properties":{}}
 {"kind":"rel","from":"file:internal/service/service.go","type":"DEFINES_FUNCTION","to":"file:internal/service/service.go:function:7:New","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"DECLARES_ENTRYPOINT","to":"file:main.go:entrypoint:8:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:main.go","type":"DEFINES_FUNCTION","to":"file:main.go:function:8:main","properties":{}}
 {"kind":"rel","from":"file:main.go","type":"IMPORTS","to":"file:main.go:import:4:fmt","properties":{}}
 {"kind":"rel","from":"file:main.go","type":"IMPORTS","to":"file:main.go:import:5:example.com/myapp/internal/service","properties":{}}
+{"kind":"rel","from":"file:main.go:entrypoint:8:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:main.go:function:8:main","properties":{}}
 {"kind":"rel","from":"file:main.go:function:8:main","type":"CALLS","to":"file:main.go:function:8:main:call:10:1:fmt.Println","properties":{}}
 {"kind":"rel","from":"file:main.go:function:8:main","type":"CALLS","to":"file:main.go:function:8:main:call:9:8:service.New","properties":{}}
 {"kind":"rel","from":"file:main.go:function:8:main:call:9:8:service.New","type":"CALL_RESOLVES_TO","to":"file:internal/service/service.go:function:7:New","properties":{}}

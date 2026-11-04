@@ -163,3 +163,38 @@ describe("Go types", () => {
   });
 });
 
+describe("Go entrypoints, tests and variables", () => {
+  const root = path.resolve("fixtures/go-entrypoints");
+
+  it("declares main and init as entrypoints handled by their functions", async () => {
+    const result = await goParser.parse(root, path.join(root, "cmd/tool/main.go"));
+    const entrypoints = result.nodes.filter((n) => n.label === "EntryPoint");
+    assert.deepEqual(entrypoints.map((n) => [n.properties.kind, n.properties.library]), [["init", "go"], ["main", "go"]]);
+    for (const entrypoint of entrypoints) {
+      assert.ok(result.relationships.some((r) => r.type === "ENTRYPOINT_HANDLED_BY" && r.from === entrypoint.id));
+    }
+    // main outside package main is an ordinary function.
+    const mathx = await goParser.parse(root, path.join(root, "mathx/mathx.go"));
+    assert.equal(mathx.nodes.filter((n) => n.label === "EntryPoint").length, 0);
+  });
+
+  it("marks the functions go test runs", async () => {
+    const result = await goParser.parse(root, path.join(root, "mathx/mathx_test.go"));
+    const kinds = result.nodes.filter((n) => n.label === "Function").map((n) => [n.properties.name, n.properties.testKind ?? null]);
+    assert.deepEqual(kinds, [["TestAdd", "test"], ["BenchmarkAdd", "benchmark"], ["Testable", null], ["ExampleAdd", "example"]]);
+  });
+
+  it("records package-level var and const", async () => {
+    const result = await goParser.parse(root, path.join(root, "config/config.go"));
+    const variables = result.nodes.filter((n) => n.label === "Variable").map((n) => [n.properties.name, n.properties.kind, n.properties.isExported, n.properties.stringValue ?? null]);
+    assert.deepEqual(variables, [
+      ["DefaultName", "const", true, "tool"],
+      ["Version", "const", true, "1.0"],
+      ["retries", "const", false, null],
+      ["Verbose", "var", true, null],
+      ["Debug", "var", true, null],
+      ["Unused", "var", true, "nobody reads this"],
+    ]);
+  });
+});
+
