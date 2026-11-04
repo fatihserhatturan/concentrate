@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 65
+        "result": 66
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 65,
+      "schemaVersion": 66,
       "stats": [
         {
           "table": "Repo",
@@ -836,6 +836,36 @@
       "page": {
         "offset": 0,
         "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "unread": true
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) WHERE true OPTIONAL MATCH ()-[read:USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO]->(env) WITH env, decl, count(read) AS readCount WHERE readCount = 0 RETURN 'unread' AS kind, env.name AS name, decl.file AS file, decl.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) RETURN DISTINCT env.name AS name",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "unread": true,
+        "limit": 50
+      },
+      "envConfig": [],
+      "note": "No scanned env file (.env, .env.*) declares a variable, so nothing is unread or undeclared; gitignored env files are not scanned.",
+      "page": {
+        "offset": 0,
+        "returned": 0
       }
     }
   }

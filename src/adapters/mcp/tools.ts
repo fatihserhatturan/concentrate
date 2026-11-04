@@ -6,7 +6,7 @@ import { asObject, objectSchema, optionalBoolean, optionalLimit, optionalString,
 import { fitToBudget } from "./budget.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
 import { pagedResult, pageWindow, type PageWindow } from "./paging.js";
-import { callerCompleteness, filesMatching, NO_FILE_MATCHED, unresolvedCalls } from "./agent-tools/graph.js";
+import { byFileAndLine, callerCompleteness, filesMatching, matchesFileOrDirectory, NO_FILE_MATCHED, unresolvedCalls } from "./agent-tools/graph.js";
 import { listStores } from "./stores.js";
 import { listTables } from "./tables.js";
 
@@ -242,7 +242,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_env_config",
-    description: "Env variable reads, and config declarations with their consumers.",
+    description: "Env variable reads, and config declarations with their consumers. unread: true lists the variables .env files declare that no code reads, and those code reads that no env file declares.",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -251,6 +251,10 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       name: {
         type: "string",
         description: "Env or config name substring.",
+      },
+      unread: {
+        type: "boolean",
+        description: "List unread and undeclared env variables instead. Defaults to false.",
       },
       limit: {
         type: "number",
@@ -633,6 +637,7 @@ async function listEnvConfig(
 ): Promise<Record<string, unknown>> {
   const file = optionalString(args.file);
   const name = optionalString(args.name);
+  if (optionalBoolean(args.unread)) return unreadEnv(engine, file, name, window);
   const { limit, fetch } = window;
   const { fileFilter, fileNote } = await fileScope(engine, file);
   const envNameFilter = name ? `AND contains(lower(env.name), lower(${quote(name)}))` : "";
@@ -690,6 +695,52 @@ async function listEnvConfig(
     query: { file, name, limit },
     envConfig: window.take([...envRows, ...configRows, ...consumedRows]),
     ...fileNote,
+  };
+}
+
+// Env variables an env file declares that no code reads (`unread`), and
+// variables code reads that no scanned env file declares (`undeclared`; only
+// when there is an env file, and not NODE_ENV, which tooling sets).
+async function unreadEnv(engine: GraphQueryEngine, file: string | undefined, name: string | undefined, window: PageWindow) {
+  const nameFilter = name ? `AND contains(lower(env.name), lower(${quote(name)}))` : "";
+  const reads = "USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO";
+  const unread = await engine.query(`
+    MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar)
+    WHERE true ${nameFilter}
+    OPTIONAL MATCH ()-[read:${reads}]->(env)
+    WITH env, decl, count(read) AS readCount
+    WHERE readCount = 0
+    RETURN 'unread' AS kind, env.name AS name, decl.file AS file, decl.line AS line
+  `) as Array<Record<string, unknown>>;
+  const declarations = await engine.query("MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) RETURN DISTINCT env.name AS name") as Array<{ name: string }>;
+  const declared = new Set(declarations.map((row) => row.name));
+  const readQuery = (owner: string) => engine.query(`
+    MATCH ${owner}-[read:USES_ENV_FILE|USES_ENV_FUNCTION]->(env:EnvVar)
+    WHERE env.name <> 'NODE_ENV' ${nameFilter}
+    RETURN 'undeclared' AS kind, env.name AS name, file.relativePath AS file, read.line AS line
+  `) as Promise<Array<Record<string, unknown>>>;
+  const undeclared = declared.size === 0 ? [] : (await Promise.all([
+    readQuery("(file:File)"),
+    readQuery("(file:File)-[:DEFINES_FUNCTION]->(:Function)"),
+    readQuery("(file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(:Function)"),
+    engine.query(`
+      MATCH (:Repo)-[read:USES_ENV_REPO]->(env:EnvVar)
+      WHERE true ${nameFilter}
+      RETURN 'undeclared' AS kind, env.name AS name, read.file AS file, read.line AS line
+    `) as Promise<Array<Record<string, unknown>>>,
+  ])).flat().filter((row) => !declared.has(String(row.name)));
+  const seen = new Set<string>();
+  const rows = [...unread, ...undeclared]
+    .filter((row) => !file || matchesFileOrDirectory(String(row.file), file))
+    .filter((row) => {
+      const key = `${row.kind}:${row.name}:${row.file}:${row.line}`;
+      return !seen.has(key) && Boolean(seen.add(key));
+    })
+    .sort((a, b) => String(a.kind).localeCompare(String(b.kind)) || byFileAndLine(a, b));
+  return {
+    query: { file, name, unread: true, limit: window.limit },
+    envConfig: window.take(rows),
+    ...(declared.size === 0 ? { note: "No scanned env file (.env, .env.*) declares a variable, so nothing is unread or undeclared; gitignored env files are not scanned." } : {}),
   };
 }
 

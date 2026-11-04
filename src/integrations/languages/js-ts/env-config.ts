@@ -9,7 +9,7 @@ import { walk } from "../tree-sitter-utils.js";
 // var whose name has a client-exposed prefix (`NEXT_PUBLIC_`, `VITE_`, …) is
 // marked `isPublic`.
 
-const publicPrefixes = /^(?:NEXT_PUBLIC_|VITE_|NUXT_PUBLIC_|PUBLIC_|REACT_APP_|EXPO_PUBLIC_|GATSBY_)/u;
+export const publicPrefixes = /^(?:NEXT_PUBLIC_|VITE_|NUXT_PUBLIC_|PUBLIC_|REACT_APP_|EXPO_PUBLIC_|GATSBY_)/u;
 
 type EnvAccess = {
   name: string;

@@ -140,7 +140,11 @@ even for large repositories; read it first to decide which tools to call.
 - `list_entrypoints`: lists non-HTTP backend entrypoints such as queues, cron
   jobs, events, realtime handlers, and schedulers.
 - `list_env_config`: lists environment variable usage and config declarations
-  or consumers.
+  or consumers. `unread: true` lists instead the variables the scanned env
+  files (`.env`, `.env.*`) declare that no code reads (`kind: "unread"`, with
+  the env file and line) and the ones code reads that no env file declares
+  (`kind: "undeclared"`, with the reading file and line; not `NODE_ENV`, and
+  only when some env file exists). Values are never stored.
 - `list_data_access`: lists data-access operations by source, model, library,
   and operation. Each row has the model's `table` when one is known.
 - `list_tables({ name?, library?, limit = 20 })`: database tables, views and
