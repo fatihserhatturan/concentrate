@@ -1057,6 +1057,28 @@ Astro).
   `func_literal`) that owns the calls in its body. A path or method that is
   not a string literal, a string constant of the file or `http.MethodX` is
   reported in `dynamicRouteCalls`.
+- Go env reads are `USES_ENV` from the function that reads (and from its
+  file; a package-level read is the file's): `os.Getenv`, `os.LookupEnv`,
+  `syscall.Getenv` with a string-literal name, and each `$NAME` / `${NAME}`
+  of an `os.ExpandEnv` literal. `os.Setenv` is a write and not recorded.
+  viper (the package or a `viper.New()` assigned to a name): `BindEnv("key",
+  "NAME")` reads `NAME`; `BindEnv("key")`, and the `Get*` / `IsSet` reads of
+  a viper with `AutomaticEnv()`, read `PREFIX_KEY` upper-cased with the
+  `SetEnvKeyReplacer(strings.NewReplacer(…))` pairs applied. A file with no
+  viper settings of its own uses the repo's (one `SetEnvPrefix` across the
+  repo; with several, no prefix). A viper on a struct field
+  (`c.v.GetString`) and keys that are not string literals are not read.
+  Struct tags `env:"NAME"` (caarlos0/env, cleanenv, go-envconfig; options
+  after a comma dropped, `envPrefix` on a nested struct field of the same
+  file prefixes its fields) are read by the function of the same file that
+  passes the struct to `Parse`, `ParseWithOptions`, `MustParse`, `ReadEnv`,
+  `ReadConfig` or `Process`, else by the struct's file; a `Prefix` option is
+  not applied. `envconfig.Process("prefix", &spec)` (kelseyhightower) reads
+  every exported field of a same-file struct as `PREFIX_FIELD`
+  (`envconfig:"name"`, `split_words:"true"`, `ignored:"true"`, nested and
+  embedded structs); a struct of another file is not followed. Route
+  handlers carry the reads of their functions, as for JS. `.env` files
+  declare the variables for Go projects too (`list_env_config { unread }`).
 - `find_unused_exports` judges Go exports by package and counts any mention
   of the name in another package's files as a use (comments and strings
   included), so it can miss dead exports but rarely flags used ones. Uses

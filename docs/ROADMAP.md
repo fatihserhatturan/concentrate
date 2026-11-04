@@ -946,10 +946,10 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Config and env
 
-- [ ] `os.Getenv`, `os.LookupEnv`, `os.ExpandEnv` → `USES_ENV`
-- [ ] viper: `viper.GetString("x")`, `BindEnv`, `AutomaticEnv` with prefixes → `ConfigValue` / `EnvVar`
-- [ ] Struct-tag config: caarlos0/env (`env:"PORT"`), kelseyhightower/envconfig
-- [ ] `.env` files declare variables for Go projects too (`list_env_config { unread }`)
+- [x] `os.Getenv`, `os.LookupEnv`, `os.ExpandEnv` → `USES_ENV`
+- [x] viper: `viper.GetString("x")`, `BindEnv`, `AutomaticEnv` with prefixes → `ConfigValue` / `EnvVar`
+- [x] Struct-tag config: caarlos0/env (`env:"PORT"`), kelseyhightower/envconfig
+- [x] `.env` files declare variables for Go projects too (`list_env_config { unread }`)
 
 ### Outbound HTTP
 

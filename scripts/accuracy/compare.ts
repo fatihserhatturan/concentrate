@@ -12,6 +12,8 @@ export type CallTarget = { file: string; name: string; className?: string } | nu
 // framework-set prototype); the call site is matched but not scored.
 export type CallLabel = { file: string; line: number; callee: string; target: CallTarget; dynamic?: true };
 export type DataAccessLabel = { file: string; function: string; model: string; operation: string; table?: string };
+// An env variable read; function null for a read outside any function.
+export type EnvLabel = { file: string; line: number; name: string; function: string | null };
 export type ComponentLabel = { file: string; name: string; line: number };
 // `file` and `line` are the rendering element's; `parent` is the component it is in.
 export type RenderLabel = { file: string; parent: string; line: number; child: string; childFile: string };
@@ -46,6 +48,8 @@ export type Labels = {
   stores?: { scope: string[]; items: StoreLabel[] };
   // Store uses in `scope` (hook calls, store references, selectors, dispatches).
   storeAccess?: { scope: string[]; items: StoreAccessLabel[] };
+  // Env variable reads in `scope`.
+  env?: { scope: string[]; items: EnvLabel[] };
 };
 
 export type Score = {
@@ -494,4 +498,44 @@ export function sumScores(scores: readonly Score[]): Score {
     scores.flatMap((entry) => entry.falsePositives),
     scores.flatMap((entry) => entry.falseNegatives),
   );
+}
+
+// Env reads: each file-level USES_ENV, with the function that reads it at
+// that line (null at package level).
+export function scanEnvReads(graph: Graph): EnvLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const functionsByRead = new Map<string, string>();
+  const fileOfFunction = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    if (rel.type === "DEFINES_FUNCTION") fileOfFunction.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationships) {
+    if (rel.type !== "USES_ENV" || byId.get(rel.from)?.label !== "Function") continue;
+    const file = fileOfFunction.get(rel.from) ?? rel.from.slice(0, rel.from.indexOf(":function:"));
+    functionsByRead.set(`${file}\0${rel.to}\0${rel.properties.line}`, String(byId.get(rel.from)?.properties.name));
+  }
+  const reads = new Map<string, EnvLabel>();
+  for (const rel of graph.relationships) {
+    const file = byId.get(rel.from);
+    if (rel.type !== "USES_ENV" || file?.label !== "File") continue;
+    const name = byId.get(rel.to)?.properties.name;
+    if (typeof name !== "string") continue;
+    const line = num(rel.properties.line);
+    reads.set(`${rel.from}\0${name}\0${line}`, {
+      file: String(file.properties.relativePath),
+      line,
+      name,
+      function: functionsByRead.get(`${rel.from}\0${rel.to}\0${rel.properties.line}`) ?? null,
+    });
+  }
+  return [...reads.values()];
+}
+
+export function compareEnv(graph: Graph, labels: NonNullable<Labels["env"]>): Score {
+  const found = scanEnvReads(graph).filter((read) => inScope(read.file, labels.scope));
+  const result = pair(labels.items, found, (label, read) => (
+    label.file === read.file && label.name === read.name && label.function === read.function && nearLine(label.line, read.line)
+  ));
+  const describe = (read: EnvLabel) => `${read.file}:${read.line} ${read.function ?? "<file>"}: ${read.name}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
 }
