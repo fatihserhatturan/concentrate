@@ -142,7 +142,8 @@ even for large repositories; read it first to decide which tools to call.
   to one file.
 - `trace_import_chain`: returns a resolved import path between two files when
   one exists.
-- `list_routes`: lists detected HTTP route declarations and handlers.
+- `list_routes`: lists detected HTTP route declarations and handlers, Go
+  ones included (`framework` `gin` or `net/http`).
   Registrations with a method or path computed at runtime
   (`app[method](url, fn)`, `this.get(path, …)` in an `app.resource = function`
   helper) are not routes; they come back in `dynamicRouteCalls` (`file`,

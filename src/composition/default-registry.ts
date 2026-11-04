@@ -4,7 +4,7 @@ import { addCallResolutionRelationships } from "../core/scan/resolution/calls.js
 import { addInheritanceRelationships } from "../core/scan/resolution/inheritance.js";
 import { astroParser, htmlParser, javascriptParser, svelteParser, typescriptParser, vueParser } from "../integrations/frameworks/js-ts/scanner.js";
 import { pythonParser } from "../integrations/languages/python/parser.js";
-import { goParser } from "../integrations/languages/go/parser.js";
+import { goFrameworkParser, goRoutesContributor } from "../integrations/frameworks/go/index.js";
 import { rustParser } from "../integrations/languages/rust/parser.js";
 import {
   nestjsModulesContributor,
@@ -34,7 +34,7 @@ export { CoreIntegrationRegistry };
 export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry {
   const registry = new CoreIntegrationRegistry();
 
-  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonParser, goParser, rustParser]) {
+  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonParser, goFrameworkParser, rustParser]) {
     registry.registerLanguageParser(parser);
   }
 
@@ -48,6 +48,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     instanceMethodContributor,
     routeHandlerContributor,
     routePathContributor,
+    goRoutesContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,
     nuxtServerRoutesContributor,

@@ -899,12 +899,12 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Framework layer
 
-- [ ] `src/integrations/frameworks/go/` with a Go parser plugin hook and route contributors; `Route.framework` names the router
+- [x] `src/integrations/frameworks/go/` with a Go parser plugin hook and route contributors; `Route.framework` names the router
 
 ### Routers
 
-- [ ] `net/http`: `http.HandleFunc` / `Handle`, `ServeMux`, Go 1.22 patterns (`"GET /items/{id}"`), `http.StripPrefix` mounts
-- [ ] gin: `r.GET/POST/…`, `Group`, `Use`, `Any`, `Handle`
+- [x] `net/http`: `http.HandleFunc` / `Handle`, `ServeMux`, Go 1.22 patterns (`"GET /items/{id}"`), `http.StripPrefix` mounts
+- [x] gin: `r.GET/POST/…`, `Group`, `Use`, `Any`, `Handle`
 - [ ] echo: `e.GET/…`, `Group`, middleware
 - [ ] chi: `r.Get/…`, `Route`, `Mount`, `Group`, `With`
 - [ ] fiber: `app.Get/…`, `Group`, `Mount`

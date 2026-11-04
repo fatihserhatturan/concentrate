@@ -24,7 +24,7 @@ chosen files); every target was decided by reading the code.
 
 | Kind | Samples | Scope |
 | --- | --- | --- |
-| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld | every route declared with a literal path in the scoped files; tests excluded |
+| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld | every route declared with a literal path in the scoped files; tests excluded; for the Go sample, the gin groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`) |
 | Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`) | every call site in 2–9 chosen files per sample; for the Go sample, every call of a repository function or method in its 13 production files |
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma) | the services; the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
@@ -130,9 +130,10 @@ Rules:
 | fastify | 14 | 14 | 0 | 0 | 100.0% | 100.0% | 100.0% (14/14) |
 | internet-nextjs-taxonomy | 9 | 9 | 0 | 0 | 100.0% | 100.0% | 100.0% (9/9) |
 | internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
+| internet-go-gin-realworld | 27 | 27 | 0 | 0 | 100.0% | 100.0% | 100.0% (27/27) |
 | internet-sveltekit-realworld | 11 | 11 | 0 | 0 | 100.0% | 100.0% | 100.0% (11/11) |
 | nestjs-starter | 1 | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% (1/1) |
-| **all** | 114 | 114 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (114/114)** |
+| **all** | 141 | 141 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (141/141)** |
 
 ### Call resolution
 
