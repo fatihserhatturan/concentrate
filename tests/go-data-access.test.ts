@@ -152,3 +152,63 @@ describe("Go database/sql and sqlx data access", () => {
     });
   });
 });
+
+describe("Go sqlc data access", () => {
+  let graph: Graph;
+  before(async () => {
+    graph = await buildCodeGraph(path.resolve("fixtures/go-sqlc"), { continueOnError: false });
+  });
+
+  it("reads each generated query's SQL constant on the DBTX interface", () => {
+    assert.deepEqual(accesses(graph), [
+      "CreateAuthor create authors sqlc",
+      "DeleteAuthor delete authors sqlc",
+      "ListAuthorBooks read authors sqlc",
+      "ListAuthorBooks read books sqlc",
+    ]);
+  });
+
+  it("reaches the handlers and routes that call the queries", async () => {
+    await withStore(graph, async (tool) => {
+      const route = await tool("route_details", { method: "GET", path: "/authors/{id}/books" });
+      assert.deepEqual(route.routes[0].tables.map((table: any) => table.table).sort(), ["authors", "books"]);
+    });
+  });
+});
+
+describe("Go ent data access", () => {
+  let graph: Graph;
+  before(async () => {
+    graph = await buildCodeGraph(path.resolve("fixtures/go-ent"), { continueOnError: false });
+  });
+
+  it("maps client builders to the schema's entity, edges included", () => {
+    assert.deepEqual(accesses(graph), [
+      // WithCars() eager-loads the edge.
+      "Adults read Car ent",
+      "Adults read User ent",
+      // QueryCars(u) reads the edge's entity.
+      "Garage read Car ent",
+      // *ent.UserClient.
+      "Lookup read User ent",
+      "Register create User ent",
+      // *ent.Tx.
+      "Sell delete Car ent",
+      "Sell update User ent",
+    ]);
+  });
+
+  it("declares schemas with their table annotation and edges", () => {
+    const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+    const tables = graph.relationships
+      .filter((rel) => rel.type === "MAPS_TO_TABLE")
+      .map((rel) => `${byId.get(rel.from)!.properties.name}=${byId.get(rel.to)!.properties.name}`)
+      .sort();
+    assert.deepEqual(tables, ["Car=cars", "User=people"]);
+    const edges = graph.relationships
+      .filter((rel) => rel.type === "RELATES_TO")
+      .map((rel) => `${byId.get(rel.from)!.properties.name}.${rel.properties.field} ${rel.properties.kind} ${byId.get(rel.to)!.properties.name}`)
+      .sort();
+    assert.deepEqual(edges, ["Car.owner one User", "User.best_friend one User", "User.cars many Car"]);
+  });
+});

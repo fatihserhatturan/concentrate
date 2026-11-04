@@ -173,7 +173,7 @@ even for large repositories; read it first to decide which tools to call.
   only when some env file exists). Values are never stored.
 - `list_data_access`: lists data-access operations by source, model, library,
   and operation. Each row has the model's `table` when one is known. Go
-  gorm, `database/sql` and sqlx accesses are included.
+  gorm, ent, sqlc, `database/sql` and sqlx accesses are included.
 - `list_tables({ name?, library?, limit = 20 })`: database tables, views and
   collections from Prisma schema files, TypeORM entities, Mongoose schemas,
   Drizzle table definitions and Knex calls. Each table has its

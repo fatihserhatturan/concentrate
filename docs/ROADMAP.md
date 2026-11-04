@@ -941,8 +941,8 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 - [x] `database/sql` and sqlx: `Query`, `QueryRow`, `Exec`, `Get`, `Select` with literal SQL → `Table` with `READS` / `WRITES`
 - [x] gorm: models from structs (`gorm` tags, `TableName()`), `db.Model(&X{})`, `Find`, `Create`, `Where`, `Save`, `Delete`; associations as `RELATES_TO`
-- [ ] sqlc: generated `Queries` methods linked to their SQL and tables
-- [ ] ent: schemas (`ent/schema`) as `DataModel`, client calls (`client.User.Query()`)
+- [x] sqlc: generated `Queries` methods linked to their SQL and tables
+- [x] ent: schemas (`ent/schema`) as `DataModel`, client calls (`client.User.Query()`)
 
 ### Config and env
 
