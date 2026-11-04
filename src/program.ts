@@ -6,6 +6,7 @@ import { exportCommand } from "./commands/export.js";
 import { smokeCommand } from "./commands/smoke.js";
 import { mcpCommand } from "./commands/mcp.js";
 import { watchCommand } from "./commands/watch.js";
+import { initCommand } from "./commands/init.js";
 
 /** Command-line surface of `concentrate`: every command, argument and flag. */
 export const program: ProgramSpec = {
@@ -112,6 +113,17 @@ export const program: ProgramSpec = {
         { flags: "-d, --database <path>", description: "Graph store directory", default: ".concentrate/graph" },
       ],
       action: mcpCommand,
+    },
+    {
+      name: "init",
+      description: "Write the MCP server config of Claude Code, Cursor and Codex into a project.",
+      args: [{ name: "path", description: "Project path" }],
+      options: [
+        { flags: "-d, --database <path>", description: "Graph store directory (default: <path>/.concentrate/graph)" },
+        { flags: "--client <name>", description: "claude, cursor or codex, repeatable (default: all three)", multiple: true },
+        { flags: "--npx", description: "Start the server with npx -y concentrate instead of this build's CLI", type: "boolean" },
+      ],
+      action: initCommand,
     },
   ],
 };
