@@ -6,7 +6,7 @@ storage engine in Phase 2, the parsers in Phase 3) can be checked mechanically.
 | Directory | Contents | Produced by |
 | --- | --- | --- |
 | `fixtures/` | One normalized graph per directory under `fixtures/` | `tests/golden.test.ts` |
-| `samples/` | Normalized graphs of the pinned sample repositories (`.jsonl.gz`) | `tests/golden-samples.test.ts` |
+| `samples/` | Normalized graphs of the pinned standing samples and of the internet samples marked `"golden": true` in `scripts/samples.json` (the Go backends and the Go full-stack sample, `.jsonl.gz`) | `tests/golden-samples.test.ts` |
 | `queries/` | Cypher statements issued by the MCP tools and the rows they returned | `tests/golden-queries.test.ts` |
 | `cypher/` | Cypher conformance corpus: hand-written queries and the rows (or error class) Kuzu returned | `tests/golden-cypher.test.ts` |
 

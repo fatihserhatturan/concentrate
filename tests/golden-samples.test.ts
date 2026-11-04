@@ -8,7 +8,7 @@ import { assertGolden, goldenRoot, scanToGoldenText } from "./helpers/golden.js"
 // Sample repositories are fetched on demand (`npm run samples:fetch`), so plain
 // `npm test` skips them. `npm run test:samples` sets REQUIRE_SAMPLES=1 and fails instead.
 const requireSamples = process.env.REQUIRE_SAMPLES === "1";
-const samples = (await readSampleManifest()).filter((sample) => sample.suite === "standing");
+const samples = (await readSampleManifest()).filter((sample) => sample.suite === "standing" || sample.golden === true);
 
 describe("golden sample graphs", () => {
   for (const sample of samples) {
@@ -21,6 +21,7 @@ describe("golden sample graphs", () => {
       const actual = await scanToGoldenText(projectPath, {
         continueOnError: sample.continueOnError ?? true,
         exclude: sample.exclude,
+        apiOrigins: sample.apiOrigins,
       });
       await assertGolden(path.join(goldenRoot, "samples", `${sample.name}.jsonl.gz`), actual);
     });
