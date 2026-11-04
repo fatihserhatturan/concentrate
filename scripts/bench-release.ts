@@ -2,7 +2,7 @@
  * Release report: scan time, peak memory and MCP tool latency of the built
  * CLI on the sample repositories.
  *
- *   npm run bench:release -- [--suite standing|internet|all] [--runs 3]
+ *   npm run bench:release -- [--suite standing|internet|all] [--sample name…] [--runs 3]
  *     [--tool-runs 20] [--out file.json] [--baseline earlier.json]
  *     [--tolerance 1.15] [--min-delta 20]
  *
@@ -30,6 +30,7 @@ import { availableSamples, checkRegression, measure, parseSuite, round, timing, 
 const { values } = parseArgs({
   options: {
     suite: { type: "string", default: "all" },
+    sample: { type: "string", multiple: true },
     runs: { type: "string", default: "3" },
     "tool-runs": { type: "string", default: "20" },
     out: { type: "string" },
@@ -108,6 +109,8 @@ async function toolCases(store: Awaited<ReturnType<typeof openGraphStore>>): Pro
     RETURN source.relativePath AS source, target.relativePath AS target ORDER BY source.relativePath, target.relativePath
   `) as Row[];
 
+  const [component] = await store.query(`MATCH (component:Component) RETURN component.name AS name ORDER BY component.name`) as Row[];
+
   const name = top?.name;
   const file = topId ? fileOfNodeId(topId, files) : null;
   const route = routes[0];
@@ -132,6 +135,11 @@ async function toolCases(store: Awaited<ReturnType<typeof openGraphStore>>): Pro
     { tool: "find_import_cycles", args: {} },
     { tool: "find_unused_exports", args: {} },
     { tool: "architecture_overview", args: {} },
+    { tool: "list_pages", args: {} },
+    { tool: "list_stores", args: {} },
+    { tool: "api_consumers", args: route ? { method: route.method, path: route.fullPath ?? route.path } : {} },
+    { tool: "component_tree", args: component ? { name: component.name } : null },
+    { tool: "find_component_usages", args: component ? { name: component.name } : null },
   ];
   const missing = mcpToolDefinitions.map((tool) => tool.name).filter((tool) => !cases.some((entry) => entry.tool === tool));
   if (missing.length > 0) throw new Error(`No benchmark case for: ${missing.join(", ")}`);
@@ -141,11 +149,14 @@ async function toolCases(store: Awaited<ReturnType<typeof openGraphStore>>): Pro
 const workRoot = await mkdtemp(path.join(os.tmpdir(), "concentrate-release-"));
 const results: SampleResult[] = [];
 try {
-  for (const sample of await availableSamples(suite)) {
+  const only = values.sample ?? [];
+  const samples = (await availableSamples(suite)).filter((sample) => only.length === 0 || only.includes(sample.name));
+  if (samples.length === 0) throw new Error(`No fetched sample matches: ${only.join(", ")}`);
+  for (const sample of samples) {
     const databasePath = path.join(workRoot, `${sample.name}-graph`);
     const cacheDir = path.join(workRoot, `${sample.name}-cache`);
     const common = ["-d", databasePath, "--manifest", path.join(workRoot, `${sample.name}-manifest.json`), "--cache-dir", cacheDir,
-      ...(sample.continueOnError ? ["--continue-on-error"] : []), ...(sample.exclude ?? []).flatMap((pattern) => ["--exclude", pattern])];
+      ...(sample.continueOnError ? ["--continue-on-error"] : []), ...(sample.apiOrigins ?? []).flatMap((origin) => ["--api-origin", origin]), ...(sample.exclude ?? []).flatMap((pattern) => ["--exclude", pattern])];
 
     const partial = sample.continueOnError === true;
     const cold: ScanRun[] = [];

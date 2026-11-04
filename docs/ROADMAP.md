@@ -988,7 +988,7 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 ### Accuracy and performance
 
 - [x] Go rows in every `bench:accuracy` section; precision 100%, recall reported (#174, #183)
-- [ ] Scan time and memory for the Go samples in `docs/benchmarks.md`
+- [x] Scan time and memory for the Go samples in `docs/benchmarks.md` (#184)
 
 ### Agent benchmark
 
