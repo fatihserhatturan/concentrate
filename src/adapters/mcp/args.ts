@@ -43,7 +43,7 @@ export function objectSchema(
   return {
     type: "object",
     properties,
-    required,
+    ...(required.length > 0 ? { required } : {}),
     additionalProperties: false,
   };
 }

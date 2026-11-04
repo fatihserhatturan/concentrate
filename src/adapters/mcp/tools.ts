@@ -84,7 +84,7 @@ const titles: Record<string, string> = {
 const annotations = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const cursorProperty = {
   type: "string",
-  description: "Opaque cursor from page.nextCursor of the previous result, to fetch the next page. Repeat the other arguments unchanged.",
+  description: "page.nextCursor of the previous result.",
 };
 
 function describeTool(definition: McpToolDefinition): McpToolDefinition {
@@ -102,67 +102,67 @@ function describeTool(definition: McpToolDefinition): McpToolDefinition {
 export const mcpToolDefinitions: McpToolDefinition[] = [
   {
     name: "graph_stats",
-    description: "Return schema version and node counts for the current Concentrate graph.",
+    description: "Schema version and node counts of the graph.",
     inputSchema: objectSchema({
       packageName: {
         type: "string",
-        description: "Optional workspace package name or relative path to filter file-owned counts.",
+        description: "Workspace package name or relative path; limits file-owned counts.",
       },
     }),
   },
   {
     name: "find_definitions",
-    description: "Find definitions by symbol name across functions, classes, variables, interfaces, type aliases, enums, and class methods (listed last, with className).",
+    description: "Definitions by name: functions, classes, variables, interfaces, type aliases, enums, and class methods (last, with className).",
     inputSchema: objectSchema({
       name: {
         type: "string",
-        description: "Symbol name or substring to find.",
+        description: "Symbol name or substring.",
       },
       exact: {
         type: "boolean",
-        description: "When true, match the symbol name exactly. Defaults to false.",
+        description: "Match the name exactly. Defaults to false.",
       },
       limit: {
         type: "number",
-        description: "Maximum rows to return. Defaults to 20.",
+        description: "Page size. Defaults to 20.",
       },
     }, ["name"]),
   },
   {
     name: "find_callers",
-    description: "Find call sites that resolve to functions with the given name. Callers can be functions, class methods (with className), or module-level code.",
+    description: "Call sites that resolve to functions or methods of this name; a caller is a function, a method (with className) or module-level code.",
     inputSchema: objectSchema({
       name: {
         type: "string",
-        description: "Function or method name to find callers for.",
+        description: "Function or method name.",
       },
       exact: {
         type: "boolean",
-        description: "When true, match the function name exactly. Defaults to true.",
+        description: "Match the name exactly. Defaults to true.",
       },
       limit: {
         type: "number",
-        description: "Maximum rows to return. Defaults to 20.",
+        description: "Page size. Defaults to 20.",
       },
     }, ["name"]),
   },
   {
     name: "list_exports",
-    description: "List exported symbols and re-exports, optionally scoped to a file or directory.",
+    description: "Exported symbols and re-exports.",
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "Optional scan-relative file or directory path, or a path suffix.",
+        description: "File or directory path (scan-relative), or a path suffix.",
       },
       limit: {
         type: "number",
-        description: "Maximum rows to return. Defaults to 50.",
+        description: "Page size. Defaults to 50.",
       },
     }),
   },
   {
     name: "trace_import_chain",
-    description: "Find a resolved import path from one file to another file.",
+    description: "A resolved import path from one file to another.",
     inputSchema: objectSchema({
       from: {
         type: "string",
@@ -180,19 +180,19 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_routes",
-    description: "List detected HTTP route declarations with source file, method, path, framework, and handler. Registrations whose method or path is computed at runtime (`app[method](url, fn)`) are not routes; they come back in dynamicRouteCalls with their file and line.",
+    description: "HTTP routes with file, line, method, path, full path, framework and handler. Registrations with a method or path computed at runtime (`app[method](url, fn)`) are not routes; they come back in dynamicRouteCalls.",
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "Optional scan-relative file or directory path, or a path suffix.",
+        description: "File or directory path (scan-relative), or a path suffix.",
       },
       framework: {
         type: "string",
-        description: "Optional framework filter, such as express-koa or fastify.",
+        description: "Framework, such as express-koa or fastify.",
       },
       limit: {
         type: "number",
-        description: "Maximum rows to return. Defaults to 50.",
+        description: "Page size. Defaults to 50.",
       },
     }),
   },
@@ -202,96 +202,96 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "Optional scan-relative file or directory path, or a path suffix.",
+        description: "File or directory path (scan-relative), or a path suffix.",
       },
       framework: {
         type: "string",
-        description: "Optional framework filter: nextjs, react-router, tanstack-router, vue-router, nuxt, sveltekit or astro.",
+        description: "nextjs, react-router, tanstack-router, vue-router, nuxt, sveltekit, astro or angular.",
       },
       path: {
         type: "string",
-        description: "Optional full path prefix of whole segments: /users matches /users and /users/:id.",
+        description: "Full path prefix of whole segments: /users matches /users and /users/:id.",
       },
       limit: {
         type: "number",
-        description: "Maximum rows to return. Defaults to 50.",
+        description: "Page size. Defaults to 50.",
       },
     }),
   },
   {
     name: "list_entrypoints",
-    description: "List non-HTTP backend entrypoints such as cron, queue, event, realtime, and scheduler handlers.",
+    description: "Non-HTTP backend entrypoints: cron, queue, event, realtime and scheduler handlers.",
     inputSchema: objectSchema({
       kind: {
         type: "string",
-        description: "Optional entrypoint kind filter.",
+        description: "Entrypoint kind.",
       },
       file: {
         type: "string",
-        description: "Optional scan-relative file or directory path, or a path suffix.",
+        description: "File or directory path (scan-relative), or a path suffix.",
       },
       limit: {
         type: "number",
-        description: "Maximum rows to return. Defaults to 50.",
+        description: "Page size. Defaults to 50.",
       },
     }),
   },
   {
     name: "list_env_config",
-    description: "List environment variable uses and config declarations/consumers.",
+    description: "Env variable reads, and config declarations with their consumers.",
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "Optional scan-relative file or directory path, or a path suffix.",
+        description: "File or directory path (scan-relative), or a path suffix.",
       },
       name: {
         type: "string",
-        description: "Optional env/config name substring.",
+        description: "Env or config name substring.",
       },
       limit: {
         type: "number",
-        description: "Maximum rows to return. Defaults to 50.",
+        description: "Page size. Defaults to 50.",
       },
     }),
   },
   {
     name: "list_data_access",
-    description: "List data-access operations linked to files, functions, routes, or entrypoints.",
+    description: "Data-access operations with the files, functions, routes and entrypoints that run them.",
     inputSchema: objectSchema({
       model: {
         type: "string",
-        description: "Optional model name substring.",
+        description: "Model name substring.",
       },
       operation: {
         type: "string",
-        description: "Optional operation filter such as read, create, update, or delete.",
+        description: "read, create, update or delete.",
       },
       library: {
         type: "string",
-        description: "Optional data-access library filter.",
+        description: "Data-access library.",
       },
       limit: {
         type: "number",
-        description: "Maximum rows to return. Defaults to 50.",
+        description: "Page size. Defaults to 50.",
       },
     }),
   },
   {
     name: "list_tables",
-    description: "Database tables, views and collections (from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions and Knex calls) with their columns, the ORM models that map to them and those models' relations, and the routes and entrypoints that read or write each table. Answers \"which endpoints write the users table?\".",
+    description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex) with columns, the ORM models mapped to them and their relations, and the routes and entrypoints that read or write each. Answers \"which endpoints write the users table?\".",
     inputSchema: objectSchema({
-      name: { type: "string", description: "Optional table name substring." },
-      library: { type: "string", description: "Optional library filter: prisma, typeorm, mongoose, drizzle or knex." },
+      name: { type: "string", description: "Table name substring." },
+      library: { type: "string", description: "prisma, typeorm, mongoose, drizzle or knex." },
       limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
     }),
   },
   {
     name: "list_stores",
-    description: "Frontend state stores (Pinia defineStore, Redux Toolkit slices and configureStore, Zustand create, Jotai atoms, Svelte stores) with their state, getters and actions, the functions that define them, and the functions that read or write them (with the members they use). Answers \"what reads the cart store?\"; for what a store change reaches (components, pages), use impact_of with the store's name.",
+    description: "Frontend state stores (Pinia, Redux Toolkit, Zustand, Jotai, Svelte) with state, getters, actions, the functions that define them, and the functions that read or write them (with the members used). Answers \"what reads the cart store?\"; for the components and pages a store change reaches, use impact_of with the store's name.",
     inputSchema: objectSchema({
-      name: { type: "string", description: "Optional store name or hook substring." },
-      library: { type: "string", description: "Optional library filter: pinia, redux, zustand, jotai or svelte." },
-      file: { type: "string", description: "Optional scan-relative declaring file or directory path, or a path suffix." },
+      name: { type: "string", description: "Store name or hook substring." },
+      library: { type: "string", description: "pinia, redux, zustand, jotai or svelte." },
+      file: { type: "string", description: "Declaring file or directory path, or a path suffix." },
       limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
     }),
   },
