@@ -953,7 +953,7 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Outbound HTTP
 
-- [ ] `http.Get/Post`, `http.NewRequest(method, url)`, `client.Do`, resty → `REQUESTS` to project routes (same `--api-origin` rules as JS/TS)
+- [x] `http.Get/Post`, `http.NewRequest(method, url)`, `client.Do`, resty → `REQUESTS` to project routes (same `--api-origin` rules as JS/TS)
 
 ### Dependency injection
 
