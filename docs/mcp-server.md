@@ -70,6 +70,13 @@ JSON text block for clients that only read `content`. Every tool has a
 `title` and the annotations `readOnlyHint: true`, `destructiveHint: false`,
 `idempotentHint: true` and `openWorldHint: false`.
 
+The tool list is part of every request an agent sends, so it is kept short:
+names, descriptions and input schemas come to about 18,000 characters (about
+4,500 tokens) for the 25 tools. Rules that hold for every tool (paging, the
+24,000-character result budget) are stated once in the server
+`instructions`, not in each description; an argument without `required` is
+optional.
+
 Smoke test after scanning a graph:
 
 ```bash

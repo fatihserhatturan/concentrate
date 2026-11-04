@@ -99,6 +99,12 @@ describe("MCP protocol", () => {
     assert.ok(definitions.inputSchema.properties.cursor);
     const stats = list.tools.find((definition: any) => definition.name === "graph_stats");
     assert.equal(stats.inputSchema.properties.cursor, undefined, "unpaged tools take no cursor");
+    // What the model reads with every request stays small: shared rules are
+    // in the instructions, not repeated per tool.
+    assert.match(discover.instructions, /characters are shortened/);
+    const visible = list.tools.map(({ name, description, inputSchema }: any) => ({ name, description, inputSchema }));
+    assert.ok(JSON.stringify(visible).length < 19_000, `tool list is ${JSON.stringify(visible).length} characters`);
+    for (const { name, description } of visible) assert.doesNotMatch(description, /characters are shortened/, name);
     assert.equal(opened, 0);
   });
 
