@@ -75,7 +75,10 @@ names, descriptions and input schemas come to about 18,000 characters (about
 4,500 tokens) for the 25 tools. Rules that hold for every tool (paging, the
 24,000-character result budget) are stated once in the server
 `instructions`, not in each description; an argument without `required` is
-optional.
+optional. The instructions also name, for every tool, the question it answers
+better than grep (callers and references resolved through imports and
+barrels, change impact, route consumers, store and table users, cycles and
+unused exports), since agents otherwise search the text first.
 
 Smoke test after scanning a graph:
 
