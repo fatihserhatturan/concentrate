@@ -1057,6 +1057,38 @@ Astro).
   `func_literal`) that owns the calls in its body. A path or method that is
   not a string literal, a string constant of the file or `http.MethodX` is
   reported in `dynamicRouteCalls`.
+- Go data access covers gorm, `database/sql` and sqlx. A call chain counts
+  when it starts at a value of type `*gorm.DB`, `*sql.DB` / `Tx` / `Conn` /
+  `Stmt` or `*sqlx.DB` / `Tx`: a typed parameter or variable, a struct field
+  of that type, a package variable, `gorm.Open` / `sql.Open` /
+  `sqlx.Connect`, or a function or local closure that returns one
+  (`common.GetDB()`); a chain a local was assigned from is followed
+  (`tx := db.Begin()`, `query := db.Model(&X{})`). gorm: the model is the
+  struct of `Model(…)`, else the value of the method (`First(&user)`,
+  `Delete(&X{})`, `FirstOrCreate`'s second argument), else a `Where` / `Not`
+  / `Or` struct condition; `Table("x")` names a table. A value of type
+  `interface{}` (`db.Save(data)`) or a struct declared inside a function
+  gives no model, and a chain that only counts (`Count(&n)` without
+  `Model`) is skipped. Operations: `Find`, `First`, `Take`, `Count`, `Scan`,
+  … read; `Create` creates; `Save` and `FirstOrCreate` upsert; `Update*`
+  update; `Delete` deletes. `Association("Tags")` reaches the field's
+  model (`Find` / `Count` read, `Append` / `Replace` / `Delete` / `Clear`
+  update) and `Preload("Author.UserModel")` reads every model on the path.
+  Models are structs that embed `gorm.Model`, have `gorm:` tags, are passed
+  to `AutoMigrate`, or are used in a query; a model's table is its
+  `TableName()` string literal or gorm's default (snake case, last word
+  pluralized: `ArticleUserModel` → `article_user_models`; a custom
+  `NamingStrategy` is not read). Fields holding another model are
+  `RELATES_TO` (`one` / `many`, `foreignKey`, `references`, `many2many` join
+  table as `relationName`, `constraint:OnDelete`). `Raw` / `Exec` SQL and the
+  SQL of `database/sql` / sqlx methods (`Query*`, `Exec*`, `Prepare*`,
+  `Get`, `Select`, `Named*`, `MustExec`) are read for tables when the SQL is
+  a string literal, a constant of the file or a `+` of those: `FROM` /
+  `JOIN` / `USING` read, `INSERT INTO` creates (upsert with `ON CONFLICT` /
+  `ON DUPLICATE KEY`), `UPDATE` updates, `DELETE FROM` deletes; CTE names
+  are not tables, and a table that is a gorm model's is that model. SQL
+  built at runtime is not read. Accesses reach the calling functions,
+  routes and entrypoints as for JS. sqlc and ent are not covered yet.
 - Go env reads are `USES_ENV` from the function that reads (and from its
   file; a package-level read is the file's): `os.Getenv`, `os.LookupEnv`,
   `syscall.Getenv` with a string-literal name, and each `$NAME` / `${NAME}`

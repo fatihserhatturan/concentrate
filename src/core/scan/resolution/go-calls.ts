@@ -22,7 +22,7 @@ export type GoCallIndex = {
 
 // A named type, or an anonymous struct (a field's `struct { … }`) with its
 // fields and the file their types are written in.
-type TypeRef = { pkg: string; name: string; anonymous?: { fields: Field[]; fileId: string } };
+export type TypeRef = { pkg: string; name: string; anonymous?: { fields: Field[]; fileId: string } };
 
 type Field = { name: string; type: string; embedded?: true; fields?: Field[] };
 
@@ -202,7 +202,7 @@ function resolveGoCallTarget(call: GraphNode, callerFileId: string, index: GoCal
 }
 
 // `*db.Store`, `Store[T]` → the package and name of the type.
-function resolveType(text: string, fileId: string, index: GoCallIndex): TypeRef | null {
+export function resolveType(text: string, fileId: string, index: GoCallIndex): TypeRef | null {
   const base = text.replace(/^\*/u, "").replace(/\[.*$/u, "");
   if (!/^[\w.]+$/u.test(base)) return null;
   const [qualifier, name] = base.includes(".") ? base.split(".") : [null, base];
@@ -242,7 +242,7 @@ function constructedType(constructor: string, fileId: string, index: GoCallIndex
 }
 
 // `(*Store, error)` → `*Store`; `(s *Store, err error)` → `*Store`.
-function firstResultType(raw: unknown): string | null {
+export function firstResultType(raw: unknown): string | null {
   if (typeof raw !== "string") return null;
   const first = raw.replace(/^\(\s*/u, "").replace(/\s*\)$/u, "").split(",")[0]!.trim();
   const parts = first.split(/\s+/u);

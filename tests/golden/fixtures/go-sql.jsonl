@@ -1,0 +1,147 @@
+{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"datamodel:database/sql:audit","label":"DataModel","properties":{"library":"database/sql","name":"audit"}}
+{"kind":"node","id":"datamodel:database/sql:orders","label":"DataModel","properties":{"library":"database/sql","name":"orders"}}
+{"kind":"node","id":"datamodel:database/sql:sessions","label":"DataModel","properties":{"library":"database/sql","name":"sessions"}}
+{"kind":"node","id":"datamodel:database/sql:users","label":"DataModel","properties":{"library":"database/sql","name":"users"}}
+{"kind":"node","id":"datamodel:sqlx:orders","label":"DataModel","properties":{"library":"sqlx","name":"orders"}}
+{"kind":"node","id":"datamodel:sqlx:users","label":"DataModel","properties":{"library":"sqlx","name":"users"}}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"go-sql","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:repo","label":"Directory","properties":{"name":"repo","path":"<root>/repo","relativePath":"repo"}}
+{"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
+{"kind":"node","id":"file:main.go:entrypoint:13:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":13,"receiverName":null,"trigger":null}}
+{"kind":"node","id":"file:main.go:function:13:main","label":"Function","properties":{"className":null,"endLine":24,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":13,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
+{"kind":"node","id":"file:main.go:function:13:main:call:14:12:sql.Open","label":"Call","properties":{"callee":"Open","columnNumber":12,"expression":"sql.Open","line":14,"name":"sql.Open","receiver":"sql"}}
+{"kind":"node","id":"file:main.go:function:13:main:call:16:2:log.Fatal","label":"Call","properties":{"callee":"Fatal","columnNumber":2,"expression":"log.Fatal","line":16,"name":"log.Fatal","receiver":"log"}}
+{"kind":"node","id":"file:main.go:function:13:main:call:18:10:repo.NewUserRepo","label":"Call","properties":{"callee":"NewUserRepo","columnNumber":10,"expression":"repo.NewUserRepo","line":18,"name":"repo.NewUserRepo","receiver":"repo"}}
+{"kind":"node","id":"file:main.go:function:13:main:call:19:14:users.Find","label":"Call","properties":{"callee":"Find","columnNumber":14,"expression":"users.Find","line":19,"name":"users.Find","receiver":"users","receiverConstructor":"repo.NewUserRepo"}}
+{"kind":"node","id":"file:main.go:function:13:main:call:19:25:context.Background","label":"Call","properties":{"callee":"Background","columnNumber":25,"expression":"context.Background","line":19,"name":"context.Background","receiver":"context"}}
+{"kind":"node","id":"file:main.go:function:13:main:call:20:2:log.Fatal","label":"Call","properties":{"callee":"Fatal","columnNumber":2,"expression":"log.Fatal","line":20,"name":"log.Fatal","receiver":"log"}}
+{"kind":"node","id":"file:main.go:function:13:main:call:23:1:db.QueryRow","label":"Call","properties":{"callee":"QueryRow","columnNumber":1,"expression":"db.QueryRow","line":23,"name":"db.QueryRow","receiver":"db","receiverConstructor":"sql.Open"}}
+{"kind":"node","id":"file:main.go:function:13:main:call:23:1:db.QueryRow(\"SELECT count(*) FROM orders\").Scan","label":"Call","properties":{"callee":"Scan","columnNumber":1,"expression":"db.QueryRow(\"SELECT count(*) FROM orders\").Scan","line":23,"name":"db.QueryRow(\"SELECT count(*) FROM orders\").Scan","receiver":"db","receiverConstructor":"sql.Open"}}
+{"kind":"node","id":"file:main.go:import:10:example.com/sqlapp/repo","label":"Import","properties":{"line":10,"source":"example.com/sqlapp/repo","specifier":"\"example.com/sqlapp/repo\""}}
+{"kind":"node","id":"file:main.go:import:4:context","label":"Import","properties":{"line":4,"source":"context","specifier":"\"context\""}}
+{"kind":"node","id":"file:main.go:import:5:database/sql","label":"Import","properties":{"line":5,"source":"database/sql","specifier":"\"database/sql\""}}
+{"kind":"node","id":"file:main.go:import:6:log","label":"Import","properties":{"line":6,"source":"log","specifier":"\"log\""}}
+{"kind":"node","id":"file:main.go:import:8:github.com/lib/pq","label":"Import","properties":{"alias":"_","line":8,"source":"github.com/lib/pq","specifier":"_ \"github.com/lib/pq\""}}
+{"kind":"node","id":"file:repo/orders.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"repo","path":"<root>/repo/orders.go","relativePath":"repo/orders.go","sourceType":"production"}}
+{"kind":"node","id":"file:repo/orders.go:class:10:OrderRepo","label":"Class","properties":{"endLine":12,"fields":"[{\"name\":\"DB\",\"type\":\"*sqlx.DB\"}]","isAbstract":false,"isExported":true,"line":10,"name":"OrderRepo","visibility":"exported"}}
+{"kind":"node","id":"file:repo/orders.go:class:5:Order","label":"Class","properties":{"endLine":8,"fields":"[{\"name\":\"ID\",\"type\":\"int\"},{\"name\":\"Total\",\"type\":\"int\"}]","isAbstract":false,"isExported":true,"line":5,"name":"Order","visibility":"exported"}}
+{"kind":"node","id":"file:repo/orders.go:function:14:Connect","label":"Function","properties":{"className":null,"endLine":20,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":14,"methodKind":null,"name":"Connect","parameters":"[{\"name\":\"dsn\",\"type\":\"string\"}]","returnType":"(*OrderRepo, error)","visibility":"exported"}}
+{"kind":"node","id":"file:repo/orders.go:function:14:Connect:call:15:12:sqlx.Connect","label":"Call","properties":{"callee":"Connect","columnNumber":12,"expression":"sqlx.Connect","line":15,"name":"sqlx.Connect","receiver":"sqlx"}}
+{"kind":"node","id":"file:repo/orders.go:function:22:ForUser","label":"Function","properties":{"className":"OrderRepo","endLine":30,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":22,"methodKind":null,"name":"ForUser","parameters":"[{\"name\":\"userID\",\"type\":\"int\"}]","returnType":"([]Order, error)","visibility":"exported"}}
+{"kind":"node","id":"file:repo/orders.go:function:22:ForUser:call:24:8:r.DB.Select","label":"Call","properties":{"callee":"Select","columnNumber":8,"expression":"r.DB.Select","line":24,"name":"r.DB.Select","receiver":"r.DB","receiverType":"*OrderRepo"}}
+{"kind":"node","id":"file:repo/orders.go:function:32:Add","label":"Function","properties":{"className":"OrderRepo","endLine":35,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":32,"methodKind":null,"name":"Add","parameters":"[{\"name\":\"o\",\"type\":\"Order\"}]","returnType":"error","visibility":"exported"}}
+{"kind":"node","id":"file:repo/orders.go:function:32:Add:call:33:11:r.DB.NamedExec","label":"Call","properties":{"callee":"NamedExec","columnNumber":11,"expression":"r.DB.NamedExec","line":33,"name":"r.DB.NamedExec","receiver":"r.DB","receiverType":"*OrderRepo"}}
+{"kind":"node","id":"file:repo/orders.go:function:37:Total","label":"Function","properties":{"className":"OrderRepo","endLine":42,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":37,"methodKind":null,"name":"Total","parameters":"[{\"name\":\"query\",\"type\":\"string\"}]","returnType":"(int, error)","visibility":"exported"}}
+{"kind":"node","id":"file:repo/orders.go:function:37:Total:call:40:8:r.DB.Get","label":"Call","properties":{"callee":"Get","columnNumber":8,"expression":"r.DB.Get","line":40,"name":"r.DB.Get","receiver":"r.DB","receiverType":"*OrderRepo"}}
+{"kind":"node","id":"file:repo/orders.go:import:3:github.com/jmoiron/sqlx","label":"Import","properties":{"line":3,"source":"github.com/jmoiron/sqlx","specifier":"\"github.com/jmoiron/sqlx\""}}
+{"kind":"node","id":"file:repo/users.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"repo","path":"<root>/repo/users.go","relativePath":"repo/users.go","sourceType":"production"}}
+{"kind":"node","id":"file:repo/users.go:class:10:UserRepo","label":"Class","properties":{"endLine":12,"fields":"[{\"name\":\"db\",\"type\":\"*sql.DB\"}]","isAbstract":false,"isExported":true,"line":10,"name":"UserRepo","visibility":"exported"}}
+{"kind":"node","id":"file:repo/users.go:function:14:NewUserRepo","label":"Function","properties":{"className":null,"endLine":16,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":14,"methodKind":null,"name":"NewUserRepo","parameters":"[{\"name\":\"db\",\"type\":\"*sql.DB\"}]","returnType":"*UserRepo","visibility":"exported"}}
+{"kind":"node","id":"file:repo/users.go:function:18:Find","label":"Function","properties":{"className":"UserRepo","endLine":22,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":18,"methodKind":null,"name":"Find","parameters":"[{\"name\":\"ctx\",\"type\":\"context.Context\"},{\"name\":\"id\",\"type\":\"int\"}]","returnType":"(string, error)","visibility":"exported"}}
+{"kind":"node","id":"file:repo/users.go:function:18:Find:call:20:55:new","label":"Call","properties":{"callee":"new","columnNumber":55,"expression":"new","line":20,"name":"new","receiver":null}}
+{"kind":"node","id":"file:repo/users.go:function:18:Find:call:20:8:r.db.QueryRowContext","label":"Call","properties":{"callee":"QueryRowContext","columnNumber":8,"expression":"r.db.QueryRowContext","line":20,"name":"r.db.QueryRowContext","receiver":"r.db","receiverType":"*UserRepo"}}
+{"kind":"node","id":"file:repo/users.go:function:18:Find:call:20:8:r.db.QueryRowContext(ctx, selectUser, id).Scan","label":"Call","properties":{"callee":"Scan","columnNumber":8,"expression":"r.db.QueryRowContext(ctx, selectUser, id).Scan","line":20,"name":"r.db.QueryRowContext(ctx, selectUser, id).Scan","receiver":"r","receiverType":"*UserRepo"}}
+{"kind":"node","id":"file:repo/users.go:function:24:Rename","label":"Function","properties":{"className":"UserRepo","endLine":38,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":24,"methodKind":null,"name":"Rename","parameters":"[{\"name\":\"ctx\",\"type\":\"context.Context\"},{\"name\":\"id\",\"type\":\"int\"},{\"name\":\"name\",\"type\":\"string\"}]","returnType":"error","visibility":"exported"}}
+{"kind":"node","id":"file:repo/users.go:function:24:Rename:call:25:12:r.db.BeginTx","label":"Call","properties":{"callee":"BeginTx","columnNumber":12,"expression":"r.db.BeginTx","line":25,"name":"r.db.BeginTx","receiver":"r.db","receiverType":"*UserRepo"}}
+{"kind":"node","id":"file:repo/users.go:function:24:Rename:call:29:14:tx.ExecContext","label":"Call","properties":{"callee":"ExecContext","columnNumber":14,"expression":"tx.ExecContext","line":29,"name":"tx.ExecContext","receiver":"tx","receiverConstructor":"r.db.BeginTx"}}
+{"kind":"node","id":"file:repo/users.go:function:24:Rename:call:30:2:tx.Rollback","label":"Call","properties":{"callee":"Rollback","columnNumber":2,"expression":"tx.Rollback","line":30,"name":"tx.Rollback","receiver":"tx","receiverConstructor":"r.db.BeginTx"}}
+{"kind":"node","id":"file:repo/users.go:function:24:Rename:call:33:14:tx.Exec","label":"Call","properties":{"callee":"Exec","columnNumber":14,"expression":"tx.Exec","line":33,"name":"tx.Exec","receiver":"tx","receiverConstructor":"r.db.BeginTx"}}
+{"kind":"node","id":"file:repo/users.go:function:24:Rename:call:34:2:tx.Rollback","label":"Call","properties":{"callee":"Rollback","columnNumber":2,"expression":"tx.Rollback","line":34,"name":"tx.Rollback","receiver":"tx","receiverConstructor":"r.db.BeginTx"}}
+{"kind":"node","id":"file:repo/users.go:function:24:Rename:call:37:8:tx.Commit","label":"Call","properties":{"callee":"Commit","columnNumber":8,"expression":"tx.Commit","line":37,"name":"tx.Commit","receiver":"tx","receiverConstructor":"r.db.BeginTx"}}
+{"kind":"node","id":"file:repo/users.go:function:40:Purge","label":"Function","properties":{"className":"UserRepo","endLine":46,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":40,"methodKind":null,"name":"Purge","parameters":"[{\"name\":\"ctx\",\"type\":\"context.Context\"}]","returnType":"error","visibility":"exported"}}
+{"kind":"node","id":"file:repo/users.go:function:40:Purge:call:41:14:r.db.Query","label":"Call","properties":{"callee":"Query","columnNumber":14,"expression":"r.db.Query","line":41,"name":"r.db.Query","receiver":"r.db","receiverType":"*UserRepo"}}
+{"kind":"node","id":"file:repo/users.go:function:40:Purge:call:45:8:rows.Close","label":"Call","properties":{"callee":"Close","columnNumber":8,"expression":"rows.Close","line":45,"name":"rows.Close","receiver":"rows","receiverConstructor":"r.db.Query"}}
+{"kind":"node","id":"file:repo/users.go:import:4:context","label":"Import","properties":{"line":4,"source":"context","specifier":"\"context\""}}
+{"kind":"node","id":"file:repo/users.go:import:5:database/sql","label":"Import","properties":{"line":5,"source":"database/sql","specifier":"\"database/sql\""}}
+{"kind":"node","id":"file:repo/users.go:variable:8:selectUser","label":"Variable","properties":{"isExported":false,"kind":"const","line":8,"name":"selectUser","stringValue":"SELECT id, email FROM users WHERE id = $1"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-sql","path":"<root>"}}
+{"kind":"node","id":"table:go:-:audit","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"database/sql","line":null,"name":"audit","provider":null,"schemaName":null}}
+{"kind":"node","id":"table:go:-:orders","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"database/sql","line":null,"name":"orders","provider":null,"schemaName":null}}
+{"kind":"node","id":"table:go:-:sessions","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"database/sql","line":null,"name":"sessions","provider":null,"schemaName":null}}
+{"kind":"node","id":"table:go:-:users","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"sqlx","line":null,"name":"users","provider":null,"schemaName":null}}
+{"kind":"rel","from":"datamodel:database/sql:audit","type":"MAPS_TO_TABLE","to":"table:go:-:audit","properties":{}}
+{"kind":"rel","from":"datamodel:database/sql:orders","type":"MAPS_TO_TABLE","to":"table:go:-:orders","properties":{}}
+{"kind":"rel","from":"datamodel:database/sql:sessions","type":"MAPS_TO_TABLE","to":"table:go:-:sessions","properties":{}}
+{"kind":"rel","from":"datamodel:database/sql:users","type":"MAPS_TO_TABLE","to":"table:go:-:users","properties":{}}
+{"kind":"rel","from":"datamodel:sqlx:orders","type":"MAPS_TO_TABLE","to":"table:go:-:orders","properties":{}}
+{"kind":"rel","from":"datamodel:sqlx:users","type":"MAPS_TO_TABLE","to":"table:go:-:users","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:repo","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
+{"kind":"rel","from":"dir:repo","type":"CONTAINS_FILE","to":"file:repo/orders.go","properties":{}}
+{"kind":"rel","from":"dir:repo","type":"CONTAINS_FILE","to":"file:repo/users.go","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"DECLARES_ENTRYPOINT","to":"file:main.go:entrypoint:13:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"DEFINES_FUNCTION","to":"file:main.go:function:13:main","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"IMPORTS","to":"file:main.go:import:10:example.com/sqlapp/repo","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"IMPORTS","to":"file:main.go:import:4:context","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"IMPORTS","to":"file:main.go:import:5:database/sql","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"IMPORTS","to":"file:main.go:import:6:log","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"IMPORTS","to":"file:main.go:import:8:github.com/lib/pq","properties":{}}
+{"kind":"rel","from":"file:main.go:entrypoint:13:0:main:<none>","type":"ACCESSES_DATA","to":"datamodel:database/sql:orders","properties":{"expression":"db.QueryRow(\"SELECT count(*) FROM orders\").Scan","library":"database/sql","line":23,"operation":"read"}}
+{"kind":"rel","from":"file:main.go:entrypoint:13:0:main:<none>","type":"ACCESSES_DATA","to":"datamodel:database/sql:users","properties":{"expression":"r.db.QueryRowContext(ctx, selectUser, id).Scan","library":"database/sql","line":20,"operation":"read"}}
+{"kind":"rel","from":"file:main.go:entrypoint:13:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:main.go:function:13:main","properties":{}}
+{"kind":"rel","from":"file:main.go:entrypoint:13:0:main:<none>","type":"READS","to":"table:go:-:orders","properties":{"expression":"db.QueryRow(\"SELECT count(*) FROM orders\").Scan","line":23,"model":"orders","operation":"read"}}
+{"kind":"rel","from":"file:main.go:entrypoint:13:0:main:<none>","type":"READS","to":"table:go:-:users","properties":{"expression":"r.db.QueryRowContext(ctx, selectUser, id).Scan","line":20,"model":"users","operation":"read"}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"ACCESSES_DATA","to":"datamodel:database/sql:orders","properties":{"expression":"db.QueryRow(\"SELECT count(*) FROM orders\").Scan","library":"database/sql","line":23,"operation":"read"}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"ACCESSES_DATA","to":"datamodel:database/sql:users","properties":{"expression":"r.db.QueryRowContext(ctx, selectUser, id).Scan","library":"database/sql","line":20,"operation":"read"}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"CALLS","to":"file:main.go:function:13:main:call:14:12:sql.Open","properties":{}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"CALLS","to":"file:main.go:function:13:main:call:16:2:log.Fatal","properties":{}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"CALLS","to":"file:main.go:function:13:main:call:18:10:repo.NewUserRepo","properties":{}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"CALLS","to":"file:main.go:function:13:main:call:19:14:users.Find","properties":{}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"CALLS","to":"file:main.go:function:13:main:call:19:25:context.Background","properties":{}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"CALLS","to":"file:main.go:function:13:main:call:20:2:log.Fatal","properties":{}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"CALLS","to":"file:main.go:function:13:main:call:23:1:db.QueryRow","properties":{}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"CALLS","to":"file:main.go:function:13:main:call:23:1:db.QueryRow(\"SELECT count(*) FROM orders\").Scan","properties":{}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"READS","to":"table:go:-:orders","properties":{"expression":"db.QueryRow(\"SELECT count(*) FROM orders\").Scan","line":23,"model":"orders","operation":"read"}}
+{"kind":"rel","from":"file:main.go:function:13:main","type":"READS","to":"table:go:-:users","properties":{"expression":"r.db.QueryRowContext(ctx, selectUser, id).Scan","line":20,"model":"users","operation":"read"}}
+{"kind":"rel","from":"file:main.go:function:13:main:call:18:10:repo.NewUserRepo","type":"CALL_RESOLVES_TO","to":"file:repo/users.go:function:14:NewUserRepo","properties":{}}
+{"kind":"rel","from":"file:main.go:function:13:main:call:19:14:users.Find","type":"CALL_RESOLVES_TO","to":"file:repo/users.go:function:18:Find","properties":{}}
+{"kind":"rel","from":"file:main.go:import:10:example.com/sqlapp/repo","type":"RESOLVES_TO","to":"file:repo/orders.go","properties":{}}
+{"kind":"rel","from":"file:main.go:import:10:example.com/sqlapp/repo","type":"RESOLVES_TO","to":"file:repo/users.go","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go","type":"DEFINES_CLASS","to":"file:repo/orders.go:class:10:OrderRepo","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go","type":"DEFINES_CLASS","to":"file:repo/orders.go:class:5:Order","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go","type":"DEFINES_FUNCTION","to":"file:repo/orders.go:function:14:Connect","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go","type":"IMPORTS","to":"file:repo/orders.go:import:3:github.com/jmoiron/sqlx","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go:class:10:OrderRepo","type":"DEFINES_METHOD","to":"file:repo/orders.go:function:22:ForUser","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go:class:10:OrderRepo","type":"DEFINES_METHOD","to":"file:repo/orders.go:function:32:Add","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go:class:10:OrderRepo","type":"DEFINES_METHOD","to":"file:repo/orders.go:function:37:Total","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go:function:14:Connect","type":"CALLS","to":"file:repo/orders.go:function:14:Connect:call:15:12:sqlx.Connect","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go:function:22:ForUser","type":"ACCESSES_DATA","to":"datamodel:sqlx:orders","properties":{"expression":"r.DB.Select","library":"sqlx","line":24,"operation":"read"}}
+{"kind":"rel","from":"file:repo/orders.go:function:22:ForUser","type":"ACCESSES_DATA","to":"datamodel:sqlx:users","properties":{"expression":"r.DB.Select","library":"sqlx","line":24,"operation":"read"}}
+{"kind":"rel","from":"file:repo/orders.go:function:22:ForUser","type":"CALLS","to":"file:repo/orders.go:function:22:ForUser:call:24:8:r.DB.Select","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go:function:22:ForUser","type":"READS","to":"table:go:-:orders","properties":{"expression":"r.DB.Select","line":24,"model":"orders","operation":"read"}}
+{"kind":"rel","from":"file:repo/orders.go:function:22:ForUser","type":"READS","to":"table:go:-:users","properties":{"expression":"r.DB.Select","line":24,"model":"users","operation":"read"}}
+{"kind":"rel","from":"file:repo/orders.go:function:32:Add","type":"ACCESSES_DATA","to":"datamodel:sqlx:orders","properties":{"expression":"r.DB.NamedExec","library":"sqlx","line":33,"operation":"create"}}
+{"kind":"rel","from":"file:repo/orders.go:function:32:Add","type":"CALLS","to":"file:repo/orders.go:function:32:Add:call:33:11:r.DB.NamedExec","properties":{}}
+{"kind":"rel","from":"file:repo/orders.go:function:32:Add","type":"WRITES","to":"table:go:-:orders","properties":{"expression":"r.DB.NamedExec","line":33,"model":"orders","operation":"create"}}
+{"kind":"rel","from":"file:repo/orders.go:function:37:Total","type":"CALLS","to":"file:repo/orders.go:function:37:Total:call:40:8:r.DB.Get","properties":{}}
+{"kind":"rel","from":"file:repo/users.go","type":"DEFINES_CLASS","to":"file:repo/users.go:class:10:UserRepo","properties":{}}
+{"kind":"rel","from":"file:repo/users.go","type":"DEFINES_FUNCTION","to":"file:repo/users.go:function:14:NewUserRepo","properties":{}}
+{"kind":"rel","from":"file:repo/users.go","type":"DEFINES_VARIABLE","to":"file:repo/users.go:variable:8:selectUser","properties":{}}
+{"kind":"rel","from":"file:repo/users.go","type":"IMPORTS","to":"file:repo/users.go:import:4:context","properties":{}}
+{"kind":"rel","from":"file:repo/users.go","type":"IMPORTS","to":"file:repo/users.go:import:5:database/sql","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:class:10:UserRepo","type":"DEFINES_METHOD","to":"file:repo/users.go:function:18:Find","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:class:10:UserRepo","type":"DEFINES_METHOD","to":"file:repo/users.go:function:24:Rename","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:class:10:UserRepo","type":"DEFINES_METHOD","to":"file:repo/users.go:function:40:Purge","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:18:Find","type":"ACCESSES_DATA","to":"datamodel:database/sql:users","properties":{"expression":"r.db.QueryRowContext(ctx, selectUser, id).Scan","library":"database/sql","line":20,"operation":"read"}}
+{"kind":"rel","from":"file:repo/users.go:function:18:Find","type":"CALLS","to":"file:repo/users.go:function:18:Find:call:20:55:new","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:18:Find","type":"CALLS","to":"file:repo/users.go:function:18:Find:call:20:8:r.db.QueryRowContext","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:18:Find","type":"CALLS","to":"file:repo/users.go:function:18:Find:call:20:8:r.db.QueryRowContext(ctx, selectUser, id).Scan","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:18:Find","type":"READS","to":"table:go:-:users","properties":{"expression":"r.db.QueryRowContext(ctx, selectUser, id).Scan","line":20,"model":"users","operation":"read"}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"ACCESSES_DATA","to":"datamodel:database/sql:audit","properties":{"expression":"tx.Exec","library":"database/sql","line":33,"operation":"upsert"}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"ACCESSES_DATA","to":"datamodel:database/sql:users","properties":{"expression":"tx.ExecContext","library":"database/sql","line":29,"operation":"update"}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"CALLS","to":"file:repo/users.go:function:24:Rename:call:25:12:r.db.BeginTx","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"CALLS","to":"file:repo/users.go:function:24:Rename:call:29:14:tx.ExecContext","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"CALLS","to":"file:repo/users.go:function:24:Rename:call:30:2:tx.Rollback","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"CALLS","to":"file:repo/users.go:function:24:Rename:call:33:14:tx.Exec","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"CALLS","to":"file:repo/users.go:function:24:Rename:call:34:2:tx.Rollback","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"CALLS","to":"file:repo/users.go:function:24:Rename:call:37:8:tx.Commit","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"WRITES","to":"table:go:-:audit","properties":{"expression":"tx.Exec","line":33,"model":"audit","operation":"upsert"}}
+{"kind":"rel","from":"file:repo/users.go:function:24:Rename","type":"WRITES","to":"table:go:-:users","properties":{"expression":"tx.ExecContext","line":29,"model":"users","operation":"update"}}
+{"kind":"rel","from":"file:repo/users.go:function:40:Purge","type":"ACCESSES_DATA","to":"datamodel:database/sql:sessions","properties":{"expression":"r.db.Query","library":"database/sql","line":41,"operation":"delete"}}
+{"kind":"rel","from":"file:repo/users.go:function:40:Purge","type":"ACCESSES_DATA","to":"datamodel:database/sql:users","properties":{"expression":"r.db.Query","library":"database/sql","line":41,"operation":"read"}}
+{"kind":"rel","from":"file:repo/users.go:function:40:Purge","type":"CALLS","to":"file:repo/users.go:function:40:Purge:call:41:14:r.db.Query","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:40:Purge","type":"CALLS","to":"file:repo/users.go:function:40:Purge:call:45:8:rows.Close","properties":{}}
+{"kind":"rel","from":"file:repo/users.go:function:40:Purge","type":"READS","to":"table:go:-:users","properties":{"expression":"r.db.Query","line":41,"model":"users","operation":"read"}}
+{"kind":"rel","from":"file:repo/users.go:function:40:Purge","type":"WRITES","to":"table:go:-:sessions","properties":{"expression":"r.db.Query","line":41,"model":"sessions","operation":"delete"}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
