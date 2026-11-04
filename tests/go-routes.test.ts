@@ -84,7 +84,9 @@ describe("Go net/http routes", () => {
       ["ALL", "/static/", "main.go:42", null, []],
       ["ALL", "/secure", "main.go:43", "secure", ["withAuth", "secure"]],
       ["POST", "/api/orders", "main.go:47", "create", ["create"]],
-      ["ALL", "/health", "main.go:51", "health", ["health"]],
+      ["ALL", "/health", "main.go:53", "health", ["health"]],
+      // A mux another function returns, mounted below a stripped prefix.
+      ["GET", "/v2/ping", "main.go:60", "health", ["health"]],
     ]);
     assert.ok(graph.nodes.filter((node) => node.label === "Route").every((node) => node.properties.framework === "net/http"));
   });
@@ -97,6 +99,62 @@ describe("Go net/http routes", () => {
     assert.equal(joinRoutePaths("/api", "/"), "/api/");
     assert.equal(joinRoutePaths("", ""), "/");
     assert.equal(joinRoutePaths("/api/", "/x/"), "/api/x/");
+  });
+});
+
+async function scan(fixture: string): Promise<Graph> {
+  return buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: false });
+}
+
+describe("Go echo, chi, fiber and gorilla/mux routes", () => {
+  it("echo: the handler first, the root's Use for every route, a group's for what follows", async () => {
+    assert.deepEqual(routes(await scan("go-echo")), [
+      ["GET", "/health", "main.go:28", "list", ["auth", "list"]],
+      ["GET", "/api/users", "main.go:34", "list", ["auth", "audit", "list"]],
+      ["POST", "/api/users", "main.go:35", "show", ["auth", "audit", "audit", "show"]],
+      ["PATCH", "/api/users/:id", "main.go:36", "show", ["auth", "audit", "show"]],
+      ["PUT", "/api/users/:id", "main.go:36", "show", ["auth", "audit", "show"]],
+      ["DELETE", "/cache", "main.go:39", "show", ["auth", "show"]],
+      ["GET", "/api/admin/stats", "main.go:45", "list", ["auth", "audit", "auth", "list"]],
+    ]);
+  });
+
+  it("chi: Route and Group callbacks, With, Mount of a returned router and a named callback", async () => {
+    assert.deepEqual(routes(await scan("go-chi")), [
+      ["GET", "/", "main.go:21", "list", ["list"]],
+      ["GET", "/articles", "main.go:24", "list", ["list"]],
+      ["POST", "/articles", "main.go:25", "show", ["auth", "show"]],
+      ["GET", "/articles/{id}", "main.go:27", "show", ["show"]],
+      ["DELETE", "/cache", "main.go:33", "show", ["auth", "show"]],
+      ["PATCH", "/x", "main.go:38", "show", ["show"]],
+      // A dependency's handler mounted as is.
+      ["ALL", "/debug", "main.go:39", null, []],
+      ["GET", "/admin/stats", "main.go:47", "list", ["auth", "list"]],
+      ["GET", "/users/{name}", "main.go:52", "show", ["show"]],
+    ]);
+  });
+
+  it("fiber: groups with handlers, Route, Add, All and a mounted app", async () => {
+    assert.deepEqual(routes(await scan("go-fiber")), [
+      ["GET", "/", "main.go:20", "list", ["auth", "list"]],
+      ["GET", "/api/items", "main.go:23", "list", ["auth", "auth", "list"]],
+      ["POST", "/api/items", "main.go:24", "show", ["auth", "auth", "auth", "show"]],
+      ["GET", "/v2/items", "main.go:27", "show", ["auth", "show"]],
+      ["PUT", "/items/:id", "main.go:30", "show", ["auth", "show"]],
+      ["ALL", "/any", "main.go:31", "list", ["auth", "list"]],
+      ["GET", "/sub/ping", "main.go:39", "list", ["auth", "list"]],
+    ]);
+  });
+
+  it("gorilla/mux: Methods chains, subrouters and router-wide middleware", async () => {
+    assert.deepEqual(routes(await scan("go-mux")), [
+      ["ALL", "/", "main.go:23", "list", ["logging", "list"]],
+      ["GET", "/items", "main.go:24", "list", ["logging", "list"]],
+      ["PATCH", "/items/{id}", "main.go:25", "show", ["logging", "show"]],
+      ["PUT", "/items/{id}", "main.go:25", "show", ["logging", "show"]],
+      ["GET", "/api/users", "main.go:29", "list", ["logging", "auth", "list"]],
+      ["ALL", "/static/", "main.go:31", null, ["logging"]],
+    ]);
   });
 });
 

@@ -995,30 +995,50 @@ Astro).
   `main` / `init`, library `go`). `TestX`, `BenchmarkX`, `FuzzX` and
   `ExampleX` in `_test.go` files carry `testKind` (`test`, `benchmark`,
   `fuzz`, `example`); `_test.go` files are test files.
-- HTTP routes come from `net/http` and gin (`Route.framework` `net/http` /
-  `gin`). A router is known when a function builds it (`gin.Default()`,
-  `gin.New()`, `http.NewServeMux()`, `&http.ServeMux{}`), groups it
-  (`r.Group("/api", mw…)`), or takes it as a parameter typed `*gin.Engine`,
-  `*gin.RouterGroup`, `gin.IRouter`, `gin.IRoutes` or `*http.ServeMux`; a
-  route on a parameter gets the path and middleware of every call that passes
-  a router in, through up to 8 functions, one `Route` per distinct mount.
-  Mounts made in `_test.go` files apply only to test routes. A route on a
-  field (`s.router.GET("/x", h)`, `s.mux.HandleFunc("/x", h)`) is taken as a
-  root router's in a file that imports gin or `net/http`. Routers returned
-  from a function (`r := NewRouter()`), stored in package variables or built
-  in closures are not followed yet; echo, chi, fiber and gorilla/mux come in
-  later PRs of Phase 19.
-- gin's `Use` applies to what is registered after it on that router and to
-  groups made after it, so the lifecycle steps are the middleware in force at
-  the registration, then the route's own handlers (the last one is the
-  handler). A factory (`AuthMiddleware(true)`) is the step of the function
-  called. `ServeMux` patterns give the method (`GET /items/{id}`; `ALL`
-  without one) and drop the host; `http.StripPrefix("/api", sub)` mounts a
-  sub-mux's routes under `/api`, and `withAuth(http.HandlerFunc(h))` makes
-  `withAuth` a middleware step and `h` the handler. A closure handler is a
-  `Function` (`<v1.POST:/items:arg1>`, kind `func_literal`) that owns the
-  calls in its body. A path or method that is not a string literal or a
-  string constant of the file is reported in `dynamicRouteCalls`.
+- HTTP routes come from `net/http`, gin, echo, chi, fiber and gorilla/mux
+  (`Route.framework` `net/http`, `gin`, `echo`, `chi`, `fiber`,
+  `gorilla/mux`). A router is known when a function builds it
+  (`gin.Default()`, `echo.New()`, `chi.NewRouter()`, `fiber.New()`,
+  `mux.NewRouter()`, `http.NewServeMux()`, `&http.ServeMux{}`, or a function
+  of the same file whose declared result is a router type), groups it
+  (`r.Group("/api", mw…)`, chi's `Route` / `Group` callbacks and `With`,
+  fiber's `Route`, `r.PathPrefix("/api").Subrouter()`), or takes it as a
+  parameter typed as one of the framework's router types (`*gin.RouterGroup`,
+  `*echo.Group`, `chi.Router`, `fiber.Router`, `*mux.Router`,
+  `*http.ServeMux`, …).
+- A route on a parameter gets the path and middleware of every call that
+  passes a router in, and a named callback (`r.Route("/users", userRoutes)`)
+  is such a call. A router a function returns gets the path its callers mount
+  the result at (`r.Mount("/admin", adminRouter())`, `app.Mount("/sub",
+  subApp())`, `mux.Handle("/v2/", http.StripPrefix("/v2", v2Routes()))`), and
+  keeps its own path when nothing mounts it. Both are followed through up to
+  8 functions, one `Route` per distinct mount, and mounts made in `_test.go`
+  files apply only to test routes. A mount of a call whose function returns
+  no router (`r.Mount("/debug", middleware.Profiler())`, `mux.Handle("/x",
+  withAuth(h))`) is a route (`ALL`) of its own.
+- A route on a field (`s.router.GET("/x", h)`) is taken as a root router's
+  when the file imports one framework with that method. Routers stored in
+  package variables or built in closures other than chi's and fiber's
+  callbacks are not followed, nor are routers a function of another file
+  returns when the caller registers routes on them directly
+  (`r := api.NewRouter(); r.Get(…)`).
+- Middleware follows each framework's order. gin, chi, fiber and echo groups
+  apply `Use` to what is registered after it; echo's root (`e.Use`, `e.Pre`)
+  and gorilla/mux routers apply it to all their routes. The lifecycle steps
+  are the routers' middleware, outermost first, then the route's own (echo's
+  come after its handler: `e.GET(path, h, mw…)`), then the handler. A factory
+  (`AuthMiddleware(true)`) is the step of the function called; fiber's
+  `app.Use("/api", mw)` (a prefix first) is not followed.
+- `ServeMux` patterns give the method (`GET /items/{id}`; `ALL` without one)
+  and drop the host; `http.StripPrefix("/api", sub)` mounts a sub-mux's
+  routes under `/api`. For `net/http`, chi and gorilla/mux,
+  `withAuth(http.HandlerFunc(h))` makes `withAuth` a middleware step and `h`
+  the handler. gorilla/mux's `.Methods("GET", "POST")` gives one `Route` per
+  method (`ALL` without it); chi serves a sub-router's `/` at its mount path.
+  A closure handler is a `Function` (`<v1.POST:/items:arg1>`, kind
+  `func_literal`) that owns the calls in its body. A path or method that is
+  not a string literal, a string constant of the file or `http.MethodX` is
+  reported in `dynamicRouteCalls`.
 - `find_unused_exports` judges Go exports by package and counts any mention
   of the name in another package's files as a use (comments and strings
   included), so it can miss dead exports but rarely flags used ones. Uses

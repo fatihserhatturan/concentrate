@@ -905,17 +905,17 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 - [x] `net/http`: `http.HandleFunc` / `Handle`, `ServeMux`, Go 1.22 patterns (`"GET /items/{id}"`), `http.StripPrefix` mounts
 - [x] gin: `r.GET/POST/…`, `Group`, `Use`, `Any`, `Handle`
-- [ ] echo: `e.GET/…`, `Group`, middleware
-- [ ] chi: `r.Get/…`, `Route`, `Mount`, `Group`, `With`
-- [ ] fiber: `app.Get/…`, `Group`, `Mount`
-- [ ] gorilla/mux: `HandleFunc(...).Methods(...)`, `PathPrefix(...).Subrouter()`
+- [x] echo: `e.GET/…`, `Group`, middleware
+- [x] chi: `r.Get/…`, `Route`, `Mount`, `Group`, `With`
+- [x] fiber: `app.Get/…`, `Group`, `Mount`
+- [x] gorilla/mux: `HandleFunc(...).Methods(...)`, `PathPrefix(...).Subrouter()`
 
 ### Route structure
 
-- [ ] Full paths through groups, sub-routers and mounts across functions and files (router passed as a parameter or returned)
-- [ ] Middleware as `ROUTE_LIFECYCLE_STEP`, in order
-- [ ] Handlers: functions, closures, methods on handler structs (`h.GetUser`), handler factories returning `http.HandlerFunc`
-- [ ] Routes registered in loops or with computed paths are reported as dynamic, as for JS/TS (#153)
+- [x] Full paths through groups, sub-routers and mounts across functions and files (router passed as a parameter or returned)
+- [x] Middleware as `ROUTE_LIFECYCLE_STEP`, in order
+- [x] Handlers: functions, closures, methods on handler structs (`h.GetUser`), handler factories returning `http.HandlerFunc`
+- [x] Routes registered in loops or with computed paths are reported as dynamic, as for JS/TS (#153)
 
 ### Other entrypoints
 
@@ -924,9 +924,9 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Acceptance criteria
 
-- [ ] One fixture per router with golden coverage
-- [ ] A pinned Go sample with hand-labelled routes: precision 100%, recall reported in `bench:accuracy`
-- [ ] `list_routes`, `route_details` and `impact_of` answer on the Go sample; `docs/mcp-server.md` and `known-limitations.md` updated
+- [x] One fixture per router with golden coverage
+- [x] A pinned Go sample with hand-labelled routes: precision 100%, recall reported in `bench:accuracy`
+- [x] `list_routes`, `route_details` and `impact_of` answer on the Go sample; `docs/mcp-server.md` and `known-limitations.md` updated
 
 ## Phase 20: Go data access, config and outbound HTTP (database/sql, sqlx, gorm, sqlc, ent, viper, fx/wire) ([#164](https://github.com/fatihserhatturan/concentrate/issues/164))
 
