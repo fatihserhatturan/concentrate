@@ -105,6 +105,7 @@ describe("MCP protocol", () => {
     const visible = list.tools.map(({ name, description, inputSchema }: any) => ({ name, description, inputSchema }));
     assert.ok(JSON.stringify(visible).length < 19_000, `tool list is ${JSON.stringify(visible).length} characters`);
     for (const { name, description } of visible) assert.doesNotMatch(description, /characters are shortened/, name);
+    for (const { name } of visible) assert.match(discover.instructions, new RegExp(`\\b${name}\\b`), `the instructions name ${name}`);
     assert.equal(opened, 0);
   });
 

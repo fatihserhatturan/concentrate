@@ -37,10 +37,14 @@ const capabilities = { tools: {}, resources: {} };
 // change with every scan.
 const STATIC_TTL_MS = 60 * 60 * 1000;
 
+// Agents reach for grep first (the benchmark in docs/agent-benchmark.md), so
+// the instructions name the questions text search cannot answer in full, and
+// every tool once.
 const instructions = [
   "Concentrate answers questions about one scanned codebase from its code graph.",
   `Start with the ${resourceDefinitions[0]!.uri} resource or graph_stats for an overview.`,
-  "Use search_symbols, find_definitions, list_routes, list_pages and list_entrypoints to locate code; find_references for uses; impact_of, route_details and detect_changes for what a change affects; component_tree and find_component_usages for UI components; get_symbol_source and get_file_outline to read code; architecture_overview, find_import_cycles and find_unused_exports for the whole repository.",
+  "Prefer it to grep when a text match is not the answer: who calls or uses a symbol (find_callers, find_references: imports, re-exports, barrels, methods and injected services are resolved), what a change affects (impact_of, detect_changes, route_details), which frontend calls reach a route (api_consumers), what reads or writes a store or table (list_stores, list_tables, list_data_access), env and config use (list_env_config), and whole-repository questions (find_import_cycles, find_unused_exports, architecture_overview, list_exports, trace_import_chain).",
+  "To locate code use search_symbols, find_definitions, list_routes, list_pages and list_entrypoints; to read it, get_symbol_source and get_file_outline; for UI components, component_tree and find_component_usages.",
   "List results are paged: pass page.nextCursor back as cursor, with the other arguments unchanged, for the next page.",
   `Results over ${OUTPUT_BUDGET_CHARS} characters are shortened: the paged list ends early with page.nextCursor, and \`truncated\` counts the items each other list lost.`,
 ].join(" ");
