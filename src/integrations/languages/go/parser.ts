@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { parseSyntaxTree, type SyntaxNode } from "../syntax/tree-sitter.js";
+import { parseSyntaxTreeSkippingErrors, type SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { LanguageParser } from "../../../core/contracts/language-parser.js";
 import {
@@ -8,6 +8,20 @@ import {
   walk,
   walkScoped,
 } from "../tree-sitter-utils.js";
+
+// Node types whose children are statements, declarations or members: one with
+// a syntax error is left out on its own, and the rest of the file is kept.
+const statementParents = new Set([
+  "source_file",
+  "statement_list",
+  "block",
+  "field_declaration_list",
+  "interface_type",
+  "import_spec_list",
+  "var_declaration",
+  "const_declaration",
+  "type_declaration",
+]);
 
 export const goParser: LanguageParser = {
   language: "go",
@@ -31,11 +45,8 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
   ];
   const relationships: GraphRelationship[] = [];
 
-  const tree = await parseSyntaxTree("go", source);
+  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors("go", source, statementParents);
   try {
-    if (tree.rootNode.hasError) {
-      throw new Error("Syntax error");
-    }
 
     // A package is a directory's files with the same package clause.
     const packageName = tree.rootNode.namedChildren
@@ -57,7 +68,19 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
         }
       }
 
-      if (node.type === "type_spec" && node.namedChildren.some((child) => child.type === "struct_type")) {
+      if (node.type === "type_spec" && node.childForFieldName("type")?.type === "interface_type") {
+        const interfaceNode = createInterfaceNode(fileNodeId, node);
+        nodes.push(interfaceNode);
+        relationships.push({ from: fileNodeId, to: interfaceNode.id, type: "DEFINES_INTERFACE", properties: {} });
+      } else if (node.type === "type_alias" || (node.type === "type_spec" && node.childForFieldName("type")?.type !== "struct_type")) {
+        const aliasNode = createTypeAliasNode(fileNodeId, node);
+        if (aliasNode) {
+          nodes.push(aliasNode);
+          relationships.push({ from: fileNodeId, to: aliasNode.id, type: "DEFINES_TYPE_ALIAS", properties: {} });
+        }
+      }
+
+      if (node.type === "type_spec" && node.childForFieldName("type")?.type === "struct_type") {
         const classNode = createStructNode(fileNodeId, node);
         if (classNode) {
           nodes.push(classNode);
@@ -110,7 +133,11 @@ async function parseGoFile(rootPath: string, filePath: string): Promise<ParsedSo
       );
     });
 
-    return { fileNodeId, nodes, relationships };
+    const parsed: ParsedSourceFile = { fileNodeId, nodes, relationships };
+    if (skippedLines.length > 0) {
+      parsed.warnings = [`Syntax error: left out the statement${skippedLines.length === 1 ? "" : "s"} at line${skippedLines.length === 1 ? "" : "s"} ${skippedLines.join(", ")}`];
+    }
+    return parsed;
   } finally {
     tree.delete();
   }
@@ -163,6 +190,7 @@ function createFunctionNode(fileNodeId: string, node: SyntaxNode, className?: st
       isAbstract: false,
       visibility: goVisibility(name),
       parameters: JSON.stringify(goParameters(node.childForFieldName("parameters"))),
+      ...typeParameters(node),
       returnType: node.childForFieldName("result")?.text ?? null,
     },
   };
@@ -220,8 +248,66 @@ function createStructNode(fileNodeId: string, node: SyntaxNode): GraphNode | nul
       isAbstract: false,
       visibility: goVisibility(name),
       fields: JSON.stringify(structFields(node.childForFieldName("type"))),
+      ...typeParameters(node),
     },
   };
+}
+
+// `type Reader interface { Read(p []byte) (int, error); io.Closer }`: the
+// method names and the embedded interfaces (types of a constraint union such
+// as `~int | ~string` are not interfaces and are left out).
+function createInterfaceNode(fileNodeId: string, node: SyntaxNode): GraphNode {
+  const name = node.childForFieldName("name")!.text;
+  const methods: string[] = [];
+  const embeds: string[] = [];
+  for (const element of node.childForFieldName("type")?.namedChildren ?? []) {
+    if (element.type === "method_elem" || element.type === "method_spec") {
+      const methodName = element.childForFieldName("name")?.text;
+      if (methodName) methods.push(methodName);
+    } else if (element.type === "type_elem" && element.namedChildren.length === 1) {
+      const embedded = element.namedChildren[0]!;
+      if (embedded.type === "type_identifier" || embedded.type === "qualified_type" || embedded.type === "generic_type") embeds.push(embedded.text);
+    }
+  }
+  return {
+    id: `${fileNodeId}:interface:${node.startPosition.row + 1}:${name}`,
+    label: "Interface",
+    properties: {
+      name,
+      line: node.startPosition.row + 1,
+      endLine: node.endPosition.row + 1,
+      isExported: /^[A-Z]/.test(name),
+      methods: JSON.stringify(methods),
+      embeds: JSON.stringify(embeds),
+      ...typeParameters(node),
+    },
+  };
+}
+
+// `type ID = string` (an alias) and `type Count int` (a defined type).
+function createTypeAliasNode(fileNodeId: string, node: SyntaxNode): GraphNode | null {
+  const name = node.childForFieldName("name")?.text;
+  const type = node.childForFieldName("type")?.text;
+  if (!name || !type) return null;
+  return {
+    id: `${fileNodeId}:type:${node.startPosition.row + 1}:${name}`,
+    label: "TypeAlias",
+    properties: {
+      name,
+      line: node.startPosition.row + 1,
+      endLine: node.endPosition.row + 1,
+      isExported: /^[A-Z]/.test(name),
+      aliasOf: type,
+      isAlias: node.type === "type_alias",
+      ...typeParameters(node),
+    },
+  };
+}
+
+// `[K comparable, V any]` of a generic type or function, as written.
+function typeParameters(node: SyntaxNode): { typeParameters?: string } {
+  const list = node.childForFieldName("type_parameters");
+  return list ? { typeParameters: list.text } : {};
 }
 
 // A struct's fields as [{name, type}]; an embedded field is named after its

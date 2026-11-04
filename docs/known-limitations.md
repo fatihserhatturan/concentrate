@@ -313,8 +313,8 @@ Blocks or informs: future query server design.
 
 ## Parsing
 
-- Grammars are pinned to the versions the native binding used: javascript
-  0.23.1, typescript and tsx 0.23.2, python 0.21.0, go 0.21.2, rust 0.21.0
+- Grammars are pinned (go upgraded since the native binding): javascript
+  0.23.1, typescript and tsx 0.23.2, python 0.21.0, go 0.25.0, rust 0.21.0
   (see `vendor/grammars/manifest.json`). Newer syntax that only later grammar
   releases understand produces `ERROR` nodes.
 - Inline JSX event handlers create no nodes of their own, so a call inside
@@ -328,8 +328,10 @@ Blocks or informs: future query server design.
   reject, is handled: a file that does not parse as written is parsed again
   with such `&` read as `_` (node text and attribute values stay as written).
   A bare `&` before a letter in JSX text (`<p>a&b</p>`) is still an error.
-  Python, Go and Rust files with syntax errors are still reported
-  as failed files (`--continue-on-error` keeps the rest of the scan).
+  A Go file with syntax errors is handled the same way (declarations,
+  statements, struct fields and interface members are left out one by one).
+  Python and Rust files with syntax errors are still reported as failed
+  files (`--continue-on-error` keeps the rest of the scan).
 
 - HTML pages (`.html`, `.htm`): `<script src>` becomes an `Import` of the
   page; a relative path resolves like `./path` (without `?query` / `#hash`).
@@ -965,9 +967,24 @@ Astro).
   first). Struct fields are followed (`h.repo.Find()`), and methods promoted
   from embedded structs are found. Locals whose type is not visible (range
   variables, results of other calls) leave the call unresolved, also when
-  they hide a package name. Package-level variables, closures, method values,
-  chained calls (`NewX().Run()`) and calls through interfaces are not
-  resolved yet.
+  they hide a package name. Package-level variables, closures, method values
+  and chained calls (`NewX().Run()`) are not resolved yet.
+- Interfaces are `Interface` nodes with their method names and embedded
+  interfaces. A struct `IMPLEMENTS` every interface of the scan whose methods
+  (with the embedded interfaces' methods) are all in the struct's method set:
+  its methods with value or pointer receivers and those promoted from
+  embedded structs. Methods match by name; signatures are not compared. An
+  interface that embeds one from outside the scan (`io.Closer`) has unknown
+  methods and gets no implementations, nor do interfaces without methods
+  (`any`, constraints like `~int | ~float64`). Defined non-struct types
+  (`type HandlerFunc func(…)`) can have methods but are `TypeAlias` nodes and
+  implement nothing.
+- A call on a value of interface type (`s.cache.Get()`) resolves to the
+  method of every implementation, each `CALL_RESOLVES_TO` marked
+  `via: "interface"`.
+- `type ID = string` and `type Count int` are `TypeAlias` nodes (`aliasOf`,
+  `isAlias`). Type parameters are kept as written (`typeParameters` on
+  structs, interfaces, types and functions); instantiations are not tracked.
 
 ## Review Process
 

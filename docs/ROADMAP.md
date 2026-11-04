@@ -853,8 +853,8 @@ Go gets files, imports, structs, functions, methods and calls today (`src/integr
 
 ### Grammar
 
-- [ ] Upgrade the vendored `go.wasm` (tree-sitter-go 0.21.2) to the current release through `npm run grammars:build`; review the golden diffs
-- [ ] Partial graph plus a scan warning for files with `ERROR` nodes, as for JS/TS
+- [x] Upgrade the vendored `go.wasm` (tree-sitter-go 0.21.2) to the current release through `npm run grammars:build`; review the golden diffs
+- [x] Partial graph plus a scan warning for files with `ERROR` nodes, as for JS/TS
 
 ### Modules and packages
 
@@ -864,14 +864,14 @@ Go gets files, imports, structs, functions, methods and calls today (`src/integr
 
 ### Declarations
 
-- [ ] Interfaces as `Interface` nodes; implicit `IMPLEMENTS` from method sets (struct and pointer receivers)
-- [ ] Embedded structs and interfaces (promoted methods); type aliases and defined types as `TypeAlias`; generics (type parameters recorded)
+- [x] Interfaces as `Interface` nodes; implicit `IMPLEMENTS` from method sets (struct and pointer receivers)
+- [x] Embedded structs and interfaces (promoted methods); type aliases and defined types as `TypeAlias`; generics (type parameters recorded)
 - [ ] Package-level `var` / `const` as `Variable` nodes; `parameters` and `returnType` on functions and methods
 
 ### Calls
 
 - [x] `pkg.Func()` and `pkg.Type{}` / `pkg.NewX()` resolve through the import (alias or last path segment)
-- [ ] Method calls on typed receivers: variables declared with a struct type, `x := pkg.NewX()` return types, struct fields, interface values (to every implementation, marked)
+- [x] Method calls on typed receivers: variables declared with a struct type, `x := pkg.NewX()` return types, struct fields, interface values (to every implementation, marked)
 
 ### Entrypoints and tests
 
@@ -884,7 +884,7 @@ Go gets files, imports, structs, functions, methods and calls today (`src/integr
 
 ### Acceptance criteria
 
-- [ ] Fixtures with golden coverage: multi-module `go.work`, package with several files, interfaces with implementations, embedded structs, generics, a file with a syntax error
+- [x] Fixtures with golden coverage: multi-module `go.work`, package with several files, interfaces with implementations, embedded structs, generics, a file with a syntax error
 - [ ] Cross-package call resolution has hand labels on a pinned Go sample (precision 100%, recall reported)
 - [x] `docs/known-limitations.md` has a Go section
 

@@ -1,5 +1,6 @@
 // Builds the tree-sitter grammars Concentrate parses with into WebAssembly.
 //   npm run grammars:build
+//   npm run grammars:build -- go rust   (only these; the others are kept)
 //
 // Each grammar is downloaded at a pinned version with `npm pack` (no install
 // scripts run) and compiled with the pinned tree-sitter CLI (devDependency).
@@ -21,18 +22,25 @@ const grammars = [
   { name: "tsx", package: "tree-sitter-typescript", version: "0.23.2", dir: "tsx" },
   { name: "html", package: "tree-sitter-html", version: "0.23.2", dir: "." },
   { name: "python", package: "tree-sitter-python", version: "0.21.0", dir: "." },
-  { name: "go", package: "tree-sitter-go", version: "0.21.2", dir: "." },
+  { name: "go", package: "tree-sitter-go", version: "0.25.0", dir: "." },
   { name: "rust", package: "tree-sitter-rust", version: "0.21.0", dir: "." },
 ];
+
+const only = process.argv.slice(2);
+const unknown = only.filter((name) => !grammars.some((grammar) => grammar.name === name));
+if (unknown.length > 0) throw new Error(`Unknown grammar ${unknown.join(", ")}`);
 
 const cli = path.join(root, "node_modules/.bin/tree-sitter");
 const cliVersion = execFileSync(cli, ["--version"], { encoding: "utf8" }).trim();
 const work = await mkdtemp(path.join(os.tmpdir(), "concentrate-grammars-"));
 await mkdir(outDir, { recursive: true });
 
-const manifest = { cli: cliVersion, grammars: {} };
+const previous = only.length > 0 ? JSON.parse(await readFile(path.join(outDir, "manifest.json"), "utf8")) : { grammars: {} };
+if (only.length > 0 && previous.cli !== cliVersion) throw new Error(`Grammars were built with ${previous.cli}; rebuild all with ${cliVersion}`);
+const manifest = { cli: cliVersion, grammars: { ...previous.grammars } };
 try {
   for (const grammar of grammars) {
+    if (only.length > 0 && !only.includes(grammar.name)) continue;
     const source = path.join(work, `${grammar.package}-${grammar.version}`);
     await mkdir(source, { recursive: true });
     const tarball = execFileSync("npm", ["pack", `${grammar.package}@${grammar.version}`, "--silent"], { cwd: source, encoding: "utf8" }).trim();
