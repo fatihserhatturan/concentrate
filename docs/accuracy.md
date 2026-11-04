@@ -25,7 +25,7 @@ chosen files); every target was decided by reading the code.
 | Kind | Samples | Scope |
 | --- | --- | --- |
 | Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld | every route declared with a literal path in the scoped files; tests excluded |
-| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | every call site in 2–9 chosen files per sample |
+| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`) | every call site in 2–9 chosen files per sample; for the Go sample, every call of a repository function or method in its 13 production files |
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma) | the services; the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
@@ -141,15 +141,18 @@ Rules:
 | express | 28 | 28 | 0 | 0 | 100.0% | 100.0% |
 | fastify | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
 | internet-angular-realworld | 21 | 21 | 0 | 0 | 100.0% | 100.0% |
+| internet-go-gin-realworld | 223 | 223 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
 | internet-sveltekit-realworld | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 14 | 14 | 0 | 0 | 100.0% | 100.0% |
 | ky | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | nestjs-starter | 2 | 2 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 125 | 125 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 348 | 348 | 0 | 0 | **100.0%** | **100.0%** |
 
 Labels counts calls with a project target. Another 433 call sites are labeled
-`null`, and 35 are `dynamic`.
+`null`, and 35 are `dynamic`. The Go sample labels only calls with a
+project target: a call into the standard library, gin or gorm that resolved
+anywhere would count as a false positive (call site not labeled).
 
 ### Data access
 

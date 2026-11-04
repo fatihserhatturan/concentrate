@@ -963,9 +963,11 @@ Astro).
   of a `.` import, `pkg.F()` to a function of the imported package (by its
   alias, else its package clause), and `x.M()` to a method when `x`'s type is
   known: the method's receiver, a parameter, `var x T`, `x := T{}` / `&T{}` /
-  `new(T)`, or `x := NewT()` / `pkg.NewT()` (the type the function returns
+  `new(T)`, `v.(T)`, or `x := NewT()` / `pkg.NewT()` (the type the function returns
   first). Struct fields are followed (`h.repo.Find()`), and methods promoted
-  from embedded structs are found. Locals whose type is not visible (range
+  from embedded structs are found, through anonymous struct fields too
+  (`self.User.Email.IsInvalid()`). A type assertion types a local
+  (`m := c.MustGet("user").(UserModel)`). Locals whose type is not visible (range
   variables, results of other calls) leave the call unresolved, also when
   they hide a package name. Package-level variables, closures, method values
   and chained calls (`NewX().Run()`) are not resolved yet.

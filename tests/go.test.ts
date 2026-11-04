@@ -198,3 +198,23 @@ describe("Go entrypoints, tests and variables", () => {
   });
 });
 
+describe("Go receivers", () => {
+  const root = path.resolve("fixtures/go-interfaces");
+
+  it("attributes methods of generic types to the type", async () => {
+    const result = await goParser.parse(root, path.join(root, "storage/optional.go"));
+    const methods = result.nodes.filter((n) => n.label === "Function").map((n) => [n.properties.name, n.properties.className]);
+    assert.deepEqual(methods, [["IsSet", "Optional"], ["Clear", "Optional"]]);
+  });
+
+  it("types locals from type assertions and keeps anonymous struct fields", async () => {
+    const result = await goParser.parse(root, path.join(root, "app/request.go"));
+    const call = result.nodes.find((n) => n.label === "Call" && n.properties.expression === "request.User.Name.Clear")!;
+    assert.equal(call.properties.receiverType, "UpdateRequest");
+    const struct = result.nodes.find((n) => n.label === "Class" && n.properties.name === "UpdateRequest")!;
+    assert.deepEqual(JSON.parse(String(struct.properties.fields)), [
+      { name: "User", type: "struct", fields: [{ name: "Name", type: "storage.Optional[string]" }] },
+    ]);
+  });
+});
+

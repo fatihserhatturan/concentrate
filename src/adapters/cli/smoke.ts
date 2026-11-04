@@ -451,6 +451,26 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     },
   },
   {
+    name: "internet-go-gin-realworld",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 41,
+      supportedFiles: 21,
+      parsedFiles: 21,
+      failedFiles: 0,
+      resolvedImports: 18,
+      unresolvedRelativeImports: 0,
+      nodes: 2620,
+      relationships: 3301,
+      fileClassifications: { production: 17, test: 4, fixture: 0, support: 0, generated: 0 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 0,
+        entrypoints: 2,
+      },
+    },
+  },
+  {
     name: "internet-nextjs-taxonomy",
     suite: "internet",
     expected: {

@@ -20,9 +20,11 @@ export type GoCallIndex = {
   importsByFile: Map<string, Map<string, string[]>>;
 };
 
-type TypeRef = { pkg: string; name: string };
+// A named type, or an anonymous struct (a field's `struct { … }`) with its
+// fields and the file their types are written in.
+type TypeRef = { pkg: string; name: string; anonymous?: { fields: Field[]; fileId: string } };
 
-type Field = { name: string; type: string; embedded?: true };
+type Field = { name: string; type: string; embedded?: true; fields?: Field[] };
 
 export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: ResolutionRelationshipIndex): GoCallIndex {
   const files = new Map<string, GraphNode>();
@@ -248,10 +250,15 @@ function firstResultType(raw: unknown): string | null {
 }
 
 function fieldType(type: TypeRef, field: string, index: GoCallIndex): TypeRef | null {
-  const owner = index.typesByPackage.get(type.pkg)?.get(type.name);
+  const owner = type.anonymous ?? (() => {
+    const named = index.typesByPackage.get(type.pkg)?.get(type.name);
+    return named ? { fields: parseFields(named.node), fileId: named.fileId } : null;
+  })();
   if (!owner) return null;
-  const found = parseFields(owner.node).find((candidate) => candidate.name === field);
-  return found ? resolveType(found.type, owner.fileId, index) : null;
+  const found = owner.fields.find((candidate) => candidate.name === field);
+  if (!found) return null;
+  if (found.fields) return { pkg: type.pkg, name: "", anonymous: { fields: found.fields, fileId: owner.fileId } };
+  return resolveType(found.type, owner.fileId, index);
 }
 
 // A method of the type itself or promoted from a field it embeds (empty

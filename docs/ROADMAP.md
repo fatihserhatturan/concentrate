@@ -885,7 +885,7 @@ Go gets files, imports, structs, functions, methods and calls today (`src/integr
 ### Acceptance criteria
 
 - [x] Fixtures with golden coverage: multi-module `go.work`, package with several files, interfaces with implementations, embedded structs, generics, a file with a syntax error
-- [ ] Cross-package call resolution has hand labels on a pinned Go sample (precision 100%, recall reported)
+- [x] Cross-package call resolution has hand labels on a pinned Go sample (precision 100%, recall reported)
 - [x] `docs/known-limitations.md` has a Go section
 
 ## Phase 19: Go HTTP routes and entrypoints (net/http, gin, echo, chi, fiber, gRPC, cobra) ([#163](https://github.com/fatihserhatturan/concentrate/issues/163))
