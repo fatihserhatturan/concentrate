@@ -26,7 +26,7 @@ chosen files); every target was decided by reading the code.
 | --- | --- | --- |
 | Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld | every route declared with a literal path in the scoped files; tests excluded; for the Go sample, the gin groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`) |
 | Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`) | every call site in 2–9 chosen files per sample; for the Go sample, every call of a repository function or method in its 13 production files |
-| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma) | the services; the standing samples have no data layer |
+| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm) | the services; for the Go sample the production files that query the database; the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
 | Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project) | `frontend/`: every HTTP call that reaches a backend route |
@@ -63,7 +63,10 @@ Rules:
   (callers that reach the access through a call are not labeled). Operations
   use the graph's categories (`save` is a create, `findOneBy` a read). Tables
   follow each library's default naming. Nested Prisma relation writes
-  (`connectOrCreate` inside an `article.create`) are not labeled.
+  (`connectOrCreate` inside an `article.create`) are not labeled. For gorm,
+  the models `Preload` paths load are reads and an `Association` call is an
+  access of the field's model; `db.Save(data)` with an `interface{}` value
+  names no model and is not labeled.
 - **Components.** `{ file, name, line }` for every React component: function
   and class components, including a class that extends another component
   (`ProfileFavorites extends Profile`).
@@ -163,9 +166,10 @@ anywhere would count as a false positive (call site not labeled).
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-go-gin-realworld | 41 | 41 | 0 | 0 | 100.0% | 100.0% |
 | internet-nest | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 26 | 26 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 43 | 43 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 84 | 84 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Components
 

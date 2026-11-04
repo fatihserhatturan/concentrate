@@ -2261,6 +2261,311 @@
       }
     ]
   },
+  "dataAccess": {
+    "scope": [
+      "hello.go",
+      "common/database.go",
+      "common/utils.go",
+      "articles/models.go",
+      "articles/routers.go",
+      "articles/serializers.go",
+      "articles/validators.go",
+      "users/models.go",
+      "users/middlewares.go",
+      "users/routers.go",
+      "users/serializers.go",
+      "users/validators.go"
+    ],
+    "items": [
+      {
+        "file": "articles/models.go",
+        "function": "GetArticleUserModel",
+        "model": "ArticleUserModel",
+        "operation": "upsert",
+        "table": "article_user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "favoritesCount",
+        "model": "FavoriteModel",
+        "operation": "read",
+        "table": "favorite_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "isFavoriteBy",
+        "model": "FavoriteModel",
+        "operation": "read",
+        "table": "favorite_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "BatchGetFavoriteCounts",
+        "model": "FavoriteModel",
+        "operation": "read",
+        "table": "favorite_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "BatchGetFavoriteStatus",
+        "model": "FavoriteModel",
+        "operation": "read",
+        "table": "favorite_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "favoriteBy",
+        "model": "FavoriteModel",
+        "operation": "upsert",
+        "table": "favorite_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "unFavoriteBy",
+        "model": "FavoriteModel",
+        "operation": "delete",
+        "table": "favorite_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindOneArticle",
+        "model": "ArticleModel",
+        "operation": "read",
+        "table": "article_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindOneArticle",
+        "model": "ArticleUserModel",
+        "operation": "read",
+        "table": "article_user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindOneArticle",
+        "model": "UserModel",
+        "operation": "read",
+        "table": "user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindOneArticle",
+        "model": "TagModel",
+        "operation": "read",
+        "table": "tag_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindOneComment",
+        "model": "CommentModel",
+        "operation": "read",
+        "table": "comment_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindOneComment",
+        "model": "ArticleUserModel",
+        "operation": "read",
+        "table": "article_user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindOneComment",
+        "model": "UserModel",
+        "operation": "read",
+        "table": "user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindOneComment",
+        "model": "ArticleModel",
+        "operation": "read",
+        "table": "article_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "getComments",
+        "model": "CommentModel",
+        "operation": "read",
+        "table": "comment_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "getComments",
+        "model": "ArticleUserModel",
+        "operation": "read",
+        "table": "article_user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "getComments",
+        "model": "UserModel",
+        "operation": "read",
+        "table": "user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "getAllTags",
+        "model": "TagModel",
+        "operation": "read",
+        "table": "tag_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindManyArticle",
+        "model": "ArticleModel",
+        "operation": "read",
+        "table": "article_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindManyArticle",
+        "model": "TagModel",
+        "operation": "read",
+        "table": "tag_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindManyArticle",
+        "model": "UserModel",
+        "operation": "read",
+        "table": "user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "FindManyArticle",
+        "model": "ArticleUserModel",
+        "operation": "read",
+        "table": "article_user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "GetArticleFeed",
+        "model": "ArticleUserModel",
+        "operation": "read",
+        "table": "article_user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "GetArticleFeed",
+        "model": "ArticleModel",
+        "operation": "read",
+        "table": "article_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "GetArticleFeed",
+        "model": "UserModel",
+        "operation": "read",
+        "table": "user_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "GetArticleFeed",
+        "model": "TagModel",
+        "operation": "read",
+        "table": "tag_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "makeUniqueSlug",
+        "model": "ArticleModel",
+        "operation": "read",
+        "table": "article_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "ReplaceTags",
+        "model": "TagModel",
+        "operation": "update",
+        "table": "tag_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "buildTagModels",
+        "model": "TagModel",
+        "operation": "read",
+        "table": "tag_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "buildTagModels",
+        "model": "TagModel",
+        "operation": "create",
+        "table": "tag_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "Update",
+        "model": "ArticleModel",
+        "operation": "update",
+        "table": "article_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "DeleteArticleModel",
+        "model": "ArticleModel",
+        "operation": "delete",
+        "table": "article_models"
+      },
+      {
+        "file": "articles/models.go",
+        "function": "DeleteCommentModel",
+        "model": "CommentModel",
+        "operation": "delete",
+        "table": "comment_models"
+      },
+      {
+        "file": "users/models.go",
+        "function": "FindOneUser",
+        "model": "UserModel",
+        "operation": "read",
+        "table": "user_models"
+      },
+      {
+        "file": "users/models.go",
+        "function": "following",
+        "model": "FollowModel",
+        "operation": "upsert",
+        "table": "follow_models"
+      },
+      {
+        "file": "users/models.go",
+        "function": "isFollowing",
+        "model": "FollowModel",
+        "operation": "read",
+        "table": "follow_models"
+      },
+      {
+        "file": "users/models.go",
+        "function": "unFollowing",
+        "model": "FollowModel",
+        "operation": "delete",
+        "table": "follow_models"
+      },
+      {
+        "file": "users/models.go",
+        "function": "GetFollowings",
+        "model": "FollowModel",
+        "operation": "read",
+        "table": "follow_models"
+      },
+      {
+        "file": "users/models.go",
+        "function": "GetFollowings",
+        "model": "UserModel",
+        "operation": "read",
+        "table": "user_models"
+      },
+      {
+        "file": "users/middlewares.go",
+        "function": "UpdateContextUserModel",
+        "model": "UserModel",
+        "operation": "read",
+        "table": "user_models"
+      }
+    ]
+  },
   "env": {
     "scope": [
       "hello.go",

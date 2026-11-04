@@ -939,8 +939,8 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Data access
 
-- [ ] `database/sql` and sqlx: `Query`, `QueryRow`, `Exec`, `Get`, `Select` with literal SQL → `Table` with `READS` / `WRITES`
-- [ ] gorm: models from structs (`gorm` tags, `TableName()`), `db.Model(&X{})`, `Find`, `Create`, `Where`, `Save`, `Delete`; associations as `RELATES_TO`
+- [x] `database/sql` and sqlx: `Query`, `QueryRow`, `Exec`, `Get`, `Select` with literal SQL → `Table` with `READS` / `WRITES`
+- [x] gorm: models from structs (`gorm` tags, `TableName()`), `db.Model(&X{})`, `Find`, `Create`, `Where`, `Save`, `Delete`; associations as `RELATES_TO`
 - [ ] sqlc: generated `Queries` methods linked to their SQL and tables
 - [ ] ent: schemas (`ent/schema`) as `DataModel`, client calls (`client.User.Query()`)
 
@@ -962,12 +962,12 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### MCP
 
-- [ ] `list_data_access`, `list_tables`, `list_env_config` and `impact_of` cover Go
+- [x] `list_data_access`, `list_tables`, `list_env_config` and `impact_of` cover Go
 
 ### Acceptance criteria
 
 - [ ] Fixtures with golden coverage for each library above
-- [ ] Hand labels for data access and env on the pinned Go sample: precision 100%, recall reported
+- [x] Hand labels for data access and env on the pinned Go sample: precision 100%, recall reported
 - [ ] Docs updated (`docs/known-limitations.md`, `docs/mcp-server.md`)
 
 ## Phase 21: Go ecosystem measurement (samples, accuracy, agent benchmark, README) ([#165](https://github.com/fatihserhatturan/concentrate/issues/165))
