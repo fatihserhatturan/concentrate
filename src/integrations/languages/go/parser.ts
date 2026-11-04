@@ -249,15 +249,13 @@ function extractGoReceiverTypeName(node: SyntaxNode): string | null {
   const receiver = node.childForFieldName("receiver");
   if (!receiver) return null;
 
+  // `(s Store)`, `(s *Store)`, `(n Nullable[T])`, `(n *Nullable[T])`.
   for (const param of receiver.namedChildren) {
     if (param.type !== "parameter_declaration") continue;
-    for (const typeChild of param.namedChildren) {
-      if (typeChild.type === "type_identifier") return typeChild.text;
-      if (typeChild.type === "pointer_type") {
-        const ti = typeChild.namedChildren.find((c) => c.type === "type_identifier");
-        if (ti) return ti.text;
-      }
-    }
+    let type = param.childForFieldName("type");
+    if (type?.type === "pointer_type") type = type.namedChildren[0] ?? null;
+    if (type?.type === "generic_type") type = type.childForFieldName("type");
+    if (type?.type === "type_identifier") return type.text;
   }
   return null;
 }
@@ -377,17 +375,21 @@ function typeParameters(node: SyntaxNode): { typeParameters?: string } {
 }
 
 // A struct's fields as [{name, type}]; an embedded field is named after its
-// type (`*db.Store` → `Store`) and marked.
-function structFields(struct: SyntaxNode | null): Array<{ name: string; type: string; embedded?: true }> {
-  const fields: Array<{ name: string; type: string; embedded?: true }> = [];
+// type (`*db.Store` → `Store`) and marked, and an anonymous struct field
+// (`User struct { … }`) has type `struct` and its own fields.
+type StructField = { name: string; type: string; embedded?: true; fields?: StructField[] };
+
+function structFields(struct: SyntaxNode | null): StructField[] {
+  const fields: StructField[] = [];
   const list = struct?.namedChildren.find((child) => child.type === "field_declaration_list");
   for (const declaration of list?.namedChildren ?? []) {
     if (declaration.type !== "field_declaration") continue;
-    const type = declaration.childForFieldName("type")?.text;
-    if (!type) continue;
+    const typeNode = declaration.childForFieldName("type");
+    if (!typeNode) continue;
+    const field = typeNode.type === "struct_type" ? { type: "struct", fields: structFields(typeNode) } : { type: typeNode.text };
     const names = declaration.childrenForFieldName("name");
-    if (names.length === 0) fields.push({ name: baseTypeName(type), type, embedded: true });
-    for (const name of names) fields.push({ name: name.text, type });
+    if (names.length === 0) fields.push({ name: baseTypeName(typeNode.text), ...field, embedded: true });
+    for (const name of names) fields.push({ name: name.text, ...field });
   }
   return fields;
 }
@@ -399,7 +401,7 @@ function baseTypeName(type: string): string {
 
 // What the names in a function's scope are known to hold, from declarations
 // the parser can see: the receiver and parameters, `var x T`, and `x := T{}`,
-// `&T{}`, `new(T)` (a type) or `x := NewT()` (whatever NewT returns, found
+// `&T{}`, `new(T)`, `v.(T)` (a type) or `x := NewT()` (whatever NewT returns, found
 // once every file is parsed). Other locals are known only to be locals (null).
 type LocalType = { type: string } | { constructor: string };
 
@@ -435,6 +437,11 @@ function localTypes(functionNode: SyntaxNode): Map<string, LocalType | null> {
 
 function valueType(value: SyntaxNode | undefined): LocalType | null {
   if (!value) return null;
+  // `c.MustGet("user").(UserModel)`.
+  if (value.type === "type_assertion_expression") {
+    const type = value.childForFieldName("type");
+    return type ? { type: type.text } : null;
+  }
   if (value.type === "unary_expression" && value.childForFieldName("operator")?.text === "&") return valueType(value.childForFieldName("operand") ?? undefined);
   if (value.type === "composite_literal") {
     const type = value.childForFieldName("type");

@@ -1,0 +1,2093 @@
+{
+  "sample": "internet-go-gin-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Calls: every call site in the production Go files (tests, doc.go and test helpers excluded) whose callee is a function or method of this repository, with the function it runs; calls into the standard library, gin, gorm and other dependencies, and calls of local closures (buildQuery) are not labeled, so any target they get counts as a false positive. Methods promoted from embedded structs are labeled with the method's own type (ArticleSerializer.isFavoriteBy -> ArticleModel.isFavoriteBy).",
+  "calls": {
+    "files": [
+      "hello.go",
+      "common/utils.go",
+      "common/database.go",
+      "common/nullable.go",
+      "users/middlewares.go",
+      "users/models.go",
+      "users/validators.go",
+      "users/serializers.go",
+      "users/routers.go",
+      "articles/routers.go",
+      "articles/models.go",
+      "articles/serializers.go",
+      "articles/validators.go"
+    ],
+    "items": [
+      {
+        "file": "hello.go",
+        "line": 16,
+        "callee": "AutoMigrate",
+        "target": {
+          "file": "users/models.go",
+          "name": "AutoMigrate"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 26,
+        "callee": "Init",
+        "target": {
+          "file": "common/database.go",
+          "name": "Init"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 27,
+        "callee": "Migrate",
+        "target": {
+          "file": "hello.go",
+          "name": "Migrate"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 42,
+        "callee": "UsersRegister",
+        "target": {
+          "file": "users/routers.go",
+          "name": "UsersRegister"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 43,
+        "callee": "AuthMiddleware",
+        "target": {
+          "file": "users/middlewares.go",
+          "name": "AuthMiddleware"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 44,
+        "callee": "ArticlesAnonymousRegister",
+        "target": {
+          "file": "articles/routers.go",
+          "name": "ArticlesAnonymousRegister"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 45,
+        "callee": "TagsAnonymousRegister",
+        "target": {
+          "file": "articles/routers.go",
+          "name": "TagsAnonymousRegister"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 46,
+        "callee": "ProfileRetrieveRegister",
+        "target": {
+          "file": "users/routers.go",
+          "name": "ProfileRetrieveRegister"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 48,
+        "callee": "AuthMiddleware",
+        "target": {
+          "file": "users/middlewares.go",
+          "name": "AuthMiddleware"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 49,
+        "callee": "UserRegister",
+        "target": {
+          "file": "users/routers.go",
+          "name": "UserRegister"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 50,
+        "callee": "ProfileRegister",
+        "target": {
+          "file": "users/routers.go",
+          "name": "ProfileRegister"
+        }
+      },
+      {
+        "file": "hello.go",
+        "line": 52,
+        "callee": "ArticlesRegister",
+        "target": {
+          "file": "articles/routers.go",
+          "name": "ArticlesRegister"
+        }
+      },
+      {
+        "file": "common/utils.go",
+        "line": 107,
+        "callee": "errorFieldName",
+        "target": {
+          "file": "common/utils.go",
+          "name": "errorFieldName"
+        }
+      },
+      {
+        "file": "common/utils.go",
+        "line": 108,
+        "callee": "errorMessageForTag",
+        "target": {
+          "file": "common/utils.go",
+          "name": "errorMessageForTag"
+        }
+      },
+      {
+        "file": "common/utils.go",
+        "line": 125,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "common/database.go",
+        "line": 50,
+        "callee": "GetDBPath",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDBPath"
+        }
+      },
+      {
+        "file": "common/database.go",
+        "line": 53,
+        "callee": "ensureDir",
+        "target": {
+          "file": "common/database.go",
+          "name": "ensureDir"
+        }
+      },
+      {
+        "file": "common/database.go",
+        "line": 77,
+        "callee": "GetTestDBPath",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetTestDBPath"
+        }
+      },
+      {
+        "file": "common/database.go",
+        "line": 80,
+        "callee": "ensureDir",
+        "target": {
+          "file": "common/database.go",
+          "name": "ensureDir"
+        }
+      },
+      {
+        "file": "common/database.go",
+        "line": 110,
+        "callee": "GetTestDBPath",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetTestDBPath"
+        }
+      },
+      {
+        "file": "users/middlewares.go",
+        "line": 33,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "users/middlewares.go",
+        "line": 45,
+        "callee": "UpdateContextUserModel",
+        "target": {
+          "file": "users/middlewares.go",
+          "name": "UpdateContextUserModel"
+        }
+      },
+      {
+        "file": "users/middlewares.go",
+        "line": 46,
+        "callee": "extractToken",
+        "target": {
+          "file": "users/middlewares.go",
+          "name": "extractToken"
+        }
+      },
+      {
+        "file": "users/middlewares.go",
+        "line": 50,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/middlewares.go",
+        "line": 65,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/middlewares.go",
+        "line": 72,
+        "callee": "UpdateContextUserModel",
+        "target": {
+          "file": "users/middlewares.go",
+          "name": "UpdateContextUserModel"
+        }
+      },
+      {
+        "file": "users/models.go",
+        "line": 46,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "users/models.go",
+        "line": 84,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "users/models.go",
+        "line": 94,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "users/models.go",
+        "line": 103,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "users/models.go",
+        "line": 116,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "users/models.go",
+        "line": 129,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "users/models.go",
+        "line": 138,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "users/validators.go",
+        "line": 25,
+        "callee": "Bind",
+        "target": {
+          "file": "common/utils.go",
+          "name": "Bind"
+        }
+      },
+      {
+        "file": "users/validators.go",
+        "line": 32,
+        "callee": "setPassword",
+        "target": {
+          "file": "users/models.go",
+          "name": "setPassword",
+          "className": "UserModel"
+        }
+      },
+      {
+        "file": "users/validators.go",
+        "line": 67,
+        "callee": "Bind",
+        "target": {
+          "file": "common/utils.go",
+          "name": "Bind"
+        }
+      },
+      {
+        "file": "users/validators.go",
+        "line": 76,
+        "callee": "IsInvalid",
+        "target": {
+          "file": "common/nullable.go",
+          "name": "IsInvalid",
+          "className": "Nullable"
+        }
+      },
+      {
+        "file": "users/validators.go",
+        "line": 79,
+        "callee": "IsInvalid",
+        "target": {
+          "file": "common/nullable.go",
+          "name": "IsInvalid",
+          "className": "Nullable"
+        }
+      },
+      {
+        "file": "users/validators.go",
+        "line": 82,
+        "callee": "IsInvalid",
+        "target": {
+          "file": "common/nullable.go",
+          "name": "IsInvalid",
+          "className": "Nullable"
+        }
+      },
+      {
+        "file": "users/validators.go",
+        "line": 85,
+        "callee": "IsInvalid",
+        "target": {
+          "file": "common/nullable.go",
+          "name": "IsInvalid",
+          "className": "Nullable"
+        }
+      },
+      {
+        "file": "users/validators.go",
+        "line": 88,
+        "callee": "IsInvalid",
+        "target": {
+          "file": "common/nullable.go",
+          "name": "IsInvalid",
+          "className": "Nullable"
+        }
+      },
+      {
+        "file": "users/validators.go",
+        "line": 103,
+        "callee": "Bind",
+        "target": {
+          "file": "common/utils.go",
+          "name": "Bind"
+        }
+      },
+      {
+        "file": "users/serializers.go",
+        "line": 44,
+        "callee": "nullableString",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "nullableString"
+        }
+      },
+      {
+        "file": "users/serializers.go",
+        "line": 45,
+        "callee": "nullableStringPtr",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "nullableStringPtr"
+        }
+      },
+      {
+        "file": "users/serializers.go",
+        "line": 46,
+        "callee": "isFollowing",
+        "target": {
+          "file": "users/models.go",
+          "name": "isFollowing",
+          "className": "UserModel"
+        }
+      },
+      {
+        "file": "users/serializers.go",
+        "line": 68,
+        "callee": "nullableString",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "nullableString"
+        }
+      },
+      {
+        "file": "users/serializers.go",
+        "line": 69,
+        "callee": "nullableStringPtr",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "nullableStringPtr"
+        }
+      },
+      {
+        "file": "users/serializers.go",
+        "line": 70,
+        "callee": "GenToken",
+        "target": {
+          "file": "common/utils.go",
+          "name": "GenToken"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 36,
+        "callee": "FindOneUser",
+        "target": {
+          "file": "users/models.go",
+          "name": "FindOneUser"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 38,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 42,
+        "callee": "Response",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "Response",
+          "className": "ProfileSerializer"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 47,
+        "callee": "FindOneUser",
+        "target": {
+          "file": "users/models.go",
+          "name": "FindOneUser"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 49,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 53,
+        "callee": "following",
+        "target": {
+          "file": "users/models.go",
+          "name": "following",
+          "className": "UserModel"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 55,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 59,
+        "callee": "Response",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "Response",
+          "className": "ProfileSerializer"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 64,
+        "callee": "FindOneUser",
+        "target": {
+          "file": "users/models.go",
+          "name": "FindOneUser"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 66,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 71,
+        "callee": "unFollowing",
+        "target": {
+          "file": "users/models.go",
+          "name": "unFollowing",
+          "className": "UserModel"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 73,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 77,
+        "callee": "Response",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "Response",
+          "className": "ProfileSerializer"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 81,
+        "callee": "NewUserModelValidator",
+        "target": {
+          "file": "users/validators.go",
+          "name": "NewUserModelValidator"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 82,
+        "callee": "Bind",
+        "target": {
+          "file": "users/validators.go",
+          "name": "Bind",
+          "className": "UserModelValidator"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 83,
+        "callee": "NewValidatorError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewValidatorError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 87,
+        "callee": "FindOneUser",
+        "target": {
+          "file": "users/models.go",
+          "name": "FindOneUser"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 88,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 91,
+        "callee": "FindOneUser",
+        "target": {
+          "file": "users/models.go",
+          "name": "FindOneUser"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 92,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 96,
+        "callee": "SaveOne",
+        "target": {
+          "file": "users/models.go",
+          "name": "SaveOne"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 103,
+        "callee": "FindOneUser",
+        "target": {
+          "file": "users/models.go",
+          "name": "FindOneUser"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 106,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 109,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 114,
+        "callee": "Response",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "Response",
+          "className": "UserSerializer"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 118,
+        "callee": "NewLoginValidator",
+        "target": {
+          "file": "users/validators.go",
+          "name": "NewLoginValidator"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 119,
+        "callee": "Bind",
+        "target": {
+          "file": "users/validators.go",
+          "name": "Bind",
+          "className": "LoginValidator"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 120,
+        "callee": "NewValidatorError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewValidatorError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 123,
+        "callee": "FindOneUser",
+        "target": {
+          "file": "users/models.go",
+          "name": "FindOneUser"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 126,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 130,
+        "callee": "checkPassword",
+        "target": {
+          "file": "users/models.go",
+          "name": "checkPassword",
+          "className": "UserModel"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 131,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 134,
+        "callee": "UpdateContextUserModel",
+        "target": {
+          "file": "users/middlewares.go",
+          "name": "UpdateContextUserModel"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 136,
+        "callee": "Response",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "Response",
+          "className": "UserSerializer"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 141,
+        "callee": "Response",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "Response",
+          "className": "UserSerializer"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 149,
+        "callee": "NewUserUpdateValidator",
+        "target": {
+          "file": "users/validators.go",
+          "name": "NewUserUpdateValidator"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 150,
+        "callee": "Bind",
+        "target": {
+          "file": "users/validators.go",
+          "name": "Bind",
+          "className": "UserUpdateValidator"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 151,
+        "callee": "NewValidatorError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewValidatorError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 152,
+        "callee": "MarkInvalidFields",
+        "target": {
+          "file": "common/utils.go",
+          "name": "MarkInvalidFields",
+          "className": "CommonError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 152,
+        "callee": "invalidFields",
+        "target": {
+          "file": "users/validators.go",
+          "name": "invalidFields",
+          "className": "UserUpdateValidator"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 158,
+        "callee": "invalidFields",
+        "target": {
+          "file": "users/validators.go",
+          "name": "invalidFields",
+          "className": "UserUpdateValidator"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 160,
+        "callee": "MarkInvalidFields",
+        "target": {
+          "file": "common/utils.go",
+          "name": "MarkInvalidFields",
+          "className": "CommonError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 184,
+        "callee": "setPassword",
+        "target": {
+          "file": "users/models.go",
+          "name": "setPassword",
+          "className": "UserModel"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 185,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 190,
+        "callee": "SaveOne",
+        "target": {
+          "file": "users/models.go",
+          "name": "SaveOne"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 191,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 194,
+        "callee": "UpdateContextUserModel",
+        "target": {
+          "file": "users/middlewares.go",
+          "name": "UpdateContextUserModel"
+        }
+      },
+      {
+        "file": "users/routers.go",
+        "line": 196,
+        "callee": "Response",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "Response",
+          "className": "UserSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 40,
+        "callee": "NewArticleModelValidator",
+        "target": {
+          "file": "articles/validators.go",
+          "name": "NewArticleModelValidator"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 41,
+        "callee": "Bind",
+        "target": {
+          "file": "articles/validators.go",
+          "name": "Bind",
+          "className": "ArticleModelValidator"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 42,
+        "callee": "NewValidatorError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewValidatorError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 50,
+        "callee": "makeUniqueSlug",
+        "target": {
+          "file": "articles/models.go",
+          "name": "makeUniqueSlug"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 51,
+        "callee": "SaveOne",
+        "target": {
+          "file": "articles/models.go",
+          "name": "SaveOne"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 58,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 62,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticleSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 72,
+        "callee": "FindManyArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindManyArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 74,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 78,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticlesSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 89,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 90,
+        "callee": "GetArticleFeed",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleFeed",
+          "className": "ArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 92,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 96,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticlesSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 101,
+        "callee": "FindOneArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 103,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 107,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticleSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 115,
+        "callee": "FindOneArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 117,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 122,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 124,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 128,
+        "callee": "NewArticleUpdateValidator",
+        "target": {
+          "file": "articles/validators.go",
+          "name": "NewArticleUpdateValidator"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 129,
+        "callee": "Bind",
+        "target": {
+          "file": "articles/validators.go",
+          "name": "Bind",
+          "className": "ArticleUpdateValidator"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 130,
+        "callee": "NewValidatorError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewValidatorError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 131,
+        "callee": "MarkInvalidFields",
+        "target": {
+          "file": "common/utils.go",
+          "name": "MarkInvalidFields",
+          "className": "CommonError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 131,
+        "callee": "invalidFields",
+        "target": {
+          "file": "articles/validators.go",
+          "name": "invalidFields",
+          "className": "ArticleUpdateValidator"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 156,
+        "callee": "makeSlug",
+        "target": {
+          "file": "articles/validators.go",
+          "name": "makeSlug"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 158,
+        "callee": "makeUniqueSlug",
+        "target": {
+          "file": "articles/models.go",
+          "name": "makeUniqueSlug"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 165,
+        "callee": "Update",
+        "target": {
+          "file": "articles/models.go",
+          "name": "Update",
+          "className": "ArticleModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 170,
+        "callee": "makeUniqueSlug",
+        "target": {
+          "file": "articles/models.go",
+          "name": "makeUniqueSlug"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 174,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 179,
+        "callee": "ReplaceTags",
+        "target": {
+          "file": "articles/models.go",
+          "name": "ReplaceTags",
+          "className": "ArticleModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 180,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 185,
+        "callee": "FindOneArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 187,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 191,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticleSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 196,
+        "callee": "FindOneArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 198,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 202,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 204,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 207,
+        "callee": "DeleteArticleModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "DeleteArticleModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 208,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 216,
+        "callee": "FindOneArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 218,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 222,
+        "callee": "favoriteBy",
+        "target": {
+          "file": "articles/models.go",
+          "name": "favoriteBy",
+          "className": "ArticleModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 222,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 223,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 227,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticleSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 232,
+        "callee": "FindOneArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 234,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 238,
+        "callee": "unFavoriteBy",
+        "target": {
+          "file": "articles/models.go",
+          "name": "unFavoriteBy",
+          "className": "ArticleModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 238,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 239,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 243,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticleSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 248,
+        "callee": "FindOneArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 250,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 253,
+        "callee": "NewCommentModelValidator",
+        "target": {
+          "file": "articles/validators.go",
+          "name": "NewCommentModelValidator"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 254,
+        "callee": "Bind",
+        "target": {
+          "file": "articles/validators.go",
+          "name": "Bind",
+          "className": "CommentModelValidator"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 255,
+        "callee": "NewValidatorError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewValidatorError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 260,
+        "callee": "SaveOne",
+        "target": {
+          "file": "articles/models.go",
+          "name": "SaveOne"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 261,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 265,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "CommentSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 270,
+        "callee": "FindOneArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 272,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 277,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 281,
+        "callee": "FindOneComment",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneComment"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 283,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 287,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 289,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 292,
+        "callee": "DeleteCommentModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "DeleteCommentModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 293,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 301,
+        "callee": "FindOneArticle",
+        "target": {
+          "file": "articles/models.go",
+          "name": "FindOneArticle"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 303,
+        "callee": "NewErrorMessage",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewErrorMessage"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 306,
+        "callee": "getComments",
+        "target": {
+          "file": "articles/models.go",
+          "name": "getComments",
+          "className": "ArticleModel"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 308,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 312,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "CommentsSerializer"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 315,
+        "callee": "getAllTags",
+        "target": {
+          "file": "articles/models.go",
+          "name": "getAllTags"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 317,
+        "callee": "NewError",
+        "target": {
+          "file": "common/utils.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "articles/routers.go",
+        "line": 321,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "TagsSerializer"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 60,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 69,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 78,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 92,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 117,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 130,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 140,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 146,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 152,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 159,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 166,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 172,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 179,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 253,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 300,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 319,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 341,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 377,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 383,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 389,
+        "callee": "GetDB",
+        "target": {
+          "file": "common/database.go",
+          "name": "GetDB"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 267,
+        "callee": "GetFollowings",
+        "target": {
+          "file": "users/models.go",
+          "name": "GetFollowings",
+          "className": "UserModel"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 315,
+        "callee": "buildTagModels",
+        "target": {
+          "file": "articles/models.go",
+          "name": "buildTagModels"
+        }
+      },
+      {
+        "file": "articles/models.go",
+        "line": 328,
+        "callee": "buildTagModels",
+        "target": {
+          "file": "articles/models.go",
+          "name": "buildTagModels"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 28,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "TagSerializer"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 40,
+        "callee": "Response",
+        "target": {
+          "file": "users/serializers.go",
+          "name": "Response",
+          "className": "ProfileSerializer"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 79,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticleUserSerializer"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 80,
+        "callee": "isFavoriteBy",
+        "target": {
+          "file": "articles/models.go",
+          "name": "isFavoriteBy",
+          "className": "ArticleModel"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 80,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 81,
+        "callee": "favoritesCount",
+        "target": {
+          "file": "articles/models.go",
+          "name": "favoritesCount",
+          "className": "ArticleModel"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 86,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "TagSerializer"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 117,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticleUserSerializer"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 124,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "TagSerializer"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 142,
+        "callee": "BatchGetFavoriteCounts",
+        "target": {
+          "file": "articles/models.go",
+          "name": "BatchGetFavoriteCounts"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 145,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 146,
+        "callee": "BatchGetFavoriteStatus",
+        "target": {
+          "file": "articles/models.go",
+          "name": "BatchGetFavoriteStatus"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 152,
+        "callee": "ResponseWithPreloaded",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "ResponseWithPreloaded",
+          "className": "ArticleSerializer"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 182,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "ArticleUserSerializer"
+        }
+      },
+      {
+        "file": "articles/serializers.go",
+        "line": 191,
+        "callee": "Response",
+        "target": {
+          "file": "articles/serializers.go",
+          "name": "Response",
+          "className": "CommentSerializer"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 33,
+        "callee": "Bind",
+        "target": {
+          "file": "common/utils.go",
+          "name": "Bind"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 41,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 42,
+        "callee": "setTags",
+        "target": {
+          "file": "articles/models.go",
+          "name": "setTags",
+          "className": "ArticleModel"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 65,
+        "callee": "Bind",
+        "target": {
+          "file": "common/utils.go",
+          "name": "Bind"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 72,
+        "callee": "IsInvalid",
+        "target": {
+          "file": "common/nullable.go",
+          "name": "IsInvalid",
+          "className": "Nullable"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 75,
+        "callee": "IsInvalid",
+        "target": {
+          "file": "common/nullable.go",
+          "name": "IsInvalid",
+          "className": "Nullable"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 78,
+        "callee": "IsInvalid",
+        "target": {
+          "file": "common/nullable.go",
+          "name": "IsInvalid",
+          "className": "Nullable"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 81,
+        "callee": "IsInvalid",
+        "target": {
+          "file": "common/nullable.go",
+          "name": "IsInvalid",
+          "className": "Nullable"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 101,
+        "callee": "Bind",
+        "target": {
+          "file": "common/utils.go",
+          "name": "Bind"
+        }
+      },
+      {
+        "file": "articles/validators.go",
+        "line": 106,
+        "callee": "GetArticleUserModel",
+        "target": {
+          "file": "articles/models.go",
+          "name": "GetArticleUserModel"
+        }
+      }
+    ]
+  }
+}
