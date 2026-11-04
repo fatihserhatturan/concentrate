@@ -108,7 +108,14 @@ even for large repositories; read it first to decide which tools to call.
 - `find_definitions`: finds symbols across functions, classes, variables,
   interfaces, type aliases and enums, then class methods (`kind: "Method"`
   with `className`, including class fields that hold a function).
-- `find_callers`: finds call sites that resolve to a named function.
+- `find_callers`: finds call sites that resolve to a named function. It also
+  returns `unresolvedCalls` (`count` and up to 10 `sites` with file, line,
+  expression and caller): calls with that callee name that resolve to no
+  function, such as calls on library objects or dynamic receivers, or callers
+  the graph missed. `completeness` says what that means: with a count of 0,
+  every call by that name is among the resolved callers, so the answer needs
+  no grep to confirm; otherwise the sites are the lines to check. A substring
+  search (`exact: false`) checks the names of up to 20 matching functions.
 - `list_exports`: lists exported definitions and re-exports, optionally scoped
   to one file.
 - `trace_import_chain`: returns a resolved import path between two files when
@@ -175,6 +182,8 @@ These answer a whole question in one call instead of a chain of lookups.
   those readers (and their callers) reach, and the `dataAccess`, `tables`,
   `envVars` and `config` of the seeds themselves. A store's name or hook as
   `symbol` makes that store the change. For a route, use `route_details`.
+  With a `symbol`, `unresolvedCalls` and `completeness` say, as in
+  `find_callers`, whether calls by the seeds' names are left unresolved.
 - `detect_changes({ base = "HEAD", maxDepth = 5, limit = 50 })`: runs
   `git diff --unified=0 <base>` (no shell; `base` must look like a revision)
   plus untracked files, maps the changed lines onto declarations whose

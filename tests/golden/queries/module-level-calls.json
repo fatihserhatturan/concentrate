@@ -622,6 +622,16 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"build\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "build"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -631,6 +641,11 @@
         "limit": 20
       },
       "callers": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named build in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 0
@@ -657,6 +672,16 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"makeApp\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "makeApp"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -666,6 +691,11 @@
         "limit": 20
       },
       "callers": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named makeApp in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 0
@@ -692,6 +722,21 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"createInstance\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "createInstance"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:factory.ts:initializercall:2:17:createInstance",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -701,6 +746,11 @@
         "limit": 20
       },
       "callers": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named createInstance in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 0
@@ -727,6 +777,16 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"createApplication\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "createApplication"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -736,6 +796,11 @@
         "limit": 20
       },
       "callers": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named createApplication in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 0

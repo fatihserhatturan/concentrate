@@ -656,6 +656,25 @@
             "relationship": "MODULE_CALLS"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "start"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:main.js:modulecall:4:2:start",
+            "resolved": 1
+          },
+          {
+            "id": "file:main.js:modulecall:19:2:start",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -684,6 +703,11 @@
           "relationship": "MODULE_CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named start in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 2
@@ -730,6 +754,25 @@
             "relationship": "MODULE_CALLS"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "stop"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:main.js:function:26:later:call:28:4:stop",
+            "resolved": 1
+          },
+          {
+            "id": "file:main.js:modulecall:13:2:stop",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -758,6 +801,11 @@
           "relationship": "MODULE_CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named stop in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 2
@@ -784,6 +832,16 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"inLoop\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "inLoop"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -793,6 +851,11 @@
         "limit": 20
       },
       "callers": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named inLoop in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 0

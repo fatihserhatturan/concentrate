@@ -2299,6 +2299,16 @@
             "line": 21
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "Counter"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -2357,6 +2367,11 @@
       "tables": [],
       "envVars": [],
       "config": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named Counter in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 0

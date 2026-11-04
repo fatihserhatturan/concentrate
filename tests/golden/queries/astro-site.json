@@ -2605,6 +2605,29 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "listPosts"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/pages/api/posts.json.ts:function:4:GET:call:4:63:listPosts",
+            "resolved": 1
+          },
+          {
+            "id": "file:src/pages/blog/[slug].astro:function:5:getStaticPaths:call:6:9:listPosts",
+            "resolved": 1
+          },
+          {
+            "id": "file:src/pages/index.astro:initializercall:8:14:listPosts",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -2699,6 +2722,11 @@
       "tables": [],
       "envVars": [],
       "config": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named listPosts in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 3

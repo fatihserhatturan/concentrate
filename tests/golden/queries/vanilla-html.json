@@ -731,6 +731,21 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"loadTodos\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "loadTodos"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:index.html:function:18:renderTodos:call:18:42:loadTodos",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -750,6 +765,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named loadTodos in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 1
@@ -786,6 +806,21 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"formatTodo\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "formatTodo"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:index.html:function:22:showFirst:call:23:13:formatTodo",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -805,6 +840,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named formatTodo in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 1

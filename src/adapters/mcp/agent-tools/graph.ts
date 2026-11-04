@@ -802,3 +802,49 @@ export async function storeImpact(
 function storeName(stores: readonly Row[], id: string): string | null {
   return str(stores.find((row) => String(row.id) === id)?.name);
 }
+
+const UNRESOLVED_SITE_LIMIT = 10;
+
+// Calls whose callee has one of the names but that resolve to no function:
+// library calls, dynamic receivers, or callers the graph missed. Zero means
+// no other call by those names is left unresolved, so a caller list for them
+// is complete for the scanned files (callbacks are in find_references); the
+// first sites otherwise tell the agent which lines to check.
+export async function unresolvedCalls(engine: IQueryEngine, names: readonly string[]) {
+  if (names.length === 0) return { count: 0, sites: [] as Row[] };
+  const calls = await engine.query(`
+    MATCH (call:Call)
+    WHERE call.callee IN $names
+    OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->()
+    RETURN id(call) AS id, count(target) AS resolved
+  `, { names: [...names] }) as Array<{ id: string; resolved: number }>;
+  const unresolved = new Set(calls.filter((call) => Number(call.resolved) === 0).map((call) => call.id));
+  if (unresolved.size === 0) return { count: 0, sites: [] as Row[] };
+  const siteQuery = (owner: string, caller: string) => engine.query(`
+    MATCH ${owner}
+    WHERE call.callee IN $names
+    RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, ${caller} AS caller
+  `, { names: [...names] }) as Promise<Array<Row & { id: string }>>;
+  const sites = (await Promise.all([
+    siteQuery("(file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call)", "fn.name"),
+    siteQuery("(file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call)", "fn.name"),
+    siteQuery("(file:File)-[:MODULE_CALLS]->(call:Call)", "null"),
+  ])).flat()
+    .filter((site) => unresolved.has(site.id))
+    .map(({ id: _id, ...site }) => site)
+    .sort(byFileAndLine);
+  return { count: unresolved.size, sites: sites.slice(0, UNRESOLVED_SITE_LIMIT) };
+}
+
+// The completeness fields of a caller answer: `unresolvedCalls` with its
+// count and first sites, and a note that says whether the list can be taken
+// as complete.
+export function callerCompleteness(names: readonly string[], unresolved: Awaited<ReturnType<typeof unresolvedCalls>>) {
+  const label = names.length === 1 ? `named ${names[0]}` : `with these names (${names.join(", ")})`;
+  return {
+    unresolvedCalls: unresolved,
+    completeness: unresolved.count === 0
+      ? `No call ${label} in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.`
+      : `${unresolved.count} call${unresolved.count === 1 ? "" : "s"} ${label} resolve${unresolved.count === 1 ? "s" : ""} to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.`,
+  };
+}

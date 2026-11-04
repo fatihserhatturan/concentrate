@@ -654,6 +654,82 @@
             "relationship": "MODULE_CALLS"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "listen"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:negative.js:function:4:start:call:5:2:app.listen",
+            "resolved": 0
+          },
+          {
+            "id": "file:negative.js:modulecall:13:0:other.listen",
+            "resolved": 0
+          },
+          {
+            "id": "file:server.js:modulecall:6:0:app.listen",
+            "resolved": 1
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "listen"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:negative.js:function:4:start:call:5:2:app.listen",
+            "file": "negative.js",
+            "line": 5,
+            "expression": "app.listen",
+            "caller": "start"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "listen"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
+        "params": {
+          "names": [
+            "listen"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:negative.js:modulecall:13:0:other.listen",
+            "file": "negative.js",
+            "line": 13,
+            "expression": "other.listen",
+            "caller": null
+          },
+          {
+            "id": "file:server.js:modulecall:6:0:app.listen",
+            "file": "server.js",
+            "line": 6,
+            "expression": "app.listen",
+            "caller": null
+          }
+        ]
       }
     ],
     "output": {
@@ -673,6 +749,24 @@
           "relationship": "MODULE_CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 2,
+        "sites": [
+          {
+            "file": "negative.js",
+            "line": 5,
+            "expression": "app.listen",
+            "caller": "start"
+          },
+          {
+            "file": "negative.js",
+            "line": 13,
+            "expression": "other.listen",
+            "caller": null
+          }
+        ]
+      },
+      "completeness": "2 calls named listen resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.",
       "page": {
         "offset": 0,
         "returned": 1
@@ -709,6 +803,21 @@
         "method": "query",
         "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"handle\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "handle"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:lib/express.js:function:9:app:call:10:4:app.handle",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -728,6 +837,11 @@
           "relationship": "CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named handle in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 1
@@ -774,6 +888,25 @@
             "relationship": "MODULE_CALLS"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "init"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:assign.js:modulecall:10:0:assigned.init",
+            "resolved": 1
+          },
+          {
+            "id": "file:lib/express.js:function:8:createApplication:call:15:2:app.init",
+            "resolved": 1
+          }
+        ]
       }
     ],
     "output": {
@@ -802,6 +935,11 @@
           "relationship": "MODULE_CALLS"
         }
       ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named init in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
       "page": {
         "offset": 0,
         "returned": 2

@@ -5,7 +5,7 @@ import { promisify } from "node:util";
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalInteger, optionalString } from "../args.js";
 import type { PageWindow } from "../paging.js";
-import { computeImpact, loadFunctions, loadSymbols, matchesFileOrDirectory, type SymbolInfo } from "./graph.js";
+import { callerCompleteness, computeImpact, loadFunctions, loadSymbols, matchesFileOrDirectory, type SymbolInfo, unresolvedCalls } from "./graph.js";
 
 const run = promisify(execFile);
 
@@ -40,7 +40,16 @@ export async function impactOf(engine: IQueryEngine, args: Record<string, unknow
       note: "No function, method, class or store matched. Use find_definitions to look the name up; for routes use route_details.",
     };
   }
-  return { symbol: symbol ?? null, file: file ?? null, maxDepth, ...await computeImpact(engine, seedIds, maxDepth, window.limit, functions, window, storeIds) };
+  // A named symbol says whether its direct callers are all known; a whole
+  // file has too many names for that.
+  const names = symbol ? [...new Set(seedIds.map((id) => functions.get(id)!.name))] : [];
+  return {
+    symbol: symbol ?? null,
+    file: file ?? null,
+    maxDepth,
+    ...await computeImpact(engine, seedIds, maxDepth, window.limit, functions, window, storeIds),
+    ...(names.length > 0 ? callerCompleteness(names, await unresolvedCalls(engine, names)) : {}),
+  };
 }
 
 // Revisions are passed to git as a single argv entry, never through a shell;
