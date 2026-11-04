@@ -180,7 +180,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_routes",
-    description: "HTTP routes with file, line, method, path, full path, framework and handler. Registrations with a method or path computed at runtime (`app[method](url, fn)`) are not routes; they come back in dynamicRouteCalls.",
+    description: "HTTP routes with file, line, method, path, full path, framework and handler. Registrations with a method or path computed at runtime (`app[method](url, fn)`) are not routes; they come back in dynamicRouteCalls. unconsumed: true lists the routes no scanned frontend call reaches (candidate dead endpoints).",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -189,6 +189,10 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       framework: {
         type: "string",
         description: "Framework, such as express-koa or fastify.",
+      },
+      unconsumed: {
+        type: "boolean",
+        description: "Only routes no call in the graph requests (see api_consumers), middleware mounts left out. Defaults to false.",
       },
       limit: {
         type: "number",
@@ -491,12 +495,21 @@ async function listRoutes(
   const framework = optionalString(args.framework);
   const { limit, fetch } = window;
   const { fileFilter, fileNote } = await fileScope(engine, file);
+  const unconsumed = optionalBoolean(args.unconsumed) ?? false;
   const frameworkFilter = framework ? `AND route.framework = ${quote(framework)}` : "";
+  // Routes no scanned call requests; middleware mounts (USE) are not endpoints.
+  const unconsumedFilter = unconsumed
+    ? `AND route.method <> 'USE'
+    OPTIONAL MATCH (:Call)-[request:REQUESTS]->(route)
+    WITH file, route, count(request) AS consumers
+    WHERE consumers = 0`
+    : "";
   const rows = await engine.query(`
     MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)
     WHERE true
       ${fileFilter}
       ${frameworkFilter}
+      ${unconsumedFilter}
     OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function)
     RETURN file.relativePath AS file,
       route.line AS line,
@@ -531,7 +544,16 @@ async function listRoutes(
     }
     : {};
 
-  return { query: { file, framework, limit }, routes: window.take(rows), ...dynamic, ...fileNote };
+  // Without any linked request (a backend scanned alone, or URLs that do not
+  // resolve), every route is unconsumed, which says nothing about dead code.
+  const requests = unconsumed
+    ? await engine.query("MATCH (:Call)-[request:REQUESTS]->(:Route) RETURN count(request) AS count") as Array<{ count: number }>
+    : [];
+  const unconsumedNote = unconsumed && Number(requests[0]?.count ?? 0) === 0
+    ? { unconsumedNote: "No call in the graph requests any route (no frontend in the scan, or its URLs did not resolve), so every route is listed; this is not evidence that they are unused." }
+    : {};
+
+  return { query: { file, framework, ...(unconsumed ? { unconsumed } : {}), limit }, routes: window.take(rows), ...unconsumedNote, ...dynamic, ...fileNote };
 }
 
 const DYNAMIC_ROUTE_CALL_LIMIT = 20;

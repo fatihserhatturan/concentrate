@@ -745,5 +745,98 @@
         "returned": 0
       }
     }
+  },
+  {
+    "tool": "list_routes",
+    "args": {
+      "unconsumed": true
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND route.method <> 'USE' OPTIONAL MATCH (:Call)-[request:REQUESTS]->(route) WITH file, route, count(request) AS consumers WHERE consumers = 0 OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "app.js",
+            "line": 5,
+            "method": "GET",
+            "path": "/health",
+            "fullPath": "/health",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:/health:arg1>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": [
+          {
+            "file": "app.js",
+            "calls": "[{\"line\":11,\"expression\":\"app[key]\",\"framework\":\"express-koa\"},{\"line\":17,\"expression\":\"this.get\",\"framework\":\"express-koa\"},{\"line\":18,\"expression\":\"this.delete\",\"framework\":\"express-koa\"},{\"line\":24,\"expression\":\"router[method]\",\"framework\":\"express-koa\"}]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (:Call)-[request:REQUESTS]->(:Route) RETURN count(request) AS count",
+        "rows": [
+          {
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "unconsumed": true,
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "app.js",
+          "line": 5,
+          "method": "GET",
+          "path": "/health",
+          "fullPath": "/health",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:/health:arg1>"
+        }
+      ],
+      "unconsumedNote": "No call in the graph requests any route (no frontend in the scan, or its URLs did not resolve), so every route is listed; this is not evidence that they are unused.",
+      "dynamicRouteCalls": [
+        {
+          "file": "app.js",
+          "line": 11,
+          "expression": "app[key]",
+          "framework": "express-koa"
+        },
+        {
+          "file": "app.js",
+          "line": 17,
+          "expression": "this.get",
+          "framework": "express-koa"
+        },
+        {
+          "file": "app.js",
+          "line": 18,
+          "expression": "this.delete",
+          "framework": "express-koa"
+        },
+        {
+          "file": "app.js",
+          "line": 24,
+          "expression": "router[method]",
+          "framework": "express-koa"
+        }
+      ],
+      "dynamicNote": "4 route registrations with a method or path computed at runtime are not listed as routes; read the source at these lines for the routes they register.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
   }
 ]

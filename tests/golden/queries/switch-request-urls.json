@@ -1687,5 +1687,65 @@
         "returned": 0
       }
     }
+  },
+  {
+    "tool": "list_routes",
+    "args": {
+      "unconsumed": true
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND route.method <> 'USE' OPTIONAL MATCH (:Call)-[request:REQUESTS]->(route) WITH file, route, count(request) AS consumers WHERE consumers = 0 OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "server/app.js",
+            "line": 8,
+            "method": "GET",
+            "path": "/api/profiles/:username",
+            "fullPath": "/api/profiles/:username",
+            "framework": "express-koa",
+            "handlerName": null,
+            "handler": "<app.get:/api/profiles/:username:arg1>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (:Call)-[request:REQUESTS]->(:Route) RETURN count(request) AS count",
+        "rows": [
+          {
+            "count": 5
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "unconsumed": true,
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "server/app.js",
+          "line": 8,
+          "method": "GET",
+          "path": "/api/profiles/:username",
+          "fullPath": "/api/profiles/:username",
+          "framework": "express-koa",
+          "handlerName": null,
+          "handler": "<app.get:/api/profiles/:username:arg1>"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
   }
 ]
