@@ -32,7 +32,8 @@ the only runtime dependency left is `web-tree-sitter`.
   `src/integrations/languages/syntax/tree-sitter.ts` imports web-tree-sitter.
   `tests/grammars.test.ts` checks the vendored grammars against their manifest.
 - **Focus.** The Node.js/TypeScript backend niche first, then the whole JS/TS ecosystem including the
-  frontend (M8); Python, Go and Rust stay at least at today's level.
+  frontend (M8), then the Go (M9) and Rust (M10) ecosystems with their frameworks; Python stays at
+  least at today's level.
 
 ### Dependency replacement map
 
@@ -56,9 +57,12 @@ the only runtime dependency left is `web-tree-sitter`.
 | M6 – Release | 8, 9 | Published to npm with a benchmarked README and CI. |
 | M7 – Niche depth | 6b, 7 | Deeper Node.js/TS backend semantics and the remaining MCP tools. |
 | M8 – Full JS/TS ecosystem | 10–17 | Frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular) and vanilla JS: components, pages, frontend → backend API links, stores and DOM events. |
+| M9 – Go ecosystem | 18–21 | Go modules, packages and calls resolved; net/http, gin, echo, chi and fiber routes; database/sql, sqlx, gorm, env and HTTP clients; measured on pinned samples. |
+| M10 – Rust ecosystem | 22–25 | Cargo workspaces, path calls, traits and attributes; axum, actix-web, Rocket and warp routes; sqlx, diesel, SeaORM, env and reqwest; measured on pinned samples. |
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
-per-category results) are done. Order from here: the M6 release (Phase 9).
+per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
+M9, the Go ecosystem (Phase 18), then M10, the Rust ecosystem (Phase 22).
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -205,7 +209,6 @@ KuzuDB was archived in October 2025 (last release 0.11.3). The Kuzu adapter was 
 ### Acceptance criteria
 
 Done in [#20](https://github.com/fatihserhatturan/concentrate/pull/20), [#21](https://github.com/fatihserhatturan/concentrate/pull/21) and the store switch PR; numbers in [benchmarks.md](benchmarks.md), the supported subset in [cypher.md](cypher.md).
-
 
 - [x] All golden query recordings (every shape in `templates.json`, fixtures and standing samples) match exactly
 - [x] `kuzu` is gone from `package.json` and `src/`
@@ -810,6 +813,358 @@ Completes M8: React-side stores on the `Store` node from Phase 14, store-aware M
 - [x] Fixtures and golden coverage for each store library
 - [x] Agent benchmark results with the frontend questions, per category, are committed and documented
 - [x] README and `docs/accuracy.md` report the M8 coverage
+
+## M9: Go ecosystem
+
+Phases 18–21 give Go the depth the JS/TS graph has: resolved packages and calls, HTTP routes,
+data access, config, outbound HTTP links and dependency injection, measured on pinned samples.
+
+### Decisions (M9 and M10)
+
+- **Still one runtime dependency.** The vendored `go.wasm` and `rust.wasm` are upgraded to current
+  grammar releases through `npm run grammars:build`, with the golden diffs reviewed. No new npm
+  dependencies.
+- **One framework-neutral schema.** Go and Rust reuse `Route`, `EntryPoint`, `Table` / `DataModel`,
+  `EnvVar` / `ConfigValue`, `Interface` / `Enum` / `TypeAlias` and the `REQUESTS`, `USES_ENV`,
+  `ACCESSES_DATA`, `READS` / `WRITES` and `IMPLEMENTS` relationships; new properties only where
+  needed. Each phase bumps `SCHEMA_VERSION`. MCP tools stay language-neutral.
+- **A framework layer per language.** `src/integrations/frameworks/go/` and
+  `src/integrations/frameworks/rust/`, with parse-time plugin hooks like `JsTsFrameworkPlugin` and
+  post-parse contributors registered in `src/composition/default-registry.ts`.
+- **Measured like M8.** Every framework phase adds a pinned sample with hand labels to
+  `bench:accuracy`; precision stays at 100% and recall is reported. Go and Rust RealWorld (Conduit)
+  backends share their API with the existing frontend samples, so frontend → backend `REQUESTS`
+  links are measured end to end.
+- **Order.** Go first, then Rust; in each milestone the language foundation, then routes, then
+  data, config and HTTP clients, then measurement.
+
+## Phase 18: Go language foundation (modules, packages, interfaces, call resolution) ([#162](https://github.com/fatihserhatturan/concentrate/issues/162))
+
+**Milestone:** M9 – Go ecosystem
+**Depends on:** Phase 3a ([#5](https://github.com/fatihserhatturan/concentrate/issues/5))
+
+**Goal:** Give Go the structural depth JS/TS has, so the framework phases (19, 20) can build on resolved packages, calls and types.
+
+Go gets files, imports, structs, functions, methods and calls today (`src/integrations/languages/go/`), but:
+- `resolveGoImport` (`src/integrations/resolution/imports.ts`) reads only the `module` line of the root `go.mod` and resolves an import to the *first* `.go` file under the package path (it can pick a file of a subpackage).
+- `pkg.Func()` never resolves: the receiver match in `src/core/scan/resolution/calls.ts` falls back to a JS `import * as X` regex (`extractImportAlias`); golden `go-import` has no `CALL_RESOLVES_TO` for `service.New`.
+- No interfaces, type aliases, generics, package `var`/`const`, embedded structs or import aliases; `parameters` and `returnType` are always `null`.
+- A file with a syntax error fails as a whole file; `_test.go` files are not classified as tests; `find_unused_exports` is limited to JS/TS (`src/adapters/mcp/analysis-tools/unused.ts:16`).
+
+### Grammar
+
+- [ ] Upgrade the vendored `go.wasm` (tree-sitter-go 0.21.2) to the current release through `npm run grammars:build`; review the golden diffs
+- [ ] Partial graph plus a scan warning for files with `ERROR` nodes, as for JS/TS
+
+### Modules and packages
+
+- [ ] `go.mod` per module (nested modules) and `go.work` workspaces; `replace` directives to local paths
+- [ ] A package is a directory: an import resolves to every file of the package, not the first match; `vendor/` is skipped
+- [ ] Import aliases, `_` and `.` imports
+
+### Declarations
+
+- [ ] Interfaces as `Interface` nodes; implicit `IMPLEMENTS` from method sets (struct and pointer receivers)
+- [ ] Embedded structs and interfaces (promoted methods); type aliases and defined types as `TypeAlias`; generics (type parameters recorded)
+- [ ] Package-level `var` / `const` as `Variable` nodes; `parameters` and `returnType` on functions and methods
+
+### Calls
+
+- [ ] `pkg.Func()` and `pkg.Type{}` / `pkg.NewX()` resolve through the import (alias or last path segment)
+- [ ] Method calls on typed receivers: variables declared with a struct type, `x := pkg.NewX()` return types, struct fields, interface values (to every implementation, marked)
+
+### Entrypoints and tests
+
+- [ ] `func main` in `package main` and `func init` as `EntryPoint` nodes
+- [ ] `_test.go` files, `TestX` / `BenchmarkX` functions classified as tests
+
+### MCP
+
+- [ ] `find_unused_exports` covers Go (capitalized names not used outside their package)
+
+### Acceptance criteria
+
+- [ ] Fixtures with golden coverage: multi-module `go.work`, package with several files, interfaces with implementations, embedded structs, generics, a file with a syntax error
+- [ ] Cross-package call resolution has hand labels on a pinned Go sample (precision 100%, recall reported)
+- [ ] `docs/known-limitations.md` has a Go section
+
+## Phase 19: Go HTTP routes and entrypoints (net/http, gin, echo, chi, fiber, gRPC, cobra) ([#163](https://github.com/fatihserhatturan/concentrate/issues/163))
+
+**Milestone:** M9 – Go ecosystem
+**Depends on:** Phase 18
+
+**Goal:** List every HTTP route of a Go service with its full path, method, middleware and handler, and the other entrypoints (gRPC services, CLI commands).
+
+There is no Go framework detection today: `list_routes`, `route_details` and `api_consumers` return nothing for Go projects. The `Route`, `EntryPoint`, `DECLARES_ROUTE`, `ROUTE_HANDLED_BY`, `MOUNTS_*` and `ROUTE_LIFECYCLE_STEP` schema is framework-neutral and is reused. Framework code goes into a new `src/integrations/frameworks/go/` layer with a parse-time plugin hook like `JsTsFrameworkPlugin` (`src/integrations/frameworks/js-ts/scanner.ts`) and post-parse contributors registered in `src/composition/default-registry.ts`.
+
+### Framework layer
+
+- [ ] `src/integrations/frameworks/go/` with a Go parser plugin hook and route contributors; `Route.framework` names the router
+
+### Routers
+
+- [ ] `net/http`: `http.HandleFunc` / `Handle`, `ServeMux`, Go 1.22 patterns (`"GET /items/{id}"`), `http.StripPrefix` mounts
+- [ ] gin: `r.GET/POST/…`, `Group`, `Use`, `Any`, `Handle`
+- [ ] echo: `e.GET/…`, `Group`, middleware
+- [ ] chi: `r.Get/…`, `Route`, `Mount`, `Group`, `With`
+- [ ] fiber: `app.Get/…`, `Group`, `Mount`
+- [ ] gorilla/mux: `HandleFunc(...).Methods(...)`, `PathPrefix(...).Subrouter()`
+
+### Route structure
+
+- [ ] Full paths through groups, sub-routers and mounts across functions and files (router passed as a parameter or returned)
+- [ ] Middleware as `ROUTE_LIFECYCLE_STEP`, in order
+- [ ] Handlers: functions, closures, methods on handler structs (`h.GetUser`), handler factories returning `http.HandlerFunc`
+- [ ] Routes registered in loops or with computed paths are reported as dynamic, as for JS/TS (#153)
+
+### Other entrypoints
+
+- [ ] gRPC: `pb.RegisterXServer(s, impl)` → `EntryPoint` (kind `grpc`) per service method of the implementation
+- [ ] cobra commands (`&cobra.Command{Use, Run/RunE}`) → `EntryPoint` (kind `cli`)
+
+### Acceptance criteria
+
+- [ ] One fixture per router with golden coverage
+- [ ] A pinned Go sample with hand-labelled routes: precision 100%, recall reported in `bench:accuracy`
+- [ ] `list_routes`, `route_details` and `impact_of` answer on the Go sample; `docs/mcp-server.md` and `known-limitations.md` updated
+
+## Phase 20: Go data access, config and outbound HTTP (database/sql, sqlx, gorm, sqlc, ent, viper, fx/wire) ([#164](https://github.com/fatihserhatturan/concentrate/issues/164))
+
+**Milestone:** M9 – Go ecosystem
+**Depends on:** Phase 19
+
+**Goal:** Answer "which handler touches this table", "which env variables does this service read" and "which routes does this client call" for Go code.
+
+`Table`, `DataModel`, `ACCESSES_DATA`, `READS` / `WRITES`, `EnvVar`, `ConfigValue`, `USES_ENV`, `DECLARES_ENV` and `REQUESTS` exist for JS/TS (`src/integrations/frameworks/js-ts/data-access.ts`, `env-config.ts`, `env-files.ts`, `http-clients.ts`) and are language-neutral in the schema. None of them is produced for Go.
+
+### Data access
+
+- [ ] `database/sql` and sqlx: `Query`, `QueryRow`, `Exec`, `Get`, `Select` with literal SQL → `Table` with `READS` / `WRITES`
+- [ ] gorm: models from structs (`gorm` tags, `TableName()`), `db.Model(&X{})`, `Find`, `Create`, `Where`, `Save`, `Delete`; associations as `RELATES_TO`
+- [ ] sqlc: generated `Queries` methods linked to their SQL and tables
+- [ ] ent: schemas (`ent/schema`) as `DataModel`, client calls (`client.User.Query()`)
+
+### Config and env
+
+- [ ] `os.Getenv`, `os.LookupEnv`, `os.ExpandEnv` → `USES_ENV`
+- [ ] viper: `viper.GetString("x")`, `BindEnv`, `AutomaticEnv` with prefixes → `ConfigValue` / `EnvVar`
+- [ ] Struct-tag config: caarlos0/env (`env:"PORT"`), kelseyhightower/envconfig
+- [ ] `.env` files declare variables for Go projects too (`list_env_config { unread }`)
+
+### Outbound HTTP
+
+- [ ] `http.Get/Post`, `http.NewRequest(method, url)`, `client.Do`, resty → `REQUESTS` to project routes (same `--api-origin` rules as JS/TS)
+
+### Dependency injection
+
+- [ ] uber fx: `fx.Provide` / `fx.Invoke` provider graph as `INJECTS`
+- [ ] google wire: `wire.Build` / `wire.NewSet` providers
+
+### MCP
+
+- [ ] `list_data_access`, `list_tables`, `list_env_config` and `impact_of` cover Go
+
+### Acceptance criteria
+
+- [ ] Fixtures with golden coverage for each library above
+- [ ] Hand labels for data access and env on the pinned Go sample: precision 100%, recall reported
+- [ ] Docs updated (`docs/known-limitations.md`, `docs/mcp-server.md`)
+
+## Phase 21: Go ecosystem measurement (samples, accuracy, agent benchmark, README) ([#165](https://github.com/fatihserhatturan/concentrate/issues/165))
+
+**Milestone:** M9 – Go ecosystem
+**Depends on:** Phase 20
+
+**Goal:** Prove the Go graph with the same measurements as M8: pinned samples, hand labels, the agent benchmark and README numbers.
+
+`scripts/samples.json` has 13 samples, all JS/TS; `bench/labels/` has no Go labels; the agent question sets (`bench/agent/questions*.json`) have no Go questions. The RealWorld (Conduit) API is shared by the existing frontend samples, so a Go RealWorld backend lets frontend → Go backend `REQUESTS` be measured end to end.
+
+### Samples and labels
+
+- [ ] Pin a Go RealWorld backend (gin) and one more Go service (chi or echo, with gorm or sqlx) in `scripts/samples.json`
+- [ ] Hand labels for routes, cross-package calls, data access and env in `bench/labels/`
+- [ ] Golden sample graphs where they stay small enough
+
+### Accuracy and performance
+
+- [ ] Go rows in every `bench:accuracy` section; precision 100%, recall reported
+- [ ] Scan time and memory for the Go samples in `docs/benchmarks.md`
+
+### Agent benchmark
+
+- [ ] Go questions (routes, callers, impact, table users, env, frontend → Go backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
+
+### Docs
+
+- [ ] README "What it sees" table and languages line cover Go
+- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated
+
+### Acceptance criteria
+
+- [ ] Accuracy, performance and agent results for Go are reproducible from scripts
+- [ ] README shows the Go coverage
+
+## M10: Rust ecosystem
+
+Phases 22–25 do the same for Rust: Cargo workspaces, path calls, traits and attributes, then axum,
+actix-web, Rocket and warp routes, sqlx, diesel and SeaORM data access, config and reqwest links.
+The decisions of M9 apply.
+
+## Phase 22: Rust language foundation (Cargo workspaces, paths, traits, enums, attributes) ([#166](https://github.com/fatihserhatturan/concentrate/issues/166))
+
+**Milestone:** M10 – Rust ecosystem
+**Depends on:** Phase 21
+
+**Goal:** Give Rust the structural depth JS/TS has, so the framework phases (23, 24) can build on resolved crates, paths, calls, traits and attributes.
+
+Rust gets files, `use` / `mod` imports, structs, functions, impl methods, calls and macro invocations today (`src/integrations/languages/rust/`), but:
+- There is no `Cargo.toml` or workspace handling; `use` of another crate of the workspace and external crates are skipped (`resolveRustImport`).
+- `a::b()` and `Type::method()` paths are never split (`analyzeMemberCallExpression` in `src/core/scan/resolution/calls.ts` splits on `.` only), so most Rust calls do not resolve.
+- No traits, `impl Trait for X`, enums, generics, `const` / `static`, or attributes (`#[get]`, `#[derive]`, `#[tokio::main]`); `parameters` and `returnType` are always `null`.
+- A file with a syntax error fails as a whole file; `#[cfg(test)]` modules and `tests/` are not classified as tests; `find_unused_exports` is limited to JS/TS.
+
+### Grammar
+
+- [ ] Upgrade the vendored `rust.wasm` (tree-sitter-rust 0.21.0) to the current release through `npm run grammars:build`; review the golden diffs
+- [ ] Partial graph plus a scan warning for files with `ERROR` nodes
+
+### Crates and modules
+
+- [ ] `Cargo.toml` packages and `[workspace]` members; crate names (with `-` → `_`) in `use` resolve to the crate's `lib.rs` / `main.rs`
+- [ ] `mod` trees (`mod.rs`, `foo.rs` + `foo/`, `#[path]`), `pub use` re-exports, `use` groups, aliases and globs
+
+### Declarations
+
+- [ ] Traits as `Interface` nodes, `impl Trait for X` as `IMPLEMENTS`; trait default methods
+- [ ] Enums (`Enum`), type aliases, generics (type parameters recorded), `const` / `static` as `Variable`
+- [ ] Attributes as `Decorator` nodes (name and arguments), `#[derive(...)]` recorded
+- [ ] `macro_rules!` definitions; `parameters` and `returnType` on functions and methods
+
+### Calls
+
+- [ ] Path calls `module::func()`, `Type::new()`, `Type::method()` and `Trait::method()` resolve through `use` and the module tree
+- [ ] Method calls on typed receivers (`let x: T`, `T::new()` return types, `self` fields); trait method calls to every implementation, marked
+
+### Entrypoints and tests
+
+- [ ] `fn main`, `#[tokio::main]`, `#[actix_web::main]` as `EntryPoint` nodes
+- [ ] `#[test]`, `#[tokio::test]`, `#[cfg(test)]` modules and `tests/` classified as tests
+
+### MCP
+
+- [ ] `find_unused_exports` covers Rust (`pub` items not used outside their crate)
+
+### Acceptance criteria
+
+- [ ] Fixtures with golden coverage: Cargo workspace with two crates, nested `mod` trees, traits with implementations, enums, attributes, a file with a syntax error
+- [ ] Path call resolution has hand labels on a pinned Rust sample (precision 100%, recall reported)
+- [ ] `docs/known-limitations.md` has a Rust section
+
+## Phase 23: Rust HTTP routes and entrypoints (axum, actix-web, Rocket, warp, tonic, clap) ([#167](https://github.com/fatihserhatturan/concentrate/issues/167))
+
+**Milestone:** M10 – Rust ecosystem
+**Depends on:** Phase 22
+
+**Goal:** List every HTTP route of a Rust service with its full path, method, middleware and handler, and the other entrypoints (gRPC services, CLI commands).
+
+There is no Rust framework detection today. The framework-neutral `Route` / `EntryPoint` schema is reused, and framework code goes into a new `src/integrations/frameworks/rust/` layer (parse-time plugin hook plus post-parse contributors), like the Go layer of Phase 19. Attribute routes need the `Decorator` nodes of Phase 22.
+
+### Framework layer
+
+- [ ] `src/integrations/frameworks/rust/` with a Rust parser plugin hook and route contributors; `Route.framework` names the framework
+
+### Routers
+
+- [ ] axum: `Router::new().route("/x", get(h).post(h2))`, `nest`, `merge`, `route_service`, `layer` / `route_layer`, `with_state`
+- [ ] actix-web: `#[get("/x")]` and the other method attributes, `App::new().service(...)`, `web::resource().route()`, `web::scope`, `configure`
+- [ ] Rocket: `#[get("/x")]` attributes, `routes![...]`, `rocket::build().mount("/base", routes)`
+- [ ] warp: `warp::path!` and filter chains (`and`, `or`, `get()`)
+
+### Route structure
+
+- [ ] Full paths through nested routers and scopes across functions, modules and crates
+- [ ] Middleware / layers / guards as `ROUTE_LIFECYCLE_STEP`; extractors (`Path`, `Query`, `Json`, `State`) recorded on the route
+- [ ] Routes built in loops or from computed paths are reported as dynamic, as for JS/TS (#153)
+
+### Other entrypoints
+
+- [ ] tonic: `XServer::new(impl)` → `EntryPoint` (kind `grpc`) per trait method of the implementation
+- [ ] clap: `#[derive(Parser)]` / `Subcommand` enums and builder `Command::new` → `EntryPoint` (kind `cli`)
+
+### Acceptance criteria
+
+- [ ] One fixture per framework with golden coverage
+- [ ] A pinned Rust sample with hand-labelled routes: precision 100%, recall reported in `bench:accuracy`
+- [ ] `list_routes`, `route_details` and `impact_of` answer on the Rust sample; docs updated
+
+## Phase 24: Rust data access, config and outbound HTTP (sqlx, diesel, SeaORM, env, reqwest) ([#168](https://github.com/fatihserhatturan/concentrate/issues/168))
+
+**Milestone:** M10 – Rust ecosystem
+**Depends on:** Phase 23
+
+**Goal:** Answer "which handler touches this table", "which env variables does this service read" and "which routes does this client call" for Rust code.
+
+The data, env and HTTP-client relationships (`Table`, `DataModel`, `READS` / `WRITES`, `EnvVar`, `ConfigValue`, `USES_ENV`, `DECLARES_ENV`, `REQUESTS`) are language-neutral in the schema but produced only for JS/TS (and Go after Phase 20).
+
+### Data access
+
+- [ ] sqlx: `query!`, `query_as!`, `query_scalar!` and `sqlx::query(...)` with literal SQL → `Table` with `READS` / `WRITES`; `#[derive(FromRow)]` structs as `DataModel`
+- [ ] diesel: `table!` macros (`schema.rs`) as `Table`, `#[derive(Queryable, Insertable)]` + `#[diesel(table_name)]` models, query DSL (`users::table.filter(...)`, `insert_into`, `update`, `delete`)
+- [ ] SeaORM: `DeriveEntityModel` entities with `table_name`, `Entity::find()`, `ActiveModel` inserts / updates; relations as `RELATES_TO`
+
+### Config and env
+
+- [ ] `std::env::var`, `env::var_os`, `env!` / `option_env!` → `USES_ENV`
+- [ ] dotenvy / dotenv loading; `.env` files declare variables for Rust projects too
+- [ ] The `config` crate (`Config::builder().add_source(Environment::with_prefix(...))`, `get_string`), envy, and clap `#[arg(env = "X")]` → `ConfigValue` / `EnvVar`
+
+### Outbound HTTP
+
+- [ ] reqwest (`reqwest::get`, `Client::get/post/request`, `.send()`) → `REQUESTS` to project routes, with the `--api-origin` rules
+
+### MCP
+
+- [ ] `list_data_access`, `list_tables`, `list_env_config` and `impact_of` cover Rust
+
+### Acceptance criteria
+
+- [ ] Fixtures with golden coverage for each library above
+- [ ] Hand labels for data access and env on the pinned Rust sample: precision 100%, recall reported
+- [ ] Docs updated (`docs/known-limitations.md`, `docs/mcp-server.md`)
+
+## Phase 25: Rust ecosystem measurement (samples, accuracy, agent benchmark, README) ([#169](https://github.com/fatihserhatturan/concentrate/issues/169))
+
+**Milestone:** M10 – Rust ecosystem
+**Depends on:** Phase 24
+
+**Goal:** Prove the Rust graph with the same measurements as M8 and M9: pinned samples, hand labels, the agent benchmark and README numbers.
+
+There are no Rust samples, labels or agent questions today. A Rust RealWorld (Conduit) backend shares its API with the existing frontend samples, so frontend → Rust backend `REQUESTS` can be measured end to end.
+
+### Samples and labels
+
+- [ ] Pin a Rust RealWorld backend (axum + sqlx) and one more Rust service (actix-web with diesel or SeaORM) in `scripts/samples.json`
+- [ ] Hand labels for routes, path calls, data access and env in `bench/labels/`
+- [ ] Golden sample graphs where they stay small enough
+
+### Accuracy and performance
+
+- [ ] Rust rows in every `bench:accuracy` section; precision 100%, recall reported
+- [ ] Scan time and memory for the Rust samples in `docs/benchmarks.md`
+
+### Agent benchmark
+
+- [ ] Rust questions (routes, callers, impact, table users, env, trait implementations, frontend → Rust backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
+
+### Docs
+
+- [ ] README "What it sees" table and languages line cover Rust
+- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated
+
+### Acceptance criteria
+
+- [ ] Accuracy, performance and agent results for Rust are reproducible from scripts
+- [ ] README shows the Rust coverage
 
 ## Verification (every milestone)
 
