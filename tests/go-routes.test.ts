@@ -190,3 +190,65 @@ describe("route MCP tools on Go", () => {
     assert.deepEqual(impact.routes.map((route: any) => route.fullPath).sort(), ["/api/v1/users", "/api/v1/users/:id"]);
   });
 });
+
+// [kind, trigger, file:line, handler, calls the handler makes]
+function entrypoints(graph: Graph): Array<[string, string | null, string, string | null, number]> {
+  return graph.nodes
+    .filter((node) => node.label === "EntryPoint")
+    .map((entrypoint) => {
+      const file = graph.relationships.find((rel) => rel.type === "DECLARES_ENTRYPOINT" && rel.to === entrypoint.id)!.from.slice("file:".length);
+      const handler = graph.relationships.find((rel) => rel.type === "ENTRYPOINT_HANDLED_BY" && rel.from === entrypoint.id);
+      const calls = handler ? graph.relationships.filter((rel) => rel.type === "CALLS" && rel.from === handler.to).length : 0;
+      return [String(entrypoint.properties.kind), entrypoint.properties.trigger as string | null, `${file}:${entrypoint.properties.line}`, handler ? functionName(graph, handler.to) : null, calls] as [string, string | null, string, string | null, number];
+    })
+    .sort((a, b) => a[2].localeCompare(b[2], "en", { numeric: true }) || String(a[1]).localeCompare(String(b[1])));
+}
+
+describe("Go gRPC and cobra entrypoints", () => {
+  it("a registered gRPC service's methods, promoted ones included, by the generated interface", async () => {
+    const graph = await scan("go-grpc");
+    assert.deepEqual(entrypoints(graph), [
+      ["main", null, "main.go:12", "main", 5],
+      ["grpc", "Greeter/SayBye", "main.go:15", "SayBye", 0],
+      ["grpc", "Greeter/SayHello", "main.go:15", "SayHello", 0],
+    ]);
+    const sayBye = graph.relationships.find((rel) => rel.type === "ENTRYPOINT_HANDLED_BY" && rel.from.endsWith("grpc:Greeter/SayBye"))!;
+    assert.equal(graph.nodes.find((node) => node.id === sayBye.to)?.properties.className, "UnimplementedGreeterServer");
+    assert.ok(graph.nodes.every((node) => node.properties.grpcRegistration === undefined));
+  });
+
+  it("cobra commands with their full path and Run / RunE handler", async () => {
+    const graph = await scan("go-cobra");
+    assert.deepEqual(entrypoints(graph), [
+      ["init", null, "cmd/root.go:20", "init", 2],
+      ["cli", "app serve", "cmd/serve.go:9", "runServe", 0],
+      ["cli", "app version", "cmd/serve.go:14", "<versionCmd.Run>", 1],
+      ["cli", "app serve migrate", "cmd/serve.go:30", "<cmd.RunE>", 1],
+      ["main", null, "main.go:5", "main", 1],
+    ]);
+    assert.ok(graph.nodes.every((node) => node.properties.goPending === undefined && node.properties.goCommandTree === undefined));
+  });
+});
+
+describe("list_entrypoints on Go", () => {
+  const listed = async (fixture: string, kind: string) => {
+    const store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-entrypoints-")), "graph"));
+    try {
+      await store.reset();
+      const graph = await scan(fixture);
+      await store.write(graph.nodes, graph.relationships);
+      return ((await callMcpTool(store, "list_entrypoints", { kind })).structuredContent as Record<string, any>).entrypoints;
+    } finally {
+      await store.close();
+    }
+  };
+
+  it("filters cobra commands and gRPC methods by kind", async () => {
+    assert.deepEqual((await listed("go-cobra", "cli")).map((entry: any) => [entry.trigger, entry.library, entry.handler]), [
+      ["app serve", "cobra", "runServe"],
+      ["app version", "cobra", "<versionCmd.Run>"],
+      ["app serve migrate", "cobra", "<cmd.RunE>"],
+    ]);
+    assert.deepEqual((await listed("go-grpc", "grpc")).map((entry: any) => entry.trigger), ["Greeter/SayBye", "Greeter/SayHello"]);
+  });
+});

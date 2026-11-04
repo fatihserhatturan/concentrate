@@ -318,3 +318,30 @@ function nested<V>(map: Map<string, Map<string, V>>, key: string): Map<string, V
   }
   return inner;
 }
+
+// The methods a value's type has (`&server{}` as `{ type: "server" }`, a
+// constructor's result as `{ factory: "svc.New" }`): the named ones, own
+// or promoted, or else every exported method declared on the type.
+export function goValueMethods(
+  value: { type?: string; factory?: string },
+  fileId: string,
+  index: GoCallIndex,
+  names?: Iterable<string>,
+): Array<{ name: string; functionId: string }> {
+  const type = value.type ? resolveType(value.type, fileId, index) : value.factory ? constructedType(value.factory, fileId, index) : null;
+  if (!type) return [];
+  if (names) {
+    return [...names].flatMap((name) => methodOf(type, name, index, 0).slice(0, 1).map((functionId) => ({ name, functionId })));
+  }
+  return [...index.methodsByPackage.get(type.pkg) ?? []]
+    .filter(([key]) => key.startsWith(`${type.name}.`) && /^[A-Z]/u.test(key.slice(type.name.length + 1)))
+    .map(([key, functionId]) => ({ name: key.slice(type.name.length + 1), functionId }));
+}
+
+// The method names of an interface declared in the package of `fileId`
+// (embedded interfaces included), null when it is not one of the scan's.
+export function goInterfaceMethodNames(fileId: string, name: string, index: GoCallIndex): Set<string> | null {
+  const pkg = index.packageByFile.get(fileId);
+  if (pkg === undefined || !index.interfacesByPackage.get(pkg)?.has(name)) return null;
+  return interfaceMethods({ pkg, name }, index, 0);
+}

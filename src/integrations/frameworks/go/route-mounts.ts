@@ -178,7 +178,7 @@ function routeRelationships(
   return relationships;
 }
 
-function resolveRef(ref: GoHandlerRef, fileId: string, index: GoCallIndex): string | null {
+export function resolveRef(ref: GoHandlerRef, fileId: string, index: GoCallIndex): string | null {
   if (ref.functionId) return ref.functionId;
   const call: GraphNode = { id: `${fileId}:handler:${ref.expression}`, label: "Call", properties: { ...ref } };
   return resolveGoCall(call, fileId, index)[0]?.functionId ?? null;

@@ -484,7 +484,7 @@ export function goVisibility(name: string): string {
   return /^[A-Z]/.test(name) ? "exported" : "unexported";
 }
 
-function createCallNodes(functionNodeId: string, node: SyntaxNode, locals: Map<string, LocalType | null>): GraphNode[] {
+export function createCallNodes(functionNodeId: string, node: SyntaxNode, locals: Map<string, LocalType | null>): GraphNode[] {
   const calls: GraphNode[] = [];
 
   walkScoped(node, (child) => {
