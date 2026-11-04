@@ -1,4 +1,5 @@
 export { runExportAdapter, type ExportAdapterOptions } from "./export.js";
+export { MCP_CLIENTS, mcpServerEntry, mergeCodexToml, mergeJsonConfig, runInitAdapter, type InitAdapterOptions, type McpClient, type McpServerEntry } from "./init.js";
 export { runMcpAdapter, type McpAdapterOptions } from "./mcp.js";
 export { runQueryAdapter, type OutputFormat, type QueryAdapterOptions } from "./query.js";
 export { runScanAdapter, type CliAdapterResult, type ScanAdapterOptions } from "./scan.js";

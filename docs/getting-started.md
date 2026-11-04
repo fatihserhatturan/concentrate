@@ -33,6 +33,9 @@ npm run dev -- export ./path/to/project --output .concentrate/export
 
 # Start MCP server (for AI tool integration)
 npm run dev -- mcp
+
+# Write the MCP config of Claude Code, Cursor and Codex into a project
+npm run dev -- init ./path/to/project
 ```
 
 The Cypher subset is described in [cypher.md](cypher.md).
@@ -42,8 +45,9 @@ The Cypher subset is described in [cypher.md](cypher.md).
 `concentrate mcp` serves the scanned graph to any MCP client over stdio. It
 offers 25 tools, a graph summary resource, and paged, structured results.
 [mcp-server.md](mcp-server.md#run) has the client configuration and
-[mcp-server.md](mcp-server.md#tools) the tool reference. Use an absolute
-`--database` path in client configurations.
+[mcp-server.md](mcp-server.md#tools) the tool reference. `concentrate init
+<path>` writes the client configuration for Claude Code, Cursor and Codex
+into the project, with an absolute `--database` path.
 
 ## Scans
 

@@ -17,7 +17,29 @@ Start the MCP server:
 npm run mcp -- --database .concentrate/graph
 ```
 
-Example MCP client command configuration:
+Write the client configuration into the project:
+
+```bash
+npm run dev -- init /path/to/project
+```
+
+`init` writes the `concentrate` server into each client's project config and
+keeps the servers and settings already there:
+
+| Client | File |
+| --- | --- |
+| Claude Code | `.mcp.json` |
+| Cursor | `.cursor/mcp.json` |
+| Codex | `.codex/config.toml` (`[mcp_servers.concentrate]`; Codex reads it only in trusted projects) |
+
+`--client claude|cursor|codex` (repeatable) picks the clients; all three by
+default. The server command is this build's CLI under the current Node with
+an absolute `--database` path, `<path>/.concentrate/graph` unless `-d` names
+another. `--npx` writes `npx -y concentrate mcp …` instead, for an installed
+package. When the graph does not exist yet, `init` prints the scan command.
+Running it again replaces only the `concentrate` entry.
+
+Example MCP client command configuration by hand:
 
 ```json
 {
