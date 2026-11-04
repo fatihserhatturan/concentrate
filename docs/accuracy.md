@@ -30,6 +30,7 @@ chosen files); every target was decided by reading the code.
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
 | Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project) | `frontend/`: every HTTP call that reaches a backend route |
+| Env reads | internet-go-gin-realworld | every env read in the production and test files (`os.Getenv`) |
 | Stores, store reads and writes | internet-vue-realworld (its Pinia setup store) | `src/`: every store and every call of a store's hook, tests included |
 
 Rules:
@@ -92,6 +93,9 @@ Rules:
   state, getters and actions it reads (`storeToRefs(useUserStore())`
   destructuring, `userStore.user`, a reference to an action without calling
   it) and the actions and write methods it calls or destructures.
+- **Env reads.** `{ file, line, name, function }` once per read of an env
+  variable, `function` null outside any function. Writes (`os.Setenv`) are
+  not labeled.
 
 ## Scoring
 
@@ -217,6 +221,16 @@ fixtures and golden queries (`fixtures/redux-toolkit`, `zustand-stores`,
 `jotai-atoms`, `svelte-stores`), not by labels on a real repository. The
 React RealWorld sample uses `connect()` with hand-written reducers, which is
 not a Redux Toolkit store.
+
+### Env reads
+
+| Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-go-gin-realworld | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
+| **all** | 6 | 6 | 0 | 0 | **100.0%** | **100.0%** |
+
+viper, struct-tag config and `os.ExpandEnv` are covered by `fixtures/go-env`
+and its golden graph; the gin sample reads env with `os.Getenv` only.
 
 ## What the misses are
 

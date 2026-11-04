@@ -2260,5 +2260,51 @@
         }
       }
     ]
+  },
+  "env": {
+    "scope": [
+      "hello.go",
+      "common/",
+      "articles/",
+      "users/"
+    ],
+    "items": [
+      {
+        "file": "hello.go",
+        "line": 63,
+        "name": "PORT",
+        "function": "main"
+      },
+      {
+        "file": "common/database.go",
+        "line": 22,
+        "name": "DB_PATH",
+        "function": "GetDBPath"
+      },
+      {
+        "file": "common/database.go",
+        "line": 32,
+        "name": "TEST_DB_PATH",
+        "function": "GetTestDBPath"
+      },
+      {
+        "file": "common/unit_test.go",
+        "line": 283,
+        "name": "DB_PATH",
+        "function": "TestDatabaseDirCreation"
+      },
+      {
+        "file": "common/unit_test.go",
+        "line": 317,
+        "name": "TEST_DB_PATH",
+        "function": "TestDBInitDirCreation"
+      },
+      {
+        "file": "common/unit_test.go",
+        "line": 353,
+        "name": "DB_PATH",
+        "function": "TestDatabaseWithCurrentDirectory"
+      }
+    ]
   }
 }
