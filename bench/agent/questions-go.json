@@ -1,0 +1,104 @@
+{
+  "$comment": "Go agent benchmark questions over the Go RealWorld backends (gin, echo) and the Next.js frontend scanned with the gin backend: routes and their middleware, callers, change impact, table users, env reads and frontend → Go backend requests. Expected answers were written by reading the pinned source (route registrations in main and the Register functions, call sites, gorm queries, os.Getenv reads, the frontend's API calls), not from Concentrate output. Scoring as in questions.json.",
+  "questions": [
+    {
+      "id": "go-gin-follow-route",
+      "sample": "internet-go-gin-realworld",
+      "category": "routes",
+      "question": "In this gin backend, which handler function serves POST /api/profiles/:username/follow, and which middleware runs before it (with the argument it is created with)?",
+      "expected": {
+        "mustInclude": ["ProfileFollow", "AuthMiddleware"],
+        "anyOf": [["AuthMiddleware(true)", "auto401 true", "auto401=true", "auto401: true", "auto401 = true"]]
+      }
+    },
+    {
+      "id": "go-gin-find-article-callers",
+      "sample": "internet-go-gin-realworld",
+      "category": "callers",
+      "question": "Which functions in the production code (not the _test.go files) call FindOneArticle?",
+      "expected": {
+        "mustInclude": [
+          "ArticleRetrieve",
+          "ArticleUpdate",
+          "ArticleDelete",
+          "ArticleFavorite",
+          "ArticleUnfavorite",
+          "ArticleCommentCreate",
+          "ArticleCommentDelete",
+          "ArticleCommentList"
+        ]
+      }
+    },
+    {
+      "id": "go-gin-find-user-impact",
+      "sample": "internet-go-gin-realworld",
+      "category": "impact",
+      "question": "If FindOneUser in users/models.go changes, which HTTP routes (method and full path) are affected, and through which handler functions?",
+      "expected": {
+        "mustInclude": [
+          "UsersRegistration",
+          "UsersLogin",
+          "ProfileRetrieve",
+          "ProfileFollow",
+          "ProfileUnfollow",
+          "/api/users/login",
+          "/api/profiles/:username/follow"
+        ]
+      }
+    },
+    {
+      "id": "go-gin-favorites-table",
+      "sample": "internet-go-gin-realworld",
+      "category": "data",
+      "question": "Which functions read or write the favorites table (the FavoriteModel gorm model), and which of them write to it?",
+      "expected": {
+        "mustInclude": [
+          "favoritesCount",
+          "isFavoriteBy",
+          "BatchGetFavoriteCounts",
+          "BatchGetFavoriteStatus",
+          "favoriteBy",
+          "unFavoriteBy"
+        ]
+      }
+    },
+    {
+      "id": "go-gin-env",
+      "sample": "internet-go-gin-realworld",
+      "category": "env",
+      "question": "Which environment variables does this backend's production code (not tests) read, and in which functions?",
+      "expected": {
+        "mustInclude": ["PORT", "DB_PATH", "TEST_DB_PATH", "GetDBPath", "GetTestDBPath"]
+      }
+    },
+    {
+      "id": "go-echo-feed-route",
+      "sample": "internet-go-echo-realworld",
+      "category": "routes",
+      "question": "In this echo backend, which handler method serves GET /api/articles/feed, which concrete store method does it end up calling, and which middleware guards the route?",
+      "expected": {
+        "mustInclude": ["Feed", "ListFeed", "ArticleStore"],
+        "anyOf": [["JWTWithConfig", "JWT middleware", "middleware.JWT"]]
+      }
+    },
+    {
+      "id": "go-echo-get-by-username-impact",
+      "sample": "internet-go-echo-realworld",
+      "category": "impact",
+      "question": "If UserStore.GetByUsername in store/user.go changes, which HTTP routes (method and full path) are affected, and through which handler methods?",
+      "expected": {
+        "mustInclude": ["GetProfile", "Follow", "Unfollow", "/api/profiles/:username/follow"]
+      }
+    },
+    {
+      "id": "go-fs-follow-consumers",
+      "sample": "internet-realworld-go-fullstack",
+      "category": "frontend-api",
+      "question": "In this full-stack app (frontend/ and the Go backend in backend/), which frontend page triggers the requests that follow and unfollow a user, through which API module, and which backend handler functions receive them?",
+      "expected": {
+        "mustInclude": ["ProfileFollow", "ProfileUnfollow", "lib/api/user"],
+        "anyOf": [["profile/[pid]", "[pid].tsx"]]
+      }
+    }
+  ]
+}

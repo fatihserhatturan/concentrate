@@ -1,0 +1,2325 @@
+{
+  "recordedAt": "2026-11-04T21:21:45.931Z",
+  "model": "haiku",
+  "runs": 3,
+  "maxTurns": 25,
+  "totals": {
+    "baseline": {
+      "runs": 24,
+      "correct": 24,
+      "medianInputTokens": 130562.5,
+      "medianOutputTokens": 1874.5,
+      "medianToolCalls": 4,
+      "medianTurns": 5,
+      "medianDurationMs": 15046.5,
+      "medianCostUsd": 0.0053,
+      "spread": {
+        "inputTokens": {
+          "min": 74622,
+          "max": 231012
+        },
+        "toolCalls": {
+          "min": 2,
+          "max": 6
+        },
+        "durationMs": {
+          "min": 7813,
+          "max": 21293
+        },
+        "costUsd": {
+          "min": 0.0034,
+          "max": 0.0112
+        }
+      },
+      "totalCostUsd": 0.1324,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
+    },
+    "concentrate": {
+      "runs": 24,
+      "correct": 24,
+      "medianInputTokens": 154279,
+      "medianOutputTokens": 1902,
+      "medianToolCalls": 5,
+      "medianTurns": 6,
+      "medianDurationMs": 16023.5,
+      "medianCostUsd": 0.0056,
+      "spread": {
+        "inputTokens": {
+          "min": 105037,
+          "max": 261327
+        },
+        "toolCalls": {
+          "min": 2,
+          "max": 12
+        },
+        "durationMs": {
+          "min": 8337,
+          "max": 23768
+        },
+        "costUsd": {
+          "min": 0.0036,
+          "max": 0.0081
+        }
+      },
+      "totalCostUsd": 0.1352,
+      "mcpRuns": 12,
+      "mcpTools": {
+        "find_callers": 11,
+        "api_consumers": 4,
+        "impact_of": 3,
+        "list_data_access": 3,
+        "search_symbols": 3,
+        "find_references": 1,
+        "list_env_config": 1,
+        "list_routes": 1,
+        "list_tables": 1
+      },
+      "toolSearchCalls": 12
+    }
+  },
+  "categories": {
+    "routes": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 166663,
+        "medianOutputTokens": 1721,
+        "medianToolCalls": 5,
+        "medianTurns": 6,
+        "medianDurationMs": 16909,
+        "medianCostUsd": 0.0056,
+        "spread": {
+          "inputTokens": {
+            "min": 102515,
+            "max": 228945
+          },
+          "toolCalls": {
+            "min": 5,
+            "max": 6
+          },
+          "durationMs": {
+            "min": 13050,
+            "max": 19434
+          },
+          "costUsd": {
+            "min": 0.0041,
+            "max": 0.0112
+          }
+        },
+        "totalCostUsd": 0.038,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 169217.5,
+        "medianOutputTokens": 1823,
+        "medianToolCalls": 4.5,
+        "medianTurns": 5.5,
+        "medianDurationMs": 15381.5,
+        "medianCostUsd": 0.0056,
+        "spread": {
+          "inputTokens": {
+            "min": 106597,
+            "max": 201530
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 6
+          },
+          "durationMs": {
+            "min": 12615,
+            "max": 17605
+          },
+          "costUsd": {
+            "min": 0.0045,
+            "max": 0.0065
+          }
+        },
+        "totalCostUsd": 0.0332,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 1
+      }
+    },
+    "callers": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 105443,
+        "medianOutputTokens": 934,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 12946,
+        "medianCostUsd": 0.0034,
+        "spread": {
+          "inputTokens": {
+            "min": 104989,
+            "max": 105453
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 10888,
+            "max": 15086
+          },
+          "costUsd": {
+            "min": 0.0034,
+            "max": 0.0038
+          }
+        },
+        "totalCostUsd": 0.0106,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 108140,
+        "medianOutputTokens": 1142,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 12078,
+        "medianCostUsd": 0.0037,
+        "spread": {
+          "inputTokens": {
+            "min": 107553,
+            "max": 108219
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 8337,
+            "max": 12602
+          },
+          "costUsd": {
+            "min": 0.0036,
+            "max": 0.0039
+          }
+        },
+        "totalCostUsd": 0.0111,
+        "mcpRuns": 1,
+        "mcpTools": {
+          "find_callers": 1
+        },
+        "toolSearchCalls": 0
+      }
+    },
+    "impact": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 129105,
+        "medianOutputTokens": 1978,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 14598,
+        "medianCostUsd": 0.0051,
+        "spread": {
+          "inputTokens": {
+            "min": 74622,
+            "max": 188185
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 11298,
+            "max": 16942
+          },
+          "costUsd": {
+            "min": 0.0048,
+            "max": 0.0061
+          }
+        },
+        "totalCostUsd": 0.0313,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 110687,
+        "medianOutputTokens": 1473,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 13740.5,
+        "medianCostUsd": 0.0047,
+        "spread": {
+          "inputTokens": {
+            "min": 105037,
+            "max": 169599
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 9267,
+            "max": 23768
+          },
+          "costUsd": {
+            "min": 0.0038,
+            "max": 0.0075
+          }
+        },
+        "totalCostUsd": 0.0314,
+        "mcpRuns": 4,
+        "mcpTools": {
+          "find_callers": 4,
+          "impact_of": 3,
+          "list_routes": 1
+        },
+        "toolSearchCalls": 5
+      }
+    },
+    "data": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 121190,
+        "medianOutputTokens": 2294,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 20513,
+        "medianCostUsd": 0.0063,
+        "spread": {
+          "inputTokens": {
+            "min": 116750,
+            "max": 202552
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 15040,
+            "max": 21293
+          },
+          "costUsd": {
+            "min": 0.0057,
+            "max": 0.0073
+          }
+        },
+        "totalCostUsd": 0.0193,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 167658,
+        "medianOutputTokens": 2536,
+        "medianToolCalls": 5,
+        "medianTurns": 6,
+        "medianDurationMs": 19363,
+        "medianCostUsd": 0.0078,
+        "spread": {
+          "inputTokens": {
+            "min": 127341,
+            "max": 176845
+          },
+          "toolCalls": {
+            "min": 5,
+            "max": 6
+          },
+          "durationMs": {
+            "min": 17131,
+            "max": 20090
+          },
+          "costUsd": {
+            "min": 0.0076,
+            "max": 0.0081
+          }
+        },
+        "totalCostUsd": 0.0234,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "list_data_access": 3,
+          "find_references": 1,
+          "list_tables": 1,
+          "search_symbols": 1
+        },
+        "toolSearchCalls": 3
+      }
+    },
+    "env": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 107072,
+        "medianOutputTokens": 1163,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 8601,
+        "medianCostUsd": 0.0041,
+        "spread": {
+          "inputTokens": {
+            "min": 106676,
+            "max": 143113
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 7813,
+            "max": 11376
+          },
+          "costUsd": {
+            "min": 0.0038,
+            "max": 0.0044
+          }
+        },
+        "totalCostUsd": 0.0123,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 149733,
+        "medianOutputTokens": 2285,
+        "medianToolCalls": 6,
+        "medianTurns": 7,
+        "medianDurationMs": 19092,
+        "medianCostUsd": 0.0052,
+        "spread": {
+          "inputTokens": {
+            "min": 147378,
+            "max": 261327
+          },
+          "toolCalls": {
+            "min": 6,
+            "max": 7
+          },
+          "durationMs": {
+            "min": 16367,
+            "max": 19118
+          },
+          "costUsd": {
+            "min": 0.005,
+            "max": 0.006
+          }
+        },
+        "totalCostUsd": 0.0162,
+        "mcpRuns": 1,
+        "mcpTools": {
+          "list_env_config": 1
+        },
+        "toolSearchCalls": 0
+      }
+    },
+    "frontend-api": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 205763,
+        "medianOutputTokens": 1994,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 15561,
+        "medianCostUsd": 0.0067,
+        "spread": {
+          "inputTokens": {
+            "min": 205616,
+            "max": 231012
+          },
+          "toolCalls": {
+            "min": 4,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 13651,
+            "max": 20763
+          },
+          "costUsd": {
+            "min": 0.0066,
+            "max": 0.0077
+          }
+        },
+        "totalCostUsd": 0.0209,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 160575,
+        "medianOutputTokens": 2174,
+        "medianToolCalls": 9,
+        "medianTurns": 10,
+        "medianDurationMs": 18337,
+        "medianCostUsd": 0.0064,
+        "spread": {
+          "inputTokens": {
+            "min": 158825,
+            "max": 248955
+          },
+          "toolCalls": {
+            "min": 5,
+            "max": 12
+          },
+          "durationMs": {
+            "min": 14599,
+            "max": 18525
+          },
+          "costUsd": {
+            "min": 0.0058,
+            "max": 0.0077
+          }
+        },
+        "totalCostUsd": 0.0199,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "find_callers": 6,
+          "api_consumers": 4,
+          "search_symbols": 2
+        },
+        "toolSearchCalls": 3
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "go-gin-follow-route",
+      "sample": "internet-go-gin-realworld",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 205192,
+            "medianOutputTokens": 1775,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 17929,
+            "medianCostUsd": 0.0064,
+            "spread": {
+              "inputTokens": {
+                "min": 193391,
+                "max": 228945
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 16367,
+                "max": 19434
+              },
+              "costUsd": {
+                "min": 0.0057,
+                "max": 0.0112
+              }
+            },
+            "totalCostUsd": 0.0234,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Handler:** `ProfileFollow` (`users/routers.go:45`), registered at `users/routers.go:30` as `router.POST(\"/:username/follow\", ProfileFollow)`.\n\n**Middleware:** The route itself has no middleware. It gets it from the route group in `hello.go`, and two middlewares run before it:\n\n- `users.AuthMiddleware(false)` at `hello.go:43`, applied to `/api`'s `v1` group.\n- `users.AuthMiddleware(true)` at `hello.go:48`, which is the one that matters for this route.\n\nThe profiles group is created at `hello.go:50` (`users.ProfileRegister(v1.Group(\"/profiles\"))`), after both `v1.Use` calls. In Gin, a group copies its parent's handlers when it is created, so the chain for this route is roughly: global engine middleware → `AuthMiddleware(false)` → `AuthMiddleware(true)` → `ProfileFollow`.\n\nThe `true` argument means that if the token is missing, the middleware aborts with 401 `{\"errors\":{\"token\":[\"is missing\"]}}`. The `false` instance runs first and only sets the user context without rejecting anonymous requests.\n\nThe `GET /:username` profile route is registered earlier, at `hello.go:46`, when the group only had the `false` middleware. So it allows anonymous access, while follow and unfollow require a token.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 16367,
+              "costUsd": 0.01122326,
+              "inputTokens": 12,
+              "outputTokens": 2374,
+              "cacheCreationTokens": 40767,
+              "cacheReadTokens": 188166,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The handler is **`ProfileFollow`** (`users/routers.go:45`), registered at `users/routers.go:30` by `ProfileRegister`.\n\nThe middleware that runs before it is **`users.AuthMiddleware(true)`**, registered at `hello.go:48`. The `true` means it aborts with 401 `{\"errors\":{\"token\":[\"is missing\"]}}` or `\"is invalid\"` when there is no valid token. It also sets `my_user_model` in the context, which `ProfileFollow` reads with `c.MustGet`.\n\nGin builds each group's handler chain when the group is created, so the `/profiles` group at `hello.go:50` also picks up the earlier `v1.Use(users.AuthMiddleware(false))` from `hello.go:43`. The full chain for the follow route is:\n\n1. `AuthMiddleware(false)` (`hello.go:43`): parses the token if present and never rejects.\n2. `AuthMiddleware(true)` (`hello.go:48`): rejects requests without a valid token.\n3. `ProfileFollow`.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 17929,
+              "costUsd": 0.005727980000000001,
+              "inputTokens": 10,
+              "outputTokens": 1775,
+              "cacheCreationTokens": 15293,
+              "cacheReadTokens": 178088,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Handler:** `ProfileFollow` in `users/routers.go:45`. It looks up the target user by `:username`, reads the caller from `c.MustGet(\"my_user_model\")`, calls `myUserModel.following(userModel)`, and returns the profile JSON.\n\n**Middleware:** `users.AuthMiddleware(true)`, registered in `hello.go:48`. The `true` argument means `auto401`: a missing or invalid token gets a 401 response and the chain stops.\n\nThe route is mounted on the `/api/profiles` group at `hello.go:50`, which is created after two `v1.Use` calls. Gin copies a group's middleware when the group is created, so the full chain for this route is:\n\n1. `users.AuthMiddleware(false)` (`hello.go:43`). This runs first, sets the user context to anonymous, and parses any token without rejecting.\n2. `users.AuthMiddleware(true)` (`hello.go:48`). This is the one you asked about. It rejects missing or invalid tokens with 401.\n3. `users.ProfileFollow`.\n\nThe `AuthMiddleware(true)` call is what makes the endpoint require authentication.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 19434,
+              "costUsd": 0.006438180000000001,
+              "inputTokens": 10,
+              "outputTokens": 1629,
+              "cacheCreationTokens": 18794,
+              "cacheReadTokens": 186388,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 196918,
+            "medianOutputTokens": 1889,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 16386,
+            "medianCostUsd": 0.0061,
+            "spread": {
+              "inputTokens": {
+                "min": 158957,
+                "max": 201530
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 12615,
+                "max": 17605
+              },
+              "costUsd": {
+                "min": 0.006,
+                "max": 0.0065
+              }
+            },
+            "totalCostUsd": 0.0186,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Handler:** `ProfileFollow` in `users/routers.go:45`. It looks up the target user by `:username`, reads the caller from the context key `my_user_model`, calls `myUserModel.following(userModel)`, and returns the profile with `following: true`.\n\n**Route registration:** `ProfileRegister` in `users/routers.go:29-32` binds `POST /:username/follow` to `ProfileFollow`. It is mounted in `hello.go:50` as `users.ProfileRegister(v1.Group(\"/profiles\"))`, under the `/api` group.\n\n**Middleware:** The middleware that runs before it is `users.AuthMiddleware(true)`, applied by `v1.Use(users.AuthMiddleware(true))` at `hello.go:48`. The `true` means that a missing or invalid token gets a 401 response. This middleware is what populates `my_user_model`, which `ProfileFollow` depends on.\n\nThere is one detail to be aware of. The same group also has `users.AuthMiddleware(false)` registered earlier (`hello.go:43`). Gin copies a group's handler chain when the group is created, and the `/profiles` group is created after both `Use` calls. So the follow route's chain is actually `AuthMiddleware(false)` → `AuthMiddleware(true)` → `ProfileFollow`. The `false` instance runs first and does not reject anything. It only sets the user context. The `true` instance is the one that enforces authentication.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 12615,
+              "costUsd": 0.006522440000000001,
+              "inputTokens": 10,
+              "outputTokens": 1889,
+              "cacheCreationTokens": 18746,
+              "cacheReadTokens": 182774,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Handler:** `ProfileFollow` in `users/routers.go:45`. It looks up the target user by `:username`, takes the logged-in user from the context (`my_user_model`), calls `following()`, and returns the profile JSON.\n\n**Middleware:** `users.AuthMiddleware(true)`, registered at `hello.go:48` with `v1.Use(...)`, just before `users.ProfileRegister(v1.Group(\"/profiles\"))` at `hello.go:50`. The `true` is `auto401`, so a missing or invalid token gets a 401 response and the request stops before `ProfileFollow` runs.\n\nThe route also inherits an earlier `users.AuthMiddleware(false)` from `hello.go:43`. That one runs first. It sets the user context when a valid token is present and does not reject anonymous requests. So the full chain for `POST /api/profiles/:username/follow` is `AuthMiddleware(false)` → `AuthMiddleware(true)` → `ProfileFollow`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 16386,
+              "costUsd": 0.00599837,
+              "inputTokens": 8,
+              "outputTokens": 1774,
+              "cacheCreationTokens": 18532,
+              "cacheReadTokens": 140417,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Handler:** `ProfileFollow` in `users/routers.go:45`. It looks up the target user by `:username`, calls `myUserModel.following(userModel)`, and returns the profile with `following: true`.\n\n**Middleware:** `users.AuthMiddleware(true)`, registered in `hello.go:48`. The `true` argument means `auto401`: a missing or invalid token gets a 401 response and the request stops before `ProfileFollow` runs.\n\nThe route is registered at `hello.go:50` via `users.ProfileRegister(v1.Group(\"/profiles\"))`, which is after the `v1.Use(users.AuthMiddleware(true))` call. Gin copies a group's handlers when the group is created, so the chain for this route is:\n\n1. Gin default middleware (Logger, Recovery)\n2. `AuthMiddleware(false)` from `hello.go:43`, which only parses the token when one is present and never rejects\n3. `AuthMiddleware(true)` from `hello.go:48`, which rejects the request if the token is missing or invalid\n4. `ProfileFollow`\n\n`ProfileFollow` reads `my_user_model` from the context with `MustGet`, which is safe only because the `true` middleware guarantees it is set.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 17605,
+              "costUsd": 0.0060535400000000005,
+              "inputTokens": 10,
+              "outputTokens": 1998,
+              "cacheCreationTokens": 16234,
+              "cacheReadTokens": 180674,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-gin-find-article-callers",
+      "sample": "internet-go-gin-realworld",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 105443,
+            "medianOutputTokens": 934,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 12946,
+            "medianCostUsd": 0.0034,
+            "spread": {
+              "inputTokens": {
+                "min": 104989,
+                "max": 105453
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 10888,
+                "max": 15086
+              },
+              "costUsd": {
+                "min": 0.0034,
+                "max": 0.0038
+              }
+            },
+            "totalCostUsd": 0.0106,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Nine production functions call `FindOneArticle`, all in `articles/routers.go`. The only other hit is its definition in `articles/models.go:151`, which doesn't call it.\n\n| Function | Call site | Notes |\n|---|---|---|\n| `ArticleRetrieve` | `routers.go:101` | |\n| `ArticleUpdate` | `routers.go:115` | Also calls it at line 185, after the update, to reload the article by its possibly new slug |\n| `ArticleDelete` | `routers.go:196` | |\n| `ArticleFavorite` | `routers.go:216` | |\n| `ArticleUnfavorite` | `routers.go:232` | |\n| `ArticleCommentCreate` | `routers.go:248` | |\n| `ArticleCommentDelete` | `routers.go:270` | |\n| `ArticleCommentList` | `routers.go:301` | |\n\n`ArticleUpdate` is the only function with two calls. The `ArticleCreate`, `ArticleList`, and `ArticleFeed` handlers don't use it.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10888,
+              "costUsd": 0.00381765,
+              "inputTokens": 6,
+              "outputTokens": 960,
+              "cacheCreationTokens": 12038,
+              "cacheReadTokens": 92945,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Nine production call sites, all in `articles/routers.go`. Each is inside a Gin handler:\n\n| Line | Handler |\n|---|---|\n| 101 | `ArticleRetrieve` |\n| 115 | `ArticleUpdate` |\n| 185 | `ArticleUpdate` (re-fetch after slug change) |\n| 196 | `ArticleDelete` |\n| 216 | `ArticleFavorite` |\n| 232 | `ArticleUnfavorite` |\n| 248 | `ArticleCommentCreate` |\n| 270 | `ArticleCommentDelete` |\n| 301 | `ArticleCommentList` |\n\nSo the distinct functions are `ArticleRetrieve`, `ArticleUpdate`, `ArticleDelete`, `ArticleFavorite`, `ArticleUnfavorite`, `ArticleCommentCreate`, `ArticleCommentDelete`, and `ArticleCommentList`. All are in `articles/routers.go`.\n\nThe only other production occurrence is the definition itself at `articles/models.go:151`. Every other match is in `articles/unit_test.go`, which I excluded.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 15086,
+              "costUsd": 0.00339319,
+              "inputTokens": 6,
+              "outputTokens": 934,
+              "cacheCreationTokens": 9848,
+              "cacheReadTokens": 95599,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`FindOneArticle` is called from 9 production sites, all in `articles/routers.go`. It is defined in `articles/models.go:151`, and nothing else in production code calls it.\n\nCalling functions (router handlers):\n\n| Function | Call sites (`articles/routers.go`) |\n|---|---|\n| `ArticleRetrieve` | line 101 |\n| `ArticleUpdate` | lines 115, 185 |\n| `ArticleDelete` | line 196 |\n| `ArticleFavorite` | line 216 |\n| `ArticleUnfavorite` | line 232 |\n| `ArticleCommentCreate` | line 248 |\n| `ArticleCommentDelete` | line 270 |\n| `ArticleCommentList` | line 301 |\n\n`ArticleUpdate` calls it twice: once to load the article at line 115, and again at line 185 to reload it under `finalSlug` after the update. `ArticleCreate`, `ArticleList`, and `ArticleFeed` do not call it.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12946,
+              "costUsd": 0.0033743300000000005,
+              "inputTokens": 6,
+              "outputTokens": 898,
+              "cacheCreationTokens": 9844,
+              "cacheReadTokens": 95593,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 108140,
+            "medianOutputTokens": 1142,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 12078,
+            "medianCostUsd": 0.0037,
+            "spread": {
+              "inputTokens": {
+                "min": 107553,
+                "max": 108219
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 8337,
+                "max": 12602
+              },
+              "costUsd": {
+                "min": 0.0036,
+                "max": 0.0039
+              }
+            },
+            "totalCostUsd": 0.0111,
+            "mcpRuns": 1,
+            "mcpTools": {
+              "find_callers": 1
+            },
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`FindOneArticle` is called in production code only from `articles/routers.go`, in these handlers:\n\n- `ArticleRetrieve` (`articles/routers.go:101`)\n- `ArticleUpdate` (`articles/routers.go:115` and `:185`, the second call re-fetches after a slug change)\n- `ArticleDelete` (`articles/routers.go:196`)\n- `ArticleFavorite` (`articles/routers.go:216`)\n- `ArticleUnfavorite` (`articles/routers.go:232`)\n- `ArticleCommentCreate` (`articles/routers.go:248`)\n- `ArticleCommentDelete` (`articles/routers.go:270`)\n- `ArticleCommentList` (`articles/routers.go:301`)\n\nThat is 9 call sites across 8 functions. The definition is at `articles/models.go:151`. I found these with a repo-wide text search, not the code graph, because the `find_callers` call failed on a missing `name` argument. A plain identifier search is exhaustive for a direct call like this, so I didn't retry it.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8337,
+              "costUsd": 0.00371086,
+              "inputTokens": 6,
+              "outputTokens": 1142,
+              "cacheCreationTokens": 10827,
+              "cacheReadTokens": 97386,
+              "toolCalls": 3,
+              "toolsByName": {
+                "mcp__concentrate__find_callers": 1,
+                "Grep": 2
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_callers",
+                  "input": {},
+                  "result": "Missing required string argument: name",
+                  "isError": true
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`FindOneArticle` is called from 9 places in production code, all in `articles/routers.go`. Its only other occurrence is the definition at `articles/models.go:151`.\n\n| Function | Call site |\n|---|---|\n| `ArticleRetrieve` | `articles/routers.go:101` |\n| `ArticleUpdate` | `articles/routers.go:115`, and again at `:185` (re-fetch by `finalSlug` after the slug changes) |\n| `ArticleDelete` | `articles/routers.go:196` |\n| `ArticleFavorite` | `articles/routers.go:216` |\n| `ArticleUnfavorite` | `articles/routers.go:232` |\n| `ArticleCommentCreate` | `articles/routers.go:248` |\n| `ArticleCommentDelete` | `articles/routers.go:270` |\n| `ArticleCommentList` | `articles/routers.go:301` |\n\nI matched the name with a text search and mapped each line to its enclosing function, so this doesn't cover indirect callers that reach it through another function.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12078,
+              "costUsd": 0.0035710100000000003,
+              "inputTokens": 6,
+              "outputTokens": 1009,
+              "cacheCreationTokens": 10476,
+              "cacheReadTokens": 97071,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The only production callers are handler functions in `articles/routers.go`. `FindOneArticle` itself is defined at `articles/models.go:151`.\n\n| Function | File:line | Route (per AGENTS.md) |\n|---|---|---|\n| `ArticleRetrieve` | `articles/routers.go:101` | `GET /api/articles/:slug` |\n| `ArticleUpdate` | `articles/routers.go:115`, `:185` | `PUT /api/articles/:slug` |\n| `ArticleDelete` | `articles/routers.go:196` | `DELETE /api/articles/:slug` |\n| `ArticleFavorite` | `articles/routers.go:216` | `POST /api/articles/:slug/favorite` |\n| `ArticleUnfavorite` | `articles/routers.go:232` | `DELETE /api/articles/:slug/favorite` |\n| `ArticleCommentCreate` | `articles/routers.go:248` | `POST /api/articles/:slug/comments` |\n| `ArticleCommentDelete` | `articles/routers.go:270` | `DELETE /api/articles/:slug/comments/:id` |\n| `ArticleCommentList` | `articles/routers.go:301` | `GET /api/articles/:slug/comments` |\n\n`ArticleUpdate` calls it twice: once at line 115 to load the article, and again at line 185 to reload it under the new slug after a title change.\n\n`ArticleList`, `ArticleFeed`, and `ArticleCreate` do not call it. Nothing outside `articles/routers.go` calls it in production code.\n\nI ran a text search for the name rather than the code-graph tool, so this covers direct references only. Calls made through a function value or an interface would not show up, but a search for the name would have caught them.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12602,
+              "costUsd": 0.00385862,
+              "inputTokens": 6,
+              "outputTokens": 1460,
+              "cacheCreationTokens": 10772,
+              "cacheReadTokens": 97362,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-gin-find-user-impact",
+      "sample": "internet-go-gin-realworld",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 76613,
+            "medianOutputTokens": 1983,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 14143,
+            "medianCostUsd": 0.0049,
+            "spread": {
+              "inputTokens": {
+                "min": 74622,
+                "max": 116336
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 11298,
+                "max": 15053
+              },
+              "costUsd": {
+                "min": 0.0048,
+                "max": 0.0055
+              }
+            },
+            "totalCostUsd": 0.0152,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "If `FindOneUser` changes, five routes are affected. The function is called only from `users/routers.go`, and the grep found no other production callers.\n\n| Method & path | Handler | Call site |\n|---|---|---|\n| `POST /api/users` (also `POST /api/users/`) | `UsersRegistration` | `users/routers.go:87` and `:91` (duplicate username/email pre-check), and `:103` (after a unique-constraint violation, to decide whether the field is username or email) |\n| `POST /api/users/login` | `UsersLogin` | `users/routers.go:123` (lookup by email) |\n| `GET /api/profiles/:username` | `ProfileRetrieve` | `users/routers.go:36` |\n| `POST /api/profiles/:username/follow` | `ProfileFollow` | `users/routers.go:47` |\n| `DELETE /api/profiles/:username/follow` | `ProfileUnfollow` | `users/routers.go:64` |\n\nThe route registrations are in `users/routers.go` (`UsersRegister`, `ProfileRetrieveRegister`, `ProfileRegister`) and `hello.go:42–50`. The `/api` prefix comes from the group in `hello.go:41`.\n\nTwo other things could be affected indirectly:\n\n- **Not affected:** `GET /api/user`, `PUT /api/user`, and every `/api/articles*` and `/api/tags` route. Their handlers don't call `FindOneUser`. `AuthMiddleware` loads the current user with `db.First` directly, not through `FindOneUser`.\n- **Unit tests:** `users/unit_test.go:710` and `:734` call it directly. These are not HTTP routes, but they will exercise any change.\n\nBehavior to watch in these handlers: registration and the 409 checks treat `err == nil` as \"exists\", so any new error return would change conflict detection. Login and the profile handlers map every error to 401 or 404, so a database error would be reported as \"not found\" or \"invalid credentials\" unless the change distinguishes it.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 11298,
+              "costUsd": 0.0049007600000000005,
+              "inputTokens": 4,
+              "outputTokens": 1973,
+              "cacheCreationTokens": 16672,
+              "cacheReadTokens": 57946,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "If `FindOneUser` changes, these five routes are affected. Every route is registered in `hello.go` under the `/api` group.\n\n| Method & path | Handler | Call site |\n|---|---|---|\n| `GET /api/profiles/:username` | `ProfileRetrieve` (`users/routers.go:35`) | `routers.go:36` |\n| `POST /api/profiles/:username/follow` | `ProfileFollow` (`users/routers.go:46`) | `routers.go:47` |\n| `DELETE /api/profiles/:username/follow` | `ProfileUnfollow` (`users/routers.go:63`) | `routers.go:64` |\n| `POST /api/users` and `POST /api/users/` | `UsersRegistration` (`users/routers.go:76`) | `routers.go:87`, `91`, and `103` (the last only on a duplicate-key error during save) |\n| `POST /api/users/login` | `UsersLogin` (`users/routers.go:117`) | `routers.go:123` |\n\nThese routes do not call `FindOneUser` and are not affected: `GET /api/user`, `PUT /api/user` and its trailing-slash variants (`UserRetrieve`, `UserUpdate`), and every route in `articles/`. The auth middleware and the article handlers get the current user from the request context instead.\n\nCallers outside the route handlers are the tests in `users/unit_test.go` (lines 710 and 734).\n\nIf only the function body changes, these routes keep their signatures but may change behavior. Every call site treats any error as \"not found\", so a change that returns a different error for database failures would turn some of these into different status codes. If the signature changes, all the call sites above and the tests would need updating.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 14143,
+              "costUsd": 0.00484074,
+              "inputTokens": 4,
+              "outputTokens": 1983,
+              "cacheCreationTokens": 16225,
+              "cacheReadTokens": 60384,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changing `FindOneUser` in `users/models.go` affects five routes, all in the `users` package. Its only callers are in `users/routers.go` (plus the tests in `users/unit_test.go`).\n\n| Method | Full path | Handler | `FindOneUser` call (routers.go) |\n|---|---|---|---|\n| GET | `/api/profiles/:username` | `ProfileRetrieve` | line 36, lookup by `Username` |\n| POST | `/api/profiles/:username/follow` | `ProfileFollow` | line 47, lookup by `Username` |\n| DELETE | `/api/profiles/:username/follow` | `ProfileUnfollow` | line 64, lookup by `Username` |\n| POST | `/api/users` (also `/api/users/`) | `UsersRegistration` | lines 87 and 91 (username and email pre-checks), and line 103 on the duplicate-key path |\n| POST | `/api/users/login` | `UsersLogin` | line 123, lookup by `Email` |\n\nThe `/api/users` path is registered twice, once with `\"\"` and once with `\"/\"` (routers.go:13–14). Both reach `UsersRegistration`. The paths come from the group mounts in `hello.go:41–50`.\n\nTwo things would break if `FindOneUser` changed:\n\n- **Error semantics.** Every caller treats any non-nil error as \"not found\" or \"does not exist\". A change that returns a different error for a database failure would turn those into 404s, 401s, or a false \"available\" for registration.\n- **Tests.** `users/unit_test.go:710` and `:734` call `FindOneUser` directly, so a signature change would break them too.\n\nThe auth middleware and `UserRetrieve`/`UserUpdate` do not call `FindOneUser`, so they are not affected.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 15053,
+              "costUsd": 0.005458,
+              "inputTokens": 6,
+              "outputTokens": 2037,
+              "cacheCreationTokens": 17240,
+              "cacheReadTokens": 99090,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 165158,
+            "medianOutputTokens": 2585,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 16131,
+            "medianCostUsd": 0.0069,
+            "spread": {
+              "inputTokens": {
+                "min": 115423,
+                "max": 169599
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 15432,
+                "max": 23768
+              },
+              "costUsd": {
+                "min": 0.0054,
+                "max": 0.0075
+              }
+            },
+            "totalCostUsd": 0.0198,
+            "mcpRuns": 1,
+            "mcpTools": {
+              "find_callers": 1,
+              "list_routes": 1
+            },
+            "toolSearchCalls": 2
+          },
+          "runs": [
+            {
+              "answer": "Five handlers call `FindOneUser` directly, and they cover six route registrations. `hello.go` mounts everything under `/api`.\n\n| Method & path | Handler | How it uses `FindOneUser` |\n|---|---|---|\n| `POST /api/users` and `POST /api/users/` | `UsersRegistration` (`users/routers.go:80`) | Three calls: username and email uniqueness pre-checks (lines 87, 91), and a re-query on duplicate-key error to attribute the conflict (line 103). |\n| `POST /api/users/login` | `UsersLogin` (`users/routers.go:117`) | Looks up by email (line 123). An error becomes 401. |\n| `GET /api/profiles/:username` | `ProfileRetrieve` (`users/routers.go:34`) | Looks up by username (line 36). An error becomes 404. |\n| `POST /api/profiles/:username/follow` | `ProfileFollow` (`users/routers.go:45`) | Looks up the target by username (line 47). An error becomes 404. |\n| `DELETE /api/profiles/:username/follow` | `ProfileUnfollow` (`users/routers.go:62`) | Looks up the target by username (line 64). An error becomes 404. |\n\nRoutes that do not call it directly: `GET /api/user`, `GET /api/user/` (`UserRetrieve`), and `PUT /api/user`, `PUT /api/user/` (`UserUpdate`). `UserUpdate` uses `SaveOne`, not `FindOneUser`. The auth middleware in `users/middlewares.go` does not call it either, because a repo-wide search for the identifier only hits `users/routers.go`, `users/models.go`, and `users/unit_test.go`.\n\nThe change would also reach the tests that call it directly, at `users/unit_test.go:710` and `:734`.\n\nTwo things that would change behavior:\n- **Not-found semantics.** Every caller treats any non-nil error as \"not found,\" so returning an error for a different reason, such as a database failure, would be reported to clients as a 404, 401, or \"available\" username or email.\n- **Return value.** Registration only checks `err == nil` to detect a duplicate, so the signature and the meaning of a nil error both matter there.\n\nI used a repo-wide grep for the identifier rather than the concentrate `find_callers` tool, which I had only just loaded. The grep covers every direct call site.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 23768,
+              "costUsd": 0.00687761,
+              "inputTokens": 8,
+              "outputTokens": 2585,
+              "cacheCreationTokens": 20699,
+              "cacheReadTokens": 144451,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "ToolSearch": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Five routes are affected, all in `users/routers.go`. Each handler calls `FindOneUser` directly, and nothing outside the `users` package calls it.\n\n| Method & path | Handler | Line calling `FindOneUser` | Notes |\n|---|---|---|---|\n| `GET /api/profiles/:username` | `ProfileRetrieve` | 36 | Returns 404 if the lookup fails |\n| `POST /api/profiles/:username/follow` | `ProfileFollow` | 47 | Returns 404 if the lookup fails |\n| `DELETE /api/profiles/:username/follow` | `ProfileUnfollow` | 64 | Returns 404 if the lookup fails |\n| `POST /api/users` and `POST /api/users/` | `UsersRegistration` | 87, 91 (pre-checks), 103 (only after a duplicate-key error on save) | Lookups by username and email decide the 409 responses |\n| `POST /api/users/login` | `UsersLogin` | 123 | Looks up by email; failure returns 401 |\n\nThe `/api` prefix comes from `hello.go` (lines 41–50), which mounts `users.UsersRegister` under `/users` and `users.ProfileRetrieveRegister` and `users.ProfileRegister` under `/profiles`.\n\nRoutes that do not call `FindOneUser` and are unaffected: `GET /api/user` (`UserRetrieve`) and `PUT /api/user` (`UserUpdate`). `UserUpdate` persists through `SaveOne`. `AuthMiddleware` loads the current user with `db.First` in `UpdateContextUserModel`, not `FindOneUser`, so no route gets an indirect dependency through it.\n\nTwo non-HTTP dependents also exist: `users/unit_test.go` calls `FindOneUser` at lines 710 and 734, so those tests would need updating too.\n\nI found these with a text search for `FindOneUser` and by reading the route registrations, not the concentrate code graph, so a graph query (`find_callers` on `FindOneUser`) would be a cross-check if you want one.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 15432,
+              "costUsd": 0.007543760000000001,
+              "inputTokens": 8,
+              "outputTokens": 2652,
+              "cacheCreationTokens": 23795,
+              "cacheReadTokens": 145796,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changing `FindOneUser` in `users/models.go:83` affects **6 HTTP routes**, handled by **5 handler functions**. Those are the only production callers; the grep and the call graph agree, and the graph reports no unresolved calls.\n\n| Method | Full path | Handler | Call sites in handler (`users/routers.go`) |\n|---|---|---|---|\n| POST | `/api/users` | `UsersRegistration` | lines 87, 91 (pre-checks), 103 (duplicate-key recheck) |\n| POST | `/api/users/` | `UsersRegistration` | same as above |\n| POST | `/api/users/login` | `UsersLogin` | line 123 |\n| GET | `/api/profiles/:username` | `ProfileRetrieve` | line 36 |\n| POST | `/api/profiles/:username/follow` | `ProfileFollow` | line 47 |\n| DELETE | `/api/profiles/:username/follow` | `ProfileUnfollow` | line 64 |\n\nThe route registrations are at `users/routers.go:13-14`, `:15`, `:26`, `:30` and `:31`. `UsersRegistration` is registered on both the empty and the trailing-slash path, so each of those counts as its own route.\n\nTwo things to check if you change the function's behaviour:\n- `UsersRegistration` uses `FindOneUser` as an existence check. A `nil` error means the name or email is taken and returns 409. Any change to error semantics, such as returning a different error for \"not found\" versus a DB failure, changes registration and login responses.\n- `UsersLogin` and the profile handlers treat any error as \"not found\" or \"invalid credentials\", so the same change can alter 401 and 404 responses.\n\nThe other callers are two unit tests in `users/unit_test.go:710` and `:734`. Routes that do not call `FindOneUser` directly, such as `GET /api/user` and `PUT /api/user`, are not affected.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 16131,
+              "costUsd": 0.00535013,
+              "inputTokens": 6,
+              "outputTokens": 2028,
+              "cacheCreationTokens": 16744,
+              "cacheReadTokens": 98673,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__find_callers": 1,
+                "mcp__concentrate__list_routes": 1,
+                "Read": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "FindOneUser"
+                  },
+                  "result": "{\"query\":{\"name\":\"FindOneUser\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"FindOneUser\",\"caller\":\"ProfileRetrieve\",\"callerKind\":\"Function\",\"file\":\"users/routers.go\",\"line\":36,\"expression\":\"FindOneUser\",\"relationship\":\"CALLS\"},{\"target\":\"FindOneUser\",\"caller\":\"ProfileFollow\",\"callerKind\":\"Function\",\"file\":\"users/routers.go\",\"line\":47,\"expression\":\"FindOneUser\",\"relationship\":\"CALLS\"},{\"target\":\"FindOneUser\",\"caller\":\"ProfileUnfollow\",\"callerKind\":\"Function\",\"file\":\"users/routers.go\",\"line\":64,\"expression\":\"FindOneUser\",\"relationship\":\"CALLS\"},{\"target\":\"FindOneUser\",\"caller\":\"UsersRegistration\",\"callerKind\":\"Function\",\"file\":\"users/routers.go\",\"line\":87,\"expression\":\"FindOneUser\",\"relationship\":\"CALLS\"},{\"target\":\"FindOneUser\",\"caller\":\"UsersRegistration\",\"callerKind\":\"Function\",\"file\":\"users/routers.go\",\"line\":91,\"expression\":\"FindOneUser\",\"relationship\":\"CALLS\"},{\"target\":\"FindOneUser\",\"caller\":\"UsersRegistration\",\"callerKind\":\"Function\",\"file\":\"users/routers.go\",\"line\":103,\"expression\":\"FindOneUser\",\"relationship\":\"CALLS\"},{\"target\":\"FindOneUser\",\"caller\":\"UsersLogin\",\"callerKind\":\"Function\",\"file\":\"users/routers.go\",\"line\":123,\"expression\":\"FindOneUser\",\"relationship\":\"CALLS\"},{\"target\":\"FindOneUser\",\"caller\":\"TestUsersRegistrationWithImage\",\"callerKind\":\"Function\",\"file\":\"users/unit_test.go\",\"line\":710,\"expression\":\"FindOneUser\",\"relationship\":\"CALLS\"},{\"target\":\"FindOneUser\",\"caller\":\"TestUsersRegistrationOverlongPasswordRejected\",\"callerKind\":\"Function\",\"file\":\"users/unit_test.go\",\"line\":734,\"expression\":\"FindOneUser\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named FindOneUser in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":9}}",
+                  "isError": false
+                },
+                {
+                  "tool": "list_routes",
+                  "input": {
+                    "file": "users/routers.go"
+                  },
+                  "result": "{\"query\":{\"file\":\"users/routers.go\",\"limit\":50},\"routes\":[{\"file\":\"users/routers.go\",\"line\":13,\"method\":\"POST\",\"path\":\"\",\"fullPath\":\"/api/users\",\"framework\":\"gin\",\"handlerName\":\"UsersRegistration\",\"handler\":\"UsersRegistration\"},{\"file\":\"users/routers.go\",\"line\":14,\"method\":\"POST\",\"path\":\"/\",\"fullPath\":\"/api/users/\",\"framework\":\"gin\",\"handlerName\":\"UsersRegistration\",\"handler\":\"UsersRegistration\"},{\"file\":\"users/routers.go\",\"line\":15,\"method\":\"POST\",\"path\":\"/login\",\"fullPath\":\"/api/users/login\",\"framework\":\"gin\",\"handlerName\":\"UsersLogin\",\"handler\":\"UsersLogin\"},{\"file\":\"users/routers.go\",\"line\":19,\"method\":\"GET\",\"path\":\"\",\"fullPath\":\"/api/user\",\"framework\":\"gin\",\"handlerName\":\"UserRetrieve\",\"handler\":\"UserRetrieve\"},{\"file\":\"users/routers.go\",\"line\":20,\"method\":\"GET\",\"path\":\"/\",\"fullPath\":\"/api/user/\",\"framework\":\"gin\",\"handlerName\":\"UserRetrieve\",\"handler\":\"UserRetrieve\"},{\"file\":\"users/routers.go\",\"line\":21,\"method\":\"PUT\",\"path\":\"\",\"fullPath\":\"/api/user\",\"framework\":\"gin\",\"handlerName\":\"UserUpdate\",\"handler\":\"UserUpdate\"},{\"file\":\"users/routers.go\",\"line\":22,\"method\":\"PUT\",\"path\":\"/\",\"fullPath\":\"/api/user/\",\"framework\":\"gin\",\"handlerName\":\"UserUpdate\",\"handler\":\"UserUpdate\"},{\"file\":\"users/routers.go\",\"line\":26,\"method\":\"GET\",\"path\":\"/:username\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"gin\",\"handlerName\":\"ProfileRetrieve\",\"handler\":\"ProfileRetrieve\"},{\"file\":\"users/routers.go\",\"line\":30,\"method\":\"POST\",\"path\":\"/:username/follow\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"gin\",\"handlerName\":\"ProfileFollow\",\"handler\":\"ProfileFollow\"},{\"file\":\"users/routers.go\",\"line\":31,\"method\":\"DELETE\",\"path\":\"/:username/follow\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"gin\",\"handlerName\":\"ProfileUnfollow\",\"handler\":\"ProfileUnfollow\"}],\"page\":{\"offset\":0,\"returned\":10}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-gin-favorites-table",
+      "sample": "internet-go-gin-realworld",
+      "category": "data",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 121190,
+            "medianOutputTokens": 2294,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 20513,
+            "medianCostUsd": 0.0063,
+            "spread": {
+              "inputTokens": {
+                "min": 116750,
+                "max": 202552
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 15040,
+                "max": 21293
+              },
+              "costUsd": {
+                "min": 0.0057,
+                "max": 0.0073
+              }
+            },
+            "totalCostUsd": 0.0193,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The `favorite_models` table is touched by 9 functions in `articles/models.go`. Only two of them write to it.\n\n**Writes**\n\n- **`ArticleModel.favoriteBy(user ArticleUserModel)`** (`articles/models.go:129`): `FirstOrCreate` on `FavoriteID` + `FavoriteByID`, so it inserts a row if none exists. Called from `ArticleFavorite` (`articles/routers.go:222`).\n- **`ArticleModel.unFavoriteBy(user ArticleUserModel)`** (`articles/models.go:139`): `Delete(&FavoriteModel{})` filtered on `favorite_id` and `favorite_by_id`. Because `FavoriteModel` embeds `gorm.Model`, this is a soft delete that sets `deleted_at`. Called from `ArticleUnfavorite` (`articles/routers.go:238`).\n\n**Reads**\n\n- **`ArticleModel.favoritesCount()`** (`articles/models.go:68`): counts rows for one article. Called from the single-article serializer (`articles/serializers.go:81`).\n- **`ArticleModel.isFavoriteBy(user)`** (`articles/models.go:77`): checks whether a given user favorited one article. Called from `articles/serializers.go:80`.\n- **`BatchGetFavoriteCounts(articleIDs)`** (`articles/models.go:88`): groups counts by `favorite_id` for many articles. Used by the list serializer at `articles/serializers.go:142`.\n- **`BatchGetFavoriteStatus(articleIDs, userID)`** (`articles/models.go:113`): returns which of the given articles this user favorited. Used at `articles/serializers.go:146`.\n- **`FindManyArticle(...)`** (`articles/models.go:178`): when the `favorited` query parameter is set, it joins `favorite_models` on `favorite_id` and filters on `favorite_by_id` and `deleted_at IS NULL` (around lines 215–226). It only reads.\n\n**Not reads or writes, but touch the table**\n\n- `hello.go:19` runs `AutoMigrate(&articles.FavoriteModel{})` to create the schema.\n- `articles/unit_test.go` runs `AutoMigrate` on the table in test setup and exercises the functions above.\n\n**Things worth knowing**\n\n- `unFavoriteBy` ignores rows affected, so unfavoriting an article the user never favorited returns no error.\n- Because the delete is soft, `FirstOrCreate` will insert a new row on re-favorite. The table has no unique index on `(favorite_id, favorite_by_id)`, so two concurrent favorites by the same user could create duplicate rows.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 20513,
+              "costUsd": 0.005698419999999999,
+              "inputTokens": 6,
+              "outputTokens": 1916,
+              "cacheCreationTokens": 18802,
+              "cacheReadTokens": 97942,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The `FavoriteModel` table is touched by 11 functions in the `articles` package. Two of them write to it: `favoriteBy` and `unFavoriteBy`. Everything else only reads.\n\n**Writers**\n\n- `favoriteBy` (`articles/models.go:129`) inserts a row using `FirstOrCreate` keyed on `FavoriteID` and `FavoriteByID`. It is called from the favorite route (`articles/routers.go:222`).\n- `unFavoriteBy` (`articles/models.go:139`) soft-deletes matching rows with `Delete(&FavoriteModel{})`. It is called from the unfavorite route (`articles/routers.go:238`).\n\n**Readers**\n\n- `favoritesCount` (`articles/models.go:68`) counts rows for one article. It is used by `ArticleSerializer.Response` (`articles/serializers.go:81`).\n- `isFavoriteBy` (`articles/models.go:77`) checks whether one user favorited one article. It is used by `ArticleSerializer.Response` (`articles/serializers.go:80`).\n- `BatchGetFavoriteCounts` (`articles/models.go:88`) returns counts for many articles in one grouped query. It is used by the list serializer (`articles/serializers.go:142`).\n- `BatchGetFavoriteStatus` (`articles/models.go:113`) returns which of many articles a user favorited. It is used by the list serializer (`articles/serializers.go:146`).\n- `FindManyArticle` (`articles/models.go:178`) filters by `favorited` through a `JOIN favorite_models` (`articles/models.go:225`). It is called from the article list route (`articles/routers.go:72`).\n- `GetArticleFeed` (`articles/models.go:252`) does not query `favorite_models`. It is listed here only because it is in the same query path.\n\n**Schema and other paths**\n\n- `hello.go:19` runs `AutoMigrate(&articles.FavoriteModel{})`. This changes the schema, not the rows.\n- Nothing else writes favorites. `SaveOne` on articles (`articles/routers.go:51`, `:260`) saves `ArticleModel` and `CommentModel`, which have no favorite association. `DeleteArticleModel` (`articles/models.go:382`) soft-deletes the article and leaves its favorite rows alone.\n- The `ArticleUserModel.FavoriteModels` field (`articles/models.go:29`) is never used for reads or writes in the code.\n\n**Things to be aware of**\n\n- `favoriteBy` is a check-then-insert, and the `FavoriteModel` struct has no unique index on `(favorite_id, favorite_by_id)`. Two concurrent favorite requests from the same user could create duplicate rows, which would inflate `favoritesCount`.\n- The `_test.go` files call `favoriteBy` and `unFavoriteBy` as setup, but those are test-only writes.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 21293,
+              "costUsd": 0.007258130000000001,
+              "inputTokens": 10,
+              "outputTokens": 2765,
+              "cacheCreationTokens": 20259,
+              "cacheReadTokens": 182283,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Writers (2 functions, both in `articles/models.go`):**\n\n- **`ArticleModel.favoriteBy(user)`** (`models.go:129`) inserts a row with `FirstOrCreate` keyed on `FavoriteID` and `FavoriteByID`. Called from `ArticleFavorite` (`routers.go:222`), the `POST /api/articles/:slug/favorite` handler.\n- **`ArticleModel.unFavoriteBy(user)`** (`models.go:139`) deletes matching rows with `Delete(&FavoriteModel{})`. Called from `ArticleUnfavorite` (`routers.go:238`), the `DELETE /api/articles/:slug/favorite` handler.\n\nBecause `FavoriteModel` embeds `gorm.Model`, that delete is a soft delete. The row stays with `deleted_at` set.\n\n**Readers (no writes):**\n\n- **`ArticleModel.favoritesCount()`** (`models.go:68`) counts rows for one article. Used by `ArticleSerializer.Response` (`serializers.go:81`).\n- **`ArticleModel.isFavoriteBy(user)`** (`models.go:77`) checks whether one user has a row for one article. Used by `ArticleSerializer.Response` (`serializers.go:80`).\n- **`BatchGetFavoriteCounts(ids)`** (`models.go:88`) returns counts per article in one grouped query. Used by the list serializer (`serializers.go:142`).\n- **`BatchGetFavoriteStatus(ids, userID)`** (`models.go:113`) returns which of those articles a user favorited. Used by the list serializer (`serializers.go:146`).\n- **`FindManyArticle(...)`** (`models.go:178`) reads the table through a raw `JOIN favorite_models` when filtering by `?favorited=username` (`models.go:225-226`).\n\n**Other references:** `hello.go:19` runs `AutoMigrate(&articles.FavoriteModel{})`. The `unit_test.go` files also migrate and exercise the table, but they are tests, not application code.\n\n**Things I noticed while reading:**\n\n- `FirstOrCreate` ignores soft-deleted rows. After an unfavorite, a re-favorite inserts a new row, so repeated toggles accumulate soft-deleted rows.\n- `FavoriteModel` has no unique index on `(favorite_id, favorite_by_id)`. Two concurrent favorites by the same user could create duplicate rows, which would inflate `favoritesCount`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 15040,
+              "costUsd": 0.006310110000000001,
+              "inputTokens": 6,
+              "outputTokens": 2294,
+              "cacheCreationTokens": 20793,
+              "cacheReadTokens": 100391,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 167658,
+            "medianOutputTokens": 2536,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 19363,
+            "medianCostUsd": 0.0078,
+            "spread": {
+              "inputTokens": {
+                "min": 127341,
+                "max": 176845
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 17131,
+                "max": 20090
+              },
+              "costUsd": {
+                "min": 0.0076,
+                "max": 0.0081
+              }
+            },
+            "totalCostUsd": 0.0234,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "list_data_access": 3,
+              "find_references": 1,
+              "list_tables": 1,
+              "search_symbols": 1
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "**Writers: two functions.** Both are methods on `ArticleModel` in `articles/models.go`:\n\n- **`favoriteBy`** (`models.go:129`) runs `FirstOrCreate` on `FavoriteModel`, inserting a row if none exists. It's called from the favorite handler at `articles/routers.go:222`.\n- **`unFavoriteBy`** (`models.go:139`) runs `Where(...).Delete(&FavoriteModel{})`. Because `FavoriteModel` embeds `gorm.Model`, this is a soft delete that sets `deleted_at`. It's called from the unfavorite handler at `articles/routers.go:238`.\n\n**Readers: six functions, plus one raw-SQL reader.**\n\n- **`favoritesCount`** (`models.go:68`) counts rows for one article. It's called from `serializers.go:81`.\n- **`isFavoriteBy`** (`models.go:77`) checks whether one user favorited one article. It's called from `serializers.go:80`.\n- **`BatchGetFavoriteCounts`** (`models.go:88`) counts favorites for many articles in one grouped query. It's called from `serializers.go:142`.\n- **`BatchGetFavoriteStatus`** (`models.go:113`) returns which of many articles a user favorited. It's called from `serializers.go:146`.\n- **`FindManyArticle`** (`models.go:178`) handles the `?favorited=` filter by joining `favorite_models` in raw SQL at lines 225–226. It doesn't go through `FavoriteModel`, so the model-based lookup doesn't show it.\n- **`GetArticleFeed`** does not touch the favorites table.\n\nAlso, `hello.go:19` runs `AutoMigrate(&articles.FavoriteModel{})`, and `articles/unit_test.go` uses the model in its test setup and assertions. Neither is a runtime read or write.\n\nThe concentrate `list_data_access` output attributes these operations to route handlers at `routers.go` line numbers that don't match the code, and it omits the raw SQL join. I used the source grep and the call sites above instead.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 17131,
+              "costUsd": 0.00806438,
+              "inputTokens": 8,
+              "outputTokens": 2536,
+              "cacheCreationTokens": 26459,
+              "cacheReadTokens": 150378,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 2,
+                "Read": 1,
+                "mcp__concentrate__find_references": 1,
+                "mcp__concentrate__list_data_access": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_references",
+                  "input": {
+                    "symbol": "FavoriteModel",
+                    "file": "articles/models.go"
+                  },
+                  "result": "{\"symbol\":\"FavoriteModel\",\"declarations\":[{\"kind\":\"class\",\"name\":\"FavoriteModel\",\"file\":\"articles/models.go\",\"line\":32,\"isExported\":true}],\"total\":0,\"counts\":{},\"references\":[],\"note\":\"Calls come from resolved call edges, so calls the scanner could not resolve are missing; possible: true marks namespace and dynamic imports that may not use the declaration.\",\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                },
+                {
+                  "tool": "list_data_access",
+                  "input": {
+                    "model": "FavoriteModel"
+                  },
+                  "result": "{\"query\":{\"model\":\"FavoriteModel\",\"limit\":50},\"dataAccess\":[{\"sourceKind\":\"Function\",\"sourceName\":\"BatchGetFavoriteCounts\",\"file\":\"articles/models.go\",\"line\":99,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).\\n\\t\\tSelect(\\\"favorite_id, COUNT(*) as count\\\").\\n\\t\\tWhere(\\\"favorite_id IN ?\\\", articleIDs).\\n\\t\\tGroup(\\\"favorite_id\\\").\\n\\t\\tFind\"},{\"sourceKind\":\"Function\",\"sourceName\":\"BatchGetFavoriteStatus\",\"file\":\"articles/models.go\",\"line\":120,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Where(\\\"favorite_id IN ? AND favorite_by_id = ?\\\", articleIDs, userID).Find\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleUpdate\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleFavorite\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleUnfavorite\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleCreate\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleRetrieve\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favor… (14224 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Writers (the only two functions that write to `favorite_models`):**\n\n- `ArticleModel.favoriteBy` (`articles/models.go:129-137`) does a `FirstOrCreate` on `FavoriteModel{FavoriteID, FavoriteByID}`, so repeat favorites don't duplicate rows. It's called by `ArticleFavorite` (`articles/routers.go:214-228`, `POST /api/articles/:slug/favorite`).\n- `ArticleModel.unFavoriteBy` (`articles/models.go:139-143`) runs `Where(favorite_id, favorite_by_id).Delete(&FavoriteModel{})`. Because `FavoriteModel` embeds `gorm.Model`, this is a soft delete that sets `deleted_at`. It's called by `ArticleUnfavorite` (`articles/routers.go:230-244`, `DELETE /api/articles/:slug/favorite`).\n\n**Readers:**\n\n- `ArticleModel.favoritesCount` (`articles/models.go:68-75`) counts rows for one article. It's used by the article serializer (`articles/serializers.go:81`).\n- `ArticleModel.isFavoriteBy` (`articles/models.go:77-85`) checks whether one user favorited one article. It's used for single-article responses.\n- `BatchGetFavoriteCounts` (`articles/models.go:88-110`) does a grouped count for many articles. It's used on the list and feed path (`articles/serializers.go:142`).\n- `BatchGetFavoriteStatus` (`articles/models.go:113-127`) fetches the current user's favorites for many articles. It's used on the same path (`articles/serializers.go:146`).\n- `FindManyArticle` (`articles/models.go:225-226`) filters `?favorited=username` with a raw `JOIN favorite_models` on the table name rather than through `FavoriteModel`.\n\n**Other touchpoints:**\n\n- `hello.go:19` runs `AutoMigrate(&articles.FavoriteModel{})`, which creates the schema but doesn't read or write rows.\n- `articles/unit_test.go` calls `favoriteBy` and `unFavoriteBy` directly and also runs `AutoMigrate`.\n\n**A caveat on the tooling:** `list_data_access` lists many of the reads under `articles/routers.go` lines 71, 80, 99 and 120, but the SQL is actually in `articles/models.go` at those same functions' lines (71, 80, 99, 120). The handler attribution comes from the call chain through the serializer, so the file and line numbers in that output are wrong for those entries. The write entries for `favoriteBy` and `unFavoriteBy` were accurate about the function names. I didn't read the full `Response()` method in `serializers.go`, so the claim that it reaches the single-article helpers is based on the tool's call graph plus the `favoritesCount` call I did confirm.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 20090,
+              "costUsd": 0.00775805,
+              "inputTokens": 6,
+              "outputTokens": 3358,
+              "cacheCreationTokens": 25290,
+              "cacheReadTokens": 102045,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__list_data_access": 1,
+                "Read": 2
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_data_access",
+                  "input": {
+                    "model": "FavoriteModel"
+                  },
+                  "result": "{\"query\":{\"model\":\"FavoriteModel\",\"limit\":50},\"dataAccess\":[{\"sourceKind\":\"Function\",\"sourceName\":\"BatchGetFavoriteCounts\",\"file\":\"articles/models.go\",\"line\":99,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).\\n\\t\\tSelect(\\\"favorite_id, COUNT(*) as count\\\").\\n\\t\\tWhere(\\\"favorite_id IN ?\\\", articleIDs).\\n\\t\\tGroup(\\\"favorite_id\\\").\\n\\t\\tFind\"},{\"sourceKind\":\"Function\",\"sourceName\":\"BatchGetFavoriteStatus\",\"file\":\"articles/models.go\",\"line\":120,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Where(\\\"favorite_id IN ? AND favorite_by_id = ?\\\", articleIDs, userID).Find\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleUpdate\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleFavorite\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleUnfavorite\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleCreate\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleRetrieve\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favor… (14224 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The `FavoriteModel` (table `favorite_models`) is written in exactly two places, both in `articles/models.go`. Several functions read it, mostly through serializers.\n\n**Writes**\n\n| Function | Operation | Where it's called |\n|---|---|---|\n| `ArticleModel.favoriteBy` (`articles/models.go:129`) | `FirstOrCreate` (upsert) | `ArticleFavorite` handler, `POST /api/articles/:slug/favorite` (`articles/routers.go:222`) |\n| `ArticleModel.unFavoriteBy` (`articles/models.go:139`) | `Where(...).Delete` | `ArticleUnfavorite` handler, `DELETE /api/articles/:slug/favorite` (`articles/routers.go:238`) |\n\nNo other production code writes to the table. The unit tests in `articles/unit_test.go` also call `favoriteBy` and `unFavoriteBy` directly, and `AutoMigrate` the model.\n\n**Reads**\n\nDirect reads, all in `articles/models.go`:\n- `ArticleModel.favoritesCount` (line 68): counts rows for one article.\n- `ArticleModel.isFavoriteBy` (line 77): checks whether a given user has favorited one article.\n- `BatchGetFavoriteCounts` (line 88): counts favorites for many articles at once.\n- `BatchGetFavoriteStatus` (line 113): returns which of many articles a given user has favorited.\n\nIndirect reads, through the serializers in `articles/serializers.go`:\n- `ArticleSerializer.Response` (line 80–81) calls `isFavoriteBy` and `favoritesCount`. This covers single-article responses: create, update, retrieve, and the favorite/unfavorite responses.\n- The list serializer (lines 142 and 146) calls `BatchGetFavoriteCounts` and `BatchGetFavoriteStatus`. This covers `GET /api/articles` (`ArticleList`) and `GET /api/articles/feed` (`ArticleFeed`).\n\nThe graph tool attributes these reads to the route handlers (`ArticleCreate`, `ArticleUpdate`, `ArticleRetrieve`, `ArticleList`, `ArticleFeed`, and the favorite handlers). I confirmed in the source that they reach the table through the serializer, not directly. The entries it lists as `Response` or `favoritesCount` at line 71/80 are the same serializer code.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 19363,
+              "costUsd": 0.00758475,
+              "inputTokens": 8,
+              "outputTokens": 2446,
+              "cacheCreationTokens": 24655,
+              "cacheReadTokens": 142995,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_data_access": 1,
+                "mcp__concentrate__list_tables": 1,
+                "mcp__concentrate__search_symbols": 1,
+                "Bash": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_data_access",
+                  "input": {
+                    "model": "Favorite"
+                  },
+                  "result": "{\"query\":{\"model\":\"Favorite\",\"limit\":50},\"dataAccess\":[{\"sourceKind\":\"Function\",\"sourceName\":\"BatchGetFavoriteCounts\",\"file\":\"articles/models.go\",\"line\":99,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).\\n\\t\\tSelect(\\\"favorite_id, COUNT(*) as count\\\").\\n\\t\\tWhere(\\\"favorite_id IN ?\\\", articleIDs).\\n\\t\\tGroup(\\\"favorite_id\\\").\\n\\t\\tFind\"},{\"sourceKind\":\"Function\",\"sourceName\":\"BatchGetFavoriteStatus\",\"file\":\"articles/models.go\",\"line\":120,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Where(\\\"favorite_id IN ? AND favorite_by_id = ?\\\", articleIDs, userID).Find\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleUpdate\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleFavorite\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleUnfavorite\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleCreate\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_models\",\"operation\":\"read\",\"expression\":\"db.Model(&FavoriteModel{}).Where(FavoriteModel{\\n\\t\\tFavoriteID: article.ID,\\n\\t}).Count\"},{\"sourceKind\":\"Function\",\"sourceName\":\"ArticleRetrieve\",\"file\":\"articles/routers.go\",\"line\":71,\"model\":\"FavoriteModel\",\"library\":\"gorm\",\"table\":\"favorite_m… (14219 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "list_tables",
+                  "input": {
+                    "name": "favorite"
+                  },
+                  "result": "{\"query\":{\"name\":\"favorite\"},\"totalTables\":1,\"tables\":[{\"name\":\"favorite_models\",\"kind\":\"table\",\"library\":\"gorm\",\"declaredIn\":null,\"line\":null,\"columns\":[],\"models\":[{\"name\":\"FavoriteModel\",\"relations\":[{\"field\":\"Favorite\",\"kind\":\"one\",\"model\":\"ArticleModel\"},{\"field\":\"FavoriteBy\",\"kind\":\"one\",\"model\":\"ArticleUserModel\"}]}],\"readBy\":{\"routes\":10,\"entrypoints\":0,\"functions\":17},\"writtenBy\":{\"routes\":2,\"entrypoints\":0,\"functions\":8},\"routes\":[{\"method\":\"GET\",\"path\":\"/api/articles/feed\",\"file\":\"articles/routers.go\",\"line\":15,\"reads\":[\"read\"]},{\"method\":\"POST\",\"path\":\"/api/articles\",\"file\":\"articles/routers.go\",\"line\":16,\"reads\":[\"read\"]},{\"method\":\"POST\",\"path\":\"/api/articles/\",\"file\":\"articles/routers.go\",\"line\":17,\"reads\":[\"read\"]},{\"method\":\"PUT\",\"path\":\"/api/articles/:slug\",\"file\":\"articles/routers.go\",\"line\":18,\"reads\":[\"read\"]},{\"method\":\"PUT\",\"path\":\"/api/articles/:slug/\",\"file\":\"articles/routers.go\",\"line\":19,\"reads\":[\"read\"]},{\"method\":\"POST\",\"path\":\"/api/articles/:slug/favorite\",\"file\":\"articles/routers.go\",\"line\":21,\"reads\":[\"read\"],\"writes\":[\"upsert\"]},{\"method\":\"DELETE\",\"path\":\"/api/articles/:slug/favorite\",\"file\":\"articles/routers.go\",\"line\":22,\"reads\":[\"read\"],\"writes\":[\"delete\"]},{\"method\":\"GET\",\"path\":\"/api/articles\",\"file\":\"articles/routers.go\",\"line\":28,\"reads\":[\"read\"]},{\"method\":\"GET\",\"path\":\"/api/articles/\",\"file\":\"articles/routers.go\",\"line\":29,\"reads\":[\"read\"]},{\"method\":\"GET\",\"path\":\"/api/articles/:slug\",\"file\":\"articles/routers.go\",\"line\":30,\"reads\":[\"read\"]}],\"entrypoints\":[]}],\"note\":\"Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions and Knex calls. readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "search_symbols",
+                  "input": {
+                    "query": "FavoriteModel"
+                  },
+                  "result": "{\"query\":{\"query\":\"FavoriteModel\",\"kind\":null,\"file\":null},\"total\":1,\"symbols\":[{\"kind\":\"class\",\"name\":\"FavoriteModel\",\"file\":\"articles/models.go\",\"line\":32,\"isExported\":true,\"match\":\"exact\",\"score\":6999}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-gin-env",
+      "sample": "internet-go-gin-realworld",
+      "category": "env",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 107072,
+            "medianOutputTokens": 1163,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 8601,
+            "medianCostUsd": 0.0041,
+            "spread": {
+              "inputTokens": {
+                "min": 106676,
+                "max": 143113
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 7813,
+                "max": 11376
+              },
+              "costUsd": {
+                "min": 0.0038,
+                "max": 0.0044
+              }
+            },
+            "totalCostUsd": 0.0123,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The production code reads three environment variables, all in two files:\n\n| Variable | Read in | Default | Used by |\n|---|---|---|---|\n| `DB_PATH` | `GetDBPath()` in `common/database.go:21-22` | `./data/gorm.db` | `Init()` (`common/database.go:49`), which `main()` calls in `hello.go:26` |\n| `PORT` | `main()` in `hello.go:63` | `8080` | `main()` itself, for `r.Run(\":\" + port)` |\n| `TEST_DB_PATH` | `GetTestDBPath()` in `common/database.go:31-32` | `./data/gorm_test.db` | `TestDBInit()` and `TestDBFree()` in `common/database.go`, which are test helpers that live in a non-test file |\n\n`TEST_DB_PATH` is technically in production code, but only the test setup and teardown reach it.\n\nThe Gin framework also reads `GIN_MODE` on its own when it starts. That happens inside the library, so it doesn't appear in this repo's code.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 11376,
+              "costUsd": 0.00438698,
+              "inputTokens": 6,
+              "outputTokens": 1259,
+              "cacheCreationTokens": 14138,
+              "cacheReadTokens": 92928,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The production code reads three environment variables, all through `os.Getenv`, and none in the test files.\n\n| Variable | Read in | Default | Purpose |\n|---|---|---|---|\n| `DB_PATH` | `GetDBPath()` in `common/database.go:22`, called by `Init()` | `./data/gorm.db` | SQLite database file used by the server |\n| `PORT` | `main()` in `hello.go:63` | `8080` | HTTP listen port |\n| `TEST_DB_PATH` | `GetTestDBPath()` in `common/database.go:32`, called by `TestDBInit()` and `TestDBFree()` | `./data/gorm_test.db` | SQLite file for tests |\n\n`TEST_DB_PATH` is the exception to \"production only.\" It lives in a non-test file, but only the test helpers call it, so the server never reads it at runtime.\n\nThe JWT secret is not read from the environment. AGENTS.md says it is defined in `common/utils.go`, so it is hardcoded.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7813,
+              "costUsd": 0.0038433,
+              "inputTokens": 6,
+              "outputTokens": 1163,
+              "cacheCreationTokens": 11550,
+              "cacheReadTokens": 95120,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The production code reads three environment variables, all through `os.Getenv`. Test files are excluded.\n\n| Variable | Read in | Default if unset | Purpose |\n|---|---|---|---|\n| `PORT` | `main()` in `hello.go:63` | `8080` | Port the Gin server listens on (`r.Run(\":\" + port)`) |\n| `DB_PATH` | `GetDBPath()` in `common/database.go:22` | `./data/gorm.db` | SQLite file used by `common.Init()` |\n| `TEST_DB_PATH` | `GetTestDBPath()` in `common/database.go:32` | `./data/gorm_test.db` | SQLite file used by `common.TestDBInit()` and removed by `TestDBFree()` |\n\n`TEST_DB_PATH` is only reached through test helpers, but it lives in non-test code (`common/database.go`), so it counts as production code here. `GetDBPath` and `GetTestDBPath` are exported so the tests can use them.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 8601,
+              "costUsd": 0.00411531,
+              "inputTokens": 8,
+              "outputTokens": 1136,
+              "cacheCreationTokens": 11134,
+              "cacheReadTokens": 131971,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 149733,
+            "medianOutputTokens": 2285,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 19092,
+            "medianCostUsd": 0.0052,
+            "spread": {
+              "inputTokens": {
+                "min": 147378,
+                "max": 261327
+              },
+              "toolCalls": {
+                "min": 6,
+                "max": 7
+              },
+              "durationMs": {
+                "min": 16367,
+                "max": 19118
+              },
+              "costUsd": {
+                "min": 0.005,
+                "max": 0.006
+              }
+            },
+            "totalCostUsd": 0.0162,
+            "mcpRuns": 1,
+            "mcpTools": {
+              "list_env_config": 1
+            },
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The production code reads two environment variables, `PORT` and `DB_PATH`. `TEST_DB_PATH` is also read from `common/database.go`, but only by test helpers.\n\n**Production reads**\n\n| Variable | Read in | Default if unset | Notes |\n|---|---|---|---|\n| `PORT` | `main()` in `hello.go:63` | `8080` | Passed to `r.Run(\":\" + port)`. |\n| `DB_PATH` | `GetDBPath()` in `common/database.go:22`, called by `Init()` (line 50) | `./data/gorm.db` | `Init()` is the real database setup path. |\n\n**Test-only reads**\n\n- `TEST_DB_PATH` is read by `GetTestDBPath()` in `common/database.go:32`, default `./data/gorm_test.db`. `GetTestDBPath()` is called by `TestDBInit()` (line 77) and `TestDBFree()` (line 110). Those helpers live in a non-`_test.go` file, so they compile into the production binary, but nothing in production calls them.\n- `common/unit_test.go` also sets and reads `DB_PATH` and `TEST_DB_PATH` (lines 67–356).\n\nThe `list_env_config` graph lists the same six reads. I confirmed the function names and call sites by reading the source.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 19118,
+              "costUsd": 0.005960140000000001,
+              "inputTokens": 14,
+              "outputTokens": 1915,
+              "cacheCreationTokens": 12569,
+              "cacheReadTokens": 248744,
+              "toolCalls": 7,
+              "toolsByName": {
+                "mcp__concentrate__list_env_config": 1,
+                "Grep": 4,
+                "Bash": 2
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_env_config",
+                  "input": {},
+                  "result": "{\"query\":{\"limit\":50},\"envConfig\":[{\"kind\":\"env\",\"file\":\"common/database.go\",\"line\":22,\"name\":\"DB_PATH\",\"value\":\"os.Getenv\",\"valueType\":null,\"consumer\":\"common/database.go\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"common/database.go\",\"line\":32,\"name\":\"TEST_DB_PATH\",\"value\":\"os.Getenv\",\"valueType\":null,\"consumer\":\"common/database.go\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"common/unit_test.go\",\"line\":283,\"name\":\"DB_PATH\",\"value\":\"os.Getenv\",\"valueType\":null,\"consumer\":\"common/unit_test.go\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"common/unit_test.go\",\"line\":317,\"name\":\"TEST_DB_PATH\",\"value\":\"os.Getenv\",\"valueType\":null,\"consumer\":\"common/unit_test.go\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"common/unit_test.go\",\"line\":353,\"name\":\"DB_PATH\",\"value\":\"os.Getenv\",\"valueType\":null,\"consumer\":\"common/unit_test.go\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"hello.go\",\"line\":63,\"name\":\"PORT\",\"value\":\"os.Getenv\",\"valueType\":null,\"consumer\":\"hello.go\",\"consumerKind\":\"File\"}],\"page\":{\"offset\":0,\"returned\":6}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The production code reads three environment variables directly, and a fourth is read by the Gin library rather than by this repo.\n\n| Variable | Read in | Default | Purpose |\n|---|---|---|---|\n| `PORT` | `main()` in `hello.go:63` | `8080` | HTTP listen port (`r.Run(\":\" + port)`) |\n| `DB_PATH` | `GetDBPath()` in `common/database.go:22` | `./data/gorm.db` | SQLite database file, used by `Init()` |\n| `TEST_DB_PATH` | `GetTestDBPath()` in `common/database.go:32` | `./data/gorm_test.db` | Test database path |\n\nNotes:\n\n- **`TEST_DB_PATH` is test-only in practice, though not in the build.** `GetTestDBPath()` lives in `common/database.go`, which is not a `_test.go` file, so it compiles into the production binary. Only the tests call it.\n- **`GIN_MODE` is not read by this repo's code.** `.env.example` lists it, but Gin reads it internally at startup.\n- **The JWT secret is not from the environment.** `JWTSecret` is a hardcoded constant in `common/utils.go:43`, used by `GenToken()` and the auth middleware in `users/middlewares.go:60`. This conflicts with the AGENTS.md note about not exposing the secret, and it means it cannot be rotated without a code change.\n- The other `os.Getenv`/`os.Setenv` calls are in `common/unit_test.go` and are test-only.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 16367,
+              "costUsd": 0.00520966,
+              "inputTokens": 8,
+              "outputTokens": 2286,
+              "cacheCreationTokens": 13519,
+              "cacheReadTokens": 136206,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 3,
+                "Bash": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The production code reads three environment variables, and only one of them is used outside test helpers.\n\n| Variable | Default | Read in | Purpose |\n|---|---|---|---|\n| `PORT` | `8080` | `main()` in `hello.go:63` | HTTP listen port for `r.Run(\":\" + port)` |\n| `DB_PATH` | `./data/gorm.db` | `GetDBPath()` in `common/database.go:22`, called from `Init()` (`database.go:50`) | SQLite file for the main database, opened by `gorm.Open` in `Init()` |\n| `TEST_DB_PATH` | `./data/gorm_test.db` | `GetTestDBPath()` in `common/database.go:32`, called from `TestDBInit()` (`database.go:77`) and `TestDBFree()` (`database.go:110`) | SQLite file for the test database |\n\nNotes:\n\n- `TEST_DB_PATH` is only meaningful for tests. `TestDBInit` and `TestDBFree` live in `common/database.go`, not in a `_test.go` file, so they compile into the production binary. Nothing in the server's startup path calls them.\n- `common/unit_test.go` also reads `DB_PATH` and `TEST_DB_PATH` directly, but those are test code and excluded from this answer.\n- A search of all `.go` files for `os.Getenv`, `os.LookupEnv`, `os.Environ`, `os.ExpandEnv`, and common config libraries (godotenv, viper, envconfig) found no other reads. The JWT secret is not read from the environment; AGENTS.md says it is defined in `common/utils.go`.\n\nI did not check for config files such as Dockerfiles or `.env` samples, because the git file listing was blocked by a permission prompt.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 19092,
+              "costUsd": 0.0050092900000000004,
+              "inputTokens": 8,
+              "outputTokens": 2285,
+              "cacheCreationTokens": 12591,
+              "cacheReadTokens": 134779,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 3,
+                "Bash": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-echo-feed-route",
+      "sample": "internet-go-echo-realworld",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 110322,
+            "medianOutputTokens": 1667,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 13426,
+            "medianCostUsd": 0.005,
+            "spread": {
+              "inputTokens": {
+                "min": 102515,
+                "max": 139935
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 13050,
+                "max": 17451
+              },
+              "costUsd": {
+                "min": 0.0041,
+                "max": 0.0055
+              }
+            },
+            "totalCostUsd": 0.0146,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Handler:** `Feed` in `handler/article.go:114`. It's registered as `articles.GET(\"/feed\", h.Feed)` in `handler/routes.go:36`, under the `/api/articles` group.\n\n**Store call:** `h.articleStore.ListFeed(userIDFromToken(c), offset, limit)`, which resolves to `(*ArticleStore).ListFeed` in `store/article.go:214`. The `article.Store` interface declares it at `article/article.go:17`. The store loads the user, collects the IDs they follow, and returns articles whose `author_id` is in that set, ordered by `created_at desc`.\n\n**Middleware:** the route sits in the `/articles` group, which applies `middleware.JWTWithConfig` with `SigningKey: utils.JWTSecret` (`handler/routes.go:24-34`). A skipper bypasses JWT for every GET except `/api/articles/feed`, so this route is the only GET under `/articles` that requires a valid token. Any other method on that group, such as POST, PUT or DELETE, also requires one.\n\n**Something to check:** the count query in `ListFeed` (`store/article.go:247`) filters by `AuthorID: u.ID`, which counts the current user's own articles rather than the feed's articles. So `articlesCount` in the response can disagree with the number of articles returned. The count should probably use the same `author_id in ?` condition as the list query. I haven't run the tests to confirm this.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 13426,
+              "costUsd": 0.00550912,
+              "inputTokens": 6,
+              "outputTokens": 1631,
+              "cacheCreationTokens": 18894,
+              "cacheReadTokens": 91422,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Handler:** `Feed` in `handler/article.go:114`. It parses `offset` (default 0) and `limit` (default 20) from the query string, then calls `userIDFromToken(c)` and returns the articles wrapped by `newArticleListResponse`.\n\n**Store method:** `h.articleStore.ListFeed(userID, offset, limit)`, which is `(*ArticleStore).ListFeed` in `store/article.go:214`. The handler reaches it through the `ListFeed` method on the `article` package's store interface (`article/article.go:17`). The concrete store does the following:\n1. Loads the current user with `First(&u, userID)`.\n2. Loads that user's follow rows into `followings`. If there are none, it returns an empty list with count 0.\n3. Runs `WHERE author_id IN (followed IDs)`, with preloads for Favorites, Tags and Author, ordered by `created_at desc`, with `Offset` and `Limit` applied.\n\n**Guard:** the route is registered in `handler/routes.go:24-36`. The `/articles` group uses `middleware.JWTWithConfig` with a custom `Skipper`. The Skipper skips JWT for every GET request except `/api/articles/feed`, so this route is the only GET under `/articles` that requires a token. The other `/articles` GETs stay public. `POST`, `PUT` and `DELETE` always go through JWT.\n\nOne thing I noticed while reading: `store/article.go:247` sets `count` by counting the current user's own articles (`AuthorID: u.ID`), not the feed's articles. So the `count` in the response does not match the feed contents. I haven't changed it.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 13050,
+              "costUsd": 0.0041167700000000005,
+              "inputTokens": 6,
+              "outputTokens": 1667,
+              "cacheCreationTokens": 11882,
+              "cacheReadTokens": 90627,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Handler:** `Handler.Feed` in `handler/article.go:114`. It parses `offset` (default 0) and `limit` (default 20), calls the store, and returns the article list response.\n\n**Store call:** `h.articleStore` is typed as the `article.Store` interface (`article/article.go:17`, `handler/handler.go:10`). At runtime it is the concrete `(*ArticleStore).ListFeed` in `store/article.go:214`. That method:\n1. Loads the user by ID with `db.First`.\n2. Loads the user's follow rows and returns empty if there are none.\n3. Queries articles where `author_id IN (followed IDs)`, with favorites, tags and author preloaded, ordered by `created_at desc`, paginated by offset and limit.\n\n**Middleware:** The route is registered in `handler/routes.go:24-36` on the `/api/articles` group, which gets `middleware.JWTWithConfig` with `SigningKey: utils.JWTSecret`. The group's `Skipper` returns true (skip auth) for every GET except when `c.Path() == \"/api/articles/feed\"`. So this GET is the only GET under `/articles` that requires a valid JWT. The other GETs (`\"\"`, `/:slug`, `/:slug/comments`) skip auth.\n\nTwo things I noticed while reading:\n- The Skipper compares against the literal string `\"/api/articles/feed\"`. It works because `main.go:34` mounts the group under `/api`. If the prefix changes, the check silently stops matching and the feed route would become unauthenticated, so it's fragile.\n- The `count` in `ListFeed` (`store/article.go:247`) counts the user's own articles (`AuthorID: u.ID`), not the feed articles. The total returned for pagination is therefore likely wrong for any user who follows people. I did not run anything to confirm this, so it's based on reading the code.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 17451,
+              "costUsd": 0.00497537,
+              "inputTokens": 8,
+              "outputTokens": 1899,
+              "cacheCreationTokens": 13820,
+              "cacheReadTokens": 126107,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 142177,
+            "medianOutputTokens": 1788,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 14847,
+            "medianCostUsd": 0.0048,
+            "spread": {
+              "inputTokens": {
+                "min": 106597,
+                "max": 179478
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 13959,
+                "max": 15916
+              },
+              "costUsd": {
+                "min": 0.0045,
+                "max": 0.0053
+              }
+            },
+            "totalCostUsd": 0.0147,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 1
+          },
+          "runs": [
+            {
+              "answer": "**Handler:** `(*Handler).Feed` in `handler/article.go:114`. It reads `offset` (default 0) and `limit` (default 20) from the query string, then calls `h.articleStore.ListFeed(userIDFromToken(c), offset, limit)`.\n\n**Store method:** `h.articleStore` is typed as the `article.ArticleStore` interface (`article/article.go:17`). The concrete implementation is `(*ArticleStore).ListFeed` in `store/article.go:214`. It:\n1. Loads the current user by ID.\n2. Fetches that user's followings and collects the followed user IDs.\n3. Returns an empty result if the user follows nobody.\n4. Otherwise queries articles where `author_id IN (followed IDs)`, preloading Favorites, Tags and Author, ordered by `created_at desc`, with the offset and limit applied.\n5. Runs a count query and returns the articles and count.\n\n**Middleware:** The route is registered in `handler/routes.go:24-36` under the `/articles` group, which applies `middleware.JWTWithConfig` with a custom Skipper. The Skipper skips JWT for GET requests unless `c.Path()` is `/api/articles/feed`, so the feed route is the one GET under `/articles` that requires a valid JWT. Other GETs (`/articles`, `/articles/:slug`, `/articles/:slug/comments`) are skipped and stay public.\n\nTwo things I noticed while reading, which you may want to check:\n- **The count is probably wrong.** `store/article.go:247` counts the current user's own articles (`AuthorID: u.ID`), not the articles in the feed. The `articlesCount` in the response will not match the number of feed articles.\n- **Errors are swallowed.** The `Association(...).Find` call on line 228 ignores its error. The `Feed` handler also returns a 500 with a nil body rather than an error message.\n\nI used `Grep` and `Read` for this. I didn't run the `concentrate` route tools, so the call chain above comes from reading the source, not from the code graph.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 13959,
+              "costUsd": 0.0045340599999999995,
+              "inputTokens": 6,
+              "outputTokens": 1788,
+              "cacheCreationTokens": 13545,
+              "cacheReadTokens": 93046,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Handler:** `Handler.Feed` in `handler/article.go:114`. It's registered in `handler/routes.go:36` as `articles.GET(\"/feed\", h.Feed)`.\n\n**Store call:** `h.articleStore.ListFeed(userIDFromToken(c), offset, limit)`. The handler's field is the `article.Store` interface (`handler/handler.go:10`). In production, `main.go:40` wires it to `store.NewArticleStore(d)`, so the concrete method is `(*ArticleStore).ListFeed` in `store/article.go:214`. It:\n1. Loads the current user with `db.First(&u, userID)`.\n2. Loads that user's follow relations.\n3. Returns early with an empty list if the user follows nobody.\n4. Queries articles where `author_id IN (followed IDs)`, ordered by `created_at desc`, with `Offset`/`Limit` and preloads for Favorites, Tags and Author.\n\n**Guard:** The `/api/articles` group uses `middleware.JWTWithConfig` (`handler/routes.go:21-33`). Its Skipper skips JWT for every GET except `/api/articles/feed`, so the feed is the only GET under `/articles` that requires a valid token. The middleware (`router/middleware/jwt.go`) sets the user ID in the context as `\"user\"`, and `userIDFromToken` (`handler/user.go:222`) reads it back. Without a valid token the request is rejected before `Feed` runs.\n\n**Things worth knowing:**\n- The `count` returned by `ListFeed` is not the feed size. The final query counts the current user's own articles (`AuthorID: u.ID`), not the articles matching the followed-author filter. Since it's paginated, the `articlesCount` in the response will likely be wrong for feed requests. It's a bug unless that's intended.\n- Store errors return HTTP 500 with a `nil` body. Errors from the follow lookup and the article query are ignored.\n- `ListFeed` returns `articles` (nil) when the user follows nobody, so the JSON output for that case depends on how `newArticleListResponse` handles a nil slice.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 15916,
+              "costUsd": 0.005296520000000001,
+              "inputTokens": 10,
+              "outputTokens": 1858,
+              "cacheCreationTokens": 13536,
+              "cacheReadTokens": 165932,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Handler:** `Handler.Feed` in `handler/article.go:114`. It parses `offset` and `limit` (defaults 0 and 20), then calls the store.\n\n**Store method:** `h.articleStore` is the `article.Store` interface (`article/article.go:17`). At runtime it is `(*ArticleStore).ListFeed` in `store/article.go:214`. That method loads the current user, collects the IDs they follow, and returns the newest articles by those authors, with `Preload`s for Favorites, Tags and Author. It returns an empty result if the user follows nobody.\n\n**Guard:** The route is registered in `handler/routes.go:36`, inside the `/articles` group. That group uses `middleware.JWTWithConfig` with a Skipper. The Skipper skips JWT for every GET except `c.Path() == \"/api/articles/feed\"`, so this route is the one GET under `/articles` that requires a valid JWT. The other GETs (list, by slug, comments) stay public.\n\n**Things I noticed while reading:**\n- **The `count` is wrong.** `ListFeed` counts with `Where(&model.Article{AuthorID: u.ID})`, so it returns the number of articles the *current user* wrote, not the number of feed articles. The `articlesCount` in the response will not match the feed. The count should filter on the followed author IDs, the same as the main query.\n- **The Skipper depends on `c.Path()`.** That only matches because the group is mounted under `/api`. If the prefix changes, the feed would silently become unauthenticated.\n- I did not check how the JWT middleware stores the user ID. `userIDFromToken` expects `c.Get(\"user\")` to be a `uint`, and if it is not, the handler quietly uses ID 0.\n\nI did not run the tests. `handler/article_test.go:112` has `TestFeedCaseSuccess`, which may cover some of this.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14847,
+              "costUsd": 0.00482954,
+              "inputTokens": 8,
+              "outputTokens": 1705,
+              "cacheCreationTokens": 13445,
+              "cacheReadTokens": 128724,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-echo-get-by-username-impact",
+      "sample": "internet-go-echo-realworld",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 142373,
+            "medianOutputTokens": 1887,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 15745,
+            "medianCostUsd": 0.0052,
+            "spread": {
+              "inputTokens": {
+                "min": 141874,
+                "max": 188185
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 11518,
+                "max": 16942
+              },
+              "costUsd": {
+                "min": 0.0048,
+                "max": 0.0061
+              }
+            },
+            "totalCostUsd": 0.0161,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Three routes are affected, all under the `/api` prefix (`main.go:34`), and all three require a JWT (`handler/routes.go`):\n\n| Method | Full path | Handler | Call site |\n|---|---|---|---|\n| GET | `/api/profiles/:username` | `Handler.GetProfile` | `handler/user.go:148` |\n| POST | `/api/profiles/:username/follow` | `Handler.Follow` | `handler/user.go:177` |\n| DELETE | `/api/profiles/:username/follow` | `Handler.Unfollow` | `handler/user.go:209` |\n\nEach handler calls `h.userStore.GetByUsername(username)` and treats the result the same way: an error returns 500, and a nil user returns 404. `Follow` and `Unfollow` then call `AddFollower` or `RemoveFollower`, and all three build the response with `newProfileResponse`.\n\n`GetByUsername` is called through the `user.Store` interface (`user/user.go:10`), and no other handler or service calls it. `newProfileResponse` (`handler/response.go:41`) uses `IsFollower`, not `GetByUsername`, so it is not affected directly. Any change to the method's signature, its nil-on-not-found behavior, or its `Preload(\"Followers\")` would change these three endpoints.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 15745,
+              "costUsd": 0.00522,
+              "inputTokens": 8,
+              "outputTokens": 2026,
+              "cacheCreationTokens": 14645,
+              "cacheReadTokens": 127720,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "If `UserStore.GetByUsername` changes, three routes are affected, all under the `/api` prefix (set in `main.go:34`). Each one is served by a handler that calls it directly.\n\n| Method | Full path | Handler |\n|---|---|---|\n| GET | `/api/profiles/:username` | `Handler.GetProfile` (`handler/user.go:146`) |\n| POST | `/api/profiles/:username/follow` | `Handler.Follow` (`handler/user.go:174`) |\n| DELETE | `/api/profiles/:username/follow` | `Handler.Unfollow` (`handler/user.go:206`) |\n\nThe route wiring is in `handler/routes.go:25-27`. All three sit in the `profiles` group behind the JWT middleware, so they require authentication.\n\n`GetByUsername` is the only lookup by username in the codebase. It is also the only caller of `Preload(\"Followers\")`, so a change to that preload would affect these same three routes.\n\nOther things that could change if the method's behavior or signature changes:\n- The `user.Store` interface in `user/user.go:10` declares `GetByUsername(string) (*model.User, error)`. A signature change there would also break the interface and its implementers.\n- `newProfileResponse` (`handler/response.go:41`) does not call `GetByUsername`. It calls `IsFollower`, so the responses for these routes depend on the looked-up user only through the fields it copies (`Username`, `Bio`, `Image`, `ID`).\n- `handler/user_test.go` may exercise these routes indirectly. I did not check it.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 11518,
+              "costUsd": 0.0047906,
+              "inputTokens": 8,
+              "outputTokens": 1610,
+              "cacheCreationTokens": 13506,
+              "cacheReadTokens": 128360,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "If `UserStore.GetByUsername` changes, three routes are affected. All three are under the `/api` group (`main.go:34`) and require a JWT:\n\n| Method | Full path | Handler method | Handler location |\n|---|---|---|---|\n| GET | `/api/profiles/:username` | `Handler.GetProfile` | `handler/user.go:148` |\n| POST | `/api/profiles/:username/follow` | `Handler.Follow` | `handler/user.go:177` |\n| DELETE | `/api/profiles/:username/follow` | `Handler.Unfollow` | `handler/user.go:209` |\n\nThe route table is in `handler/routes.go`, in the `profiles` group.\n\nThe handlers call `GetByUsername` through the `user.Store` interface (`user/user.go:10`), not the concrete `*store.UserStore`. A change to the method's signature would therefore break compilation of the interface and the handler code. A change to its behavior, such as the `Preload(\"Followers\")` at `store/user.go:41`, reaches these three routes only.\n\nNothing else calls `GetByUsername`. The other handlers use `IsFollower`, which is a different method.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 16942,
+              "costUsd": 0.006072020000000001,
+              "inputTokens": 10,
+              "outputTokens": 1887,
+              "cacheCreationTokens": 17083,
+              "cacheReadTokens": 171092,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 105273,
+            "medianOutputTokens": 863,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 9271,
+            "medianCostUsd": 0.0039,
+            "spread": {
+              "inputTokens": {
+                "min": 105037,
+                "max": 105951
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 9267,
+                "max": 12049
+              },
+              "costUsd": {
+                "min": 0.0038,
+                "max": 0.004
+              }
+            },
+            "totalCostUsd": 0.0116,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "find_callers": 3,
+              "impact_of": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "If `UserStore.GetByUsername` (`store/user.go:40-49`) changes, three routes are affected. All three are in the profile group, and each reaches the store through a `Handler` method in `handler/user.go`:\n\n| Method | Full path | Handler method | Call site |\n|---|---|---|---|\n| GET | `/api/profiles/:username` | `Handler.GetProfile` | `handler/user.go:148` |\n| POST | `/api/profiles/:username/follow` | `Handler.Follow` | `handler/user.go:177` |\n| DELETE | `/api/profiles/:username/follow` | `Handler.Unfollow` | `handler/user.go:209` |\n\nThe routes are registered in `handler/routes.go` at lines 20, 21 and 22.\n\nThe call graph is complete: there are no unresolved calls to `GetByUsername`, and no module-level or non-handler callers. The store method reads the `users` and `follows` tables through GORM, preloading `Followers`. Nothing in the frontend or in the store-consuming components is affected.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9267,
+              "costUsd": 0.0037776300000000006,
+              "inputTokens": 6,
+              "outputTokens": 746,
+              "cacheCreationTokens": 12388,
+              "cacheReadTokens": 92643,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "symbol": "GetByUsername",
+                    "file": "store/user.go"
+                  },
+                  "result": "{\"symbol\":\"GetByUsername\",\"file\":\"store/user.go\",\"maxDepth\":5,\"seeds\":[{\"name\":\"GetByUsername\",\"className\":\"UserStore\",\"file\":\"store/user.go\",\"line\":40,\"endLine\":49}],\"callers\":[{\"name\":\"GetProfile\",\"className\":\"Handler\",\"file\":\"handler/user.go\",\"line\":146,\"endLine\":156,\"depth\":1},{\"name\":\"Follow\",\"className\":\"Handler\",\"file\":\"handler/user.go\",\"line\":174,\"endLine\":188,\"depth\":1},{\"name\":\"Unfollow\",\"className\":\"Handler\",\"file\":\"handler/user.go\",\"line\":206,\"endLine\":220,\"depth\":1}],\"moduleCallers\":[],\"routes\":[{\"method\":\"GET\",\"path\":\"/:username\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"echo\",\"file\":\"handler/routes.go\",\"line\":20,\"reachedThrough\":[{\"function\":\"GetProfile\",\"functionFile\":\"handler/user.go\",\"as\":\"handler\"}]},{\"method\":\"POST\",\"path\":\"/:username/follow\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"echo\",\"file\":\"handler/routes.go\",\"line\":21,\"reachedThrough\":[{\"function\":\"Follow\",\"functionFile\":\"handler/user.go\",\"as\":\"handler\"}]},{\"method\":\"DELETE\",\"path\":\"/:username/follow\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"echo\",\"file\":\"handler/routes.go\",\"line\":22,\"reachedThrough\":[{\"function\":\"Unfollow\",\"functionFile\":\"handler/user.go\",\"as\":\"handler\"}]}],\"entrypoints\":[],\"components\":[],\"pages\":[],\"apiConsumers\":[],\"consumerComponents\":[],\"consumerPages\":[],\"stores\":[],\"storeComponents\":[],\"storePages\":[],\"dataAccess\":[{\"model\":\"Follow\",\"library\":\"gorm\",\"operation\":\"read\",\"line\":42,\"expression\":\"us.db.Where(&model.User{Username: username}).Preload(\\\"Followers\\\").First\",\"usedBy\":[{\"function\":\"GetByUsername\",\"functionFile\":\"store/user.go\"}]},{\"model\":\"User\",\"library\":\"gorm\",\"operation\":\"read\",\"line\":42,\"expression\":\"us.db.Where(&model.User{Username: username}).Preload(\\\"Followers\\\").First\",\"usedBy\":[{\"function\":\"GetByUsername\",\"functionFile\":\"store/user.go\"}]}],\"tables\":[{\"table\":\"follows\",\"kind\":\"table\",\"library\":\"gorm\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"function\":\"GetByUsername\",\"functionFile\":\"store/user.go\"}]},{\"table\":\"u… (2437 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "GetByUsername"
+                  },
+                  "result": "{\"query\":{\"name\":\"GetByUsername\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"GetByUsername\",\"caller\":\"GetProfile\",\"callerKind\":\"Function\",\"file\":\"handler/user.go\",\"line\":148,\"expression\":\"h.userStore.GetByUsername\",\"relationship\":\"CALLS\"},{\"target\":\"GetByUsername\",\"caller\":\"Follow\",\"callerKind\":\"Function\",\"file\":\"handler/user.go\",\"line\":177,\"expression\":\"h.userStore.GetByUsername\",\"relationship\":\"CALLS\"},{\"target\":\"GetByUsername\",\"caller\":\"Unfollow\",\"callerKind\":\"Function\",\"file\":\"handler/user.go\",\"line\":209,\"expression\":\"h.userStore.GetByUsername\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named GetByUsername in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":3}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three routes are affected, all in `handler/routes.go`. The call graph reports no unresolved calls to `GetByUsername`, so this list should be complete.\n\n| Method | Full path | Handler method | Registered at |\n|---|---|---|---|\n| GET | `/api/profiles/:username` | `Handler.GetProfile` (`handler/user.go:146`) | `handler/routes.go:20` |\n| POST | `/api/profiles/:username/follow` | `Handler.Follow` (`handler/user.go:174`) | `handler/routes.go:21` |\n| DELETE | `/api/profiles/:username/follow` | `Handler.Unfollow` (`handler/user.go:206`) | `handler/routes.go:22` |\n\nEach handler calls `h.userStore.GetByUsername` at `handler/user.go:148`, `:177` and `:209`, respectively.\n\nThe store method reads the `users` and `follows` tables through GORM. The graph shows no writes, so the change only affects read paths.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9271,
+              "costUsd": 0.0038611000000000006,
+              "inputTokens": 6,
+              "outputTokens": 863,
+              "cacheCreationTokens": 12507,
+              "cacheReadTokens": 92760,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "file": "store/user.go",
+                    "symbol": "GetByUsername"
+                  },
+                  "result": "{\"symbol\":\"GetByUsername\",\"file\":\"store/user.go\",\"maxDepth\":5,\"seeds\":[{\"name\":\"GetByUsername\",\"className\":\"UserStore\",\"file\":\"store/user.go\",\"line\":40,\"endLine\":49}],\"callers\":[{\"name\":\"GetProfile\",\"className\":\"Handler\",\"file\":\"handler/user.go\",\"line\":146,\"endLine\":156,\"depth\":1},{\"name\":\"Follow\",\"className\":\"Handler\",\"file\":\"handler/user.go\",\"line\":174,\"endLine\":188,\"depth\":1},{\"name\":\"Unfollow\",\"className\":\"Handler\",\"file\":\"handler/user.go\",\"line\":206,\"endLine\":220,\"depth\":1}],\"moduleCallers\":[],\"routes\":[{\"method\":\"GET\",\"path\":\"/:username\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"echo\",\"file\":\"handler/routes.go\",\"line\":20,\"reachedThrough\":[{\"function\":\"GetProfile\",\"functionFile\":\"handler/user.go\",\"as\":\"handler\"}]},{\"method\":\"POST\",\"path\":\"/:username/follow\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"echo\",\"file\":\"handler/routes.go\",\"line\":21,\"reachedThrough\":[{\"function\":\"Follow\",\"functionFile\":\"handler/user.go\",\"as\":\"handler\"}]},{\"method\":\"DELETE\",\"path\":\"/:username/follow\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"echo\",\"file\":\"handler/routes.go\",\"line\":22,\"reachedThrough\":[{\"function\":\"Unfollow\",\"functionFile\":\"handler/user.go\",\"as\":\"handler\"}]}],\"entrypoints\":[],\"components\":[],\"pages\":[],\"apiConsumers\":[],\"consumerComponents\":[],\"consumerPages\":[],\"stores\":[],\"storeComponents\":[],\"storePages\":[],\"dataAccess\":[{\"model\":\"Follow\",\"library\":\"gorm\",\"operation\":\"read\",\"line\":42,\"expression\":\"us.db.Where(&model.User{Username: username}).Preload(\\\"Followers\\\").First\",\"usedBy\":[{\"function\":\"GetByUsername\",\"functionFile\":\"store/user.go\"}]},{\"model\":\"User\",\"library\":\"gorm\",\"operation\":\"read\",\"line\":42,\"expression\":\"us.db.Where(&model.User{Username: username}).Preload(\\\"Followers\\\").First\",\"usedBy\":[{\"function\":\"GetByUsername\",\"functionFile\":\"store/user.go\"}]}],\"tables\":[{\"table\":\"follows\",\"kind\":\"table\",\"library\":\"gorm\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"function\":\"GetByUsername\",\"functionFile\":\"store/user.go\"}]},{\"table\":\"u… (2437 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "GetByUsername"
+                  },
+                  "result": "{\"query\":{\"name\":\"GetByUsername\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"GetByUsername\",\"caller\":\"GetProfile\",\"callerKind\":\"Function\",\"file\":\"handler/user.go\",\"line\":148,\"expression\":\"h.userStore.GetByUsername\",\"relationship\":\"CALLS\"},{\"target\":\"GetByUsername\",\"caller\":\"Follow\",\"callerKind\":\"Function\",\"file\":\"handler/user.go\",\"line\":177,\"expression\":\"h.userStore.GetByUsername\",\"relationship\":\"CALLS\"},{\"target\":\"GetByUsername\",\"caller\":\"Unfollow\",\"callerKind\":\"Function\",\"file\":\"handler/user.go\",\"line\":209,\"expression\":\"h.userStore.GetByUsername\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named GetByUsername in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":3}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changing `UserStore.GetByUsername` (`store/user.go:40-49`) affects three routes, all in the profile handler:\n\n| Method | Full path | Handler method |\n|---|---|---|\n| GET | `/api/profiles/:username` | `Handler.GetProfile` (`handler/user.go:146`) |\n| POST | `/api/profiles/:username/follow` | `Handler.Follow` (`handler/user.go:174`) |\n| DELETE | `/api/profiles/:username/follow` | `Handler.Unfollow` (`handler/user.go:206`) |\n\nEach handler calls it as `h.userStore.GetByUsername`. The routes are registered in `handler/routes.go` at lines 20-22 on Echo. The full paths come from the graph; I did not read the route group setup to confirm the `/api/profiles` prefix.\n\nThe graph reports no unresolved calls to this function, so these three handlers are the complete set of callers. No other entrypoints, components, or pages depend on it. The only data access is a gorm read of the `users` and `follows` tables, which preloads `Followers`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12049,
+              "costUsd": 0.00395979,
+              "inputTokens": 6,
+              "outputTokens": 918,
+              "cacheCreationTokens": 12846,
+              "cacheReadTokens": 93099,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "file": "store/user.go",
+                    "symbol": "GetByUsername"
+                  },
+                  "result": "{\"symbol\":\"GetByUsername\",\"file\":\"store/user.go\",\"maxDepth\":5,\"seeds\":[{\"name\":\"GetByUsername\",\"className\":\"UserStore\",\"file\":\"store/user.go\",\"line\":40,\"endLine\":49}],\"callers\":[{\"name\":\"GetProfile\",\"className\":\"Handler\",\"file\":\"handler/user.go\",\"line\":146,\"endLine\":156,\"depth\":1},{\"name\":\"Follow\",\"className\":\"Handler\",\"file\":\"handler/user.go\",\"line\":174,\"endLine\":188,\"depth\":1},{\"name\":\"Unfollow\",\"className\":\"Handler\",\"file\":\"handler/user.go\",\"line\":206,\"endLine\":220,\"depth\":1}],\"moduleCallers\":[],\"routes\":[{\"method\":\"GET\",\"path\":\"/:username\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"echo\",\"file\":\"handler/routes.go\",\"line\":20,\"reachedThrough\":[{\"function\":\"GetProfile\",\"functionFile\":\"handler/user.go\",\"as\":\"handler\"}]},{\"method\":\"POST\",\"path\":\"/:username/follow\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"echo\",\"file\":\"handler/routes.go\",\"line\":21,\"reachedThrough\":[{\"function\":\"Follow\",\"functionFile\":\"handler/user.go\",\"as\":\"handler\"}]},{\"method\":\"DELETE\",\"path\":\"/:username/follow\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"echo\",\"file\":\"handler/routes.go\",\"line\":22,\"reachedThrough\":[{\"function\":\"Unfollow\",\"functionFile\":\"handler/user.go\",\"as\":\"handler\"}]}],\"entrypoints\":[],\"components\":[],\"pages\":[],\"apiConsumers\":[],\"consumerComponents\":[],\"consumerPages\":[],\"stores\":[],\"storeComponents\":[],\"storePages\":[],\"dataAccess\":[{\"model\":\"Follow\",\"library\":\"gorm\",\"operation\":\"read\",\"line\":42,\"expression\":\"us.db.Where(&model.User{Username: username}).Preload(\\\"Followers\\\").First\",\"usedBy\":[{\"function\":\"GetByUsername\",\"functionFile\":\"store/user.go\"}]},{\"model\":\"User\",\"library\":\"gorm\",\"operation\":\"read\",\"line\":42,\"expression\":\"us.db.Where(&model.User{Username: username}).Preload(\\\"Followers\\\").First\",\"usedBy\":[{\"function\":\"GetByUsername\",\"functionFile\":\"store/user.go\"}]}],\"tables\":[{\"table\":\"follows\",\"kind\":\"table\",\"library\":\"gorm\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"function\":\"GetByUsername\",\"functionFile\":\"store/user.go\"}]},{\"table\":\"u… (2437 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "GetByUsername"
+                  },
+                  "result": "{\"query\":{\"name\":\"GetByUsername\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"GetByUsername\",\"caller\":\"GetProfile\",\"callerKind\":\"Function\",\"file\":\"handler/user.go\",\"line\":148,\"expression\":\"h.userStore.GetByUsername\",\"relationship\":\"CALLS\"},{\"target\":\"GetByUsername\",\"caller\":\"Follow\",\"callerKind\":\"Function\",\"file\":\"handler/user.go\",\"line\":177,\"expression\":\"h.userStore.GetByUsername\",\"relationship\":\"CALLS\"},{\"target\":\"GetByUsername\",\"caller\":\"Unfollow\",\"callerKind\":\"Function\",\"file\":\"handler/user.go\",\"line\":209,\"expression\":\"h.userStore.GetByUsername\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named GetByUsername in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":3}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-fs-follow-consumers",
+      "sample": "internet-realworld-go-fullstack",
+      "category": "frontend-api",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 205763,
+            "medianOutputTokens": 1994,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 15561,
+            "medianCostUsd": 0.0067,
+            "spread": {
+              "inputTokens": {
+                "min": 205616,
+                "max": 231012
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 13651,
+                "max": 20763
+              },
+              "costUsd": {
+                "min": 0.0066,
+                "max": 0.0077
+              }
+            },
+            "totalCostUsd": 0.0209,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The follow/unfollow requests come from the profile page, go through `UserAPI` in `frontend/lib/api/user.ts`, and land on `ProfileFollow` and `ProfileUnfollow` in `backend/users/routers.go`.\n\n**Frontend**\n\n- **Page:** `frontend/pages/profile/[pid].tsx`. The `pid` route param is the target username. The page renders `FollowUserButton` (`frontend/components/profile/FollowUserButton.tsx`) when the viewer is logged in and is not the profile owner.\n- **Page handlers:** `handleFollow` calls `UserAPI.follow(pid)` and `handleUnfollow` calls `UserAPI.unfollow(pid)`. `FollowUserButton` picks between them based on the `following` flag.\n- **API module:** `frontend/lib/api/user.ts`\n  - `follow(username)` sends `POST ${SERVER_BASE_URL}/profiles/${username}/follow` with an empty body and a `Token` authorization header.\n  - `unfollow(username)` sends `DELETE ${SERVER_BASE_URL}/profiles/${username}/follow` with the same header.\n\n**Backend**\n\n- **Route registration:** `backend/hello.go` (lines 46–50). `ProfileRetrieveRegister` is mounted before `AuthMiddleware(true)`, and `ProfileRegister` is mounted after it. So the follow and unfollow routes require a valid token.\n- **Handlers:** `backend/users/routers.go`, registered in `ProfileRegister` (lines 29–32):\n  - `POST /:username/follow` → `ProfileFollow` (line 45). It looks up the target user, reads the caller from `my_user_model` (set by the auth middleware), and calls `myUserModel.following(userModel)`, which creates the follow row.\n  - `DELETE /:username/follow` → `ProfileUnfollow` (line 62). Same lookup, then `myUserModel.unFollowing(userModel)`, which deletes the row.\n- **Persistence:** `backend/users/models.go`. The `following` and `unFollowing` methods operate on `FollowModel`.\n\nOne bug I noticed while tracing this: `handleUnfollow` in the profile page does its optimistic SWR update with `following: true` instead of `false`. The UI may keep showing \"Unfollow\" until the revalidation fetch returns. The request itself is correct; the optimistic state is wrong. I did not change anything.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 20763,
+              "costUsd": 0.00766233,
+              "inputTokens": 12,
+              "outputTokens": 2446,
+              "cacheCreationTokens": 21727,
+              "cacheReadTokens": 209273,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The requests come from the **profile page** `frontend/pages/profile/[pid].tsx`, go through **`UserAPI.follow` / `UserAPI.unfollow`** in `frontend/lib/api/user.ts`, and are handled by **`ProfileFollow` and `ProfileUnfollow`** in `backend/users/routers.go`.\n\n1. **Frontend page:** `pages/profile/[pid].tsx` defines `handleFollow` and `handleUnfollow`, and passes them to `FollowUserButton` (`components/profile/FollowUserButton.tsx`), which calls one or the other depending on the `following` flag.\n\n2. **API module:** `frontend/lib/api/user.ts`\n   - `follow(username)` sends `POST ${SERVER_BASE_URL}/profiles/${username}/follow`\n   - `unfollow(username)` sends `DELETE ${SERVER_BASE_URL}/profiles/${username}/follow`\n\n   Both attach `Authorization: Token <token>`, reading the token from `localStorage`.\n\n3. **Backend handlers:** `backend/users/routers.go`\n   - `ProfileRegister` wires `POST /:username/follow` to `ProfileFollow` and `DELETE /:username/follow` to `ProfileUnfollow`.\n   - `backend/hello.go` mounts this group at `/profiles` under the `v1` router. It applies `AuthMiddleware(true)` before `ProfileRegister`, so both routes require a token.\n   - `ProfileFollow` looks up the target user by `:username`, then calls `myUserModel.following(userModel)`. That creates a `FollowModel` row via `FirstOrCreate`.\n   - `ProfileUnfollow` does the same lookup, then calls `myUserModel.unFollowing(userModel)`. That deletes the matching `FollowModel` row. Both return the updated profile as JSON.\n   - The model methods are in `backend/users/models.go`.\n\nI noticed one likely bug while reading. In `handleUnfollow`, the optimistic `mutate` sets `following: true` instead of `false`, so the button stays in the \"Unfollow\" state until the server response triggers a revalidation. I did not change it.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 15561,
+              "costUsd": 0.00667045,
+              "inputTokens": 10,
+              "outputTokens": 1862,
+              "cacheCreationTokens": 19381,
+              "cacheReadTokens": 186225,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The follow and unfollow requests start on the profile page, go through the `follow`/`unfollow` functions in the user API module, and are handled by `ProfileFollow` and `ProfileUnfollow` in the Go backend.\n\n**1. Frontend page:** `frontend/pages/profile/[pid].tsx`\n- The `handleFollow` and `handleUnfollow` functions (lines ~42–59) call `UserAPI.follow(pid)` and `UserAPI.unfollow(pid)`.\n- They are passed as props to `FollowUserButton` (`frontend/components/profile/FollowUserButton.tsx`), which calls `follow(username)` or `unfollow(username)` depending on the `following` flag.\n\n**2. API module:** `frontend/lib/api/user.ts`\n- `follow` (line 68) sends `axios.post` to `${SERVER_BASE_URL}/profiles/${username}/follow` with an empty body.\n- `unfollow` (line 86) sends `axios.delete` to the same URL.\n- Both read the token from `localStorage.user` and send it as `Authorization: Token <token>`.\n\n**3. Backend routing:** `backend/hello.go`\n- `users.ProfileRegister(v1.Group(\"/profiles\"))` registers the routes, under the `/api` group and after `v1.Use(users.AuthMiddleware(true))`, so authentication is required.\n- `backend/users/routers.go` lines 29–32 map `POST /:username/follow` to `ProfileFollow` and `DELETE /:username/follow` to `ProfileUnfollow`.\n\n**4. Backend handlers:** `backend/users/routers.go`\n- `ProfileFollow` (line 45) looks up the target user by username, gets the logged-in user from `my_user_model` (set by `AuthMiddleware` in `middlewares.go:37`), and calls `myUserModel.following(userModel)`. That writes a `FollowModel` row.\n- `ProfileUnfollow` (line 62) does the same lookup and calls `myUserModel.unFollowing(userModel)`, which deletes the row (`backend/users/models.go`).\n- Both return the updated `profile` JSON, or a 404 if the user is missing.\n\nOne thing I noticed while tracing this: in `handleUnfollow`, the optimistic `mutate` sets `following: true` instead of `false`. The UI will briefly show the user as still followed until the revalidation from `trigger` returns the server state. It's probably a copy-paste slip, and I haven't changed it.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 13651,
+              "costUsd": 0.0066073899999999994,
+              "inputTokens": 10,
+              "outputTokens": 1994,
+              "cacheCreationTokens": 18694,
+              "cacheReadTokens": 187059,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 160575,
+            "medianOutputTokens": 2174,
+            "medianToolCalls": 9,
+            "medianTurns": 10,
+            "medianDurationMs": 18337,
+            "medianCostUsd": 0.0064,
+            "spread": {
+              "inputTokens": {
+                "min": 158825,
+                "max": 248955
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 12
+              },
+              "durationMs": {
+                "min": 14599,
+                "max": 18525
+              },
+              "costUsd": {
+                "min": 0.0058,
+                "max": 0.0077
+              }
+            },
+            "totalCostUsd": 0.0199,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "find_callers": 6,
+              "api_consumers": 4,
+              "search_symbols": 2
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "The page is **`frontend/pages/profile/[pid].tsx`** (the user profile page). It renders `FollowUserButton`, which calls `handleFollow` or `handleUnfollow` depending on the current `following` state.\n\n**API module:** `frontend/lib/api/user.ts`\n- `follow` (line 68) sends `POST ${SERVER_BASE_URL}/profiles/${username}/follow` via `axios.post` (line 72).\n- `unfollow` (line 86) sends `DELETE ${SERVER_BASE_URL}/profiles/${username}/follow` via `axios.delete` (line 90).\n\n**Backend handlers:** `backend/users/routers.go` (gin)\n- `router.POST(\"/:username/follow\", ProfileFollow)` at line 30, handled by `ProfileFollow` at line 45.\n- `router.DELETE(\"/:username/follow\", ProfileUnfollow)` at line 31, handled by `ProfileUnfollow` at line 62.\n\nBoth handlers call the `UserModel` methods in `backend/users/models.go`: `following` (line 102) creates a `FollowModel` row with `FirstOrCreate`, and `unFollowing` (line 128) deletes it. The profile response's `following` field comes from `isFollowing` in `serializers.go`.\n\nThe concentrate graph confirms both links: `api_consumers` for `/api/profiles/:username/follow` returns exactly these two axios calls, each matched to its gin route.\n\n**Bug I noticed:** in `handleUnfollow` (`[pid].tsx` line 55), the optimistic update sets `following: true`. It should be `false`. The SWR `trigger` on line 59 refetches afterward, so the wrong state should only show until the response arrives, but the button will briefly still read \"Unfollow\" after the click. I haven't changed anything. Tell me if you want me to fix it.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 14599,
+              "costUsd": 0.00581128,
+              "inputTokens": 8,
+              "outputTokens": 1817,
+              "cacheCreationTokens": 17349,
+              "cacheReadTokens": 143218,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "Read": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "path": "/api/profiles/:username/follow"
+                  },
+                  "result": "{\"query\":{\"method\":null,\"path\":\"/api/profiles/:username/follow\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"DELETE\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"gin\",\"file\":\"backend/users/routers.go\",\"line\":31},\"client\":\"axios\",\"method\":\"DELETE\",\"url\":\"/api/profiles/${username}/follow\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":90,\"expression\":\"axios.delete\",\"function\":\"unfollow\"},{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"gin\",\"file\":\"backend/users/routers.go\",\"line\":30},\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/profiles/${username}/follow\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":72,\"expression\":\"axios.post\",\"function\":\"follow\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The follow and unfollow requests come from the profile page, go through `UserAPI` in `frontend/lib/api/user.ts`, and land in `ProfileFollow` and `ProfileUnfollow` in `backend/users/routers.go`.\n\n**Frontend**\n\n- **Page:** `frontend/pages/profile/[pid].tsx`. `handleFollow` (line 42) and `handleUnfollow` (line 52) are the page's handlers. The button that calls them is `FollowUserButton` (`frontend/components/profile/FollowUserButton.tsx`), which calls `follow(username)` or `unfollow(username)` depending on the `following` flag.\n- **API module:** `frontend/lib/api/user.ts`.\n  - `follow` (line 68) sends `POST ${SERVER_BASE_URL}/profiles/${username}/follow` with the token from localStorage.\n  - `unfollow` (line 86) sends `DELETE ${SERVER_BASE_URL}/profiles/${username}/follow` with the same auth header.\n\n**Backend**\n\n- **Routes:** `backend/users/routers.go`, lines 30–31:\n  - `router.POST(\"/:username/follow\", ProfileFollow)`\n  - `router.DELETE(\"/:username/follow\", ProfileUnfollow)`\n  - Full paths are `/api/profiles/:username/follow`, matching the frontend calls.\n- **Handlers:**\n  - `ProfileFollow` (line 45) looks up the target user by `username`, takes the caller from `c.MustGet(\"my_user_model\")`, and calls `myUserModel.following(userModel)`.\n  - `ProfileUnfollow` (line 62) does the same with `unFollowing`.\n  - Both return the updated profile as JSON.\n\nConcentrate's `api_consumers` output confirms these links, with the same method, path and line numbers.\n\nOne thing I noticed while reading: `handleUnfollow` in `[pid].tsx` (line 55) does its optimistic update with `following: true`, which looks wrong for an unfollow. It should probably be `false`. I haven't changed it.",
+              "isError": false,
+              "turns": 10,
+              "durationMs": 18337,
+              "costUsd": 0.00637508,
+              "inputTokens": 8,
+              "outputTokens": 2174,
+              "cacheCreationTokens": 19469,
+              "cacheReadTokens": 139348,
+              "toolCalls": 9,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 2,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__search_symbols": 1,
+                "Read": 4
+              },
+              "mcpCalls": [
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "file": "frontend/lib/api/user.ts"
+                  },
+                  "result": "{\"query\":{\"method\":null,\"path\":null,\"routeFile\":null,\"framework\":null,\"file\":\"frontend/lib/api/user.ts\",\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"gin\",\"file\":\"backend/users/routers.go\",\"line\":26},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/profiles/${username}\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":103,\"expression\":\"axios.get\",\"function\":\"get\"},{\"route\":{\"method\":\"DELETE\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"gin\",\"file\":\"backend/users/routers.go\",\"line\":31},\"client\":\"axios\",\"method\":\"DELETE\",\"url\":\"/api/profiles/${username}/follow\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":90,\"expression\":\"axios.delete\",\"function\":\"unfollow\"},{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"gin\",\"file\":\"backend/users/routers.go\",\"line\":30},\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/profiles/${username}/follow\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":72,\"expression\":\"axios.post\",\"function\":\"follow\"},{\"route\":{\"method\":\"PUT\",\"fullPath\":\"/api/user\",\"framework\":\"gin\",\"file\":\"backend/users/routers.go\",\"line\":21},\"client\":\"axios\",\"method\":\"PUT\",\"url\":\"/api/user\",\"match\":\"exact\",\"file\":\"frontend/lib/api/user.ts\",\"line\":54,\"expression\":\"axios.put\",\"function\":\"save\"},{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/users\",\"framework\":\"gin\",\"file\":\"backend/users/routers.go\",\"line\":13},\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/users\",\"match\":\"exact\",\"file\":\"frontend/lib/api/user.ts\",\"line\":38,\"expression\":\"axios.post\",\"function\":\"register\"},{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/users/login\",\"framework\":\"gin\",\"file\":\"backend/users/routers.go\",\"line\":15},\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/users/login\",\"match\":\"exact\",\"file\":\"frontend/lib/api/user.ts\",\"line\":22,\"expression\":\"axios.post\",\"function\":\"login\"}],\"page\":{\"offset\":0,\"returned\":6}}",
+                  "isError": false
+                },
+                {
+                  "tool": "search_symbols",
+                  "input": {
+                    "query": "follow"
+                  },
+                  "result": "{\"query\":{\"query\":\"follow\",\"kind\":null,\"file\":null},\"total\":15,\"symbols\":[{\"kind\":\"function\",\"name\":\"follow\",\"file\":\"frontend/lib/api/user.ts\",\"line\":68,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"following\",\"className\":\"UserModel\",\"file\":\"backend/users/models.go\",\"line\":102,\"isExported\":false,\"match\":\"prefix\",\"score\":4969},{\"kind\":\"function\",\"name\":\"followUser\",\"file\":\"backend/articles/unit_test.go\",\"line\":794,\"isExported\":false,\"match\":\"prefix\",\"score\":4959},{\"kind\":\"class\",\"name\":\"FollowModel\",\"file\":\"backend/users/models.go\",\"line\":36,\"isExported\":true,\"match\":\"prefix\",\"score\":4949},{\"kind\":\"function\",\"name\":\"FollowUserButton\",\"file\":\"frontend/components/profile/FollowUserButton.tsx\",\"line\":3,\"isExported\":false,\"match\":\"prefix\",\"score\":4899},{\"kind\":\"method\",\"name\":\"isFollowing\",\"className\":\"UserModel\",\"file\":\"backend/users/models.go\",\"line\":115,\"isExported\":false,\"match\":\"substring\",\"score\":2999},{\"kind\":\"method\",\"name\":\"unFollowing\",\"className\":\"UserModel\",\"file\":\"backend/users/models.go\",\"line\":128,\"isExported\":false,\"match\":\"substring\",\"score\":2999},{\"kind\":\"function\",\"name\":\"handleFollow\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":42,\"isExported\":false,\"match\":\"substring\",\"score\":2999},{\"kind\":\"function\",\"name\":\"ProfileFollow\",\"file\":\"backend/users/routers.go\",\"line\":45,\"isExported\":true,\"match\":\"substring\",\"score\":2999},{\"kind\":\"method\",\"name\":\"GetFollowings\",\"className\":\"UserModel\",\"file\":\"backend/users/models.go\",\"line\":137,\"isExported\":false,\"match\":\"substring\",\"score\":2999},{\"kind\":\"function\",\"name\":\"TestArticleFeedWithFollowing\",\"file\":\"backend/articles/unit_test.go\",\"line\":1008,\"isExported\":true,\"match\":\"substring\",\"score\":2999},{\"kind\":\"function\",\"name\":\"unfollow\",\"file\":\"frontend/lib/api/user.ts\",\"line\":86,\"isExported\":false,\"match\":\"substring\",\"score\":2969},{\"kind\":\"function\",\"name\":\"TestArticleFeedWithEmptyFollowings\",\"file\":\"backend/articles/unit_test.go\",\"line\":1355,\"isExported\":true,\"match\":\"substring\",\"scor… (2332 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The follow and unfollow requests start on the profile page, go through `UserAPI` in `frontend/lib/api/user.ts`, and land in two Gin handlers in `backend/users/routers.go`.\n\n**Frontend**\n\n1. **Page:** `frontend/pages/profile/[pid].tsx`. It renders `FollowUserButton` (line 77) and passes it `handleFollow` and `handleUnfollow`.\n   - `handleFollow` (line 42) calls `UserAPI.follow(pid)`.\n   - `handleUnfollow` (line 52) calls `UserAPI.unfollow(pid)`.\n2. **Button:** `frontend/components/profile/FollowUserButton.tsx`. Its `handleClick` calls `unfollow(username)` when the user is already followed, and `follow(username)` otherwise.\n3. **API module:** `frontend/lib/api/user.ts`.\n   - `follow` (line 68) sends `axios.post` to `${SERVER_BASE_URL}/profiles/${username}/follow` (line 72).\n   - `unfollow` (line 86) sends `axios.delete` to the same URL (line 90).\n   - Both send the `Authorization: Token …` header taken from localStorage.\n\n**Backend** (`backend/users/routers.go`)\n\n- Line 30 registers `POST /:username/follow` → `ProfileFollow` (line 45).\n- Line 31 registers `DELETE /:username/follow` → `ProfileUnfollow` (line 62).\n- Both handlers look up the target user by `username`, read `my_user_model` from the context, and call the model method `following` or `unFollowing` on `UserModel` in `backend/users/models.go`.\n- The routes are mounted under `/api`, so the full paths are `/api/profiles/:username/follow`.\n\nThe concentrate graph shows the same links: `api_consumers` ties `POST` and `DELETE` on that path to `follow` and `unfollow` in `user.ts`. The `find_callers` results confirm `handleFollow` and `handleUnfollow` call `UserAPI`.\n\nOne thing I noticed while reading: `handleUnfollow` calls `mutate(..., { profile: { ...profile, following: true } }, true)`. It sets `following: true` on the optimistic update, which looks wrong for an unfollow. I didn't change anything.",
+              "isError": false,
+              "turns": 13,
+              "durationMs": 18525,
+              "costUsd": 0.007693810000000001,
+              "inputTokens": 12,
+              "outputTokens": 2513,
+              "cacheCreationTokens": 20772,
+              "cacheReadTokens": 228171,
+              "toolCalls": 12,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__search_symbols": 1,
+                "mcp__concentrate__api_consumers": 2,
+                "mcp__concentrate__find_callers": 6,
+                "Bash": 1,
+                "Grep": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "search_symbols",
+                  "input": {
+                    "query": "follow",
+                    "limit": 50
+                  },
+                  "result": "{\"query\":{\"query\":\"follow\",\"kind\":null,\"file\":null},\"total\":15,\"symbols\":[{\"kind\":\"function\",\"name\":\"follow\",\"file\":\"frontend/lib/api/user.ts\",\"line\":68,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"following\",\"className\":\"UserModel\",\"file\":\"backend/users/models.go\",\"line\":102,\"isExported\":false,\"match\":\"prefix\",\"score\":4969},{\"kind\":\"function\",\"name\":\"followUser\",\"file\":\"backend/articles/unit_test.go\",\"line\":794,\"isExported\":false,\"match\":\"prefix\",\"score\":4959},{\"kind\":\"class\",\"name\":\"FollowModel\",\"file\":\"backend/users/models.go\",\"line\":36,\"isExported\":true,\"match\":\"prefix\",\"score\":4949},{\"kind\":\"function\",\"name\":\"FollowUserButton\",\"file\":\"frontend/components/profile/FollowUserButton.tsx\",\"line\":3,\"isExported\":false,\"match\":\"prefix\",\"score\":4899},{\"kind\":\"method\",\"name\":\"isFollowing\",\"className\":\"UserModel\",\"file\":\"backend/users/models.go\",\"line\":115,\"isExported\":false,\"match\":\"substring\",\"score\":2999},{\"kind\":\"method\",\"name\":\"unFollowing\",\"className\":\"UserModel\",\"file\":\"backend/users/models.go\",\"line\":128,\"isExported\":false,\"match\":\"substring\",\"score\":2999},{\"kind\":\"function\",\"name\":\"handleFollow\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":42,\"isExported\":false,\"match\":\"substring\",\"score\":2999},{\"kind\":\"function\",\"name\":\"ProfileFollow\",\"file\":\"backend/users/routers.go\",\"line\":45,\"isExported\":true,\"match\":\"substring\",\"score\":2999},{\"kind\":\"method\",\"name\":\"GetFollowings\",\"className\":\"UserModel\",\"file\":\"backend/users/models.go\",\"line\":137,\"isExported\":false,\"match\":\"substring\",\"score\":2999},{\"kind\":\"function\",\"name\":\"TestArticleFeedWithFollowing\",\"file\":\"backend/articles/unit_test.go\",\"line\":1008,\"isExported\":true,\"match\":\"substring\",\"score\":2999},{\"kind\":\"function\",\"name\":\"unfollow\",\"file\":\"frontend/lib/api/user.ts\",\"line\":86,\"isExported\":false,\"match\":\"substring\",\"score\":2969},{\"kind\":\"function\",\"name\":\"TestArticleFeedWithEmptyFollowings\",\"file\":\"backend/articles/unit_test.go\",\"line\":1355,\"isExported\":true,\"match\":\"substring\",\"scor… (2332 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "POST",
+                    "limit": 100
+                  },
+                  "result": "{\"query\":{\"method\":\"POST\",\"path\":null,\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":100},\"consumers\":[{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/articles\",\"framework\":\"gin\",\"file\":\"backend/articles/routers.go\",\"line\":16},\"client\":\"net/http\",\"method\":\"POST\",\"url\":\"/api/articles\",\"match\":\"exact\",\"file\":\"backend/articles/unit_test.go\",\"line\":699,\"expression\":\"http.NewRequest\",\"function\":\"TestCreateArticleRequiredFields\"},{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/articles\",\"framework\":\"gin\",\"file\":\"backend/articles/routers.go\",\"line\":16},\"client\":\"net/http\",\"method\":\"POST\",\"url\":\"/api/articles\",\"match\":\"exact\",\"file\":\"backend/articles/unit_test.go\",\"line\":708,\"expression\":\"http.NewRequest\",\"function\":\"TestCreateArticleRequiredFields\"},{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/articles\",\"framework\":\"gin\",\"file\":\"backend/articles/routers.go\",\"line\":16},\"client\":\"net/http\",\"method\":\"POST\",\"url\":\"/api/articles\",\"match\":\"exact\",\"file\":\"backend/articles/unit_test.go\",\"line\":717,\"expression\":\"http.NewRequest\",\"function\":\"TestCreateArticleRequiredFields\"},{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/articles\",\"framework\":\"gin\",\"file\":\"backend/articles/routers.go\",\"line\":16},\"client\":\"net/http\",\"method\":\"POST\",\"url\":\"/api/articles\",\"match\":\"exact\",\"file\":\"backend/articles/unit_test.go\",\"line\":1142,\"expression\":\"http.NewRequest\",\"function\":\"TestArticleValidationErrors\"},{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/articles\",\"framework\":\"gin\",\"file\":\"backend/articles/routers.go\",\"line\":16},\"client\":\"net/http\",\"method\":\"POST\",\"url\":\"/api/articles\",\"match\":\"exact\",\"file\":\"backend/articles/unit_test.go\",\"line\":1150,\"expression\":\"http.NewRequest\",\"function\":\"TestArticleValidationErrors\"},{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/articles\",\"framework\":\"gin\",\"file\":\"backend/articles/routers.go\",\"line\":16},\"client\":\"net/http\",\"method\":\"POST\",\"url\":\"/api/articles\",\"match\":\"exact\",\"file\":\"backend/articles/unit_test.go\",\"line\":1205,\"expression\":\"http.NewRequest\",\"functi… (9672 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "DELETE",
+                    "path": "/api/profiles/:username/follow"
+                  },
+                  "result": "{\"query\":{\"method\":\"DELETE\",\"path\":\"/api/profiles/:username/follow\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"DELETE\",\"fullPath\":\"/api/profiles/:username/follow\",\"framework\":\"gin\",\"file\":\"backend/users/routers.go\",\"line\":31},\"client\":\"axios\",\"method\":\"DELETE\",\"url\":\"/api/profiles/${username}/follow\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":90,\"expression\":\"axios.delete\",\"function\":\"unfollow\"}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "follow"
+                  },
+                  "result": "{\"query\":{\"name\":\"follow\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"follow\",\"caller\":\"handleFollow\",\"callerKind\":\"Function\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":48,\"expression\":\"UserAPI.follow\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":1,\"sites\":[{\"file\":\"frontend/components/profile/FollowUserButton.tsx\",\"line\":16,\"expression\":\"follow\",\"caller\":\"handleClick\"}]},\"completeness\":\"1 call named follow resolves to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "unfollow"
+                  },
+                  "result": "{\"query\":{\"name\":\"unfollow\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"unfollow\",\"caller\":\"handleUnfollow\",\"callerKind\":\"Function\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":58,\"expression\":\"UserAPI.unfollow\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":1,\"sites\":[{\"file\":\"frontend/components/profile/FollowUserButton.tsx\",\"line\":16,\"expression\":\"unfollow\",\"caller\":\"handleClick\"}]},\"completeness\":\"1 call named unfollow resolves to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "handleFollow"
+                  },
+                  "result": "{\"query\":{\"name\":\"handleFollow\",\"exact\":true,\"limit\":20},\"callers\":[],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named handleFollow in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "handleUnfollow"
+                  },
+                  "result": "{\"query\":{\"name\":\"handleUnfollow\",\"exact\":true,\"limit\":20},\"callers\":[],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named handleUnfollow in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "ProfileFollow"
+                  },
+                  "result": "{\"query\":{\"name\":\"ProfileFollow\",\"exact\":true,\"limit\":20},\"callers\":[],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named ProfileFollow in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "ProfileUnfollow"
+                  },
+                  "result": "{\"query\":{\"name\":\"ProfileUnfollow\",\"exact\":true,\"limit\":20},\"callers\":[],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named ProfileUnfollow in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
