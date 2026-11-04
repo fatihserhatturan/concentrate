@@ -1,0 +1,340 @@
+{
+  "version": "0.1.0",
+  "recordedAt": "2026-11-04T20:33:53.973Z",
+  "node": "v24.13.0",
+  "platform": "darwin-arm64",
+  "cpus": 10,
+  "runs": 5,
+  "toolRuns": 20,
+  "results": [
+    {
+      "sample": "internet-go-gin-realworld",
+      "nodes": 2671,
+      "relationships": 4745,
+      "scanCold": {
+        "ms": 353,
+        "maxRssMb": 160
+      },
+      "scanWarm": {
+        "ms": 149,
+        "maxRssMb": 118
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 1.26,
+          "p95": 1.91
+        },
+        "find_definitions": {
+          "p50": 0.64,
+          "p95": 1.11
+        },
+        "find_callers": {
+          "p50": 4.56,
+          "p95": 6.44
+        },
+        "list_exports": {
+          "p50": 0.91,
+          "p95": 2.7
+        },
+        "trace_import_chain": {
+          "p50": 0.27,
+          "p95": 0.32
+        },
+        "list_routes": {
+          "p50": 0.34,
+          "p95": 1.7
+        },
+        "list_entrypoints": {
+          "p50": 0.1,
+          "p95": 0.13
+        },
+        "list_env_config": {
+          "p50": 0.26,
+          "p95": 0.27
+        },
+        "list_data_access": {
+          "p50": 2.43,
+          "p95": 3.88
+        },
+        "list_tables": {
+          "p50": 1.09,
+          "p95": 2.83
+        },
+        "impact_of": {
+          "p50": 4.75,
+          "p95": 9.36
+        },
+        "detect_changes": {
+          "p50": 21.58,
+          "p95": 27.88
+        },
+        "route_details": {
+          "p50": 4.4,
+          "p95": 6.77
+        },
+        "get_symbol_source": {
+          "p50": 0.35,
+          "p95": 0.43
+        },
+        "get_file_outline": {
+          "p50": 0.53,
+          "p95": 0.56
+        },
+        "search_symbols": {
+          "p50": 0.76,
+          "p95": 2.25
+        },
+        "find_references": {
+          "p50": 3.81,
+          "p95": 9.82
+        },
+        "find_import_cycles": {
+          "p50": 0.42,
+          "p95": 0.46
+        },
+        "find_unused_exports": {
+          "p50": 7.22,
+          "p95": 11.44
+        },
+        "architecture_overview": {
+          "p50": 1.64,
+          "p95": 3.5
+        },
+        "list_pages": {
+          "p50": 0.09,
+          "p95": 0.11
+        },
+        "list_stores": {
+          "p50": 0.15,
+          "p95": 0.17
+        },
+        "api_consumers": {
+          "p50": 3.06,
+          "p95": 6.84
+        }
+      }
+    },
+    {
+      "sample": "internet-go-echo-realworld",
+      "nodes": 1369,
+      "relationships": 2243,
+      "scanCold": {
+        "ms": 228,
+        "maxRssMb": 131
+      },
+      "scanWarm": {
+        "ms": 149,
+        "maxRssMb": 123
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.72,
+          "p95": 3.05
+        },
+        "find_definitions": {
+          "p50": 0.53,
+          "p95": 0.64
+        },
+        "find_callers": {
+          "p50": 1.95,
+          "p95": 3.95
+        },
+        "list_exports": {
+          "p50": 0.67,
+          "p95": 2.11
+        },
+        "trace_import_chain": {
+          "p50": 0.2,
+          "p95": 0.22
+        },
+        "list_routes": {
+          "p50": 0.24,
+          "p95": 0.29
+        },
+        "list_entrypoints": {
+          "p50": 0.1,
+          "p95": 0.12
+        },
+        "list_env_config": {
+          "p50": 0.22,
+          "p95": 0.24
+        },
+        "list_data_access": {
+          "p50": 1.1,
+          "p95": 2.7
+        },
+        "list_tables": {
+          "p50": 0.67,
+          "p95": 1.93
+        },
+        "impact_of": {
+          "p50": 2.82,
+          "p95": 5.69
+        },
+        "detect_changes": {
+          "p50": 20.57,
+          "p95": 31.18
+        },
+        "route_details": {
+          "p50": 2.18,
+          "p95": 4.43
+        },
+        "get_symbol_source": {
+          "p50": 0.4,
+          "p95": 0.6
+        },
+        "get_file_outline": {
+          "p50": 0.59,
+          "p95": 2.37
+        },
+        "search_symbols": {
+          "p50": 0.63,
+          "p95": 0.75
+        },
+        "find_references": {
+          "p50": 2.36,
+          "p95": 4.92
+        },
+        "find_import_cycles": {
+          "p50": 0.38,
+          "p95": 2.72
+        },
+        "find_unused_exports": {
+          "p50": 4.54,
+          "p95": 6.59
+        },
+        "architecture_overview": {
+          "p50": 1.05,
+          "p95": 2.64
+        },
+        "list_pages": {
+          "p50": 0.09,
+          "p95": 0.1
+        },
+        "list_stores": {
+          "p50": 0.14,
+          "p95": 0.17
+        },
+        "api_consumers": {
+          "p50": 1.44,
+          "p95": 3.75
+        }
+      }
+    },
+    {
+      "sample": "internet-realworld-go-fullstack",
+      "nodes": 3598,
+      "relationships": 6025,
+      "scanCold": {
+        "ms": 473,
+        "maxRssMb": 200
+      },
+      "scanWarm": {
+        "ms": 176,
+        "maxRssMb": 126
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 1.46,
+          "p95": 1.76
+        },
+        "find_definitions": {
+          "p50": 0.64,
+          "p95": 0.75
+        },
+        "find_callers": {
+          "p50": 3.99,
+          "p95": 6.01
+        },
+        "list_exports": {
+          "p50": 1.2,
+          "p95": 2.92
+        },
+        "trace_import_chain": {
+          "p50": 0.52,
+          "p95": 2.39
+        },
+        "list_routes": {
+          "p50": 0.29,
+          "p95": 0.33
+        },
+        "list_entrypoints": {
+          "p50": 0.1,
+          "p95": 0.12
+        },
+        "list_env_config": {
+          "p50": 0.26,
+          "p95": 0.29
+        },
+        "list_data_access": {
+          "p50": 2.48,
+          "p95": 5.1
+        },
+        "list_tables": {
+          "p50": 1.1,
+          "p95": 2.09
+        },
+        "impact_of": {
+          "p50": 5.14,
+          "p95": 10.39
+        },
+        "detect_changes": {
+          "p50": 28.02,
+          "p95": 30.9
+        },
+        "route_details": {
+          "p50": 5.7,
+          "p95": 8.4
+        },
+        "get_symbol_source": {
+          "p50": 0.38,
+          "p95": 2.16
+        },
+        "get_file_outline": {
+          "p50": 0.82,
+          "p95": 0.89
+        },
+        "search_symbols": {
+          "p50": 1.2,
+          "p95": 2.8
+        },
+        "find_references": {
+          "p50": 5.49,
+          "p95": 8.07
+        },
+        "find_import_cycles": {
+          "p50": 1.07,
+          "p95": 3.07
+        },
+        "find_unused_exports": {
+          "p50": 12.84,
+          "p95": 14.95
+        },
+        "architecture_overview": {
+          "p50": 2.76,
+          "p95": 9.35
+        },
+        "list_pages": {
+          "p50": 0.08,
+          "p95": 0.1
+        },
+        "list_stores": {
+          "p50": 0.17,
+          "p95": 0.2
+        },
+        "api_consumers": {
+          "p50": 4.67,
+          "p95": 16.16
+        },
+        "component_tree": {
+          "p50": 1.46,
+          "p95": 3.59
+        },
+        "find_component_usages": {
+          "p50": 0.34,
+          "p95": 0.35
+        }
+      }
+    }
+  ]
+}

@@ -981,14 +981,14 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Samples and labels
 
-- [ ] Pin a Go RealWorld backend (gin) and one more Go service (chi or echo, with gorm or sqlx) in `scripts/samples.json`
-- [ ] Hand labels for routes, cross-package calls, data access and env in `bench/labels/`
+- [x] Pin a Go RealWorld backend (gin) and one more Go service (chi or echo, with gorm or sqlx) in `scripts/samples.json` (#174, #183)
+- [x] Hand labels for routes, cross-package calls, data access and env in `bench/labels/` (#174, #183)
 - [ ] Golden sample graphs where they stay small enough
 
 ### Accuracy and performance
 
-- [ ] Go rows in every `bench:accuracy` section; precision 100%, recall reported
-- [ ] Scan time and memory for the Go samples in `docs/benchmarks.md`
+- [x] Go rows in every `bench:accuracy` section; precision 100%, recall reported (#174, #183)
+- [x] Scan time and memory for the Go samples in `docs/benchmarks.md` (#184)
 
 ### Agent benchmark
 
@@ -996,13 +996,13 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Docs
 
-- [ ] README "What it sees" table and languages line cover Go
-- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated
+- [x] README "What it sees" table and languages line cover Go (#175–#183)
+- [x] `docs/accuracy.md` and `docs/known-limitations.md` updated (#183)
 
 ### Acceptance criteria
 
 - [ ] Accuracy, performance and agent results for Go are reproducible from scripts
-- [ ] README shows the Go coverage
+- [x] README shows the Go coverage (#183)
 
 ## M10: Rust ecosystem
 

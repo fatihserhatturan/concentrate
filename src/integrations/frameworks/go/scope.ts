@@ -9,8 +9,29 @@ export type Definition = { type: string } | { value: SyntaxNode } | null;
 
 // What a name holds at a point: its type, or the expression it was last
 // assigned before the point (in the functions around it, else at package
-// level).
+// level). The declarations of each function body and the package-level
+// `var` specs are collected once per lookup, by name, so a lookup does not
+// walk the tree again.
 export function createDefinitionLookup(root: SyntaxNode): (name: string, at: SyntaxNode) => Definition {
+  const bodies = new Map<string, Map<string, SyntaxNode[]>>();
+  let packageVars: SyntaxNode[] | null = null;
+  const declarationsOf = (body: SyntaxNode): Map<string, SyntaxNode[]> => {
+    const key = `${body.startIndex}:${body.endIndex}`;
+    let byName = bodies.get(key);
+    if (byName) return byName;
+    byName = new Map();
+    for (const node of body.descendantsOfType(["short_var_declaration", "assignment_statement", "var_spec"])) {
+      const names = node.type === "var_spec" ? node.childrenForFieldName("name") : node.childForFieldName("left")?.namedChildren ?? [];
+      for (const id of names) {
+        if (node.type !== "var_spec" && id.type !== "identifier") continue;
+        const list = byName.get(id.text) ?? [];
+        if (!list.some((existing) => same(existing, node))) list.push(node);
+        byName.set(id.text, list);
+      }
+    }
+    bodies.set(key, byName);
+    return byName;
+  };
   return (name: string, at: SyntaxNode): Definition => {
     for (let scope = at.parent; scope; scope = scope.parent) {
       if (!FUNCTION_TYPES.has(scope.type)) continue;
@@ -22,16 +43,16 @@ export function createDefinitionLookup(root: SyntaxNode): (name: string, at: Syn
         }
       }
       const body = scope.childForFieldName("body");
-      for (const node of body ? [body, ...body.descendantsOfType(["short_var_declaration", "assignment_statement", "var_spec"])] : []) {
-        if (node.startIndex >= at.startIndex || same(node, body!)) continue;
+      for (const node of body ? declarationsOf(body).get(name) ?? [] : []) {
+        if (node.startIndex >= at.startIndex) continue;
         if (!visibleFrom(node, at, scope)) continue;
         const result = assignmentOf(node, name);
         if (result !== undefined && (!best || node.startIndex > best.start)) best = { start: node.startIndex, result };
       }
       if (best) return best.result;
     }
-    for (const spec of root.descendantsOfType("var_spec")) {
-      if (!isPackageLevel(spec)) continue;
+    packageVars ??= root.descendantsOfType("var_spec").filter((spec) => isPackageLevel(spec));
+    for (const spec of packageVars) {
       const result = assignmentOf(spec, name);
       if (result !== undefined) return result;
     }

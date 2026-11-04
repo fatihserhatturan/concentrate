@@ -262,3 +262,65 @@ Tool latency, p50 / p95 ms:
   `find_unused_exports`) take 50–125 ms.
 - `detect_changes` runs `git`: about 22 ms on the small graphs, 48 ms on
   `internet-nest`.
+
+## Go samples (Phase 21)
+
+`npm run bench:release -- --sample internet-go-gin-realworld --sample
+internet-go-echo-realworld --sample internet-realworld-go-fullstack --runs 5`
+on the same Apple M4 (10 CPUs), Node v24.13.0, recorded 2026-11-04 for 0.1.0
+([`bench/results/0.1.0-2026-11-04-go.json`](../bench/results/0.1.0-2026-11-04-go.json)).
+`--sample` (repeatable) limits the run to the named samples; a sample's
+`apiOrigins` are passed to the scan as `--api-origin`.
+
+| Sample | Parsed files | Nodes | Rels | Cold scan ms | Cold peak RSS MB | Warm scan ms | Warm peak RSS MB |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-go-gin-realworld | 21 | 2671 | 4745 | 353 | 160 | 149 | 118 |
+| internet-go-echo-realworld | 24 | 1369 | 2243 | 228 | 131 | 149 | 123 |
+| internet-realworld-go-fullstack (gin + Next.js) | 83 | 3598 | 6025 | 473 | 200 | 176 | 126 |
+
+- The first run took 2.1 s for a cold gin scan: the Go data-access and
+  outbound-HTTP plugins walked each function body again for every name they
+  looked up (1.6 s of the 2.1 s in `descendantsOfType`). The lookup now
+  collects a body's declarations once, by name, and the cold scan is 353 ms
+  with an identical graph.
+- A cold Go scan still costs more per file than a JS/TS one
+  (`internet-node-express-realworld`: 39 files, 124 ms); the warm scans are
+  close (149 vs 91 ms), so the difference is in parsing and the Go parse
+  plugins, not in the cross-file passes. Not profiled further yet.
+
+Tool latency, p50 / p95 ms (20 calls; component tools only on the fullstack
+sample, which has a frontend):
+
+| Tool | internet-go-gin-realworld | internet-go-echo-realworld | internet-realworld-go-fullstack |
+| --- | ---: | ---: | ---: |
+| graph_stats | 1.26 / 1.91 | 0.72 / 3.05 | 1.46 / 1.76 |
+| find_definitions | 0.64 / 1.11 | 0.53 / 0.64 | 0.64 / 0.75 |
+| find_callers | 4.56 / 6.44 | 1.95 / 3.95 | 3.99 / 6.01 |
+| list_exports | 0.91 / 2.7 | 0.67 / 2.11 | 1.2 / 2.92 |
+| trace_import_chain | 0.27 / 0.32 | 0.2 / 0.22 | 0.52 / 2.39 |
+| list_routes | 0.34 / 1.7 | 0.24 / 0.29 | 0.29 / 0.33 |
+| list_pages | 0.09 / 0.11 | 0.09 / 0.1 | 0.08 / 0.1 |
+| list_entrypoints | 0.1 / 0.13 | 0.1 / 0.12 | 0.1 / 0.12 |
+| list_env_config | 0.26 / 0.27 | 0.22 / 0.24 | 0.26 / 0.29 |
+| list_data_access | 2.43 / 3.88 | 1.1 / 2.7 | 2.48 / 5.1 |
+| list_tables | 1.09 / 2.83 | 0.67 / 1.93 | 1.1 / 2.09 |
+| list_stores | 0.15 / 0.17 | 0.14 / 0.17 | 0.17 / 0.2 |
+| impact_of | 4.75 / 9.36 | 2.82 / 5.69 | 5.14 / 10.39 |
+| detect_changes | 21.58 / 27.88 | 20.57 / 31.18 | 28.02 / 30.9 |
+| route_details | 4.4 / 6.77 | 2.18 / 4.43 | 5.7 / 8.4 |
+| api_consumers | 3.06 / 6.84 | 1.44 / 3.75 | 4.67 / 16.16 |
+| get_symbol_source | 0.35 / 0.43 | 0.4 / 0.6 | 0.38 / 2.16 |
+| get_file_outline | 0.53 / 0.56 | 0.59 / 2.37 | 0.82 / 0.89 |
+| component_tree | – | – | 1.46 / 3.59 |
+| find_component_usages | – | – | 0.34 / 0.35 |
+| search_symbols | 0.76 / 2.25 | 0.63 / 0.75 | 1.2 / 2.8 |
+| find_references | 3.81 / 9.82 | 2.36 / 4.92 | 5.49 / 8.07 |
+| find_import_cycles | 0.42 / 0.46 | 0.38 / 2.72 | 1.07 / 3.07 |
+| find_unused_exports | 7.22 / 11.44 | 4.54 / 6.59 | 12.84 / 14.95 |
+| architecture_overview | 1.64 / 3.5 | 1.05 / 2.64 | 2.76 / 9.35 |
+
+- Every tool answers in under 15 ms at p50; `detect_changes` (which runs
+  `git`) is the floor at 20–28 ms, as on the JS/TS samples.
+- `bench:release` now has cases for the tools added since 0.1.0's first
+  report (`list_pages`, `list_stores`, `api_consumers`, `component_tree`,
+  `find_component_usages`); without them the script refused to run.
