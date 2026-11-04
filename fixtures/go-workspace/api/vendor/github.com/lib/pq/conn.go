@@ -1,0 +1,3 @@
+package pq
+
+func Open() {}

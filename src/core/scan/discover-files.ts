@@ -40,6 +40,10 @@ export async function discoverFiles(rootPath: string, options: DiscoverFilesOpti
       if (entryNames.includes(".gitignore")) {
         await addGitIgnore(rootPath, directory, ignoreRules);
       }
+      // A Go module's `vendor/` holds copies of its dependencies.
+      if (entryNames.includes("go.mod") && entryNames.includes("vendor")) {
+        ignoreRules.add("/vendor/", directory);
+      }
     },
     accept: (relativePath, isDirectory) => {
       if (ignoreRules.ignores(relativePath, isDirectory)) return false;

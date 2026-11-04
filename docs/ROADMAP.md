@@ -858,9 +858,9 @@ Go gets files, imports, structs, functions, methods and calls today (`src/integr
 
 ### Modules and packages
 
-- [ ] `go.mod` per module (nested modules) and `go.work` workspaces; `replace` directives to local paths
-- [ ] A package is a directory: an import resolves to every file of the package, not the first match; `vendor/` is skipped
-- [ ] Import aliases, `_` and `.` imports
+- [x] `go.mod` per module (nested modules) and `go.work` workspaces; `replace` directives to local paths
+- [x] A package is a directory: an import resolves to every file of the package, not the first match; `vendor/` is skipped
+- [x] Import aliases, `_` and `.` imports
 
 ### Declarations
 
@@ -870,7 +870,7 @@ Go gets files, imports, structs, functions, methods and calls today (`src/integr
 
 ### Calls
 
-- [ ] `pkg.Func()` and `pkg.Type{}` / `pkg.NewX()` resolve through the import (alias or last path segment)
+- [x] `pkg.Func()` and `pkg.Type{}` / `pkg.NewX()` resolve through the import (alias or last path segment)
 - [ ] Method calls on typed receivers: variables declared with a struct type, `x := pkg.NewX()` return types, struct fields, interface values (to every implementation, marked)
 
 ### Entrypoints and tests
@@ -886,7 +886,7 @@ Go gets files, imports, structs, functions, methods and calls today (`src/integr
 
 - [ ] Fixtures with golden coverage: multi-module `go.work`, package with several files, interfaces with implementations, embedded structs, generics, a file with a syntax error
 - [ ] Cross-package call resolution has hand labels on a pinned Go sample (precision 100%, recall reported)
-- [ ] `docs/known-limitations.md` has a Go section
+- [x] `docs/known-limitations.md` has a Go section
 
 ## Phase 19: Go HTTP routes and entrypoints (net/http, gin, echo, chi, fiber, gRPC, cobra) ([#163](https://github.com/fatihserhatturan/concentrate/issues/163))
 
