@@ -312,7 +312,8 @@ Example:
   - `re-export` statements that pass the declaration on;
   - `route` and `entrypoint` for functions that handle them (`detail` is the
     role);
-  - `extends`, `implements` and `injects` for classes and interfaces.
+  - `extends`, `implements` and `injects` for classes and interfaces (Go
+    structs too: fx and wire providers).
   `Class.method` selects one class's method (calls only). `counts` sums the
   references by kind.
 - `find_import_cycles({ scope = "file", path?, limit = 20 })`: strongly connected

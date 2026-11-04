@@ -1130,6 +1130,23 @@ Astro).
   the URL it leaves the call unlinked. Requests in `_test.go` files
   (`httptest` with `http.NewRequest`) are linked too. Other clients
   (`go-retryablehttp`, generated OpenAPI clients, `grpc`) are not read.
+- Go dependency injection (uber fx, google wire) is `INJECTS` between
+  structs, as NestJS injection is between classes: a provider is a function
+  passed to `fx.Provide` (directly or as `fx.Annotate(F, …)`, wherever the
+  call is: `fx.New`, `fx.Module`, `fx.Options`), `wire.NewSet` or
+  `wire.Build`, by name in the file's package or as `pkg.Func`; the struct
+  it returns first injects the struct of each parameter (`fieldName` the
+  parameter's name; the fields of an `fx.In` parameter struct, by field
+  name). `wire.Struct(new(T), "*" | "Field"…)` makes T inject those fields'
+  types. An interface (as a parameter, or as a provider's result) is the
+  struct `wire.Bind(new(I), new(*T))` or `fx.As(new(I))` binds to it
+  anywhere in the scan, else its only implementation, else nothing. Only
+  structs of the scan are linked (`*sql.DB`, `*zap.Logger` are not);
+  `fx.Invoke` functions, wire injector functions, `fx.Out` result structs,
+  named values (`name:"…"` tags, `fx.ParamTags`) and groups are not read,
+  and providers are not scoped to the `fx.New` / injector that registers
+  them. Values (`fx.Supply`, `wire.Value`) take no dependencies. The calls
+  in wire's generated `wire_gen.go` are ordinary calls.
 - Go env reads are `USES_ENV` from the function that reads (and from its
   file; a package-level read is the file's): `os.Getenv`, `os.LookupEnv`,
   `syscall.Getenv` with a string-literal name, and each `$NAME` / `${NAME}`
