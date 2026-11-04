@@ -133,3 +133,33 @@ describe("Go modules", () => {
     assert.equal(goPackageDirectory("github.com/lib/pq", config), null);
   });
 });
+
+describe("Go types", () => {
+  const root = path.resolve("fixtures/go-interfaces");
+
+  it("records interfaces with their methods and embedded interfaces", async () => {
+    const result = await goParser.parse(root, path.join(root, "storage/storage.go"));
+    const store = result.nodes.find((n) => n.label === "Interface" && n.properties.name === "Store")!;
+    assert.equal(store.properties.methods, JSON.stringify(["Put"]));
+    assert.equal(store.properties.embeds, JSON.stringify(["Reader", "io.Closer"]));
+    assert.ok(result.relationships.some((r) => r.type === "DEFINES_INTERFACE" && r.to === store.id));
+    const number = result.nodes.find((n) => n.label === "Interface" && n.properties.name === "Number")!;
+    assert.equal(number.properties.embeds, "[]");
+  });
+
+  it("records aliases, defined types and type parameters", async () => {
+    const result = await goParser.parse(root, path.join(root, "storage/storage.go"));
+    const types = result.nodes.filter((n) => n.label === "TypeAlias").map((n) => [n.properties.name, n.properties.aliasOf, n.properties.isAlias]);
+    assert.deepEqual(types, [["ID", "string", true], ["Count", "int", false]]);
+    assert.equal(result.nodes.find((n) => n.properties.name === "Pair")!.properties.typeParameters, "[K comparable, V any]");
+    assert.equal(result.nodes.find((n) => n.properties.name === "Sum")!.properties.typeParameters, "[T Number]");
+  });
+
+  it("leaves out statements with syntax errors and keeps the rest", async () => {
+    const result = await goParser.parse(root, path.join(root, "app/broken.go"));
+    assert.deepEqual(result.warnings, ["Syntax error: left out the statement at line 8"]);
+    const names = result.nodes.filter((n) => n.label === "Function").map((n) => n.properties.name);
+    assert.deepEqual(names, ["helper", "broken", "caller"]);
+  });
+});
+

@@ -12,6 +12,9 @@ export type GoCallIndex = {
   // `Type.method` per package.
   methodsByPackage: Map<string, Map<string, string>>;
   typesByPackage: Map<string, Map<string, { node: GraphNode; fileId: string }>>;
+  interfacesByPackage: Map<string, Map<string, { node: GraphNode; fileId: string }>>;
+  // Structs per interface (IMPLEMENTS), as type references.
+  implementersByInterface: Map<string, TypeRef[]>;
   fileByFunctionId: Map<string, string>;
   // Imported packages per file by local name; `.` imports under ".".
   importsByFile: Map<string, Map<string, string[]>>;
@@ -37,6 +40,8 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
     functionsByPackage: new Map(),
     methodsByPackage: new Map(),
     typesByPackage: new Map(),
+    interfacesByPackage: new Map(),
+    implementersByInterface: new Map(),
     fileByFunctionId: relationshipIndex.fileByFunctionId,
     importsByFile: new Map(),
   };
@@ -62,6 +67,10 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
       const fileId = relationshipIndex.fileByClassId.get(node.id);
       const pkg = packageByFile.get(fileId ?? "");
       if (pkg !== undefined) nested(index.typesByPackage, pkg).set(String(node.properties.name), { node, fileId: fileId! });
+    } else if (node.label === "Interface") {
+      const fileId = relationshipIndex.fileByInterfaceId.get(node.id);
+      const pkg = packageByFile.get(fileId ?? "");
+      if (pkg !== undefined) nested(index.interfacesByPackage, pkg).set(String(node.properties.name), { node, fileId: fileId! });
     } else if (node.label === "Import") {
       const fileId = relationshipIndex.fileByImportId.get(node.id);
       const targets = targetsByImport.get(node.id);
@@ -76,13 +85,71 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
     }
   }
 
+  const typeRefByClassId = new Map<string, TypeRef>();
+  for (const [pkg, types] of index.typesByPackage) {
+    for (const [name, { node }] of types) typeRefByClassId.set(node.id, { pkg, name });
+  }
+  for (const relationship of graph.relationships) {
+    if (relationship.type !== "IMPLEMENTS") continue;
+    const implementer = typeRefByClassId.get(relationship.from);
+    if (implementer) index.implementersByInterface.set(relationship.to, [...index.implementersByInterface.get(relationship.to) ?? [], implementer]);
+  }
+
   return index;
 }
 
-// The function a call made in `callerFileId` reaches, or null when it is
-// not one of the scan's (the standard library, a dependency) or its
+// Go has no `implements`: a struct implements every interface whose methods
+// are all in its method set (its own methods, value or pointer receivers,
+// and the ones promoted from embedded structs), matched by name. Interfaces
+// without methods (`any`, constraints) are left out.
+export function addGoImplementsRelationships(graph: IGraphContributor, relationshipIndex: ResolutionRelationshipIndex): void {
+  if (![...relationshipIndex.fileByInterfaceId.values()].some(isGoFile)) return;
+  const index = createGoCallIndex(graph, relationshipIndex);
+  const interfaces = [...index.interfacesByPackage].flatMap(([pkg, byName]) => [...byName.keys()].map((name) => ({ pkg, name })));
+  const required = interfaces
+    .map((ref) => ({ ref, id: index.interfacesByPackage.get(ref.pkg)!.get(ref.name)!.node.id, methods: interfaceMethods(ref, index, 0) }))
+    .filter((entry) => entry.methods !== null && entry.methods.size > 0);
+  if (required.length === 0) return;
+  for (const [pkg, types] of index.typesByPackage) {
+    for (const [name, { node }] of types) {
+      const type = { pkg, name };
+      for (const entry of required) {
+        if ([...entry.methods!].every((method) => methodOf(type, method, index, 0).length > 0)) {
+          graph.addRelationship({ from: node.id, to: entry.id, type: "IMPLEMENTS", properties: {} });
+        }
+      }
+    }
+  }
+}
+
+// An interface's methods with those of the interfaces it embeds; null when
+// an embedded interface is not one of the scan's (its methods are unknown).
+function interfaceMethods(ref: TypeRef, index: GoCallIndex, depth: number): Set<string> | null {
+  const entry = index.interfacesByPackage.get(ref.pkg)?.get(ref.name);
+  if (!entry || depth > 4) return null;
+  const methods = new Set(parseList(entry.node.properties.methods));
+  for (const embedded of parseList(entry.node.properties.embeds)) {
+    const embeddedRef = resolveType(embedded, entry.fileId, index);
+    const inherited = embeddedRef ? interfaceMethods(embeddedRef, index, depth + 1) : null;
+    if (!inherited) return null;
+    for (const method of inherited) methods.add(method);
+  }
+  return methods;
+}
+
+export type GoCallTarget = { functionId: string; via?: "interface" };
+
+// The functions a call made in `callerFileId` reaches: one, every
+// implementation of an interface method (marked), or none when the callee is
+// not one of the scan's (the standard library, a dependency) or the
 // receiver's type is unknown.
-export function resolveGoCall(call: GraphNode, callerFileId: string, index: GoCallIndex): string | null {
+export function resolveGoCall(call: GraphNode, callerFileId: string, index: GoCallIndex): GoCallTarget[] {
+  const found = resolveGoCallTarget(call, callerFileId, index);
+  if (found === null) return [];
+  return typeof found === "string" ? [{ functionId: found }] : found.map((functionId) => ({ functionId, via: "interface" as const }));
+}
+
+function resolveGoCallTarget(call: GraphNode, callerFileId: string, index: GoCallIndex): string | string[] | null {
   const callee = call.properties.callee;
   const receiver = call.properties.receiver;
   const pkg = index.packageByFile.get(callerFileId);
@@ -123,7 +190,13 @@ export function resolveGoCall(call: GraphNode, callerFileId: string, index: GoCa
     if (!type) return null;
     type = fieldType(type, field, index);
   }
-  return type ? methodOf(type, callee, index, 0) : null;
+  if (!type) return null;
+  const iface = index.interfacesByPackage.get(type.pkg)?.get(type.name);
+  if (iface) {
+    const implementations = (index.implementersByInterface.get(iface.node.id) ?? []).flatMap((implementer) => methodOf(implementer, callee, index, 0).slice(0, 1));
+    return implementations.length > 0 ? [...new Set(implementations)].sort() : null;
+  }
+  return methodOf(type, callee, index, 0)[0] ?? null;
 }
 
 // `*db.Store`, `Store[T]` → the package and name of the type.
@@ -134,15 +207,19 @@ function resolveType(text: string, fileId: string, index: GoCallIndex): TypeRef 
   if (!name) return null;
   if (qualifier === null) {
     const pkg = index.packageByFile.get(fileId);
-    if (pkg !== undefined && index.typesByPackage.get(pkg)?.has(name)) return { pkg, name };
+    if (pkg !== undefined && hasType(pkg, name, index)) return { pkg, name };
     for (const dotPackage of index.importsByFile.get(fileId)?.get(".") ?? []) {
-      if (index.typesByPackage.get(dotPackage)?.has(name)) return { pkg: dotPackage, name };
+      if (hasType(dotPackage, name, index)) return { pkg: dotPackage, name };
     }
     return pkg === undefined ? null : { pkg, name };
   }
   const targets = index.importsByFile.get(fileId)?.get(qualifier) ?? [];
-  const pkg = targets.find((target) => index.typesByPackage.get(target)?.has(name)) ?? targets[0];
+  const pkg = targets.find((target) => hasType(target, name, index)) ?? targets[0];
   return pkg === undefined ? null : { pkg, name };
+}
+
+function hasType(pkg: string, name: string, index: GoCallIndex): boolean {
+  return index.typesByPackage.get(pkg)?.has(name) === true || index.interfacesByPackage.get(pkg)?.has(name) === true;
 }
 
 // `x := NewStore()` / `store.New()`: the type the constructor returns first.
@@ -177,19 +254,20 @@ function fieldType(type: TypeRef, field: string, index: GoCallIndex): TypeRef | 
   return found ? resolveType(found.type, owner.fileId, index) : null;
 }
 
-// A method of the type itself or promoted from a field it embeds.
-function methodOf(type: TypeRef, method: string, index: GoCallIndex, depth: number): string | null {
+// A method of the type itself or promoted from a field it embeds (empty
+// when there is none).
+function methodOf(type: TypeRef, method: string, index: GoCallIndex, depth: number): string[] {
   const own = index.methodsByPackage.get(type.pkg)?.get(`${type.name}.${method}`);
-  if (own || depth > 3) return own ?? null;
+  if (own) return [own];
   const owner = index.typesByPackage.get(type.pkg)?.get(type.name);
-  if (!owner) return null;
+  if (!owner || depth > 3) return [];
   for (const field of parseFields(owner.node)) {
     if (!field.embedded) continue;
     const embedded = resolveType(field.type, owner.fileId, index);
-    const found = embedded ? methodOf(embedded, method, index, depth + 1) : null;
-    if (found) return found;
+    const found = embedded ? methodOf(embedded, method, index, depth + 1) : [];
+    if (found.length > 0) return found;
   }
-  return null;
+  return [];
 }
 
 function parseFields(node: GraphNode): Field[] {
@@ -197,6 +275,16 @@ function parseFields(node: GraphNode): Field[] {
   if (typeof raw !== "string") return [];
   try {
     return JSON.parse(raw) as Field[];
+  } catch {
+    return [];
+  }
+}
+
+function parseList(raw: unknown): string[] {
+  if (typeof raw !== "string") return [];
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string") : [];
   } catch {
     return [];
   }

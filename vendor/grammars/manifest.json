@@ -33,9 +33,9 @@
     },
     "go": {
       "package": "tree-sitter-go",
-      "version": "0.21.2",
-      "sha256": "db1fb2a2a45f549e5909ddf5b264685c51e9458f43e6de235ee550f9b3f04b5f",
-      "bytes": 207175
+      "version": "0.25.0",
+      "sha256": "058a4f6c7cb7156c599c2ca07af9645f03b3f655b84bced9c72816e755c7030b",
+      "bytes": 217764
     },
     "rust": {
       "package": "tree-sitter-rust",

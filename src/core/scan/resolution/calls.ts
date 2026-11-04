@@ -58,13 +58,12 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
 
     if (isGoFile(callerFileId)) {
       goIndex ??= createGoCallIndex(graph, relationshipIndex);
-      const targetFunctionId = resolveGoCall(node, callerFileId, goIndex);
-      if (targetFunctionId) {
-        graph.addRelationship({ from: node.id, to: targetFunctionId, type: "CALL_RESOLVES_TO", properties: {} });
-        resolved++;
-      } else {
-        unresolved++;
+      const targets = resolveGoCall(node, callerFileId, goIndex);
+      for (const target of targets) {
+        graph.addRelationship({ from: node.id, to: target.functionId, type: "CALL_RESOLVES_TO", properties: target.via ? { via: target.via } : {} });
       }
+      if (targets.length > 0) resolved++;
+      else unresolved++;
       continue;
     }
 

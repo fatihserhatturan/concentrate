@@ -1,5 +1,6 @@
 import type { IGraphContributor } from "../../contracts/graph-contributor.js";
 import type { GraphNode } from "../../graph/model.js";
+import { addGoImplementsRelationships } from "./go-calls.js";
 import {
   createResolutionRelationshipIndex,
   indexImportNodesByFile,
@@ -54,6 +55,8 @@ export function addInheritanceRelationships(graph: IGraphContributor): void {
       });
     }
   }
+
+  addGoImplementsRelationships(graph, relationshipIndex);
 }
 
 function resolveNamedNode(

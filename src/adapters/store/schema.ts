@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 67;
+export const SCHEMA_VERSION = 68;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -27,10 +27,10 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Directory", properties: { path: "STRING", relativePath: "STRING", name: "STRING" } },
   { label: "File", properties: { path: "STRING", relativePath: "STRING", language: "STRING", defaultExport: "STRING", defaultExportFrom: "STRING", sourceType: "STRING", isTest: "BOOLEAN", isFixture: "BOOLEAN", isSupport: "BOOLEAN", isGenerated: "BOOLEAN", dynamicRouteCalls: "STRING", packageName: "STRING" } },
   { label: "Import", properties: { source: "STRING", specifier: "STRING", line: "INT64", isReExport: "BOOLEAN", isWildcard: "BOOLEAN", isDynamic: "BOOLEAN", isCjs: "BOOLEAN", isTypeOnly: "BOOLEAN", bindings: "STRING", alias: "STRING" } },
-  { label: "Function", properties: { name: "STRING", kind: "STRING", methodKind: "STRING", line: "INT64", endLine: "INT64", className: "STRING", isExported: "BOOLEAN", isAsync: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", parameters: "STRING", returnType: "STRING", storeRefs: "STRING", storeSelects: "STRING", formAction: "STRING" } },
-  { label: "Class", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", extendsNames: "STRING", implementsNames: "STRING", fields: "STRING" } },
-  { label: "Interface", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
-  { label: "TypeAlias", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
+  { label: "Function", properties: { name: "STRING", kind: "STRING", methodKind: "STRING", line: "INT64", endLine: "INT64", className: "STRING", isExported: "BOOLEAN", isAsync: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", parameters: "STRING", returnType: "STRING", storeRefs: "STRING", storeSelects: "STRING", formAction: "STRING", typeParameters: "STRING" } },
+  { label: "Class", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", extendsNames: "STRING", implementsNames: "STRING", fields: "STRING", typeParameters: "STRING" } },
+  { label: "Interface", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", methods: "STRING", embeds: "STRING", typeParameters: "STRING" } },
+  { label: "TypeAlias", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", aliasOf: "STRING", isAlias: "BOOLEAN", typeParameters: "STRING" } },
   { label: "Enum", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
   { label: "Call", properties: { name: "STRING", expression: "STRING", callee: "STRING", receiver: "STRING", requireSource: "STRING", line: "INT64", columnNumber: "INT64", args: "STRING", httpClient: "STRING", httpReceiver: "STRING", httpMethod: "STRING", httpUrl: "STRING", httpUrlAlternatives: "STRING", storeAccess: "STRING", reduxAccess: "STRING", receiverType: "STRING", receiverConstructor: "STRING", receiverIsLocal: "BOOLEAN" } },
   { label: "Field", properties: { name: "STRING", typeName: "STRING", isStatic: "BOOLEAN", isReadonly: "BOOLEAN", visibility: "STRING", line: "INT64", isInjected: "BOOLEAN" } },
@@ -75,7 +75,7 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "RE_EXPORTS_CLASS", from: "File", to: "Class", properties: {} },
   { type: "RE_EXPORTS_VARIABLE", from: "File", to: "Variable", properties: {} },
   { type: "CALLS", from: "Function", to: "Call", properties: {} },
-  { type: "CALL_RESOLVES_TO", from: "Call", to: "Function", properties: {} },
+  { type: "CALL_RESOLVES_TO", from: "Call", to: "Function", properties: { via: "STRING" } },
   { type: "MODULE_CALLS", from: "File", to: "Call", properties: {} },
   { type: "PASSED_TO", from: "Function", to: "Call", properties: {} },
   { type: "INITIALIZED_BY", from: "Variable", to: "Call", properties: {} },
