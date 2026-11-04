@@ -393,3 +393,73 @@ Per category (medians over six runs; cost is the sum):
   `impact_of`; with a single store and a distinctive hook name, grep is the
   shorter path. A repository with several stores, or slices reached through
   selectors, would be the fairer test.
+
+### Go questions (Phase 21)
+
+[`bench/agent/questions-go.json`](../bench/agent/questions-go.json) has eight
+questions over the Go RealWorld backends and the Next.js frontend scanned
+with the gin backend:
+
+- **routes:** the handler and middleware of gin's
+  `POST /api/profiles/:username/follow` (`AuthMiddleware(true)`); echo's
+  `GET /api/articles/feed` handler, the concrete store method it reaches
+  through the `article.Store` interface, and its JWT middleware;
+- **callers:** the production callers of gin's `FindOneArticle`;
+- **impact:** the routes and handlers a change to gin's `FindOneUser` or
+  echo's `UserStore.GetByUsername` reaches;
+- **data:** the functions that read and write gin's `FavoriteModel`;
+- **env:** the env variables gin's production code reads, and where;
+- **frontend-api:** the page and API module that send the follow requests
+  and the gin handlers that receive them (`internet-realworld-go-fullstack`).
+
+Expected answers were written from the source (route registrations in
+`main` and the `Register` functions, call sites, gorm queries,
+`os.Getenv`, the frontend's API calls).
+
+```bash
+npm run bench:agent -- --questions bench/agent/questions-go.json --runs 3 --model sonnet --max-turns 25
+npm run bench:agent -- --questions bench/agent/questions-go.json --runs 3 --model haiku --max-turns 25
+```
+
+Recorded 2026-11-04 with Claude Code 2.1.317, three runs each,
+`--max-turns 25`
+([`agent-go-sonnet-runs3-2026-11-04.json`](../bench/results/agent-go-sonnet-runs3-2026-11-04.json),
+[`agent-go-haiku-runs3-2026-11-04.json`](../bench/results/agent-go-haiku-runs3-2026-11-04.json)).
+Per category, median input tokens (baseline → concentrate) and the runs in
+which the agent called a Concentrate tool:
+
+| Category | Runs | sonnet: correct | sonnet: input tokens | sonnet: MCP runs | haiku: correct | haiku: input tokens | haiku: MCP runs |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| routes | 6 | 6/6 / 6/6 | 105.0k → 100.0k (−5%) | 0/6 | 6/6 / 6/6 | 166.7k → 169.2k (+2%) | 0/6 |
+| callers | 3 | 3/3 / 3/3 | 102.2k → 105.1k (+3%) | 0/3 | 3/3 / 3/3 | 105.4k → 108.1k (+3%) | 1/3 |
+| impact | 6 | 6/6 / 6/6 | 122.0k → 109.4k (−10%) | 4/6 | 6/6 / 6/6 | 129.1k → 110.7k (−14%) | 4/6 |
+| data | 3 | 3/3 / 3/3 | 143.1k → 107.6k (−25%) | 0/3 | 3/3 / 3/3 | 121.2k → 167.7k (+38%) | 3/3 |
+| env | 3 | 3/3 / 3/3 | 102.4k → 104.5k (+2%) | 0/3 | 3/3 / 3/3 | 107.1k → 149.7k (+40%) | 1/3 |
+| frontend-api | 3 | 3/3 / 3/3 | 137.7k → 111.5k (−19%) | 3/3 | 3/3 / 3/3 | 205.8k → 160.6k (−22%) | 3/3 |
+
+| | sonnet: baseline | sonnet: concentrate | haiku: baseline | haiku: concentrate |
+| --- | ---: | ---: | ---: | ---: |
+| Correct | 24/24 | 24/24 | 24/24 | 24/24 |
+| Median input tokens | 108.2k | 106.4k (−2%) | 130.6k | 154.3k (+18%) |
+| Median tool calls | 3 | 3 | 4 | 5 |
+| Median wall time | 16.2 s | 16.3 s | 15.0 s | 16.0 s |
+| Total cost (CLI estimate) | $1.87 | $1.58 | $0.13 | $0.14 |
+
+- **No accuracy difference.** Every one of the 96 runs (8 questions × 2
+  modes × 3 runs × 2 models) was correct. The two Go backends are small (21 and 24 files) and name handlers,
+  stores and models plainly, so grep finds every answer.
+- **Concentrate helped where an answer spans the stack.** The full-stack
+  follow question (`api_consumers` in every run) used 19% (sonnet) and 22%
+  (haiku) fewer input tokens, and the impact questions 10% and 14% fewer
+  (`impact_of`, `find_callers`).
+- **Differences without an MCP call are noise.** Sonnet never called a
+  Concentrate tool on the route, callers, data and env questions; its −25%
+  on the data question and the cheaper gin route runs come from how many
+  files it chose to read, not from the graph.
+- **Listings cost haiku more.** Haiku called `list_data_access` in all
+  three data runs: the result lists the handlers each access is reached
+  through as well as the functions that run the query, so it is longer than
+  the grep hits (+38% input tokens). The rows of a reached-through function
+  show that function's file with the query's line (`articles/routers.go:71`
+  for a query at `articles/models.go:71`), which the agent had to check
+  against the source.

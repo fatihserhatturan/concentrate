@@ -992,7 +992,7 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Agent benchmark
 
-- [ ] Go questions (routes, callers, impact, table users, env, frontend → Go backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
+- [x] Go questions (routes, callers, impact, table users, env, frontend → Go backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs) (#185)
 
 ### Docs
 
@@ -1001,7 +1001,7 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Acceptance criteria
 
-- [ ] Accuracy, performance and agent results for Go are reproducible from scripts
+- [x] Accuracy, performance and agent results for Go are reproducible from scripts (#183–#185)
 - [x] README shows the Go coverage (#183)
 
 ## M10: Rust ecosystem
