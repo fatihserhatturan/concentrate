@@ -157,6 +157,9 @@ export type SampleManifestEntry = {
   exclude?: string[];
   // Scan setting: origins that serve the sample's own routes.
   apiOrigins?: string[];
+  // An internet sample small enough to keep a golden graph of
+  // (tests/golden/samples/); standing samples always have one.
+  golden?: boolean;
 };
 
 type SampleExpectation = Pick<SmokeSample, "name" | "suite" | "expected">;

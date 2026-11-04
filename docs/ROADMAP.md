@@ -983,7 +983,7 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 - [x] Pin a Go RealWorld backend (gin) and one more Go service (chi or echo, with gorm or sqlx) in `scripts/samples.json` (#174, #183)
 - [x] Hand labels for routes, cross-package calls, data access and env in `bench/labels/` (#174, #183)
-- [ ] Golden sample graphs where they stay small enough
+- [x] Golden sample graphs where they stay small enough (#186)
 
 ### Accuracy and performance
 
