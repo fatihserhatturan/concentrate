@@ -162,7 +162,9 @@ even for large repositories; read it first to decide which tools to call.
   `componentFile`. `path` keeps pages under a prefix of whole segments
   (`/users` matches `/users/:id`, not `/usersettings`).
 - `list_entrypoints`: lists non-HTTP backend entrypoints such as queues, cron
-  jobs, events, realtime handlers, and schedulers.
+  jobs, events, realtime handlers, and schedulers; for Go also `main` /
+  `init`, gRPC service methods (kind `grpc`, trigger `Service/Method`) and
+  cobra commands (kind `cli`, trigger the command path, `app serve`).
 - `list_env_config`: lists environment variable usage and config declarations
   or consumers. `unread: true` lists instead the variables the scanned env
   files (`.env`, `.env.*`) declare that no code reads (`kind: "unread"`, with

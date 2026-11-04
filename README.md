@@ -25,7 +25,7 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 
 | | |
 | --- | --- |
-| **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints |
+| **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints (Go `main`, gRPC services and cobra commands included) |
 | **Calls** | call sites resolved to their target declaration across files, barrels and re-exports |
 | **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers; Next.js, Nuxt, SvelteKit and Astro server routes, and tRPC procedures; Go `net/http`, gin, echo, chi, fiber and gorilla/mux, with groups and routers passed between functions |
 | **Components** | React, Vue, Svelte, Astro, Angular and web components, and which component renders which, with the props passed |

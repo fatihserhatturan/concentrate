@@ -3,6 +3,7 @@ import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
 import type { GraphNode } from "../../../core/graph/model.js";
 import { analyzeMemberCallExpression, walkScoped } from "../../languages/tree-sitter-utils.js";
 import { goParameters, localTypes, type GoParsePlugin, type LocalType } from "../../languages/go/parser.js";
+import { addClosures, closureFunctionNode } from "./closures.js";
 
 // Go HTTP routes, found at parse time from the routers a function builds,
 // receives or returns: `r := gin.Default()`, `mux := http.NewServeMux()`, a
@@ -212,25 +213,7 @@ export const goRoutesPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, relatio
 
     const handlerRef = (node: SyntaxNode, scope: GoHandlerRef["scope"], syntheticName: string): GoHandlerRef => {
       if (node.type === "func_literal") {
-        const line = node.startPosition.row + 1;
-        const closure: GraphNode = {
-          id: `${fileNodeId}:function:${line}:${syntheticName}`,
-          label: "Function",
-          properties: {
-            name: syntheticName,
-            kind: "func_literal",
-            methodKind: null,
-            line,
-            endLine: node.endPosition.row + 1,
-            className: null,
-            isExported: false,
-            isAsync: false,
-            isAbstract: false,
-            visibility: "unexported",
-            parameters: JSON.stringify(goParameters(node.childForFieldName("parameters"))),
-            returnType: node.childForFieldName("result")?.text ?? null,
-          },
-        };
+        const closure = closureFunctionNode(fileNodeId, node, syntheticName);
         closures.push({ node: closure, syntax: node });
         return { expression: syntheticName, callee: syntheticName, receiver: null, functionId: closure.id, scope };
       }
@@ -688,25 +671,8 @@ export const goRoutesPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, relatio
     }
     for (const [call, routerArguments] of argumentsByCall) call.properties.routerArguments = JSON.stringify(routerArguments);
 
-    // A closure handler is a function of its own: the calls in its body move
-    // from the enclosing function to it.
-    for (const closure of closures) {
-      if (nodes.some((node) => node.id === closure.node.id)) continue;
-      nodes.push(closure.node);
-      relationships.push({ from: fileNodeId, to: closure.node.id, type: "DEFINES_FUNCTION", properties: {} });
-      const start = closure.syntax.startPosition;
-      const end = closure.syntax.endPosition;
-      for (const relationship of relationships) {
-        if (relationship.type !== "CALLS" || relationship.from !== fn.node.id) continue;
-        const call = callsById.get(relationship.to);
-        if (!call) continue;
-        const line = Number(call.properties.line) - 1;
-        const column = Number(call.properties.columnNumber);
-        const inside = (line > start.row || (line === start.row && column >= start.column))
-          && (line < end.row || (line === end.row && column < end.column));
-        if (inside) relationship.from = closure.node.id;
-      }
-    }
+    // A closure handler is a function of its own.
+    addClosures(closures, fn.node.id, fileNodeId, nodes, relationships, callsById);
   }
 
   if (dynamicCalls.length > 0) {
@@ -716,7 +682,7 @@ export const goRoutesPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, relatio
 };
 
 // The local name of each imported package, by path.
-function importedPackages(root: SyntaxNode): Map<string, string> {
+export function importedPackages(root: SyntaxNode): Map<string, string> {
   const names = new Map<string, string>();
   for (const spec of root.descendantsOfType("import_spec")) {
     const source = spec.childForFieldName("path")?.text.slice(1, -1);
@@ -762,7 +728,7 @@ function stringList(node: SyntaxNode | undefined, value: (node: SyntaxNode) => s
   return (body?.namedChildren ?? []).map((element) => value(element.type === "literal_element" ? element.namedChildren[0]! : element));
 }
 
-function reference(expression: string, locals: Map<string, LocalType | null>): Omit<GoHandlerRef, "scope"> {
+export function reference(expression: string, locals: Map<string, LocalType | null>): Omit<GoHandlerRef, "scope"> {
   const parts = analyzeMemberCallExpression(expression) ?? { expression, callee: expression, receiver: null };
   const local = parts.receiver === null ? undefined : locals.get(parts.receiver.split(".")[0]!);
   return {

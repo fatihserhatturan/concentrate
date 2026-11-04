@@ -57,12 +57,12 @@ the only runtime dependency left is `web-tree-sitter`.
 | M6 – Release | 8, 9 | Published to npm with a benchmarked README and CI. |
 | M7 – Niche depth | 6b, 7 | Deeper Node.js/TS backend semantics and the remaining MCP tools. |
 | M8 – Full JS/TS ecosystem | 10–17 | Frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular) and vanilla JS: components, pages, frontend → backend API links, stores and DOM events. |
-| M9 – Go ecosystem | 18–21 | Go modules, packages and calls resolved; net/http, gin, echo, chi and fiber routes; database/sql, sqlx, gorm, env and HTTP clients; measured on pinned samples. |
+| M9 – Go ecosystem | 18–21 | Go modules, packages and calls resolved; net/http, gin, echo, chi, fiber and gorilla/mux routes, gRPC and cobra entrypoints; database/sql, sqlx, gorm, env and HTTP clients; measured on pinned samples. |
 | M10 – Rust ecosystem | 22–25 | Cargo workspaces, path calls, traits and attributes; axum, actix-web, Rocket and warp routes; sqlx, diesel, SeaORM, env and reqwest; measured on pinned samples. |
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
-M9, the Go ecosystem (Phase 18), then M10, the Rust ecosystem (Phase 22).
+M9, the Go ecosystem (Phases 18 and 19 done; Phase 20 next), then M10, the Rust ecosystem (Phase 22).
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -919,8 +919,8 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Other entrypoints
 
-- [ ] gRPC: `pb.RegisterXServer(s, impl)` → `EntryPoint` (kind `grpc`) per service method of the implementation
-- [ ] cobra commands (`&cobra.Command{Use, Run/RunE}`) → `EntryPoint` (kind `cli`)
+- [x] gRPC: `pb.RegisterXServer(s, impl)` → `EntryPoint` (kind `grpc`) per service method of the implementation
+- [x] cobra commands (`&cobra.Command{Use, Run/RunE}`) → `EntryPoint` (kind `cli`)
 
 ### Acceptance criteria
 

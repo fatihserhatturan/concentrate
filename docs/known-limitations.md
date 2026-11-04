@@ -995,6 +995,24 @@ Astro).
   `main` / `init`, library `go`). `TestX`, `BenchmarkX`, `FuzzX` and
   `ExampleX` in `_test.go` files carry `testKind` (`test`, `benchmark`,
   `fuzz`, `example`); `_test.go` files are test files.
+- `pb.RegisterXServer(s, impl)` (`XServer` any service name, in a file that
+  imports `google.golang.org/grpc` or calling a scanned function whose second
+  parameter is `XServer`) makes one `EntryPoint` (kind `grpc`, library
+  `grpc`, trigger `X/Method`) per service method, handled by the
+  implementation's method, promoted ones included (an embedded
+  `UnimplementedXServer`). The methods are those of the generated `XServer`
+  interface when it is in the scan, else every exported method of the
+  implementation's type. The implementation's type must be visible:
+  `&server{}`, `new(T)`, a typed local or a constructor (`service.New()`).
+  The proto package is not read, so the service is named without it.
+- A cobra command (`&cobra.Command{Use: "serve", RunE: …}`, at package level
+  or in a function) with `RunE` or `Run` is an `EntryPoint` (kind `cli`,
+  library `cobra`) handled by that function or closure. Its trigger is the
+  command path through `parent.AddCommand(child…)` calls of the same package,
+  following commands a function builds and returns (`var serveCmd =
+  newServeCmd()`); `Use` gives each name (its first word). Commands passed
+  to `AddCommand` as calls (`root.AddCommand(newServeCmd())`) keep their own
+  name.
 - HTTP routes come from `net/http`, gin, echo, chi, fiber and gorilla/mux
   (`Route.framework` `net/http`, `gin`, `echo`, `chi`, `fiber`,
   `gorilla/mux`). A router is known when a function builds it
