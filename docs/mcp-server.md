@@ -125,7 +125,11 @@ even for large repositories; read it first to decide which tools to call.
   (`app[method](url, fn)`, `this.get(path, …)` in an `app.resource = function`
   helper) are not routes; they come back in `dynamicRouteCalls` (`file`,
   `line`, `expression`, `framework`, at most 20) with a `dynamicNote`
-  giving their count.
+  giving their count. `unconsumed: true` keeps only the routes no `Call` in
+  the graph requests (`REQUESTS`, as in `api_consumers`), leaving out
+  middleware mounts (`USE`): in a scan with its frontend, candidate dead
+  endpoints. When the graph has no `REQUESTS` at all (a backend scanned
+  alone), every route is listed with an `unconsumedNote` saying so.
 - `list_pages({ file?, framework?, path?, limit = 50 })`: UI pages from the
   Next.js App and Pages Router, React Router and TanStack Router, ordered by
   `fullPath`: the declaring `file` and `line`, `path` as declared, `router`,
