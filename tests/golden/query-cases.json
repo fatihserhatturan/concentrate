@@ -1415,6 +1415,32 @@
           "framework": "fastify"
         }
       }
+    ],
+    "cjs-export-functions": [
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "compileETag"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "named"
+        }
+      },
+      {
+        "tool": "find_callers",
+        "args": {
+          "name": "normalize"
+        }
+      },
+      {
+        "tool": "list_exports",
+        "args": {
+          "file": "utils.js"
+        }
+      }
     ]
   }
 }

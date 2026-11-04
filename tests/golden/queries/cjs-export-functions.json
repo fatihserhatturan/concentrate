@@ -1,0 +1,1181 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 65
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 1
+          },
+          {
+            "table": "File",
+            "count": 2
+          },
+          {
+            "table": "Import",
+            "count": 2
+          },
+          {
+            "table": "Function",
+            "count": 5
+          },
+          {
+            "table": "Class",
+            "count": 0
+          },
+          {
+            "table": "Field",
+            "count": 0
+          },
+          {
+            "table": "Variable",
+            "count": 5
+          },
+          {
+            "table": "Decorator",
+            "count": 0
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 7
+          },
+          {
+            "table": "Route",
+            "count": 0
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 1
+          },
+          {
+            "table": "ConfigValue",
+            "count": 3
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 65,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 1
+        },
+        {
+          "table": "File",
+          "count": 2
+        },
+        {
+          "table": "Import",
+          "count": 2
+        },
+        {
+          "table": "Function",
+          "count": 5
+        },
+        {
+          "table": "Class",
+          "count": 0
+        },
+        {
+          "table": "Field",
+          "count": 0
+        },
+        {
+          "table": "Variable",
+          "count": 5
+        },
+        {
+          "table": "Decorator",
+          "count": 0
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 7
+        },
+        {
+          "table": "Route",
+          "count": 0
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 1
+        },
+        {
+          "table": "ConfigValue",
+          "count": 3
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "set",
+            "kind": "Function",
+            "file": "app.js",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "compileETag",
+            "kind": "Function",
+            "file": "utils.js",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "normalize",
+            "kind": "Function",
+            "file": "utils.js",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "inner",
+            "kind": "Function",
+            "file": "utils.js",
+            "line": 10,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "name": "normalize",
+            "kind": "Function",
+            "file": "utils.js",
+            "line": 24,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "compileETag",
+            "kind": "Variable",
+            "file": "app.js",
+            "line": 3,
+            "isExported": false,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "named",
+            "kind": "Variable",
+            "file": "utils.js",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "methods",
+            "kind": "Variable",
+            "file": "utils.js",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "name": "debug",
+            "kind": "Variable",
+            "file": "utils.js",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "set",
+          "kind": "Function",
+          "file": "app.js",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "compileETag",
+          "kind": "Function",
+          "file": "utils.js",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "normalize",
+          "kind": "Function",
+          "file": "utils.js",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "inner",
+          "kind": "Function",
+          "file": "utils.js",
+          "line": 10,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "normalize",
+          "kind": "Function",
+          "file": "utils.js",
+          "line": 24,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "compileETag",
+          "kind": "Variable",
+          "file": "app.js",
+          "line": 3,
+          "isExported": false,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "named",
+          "kind": "Variable",
+          "file": "utils.js",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "methods",
+          "kind": "Variable",
+          "file": "utils.js",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "name": "debug",
+          "kind": "Variable",
+          "file": "utils.js",
+          "line": 19,
+          "isExported": true,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 9
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "app.js",
+            "name": "set",
+            "kind": "Function",
+            "line": 6,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "utils.js",
+            "name": "compileETag",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "utils.js",
+            "name": "normalize",
+            "kind": "Function",
+            "line": 8,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "utils.js",
+            "name": "named",
+            "kind": "Variable",
+            "line": 10,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "utils.js",
+            "name": "methods",
+            "kind": "Variable",
+            "line": 15,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "utils.js",
+            "name": "debug",
+            "kind": "Variable",
+            "line": 19,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "app.js",
+          "name": "set",
+          "kind": "Function",
+          "line": 6,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "utils.js",
+          "name": "compileETag",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "utils.js",
+          "name": "normalize",
+          "kind": "Function",
+          "line": 8,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "utils.js",
+          "name": "named",
+          "kind": "Variable",
+          "line": 10,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "utils.js",
+          "name": "methods",
+          "kind": "Variable",
+          "line": 15,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "utils.js",
+          "name": "debug",
+          "kind": "Variable",
+          "line": 19,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 6
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "utils.js",
+            "line": 17,
+            "name": "DEBUG",
+            "value": "member",
+            "valueType": null,
+            "consumer": "utils.js",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "utils.js",
+          "line": 17,
+          "name": "DEBUG",
+          "value": "member",
+          "valueType": null,
+          "consumer": "utils.js",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "find_callers",
+    "args": {
+      "name": "compileETag"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"compileETag\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "compileETag",
+            "caller": "set",
+            "callerKind": "Function",
+            "file": "app.js",
+            "line": 7,
+            "expression": "compileETag",
+            "relationship": "CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"compileETag\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"compileETag\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "compileETag",
+            "caller": "app.js",
+            "callerKind": "File",
+            "file": "app.js",
+            "line": 10,
+            "expression": "utils.compileETag",
+            "relationship": "MODULE_CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "compileETag"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:app.js:function:6:set:call:7:9:compileETag",
+            "resolved": 1
+          },
+          {
+            "id": "file:app.js:modulecall:10:0:utils.compileETag",
+            "resolved": 1
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "compileETag",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [
+        {
+          "target": "compileETag",
+          "caller": "set",
+          "callerKind": "Function",
+          "file": "app.js",
+          "line": 7,
+          "expression": "compileETag",
+          "relationship": "CALLS"
+        },
+        {
+          "target": "compileETag",
+          "caller": "app.js",
+          "callerKind": "File",
+          "file": "app.js",
+          "line": 10,
+          "expression": "utils.compileETag",
+          "relationship": "MODULE_CALLS"
+        }
+      ],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named compileETag in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "find_callers",
+    "args": {
+      "name": "named"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"named\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"named\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"named\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "named"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:app.js:modulecall:11:0:utils.named",
+            "resolved": 0
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "named"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "named"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
+        "params": {
+          "names": [
+            "named"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:app.js:modulecall:11:0:utils.named",
+            "file": "app.js",
+            "line": 11,
+            "expression": "utils.named",
+            "caller": null
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "named",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [],
+      "unresolvedCalls": {
+        "count": 1,
+        "sites": [
+          {
+            "file": "app.js",
+            "line": 11,
+            "expression": "utils.named",
+            "caller": null
+          }
+        ]
+      },
+      "completeness": "1 call named named resolves to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.",
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "find_callers",
+    "args": {
+      "name": "normalize"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"normalize\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": [
+          {
+            "target": "normalize",
+            "caller": "compileETag",
+            "callerKind": "Function",
+            "file": "utils.js",
+            "line": 5,
+            "expression": "normalize",
+            "relationship": "CALLS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"normalize\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"normalize\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "normalize"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:utils.js:function:4:compileETag:call:5:9:normalize",
+            "resolved": 1
+          },
+          {
+            "id": "file:utils.js:function:24:normalize:call:25:9:exports.normalize",
+            "resolved": 0
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "normalize"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:utils.js:function:4:compileETag:call:5:9:normalize",
+            "file": "utils.js",
+            "line": 5,
+            "expression": "normalize",
+            "caller": "compileETag"
+          },
+          {
+            "id": "file:utils.js:function:24:normalize:call:25:9:exports.normalize",
+            "file": "utils.js",
+            "line": 25,
+            "expression": "exports.normalize",
+            "caller": "normalize"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "params": {
+          "names": [
+            "normalize"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
+        "params": {
+          "names": [
+            "normalize"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "normalize",
+        "exact": true,
+        "limit": 20
+      },
+      "callers": [
+        {
+          "target": "normalize",
+          "caller": "compileETag",
+          "callerKind": "Function",
+          "file": "utils.js",
+          "line": 5,
+          "expression": "normalize",
+          "relationship": "CALLS"
+        }
+      ],
+      "unresolvedCalls": {
+        "count": 1,
+        "sites": [
+          {
+            "file": "utils.js",
+            "line": 25,
+            "expression": "exports.normalize",
+            "caller": "normalize"
+          }
+        ]
+      },
+      "completeness": "1 call named normalize resolves to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {
+      "file": "utils.js"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "rows": [
+          {
+            "file": "app.js"
+          },
+          {
+            "file": "utils.js"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "utils.js",
+            "name": "compileETag",
+            "kind": "Function",
+            "line": 4,
+            "relationship": "DEFINES_FUNCTION"
+          },
+          {
+            "file": "utils.js",
+            "name": "normalize",
+            "kind": "Function",
+            "line": 8,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "utils.js",
+            "name": "named",
+            "kind": "Variable",
+            "line": 10,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "utils.js",
+            "name": "methods",
+            "kind": "Variable",
+            "line": 15,
+            "relationship": "DEFINES_VARIABLE"
+          },
+          {
+            "file": "utils.js",
+            "name": "debug",
+            "kind": "Variable",
+            "line": 19,
+            "relationship": "DEFINES_VARIABLE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true AND file.relativePath IN [\"utils.js\"] RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "file": "utils.js",
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "utils.js",
+          "name": "compileETag",
+          "kind": "Function",
+          "line": 4,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "utils.js",
+          "name": "normalize",
+          "kind": "Function",
+          "line": 8,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "file": "utils.js",
+          "name": "named",
+          "kind": "Variable",
+          "line": 10,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "utils.js",
+          "name": "methods",
+          "kind": "Variable",
+          "line": 15,
+          "relationship": "DEFINES_VARIABLE"
+        },
+        {
+          "file": "utils.js",
+          "name": "debug",
+          "kind": "Variable",
+          "line": 19,
+          "relationship": "DEFINES_VARIABLE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  }
+]

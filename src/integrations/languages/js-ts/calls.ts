@@ -19,6 +19,7 @@ import {
   extractFunctionParameters,
   extractReturnType,
 } from "./function-signature.js";
+import { cjsExportFunctionName } from "./exports.js";
 
 type CallParts = Omit<CallExpressionParts, "callee"> & { callee: string | null; requireSource?: string };
 
@@ -455,7 +456,7 @@ export function createCallNodes(
 function ownsCalls(node: SyntaxNode, callbackKeys: ReadonlySet<string>): boolean {
   if (isClassNode(node) || isVariableClassValue(node)) return true;
   if (!isFunctionNode(node)) return false;
-  if (moduleObjectPropertyFunctionName(node) !== null || isClassFieldFunction(node)) return true;
+  if (moduleObjectPropertyFunctionName(node) !== null || cjsExportFunctionName(node) !== null || isClassFieldFunction(node)) return true;
   if (node.type === "method_definition" || node.type === "abstract_method_signature") {
     return node.parent?.type === "class_body";
   }
