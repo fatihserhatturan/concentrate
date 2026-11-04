@@ -1,15 +1,18 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import {
   claudeArgs,
+  desktopClaudeBinaries,
   mcpConfig,
   median,
   parseStreamJson,
   scoreAnswer,
   summarize,
   totalInputTokens,
+  truncateResult,
   type Question,
 } from "../scripts/agent/agent.js";
 
@@ -33,8 +36,8 @@ describe("agent benchmark: scoring", () => {
 describe("agent benchmark: stream-json", () => {
   const transcript = [
     JSON.stringify({ type: "system", subtype: "init", tools: ["Read", "mcp__concentrate__list_routes"] }),
-    JSON.stringify({ type: "assistant", message: { content: [{ type: "text", text: "Looking" }, { type: "tool_use", name: "mcp__concentrate__list_routes", input: {} }] } }),
-    JSON.stringify({ type: "user", message: { content: [{ type: "tool_result", content: "[]" }] } }),
+    JSON.stringify({ type: "assistant", message: { content: [{ type: "text", text: "Looking" }, { type: "tool_use", id: "t1", name: "mcp__concentrate__list_routes", input: { file: "src" } }] } }),
+    JSON.stringify({ type: "user", message: { content: [{ type: "tool_result", tool_use_id: "t1", content: [{ type: "text", text: "[]" }] }] } }),
     JSON.stringify({ type: "assistant", message: { content: [{ type: "tool_use", name: "Read", input: {} }, { type: "tool_use", name: "Read", input: {} }] } }),
     "not json",
     JSON.stringify({
@@ -57,6 +60,12 @@ describe("agent benchmark: stream-json", () => {
     assert.deepEqual(run.toolsByName, { mcp__concentrate__list_routes: 1, Read: 2 });
     assert.equal(run.toolCalls, 3);
     assert.equal(totalInputTokens(run), 6010);
+    assert.deepEqual(run.mcpCalls, [{ tool: "list_routes", input: { file: "src" }, result: "[]", isError: false }]);
+  });
+
+  it("truncates long MCP results", () => {
+    assert.equal(truncateResult("abc", 5), "abc");
+    assert.equal(truncateResult("abcdefgh", 5), "abcde… (8 chars)");
   });
 
   it("marks runs that hit the turn limit as errors and rejects transcripts without a result", () => {
@@ -98,7 +107,7 @@ describe("agent benchmark: summaries", () => {
     assert.equal(median([]), 0);
     const run = (correct: boolean, toolCalls: number) => ({
       answer: "", isError: false, turns: toolCalls + 1, durationMs: 1000, costUsd: 0.01, inputTokens: 100,
-      outputTokens: 10, cacheCreationTokens: 0, cacheReadTokens: 900, toolCalls, toolsByName: {}, correct,
+      outputTokens: 10, cacheCreationTokens: 0, cacheReadTokens: 900, toolCalls, toolsByName: {}, mcpCalls: [], correct,
     });
     const summary = summarize([run(true, 2), run(false, 8), run(true, 4)]);
     assert.deepEqual([summary.runs, summary.correct, summary.medianToolCalls, summary.medianInputTokens, summary.medianTurns], [3, 2, 4, 1000, 5]);
@@ -107,7 +116,7 @@ describe("agent benchmark: summaries", () => {
   it("reports the spread, the total cost and MCP use", () => {
     const run = (toolCalls: number, costUsd: number, toolsByName: Record<string, number>) => ({
       answer: "", isError: false, turns: 2, durationMs: toolCalls * 1000, costUsd, inputTokens: toolCalls * 100,
-      outputTokens: 10, cacheCreationTokens: 0, cacheReadTokens: 0, toolCalls, toolsByName, correct: true,
+      outputTokens: 10, cacheCreationTokens: 0, cacheReadTokens: 0, toolCalls, toolsByName, mcpCalls: [], correct: true,
     });
     const summary = summarize([
       run(2, 0.01, { ToolSearch: 1, mcp__concentrate__impact_of: 1 }),
@@ -134,4 +143,22 @@ for (const file of ["questions.json", "questions-hard.json", "questions-frontend
     assert.ok(question.question.endsWith("?") || question.question.endsWith("."), question.id);
     assert.ok(question.expected.mustInclude.length > 0, question.id);
   }
+});
+
+describe("agent benchmark: Claude CLI lookup", () => {
+  it("lists the desktop app's CLIs, newest version first", () => {
+    const root = mkdtempSync(path.join(os.tmpdir(), "claude-code-"));
+    try {
+      const binary = (version: string, build: string) => path.join(root, version, build, "claude.app/Contents/MacOS/claude");
+      for (const [version, build] of [["2.1.9", "aaa"], ["2.1.10", "bbb"], ["2.2.0", "ccc"]] as const) {
+        mkdirSync(path.dirname(binary(version, build)), { recursive: true });
+        writeFileSync(binary(version, build), "");
+      }
+      mkdirSync(path.join(root, "3.0.0", "empty"), { recursive: true });
+      assert.deepEqual(desktopClaudeBinaries(root), [binary("2.2.0", "ccc"), binary("2.1.10", "bbb"), binary("2.1.9", "aaa")]);
+      assert.deepEqual(desktopClaudeBinaries(path.join(root, "missing")), []);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
 });

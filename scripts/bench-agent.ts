@@ -6,6 +6,7 @@
  *   npm run bench:agent -- [--runs 3] [--model name] [--question id]
  *     [--sample name] [--max-turns 30] [--out file.json] [--dry-run]
  *     [--claude path] [--rescore results.json] [--questions file.json]
+ *     [--details]
  *
  * `npm run bench:agent` builds first. Each sample is scanned with the built
  * CLI into .concentrate/agent-bench/<sample>/; every question then runs
@@ -15,21 +16,27 @@
  * bench/agent/questions-hard.json); see docs/agent-benchmark.md.
  *
  * --dry-run prints the commands and writes the MCP configs without scanning
- * or calling claude. --claude names the CLI when it is not `claude` on PATH
- * (or set CLAUDE_BIN). Runs use the account claude is signed in with: a
+ * or calling claude. --claude names the CLI (or set CLAUDE_BIN); without it,
+ * `claude` on PATH is used, else the newest CLI the Claude desktop app ships
+ * (macOS). Runs use the account claude is signed in with: a
  * subscription's usage limits, or API billing with ANTHROPIC_API_KEY.
  * --rescore scores the answers in an earlier results file again with the
  * current questions and scorer, without calling claude, and rewrites it.
+ * --details adds the keys each wrong run missed and every MCP call with the
+ * start of its result to the report. Every run in the results file keeps its
+ * MCP calls with inputs and results (truncated).
  */
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { readSampleManifest, samplesDirectory } from "../src/adapters/cli/smoke.js";
 import {
   claudeArgs,
+  desktopClaudeBinaries,
   mcpConfig,
   modes,
   parseStreamJson,
@@ -51,15 +58,17 @@ const { values } = parseArgs({
     "max-turns": { type: "string", default: "30" },
     out: { type: "string" },
     "dry-run": { type: "boolean", default: false },
-    claude: { type: "string", default: process.env.CLAUDE_BIN ?? "claude" },
+    claude: { type: "string" },
     rescore: { type: "string" },
     questions: { type: "string" },
+    details: { type: "boolean", default: false },
   },
 });
 const runs = Number.parseInt(values.runs!, 10);
 const maxTurns = Number.parseInt(values["max-turns"]!, 10);
 const dryRun = values["dry-run"]!;
-const claude = values.claude!;
+const details = values.details!;
+const desktopClaudeRoot = path.join(os.homedir(), "Library/Application Support/Claude/claude-code");
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const cli = path.join(root, "dist/index.js");
@@ -113,13 +122,30 @@ if (values.rescore) {
   process.exit(0);
 }
 
+// The CLI named by --claude or CLAUDE_BIN, else `claude` on PATH, else the
+// newest one of the desktop app; null when none answers --version.
+function findClaude(): { path: string; version: string } | null {
+  const named = values.claude ?? process.env.CLAUDE_BIN;
+  const candidates = named ? [named] : ["claude", ...(process.platform === "darwin" ? desktopClaudeBinaries(desktopClaudeRoot) : [])];
+  for (const candidate of candidates) {
+    const probe = spawnSync(candidate, ["--version"], { encoding: "utf8" });
+    if (!probe.error && probe.status === 0) return { path: candidate, version: probe.stdout.trim() };
+  }
+  return null;
+}
+
+let claude = values.claude ?? process.env.CLAUDE_BIN ?? "claude";
 if (!dryRun) {
-  const probe = spawnSync(claude, ["--version"], { encoding: "utf8" });
-  if (probe.error || probe.status !== 0) {
-    console.error(`The Claude Code CLI (${claude}) was not found. Install it and sign in, pass --claude <path>, or use --dry-run.`);
+  const found = findClaude();
+  if (!found) {
+    const looked = values.claude ?? process.env.CLAUDE_BIN
+      ? claude
+      : `claude on PATH${process.platform === "darwin" ? ` or the desktop app's CLI in ${desktopClaudeRoot}` : ""}`;
+    console.error(`The Claude Code CLI was not found (looked for ${looked}). Install it and sign in, pass --claude <path> (or set CLAUDE_BIN), or use --dry-run.`);
     process.exit(1);
   }
-  console.error(`${claude} ${probe.stdout.trim()}`);
+  claude = found.path;
+  console.error(`${claude} ${found.version}`);
   if (!existsSync(cli)) throw new Error(`${cli} is missing; run npm run build`);
 }
 
@@ -271,4 +297,41 @@ function printReport({ model, runs: runCount, totals, categories, results: rows 
     console.log(`| ${result.id} | ${summary.mcpRuns}/${summary.runs} | ${summary.toolSearchCalls} | ${toolList(summary.mcpTools)} |`);
   }
   console.log(`| **all** | ${conc!.mcpRuns}/${conc!.runs} | ${conc!.toolSearchCalls} | ${toolList(conc!.mcpTools)} |`);
+  if (details) printDetails(rows);
+}
+
+// Wrong runs with the keys they missed, then every MCP call with the start
+// of its result (results files from before MCP calls were kept have none).
+function printDetails(rows: readonly QuestionResult[]) {
+  const cell = (text: string) => text.replace(/\s+/g, " ").replace(/\|/g, "\\|");
+  console.log("\n### Missed keys (wrong runs)\n");
+  console.log("| Question | Mode | Run | Missing |");
+  console.log("| --- | --- | ---: | --- |");
+  let wrong = 0;
+  for (const result of rows) {
+    for (const mode of modes) {
+      result.modes[mode].runs.forEach((run, index) => {
+        if (run.correct) return;
+        wrong += 1;
+        const missing = run.missing.length > 0 ? run.missing.map((key) => `\`${cell(key)}\``).join(", ") : run.isError ? "(run ended with an error)" : "–";
+        console.log(`| ${result.id} | ${mode} | ${index + 1} | ${missing} |`);
+      });
+    }
+  }
+  if (wrong === 0) console.log("| – | – | – | every run is correct |");
+
+  console.log("\n### MCP calls (concentrate mode)\n");
+  console.log("| Question | Run | Tool | Input | Result |");
+  console.log("| --- | ---: | --- | --- | --- |");
+  const preview = (text: string) => cell(text.length > 120 ? `${text.slice(0, 120)}…` : text) || "(empty)";
+  let calls = 0;
+  for (const result of rows) {
+    result.modes.concentrate.runs.forEach((run, index) => {
+      for (const call of run.mcpCalls ?? []) {
+        calls += 1;
+        console.log(`| ${result.id} | ${index + 1} | \`${call.tool}\` | \`${cell(JSON.stringify(call.input))}\` | ${call.isError ? "error: " : ""}${preview(call.result)} |`);
+      }
+    });
+  }
+  if (calls === 0) console.log("| – | – | – | – | no MCP calls recorded |");
 }
