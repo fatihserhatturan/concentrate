@@ -1,0 +1,1940 @@
+{
+  "sample": "internet-go-echo-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. echo v4 with jinzhu/gorm (v1) and sqlite. Routes: every route main.go and handler/routes.go register; Register runs on the /api group main.go creates, and a route path \"\" is the group's path. Calls: every call site in the production Go files (handler/*_test.go and the generated docs/docs.go excluded) whose callee is a function or method of this repository, with the function it runs; calls into echo, gorm, jwt-go, validator and other dependencies (c.Bind, c.Validate, gorm.IsRecordNotFoundError), and calls of local closures (extractor), function-typed fields (config.Skipper) and parameters (next) are not labeled, so any target they get counts as a false positive. A call on the user.Store or article.Store interface (h.userStore.GetByID) is labeled with the method of its only production implementation (store.UserStore, store.ArticleStore). Data access: each store method's gorm chains, by the model the chain queries (Model(), else the method's value, else the Where struct), the models its Preload paths name, and the model an Association(\"Field\") reaches (Find / Count read; Append / Replace / Delete update); tables are gorm v1's names. Where the chain's Preload paths are not fields of the chain's model but of the associated one (ListByTag, ListByWhoFavorited: Model(&tag).Preload(\"Author\")...Association(\"Articles\")), the preloads are labeled as reads of the associated model's related models, which gorm runs. AutoMigrate creates tables and is not an access. Env: the production code reads no environment variable (the JWT secret is a constant), so any env read found is a false positive.",
+  "routes": {
+    "scope": [
+      "main.go",
+      "handler/routes.go"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/swagger/*",
+        "file": "main.go",
+        "line": 32
+      },
+      {
+        "method": "POST",
+        "path": "/api/users",
+        "file": "handler/routes.go",
+        "line": 12
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/login",
+        "file": "handler/routes.go",
+        "line": 13
+      },
+      {
+        "method": "GET",
+        "path": "/api/user",
+        "file": "handler/routes.go",
+        "line": 16
+      },
+      {
+        "method": "PUT",
+        "path": "/api/user",
+        "file": "handler/routes.go",
+        "line": 17
+      },
+      {
+        "method": "GET",
+        "path": "/api/profiles/:username",
+        "file": "handler/routes.go",
+        "line": 20
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/:username/follow",
+        "file": "handler/routes.go",
+        "line": 21
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/profiles/:username/follow",
+        "file": "handler/routes.go",
+        "line": 22
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles",
+        "file": "handler/routes.go",
+        "line": 35
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/feed",
+        "file": "handler/routes.go",
+        "line": 36
+      },
+      {
+        "method": "PUT",
+        "path": "/api/articles/:slug",
+        "file": "handler/routes.go",
+        "line": 37
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/:slug",
+        "file": "handler/routes.go",
+        "line": 38
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/:slug/comments",
+        "file": "handler/routes.go",
+        "line": 39
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/:slug/comments/:id",
+        "file": "handler/routes.go",
+        "line": 40
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/:slug/favorite",
+        "file": "handler/routes.go",
+        "line": 41
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/:slug/favorite",
+        "file": "handler/routes.go",
+        "line": 42
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles",
+        "file": "handler/routes.go",
+        "line": 43
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/:slug",
+        "file": "handler/routes.go",
+        "line": 44
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/:slug/comments",
+        "file": "handler/routes.go",
+        "line": 45
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags",
+        "file": "handler/routes.go",
+        "line": 48
+      }
+    ]
+  },
+  "calls": {
+    "files": [
+      "main.go",
+      "db/db.go",
+      "router/router.go",
+      "router/validator.go",
+      "router/middleware/jwt.go",
+      "handler/handler.go",
+      "handler/routes.go",
+      "handler/user.go",
+      "handler/article.go",
+      "handler/request.go",
+      "handler/response.go",
+      "model/user.go",
+      "model/article.go",
+      "store/user.go",
+      "store/article.go",
+      "utils/errors.go",
+      "utils/jwt.go",
+      "utils/utils.go",
+      "user/user.go",
+      "article/article.go"
+    ],
+    "items": [
+      {
+        "file": "main.go",
+        "line": 30,
+        "callee": "New",
+        "target": {
+          "file": "router/router.go",
+          "name": "New"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 36,
+        "callee": "New",
+        "target": {
+          "file": "db/db.go",
+          "name": "New"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 37,
+        "callee": "AutoMigrate",
+        "target": {
+          "file": "db/db.go",
+          "name": "AutoMigrate"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 39,
+        "callee": "NewUserStore",
+        "target": {
+          "file": "store/user.go",
+          "name": "NewUserStore"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 40,
+        "callee": "NewArticleStore",
+        "target": {
+          "file": "store/article.go",
+          "name": "NewArticleStore"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 41,
+        "callee": "NewHandler",
+        "target": {
+          "file": "handler/handler.go",
+          "name": "NewHandler"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 42,
+        "callee": "Register",
+        "target": {
+          "file": "handler/routes.go",
+          "name": "Register",
+          "className": "Handler"
+        }
+      },
+      {
+        "file": "router/router.go",
+        "line": 19,
+        "callee": "NewValidator",
+        "target": {
+          "file": "router/validator.go",
+          "name": "NewValidator"
+        }
+      },
+      {
+        "file": "router/middleware/jwt.go",
+        "line": 29,
+        "callee": "JWTWithConfig",
+        "target": {
+          "file": "router/middleware/jwt.go",
+          "name": "JWTWithConfig"
+        }
+      },
+      {
+        "file": "router/middleware/jwt.go",
+        "line": 33,
+        "callee": "jwtFromHeader",
+        "target": {
+          "file": "router/middleware/jwt.go",
+          "name": "jwtFromHeader"
+        }
+      },
+      {
+        "file": "router/middleware/jwt.go",
+        "line": 43,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "router/middleware/jwt.go",
+        "line": 52,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "router/middleware/jwt.go",
+        "line": 59,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/routes.go",
+        "line": 10,
+        "callee": "JWT",
+        "target": {
+          "file": "router/middleware/jwt.go",
+          "name": "JWT"
+        }
+      },
+      {
+        "file": "handler/routes.go",
+        "line": 24,
+        "callee": "JWTWithConfig",
+        "target": {
+          "file": "router/middleware/jwt.go",
+          "name": "JWTWithConfig"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 27,
+        "callee": "bind",
+        "target": {
+          "file": "handler/request.go",
+          "name": "bind",
+          "className": "userRegisterRequest"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 28,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 30,
+        "callee": "Create",
+        "target": {
+          "file": "store/user.go",
+          "name": "Create",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 31,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 33,
+        "callee": "newUserResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newUserResponse"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 53,
+        "callee": "bind",
+        "target": {
+          "file": "handler/request.go",
+          "name": "bind",
+          "className": "userLoginRequest"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 54,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 56,
+        "callee": "GetByEmail",
+        "target": {
+          "file": "store/user.go",
+          "name": "GetByEmail",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 58,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 61,
+        "callee": "AccessForbidden",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "AccessForbidden"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 63,
+        "callee": "CheckPassword",
+        "target": {
+          "file": "model/user.go",
+          "name": "CheckPassword",
+          "className": "User"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 64,
+        "callee": "AccessForbidden",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "AccessForbidden"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 66,
+        "callee": "newUserResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newUserResponse"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 85,
+        "callee": "GetByID",
+        "target": {
+          "file": "store/user.go",
+          "name": "GetByID",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 85,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 87,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 90,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 92,
+        "callee": "newUserResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newUserResponse"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 112,
+        "callee": "GetByID",
+        "target": {
+          "file": "store/user.go",
+          "name": "GetByID",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 112,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 114,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 117,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 119,
+        "callee": "newUserUpdateRequest",
+        "target": {
+          "file": "handler/request.go",
+          "name": "newUserUpdateRequest"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 120,
+        "callee": "populate",
+        "target": {
+          "file": "handler/request.go",
+          "name": "populate",
+          "className": "userUpdateRequest"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 121,
+        "callee": "bind",
+        "target": {
+          "file": "handler/request.go",
+          "name": "bind",
+          "className": "userUpdateRequest"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 122,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 124,
+        "callee": "Update",
+        "target": {
+          "file": "store/user.go",
+          "name": "Update",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 125,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 127,
+        "callee": "newUserResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newUserResponse"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 148,
+        "callee": "GetByUsername",
+        "target": {
+          "file": "store/user.go",
+          "name": "GetByUsername",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 150,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 153,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 155,
+        "callee": "newProfileResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newProfileResponse"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 155,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 175,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 177,
+        "callee": "GetByUsername",
+        "target": {
+          "file": "store/user.go",
+          "name": "GetByUsername",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 179,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 182,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 184,
+        "callee": "AddFollower",
+        "target": {
+          "file": "store/user.go",
+          "name": "AddFollower",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 185,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 187,
+        "callee": "newProfileResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newProfileResponse"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 187,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 207,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 209,
+        "callee": "GetByUsername",
+        "target": {
+          "file": "store/user.go",
+          "name": "GetByUsername",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 211,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 214,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 216,
+        "callee": "RemoveFollower",
+        "target": {
+          "file": "store/user.go",
+          "name": "RemoveFollower",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 217,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 219,
+        "callee": "newProfileResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newProfileResponse"
+        }
+      },
+      {
+        "file": "handler/user.go",
+        "line": 219,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 27,
+        "callee": "GetBySlug",
+        "target": {
+          "file": "store/article.go",
+          "name": "GetBySlug",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 30,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 34,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 37,
+        "callee": "newArticleResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newArticleResponse"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 76,
+        "callee": "ListByTag",
+        "target": {
+          "file": "store/article.go",
+          "name": "ListByTag",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 81,
+        "callee": "ListByAuthor",
+        "target": {
+          "file": "store/article.go",
+          "name": "ListByAuthor",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 86,
+        "callee": "ListByWhoFavorited",
+        "target": {
+          "file": "store/article.go",
+          "name": "ListByWhoFavorited",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 91,
+        "callee": "List",
+        "target": {
+          "file": "store/article.go",
+          "name": "List",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 97,
+        "callee": "newArticleListResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newArticleListResponse"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 97,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 130,
+        "callee": "ListFeed",
+        "target": {
+          "file": "store/article.go",
+          "name": "ListFeed",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 130,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 135,
+        "callee": "newArticleListResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newArticleListResponse"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 135,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 156,
+        "callee": "bind",
+        "target": {
+          "file": "handler/request.go",
+          "name": "bind",
+          "className": "articleCreateRequest"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 157,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 160,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 162,
+        "callee": "CreateArticle",
+        "target": {
+          "file": "store/article.go",
+          "name": "CreateArticle",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 164,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 167,
+        "callee": "newArticleResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newArticleResponse"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 190,
+        "callee": "GetUserArticleBySlug",
+        "target": {
+          "file": "store/article.go",
+          "name": "GetUserArticleBySlug",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 190,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 192,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 196,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 200,
+        "callee": "populate",
+        "target": {
+          "file": "handler/request.go",
+          "name": "populate",
+          "className": "articleUpdateRequest"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 202,
+        "callee": "bind",
+        "target": {
+          "file": "handler/request.go",
+          "name": "bind",
+          "className": "articleUpdateRequest"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 203,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 206,
+        "callee": "UpdateArticle",
+        "target": {
+          "file": "store/article.go",
+          "name": "UpdateArticle",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 207,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 210,
+        "callee": "newArticleResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newArticleResponse"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 230,
+        "callee": "GetUserArticleBySlug",
+        "target": {
+          "file": "store/article.go",
+          "name": "GetUserArticleBySlug",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 230,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 232,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 236,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 239,
+        "callee": "DeleteArticle",
+        "target": {
+          "file": "store/article.go",
+          "name": "DeleteArticle",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 241,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 267,
+        "callee": "GetBySlug",
+        "target": {
+          "file": "store/article.go",
+          "name": "GetBySlug",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 269,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 273,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 279,
+        "callee": "bind",
+        "target": {
+          "file": "handler/request.go",
+          "name": "bind",
+          "className": "createCommentRequest"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 280,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 283,
+        "callee": "AddComment",
+        "target": {
+          "file": "store/article.go",
+          "name": "AddComment",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 284,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 287,
+        "callee": "newCommentResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newCommentResponse"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 305,
+        "callee": "GetCommentsBySlug",
+        "target": {
+          "file": "store/article.go",
+          "name": "GetCommentsBySlug",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 307,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 310,
+        "callee": "newCommentListResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newCommentListResponse"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 335,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 338,
+        "callee": "GetCommentByID",
+        "target": {
+          "file": "store/article.go",
+          "name": "GetCommentByID",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 340,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 344,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 347,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 348,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 351,
+        "callee": "DeleteComment",
+        "target": {
+          "file": "store/article.go",
+          "name": "DeleteComment",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 352,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 376,
+        "callee": "GetBySlug",
+        "target": {
+          "file": "store/article.go",
+          "name": "GetBySlug",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 379,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 383,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 386,
+        "callee": "AddFavorite",
+        "target": {
+          "file": "store/article.go",
+          "name": "AddFavorite",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 386,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 387,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 390,
+        "callee": "newArticleResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newArticleResponse"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 412,
+        "callee": "GetBySlug",
+        "target": {
+          "file": "store/article.go",
+          "name": "GetBySlug",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 414,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 418,
+        "callee": "NotFound",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NotFound"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 421,
+        "callee": "RemoveFavorite",
+        "target": {
+          "file": "store/article.go",
+          "name": "RemoveFavorite",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 421,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 422,
+        "callee": "NewError",
+        "target": {
+          "file": "utils/errors.go",
+          "name": "NewError"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 425,
+        "callee": "newArticleResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newArticleResponse"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 443,
+        "callee": "ListTags",
+        "target": {
+          "file": "store/article.go",
+          "name": "ListTags",
+          "className": "ArticleStore"
+        }
+      },
+      {
+        "file": "handler/article.go",
+        "line": 448,
+        "callee": "newTagListResponse",
+        "target": {
+          "file": "handler/response.go",
+          "name": "newTagListResponse"
+        }
+      },
+      {
+        "file": "handler/request.go",
+        "line": 45,
+        "callee": "HashPassword",
+        "target": {
+          "file": "model/user.go",
+          "name": "HashPassword",
+          "className": "User"
+        }
+      },
+      {
+        "file": "handler/request.go",
+        "line": 73,
+        "callee": "HashPassword",
+        "target": {
+          "file": "model/user.go",
+          "name": "HashPassword",
+          "className": "User"
+        }
+      },
+      {
+        "file": "handler/request.go",
+        "line": 169,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 28,
+        "callee": "GenerateJWT",
+        "target": {
+          "file": "utils/jwt.go",
+          "name": "GenerateJWT"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 46,
+        "callee": "IsFollower",
+        "target": {
+          "file": "store/user.go",
+          "name": "IsFollower",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 90,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 98,
+        "callee": "FollowedBy",
+        "target": {
+          "file": "model/user.go",
+          "name": "FollowedBy",
+          "className": "User"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 98,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 126,
+        "callee": "IsFollower",
+        "target": {
+          "file": "store/user.go",
+          "name": "IsFollower",
+          "className": "UserStore"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 163,
+        "callee": "FollowedBy",
+        "target": {
+          "file": "model/user.go",
+          "name": "FollowedBy",
+          "className": "User"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 163,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 179,
+        "callee": "FollowedBy",
+        "target": {
+          "file": "model/user.go",
+          "name": "FollowedBy",
+          "className": "User"
+        }
+      },
+      {
+        "file": "handler/response.go",
+        "line": 179,
+        "callee": "userIDFromToken",
+        "target": {
+          "file": "handler/user.go",
+          "name": "userIDFromToken"
+        }
+      }
+    ]
+  },
+  "dataAccess": {
+    "scope": [
+      "main.go",
+      "db/",
+      "store/",
+      "handler/",
+      "router/",
+      "model/",
+      "utils/",
+      "user/",
+      "article/"
+    ],
+    "items": [
+      {
+        "file": "store/user.go",
+        "function": "GetByID",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/user.go",
+        "function": "GetByEmail",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/user.go",
+        "function": "GetByUsername",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/user.go",
+        "function": "GetByUsername",
+        "model": "Follow",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "store/user.go",
+        "function": "Create",
+        "model": "User",
+        "operation": "create",
+        "table": "users"
+      },
+      {
+        "file": "store/user.go",
+        "function": "Update",
+        "model": "User",
+        "operation": "update",
+        "table": "users"
+      },
+      {
+        "file": "store/user.go",
+        "function": "AddFollower",
+        "model": "Follow",
+        "operation": "update",
+        "table": "follows"
+      },
+      {
+        "file": "store/user.go",
+        "function": "RemoveFollower",
+        "model": "Follow",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "store/user.go",
+        "function": "RemoveFollower",
+        "model": "Follow",
+        "operation": "delete",
+        "table": "follows"
+      },
+      {
+        "file": "store/user.go",
+        "function": "IsFollower",
+        "model": "Follow",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "store/article.go",
+        "function": "GetBySlug",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "GetBySlug",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "GetBySlug",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "GetUserArticleBySlug",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "CreateArticle",
+        "model": "Article",
+        "operation": "create",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "CreateArticle",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "CreateArticle",
+        "model": "Tag",
+        "operation": "update",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "CreateArticle",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "CreateArticle",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "UpdateArticle",
+        "model": "Article",
+        "operation": "update",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "UpdateArticle",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "UpdateArticle",
+        "model": "Tag",
+        "operation": "update",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "UpdateArticle",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "UpdateArticle",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "DeleteArticle",
+        "model": "Article",
+        "operation": "delete",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "List",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "List",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "List",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListByTag",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListByTag",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListByTag",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListByAuthor",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListByAuthor",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListByAuthor",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListByWhoFavorited",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListByWhoFavorited",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListByWhoFavorited",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListFeed",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListFeed",
+        "model": "Follow",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListFeed",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListFeed",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "store/article.go",
+        "function": "AddComment",
+        "model": "Comment",
+        "operation": "update",
+        "table": "comments"
+      },
+      {
+        "file": "store/article.go",
+        "function": "AddComment",
+        "model": "Comment",
+        "operation": "read",
+        "table": "comments"
+      },
+      {
+        "file": "store/article.go",
+        "function": "AddComment",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "GetCommentsBySlug",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "store/article.go",
+        "function": "GetCommentsBySlug",
+        "model": "Comment",
+        "operation": "read",
+        "table": "comments"
+      },
+      {
+        "file": "store/article.go",
+        "function": "GetCommentsBySlug",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "GetCommentByID",
+        "model": "Comment",
+        "operation": "read",
+        "table": "comments"
+      },
+      {
+        "file": "store/article.go",
+        "function": "DeleteComment",
+        "model": "Comment",
+        "operation": "delete",
+        "table": "comments"
+      },
+      {
+        "file": "store/article.go",
+        "function": "AddFavorite",
+        "model": "User",
+        "operation": "update",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "RemoveFavorite",
+        "model": "User",
+        "operation": "update",
+        "table": "users"
+      },
+      {
+        "file": "store/article.go",
+        "function": "ListTags",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      }
+    ]
+  },
+  "env": {
+    "scope": [
+      "main.go",
+      "db/",
+      "store/",
+      "handler/",
+      "router/",
+      "model/",
+      "utils/",
+      "user/",
+      "article/"
+    ],
+    "items": []
+  }
+}

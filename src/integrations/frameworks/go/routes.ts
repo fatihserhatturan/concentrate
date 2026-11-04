@@ -100,7 +100,7 @@ type RouteDraft = {
 
 type PendingArgument = { call: GraphNode; index: number; router: Router; count: number; prefix?: string; callback?: GoHandlerRef; fallback?: RouteDraft[] };
 
-const packages: Array<[GoRouteFramework, RegExp]> = [
+export const routerPackages: Array<[GoRouteFramework, RegExp]> = [
   ["gin", /^github\.com\/gin-gonic\/gin$/u],
   ["echo", /^github\.com\/labstack\/echo(?:\/v\d+)?$/u],
   ["chi", /^github\.com\/go-chi\/chi(?:\/v\d+)?$/u],
@@ -136,14 +136,24 @@ const fiberMethods = new Map([...titleMethods, ["All", "ALL"]]);
 
 const handlerLike = new Set(["identifier", "selector_expression", "call_expression", "func_literal"]);
 
-export const goRoutesPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, relationships, functions }) => {
+// A router another package's function returns, by the callee as the file
+// writes it (`router.New`); found after the parse (foreign-routers.ts).
+export type GoForeignRouter = { framework: GoRouteFramework; kind: "root" | "group" };
+
+export const goRoutesPlugin: GoParsePlugin = createGoRoutesPlugin();
+
+export function createGoRoutesPlugin(foreign: ReadonlyMap<string, GoForeignRouter> = new Map()): GoParsePlugin {
+  return (file) => routesOf(file, foreign);
+}
+
+function routesOf({ fileNodeId, root, nodes, relationships, functions }: Parameters<GoParsePlugin>[0], foreign: ReadonlyMap<string, GoForeignRouter>): void {
   const imports = importedPackages(root);
   const alias = new Map<GoRouteFramework, string>();
   for (const [source, name] of imports) {
-    const framework = packages.find(([, pattern]) => pattern.test(source))?.[0];
+    const framework = routerPackages.find(([, pattern]) => pattern.test(source))?.[0];
     if (framework) alias.set(framework, name);
   }
-  if (alias.size === 0) return;
+  if (alias.size === 0 && foreign.size === 0) return;
   const http = alias.get("net/http");
 
   const constants = new Map<string, string>();
@@ -271,6 +281,8 @@ export const goRoutesPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, relatio
         if (constructors[framework].some((constructor) => callee.text === `${name}.${constructor}`)) return newRouter(framework);
       }
       if (callee.type === "identifier" && routerConstructors.has(callee.text)) return { ...newRouter(routerConstructors.get(callee.text)!), fromCall: node };
+      const external = foreign.get(callee.text);
+      if (external) return newRouter(external.framework, external.kind);
       if (callee.type !== "selector_expression") return null;
       const method = callee.childForFieldName("field")?.text;
       const operand = callee.childForFieldName("operand");
@@ -679,7 +691,7 @@ export const goRoutesPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, relatio
     const file = nodes.find((node) => node.id === fileNodeId);
     if (file) file.properties.dynamicRouteCalls = JSON.stringify(dynamicCalls);
   }
-};
+}
 
 // The local name of each imported package, by path.
 export function importedPackages(root: SyntaxNode): Map<string, string> {
@@ -702,7 +714,7 @@ function defaultPackageName(source: string): string {
   return /^v\d+$/u.test(last) && parts.length > 1 ? parts[parts.length - 2]! : last;
 }
 
-function routerTypeOf(type: string, alias: Map<GoRouteFramework, string>): { framework: GoRouteFramework; kind: "root" | "group" } | null {
+export function routerTypeOf(type: string, alias: Map<GoRouteFramework, string>): { framework: GoRouteFramework; kind: "root" | "group" } | null {
   const bare = type.trim().replace(/^\*/u, "");
   for (const [framework, name] of alias) {
     if (!bare.startsWith(`${name}.`)) continue;

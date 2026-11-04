@@ -18,6 +18,7 @@ export type GoCallIndex = {
   fileByFunctionId: Map<string, string>;
   // Imported packages per file by local name; `.` imports under ".".
   importsByFile: Map<string, Map<string, string[]>>;
+  functionsById: Map<string, GraphNode>;
 };
 
 // A named type, or an anonymous struct (a field's `struct { … }`) with its
@@ -46,6 +47,7 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
     implementersByInterface: new Map(),
     fileByFunctionId: relationshipIndex.fileByFunctionId,
     importsByFile: new Map(),
+    functionsById: new Map(),
   };
 
   const targetsByImport = new Map<string, string[]>();
@@ -56,6 +58,7 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
 
   for (const node of graph.nodes) {
     if (node.label === "Function") {
+      index.functionsById.set(node.id, node);
       const pkg = packageByFile.get(relationshipIndex.fileByFunctionId.get(node.id) ?? "");
       if (pkg === undefined) continue;
       const name = String(node.properties.name);
@@ -226,6 +229,9 @@ function hasType(pkg: string, name: string, index: GoCallIndex): boolean {
 
 // `x := NewStore()` / `store.New()`: the type the constructor returns first.
 function constructedType(constructor: string, fileId: string, index: GoCallIndex): TypeRef | null {
+  // `(*Handler).store.Get`: the result of a method reached through fields.
+  const onType = /^\((.+)\)\.(.+)$/u.exec(constructor);
+  if (onType) return methodResultType(onType[1]!, onType[2]!.split("."), fileId, index);
   const [qualifier, name] = constructor.includes(".") ? constructor.split(".") : [null, constructor];
   const pkgs = qualifier === null
     ? [index.packageByFile.get(fileId)!, ...index.importsByFile.get(fileId)?.get(".") ?? []]
@@ -239,6 +245,30 @@ function constructedType(constructor: string, fileId: string, index: GoCallIndex
   }
   // A conversion or a type's literal name used like a call: `Store(x)`.
   return qualifier === null && index.typesByPackage.get(pkgs[0]!)?.has(name!) ? { pkg: pkgs[0]!, name: name! } : null;
+}
+
+// The type a method returns first, on a value of `typeText` through
+// `fields`; for an interface, the result its implementations agree on.
+function methodResultType(typeText: string, path: string[], fileId: string, index: GoCallIndex): TypeRef | null {
+  let type = resolveType(typeText, fileId, index);
+  const method = path.pop();
+  for (const field of path) {
+    if (!type) return null;
+    type = fieldType(type, field, index);
+  }
+  if (!type || !method) return null;
+  const iface = index.interfacesByPackage.get(type.pkg)?.get(type.name);
+  const owners = iface ? index.implementersByInterface.get(iface.node.id) ?? [] : [type];
+  const results = new Map<string, TypeRef>();
+  for (const owner of owners) {
+    const functionId = methodOf(owner, method, index, 0)[0];
+    const fn = functionId ? index.functionsById.get(functionId) : undefined;
+    const fnFile = fn ? index.fileByFunctionId.get(fn.id) : undefined;
+    const result = fn ? firstResultType(fn.properties.returnType) : null;
+    const resolved = result && fnFile ? resolveType(result, fnFile, index) : null;
+    if (resolved) results.set(`${resolved.pkg}\0${resolved.name}`, resolved);
+  }
+  return results.size === 1 ? [...results.values()][0]! : null;
 }
 
 // `(*Store, error)` → `*Store`; `(s *Store, err error)` → `*Store`.

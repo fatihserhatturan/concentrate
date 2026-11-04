@@ -12,7 +12,7 @@ npm run bench:accuracy -- [--sample name] [--details] [--json out.json]
 
 `--details` lists every false positive (FP), false negative (FN) and wrong
 route path. The latest run is in
-[`bench/results/accuracy-0.1.0-2026-11-03.json`](../bench/results/accuracy-0.1.0-2026-11-03.json).
+[`bench/results/accuracy-0.1.0-2026-11-04.json`](../bench/results/accuracy-0.1.0-2026-11-04.json).
 
 ## Labels
 
@@ -24,13 +24,13 @@ chosen files); every target was decided by reading the code.
 
 | Kind | Samples | Scope |
 | --- | --- | --- |
-| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld | every route declared with a literal path in the scoped files; tests excluded; for the Go sample, the gin groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`) |
-| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`) | every call site in 2–9 chosen files per sample; for the Go sample, every call of a repository function or method in its 13 production files |
-| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm) | the services; for the Go sample the production files that query the database; the standing samples have no data layer |
+| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld, internet-go-echo-realworld | every route declared with a literal path in the scoped files; tests excluded; for the gin sample, the groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`); for the echo sample, the `*echo.Echo` that `router.New()` in another package returns, grouped in `main` and passed to `(*Handler).Register` |
+| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`), internet-go-echo-realworld (another Conduit Go backend: echo, gorm behind store interfaces, packages `handler`, `store`, `model`, `router`, `db`, `utils`) | every call site in 2–9 chosen files per sample; for the Go samples, every call of a repository function or method in their production files (13 gin, 21 echo; echo's generated `docs/docs.go` excluded) |
+| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm), internet-go-echo-realworld (gorm) | the services; for the Go samples the production files that query the database; the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
-| Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project) | `frontend/`: every HTTP call that reaches a backend route |
-| Env reads | internet-go-gin-realworld | every env read in the production and test files (`os.Getenv`) |
+| Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project), internet-realworld-go-fullstack (the same frontend with the gin backend) | `frontend/`: every HTTP call that reaches a backend route; the Go pair's labels are the Express pair's, with each route's declaring file moved to the gin `routers.go` that registers it |
+| Env reads | internet-go-gin-realworld, internet-go-echo-realworld | every env read in the production and test files (`os.Getenv`); the echo sample reads none (its secret and database path are constants) |
 | Stores, store reads and writes | internet-vue-realworld (its Pinia setup store) | `src/`: every store and every call of a store's hook, tests included |
 
 Rules:
@@ -127,7 +127,7 @@ Rules:
   and both member sets match, so a missed or extra member is an FP and an
   FN.
 
-## Results (2026-11-03, schema 65)
+## Results (2026-11-04, schema 69)
 
 ### Routes
 
@@ -135,12 +135,13 @@ Rules:
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | express | 59 | 59 | 0 | 0 | 100.0% | 100.0% | 100.0% (59/59) |
 | fastify | 14 | 14 | 0 | 0 | 100.0% | 100.0% | 100.0% (14/14) |
+| internet-go-echo-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
 | internet-nextjs-taxonomy | 9 | 9 | 0 | 0 | 100.0% | 100.0% | 100.0% (9/9) |
 | internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
 | internet-go-gin-realworld | 27 | 27 | 0 | 0 | 100.0% | 100.0% | 100.0% (27/27) |
 | internet-sveltekit-realworld | 11 | 11 | 0 | 0 | 100.0% | 100.0% | 100.0% (11/11) |
 | nestjs-starter | 1 | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% (1/1) |
-| **all** | 141 | 141 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (141/141)** |
+| **all** | 161 | 161 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (161/161)** |
 
 ### Call resolution
 
@@ -149,27 +150,29 @@ Rules:
 | express | 28 | 28 | 0 | 0 | 100.0% | 100.0% |
 | fastify | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
 | internet-angular-realworld | 21 | 21 | 0 | 0 | 100.0% | 100.0% |
+| internet-go-echo-realworld | 149 | 149 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-gin-realworld | 223 | 223 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
 | internet-sveltekit-realworld | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 14 | 14 | 0 | 0 | 100.0% | 100.0% |
 | ky | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | nestjs-starter | 2 | 2 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 348 | 348 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 497 | 497 | 0 | 0 | **100.0%** | **100.0%** |
 
 Labels counts calls with a project target. Another 433 call sites are labeled
-`null`, and 35 are `dynamic`. The Go sample labels only calls with a
-project target: a call into the standard library, gin or gorm that resolved
+`null`, and 35 are `dynamic`. The Go samples label only calls with a
+project target: a call into the standard library, gin, echo or gorm that resolved
 anywhere would count as a false positive (call site not labeled).
 
 ### Data access
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-go-echo-realworld | 52 | 52 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-gin-realworld | 41 | 41 | 0 | 0 | 100.0% | 100.0% |
 | internet-nest | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 26 | 26 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 84 | 84 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 136 | 136 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Components
 
@@ -206,6 +209,8 @@ anywhere would count as a false positive (call site not labeled).
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-realworld-fullstack | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
+| internet-realworld-go-fullstack | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
+| **all** | 66 | 66 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Stores
 

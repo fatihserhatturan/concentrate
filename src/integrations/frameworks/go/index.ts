@@ -7,6 +7,7 @@ import { goHttpClientsPlugin } from "./http-clients.js";
 import { goDiPlugin } from "./di.js";
 
 export { goRoutesContributor } from "./route-mounts.js";
+export { goForeignRoutersContributor } from "./foreign-routers.js";
 export { goEntrypointsContributor } from "./entrypoints.js";
 export { goEnvConfigContributor } from "./env-config.js";
 export { goDataAccessContributor } from "./data-access.js";
