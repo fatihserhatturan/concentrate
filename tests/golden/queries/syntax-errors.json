@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 64
+        "result": 65
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 64,
+      "schemaVersion": 65,
       "stats": [
         {
           "table": "Repo",
@@ -428,6 +428,11 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
         "rows": []
       }
     ],

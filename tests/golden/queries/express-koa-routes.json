@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 64
+        "result": 65
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 64,
+      "schemaVersion": 65,
       "stats": [
         {
           "table": "Repo",
@@ -643,6 +643,11 @@
             "handler": null
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
       }
     ],
     "output": {
@@ -980,6 +985,11 @@
             "handler": "validateUser"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
       }
     ],
     "output": {
@@ -1149,6 +1159,11 @@
             "handler": null
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL AND file.relativePath IN [\"routes.ts\"] RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
       }
     ],
     "output": {
@@ -1286,6 +1301,11 @@
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND file.relativePath IN [\"paths.ts\"] OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL AND file.relativePath IN [\"paths.ts\"] RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
       }
     ],
     "output": {
@@ -1309,6 +1329,11 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND route.framework = \"fastify\" OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
         "rows": []
       }
     ],

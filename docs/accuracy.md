@@ -38,7 +38,9 @@ Rules:
   prefixes included. Middleware mounts (`app.use`) are not routes. Express
   examples that build paths at runtime (`examples/resource`,
   `examples/route-map`, `examples/mvc`) are listed under `routes.computed` in
-  the label file and not scored. Next.js route handlers are labeled at the
+  the label file and not scored; since #146 the graph records each of their
+  registration lines in `File.dynamicRouteCalls`, which `list_routes`
+  returns. Next.js route handlers are labeled at the
   exported `GET` / `POST` / ... function, with Next's path syntax
   (`/api/posts/[postId]`); a `pages/api/` handler is method `ALL`, at its
   `export default` line when that is a library call (`NextAuth(options)`).
@@ -118,7 +120,7 @@ Rules:
   and both member sets match, so a missed or extra member is an FP and an
   FN.
 
-## Results (2026-11-03, schema 64)
+## Results (2026-11-03, schema 65)
 
 ### Routes
 

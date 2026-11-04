@@ -180,7 +180,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_routes",
-    description: "List detected HTTP route declarations with source file, method, path, framework, and handler.",
+    description: "List detected HTTP route declarations with source file, method, path, framework, and handler. Registrations whose method or path is computed at runtime (`app[method](url, fn)`) are not routes; they come back in dynamicRouteCalls with their file and line.",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -493,8 +493,31 @@ async function listRoutes(
     LIMIT ${fetch}
   `);
 
-  return { query: { file, framework, limit }, routes: window.take(rows), ...fileNote };
+  // Registrations with a computed method or path (`app[method](url, fn)`)
+  // make no Route; they are listed so the caller knows to read the source.
+  const dynamicFiles = await engine.query(`
+    MATCH (file:File)
+    WHERE file.dynamicRouteCalls IS NOT NULL
+      ${fileFilter}
+    RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls
+    ORDER BY file.relativePath
+  `) as Array<{ file: string; calls: string }>;
+  const dynamicRouteCalls = dynamicFiles.flatMap((row) => (
+    (JSON.parse(row.calls) as Array<{ line: number; expression: string; framework: string }>)
+      .filter((call) => !framework || call.framework === framework)
+      .map((call) => ({ file: row.file, line: call.line, expression: call.expression, framework: call.framework }))
+  ));
+  const dynamic = dynamicRouteCalls.length > 0
+    ? {
+      dynamicRouteCalls: dynamicRouteCalls.slice(0, DYNAMIC_ROUTE_CALL_LIMIT),
+      dynamicNote: `${dynamicRouteCalls.length} route registration${dynamicRouteCalls.length === 1 ? "" : "s"} with a method or path computed at runtime ${dynamicRouteCalls.length === 1 ? "is" : "are"} not listed as routes; read the source at these lines for the routes ${dynamicRouteCalls.length === 1 ? "it registers" : "they register"}.`,
+    }
+    : {};
+
+  return { query: { file, framework, limit }, routes: window.take(rows), ...dynamic, ...fileNote };
 }
+
+const DYNAMIC_ROUTE_CALL_LIMIT = 20;
 
 async function listPages(
   engine: GraphQueryEngine,

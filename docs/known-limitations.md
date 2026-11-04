@@ -29,6 +29,15 @@ and deeper package graph queries.
 - Full path resolution depends on visible mount chains and constant strings.
   Highly dynamic path construction can remain unresolved.
 - Middleware ordering is structural, not a full runtime execution model.
+- Registrations whose method or path is computed at runtime make no `Route`:
+  `app[method](url, handler)` on an app or router (module-level, or a
+  parameter or local of the function), as in a helper that walks a route
+  map, and `this.get(path, …)` / `.post` / … in a function assigned to a
+  member of a module-level app (`app.resource = function (path, obj)`). The
+  File records them in `dynamicRouteCalls` (line, expression, framework),
+  and `list_routes` returns them in `dynamicRouteCalls` with a note, so an
+  agent knows which lines to read. A string member (`app['get'](…)`) and
+  `this` in an arrow function are not counted.
 - NestJS `app.setGlobalPrefix()` is applied to the routes of the package that
   calls it when its argument is a string literal or a visible constant. Its
   `exclude` option and prefixes chosen at runtime are not modelled.
@@ -762,9 +771,9 @@ Astro).
 - `REQUESTS` links a call to the `Route` its URL reaches when the resolved
   URL (each URL, for alternatives) is a path and exactly one route is the
   most specific match (literal segments over parameters over catch-alls);
-  `match` says `exact`, `parameter` or `catch-all`. Unresolved or absolute URLs, partly dynamic
-  segments (`/u/${id}.json`) and ties between routes stay unlinked. Query
-  strings are ignored.
+  `match` says `exact`, `parameter` or `catch-all`. Unresolved or absolute
+  URLs, partly dynamic segments (`/u/${id}.json`) and ties between routes
+  stay unlinked. Query strings are ignored.
 - tRPC: procedures of a top-level `router({…})`, `t.router({…})` or
   `createTRPCRouter({…})` (also default-exported) are `Route` nodes
   (framework `trpc`, method `QUERY` / `MUTATION` / `SUBSCRIPTION`,
