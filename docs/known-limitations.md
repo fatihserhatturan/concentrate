@@ -1107,6 +1107,29 @@ Astro).
   schema's file or ent's default (snake case, plural), and their `Edges()`
   (`edge.To` / `edge.From`, `.Unique()` for `one`) as `RELATES_TO`. The
   generated package's own code is not read for accesses.
+- Go outbound HTTP is recorded on the call like the JS clients and linked
+  by the same matcher (`REQUESTS`, `api_consumers`): `net/http`
+  `http.Get` / `Head` / `Post` / `PostForm`, `http.NewRequest` and
+  `NewRequestWithContext` (the call that builds the request, not
+  `client.Do`), and `Get` / `Head` / `Post` / `PostForm` on an
+  `*http.Client` (`http.DefaultClient`, `&http.Client{…}`, a typed
+  parameter or variable, or a field of a struct of the same file); resty
+  `R()…Get(url)` / `Post` / `Put` / `Patch` / `Delete` / `Head` /
+  `Options` / `Execute(method, url)` on a `*resty.Client` (`resty.New()`,
+  typed values and same-file struct fields) or a `*resty.Request`, with
+  `SetBaseURL` / `SetHostURL` joined to a relative URL (a field's base when
+  every value the file gives the field agrees). The method is the
+  function's or a literal / `http.MethodX` / string constant. The URL is a
+  string literal, a string constant or variable (the function's, the
+  package's in any file, or an imported package's exported one), `+`, a
+  `fmt.Sprintf` format (each verb a dynamic segment) or `path.Join`; an
+  `os.Getenv("X")` part takes the nearest `.env*` file's value when it is
+  a URL or path. A local origin and the `--api-origin`s are dropped as for
+  JS. Anything else (a struct field like `c.baseURL`, a function result) is
+  dynamic: as a segment it matches a route parameter, and at the start of
+  the URL it leaves the call unlinked. Requests in `_test.go` files
+  (`httptest` with `http.NewRequest`) are linked too. Other clients
+  (`go-retryablehttp`, generated OpenAPI clients, `grpc`) are not read.
 - Go env reads are `USES_ENV` from the function that reads (and from its
   file; a package-level read is the file's): `os.Getenv`, `os.LookupEnv`,
   `syscall.Getenv` with a string-literal name, and each `$NAME` / `${NAME}`

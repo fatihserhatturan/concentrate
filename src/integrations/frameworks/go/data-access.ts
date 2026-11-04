@@ -7,6 +7,7 @@ import { createResolutionRelationshipIndex } from "../../../core/scan/resolution
 import { createGoCallIndex, firstResultType, goInterfaceMethodNames, resolveGoCall, resolveType } from "../../../core/scan/resolution/go-calls.js";
 import { importedPackages } from "./routes.js";
 import { sqlTableAccesses } from "./sql.js";
+import { createDefinitionLookup, insideFunction, isPackageLevel, same, stringConstants, valueTypeText } from "./scope.js";
 
 // Go data access: gorm, database/sql and sqlx.
 //
@@ -88,7 +89,6 @@ const isChainMethod = (method: string) => chainMethods.has(method) || /^Query[A-
 
 type EntSchema = { table?: string; edges: Array<{ name: string; target: string; unique: boolean }> };
 
-const FUNCTION_TYPES = new Set(["function_declaration", "method_declaration", "func_literal"]);
 const MAX_DEPTH = 6;
 
 export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) => {
@@ -114,35 +114,7 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
     return undefined;
   };
 
-  // What a name holds at a point: its type, or the expression it was last
-  // assigned before the point (in the functions around it, else at package
-  // level).
-  const definitionOf = (name: string, at: SyntaxNode): { type: string } | { value: SyntaxNode } | null => {
-    for (let scope = at.parent; scope; scope = scope.parent) {
-      if (!FUNCTION_TYPES.has(scope.type)) continue;
-      let best: { start: number; result: { type: string } | { value: SyntaxNode } | null } | null = null;
-      for (const list of [scope.childForFieldName("receiver"), scope.childForFieldName("parameters")]) {
-        for (const parameter of list?.namedChildren ?? []) {
-          const type = parameter.childForFieldName("type")?.text;
-          if (type && parameter.childrenForFieldName("name").some((id) => id.text === name)) best = { start: -1, result: { type } };
-        }
-      }
-      const body = scope.childForFieldName("body");
-      for (const node of body ? [body, ...body.descendantsOfType(["short_var_declaration", "assignment_statement", "var_spec"])] : []) {
-        if (node.startIndex >= at.startIndex || same(node, body!)) continue;
-        if (!visibleFrom(node, at, scope)) continue;
-        const result = assignmentOf(node, name);
-        if (result !== undefined && (!best || node.startIndex > best.start)) best = { start: node.startIndex, result };
-      }
-      if (best) return best.result;
-    }
-    for (const spec of root.descendantsOfType("var_spec")) {
-      if (!isPackageLevel(spec)) continue;
-      const result = assignmentOf(spec, name);
-      if (result !== undefined) return result;
-    }
-    return null;
-  };
+  const definitionOf = createDefinitionLookup(root);
 
   const typeOf = (expression: SyntaxNode, depth: number): string | undefined => {
     if (depth > MAX_DEPTH) return undefined;
@@ -826,75 +798,6 @@ function isChained(call: SyntaxNode): boolean {
 }
 
 // Syntax nodes are new objects on every access: the same node is the same span.
-function same(left: SyntaxNode, right: SyntaxNode): boolean {
-  return left.startIndex === right.startIndex && left.endIndex === right.endIndex && left.type === right.type;
-}
-
-function assignmentOf(node: SyntaxNode, name: string): { type: string } | { value: SyntaxNode } | null | undefined {
-  if (node.type === "var_spec") {
-    const names = node.childrenForFieldName("name");
-    const index = names.findIndex((id) => id.text === name);
-    if (index === -1) return undefined;
-    const type = node.childForFieldName("type")?.text;
-    if (type) return { type };
-    const values = node.childForFieldName("value")?.namedChildren ?? [];
-    const value = values[index] ?? (values.length === 1 && index === 0 ? values[0] : undefined);
-    return value ? { value } : null;
-  }
-  const names = node.childForFieldName("left")?.namedChildren ?? [];
-  const index = names.findIndex((id) => id.type === "identifier" && id.text === name);
-  if (index === -1) return undefined;
-  const values = node.childForFieldName("right")?.namedChildren ?? [];
-  const value = values.length === names.length ? values[index] : values.length === 1 && index === 0 ? values[0] : undefined;
-  return value ? { value } : null;
-}
-
-// A declaration in a closure that does not contain the point is not seen.
-function visibleFrom(declaration: SyntaxNode, at: SyntaxNode, scope: SyntaxNode): boolean {
-  for (let node = declaration.parent; node && !same(node, scope); node = node.parent) {
-    if (node.type === "func_literal" && !(node.startIndex <= at.startIndex && at.endIndex <= node.endIndex)) return false;
-  }
-  return true;
-}
-
-function isPackageLevel(spec: SyntaxNode): boolean {
-  const declaration = spec.parent?.type === "var_declaration" ? spec.parent : spec.parent?.parent;
-  return declaration?.parent?.type === "source_file";
-}
-
-function insideFunction(node: SyntaxNode): boolean {
-  for (let current = node.parent; current; current = current.parent) if (FUNCTION_TYPES.has(current.type)) return true;
-  return false;
-}
-
-// The type a value is written with: `T{}`, `&T{}`, `[]T{}`, `make([]T, n)`, `new(T)`.
-function valueTypeText(value: SyntaxNode): string | undefined {
-  if (value.type === "unary_expression" && value.childForFieldName("operator")?.text === "&") {
-    const operand = value.childForFieldName("operand");
-    return operand?.type === "composite_literal" ? valueTypeText(operand) : undefined;
-  }
-  if (value.type === "composite_literal") return value.childForFieldName("type")?.text;
-  if (value.type === "call_expression") {
-    const fn = value.childForFieldName("function")?.text;
-    const first = value.childForFieldName("arguments")?.namedChildren[0];
-    if ((fn === "make" || fn === "new") && first) return fn === "new" ? `*${first.text}` : first.text;
-  }
-  return undefined;
-}
-
-function stringConstants(root: SyntaxNode): Map<string, string> {
-  const constants = new Map<string, string>();
-  for (const spec of root.descendantsOfType("const_spec")) {
-    const names = spec.childrenForFieldName("name");
-    const values = spec.childForFieldName("value")?.namedChildren ?? [];
-    names.forEach((name, index) => {
-      const value = values[index];
-      if (value?.type === "interpreted_string_literal" || value?.type === "raw_string_literal") constants.set(name.text, value.text.slice(1, -1));
-    });
-  }
-  return constants;
-}
-
 function defaultPackageName(source: string): string {
   const parts = source.split("/");
   const last = parts[parts.length - 1]!;
