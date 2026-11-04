@@ -957,8 +957,8 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Dependency injection
 
-- [ ] uber fx: `fx.Provide` / `fx.Invoke` provider graph as `INJECTS`
-- [ ] google wire: `wire.Build` / `wire.NewSet` providers
+- [x] uber fx: `fx.Provide` / `fx.Invoke` provider graph as `INJECTS`
+- [x] google wire: `wire.Build` / `wire.NewSet` providers
 
 ### MCP
 
@@ -966,9 +966,9 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 
 ### Acceptance criteria
 
-- [ ] Fixtures with golden coverage for each library above
+- [x] Fixtures with golden coverage for each library above
 - [x] Hand labels for data access and env on the pinned Go sample: precision 100%, recall reported
-- [ ] Docs updated (`docs/known-limitations.md`, `docs/mcp-server.md`)
+- [x] Docs updated (`docs/known-limitations.md`, `docs/mcp-server.md`)
 
 ## Phase 21: Go ecosystem measurement (samples, accuracy, agent benchmark, README) ([#165](https://github.com/fatihserhatturan/concentrate/issues/165))
 
