@@ -1,0 +1,84 @@
+{
+  "$comment": "Go agent benchmark questions over two larger Go repositories: go-kratos/beer-shop (nine kratos microservices wired with google/wire, ent data layer, gRPC between services) and umputun/remark42 (a comment engine with storage interfaces that have local and remote implementations). They ask for interface dispatch across packages, wire injection, change impact through interfaces and a call that crosses services over gRPC. Expected answers were written by reading the pinned source (wire_gen.go injectors, interface declarations and their implementations, call sites), not from Concentrate output. Scoring as in questions.json.",
+  "questions": [
+    {
+      "id": "go-beer-shop-unused-clients",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "di",
+      "question": "In the shop interface gateway (app/shop/interface), the data layer's wire provider set declares several gRPC service clients. Which of them does the generated injector actually construct and inject, and which are declared but never used?",
+      "expected": {
+        "mustInclude": ["NewOrderServiceClient", "NewPaymentServiceClient"],
+        "anyOf": [
+          ["NewUserServiceClient", "UserClient"],
+          ["NewCartServiceClient", "CartClient"],
+          ["NewCatalogServiceClient", "CatalogClient"],
+          ["initApp", "wire_gen.go"]
+        ]
+      }
+    },
+    {
+      "id": "go-beer-shop-user-injection",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "di",
+      "question": "In the user service (app/user/service), which repository constructors receive the *Data value in the generated injector, and which use cases is NewUserService constructed with?",
+      "expected": {
+        "mustInclude": ["NewUserRepo", "NewCardRepo", "NewAddressRepo", "UserUseCase", "CardUseCase", "AddressUseCase"]
+      }
+    },
+    {
+      "id": "go-beer-shop-register-across-services",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "callers",
+      "question": "When a shopper registers through the shop interface gateway (ShopInterface.Register), follow the call into the user service: which use case handles it in the gateway, which user-service gRPC method does the gateway call to store the user, and which functions in the user service handle that call down to the database insert? Name the file of the function that does the insert.",
+      "expected": {
+        "mustInclude": ["AuthUseCase", "UserService", "UserUseCase", "CreateUser", "app/user/service/internal/data/user.go"],
+        "anyOf": [["SaveUserReq", "uc.Save", "Save RPC", "Save gRPC", "Save method", "Save(", "Save call", "Save on the user"]]
+      }
+    },
+    {
+      "id": "go-beer-shop-count-impact",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "impact",
+      "question": "In the catalog service (app/catalog/service), if beerRepo.Count in internal/data/beer.go changes its behaviour, which functions are affected up to the gRPC handler of the catalog service?",
+      "expected": {
+        "mustInclude": ["ListNext", "ListBeerNextToken"]
+      }
+    },
+    {
+      "id": "go-remark42-storage-implementations",
+      "sample": "internet-go-remark42",
+      "category": "dispatch",
+      "question": "In the remark42 backend's production code (not _test.go files, not the generated *_mock.go mocks and not the _example directory), which types implement the storage engine interface engine.Interface and the admin store interface admin.Store? Give each type with the file it is declared in.",
+      "expected": {
+        "mustInclude": ["BoltDB", "StaticStore", "RPC", "engine/bolt.go", "engine/remote.go", "admin/admin.go", "admin/remote.go"]
+      }
+    },
+    {
+      "id": "go-remark42-engine-flag-callers",
+      "sample": "internet-go-remark42",
+      "category": "dispatch",
+      "question": "In the remark42 backend's production code (not tests, not the _example directory), which functions call the storage engine's Flag method, and which engine implementations can each of those calls reach at run time?",
+      "expected": {
+        "mustInclude": ["IsReadOnly", "SetReadOnly", "IsVerified", "SetVerified", "IsBlocked", "SetBlock", "userFlagCache", "BoltDB", "RPC"]
+      }
+    },
+    {
+      "id": "go-remark42-is-blocked-impact",
+      "sample": "internet-go-remark42",
+      "category": "impact",
+      "question": "In the remark42 backend, if DataStore.IsBlocked (app/store/service) changes, which production functions call it, directly or through the store interfaces the REST handlers depend on?",
+      "expected": {
+        "mustInclude": ["getAuthenticator", "createCommentCtrl", "voteCtrl"]
+      }
+    },
+    {
+      "id": "go-remark42-image-save",
+      "sample": "internet-go-remark42",
+      "category": "dispatch",
+      "question": "In the remark42 backend, image.Service.SaveWithID writes the image through its store field. Which image store implementations' Save methods can that call run (production code, not mocks or the _example directory), and which production functions call SaveWithID, directly or through image.Service.Save?",
+      "expected": {
+        "mustInclude": ["FileSystem", "RPC", "bolt_store.go", "cacheImage", "savePictureCtrl"]
+      }
+    }
+  ]
+}

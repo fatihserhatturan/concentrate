@@ -1,0 +1,2213 @@
+{
+  "recordedAt": "2026-11-05T11:42:05.353Z",
+  "model": "haiku",
+  "runs": 3,
+  "maxTurns": 30,
+  "totals": {
+    "baseline": {
+      "runs": 24,
+      "correct": 24,
+      "medianInputTokens": 258564,
+      "medianOutputTokens": 3444.5,
+      "medianToolCalls": 8,
+      "medianTurns": 9,
+      "medianDurationMs": 23528.5,
+      "medianCostUsd": 0.009,
+      "spread": {
+        "inputTokens": {
+          "min": 106063,
+          "max": 663353
+        },
+        "toolCalls": {
+          "min": 3,
+          "max": 17
+        },
+        "durationMs": {
+          "min": 9567,
+          "max": 55331
+        },
+        "costUsd": {
+          "min": 0.0042,
+          "max": 0.0204
+        }
+      },
+      "totalCostUsd": 0.2292,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
+    },
+    "concentrate": {
+      "runs": 24,
+      "correct": 24,
+      "medianInputTokens": 242959.5,
+      "medianOutputTokens": 2882,
+      "medianToolCalls": 6,
+      "medianTurns": 7,
+      "medianDurationMs": 20880.5,
+      "medianCostUsd": 0.0077,
+      "spread": {
+        "inputTokens": {
+          "min": 102773,
+          "max": 704240
+        },
+        "toolCalls": {
+          "min": 2,
+          "max": 19
+        },
+        "durationMs": {
+          "min": 8067,
+          "max": 84569
+        },
+        "costUsd": {
+          "min": 0.0037,
+          "max": 0.0203
+        }
+      },
+      "totalCostUsd": 0.2086,
+      "mcpRuns": 7,
+      "mcpTools": {
+        "find_callers": 8,
+        "get_symbol_source": 8,
+        "find_references": 6,
+        "find_definitions": 3,
+        "search_symbols": 3,
+        "impact_of": 2
+      },
+      "toolSearchCalls": 7
+    }
+  },
+  "categories": {
+    "di": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 139363,
+        "medianOutputTokens": 1464,
+        "medianToolCalls": 3.5,
+        "medianTurns": 4.5,
+        "medianDurationMs": 14148,
+        "medianCostUsd": 0.0055,
+        "spread": {
+          "inputTokens": {
+            "min": 106063,
+            "max": 225390
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 9567,
+            "max": 19347
+          },
+          "costUsd": {
+            "min": 0.0042,
+            "max": 0.0094
+          }
+        },
+        "totalCostUsd": 0.0357,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 125679,
+        "medianOutputTokens": 1374,
+        "medianToolCalls": 3.5,
+        "medianTurns": 4.5,
+        "medianDurationMs": 11384,
+        "medianCostUsd": 0.0048,
+        "spread": {
+          "inputTokens": {
+            "min": 102773,
+            "max": 151858
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 6
+          },
+          "durationMs": {
+            "min": 8067,
+            "max": 16655
+          },
+          "costUsd": {
+            "min": 0.0037,
+            "max": 0.0061
+          }
+        },
+        "totalCostUsd": 0.0293,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "callers": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 261851,
+        "medianOutputTokens": 3441,
+        "medianToolCalls": 7,
+        "medianTurns": 8,
+        "medianDurationMs": 19724,
+        "medianCostUsd": 0.0101,
+        "spread": {
+          "inputTokens": {
+            "min": 224713,
+            "max": 311959
+          },
+          "toolCalls": {
+            "min": 6,
+            "max": 8
+          },
+          "durationMs": {
+            "min": 19663,
+            "max": 22408
+          },
+          "costUsd": {
+            "min": 0.0096,
+            "max": 0.0103
+          }
+        },
+        "totalCostUsd": 0.03,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 236373,
+        "medianOutputTokens": 3128,
+        "medianToolCalls": 13,
+        "medianTurns": 14,
+        "medianDurationMs": 20034,
+        "medianCostUsd": 0.0084,
+        "spread": {
+          "inputTokens": {
+            "min": 221560,
+            "max": 323808
+          },
+          "toolCalls": {
+            "min": 5,
+            "max": 13
+          },
+          "durationMs": {
+            "min": 16368,
+            "max": 23734
+          },
+          "costUsd": {
+            "min": 0.0079,
+            "max": 0.01
+          }
+        },
+        "totalCostUsd": 0.0263,
+        "mcpRuns": 1,
+        "mcpTools": {
+          "get_symbol_source": 8,
+          "find_definitions": 2,
+          "search_symbols": 2
+        },
+        "toolSearchCalls": 1
+      }
+    },
+    "impact": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 254564.5,
+        "medianOutputTokens": 3515.5,
+        "medianToolCalls": 8,
+        "medianTurns": 9,
+        "medianDurationMs": 24844.5,
+        "medianCostUsd": 0.0088,
+        "spread": {
+          "inputTokens": {
+            "min": 233230,
+            "max": 298056
+          },
+          "toolCalls": {
+            "min": 5,
+            "max": 13
+          },
+          "durationMs": {
+            "min": 23187,
+            "max": 29691
+          },
+          "costUsd": {
+            "min": 0.0081,
+            "max": 0.0099
+          }
+        },
+        "totalCostUsd": 0.0531,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 229131,
+        "medianOutputTokens": 2629,
+        "medianToolCalls": 6,
+        "medianTurns": 7,
+        "medianDurationMs": 18936.5,
+        "medianCostUsd": 0.0068,
+        "spread": {
+          "inputTokens": {
+            "min": 105033,
+            "max": 353074
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 13
+          },
+          "durationMs": {
+            "min": 10324,
+            "max": 30922
+          },
+          "costUsd": {
+            "min": 0.004,
+            "max": 0.0105
+          }
+        },
+        "totalCostUsd": 0.0425,
+        "mcpRuns": 5,
+        "mcpTools": {
+          "find_callers": 8,
+          "find_references": 6,
+          "impact_of": 2,
+          "find_definitions": 1
+        },
+        "toolSearchCalls": 5
+      }
+    },
+    "dispatch": {
+      "baseline": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 360368,
+        "medianOutputTokens": 4522,
+        "medianToolCalls": 14,
+        "medianTurns": 15,
+        "medianDurationMs": 41828,
+        "medianCostUsd": 0.0104,
+        "spread": {
+          "inputTokens": {
+            "min": 242829,
+            "max": 663353
+          },
+          "toolCalls": {
+            "min": 6,
+            "max": 17
+          },
+          "durationMs": {
+            "min": 21170,
+            "max": 55331
+          },
+          "costUsd": {
+            "min": 0.0069,
+            "max": 0.0204
+          }
+        },
+        "totalCostUsd": 0.1104,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 418304,
+        "medianOutputTokens": 4735,
+        "medianToolCalls": 10,
+        "medianTurns": 11,
+        "medianDurationMs": 33615,
+        "medianCostUsd": 0.0116,
+        "spread": {
+          "inputTokens": {
+            "min": 204518,
+            "max": 704240
+          },
+          "toolCalls": {
+            "min": 5,
+            "max": 19
+          },
+          "durationMs": {
+            "min": 20618,
+            "max": 84569
+          },
+          "costUsd": {
+            "min": 0.0065,
+            "max": 0.0203
+          }
+        },
+        "totalCostUsd": 0.1105,
+        "mcpRuns": 1,
+        "mcpTools": {
+          "search_symbols": 1
+        },
+        "toolSearchCalls": 1
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "go-beer-shop-unused-clients",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "di",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 183532,
+            "medianOutputTokens": 1998,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 16518,
+            "medianCostUsd": 0.0068,
+            "spread": {
+              "inputTokens": {
+                "min": 106063,
+                "max": 225390
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 13565,
+                "max": 19347
+              },
+              "costUsd": {
+                "min": 0.006,
+                "max": 0.0094
+              }
+            },
+            "totalCostUsd": 0.0221,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The generated injector constructs three gRPC clients. Two providers in the set are never used.\n\n**Constructed and injected** (`cmd/server/wire_gen.go:25-28`):\n- `NewUserServiceClient` → `userClient`\n- `NewCartServiceClient` → `cartClient`\n- `NewCatalogServiceClient` → `catalogClient`\n\nThese three are passed into `data.NewData(...)`, which stores them on the `Data` struct as `uc`, `cc` and `bc` (`internal/data/data.go:41-58`).\n\n**Declared but never used:**\n- `NewOrderServiceClient` (`data.go:136`), which builds `orderv1.OrderClient`\n- `NewPaymentServiceClient` (`data.go:152`), which builds `paymentv1.PaymentClient`\n\nNeither is in `wire_gen.go`, and the `Data` struct has no field for either one. Nothing in the data layer depends on them.\n\nWire does not flag this. `data.ProviderSet` is passed to `wire.Build` as a whole set (`cmd/server/wire.go:22`), and Wire only reports unused providers that are listed directly in `wire.Build`. Members of a nested `NewSet` that nothing requests are dropped silently.\n\nIf the order or payment client is needed later, add it as a parameter to `NewData` and rerun `wire` (or `go generate`) so `wire_gen.go` picks it up. Until then, the two providers only add dead code.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 13565,
+              "costUsd": 0.00937522,
+              "inputTokens": 6,
+              "outputTokens": 1677,
+              "cacheCreationTokens": 39345,
+              "cacheReadTokens": 66712,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Constructed and injected by `initApp`** (`cmd/server/wire_gen.go`):\n\n- `NewUserServiceClient` → `userClient`, passed into `NewData`. `userRepo` uses it for `VerifyPassword` and `GetUser`.\n- `NewCatalogServiceClient` → `catalogClient`, passed into `NewData`. `catalogRepo` uses it for `GetBeer` and `ListBeer`.\n- `NewCartServiceClient` → `cartClient`, passed into `NewData`. It is stored in `Data.cc`, but nothing ever calls it. `internal/data` never reads `d.cc`, and the `s.cc` uses in `internal/service/catalog.go` belong to the service struct, not the data layer. So it is built and injected but effectively unused.\n\n**Declared in `data.ProviderSet` but never constructed:**\n\n- `NewOrderServiceClient` (`orderv1.OrderClient`)\n- `NewPaymentServiceClient` (`paymentv1.PaymentClient`)\n\nNeither appears in `NewData`'s parameters or anywhere else in the interface, so the generated injector never calls them. Wire only generates the providers reachable from the `initApp` signature, so these two are dead code in the set.\n\nAlso outside the set: `NewDiscovery` and `NewRegistrar` are constructed and used (discovery for the three dialed clients, registrar for `newApp`).\n\nI read the code and did not run `wire` to regenerate, so this reflects the checked-in `wire_gen.go`. If the set changes, `go generate` in `app/shop/interface` would show whether the output differs.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 19347,
+              "costUsd": 0.00678678,
+              "inputTokens": 12,
+              "outputTokens": 2691,
+              "cacheCreationTokens": 16770,
+              "cacheReadTokens": 208608,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Bash": 4,
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Constructed and injected (3):** `wire_gen.go` builds `UserClient`, `CartClient`, and `CatalogClient`, then passes them into `data.NewData`.\n\n**Declared but not constructed (2):** `NewOrderServiceClient` and `NewPaymentServiceClient` are in `ProviderSet` in `internal/data/data.go`, but `wire_gen.go` never calls them. Wire only builds providers reachable from `initApp`'s return values, so they're skipped.\n\n**Injected but never used (1):** `CartClient` is built and stored in `Data.cc`, but no code reads `data.cc` anywhere in the gateway. Its only uses are the constructor and struct field. That makes it a live gRPC connection opened at startup for no purpose, unlike the other two that are used:\n\n- `Data.uc` (UserClient) is used by `internal/data/user.go`.\n- `Data.bc` (CatalogClient) is used by `internal/data/catalog.go`.\n\nOrder and Payment are the dead providers; Cart is the one that's wired in and unused. Removing Cart would mean dropping `NewCartServiceClient` from the set, the `cc` field and parameter in `NewData`, and regenerating `wire_gen.go`. I haven't changed anything.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 16518,
+              "costUsd": 0.00598219,
+              "inputTokens": 10,
+              "outputTokens": 1998,
+              "cacheCreationTokens": 16563,
+              "cacheReadTokens": 166959,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Bash": 3,
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 144032,
+            "medianOutputTokens": 2061,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 12359,
+            "medianCostUsd": 0.0056,
+            "spread": {
+              "inputTokens": {
+                "min": 112325,
+                "max": 151858
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 10409,
+                "max": 16655
+              },
+              "costUsd": {
+                "min": 0.0049,
+                "max": 0.0061
+              }
+            },
+            "totalCostUsd": 0.0166,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Constructed and injected by the generated injector:** `userClient`, `cartClient`, and `catalogClient`. Wire builds all three in `cmd/server/wire_gen.go:25-28` and passes them to `data.NewData` (line 28).\n\n**Declared but never constructed:** `NewOrderServiceClient` and `NewPaymentServiceClient`. They are in `ProviderSet` (`internal/data/data.go:34-35`), but `initApp` never requests them, so Wire leaves them out of the generated code. Nothing else in the graph depends on them either. `NewData` takes no order or payment client.\n\n**Injected but never used:** the cart client. `NewCartServiceClient` runs and its connection is stored in `Data.cc` (`data.go:44, 57`), but no code in the data package ever calls `r.data.cc` or `d.cc`. The only other `s.cc` references are in `service/catalog.go`, which belong to a different struct and are not this client. So the cart gRPC connection is created at startup and then sits idle.\n\nThe other two are used. `uc` (user) is called from `data/user.go`, and `bc` (catalog) is called from `data/catalog.go`.\n\nWire does not warn about the two unused order and payment providers because they are inside a `wire.NewSet` rather than passed directly to `wire.Build`. If you want the set cleaned up, you could remove the order and payment entries from `ProviderSet`, or wire them in only when a use case needs them. Removing the cart client would also mean dropping it from `NewData` and the injector.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 10409,
+              "costUsd": 0.0056119099999999995,
+              "inputTokens": 6,
+              "outputTokens": 2061,
+              "cacheCreationTokens": 18198,
+              "cacheReadTokens": 94121,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The generated injector builds three of the five declared clients. Order and payment are declared but never used.\n\n**Constructed and injected by `initApp` (`cmd/server/wire_gen.go:25-27`):**\n- `data.NewUserServiceClient` → `userClient`, passed into `NewData` and used by `data/user.go` (`rp.data.uc.*`).\n- `data.NewCartServiceClient` → `cartClient`, passed into `NewData`. It's stored in `Data.cc`, but nothing reads `data.cc`. The only `s.cc` calls are in `service/catalog.go`, which is a different struct. So it's wired in but never called.\n- `data.NewCatalogServiceClient` → `catalogClient`, passed into `NewData` and used by `data/catalog.go` (`r.data.bc.*`).\n\n**Declared but never used:**\n- `data.NewOrderServiceClient` (`internal/data/data.go:136`)\n- `data.NewPaymentServiceClient` (`internal/data/data.go:152`)\n\nNeither is in the `NewData` signature, so wire never reaches them from `initApp`. Nothing else in the interface package references `orderv1` or `paymentv1` beyond their own constructors. Wire doesn't flag them because they sit inside `data.ProviderSet` and wire only reports unused providers passed directly to `wire.Build`.\n\nIf you want them gone, delete both constructors and their imports from `data.go`, then delete `NewOrderServiceClient` and `NewPaymentServiceClient` from `ProviderSet`. Keep `NewCartServiceClient` only if you plan to add cart calls to `Data`. Otherwise, remove it from `NewData`'s parameters and `Data` as well, then regenerate `wire_gen.go`. I haven't made any changes; I only read the files.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 16655,
+              "costUsd": 0.00608754,
+              "inputTokens": 8,
+              "outputTokens": 2222,
+              "cacheCreationTokens": 18196,
+              "cacheReadTokens": 133654,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The generated injector builds three clients and declares two that it never uses.\n\n**Constructed and injected** (`cmd/server/wire_gen.go`, `initApp`):\n- `NewUserServiceClient`, which becomes `userClient`. It is passed to `NewData`.\n- `NewCartServiceClient`, which becomes `cartClient`. It is passed to `NewData`.\n- `NewCatalogServiceClient`, which becomes `catalogClient`. It is passed to `NewData`.\n\n`NewData` stores these three in the `Data` struct as `uc`, `cc` and `bc`.\n\n**Declared but never used** (`internal/data/data.go`, `ProviderSet`, lines 34–35):\n- `NewOrderServiceClient` (`orderv1.OrderClient`)\n- `NewPaymentServiceClient` (`paymentv1.PaymentClient`)\n\nNeither one appears in `wire_gen.go`, and nothing else in the interface gateway references them. They are not fields of `Data`, so no repo or use case can reach them. Because Wire only builds providers that are reachable from the injector, these two constructors never run. No gRPC connection to the order or payment service is dialed from this gateway.\n\nThe `ProviderSet` is passed to `wire.Build` as a whole set, so Wire does not complain about the unused providers. If you want the generated code to match the declarations, remove the two entries from the set and regenerate with `go generate`. Keep them only if you plan to add order or payment repos soon.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12359,
+              "costUsd": 0.004949090000000001,
+              "inputTokens": 8,
+              "outputTokens": 1508,
+              "cacheCreationTokens": 14495,
+              "cacheReadTokens": 129529,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 2,
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-beer-shop-user-injection",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "di",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 136247,
+            "medianOutputTokens": 1231,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 10931,
+            "medianCostUsd": 0.0043,
+            "spread": {
+              "inputTokens": {
+                "min": 135748,
+                "max": 142479
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 9567,
+                "max": 14731
+              },
+              "costUsd": {
+                "min": 0.0042,
+                "max": 0.005
+              }
+            },
+            "totalCostUsd": 0.0135,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Repositories that receive `*Data`:** three, all in `internal/data`:\n\n- `NewUserRepo(data *Data, logger)` in `internal/data/user.go:27`\n- `NewCardRepo(data *Data, logger)` in `internal/data/card.go:19`\n- `NewAddressRepo(data *Data, logger)` in `internal/data/address.go:18`\n\n`NewData` in `internal/data/data.go:79` is what produces the `*Data` value, from the ent client and the Redis cmdable.\n\n**`NewUserService` use cases:** it takes three use cases, plus a logger, in `internal/service/service.go:23`:\n\n- `*biz.UserUseCase`\n- `*biz.CardUseCase`\n- `*biz.AddressUseCase`\n\nIn the generated injector `initApp` in `cmd/server/wire_gen.go`, each use case is built from its repo, so `NewUserService` receives `userUseCase`, `cardUseCase` and `addressUseCase`. Those come from `biz.NewUserUseCase`, `biz.NewCardUseCase` and `biz.NewAddressUseCase`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10931,
+              "costUsd": 0.0050299,
+              "inputTokens": 8,
+              "outputTokens": 1231,
+              "cacheCreationTokens": 15731,
+              "cacheReadTokens": 126740,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "In the generated injector (`app/user/service/cmd/server/wire_gen.go`, `initApp`), three repository constructors receive the `*Data` value:\n\n- `data.NewUserRepo(dataData, logger)` (`internal/data/user.go:27`)\n- `data.NewCardRepo(dataData, logger)` (`internal/data/card.go:19`)\n- `data.NewAddressRepo(dataData, logger)` (`internal/data/address.go:18`)\n\nThe `*Data` itself comes from `data.NewData(client, cmdable, logger)`, which returns it along with a cleanup function.\n\n`NewUserService` is called with three use cases plus the logger:\n\n- `biz.NewUserUseCase(userRepo, logger)`, so `*biz.UserUseCase`\n- `biz.NewCardUseCase(cardRepo, logger)`, so `*biz.CardUseCase`\n- `biz.NewAddressUseCase(addressRepo, logger)`, so `*biz.AddressUseCase`\n\nThe call is `service.NewUserService(userUseCase, cardUseCase, addressUseCase, logger)` (`internal/service/service.go:23`).",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 14731,
+              "costUsd": 0.004152390000000001,
+              "inputTokens": 8,
+              "outputTokens": 1218,
+              "cacheCreationTokens": 11501,
+              "cacheReadTokens": 124239,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "In the generated injector (`cmd/server/wire_gen.go`, `initApp`), three repository constructors receive the `*Data` value:\n\n- `data.NewUserRepo(dataData, logger)`\n- `data.NewCardRepo(dataData, logger)`\n- `data.NewAddressRepo(dataData, logger)`\n\n`dataData` is produced earlier by `data.NewData(client, cmdable, logger)`, which also returns the cleanup function. The `*Data` value is not passed to any other constructor.\n\n`NewUserService` is constructed with three use cases plus the logger:\n\n```go\nservice.NewUserService(userUseCase, cardUseCase, addressUseCase, logger)\n```\n\nThese are `biz.NewUserUseCase`, `biz.NewCardUseCase` and `biz.NewAddressUseCase`. The `NewUserService` signature in `internal/service/service.go` takes `(uc, cc, ac, logger)` in that same order, so the injector matches it.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9567,
+              "costUsd": 0.00433006,
+              "inputTokens": 8,
+              "outputTokens": 1251,
+              "cacheCreationTokens": 12323,
+              "cacheReadTokens": 123916,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 110439,
+            "medianOutputTokens": 1221,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 9497,
+            "medianCostUsd": 0.0043,
+            "spread": {
+              "inputTokens": {
+                "min": 102773,
+                "max": 139033
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 8067,
+                "max": 12960
+              },
+              "costUsd": {
+                "min": 0.0037,
+                "max": 0.0046
+              }
+            },
+            "totalCostUsd": 0.0127,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "In the generated injector (`app/user/service/cmd/server/wire_gen.go`), three repository constructors receive the `*Data` value. All three take `(data *Data, logger log.Logger)`:\n\n- `data.NewUserRepo(dataData, logger)` (`internal/data/user.go:27`)\n- `data.NewCardRepo(dataData, logger)` (`internal/data/card.go:19`)\n- `data.NewAddressRepo(dataData, logger)` (`internal/data/address.go:18`)\n\n`dataData` comes from `data.NewData(client, cmdable, logger)`, which returns the `*Data` value and a cleanup function.\n\n`NewUserService` is constructed with three use cases plus the logger (`wire_gen.go:36`):\n\n- `userUseCase` from `biz.NewUserUseCase`\n- `cardUseCase` from `biz.NewCardUseCase`\n- `addressUseCase` from `biz.NewAddressUseCase`\n\nIts signature is `NewUserService(uc *biz.UserUseCase, cc *biz.CardUseCase, ac *biz.AddressUseCase, logger log.Logger)` (`internal/service/service.go:23`). The service layer never receives `*Data` or any repo directly.\n\nI read these from the generated file and the source; I did not regenerate with `wire` to confirm they still match.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 8067,
+              "costUsd": 0.00459621,
+              "inputTokens": 6,
+              "outputTokens": 1240,
+              "cacheCreationTokens": 15112,
+              "cacheReadTokens": 95321,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Glob": 1,
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Repositories that receive `*Data`:** three, all in `cmd/server/wire_gen.go` (`initApp`):\n\n- `data.NewUserRepo(dataData, logger)`\n- `data.NewCardRepo(dataData, logger)`\n- `data.NewAddressRepo(dataData, logger)`\n\n`dataData` is produced by `data.NewData(client, cmdable, logger)`. The other data constructors, `NewEntClient` and `NewRedisCmd`, take `*conf.Data` rather than `*Data`.\n\n**Use cases for `NewUserService`:** it is called as `service.NewUserService(userUseCase, cardUseCase, addressUseCase, logger)`, so it gets three biz use cases plus the logger:\n\n- `biz.NewUserUseCase(userRepo, logger)`\n- `biz.NewCardUseCase(cardRepo, logger)`\n- `biz.NewAddressUseCase(addressRepo, logger)`\n\n`wire_gen.go` is generated, so these reflect the current injector. The source of truth is the provider sets in `cmd/server/wire.go`. I read the generated file and did not re-run `wire` to confirm it is up to date.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9497,
+              "costUsd": 0.00374695,
+              "inputTokens": 6,
+              "outputTokens": 1192,
+              "cacheCreationTokens": 11172,
+              "cacheReadTokens": 91595,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Bash": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "In the generated injector (`app/user/service/cmd/server/wire_gen.go`), three repository constructors receive the `*Data` value:\n\n- `data.NewUserRepo(dataData, logger)` (`internal/data/user.go:27`)\n- `data.NewCardRepo(dataData, logger)` (`internal/data/card.go:19`)\n- `data.NewAddressRepo(dataData, logger)` (`internal/data/address.go:18`)\n\nThe `dataData` value comes from `data.NewData(client, cmdable, logger)`. `NewData` also returns a cleanup function, which `initApp` wraps and returns to the caller.\n\n`NewUserService` (`internal/service/service.go:23`) is constructed with three use cases plus the logger:\n\n- `biz.NewUserUseCase(userRepo, logger)`, passed as `userUseCase`\n- `biz.NewCardUseCase(cardRepo, logger)`, passed as `cardUseCase`\n- `biz.NewAddressUseCase(addressRepo, logger)`, passed as `addressUseCase`\n\nSo the call is `service.NewUserService(userUseCase, cardUseCase, addressUseCase, logger)`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12960,
+              "costUsd": 0.0043174599999999995,
+              "inputTokens": 8,
+              "outputTokens": 1221,
+              "cacheCreationTokens": 12189,
+              "cacheReadTokens": 126836,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-beer-shop-register-across-services",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 261851,
+            "medianOutputTokens": 3441,
+            "medianToolCalls": 7,
+            "medianTurns": 8,
+            "medianDurationMs": 19724,
+            "medianCostUsd": 0.0101,
+            "spread": {
+              "inputTokens": {
+                "min": 224713,
+                "max": 311959
+              },
+              "toolCalls": {
+                "min": 6,
+                "max": 8
+              },
+              "durationMs": {
+                "min": 19663,
+                "max": 22408
+              },
+              "costUsd": {
+                "min": 0.0096,
+                "max": 0.0103
+              }
+            },
+            "totalCostUsd": 0.03,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Short answer:** `ShopInterface.Register` → `AuthUseCase.Register` → `userRepo.Save` → user-service gRPC `User/Save` → `UserUseCase.Save` → `userRepo.CreateUser`. The insert happens in `app/user/service/internal/data/user.go`, in `CreateUser`.\n\n**1. Gateway entry point**\n- `app/shop/interface/internal/service/user.go:10`: `ShopInterface.Register` does `return s.ac.Register(ctx, req)`.\n- `app/shop/interface/internal/biz/auth.go:54`: `AuthUseCase.Register` is the use case. It:\n  1. Calls `userRepo.FindByUsername`. If the error is not `ErrUserNotFound`, it returns \"username already exists\".\n  2. Calls `NewUser(...)` in `biz/user.go` to build the entity with a random ID.\n  3. Calls `userRepo.Save(ctx, &user)` at line 67.\n\n**2. Gateway → user service call**\n- `app/shop/interface/internal/data/user.go`, `userRepo.Save`: calls `rp.data.uc.Save(ctx, &usV1.SaveUserReq{...})`. `data.uc` is a `userv1.UserClient`, so this is the gRPC RPC `Save` declared in `api/user/service/v1/user.proto:17`.\n- The gateway's `FindByUsername` likewise calls the `GetUserByUsername` RPC.\n\n**3. User service handlers**\n- `app/user/service/internal/service/user.go`, `UserService.Save`: forwards to `s.uc.Save(ctx, in)`.\n- `app/user/service/internal/biz/user.go`, `UserUseCase.Save`: builds a `biz.User` with `rand.Int63()` as the ID, then calls `uc.repo.CreateUser(ctx, user)`.\n\n**4. Database insert**\n- `app/user/service/internal/data/user.go`, `userRepo.CreateUser`: hashes the password with `util.HashPassword`, then runs `r.data.db.User.Create().SetUsername(...).SetPasswordHash(ph).Save(ctx)` through the ent client.\n\n**Notes**\n- The user service also has a separate `CreateUser` RPC (`UserService.CreateUser` → `UserUseCase.Create` → the same `repo.CreateUser`). The shop gateway's register path does not use it; it uses `Save`.\n- The gateway's `Save` sends the plaintext password. Hashing happens only in the user service's data layer.\n- The ID the gateway generates in `NewUser` is not used. The user service's `Save` generates its own ID, and the gateway receives it back as `RegisterReply.Id`.\n- The HTTP route `POST /v1/register` (`api/shop/interface/v1/shop_interface_http.pb.go`) reaches the same `Register` method. It is whitelisted in `app/shop/interface/internal/server/http.go:25`.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 22408,
+              "costUsd": 0.00960925,
+              "inputTokens": 12,
+              "outputTokens": 3448,
+              "cacheCreationTokens": 27714,
+              "cacheReadTokens": 234125,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1,
+                "Bash": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Short answer:** the gateway's `Register` calls the user service's `Save` RPC. That reaches the database insert in `CreateUser` in `app/user/service/internal/data/user.go`.\n\nThe full chain:\n\n1. **Gateway entry point:** `app/shop/interface/internal/service/user.go:10`, `ShopInterface.Register`, which forwards to `s.ac.Register`.\n\n2. **Gateway use case:** `app/shop/interface/internal/biz/auth.go:54`, `AuthUseCase.Register`. It checks that the username is free with `userRepo.FindByUsername`, builds the user with `NewUser`, then calls `receiver.userRepo.Save(ctx, &user)`.\n\n3. **Gateway repo → user-service RPC:** `app/shop/interface/internal/data/user.go:82`, `userRepo.Save`. It calls `rp.data.uc.Save(...)` with a `usV1.SaveUserReq`. `data.uc` is a `userv1.UserClient` (`app/shop/interface/internal/data/data.go:43`). The gRPC method is **`/user.service.v1.User/Save`**, declared as `rpc Save(SaveUserReq) returns (SaveUserReply)` in `api/user/service/v1/user.proto:17`.\n\n4. **User service handlers, in order:**\n   - `app/user/service/internal/service/user.go:51`, `UserService.Save`, which delegates to `s.uc.Save`.\n   - `app/user/service/internal/biz/user.go:39`, `UserUseCase.Save`. It builds a `User`, assigns `Id: rand.Int63()`, and calls `uc.repo.CreateUser(ctx, user)`.\n   - `app/user/service/internal/data/user.go:58`, `userRepo.CreateUser`. This hashes the password with `util.HashPassword` and runs `r.data.db.User.Create().SetUsername(...).SetPasswordHash(...).Save(ctx)`.\n\n**The file that does the insert is `app/user/service/internal/data/user.go`**, in `userRepo.CreateUser`. The `.Save(ctx)` there is the ent builder's insert. Its generated code lives in `app/user/service/internal/data/ent/user_create.go`, but the call is made from `data/user.go`.\n\n**Side note (not asked, but affects the result):** `UserUseCase.Save` sets its own random `Id` and passes it to `CreateUser`, but `CreateUser` never sets the ID, so the database assigns its own. `Save` also discards the row returned by `CreateUser` and replies with the random ID. The gateway's `RegisterReply.Id` may therefore not match the stored user's primary key. I haven't run anything to confirm this; it's from reading the code.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 19724,
+              "costUsd": 0.01034964,
+              "inputTokens": 14,
+              "outputTokens": 3441,
+              "cacheCreationTokens": 28991,
+              "cacheReadTokens": 282954,
+              "toolCalls": 7,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1,
+                "Bash": 5
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Short answer:** `ShopInterface.Register` calls the user service's `Save` gRPC method, and the insert happens in `userRepo.CreateUser` in `app/user/service/internal/data/user.go`.\n\nThe full chain, traced through the code:\n\n1. **Gateway entry point:** `app/shop/interface/internal/service/user.go:10`. `(*ShopInterface).Register` just delegates to `s.ac.Register(ctx, req)`. The HTTP route `POST /v1/register` is wired to it in `api/shop/interface/v1/shop_interface_http.pb.go:60`.\n\n2. **Gateway use case:** `AuthUseCase.Register` in `app/shop/interface/internal/biz/auth.go:54`. It:\n   - calls `userRepo.FindByUsername` to check for an existing username,\n   - builds the user with `NewUser(...)`,\n   - calls `userRepo.Save(ctx, &user)` (line 67).\n\n3. **Gateway repo (gRPC client call):** `userRepo.Save` in `app/shop/interface/internal/data/user.go:82`. It calls `rp.data.uc.Save(ctx, &usV1.SaveUserReq{...})`. `rp.data.uc` is a `userv1.UserClient` built in `NewUserServiceClient` (`app/shop/interface/internal/data/data.go:84`). So the gRPC method is **`User.Save`** with request `SaveUserReq`.\n\n4. **User service gRPC handler:** `(*UserService).Save` in `app/user/service/internal/service/user.go:51`. It delegates to `s.uc.Save(ctx, in)`.\n\n5. **User service use case:** `(*UserUseCase).Save` in `app/user/service/internal/biz/user.go:39`. It builds a `User` with a random `Id` (`rand.Int63()`) and calls `uc.repo.CreateUser(ctx, user)`.\n\n6. **User service repo (the insert):** `(*userRepo).CreateUser` in **`app/user/service/internal/data/user.go:58`**. It hashes the password with `util.HashPassword`, then runs `r.data.db.User.Create().SetUsername(...).SetPasswordHash(...).Save(ctx)`. That `Save` is the ent ORM call, which runs the generated `UserCreate.sqlSave` in `app/user/service/internal/data/ent/user_create.go:180` to issue the actual SQL INSERT.\n\n**Things I noticed while tracing:**\n\n- In `AuthUseCase.Register`, the duplicate check is `if !errors.Is(err, ErrUserNotFound)`. Any error from `FindByUsername` other than \"not found\", such as a network failure to the user service, is reported as \"username already exists\". Behaviour is correct for the normal path, but the error message can be misleading.\n- The gateway sends the plain password over gRPC. Hashing only happens in the user service's `CreateUser`.\n\nI only read code and did not run anything.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 19663,
+              "costUsd": 0.01006353,
+              "inputTokens": 10,
+              "outputTokens": 3072,
+              "cacheCreationTokens": 33050,
+              "cacheReadTokens": 191653,
+              "toolCalls": 8,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 5,
+                "Bash": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 236373,
+            "medianOutputTokens": 3128,
+            "medianToolCalls": 13,
+            "medianTurns": 14,
+            "medianDurationMs": 20034,
+            "medianCostUsd": 0.0084,
+            "spread": {
+              "inputTokens": {
+                "min": 221560,
+                "max": 323808
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 13
+              },
+              "durationMs": {
+                "min": 16368,
+                "max": 23734
+              },
+              "costUsd": {
+                "min": 0.0079,
+                "max": 0.01
+              }
+            },
+            "totalCostUsd": 0.0263,
+            "mcpRuns": 1,
+            "mcpTools": {
+              "get_symbol_source": 8,
+              "find_definitions": 2,
+              "search_symbols": 2
+            },
+            "toolSearchCalls": 1
+          },
+          "runs": [
+            {
+              "answer": "**Short answer:** the gateway's `Register` calls the user service's `Save` gRPC method, and the insert happens in `app/user/service/internal/data/user.go`, in `userRepo.CreateUser`.\n\n**Call chain**\n\n1. **Gateway entry:** `ShopInterface.Register` in `app/shop/interface/internal/service/user.go:10` only delegates to `s.ac.Register`.\n2. **Gateway use case:** `AuthUseCase.Register` in `app/shop/interface/internal/biz/auth.go:54` checks that the username is free with `userRepo.FindByUsername`, builds a `User` with `NewUser`, and calls `userRepo.Save(ctx, &user)`.\n3. **Gateway data layer:** `userRepo.Save` in `app/shop/interface/internal/data/user.go:82` calls `rp.data.uc.Save` with a `usV1.SaveUserReq`. That is the user-service gRPC client, and the method it hits is `Save` (`api/user/service/v1/user_grpc.pb.go:82`). The gateway does not call `CreateUser` over gRPC.\n4. **User service gRPC handler:** `UserService.Save` in `app/user/service/internal/service/user.go:51` delegates to `s.uc.Save`.\n5. **User service use case:** `UserUseCase.Save` in `app/user/service/internal/biz/user.go:39` builds a `User` with a random `Id` and calls `uc.repo.CreateUser(ctx, user)`.\n6. **Insert:** `userRepo.CreateUser` in `app/user/service/internal/data/user.go:58` hashes the password with `util.HashPassword`, then runs `r.data.db.User.Create().SetUsername(...).SetPasswordHash(...).Save(ctx)`. That is the database insert, done through the ent client.\n\n**Caveat I noticed:** `UserUseCase.Save` ignores the ID that the insert returns. It replies with the random `Id` it generated, while `CreateUser` does not set an ID, so the database assigns its own. The reply's `Id` may therefore not match the stored row. I read this from the source and did not run it.",
+              "isError": false,
+              "turns": 14,
+              "durationMs": 16368,
+              "costUsd": 0.00787872,
+              "inputTokens": 12,
+              "outputTokens": 3128,
+              "cacheCreationTokens": 20789,
+              "cacheReadTokens": 215572,
+              "toolCalls": 13,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__search_symbols": 2,
+                "mcp__concentrate__get_symbol_source": 8,
+                "mcp__concentrate__find_definitions": 2
+              },
+              "mcpCalls": [
+                {
+                  "tool": "search_symbols",
+                  "input": {
+                    "query": "Register",
+                    "limit": 50
+                  },
+                  "result": "{\"query\":{\"query\":\"Register\",\"kind\":null,\"file\":null},\"total\":33,\"symbols\":[{\"kind\":\"method\",\"name\":\"Register\",\"className\":\"ShopInterface\",\"file\":\"app/shop/interface/internal/service/user.go\",\"line\":10,\"isExported\":true,\"match\":\"exact\",\"score\":6999},{\"kind\":\"function\",\"name\":\"Register\",\"file\":\"web/shop/src/pages/Register/index.js\",\"line\":7,\"isExported\":true,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"Register\",\"className\":\"shopInterfaceClient\",\"file\":\"api/shop/interface/v1/shop_interface_grpc.pb.go\",\"line\":70,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"Register\",\"className\":\"UnimplementedShopInterfaceServer\",\"file\":\"api/shop/interface/v1/shop_interface_grpc.pb.go\",\"line\":241,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"Register\",\"className\":\"ShopInterfaceHTTPClientImpl\",\"file\":\"api/shop/interface/v1/shop_interface_http.pb.go\",\"line\":616,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"Register\",\"className\":\"AuthUseCase\",\"file\":\"app/shop/interface/internal/biz/auth.go\",\"line\":54,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"function\",\"name\":\"register\",\"file\":\"web/admin/src/api/admin.js\",\"line\":10,\"isExported\":true,\"match\":\"exact-ignore-case\",\"score\":5999},{\"kind\":\"function\",\"name\":\"register\",\"file\":\"web/shop/src/api/user.js\",\"line\":10,\"isExported\":true,\"match\":\"exact-ignore-case\",\"score\":5999},{\"kind\":\"class\",\"name\":\"RegisterReq\",\"file\":\"api/shop/admin/v1/shop_admin.pb.go\",\"line\":24,\"isExported\":true,\"match\":\"prefix\",\"score\":4969},{\"kind\":\"class\",\"name\":\"RegisterReq\",\"file\":\"api/shop/interface/v1/shop_interface.pb.go\",\"line\":24,\"isExported\":true,\"match\":\"prefix\",\"score\":4969},{\"kind\":\"class\",\"name\":\"RegisterReply\",\"file\":\"api/shop/admin/v1/shop_admin.pb.go\",\"line\":79,\"isExported\":true,\"match\":\"prefix\",\"score\":4949},{\"kind\":\"class\",\"name\":\"RegisterReply\",\"file\":\"api/shop/interface/v1/shop_interface.pb.go\",\"line\":79,\"isExported\":true,\"match\":\"prefix\",\"score\":4949}… (5573 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "search_symbols",
+                  "input": {
+                    "query": "CreateUser",
+                    "limit": 50
+                  },
+                  "result": "{\"query\":{\"query\":\"CreateUser\",\"kind\":null,\"file\":null},\"total\":12,\"symbols\":[{\"kind\":\"method\",\"name\":\"CreateUser\",\"className\":\"UserService\",\"file\":\"app/user/service/internal/service/user.go\",\"line\":10,\"isExported\":true,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"CreateUser\",\"className\":\"userClient\",\"file\":\"api/user/service/v1/user_grpc.pb.go\",\"line\":91,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"CreateUser\",\"className\":\"UnimplementedUserServer\",\"file\":\"api/user/service/v1/user_grpc.pb.go\",\"line\":214,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"CreateUser\",\"className\":\"userRepo\",\"file\":\"app/user/service/internal/data/user.go\",\"line\":58,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"class\",\"name\":\"CreateUserReq\",\"file\":\"api/shop/admin/v1/shop_admin.pb.go\",\"line\":482,\"isExported\":true,\"match\":\"prefix\",\"score\":4969},{\"kind\":\"class\",\"name\":\"CreateUserReq\",\"file\":\"api/shop/interface/v1/shop_interface.pb.go\",\"line\":406,\"isExported\":true,\"match\":\"prefix\",\"score\":4969},{\"kind\":\"class\",\"name\":\"CreateUserReq\",\"file\":\"api/user/service/v1/user.pb.go\",\"line\":228,\"isExported\":true,\"match\":\"prefix\",\"score\":4969},{\"kind\":\"class\",\"name\":\"CreateUserReply\",\"file\":\"api/shop/admin/v1/shop_admin.pb.go\",\"line\":537,\"isExported\":true,\"match\":\"prefix\",\"score\":4949},{\"kind\":\"class\",\"name\":\"CreateUserReply\",\"file\":\"api/shop/interface/v1/shop_interface.pb.go\",\"line\":461,\"isExported\":true,\"match\":\"prefix\",\"score\":4949},{\"kind\":\"class\",\"name\":\"CreateUserReply\",\"file\":\"api/user/service/v1/user.pb.go\",\"line\":283,\"isExported\":true,\"match\":\"prefix\",\"score\":4949},{\"kind\":\"function\",\"name\":\"_User_CreateUser_Handler\",\"file\":\"api/user/service/v1/user_grpc.pb.go\",\"line\":311,\"isExported\":false,\"match\":\"substring\",\"score\":2999},{\"kind\":\"variable\",\"name\":\"User_CreateUser_FullMethodName\",\"file\":\"api/user/service/v1/user_grpc.pb.go\",\"line\":25,\"isExported\":true,\"match\":\"substring\",\"score\":2999}],\"page\":{\"offset\":0,\"returned\":12}}",
+                  "isError": false
+                },
+                {
+                  "tool": "get_symbol_source",
+                  "input": {
+                    "name": "ShopInterface.Register",
+                    "file": "app/shop/interface/internal/service/user.go"
+                  },
+                  "result": "{\"name\":\"ShopInterface.Register\",\"matches\":[{\"kind\":\"method\",\"name\":\"Register\",\"className\":\"ShopInterface\",\"file\":\"app/shop/interface/internal/service/user.go\",\"line\":10,\"endLine\":12,\"source\":\"func (s *ShopInterface) Register(ctx context.Context, req *v1.RegisterReq) (*v1.RegisterReply, error) {\\n\\treturn s.ac.Register(ctx, req)\\n}\"}],\"note\":\"Source is read from disk using line spans from the last scan; it may differ if the file changed since.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "get_symbol_source",
+                  "input": {
+                    "name": "AuthUseCase.Register",
+                    "file": "app/shop/interface/internal/biz/auth.go"
+                  },
+                  "result": "{\"name\":\"AuthUseCase.Register\",\"matches\":[{\"kind\":\"method\",\"name\":\"Register\",\"className\":\"AuthUseCase\",\"file\":\"app/shop/interface/internal/biz/auth.go\",\"line\":54,\"endLine\":74,\"source\":\"func (receiver *AuthUseCase) Register(ctx context.Context, req *v1.RegisterReq) (*v1.RegisterReply, error) {\\n\\n\\t// check username\\n\\t_, err := receiver.userRepo.FindByUsername(ctx, req.Username)\\n\\tif !errors.Is(err, ErrUserNotFound) {\\n\\t\\treturn nil, v1.ErrorRegisterFailed(\\\"username already exists\\\")\\n\\t}\\n\\t// create user\\n\\tuser, err := NewUser(req.Username, req.Password)\\n\\tif err != nil {\\n\\t\\treturn nil, v1.ErrorRegisterFailed(\\\"create user failed: %s\\\", err.Error())\\n\\t}\\n\\t// save user\\n\\terr = receiver.userRepo.Save(ctx, &user)\\n\\tif err != nil {\\n\\t\\treturn nil, v1.ErrorRegisterFailed(\\\"save user failed: %s\\\", err.Error())\\n\\t}\\n\\treturn &v1.RegisterReply{\\n\\t\\tId: user.Id,\\n\\t}, nil\\n}\"}],\"note\":\"Source is read from disk using line spans from the last scan; it may differ if the file changed since.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "get_symbol_source",
+                  "input": {
+                    "name": "UserService.CreateUser",
+                    "file": "app/user/service/internal/service/user.go"
+                  },
+                  "result": "{\"name\":\"UserService.CreateUser\",\"matches\":[{\"kind\":\"method\",\"name\":\"CreateUser\",\"className\":\"UserService\",\"file\":\"app/user/service/internal/service/user.go\",\"line\":10,\"endLine\":22,\"source\":\"func (s *UserService) CreateUser(ctx context.Context, req *v1.CreateUserReq) (*v1.CreateUserReply, error) {\\n\\trv, err := s.uc.Create(ctx, &biz.User{\\n\\t\\tUsername: req.Username,\\n\\t\\tPassword: req.Password,\\n\\t})\\n\\tif err != nil {\\n\\t\\treturn nil, err\\n\\t}\\n\\treturn &v1.CreateUserReply{\\n\\t\\tId:       rv.Id,\\n\\t\\tUsername: rv.Username,\\n\\t}, nil\\n}\"}],\"note\":\"Source is read from disk using line spans from the last scan; it may differ if the file changed since.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "get_symbol_source",
+                  "input": {
+                    "name": "userRepo.CreateUser",
+                    "file": "app/user/service/internal/data/user.go"
+                  },
+                  "result": "{\"name\":\"userRepo.CreateUser\",\"matches\":[{\"kind\":\"method\",\"name\":\"CreateUser\",\"className\":\"userRepo\",\"file\":\"app/user/service/internal/data/user.go\",\"line\":58,\"endLine\":72,\"source\":\"func (r *userRepo) CreateUser(ctx context.Context, u *biz.User) (*biz.User, error) {\\n\\tph, err := util.HashPassword(u.Password)\\n\\tif err != nil {\\n\\t\\treturn nil, err\\n\\t}\\n\\tpo, err := r.data.db.User.\\n\\t\\tCreate().\\n\\t\\tSetUsername(u.Username).\\n\\t\\tSetPasswordHash(ph).\\n\\t\\tSave(ctx)\\n\\tif err != nil {\\n\\t\\treturn nil, err\\n\\t}\\n\\treturn &biz.User{Id: po.ID, Username: po.Username}, nil\\n}\"}],\"note\":\"Source is read from disk using line spans from the last scan; it may differ if the file changed since.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_definitions",
+                  "input": {
+                    "name": "Save",
+                    "exact": true
+                  },
+                  "result": "{\"query\":{\"name\":\"Save\",\"exact\":true,\"limit\":20},\"definitions\":[{\"name\":\"Save\",\"kind\":\"Function\",\"file\":\"app/user/service/internal/service/user.go\",\"line\":51,\"isExported\":true,\"relationship\":\"DEFINES_FUNCTION\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"api/user/service/v1/user_grpc.pb.go\",\"line\":82,\"isExported\":false,\"relationship\":\"DEFINES_METHOD\",\"className\":\"userClient\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"api/user/service/v1/user_grpc.pb.go\",\"line\":211,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"UnimplementedUserServer\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/data/ent/beer_create.go\",\"line\":94,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"BeerCreate\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/data/ent/beer_create.go\",\"line\":272,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"BeerCreateBulk\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/data/ent/beer_update.go\",\"line\":109,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"BeerUpdate\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/data/ent/beer_update.go\",\"line\":336,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"BeerUpdateOne\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"app/shop/interface/internal/data/user.go\",\"line\":82,\"isExported\":false,\"relationship\":\"DEFINES_METHOD\",\"className\":\"userRepo\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/biz/user.go\",\"line\":39,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"UserUseCase\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/data/ent/address_create.go\",\"line\":107,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"AddressCreate\"},{\"name\":\"Save\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/data/ent/address_create.go\",\"line\":294,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"AddressCreateBulk\"},{\"name\":\"Save\",\"kind\":\"… (3689 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "find_definitions",
+                  "input": {
+                    "name": "Create",
+                    "exact": true
+                  },
+                  "result": "{\"query\":{\"name\":\"Create\",\"exact\":true,\"limit\":20},\"definitions\":[{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/biz/beer.go\",\"line\":45,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"BeerUseCase\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/data/ent/client.go\",\"line\":141,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"BeerClient\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/data/ent/migrate/migrate.go\",\"line\":48,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"Schema\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/order/service/internal/biz/order.go\",\"line\":30,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"OrderUseCase\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/biz/address.go\",\"line\":32,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"AddressUseCase\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/biz/card.go\",\"line\":33,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"CardUseCase\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/biz/user.go\",\"line\":67,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"UserUseCase\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/data/ent/client.go\",\"line\":156,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"AddressClient\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/data/ent/client.go\",\"line\":260,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"CardClient\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/data/ent/client.go\",\"line\":364,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"UserClient\"},{\"name\":\"Create\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/data/ent/migrate/migrate.go\",\"line\":48,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"Schema\"}],\"page\":{\"offset\":0,\"retur… (2009 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "get_symbol_source",
+                  "input": {
+                    "name": "userRepo.Save",
+                    "file": "app/shop/interface/internal/data/user.go"
+                  },
+                  "result": "{\"name\":\"userRepo.Save\",\"matches\":[{\"kind\":\"method\",\"name\":\"Save\",\"className\":\"userRepo\",\"file\":\"app/shop/interface/internal/data/user.go\",\"line\":82,\"endLine\":89,\"source\":\"func (rp *userRepo) Save(ctx context.Context, u *biz.User) error {\\n\\t_, err := rp.data.uc.Save(ctx, &usV1.SaveUserReq{\\n\\t\\tId:       u.Id,\\n\\t\\tUsername: u.Username,\\n\\t\\tPassword: u.Password,\\n\\t})\\n\\treturn err\\n}\"}],\"note\":\"Source is read from disk using line spans from the last scan; it may differ if the file changed since.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "get_symbol_source",
+                  "input": {
+                    "name": "UserService.Save",
+                    "file": "app/user/service/internal/service/user.go"
+                  },
+                  "result": "{\"name\":\"UserService.Save\",\"matches\":[{\"kind\":\"method\",\"name\":\"Save\",\"className\":\"UserService\",\"file\":\"app/user/service/internal/service/user.go\",\"line\":51,\"endLine\":53,\"source\":\"func (s *UserService) Save(ctx context.Context, in *v1.SaveUserReq) (*v1.SaveUserReply, error) {\\n\\treturn s.uc.Save(ctx, in)\\n}\"}],\"note\":\"Source is read from disk using line spans from the last scan; it may differ if the file changed since.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "get_symbol_source",
+                  "input": {
+                    "name": "UserUseCase.Save",
+                    "file": "app/user/service/internal/biz/user.go"
+                  },
+                  "result": "{\"name\":\"UserUseCase.Save\",\"matches\":[{\"kind\":\"method\",\"name\":\"Save\",\"className\":\"UserUseCase\",\"file\":\"app/user/service/internal/biz/user.go\",\"line\":39,\"endLine\":53,\"source\":\"func (uc *UserUseCase) Save(ctx context.Context, in *v1.SaveUserReq) (*v1.SaveUserReply, error) {\\n\\tuser := &User{\\n\\t\\tId:       rand.Int63(),\\n\\t\\tUsername: in.Username,\\n\\t\\tPassword: in.Password,\\n\\t}\\n\\t_, err := uc.repo.CreateUser(ctx, user)\\n\\tif err != nil {\\n\\t\\t// todo: handle error\\n\\t\\treturn nil, err\\n\\t}\\n\\treturn &v1.SaveUserReply{\\n\\t\\tId: user.Id,\\n\\t}, nil\\n}\"}],\"note\":\"Source is read from disk using line spans from the last scan; it may differ if the file changed since.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "get_symbol_source",
+                  "input": {
+                    "name": "UserUseCase.Create",
+                    "file": "app/user/service/internal/biz/user.go"
+                  },
+                  "result": "{\"name\":\"UserUseCase.Create\",\"matches\":[{\"kind\":\"method\",\"name\":\"Create\",\"className\":\"UserUseCase\",\"file\":\"app/user/service/internal/biz/user.go\",\"line\":67,\"endLine\":73,\"source\":\"func (uc *UserUseCase) Create(ctx context.Context, u *User) (*User, error) {\\n\\tout, err := uc.repo.CreateUser(ctx, u)\\n\\tif err != nil {\\n\\t\\treturn nil, err\\n\\t}\\n\\treturn out, nil\\n}\"}],\"note\":\"Source is read from disk using line spans from the last scan; it may differ if the file changed since.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Short answer:** the insert happens in `app/user/service/internal/data/user.go`, in `userRepo.CreateUser`.\n\nThe full chain:\n\n1. **Gateway entry point:** `ShopInterface.Register` in `app/shop/interface/internal/service/user.go:10` only delegates to `s.ac.Register(ctx, req)`.\n\n2. **Gateway use case:** `AuthUseCase.Register` in `app/shop/interface/internal/biz/auth.go:54`. It:\n   - checks for an existing username with `userRepo.FindByUsername` (line 57),\n   - builds the user with `NewUser(...)` (line 62),\n   - calls `receiver.userRepo.Save(ctx, &user)` (line 67).\n\n3. **Gateway repo, to the user service:** `userRepo.Save` in `app/shop/interface/internal/data/user.go` calls `rp.data.uc.Save(ctx, &usV1.SaveUserReq{...})`. That is the gRPC client method `User.Save`, defined in `api/user/service/v1/user.proto:17` with full method name `/user.service.v1.User/Save`.\n\n4. **User service handlers, down to the database:**\n   - `UserService.Save` in `app/user/service/internal/service/user.go:51` delegates to `s.uc.Save(ctx, in)`.\n   - `UserUseCase.Save` in `app/user/service/internal/biz/user.go:39` builds a `User` with `rand.Int63()` as the ID and calls `uc.repo.CreateUser(ctx, user)`.\n   - `userRepo.CreateUser` in `app/user/service/internal/data/user.go:58` hashes the password with `util.HashPassword` and runs `r.data.db.User.Create().SetUsername(...).SetPasswordHash(...).Save(ctx)`. That `Save` is the ent-generated insert, and it is the database write.\n\nSo the file containing the insert is **`app/user/service/internal/data/user.go`**.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 20034,
+              "costUsd": 0.0084279,
+              "inputTokens": 10,
+              "outputTokens": 2254,
+              "cacheCreationTokens": 26760,
+              "cacheReadTokens": 194790,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`ShopInterface.Register` ends in a database insert in `app/user/service/internal/data/user.go`, in the `CreateUser` method. The call chain is:\n\n1. **Gateway handler:** `app/shop/interface/internal/service/user.go:10`, `(*ShopInterface).Register`, which just delegates to `s.ac.Register(ctx, req)`.\n2. **Gateway use case:** `app/shop/interface/internal/biz/auth.go:54`, `(*AuthUseCase).Register`. It checks that the username is free with `userRepo.FindByUsername`, builds a `biz.User` with `NewUser`, and calls `receiver.userRepo.Save(ctx, &user)`.\n3. **Gateway repo:** `app/shop/interface/internal/data/user.go:82`, `(*userRepo).Save`. It calls the user-service gRPC client `rp.data.uc.Save(...)` with a `usV1.SaveUserReq`.\n4. **gRPC method:** `Save`, declared as `rpc Save(SaveUserReq) returns (SaveUserReply)` in `api/user/service/v1/user.proto:17`.\n5. **User service server:** `app/user/service/internal/service/user.go:51`, `(*UserService).Save`, which calls `s.uc.Save(ctx, in)`.\n6. **User service use case:** `app/user/service/internal/biz/user.go:39`, `(*UserUseCase).Save`. It builds a `User` with `Id: rand.Int63()` and calls `uc.repo.CreateUser(ctx, user)`.\n7. **User service repo, the insert:** `app/user/service/internal/data/user.go:58`, `(*userRepo).CreateUser`. It hashes the password with `util.HashPassword`, then runs `r.data.db.User.Create().SetUsername(...).SetPasswordHash(...).Save(ctx)`. That `Create().…Save(ctx)` is the ent ORM call that issues the INSERT. The generated SQL lives in `app/user/service/internal/data/ent/user_create.go` (`sqlSave` at line 180).\n\nTwo things I noticed while tracing:\n\n- The gateway sends the plaintext password over gRPC (`Password: u.Password`), and hashing happens only in the user service's `CreateUser`.\n- The gateway sets `Id` on the save request, but the user service ignores it and generates its own `rand.Int63()` ID. The `RegisterReply.Id` returned to the shopper is therefore the ID the user service generated.\n\nI only read the code and did not run anything.",
+              "isError": false,
+              "turns": 14,
+              "durationMs": 23734,
+              "costUsd": 0.010001529999999998,
+              "inputTokens": 16,
+              "outputTokens": 3956,
+              "cacheCreationTokens": 25179,
+              "cacheReadTokens": 298613,
+              "toolCalls": 13,
+              "toolsByName": {
+                "Grep": 8,
+                "Read": 5
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-beer-shop-count-impact",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 235709,
+            "medianOutputTokens": 3135,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 23499,
+            "medianCostUsd": 0.0086,
+            "spread": {
+              "inputTokens": {
+                "min": 233230,
+                "max": 253852
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 8
+              },
+              "durationMs": {
+                "min": 23187,
+                "max": 23558
+              },
+              "costUsd": {
+                "min": 0.0081,
+                "max": 0.0086
+              }
+            },
+            "totalCostUsd": 0.0252,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "If `beerRepo.Count` changes behaviour, the only gRPC endpoint affected is **`ListBeerNextToken`**. Every other handler is unaffected.\n\n**Call chain**\n\n1. **`app/catalog/service/internal/data/beer.go:98`**: `beerRepo.Count` returns `r.data.db.Beer.Query().Count(ctx)`, the total number of beer rows.\n2. **`app/catalog/service/internal/biz/beer.go:62`**: `BeerUseCase.ListNext` calls `uc.repo.Count(ctx)` and passes the result as `total` into `uc.pageToken.ProcessPageTokens(total, pageSize, pageToken)` (`:67`).\n3. **`pkg/page_token/page_token.go`**: `ProcessPageTokens` uses `numElements` (the total) in four places:\n   - It validates the decoded token index. If `index >= total`, it returns `ErrInvalidToken`.\n   - It sets `pageSize = total` when the request's page size is 0.\n   - It computes `end = min(start + pageSize, total)`.\n   - It emits a `nextToken` only when `end < total`.\n   \n   So a changed count changes the `start`/`end` window, whether a next-page token is returned, and whether an old token is rejected.\n4. **`biz/beer.go:72`**: the singleflight key is built from `start` and `end`, so the deduplication key changes with them. The data query `ListBeerNext(start, end)` receives the altered window.\n5. **`app/catalog/service/internal/service/beer.go:94`**: `CatalogService.ListBeerNextToken`, the gRPC handler, calls `s.bc.ListNext`. It returns `Results` and `NextPageToken` to the client. This is the end of the chain. The RPC is declared in `api/catalog/service/v1/catalog.proto` and wired through `catalog_grpc.pb.go`.\n\n**Not affected**\n\n- `CreateBeer`, `GetBeer`, `UpdateBeer` and `ListBeer` (offset/page-number pagination via `ListBeer` in `biz/beer.go:57`) do not call `Count`.\n- The `Count` field on `Beer` (the inventory-style `count` column in `ent/beer.go`) is a different thing from `beerRepo.Count`. Changing one does not change the other.\n\n**Something to check**\n\n`beerRepo.UpdateBeer` (`data/beer.go:58`) calls `r.data.db.Beer.Create()` instead of an update. Each \"update\" inserts a new row, so the total that `Count` returns grows on every update. That feeds straight into the `ListBeerNextToken` pagination above. It looks like a bug, and it would make your `Count` behaviour change look like it came from the pagination code when it actually came from this.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 23187,
+              "costUsd": 0.008556330000000001,
+              "inputTokens": 12,
+              "outputTokens": 3135,
+              "cacheCreationTokens": 23417,
+              "cacheReadTokens": 230423,
+              "toolCalls": 8,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 4,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Only one gRPC endpoint is affected: **`ListBeerNextToken`**. Every other catalog RPC is unaffected, because `Count` is called from exactly one place.\n\n**Call chain, from the data layer up to the gRPC handler**\n\n1. **`internal/data/beer.go:98`**: `beerRepo.Count` runs `Beer.Query().Count(ctx)` and returns the total row count.\n2. **`internal/biz/beer.go:62`**: `BeerUseCase.ListNext` calls `uc.repo.Count(ctx)` first and passes the result as `numElements` to `pageToken.ProcessPageTokens`. That function computes `start`, `end` and `nextToken`, and `ListNext` then calls `repo.ListBeerNext(start, end)`.\n3. **`internal/service/beer.go:94`**: `CatalogService.ListBeerNextToken` calls `s.bc.ListNext` and maps the result into `ListBeerReplyNextToken`.\n4. **`internal/server/grpc.go`**: `NewGRPCServer` registers `CatalogService` via `v1.RegisterCatalogServer`, which exposes `ListBeerNextToken` over gRPC.\n\n**What `Count` changes affect, and how**\n\n`ProcessPageTokens` in `pkg/page_token/page_token.go:100` uses the total in four places:\n\n- **Token validation (line 116):** a page token whose index is `>= total` is rejected with `ErrInvalidToken`. If the count drops, tokens that were valid before can start failing.\n- **Default page size (line 122):** when `PageSize == 0`, it becomes `total`, so the request returns everything from `start` onward.\n- **End of page (line 125):** `end = min(start + pageSize, total)`. A smaller total truncates the page.\n- **Next token (line 127):** a token is issued only while `end < total`. A total of 0 gives an empty page and no token.\n\nErrors from `Count` return early from `ListNext` and reach the gRPC caller as an error.\n\n**Not affected**\n\n- `ListBeer` (`biz.List` → `repo.ListBeer`) is offset-based and never calls `Count`.\n- `Get`, `Create` and `Update` do not call `Count`.\n- `ListBeerNext` itself uses only `start` and `end`, not the total, so it works with whatever bounds `ProcessPageTokens` returns.\n\nI only traced the code by reading it. I did not run the tests or the service.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 23558,
+              "costUsd": 0.00856153,
+              "inputTokens": 12,
+              "outputTokens": 3304,
+              "cacheCreationTokens": 24085,
+              "cacheReadTokens": 209133,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Bash": 4,
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Only one call path reaches the gRPC handler, so a change to `beerRepo.Count` affects four layers:\n\n1. **`beerRepo.Count`** (`app/catalog/service/internal/data/beer.go:98`): returns the total row count from `r.data.db.Beer.Query().Count(ctx)`.\n2. **`BeerUseCase.ListNext`** (`app/catalog/service/internal/biz/beer.go:61-77`): calls `uc.repo.Count(ctx)` first and passes the result to `pageToken.ProcessPageTokens(total, pageSize, pageToken)`. Its `start` and `end` values go to `ListBeerNext`, and an error from `Count` returns immediately.\n3. **`pageToken.ProcessPageTokens`** (`pkg/page_token/page_token.go:100-127`): the total is the upper bound for everything:\n   - a decoded token index `>= numElements` is rejected with `ErrInvalidToken`;\n   - `pageSize == 0` becomes `numElements`;\n   - `end = min(start+pageSize, numElements)`;\n   - a `nextToken` is issued only when `end < numElements`.\n4. **`CatalogService.ListBeerNextToken`** (`app/catalog/service/internal/service/beer.go:94-113`): maps the results and returns `NextPageToken` from `ListNext`. It has no direct dependency on `Count`.\n\nThe gRPC handler is registered in `app/catalog/service/internal/server/grpc.go:36` with `v1.RegisterCatalogServer(srv, s)`. That exposes `ListBeerNextToken` over gRPC.\n\n**Effects on the gRPC endpoint for `ListBeerNextToken`:**\n- A higher or lower count changes page boundaries, next-page tokens, and whether a next token is returned at all.\n- Tokens issued earlier can fail with `ErrInvalidToken` if the total drops below their index.\n- If `Count` returns an error, the handler returns that error with an empty result.\n- If `Count` counts a different set than the one `ListBeerNext` reads (for example, a filter applied only to the count), pages can be empty, short, or skip items.\n\n**Not affected:** `CreateBeer`, `GetBeer`, `UpdateBeer`, `ListBeer` (the offset-based list) and their gRPC handlers do not call `Count`.\n\nOne thing I noticed in the same path, not caused by `Count`: `ListNext` does `data.([]*Beer)` on the result of `singleflight.Do`. If `ListBeerNext` returns an error, `data` is nil and that assertion panics. The gRPC `recovery` middleware would catch the panic, but the bug is still there.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 23499,
+              "costUsd": 0.0081109,
+              "inputTokens": 12,
+              "outputTokens": 3044,
+              "cacheCreationTokens": 22267,
+              "cacheReadTokens": 213430,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Bash": 5
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 143257,
+            "medianOutputTokens": 1845,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 15218,
+            "medianCostUsd": 0.005,
+            "spread": {
+              "inputTokens": {
+                "min": 105033,
+                "max": 353074
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 9
+              },
+              "durationMs": {
+                "min": 10324,
+                "max": 30922
+              },
+              "costUsd": {
+                "min": 0.004,
+                "max": 0.0105
+              }
+            },
+            "totalCostUsd": 0.0195,
+            "mcpRuns": 2,
+            "mcpTools": {
+              "impact_of": 2,
+              "find_callers": 1,
+              "find_definitions": 1
+            },
+            "toolSearchCalls": 2
+          },
+          "runs": [
+            {
+              "answer": "Only one gRPC handler is affected: `Catalog/ListBeerNextToken`. The chain runs up through three functions:\n\n1. **`beerRepo.Count`**, `app/catalog/service/internal/data/beer.go:98`. This is the function that changes. It returns the total beer count from `r.data.db.Beer.Query().Count(ctx)`.\n2. **`BeerUseCase.ListNext`**, `app/catalog/service/internal/biz/beer.go:61`. It calls `uc.repo.Count(ctx)` and uses the result as `total`. That value goes into `uc.pageToken.ProcessPageTokens(total, pageSize, pageToken)`, which computes the `start`, `end` and `nextToken` values. A different count therefore changes the page boundaries and the next-page token, and any error from `Count` is returned directly.\n3. **`CatalogService.ListBeerNextToken`**, `app/catalog/service/internal/service/beer.go:94`. It calls `s.bc.ListNext` and maps the results to `ListBeerReplyNextToken`, including `NextPageToken`.\n4. **gRPC entrypoint**, `app/catalog/service/internal/server/grpc.go:36`, registered as `Catalog/ListBeerNextToken`.\n\nFunctions that are not affected:\n- `beerRepo.ListBeerNext` (the data-layer lookup) receives `start` and `end` from `ListNext` and does not call `Count`.\n- `BeerUseCase.List` and `ListBeer` use page number and size, not `Count`, so they are unaffected.\n- The `sql.Count` calls in `ent.go` are library calls and do not depend on `beerRepo.Count`.\n\nThe impact analysis found no routes, components, pages, stores or config involved. The only other caller of `Count` is in the ent-generated `ent/beer/where.go` and `ent/ent.go`, which are unrelated helpers.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 15218,
+              "costUsd": 0.00500287,
+              "inputTokens": 8,
+              "outputTokens": 1845,
+              "cacheCreationTokens": 13932,
+              "cacheReadTokens": 129317,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_definitions": 1,
+                "mcp__concentrate__impact_of": 1,
+                "Read": 3
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_definitions",
+                  "input": {
+                    "name": "Count",
+                    "exact": true
+                  },
+                  "result": "{\"query\":{\"name\":\"Count\",\"exact\":true,\"limit\":20},\"definitions\":[{\"name\":\"Count\",\"kind\":\"Function\",\"file\":\"app/catalog/service/internal/data/ent/beer/where.go\",\"line\":110,\"isExported\":true,\"relationship\":\"DEFINES_FUNCTION\"},{\"name\":\"Count\",\"kind\":\"Function\",\"file\":\"app/catalog/service/internal/data/ent/ent.go\",\"line\":72,\"isExported\":true,\"relationship\":\"DEFINES_FUNCTION\"},{\"name\":\"Count\",\"kind\":\"Function\",\"file\":\"app/user/service/internal/data/ent/ent.go\",\"line\":72,\"isExported\":true,\"relationship\":\"DEFINES_FUNCTION\"},{\"name\":\"Count\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/data/beer.go\",\"line\":98,\"isExported\":false,\"relationship\":\"DEFINES_METHOD\",\"className\":\"beerRepo\"},{\"name\":\"Count\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/data/ent/beer_query.go\",\"line\":191,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"BeerQuery\"},{\"name\":\"Count\",\"kind\":\"Method\",\"file\":\"app/catalog/service/internal/data/ent/mutation.go\",\"line\":215,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"BeerMutation\"},{\"name\":\"Count\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/data/ent/address_query.go\",\"line\":217,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"AddressQuery\"},{\"name\":\"Count\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/data/ent/card_query.go\",\"line\":217,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"CardQuery\"},{\"name\":\"Count\",\"kind\":\"Method\",\"file\":\"app/user/service/internal/data/ent/user_query.go\",\"line\":241,\"isExported\":true,\"relationship\":\"DEFINES_METHOD\",\"className\":\"UserQuery\"}],\"page\":{\"offset\":0,\"returned\":9}}",
+                  "isError": false
+                },
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "file": "internal/data/beer.go",
+                    "symbol": "Count"
+                  },
+                  "result": "{\"symbol\":\"Count\",\"file\":\"internal/data/beer.go\",\"maxDepth\":5,\"seeds\":[{\"name\":\"Count\",\"className\":\"beerRepo\",\"file\":\"app/catalog/service/internal/data/beer.go\",\"line\":98,\"endLine\":100}],\"callers\":[{\"name\":\"ListNext\",\"className\":\"BeerUseCase\",\"file\":\"app/catalog/service/internal/biz/beer.go\",\"line\":61,\"endLine\":77,\"depth\":1},{\"name\":\"ListBeerNextToken\",\"className\":\"CatalogService\",\"file\":\"app/catalog/service/internal/service/beer.go\",\"line\":94,\"endLine\":113,\"depth\":2}],\"moduleCallers\":[],\"routes\":[],\"entrypoints\":[{\"kind\":\"grpc\",\"trigger\":\"Catalog/ListBeerNextToken\",\"library\":\"grpc\",\"file\":\"app/catalog/service/internal/server/grpc.go\",\"line\":36,\"reachedThrough\":[{\"function\":\"ListBeerNextToken\",\"functionFile\":\"app/catalog/service/internal/service/beer.go\"}]}],\"components\":[],\"pages\":[],\"apiConsumers\":[],\"consumerComponents\":[],\"consumerPages\":[],\"stores\":[],\"storeComponents\":[],\"storePages\":[],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"unresolvedCalls\":{\"count\":2,\"sites\":[{\"file\":\"app/catalog/service/internal/data/ent/ent.go\",\"line\":74,\"expression\":\"sql.Count\",\"caller\":\"Count\"},{\"file\":\"app/user/service/internal/data/ent/ent.go\",\"line\":74,\"expression\":\"sql.Count\",\"caller\":\"Count\"}]},\"completeness\":\"2 calls named Count resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Only one path is affected: the `ListBeerNextToken` gRPC endpoint, through `ListNext`. Every other catalog endpoint is unaffected.\n\n**The chain, bottom to top:**\n\n1. **`beerRepo.Count`** (`app/catalog/service/internal/data/beer.go:98`) runs `r.data.db.Beer.Query().Count(ctx)`, a SQL count of all beers.\n2. **`BeerRepo.Count`** interface method (`internal/biz/beer.go:31`) is the contract it implements.\n3. **`BeerUseCase.ListNext`** (`internal/biz/beer.go:61-63`) is the only caller of `repo.Count` in the catalog service. It passes `total` to `pageToken.ProcessPageTokens(total, pageSize, pageToken)`, which decides:\n   - `start`, from the incoming token's index. A token whose index is `>= total` is rejected with `ErrInvalidToken`.\n   - `end = min(start+pageSize, total)`. A pageSize of 0 means \"all remaining\".\n   - `nextToken`, which is issued only when `end < total`.\n   - `ListBeerNext(start, end)` is then called with that range, and the singleflight key is built from it.\n4. **`CatalogService.ListBeerNextToken`** (`internal/service/beer.go:94-112`) calls `s.bc.ListNext` and returns the beers and `NextPageToken` to the caller. It returns `err` at the end, so errors from `Count` or token processing reach the client.\n5. **gRPC handler registration**: `v1.RegisterCatalogServer(srv, s)` in `internal/server/grpc.go:36` exposes `ListBeerNextToken` as the gRPC endpoint.\n\n**What a change in `Count` would do to this endpoint:**\n\n- **Returns an error:** `ListNext` returns early, and the gRPC call fails with that error.\n- **Returns 0:** no page is returned and no next token is issued. A request carrying a non-empty token is rejected with \"Token failed\" (`ErrInvalidToken`), since its index is `>= 0`.\n- **Returns a value too high:** the last page comes back short or empty, and a next token is issued for a position that does not exist.\n- **Returns a value too low:** the tail of the list is never returned, and tokens issued earlier can be rejected as invalid.\n- **Changes over time:** tokens are not bound to a total. A token issued under an old count is validated against the current count, so it can start failing after data is added or removed.\n\n**Not affected:**\n\n- `ListBeer` (offset-style paging through `ListBeer(pageNum, pageSize)`) does not call `Count`.\n- `Create`, `Get`, and `Update` do not call `Count`.\n- `ListBeerNext` itself, the repository method that fetches the rows, still runs unchanged. Only the `start`/`end` range it receives depends on `Count`.\n\nI traced this with Grep and Read rather than the concentrate code-graph tools, so it covers this repo's call sites only.",
+              "isError": false,
+              "turns": 10,
+              "durationMs": 30922,
+              "costUsd": 0.010491049999999998,
+              "inputTokens": 16,
+              "outputTokens": 4314,
+              "cacheCreationTokens": 25273,
+              "cacheReadTokens": 327785,
+              "toolCalls": 9,
+              "toolsByName": {
+                "Grep": 3,
+                "Bash": 6
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "If `beerRepo.Count` in `app/catalog/service/internal/data/beer.go` changes behaviour, the impact runs up to one gRPC handler through two functions:\n\n1. **`beerRepo.Count`** (`internal/data/beer.go:98`): the data-layer function that counts beers via `r.data.db.Beer.Query().Count`.\n2. **`BeerUseCase.ListNext`** (`internal/biz/beer.go:61`, depth 1): calls `uc.repo.Count` at line 62.\n3. **`CatalogService.ListBeerNextToken`** (`internal/service/beer.go:94`, depth 2): calls `ListNext`.\n4. **gRPC handler `Catalog/ListBeerNextToken`** (`internal/server/grpc.go:36`): the entrypoint that routes to `ListBeerNextToken`.\n\nNo HTTP routes, frontend consumers, or stores are affected. The only other callers of `Count` are in the generated ent code (`BeerQuery.CountX`, `BeerCreate`, `BeerUpdate` and similar), which doesn't call `beerRepo.Count`, so they are not affected.\n\nThe graph's `impact_of` result says 2 unresolved `sql.Count` sites exist, but those are library calls in the generated ent package and can't reach `beerRepo.Count`.\n\nI traced this with the concentrate code graph and did not read the function bodies, so the chain is based on the call graph. The `ListNext` line-62 call is the one to check first if you want to confirm how the count is used for next-page tokens.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10324,
+              "costUsd": 0.0039997,
+              "inputTokens": 6,
+              "outputTokens": 1126,
+              "cacheCreationTokens": 12557,
+              "cacheReadTokens": 92470,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "file": "internal/data/beer.go",
+                    "symbol": "Count",
+                    "maxDepth": 10
+                  },
+                  "result": "{\"symbol\":\"Count\",\"file\":\"internal/data/beer.go\",\"maxDepth\":10,\"seeds\":[{\"name\":\"Count\",\"className\":\"beerRepo\",\"file\":\"app/catalog/service/internal/data/beer.go\",\"line\":98,\"endLine\":100}],\"callers\":[{\"name\":\"ListNext\",\"className\":\"BeerUseCase\",\"file\":\"app/catalog/service/internal/biz/beer.go\",\"line\":61,\"endLine\":77,\"depth\":1},{\"name\":\"ListBeerNextToken\",\"className\":\"CatalogService\",\"file\":\"app/catalog/service/internal/service/beer.go\",\"line\":94,\"endLine\":113,\"depth\":2}],\"moduleCallers\":[],\"routes\":[],\"entrypoints\":[{\"kind\":\"grpc\",\"trigger\":\"Catalog/ListBeerNextToken\",\"library\":\"grpc\",\"file\":\"app/catalog/service/internal/server/grpc.go\",\"line\":36,\"reachedThrough\":[{\"function\":\"ListBeerNextToken\",\"functionFile\":\"app/catalog/service/internal/service/beer.go\"}]}],\"components\":[],\"pages\":[],\"apiConsumers\":[],\"consumerComponents\":[],\"consumerPages\":[],\"stores\":[],\"storeComponents\":[],\"storePages\":[],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"unresolvedCalls\":{\"count\":2,\"sites\":[{\"file\":\"app/catalog/service/internal/data/ent/ent.go\",\"line\":74,\"expression\":\"sql.Count\",\"caller\":\"Count\"},{\"file\":\"app/user/service/internal/data/ent/ent.go\",\"line\":74,\"expression\":\"sql.Count\",\"caller\":\"Count\"}]},\"completeness\":\"2 calls named Count resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "Count"
+                  },
+                  "result": "{\"query\":{\"name\":\"Count\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"Count\",\"caller\":\"ListNext\",\"callerKind\":\"Method\",\"className\":\"BeerUseCase\",\"file\":\"app/catalog/service/internal/biz/beer.go\",\"line\":62,\"expression\":\"uc.repo.Count\",\"relationship\":\"CALLS\"},{\"target\":\"Count\",\"caller\":\"Count\",\"callerKind\":\"Method\",\"className\":\"beerRepo\",\"file\":\"app/catalog/service/internal/data/beer.go\",\"line\":99,\"expression\":\"r.data.db.Beer.Query().Count\",\"relationship\":\"CALLS\"},{\"target\":\"Count\",\"caller\":\"check\",\"callerKind\":\"Method\",\"className\":\"BeerCreate\",\"file\":\"app/catalog/service/internal/data/ent/beer_create.go\",\"line\":158,\"expression\":\"bc.mutation.Count\",\"relationship\":\"CALLS\"},{\"target\":\"Count\",\"caller\":\"createSpec\",\"callerKind\":\"Method\",\"className\":\"BeerCreate\",\"file\":\"app/catalog/service/internal/data/ent/beer_create.go\",\"line\":222,\"expression\":\"bc.mutation.Count\",\"relationship\":\"CALLS\"},{\"target\":\"Count\",\"caller\":\"CountX\",\"callerKind\":\"Method\",\"className\":\"BeerQuery\",\"file\":\"app/catalog/service/internal/data/ent/beer_query.go\",\"line\":200,\"expression\":\"bq.Count\",\"relationship\":\"CALLS\"},{\"target\":\"Count\",\"caller\":\"sqlSave\",\"callerKind\":\"Method\",\"className\":\"BeerUpdate\",\"file\":\"app/catalog/service/internal/data/ent/beer_update.go\",\"line\":191,\"expression\":\"bu.mutation.Count\",\"relationship\":\"CALLS\"},{\"target\":\"Count\",\"caller\":\"sqlSave\",\"callerKind\":\"Method\",\"className\":\"BeerUpdateOne\",\"file\":\"app/catalog/service/internal/data/ent/beer_update.go\",\"line\":423,\"expression\":\"buo.mutation.Count\",\"relationship\":\"CALLS\"},{\"target\":\"Count\",\"caller\":\"Field\",\"callerKind\":\"Method\",\"className\":\"BeerMutation\",\"file\":\"app/catalog/service/internal/data/ent/mutation.go\",\"line\":477,\"expression\":\"m.Count\",\"relationship\":\"CALLS\"},{\"target\":\"Count\",\"caller\":\"CountX\",\"callerKind\":\"Method\",\"className\":\"AddressQuery\",\"file\":\"app/user/service/internal/data/ent/address_query.go\",\"line\":226,\"expression\":\"aq.Count\",\"relationship\":\"CALLS\"},{\"target\":\"Count\",\"caller\":\"CountX\",\"callerKind\":\"Method\",\"cla… (2781 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-remark42-storage-implementations",
+      "sample": "internet-go-remark42",
+      "category": "dispatch",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 298623,
+            "medianOutputTokens": 3500,
+            "medianToolCalls": 11,
+            "medianTurns": 12,
+            "medianDurationMs": 30316,
+            "medianCostUsd": 0.0086,
+            "spread": {
+              "inputTokens": {
+                "min": 242829,
+                "max": 341030
+              },
+              "toolCalls": {
+                "min": 6,
+                "max": 14
+              },
+              "durationMs": {
+                "min": 21170,
+                "max": 41828
+              },
+              "costUsd": {
+                "min": 0.0069,
+                "max": 0.0104
+              }
+            },
+            "totalCostUsd": 0.0259,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**`engine.Interface`** (declared in `backend/app/store/engine/engine.go:23`) is implemented by two production types:\n\n- **`BoltDB`** (pointer receivers), declared in `backend/app/store/engine/bolt.go:29`. This is the default BoltDB engine.\n- **`RPC`** (pointer receivers), declared in `backend/app/store/engine/remote.go:12`. This is the remote engine client.\n\n**`admin.Store`** (declared in `backend/app/store/admin/admin.go:15`) is implemented by two production types:\n\n- **`StaticStore`**, declared in `backend/app/store/admin/admin.go:35`. It is built by `NewStaticStore` or `NewStaticKeyStore`.\n- **`RPC`**, declared in `backend/app/store/admin/remote.go:16`. This is the remote admin client.\n\nI confirmed each type has the full method set. Two other things were checked and ruled out: no struct embeds either interface, and no other production type has these methods. The `*_mock.go` files and `backend/_example/memory_store/accessor` (`MemData`, `MemAdmin`) were excluded as you asked.",
+              "isError": false,
+              "turns": 15,
+              "durationMs": 41828,
+              "costUsd": 0.01038281,
+              "inputTokens": 16,
+              "outputTokens": 4213,
+              "cacheCreationTokens": 25603,
+              "cacheReadTokens": 315411,
+              "toolCalls": 14,
+              "toolsByName": {
+                "Grep": 11,
+                "Bash": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Production code has two implementers of each interface, all in `backend/app/store`.\n\n**`engine.Interface`** (declared in `backend/app/store/engine/engine.go:23`)\n\n- `BoltDB` in `backend/app/store/engine/bolt.go:29`, the BoltDB storage engine. Constructed by `NewBoltDB`.\n- `RPC` in `backend/app/store/engine/remote.go:12`, the remote engine that forwards the calls over RPC.\n\n**`admin.Store`** (declared in `backend/app/store/admin/admin.go:15`)\n\n- `StaticStore` in `backend/app/store/admin/admin.go:35`, which returns the same key, admins and email for every site. Constructed by `NewStaticStore` or `NewStaticKeyStore`.\n- `RPC` in `backend/app/store/admin/remote.go:16`, the remote admin store.\n\nI checked each type's method set against its interface, and each has every method. A backend-wide search found no other production implementers. The only production code that refers to either interface is `backend/app/store/service/service.go`.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 30316,
+              "costUsd": 0.006920490000000001,
+              "inputTokens": 12,
+              "outputTokens": 2941,
+              "cacheCreationTokens": 15898,
+              "cacheReadTokens": 226919,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Storage engine (`engine.Interface`)**, declared in `backend/app/store/engine/engine.go`:\n\n- **`BoltDB`**, declared in `backend/app/store/engine/bolt.go` (line 29). This is the default `bolt` store, created by `NewBoltDB` in `makeDataStore` (`backend/app/cmd/server.go:958`).\n- **`RPC`**, declared in `backend/app/store/engine/remote.go` (line 12). This is the `rpc` store type, returned from the same `makeDataStore` function.\n\n**Admin store (`admin.Store`)**, declared in `backend/app/store/admin/admin.go`:\n\n- **`StaticStore`**, declared in `backend/app/store/admin/admin.go` (line 35). This is the `shared` admin type, created by `NewStaticStore` in `makeAdminStore` (`backend/app/cmd/server.go:1045`).\n- **`RPC`**, declared in `backend/app/store/admin/remote.go` (line 16). This is the `rpc` admin type, returned from `makeAdminStore`.\n\nThe two `RPC` types are in different packages (`engine` and `admin`), so they are distinct types.\n\nI excluded `_test.go`, the `*_mock.go` files (`InterfaceMock`, `StoreMock`) and `_example/`. The example module has its own `MemData` (`accessor/data.go`) and `MemAdmin` (`accessor/admin.go`), which implement the same interfaces there.\n\nThe method sets match the interfaces. I did not run the compiler, but the `makeDataStore` and `makeAdminStore` return types only compile if these types satisfy the interfaces.",
+              "isError": false,
+              "turns": 12,
+              "durationMs": 21170,
+              "costUsd": 0.008630970000000002,
+              "inputTokens": 14,
+              "outputTokens": 3500,
+              "cacheCreationTokens": 20492,
+              "cacheReadTokens": 278117,
+              "toolCalls": 11,
+              "toolsByName": {
+                "Grep": 6,
+                "Bash": 2,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 286016,
+            "medianOutputTokens": 2932,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 23087,
+            "medianCostUsd": 0.0076,
+            "spread": {
+              "inputTokens": {
+                "min": 204518,
+                "max": 292710
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 11
+              },
+              "durationMs": {
+                "min": 20618,
+                "max": 29549
+              },
+              "costUsd": {
+                "min": 0.0065,
+                "max": 0.0083
+              }
+            },
+            "totalCostUsd": 0.0223,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Storage engine (`engine.Interface`)**, declared in `backend/app/store/engine/engine.go`:\n\n1. **`BoltDB`**, declared in `backend/app/store/engine/bolt.go:29`. This is the local BoltDB engine, built by `engine.NewBoltDB`.\n2. **`RPC`**, declared in `backend/app/store/engine/remote.go:12`. This is the remote engine that talks JSON-RPC, used when the store type is RPC.\n\n`makeDataStore` in `backend/app/cmd/server.go:958` picks one of these two. Both implement all 11 methods of the interface.\n\n**Admin store (`admin.Store`)**, declared in `backend/app/store/admin/admin.go:15`:\n\n1. **`StaticStore`**, declared in `backend/app/store/admin/admin.go:35`. It serves a single shared set of admins, email and key for all sites. `admin.NewStaticStore` builds it.\n2. **`RPC`**, declared in `backend/app/store/admin/remote.go:16`. It is the remote admin store, built by `makeAdminStore` in `backend/app/cmd/server.go:1045`.\n\nI excluded `_test.go`, `*_mock.go` and `_example` as you asked. I searched method sets by pattern rather than with the compiler, so an implementation hidden behind an embedded struct would not show up in this list.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 20618,
+              "costUsd": 0.00648208,
+              "inputTokens": 10,
+              "outputTokens": 2659,
+              "cacheCreationTokens": 16350,
+              "cacheReadTokens": 188158,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Storage engine: `engine.Interface`** (`backend/app/store/engine/engine.go:23`)\n\nTwo production types implement it, both through pointer receivers:\n\n- `*BoltDB` in `backend/app/store/engine/bolt.go:29`, the embedded BoltDB engine. Selected by `store.type = \"bolt\"` in `makeDataStore` (`backend/app/cmd/server.go:958`).\n- `*RPC` in `backend/app/store/engine/remote.go:12`, which delegates every call to a remote HTTP server. Selected by `store.type = \"rpc\"`.\n\n`BoltSite` in `bolt.go:48` is a per-site config struct, not an implementation.\n\n**Admin store: `admin.Store`** (`backend/app/store/admin/admin.go:15`)\n\nTwo production types implement it:\n\n- `*StaticStore` in `backend/app/store/admin/admin.go:35`, which uses one set of admins, email and key for all sites. Used for the `shared` admin type in `makeAdminStore` (`backend/app/cmd/server.go:1045`).\n- `*RPC` in `backend/app/store/admin/remote.go:16`, which delegates to a remote server.\n\nI found these with grep over non-test, non-mock `.go` files under `backend/app`, checking method receivers against each interface's method set. The concrete types are also what `makeDataStore` and `makeAdminStore` return, which confirms they satisfy the interfaces. I did not run the compiler to check this.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 23087,
+              "costUsd": 0.00755134,
+              "inputTokens": 14,
+              "outputTokens": 2932,
+              "cacheCreationTokens": 16968,
+              "cacheReadTokens": 269034,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 5
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Storage engine (`engine.Interface`)**, declared in `backend/app/store/engine/engine.go`:\n\n- **`BoltDB`**, declared in `backend/app/store/engine/bolt.go` (line 29). This is the BoltDB engine.\n- **`RPC`**, declared in `backend/app/store/engine/remote.go` (line 12). This is the remote engine client.\n\n**Admin store (`admin.Store`)**, declared in `backend/app/store/admin/admin.go`:\n\n- **`StaticStore`**, declared in `backend/app/store/admin/admin.go` (line 35). It serves a fixed set of admins, email and key for all sites.\n- **`RPC`**, declared in `backend/app/store/admin/remote.go` (line 16). This is the remote admin client.\n\nI found these by grepping for the full method sets of both interfaces in non-test, non-mock files under `backend/app`. `BoltDB` and `RPC` each implement all eleven engine methods. `StaticStore` and `RPC` each implement all five admin methods. No other type in `backend/app` defines those methods. The `_example` accessor types (`MemData`, `MemAdmin`) are excluded as you asked.",
+              "isError": false,
+              "turns": 12,
+              "durationMs": 29549,
+              "costUsd": 0.008291689999999999,
+              "inputTokens": 14,
+              "outputTokens": 3371,
+              "cacheCreationTokens": 19357,
+              "cacheReadTokens": 273339,
+              "toolCalls": 11,
+              "toolsByName": {
+                "Grep": 8,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-remark42-engine-flag-callers",
+      "sample": "internet-go-remark42",
+      "category": "dispatch",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 529918,
+            "medianOutputTokens": 7895,
+            "medianToolCalls": 16,
+            "medianTurns": 17,
+            "medianDurationMs": 46358,
+            "medianCostUsd": 0.0165,
+            "spread": {
+              "inputTokens": {
+                "min": 464603,
+                "max": 663353
+              },
+              "toolCalls": {
+                "min": 14,
+                "max": 17
+              },
+              "durationMs": {
+                "min": 45547,
+                "max": 55331
+              },
+              "costUsd": {
+                "min": 0.0143,
+                "max": 0.0204
+              }
+            },
+            "totalCostUsd": 0.0511,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two engine implementations can receive a production `Flag` call: `*engine.BoltDB` and `*engine.RPC`. Each process uses only one of them, chosen by `store.type` at startup. The only other `Flag` implementation is `InterfaceMock`, which is used only in tests.\n\n**Production call sites** (all in `backend/app/store/service/service.go`, on `DataStore`, through `s.Engine` of type `engine.Interface`):\n\n| `Flag` caller | Flag | Reached from (production) |\n|---|---|---|\n| `IsReadOnly` (684) | readonly get | `rest/api/rest_public.go:123` (`findCommentsCtrl`), `rest/api/rest_private.go:765` (`isReadOnly`), `Metas` (846), which is used by `migrator/native.go:78` |\n| `SetReadOnly` (691) | readonly set | `rest/api/admin.go:221` (`setReadOnlyCtrl`), `SetMetas` (918), used by `migrator/native.go:191` |\n| `IsVerified` (702) | verified get | `rest/api/rest_private.go:240` (`userInfoCtrl`) |\n| `SetVerified` (709) | verified set | `rest/api/admin.go:251` (`setVerifyCtrl`), `SetMetas` |\n| `IsBlocked` (720) | blocked get | `rest/api/rest_private.go:142` (`createCommentCtrl`), `rest_private.go:273` (`voteCtrl`), `cmd/server.go:1485` (`getAuthenticator`) |\n| `SetBlock` (727) | blocked set | `rest/api/admin.go:176` (`setBlockCtrl`), `SetMetas` |\n| `userFlagCache.blocked` (1067) | blocked get | `alterCommentCached` (1028), reached from `alterComment`, `alterComments`, `FindSince`, `Get`, `User`, `Last` and therefore from most comment read paths |\n| `userFlagCache.verified` (1082) | verified get | same as `blocked` |\n\nThe `userFlagCache` path is the widest. It runs for every listing and single-comment read, including the REST find, user, and last endpoints, RSS, and the notify and migrator code that call `Get` or `Find`. Only the `blocked` and `verified` lookups are cached per request.\n\nBolt's internal `checkFlag` calls (`bolt.go:92` and `bolt.go:311`) do not go through the `Flag` method, so they are not in this list.\n\n**Engine reachability at run time**\n\n- `cmd/server.go:958` `makeDataStore` picks the engine from `store.type` (`choice:\"bolt\" choice:\"rpc\"`, default `bolt`):\n  - `bolt` → `engine.NewBoltDB`, whose `Flag` is at `store/engine/bolt.go:198`. It does a read (`checkFlag`) or a write (`setFlag`) depending on the request.\n  - `rpc` → `&engine.RPC{...}`, whose `Flag` at `store/engine/remote.go:65` sends a `store.flag` JSON-RPC call. The behaviour then depends on the remote store, which is not in this repo.\n- So every caller in the table can reach both engines, but any one running process reaches only the configured one. With `store.type=bolt`, every call hits BoltDB. With `rpc`, every call goes to the remote.\n- `InterfaceMock` (`engine_mock.go:320`) is referenced only from `service_test.go`, so no production path reaches it.\n- `makeDataStore` has no other branch. The only other place a `DataStore` is built is the migrator, which runs on the same `dataService` from `cmd/server.go:698`, so it inherits the same engine.\n\nI did not fully trace every caller of `isReadOnly` (`rest_private.go:765`) or of the `Get` and `Find` wrappers. Those lists are complete for the `Flag`-calling functions themselves, but a few top-level handlers reach `alterComment` through wrappers I did not follow to the HTTP route.",
+              "isError": false,
+              "turns": 15,
+              "durationMs": 46358,
+              "costUsd": 0.020364780000000002,
+              "inputTokens": 22,
+              "outputTokens": 7895,
+              "cacheCreationTokens": 51483,
+              "cacheReadTokens": 611848,
+              "toolCalls": 14,
+              "toolsByName": {
+                "Grep": 6,
+                "Bash": 8
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Direct callers of `engine.Interface.Flag` in production code (excluding `_example` and tests): 8 functions, all in `backend/app/store/service/service.go`.**\n\n| Caller (`DataStore` or helper) | Flag / op | Who calls it in production |\n|---|---|---|\n| `IsReadOnly` (l.684) | ReadOnly, get | `rest/api/rest_private.go:765` (`isReadOnly`), `rest/api/rest_public.go:123` (`findCommentsCtrl`), `service.go:857` (`Metas`) |\n| `SetReadOnly` (l.691) | ReadOnly, set | `rest/api/admin.go:221` (`setReadOnlyCtrl`), `service.go:924` (`SetMetas`) |\n| `IsVerified` (l.702) | Verified, get | `rest/api/rest_private.go:240` (`userInfoCtrl`) |\n| `SetVerified` (l.709) | Verified, set | `rest/api/admin.go:251` (`setVerifyCtrl`), `service.go:934` (`SetMetas`) |\n| `IsBlocked` (l.720) | Blocked, get | `cmd/server.go:1485` (`getAuthenticator`), `rest/api/rest_private.go:142` (`createCommentCtrl`), `rest/api/rest_private.go:273` (`voteCtrl`) |\n| `SetBlock` (l.727) | Blocked, set | `rest/api/admin.go:176` (`setBlockCtrl`), `service.go:931` (`SetMetas`) |\n| `userFlagCache.blocked` (l.1067) | Blocked, get | `service.go:1030` (`alterCommentCached`) |\n| `userFlagCache.verified` (l.1082) | Verified, get | `service.go:1036` (`alterCommentCached`) |\n\nTwo other spots use the cache indirectly: `alterComments` and `alterComment` (`service.go:1015`, `:1023`) build the cache and route through `alterCommentCached`. `FindSince` (`service.go:131`) also creates one. `BlockedUsers` uses `ListFlags`, not `Flag`, so it is not in the table.\n\n**Which engine implementations can each call reach at run time:** only two, and each process uses one of them.\n\n- `engine.BoltDB` (`store/engine/bolt.go:198`)\n- `engine.RPC` (`store/engine/remote.go:65`), a client that forwards to a remote server over JSON-RPC\n\n`makeDataStore` (`cmd/server.go:958`) picks one based on `--store.type`. `bolt` is the default and builds `NewBoltDB`. `rpc` builds `&engine.RPC{...}`. That single value is stored as `DataStore.Engine` (`cmd/server.go:648`). So every caller above can reach both engines in principle, but in a given deployment all of them hit the same one.\n\n`engine_mock.go` also implements `Flag`, but it is a test mock and is never reachable at run time. The `Flag` calls in `_example/memory_store` are excluded as requested.",
+              "isError": false,
+              "turns": 17,
+              "durationMs": 45547,
+              "costUsd": 0.014263590000000001,
+              "inputTokens": 22,
+              "outputTokens": 7096,
+              "cacheCreationTokens": 28497,
+              "cacheReadTokens": 501399,
+              "toolCalls": 16,
+              "toolsByName": {
+                "Grep": 8,
+                "Read": 2,
+                "Bash": 6
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "There are six exported `DataStore` methods, plus two helper methods on `userFlagCache`, that call `Engine.Flag` directly. At run time each of them reaches one of two engines, `BoltDB` or `RPC`, and which one is fixed per process by config.\n\n**Direct callers of `Engine.Flag`** (all in `backend/app/store/service/service.go`):\n\n| Function | Flag used | Production callers |\n|---|---|---|\n| `IsReadOnly` (684) | ReadOnly | `Metas` (857), `rest/api/rest_public.go:123` (findCommentsCtrl), `rest/api/rest_private.go:765` (`isReadOnly` helper, used at 147 createCommentCtrl and 267 voteCtrl) |\n| `SetReadOnly` (691) | ReadOnly | `rest/api/admin.go:221` (setReadOnlyCtrl) |\n| `IsVerified` (702) | Verified | `rest/api/rest_private.go:240` (userInfoCtrl) |\n| `SetVerified` (709) | Verified | `rest/api/admin.go:251` (setVerifyCtrl), `SetMetas` (934) |\n| `IsBlocked` (720) | Blocked | `rest/api/rest_private.go:142` (createCommentCtrl), `rest/api/rest_private.go:273` (voteCtrl), `cmd/server.go:1485` (auth closure in `getAuthenticator`) |\n| `SetBlock` (727) | Blocked | `rest/api/admin.go:176` (setBlockCtrl), `SetMetas` (931) |\n| `userFlagCache.blocked` (1067) | Blocked | `alterCommentCached` (1030) |\n| `userFlagCache.verified` (1082) | Verified | `alterCommentCached` (1036) |\n\n`SetMetas` (918) is reached from `migrator/native.go:191`, and `Metas` (846) from `migrator/native.go:78`.\n\n**Indirect callers through `alterCommentCached`:** the two `userFlagCache` helpers run for every comment returned by these service methods:\n- `FindSince` (line 141), reached from `Find`, `rest_public.go:102` (findCommentsCtrl), `rss.go` (post and site feeds), `ResubmitStagingImages` (256), and `migrator/native.go:52`.\n- `alterComment`, reached from `Get`.\n- `alterComments`, reached from `User` and `Last`.\n\nEach lookup is cached per user within one call, so the engine sees at most one Flag call per user per flag per call.\n\n**Engine implementations reachable at run time:**\n- `DataStore.Engine` is set from `makeDataStore` (`cmd/server.go:958`, wired at 631 and 648). It returns either:\n  - `*engine.BoltDB` (`engine/bolt.go:198`) when `store.type=bolt`, or\n  - `*engine.RPC` (`engine/remote.go:65`) when `store.type=rpc`. This is a JSON-RPC client; the server side is not in this repo.\n- Any other `store.type` fails at startup. So every call site above reaches exactly one of the two implementations in a given process, never both.\n- `engine/engine_mock.go` (`InterfaceMock`) is a generated mock. The only callers I found are in `service_test.go`, so it is never reached at run time.\n\nI checked the call sites and the wiring by reading the code. I did not run anything, and I did not verify the `Flag` method bodies of `BoltDB` or `RPC` beyond their existence and signatures.",
+              "isError": false,
+              "turns": 18,
+              "durationMs": 55331,
+              "costUsd": 0.01650122,
+              "inputTokens": 18,
+              "outputTokens": 8506,
+              "cacheCreationTokens": 40003,
+              "cacheReadTokens": 424582,
+              "toolCalls": 17,
+              "toolsByName": {
+                "Grep": 11,
+                "Read": 6
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 619544,
+            "medianOutputTokens": 9258,
+            "medianToolCalls": 19,
+            "medianTurns": 20,
+            "medianDurationMs": 57600,
+            "medianCostUsd": 0.0174,
+            "spread": {
+              "inputTokens": {
+                "min": 611951,
+                "max": 704240
+              },
+              "toolCalls": {
+                "min": 18,
+                "max": 19
+              },
+              "durationMs": {
+                "min": 50287,
+                "max": 84569
+              },
+              "costUsd": {
+                "min": 0.0164,
+                "max": 0.0203
+              }
+            },
+            "totalCostUsd": 0.0541,
+            "mcpRuns": 1,
+            "mcpTools": {
+              "search_symbols": 1
+            },
+            "toolSearchCalls": 1
+          },
+          "runs": [
+            {
+              "answer": "Only the `DataStore` wrappers and the `userFlagCache` helpers call `Engine.Flag` in production code. At run time each of those calls can reach exactly two engines, `BoltDB` and `RPC`, and which one is fixed at startup by the `store.type` setting.\n\n**Production callers of `Engine.Flag`** (all in `backend/app/store/service/service.go`)\n\n| Caller | Flag | Line |\n|---|---|---|\n| `DataStore.IsReadOnly` | ReadOnly | 686 |\n| `DataStore.SetReadOnly` | ReadOnly | 697 |\n| `DataStore.IsVerified` | Verified | 704 |\n| `DataStore.SetVerified` | Verified | 715 |\n| `DataStore.IsBlocked` | Blocked | 722 |\n| `DataStore.SetBlock` | Blocked | 734 |\n| `userFlagCache.blocked` | Blocked | 1072 |\n| `userFlagCache.verified` | Verified | 1087 |\n\nNothing outside `service.go` calls `Engine.Flag` directly. Handlers and other packages go through the `DataStore` methods.\n\n**Which engine each call can reach**\n\n- `DataStore.Engine` is assigned once, at `backend/app/cmd/server.go:648`, from `makeDataStore()` (`server.go:958`). That function returns either `*engine.BoltDB` (`store.type = bolt`) or `*engine.RPC` (`store.type = rpc`). Any other value fails startup.\n- So every call site above can reach `BoltDB.Flag` (`store/engine/bolt.go:198`) or `RPC.Flag` (`store/engine/remote.go:65`). Which one depends only on configuration.\n- `InterfaceMock.Flag` (`engine_mock.go:320`) is reachable only from tests.\n- `MemData.Flag` in `_example/memory_store` is not reachable from production code, as you asked.\n\n**How the callers are reached at run time**\n\n- `IsReadOnly`: `rest/api/rest_public.go:123` (`findCommentsCtrl`), `rest_private.go:765` (`isReadOnly`), `migrator/native.go:78` via `Metas`, and `service.go:857` inside `Metas`.\n- `SetReadOnly`, `SetBlock`, `SetVerified`: the admin handlers `setReadOnlyCtrl`, `setBlockCtrl` and `setVerifyCtrl` in `admin.go`. Also `SetMetas` (`service.go:924–934`), which the migrator's `Import` (`native.go:191`) calls.\n- `IsBlocked`: `rest_private.go:142` (`createCommentCtrl`), `rest_private.go:273` (`voteCtrl`), and `server.go:1485` inside `getAuthenticator`.\n- `IsVerified`: `rest_private.go:240` (`userInfoCtrl`).\n- `userFlagCache.blocked/verified`: built inside `FindSince`, `Get`, `User`, `Last`, and `alterComments`. These run from:\n  - `findCommentsCtrl`, `lastCommentsCtrl`, `commentByIDCtrl`, `findUserCommentsCtrl`, and the update and `setTitle` paths.\n  - `rss.go` and `notify.go`.\n  - `admin.go:81` (`getUserInfoCtrl`).\n  - `server.go:904`, which calls `ResubmitStagingImages` at startup and then `FindSince`.\n\nEvery path above reaches the same two engines, selected by `store.type`.\n\nOne thing I did not check: how the migrator's `DataStore` is constructed. Its `Native` type takes a `DataStore`, so it should be the same `makeDataStore` result, but I did not confirm that.",
+              "isError": false,
+              "turns": 20,
+              "durationMs": 50287,
+              "costUsd": 0.01737312,
+              "inputTokens": 24,
+              "outputTokens": 9258,
+              "cacheCreationTokens": 34855,
+              "cacheReadTokens": 577072,
+              "toolCalls": 19,
+              "toolsByName": {
+                "mcp__concentrate__search_symbols": 1,
+                "Grep": 10,
+                "Read": 5,
+                "Bash": 3
+              },
+              "mcpCalls": [
+                {
+                  "tool": "search_symbols",
+                  "input": {
+                    "query": "Flag"
+                  },
+                  "result": "{\"query\":{\"query\":\"Flag\",\"kind\":null,\"file\":null},\"total\":57,\"symbols\":[{\"kind\":\"type\",\"name\":\"Flag\",\"file\":\"backend/app/store/engine/engine.go\",\"line\":76,\"isExported\":true,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"Flag\",\"className\":\"MemData\",\"file\":\"backend/_example/memory_store/accessor/data.go\",\"line\":241,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"Flag\",\"className\":\"BoltDB\",\"file\":\"backend/app/store/engine/bolt.go\",\"line\":198,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"Flag\",\"className\":\"InterfaceMock\",\"file\":\"backend/app/store/engine/engine_mock.go\",\"line\":320,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"method\",\"name\":\"Flag\",\"className\":\"RPC\",\"file\":\"backend/app/store/engine/remote.go\",\"line\":65,\"isExported\":false,\"match\":\"exact\",\"score\":6999},{\"kind\":\"class\",\"name\":\"flagKey\",\"file\":\"backend/app/store/service/service.go\",\"line\":1058,\"isExported\":false,\"match\":\"prefix\",\"score\":4969},{\"kind\":\"variable\",\"name\":\"FlagTrue\",\"file\":\"backend/app/store/engine/engine.go\",\"line\":84,\"isExported\":true,\"match\":\"prefix\",\"score\":4959},{\"kind\":\"method\",\"name\":\"flagHndl\",\"className\":\"RPC\",\"file\":\"backend/_example/memory_store/server/data.go\",\"line\":78,\"isExported\":false,\"match\":\"prefix\",\"score\":4959},{\"kind\":\"variable\",\"name\":\"FlagFalse\",\"file\":\"backend/app/store/engine/engine.go\",\"line\":85,\"isExported\":true,\"match\":\"prefix\",\"score\":4949},{\"kind\":\"method\",\"name\":\"FlagCalls\",\"className\":\"InterfaceMock\",\"file\":\"backend/app/store/engine/engine_mock.go\",\"line\":339,\"isExported\":false,\"match\":\"prefix\",\"score\":4949},{\"kind\":\"type\",\"name\":\"FlagStatus\",\"file\":\"backend/app/store/engine/engine.go\",\"line\":79,\"isExported\":true,\"match\":\"prefix\",\"score\":4939},{\"kind\":\"variable\",\"name\":\"FlagNonSet\",\"file\":\"backend/app/store/engine/engine.go\",\"line\":83,\"isExported\":true,\"match\":\"prefix\",\"score\":4939},{\"kind\":\"method\",\"name\":\"flagBucket\",\"className\":\"BoltDB\",\"file\":\"backend/app/store/engine/bolt.go\",\"line\":627,… (3303 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Short answer:** Seven production functions call `Flag` on `DataStore.Engine`. Every one of them reaches whichever engine `--store.type` selects at startup, so each call can reach either `BoltDB` or `RPC`, never both in one process. The `MemData` implementation in `_example/` is not reachable from the server.\n\n**Engine wiring.** `cmd/server.go:631` calls `makeDataStore()`, which switches on `--store.type`. `bolt` (the default) returns `engine.NewBoltDB`, and `rpc` returns `&engine.RPC{...}`. The resulting `DataStore` at `cmd/server.go:647` is shared by the REST handlers, the auth setup, the notifier and the migrator/exporter (`cmd/server.go:698-707`). The two `Flag` implementations are `bolt.go:198` and `remote.go:65`. `engine_mock.go` is a generated test mock and is not wired into the server.\n\n**Direct `Flag` call sites (`backend/app/store/service/service.go`)**\n\n| Function (line) | Flag | Who calls it, in production |\n|---|---|---|\n| `IsReadOnly` (684) | ReadOnly get | `Metas` (857), `rest/api/rest_public.go:123`, `rest/api/rest_private.go:765` |\n| `SetReadOnly` (691) | ReadOnly set | `SetMetas` (924), `rest/api/admin.go:221` |\n| `IsVerified` (702) | Verified get | `rest/api/rest_private.go:240` |\n| `SetVerified` (709) | Verified set | `SetMetas` (934), `rest/api/admin.go:251` |\n| `IsBlocked` (720) | Blocked get | `rest/api/rest_private.go:142, 273`, `cmd/server.go:1485` (inside `getAuthenticator`) |\n| `SetBlock` (727) | Blocked set | `SetMetas` (931), `rest/api/admin.go:176` |\n| `userFlagCache.blocked` (1072) | Blocked get | `alterCommentCached` (1030) |\n| `userFlagCache.verified` (1087) | Verified get | `alterCommentCached` (1036) |\n\n`SetMetas` is reached through `migrator/native.go:191`, and `Metas` through `migrator/native.go:78`.\n\n**Indirect paths through `alterCommentCached`.** The two cache methods run only inside `alterCommentCached`, which is reached from:\n- `FindSince` (line 141), which `Find` and `rest_public.go:102` both use. The `rss.go:41` handler calls `Find`.\n- `Get` (line 158, via `alterComment`). Callers include `rest_private.go:163, 201`, `rest_public.go:229`, `rss.go:155` and `notify/notify.go:90, 124`.\n- `alterComments`, used by `User` (line 955) and `Last` (line 971). Callers include `rest_private.go:671`, `rest_public.go:264`, `admin.go:81`, `rss.go:71` and `rest_public.go:202`.\n\n**Notable behaviour.** `IsReadOnly`, `IsVerified` and `IsBlocked` return `false` when `Flag` errors, so with the RPC engine a network failure silently reads as \"not blocked\". The setter functions do return the error. The `userFlagCache` also skips caching on error, so a failed lookup is retried for the next comment from the same user.\n\nI only read the code and ran no tests. The engine-to-caller mapping is from grep plus reading the surrounding functions, so an indirect caller reached through an interface value could be missing. The `rest/api` handler names above come from the code graph search.",
+              "isError": false,
+              "turns": 19,
+              "durationMs": 84569,
+              "costUsd": 0.0202867,
+              "inputTokens": 24,
+              "outputTokens": 10294,
+              "cacheCreationTokens": 42606,
+              "cacheReadTokens": 661610,
+              "toolCalls": 18,
+              "toolsByName": {
+                "Grep": 11,
+                "Bash": 7
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Direct callers:** there are eight `Engine.Flag` call sites, all in `backend/app/store/service/service.go`. Every one of them uses the `engine.Interface` value held in `DataStore.Engine`.\n\n| Direct caller | Flag | Reached from production code |\n|---|---|---|\n| `IsReadOnly` (684) | ReadOnly, read | `Metas` (857); `private.isReadOnly` in `rest/api/rest_private.go:765`, which the private handlers use; `findCommentsCtrl` in `rest/api/rest_public.go:123` |\n| `SetReadOnly` (691) | ReadOnly, write | `SetMetas` (924); `setReadOnlyCtrl` in `rest/api/admin.go:221` |\n| `IsVerified` (702) | Verified, read | `userInfoCtrl` in `rest_private.go:240` |\n| `SetVerified` (709) | Verified, write | `SetMetas` (934); `setVerifyCtrl` in `admin.go:251` |\n| `IsBlocked` (720) | Blocked, read | `getAuthenticator` closure in `cmd/server.go:1485`; `createCommentCtrl` (`rest_private.go:142`); `voteCtrl` (`rest_private.go:273`) |\n| `SetBlock` (727) | Blocked, write | `SetMetas` (931); `setBlockCtrl` in `admin.go:176` |\n| `userFlagCache.blocked` (1072) | Blocked, read | `alterCommentCached` (1030) |\n| `userFlagCache.verified` (1087) | Verified, read | `alterCommentCached` (1036) |\n\nThe two `userFlagCache` methods are the indirect path for read APIs. `alterCommentCached` is reached from `FindSince` (lines 141 and 131, which builds the cache), `Get` (via `alterComment`), `User` (955) and `Last` (971). `Find` goes through `FindSince`.\n\n**Engine implementations:**\n- `BoltDB.Flag` (`store/engine/bolt.go:198`) is reachable. It is the engine when `store.type` is `bolt`, the default path in `makeDataStore` (`cmd/server.go:958`).\n- `RPC.Flag` (`store/engine/remote.go:65`) is reachable. It sends `store.flag` over JSON-RPC when `store.type` is `rpc`.\n- `InterfaceMock.Flag` (`store/engine/engine_mock.go:320`) is a moq-generated mock. It sits in the non-test `engine` package, but nothing in production code constructs it, so it is not reachable at run time.\n\nEach process uses exactly one engine, chosen at startup. Any other `store.type` fails there. So every call above reaches either BoltDB or RPC, depending on configuration.\n\n**Behaviour note:** `IsReadOnly`, `IsVerified`, `IsBlocked` and the cache methods turn an error into `false`. So with the RPC engine, a failed flag read silently means \"not blocked\" and \"not read-only\".\n\nI used grep and a read of the source for this, not the concentrate code graph. The call-site list covers `backend/app` excluding `_test.go` files.",
+              "isError": false,
+              "turns": 20,
+              "durationMs": 57600,
+              "costUsd": 0.01642833,
+              "inputTokens": 26,
+              "outputTokens": 9044,
+              "cacheCreationTokens": 30045,
+              "cacheReadTokens": 589473,
+              "toolCalls": 19,
+              "toolsByName": {
+                "Grep": 9,
+                "ToolSearch": 1,
+                "Bash": 9
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-remark42-is-blocked-impact",
+      "sample": "internet-go-remark42",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 271141,
+            "medianOutputTokens": 4565,
+            "medianToolCalls": 11,
+            "medianTurns": 12,
+            "medianDurationMs": 29277,
+            "medianCostUsd": 0.009,
+            "spread": {
+              "inputTokens": {
+                "min": 255277,
+                "max": 298056
+              },
+              "toolCalls": {
+                "min": 8,
+                "max": 13
+              },
+              "durationMs": {
+                "min": 26131,
+                "max": 29691
+              },
+              "costUsd": {
+                "min": 0.009,
+                "max": 0.0099
+              }
+            },
+            "totalCostUsd": 0.0279,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Four production call sites use `IsBlocked`, and none of them goes through `DataStore` directly except the auth claims hook.\n\n**Direct and interface-routed callers**\n\n1. **`createCommentCtrl`**, `backend/app/rest/api/rest_private.go:142`. It runs `POST /comment` (registered at `rest.go:364`) and returns 403 \"user blocked\" if the commenter is blocked. It calls through the `privStore` interface (`rest_private.go:70`), which `DataStore` satisfies.\n2. **`voteCtrl`**, `backend/app/rest/api/rest_private.go:273`. It runs `PUT /vote/{id}` (registered at `rest.go:365`) and returns 403 for a blocked voter. It also goes through `privStore`.\n3. **The auth claims hook in `getAuthenticator`**, `backend/app/cmd/server.go:1485`. It is the `ClaimsUpd` callback in `getAuthenticator` (`server.go:1455`) and sets the `blocked` claim on token issue or refresh. It calls `DataStore` directly, not through an interface. The `Validator` at `server.go:1522` then rejects any token whose `blocked` claim is true, so a change to `IsBlocked` takes effect for authenticated requests only when that claim is next rewritten.\n\n**Interface declared but not called**\n\n- `adminStore` (`backend/app/rest/api/admin.go:36`) lists `IsBlocked`, but no admin handler calls it. `setBlockCtrl`, `blockedUsersCtrl` and the other admin handlers use `SetBlock`, `BlockedUsers` and the rest. A change to `IsBlocked` does not reach the admin handlers through this interface.\n\n**Not affected**\n\n- `IsBlocked` has no caller inside `app/store/service`. `DataStore.Create`, `Vote` and the other store methods never check it.\n- The only other references are in `_test.go` files: `migrator/native_test.go`, `store/service/service_test.go`, and `rest/api/admin_test.go`.\n\n**Summary:** the production surface is `createCommentCtrl`, `voteCtrl`, and the auth `ClaimsUpd` hook in `getAuthenticator`. Changing the semantics of `IsBlocked` also changes what those three do, and it changes the `blocked` claim that the `Validator` enforces. The `privStore` and `adminStore` interface declarations are a compile-time contract. A signature change breaks both.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 26131,
+              "costUsd": 0.009864069999999999,
+              "inputTokens": 12,
+              "outputTokens": 3727,
+              "cacheCreationTokens": 27832,
+              "cacheReadTokens": 243297,
+              "toolCalls": 8,
+              "toolsByName": {
+                "Grep": 4,
+                "Bash": 3,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four production call sites, all in the REST layer or the auth setup. Nothing outside `backend/app/rest` and `backend/app/cmd` calls it.\n\n**Direct calls (3 sites)**\n\n1. **`createCommentCtrl`**, `backend/app/rest/api/rest_private.go:142`. It runs `POST /comment` and rejects the request if the commenter is blocked. Registered at `rest.go:364`.\n2. **`voteCtrl`**, `backend/app/rest/api/rest_private.go:273`. It runs `PUT /vote/{id}` and rejects blocked users. Registered at `rest.go:365`.\n3. **`ClaimsUpd` closure in `getAuthenticator`**, `backend/app/cmd/server.go:1485`. It sets the `blocked` boolean attribute on the user when go-pkgz/auth issues or refreshes a token. The closure is wired at `server.go:1474`. Because it runs on token refresh, the attribute can lag a block or unblock until the next refresh.\n\n**Through the store interfaces (no extra production callers)**\n\n- `privStore.IsBlocked` (`rest_private.go:70`) is the interface the `private` handlers use. Its only production callers are sites 1 and 2 above. `updateCommentCtrl`, `userInfoCtrl`, `getEmailCtrl` and the other private handlers do not call it.\n- `adminStore.IsBlocked` (`admin.go:36`) is declared but never called from production code. The admin handlers call `SetBlock` and `BlockedUsers`, not `IsBlocked`. A change to `IsBlocked` therefore cannot reach the admin routes unless someone adds a caller.\n\n**Test-only callers:** `app/store/service/service_test.go`, `app/migrator/native_test.go`, and `app/rest/api/admin_test.go`.\n\n**What this means if `IsBlocked` changes**\n\n- A change to its signature breaks `privStore`, `adminStore`, and the `ds.IsBlocked` call in `server.go`. Only the two interface declarations and the three call sites need updating.\n- A change to its semantics affects only `POST /comment`, `PUT /vote/{id}`, and the `blocked` attribute that the auth layer sets on tokens.\n\nI only searched with grep and read the call sites; I did not run the tests.",
+              "isError": false,
+              "turns": 12,
+              "durationMs": 29691,
+              "costUsd": 0.00904504,
+              "inputTokens": 12,
+              "outputTokens": 4565,
+              "cacheCreationTokens": 22151,
+              "cacheReadTokens": 233114,
+              "toolCalls": 11,
+              "toolsByName": {
+                "Grep": 6,
+                "Bash": 1,
+                "Read": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three production call sites use `IsBlocked`, and all three are in the REST layer or the auth setup. Nothing inside `app/store/service` calls it.\n\n**Direct callers (`s.dataService.IsBlocked` / `ds.IsBlocked`):**\n\n1. **`createCommentCtrl`**, `backend/app/rest/api/rest_private.go:142`. Handles `POST /comment` (registered at `rest.go:364`). It rejects the comment with 403 `ErrUserBlocked` if the author is blocked for the site.\n2. **`voteCtrl`**, `backend/app/rest/api/rest_private.go:273`. Handles `PUT /vote/{id}` (registered at `rest.go:365`). It rejects the vote with 403 `ErrUserBlocked` if the voter is blocked.\n3. **`getAuthenticator`'s `ClaimsUpd` closure**, `backend/app/cmd/server.go:1485`. It sets a `\"blocked\"` boolean attribute on the user when a token is issued or refreshed. The closure is built in `getAuthenticator` (`server.go:1455`) and wired up in `newServerApp` (`server.go:675`). This affects every authenticated request's claims, not just comment and vote routes.\n\n**Through interfaces:**\n\n- `privStore` (`rest_private.go:56–71`) declares `IsBlocked`, and the `private` struct's `dataService` field has that type. That is how callers 1 and 2 reach `DataStore.IsBlocked`. `rest.go:416` injects `s.DataService` into it.\n- `adminStore` (`admin.go:31–44`) also declares `IsBlocked`, but no production code in `admin.go` calls it. Admin block and unblock handlers use `SetBlock` and `BlockedUsers` only. A change to `IsBlocked` would still have to compile against `adminStore`, so the interface is affected, but there are no admin-side callers to update.\n\nTest files (`service_test.go`, `admin_test.go`, `native_test.go`) also call `IsBlocked`, but I left them out because you asked about production code.",
+              "isError": false,
+              "turns": 14,
+              "durationMs": 29277,
+              "costUsd": 0.00896773,
+              "inputTokens": 14,
+              "outputTokens": 4623,
+              "cacheCreationTokens": 19339,
+              "cacheReadTokens": 278703,
+              "toolCalls": 13,
+              "toolsByName": {
+                "Grep": 7,
+                "Bash": 1,
+                "Read": 5
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 249546,
+            "medianOutputTokens": 2832,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 21143,
+            "medianCostUsd": 0.0071,
+            "spread": {
+              "inputTokens": {
+                "min": 208716,
+                "max": 303378
+              },
+              "toolCalls": {
+                "min": 6,
+                "max": 13
+              },
+              "durationMs": {
+                "min": 16730,
+                "max": 28067
+              },
+              "costUsd": {
+                "min": 0.0066,
+                "max": 0.0094
+              }
+            },
+            "totalCostUsd": 0.023,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "find_callers": 7,
+              "find_references": 6
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "Three production functions call `DataStore.IsBlocked`, and the REST handlers reach it through the `privStore` interface.\n\n**Production callers**\n\n1. **`ServerCommand.getAuthenticator`**, `backend/app/cmd/server.go:1485`. It calls `ds.IsBlocked(audience, c.User.ID)` directly on the `*service.DataStore` and stores the result as the `\"blocked\"` user attribute. This is inside a closure that `getAuthenticator` builds for the auth service, so it affects user info, not a REST handler.\n2. **`private.createCommentCtrl`**, `backend/app/rest/api/rest_private.go:142`. It calls `s.dataService.IsBlocked(...)` and returns 403 `ErrUserBlocked` before creating the comment. It is registered as `POST /comment` on the authenticated group (`rest.go:364`).\n3. **`private.voteCtrl`**, `backend/app/rest/api/rest_private.go:273`. It makes the same check before voting and returns 403. It is registered as `PUT /vote/{id}` on the authenticated group (`rest.go:365`).\n\n**Interfaces**\n\n- `IsBlocked` is declared in `privStore` (`rest_private.go:70`), which is the type of `private.dataService`. That is how the two controllers reach it.\n- It is also declared in `adminStore` (`admin.go:36`), but I found no production call through it. The only calls are in `admin_test.go`, which reaches them via `srv.adminRest.dataService.IsBlocked`.\n- `pubStore` and `rssStore` do not declare it, so the public and RSS handlers do not depend on it.\n\n**Test-only callers**, which would not break in production: `migrator/native_test.go` (lines 97, 100, 136, 139), `store/service/service_test.go:1044`, and `rest/api/admin_test.go` (lines 310–384).\n\n**Limits:** The call graph resolves calls through the interfaces, but the tool reports six unresolved sites, all in `admin_test.go`. I did not check any call that depends on reflection or on a generic wrapper, so there may be a caller the scanner missed.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 21143,
+              "costUsd": 0.007073949999999999,
+              "inputTokens": 12,
+              "outputTokens": 2832,
+              "cacheCreationTokens": 16639,
+              "cacheReadTokens": 232895,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_references": 1,
+                "mcp__concentrate__find_callers": 1,
+                "Bash": 3
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_references",
+                  "input": {
+                    "symbol": "IsBlocked",
+                    "file": "app/store/service",
+                    "limit": 200
+                  },
+                  "result": "{\"symbol\":\"IsBlocked\",\"declarations\":[{\"kind\":\"method\",\"name\":\"IsBlocked\",\"className\":\"DataStore\",\"file\":\"backend/app/store/service/service.go\",\"line\":720,\"isExported\":false}],\"total\":8,\"counts\":{\"call\":8},\"references\":[{\"kind\":\"call\",\"file\":\"backend/app/cmd/server.go\",\"line\":1485,\"from\":\"ServerCommand.getAuthenticator\",\"detail\":\"ds.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":97,\"from\":\"TestNative_Import\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":100,\"from\":\"TestNative_Import\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":136,\"from\":\"TestNative_ImportWithMapper\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":139,\"from\":\"TestNative_ImportWithMapper\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":142,\"from\":\"private.createCommentCtrl\",\"detail\":\"s.dataService.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":273,\"from\":\"private.voteCtrl\",\"detail\":\"s.dataService.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/store/service/service_test.go\",\"line\":1044,\"from\":\"TestService_SetMetas\",\"detail\":\"b.IsBlocked\"}],\"note\":\"Calls come from resolved call edges, so calls the scanner could not resolve are missing; possible: true marks namespace and dynamic imports that may not use the declaration.\",\"page\":{\"offset\":0,\"returned\":8}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "IsBlocked",
+                    "limit": 100
+                  },
+                  "result": "{\"query\":{\"name\":\"IsBlocked\",\"exact\":true,\"limit\":100},\"callers\":[{\"target\":\"IsBlocked\",\"caller\":\"TestNative_Import\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":97,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestNative_Import\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":100,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestNative_ImportWithMapper\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":136,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestNative_ImportWithMapper\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":139,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestService_SetMetas\",\"callerKind\":\"Function\",\"file\":\"backend/app/store/service/service_test.go\",\"line\":1044,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"getAuthenticator\",\"callerKind\":\"Method\",\"className\":\"ServerCommand\",\"file\":\"backend/app/cmd/server.go\",\"line\":1485,\"expression\":\"ds.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"createCommentCtrl\",\"callerKind\":\"Method\",\"className\":\"private\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":142,\"expression\":\"s.dataService.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"voteCtrl\",\"callerKind\":\"Method\",\"className\":\"private\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":273,\"expression\":\"s.dataService.IsBlocked\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":6,\"sites\":[{\"file\":\"backend/app/rest/api/admin_test.go\",\"line\":310,\"expression\":\"srv.adminRest.dataService.IsBlocked\",\"caller\":\"TestAdmin_Block\"},{\"file\":\"backend/app/rest/api/admin_test.go\",\"line\":311,\"expression\":\"srv.adminRest.dataService.IsBlocked\",\"caller\":\"TestAdmin_Block\"},{\"file\":\"backend/app/rest/api/admin_test.go\",\"line\":353,\"expressio… (2670 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three production functions call `DataStore.IsBlocked`, and two of them reach it through the `privStore` interface that the REST handlers depend on.\n\n**Direct call sites (non-test)**\n\n1. **`ServerCommand.getAuthenticator`**, `backend/app/cmd/server.go:1485`. It calls `ds.IsBlocked` inside the `ClaimsUpd` callback passed to `auth.NewService`. The go-pkgz/auth library runs that callback whenever it issues or refreshes a JWT, so this path is hit by login and token-refresh traffic rather than by a direct call in our code.\n2. **`private.createCommentCtrl`**, `backend/app/rest/api/rest_private.go:142`, via `s.dataService.IsBlocked`. It is registered at `rest.go:364` as `POST /comment`.\n3. **`private.voteCtrl`**, `backend/app/rest/api/rest_private.go:273`, via `s.dataService.IsBlocked`. It is registered at `rest.go:365` as `PUT /vote/{id}`.\n\n**Interface path**\n\n- `privStore` (`rest_private.go:70`) declares `IsBlocked(siteID, userID string) bool`. The `private` controller's `dataService` field has that type, so the two handlers above reach the method through the interface.\n- `admin.go:36` declares the same method on an admin-side interface, but no non-test code calls it through that interface.\n\n**Upstream chain for the server path**\n\n`main.go:51` → `ServerCommand.Execute` (`server.go:372`) → `newServerApp` (`server.go:675`) → `getAuthenticator` (`server.go:1485`, inside the `ClaimsUpd` closure).\n\n**Test-only callers**\n\nThese do not affect production behaviour but would need updating if the signature changes:\n- `migrator/native_test.go` (lines 97, 100, 136, 139)\n- `store/service/service_test.go:1044`\n- `rest/api/admin_test.go` (lines 310–384), where the calls go through `srv.adminRest.dataService` and the graph could not resolve them\n\n**Caveats**\n\n- The graph tool did not resolve the route registrations in `rest.go` as calls to `createCommentCtrl` or `voteCtrl`. I confirmed those paths with grep.\n- The `ClaimsUpd` path depends on go-pkgz/auth calling the callback, which the code graph cannot see. I read it from the `auth.Opts` wiring.",
+              "isError": false,
+              "turns": 14,
+              "durationMs": 28067,
+              "costUsd": 0.009358189999999999,
+              "inputTokens": 14,
+              "outputTokens": 3893,
+              "cacheCreationTokens": 23035,
+              "cacheReadTokens": 280329,
+              "toolCalls": 13,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_references": 4,
+                "mcp__concentrate__find_callers": 5,
+                "Grep": 2,
+                "Bash": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_references",
+                  "input": {
+                    "symbol": "DataStore.IsBlocked",
+                    "limit": 200
+                  },
+                  "result": "{\"symbol\":\"DataStore.IsBlocked\",\"declarations\":[{\"kind\":\"method\",\"name\":\"IsBlocked\",\"className\":\"DataStore\",\"file\":\"backend/app/store/service/service.go\",\"line\":720,\"isExported\":false}],\"total\":8,\"counts\":{\"call\":8},\"references\":[{\"kind\":\"call\",\"file\":\"backend/app/cmd/server.go\",\"line\":1485,\"from\":\"ServerCommand.getAuthenticator\",\"detail\":\"ds.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":97,\"from\":\"TestNative_Import\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":100,\"from\":\"TestNative_Import\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":136,\"from\":\"TestNative_ImportWithMapper\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":139,\"from\":\"TestNative_ImportWithMapper\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":142,\"from\":\"private.createCommentCtrl\",\"detail\":\"s.dataService.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":273,\"from\":\"private.voteCtrl\",\"detail\":\"s.dataService.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/store/service/service_test.go\",\"line\":1044,\"from\":\"TestService_SetMetas\",\"detail\":\"b.IsBlocked\"}],\"note\":\"Calls come from resolved call edges, so calls the scanner could not resolve are missing; possible: true marks namespace and dynamic imports that may not use the declaration.\",\"page\":{\"offset\":0,\"returned\":8}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "IsBlocked",
+                    "limit": 200
+                  },
+                  "result": "{\"query\":{\"name\":\"IsBlocked\",\"exact\":true,\"limit\":200},\"callers\":[{\"target\":\"IsBlocked\",\"caller\":\"TestNative_Import\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":97,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestNative_Import\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":100,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestNative_ImportWithMapper\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":136,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestNative_ImportWithMapper\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":139,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestService_SetMetas\",\"callerKind\":\"Function\",\"file\":\"backend/app/store/service/service_test.go\",\"line\":1044,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"getAuthenticator\",\"callerKind\":\"Method\",\"className\":\"ServerCommand\",\"file\":\"backend/app/cmd/server.go\",\"line\":1485,\"expression\":\"ds.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"createCommentCtrl\",\"callerKind\":\"Method\",\"className\":\"private\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":142,\"expression\":\"s.dataService.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"voteCtrl\",\"callerKind\":\"Method\",\"className\":\"private\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":273,\"expression\":\"s.dataService.IsBlocked\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":6,\"sites\":[{\"file\":\"backend/app/rest/api/admin_test.go\",\"line\":310,\"expression\":\"srv.adminRest.dataService.IsBlocked\",\"caller\":\"TestAdmin_Block\"},{\"file\":\"backend/app/rest/api/admin_test.go\",\"line\":311,\"expression\":\"srv.adminRest.dataService.IsBlocked\",\"caller\":\"TestAdmin_Block\"},{\"file\":\"backend/app/rest/api/admin_test.go\",\"line\":353,\"expressio… (2670 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "createCommentCtrl"
+                  },
+                  "result": "{\"query\":{\"name\":\"createCommentCtrl\",\"exact\":true,\"limit\":20},\"callers\":[],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named createCommentCtrl in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "voteCtrl"
+                  },
+                  "result": "{\"query\":{\"name\":\"voteCtrl\",\"exact\":true,\"limit\":20},\"callers\":[],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named voteCtrl in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "getAuthenticator"
+                  },
+                  "result": "{\"query\":{\"name\":\"getAuthenticator\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"getAuthenticator\",\"caller\":\"newServerApp\",\"callerKind\":\"Method\",\"className\":\"ServerCommand\",\"file\":\"backend/app/cmd/server.go\",\"line\":675,\"expression\":\"s.getAuthenticator\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named getAuthenticator in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_references",
+                  "input": {
+                    "symbol": "private.createCommentCtrl"
+                  },
+                  "result": "{\"symbol\":\"private.createCommentCtrl\",\"declarations\":[{\"kind\":\"method\",\"name\":\"createCommentCtrl\",\"className\":\"private\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":106,\"isExported\":false}],\"total\":0,\"counts\":{},\"references\":[],\"note\":\"Calls come from resolved call edges, so calls the scanner could not resolve are missing; possible: true marks namespace and dynamic imports that may not use the declaration.\",\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_references",
+                  "input": {
+                    "symbol": "private.voteCtrl"
+                  },
+                  "result": "{\"symbol\":\"private.voteCtrl\",\"declarations\":[{\"kind\":\"method\",\"name\":\"voteCtrl\",\"className\":\"private\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":255,\"isExported\":false}],\"total\":0,\"counts\":{},\"references\":[],\"note\":\"Calls come from resolved call edges, so calls the scanner could not resolve are missing; possible: true marks namespace and dynamic imports that may not use the declaration.\",\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "newServerApp"
+                  },
+                  "result": "{\"query\":{\"name\":\"newServerApp\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_WithSSL\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":280,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_WithRemote\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":337,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_Failed\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":368,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_Failed\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":379,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_Failed\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":389,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_Failed\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":399,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_Failed\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":411,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_Failed\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":421,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_Failed\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":435,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"TestServerApp_Failed\",\"callerKind\":\"Function\",\"file\":\"backend/app/cmd/server_test.go\",\"line\":447,\"expression\":\"opts.newServerApp\",\"relationship\":\"CALLS\"},{\"target\":\"newServerApp\",\"caller\":\"Te… (3041 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "find_references",
+                  "input": {
+                    "symbol": "ServerCommand.getAuthenticator"
+                  },
+                  "result": "{\"symbol\":\"ServerCommand.getAuthenticator\",\"declarations\":[{\"kind\":\"method\",\"name\":\"getAuthenticator\",\"className\":\"ServerCommand\",\"file\":\"backend/app/cmd/server.go\",\"line\":1455,\"isExported\":false}],\"total\":1,\"counts\":{\"call\":1},\"references\":[{\"kind\":\"call\",\"file\":\"backend/app/cmd/server.go\",\"line\":675,\"from\":\"ServerCommand.newServerApp\",\"detail\":\"s.getAuthenticator\"}],\"note\":\"Calls come from resolved call edges, so calls the scanner could not resolve are missing; possible: true marks namespace and dynamic imports that may not use the declaration.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three production call sites reach `DataStore.IsBlocked`. Two of them are REST handlers, and one runs in the auth token path.\n\n**Direct production callers**\n\n1. **`createCommentCtrl`** (`backend/app/rest/api/rest_private.go:142`), handling `POST /comment` (wired at `rest.go:364`). It calls `s.dataService.IsBlocked(...)` and returns 403 \"user blocked\" if true.\n2. **`voteCtrl`** (`backend/app/rest/api/rest_private.go:273`), handling `PUT /vote/{id}` (wired at `rest.go:365`). Same check, same 403.\n3. **`ServerCommand.getAuthenticator`'s `ClaimsUpd` closure** (`backend/app/cmd/server.go:1485`). It runs `c.User.SetBoolAttr(\"blocked\", ds.IsBlocked(audience, c.User.ID))`. This closure runs when a token is issued or refreshed, not on every request. So a block change reaches the auth layer only through the JWT's `blocked` claim, which then lasts until the next refresh.\n\n**Through store interfaces**\n\n- `rest_private.go:70` declares the `IsBlocked` method on the private handlers' data-service interface. Calls 1 and 2 go through it.\n- `admin.go:36` declares `IsBlocked` on `adminStore`. I found no production call through it. The only callers are in `admin_test.go` (lines 310–384), which hit `srv.adminRest.dataService.IsBlocked` directly. The admin handlers in `admin.go` don't call it.\n\n**Test-only callers** (not production, but they would need updating if the signature or semantics change): `migrator/native_test.go` (97, 100, 136, 139), `store/service/service_test.go:1044`, and `rest/api/admin_test.go` (310–384).\n\nThe call-graph tool reported six calls named `IsBlocked` as unresolved. These are the `admin_test.go` sites, which go through a field on a struct. The grep confirmed there are no other production call sites.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 16730,
+              "costUsd": 0.006593570000000001,
+              "inputTokens": 10,
+              "outputTokens": 2426,
+              "cacheCreationTokens": 17329,
+              "cacheReadTokens": 191377,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__find_callers": 1,
+                "mcp__concentrate__find_references": 1,
+                "Grep": 1,
+                "Bash": 2
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "IsBlocked",
+                    "limit": 100
+                  },
+                  "result": "{\"query\":{\"name\":\"IsBlocked\",\"exact\":true,\"limit\":100},\"callers\":[{\"target\":\"IsBlocked\",\"caller\":\"TestNative_Import\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":97,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestNative_Import\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":100,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestNative_ImportWithMapper\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":136,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestNative_ImportWithMapper\",\"callerKind\":\"Function\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":139,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"TestService_SetMetas\",\"callerKind\":\"Function\",\"file\":\"backend/app/store/service/service_test.go\",\"line\":1044,\"expression\":\"b.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"getAuthenticator\",\"callerKind\":\"Method\",\"className\":\"ServerCommand\",\"file\":\"backend/app/cmd/server.go\",\"line\":1485,\"expression\":\"ds.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"createCommentCtrl\",\"callerKind\":\"Method\",\"className\":\"private\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":142,\"expression\":\"s.dataService.IsBlocked\",\"relationship\":\"CALLS\"},{\"target\":\"IsBlocked\",\"caller\":\"voteCtrl\",\"callerKind\":\"Method\",\"className\":\"private\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":273,\"expression\":\"s.dataService.IsBlocked\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":6,\"sites\":[{\"file\":\"backend/app/rest/api/admin_test.go\",\"line\":310,\"expression\":\"srv.adminRest.dataService.IsBlocked\",\"caller\":\"TestAdmin_Block\"},{\"file\":\"backend/app/rest/api/admin_test.go\",\"line\":311,\"expression\":\"srv.adminRest.dataService.IsBlocked\",\"caller\":\"TestAdmin_Block\"},{\"file\":\"backend/app/rest/api/admin_test.go\",\"line\":353,\"expressio… (2670 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "find_references",
+                  "input": {
+                    "symbol": "DataStore.IsBlocked",
+                    "limit": 100
+                  },
+                  "result": "{\"symbol\":\"DataStore.IsBlocked\",\"declarations\":[{\"kind\":\"method\",\"name\":\"IsBlocked\",\"className\":\"DataStore\",\"file\":\"backend/app/store/service/service.go\",\"line\":720,\"isExported\":false}],\"total\":8,\"counts\":{\"call\":8},\"references\":[{\"kind\":\"call\",\"file\":\"backend/app/cmd/server.go\",\"line\":1485,\"from\":\"ServerCommand.getAuthenticator\",\"detail\":\"ds.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":97,\"from\":\"TestNative_Import\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":100,\"from\":\"TestNative_Import\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":136,\"from\":\"TestNative_ImportWithMapper\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/migrator/native_test.go\",\"line\":139,\"from\":\"TestNative_ImportWithMapper\",\"detail\":\"b.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":142,\"from\":\"private.createCommentCtrl\",\"detail\":\"s.dataService.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/rest/api/rest_private.go\",\"line\":273,\"from\":\"private.voteCtrl\",\"detail\":\"s.dataService.IsBlocked\"},{\"kind\":\"call\",\"file\":\"backend/app/store/service/service_test.go\",\"line\":1044,\"from\":\"TestService_SetMetas\",\"detail\":\"b.IsBlocked\"}],\"note\":\"Calls come from resolved call edges, so calls the scanner could not resolve are missing; possible: true marks namespace and dynamic imports that may not use the declaration.\",\"page\":{\"offset\":0,\"returned\":8}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "go-remark42-image-save",
+      "sample": "internet-go-remark42",
+      "category": "dispatch",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 360368,
+            "medianOutputTokens": 4522,
+            "medianToolCalls": 10,
+            "medianTurns": 11,
+            "medianDurationMs": 28996,
+            "medianCostUsd": 0.0103,
+            "spread": {
+              "inputTokens": {
+                "min": 305980,
+                "max": 513782
+              },
+              "toolCalls": {
+                "min": 8,
+                "max": 16
+              },
+              "durationMs": {
+                "min": 23990,
+                "max": 46320
+              },
+              "costUsd": {
+                "min": 0.0088,
+                "max": 0.0142
+              }
+            },
+            "totalCostUsd": 0.0334,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Image store `Save` methods that production can reach**\n\n`image.Service.SaveWithID` (`backend/app/store/image/image.go:233`) validates and resizes the image, then calls `s.store.Save(id, img)`. Only one store is active per process, chosen by `makePicturesStore` (`backend/app/cmd/server.go:1007`) from the configured image type. Three production implementations can run:\n\n- **`*FileSystem`** (`store/image/fs_store.go:36`), for type `fs`.\n- **`*Bolt`** (`store/image/bolt_store.go:56`), for type `bolt`.\n- **`*RPC`** (`store/image/remote_store.go:20`), for type `rpc`. It sends `image.save_with_id` to a remote server. The only handler for that method in this repo is in `backend/_example/memory_store/server`, so the remote end is outside production code here.\n\n`store/image/image_mock.go` is excluded as a mock, and `_example` is excluded as requested.\n\n**Production functions that call `SaveWithID`**\n\n1. **`proxy.Image.cacheImage`** (`backend/app/rest/proxy/image.go:193-194`) calls `SaveWithID` directly. It is called from `proxy.Image.Handler` (line 157), which serves `GET /api/v1/img` on the open, unauthenticated route group (`rest.go:302`). It runs only when `CacheExternal` is enabled and the image was not already in the store, after a successful upstream download.\n\n2. **`image.Service.Save`** (`store/image/image.go:227-229`) calls `SaveWithID`. Its only production caller is **`savePictureCtrl`** (`backend/app/rest/api/rest_private.go:749`), registered as `POST /picture` on the authenticated group (`rest.go:381`). No other production code calls `Service.Save`.\n\nSo a user upload reaches `FileSystem.Save`, `Bolt.Save` or `RPC.Save` through `savePictureCtrl`, and an external image fetched by the proxy reaches them through `cacheImage` when `CacheExternal` is on. Both paths go through `SaveWithID`, which validates the bytes before the store sees them.",
+              "isError": false,
+              "turns": 17,
+              "durationMs": 46320,
+              "costUsd": 0.014245139999999998,
+              "inputTokens": 22,
+              "outputTokens": 5885,
+              "cacheCreationTokens": 32436,
+              "cacheReadTokens": 481324,
+              "toolCalls": 16,
+              "toolsByName": {
+                "Grep": 10,
+                "Bash": 3,
+                "Read": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Store `Save` methods reachable from `image.Service.SaveWithID`**\n\n`SaveWithID` (`backend/app/store/image/image.go:233`) validates and resizes the image, then calls `s.store.Save`. The `store` field is set once by `NewService`, and `makePicturesStore` (`backend/app/cmd/server.go:1008`) picks one implementation from `image.type`. Three production `Save` methods can run, and only one is instantiated per process:\n\n| `image.type` | Implementation | `Save` location |\n|---|---|---|\n| `bolt` (default) | `*Bolt` | `backend/app/store/image/bolt_store.go:56`, writes to the staging bucket in BoltDB |\n| `fs` | `*FileSystem` | `backend/app/store/image/fs_store.go:36`, writes to the staging directory on disk |\n| `rpc` | `*RPC` | `backend/app/store/image/remote_store.go:20`, calls the remote JSON-RPC method `image.save_with_id` |\n\nThe `StoreMock` `Save` (`image_mock.go:312`) is test-only and excluded. The `_example/memory_store` server is excluded too, though it is the remote end of the `rpc` type.\n\n**Production callers of `SaveWithID`**\n\n1. **Directly: `proxy.Image.cacheImage`** (`backend/app/rest/proxy/image.go:193-198`)\n   - Called from `proxy.Image.Handler` (`image.go:157`), which is mounted as `GET /img` (`backend/app/rest/api/rest.go:302`).\n   - It runs only on a cache miss, after a successful upstream download, and only when `CacheExternal` is set (`server.go:720`, from `image-proxy.cache-external`).\n   - The route is in the open group, so it needs no authentication.\n\n2. **Through `image.Service.Save`**\n   - `Service.Save` (`image.go:227`) generates an ID and calls `SaveWithID`.\n   - Its only non-test caller is `savePictureCtrl` (`backend/app/rest/api/rest_private.go:749`), mounted as `POST /picture` (`rest.go:381`) in the authenticated group.\n   - The chain is `POST /picture` → `savePictureCtrl` → `Service.Save` → `SaveWithID` → `store.Save`.\n\nThe test files also call `SaveWithID` and `Save`, but those calls are excluded here.",
+              "isError": false,
+              "turns": 11,
+              "durationMs": 28996,
+              "costUsd": 0.01026994,
+              "inputTokens": 16,
+              "outputTokens": 4522,
+              "cacheCreationTokens": 23178,
+              "cacheReadTokens": 337174,
+              "toolCalls": 10,
+              "toolsByName": {
+                "Grep": 4,
+                "Bash": 6
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Store implementations whose `Save` can run (production code):** three.\n\n`image.Service.SaveWithID` (`backend/app/store/image/image.go:233`) validates and resizes the image with `prepareImage`, then calls `s.store.Save(id, img)`. The `Store` field is set by `image.NewService`, and `cmd/server.go:1009-1040` (`makePicturesStore`) selects one of three by config:\n\n1. **`image.Bolt`**, `bolt_store.go:56`, when `image.type` is `bolt`.\n2. **`image.FileSystem`**, `fs_store.go:36`, when `image.type` is `fs`. This is the default (`cmd/server.go:196`).\n3. **`image.RPC`**, `remote_store.go:20`, when `image.type` is `rpc`.\n\n`StoreMock.Save` in `image_mock.go:312` is a test mock and is excluded. The `_example/memory_store` implementations are also excluded.\n\n**Production callers of `SaveWithID`, directly or through `Service.Save`:**\n\n- **`rest/api/rest_private.go:749`, `savePictureCtrl`**: this is the upload handler. It calls `imageService.Save(user.ID, file)`, which generates `path.Join(userID, guid())` and then calls `SaveWithID`. I did not check which route group it is registered under.\n- **`rest/proxy/image.go:194`, `Image.cacheImage`**: this calls `ImageService.SaveWithID(imgID, r)` directly. It is reached from `Image.Handler` (`GET /img`, registered at `rest/api/rest.go:302` in the open route group) only when `CacheExternal` is enabled (`--cache-external` / `CACHE_EXTERNAL`, wired at `cmd/server.go:718-720`). The handler downloads the upstream image first, then caches it. A failed save is logged and the response is still served.\n\nNo other production code calls `SaveWithID` or `Service.Save`. The `ImageService` uses in `store/service/service.go` are `ExtractPictures`, `Commit`, `Submit`, `Delete` and `Info`, none of which write through `Save`.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 23990,
+              "costUsd": 0.008843640000000002,
+              "inputTokens": 14,
+              "outputTokens": 3592,
+              "cacheCreationTokens": 20982,
+              "cacheReadTokens": 284984,
+              "toolCalls": 8,
+              "toolsByName": {
+                "Grep": 4,
+                "Bash": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 418304,
+            "medianOutputTokens": 4735,
+            "medianToolCalls": 9,
+            "medianTurns": 10,
+            "medianDurationMs": 33615,
+            "medianCostUsd": 0.0116,
+            "spread": {
+              "inputTokens": {
+                "min": 316283,
+                "max": 488013
+              },
+              "toolCalls": {
+                "min": 9,
+                "max": 10
+              },
+              "durationMs": {
+                "min": 30199,
+                "max": 38435
+              },
+              "costUsd": {
+                "min": 0.0098,
+                "max": 0.0126
+              }
+            },
+            "totalCostUsd": 0.0341,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Store `Save` methods reachable from `SaveWithID` in production:** three, one per `--image.type` value. `makePicturesStore` in `backend/app/cmd/server.go:1013-1040` wires each one into `image.NewService`:\n\n| `--image.type` | Implementation | `Save` location |\n|---|---|---|\n| `fs` (default) | `*image.FileSystem` | `backend/app/store/image/fs_store.go:36` |\n| `bolt` | `*image.Bolt` (`NewBoltStorage`) | `backend/app/store/image/bolt_store.go:56` |\n| `rpc` | `*image.RPC` | `backend/app/store/image/remote_store.go:20` |\n\nThe only other `Save` is `StoreMock.Save` in `image_mock.go`, which is generated test code and excluded.\n\n**Production callers of `SaveWithID`, directly or through `Service.Save`:**\n\n1. **`image.Service.Save`** (`store/image/image.go:227`) has one production caller, `savePictureCtrl` in `backend/app/rest/api/rest_private.go:749`. That handler is mounted at `POST /api/v1/picture` in `rest.go:381`, behind the authenticated group (`Auth`, `rejectAnonUser`, `matchSiteID`).\n\n2. **`SaveWithID` directly** has one production caller, `proxy.Image.cacheImage` (`backend/app/rest/proxy/image.go:194`). It is called only from `proxy.Image.Handler` (`image.go:157`), and only when `CacheExternal` is true. That flag comes from `--image-proxy.cache-external`, which defaults to off. The handler serves `GET /api/v1/img` on the open route group, and it caches only after a successful upstream download when the image is not already in the store.\n\nSo a production write through `image.Service.SaveWithID` reaches `Save` on any of the three stores, via either a user upload or an external image fetch with caching enabled. The `_example` directory and `_test.go` files were excluded from this search.",
+              "isError": false,
+              "turns": 11,
+              "durationMs": 33615,
+              "costUsd": 0.012634219999999998,
+              "inputTokens": 20,
+              "outputTokens": 4735,
+              "cacheCreationTokens": 28341,
+              "cacheReadTokens": 459652,
+              "toolCalls": 10,
+              "toolsByName": {
+                "Grep": 3,
+                "Bash": 6,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Three production `Save` methods can run, one per `image.type` setting, and both callers are reachable in production.\n\n**Store `Save` implementations that can run**\n\n`image.Service.store` is set only in `makePicturesStore` (`backend/app/cmd/server.go:1012`), which picks one store from config. So only one of these runs in a given process:\n\n- `Bolt.Save` (`backend/app/store/image/bolt_store.go:56`), when `image.type = \"bolt\"`\n- `FileSystem.Save` (`backend/app/store/image/fs_store.go:36`), when `image.type = \"fs\"`\n- `RPC.Save` (`backend/app/store/image/remote_store.go:20`), when `image.type = \"rpc\"`, which forwards to a remote over JSON-RPC\n\nExcluded: `StoreMock.Save` (`image_mock.go:312`, a generated mock) and `MemImage.Save` (`backend/_example/memory_store/accessor/image.go:39`, the example directory).\n\n**Production callers of `SaveWithID`**\n\n1. **Direct: `proxy.Image.cacheImage`** (`backend/app/rest/proxy/image.go:193`). It is called only from `proxy.Image.Handler` (line 157), which serves `GET /api/v1/img`. That call happens only when the image is not already cached, the upstream download succeeded, and `CacheExternal` is true (`--cache-external`). The route is an open, unauthenticated route (`backend/app/rest/api/rest.go:302`). So anonymous requests can trigger a store write when `CacheExternal` is on. Failures are logged and ignored.\n\n2. **Via `Service.Save`: `savePictureCtrl`** (`backend/app/rest/api/rest_private.go:730`, the `POST /picture` handler). `Service.Save` (`image.go:227`) generates an id and calls `SaveWithID`. This is the only production caller of `Service.Save`. The route is authenticated, mounted in the protected group at `rest.go:381`, and not gated by `CacheExternal`.\n\n`Service.Save` and `SaveWithID` are not called from `store/service`, which uses only `Load`, `Delete`, `Commit`, `Submit`, `ExtractPictures` and related methods.\n\nEvery production `Save` path therefore runs from one of these two HTTP handlers.",
+              "isError": false,
+              "turns": 10,
+              "durationMs": 30199,
+              "costUsd": 0.009813369999999998,
+              "inputTokens": 14,
+              "outputTokens": 4307,
+              "cacheCreationTokens": 23662,
+              "cacheReadTokens": 292607,
+              "toolCalls": 9,
+              "toolsByName": {
+                "Grep": 5,
+                "Bash": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Store implementations whose `Save` can run in production**\n\nAll three are selected in `makePicturesStore` (`backend/app/cmd/server.go:1008`) by the image-store type setting, which accepts `fs`, `bolt` or `rpc` and defaults to `fs`.\n\n- **`(*FileSystem).Save`**, `backend/app/store/image/fs_store.go:36`. Used when `type=fs`, the default.\n- **`(*Bolt).Save`**, `backend/app/store/image/bolt_store.go:56`. Used when `type=bolt`, through `image.NewBoltStorage`.\n- **`(*RPC).Save`**, `backend/app/store/image/remote_store.go:20`. Used when `type=rpc`. It doesn't store anything locally: it sends `image.save_with_id` over JSON-RPC, and the remote end does the actual write. That remote end is outside this repo's production code.\n\nExcluded: `StoreMock.Save` in `image_mock.go` (a mock) and `backend/_example/memory_store/...` (the example).\n\nBefore any of these runs, `Service.SaveWithID` has already validated and resized the image through `prepareImage`, so the store only receives processed bytes.\n\n**Production callers of `SaveWithID`, directly or through `Service.Save`**\n\n1. **`Service.Save`** (`store/image/image.go:227`) calls `SaveWithID` with a generated `userID/guid` ID. Its only production caller is `savePictureCtrl` (`rest/api/rest_private.go:749`). That handler is registered as `POST /picture` in `rest/api/rest.go:381`, in the authenticated group: it requires a non-anonymous user, a matching site ID, and rate limiting.\n\n2. **`Image.cacheImage`** (`rest/proxy/image.go:193`) calls `SaveWithID` directly. It is called from `Image.Handler` (`proxy/image.go:157`) for `GET /img` (`rest/api/rest.go:302`). The call is gated by `if p.CacheExternal`, which the `--image-proxy.cache-external` flag sets, and only runs when the image isn't already in the store. The route itself is always registered.\n\nNo other production code calls `SaveWithID` or `Service.Save`. The `store/service` package uses only `Commit`, `Submit`, `Delete`, `Load` and the extraction helpers. The `SaveWithID` and `Save` matches in `_example` and in test files are excluded.",
+              "isError": false,
+              "turns": 10,
+              "durationMs": 38435,
+              "costUsd": 0.01163151,
+              "inputTokens": 18,
+              "outputTokens": 5559,
+              "cacheCreationTokens": 24565,
+              "cacheReadTokens": 393721,
+              "toolCalls": 9,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 6,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

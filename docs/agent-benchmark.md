@@ -463,3 +463,82 @@ which the agent called a Concentrate tool:
   show that function's file with the query's line (`articles/routers.go:71`
   for a query at `articles/models.go:71`), which the agent had to check
   against the source.
+
+### Larger Go repositories (#187)
+
+The Phase 21 questions could not separate the modes: the Go backends were
+small enough for grep. [`bench/agent/questions-go-large.json`](../bench/agent/questions-go-large.json)
+asks eight questions over two larger repositories, where an answer crosses
+packages, interfaces or services:
+
+- **`internet-go-kratos-beer-shop`** (go-kratos/beer-shop, 283 Go files,
+  nine kratos services wired with google/wire, ent, gRPC between services):
+  - **di:** which gRPC clients of the gateway's provider set the generated
+    injector builds and which it never uses (order, payment); which repositories
+    and use cases the user service's injector wires into `NewUserService`;
+  - **callers:** registration from the gateway's `ShopInterface.Register`
+    over gRPC into the user service, down to the ent insert in
+    `app/user/service/internal/data/user.go`;
+  - **impact:** what a change to catalog's `beerRepo.Count` reaches
+    (`BeerUseCase.ListNext`, `CatalogService.ListBeerNextToken`).
+- **`internet-go-remark42`** (umputun/remark42 backend, 158 Go files outside
+  `vendor/`):
+  - **dispatch:** the production implementations of `engine.Interface` and
+    `admin.Store`; the callers of the engine's `Flag` and the
+    implementations each call reaches (`BoltDB`, `RPC`); the image stores
+    `image.Service.SaveWithID` can write through and its callers;
+  - **impact:** the callers of `DataStore.IsBlocked`, directly and through
+    the REST handlers' store interfaces.
+
+Expected answers were written from the source (`wire_gen.go`, interface
+declarations and their implementations, call sites). remark42's routes
+(`go-pkgz/routegroup`) and env options (`go-flags` `env-namespace`) are not
+read by the graph yet, so no route or env question is asked there.
+
+```bash
+npm run bench:agent -- --questions bench/agent/questions-go-large.json --runs 3 --model sonnet
+npm run bench:agent -- --questions bench/agent/questions-go-large.json --runs 3 --model haiku
+```
+
+Recorded 2026-11-05 with Claude Code 2.1.317, three runs each,
+`--max-turns 30`
+([`agent-go-large-sonnet-runs3-2026-11-05.json`](../bench/results/agent-go-large-sonnet-runs3-2026-11-05.json),
+[`agent-go-large-haiku-runs3-2026-11-05.json`](../bench/results/agent-go-large-haiku-runs3-2026-11-05.json)).
+Sonnet's two last remark42 questions were run again after the first runs
+stopped at the account's usage limit; their results replace the failed
+runs in the file. Per category, median input tokens (baseline →
+concentrate) and the runs in which the agent called a Concentrate tool:
+
+| Category | Runs | sonnet: correct | sonnet: input tokens | sonnet: MCP runs | haiku: correct | haiku: input tokens | haiku: MCP runs |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| di | 6 | 6/6 / 6/6 | 96.9k → 99.6k (+3%) | 0/6 | 6/6 / 6/6 | 139.4k → 125.7k (−10%) | 0/6 |
+| callers | 3 | 3/3 / 3/3 | 175.3k → 175.7k (+0%) | 0/3 | 3/3 / 3/3 | 261.9k → 236.4k (−10%) | 1/3 |
+| impact | 6 | 6/6 / 6/6 | 166.4k → 110.6k (−34%) | 5/6 | 6/6 / 6/6 | 254.6k → 229.1k (−10%) | 5/6 |
+| dispatch | 9 | 9/9 / 9/9 | 229.5k → 166.1k (−28%) | 0/9 | 9/9 / 9/9 | 360.4k → 418.3k (+16%) | 1/9 |
+
+| | sonnet: baseline | sonnet: concentrate | haiku: baseline | haiku: concentrate |
+| --- | ---: | ---: | ---: | ---: |
+| Correct | 24/24 | 24/24 | 24/24 | 24/24 |
+| Median input tokens | 170.9k | 157.9k (−8%) | 258.6k | 243.0k (−6%) |
+| Median tool calls | 6 | 6 | 8 | 6 |
+| Median wall time | 19.3 s | 20.4 s | 23.5 s | 20.9 s |
+| Total cost (CLI estimate) | $2.45 | $2.10 | $0.23 | $0.21 |
+
+- **Still no accuracy difference.** All 96 runs were correct. With 158–283
+  files and descriptive names (`NewOrderServiceClient`, `BoltDB`), grep and a
+  few reads still find every answer.
+- **The graph helped where the agent asked it.** The impact questions, the
+  only ones where the agent called Concentrate in most runs (`impact_of`,
+  `find_callers`), cost sonnet 34% fewer input tokens.
+- **The dispatch questions went unasked.** Sonnet never called a Concentrate
+  tool on the four interface questions, although the graph resolves
+  `s.Engine.Flag(…)` to `BoltDB.Flag` and `RPC.Flag` and holds `IMPLEMENTS`
+  for every store. No tool returns an interface's implementations, and
+  `find_callers` does not say that interface calls resolve to them; sonnet's
+  −28% there comes from how many files it read, not from the graph.
+- **The di questions are answered from `wire_gen.go`.** The generated
+  injector lists every constructor call in order, so one read answers both
+  questions; the graph's `INJECTS` adds nothing an agent needs.
+- **The cross-service question is out of the graph's reach.** No edge links
+  the gateway's `userv1.UserClient.Save` call to `UserService.Save` in the
+  user service, so both modes read both sides.
