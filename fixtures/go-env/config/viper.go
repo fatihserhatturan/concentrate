@@ -16,3 +16,15 @@ func init() {
 func LogLevel() string {
 	return viper.GetString("log.level")
 }
+
+// viper.Unmarshal fills the struct from the keys AutomaticEnv reads.
+type Settings struct {
+	Port    int `mapstructure:"port"`
+	Timeout string
+	Ignored string `mapstructure:"-"`
+}
+
+func Load() (settings Settings, err error) {
+	err = viper.Unmarshal(&settings)
+	return
+}

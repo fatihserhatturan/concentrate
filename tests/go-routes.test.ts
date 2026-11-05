@@ -45,6 +45,8 @@ describe("Go gin routes", () => {
       ["GET", "/api/v1/items", "main.go:34", "List", ["Logger", "List"]],
       // Use applies to what is registered after it.
       ["POST", "/api/v1/items", "main.go:38", "<v1.POST:/items:arg1>", ["Logger", "Required", "<v1.POST:/items:arg1>"]],
+      // `r.Group("/admin").Use(auth.Required(true))`: gin's Use returns the group.
+      ["GET", "/admin/stats", "main.go:44", "ping", ["Logger", "Required", "ping"]],
       ["GET", "/api/v1/users", "routes/users.go:14", "Show", ["Logger", "Show"]],
       ["GET", "/api/v1/users/:id", "routes/users.go:15", "Show", ["Logger", "Show"]],
       ["POST", "/api/v1/users/", "routes/users.go:17", "Create", ["Logger", "Required", "Audit", "Create"]],
@@ -73,7 +75,7 @@ describe("Go gin routes", () => {
 
   it("lists a registration with a computed path as dynamic", () => {
     const main = graph.nodes.find((node) => node.id === "file:main.go")!;
-    assert.deepEqual(JSON.parse(String(main.properties.dynamicRouteCalls)), [{ line: 46, expression: "r.GET", framework: "gin" }]);
+    assert.deepEqual(JSON.parse(String(main.properties.dynamicRouteCalls)), [{ line: 50, expression: "r.GET", framework: "gin" }]);
   });
 
   it("leaves no pending properties behind", () => {
@@ -186,8 +188,8 @@ describe("route MCP tools on Go", () => {
 
   it("list_routes, route_details and impact_of work on gin routes", async () => {
     const listed = await tool("list_routes", { framework: "gin" });
-    assert.equal(listed.routes.length, 9);
-    assert.deepEqual(listed.dynamicRouteCalls, [{ file: "main.go", line: 46, expression: "r.GET", framework: "gin" }]);
+    assert.equal(listed.routes.length, 10);
+    assert.deepEqual(listed.dynamicRouteCalls, [{ file: "main.go", line: 50, expression: "r.GET", framework: "gin" }]);
 
     const details = await tool("route_details", { method: "post", path: "/api/v1/users/" });
     assert.equal(details.routes.length, 1);

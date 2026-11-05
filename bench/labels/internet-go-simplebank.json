@@ -1,0 +1,1472 @@
+{
+  "sample": "internet-go-simplebank",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json, doc/** excluded: the generated statik bundle), not from Concentrate output. A gin API (api/), a gRPC server with a grpc-gateway HTTP mux (gapi/, main.go), sqlc queries on pgx (db/sqlc/) and an asynq worker; the Vue frontend/ is not labeled. Routes: the seven routes api/server.go registers (four on router.Group(\"/\").Use(authMiddleware(...)), which gin returns with the middleware) and the two net/http mounts runGatewayServer makes; the grpc-gateway patterns in the generated pb/*.pb.gw.go are not routes Concentrate is labeled for. Calls: every call site in the files listed whose callee is a function or method of this repository (generated pb getters and registration functions included), with the functions it runs; calls into gin, pgx, asynq, zerolog, grpc, gomock and the standard library, and calls of function values (fn, arg.AfterCreate, stop) are not labeled. A call on an interface is labeled with every type in the repository whose method set has the method with the same signature: db.Store with the sqlc Queries method SQLStore promotes (or SQLStore's own transaction method) and the gomock MockStore; worker.TaskDistributor with RedisTaskDistributor and the mock; token.Maker with JWTMaker and PasetoMaker; worker.TaskProcessor and mail.EmailSender have one implementer. q in the closures execTx is passed is a *Queries. Data access: each sqlc query method in db/sqlc/*.sql.go, by the table its SQL names (sqlc models are tables). Env: viper.Unmarshal in util.LoadConfig fills Config, whose mapstructure keys viper's AutomaticEnv reads from the environment.",
+  "routes": {
+    "scope": [
+      "main.go",
+      "api/"
+    ],
+    "items": [
+      {
+        "method": "POST",
+        "path": "/users",
+        "file": "api/server.go",
+        "line": 46
+      },
+      {
+        "method": "POST",
+        "path": "/users/login",
+        "file": "api/server.go",
+        "line": 47
+      },
+      {
+        "method": "POST",
+        "path": "/tokens/renew_access",
+        "file": "api/server.go",
+        "line": 48
+      },
+      {
+        "method": "POST",
+        "path": "/accounts",
+        "file": "api/server.go",
+        "line": 51
+      },
+      {
+        "method": "GET",
+        "path": "/accounts/:id",
+        "file": "api/server.go",
+        "line": 52
+      },
+      {
+        "method": "GET",
+        "path": "/accounts",
+        "file": "api/server.go",
+        "line": 53
+      },
+      {
+        "method": "POST",
+        "path": "/transfers",
+        "file": "api/server.go",
+        "line": 55
+      },
+      {
+        "method": "ALL",
+        "path": "/",
+        "file": "main.go",
+        "line": 199
+      },
+      {
+        "method": "ALL",
+        "path": "/swagger/",
+        "file": "main.go",
+        "line": 207
+      }
+    ]
+  },
+  "calls": {
+    "files": [
+      "main.go",
+      "api/server.go",
+      "api/account.go",
+      "api/transfer.go",
+      "api/middleware.go",
+      "db/sqlc/store.go",
+      "db/sqlc/exec_tx.go",
+      "db/sqlc/tx_create_user.go",
+      "db/sqlc/tx_transfer.go",
+      "gapi/rpc_create_user.go",
+      "gapi/rpc_update_user.go",
+      "worker/task_send_verify_email.go"
+    ],
+    "items": [
+      {
+        "file": "main.go",
+        "line": 43,
+        "callee": "LoadConfig",
+        "target": {
+          "file": "util/config.go",
+          "name": "LoadConfig"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 60,
+        "callee": "runDBMigration",
+        "target": {
+          "file": "main.go",
+          "name": "runDBMigration"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 62,
+        "callee": "NewStore",
+        "target": {
+          "file": "db/sqlc/store.go",
+          "name": "NewStore"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 68,
+        "callee": "NewRedisTaskDistributor",
+        "target": {
+          "file": "worker/distributor.go",
+          "name": "NewRedisTaskDistributor"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 72,
+        "callee": "runTaskProcessor",
+        "target": {
+          "file": "main.go",
+          "name": "runTaskProcessor"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 73,
+        "callee": "runGatewayServer",
+        "target": {
+          "file": "main.go",
+          "name": "runGatewayServer"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 74,
+        "callee": "runGrpcServer",
+        "target": {
+          "file": "main.go",
+          "name": "runGrpcServer"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 102,
+        "callee": "NewGmailSender",
+        "target": {
+          "file": "mail/sender.go",
+          "name": "NewGmailSender"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 103,
+        "callee": "NewRedisTaskProcessor",
+        "target": {
+          "file": "worker/processor.go",
+          "name": "NewRedisTaskProcessor"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 106,
+        "callee": "Start",
+        "target": {
+          "file": "worker/processor.go",
+          "name": "Start",
+          "className": "RedisTaskProcessor"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 115,
+        "callee": "Shutdown",
+        "target": {
+          "file": "worker/processor.go",
+          "name": "Shutdown",
+          "className": "RedisTaskProcessor"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 129,
+        "callee": "NewServer",
+        "target": {
+          "file": "gapi/server.go",
+          "name": "NewServer"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 136,
+        "callee": "RegisterSimpleBankServer",
+        "target": {
+          "file": "pb/service_simple_bank_grpc.pb.go",
+          "name": "RegisterSimpleBankServer"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 177,
+        "callee": "NewServer",
+        "target": {
+          "file": "gapi/server.go",
+          "name": "NewServer"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 193,
+        "callee": "RegisterSimpleBankHandlerServer",
+        "target": {
+          "file": "pb/service_simple_bank.pb.gw.go",
+          "name": "RegisterSimpleBankHandlerServer"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 226,
+        "callee": "HttpLogger",
+        "target": {
+          "file": "gapi/logger.go",
+          "name": "HttpLogger"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 262,
+        "callee": "NewServer",
+        "target": {
+          "file": "api/server.go",
+          "name": "NewServer"
+        }
+      },
+      {
+        "file": "main.go",
+        "line": 267,
+        "callee": "Start",
+        "target": {
+          "file": "api/server.go",
+          "name": "Start",
+          "className": "Server"
+        }
+      },
+      {
+        "file": "api/server.go",
+        "line": 24,
+        "callee": "NewPasetoMaker",
+        "target": {
+          "file": "token/paseto_maker.go",
+          "name": "NewPasetoMaker"
+        }
+      },
+      {
+        "file": "api/server.go",
+        "line": 39,
+        "callee": "setupRouter",
+        "target": {
+          "file": "api/server.go",
+          "name": "setupRouter",
+          "className": "Server"
+        }
+      },
+      {
+        "file": "api/server.go",
+        "line": 50,
+        "callee": "authMiddleware",
+        "target": {
+          "file": "api/middleware.go",
+          "name": "authMiddleware"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 19,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 34,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 37,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 51,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 58,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 62,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 69,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 84,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 97,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 30,
+        "callee": "CreateAccount",
+        "target": null,
+        "targets": [
+          {
+            "file": "db/sqlc/account.sql.go",
+            "name": "CreateAccount",
+            "className": "Queries"
+          },
+          {
+            "file": "db/mock/store.go",
+            "name": "CreateAccount",
+            "className": "MockStore"
+          }
+        ]
+      },
+      {
+        "file": "api/account.go",
+        "line": 32,
+        "callee": "ErrorCode",
+        "target": {
+          "file": "db/sqlc/error.go",
+          "name": "ErrorCode"
+        }
+      },
+      {
+        "file": "api/account.go",
+        "line": 55,
+        "callee": "GetAccount",
+        "target": null,
+        "targets": [
+          {
+            "file": "db/sqlc/account.sql.go",
+            "name": "GetAccount",
+            "className": "Queries"
+          },
+          {
+            "file": "db/mock/store.go",
+            "name": "GetAccount",
+            "className": "MockStore"
+          }
+        ]
+      },
+      {
+        "file": "api/account.go",
+        "line": 95,
+        "callee": "ListAccounts",
+        "target": null,
+        "targets": [
+          {
+            "file": "db/sqlc/account.sql.go",
+            "name": "ListAccounts",
+            "className": "Queries"
+          },
+          {
+            "file": "db/mock/store.go",
+            "name": "ListAccounts",
+            "className": "MockStore"
+          }
+        ]
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 23,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 35,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 52,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 63,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 67,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 73,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 27,
+        "callee": "validAccount",
+        "target": {
+          "file": "api/transfer.go",
+          "name": "validAccount",
+          "className": "Server"
+        }
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 39,
+        "callee": "validAccount",
+        "target": {
+          "file": "api/transfer.go",
+          "name": "validAccount",
+          "className": "Server"
+        }
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 50,
+        "callee": "TransferTx",
+        "target": null,
+        "targets": [
+          {
+            "file": "db/sqlc/tx_transfer.go",
+            "name": "TransferTx",
+            "className": "SQLStore"
+          },
+          {
+            "file": "db/mock/store.go",
+            "name": "TransferTx",
+            "className": "MockStore"
+          }
+        ]
+      },
+      {
+        "file": "api/transfer.go",
+        "line": 60,
+        "callee": "GetAccount",
+        "target": null,
+        "targets": [
+          {
+            "file": "db/sqlc/account.sql.go",
+            "name": "GetAccount",
+            "className": "Queries"
+          },
+          {
+            "file": "db/mock/store.go",
+            "name": "GetAccount",
+            "className": "MockStore"
+          }
+        ]
+      },
+      {
+        "file": "api/middleware.go",
+        "line": 26,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/middleware.go",
+        "line": 33,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/middleware.go",
+        "line": 40,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/middleware.go",
+        "line": 47,
+        "callee": "errorResponse",
+        "target": {
+          "file": "api/server.go",
+          "name": "errorResponse"
+        }
+      },
+      {
+        "file": "api/middleware.go",
+        "line": 45,
+        "callee": "VerifyToken",
+        "target": null,
+        "targets": [
+          {
+            "file": "token/jwt_maker.go",
+            "name": "VerifyToken",
+            "className": "JWTMaker"
+          },
+          {
+            "file": "token/paseto_maker.go",
+            "name": "VerifyToken",
+            "className": "PasetoMaker"
+          }
+        ]
+      },
+      {
+        "file": "db/sqlc/store.go",
+        "line": 27,
+        "callee": "New",
+        "target": {
+          "file": "db/sqlc/db.go",
+          "name": "New"
+        }
+      },
+      {
+        "file": "db/sqlc/exec_tx.go",
+        "line": 15,
+        "callee": "New",
+        "target": {
+          "file": "db/sqlc/db.go",
+          "name": "New"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_create_user.go",
+        "line": 17,
+        "callee": "execTx",
+        "target": {
+          "file": "db/sqlc/exec_tx.go",
+          "name": "execTx",
+          "className": "SQLStore"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_create_user.go",
+        "line": 20,
+        "callee": "CreateUser",
+        "target": {
+          "file": "db/sqlc/user.sql.go",
+          "name": "CreateUser",
+          "className": "Queries"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_transfer.go",
+        "line": 26,
+        "callee": "execTx",
+        "target": {
+          "file": "db/sqlc/exec_tx.go",
+          "name": "execTx",
+          "className": "SQLStore"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_transfer.go",
+        "line": 29,
+        "callee": "CreateTransfer",
+        "target": {
+          "file": "db/sqlc/transfer.sql.go",
+          "name": "CreateTransfer",
+          "className": "Queries"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_transfer.go",
+        "line": 38,
+        "callee": "CreateEntry",
+        "target": {
+          "file": "db/sqlc/entry.sql.go",
+          "name": "CreateEntry",
+          "className": "Queries"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_transfer.go",
+        "line": 46,
+        "callee": "CreateEntry",
+        "target": {
+          "file": "db/sqlc/entry.sql.go",
+          "name": "CreateEntry",
+          "className": "Queries"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_transfer.go",
+        "line": 55,
+        "callee": "addMoney",
+        "target": {
+          "file": "db/sqlc/tx_transfer.go",
+          "name": "addMoney"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_transfer.go",
+        "line": 57,
+        "callee": "addMoney",
+        "target": {
+          "file": "db/sqlc/tx_transfer.go",
+          "name": "addMoney"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_transfer.go",
+        "line": 74,
+        "callee": "AddAccountBalance",
+        "target": {
+          "file": "db/sqlc/account.sql.go",
+          "name": "AddAccountBalance",
+          "className": "Queries"
+        }
+      },
+      {
+        "file": "db/sqlc/tx_transfer.go",
+        "line": 82,
+        "callee": "AddAccountBalance",
+        "target": {
+          "file": "db/sqlc/account.sql.go",
+          "name": "AddAccountBalance",
+          "className": "Queries"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 19,
+        "callee": "validateCreateUserRequest",
+        "target": {
+          "file": "gapi/rpc_create_user.go",
+          "name": "validateCreateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 21,
+        "callee": "invalidArgumentError",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "invalidArgumentError"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 24,
+        "callee": "HashPassword",
+        "target": {
+          "file": "util/password.go",
+          "name": "HashPassword"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 24,
+        "callee": "GetPassword",
+        "target": {
+          "file": "pb/rpc_create_user.pb.go",
+          "name": "GetPassword",
+          "className": "CreateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 31,
+        "callee": "GetUsername",
+        "target": {
+          "file": "pb/rpc_create_user.pb.go",
+          "name": "GetUsername",
+          "className": "CreateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 33,
+        "callee": "GetFullName",
+        "target": {
+          "file": "pb/rpc_create_user.pb.go",
+          "name": "GetFullName",
+          "className": "CreateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 34,
+        "callee": "GetEmail",
+        "target": {
+          "file": "pb/rpc_create_user.pb.go",
+          "name": "GetEmail",
+          "className": "CreateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 46,
+        "callee": "DistributeTaskSendVerifyEmail",
+        "target": null,
+        "targets": [
+          {
+            "file": "worker/task_send_verify_email.go",
+            "name": "DistributeTaskSendVerifyEmail",
+            "className": "RedisTaskDistributor"
+          },
+          {
+            "file": "worker/mock/distributor.go",
+            "name": "DistributeTaskSendVerifyEmail",
+            "className": "MockTaskDistributor"
+          }
+        ]
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 50,
+        "callee": "CreateUserTx",
+        "target": null,
+        "targets": [
+          {
+            "file": "db/sqlc/tx_create_user.go",
+            "name": "CreateUserTx",
+            "className": "SQLStore"
+          },
+          {
+            "file": "db/mock/store.go",
+            "name": "CreateUserTx",
+            "className": "MockStore"
+          }
+        ]
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 52,
+        "callee": "ErrorCode",
+        "target": {
+          "file": "db/sqlc/error.go",
+          "name": "ErrorCode"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 59,
+        "callee": "convertUser",
+        "target": {
+          "file": "gapi/converter.go",
+          "name": "convertUser"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 65,
+        "callee": "ValidateUsername",
+        "target": {
+          "file": "val/validator.go",
+          "name": "ValidateUsername"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 65,
+        "callee": "GetUsername",
+        "target": {
+          "file": "pb/rpc_create_user.pb.go",
+          "name": "GetUsername",
+          "className": "CreateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 66,
+        "callee": "fieldViolation",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "fieldViolation"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 69,
+        "callee": "ValidatePassword",
+        "target": {
+          "file": "val/validator.go",
+          "name": "ValidatePassword"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 69,
+        "callee": "GetPassword",
+        "target": {
+          "file": "pb/rpc_create_user.pb.go",
+          "name": "GetPassword",
+          "className": "CreateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 70,
+        "callee": "fieldViolation",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "fieldViolation"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 73,
+        "callee": "ValidateFullName",
+        "target": {
+          "file": "val/validator.go",
+          "name": "ValidateFullName"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 73,
+        "callee": "GetFullName",
+        "target": {
+          "file": "pb/rpc_create_user.pb.go",
+          "name": "GetFullName",
+          "className": "CreateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 74,
+        "callee": "fieldViolation",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "fieldViolation"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 77,
+        "callee": "ValidateEmail",
+        "target": {
+          "file": "val/validator.go",
+          "name": "ValidateEmail"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 77,
+        "callee": "GetEmail",
+        "target": {
+          "file": "pb/rpc_create_user.pb.go",
+          "name": "GetEmail",
+          "className": "CreateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_create_user.go",
+        "line": 78,
+        "callee": "fieldViolation",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "fieldViolation"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 19,
+        "callee": "authorizeUser",
+        "target": {
+          "file": "gapi/authorization.go",
+          "name": "authorizeUser",
+          "className": "Server"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 21,
+        "callee": "unauthenticatedError",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "unauthenticatedError"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 24,
+        "callee": "validateUpdateUserRequest",
+        "target": {
+          "file": "gapi/rpc_update_user.go",
+          "name": "validateUpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 26,
+        "callee": "invalidArgumentError",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "invalidArgumentError"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 29,
+        "callee": "GetUsername",
+        "target": {
+          "file": "pb/rpc_update_user.pb.go",
+          "name": "GetUsername",
+          "className": "UpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 34,
+        "callee": "GetUsername",
+        "target": {
+          "file": "pb/rpc_update_user.pb.go",
+          "name": "GetUsername",
+          "className": "UpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 36,
+        "callee": "GetFullName",
+        "target": {
+          "file": "pb/rpc_update_user.pb.go",
+          "name": "GetFullName",
+          "className": "UpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 40,
+        "callee": "GetEmail",
+        "target": {
+          "file": "pb/rpc_update_user.pb.go",
+          "name": "GetEmail",
+          "className": "UpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 46,
+        "callee": "HashPassword",
+        "target": {
+          "file": "util/password.go",
+          "name": "HashPassword"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 46,
+        "callee": "GetPassword",
+        "target": {
+          "file": "pb/rpc_update_user.pb.go",
+          "name": "GetPassword",
+          "className": "UpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 62,
+        "callee": "UpdateUser",
+        "target": null,
+        "targets": [
+          {
+            "file": "db/sqlc/user.sql.go",
+            "name": "UpdateUser",
+            "className": "Queries"
+          },
+          {
+            "file": "db/mock/store.go",
+            "name": "UpdateUser",
+            "className": "MockStore"
+          }
+        ]
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 71,
+        "callee": "convertUser",
+        "target": {
+          "file": "gapi/converter.go",
+          "name": "convertUser"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 77,
+        "callee": "ValidateUsername",
+        "target": {
+          "file": "val/validator.go",
+          "name": "ValidateUsername"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 77,
+        "callee": "GetUsername",
+        "target": {
+          "file": "pb/rpc_update_user.pb.go",
+          "name": "GetUsername",
+          "className": "UpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 78,
+        "callee": "fieldViolation",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "fieldViolation"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 82,
+        "callee": "ValidatePassword",
+        "target": {
+          "file": "val/validator.go",
+          "name": "ValidatePassword"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 82,
+        "callee": "GetPassword",
+        "target": {
+          "file": "pb/rpc_update_user.pb.go",
+          "name": "GetPassword",
+          "className": "UpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 83,
+        "callee": "fieldViolation",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "fieldViolation"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 88,
+        "callee": "ValidateFullName",
+        "target": {
+          "file": "val/validator.go",
+          "name": "ValidateFullName"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 88,
+        "callee": "GetFullName",
+        "target": {
+          "file": "pb/rpc_update_user.pb.go",
+          "name": "GetFullName",
+          "className": "UpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 89,
+        "callee": "fieldViolation",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "fieldViolation"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 94,
+        "callee": "ValidateEmail",
+        "target": {
+          "file": "val/validator.go",
+          "name": "ValidateEmail"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 94,
+        "callee": "GetEmail",
+        "target": {
+          "file": "pb/rpc_update_user.pb.go",
+          "name": "GetEmail",
+          "className": "UpdateUserRequest"
+        }
+      },
+      {
+        "file": "gapi/rpc_update_user.go",
+        "line": 95,
+        "callee": "fieldViolation",
+        "target": {
+          "file": "gapi/error.go",
+          "name": "fieldViolation"
+        }
+      },
+      {
+        "file": "worker/task_send_verify_email.go",
+        "line": 47,
+        "callee": "GetUser",
+        "target": null,
+        "targets": [
+          {
+            "file": "db/sqlc/user.sql.go",
+            "name": "GetUser",
+            "className": "Queries"
+          },
+          {
+            "file": "db/mock/store.go",
+            "name": "GetUser",
+            "className": "MockStore"
+          }
+        ]
+      },
+      {
+        "file": "worker/task_send_verify_email.go",
+        "line": 52,
+        "callee": "CreateVerifyEmail",
+        "target": null,
+        "targets": [
+          {
+            "file": "db/sqlc/verify_email.sql.go",
+            "name": "CreateVerifyEmail",
+            "className": "Queries"
+          },
+          {
+            "file": "db/mock/store.go",
+            "name": "CreateVerifyEmail",
+            "className": "MockStore"
+          }
+        ]
+      },
+      {
+        "file": "worker/task_send_verify_email.go",
+        "line": 55,
+        "callee": "RandomString",
+        "target": {
+          "file": "util/random.go",
+          "name": "RandomString"
+        }
+      },
+      {
+        "file": "worker/task_send_verify_email.go",
+        "line": 71,
+        "callee": "SendEmail",
+        "target": {
+          "file": "mail/sender.go",
+          "name": "SendEmail",
+          "className": "GmailSender"
+        }
+      }
+    ]
+  },
+  "dataAccess": {
+    "scope": [
+      "main.go",
+      "api/",
+      "db/",
+      "gapi/",
+      "mail/",
+      "token/",
+      "util/",
+      "val/",
+      "worker/"
+    ],
+    "items": [
+      {
+        "file": "db/sqlc/account.sql.go",
+        "function": "AddAccountBalance",
+        "model": "accounts",
+        "operation": "update",
+        "table": "accounts"
+      },
+      {
+        "file": "db/sqlc/account.sql.go",
+        "function": "CreateAccount",
+        "model": "accounts",
+        "operation": "create",
+        "table": "accounts"
+      },
+      {
+        "file": "db/sqlc/account.sql.go",
+        "function": "DeleteAccount",
+        "model": "accounts",
+        "operation": "delete",
+        "table": "accounts"
+      },
+      {
+        "file": "db/sqlc/account.sql.go",
+        "function": "GetAccount",
+        "model": "accounts",
+        "operation": "read",
+        "table": "accounts"
+      },
+      {
+        "file": "db/sqlc/account.sql.go",
+        "function": "GetAccountForUpdate",
+        "model": "accounts",
+        "operation": "read",
+        "table": "accounts"
+      },
+      {
+        "file": "db/sqlc/account.sql.go",
+        "function": "ListAccounts",
+        "model": "accounts",
+        "operation": "read",
+        "table": "accounts"
+      },
+      {
+        "file": "db/sqlc/account.sql.go",
+        "function": "UpdateAccount",
+        "model": "accounts",
+        "operation": "update",
+        "table": "accounts"
+      },
+      {
+        "file": "db/sqlc/entry.sql.go",
+        "function": "CreateEntry",
+        "model": "entries",
+        "operation": "create",
+        "table": "entries"
+      },
+      {
+        "file": "db/sqlc/entry.sql.go",
+        "function": "GetEntry",
+        "model": "entries",
+        "operation": "read",
+        "table": "entries"
+      },
+      {
+        "file": "db/sqlc/entry.sql.go",
+        "function": "ListEntries",
+        "model": "entries",
+        "operation": "read",
+        "table": "entries"
+      },
+      {
+        "file": "db/sqlc/session.sql.go",
+        "function": "CreateSession",
+        "model": "sessions",
+        "operation": "create",
+        "table": "sessions"
+      },
+      {
+        "file": "db/sqlc/session.sql.go",
+        "function": "GetSession",
+        "model": "sessions",
+        "operation": "read",
+        "table": "sessions"
+      },
+      {
+        "file": "db/sqlc/transfer.sql.go",
+        "function": "CreateTransfer",
+        "model": "transfers",
+        "operation": "create",
+        "table": "transfers"
+      },
+      {
+        "file": "db/sqlc/transfer.sql.go",
+        "function": "GetTransfer",
+        "model": "transfers",
+        "operation": "read",
+        "table": "transfers"
+      },
+      {
+        "file": "db/sqlc/transfer.sql.go",
+        "function": "ListTransfers",
+        "model": "transfers",
+        "operation": "read",
+        "table": "transfers"
+      },
+      {
+        "file": "db/sqlc/user.sql.go",
+        "function": "CreateUser",
+        "model": "users",
+        "operation": "create",
+        "table": "users"
+      },
+      {
+        "file": "db/sqlc/user.sql.go",
+        "function": "GetUser",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "db/sqlc/user.sql.go",
+        "function": "UpdateUser",
+        "model": "users",
+        "operation": "update",
+        "table": "users"
+      },
+      {
+        "file": "db/sqlc/verify_email.sql.go",
+        "function": "CreateVerifyEmail",
+        "model": "verify_emails",
+        "operation": "create",
+        "table": "verify_emails"
+      },
+      {
+        "file": "db/sqlc/verify_email.sql.go",
+        "function": "UpdateVerifyEmail",
+        "model": "verify_emails",
+        "operation": "update",
+        "table": "verify_emails"
+      }
+    ]
+  },
+  "env": {
+    "scope": [
+      "main.go",
+      "api/",
+      "db/",
+      "gapi/",
+      "mail/",
+      "token/",
+      "util/",
+      "val/",
+      "worker/"
+    ],
+    "items": [
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "ENVIRONMENT",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "ALLOWED_ORIGINS",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "DB_SOURCE",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "MIGRATION_URL",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "REDIS_ADDRESS",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "HTTP_SERVER_ADDRESS",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "GRPC_SERVER_ADDRESS",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "TOKEN_SYMMETRIC_KEY",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "ACCESS_TOKEN_DURATION",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "REFRESH_TOKEN_DURATION",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "EMAIL_SENDER_NAME",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "EMAIL_SENDER_ADDRESS",
+        "function": "LoadConfig"
+      },
+      {
+        "file": "util/config.go",
+        "line": 40,
+        "name": "EMAIL_SENDER_PASSWORD",
+        "function": "LoadConfig"
+      }
+    ]
+  }
+}

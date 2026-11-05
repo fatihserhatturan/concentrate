@@ -45,6 +45,9 @@ describe("Go env and config", () => {
       ["GET /health", "RELEASE", 13, "os.Getenv"],
       ["GET /region", "REGION", 20, "os.Getenv"],
       ["init", "REDIS_ADDR", 13, "viper.BindEnv"],
+      // viper.Unmarshal: the struct's mapstructure keys, else field names ("-" skipped).
+      ["Load", "APP_PORT", 28, "viper.Unmarshal"],
+      ["Load", "APP_TIMEOUT", 28, "viper.Unmarshal"],
       // caarlos0/env: the function that parses the struct; envPrefix on the nested struct.
       ["Load", "DATABASE_MAX_CONNS", 7, "env struct tag"],
       ["Load", "DATABASE_URL", 6, "env struct tag"],

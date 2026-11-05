@@ -158,6 +158,30 @@ describe("accuracy comparator: calls", () => {
     ]));
     assert.deepEqual([score.tp, score.fp, score.fn], [1, 0, 0]);
   });
+
+  it("scores each target of a call that dispatches to several (interface implementers)", () => {
+    const graph = callGraph([
+      { file: "a.go", line: 1, callee: "Find", target: { file: "mysql.go", name: "Find", className: "Repo" } },
+      { file: "b.ts", line: 1, callee: "unused", target: { file: "mock.go", name: "Find", className: "MockRepo" } },
+      { file: "b.ts", line: 2, callee: "unused", target: { file: "other.go", name: "Find", className: "Other" } },
+    ]);
+    graph.nodes.push(...files("a.go", "mysql.go", "mock.go", "other.go", "pg.go"));
+    const call = graph.nodes.find((entry) => entry.label === "Call" && entry.properties.callee === "Find")!;
+    for (const target of graph.nodes.filter((entry) => entry.label === "Function" && entry.properties.className !== "Repo")) {
+      graph.relationships.push(rel(call.id, "CALL_RESOLVES_TO", target.id));
+    }
+    const score = compareCalls(graph, { files: ["a.go"], items: [{
+      file: "a.go", line: 1, callee: "Find", target: null,
+      targets: [
+        { file: "mysql.go", name: "Find", className: "Repo" },
+        { file: "mock.go", name: "Find", className: "MockRepo" },
+        { file: "pg.go", name: "Find", className: "PgRepo" },
+      ],
+    }] });
+    assert.equal(score.tp, 2);
+    assert.deepEqual(score.falsePositives, ["a.go:1 Find -> other.go Other.Find"]);
+    assert.deepEqual(score.falseNegatives, ["a.go:1 Find -> pg.go PgRepo.Find"]);
+  });
 });
 
 describe("accuracy comparator: data access", () => {

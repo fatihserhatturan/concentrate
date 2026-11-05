@@ -123,9 +123,10 @@ describe("Go database/sql and sqlx data access", () => {
     graph = await buildCodeGraph(path.resolve("fixtures/go-sql"), { continueOnError: false });
   });
 
-  it("reads the tables of literal SQL, constants included, and skips dynamic SQL", () => {
+  it("reads the tables of literal SQL, constants, locals and SQL a helper is passed, and skips dynamic SQL", () => {
     assert.deepEqual(accesses(graph), [
       "Add create orders sqlx",
+      "ByID read products database/sql",
       "Find read users database/sql",
       "ForUser read orders sqlx",
       "ForUser read users sqlx",
@@ -133,6 +134,7 @@ describe("Go database/sql and sqlx data access", () => {
       "Purge read users database/sql",
       "Rename update users database/sql",
       "Rename upsert audit database/sql",
+      "Store create products database/sql",
       "main read orders database/sql",
     ]);
   });
@@ -147,6 +149,7 @@ describe("Go database/sql and sqlx data access", () => {
     assert.deepEqual(sqlTableAccesses("UPDATE public.users SET name = 'from x' WHERE id IN (SELECT user_id FROM bans)"), [
       { table: "users", operation: "update" }, { table: "bans", operation: "read" },
     ]);
+    assert.deepEqual(sqlTableAccesses("INSERT IGNORE article SET title = ?"), [{ table: "article", operation: "create" }]);
     assert.deepEqual(sqlTableAccesses("CREATE TABLE t (id int)"), []);
   });
 

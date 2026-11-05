@@ -4,6 +4,8 @@
 {"kind":"node","id":"dir:server","label":"Directory","properties":{"name":"server","path":"<root>/server","relativePath":"server"}}
 {"kind":"node","id":"env:APP_LOG_LEVEL","label":"EnvVar","properties":{"name":"APP_LOG_LEVEL"}}
 {"kind":"node","id":"env:APP_MODE","label":"EnvVar","properties":{"name":"APP_MODE"}}
+{"kind":"node","id":"env:APP_PORT","label":"EnvVar","properties":{"name":"APP_PORT"}}
+{"kind":"node","id":"env:APP_TIMEOUT","label":"EnvVar","properties":{"name":"APP_TIMEOUT"}}
 {"kind":"node","id":"env:DATABASE_MAX_CONNS","label":"EnvVar","properties":{"name":"DATABASE_MAX_CONNS"}}
 {"kind":"node","id":"env:DATABASE_URL","label":"EnvVar","properties":{"name":"DATABASE_URL"}}
 {"kind":"node","id":"env:DB_HOST","label":"EnvVar","properties":{"name":"DB_HOST"}}
@@ -30,9 +32,12 @@
 {"kind":"node","id":"file:config/spec.go:function:17:LoadSpec:call:19:8:envconfig.Process","label":"Call","properties":{"callee":"Process","columnNumber":8,"expression":"envconfig.Process","line":19,"name":"envconfig.Process","receiver":"envconfig"}}
 {"kind":"node","id":"file:config/spec.go:import:3:github.com/kelseyhightower/envconfig","label":"Import","properties":{"line":3,"source":"github.com/kelseyhightower/envconfig","specifier":"\"github.com/kelseyhightower/envconfig\""}}
 {"kind":"node","id":"file:config/viper.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"config","path":"<root>/config/viper.go","relativePath":"config/viper.go","sourceType":"production"}}
+{"kind":"node","id":"file:config/viper.go:class:21:Settings","label":"Class","properties":{"endLine":25,"fields":"[{\"name\":\"Port\",\"type\":\"int\"},{\"name\":\"Timeout\",\"type\":\"string\"},{\"name\":\"Ignored\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":21,"name":"Settings","visibility":"exported"}}
 {"kind":"node","id":"file:config/viper.go:entrypoint:9:0:init:<none>","label":"EntryPoint","properties":{"handlerName":"init","kind":"init","library":"go","line":9,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:config/viper.go:function:16:LogLevel","label":"Function","properties":{"className":null,"endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":16,"methodKind":null,"name":"LogLevel","parameters":"[]","returnType":"string","visibility":"exported"}}
 {"kind":"node","id":"file:config/viper.go:function:16:LogLevel:call:17:8:viper.GetString","label":"Call","properties":{"callee":"GetString","columnNumber":8,"expression":"viper.GetString","line":17,"name":"viper.GetString","receiver":"viper"}}
+{"kind":"node","id":"file:config/viper.go:function:27:Load","label":"Function","properties":{"className":null,"endLine":30,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":27,"methodKind":null,"name":"Load","parameters":"[]","returnType":"(settings Settings, err error)","visibility":"exported"}}
+{"kind":"node","id":"file:config/viper.go:function:27:Load:call:28:7:viper.Unmarshal","label":"Call","properties":{"callee":"Unmarshal","columnNumber":7,"expression":"viper.Unmarshal","line":28,"name":"viper.Unmarshal","receiver":"viper"}}
 {"kind":"node","id":"file:config/viper.go:function:9:init","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":9,"methodKind":null,"name":"init","parameters":"[]","returnType":null,"visibility":"unexported"}}
 {"kind":"node","id":"file:config/viper.go:function:9:init:call:10:1:viper.SetEnvPrefix","label":"Call","properties":{"callee":"SetEnvPrefix","columnNumber":1,"expression":"viper.SetEnvPrefix","line":10,"name":"viper.SetEnvPrefix","receiver":"viper"}}
 {"kind":"node","id":"file:config/viper.go:function:9:init:call:11:1:viper.SetEnvKeyReplacer","label":"Call","properties":{"callee":"SetEnvKeyReplacer","columnNumber":1,"expression":"viper.SetEnvKeyReplacer","line":11,"name":"viper.SetEnvKeyReplacer","receiver":"viper"}}
@@ -62,7 +67,7 @@
 {"kind":"node","id":"file:server/server.go:function:10:Run:call:11:6:gin.Default","label":"Call","properties":{"callee":"Default","columnNumber":6,"expression":"gin.Default","line":11,"name":"gin.Default","receiver":"gin"}}
 {"kind":"node","id":"file:server/server.go:function:10:Run:call:12:1:r.GET","label":"Call","properties":{"callee":"GET","columnNumber":1,"expression":"r.GET","line":12,"name":"r.GET","receiver":"r","receiverConstructor":"gin.Default"}}
 {"kind":"node","id":"file:server/server.go:function:10:Run:call:13:16:os.Getenv","label":"Call","properties":{"callee":"Getenv","columnNumber":16,"expression":"os.Getenv","line":13,"name":"os.Getenv","receiver":"os"}}
-{"kind":"node","id":"file:server/server.go:function:10:Run:call:13:2:c.String","label":"Call","properties":{"callee":"String","columnNumber":2,"expression":"c.String","line":13,"name":"c.String","receiver":"c"}}
+{"kind":"node","id":"file:server/server.go:function:10:Run:call:13:2:c.String","label":"Call","properties":{"callee":"String","columnNumber":2,"expression":"c.String","line":13,"name":"c.String","receiver":"c","receiverType":"*gin.Context"}}
 {"kind":"node","id":"file:server/server.go:function:10:Run:call:15:1:r.GET","label":"Call","properties":{"callee":"GET","columnNumber":1,"expression":"r.GET","line":15,"name":"r.GET","receiver":"r","receiverConstructor":"gin.Default"}}
 {"kind":"node","id":"file:server/server.go:function:10:Run:call:16:1:r.Run","label":"Call","properties":{"callee":"Run","columnNumber":1,"expression":"r.Run","line":16,"name":"r.Run","receiver":"r","receiverConstructor":"gin.Default"}}
 {"kind":"node","id":"file:server/server.go:function:12:<r.GET:/health:arg1>","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"func_literal","line":12,"methodKind":null,"name":"<r.GET:/health:arg1>","parameters":"[{\"name\":\"c\",\"type\":\"*gin.Context\"}]","returnType":null,"visibility":"unexported"}}
@@ -105,15 +110,22 @@
 {"kind":"rel","from":"file:config/spec.go:function:17:LoadSpec","type":"USES_ENV","to":"env:WORKER_MAX_WORKERS","properties":{"access":"envconfig","line":10}}
 {"kind":"rel","from":"file:config/spec.go:function:17:LoadSpec","type":"USES_ENV","to":"env:WORKER_QUEUE","properties":{"access":"envconfig","line":11}}
 {"kind":"rel","from":"file:config/viper.go","type":"DECLARES_ENTRYPOINT","to":"file:config/viper.go:entrypoint:9:0:init:<none>","properties":{}}
+{"kind":"rel","from":"file:config/viper.go","type":"DEFINES_CLASS","to":"file:config/viper.go:class:21:Settings","properties":{}}
 {"kind":"rel","from":"file:config/viper.go","type":"DEFINES_FUNCTION","to":"file:config/viper.go:function:16:LogLevel","properties":{}}
+{"kind":"rel","from":"file:config/viper.go","type":"DEFINES_FUNCTION","to":"file:config/viper.go:function:27:Load","properties":{}}
 {"kind":"rel","from":"file:config/viper.go","type":"DEFINES_FUNCTION","to":"file:config/viper.go:function:9:init","properties":{}}
 {"kind":"rel","from":"file:config/viper.go","type":"IMPORTS","to":"file:config/viper.go:import:4:strings","properties":{}}
 {"kind":"rel","from":"file:config/viper.go","type":"IMPORTS","to":"file:config/viper.go:import:6:github.com/spf13/viper","properties":{}}
 {"kind":"rel","from":"file:config/viper.go","type":"USES_ENV","to":"env:APP_LOG_LEVEL","properties":{"access":"viper.GetString","line":17}}
+{"kind":"rel","from":"file:config/viper.go","type":"USES_ENV","to":"env:APP_PORT","properties":{"access":"viper.Unmarshal","line":28}}
+{"kind":"rel","from":"file:config/viper.go","type":"USES_ENV","to":"env:APP_TIMEOUT","properties":{"access":"viper.Unmarshal","line":28}}
 {"kind":"rel","from":"file:config/viper.go","type":"USES_ENV","to":"env:REDIS_ADDR","properties":{"access":"viper.BindEnv","line":13}}
 {"kind":"rel","from":"file:config/viper.go:entrypoint:9:0:init:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:config/viper.go:function:9:init","properties":{}}
 {"kind":"rel","from":"file:config/viper.go:function:16:LogLevel","type":"CALLS","to":"file:config/viper.go:function:16:LogLevel:call:17:8:viper.GetString","properties":{}}
 {"kind":"rel","from":"file:config/viper.go:function:16:LogLevel","type":"USES_ENV","to":"env:APP_LOG_LEVEL","properties":{"access":"viper.GetString","line":17}}
+{"kind":"rel","from":"file:config/viper.go:function:27:Load","type":"CALLS","to":"file:config/viper.go:function:27:Load:call:28:7:viper.Unmarshal","properties":{}}
+{"kind":"rel","from":"file:config/viper.go:function:27:Load","type":"USES_ENV","to":"env:APP_PORT","properties":{"access":"viper.Unmarshal","line":28}}
+{"kind":"rel","from":"file:config/viper.go:function:27:Load","type":"USES_ENV","to":"env:APP_TIMEOUT","properties":{"access":"viper.Unmarshal","line":28}}
 {"kind":"rel","from":"file:config/viper.go:function:9:init","type":"CALLS","to":"file:config/viper.go:function:9:init:call:10:1:viper.SetEnvPrefix","properties":{}}
 {"kind":"rel","from":"file:config/viper.go:function:9:init","type":"CALLS","to":"file:config/viper.go:function:9:init:call:11:1:viper.SetEnvKeyReplacer","properties":{}}
 {"kind":"rel","from":"file:config/viper.go:function:9:init","type":"CALLS","to":"file:config/viper.go:function:9:init:call:11:25:strings.NewReplacer","properties":{}}

@@ -39,6 +39,10 @@ func main() {
 		ping(c)
 	})
 
+	// gin's Use returns the group with the middleware.
+	admin := r.Group("/admin").Use(auth.Required(true))
+	admin.GET("/stats", ping)
+
 	r.Run(":8080")
 }
 

@@ -80,7 +80,7 @@
 {"kind":"node","id":"file:store/store.go:function:16:All","label":"Function","properties":{"className":"memory","endLine":16,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":16,"methodKind":null,"name":"All","parameters":"[]","returnType":"[]model.Item","visibility":"exported"}}
 {"kind":"node","id":"file:store/store.go:function:17:Default","label":"Function","properties":{"className":"memory","endLine":17,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":17,"methodKind":null,"name":"Default","parameters":"[]","returnType":"*model.Item","visibility":"exported"}}
 {"kind":"node","id":"file:store/store.go:import:3:example.com/split/model","label":"Import","properties":{"line":3,"source":"example.com/split/model","specifier":"\"example.com/split/model\""}}
-{"kind":"node","id":"file:store/store.go:interface:5:Items","label":"Interface","properties":{"embeds":"[]","endLine":9,"isExported":true,"line":5,"methods":"[\"Find\",\"All\",\"Default\"]","name":"Items"}}
+{"kind":"node","id":"file:store/store.go:interface:5:Items","label":"Interface","properties":{"embeds":"[]","endLine":9,"isExported":true,"line":5,"methodSignatures":"{\"Find\":{\"parameters\":[\"string\"],\"returnType\":\"(*model.Item, error)\"},\"All\":{\"parameters\":[],\"returnType\":\"[]model.Item\"},\"Default\":{\"parameters\":[],\"returnType\":\"*model.Item\"}}","methods":"[\"Find\",\"All\",\"Default\"]","name":"Items"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-split-router","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:api","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:client","properties":{}}

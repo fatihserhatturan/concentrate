@@ -305,6 +305,10 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
         const own = args.slice(1).map((arg, index) => handlerRef(arg, "router", `<${callee.text}:${prefix ?? "?"}:arg${index + 1}>`));
         return child(receiver, prefix, own);
       }
+      // gin's `r.Group("/").Use(mw)` returns the group with the middleware.
+      if (receiver.framework === "gin" && method === "Use") {
+        return child(receiver, "", args.map((arg, index) => handlerRef(arg, "router", `<${callee.text}:arg${index}>`)));
+      }
       // `r.With(mw).Get(…)`.
       if (receiver.framework === "chi" && method === "With") {
         return child(receiver, "", args.map((arg, index) => handlerRef(arg, "router", `<${callee.text}:arg${index}>`)));

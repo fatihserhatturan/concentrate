@@ -10,7 +10,9 @@ export type RouteLabel = { method: string; path: string; file: string; line: num
 export type CallTarget = { file: string; name: string; className?: string } | null;
 // dynamic: the target is only known at runtime (a generated method, a
 // framework-set prototype); the call site is matched but not scored.
-export type CallLabel = { file: string; line: number; callee: string; target: CallTarget; dynamic?: true };
+// targets: every function a call dispatches to (a Go interface method has one
+// per implementer); each target is scored on its own, in place of `target`.
+export type CallLabel = { file: string; line: number; callee: string; target: CallTarget; targets?: Array<NonNullable<CallTarget>>; dynamic?: true };
 export type DataAccessLabel = { file: string; function: string; model: string; operation: string; table?: string };
 // An env variable read; function null for a read outside any function.
 export type EnvLabel = { file: string; line: number; name: string; function: string | null };
@@ -164,35 +166,32 @@ export function compareRoutes(graph: Graph, labels: NonNullable<Labels["routes"]
   };
 }
 
-export type FoundCall = { file: string; line: number; callee: string; target: CallTarget };
+export type FoundCall = { file: string; line: number; callee: string; target: CallTarget; targets: Array<NonNullable<CallTarget>> };
 
 export function scanCalls(graph: Graph, files: readonly string[]): FoundCall[] {
   const paths = filePaths(graph);
   const wanted = new Set(files);
   const byId = new Map(graph.nodes.map((node) => [node.id, node]));
-  const targetOf = new Map<string, string>();
+  const targetsOf = new Map<string, string[]>();
   for (const rel of graph.relationships) {
-    if (rel.type === "CALL_RESOLVES_TO") targetOf.set(rel.from, rel.to);
+    if (rel.type === "CALL_RESOLVES_TO") targetsOf.set(rel.from, [...targetsOf.get(rel.from) ?? [], rel.to]);
   }
   return graph.nodes.flatMap((node) => {
     if (node.label !== "Call") return [];
     const file = fileOfNodeId(node.id, paths);
     if (!file || !wanted.has(file)) return [];
-    const targetId = targetOf.get(node.id);
-    const target = targetId ? byId.get(targetId) : undefined;
-    const targetFile = targetId ? fileOfNodeId(targetId, paths) : null;
-    return [{
-      file,
-      line: num(node.properties.line),
-      callee: String(node.properties.callee ?? node.properties.name),
-      target: target && targetFile
-        ? {
+    const targets = (targetsOf.get(node.id) ?? []).flatMap((targetId) => {
+      const target = byId.get(targetId);
+      const targetFile = fileOfNodeId(targetId, paths);
+      return target && targetFile
+        ? [{
           file: targetFile,
           name: String(target.properties.name),
           ...(typeof target.properties.className === "string" ? { className: target.properties.className } : {}),
-        }
-        : null,
-    }];
+        }]
+        : [];
+    });
+    return [{ file, line: num(node.properties.line), callee: String(node.properties.callee ?? node.properties.name), target: targets[0] ?? null, targets }];
   });
 }
 
@@ -224,16 +223,18 @@ export function compareCalls(graph: Graph, labels: NonNullable<Labels["calls"]>)
     const call = candidates.find((item) => item.line === label.line) ?? candidates[0];
     if (call) usedFound.add(call);
     if (label.dynamic) continue;
-    const target = call?.target ?? null;
-    if (label.target && sameTarget(label.target, target)) {
-      tp++;
-      continue;
+    const expected = label.targets ?? (label.target ? [label.target] : []);
+    const targets = call?.targets ?? [];
+    for (const target of expected) {
+      if (targets.some((item) => sameTarget(target, item))) tp++;
+      else falseNegatives.push(describe(label, target));
     }
-    if (target && !sameTarget(label.target, target)) falsePositives.push(describe(label, target));
-    if (label.target) falseNegatives.push(describe(label, label.target));
+    for (const target of targets) {
+      if (!expected.some((item) => sameTarget(item, target))) falsePositives.push(describe(label, target));
+    }
   }
   for (const call of found.filter((item) => !usedFound.has(item))) {
-    if (call.target) falsePositives.push(`${describe(call, call.target)} (call site not labeled)`);
+    for (const target of call.targets) falsePositives.push(`${describe(call, target)} (call site not labeled)`);
   }
   return score(tp, falsePositives, falseNegatives);
 }

@@ -1,6 +1,7 @@
-{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":4,"parsedFiles":4,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"datamodel:database/sql:audit","label":"DataModel","properties":{"library":"database/sql","name":"audit"}}
 {"kind":"node","id":"datamodel:database/sql:orders","label":"DataModel","properties":{"library":"database/sql","name":"orders"}}
+{"kind":"node","id":"datamodel:database/sql:products","label":"DataModel","properties":{"library":"database/sql","name":"products"}}
 {"kind":"node","id":"datamodel:database/sql:sessions","label":"DataModel","properties":{"library":"database/sql","name":"sessions"}}
 {"kind":"node","id":"datamodel:database/sql:users","label":"DataModel","properties":{"library":"database/sql","name":"users"}}
 {"kind":"node","id":"datamodel:sqlx:orders","label":"DataModel","properties":{"library":"sqlx","name":"orders"}}
@@ -35,6 +36,17 @@
 {"kind":"node","id":"file:repo/orders.go:function:37:Total","label":"Function","properties":{"className":"OrderRepo","endLine":42,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":37,"methodKind":null,"name":"Total","parameters":"[{\"name\":\"query\",\"type\":\"string\"}]","returnType":"(int, error)","visibility":"exported"}}
 {"kind":"node","id":"file:repo/orders.go:function:37:Total:call:40:8:r.DB.Get","label":"Call","properties":{"callee":"Get","columnNumber":8,"expression":"r.DB.Get","line":40,"name":"r.DB.Get","receiver":"r.DB","receiverType":"*OrderRepo"}}
 {"kind":"node","id":"file:repo/orders.go:import:3:github.com/jmoiron/sqlx","label":"Import","properties":{"line":3,"source":"github.com/jmoiron/sqlx","specifier":"\"github.com/jmoiron/sqlx\""}}
+{"kind":"node","id":"file:repo/products.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"repo","path":"<root>/repo/products.go","relativePath":"repo/products.go","sourceType":"production"}}
+{"kind":"node","id":"file:repo/products.go:class:8:ProductRepo","label":"Class","properties":{"endLine":10,"fields":"[{\"name\":\"Conn\",\"type\":\"*sql.DB\"}]","isAbstract":false,"isExported":true,"line":8,"name":"ProductRepo","visibility":"exported"}}
+{"kind":"node","id":"file:repo/products.go:function:13:fetch","label":"Function","properties":{"className":"ProductRepo","endLine":15,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"method_declaration","line":13,"methodKind":null,"name":"fetch","parameters":"[{\"name\":\"ctx\",\"type\":\"context.Context\"},{\"name\":\"query\",\"type\":\"string\"},{\"name\":\"args\",\"type\":\"...interface{}\"}]","returnType":"(*sql.Rows, error)","visibility":"unexported"}}
+{"kind":"node","id":"file:repo/products.go:function:13:fetch:call:14:8:r.Conn.QueryContext","label":"Call","properties":{"callee":"QueryContext","columnNumber":8,"expression":"r.Conn.QueryContext","line":14,"name":"r.Conn.QueryContext","receiver":"r.Conn","receiverType":"*ProductRepo"}}
+{"kind":"node","id":"file:repo/products.go:function:17:ByID","label":"Function","properties":{"className":"ProductRepo","endLine":20,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":17,"methodKind":null,"name":"ByID","parameters":"[{\"name\":\"ctx\",\"type\":\"context.Context\"},{\"name\":\"id\",\"type\":\"int\"}]","returnType":"(*sql.Rows, error)","visibility":"exported"}}
+{"kind":"node","id":"file:repo/products.go:function:17:ByID:call:19:8:r.fetch","label":"Call","properties":{"callee":"fetch","columnNumber":8,"expression":"r.fetch","line":19,"name":"r.fetch","receiver":"r","receiverType":"*ProductRepo"}}
+{"kind":"node","id":"file:repo/products.go:function:23:Store","label":"Function","properties":{"className":"ProductRepo","endLine":31,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":23,"methodKind":null,"name":"Store","parameters":"[{\"name\":\"ctx\",\"type\":\"context.Context\"},{\"name\":\"name\",\"type\":\"string\"}]","returnType":"error","visibility":"exported"}}
+{"kind":"node","id":"file:repo/products.go:function:23:Store:call:25:14:r.Conn.PrepareContext","label":"Call","properties":{"callee":"PrepareContext","columnNumber":14,"expression":"r.Conn.PrepareContext","line":25,"name":"r.Conn.PrepareContext","receiver":"r.Conn","receiverType":"*ProductRepo"}}
+{"kind":"node","id":"file:repo/products.go:function:23:Store:call:29:10:stmt.ExecContext","label":"Call","properties":{"callee":"ExecContext","columnNumber":10,"expression":"stmt.ExecContext","line":29,"name":"stmt.ExecContext","receiver":"stmt","receiverConstructor":"(*ProductRepo).Conn.PrepareContext"}}
+{"kind":"node","id":"file:repo/products.go:import:4:context","label":"Import","properties":{"line":4,"source":"context","specifier":"\"context\""}}
+{"kind":"node","id":"file:repo/products.go:import:5:database/sql","label":"Import","properties":{"line":5,"source":"database/sql","specifier":"\"database/sql\""}}
 {"kind":"node","id":"file:repo/users.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"repo","path":"<root>/repo/users.go","relativePath":"repo/users.go","sourceType":"production"}}
 {"kind":"node","id":"file:repo/users.go:class:10:UserRepo","label":"Class","properties":{"endLine":12,"fields":"[{\"name\":\"db\",\"type\":\"*sql.DB\"}]","isAbstract":false,"isExported":true,"line":10,"name":"UserRepo","visibility":"exported"}}
 {"kind":"node","id":"file:repo/users.go:function:14:NewUserRepo","label":"Function","properties":{"className":null,"endLine":16,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":14,"methodKind":null,"name":"NewUserRepo","parameters":"[{\"name\":\"db\",\"type\":\"*sql.DB\"}]","returnType":"*UserRepo","visibility":"exported"}}
@@ -58,10 +70,12 @@
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-sql","path":"<root>"}}
 {"kind":"node","id":"table:go:-:audit","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"database/sql","line":null,"name":"audit","provider":null,"schemaName":null}}
 {"kind":"node","id":"table:go:-:orders","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"database/sql","line":null,"name":"orders","provider":null,"schemaName":null}}
+{"kind":"node","id":"table:go:-:products","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"database/sql","line":null,"name":"products","provider":null,"schemaName":null}}
 {"kind":"node","id":"table:go:-:sessions","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"database/sql","line":null,"name":"sessions","provider":null,"schemaName":null}}
 {"kind":"node","id":"table:go:-:users","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"sqlx","line":null,"name":"users","provider":null,"schemaName":null}}
 {"kind":"rel","from":"datamodel:database/sql:audit","type":"MAPS_TO_TABLE","to":"table:go:-:audit","properties":{}}
 {"kind":"rel","from":"datamodel:database/sql:orders","type":"MAPS_TO_TABLE","to":"table:go:-:orders","properties":{}}
+{"kind":"rel","from":"datamodel:database/sql:products","type":"MAPS_TO_TABLE","to":"table:go:-:products","properties":{}}
 {"kind":"rel","from":"datamodel:database/sql:sessions","type":"MAPS_TO_TABLE","to":"table:go:-:sessions","properties":{}}
 {"kind":"rel","from":"datamodel:database/sql:users","type":"MAPS_TO_TABLE","to":"table:go:-:users","properties":{}}
 {"kind":"rel","from":"datamodel:sqlx:orders","type":"MAPS_TO_TABLE","to":"table:go:-:orders","properties":{}}
@@ -69,6 +83,7 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:repo","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
 {"kind":"rel","from":"dir:repo","type":"CONTAINS_FILE","to":"file:repo/orders.go","properties":{}}
+{"kind":"rel","from":"dir:repo","type":"CONTAINS_FILE","to":"file:repo/products.go","properties":{}}
 {"kind":"rel","from":"dir:repo","type":"CONTAINS_FILE","to":"file:repo/users.go","properties":{}}
 {"kind":"rel","from":"file:main.go","type":"DECLARES_ENTRYPOINT","to":"file:main.go:entrypoint:13:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:main.go","type":"DEFINES_FUNCTION","to":"file:main.go:function:13:main","properties":{}}
@@ -97,6 +112,7 @@
 {"kind":"rel","from":"file:main.go:function:13:main:call:18:10:repo.NewUserRepo","type":"CALL_RESOLVES_TO","to":"file:repo/users.go:function:14:NewUserRepo","properties":{}}
 {"kind":"rel","from":"file:main.go:function:13:main:call:19:14:users.Find","type":"CALL_RESOLVES_TO","to":"file:repo/users.go:function:18:Find","properties":{}}
 {"kind":"rel","from":"file:main.go:import:10:example.com/sqlapp/repo","type":"RESOLVES_TO","to":"file:repo/orders.go","properties":{}}
+{"kind":"rel","from":"file:main.go:import:10:example.com/sqlapp/repo","type":"RESOLVES_TO","to":"file:repo/products.go","properties":{}}
 {"kind":"rel","from":"file:main.go:import:10:example.com/sqlapp/repo","type":"RESOLVES_TO","to":"file:repo/users.go","properties":{}}
 {"kind":"rel","from":"file:repo/orders.go","type":"DEFINES_CLASS","to":"file:repo/orders.go:class:10:OrderRepo","properties":{}}
 {"kind":"rel","from":"file:repo/orders.go","type":"DEFINES_CLASS","to":"file:repo/orders.go:class:5:Order","properties":{}}
@@ -115,6 +131,21 @@
 {"kind":"rel","from":"file:repo/orders.go:function:32:Add","type":"CALLS","to":"file:repo/orders.go:function:32:Add:call:33:11:r.DB.NamedExec","properties":{}}
 {"kind":"rel","from":"file:repo/orders.go:function:32:Add","type":"WRITES","to":"table:go:-:orders","properties":{"expression":"r.DB.NamedExec","line":33,"model":"orders","operation":"create"}}
 {"kind":"rel","from":"file:repo/orders.go:function:37:Total","type":"CALLS","to":"file:repo/orders.go:function:37:Total:call:40:8:r.DB.Get","properties":{}}
+{"kind":"rel","from":"file:repo/products.go","type":"DEFINES_CLASS","to":"file:repo/products.go:class:8:ProductRepo","properties":{}}
+{"kind":"rel","from":"file:repo/products.go","type":"IMPORTS","to":"file:repo/products.go:import:4:context","properties":{}}
+{"kind":"rel","from":"file:repo/products.go","type":"IMPORTS","to":"file:repo/products.go:import:5:database/sql","properties":{}}
+{"kind":"rel","from":"file:repo/products.go:class:8:ProductRepo","type":"DEFINES_METHOD","to":"file:repo/products.go:function:13:fetch","properties":{}}
+{"kind":"rel","from":"file:repo/products.go:class:8:ProductRepo","type":"DEFINES_METHOD","to":"file:repo/products.go:function:17:ByID","properties":{}}
+{"kind":"rel","from":"file:repo/products.go:class:8:ProductRepo","type":"DEFINES_METHOD","to":"file:repo/products.go:function:23:Store","properties":{}}
+{"kind":"rel","from":"file:repo/products.go:function:13:fetch","type":"CALLS","to":"file:repo/products.go:function:13:fetch:call:14:8:r.Conn.QueryContext","properties":{}}
+{"kind":"rel","from":"file:repo/products.go:function:17:ByID","type":"ACCESSES_DATA","to":"datamodel:database/sql:products","properties":{"direct":true,"expression":"r.fetch","file":"repo/products.go","library":"database/sql","line":19,"operation":"read"}}
+{"kind":"rel","from":"file:repo/products.go:function:17:ByID","type":"CALLS","to":"file:repo/products.go:function:17:ByID:call:19:8:r.fetch","properties":{}}
+{"kind":"rel","from":"file:repo/products.go:function:17:ByID","type":"READS","to":"table:go:-:products","properties":{"expression":"r.fetch","line":19,"model":"products","operation":"read"}}
+{"kind":"rel","from":"file:repo/products.go:function:17:ByID:call:19:8:r.fetch","type":"CALL_RESOLVES_TO","to":"file:repo/products.go:function:13:fetch","properties":{}}
+{"kind":"rel","from":"file:repo/products.go:function:23:Store","type":"ACCESSES_DATA","to":"datamodel:database/sql:products","properties":{"direct":true,"expression":"r.Conn.PrepareContext","file":"repo/products.go","library":"database/sql","line":25,"operation":"create"}}
+{"kind":"rel","from":"file:repo/products.go:function:23:Store","type":"CALLS","to":"file:repo/products.go:function:23:Store:call:25:14:r.Conn.PrepareContext","properties":{}}
+{"kind":"rel","from":"file:repo/products.go:function:23:Store","type":"CALLS","to":"file:repo/products.go:function:23:Store:call:29:10:stmt.ExecContext","properties":{}}
+{"kind":"rel","from":"file:repo/products.go:function:23:Store","type":"WRITES","to":"table:go:-:products","properties":{"expression":"r.Conn.PrepareContext","line":25,"model":"products","operation":"create"}}
 {"kind":"rel","from":"file:repo/users.go","type":"DEFINES_CLASS","to":"file:repo/users.go:class:10:UserRepo","properties":{}}
 {"kind":"rel","from":"file:repo/users.go","type":"DEFINES_FUNCTION","to":"file:repo/users.go:function:14:NewUserRepo","properties":{}}
 {"kind":"rel","from":"file:repo/users.go","type":"DEFINES_VARIABLE","to":"file:repo/users.go:variable:8:selectUser","properties":{}}

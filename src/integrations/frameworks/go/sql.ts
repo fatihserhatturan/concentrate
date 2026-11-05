@@ -1,7 +1,8 @@
 // The tables a literal SQL statement reads and writes:
 //   SELECT … FROM a JOIN b       → read a, read b
-//   INSERT INTO a … [SELECT … FROM b] → create a (upsert with ON CONFLICT /
-//                                  ON DUPLICATE KEY), read b
+//   INSERT [INTO] a … [SELECT … FROM b] → create a (upsert with ON CONFLICT /
+//                                  ON DUPLICATE KEY), read b; MySQL's INTO is
+//                                  optional (`INSERT article SET …`)
 //   UPDATE a SET … FROM b        → update a, read b
 //   DELETE FROM a USING b        → delete a, read b
 // Names defined by WITH are not tables; a schema-qualified name keeps its
@@ -35,7 +36,7 @@ export function sqlTableAccesses(sql: string): SqlTableAccess[] {
   const verb = main?.[1]?.toUpperCase();
   let rest = text;
   if (verb === "INSERT" || verb === "REPLACE") {
-    const target = new RegExp(String.raw`\b(?:INSERT|REPLACE)\s+(?:OR\s+\w+\s+|IGNORE\s+)?INTO\s+(${QUALIFIED})`, "iu").exec(text);
+    const target = new RegExp(String.raw`\b(?:INSERT|REPLACE)\s+(?:(?:LOW_PRIORITY|DELAYED|HIGH_PRIORITY)\s+)?(?:OR\s+\w+\s+|IGNORE\s+)?(?:INTO\s+)?(?!INTO\b)(${QUALIFIED})`, "iu").exec(text);
     if (target) {
       add(target[1]!, verb === "REPLACE" || /\bON\s+(?:CONFLICT|DUPLICATE\s+KEY)\b/iu.test(text) ? "upsert" : "create");
       rest = `${text.slice(0, target.index)} ${text.slice(target.index + target[0].length)}`;

@@ -1,0 +1,694 @@
+{
+  "sample": "internet-go-clean-arch",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. echo v4 with database/sql (MySQL); repository -> service -> REST handler layers joined by interfaces. Routes: the four routes NewArticleHandler registers on the echo instance main.go creates. Calls: every call site in the production Go files (the mockery mocks under article/mocks and internal/rest/mocks, and *_test.go files, are not call files) whose callee is a function or method of this repository, with the functions it runs; calls into echo, database/sql, logrus, errgroup, validator and the standard library, and calls of parameters (next) are not labeled, so any target they get counts as a false positive. A call on an interface (a.articleRepo.Fetch, a.Service.Fetch) is labeled with the method of every type in the repository whose method set has the interface's methods with the same signatures, as Go decides (class hierarchy analysis): the MySQL repository, the mockery mocks, and article.Service, whose methods match ArticleRepository's and rest.ArticleService's (both interfaces have the same six methods); AuthorRepository (GetByID returning domain.Author) is implemented only by the MySQL AuthorRepository and its mock. Data access: each repository method's SQL, by the table it names (the model is the table: database/sql has no models); the SQL of Fetch, GetByID and GetByTitle runs in the fetch helper they pass it to, and author GetByID's in getOne, so the access is labeled on the method that holds the SQL. MySQL's INSERT without INTO (Store) creates. Env: the seven os.Getenv reads in main (godotenv.Load in init loads .env and is not a read).",
+  "routes": {
+    "scope": [
+      "app/main.go",
+      "internal/rest/article.go"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/articles",
+        "file": "internal/rest/article.go",
+        "line": 44
+      },
+      {
+        "method": "POST",
+        "path": "/articles",
+        "file": "internal/rest/article.go",
+        "line": 45
+      },
+      {
+        "method": "GET",
+        "path": "/articles/:id",
+        "file": "internal/rest/article.go",
+        "line": 46
+      },
+      {
+        "method": "DELETE",
+        "path": "/articles/:id",
+        "file": "internal/rest/article.go",
+        "line": 47
+      }
+    ]
+  },
+  "calls": {
+    "files": [
+      "app/main.go",
+      "article/service.go",
+      "domain/article.go",
+      "domain/author.go",
+      "domain/errors.go",
+      "internal/repository/helper.go",
+      "internal/repository/mysql/article.go",
+      "internal/repository/mysql/author.go",
+      "internal/rest/article.go",
+      "internal/rest/middleware/cors.go",
+      "internal/rest/middleware/timeout.go"
+    ],
+    "items": [
+      {
+        "file": "app/main.go",
+        "line": 73,
+        "callee": "SetRequestContextWithTimeout",
+        "target": {
+          "file": "internal/rest/middleware/timeout.go",
+          "name": "SetRequestContextWithTimeout"
+        }
+      },
+      {
+        "file": "app/main.go",
+        "line": 76,
+        "callee": "NewAuthorRepository",
+        "target": {
+          "file": "internal/repository/mysql/author.go",
+          "name": "NewAuthorRepository"
+        }
+      },
+      {
+        "file": "app/main.go",
+        "line": 77,
+        "callee": "NewArticleRepository",
+        "target": {
+          "file": "internal/repository/mysql/article.go",
+          "name": "NewArticleRepository"
+        }
+      },
+      {
+        "file": "app/main.go",
+        "line": 80,
+        "callee": "NewService",
+        "target": {
+          "file": "article/service.go",
+          "name": "NewService"
+        }
+      },
+      {
+        "file": "app/main.go",
+        "line": 81,
+        "callee": "NewArticleHandler",
+        "target": {
+          "file": "internal/rest/article.go",
+          "name": "NewArticleHandler"
+        }
+      },
+      {
+        "file": "article/service.go",
+        "line": 63,
+        "callee": "GetByID",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/author.go",
+            "name": "GetByID",
+            "className": "AuthorRepository"
+          },
+          {
+            "file": "article/mocks/AuthorRepository.go",
+            "name": "GetByID",
+            "className": "AuthorRepository"
+          }
+        ]
+      },
+      {
+        "file": "article/service.go",
+        "line": 102,
+        "callee": "Fetch",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "Fetch",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "Fetch",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "Fetch",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "Fetch",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "article/service.go",
+        "line": 107,
+        "callee": "fillAuthorDetails",
+        "target": {
+          "file": "article/service.go",
+          "name": "fillAuthorDetails",
+          "className": "Service"
+        }
+      },
+      {
+        "file": "article/service.go",
+        "line": 115,
+        "callee": "GetByID",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "GetByID",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "GetByID",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "GetByID",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "GetByID",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "article/service.go",
+        "line": 120,
+        "callee": "GetByID",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/author.go",
+            "name": "GetByID",
+            "className": "AuthorRepository"
+          },
+          {
+            "file": "article/mocks/AuthorRepository.go",
+            "name": "GetByID",
+            "className": "AuthorRepository"
+          }
+        ]
+      },
+      {
+        "file": "article/service.go",
+        "line": 130,
+        "callee": "Update",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "Update",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "Update",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "Update",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "Update",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "article/service.go",
+        "line": 134,
+        "callee": "GetByTitle",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "GetByTitle",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "GetByTitle",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "GetByTitle",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "GetByTitle",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "article/service.go",
+        "line": 139,
+        "callee": "GetByID",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/author.go",
+            "name": "GetByID",
+            "className": "AuthorRepository"
+          },
+          {
+            "file": "article/mocks/AuthorRepository.go",
+            "name": "GetByID",
+            "className": "AuthorRepository"
+          }
+        ]
+      },
+      {
+        "file": "article/service.go",
+        "line": 149,
+        "callee": "GetByTitle",
+        "target": {
+          "file": "article/service.go",
+          "name": "GetByTitle",
+          "className": "Service"
+        }
+      },
+      {
+        "file": "article/service.go",
+        "line": 154,
+        "callee": "Store",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "Store",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "Store",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "Store",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "Store",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "article/service.go",
+        "line": 159,
+        "callee": "GetByID",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "GetByID",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "GetByID",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "GetByID",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "GetByID",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "article/service.go",
+        "line": 166,
+        "callee": "Delete",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "Delete",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "Delete",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "Delete",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "Delete",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "internal/rest/article.go",
+        "line": 62,
+        "callee": "Fetch",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "Fetch",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "Fetch",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "Fetch",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "Fetch",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "internal/rest/article.go",
+        "line": 64,
+        "callee": "getStatusCode",
+        "target": {
+          "file": "internal/rest/article.go",
+          "name": "getStatusCode"
+        }
+      },
+      {
+        "file": "internal/rest/article.go",
+        "line": 81,
+        "callee": "GetByID",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "GetByID",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "GetByID",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "GetByID",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "GetByID",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "internal/rest/article.go",
+        "line": 83,
+        "callee": "getStatusCode",
+        "target": {
+          "file": "internal/rest/article.go",
+          "name": "getStatusCode"
+        }
+      },
+      {
+        "file": "internal/rest/article.go",
+        "line": 107,
+        "callee": "isRequestValid",
+        "target": {
+          "file": "internal/rest/article.go",
+          "name": "isRequestValid"
+        }
+      },
+      {
+        "file": "internal/rest/article.go",
+        "line": 112,
+        "callee": "Store",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "Store",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "Store",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "Store",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "Store",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "internal/rest/article.go",
+        "line": 114,
+        "callee": "getStatusCode",
+        "target": {
+          "file": "internal/rest/article.go",
+          "name": "getStatusCode"
+        }
+      },
+      {
+        "file": "internal/rest/article.go",
+        "line": 130,
+        "callee": "Delete",
+        "target": null,
+        "targets": [
+          {
+            "file": "internal/repository/mysql/article.go",
+            "name": "Delete",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "article/mocks/ArticleRepository.go",
+            "name": "Delete",
+            "className": "ArticleRepository"
+          },
+          {
+            "file": "internal/rest/mocks/ArticleService.go",
+            "name": "Delete",
+            "className": "ArticleService"
+          },
+          {
+            "file": "article/service.go",
+            "name": "Delete",
+            "className": "Service"
+          }
+        ]
+      },
+      {
+        "file": "internal/rest/article.go",
+        "line": 132,
+        "callee": "getStatusCode",
+        "target": {
+          "file": "internal/rest/article.go",
+          "name": "getStatusCode"
+        }
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "line": 67,
+        "callee": "DecodeCursor",
+        "target": {
+          "file": "internal/repository/helper.go",
+          "name": "DecodeCursor"
+        }
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "line": 72,
+        "callee": "fetch",
+        "target": {
+          "file": "internal/repository/mysql/article.go",
+          "name": "fetch",
+          "className": "ArticleRepository"
+        }
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "line": 78,
+        "callee": "EncodeCursor",
+        "target": {
+          "file": "internal/repository/helper.go",
+          "name": "EncodeCursor"
+        }
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "line": 87,
+        "callee": "fetch",
+        "target": {
+          "file": "internal/repository/mysql/article.go",
+          "name": "fetch",
+          "className": "ArticleRepository"
+        }
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "line": 105,
+        "callee": "fetch",
+        "target": {
+          "file": "internal/repository/mysql/article.go",
+          "name": "fetch",
+          "className": "ArticleRepository"
+        }
+      },
+      {
+        "file": "internal/repository/mysql/author.go",
+        "line": 40,
+        "callee": "getOne",
+        "target": {
+          "file": "internal/repository/mysql/author.go",
+          "name": "getOne",
+          "className": "AuthorRepository"
+        }
+      }
+    ]
+  },
+  "dataAccess": {
+    "scope": [
+      "app/",
+      "article/",
+      "domain/",
+      "internal/"
+    ],
+    "items": [
+      {
+        "file": "internal/repository/mysql/article.go",
+        "function": "Fetch",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "function": "GetByID",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "function": "GetByTitle",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "function": "Store",
+        "model": "article",
+        "operation": "create",
+        "table": "article"
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "function": "Delete",
+        "model": "article",
+        "operation": "delete",
+        "table": "article"
+      },
+      {
+        "file": "internal/repository/mysql/article.go",
+        "function": "Update",
+        "model": "article",
+        "operation": "update",
+        "table": "article"
+      },
+      {
+        "file": "internal/repository/mysql/author.go",
+        "function": "GetByID",
+        "model": "author",
+        "operation": "read",
+        "table": "author"
+      }
+    ]
+  },
+  "env": {
+    "scope": [
+      "app/",
+      "article/",
+      "domain/",
+      "internal/"
+    ],
+    "items": [
+      {
+        "file": "app/main.go",
+        "line": 37,
+        "name": "DATABASE_HOST",
+        "function": "main"
+      },
+      {
+        "file": "app/main.go",
+        "line": 38,
+        "name": "DATABASE_PORT",
+        "function": "main"
+      },
+      {
+        "file": "app/main.go",
+        "line": 39,
+        "name": "DATABASE_USER",
+        "function": "main"
+      },
+      {
+        "file": "app/main.go",
+        "line": 40,
+        "name": "DATABASE_PASS",
+        "function": "main"
+      },
+      {
+        "file": "app/main.go",
+        "line": 41,
+        "name": "DATABASE_NAME",
+        "function": "main"
+      },
+      {
+        "file": "app/main.go",
+        "line": 66,
+        "name": "CONTEXT_TIMEOUT",
+        "function": "main"
+      },
+      {
+        "file": "app/main.go",
+        "line": 84,
+        "name": "SERVER_ADDRESS",
+        "function": "main"
+      }
+    ]
+  }
+}
