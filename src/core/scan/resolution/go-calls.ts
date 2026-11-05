@@ -118,8 +118,10 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
 // Go has no `implements`: a struct implements every interface whose methods
 // are all in its method set (its own methods, value or pointer receivers,
 // and the ones promoted from embedded structs), matched by name and by the
-// parameter and result types (package qualifiers ignored, so `domain.User`
-// and `User` match; a generic interface's methods by name only). Interfaces
+// parameter and result types (a type of the scan by its package, so
+// `domain.User` and `User` match inside package domain but two packages'
+// `User` do not; other types by name; a generic interface's methods by name
+// only). Interfaces
 // without methods (`any`, constraints) are left out.
 export function addGoImplementsRelationships(graph: IGraphContributor, relationshipIndex: ResolutionRelationshipIndex): void {
   if (![...relationshipIndex.fileByInterfaceId.values()].some(isGoFile)) return;
@@ -133,7 +135,7 @@ export function addGoImplementsRelationships(graph: IGraphContributor, relations
   const matches = (functionIds: string[], wanted: string | undefined) =>
     functionIds.length > 0 && (wanted === undefined || functionIds.some((id) => {
       const fn = functionById.get(id);
-      return !fn || functionSignature(fn) === wanted;
+      return !fn || functionSignature(fn, index) === wanted;
     }));
   for (const [pkg, types] of index.typesByPackage) {
     for (const [name, { node }] of types) {
@@ -178,11 +180,11 @@ function interfaceSignatures(ref: TypeRef, index: GoCallIndex, depth: number): M
   } catch {
     // An older scan without signatures: match by name.
   }
-  for (const [method, signature] of Object.entries(own)) signatures.set(method, signatureKey(signature.parameters, signature.returnType));
+  for (const [method, signature] of Object.entries(own)) signatures.set(method, signatureKey(signature.parameters, signature.returnType, entry.fileId, index));
   return signatures;
 }
 
-function functionSignature(fn: GraphNode): string | undefined {
+function functionSignature(fn: GraphNode, index: GoCallIndex): string | undefined {
   if (typeof fn.properties.typeParameters === "string") return undefined;
   let parameters: Array<{ type: string | null }> = [];
   try {
@@ -190,17 +192,24 @@ function functionSignature(fn: GraphNode): string | undefined {
   } catch {
     return undefined;
   }
-  return signatureKey(parameters.map((parameter) => parameter.type), typeof fn.properties.returnType === "string" ? fn.properties.returnType : null);
+  const fileId = fn.id.slice(0, fn.id.indexOf(":function:"));
+  return signatureKey(parameters.map((parameter) => parameter.type), typeof fn.properties.returnType === "string" ? fn.properties.returnType : null, fileId, index);
 }
 
 // `(ctx context.Context, id int64) (domain.User, error)` as
-// "Context,int64->User,error": types without package qualifiers or names.
-function signatureKey(parameters: Array<string | null>, returnType: string | null): string {
-  return `${parameters.map((type) => bareType(type ?? "")).join(",")}->${resultTypes(returnType).join(",")}`;
+// "Context,int64->domain#User,error": result names dropped, a type of the scan
+// written with its package (resolved in `fileId`), any other without its
+// qualifier.
+function signatureKey(parameters: Array<string | null>, returnType: string | null, fileId: string, index: GoCallIndex): string {
+  const key = (type: string) => keyType(type, fileId, index);
+  return `${parameters.map((type) => key(type ?? "")).join(",")}->${resultTypes(returnType).map(key).join(",")}`;
 }
 
-function bareType(type: string): string {
-  return type.replace(/\b[A-Za-z_]\w*\./gu, "").replace(/\s+/gu, "");
+function keyType(type: string, fileId: string, index: GoCallIndex): string {
+  return type.replace(/\b(?:[A-Za-z_]\w*\.)?([A-Za-z_]\w*)\b/gu, (written, name: string) => {
+    const ref = resolveType(written, fileId, index);
+    return ref && hasType(ref.pkg, ref.name, index) ? `${ref.pkg}#${name}` : name;
+  }).replace(/\s+/gu, "");
 }
 
 // `(res []domain.Article, next string, err error)`, `(a, b int)`,
@@ -222,7 +231,7 @@ function resultTypes(text: string | null): string[] {
   if (current.trim()) parts.push(current.trim());
   // Named results: `name type`, a bare name takes the next type.
   const named = parts.some((part) => /^[A-Za-z_]\w*\s+\S/u.test(part) && !/^(?:chan|func|map|struct|interface)\b/u.test(part));
-  if (!named) return parts.map(bareType);
+  if (!named) return parts;
   const types: string[] = [];
   let pending = 0;
   for (const part of parts) {
@@ -231,7 +240,7 @@ function resultTypes(text: string | null): string[] {
       pending += 1;
       continue;
     }
-    for (let count = 0; count <= pending; count += 1) types.push(bareType(match[1]!));
+    for (let count = 0; count <= pending; count += 1) types.push(match[1]!);
     pending = 0;
   }
   return types;
