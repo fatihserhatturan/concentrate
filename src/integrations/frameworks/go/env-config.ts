@@ -10,8 +10,9 @@ import { descendantsOf } from "./scope.js";
 //   - `os.Getenv("PORT")`, `os.LookupEnv`, `syscall.Getenv`, and each
 //     `$NAME`/`${NAME}` of an `os.ExpandEnv` literal;
 //   - viper: `BindEnv("key", "NAME")`, `BindEnv("key")`, and the `Get*`/
-//     `IsSet` reads of a viper with `AutomaticEnv()`, named the way viper
-//     names them (`SetEnvPrefix`, `SetEnvKeyReplacer(strings.NewReplacer(…))`;
+//     `IsSet` reads of a viper with `AutomaticEnv()`, and the keys of the
+//     same-file struct `Unmarshal(&cfg)` fills (`mapstructure:"KEY"` tags, else
+//     the field names), named the way viper names them (`SetEnvPrefix`, `SetEnvKeyReplacer(strings.NewReplacer(…))`;
 //     a file without settings of its own takes the repo's);
 //   - struct tags: `env:"NAME"` (caarlos0/env, cleanenv, go-envconfig;
 //     `envPrefix` on a nested struct field), read by the function of the
@@ -101,6 +102,12 @@ export const goEnvConfigPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, rela
         }
       } else if ((/^Get[A-Z]?\w*$/u.test(method) && method !== "GetViper") || method === "IsSet") {
         if (first !== null) viperFile.reads.push({ source: ownerOf(line), key: first, line, access, automatic: true });
+      } else if ((method === "Unmarshal" || method === "UnmarshalExact") && args[0]) {
+        const type = structOf(args[0], call, functions.map((fn) => fn.syntax), root);
+        for (const field of type ? structs.get(type)?.fields ?? [] : []) {
+          const key = field.tags.get("mapstructure")?.split(",")[0] || field.name;
+          if (key && key !== "-") viperFile.reads.push({ source: ownerOf(line), key, line, access, automatic: true });
+        }
       }
     } else if (envconfig && receiver === envconfig && (method === "Process" || method === "MustProcess") && args.length >= 2) {
       const type = structOf(args[1]!, call, functions.map((fn) => fn.syntax), root);

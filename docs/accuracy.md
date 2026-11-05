@@ -12,7 +12,7 @@ npm run bench:accuracy -- [--sample name] [--details] [--json out.json]
 
 `--details` lists every false positive (FP), false negative (FN) and wrong
 route path. The latest run is in
-[`bench/results/accuracy-0.1.0-2026-11-04.json`](../bench/results/accuracy-0.1.0-2026-11-04.json).
+[`bench/results/accuracy-0.1.0-2026-11-05.json`](../bench/results/accuracy-0.1.0-2026-11-05.json).
 
 ## Labels
 
@@ -24,13 +24,13 @@ chosen files); every target was decided by reading the code.
 
 | Kind | Samples | Scope |
 | --- | --- | --- |
-| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld, internet-go-echo-realworld | every route declared with a literal path in the scoped files; tests excluded; for the gin sample, the groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`); for the echo sample, the `*echo.Echo` that `router.New()` in another package returns, grouped in `main` and passed to `(*Handler).Register` |
-| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`), internet-go-echo-realworld (another Conduit Go backend: echo, gorm behind store interfaces, packages `handler`, `store`, `model`, `router`, `db`, `utils`) | every call site in 2–9 chosen files per sample; for the Go samples, every call of a repository function or method in their production files (13 gin, 21 echo; echo's generated `docs/docs.go` excluded) |
-| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm), internet-go-echo-realworld (gorm) | the services; for the Go samples the production files that query the database; the standing samples have no data layer |
+| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base | every route declared with a literal path in the scoped files; tests excluded; for the gin sample, the groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`); for the echo sample, the `*echo.Echo` that `router.New()` in another package returns, grouped in `main` and passed to `(*Handler).Register`; for simplebank, gin's `router.Group("/").Use(mw)` and the grpc-gateway `http.ServeMux` mounts in `main.go`; for go-base, chi `Mount` / `Route` / `Group` across packages |
+| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`), internet-go-echo-realworld (another Conduit Go backend: echo, gorm behind store interfaces, packages `handler`, `store`, `model`, `router`, `db`, `utils`), internet-go-clean-arch (echo + database/sql, repository → service → handler layers joined by interfaces), internet-go-simplebank (gin, gRPC, sqlc on pgx, asynq) | every call site in 2–9 chosen files per sample; for the Go samples, every call of a repository function or method in their production files (13 gin, 21 echo, 11 clean-arch; echo's generated `docs/docs.go` excluded), and 12 chosen files of simplebank (`main.go`, `api/`, the `db/sqlc` transactions, two `gapi` RPCs, a worker task) |
+| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm), internet-go-echo-realworld (gorm), internet-go-clean-arch (database/sql, MySQL), internet-go-simplebank (sqlc) | the services; for the Go samples the production files that query the database; the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
 | Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project), internet-realworld-go-fullstack (the same frontend with the gin backend) | `frontend/`: every HTTP call that reaches a backend route; the Go pair's labels are the Express pair's, with each route's declaring file moved to the gin `routers.go` that registers it |
-| Env reads | internet-go-gin-realworld, internet-go-echo-realworld | every env read in the production and test files (`os.Getenv`); the echo sample reads none (its secret and database path are constants) |
+| Env reads | internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base | every env read in the production and test files: `os.Getenv` (gin, clean-arch, go-base), viper `Get*` with `AutomaticEnv` (go-base) and the `mapstructure` keys `viper.Unmarshal` fills (simplebank); the echo sample reads none (its secret and database path are constants) |
 | Stores, store reads and writes | internet-vue-realworld (its Pinia setup store) | `src/`: every store and every call of a store's hook, tests included |
 
 Rules:
@@ -54,7 +54,12 @@ Rules:
   name (the last member, or the class of `new X`). `target` is the project
   declaration the call runs (`{ file, name, className? }`; `new X` targets X's
   `constructor`, and the class node also counts) or `null` when it runs
-  package or built-in code or a callback parameter. Call sites whose target
+  package or built-in code or a callback parameter. A call that dispatches
+  to several functions has `targets` (the list) in place of `target`: a Go
+  interface method call is labeled with the method of every type in the
+  repository whose method set has the interface's methods with the same
+  signatures, mocks included (class hierarchy analysis, what Go itself
+  allows). Call sites whose target
   is only known at runtime are marked `dynamic` and not scored: Express's
   `app.get` / `app.post` (generated in a `methods.forEach` loop) and
   `req` / `res` methods (prototypes the framework sets per request).
@@ -66,7 +71,9 @@ Rules:
   (`connectOrCreate` inside an `article.create`) are not labeled. For gorm,
   the models `Preload` paths load are reads and an `Association` call is an
   access of the field's model; `db.Save(data)` with an `interface{}` value
-  names no model and is not labeled.
+  names no model and is not labeled. For database/sql and sqlc the model is
+  the table the SQL names, labeled on the function that holds the SQL, also
+  when a helper it passes the SQL to runs it (`m.fetch(ctx, query, id)`).
 - **Components.** `{ file, name, line }` for every React component: function
   and class components, including a class that extends another component
   (`ProfileFavorites extends Profile`).
@@ -106,11 +113,11 @@ Rules:
   Detection gives precision and recall; *full path* is the share of detected
   routes whose full path also matches, so a lost mount prefix does not count
   as a missed route.
-- **Calls:** a labeled call is a TP when it resolves to the labeled target.
-  It is an FN when the labeled target is missed (unresolved, wrong, or no call
-  node). An FP is a resolution that should not be there: a wrong target, a
-  target for a call labeled `null`, or a resolved call at a site the labels
-  do not have. Unresolved calls labeled `null` count for neither, so recall
+- **Calls:** each labeled target is scored on its own: a TP when the call
+  resolves to it, an FN when the call misses it (unresolved, wrong, or no
+  call node). An FP is a resolution that should not be there: a target the
+  label does not list, a target for a call labeled `null`, or a resolved
+  call at a site the labels do not have. Unresolved calls labeled `null` count for neither, so recall
   is over calls with a project target.
 - **Data access:** an access matches on file, function, model and operation,
   and on the table when the label names one.
@@ -127,7 +134,7 @@ Rules:
   and both member sets match, so a missed or extra member is an FP and an
   FN.
 
-## Results (2026-11-04, schema 69)
+## Results (2026-11-05, schema 72)
 
 ### Routes
 
@@ -135,13 +142,16 @@ Rules:
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | express | 59 | 59 | 0 | 0 | 100.0% | 100.0% | 100.0% (59/59) |
 | fastify | 14 | 14 | 0 | 0 | 100.0% | 100.0% | 100.0% (14/14) |
+| internet-go-chi-base | 19 | 19 | 0 | 0 | 100.0% | 100.0% | 100.0% (19/19) |
+| internet-go-clean-arch | 4 | 4 | 0 | 0 | 100.0% | 100.0% | 100.0% (4/4) |
 | internet-go-echo-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
+| internet-go-gin-realworld | 27 | 27 | 0 | 0 | 100.0% | 100.0% | 100.0% (27/27) |
+| internet-go-simplebank | 9 | 9 | 0 | 0 | 100.0% | 100.0% | 100.0% (9/9) |
 | internet-nextjs-taxonomy | 9 | 9 | 0 | 0 | 100.0% | 100.0% | 100.0% (9/9) |
 | internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
-| internet-go-gin-realworld | 27 | 27 | 0 | 0 | 100.0% | 100.0% | 100.0% (27/27) |
 | internet-sveltekit-realworld | 11 | 11 | 0 | 0 | 100.0% | 100.0% | 100.0% (11/11) |
 | nestjs-starter | 1 | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% (1/1) |
-| **all** | 161 | 161 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (161/161)** |
+| **all** | 193 | 193 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (193/193)** |
 
 ### Call resolution
 
@@ -150,14 +160,16 @@ Rules:
 | express | 28 | 28 | 0 | 0 | 100.0% | 100.0% |
 | fastify | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
 | internet-angular-realworld | 21 | 21 | 0 | 0 | 100.0% | 100.0% |
+| internet-go-clean-arch | 68 | 68 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-echo-realworld | 149 | 149 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-gin-realworld | 223 | 223 | 0 | 0 | 100.0% | 100.0% |
+| internet-go-simplebank | 123 | 123 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 24 | 24 | 0 | 0 | 100.0% | 100.0% |
 | internet-sveltekit-realworld | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-vue-realworld | 14 | 14 | 0 | 0 | 100.0% | 100.0% |
 | ky | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
 | nestjs-starter | 2 | 2 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 497 | 497 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 688 | 688 | 0 | 0 | **100.0%** | **100.0%** |
 
 Labels counts calls with a project target. Another 433 call sites are labeled
 `null`, and 35 are `dynamic`. The Go samples label only calls with a
@@ -168,11 +180,13 @@ anywhere would count as a false positive (call site not labeled).
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-go-clean-arch | 7 | 7 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-echo-realworld | 52 | 52 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-gin-realworld | 41 | 41 | 0 | 0 | 100.0% | 100.0% |
+| internet-go-simplebank | 20 | 20 | 0 | 0 | 100.0% | 100.0% |
 | internet-nest | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 26 | 26 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 136 | 136 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 163 | 163 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Components
 
@@ -217,12 +231,14 @@ anywhere would count as a false positive (call site not labeled).
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-vue-realworld | 1 | 1 | 0 | 0 | 100.0% | 100.0% |
+| **all** | 1 | 1 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Store reads and writes
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-vue-realworld | 11 | 11 | 0 | 0 | 100.0% | 100.0% |
+| **all** | 11 | 11 | 0 | 0 | **100.0%** | **100.0%** |
 
 Only one standing sample uses a store library, so these two tables are
 small: Redux Toolkit, Zustand, Jotai and Svelte stores are covered by their
@@ -235,11 +251,16 @@ not a Redux Toolkit store.
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-go-chi-base | 20 | 20 | 0 | 0 | 100.0% | 100.0% |
+| internet-go-clean-arch | 7 | 7 | 0 | 0 | 100.0% | 100.0% |
+| internet-go-echo-realworld | 0 | 0 | 0 | 0 | – | – |
 | internet-go-gin-realworld | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 6 | 6 | 0 | 0 | **100.0%** | **100.0%** |
+| internet-go-simplebank | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
+| **all** | 46 | 46 | 0 | 0 | **100.0%** | **100.0%** |
 
-viper, struct-tag config and `os.ExpandEnv` are covered by `fixtures/go-env`
-and its golden graph; the gin sample reads env with `os.Getenv` only.
+Struct-tag config (`env:"…"`, envconfig) and `os.ExpandEnv` are covered by
+`fixtures/go-env` and its golden graph only; the samples read env with
+`os.Getenv` and viper.
 
 ## What the misses are
 
@@ -299,6 +320,16 @@ are, and they cluster:
 Every labeled data access is found since #49 (the TypeORM `*By` and Mongoose
 `findById*` / `findOneAnd*` methods, and calls on a receiver split over
 lines, `this.catModel\n  .findByIdAndUpdate(…)`).
+
+On the Go samples, every labeled route, call target, data access and env
+read is found. Labeling go-clean-arch and simplebank found seven gaps, fixed
+before the labels were scored (#187): an interface implemented by any type
+with a method of the same name (a single-method `AuthorRepository` also
+matched `ArticleHandler.GetByID(echo.Context)`), a later `if a, ok := …`
+hiding the receiver `a`, the untyped parameter of a closure (`func(q
+*Queries) error`), SQL in a local or passed to a helper, MySQL's `INSERT`
+without `INTO`, gin's `Group("/").Use(mw)`, and viper's `Unmarshal(&cfg)`.
+go-base's data access (bun) and calls are not labeled: bun is not read yet.
 
 The same list, by area, is in [known-limitations.md](known-limitations.md).
 

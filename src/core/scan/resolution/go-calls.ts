@@ -117,21 +117,29 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
 
 // Go has no `implements`: a struct implements every interface whose methods
 // are all in its method set (its own methods, value or pointer receivers,
-// and the ones promoted from embedded structs), matched by name. Interfaces
+// and the ones promoted from embedded structs), matched by name and by the
+// parameter and result types (package qualifiers ignored, so `domain.User`
+// and `User` match; a generic interface's methods by name only). Interfaces
 // without methods (`any`, constraints) are left out.
 export function addGoImplementsRelationships(graph: IGraphContributor, relationshipIndex: ResolutionRelationshipIndex): void {
   if (![...relationshipIndex.fileByInterfaceId.values()].some(isGoFile)) return;
   const index = createGoCallIndex(graph, relationshipIndex);
   const interfaces = [...index.interfacesByPackage].flatMap(([pkg, byName]) => [...byName.keys()].map((name) => ({ pkg, name })));
   const required = interfaces
-    .map((ref) => ({ ref, id: index.interfacesByPackage.get(ref.pkg)!.get(ref.name)!.node.id, methods: interfaceMethods(ref, index, 0) }))
+    .map((ref) => ({ ref, id: index.interfacesByPackage.get(ref.pkg)!.get(ref.name)!.node.id, methods: interfaceMethods(ref, index, 0), signatures: interfaceSignatures(ref, index, 0) }))
     .filter((entry) => entry.methods !== null && entry.methods.size > 0);
   if (required.length === 0) return;
+  const functionById = new Map(graph.nodes.filter((node) => node.label === "Function").map((node) => [node.id, node]));
+  const matches = (functionIds: string[], wanted: string | undefined) =>
+    functionIds.length > 0 && (wanted === undefined || functionIds.some((id) => {
+      const fn = functionById.get(id);
+      return !fn || functionSignature(fn) === wanted;
+    }));
   for (const [pkg, types] of index.typesByPackage) {
     for (const [name, { node }] of types) {
       const type = { pkg, name };
       for (const entry of required) {
-        if ([...entry.methods!].every((method) => methodOf(type, method, index, 0).length > 0)) {
+        if ([...entry.methods!].every((method) => matches(methodOf(type, method, index, 0), entry.signatures.get(method)))) {
           graph.addRelationship({ from: node.id, to: entry.id, type: "IMPLEMENTS", properties: {} });
         }
       }
@@ -152,6 +160,81 @@ function interfaceMethods(ref: TypeRef, index: GoCallIndex, depth: number): Set<
     for (const method of inherited) methods.add(method);
   }
   return methods;
+}
+
+// Each method's signature key (see signatureKey), embedded interfaces'
+// included; empty for a generic interface (its methods use type parameters).
+function interfaceSignatures(ref: TypeRef, index: GoCallIndex, depth: number): Map<string, string> {
+  const entry = index.interfacesByPackage.get(ref.pkg)?.get(ref.name);
+  const signatures = new Map<string, string>();
+  if (!entry || depth > 4 || typeof entry.node.properties.typeParameters === "string") return signatures;
+  for (const embedded of parseList(entry.node.properties.embeds)) {
+    const embeddedRef = resolveType(embedded, entry.fileId, index);
+    if (embeddedRef) for (const [method, key] of interfaceSignatures(embeddedRef, index, depth + 1)) signatures.set(method, key);
+  }
+  let own: Record<string, { parameters: Array<string | null>; returnType: string | null }> = {};
+  try {
+    own = JSON.parse(String(entry.node.properties.methodSignatures ?? "{}"));
+  } catch {
+    // An older scan without signatures: match by name.
+  }
+  for (const [method, signature] of Object.entries(own)) signatures.set(method, signatureKey(signature.parameters, signature.returnType));
+  return signatures;
+}
+
+function functionSignature(fn: GraphNode): string | undefined {
+  if (typeof fn.properties.typeParameters === "string") return undefined;
+  let parameters: Array<{ type: string | null }> = [];
+  try {
+    parameters = JSON.parse(String(fn.properties.parameters ?? "[]"));
+  } catch {
+    return undefined;
+  }
+  return signatureKey(parameters.map((parameter) => parameter.type), typeof fn.properties.returnType === "string" ? fn.properties.returnType : null);
+}
+
+// `(ctx context.Context, id int64) (domain.User, error)` as
+// "Context,int64->User,error": types without package qualifiers or names.
+function signatureKey(parameters: Array<string | null>, returnType: string | null): string {
+  return `${parameters.map((type) => bareType(type ?? "")).join(",")}->${resultTypes(returnType).join(",")}`;
+}
+
+function bareType(type: string): string {
+  return type.replace(/\b[A-Za-z_]\w*\./gu, "").replace(/\s+/gu, "");
+}
+
+// `(res []domain.Article, next string, err error)`, `(a, b int)`,
+// `(int, error)` or `error` as their types.
+function resultTypes(text: string | null): string[] {
+  if (!text) return [];
+  const inner = text.trim().startsWith("(") ? text.trim().slice(1, -1) : text;
+  const parts: string[] = [];
+  let depth = 0;
+  let current = "";
+  for (const char of inner) {
+    if ("([{".includes(char)) depth += 1;
+    if (")]}".includes(char)) depth -= 1;
+    if (char === "," && depth === 0) {
+      parts.push(current.trim());
+      current = "";
+    } else current += char;
+  }
+  if (current.trim()) parts.push(current.trim());
+  // Named results: `name type`, a bare name takes the next type.
+  const named = parts.some((part) => /^[A-Za-z_]\w*\s+\S/u.test(part) && !/^(?:chan|func|map|struct|interface)\b/u.test(part));
+  if (!named) return parts.map(bareType);
+  const types: string[] = [];
+  let pending = 0;
+  for (const part of parts) {
+    const match = /^[A-Za-z_]\w*\s+(.+)$/su.exec(part);
+    if (!match) {
+      pending += 1;
+      continue;
+    }
+    for (let count = 0; count <= pending; count += 1) types.push(bareType(match[1]!));
+    pending = 0;
+  }
+  return types;
 }
 
 export type GoCallTarget = { functionId: string; via?: "interface" };

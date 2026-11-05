@@ -1,0 +1,74 @@
+{"kind":"report","status":"success","discoveredFiles":3,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"go-signatures","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:repo","label":"Directory","properties":{"name":"repo","path":"<root>/repo","relativePath":"repo"}}
+{"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
+{"kind":"node","id":"file:main.go:class:5:Service","label":"Class","properties":{"endLine":8,"fields":"[{\"name\":\"users\",\"type\":\"repo.Users\"},{\"name\":\"posts\",\"type\":\"repo.Posts\"}]","isAbstract":false,"isExported":true,"line":5,"name":"Service","visibility":"exported"}}
+{"kind":"node","id":"file:main.go:entrypoint:30:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":30,"receiverName":null,"trigger":null}}
+{"kind":"node","id":"file:main.go:function:10:Load","label":"Function","properties":{"className":"Service","endLine":21,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":10,"methodKind":null,"name":"Load","parameters":"[{\"name\":\"ids\",\"type\":\"map[int]bool\"}]","returnType":null,"visibility":"exported"}}
+{"kind":"node","id":"file:main.go:function:10:Load:call:12:2:s.users.Get","label":"Call","properties":{"callee":"Get","columnNumber":2,"expression":"s.users.Get","line":12,"name":"s.users.Get","receiver":"s.users","receiverType":"*Service"}}
+{"kind":"node","id":"file:main.go:function:10:Load:call:14:4:func() {\n\t\ts.posts.Get(1)\n\t}","label":"Call","properties":{"callee":"Get(1)\n\t}","columnNumber":4,"expression":"func() {\n\t\ts.posts.Get(1)\n\t}","line":14,"name":"func() {\n\t\ts.posts.Get(1)\n\t}","receiver":"func"}}
+{"kind":"node","id":"file:main.go:function:10:Load:call:15:2:s.posts.Get","label":"Call","properties":{"callee":"Get","columnNumber":2,"expression":"s.posts.Get","line":15,"name":"s.posts.Get","receiver":"s.posts","receiverType":"*Service"}}
+{"kind":"node","id":"file:main.go:function:24:save","label":"Function","properties":{"className":null,"endLine":28,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":24,"methodKind":null,"name":"save","parameters":"[]","returnType":"error","visibility":"unexported"}}
+{"kind":"node","id":"file:main.go:function:24:save:call:25:8:repo.Run","label":"Call","properties":{"callee":"Run","columnNumber":8,"expression":"repo.Run","line":25,"name":"repo.Run","receiver":"repo"}}
+{"kind":"node","id":"file:main.go:function:24:save:call:26:9:tx.Save","label":"Call","properties":{"callee":"Save","columnNumber":9,"expression":"tx.Save","line":26,"name":"tx.Save","receiver":"tx","receiverType":"*repo.Tx"}}
+{"kind":"node","id":"file:main.go:function:30:main","label":"Function","properties":{"className":null,"endLine":34,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":30,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
+{"kind":"node","id":"file:main.go:function:30:main:call:32:1:svc.Load","label":"Call","properties":{"callee":"Load","columnNumber":1,"expression":"svc.Load","line":32,"name":"svc.Load","receiver":"svc","receiverType":"Service"}}
+{"kind":"node","id":"file:main.go:function:30:main:call:33:5:save","label":"Call","properties":{"callee":"save","columnNumber":5,"expression":"save","line":33,"name":"save","receiver":null}}
+{"kind":"node","id":"file:main.go:import:3:example.com/ifaces/repo","label":"Import","properties":{"line":3,"source":"example.com/ifaces/repo","specifier":"\"example.com/ifaces/repo\""}}
+{"kind":"node","id":"file:repo/repo.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"repo","path":"<root>/repo/repo.go","relativePath":"repo/repo.go","sourceType":"production"}}
+{"kind":"node","id":"file:repo/repo.go:class:16:UserRepo","label":"Class","properties":{"endLine":16,"fields":"[]","isAbstract":false,"isExported":true,"line":16,"name":"UserRepo","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:class:20:PostRepo","label":"Class","properties":{"endLine":20,"fields":"[]","isAbstract":false,"isExported":true,"line":20,"name":"PostRepo","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:class:25:Handler","label":"Class","properties":{"endLine":25,"fields":"[]","isAbstract":false,"isExported":true,"line":25,"name":"Handler","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:class:29:Tx","label":"Class","properties":{"endLine":29,"fields":"[]","isAbstract":false,"isExported":true,"line":29,"name":"Tx","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:class:3:User","label":"Class","properties":{"endLine":3,"fields":"[{\"name\":\"Name\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":3,"name":"User","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:class:5:Post","label":"Class","properties":{"endLine":5,"fields":"[{\"name\":\"Title\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":5,"name":"Post","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:function:18:Get","label":"Function","properties":{"className":"UserRepo","endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":18,"methodKind":null,"name":"Get","parameters":"[{\"name\":\"id\",\"type\":\"int\"}]","returnType":"(User, error)","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:function:22:Get","label":"Function","properties":{"className":"PostRepo","endLine":22,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":22,"methodKind":null,"name":"Get","parameters":"[{\"name\":\"id\",\"type\":\"int\"}]","returnType":"(res Post, err error)","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:function:27:Get","label":"Function","properties":{"className":"Handler","endLine":27,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":27,"methodKind":null,"name":"Get","parameters":"[{\"name\":\"name\",\"type\":\"string\"}]","returnType":"error","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:function:31:Save","label":"Function","properties":{"className":"Tx","endLine":31,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":31,"methodKind":null,"name":"Save","parameters":"[{\"name\":\"u\",\"type\":\"User\"}]","returnType":"error","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:function:33:Run","label":"Function","properties":{"className":null,"endLine":33,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":33,"methodKind":null,"name":"Run","parameters":"[{\"name\":\"fn\",\"type\":\"func(tx *Tx) error\"}]","returnType":"error","visibility":"exported"}}
+{"kind":"node","id":"file:repo/repo.go:function:33:Run:call:33:47:fn","label":"Call","properties":{"callee":"fn","columnNumber":47,"expression":"fn","line":33,"name":"fn","receiver":null}}
+{"kind":"node","id":"file:repo/repo.go:interface:12:Posts","label":"Interface","properties":{"embeds":"[]","endLine":14,"isExported":true,"line":12,"methodSignatures":"{\"Get\":{\"parameters\":[\"int\"],\"returnType\":\"(Post, error)\"}}","methods":"[\"Get\"]","name":"Posts"}}
+{"kind":"node","id":"file:repo/repo.go:interface:8:Users","label":"Interface","properties":{"embeds":"[]","endLine":10,"isExported":true,"line":8,"methodSignatures":"{\"Get\":{\"parameters\":[\"int\"],\"returnType\":\"(User, error)\"}}","methods":"[\"Get\"]","name":"Users"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-signatures","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:repo","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
+{"kind":"rel","from":"dir:repo","type":"CONTAINS_FILE","to":"file:repo/repo.go","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"DECLARES_ENTRYPOINT","to":"file:main.go:entrypoint:30:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"DEFINES_CLASS","to":"file:main.go:class:5:Service","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"DEFINES_FUNCTION","to":"file:main.go:function:24:save","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"DEFINES_FUNCTION","to":"file:main.go:function:30:main","properties":{}}
+{"kind":"rel","from":"file:main.go","type":"IMPORTS","to":"file:main.go:import:3:example.com/ifaces/repo","properties":{}}
+{"kind":"rel","from":"file:main.go:class:5:Service","type":"DEFINES_METHOD","to":"file:main.go:function:10:Load","properties":{}}
+{"kind":"rel","from":"file:main.go:entrypoint:30:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:main.go:function:30:main","properties":{}}
+{"kind":"rel","from":"file:main.go:function:10:Load","type":"CALLS","to":"file:main.go:function:10:Load:call:12:2:s.users.Get","properties":{}}
+{"kind":"rel","from":"file:main.go:function:10:Load","type":"CALLS","to":"file:main.go:function:10:Load:call:14:4:func() {\n\t\ts.posts.Get(1)\n\t}","properties":{}}
+{"kind":"rel","from":"file:main.go:function:10:Load","type":"CALLS","to":"file:main.go:function:10:Load:call:15:2:s.posts.Get","properties":{}}
+{"kind":"rel","from":"file:main.go:function:10:Load:call:12:2:s.users.Get","type":"CALL_RESOLVES_TO","to":"file:repo/repo.go:function:18:Get","properties":{"via":"interface"}}
+{"kind":"rel","from":"file:main.go:function:10:Load:call:15:2:s.posts.Get","type":"CALL_RESOLVES_TO","to":"file:repo/repo.go:function:22:Get","properties":{"via":"interface"}}
+{"kind":"rel","from":"file:main.go:function:24:save","type":"CALLS","to":"file:main.go:function:24:save:call:25:8:repo.Run","properties":{}}
+{"kind":"rel","from":"file:main.go:function:24:save","type":"CALLS","to":"file:main.go:function:24:save:call:26:9:tx.Save","properties":{}}
+{"kind":"rel","from":"file:main.go:function:24:save:call:25:8:repo.Run","type":"CALL_RESOLVES_TO","to":"file:repo/repo.go:function:33:Run","properties":{}}
+{"kind":"rel","from":"file:main.go:function:24:save:call:26:9:tx.Save","type":"CALL_RESOLVES_TO","to":"file:repo/repo.go:function:31:Save","properties":{}}
+{"kind":"rel","from":"file:main.go:function:30:main","type":"CALLS","to":"file:main.go:function:30:main:call:32:1:svc.Load","properties":{}}
+{"kind":"rel","from":"file:main.go:function:30:main","type":"CALLS","to":"file:main.go:function:30:main:call:33:5:save","properties":{}}
+{"kind":"rel","from":"file:main.go:function:30:main:call:32:1:svc.Load","type":"CALL_RESOLVES_TO","to":"file:main.go:function:10:Load","properties":{}}
+{"kind":"rel","from":"file:main.go:function:30:main:call:33:5:save","type":"CALL_RESOLVES_TO","to":"file:main.go:function:24:save","properties":{}}
+{"kind":"rel","from":"file:main.go:import:3:example.com/ifaces/repo","type":"RESOLVES_TO","to":"file:repo/repo.go","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go","type":"DEFINES_CLASS","to":"file:repo/repo.go:class:16:UserRepo","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go","type":"DEFINES_CLASS","to":"file:repo/repo.go:class:20:PostRepo","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go","type":"DEFINES_CLASS","to":"file:repo/repo.go:class:25:Handler","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go","type":"DEFINES_CLASS","to":"file:repo/repo.go:class:29:Tx","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go","type":"DEFINES_CLASS","to":"file:repo/repo.go:class:3:User","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go","type":"DEFINES_CLASS","to":"file:repo/repo.go:class:5:Post","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go","type":"DEFINES_FUNCTION","to":"file:repo/repo.go:function:33:Run","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go","type":"DEFINES_INTERFACE","to":"file:repo/repo.go:interface:12:Posts","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go","type":"DEFINES_INTERFACE","to":"file:repo/repo.go:interface:8:Users","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go:class:16:UserRepo","type":"DEFINES_METHOD","to":"file:repo/repo.go:function:18:Get","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go:class:16:UserRepo","type":"IMPLEMENTS","to":"file:repo/repo.go:interface:8:Users","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go:class:20:PostRepo","type":"DEFINES_METHOD","to":"file:repo/repo.go:function:22:Get","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go:class:20:PostRepo","type":"IMPLEMENTS","to":"file:repo/repo.go:interface:12:Posts","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go:class:25:Handler","type":"DEFINES_METHOD","to":"file:repo/repo.go:function:27:Get","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go:class:29:Tx","type":"DEFINES_METHOD","to":"file:repo/repo.go:function:31:Save","properties":{}}
+{"kind":"rel","from":"file:repo/repo.go:function:33:Run","type":"CALLS","to":"file:repo/repo.go:function:33:Run:call:33:47:fn","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

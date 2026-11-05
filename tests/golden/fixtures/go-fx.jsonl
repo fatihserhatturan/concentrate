@@ -45,7 +45,7 @@
 {"kind":"node","id":"file:store/store.go:function:21:NewUserStore","label":"Function","properties":{"className":null,"endLine":23,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":21,"methodKind":null,"name":"NewUserStore","parameters":"[{\"name\":\"cfg\",\"type\":\"*Config\"},{\"name\":\"db\",\"type\":\"*sql.DB\"}]","returnType":"UserStore","visibility":"exported"}}
 {"kind":"node","id":"file:store/store.go:function:27:NewAuditLog","label":"Function","properties":{"className":null,"endLine":27,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":27,"methodKind":null,"name":"NewAuditLog","parameters":"[]","returnType":"*AuditLog","visibility":"exported"}}
 {"kind":"node","id":"file:store/store.go:import:3:database/sql","label":"Import","properties":{"line":3,"source":"database/sql","specifier":"\"database/sql\""}}
-{"kind":"node","id":"file:store/store.go:interface:10:UserStore","label":"Interface","properties":{"embeds":"[]","endLine":12,"isExported":true,"line":10,"methods":"[\"Find\"]","name":"UserStore"}}
+{"kind":"node","id":"file:store/store.go:interface:10:UserStore","label":"Interface","properties":{"embeds":"[]","endLine":12,"isExported":true,"line":10,"methodSignatures":"{\"Find\":{\"parameters\":[\"int\"],\"returnType\":\"(string, error)\"}}","methods":"[\"Find\"]","name":"UserStore"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-fx","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:api","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:service","properties":{}}

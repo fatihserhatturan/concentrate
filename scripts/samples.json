@@ -14,6 +14,9 @@
     { "name": "internet-angular-realworld", "suite": "internet", "repo": "https://github.com/gothinkster/angular-realworld-example-app", "sha": "f39866e5241477f3b891a045edfaedf82792be5e" },
     { "name": "internet-go-gin-realworld", "golden": true, "suite": "internet", "repo": "https://github.com/realworld-apps/golang-gin-realworld-example-app", "sha": "a41289b2a4951e7cc09066f86742a27f85121c9b" },
     { "name": "internet-go-echo-realworld", "golden": true, "suite": "internet", "repo": "https://github.com/xesina/golang-echo-realworld-example-app", "sha": "e578590b51e93440c5bdfdb5a98578679c0ee383" },
+    { "name": "internet-go-clean-arch", "suite": "internet", "repo": "https://github.com/bxcodec/go-clean-arch", "sha": "e06c6d0cb37069b0ef56e3df67f80ca130a1ab82" },
+    { "name": "internet-go-chi-base", "suite": "internet", "repo": "https://github.com/dhax/go-base", "sha": "ed4c6ac2bdbc46778f3076a2f52c4751deaf5a6b" },
+    { "name": "internet-go-simplebank", "suite": "internet", "repo": "https://github.com/techschool/simplebank", "sha": "97f000fe58ad01a0774179ffa8884ac7784cf263", "exclude": ["doc/**"] },
     { "name": "internet-nextjs-taxonomy", "suite": "internet", "repo": "https://github.com/shadcn-ui/taxonomy", "sha": "298a8857c7128a0d121e7f699dfd729f23b3966d" },
     { "name": "internet-realworld-fullstack", "suite": "internet", "parts": [
       { "dir": "backend", "repo": "https://github.com/gothinkster/node-express-realworld-example-app", "sha": "30b68e1e881462b2f4164ea09ab4c4f5699c7b0b" },

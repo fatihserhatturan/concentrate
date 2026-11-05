@@ -1,0 +1,260 @@
+{
+  "sample": "internet-go-chi-base",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. chi with cobra (cmd/) and viper, bun on Postgres. Routes: every route api/api.go, api/admin, api/app and auth/pwdless register, with the paths the Mount and Route calls give them (a sub-router's \"/\" is the mount path; trailing slashes are not compared). Env: each viper Get* read (cmd/root.go calls viper.AutomaticEnv, so a key is read as its upper-cased environment variable; SetDefault and BindPFlag are not reads) and the two os.Getenv reads in auth/pwdless/emails.go; *_test.go files are not labeled. Calls and data access are not labeled: the stores in database/ use bun (NewSelect().Model(...)), which Concentrate does not read yet.",
+  "routes": {
+    "scope": [
+      "api/",
+      "auth/"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/admin/accounts/",
+        "file": "api/admin/accounts.go",
+        "line": 45
+      },
+      {
+        "method": "POST",
+        "path": "/admin/accounts/",
+        "file": "api/admin/accounts.go",
+        "line": 46
+      },
+      {
+        "method": "GET",
+        "path": "/admin/accounts/{accountID}/",
+        "file": "api/admin/accounts.go",
+        "line": 49
+      },
+      {
+        "method": "PUT",
+        "path": "/admin/accounts/{accountID}/",
+        "file": "api/admin/accounts.go",
+        "line": 50
+      },
+      {
+        "method": "DELETE",
+        "path": "/admin/accounts/{accountID}/",
+        "file": "api/admin/accounts.go",
+        "line": 51
+      },
+      {
+        "method": "GET",
+        "path": "/admin/",
+        "file": "api/admin/api.go",
+        "line": 48
+      },
+      {
+        "method": "GET",
+        "path": "/healthz",
+        "file": "api/api.go",
+        "line": 81
+      },
+      {
+        "method": "GET",
+        "path": "/*",
+        "file": "api/api.go",
+        "line": 85
+      },
+      {
+        "method": "GET",
+        "path": "/api/account/",
+        "file": "api/app/account.go",
+        "line": 47
+      },
+      {
+        "method": "PUT",
+        "path": "/api/account/",
+        "file": "api/app/account.go",
+        "line": 48
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/account/",
+        "file": "api/app/account.go",
+        "line": 49
+      },
+      {
+        "method": "PUT",
+        "path": "/api/account/token/{tokenID}/",
+        "file": "api/app/account.go",
+        "line": 51
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/account/token/{tokenID}/",
+        "file": "api/app/account.go",
+        "line": 52
+      },
+      {
+        "method": "GET",
+        "path": "/api/profile/",
+        "file": "api/app/profile.go",
+        "line": 41
+      },
+      {
+        "method": "PUT",
+        "path": "/api/profile/",
+        "file": "api/app/profile.go",
+        "line": 42
+      },
+      {
+        "method": "POST",
+        "path": "/auth/login",
+        "file": "auth/pwdless/api.go",
+        "line": 72
+      },
+      {
+        "method": "POST",
+        "path": "/auth/token",
+        "file": "auth/pwdless/api.go",
+        "line": 73
+      },
+      {
+        "method": "POST",
+        "path": "/auth/refresh",
+        "file": "auth/pwdless/api.go",
+        "line": 77
+      },
+      {
+        "method": "POST",
+        "path": "/auth/logout",
+        "file": "auth/pwdless/api.go",
+        "line": 78
+      }
+    ]
+  },
+  "env": {
+    "scope": [
+      "main.go",
+      "api/",
+      "auth/",
+      "cmd/",
+      "database/",
+      "email/",
+      "logging/",
+      "models/"
+    ],
+    "items": [
+      {
+        "file": "api/server.go",
+        "line": 22,
+        "name": "ENABLE_CORS",
+        "function": "NewServer"
+      },
+      {
+        "file": "api/server.go",
+        "line": 28,
+        "name": "PORT",
+        "function": "NewServer"
+      },
+      {
+        "file": "auth/jwt/tokenauth.go",
+        "line": 21,
+        "name": "AUTH_JWT_SECRET",
+        "function": "NewTokenAuth"
+      },
+      {
+        "file": "auth/jwt/tokenauth.go",
+        "line": 40,
+        "name": "AUTH_JWT_EXPIRY",
+        "function": "NewTokenAuth"
+      },
+      {
+        "file": "auth/jwt/tokenauth.go",
+        "line": 41,
+        "name": "AUTH_JWT_REFRESH_EXPIRY",
+        "function": "NewTokenAuth"
+      },
+      {
+        "file": "auth/pwdless/emails.go",
+        "line": 22,
+        "name": "EMAIL_FROM_NAME",
+        "function": "LoginTokenEmail"
+      },
+      {
+        "file": "auth/pwdless/emails.go",
+        "line": 22,
+        "name": "EMAIL_FROM_ADDRESS",
+        "function": "LoginTokenEmail"
+      },
+      {
+        "file": "auth/pwdless/logintoken.go",
+        "line": 34,
+        "name": "AUTH_LOGIN_URL",
+        "function": "NewLoginTokenAuth"
+      },
+      {
+        "file": "auth/pwdless/logintoken.go",
+        "line": 35,
+        "name": "AUTH_LOGIN_TOKEN_LENGTH",
+        "function": "NewLoginTokenAuth"
+      },
+      {
+        "file": "auth/pwdless/logintoken.go",
+        "line": 36,
+        "name": "AUTH_LOGIN_TOKEN_EXPIRY",
+        "function": "NewLoginTokenAuth"
+      },
+      {
+        "file": "database/postgres.go",
+        "line": 17,
+        "name": "DB_DSN",
+        "function": "DBConn"
+      },
+      {
+        "file": "database/postgres.go",
+        "line": 27,
+        "name": "DB_DEBUG",
+        "function": "DBConn"
+      },
+      {
+        "file": "email/smtp.go",
+        "line": 26,
+        "name": "EMAIL_SMTP_HOST",
+        "function": "NewMailer"
+      },
+      {
+        "file": "email/smtp.go",
+        "line": 27,
+        "name": "EMAIL_SMTP_PORT",
+        "function": "NewMailer"
+      },
+      {
+        "file": "email/smtp.go",
+        "line": 28,
+        "name": "EMAIL_SMTP_USER",
+        "function": "NewMailer"
+      },
+      {
+        "file": "email/smtp.go",
+        "line": 29,
+        "name": "EMAIL_SMTP_PASSWORD",
+        "function": "NewMailer"
+      },
+      {
+        "file": "email/smtp.go",
+        "line": 44,
+        "name": "EMAIL_FROM_NAME",
+        "function": "NewMailer"
+      },
+      {
+        "file": "email/smtp.go",
+        "line": 44,
+        "name": "EMAIL_FROM_ADDRESS",
+        "function": "NewMailer"
+      },
+      {
+        "file": "logging/logger.go",
+        "line": 26,
+        "name": "LOG_TEXTLOGGING",
+        "function": "NewLogger"
+      },
+      {
+        "file": "logging/logger.go",
+        "line": 36,
+        "name": "LOG_LEVEL",
+        "function": "NewLogger"
+      }
+    ]
+  }
+}

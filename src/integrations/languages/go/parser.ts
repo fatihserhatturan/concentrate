@@ -312,16 +312,24 @@ function createStructNode(fileNodeId: string, node: SyntaxNode): GraphNode | nul
 }
 
 // `type Reader interface { Read(p []byte) (int, error); io.Closer }`: the
-// method names and the embedded interfaces (types of a constraint union such
+// method names (and each one's parameters and result, `methodSignatures`)
+// and the embedded interfaces (types of a constraint union such
 // as `~int | ~string` are not interfaces and are left out).
 function createInterfaceNode(fileNodeId: string, node: SyntaxNode): GraphNode {
   const name = node.childForFieldName("name")!.text;
   const methods: string[] = [];
+  const signatures: Record<string, { parameters: Array<string | null>; returnType: string | null }> = {};
   const embeds: string[] = [];
   for (const element of node.childForFieldName("type")?.namedChildren ?? []) {
     if (element.type === "method_elem" || element.type === "method_spec") {
       const methodName = element.childForFieldName("name")?.text;
-      if (methodName) methods.push(methodName);
+      if (methodName) {
+        methods.push(methodName);
+        signatures[methodName] = {
+          parameters: goParameters(element.childForFieldName("parameters")).map((parameter) => parameter.type),
+          returnType: element.childForFieldName("result")?.text ?? null,
+        };
+      }
     } else if (element.type === "type_elem" && element.namedChildren.length === 1) {
       const embedded = element.namedChildren[0]!;
       if (embedded.type === "type_identifier" || embedded.type === "qualified_type" || embedded.type === "generic_type") embeds.push(embedded.text);
@@ -336,6 +344,7 @@ function createInterfaceNode(fileNodeId: string, node: SyntaxNode): GraphNode {
       endLine: node.endPosition.row + 1,
       isExported: /^[A-Z]/.test(name),
       methods: JSON.stringify(methods),
+      methodSignatures: JSON.stringify(signatures),
       embeds: JSON.stringify(embeds),
       ...typeParameters(node),
     },
@@ -454,14 +463,35 @@ export function localTypes(functionNode: SyntaxNode): ReadonlyMap<string, LocalT
   return locals;
 }
 
+// One entry per name. A name declared again in a nested block or closure
+// (`if a, ok := m[k]; ok` with `a` the receiver) does not replace the outer
+// declaration; one declared again at the same depth does. A closure's
+// parameters (`execTx(ctx, func(q *Queries) error {…})`) are locals of its
+// body.
 function readLocalTypes(functionNode: SyntaxNode): Map<string, LocalType | null> {
   const locals = new Map<string, LocalType | null>();
-  const declare = (name: SyntaxNode, local: LocalType | null) => {
-    if (name.type === "identifier" && name.text !== "_") locals.set(name.text, local);
+  const depthOf = new Map<string, number>();
+  const blockDepth = (node: SyntaxNode) => {
+    let depth = 0;
+    for (let current = node.parent; current && current.id !== functionNode.id; current = current.parent) {
+      if (current.type === "block") depth += 1;
+    }
+    return depth;
   };
-  for (const list of [functionNode.childForFieldName("receiver"), functionNode.childForFieldName("parameters")]) {
+  const declare = (name: SyntaxNode, local: LocalType | null, depth = blockDepth(name)) => {
+    if (name.type !== "identifier" || name.text === "_") return;
+    if ((depthOf.get(name.text) ?? Infinity) < depth) return;
+    depthOf.set(name.text, depth);
+    locals.set(name.text, local);
+  };
+  const result = functionNode.childForFieldName("result");
+  // Named results (`(config Config, err error)`) are locals too.
+  for (const list of [functionNode.childForFieldName("receiver"), functionNode.childForFieldName("parameters"), result?.type === "parameter_list" ? result : null]) {
     for (const parameter of goParameters(list)) {
-      if (parameter.name && parameter.type && !parameter.type.startsWith("...")) locals.set(parameter.name, { type: parameter.type });
+      if (parameter.name && parameter.type && !parameter.type.startsWith("...")) {
+        locals.set(parameter.name, { type: parameter.type });
+        depthOf.set(parameter.name, 0);
+      }
     }
   }
   walkScoped(functionNode, (node) => {
@@ -489,7 +519,14 @@ function readLocalTypes(functionNode: SyntaxNode): Map<string, LocalType | null>
         : ranged.constructor.endsWith("[]") ? null : { constructor: `${ranged.constructor}[]` };
       names.forEach((name, index) => declare(name, index === 1 ? element : null));
     }
-  }, (node) => node.type === "func_literal");
+    if (node.type === "func_literal" && node.id !== functionNode.id) {
+      for (const declaration of node.childForFieldName("parameters")?.namedChildren ?? []) {
+        if (declaration.type !== "parameter_declaration") continue;
+        const type = declaration.childForFieldName("type")?.text;
+        for (const name of declaration.childrenForFieldName("name")) declare(name, type ? { type } : null, blockDepth(name) + 1);
+      }
+    }
+  }, () => false);
   return locals;
 }
 

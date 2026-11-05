@@ -25,7 +25,7 @@
 {"kind":"node","id":"file:repo/repo.go:function:14:Now","label":"Function","properties":{"className":"FakeClock","endLine":14,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":14,"methodKind":null,"name":"Now","parameters":"[]","returnType":"int64","visibility":"exported"}}
 {"kind":"node","id":"file:repo/repo.go:function:20:NewOrders","label":"Function","properties":{"className":null,"endLine":20,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":20,"methodKind":null,"name":"NewOrders","parameters":"[{\"name\":\"clock\",\"type\":\"Clock\"}]","returnType":"*Orders","visibility":"exported"}}
 {"kind":"node","id":"file:repo/repo.go:function:9:Now","label":"Function","properties":{"className":"SystemClock","endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":9,"methodKind":null,"name":"Now","parameters":"[]","returnType":"int64","visibility":"exported"}}
-{"kind":"node","id":"file:repo/repo.go:interface:3:Clock","label":"Interface","properties":{"embeds":"[]","endLine":5,"isExported":true,"line":3,"methods":"[\"Now\"]","name":"Clock"}}
+{"kind":"node","id":"file:repo/repo.go:interface:3:Clock","label":"Interface","properties":{"embeds":"[]","endLine":5,"isExported":true,"line":3,"methodSignatures":"{\"Now\":{\"parameters\":[],\"returnType\":\"int64\"}}","methods":"[\"Now\"]","name":"Clock"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-wire","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:app","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:repo","properties":{}}

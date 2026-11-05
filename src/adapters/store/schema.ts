@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 71;
+export const SCHEMA_VERSION = 72;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -29,7 +29,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Import", properties: { source: "STRING", specifier: "STRING", line: "INT64", isReExport: "BOOLEAN", isWildcard: "BOOLEAN", isDynamic: "BOOLEAN", isCjs: "BOOLEAN", isTypeOnly: "BOOLEAN", bindings: "STRING", alias: "STRING" } },
   { label: "Function", properties: { name: "STRING", kind: "STRING", methodKind: "STRING", line: "INT64", endLine: "INT64", className: "STRING", isExported: "BOOLEAN", isAsync: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", parameters: "STRING", returnType: "STRING", storeRefs: "STRING", storeSelects: "STRING", formAction: "STRING", typeParameters: "STRING", testKind: "STRING" } },
   { label: "Class", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", extendsNames: "STRING", implementsNames: "STRING", fields: "STRING", typeParameters: "STRING" } },
-  { label: "Interface", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", methods: "STRING", embeds: "STRING", typeParameters: "STRING" } },
+  { label: "Interface", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", methods: "STRING", methodSignatures: "STRING", embeds: "STRING", typeParameters: "STRING" } },
   { label: "TypeAlias", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", aliasOf: "STRING", isAlias: "BOOLEAN", typeParameters: "STRING" } },
   { label: "Enum", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN" } },
   { label: "Call", properties: { name: "STRING", expression: "STRING", callee: "STRING", receiver: "STRING", requireSource: "STRING", line: "INT64", columnNumber: "INT64", args: "STRING", httpClient: "STRING", httpReceiver: "STRING", httpMethod: "STRING", httpUrl: "STRING", httpUrlAlternatives: "STRING", storeAccess: "STRING", reduxAccess: "STRING", receiverType: "STRING", receiverConstructor: "STRING", receiverIsLocal: "BOOLEAN" } },

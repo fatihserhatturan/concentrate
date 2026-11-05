@@ -40,7 +40,9 @@ import { createDefinitionLookup, descendantsOf, insideFunction, isPackageLevel, 
 // READS / WRITES to the tables follow from the JS/TS data-access contributor,
 // which runs after this one.
 
-type Arg = { literal?: string; type?: string; field?: { type: string; name: string } };
+// `param`: the argument is the enclosing function's parameter at that index
+// (`m.Conn.QueryContext(ctx, query)` in a helper its callers pass SQL to).
+type Arg = { literal?: string; type?: string; field?: { type: string; name: string }; param?: number };
 type Step = { method: string; args: Arg[] };
 // `next`: the selector after the field (`s.client.User` → field `client`,
 // next `User`).
@@ -91,6 +93,27 @@ const isChainMethod = (method: string) => chainMethods.has(method) || /^Query[A-
 type EntSchema = { table?: string; edges: Array<{ name: string; target: string; unique: boolean }> };
 
 const MAX_DEPTH = 6;
+const SQL_START = /^\s*(?:SELECT|INSERT|UPDATE|DELETE|REPLACE|WITH|MERGE)\b/iu;
+
+// The index of a name among the parameters of the function declaration
+// around it (not a closure's), receiver excluded.
+function parameterIndex(name: SyntaxNode): number | undefined {
+  let fn: SyntaxNode | null = name.parent;
+  while (fn && fn.type !== "function_declaration" && fn.type !== "method_declaration") {
+    if (fn.type === "func_literal") return undefined;
+    fn = fn.parent;
+  }
+  let index = 0;
+  for (const parameter of fn?.childForFieldName("parameters")?.namedChildren ?? []) {
+    const names = parameter.childrenForFieldName("name");
+    for (const id of names) {
+      if (id.text === name.text) return index;
+      index += 1;
+    }
+    if (names.length === 0) index += 1;
+  }
+  return undefined;
+}
 
 export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) => {
   const imports = importedPackages(root);
@@ -103,13 +126,21 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
     if (node.label === "Call") calls.set(`${node.properties.line}:${node.properties.columnNumber}:${node.properties.expression}`, node);
   }
 
-  const literal = (node: SyntaxNode): string | undefined => {
+  // A string literal, a constant, a concatenation of those, or a local
+  // holding one (`query := \`SELECT …\``).
+  const literal = (node: SyntaxNode, depth = 0): string | undefined => {
+    if (depth > MAX_DEPTH) return undefined;
     if (node.type === "interpreted_string_literal" || node.type === "raw_string_literal") return node.text.slice(1, -1);
-    if (node.type === "identifier") return constants.get(node.text);
+    if (node.type === "identifier") {
+      const constant = constants.get(node.text);
+      if (constant !== undefined) return constant;
+      const definition = definitionOf(node.text, node);
+      return definition && "value" in definition ? literal(definition.value, depth + 1) : undefined;
+    }
     if (node.type === "binary_expression" && node.childForFieldName("operator")?.text === "+") {
       const left = node.childForFieldName("left");
       const right = node.childForFieldName("right");
-      const [a, b] = [left ? literal(left) : undefined, right ? literal(right) : undefined];
+      const [a, b] = [left ? literal(left, depth + 1) : undefined, right ? literal(right, depth + 1) : undefined];
       return a !== undefined && b !== undefined ? a + b : undefined;
     }
     return undefined;
@@ -143,7 +174,9 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
       if (type && field) return { field: { type, name: field } };
     }
     const type = typeOf(node, 0);
-    return type ? { type } : {};
+    // A string parameter may be SQL the callers pass.
+    const param = node.type === "identifier" && (!type || type === "string") ? parameterIndex(node) : undefined;
+    return { ...type ? { type } : {}, ...param !== undefined ? { param } : {} };
   };
 
   const decompose = (expression: SyntaxNode, depth: number): Chain | null => {
@@ -192,6 +225,21 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
     }
     return null;
   };
+
+  // SQL a call passes on (`m.fetch(ctx, query, id)`): the contributor gives
+  // it to the call when the function called runs it from that parameter.
+  for (const call of descendantsOf(root, "call_expression")) {
+    const fn = call.childForFieldName("function");
+    if (!fn) continue;
+    const sql: Record<number, string> = {};
+    (call.childForFieldName("arguments")?.namedChildren ?? []).forEach((arg, index) => {
+      if (arg.type !== "identifier" && arg.type !== "interpreted_string_literal" && arg.type !== "raw_string_literal" && arg.type !== "binary_expression") return;
+      const value = literal(arg);
+      if (value !== undefined && SQL_START.test(value)) sql[index] = value;
+    });
+    const node = Object.keys(sql).length > 0 ? calls.get(`${call.startPosition.row + 1}:${call.startPosition.column}:${fn.text}`) : undefined;
+    if (node) node.properties.goSqlArgs = JSON.stringify(sql);
+  }
 
   for (const call of descendantsOf(root, "call_expression")) {
     const fn = call.childForFieldName("function");
@@ -326,6 +374,7 @@ export const goDataAccessContributor: ISemanticContributor = {
     const cleanup = () => {
       for (const node of graph.nodes) {
         delete node.properties.goDataAccess;
+        delete node.properties.goSqlArgs;
         delete node.properties.goGorm;
         delete node.properties.goLocalType;
         delete node.properties.goTableName;
@@ -501,6 +550,12 @@ export const goDataAccessContributor: ISemanticContributor = {
 
     const accesses: Access[] = [];
     const sqlCalls: Array<{ call: GraphNode; sql: string; library: string }> = [];
+    const sqlCallersOf = new Map<string, GraphNode[]>();
+    for (const relationship of graph.relationships) {
+      if (relationship.type !== "CALL_RESOLVES_TO") continue;
+      const call = nodeById.get(relationship.from);
+      if (call) sqlCallersOf.set(relationship.to, [...sqlCallersOf.get(relationship.to) ?? [], call]);
+    }
     for (const call of pending) {
       const chain = JSON.parse(String(call.properties.goDataAccess)) as Chain;
       const fileId = /^(file:.+?\.go)(?=:)/u.exec(call.id)?.[1];
@@ -562,6 +617,15 @@ export const goDataAccessContributor: ISemanticContributor = {
         if (!sqlStep) continue;
         const sql = sqlStep.args.find((arg) => arg.literal !== undefined)?.literal;
         if (sql) sqlCalls.push({ call, sql, library });
+        // A helper running the SQL its callers pass: each caller's call
+        // makes the access (the SQL is the caller's).
+        const params = sql === undefined ? sqlStep.args.flatMap((arg) => arg.param !== undefined ? [String(arg.param)] : []) : [];
+        const helper = params.length > 0 ? relationshipIndex.callerFunctionByCallId.get(call.id) : undefined;
+        for (const caller of helper ? sqlCallersOf.get(helper) ?? [] : []) {
+          const passed = typeof caller.properties.goSqlArgs === "string" ? JSON.parse(caller.properties.goSqlArgs) as Record<string, string> : {};
+          const text = params.map((param) => passed[param]).find((value) => value !== undefined);
+          if (text) sqlCalls.push({ call: caller, sql: text, library });
+        }
         continue;
       }
 
