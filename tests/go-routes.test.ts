@@ -52,6 +52,18 @@ describe("Go gin routes", () => {
     ]);
   });
 
+  it("keeps a factory middleware's call on its lifecycle step", () => {
+    const steps = (method: string, fullPath: string) => {
+      const route = graph.nodes.find((node) => node.label === "Route" && node.properties.method === method && node.properties.fullPath === fullPath)!;
+      return graph.relationships
+        .filter((rel) => rel.type === "ROUTE_LIFECYCLE_STEP" && rel.from === route.id)
+        .sort((a, b) => Number(a.properties.orderIndex) - Number(b.properties.orderIndex))
+        .map((rel) => [functionName(graph, rel.to), rel.properties.expression ?? null]);
+    };
+    assert.deepEqual(steps("POST", "/api/v1/items"), [["Logger", null], ["Required", "auth.Required(true)"], ["<v1.POST:/items:arg1>", null]]);
+    assert.deepEqual(steps("POST", "/api/v1/users/"), [["Logger", null], ["Required", "auth.Required(false)"], ["Audit", null], ["Create", null]]);
+  });
+
   it("moves a closure handler's calls to a function of its own", () => {
     const closure = graph.nodes.find((node) => node.label === "Function" && node.properties.name === "<v1.POST:/items:arg1>")!;
     assert.equal(closure.properties.kind, "func_literal");

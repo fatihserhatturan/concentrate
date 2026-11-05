@@ -12,6 +12,8 @@ type DataAccess = {
   // A model declared in a schema file (Prisma), instead of one named after
   // the call.
   modelId?: string;
+  // The file of the call that makes the access.
+  file?: string | null;
 };
 
 type ModelHint = {
@@ -116,6 +118,7 @@ export function addDataAccessRelationships(
     if (!dataAccess) continue;
 
     const file = fileOfNodeId(callNode.id, filePaths);
+    dataAccess.file = file;
     const declared = !file ? null : dataAccess.library === "prisma"
       ? resolvePrismaModel(prismaModels, file, dataAccess.modelName)
       : declaredModels.resolve(dataAccess.library, file, dataAccess.modelName);
@@ -129,8 +132,10 @@ export function addDataAccessRelationships(
       if (dataAccess.library === "knex") addKnexTable(graph, modelNode.id, dataAccess.modelName);
     }
 
-    for (const sourceId of accessSourceIds(callNode.id, context)) {
-      addDataAccessRelationship(graph, sourceId, modelId, dataAccess);
+    for (const [index, sourceId] of accessSourceIds(callNode.id, context).entries()) {
+      // The function (or module) that makes the call is the direct access;
+      // its routes and entrypoints reach it.
+      addDataAccessRelationship(graph, sourceId, modelId, dataAccess, index === 0);
       directAccesses.push({ from: sourceId, to: modelId, dataAccess });
     }
   }
@@ -203,7 +208,7 @@ function addDeclaredRelations(graph: IGraphContributor, declaredModels: Declared
 }
 
 // Node ids start with their file's id (`file:<relativePath>:...`).
-function fileOfNodeId(id: string, filePaths: ReadonlySet<string>): string | null {
+export function fileOfNodeId(id: string, filePaths: ReadonlySet<string>): string | null {
   if (!id.startsWith("file:")) return null;
   for (let index = id.indexOf(":", 5); index !== -1; index = id.indexOf(":", index + 1)) {
     const candidate = id.slice(5, index);
@@ -522,7 +527,7 @@ function propagateDataAccessThroughResolvedCalls(
           continue;
         }
 
-        addDataAccessRelationship(graph, callerFunctionId, access.to, access.dataAccess);
+        addDataAccessRelationship(graph, callerFunctionId, access.to, access.dataAccess, false);
         dataAccessesByFunctionId.set(callerFunctionId, [
           ...(dataAccessesByFunctionId.get(callerFunctionId) ?? []),
           access,
@@ -531,7 +536,7 @@ function propagateDataAccessThroughResolvedCalls(
           ...(context.routesByFunctionId.get(callerFunctionId) ?? []),
           ...(context.entrypointsByFunctionId.get(callerFunctionId) ?? []),
         ]) {
-          addDataAccessRelationship(graph, sourceId, access.to, access.dataAccess);
+          addDataAccessRelationship(graph, sourceId, access.to, access.dataAccess, false);
         }
         changed = true;
       }
@@ -544,6 +549,7 @@ function addDataAccessRelationship(
   from: string,
   to: string,
   dataAccess: DataAccess,
+  direct: boolean,
 ): void {
   graph.addRelationship({
     from,
@@ -554,6 +560,10 @@ function addDataAccessRelationship(
       library: dataAccess.library,
       line: dataAccess.line,
       expression: dataAccess.expression,
+      // `line` is in `file`; a propagated edge (direct false) comes from a
+      // caller of the function that makes the call, or its route.
+      file: dataAccess.file ?? null,
+      direct,
     },
   });
 }

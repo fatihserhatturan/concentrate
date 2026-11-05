@@ -23,6 +23,6 @@
 {"kind":"rel","from":"file:service.ts:class:9:AccountService","type":"DEFINES_FIELD","to":"file:service.ts:class:9:AccountService:field:14:serviceId","properties":{}}
 {"kind":"rel","from":"file:service.ts:class:9:AccountService","type":"DEFINES_METHOD","to":"file:service.ts:function:10:constructor","properties":{}}
 {"kind":"rel","from":"file:service.ts:class:9:AccountService","type":"DEFINES_METHOD","to":"file:service.ts:function:18:find","properties":{}}
-{"kind":"rel","from":"file:service.ts:function:18:find","type":"ACCESSES_DATA","to":"datamodel:typeorm:Repository","properties":{"expression":"this.repository.find","library":"typeorm","line":19,"operation":"read"}}
+{"kind":"rel","from":"file:service.ts:function:18:find","type":"ACCESSES_DATA","to":"datamodel:typeorm:Repository","properties":{"direct":true,"expression":"this.repository.find","file":"service.ts","library":"typeorm","line":19,"operation":"read"}}
 {"kind":"rel","from":"file:service.ts:function:18:find","type":"CALLS","to":"file:service.ts:function:18:find:call:19:11:this.repository.find","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

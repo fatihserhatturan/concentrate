@@ -46,13 +46,13 @@ export async function routeDetails(engine: IQueryEngine, args: Record<string, un
       MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function)
       WHERE id(route) IN $ids
       RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook,
-        step.orderIndex AS orderIndex
+        step.orderIndex AS orderIndex, step.expression AS expression
     `, { ids: routeIds }),
     engine.query(`
       MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel)
       WHERE id(route) IN $ids
       RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation,
-        rel.line AS line, rel.expression AS expression
+        rel.file AS file, rel.line AS line, rel.expression AS expression
     `, { ids: routeIds }),
     engine.query(`
       MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table)

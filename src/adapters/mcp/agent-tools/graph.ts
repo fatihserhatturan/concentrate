@@ -265,7 +265,7 @@ export async function functionResources(engine: IQueryEngine, ids: readonly stri
       MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel)
       WHERE id(fn) IN $ids
       RETURN model.name AS model, model.library AS library, rel.operation AS operation,
-        rel.line AS line, rel.expression AS expression, id(fn) AS fn
+        rel.file AS file, rel.line AS line, rel.expression AS expression, id(fn) AS fn
     `, params),
     engine.query(`
       MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table)

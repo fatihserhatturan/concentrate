@@ -164,7 +164,7 @@ function routeRelationships(
       from: routeId,
       to: functionId,
       type: "ROUTE_LIFECYCLE_STEP",
-      properties: { role: step.role, scope: step.ref.scope, hook: step.hook, orderIndex },
+      properties: { role: step.role, scope: step.ref.scope, hook: step.hook, orderIndex, ...step.ref.call ? { expression: step.ref.call } : {} },
     });
   });
   for (let orderIndex = 0; orderIndex < resolved.length - 1; orderIndex += 1) {

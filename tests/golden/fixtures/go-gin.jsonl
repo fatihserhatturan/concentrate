@@ -154,7 +154,7 @@
 {"kind":"rel","from":"file:main.go:route:34:1:GET:/items","type":"ROUTE_LIFECYCLE_STEP","to":"file:main.go:function:16:List","properties":{"hook":"handler","orderIndex":1,"role":"handler","scope":"route"}}
 {"kind":"rel","from":"file:main.go:route:38:1:POST:/items","type":"ROUTE_HANDLED_BY","to":"file:main.go:function:38:<v1.POST:/items:arg1>","properties":{}}
 {"kind":"rel","from":"file:main.go:route:38:1:POST:/items","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:11:Logger","properties":{"hook":null,"orderIndex":0,"role":"middleware","scope":"router"}}
-{"kind":"rel","from":"file:main.go:route:38:1:POST:/items","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:5:Required","properties":{"hook":null,"orderIndex":1,"role":"middleware","scope":"router"}}
+{"kind":"rel","from":"file:main.go:route:38:1:POST:/items","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:5:Required","properties":{"expression":"auth.Required(true)","hook":null,"orderIndex":1,"role":"middleware","scope":"router"}}
 {"kind":"rel","from":"file:main.go:route:38:1:POST:/items","type":"ROUTE_LIFECYCLE_STEP","to":"file:main.go:function:38:<v1.POST:/items:arg1>","properties":{"hook":"handler","orderIndex":2,"role":"handler","scope":"route"}}
 {"kind":"rel","from":"file:routes/users.go","type":"DECLARES_ROUTE","to":"file:routes/users.go:route:14:1:GET:","properties":{}}
 {"kind":"rel","from":"file:routes/users.go","type":"DECLARES_ROUTE","to":"file:routes/users.go:route:15:1:GET:/:id","properties":{}}
@@ -186,11 +186,11 @@
 {"kind":"rel","from":"file:routes/users.go:route:17:1:POST:/","type":"ROUTE_HANDLED_BY","to":"file:routes/users.go:function:11:Create","properties":{}}
 {"kind":"rel","from":"file:routes/users.go:route:17:1:POST:/","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:11:Logger","properties":{"hook":null,"orderIndex":0,"role":"middleware","scope":"router"}}
 {"kind":"rel","from":"file:routes/users.go:route:17:1:POST:/","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:15:Audit","properties":{"hook":null,"orderIndex":2,"role":"middleware","scope":"route"}}
-{"kind":"rel","from":"file:routes/users.go:route:17:1:POST:/","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:5:Required","properties":{"hook":null,"orderIndex":1,"role":"middleware","scope":"router"}}
+{"kind":"rel","from":"file:routes/users.go:route:17:1:POST:/","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:5:Required","properties":{"expression":"auth.Required(false)","hook":null,"orderIndex":1,"role":"middleware","scope":"router"}}
 {"kind":"rel","from":"file:routes/users.go:route:17:1:POST:/","type":"ROUTE_LIFECYCLE_STEP","to":"file:routes/users.go:function:11:Create","properties":{"hook":"handler","orderIndex":3,"role":"handler","scope":"route"}}
 {"kind":"rel","from":"file:routes/users.go:route:22:1:DELETE:/:id","type":"ROUTE_HANDLED_BY","to":"file:routes/users.go:function:11:Create","properties":{}}
 {"kind":"rel","from":"file:routes/users.go:route:22:1:DELETE:/:id","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:11:Logger","properties":{"hook":null,"orderIndex":0,"role":"middleware","scope":"router"}}
-{"kind":"rel","from":"file:routes/users.go:route:22:1:DELETE:/:id","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:5:Required","properties":{"hook":null,"orderIndex":1,"role":"middleware","scope":"router"}}
+{"kind":"rel","from":"file:routes/users.go:route:22:1:DELETE:/:id","type":"ROUTE_LIFECYCLE_STEP","to":"file:auth/auth.go:function:5:Required","properties":{"expression":"auth.Required(false)","hook":null,"orderIndex":1,"role":"middleware","scope":"router"}}
 {"kind":"rel","from":"file:routes/users.go:route:22:1:DELETE:/:id","type":"ROUTE_LIFECYCLE_STEP","to":"file:routes/users.go:function:11:Create","properties":{"hook":"handler","orderIndex":2,"role":"handler","scope":"route"}}
 {"kind":"rel","from":"file:routes/users_test.go","type":"DEFINES_FUNCTION","to":"file:routes/users_test.go:function:9:TestRegister","properties":{}}
 {"kind":"rel","from":"file:routes/users_test.go","type":"IMPORTS","to":"file:routes/users_test.go:import:4:testing","properties":{}}

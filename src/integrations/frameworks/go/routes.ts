@@ -28,8 +28,9 @@ export type GoHandlerRef = {
   receiverConstructor?: string;
   receiverIsLocal?: true;
   // A call that returns the handler (`AuthMiddleware(true)`): the step is
-  // the function called.
+  // the function called, and `call` the call as written.
   factory?: true;
+  call?: string;
   functionId?: string;
   // "router" for middleware a router or group applies, "route" for the
   // registration's own.
@@ -233,7 +234,7 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
         const callee = node.childForFieldName("function");
         const args = node.childForFieldName("arguments")?.namedChildren ?? [];
         if (callee && args.length === 1 && isWrapper(callee.text, alias)) return handlerRef(args[0]!, scope, syntheticName);
-        return { ...reference(callee?.text ?? node.text, locals), factory: true, scope };
+        return { ...reference(callee?.text ?? node.text, locals), factory: true, call: callText(node), scope };
       }
       return { ...reference(node.text, locals), scope };
     };
@@ -764,6 +765,12 @@ function topOf(router: Router): Router {
   let top = router;
   while (top.parent) top = top.parent;
   return top;
+}
+
+// A factory call as written, whitespace collapsed (`users.AuthMiddleware(true)`).
+function callText(node: SyntaxNode): string {
+  const text = node.text.replace(/\s+/gu, " ");
+  return text.length > 160 ? `${text.slice(0, 157)}...` : text;
 }
 
 // The middleware a registration gets from the routers above it: all of a

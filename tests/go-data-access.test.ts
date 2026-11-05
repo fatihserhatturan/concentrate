@@ -102,6 +102,13 @@ describe("Go gorm data access", () => {
       assert.deepEqual(tables.tables[0].routes.map((route: any) => `${route.method} ${route.path}`), ["DELETE /categories/:slug"]);
       const access = await tool("list_data_access", { model: "Post", operation: "read" });
       assert.ok(access.dataAccess.some((row: any) => row.sourceKind === "Route" && row.sourceName === "/posts/count"));
+      // Direct rows first; a reached-through row keeps the call's own file.
+      const firstReached = access.dataAccess.findIndex((row: any) => row.direct !== true);
+      assert.ok(firstReached > 0 && access.dataAccess.slice(firstReached).every((row: any) => row.direct === false));
+      assert.ok(access.dataAccess.every((row: any) => typeof row.accessFile === "string" && typeof row.file === "string"));
+      assert.ok(access.dataAccess.filter((row: any) => row.direct).every((row: any) => row.sourceKind !== "Function" || row.file === row.accessFile));
+      const direct = await tool("list_data_access", { model: "Post", operation: "read", direct: true });
+      assert.deepEqual(direct.dataAccess, access.dataAccess.slice(0, firstReached));
       const route = await tool("route_details", { method: "DELETE", path: "/categories/:slug" });
       assert.deepEqual(route.routes[0].tables.map((table: any) => [table.table, table.writes]), [["post_categories", ["delete"]]]);
       const impact = await tool("impact_of", { symbol: "RenameAuthor" });

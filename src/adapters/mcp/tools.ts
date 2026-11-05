@@ -224,7 +224,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_entrypoints",
-    description: "Non-HTTP backend entrypoints: cron, queue, event, realtime and scheduler handlers.",
+    description: "Non-HTTP backend entrypoints: cron, queue, event, realtime and scheduler handlers; Go main, init, gRPC methods and cobra commands (cli).",
     inputSchema: objectSchema({
       kind: {
         type: "string",
@@ -264,7 +264,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_data_access",
-    description: "Data-access operations with the files, functions, routes and entrypoints that run them.",
+    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, sqlc, sql, sqlx) with the files, functions, routes and entrypoints that run them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
     inputSchema: objectSchema({
       model: {
         type: "string",
@@ -272,11 +272,15 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       operation: {
         type: "string",
-        description: "read, create, update or delete.",
+        description: "read, create, update, upsert or delete.",
       },
       library: {
         type: "string",
-        description: "Data-access library.",
+        description: "Data-access library, such as prisma, typeorm or gorm.",
+      },
+      direct: {
+        type: "boolean",
+        description: "Only rows that make the call. Defaults to false.",
       },
       limit: {
         type: "number",
@@ -286,10 +290,10 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_tables",
-    description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex) with columns, the ORM models mapped to them and their relations, and the routes and entrypoints that read or write each. Answers \"which endpoints write the users table?\".",
+    description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex; Go gorm, ent, sqlc) with columns, the ORM models mapped to them and their relations, and the routes and entrypoints that read or write each. Answers \"which endpoints write the users table?\".",
     inputSchema: objectSchema({
       name: { type: "string", description: "Table name substring." },
-      library: { type: "string", description: "prisma, typeorm, mongoose, drizzle or knex." },
+      library: { type: "string", description: "prisma, typeorm, mongoose, drizzle, knex, gorm, ent or sqlc." },
       limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
     }),
   },
@@ -752,17 +756,24 @@ async function listDataAccess(
   const model = optionalString(args.model);
   const operation = optionalString(args.operation);
   const library = optionalString(args.library);
+  const direct = args.direct === true;
   const { limit, fetch } = window;
-  const filters = dataAccessFilters(model, operation, library);
+  const filters = [dataAccessFilters(model, operation, library), direct ? "AND rel.direct = true" : ""].filter(Boolean).join("\n      ");
   const queries = [
     dataAccessQuery("File", "ACCESSES_DATA_FILE", filters, fetch),
     dataAccessQuery("Function", "ACCESSES_DATA_FUNCTION", filters, fetch),
     dataAccessQuery("Route", "ACCESSES_DATA_ROUTE", filters, fetch),
     dataAccessQuery("EntryPoint", "ACCESSES_DATA_ENTRYPOINT", filters, fetch),
   ];
-  const rows = (await Promise.all(queries.map((query) => engine.query(query)))).flat();
+  // Direct accesses first, each kind in its query's order. A method has no
+  // DEFINES_FUNCTION (its class has it, in another file in Go): its file is
+  // the start of its id (`file:<path>:function:...`).
+  const rows = (await Promise.all(queries.map((query) => engine.query(query)))).flat()
+    .map((row, index) => ({ row: row as Record<string, unknown>, index }))
+    .sort((a, b) => Number(b.row.direct === true) - Number(a.row.direct === true) || a.index - b.index)
+    .map(({ row: { sourceId, ...row } }) => ({ ...row, file: row.file ?? fileOfFunctionId(sourceId) }));
 
-  return { query: { model, operation, library, limit }, dataAccess: window.take(rows) };
+  return { query: { model, operation, library, direct, limit }, dataAccess: window.take(rows) };
 }
 
 function findImportChain(
@@ -927,6 +938,12 @@ function dataAccessFilters(model: string | undefined, operation: string | undefi
   ].filter(Boolean).join("\n      ");
 }
 
+function fileOfFunctionId(id: unknown): string | null {
+  if (typeof id !== "string" || !id.startsWith("file:")) return null;
+  const end = id.indexOf(":function:");
+  return end > 5 ? id.slice(5, end) : null;
+}
+
 function dataAccessQuery(sourceLabel: string, relationship: string, filters: string, limit: number): string {
   const fileMatch = sourceLabel === "File"
     ? "WITH source AS file, source, rel, model"
@@ -952,6 +969,9 @@ function dataAccessQuery(sourceLabel: string, relationship: string, filters: str
     RETURN '${sourceLabel}' AS sourceKind,
       ${sourceName} AS sourceName,
       file.relativePath AS file,
+      id(source) AS sourceId,
+      rel.direct AS direct,
+      rel.file AS accessFile,
       rel.line AS line,
       model.name AS model,
       model.library AS library,

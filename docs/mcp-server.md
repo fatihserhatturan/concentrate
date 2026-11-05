@@ -171,12 +171,19 @@ even for large repositories; read it first to decide which tools to call.
   the env file and line) and the ones code reads that no env file declares
   (`kind: "undeclared"`, with the reading file and line; not `NODE_ENV`, and
   only when some env file exists). Values are never stored.
-- `list_data_access`: lists data-access operations by source, model, library,
-  and operation. Each row has the model's `table` when one is known. Go
-  gorm, ent, sqlc, `database/sql` and sqlx accesses are included.
+- `list_data_access({ model?, operation?, library?, direct?, limit = 50 })`:
+  lists data-access operations by source, model, library, and operation. Each
+  row has the model's `table` when one is known. Go gorm, ent, sqlc,
+  `database/sql` and sqlx accesses are included. Rows with `direct: true`
+  (the file or function that makes the call) come first; the others are the
+  callers, routes and entrypoints that reach it. `line` is in `accessFile`,
+  the file of the call, which differs from the source's `file` on a
+  reached-through row. `direct: true` as an argument keeps only the direct
+  rows.
 - `list_tables({ name?, library?, limit = 20 })`: database tables, views and
   collections from Prisma schema files, TypeORM entities, Mongoose schemas,
-  Drizzle table definitions and Knex calls. Each table has its
+  Drizzle table definitions and Knex calls, and Go gorm models, ent schemas
+  and sqlc queries. Each table has its
   `columns` (with the database `column` name when `@map` renames it, and
   `isId` / `isUnique` / `optional` / `list` flags), the `models` that map to it
   with their `relations` (`field`, `kind` one or many, target `model`,
@@ -229,7 +236,8 @@ These answer a whole question in one call instead of a chain of lookups.
 - `route_details({ method, path, limit = 5 })`: for each matching route (method
   case-insensitive, path matched against the resolved full path or the path as
   declared): `handlers`, `lifecycle` steps (middleware, guards, hooks, ...) in
-  order, the `callChain` from those functions (up to 4 levels, caller → callee
+  order (a Go middleware created by a call keeps it as `expression`,
+  `auth.Required(true)`), the `callChain` from those functions (up to 4 levels, caller → callee
   with the call line), and the `dataAccess`, `tables`, `envVars` and `config`
   of the route and that chain (`usedBy` lists where each one is used). A
   `tables` entry has the table, its `kind` and `library`, and the `reads` and
