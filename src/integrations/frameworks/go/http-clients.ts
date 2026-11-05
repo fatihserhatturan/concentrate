@@ -7,7 +7,7 @@ import { createResolutionRelationshipIndex } from "../../../core/scan/resolution
 import { createGoCallIndex } from "../../../core/scan/resolution/go-calls.js";
 import { ENV_VALUE_FILES, readEnvFiles } from "../js-ts/env-files.js";
 import { importedPackages } from "./routes.js";
-import { createDefinitionLookup, stringConstants, valueTypeText, type Definition } from "./scope.js";
+import { createDefinitionLookup, descendantsOf, stringConstants, valueTypeText, type Definition } from "./scope.js";
 
 // Go outbound HTTP, recorded on the Call node like the JS/TS clients
 // (`httpClient`, `httpMethod`, `httpUrl`) so the http-requests contributor
@@ -55,35 +55,41 @@ export const goHttpClientsPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) 
   }
 
   // Struct fields by struct name, and the values fields are given
-  // (`Client{api: resty.New()…}`, `c.api = …`).
-  const fieldTypes = new Map<string, Map<string, string>>();
-  for (const spec of root.descendantsOfType("type_spec")) {
-    const type = spec.childForFieldName("type");
-    const name = spec.childForFieldName("name")?.text;
-    if (type?.type !== "struct_type" || !name) continue;
-    const fields = new Map<string, string>();
-    for (const declaration of type.descendantsOfType("field_declaration")) {
-      const fieldType = declaration.childForFieldName("type")?.text;
-      for (const field of declaration.childrenForFieldName("name")) if (fieldType) fields.set(field.text, fieldType);
+  // (`Client{api: resty.New()…}`, `c.api = …`): read on the first typed
+  // value, which only a file importing net/http or resty asks for.
+  let fieldTables: { fieldTypes: Map<string, Map<string, string>>; fieldValues: Map<string, SyntaxNode[]> } | null = null;
+  const fields = () => (fieldTables ??= readFieldTables());
+  const readFieldTables = () => {
+    const fieldTypes = new Map<string, Map<string, string>>();
+    for (const spec of descendantsOf(root, "type_spec")) {
+      const type = spec.childForFieldName("type");
+      const name = spec.childForFieldName("name")?.text;
+      if (type?.type !== "struct_type" || !name) continue;
+      const byField = new Map<string, string>();
+      for (const declaration of type.descendantsOfType("field_declaration")) {
+        const fieldType = declaration.childForFieldName("type")?.text;
+        for (const field of declaration.childrenForFieldName("name")) if (fieldType) byField.set(field.text, fieldType);
+      }
+      fieldTypes.set(name, byField);
     }
-    fieldTypes.set(name, fields);
-  }
-  const fieldValues = new Map<string, SyntaxNode[]>();
-  const addFieldValue = (field: string, value: SyntaxNode | null | undefined) => {
-    if (value) fieldValues.set(field, [...fieldValues.get(field) ?? [], value]);
+    const fieldValues = new Map<string, SyntaxNode[]>();
+    const addFieldValue = (field: string, value: SyntaxNode | null | undefined) => {
+      if (value) fieldValues.set(field, [...fieldValues.get(field) ?? [], value]);
+    };
+    for (const element of descendantsOf(root, "keyed_element")) {
+      const [key, value] = element.namedChildren;
+      const name = key?.type === "literal_element" ? key.namedChildren[0] : key;
+      if (name?.type === "identifier" || name?.type === "field_identifier") addFieldValue(name.text, value?.type === "literal_element" ? value.namedChildren[0] : value);
+    }
+    for (const assignment of descendantsOf(root, "assignment_statement")) {
+      const left = assignment.childForFieldName("left")?.namedChildren ?? [];
+      const right = assignment.childForFieldName("right")?.namedChildren ?? [];
+      left.forEach((target, index) => {
+        if (target.type === "selector_expression" && right.length === left.length) addFieldValue(target.childForFieldName("field")!.text, right[index]);
+      });
+    }
+    return { fieldTypes, fieldValues };
   };
-  for (const element of root.descendantsOfType("keyed_element")) {
-    const [key, value] = element.namedChildren;
-    const name = key?.type === "literal_element" ? key.namedChildren[0] : key;
-    if (name?.type === "identifier" || name?.type === "field_identifier") addFieldValue(name.text, value?.type === "literal_element" ? value.namedChildren[0] : value);
-  }
-  for (const assignment of root.descendantsOfType("assignment_statement")) {
-    const left = assignment.childForFieldName("left")?.namedChildren ?? [];
-    const right = assignment.childForFieldName("right")?.namedChildren ?? [];
-    left.forEach((target, index) => {
-      if (target.type === "selector_expression" && right.length === left.length) addFieldValue(target.childForFieldName("field")!.text, right[index]);
-    });
-  }
 
   const isType = (type: string | undefined, alias: string | undefined, name: string) => !!alias && type?.replace(/^\*/u, "") === `${alias}.${name}`;
 
@@ -105,7 +111,7 @@ export const goHttpClientsPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) 
         return operand.text === http && field === "DefaultClient" ? `*${http}.Client` : undefined;
       }
       const owner = typeOf(operand, depth + 1)?.replace(/^\*/u, "");
-      return owner ? fieldTypes.get(owner)?.get(field) : undefined;
+      return owner ? fields().fieldTypes.get(owner)?.get(field) : undefined;
     }
     return undefined;
   };
@@ -145,7 +151,7 @@ export const goHttpClientsPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) 
       const kind = kindOf(typeOf(expression, depth + 1));
       if (!kind) return null;
       const field = expression.childForFieldName("field")!.text;
-      const bases = new Set((fieldValues.get(field) ?? []).map((value) => restyOf(value, depth + 1)?.base ?? null));
+      const bases = new Set((fields().fieldValues.get(field) ?? []).map((value) => restyOf(value, depth + 1)?.base ?? null));
       return { kind, base: bases.size === 1 ? [...bases][0]! : null };
     }
     return null;
@@ -216,7 +222,7 @@ export const goHttpClientsPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) 
   // Package strings built from other strings (`var usersPath = Prefix +
   // "/users"`), as templates the contributor resolves.
   const variables = new Map(nodes.filter((node) => node.label === "Variable" && node.id.startsWith(`${fileNodeId}:`)).map((node) => [`${node.properties.line}:${node.properties.name}`, node]));
-  for (const spec of root.descendantsOfType(["const_spec", "var_spec"])) {
+  for (const spec of descendantsOf(root, ["const_spec", "var_spec"])) {
     if (spec.parent?.parent?.type !== "source_file" && spec.parent?.parent?.parent?.type !== "source_file") continue;
     const values = spec.childForFieldName("value")?.namedChildren ?? [];
     spec.childrenForFieldName("name").forEach((name, index) => {
@@ -229,7 +235,7 @@ export const goHttpClientsPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) 
   }
   if (!http && !resty) return;
 
-  for (const call of root.descendantsOfType("call_expression")) {
+  for (const call of descendantsOf(root, "call_expression")) {
     const fn = call.childForFieldName("function");
     if (fn?.type !== "selector_expression") continue;
     const operand = fn.childForFieldName("operand")!;

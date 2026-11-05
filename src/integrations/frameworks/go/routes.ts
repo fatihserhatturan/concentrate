@@ -4,6 +4,7 @@ import type { GraphNode } from "../../../core/graph/model.js";
 import { analyzeMemberCallExpression, walkScoped } from "../../languages/tree-sitter-utils.js";
 import { goParameters, localTypes, type GoParsePlugin, type LocalType } from "../../languages/go/parser.js";
 import { addClosures, closureFunctionNode } from "./closures.js";
+import { cachedForRoot, descendantsOf } from "./scope.js";
 
 // Go HTTP routes, found at parse time from the routers a function builds,
 // receives or returns: `r := gin.Default()`, `mux := http.NewServeMux()`, a
@@ -695,9 +696,13 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
 }
 
 // The local name of each imported package, by path.
-export function importedPackages(root: SyntaxNode): Map<string, string> {
+export function importedPackages(root: SyntaxNode): ReadonlyMap<string, string> {
+  return cachedForRoot(root, "importedPackages", () => readImportedPackages(root));
+}
+
+function readImportedPackages(root: SyntaxNode): Map<string, string> {
   const names = new Map<string, string>();
-  for (const spec of root.descendantsOfType("import_spec")) {
+  for (const spec of descendantsOf(root, "import_spec")) {
     const source = spec.childForFieldName("path")?.text.slice(1, -1);
     if (!source) continue;
     const alias = spec.childForFieldName("name")?.text;
@@ -741,7 +746,7 @@ function stringList(node: SyntaxNode | undefined, value: (node: SyntaxNode) => s
   return (body?.namedChildren ?? []).map((element) => value(element.type === "literal_element" ? element.namedChildren[0]! : element));
 }
 
-export function reference(expression: string, locals: Map<string, LocalType | null>): Omit<GoHandlerRef, "scope"> {
+export function reference(expression: string, locals: ReadonlyMap<string, LocalType | null>): Omit<GoHandlerRef, "scope"> {
   const parts = analyzeMemberCallExpression(expression) ?? { expression, callee: expression, receiver: null };
   const local = parts.receiver === null ? undefined : locals.get(parts.receiver.split(".")[0]!);
   return {

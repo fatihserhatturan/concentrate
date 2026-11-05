@@ -8,7 +8,7 @@ import { createResolutionRelationshipIndex } from "../../../core/scan/resolution
 import { createGoCallIndex, firstResultType, goInterfaceMethodNames, resolveGoCall, resolveType } from "../../../core/scan/resolution/go-calls.js";
 import { importedPackages } from "./routes.js";
 import { sqlTableAccesses } from "./sql.js";
-import { createDefinitionLookup, insideFunction, isPackageLevel, same, stringConstants, valueTypeText } from "./scope.js";
+import { createDefinitionLookup, descendantsOf, insideFunction, isPackageLevel, same, stringConstants, valueTypeText } from "./scope.js";
 
 // Go data access: gorm, database/sql and sqlx.
 //
@@ -193,9 +193,12 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
     return null;
   };
 
-  for (const call of root.descendantsOfType("call_expression")) {
+  for (const call of descendantsOf(root, "call_expression")) {
     const fn = call.childForFieldName("function");
     if (fn?.type !== "selector_expression" || isChained(call)) continue;
+    // Only a chain whose own methods include a data-access one is kept, so a
+    // call without one (`c.JSON(…)`) is not decomposed (its arguments typed).
+    if (!ownMethods(fn).some(isChainMethod)) continue;
     const chain = decompose(call, 0);
     const own = chain ? ownSteps(fn) : 0;
     if (!chain || !chain.steps.slice(-own).some((step) => isChainMethod(step.method))) continue;
@@ -206,7 +209,7 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
 
   // gorm structs: their `gorm:"…"` tags and whether they embed gorm.Model;
   // structs declared inside a function are not models.
-  for (const spec of root.descendantsOfType("type_spec")) {
+  for (const spec of descendantsOf(root, "type_spec")) {
     const type = spec.childForFieldName("type");
     const name = spec.childForFieldName("name")?.text;
     if (type?.type !== "struct_type" || !name) continue;
@@ -240,7 +243,7 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
   const edge = imports.get(ENT_EDGE_PACKAGE);
   if (ent) {
     const schemas = new Map<string, EntSchema>();
-    for (const spec of root.descendantsOfType("type_spec")) {
+    for (const spec of descendantsOf(root, "type_spec")) {
       const type = spec.childForFieldName("type");
       const list = type?.type === "struct_type" ? type.namedChildren.find((child) => child.type === "field_declaration_list") : undefined;
       const embedsSchema = (list?.namedChildren ?? []).some((declaration) => declaration.type === "field_declaration"
@@ -248,7 +251,7 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
       const name = spec.childForFieldName("name")?.text;
       if (embedsSchema && name) schemas.set(name, { edges: [] });
     }
-    for (const method of root.descendantsOfType("method_declaration")) {
+    for (const method of descendantsOf(root, "method_declaration")) {
       const receiver = method.childForFieldName("receiver")?.namedChildren[0]?.childForFieldName("type")?.text.replace(/^\*/u, "");
       const schema = receiver ? schemas.get(receiver) : undefined;
       const methodName = method.childForFieldName("name")?.text;
@@ -288,7 +291,7 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
   }
 
   // `func (Article) TableName() string { return "posts" }`.
-  for (const method of root.descendantsOfType("method_declaration")) {
+  for (const method of descendantsOf(root, "method_declaration")) {
     if (method.childForFieldName("name")?.text !== "TableName") continue;
     const statements = method.childForFieldName("body")?.descendantsOfType("return_statement") ?? [];
     const value = statements.length === 1 ? statements[0]!.namedChildren[0]?.namedChildren[0] ?? statements[0]!.namedChildren[0] : undefined;
@@ -298,7 +301,7 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
   }
 
   // Package variables: what they hold (`var DB *gorm.DB`, `var db = Open()`).
-  for (const spec of root.descendantsOfType("var_spec")) {
+  for (const spec of descendantsOf(root, "var_spec")) {
     if (!isPackageLevel(spec)) continue;
     const type = spec.childForFieldName("type")?.text;
     const values = spec.childForFieldName("value")?.namedChildren ?? [];
@@ -788,6 +791,17 @@ function pluralize(word: string): string {
 }
 
 // The selector calls a call's own chain makes (`db.Where(…).First` → 2).
+function ownMethods(fn: SyntaxNode): string[] {
+  const methods: string[] = [];
+  for (let current: SyntaxNode | null = fn; current?.type === "selector_expression"; ) {
+    const field = current.childForFieldName("field")?.text;
+    if (field) methods.push(field);
+    const operand: SyntaxNode | null = current.childForFieldName("operand");
+    current = operand?.type === "call_expression" ? operand.childForFieldName("function") : null;
+  }
+  return methods;
+}
+
 function ownSteps(fn: SyntaxNode): number {
   let count = 0;
   for (let current: SyntaxNode | null = fn; current?.type === "selector_expression"; ) {

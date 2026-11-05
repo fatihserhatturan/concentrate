@@ -7,12 +7,35 @@ export const FUNCTION_TYPES = new Set(["function_declaration", "method_declarati
 
 export type Definition = { type: string } | { value: SyntaxNode } | null;
 
+// Every Go parse plugin gets the same root node, and several ask it the same
+// questions (the call expressions, the imports, the constants, a name's
+// definition): the answers are kept per root, so the tree is walked once.
+// Callers must not change what they get.
+const perRoot = new WeakMap<SyntaxNode, Map<string, unknown>>();
+export function cachedForRoot<T>(root: SyntaxNode, key: string, make: () => T): T {
+  let cache = perRoot.get(root);
+  if (!cache) {
+    cache = new Map();
+    perRoot.set(root, cache);
+  }
+  if (!cache.has(key)) cache.set(key, make());
+  return cache.get(key) as T;
+}
+
+export function descendantsOf(root: SyntaxNode, types: string | string[]): readonly SyntaxNode[] {
+  return cachedForRoot(root, `descendants:${String(types)}`, () => root.descendantsOfType(types));
+}
+
 // What a name holds at a point: its type, or the expression it was last
 // assigned before the point (in the functions around it, else at package
 // level). The declarations of each function body and the package-level
 // `var` specs are collected once per lookup, by name, so a lookup does not
 // walk the tree again.
 export function createDefinitionLookup(root: SyntaxNode): (name: string, at: SyntaxNode) => Definition {
+  return cachedForRoot(root, "definitions", () => definitionLookup(root));
+}
+
+function definitionLookup(root: SyntaxNode): (name: string, at: SyntaxNode) => Definition {
   const bodies = new Map<string, Map<string, SyntaxNode[]>>();
   let packageVars: SyntaxNode[] | null = null;
   const declarationsOf = (body: SyntaxNode): Map<string, SyntaxNode[]> => {
@@ -51,7 +74,7 @@ export function createDefinitionLookup(root: SyntaxNode): (name: string, at: Syn
       }
       if (best) return best.result;
     }
-    packageVars ??= root.descendantsOfType("var_spec").filter((spec) => isPackageLevel(spec));
+    packageVars ??= descendantsOf(root, "var_spec").filter((spec) => isPackageLevel(spec));
     for (const spec of packageVars) {
       const result = assignmentOf(spec, name);
       if (result !== undefined) return result;
@@ -116,9 +139,13 @@ export function valueTypeText(value: SyntaxNode): string | undefined {
   return undefined;
 }
 
-export function stringConstants(root: SyntaxNode): Map<string, string> {
+export function stringConstants(root: SyntaxNode): ReadonlyMap<string, string> {
+  return cachedForRoot(root, "stringConstants", () => readStringConstants(root));
+}
+
+function readStringConstants(root: SyntaxNode): Map<string, string> {
   const constants = new Map<string, string>();
-  for (const spec of root.descendantsOfType("const_spec")) {
+  for (const spec of descendantsOf(root, "const_spec")) {
     const names = spec.childrenForFieldName("name");
     const values = spec.childForFieldName("value")?.namedChildren ?? [];
     names.forEach((name, index) => {

@@ -5,6 +5,7 @@ import type { GoParsePlugin } from "../../languages/go/parser.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
 import { createGoCallIndex, firstResultType, resolveType, type GoCallIndex, type TypeRef } from "../../../core/scan/resolution/go-calls.js";
 import { importedPackages } from "./routes.js";
+import { descendantsOf } from "./scope.js";
 
 // Go dependency injection with uber fx and google wire, as INJECTS between
 // structs (like NestJS constructor injection):
@@ -52,7 +53,7 @@ export const goDiPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) => {
   const isFunctionRef = (node: SyntaxNode) => node.type === "identifier" || (node.type === "selector_expression" && node.childForFieldName("operand")?.type === "identifier");
   const line = (node: SyntaxNode) => node.startPosition.row + 1;
 
-  for (const call of root.descendantsOfType("call_expression")) {
+  for (const call of descendantsOf(root, "call_expression")) {
     if (isCall(call, fx, ["Provide"]) || isCall(call, wire, ["NewSet", "Build"])) {
       for (const arg of argsOf(call)) {
         if (isFunctionRef(arg)) entries.push({ kind: "provide", ref: arg.text, line: line(arg) });

@@ -45,7 +45,7 @@ export const goEntrypointsPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, re
   const callsById = new Map(nodes.filter((node) => node.label === "Call").map((node) => [node.id, node]));
   const tree: CommandTree = { commands: [], edges: [], aliases: [] };
 
-  const commandLiteral = (literal: SyntaxNode, locals: Map<string, LocalType | null>, enclosing: { id: string; syntax: SyntaxNode } | null, closures: Array<{ node: GraphNode; syntax: SyntaxNode }>) => {
+  const commandLiteral = (literal: SyntaxNode, locals: ReadonlyMap<string, LocalType | null>, enclosing: { id: string; syntax: SyntaxNode } | null, closures: Array<{ node: GraphNode; syntax: SyntaxNode }>) => {
     const fields = new Map<string, SyntaxNode>();
     for (const element of literal.childForFieldName("body")?.namedChildren ?? []) {
       if (element.type !== "keyed_element") continue;
@@ -104,7 +104,7 @@ export const goEntrypointsPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, re
 
   const isCommand = (node: SyntaxNode) => cobra !== undefined && node.type === "composite_literal" && node.childForFieldName("type")?.text === `${cobra}.Command`;
 
-  const visitCalls = (scope: SyntaxNode, functionId: string, locals: Map<string, LocalType | null>) => {
+  const visitCalls = (scope: SyntaxNode, functionId: string, locals: ReadonlyMap<string, LocalType | null>) => {
     walkScoped(scope, (node) => {
       if (node.type !== "call_expression") return;
       const callee = node.childForFieldName("function");
@@ -189,7 +189,7 @@ function returns(fn: SyntaxNode, name: string): boolean {
 }
 
 // `&server{}`, `server{}`, `new(server)`, a typed local, `svc.New(…)`.
-function implementationValue(node: SyntaxNode, locals: Map<string, LocalType | null>): { type?: string; factory?: string } | null {
+function implementationValue(node: SyntaxNode, locals: ReadonlyMap<string, LocalType | null>): { type?: string; factory?: string } | null {
   if (node.type === "unary_expression" && node.childForFieldName("operator")?.text === "&") return implementationValue(node.childForFieldName("operand")!, locals);
   if (node.type === "composite_literal") {
     const type = node.childForFieldName("type")?.text;

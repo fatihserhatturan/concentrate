@@ -3,6 +3,7 @@ import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js"
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import { localTypes, type GoParsePlugin } from "../../languages/go/parser.js";
 import { importedPackages } from "./routes.js";
+import { descendantsOf } from "./scope.js";
 
 // Go env reads, as USES_ENV from the function that reads (the file for a
 // package-level read) to an EnvVar:
@@ -58,7 +59,7 @@ export const goEnvConfigPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, rela
   // viper instances: the package and the names `viper.New()` is assigned to.
   const vipers = new Set<string>(viper ? [viper] : []);
   if (viper) {
-    for (const call of root.descendantsOfType("call_expression")) {
+    for (const call of descendantsOf(root, "call_expression")) {
       if (selector(call) !== `${viper}.New`) continue;
       const declaration = call.parent?.parent;
       if (declaration?.type !== "short_var_declaration" && declaration?.type !== "assignment_statement" && declaration?.type !== "var_spec") continue;
@@ -72,7 +73,7 @@ export const goEnvConfigPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, rela
   const structs = structTypes(root);
   const parsedStructs: Array<{ type: string; source: string; envconfigPrefix?: string }> = [];
 
-  for (const call of root.descendantsOfType("call_expression")) {
+  for (const call of descendantsOf(root, "call_expression")) {
     const callee = selector(call);
     if (!callee) continue;
     const [receiver, method] = splitSelector(callee);
@@ -243,7 +244,7 @@ function envconfigNames(type: string, prefix: string, structs: Map<string, Struc
 
 function structTypes(root: SyntaxNode): Map<string, Struct> {
   const structs = new Map<string, Struct>();
-  for (const spec of root.descendantsOfType("type_spec")) {
+  for (const spec of descendantsOf(root, "type_spec")) {
     const name = spec.childForFieldName("name")?.text;
     const type = spec.childForFieldName("type");
     if (!name || type?.type !== "struct_type") continue;
@@ -275,7 +276,7 @@ function structOf(argument: SyntaxNode, call: SyntaxNode, functionSyntaxes: Synt
     .sort((left, right) => (left.endIndex - left.startIndex) - (right.endIndex - right.startIndex))[0];
   const local = enclosing ? localTypes(enclosing).get(expression.text) : undefined;
   if (local && "type" in local) return bareType(local.type);
-  for (const spec of root.descendantsOfType("var_spec")) {
+  for (const spec of descendantsOf(root, "var_spec")) {
     const declaration = spec.parent?.type === "var_declaration" ? spec.parent : spec.parent?.parent;
     if (declaration?.parent?.type !== "source_file") continue;
     if (!spec.childrenForFieldName("name").some((name) => name.text === expression.text)) continue;

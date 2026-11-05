@@ -283,10 +283,31 @@ on the same Apple M4 (10 CPUs), Node v24.13.0, recorded 2026-11-04 for 0.1.0
   looked up (1.6 s of the 2.1 s in `descendantsOfType`). The lookup now
   collects a body's declarations once, by name, and the cold scan is 353 ms
   with an identical graph.
-- A cold Go scan still costs more per file than a JS/TS one
-  (`internet-node-express-realworld`: 39 files, 124 ms); the warm scans are
-  close (149 vs 91 ms), so the difference is in parsing and the Go parse
-  plugins, not in the cross-file passes. Not profiled further yet.
+- A cold Go scan cost about 3× a JS/TS one per file
+  (`internet-node-express-realworld`: 39 files, 124 ms). A `--cpu-prof`
+  of the gin scan (2026-11-05, #187) put 181 ms of 357 in the Go parse, of
+  which tree-sitter itself was 27 ms: the parse plugins asked the same tree
+  the same questions (the call expressions, the imports, the constants, a
+  name's definition, a function's locals) one plugin after another, and the
+  parser walked the whole tree twice in JS to find declarations. Each answer
+  is now kept per tree (`frameworks/go/scope.ts`, `cachedForRoot`; a
+  function's locals per tree in `localTypes`), the declarations come from
+  `descendantsOfType`, data access only decomposes a chain that has a
+  data-access method, and the outbound-HTTP plugin reads struct fields only
+  in files that import a client. The graphs are identical (goldens
+  unchanged). With the same command plus express, on 2026-11-05
+  ([`bench/results/0.1.0-2026-11-05-go-scan.json`](../bench/results/0.1.0-2026-11-05-go-scan.json)):
+
+  | Sample | Cold scan ms (before → after) | Cold peak RSS MB |
+  | --- | ---: | ---: |
+  | internet-go-gin-realworld | 353 → 267 | 160 → 149 |
+  | internet-go-echo-realworld | 228 → 193 | 131 → 130 |
+  | internet-realworld-go-fullstack | 473 → 389 | 200 → 179 |
+  | internet-node-express-realworld (JS, same run) | 185 | 129 |
+
+  Per file gin still costs more (its 21 files hold 5,479 lines; express's 39
+  hold 2,374), but per line, after the ~60 ms a scan of an empty project
+  takes, gin is now about 38 µs and express about 48 µs.
 
 Tool latency, p50 / p95 ms (20 calls; component tools only on the fullstack
 sample, which has a frontend):
