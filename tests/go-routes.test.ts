@@ -120,7 +120,7 @@ async function scan(fixture: string): Promise<Graph> {
   return buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: false });
 }
 
-describe("Go echo, chi, fiber, gorilla/mux and routegroup routes", () => {
+describe("Go echo, chi, fiber, gorilla/mux, routegroup and kratos routes", () => {
   it("echo: the handler first, the root's Use for every route, a group's for what follows", async () => {
     assert.deepEqual(routes(await scan("go-echo")), [
       ["GET", "/health", "main.go:28", "list", ["auth", "list"]],
@@ -183,6 +183,25 @@ describe("Go echo, chi, fiber, gorilla/mux and routegroup routes", () => {
       ["PUT", "/private", "main.go:38", "show", ["logging", "auth", "show"]],
       ["ALL", "/v2/files/", "main.go:42", null, []],
     ]);
+  });
+
+  it("kratos: protoc-gen-go-http registrations run the service method, Route/Group prefixes and filters", async () => {
+    const graph = await scan("go-kratos");
+    assert.deepEqual(routes(graph), [
+      ["GET", "/v1/hello/{name}", "api/v1/greeter_http.pb.go:22", "SayHello", ["SayHello"]],
+      ["DELETE", "/v1/hello/{name}", "api/v1/greeter_http.pb.go:23", "DeleteHello", ["DeleteHello"]],
+      ["ALL", "/metrics", "internal/server/http.go:24", "metrics", ["metrics"]],
+      ["ALL", "/q/", "internal/server/http.go:25", null, []],
+      ["GET", "/admin/v1/health", "internal/server/http.go:27", "health", ["audit", "health"]],
+      // The group's filter, then the route's own.
+      ["POST", "/admin/v1/reload", "internal/server/http.go:28", "health", ["audit", "audit", "health"]],
+    ]);
+    // The service, not the embedded Unimplemented stub.
+    const handlers = graph.relationships
+      .filter((rel) => rel.type === "ROUTE_HANDLED_BY" && graph.nodes.find((node) => node.id === rel.from)?.properties.path === "/v1/hello/{name}")
+      .map((rel) => graph.nodes.find((node) => node.id === rel.to)!.properties.className);
+    assert.deepEqual(handlers, ["GreeterService", "GreeterService"]);
+    assert.ok(graph.nodes.filter((node) => node.label === "Route").every((node) => node.properties.framework === "kratos"));
   });
 });
 
