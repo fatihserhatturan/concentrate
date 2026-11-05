@@ -12,12 +12,12 @@ export type FileClassification = {
 
 export type FileClassificationCounts = Record<FileSourceType, number>;
 
-export function classifyFile(relativePath: string): FileClassification {
+export function classifyFile(relativePath: string, generatedContent = false): FileClassification {
   const normalizedPath = relativePath.split(path.sep).join("/");
   const segments = normalizedPath.split("/");
   const fileName = segments.at(-1) ?? normalizedPath;
 
-  const isGenerated = hasSegment(segments, [
+  const isGenerated = generatedContent || hasSegment(segments, [
     "generated",
     "__generated__",
     "codegen",

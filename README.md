@@ -37,7 +37,7 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 | **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle; Go gorm, ent, sqlc, `database/sql` and sqlx (literal SQL): models, tables, and read and write operations |
 | **Workspaces** | packages and the dependencies between them, both declared and used in source |
 
-Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux, routegroup, kratos), entrypoints, env reads, data access, outbound HTTP and dependency injection (fx, wire); the other languages get structure, imports and calls.
+Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux, routegroup, kratos), entrypoints, env reads, data access, outbound HTTP, gRPC calls between services and dependency injection (fx, wire); the other languages get structure, imports and calls.
 
 ## How it works
 

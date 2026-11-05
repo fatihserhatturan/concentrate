@@ -5,6 +5,7 @@ import { goEnvConfigPlugin } from "./env-config.js";
 import { goDataAccessPlugin } from "./data-access.js";
 import { goHttpClientsPlugin } from "./http-clients.js";
 import { goDiPlugin } from "./di.js";
+import { goGrpcPlugin } from "./grpc.js";
 
 export { goRoutesContributor } from "./route-mounts.js";
 export { goForeignRoutersContributor } from "./foreign-routers.js";
@@ -13,6 +14,7 @@ export { goEnvConfigContributor } from "./env-config.js";
 export { goDataAccessContributor } from "./data-access.js";
 export { goHttpClientsContributor } from "./http-clients.js";
 export { goDiContributor } from "./di.js";
+export { goGrpcContributor } from "./grpc.js";
 
 // The Go parser with the framework layer's parse-time semantics.
-export const goFrameworkParser = createGoParser([goRoutesPlugin, goEntrypointsPlugin, goEnvConfigPlugin, goDataAccessPlugin, goHttpClientsPlugin, goDiPlugin]);
+export const goFrameworkParser = createGoParser([goRoutesPlugin, goEntrypointsPlugin, goEnvConfigPlugin, goDataAccessPlugin, goHttpClientsPlugin, goDiPlugin, goGrpcPlugin]);

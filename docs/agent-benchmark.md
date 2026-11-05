@@ -492,9 +492,9 @@ packages, interfaces or services:
 
 Expected answers were written from the source (`wire_gen.go`, interface
 declarations and their implementations, call sites). When these runs were
-made, the graph did not read remark42's routes (`go-pkgz/routegroup`, read
-since #196) or its env options (`go-flags` `env-namespace`), so no route or
-env question is asked there.
+made, the graph did not read remark42's routes (`go-pkgz/routegroup`) or
+its env options (`go-flags` `env-namespace`), both read since #196, so no
+route or env question is asked there.
 
 ```bash
 npm run bench:agent -- --questions bench/agent/questions-go-large.json --runs 3 --model sonnet

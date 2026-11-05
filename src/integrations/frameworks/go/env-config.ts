@@ -14,8 +14,9 @@ import { descendantsOf } from "./scope.js";
 //     same-file struct `Unmarshal(&cfg)` fills (`mapstructure:"KEY"` tags, else
 //     the field names), named the way viper names them (`SetEnvPrefix`, `SetEnvKeyReplacer(strings.NewReplacer(…))`;
 //     a file without settings of its own takes the repo's);
-//   - struct tags: `env:"NAME"` (caarlos0/env, cleanenv, go-envconfig;
-//     `envPrefix` on a nested struct field), read by the function of the
+//   - struct tags: `env:"NAME"` (caarlos0/env, cleanenv, go-envconfig,
+//     go-flags; `envPrefix` or go-flags' `env-namespace` on a nested struct
+//     field, anonymous structs included), read by the function of the
 //     file that parses the struct, else by the struct's file; and the fields
 //     of a struct `envconfig.Process("prefix", &spec)` fills (kelseyhightower/
 //     envconfig: `PREFIX_FIELD`, `envconfig:"name"`, `split_words`).
@@ -125,7 +126,9 @@ export const goEnvConfigPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, rela
   // the struct is parsed, else by the file.
   const nested = new Set<string>();
   for (const struct of structs.values()) {
-    for (const field of struct.fields) if (field.tags.has("envPrefix")) nested.add(bareType(field.type));
+    for (const field of struct.fields) {
+      if (field.tags.has("envPrefix") || field.tags.has("env-namespace") || field.type.startsWith("struct@")) nested.add(bareType(field.type));
+    }
   }
   const parsedBy = new Map<string, string[]>();
   for (const parsed of parsedStructs) {
@@ -211,7 +214,8 @@ function envVarNode(name: string): GraphNode {
 }
 
 // `env:"PORT,required"` fields, and those of a nested struct under its
-// `envPrefix`.
+// `envPrefix` (caarlos0/env), or its `env-namespace` and `_` (go-flags);
+// an anonymous or embedded struct without either keeps the prefix.
 function envTagNames(type: string, prefix: string, structs: Map<string, Struct>, depth: number): EnvRead[] {
   const struct = structs.get(type);
   if (!struct || depth > 4) return [];
@@ -219,8 +223,10 @@ function envTagNames(type: string, prefix: string, structs: Map<string, Struct>,
   for (const field of struct.fields) {
     const env = field.tags.get("env")?.split(",")[0]?.trim();
     if (env && env !== "-") names.push({ name: `${prefix}${env}`, line: field.line, access: "env struct tag" });
-    const nestedPrefix = field.tags.get("envPrefix");
-    if (nestedPrefix !== undefined) names.push(...envTagNames(bareType(field.type), `${prefix}${nestedPrefix}`, structs, depth + 1));
+    const envPrefix = field.tags.get("envPrefix");
+    const namespace = field.tags.get("env-namespace");
+    const nestedPrefix = envPrefix !== undefined ? `${prefix}${envPrefix}` : namespace ? `${prefix}${namespace}_` : field.type.startsWith("struct@") || (field.name === null && !env && structs.has(bareType(field.type))) ? prefix : undefined;
+    if (nestedPrefix !== undefined) names.push(...envTagNames(bareType(field.type), nestedPrefix, structs, depth + 1));
   }
   return names;
 }
@@ -249,25 +255,35 @@ function envconfigNames(type: string, prefix: string, structs: Map<string, Struc
   return names;
 }
 
+// The file's struct types by name; an anonymous struct a field declares
+// (`Bolt struct { Path string \`env:"PATH"\` }`) is one too, under a name of
+// its position the field's type points to.
 function structTypes(root: SyntaxNode): Map<string, Struct> {
   const structs = new Map<string, Struct>();
-  for (const spec of descendantsOf(root, "type_spec")) {
-    const name = spec.childForFieldName("name")?.text;
-    const type = spec.childForFieldName("type");
-    if (!name || type?.type !== "struct_type") continue;
+  const add = (name: string, type: SyntaxNode) => {
     const fields: Struct["fields"] = [];
     const list = type.namedChildren.find((child) => child.type === "field_declaration_list");
     for (const declaration of list?.namedChildren ?? []) {
       if (declaration.type !== "field_declaration") continue;
-      const fieldType = declaration.childForFieldName("type")?.text ?? "";
+      const typeNode = declaration.childForFieldName("type");
+      let fieldType = typeNode?.text ?? "";
+      if (typeNode?.type === "struct_type") {
+        fieldType = `struct@${typeNode.startPosition.row + 1}:${typeNode.startPosition.column}`;
+        add(fieldType, typeNode);
+      }
       const tagText = declaration.childForFieldName("tag")?.text.slice(1, -1) ?? "";
-      const tags = new Map([...tagText.matchAll(/(\w+):"([^"]*)"/gu)].map((match) => [match[1]!, match[2]!]));
+      const tags = new Map([...tagText.matchAll(/([\w-]+):"([^"]*)"/gu)].map((match) => [match[1]!, match[2]!]));
       const line = declaration.startPosition.row + 1;
       const names = declaration.childrenForFieldName("name");
       if (names.length === 0) fields.push({ name: null, type: fieldType, tags, line });
       for (const fieldName of names) fields.push({ name: fieldName.text, type: fieldType, tags, line });
     }
     structs.set(name, { fields });
+  };
+  for (const spec of descendantsOf(root, "type_spec")) {
+    const name = spec.childForFieldName("name")?.text;
+    const type = spec.childForFieldName("type");
+    if (name && type?.type === "struct_type") add(name, type);
   }
   return structs;
 }
