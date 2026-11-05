@@ -82,7 +82,7 @@
 {"kind":"node","id":"file:store/store.go:import:4:example.com/gormapp/models","label":"Import","properties":{"line":4,"source":"example.com/gormapp/models","specifier":"\"example.com/gormapp/models\""}}
 {"kind":"node","id":"file:store/store.go:import:5:gorm.io/driver/sqlite","label":"Import","properties":{"line":5,"source":"gorm.io/driver/sqlite","specifier":"\"gorm.io/driver/sqlite\""}}
 {"kind":"node","id":"file:store/store.go:import:6:gorm.io/gorm","label":"Import","properties":{"line":6,"source":"gorm.io/gorm","specifier":"\"gorm.io/gorm\""}}
-{"kind":"node","id":"file:store/store.go:variable:9:DB","label":"Variable","properties":{"isExported":true,"kind":"var","line":9,"name":"DB"}}
+{"kind":"node","id":"file:store/store.go:variable:9:DB","label":"Variable","properties":{"goType":"*gorm.DB","isExported":true,"kind":"var","line":9,"name":"DB"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-gorm","path":"<root>"}}
 {"kind":"node","id":"table:go:-:archived_posts","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"gorm","line":null,"name":"archived_posts","provider":null,"schemaName":null}}
 {"kind":"node","id":"table:go:-:audit_log","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"gorm","line":null,"name":"audit_log","provider":null,"schemaName":null}}

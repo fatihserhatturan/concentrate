@@ -11,7 +11,7 @@
 {"kind":"node","id":"file:cmd/root.go:function:20:init:call:22:1:serveCmd.AddCommand","label":"Call","properties":{"callee":"AddCommand","columnNumber":1,"expression":"serveCmd.AddCommand","line":22,"name":"serveCmd.AddCommand","receiver":"serveCmd"}}
 {"kind":"node","id":"file:cmd/root.go:import:4:fmt","label":"Import","properties":{"line":4,"source":"fmt","specifier":"\"fmt\""}}
 {"kind":"node","id":"file:cmd/root.go:import:6:github.com/spf13/cobra","label":"Import","properties":{"line":6,"source":"github.com/spf13/cobra","specifier":"\"github.com/spf13/cobra\""}}
-{"kind":"node","id":"file:cmd/root.go:variable:9:rootCmd","label":"Variable","properties":{"isExported":false,"kind":"var","line":9,"name":"rootCmd"}}
+{"kind":"node","id":"file:cmd/root.go:variable:9:rootCmd","label":"Variable","properties":{"goType":"cobra.Command","isExported":false,"kind":"var","line":9,"name":"rootCmd"}}
 {"kind":"node","id":"file:cmd/serve.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"cmd","path":"<root>/cmd/serve.go","relativePath":"cmd/serve.go","sourceType":"production"}}
 {"kind":"node","id":"file:cmd/serve.go:entrypoint:14:18:cli:version","label":"EntryPoint","properties":{"handlerName":"<versionCmd.Run>","kind":"cli","library":"cobra","line":14,"receiverName":"versionCmd","trigger":"app version"}}
 {"kind":"node","id":"file:cmd/serve.go:entrypoint:30:9:cli:migrate","label":"EntryPoint","properties":{"handlerName":"<cmd.RunE>","kind":"cli","library":"cobra","line":30,"receiverName":"cmd","trigger":"app serve migrate"}}
@@ -26,9 +26,9 @@
 {"kind":"node","id":"file:cmd/serve.go:function:32:<cmd.RunE>","label":"Function","properties":{"className":null,"endLine":34,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"func_literal","line":32,"methodKind":null,"name":"<cmd.RunE>","parameters":"[{\"name\":\"cmd\",\"type\":\"*cobra.Command\"},{\"name\":\"args\",\"type\":\"[]string\"}]","returnType":"error","visibility":"unexported"}}
 {"kind":"node","id":"file:cmd/serve.go:import:4:fmt","label":"Import","properties":{"line":4,"source":"fmt","specifier":"\"fmt\""}}
 {"kind":"node","id":"file:cmd/serve.go:import:6:github.com/spf13/cobra","label":"Import","properties":{"line":6,"source":"github.com/spf13/cobra","specifier":"\"github.com/spf13/cobra\""}}
-{"kind":"node","id":"file:cmd/serve.go:variable:14:versionCmd","label":"Variable","properties":{"isExported":false,"kind":"var","line":14,"name":"versionCmd"}}
-{"kind":"node","id":"file:cmd/serve.go:variable:39:migrateCmd","label":"Variable","properties":{"isExported":false,"kind":"var","line":39,"name":"migrateCmd"}}
-{"kind":"node","id":"file:cmd/serve.go:variable:9:serveCmd","label":"Variable","properties":{"isExported":false,"kind":"var","line":9,"name":"serveCmd"}}
+{"kind":"node","id":"file:cmd/serve.go:variable:14:versionCmd","label":"Variable","properties":{"goType":"cobra.Command","isExported":false,"kind":"var","line":14,"name":"versionCmd"}}
+{"kind":"node","id":"file:cmd/serve.go:variable:39:migrateCmd","label":"Variable","properties":{"goConstructor":"newMigrateCmd","isExported":false,"kind":"var","line":39,"name":"migrateCmd"}}
+{"kind":"node","id":"file:cmd/serve.go:variable:9:serveCmd","label":"Variable","properties":{"goType":"cobra.Command","isExported":false,"kind":"var","line":9,"name":"serveCmd"}}
 {"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
 {"kind":"node","id":"file:main.go:entrypoint:5:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":5,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:main.go:function:5:main","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":5,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}

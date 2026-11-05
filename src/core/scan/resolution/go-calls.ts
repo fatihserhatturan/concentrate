@@ -19,6 +19,9 @@ export type GoCallIndex = {
   // Imported packages per file by local name; `.` imports under ".".
   importsByFile: Map<string, Map<string, string[]>>;
   functionsById: Map<string, GraphNode>;
+  // Package variables with a type or a constructor (`var db *gorm.DB`,
+  // `var store = NewStore()`).
+  variablesByPackage: Map<string, Map<string, { type?: string; factory?: string; fileId: string }>>;
 };
 
 // A named type, or an anonymous struct (a field's `struct { … }`) with its
@@ -48,6 +51,7 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
     fileByFunctionId: relationshipIndex.fileByFunctionId,
     importsByFile: new Map(),
     functionsById: new Map(),
+    variablesByPackage: new Map(),
   };
 
   const targetsByImport = new Map<string, string[]>();
@@ -76,6 +80,14 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
       const fileId = relationshipIndex.fileByInterfaceId.get(node.id);
       const pkg = packageByFile.get(fileId ?? "");
       if (pkg !== undefined) nested(index.interfacesByPackage, pkg).set(String(node.properties.name), { node, fileId: fileId! });
+    } else if (node.label === "Variable" && (typeof node.properties.goType === "string" || typeof node.properties.goConstructor === "string")) {
+      const fileId = node.id.slice(0, node.id.indexOf(":variable:"));
+      const pkg = packageByFile.get(fileId);
+      if (pkg === undefined) continue;
+      nested(index.variablesByPackage, pkg).set(String(node.properties.name), {
+        ...typeof node.properties.goType === "string" ? { type: node.properties.goType } : { factory: String(node.properties.goConstructor) },
+        fileId,
+      });
     } else if (node.label === "Import") {
       const fileId = relationshipIndex.fileByImportId.get(node.id);
       const targets = targetsByImport.get(node.id);
@@ -177,7 +189,7 @@ function resolveGoCallTarget(call: GraphNode, callerFileId: string, index: GoCal
   const chained = typeof call.properties.receiverConstructor === "string" && call.properties.receiverConstructor.endsWith("()");
   if (!chained && /[()[\]]/u.test(expression.slice(0, expression.lastIndexOf(".")))) return null;
 
-  const [root, ...fields] = receiver.split(".");
+  let [root, ...fields] = receiver.split(".");
   let type: TypeRef | null = null;
   if (typeof call.properties.receiverType === "string") {
     type = resolveType(call.properties.receiverType, callerFileId, index);
@@ -186,13 +198,26 @@ function resolveGoCallTarget(call: GraphNode, callerFileId: string, index: GoCal
     if (chained) return type ? methodOnType(type, callee, index) : null;
   } else if (call.properties.receiverIsLocal === true) {
     return null;
-  } else if (fields.length === 0) {
+  } else {
     // `pkg.Func()`.
-    for (const target of index.importsByFile.get(callerFileId)?.get(root!) ?? []) {
-      const found = index.functionsByPackage.get(target)?.get(callee)?.id;
-      if (found) return found;
+    if (fields.length === 0) {
+      for (const target of index.importsByFile.get(callerFileId)?.get(root!) ?? []) {
+        const found = index.functionsByPackage.get(target)?.get(callee)?.id;
+        if (found) return found;
+      }
     }
-    return null;
+    // A package variable: the package's own (`store.Get()`) or another's
+    // (`config.DB.Find()`).
+    const own = [pkg, ...index.importsByFile.get(callerFileId)?.get(".") ?? []].map((p) => index.variablesByPackage.get(p)?.get(root!)).find(Boolean);
+    if (own) type = variableType(own, index);
+    else if (fields.length > 0) {
+      const variable = (index.importsByFile.get(callerFileId)?.get(root!) ?? []).map((p) => index.variablesByPackage.get(p)?.get(fields[0]!)).find(Boolean);
+      if (variable) {
+        type = variableType(variable, index);
+        fields = fields.slice(1);
+      }
+    }
+    if (!type) return null;
   }
 
   for (const field of fields) {
@@ -211,6 +236,18 @@ function methodOnType(type: TypeRef, callee: string, index: GoCallIndex): string
     return implementations.length > 0 ? [...new Set(implementations)].sort() : null;
   }
   return methodOf(type, callee, index, 0)[0] ?? null;
+}
+
+function variableType(variable: { type?: string; factory?: string; fileId: string }, index: GoCallIndex): TypeRef | null {
+  return variable.type ? resolveType(variable.type, variable.fileId, index) : constructedType(variable.factory!, variable.fileId, index);
+}
+
+// `[]T`, `[4]T`, `map[K]T` → `T` (null for anything else).
+function elementTypeText(type: string): string | null {
+  const slice = /^(?:\[\d*\])+(.+)$/u.exec(type);
+  if (slice) return slice[1]!.startsWith("[") ? null : slice[1]!;
+  const map = /^map\[[^\]]+\](.+)$/u.exec(type);
+  return map ? map[1]! : null;
 }
 
 // `*db.Store`, `Store[T]` → the package and name of the type.
@@ -237,29 +274,44 @@ function hasType(pkg: string, name: string, index: GoCallIndex): boolean {
 }
 
 // `x := NewStore()` / `store.New()`: the type the constructor returns first.
-function constructedType(constructor: string, fileId: string, index: GoCallIndex): TypeRef | null {
+// A trailing `[]` (`h.items.All[]`, from a range) asks for the element of
+// that result.
+function constructedType(written: string, fileId: string, index: GoCallIndex): TypeRef | null {
+  const element = written.endsWith("[]");
+  const constructor = element ? written.slice(0, -2) : written;
+  const resultOf = (result: string | null) => (element && result !== null ? elementTypeText(result) : result);
   // `(*Handler).store.Get`: the result of a method reached through fields.
   const onType = /^\((.+)\)\.(.+)$/u.exec(constructor);
-  if (onType) return methodResultType(onType[1]!, onType[2]!.split("."), fileId, index);
-  const [qualifier, name] = constructor.includes(".") ? constructor.split(".") : [null, constructor];
+  if (onType) return methodResultType(resolveType(onType[1]!, fileId, index), onType[2]!.split("."), index, resultOf);
+  // `store.All` on a package variable (`var store = New()`), or
+  // `config.DB.All` on another package's.
+  const parts = constructor.split(".");
+  const ownPackages = [index.packageByFile.get(fileId)!, ...index.importsByFile.get(fileId)?.get(".") ?? []];
+  const imported = index.importsByFile.get(fileId)?.get(parts[0]!) ?? [];
+  const own = parts.length > 1 && imported.length === 0 ? ownPackages.map((p) => index.variablesByPackage.get(p)?.get(parts[0]!)).find(Boolean) : undefined;
+  if (own) return methodResultType(variableType(own, index), parts.slice(1), index, resultOf);
+  const foreign = parts.length > 2 ? imported.map((p) => index.variablesByPackage.get(p)?.get(parts[1]!)).find(Boolean) : undefined;
+  if (foreign) return methodResultType(variableType(foreign, index), parts.slice(2), index, resultOf);
+  if (parts.length > 2) return null;
+  const [qualifier, name] = parts.length === 2 ? parts : [null, constructor];
   const pkgs = qualifier === null
     ? [index.packageByFile.get(fileId)!, ...index.importsByFile.get(fileId)?.get(".") ?? []]
     : index.importsByFile.get(fileId)?.get(qualifier) ?? [];
   for (const pkg of pkgs) {
     const fn = index.functionsByPackage.get(pkg)?.get(name!);
     if (!fn) continue;
-    const result = firstResultType(fn.properties.returnType);
+    const result = resultOf(firstResultType(fn.properties.returnType));
     const fnFile = index.fileByFunctionId.get(fn.id);
     return result && fnFile ? resolveType(result, fnFile, index) : null;
   }
   // A conversion or a type's literal name used like a call: `Store(x)`.
-  return qualifier === null && index.typesByPackage.get(pkgs[0]!)?.has(name!) ? { pkg: pkgs[0]!, name: name! } : null;
+  return !element && qualifier === null && index.typesByPackage.get(pkgs[0]!)?.has(name!) ? { pkg: pkgs[0]!, name: name! } : null;
 }
 
-// The type a method returns first, on a value of `typeText` through
+// The type a method returns first, on a value of type `start` through
 // `fields`; for an interface, the result its implementations agree on.
-function methodResultType(typeText: string, path: string[], fileId: string, index: GoCallIndex): TypeRef | null {
-  let type = resolveType(typeText, fileId, index);
+function methodResultType(start: TypeRef | null, path: string[], index: GoCallIndex, resultOf: (result: string | null) => string | null = (result) => result): TypeRef | null {
+  let type = start;
   const method = path.pop();
   for (const field of path) {
     if (!type) return null;
@@ -273,7 +325,7 @@ function methodResultType(typeText: string, path: string[], fileId: string, inde
     const functionId = methodOf(owner, method, index, 0)[0];
     const fn = functionId ? index.functionsById.get(functionId) : undefined;
     const fnFile = fn ? index.fileByFunctionId.get(fn.id) : undefined;
-    const result = fn ? firstResultType(fn.properties.returnType) : null;
+    const result = fn ? resultOf(firstResultType(fn.properties.returnType)) : null;
     const resolved = result && fnFile ? resolveType(result, fnFile, index) : null;
     if (resolved) results.set(`${resolved.pkg}\0${resolved.name}`, resolved);
   }
