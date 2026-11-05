@@ -81,7 +81,7 @@ async function parseGoFile(rootPath: string, filePath: string, plugins: readonly
         const values = spec.childForFieldName("value")?.namedChildren ?? [];
         spec.childrenForFieldName("name").forEach((name, index) => {
           if (name.text === "_") return;
-          const variable = createVariableNode(fileNodeId, declaration.type === "var_declaration" ? "var" : "const", name, values[index]);
+          const variable = createVariableNode(fileNodeId, declaration.type === "var_declaration" ? "var" : "const", name, values[index], spec.childForFieldName("type")?.text);
           nodes.push(variable);
           relationships.push({ from: fileNodeId, to: variable.id, type: "DEFINES_VARIABLE", properties: {} });
         });
@@ -339,9 +339,11 @@ function createInterfaceNode(fileNodeId: string, node: SyntaxNode): GraphNode {
   };
 }
 
-function createVariableNode(fileNodeId: string, kind: "var" | "const", name: SyntaxNode, value: SyntaxNode | undefined): GraphNode {
+function createVariableNode(fileNodeId: string, kind: "var" | "const", name: SyntaxNode, value: SyntaxNode | undefined, type: string | undefined): GraphNode {
   const line = name.startPosition.row + 1;
   const literal = value?.type === "interpreted_string_literal" || value?.type === "raw_string_literal" ? goStringValue(value) : null;
+  // A package variable's type, for calls on it (`store.Get()`, `config.DB.Find()`).
+  const local = kind === "var" ? (type ? { type } : valueType(value)) : null;
   return {
     id: `${fileNodeId}:variable:${line}:${name.text}`,
     label: "Variable",
@@ -351,6 +353,7 @@ function createVariableNode(fileNodeId: string, kind: "var" | "const", name: Syn
       isExported: /^[A-Z]/.test(name.text),
       line,
       ...(literal === null ? {} : { stringValue: literal }),
+      ...(local === null ? {} : "type" in local ? { goType: local.type } : { goConstructor: local.constructor }),
     },
   };
 }
@@ -454,10 +457,14 @@ export function localTypes(functionNode: SyntaxNode): Map<string, LocalType | nu
     if (node.type === "range_clause") {
       // `for _, c := range comments` over a `[]T` or `map[K]T`: c is a T.
       const names = node.childForFieldName("left")?.namedChildren ?? [];
+      // Over a call's result (`range h.items.All()`, or a local holding it),
+      // the element of the result: `(*Handler).items.All[]`.
       const right = node.childForFieldName("right");
-      const ranged = right?.type === "identifier" ? locals.get(right.text) : undefined;
-      const element = ranged && "type" in ranged ? elementType(ranged.type) : null;
-      names.forEach((name, index) => declare(name, index === 1 && element ? { type: element } : null));
+      const ranged = right?.type === "identifier" ? locals.get(right.text) : right?.type === "call_expression" ? onReceiver(valueType(right), locals) : undefined;
+      const element: LocalType | null = !ranged ? null : "type" in ranged
+        ? (elementType(ranged.type) === null ? null : { type: elementType(ranged.type)! })
+        : ranged.constructor.endsWith("[]") ? null : { constructor: `${ranged.constructor}[]` };
+      names.forEach((name, index) => declare(name, index === 1 ? element : null));
     }
   }, (node) => node.type === "func_literal");
   return locals;
@@ -474,7 +481,7 @@ function onReceiver(local: LocalType | null, locals: Map<string, LocalType | nul
 }
 
 // `[]T`, `[4]T`, `map[K]T` → `T`.
-function elementType(type: string): string | null {
+export function elementType(type: string): string | null {
   const slice = /^(?:\[\d*\])+(.+)$/u.exec(type);
   if (slice) return slice[1]!.startsWith("[") ? null : slice[1]!;
   const map = /^map\[[^\]]+\](.+)$/u.exec(type);

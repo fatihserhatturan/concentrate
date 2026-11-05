@@ -56,7 +56,7 @@
 {"kind":"node","id":"file:main.go:import:5:os","label":"Import","properties":{"line":5,"source":"os","specifier":"\"os\""}}
 {"kind":"node","id":"file:main.go:import:7:example.com/envapp/config","label":"Import","properties":{"line":7,"source":"example.com/envapp/config","specifier":"\"example.com/envapp/config\""}}
 {"kind":"node","id":"file:main.go:import:8:example.com/envapp/server","label":"Import","properties":{"line":8,"source":"example.com/envapp/server","specifier":"\"example.com/envapp/server\""}}
-{"kind":"node","id":"file:main.go:variable:11:mode","label":"Variable","properties":{"isExported":false,"kind":"var","line":11,"name":"mode"}}
+{"kind":"node","id":"file:main.go:variable:11:mode","label":"Variable","properties":{"goConstructor":"os.Getenv","isExported":false,"kind":"var","line":11,"name":"mode"}}
 {"kind":"node","id":"file:server/server.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"server","path":"<root>/server/server.go","relativePath":"server/server.go","sourceType":"production"}}
 {"kind":"node","id":"file:server/server.go:function:10:Run","label":"Function","properties":{"className":null,"endLine":17,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":10,"methodKind":null,"name":"Run","parameters":"[{\"name\":\"cfg\",\"type\":\"config.Config\"}]","returnType":null,"visibility":"exported"}}
 {"kind":"node","id":"file:server/server.go:function:10:Run:call:11:6:gin.Default","label":"Call","properties":{"callee":"Default","columnNumber":6,"expression":"gin.Default","line":11,"name":"gin.Default","receiver":"gin"}}

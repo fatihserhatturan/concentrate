@@ -973,14 +973,19 @@ Astro).
   called on a typed value or field (`u, err := h.userStore.GetByEmail(e)`:
   the method's first result, through fields; on an interface, the result
   its implementations agree on), and a range over a typed slice, array or
-  map (`for _, a := range articles` with `articles []model.Article`). Locals
-  whose type is not visible (results of package functions without a
-  declared result, ranges over untyped expressions) leave the call
-  unresolved, also when they hide a package name. A call on a call's result
+  map (`for _, a := range articles` with `articles []model.Article`), also
+  over a call's result (`range h.items.All()`, or a local holding it). A
+  package variable is typed by its declared type or its constructor
+  (`var store = New()` in the package, `config.DB` in another). Locals
+  whose type is not visible (results of functions outside the scan, ranges
+  over other expressions) leave the call unresolved, also when they hide a
+  package name. Locals are kept per function, so two locals of one name in
+  different blocks (`for _, item := range …` twice) both take the last one's
+  type. A call on a call's result
   is resolved one level deep: on a package function's result
   (`api.NewHandler(s).Register(v1)`, which also mounts the routes `Register`
   declares) or a typed value's method result (`h.items.Default().Label()`).
-  Longer chains (`a.B().C().D()`), package-level variables, closures and
+  Longer chains (`a.B().C().D()`), closures' own parameters and locals, and
   method values are not resolved yet.
 - Interfaces are `Interface` nodes with their method names and embedded
   interfaces. A struct `IMPLEMENTS` every interface of the scan whose methods
