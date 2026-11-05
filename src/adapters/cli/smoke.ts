@@ -553,6 +553,46 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     },
   },
   {
+    name: "internet-go-kratos-beer-shop",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 473,
+      supportedFiles: 283,
+      parsedFiles: 283,
+      failedFiles: 0,
+      resolvedImports: 357,
+      unresolvedRelativeImports: 3,
+      nodes: 16623,
+      relationships: 19500,
+      fileClassifications: { production: 279, test: 2, fixture: 0, support: 2, generated: 0 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 0,
+        entrypoints: 131,
+      },
+    },
+  },
+  {
+    name: "internet-go-remark42",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 256,
+      supportedFiles: 158,
+      parsedFiles: 158,
+      failedFiles: 0,
+      resolvedImports: 153,
+      unresolvedRelativeImports: 0,
+      nodes: 21786,
+      relationships: 26905,
+      fileClassifications: { production: 73, test: 85, fixture: 0, support: 0, generated: 0 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 7,
+        entrypoints: 4,
+      },
+    },
+  },
+  {
     name: "internet-nextjs-taxonomy",
     suite: "internet",
     expected: {
