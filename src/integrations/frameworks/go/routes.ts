@@ -16,7 +16,7 @@ import { cachedForRoot, descendantsOf } from "./scope.js";
 // caller mounts) and handler references are finished once every file is
 // parsed (route-mounts.ts).
 
-export type GoRouteFramework = "gin" | "echo" | "chi" | "fiber" | "gorilla/mux" | "net/http";
+export type GoRouteFramework = "gin" | "echo" | "chi" | "fiber" | "gorilla/mux" | "net/http" | "routegroup";
 
 // A reference to a handler or middleware, in the shape of a Call node's
 // properties so the Go call resolver can find the function it names; a
@@ -109,6 +109,7 @@ export const routerPackages: Array<[GoRouteFramework, RegExp]> = [
   ["fiber", /^github\.com\/gofiber\/fiber(?:\/v\d+)?$/u],
   ["gorilla/mux", /^github\.com\/gorilla\/mux$/u],
   ["net/http", /^net\/http$/u],
+  ["routegroup", /^github\.com\/go-pkgz\/routegroup$/u],
 ];
 
 // The types a parameter holding a router has, per framework.
@@ -119,6 +120,7 @@ const routerTypes: Record<GoRouteFramework, Record<string, "root" | "group">> = 
   fiber: { App: "root", Router: "group", Group: "group" },
   "gorilla/mux": { Router: "root" },
   "net/http": { ServeMux: "root" },
+  routegroup: { Bundle: "root" },
 };
 
 const constructors: Record<GoRouteFramework, string[]> = {
@@ -128,6 +130,7 @@ const constructors: Record<GoRouteFramework, string[]> = {
   fiber: ["New"],
   "gorilla/mux": ["NewRouter"],
   "net/http": ["NewServeMux"],
+  routegroup: ["New"],
 };
 
 const upperMethods = ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"];
@@ -282,6 +285,9 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
       for (const [framework, name] of alias) {
         if (constructors[framework].some((constructor) => callee.text === `${name}.${constructor}`)) return newRouter(framework);
       }
+      // `routegroup.Mount(mux, "/api")`: a root bundle below a path.
+      const bundles = alias.get("routegroup");
+      if (bundles && callee.text === `${bundles}.Mount` && args.length === 2) return { ...newRouter("routegroup"), prefix: stringValue(args[1]) };
       if (callee.type === "identifier" && routerConstructors.has(callee.text)) return { ...newRouter(routerConstructors.get(callee.text)!), fromCall: node };
       const external = foreign.get(callee.text);
       if (external) return newRouter(external.framework, external.kind);
@@ -309,8 +315,13 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
       if (receiver.framework === "gin" && method === "Use") {
         return child(receiver, "", args.map((arg, index) => handlerRef(arg, "router", `<${callee.text}:arg${index}>`)));
       }
+      // routegroup's `b.Group()`, `b.Mount("/x")` and `b.With(mw)` are bundles
+      // with the middleware `b` has so far.
+      if (receiver.framework === "routegroup" && (method === "Group" || method === "Mount")) {
+        return child(receiver, method === "Mount" ? stringValue(args[0]) : "", []);
+      }
       // `r.With(mw).Get(…)`.
-      if (receiver.framework === "chi" && method === "With") {
+      if ((receiver.framework === "chi" || receiver.framework === "routegroup") && method === "With") {
         return child(receiver, "", args.map((arg, index) => handlerRef(arg, "router", `<${callee.text}:arg${index}>`)));
       }
       return null;
@@ -448,7 +459,10 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
       const operand = callee.type === "selector_expression" ? callee.childForFieldName("operand") : null;
       const receiverName = operand?.text ?? null;
       const router = packageLevel ? defaultMux : operand ? receiverRouter(operand, method, args) : null;
-      const name = (routePath: string, index: number) => `<${callee.text}:${routePath}:arg${index}>`;
+      // A long or multi-line receiver chain (`r.With(a, // …\n b).HandleFunc`)
+      // is named by its method alone.
+      const label = callee.text.length > 80 || callee.text.includes("\n") ? method : callee.text;
+      const name = (routePath: string, index: number) => `<${label}:${routePath}:arg${index}>`;
       const use = (target: Router) => {
         target.own.push(...args.map((arg, index) => handlerRef(arg, "router", `<${callee.text}:arg${index}>`)));
       };
@@ -535,6 +549,36 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
           const routePath = stringValue(args[shape.from - 1]);
           if (routePath === null || shape.method === null) dynamic(node, "chi");
           else addRoute(node, router, shape.method.toUpperCase(), routePath, handlerChain(args[shape.from]!, name(routePath, shape.from)), args[shape.from], receiverName);
+          return;
+        }
+      }
+
+      if (router?.framework === "routegroup") {
+        if (method === "Use") {
+          use(router);
+          return;
+        }
+        // On a root bundle `Route` configures a new group; on a group, the
+        // group itself.
+        if (method === "Route") {
+          callback(node, router.parent === null && router.base === null ? child(router, "", []) : router, args[0]);
+          return;
+        }
+        // `HandleFunc("GET /comments/{id}", h)`, `HandleFiles("/web/", fs)`,
+        // `HandleRoot("GET", h)` (the bundle's own path).
+        if ((method === "Handle" || method === "HandleFunc" || method === "HandleFiles") && args.length === 2) {
+          const pattern = stringValue(args[0]);
+          if (pattern === null) dynamic(node, "routegroup");
+          else {
+            const parsed = parseServeMuxPattern(pattern);
+            addRoute(node, router, parsed.method, parsed.path, handlerChain(args[1]!, name(parsed.path, 1)), args[1], receiverName);
+          }
+          return;
+        }
+        if ((method === "HandleRoot" || method === "HandleRootFunc") && args.length === 2) {
+          const value = stringValue(args[0]);
+          if (value === null) dynamic(node, "routegroup");
+          else addRoute(node, router, value === "" ? "ALL" : value.toUpperCase(), "", handlerChain(args[1]!, name("", 1)), args[1], receiverName);
           return;
         }
       }

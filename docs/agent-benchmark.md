@@ -491,9 +491,10 @@ packages, interfaces or services:
     the REST handlers' store interfaces.
 
 Expected answers were written from the source (`wire_gen.go`, interface
-declarations and their implementations, call sites). remark42's routes
-(`go-pkgz/routegroup`) and env options (`go-flags` `env-namespace`) are not
-read by the graph yet, so no route or env question is asked there.
+declarations and their implementations, call sites). When these runs were
+made, the graph did not read remark42's routes (`go-pkgz/routegroup`, read
+since #196) or its env options (`go-flags` `env-namespace`), so no route or
+env question is asked there.
 
 ```bash
 npm run bench:agent -- --questions bench/agent/questions-go-large.json --runs 3 --model sonnet
