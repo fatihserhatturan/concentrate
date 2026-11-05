@@ -995,9 +995,11 @@ Astro).
   (with the embedded interfaces' methods) are all in the struct's method set:
   its methods with value or pointer receivers and those promoted from
   embedded structs. Methods match by name and by their parameter and result
-  types, compared without package qualifiers (`domain.User` and `User`
-  match) and without parameter names; a generic interface's methods match by
-  name only. An
+  types without parameter names. A type of the scan is compared with its
+  package (`domain.User` written in package `repo` and `User` written in
+  package `domain` match; two packages' `User` do not), any other type by
+  name, so `context.Context` and a dependency's types match whatever
+  package wrote them. A generic interface's methods match by name only. An
   interface that embeds one from outside the scan (`io.Closer`) has unknown
   methods and gets no implementations, nor do interfaces without methods
   (`any`, constraints like `~int | ~float64`). Defined non-struct types
