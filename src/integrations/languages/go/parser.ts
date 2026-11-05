@@ -521,6 +521,7 @@ export function createCallNodes(functionNodeId: string, node: SyntaxNode, locals
     }
 
     const local = callExpression.receiver === null ? undefined : locals.get(callExpression.receiver.split(".")[0]!);
+    const chained = chainedReceiver(child, locals);
     calls.push({
       id: `${functionNodeId}:call:${child.startPosition.row + 1}:${child.startPosition.column}:${callExpression.expression}`,
       label: "Call",
@@ -531,12 +532,30 @@ export function createCallNodes(functionNodeId: string, node: SyntaxNode, locals
         receiver: callExpression.receiver,
         line: child.startPosition.row + 1,
         columnNumber: child.startPosition.column,
-        ...(local === undefined ? {} : local === null ? { receiverIsLocal: true } : "type" in local ? { receiverType: local.type } : { receiverConstructor: local.constructor }),
+        ...chained !== undefined
+          ? { receiverConstructor: chained }
+          : local === undefined ? {} : local === null ? { receiverIsLocal: true } : "type" in local ? { receiverType: local.type } : { receiverConstructor: local.constructor },
       },
     });
   }, (child) => child.type === "function_declaration" || child.type === "method_declaration");
 
   return calls;
+}
+
+// `api.NewHandler(s).Register(v1)`: the receiver is the result of a call to a
+// package function or to a method of a typed local (`h.store.Get(1).Name()`),
+// written with a trailing `()` (`api.NewHandler()`, `(*Handler).store.Get()`)
+// so the resolver can tell it from a local's constructor.
+function chainedReceiver(call: SyntaxNode, locals: Map<string, LocalType | null>): string | undefined {
+  const fn = call.childForFieldName("function");
+  const operand = fn?.type === "selector_expression" ? fn.childForFieldName("operand") : null;
+  if (operand?.type !== "call_expression") return undefined;
+  const callee = operand.childForFieldName("function");
+  if (!callee || (callee.type !== "identifier" && callee.type !== "selector_expression") || !/^\w+(?:\.\w+)*$/u.test(callee.text)) return undefined;
+  const [root, ...rest] = callee.text.split(".");
+  if (!locals.has(root!)) return `${callee.text}()`;
+  const local = locals.get(root!);
+  return local && "type" in local && rest.length > 0 ? `(${local.type}).${rest.join(".")}()` : undefined;
 }
 
 function extractFunctionName(node: SyntaxNode): string | null {

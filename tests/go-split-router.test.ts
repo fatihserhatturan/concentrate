@@ -19,7 +19,11 @@ describe("Go routers built in another package", () => {
       .filter((node) => node.label === "Route")
       .map((node) => `${node.properties.method} ${node.properties.fullPath}`)
       .sort();
-    assert.deepEqual(routes, ["GET /api/items", "GET /api/items/", "GET /api/items/:name", "GET /health"]);
+    assert.deepEqual(routes, [
+      "GET /api/items", "GET /api/items/", "GET /api/items/:name", "GET /health",
+      // `api.NewHandler(store.New()).Register(r.Group("/v2"))`
+      "GET /v2/items", "GET /v2/items/", "GET /v2/items/:name",
+    ]);
     assert.ok(graph.nodes.every((node) => !("goPending" in node.properties) && !("routerArguments" in node.properties)));
   });
 
@@ -38,5 +42,16 @@ describe("Go routers built in another package", () => {
     // `item, err := h.items.Find(…)` (interface field, one implementer) and
     // `for _, item := range items` over `[]model.Item`.
     assert.equal(resolved.filter((link) => link === "item.Label -> Item.Label").length, 2);
+  });
+
+  it("resolves calls on a call's result", () => {
+    const resolved = graph.relationships
+      .filter((rel) => rel.type === "CALL_RESOLVES_TO" && String(byId.get(rel.from)!.properties.expression).includes(")."))
+      .map((rel) => `${byId.get(rel.from)!.properties.expression} -> ${byId.get(rel.to)!.properties.className}.${byId.get(rel.to)!.properties.name}`)
+      .sort();
+    assert.deepEqual(resolved, [
+      "api.NewHandler(store.New()).Register -> Handler.Register",
+      "h.items.Default().Label -> Item.Label",
+    ]);
   });
 });

@@ -171,15 +171,19 @@ function resolveGoCallTarget(call: GraphNode, callerFileId: string, index: GoCal
   }
 
   // `NewX().Run()` and `a[i].Run()`: the receiver is an expression's result.
+  // Only the result of a call to a known function is typed (the parse writes
+  // it as `api.NewHandler()`).
   const expression = String(call.properties.expression ?? "");
-  if (/[()[\]]/u.test(expression.slice(0, expression.lastIndexOf(".")))) return null;
+  const chained = typeof call.properties.receiverConstructor === "string" && call.properties.receiverConstructor.endsWith("()");
+  if (!chained && /[()[\]]/u.test(expression.slice(0, expression.lastIndexOf(".")))) return null;
 
   const [root, ...fields] = receiver.split(".");
   let type: TypeRef | null = null;
   if (typeof call.properties.receiverType === "string") {
     type = resolveType(call.properties.receiverType, callerFileId, index);
   } else if (typeof call.properties.receiverConstructor === "string") {
-    type = constructedType(call.properties.receiverConstructor, callerFileId, index);
+    type = constructedType(call.properties.receiverConstructor.replace(/\(\)$/u, ""), callerFileId, index);
+    if (chained) return type ? methodOnType(type, callee, index) : null;
   } else if (call.properties.receiverIsLocal === true) {
     return null;
   } else if (fields.length === 0) {
@@ -196,6 +200,11 @@ function resolveGoCallTarget(call: GraphNode, callerFileId: string, index: GoCal
     type = fieldType(type, field, index);
   }
   if (!type) return null;
+  return methodOnType(type, callee, index);
+}
+
+// A method of a type, or every implementation of an interface's method.
+function methodOnType(type: TypeRef, callee: string, index: GoCallIndex): string | string[] | null {
   const iface = index.interfacesByPackage.get(type.pkg)?.get(type.name);
   if (iface) {
     const implementations = (index.implementersByInterface.get(iface.node.id) ?? []).flatMap((implementer) => methodOf(implementer, callee, index, 0).slice(0, 1));

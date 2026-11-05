@@ -39,4 +39,7 @@ func (h *Handler) List(c echo.Context) error {
 	return c.JSON(200, labels(h.items.All()))
 }
 
+// A method called on the result of an interface field's method.
+func (h *Handler) defaultLabel() string { return h.items.Default().Label() }
+
 func NewHandler(items store.Items) *Handler { return &Handler{items: items} }

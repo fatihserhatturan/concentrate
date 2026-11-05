@@ -976,8 +976,12 @@ Astro).
   map (`for _, a := range articles` with `articles []model.Article`). Locals
   whose type is not visible (results of package functions without a
   declared result, ranges over untyped expressions) leave the call
-  unresolved, also when they hide a package name. Package-level variables, closures, method values
-  and chained calls (`NewX().Run()`) are not resolved yet.
+  unresolved, also when they hide a package name. A call on a call's result
+  is resolved one level deep: on a package function's result
+  (`api.NewHandler(s).Register(v1)`, which also mounts the routes `Register`
+  declares) or a typed value's method result (`h.items.Default().Label()`).
+  Longer chains (`a.B().C().D()`), package-level variables, closures and
+  method values are not resolved yet.
 - Interfaces are `Interface` nodes with their method names and embedded
   interfaces. A struct `IMPLEMENTS` every interface of the scan whose methods
   (with the embedded interfaces' methods) are all in the struct's method set:
