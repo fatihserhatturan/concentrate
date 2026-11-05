@@ -13,6 +13,8 @@ func main() {
 	v1 := r.Group("/api")
 	h := api.NewHandler(store.New())
 	h.Register(v1)
+	// The same handler mounted again through a chained call.
+	api.NewHandler(store.New()).Register(r.Group("/v2"))
 	r.Logger.Fatal(r.Start(":1323"))
 }
 
