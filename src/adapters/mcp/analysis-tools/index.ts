@@ -15,7 +15,7 @@ const kind = { type: "string", description: `${DECLARATION_KINDS.join(", ")}.` }
 export const analysisToolDefinitions = [
   {
     name: "search_symbols",
-    description: "Fuzzy search over declarations. Ranks exact names, then prefixes, word initials (gUS finds getUserService), substrings and letters in order (injctr finds Injector), each with its match type and score. A query with a dot matches Class.method.",
+    description: "Fuzzy search over declarations. Ranks exact names, then prefixes, word initials (gUS finds getUserService), substrings and letters in order (injctr finds Injector). A query with a dot matches Class.method.",
     inputSchema: objectSchema({
       query: { type: "string", description: "Name or fragment." },
       kind,

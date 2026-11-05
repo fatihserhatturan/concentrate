@@ -112,7 +112,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "find_definitions",
-    description: "Definitions by name: functions, classes, variables, interfaces, type aliases, enums, and class methods (last, with className).",
+    description: "Definitions by name: functions, classes, variables, interfaces (with implementations), type aliases, enums, and class methods (last, with className).",
     inputSchema: objectSchema({
       name: {
         type: "string",
@@ -130,7 +130,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "find_callers",
-    description: "Call sites that resolve to functions or methods of this name; a caller is a function, a method (with className) or module-level code. unresolvedCalls and completeness say whether any call by that name is left unresolved.",
+    description: "Call sites that resolve to functions or methods of this name; a caller is a function, a method (with className) or module-level code. A call through an interface reaches every implementation (targetClassName). unresolvedCalls and completeness say whether any call by that name is left unresolved.",
     inputSchema: objectSchema({
       name: {
         type: "string",
@@ -180,7 +180,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_routes",
-    description: "HTTP routes with file, line, method, path, full path, framework and handler. Registrations with a method or path computed at runtime (`app[method](url, fn)`) are not routes; they come back in dynamicRouteCalls. unconsumed: true lists the routes no scanned frontend call reaches (candidate dead endpoints).",
+    description: "HTTP routes with file, line, method, path, full path, framework and handler. Registrations whose method or path is computed at runtime (`app[method](url, fn)`) come back in dynamicRouteCalls. unconsumed: true lists the routes no scanned frontend call reaches.",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -202,7 +202,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_pages",
-    description: "List UI pages (Next.js App and Pages Router, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit, Astro, Angular Router) with source file, line, path as declared, full URL path, router, kind (page, layout, index, ...) and the component each renders, ordered by full path.",
+    description: "UI pages (Next.js App and Pages Router, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit, Astro, Angular Router) with file, line, path as declared, full URL path, router, kind (page, layout, index, ...) and the component each renders.",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -351,7 +351,7 @@ async function findDefinitions(
   const { limit, fetch } = window;
   const rows = await definitionQueries(name, exact, fetch);
 
-  return { query: { name, exact, limit }, definitions: window.take(rows) };
+  return { query: { name, exact, limit }, definitions: await withImplementations(engine, window.take(rows) as DefinitionRow[]) };
 
   async function definitionQueries(symbolName: string, exactMatch: boolean, rowLimit: number): Promise<unknown[]> {
     const queries = [
@@ -369,6 +369,62 @@ async function findDefinitions(
   }
 }
 
+type DefinitionRow = { name: string; kind: string; file: string; line: number; implementations?: Array<{ name: string; file: string; line: number }> };
+
+// An interface row lists the classes that implement it, so a question about
+// an interface's implementations (or the dispatch targets of its methods)
+// is answered by the definition itself.
+async function withImplementations(engine: GraphQueryEngine, rows: DefinitionRow[]): Promise<DefinitionRow[]> {
+  const interfaces = rows.filter((row) => row.kind === "Interface");
+  if (interfaces.length === 0) return rows;
+  const found = await engine.query(`
+    MATCH (file:File)-[:DEFINES_INTERFACE]->(target:Interface)
+    MATCH (classFile:File)-[:DEFINES_CLASS]->(cls:Class)-[:IMPLEMENTS]->(target)
+    WHERE target.name IN [${[...new Set(interfaces.map((row) => quote(row.name)))].join(", ")}]
+    RETURN target.name AS interfaceName, file.relativePath AS interfaceFile, target.line AS interfaceLine,
+      cls.name AS name, classFile.relativePath AS file, cls.line AS line
+    ORDER BY classFile.relativePath, cls.line
+  `) as Array<{ interfaceName: string; interfaceFile: string; interfaceLine: number; name: string; file: string; line: number }>;
+  for (const row of interfaces) {
+    const implementations = found
+      .filter((match) => match.interfaceName === row.name && match.interfaceFile === row.file && match.interfaceLine === row.line)
+      .map(({ name, file, line }) => ({ name, file, line }));
+    if (implementations.length > 0) row.implementations = implementations;
+  }
+  return rows;
+}
+
+type CallerRow = { target: string; targetId?: string; targetClassName?: string; targetFile?: string };
+
+// When more than one function has the name (a method that several classes
+// implement, so a call through an interface resolves to each of them), every
+// row says which one it reaches.
+async function withTargets(engine: GraphQueryEngine, rows: CallerRow[], predicate: string): Promise<CallerRow[]> {
+  const ids = [...new Set(rows.map((row) => row.targetId!))];
+  const [{ targets }] = await engine.query(`MATCH (target:Function) WHERE ${predicate} RETURN count(target) AS targets`) as Array<{ targets: number }>;
+  if (ids.length > 0 && Number(targets) > 1) {
+    const list = ids.map(quote).join(", ");
+    const located = await engine.query(`
+      MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(target:Function)
+      WHERE target.id IN [${list}]
+      RETURN target.id AS id, cls.name AS className, file.relativePath AS file
+    `) as Array<{ id: string; className?: string; file: string }>;
+    located.push(...await engine.query(`
+      MATCH (file:File)-[:DEFINES_FUNCTION]->(target:Function)
+      WHERE target.id IN [${list}]
+      RETURN target.id AS id, file.relativePath AS file
+    `) as Array<{ id: string; file: string }>);
+    const byId = new Map(located.map((target) => [target.id, target]));
+    for (const row of rows) {
+      const target = byId.get(row.targetId!);
+      if (target?.className) row.targetClassName = target.className;
+      if (target) row.targetFile = target.file;
+    }
+  }
+  for (const row of rows) delete row.targetId;
+  return rows;
+}
+
 async function findCallers(
   engine: GraphQueryEngine,
   args: Record<string, unknown>,
@@ -384,6 +440,7 @@ async function findCallers(
     MATCH (file:File)-[:DEFINES_FUNCTION]->(caller)
     WHERE ${predicate}
     RETURN target.name AS target,
+      target.id AS targetId,
       caller.name AS caller,
       'Function' AS callerKind,
       file.relativePath AS file,
@@ -400,6 +457,7 @@ async function findCallers(
     MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller)
     WHERE ${predicate}
     RETURN target.name AS target,
+      target.id AS targetId,
       caller.name AS caller,
       'Method' AS callerKind,
       class.name AS className,
@@ -415,6 +473,7 @@ async function findCallers(
     MATCH (file:File)-[:MODULE_CALLS]->(call)
     WHERE ${predicate}
     RETURN target.name AS target,
+      target.id AS targetId,
       file.relativePath AS caller,
       'File' AS callerKind,
       file.relativePath AS file,
@@ -437,7 +496,7 @@ async function findCallers(
 
   return {
     query: { name, exact, limit },
-    callers: window.take([...functionCallers, ...methodCallers, ...moduleCallers]),
+    callers: await withTargets(engine, window.take([...functionCallers, ...methodCallers, ...moduleCallers]) as CallerRow[], predicate),
     ...callerCompleteness(names, await unresolvedCalls(engine, names)),
   };
 }

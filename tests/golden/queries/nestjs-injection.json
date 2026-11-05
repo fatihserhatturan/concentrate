@@ -591,12 +591,12 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"findAll\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"findAll\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"findAll\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"findAll\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": [
           {
             "target": "findAll",
@@ -606,13 +606,40 @@
             "file": "users.controller.ts",
             "line": 10,
             "expression": "this.usersService.findAll",
-            "relationship": "CALLS"
+            "relationship": "CALLS",
+            "targetClassName": "UsersService",
+            "targetFile": "users.service.ts"
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"findAll\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"findAll\" RETURN target.name AS target, target.id AS targetId, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (target:Function) WHERE target.name = \"findAll\" RETURN count(target) AS targets",
+        "rows": [
+          {
+            "targets": 2
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(target:Function) WHERE target.id IN [\"file:users.service.ts:function:2:findAll\"] RETURN target.id AS id, cls.name AS className, file.relativePath AS file",
+        "rows": [
+          {
+            "id": "file:users.service.ts:function:2:findAll",
+            "className": "UsersService",
+            "file": "users.service.ts"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(target:Function) WHERE target.id IN [\"file:users.service.ts:function:2:findAll\"] RETURN target.id AS id, file.relativePath AS file",
         "rows": []
       },
       {
@@ -646,7 +673,9 @@
           "file": "users.controller.ts",
           "line": 10,
           "expression": "this.usersService.findAll",
-          "relationship": "CALLS"
+          "relationship": "CALLS",
+          "targetClassName": "UsersService",
+          "targetFile": "users.service.ts"
         }
       ],
       "unresolvedCalls": {
