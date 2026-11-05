@@ -5,7 +5,6 @@ import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../co
 import type { LanguageParser } from "../../../core/contracts/language-parser.js";
 import {
   analyzeMemberCallExpression,
-  walk,
   walkScoped,
 } from "../tree-sitter-utils.js";
 
@@ -88,7 +87,9 @@ async function parseGoFile(rootPath: string, filePath: string, plugins: readonly
       }
     }
 
-    walk(tree.rootNode, (node) => {
+    // descendantsOfType runs in the parser's wasm and keeps document order,
+    // so it finds the same nodes as a walk without visiting every node in JS.
+    for (const node of tree.rootNode.descendantsOfType(["import_spec", "type_spec", "type_alias"])) {
       if (node.type === "import_spec") {
         const importNode = createImportNode(fileNodeId, node);
         if (importNode) {
@@ -126,7 +127,7 @@ async function parseGoFile(rootPath: string, filePath: string, plugins: readonly
           });
         }
       }
-    });
+    }
 
     // Second pass: process functions and methods now that all structs are indexed.
     const classesByName = new Map(
@@ -136,8 +137,7 @@ async function parseGoFile(rootPath: string, filePath: string, plugins: readonly
     );
 
     const functions: GoParsedFunction[] = [];
-    walk(tree.rootNode, (node) => {
-      if (node.type !== "function_declaration" && node.type !== "method_declaration") return;
+    for (const node of tree.rootNode.descendantsOfType(["function_declaration", "method_declaration"])) {
 
       const receiverTypeName = node.type === "method_declaration"
         ? extractGoReceiverTypeName(node)
@@ -146,7 +146,7 @@ async function parseGoFile(rootPath: string, filePath: string, plugins: readonly
       const className = receiverTypeName ?? undefined;
 
       const functionNode = createFunctionNode(fileNodeId, node, className);
-      if (!functionNode) return;
+      if (!functionNode) continue;
 
       nodes.push(functionNode);
       functions.push({ syntax: node, node: functionNode });
@@ -186,9 +186,12 @@ async function parseGoFile(rootPath: string, filePath: string, plugins: readonly
           properties: {},
         })),
       );
-    });
+    }
 
-    for (const plugin of plugins) plugin({ fileNodeId, relativePath: relativePath.replaceAll("\\", "/"), root: tree.rootNode, nodes, relationships, functions });
+    // One root object for every plugin: they share what they ask it
+    // (frameworks/go/scope.ts, cachedForRoot).
+    const root = tree.rootNode;
+    for (const plugin of plugins) plugin({ fileNodeId, relativePath: relativePath.replaceAll("\\", "/"), root, nodes, relationships, functions });
 
     const parsed: ParsedSourceFile = { fileNodeId, nodes, relationships };
     if (skippedLines.length > 0) {
@@ -431,7 +434,27 @@ function baseTypeName(type: string): string {
 // once every file is parsed). Other locals are known only to be locals (null).
 export type LocalType = { type: string } | { constructor: string };
 
-export function localTypes(functionNode: SyntaxNode): Map<string, LocalType | null> {
+// The parse, the routes, entrypoints and env plugins all ask for a function's
+// locals: they are read once per function of a tree. Callers must not change
+// the map.
+const localsByTree = new WeakMap<object, Map<string, ReadonlyMap<string, LocalType | null>>>();
+export function localTypes(functionNode: SyntaxNode): ReadonlyMap<string, LocalType | null> {
+  const tree = functionNode.tree as object;
+  let byFunction = localsByTree.get(tree);
+  if (!byFunction) {
+    byFunction = new Map();
+    localsByTree.set(tree, byFunction);
+  }
+  const key = `${functionNode.startIndex}:${functionNode.endIndex}:${functionNode.type}`;
+  let locals = byFunction.get(key);
+  if (!locals) {
+    locals = readLocalTypes(functionNode);
+    byFunction.set(key, locals);
+  }
+  return locals;
+}
+
+function readLocalTypes(functionNode: SyntaxNode): Map<string, LocalType | null> {
   const locals = new Map<string, LocalType | null>();
   const declare = (name: SyntaxNode, local: LocalType | null) => {
     if (name.type === "identifier" && name.text !== "_") locals.set(name.text, local);
@@ -473,7 +496,7 @@ export function localTypes(functionNode: SyntaxNode): Map<string, LocalType | nu
 // `h.store.Get()` with h a local of a known type: `(*Handler).store.Get`,
 // which the resolver follows through the type's fields to the method's
 // result.
-function onReceiver(local: LocalType | null, locals: Map<string, LocalType | null>): LocalType | null {
+function onReceiver(local: LocalType | null, locals: ReadonlyMap<string, LocalType | null>): LocalType | null {
   if (!local || "type" in local) return local;
   const [root, ...rest] = local.constructor.split(".");
   const receiver = rest.length > 0 ? locals.get(root!) : undefined;
@@ -514,7 +537,7 @@ export function goVisibility(name: string): string {
   return /^[A-Z]/.test(name) ? "exported" : "unexported";
 }
 
-export function createCallNodes(functionNodeId: string, node: SyntaxNode, locals: Map<string, LocalType | null>): GraphNode[] {
+export function createCallNodes(functionNodeId: string, node: SyntaxNode, locals: ReadonlyMap<string, LocalType | null>): GraphNode[] {
   const calls: GraphNode[] = [];
 
   walkScoped(node, (child) => {
@@ -553,7 +576,7 @@ export function createCallNodes(functionNodeId: string, node: SyntaxNode, locals
 // package function or to a method of a typed local (`h.store.Get(1).Name()`),
 // written with a trailing `()` (`api.NewHandler()`, `(*Handler).store.Get()`)
 // so the resolver can tell it from a local's constructor.
-function chainedReceiver(call: SyntaxNode, locals: Map<string, LocalType | null>): string | undefined {
+function chainedReceiver(call: SyntaxNode, locals: ReadonlyMap<string, LocalType | null>): string | undefined {
   const fn = call.childForFieldName("function");
   const operand = fn?.type === "selector_expression" ? fn.childForFieldName("operand") : null;
   if (operand?.type !== "call_expression") return undefined;
