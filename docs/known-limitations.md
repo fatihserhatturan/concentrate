@@ -1037,17 +1037,19 @@ Astro).
   newServeCmd()`); `Use` gives each name (its first word). Commands passed
   to `AddCommand` as calls (`root.AddCommand(newServeCmd())`) keep their own
   name.
-- HTTP routes come from `net/http`, gin, echo, chi, fiber and gorilla/mux
-  (`Route.framework` `net/http`, `gin`, `echo`, `chi`, `fiber`,
-  `gorilla/mux`). A router is known when a function builds it
-  (`gin.Default()`, `echo.New()`, `chi.NewRouter()`, `fiber.New()`,
-  `mux.NewRouter()`, `http.NewServeMux()`, `&http.ServeMux{}`, or a function
+- HTTP routes come from `net/http`, gin, echo, chi, fiber, gorilla/mux and
+  go-pkgz/routegroup (`Route.framework` `net/http`, `gin`, `echo`, `chi`,
+  `fiber`, `gorilla/mux`, `routegroup`). A router is known when a function
+  builds it (`gin.Default()`, `echo.New()`, `chi.NewRouter()`, `fiber.New()`,
+  `mux.NewRouter()`, `http.NewServeMux()`, `&http.ServeMux{}`,
+  `routegroup.New(mux)`, `routegroup.Mount(mux, "/api")`, or a function
   of the same file whose declared result is a router type), groups it
   (`r.Group("/api", mw…)`, chi's `Route` / `Group` callbacks and `With`,
-  fiber's `Route`, `r.PathPrefix("/api").Subrouter()`), or takes it as a
-  parameter typed as one of the framework's router types (`*gin.RouterGroup`,
+  fiber's `Route`, `r.PathPrefix("/api").Subrouter()`, routegroup's `Group`,
+  `Mount("/api")`, `With` and `Route` callbacks), or takes it as a parameter
+  typed as one of the framework's router types (`*gin.RouterGroup`,
   `*echo.Group`, `chi.Router`, `fiber.Router`, `*mux.Router`,
-  `*http.ServeMux`, …).
+  `*http.ServeMux`, `*routegroup.Bundle`, …).
 - A route on a parameter gets the path and middleware of every call that
   passes a router in, and a named callback (`r.Route("/users", userRoutes)`)
   is such a call. A router a function returns gets the path its callers mount
@@ -1069,19 +1071,25 @@ Astro).
 - Middleware follows each framework's order. gin, chi, fiber and echo groups
   apply `Use` to what is registered after it, and gin's `Use` returns the
   group with the middleware (`auth := r.Group("/").Use(mw)`); echo's root (`e.Use`, `e.Pre`)
-  and gorilla/mux routers apply it to all their routes. The lifecycle steps
+  and gorilla/mux routers apply it to all their routes. routegroup's `Use`
+  applies to every route of its bundle; `Route` on a root bundle configures a
+  new group, so its `Use` stays inside the callback. The lifecycle steps
   are the routers' middleware, outermost first, then the route's own (echo's
   come after its handler: `e.GET(path, h, mw…)`), then the handler. A factory
   (`AuthMiddleware(true)`) is the step of the function called; fiber's
   `app.Use("/api", mw)` (a prefix first) is not followed.
 - `ServeMux` patterns give the method (`GET /items/{id}`; `ALL` without one)
   and drop the host; `http.StripPrefix("/api", sub)` mounts a sub-mux's
-  routes under `/api`. For `net/http`, chi and gorilla/mux,
+  routes under `/api`; routegroup routes use the same patterns, and its
+  `HandleRoot("GET", h)` registers the bundle's own path. For `net/http`, chi
+  and gorilla/mux,
   `withAuth(http.HandlerFunc(h))` makes `withAuth` a middleware step and `h`
   the handler. gorilla/mux's `.Methods("GET", "POST")` gives one `Route` per
   method (`ALL` without it); chi serves a sub-router's `/` at its mount path.
   A closure handler is a `Function` (`<v1.POST:/items:arg1>`, kind
-  `func_literal`) that owns the calls in its body. A path or method that is
+  `func_literal`) that owns the calls in its body; when the call before the
+  method spans lines or is long, the name keeps only the method
+  (`<HandleFunc:/items:arg1>`). A path or method that is
   not a string literal, a string constant of the file or `http.MethodX` is
   reported in `dynamicRouteCalls`.
 - Go data access covers gorm, `database/sql` and sqlx. A call chain counts

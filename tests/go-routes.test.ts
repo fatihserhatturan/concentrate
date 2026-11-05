@@ -120,7 +120,7 @@ async function scan(fixture: string): Promise<Graph> {
   return buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: false });
 }
 
-describe("Go echo, chi, fiber and gorilla/mux routes", () => {
+describe("Go echo, chi, fiber, gorilla/mux and routegroup routes", () => {
   it("echo: the handler first, the root's Use for every route, a group's for what follows", async () => {
     assert.deepEqual(routes(await scan("go-echo")), [
       ["GET", "/health", "main.go:28", "list", ["auth", "list"]],
@@ -168,6 +168,20 @@ describe("Go echo, chi, fiber and gorilla/mux routes", () => {
       ["PUT", "/items/{id}", "main.go:25", "show", ["logging", "show"]],
       ["GET", "/api/users", "main.go:29", "list", ["logging", "auth", "list"]],
       ["ALL", "/static/", "main.go:31", null, ["logging"]],
+    ]);
+  });
+
+  it("routegroup: Mount prefixes, Route on the root and on a group, With and HandleRoot", async () => {
+    assert.deepEqual(routes(await scan("go-routegroup")), [
+      ["GET", "/health", "main.go:24", "list", ["logging", "list"]],
+      ["GET", "/api/v1/items", "main.go:27", "list", ["logging", "list"]],
+      ["POST", "/api/v1/items", "main.go:28", "show", ["logging", "auth", "show"]],
+      ["DELETE", "/api/v1/admin/cache", "main.go:32", "show", ["logging", "auth", "show"]],
+      // HandleRoot registers the bundle's own path.
+      ["GET", "/api/v1/admin", "main.go:33", "list", ["logging", "auth", "list"]],
+      // Route on the root configures a new group, so its Use stays there.
+      ["PUT", "/private", "main.go:38", "show", ["logging", "auth", "show"]],
+      ["ALL", "/v2/files/", "main.go:42", null, []],
     ]);
   });
 });

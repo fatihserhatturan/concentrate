@@ -27,7 +27,7 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 | --- | --- |
 | **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints (Go `main`, gRPC services and cobra commands included) |
 | **Calls** | call sites resolved to their target declaration across files, barrels and re-exports |
-| **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers; Next.js, Nuxt, SvelteKit and Astro server routes, and tRPC procedures; Go `net/http`, gin, echo, chi, fiber and gorilla/mux, with groups and routers passed between functions |
+| **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers; Next.js, Nuxt, SvelteKit and Astro server routes, and tRPC procedures; Go `net/http`, gin, echo, chi, fiber, gorilla/mux and go-pkgz/routegroup, with groups and routers passed between functions |
 | **Components** | React, Vue, Svelte, Astro, Angular and web components, and which component renders which, with the props passed |
 | **Pages** | Next.js, Nuxt, SvelteKit and Astro file routes; React Router, TanStack Router, Vue Router and Angular Router records, each linked to the component it renders |
 | **Frontend requests** | fetch, axios, ky, ofetch, SWR, TanStack Query, Angular `HttpClient` and tRPC calls, and Go `net/http` and resty clients, linked to the backend route they reach |
@@ -37,7 +37,7 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 | **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle; Go gorm, ent, sqlc, `database/sql` and sqlx (literal SQL): models, tables, and read and write operations |
 | **Workspaces** | packages and the dependencies between them, both declared and used in source |
 
-Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux), entrypoints, env reads, data access, outbound HTTP and dependency injection (fx, wire); the other languages get structure, imports and calls.
+Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux, routegroup), entrypoints, env reads, data access, outbound HTTP and dependency injection (fx, wire); the other languages get structure, imports and calls.
 
 ## How it works
 
