@@ -32,8 +32,8 @@ the only runtime dependency left is `web-tree-sitter`.
   `src/integrations/languages/syntax/tree-sitter.ts` imports web-tree-sitter.
   `tests/grammars.test.ts` checks the vendored grammars against their manifest.
 - **Focus.** The Node.js/TypeScript backend niche first, then the whole JS/TS ecosystem including the
-  frontend (M8), then the Go ecosystem (M9), the non-code files of a project (M10) and the Rust
-  ecosystem (M11); Python stays at least at today's level.
+  frontend (M8), then the Go ecosystem (M9), the non-code files of a project (M10), the Rust
+  ecosystem (M11), the Python ecosystem (M12) and the C/C++ ecosystem (M13).
 
 ### Dependency replacement map
 
@@ -60,11 +60,14 @@ the only runtime dependency left is `web-tree-sitter`.
 | M9 – Go ecosystem | 18–21 | Go modules, packages and calls resolved; net/http, gin, echo, chi, fiber and gorilla/mux routes, gRPC and cobra entrypoints; database/sql, sqlx, gorm, env and HTTP clients; measured on pinned samples. |
 | M10 – Non-code files | 22–25 | Every file in the graph (styles, JSON, YAML, shell, PowerShell, Dockerfile, Makefile, SQL, `.proto`) with vendored tree-sitter grammars; scripts and infrastructure as entrypoints with their env; CSS linked to components; SQL tables and `.proto` services; measured on pinned samples. |
 | M11 – Rust ecosystem | 26–29 | Cargo workspaces, path calls, traits and attributes; axum, actix-web, Rocket and warp routes; sqlx, diesel, SeaORM, env and reqwest; measured on pinned samples. |
+| M12 – Python ecosystem | 30–33 | Python packages, classes, decorators and typed calls; Django, Flask, FastAPI, Celery and click/typer entrypoints; SQLAlchemy, Django ORM, env, HTTP clients and DI; measured on pinned samples. |
+| M13 – C/C++ ecosystem | 34–37 | C and C++ includes, headers, namespaces, classes and virtual calls; CMake, Make and `compile_commands.json` targets; Drogon, Crow, Pistache, cpp-httplib, gRPC and Qt; SQL, env and libcurl; measured on pinned samples. |
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
 M9, the Go ecosystem, is done. Next is M10, the non-code files of a project (Phase 22), then M11,
-the Rust ecosystem (Phase 26).
+the Rust ecosystem (Phase 26), M12, the Python ecosystem (Phase 30), and M13, the C/C++ ecosystem
+(Phase 34).
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -1307,6 +1310,321 @@ There are no Rust samples, labels or agent questions today. A Rust RealWorld (Co
 
 - [ ] Accuracy, performance and agent results for Rust are reproducible from scripts
 - [ ] README shows the Rust coverage
+
+## M12: Python ecosystem
+
+Phases 30–33 bring Python from imports and plain calls to the depth of Go and Rust:
+packages, classes, decorators and typed method calls, then Django, Flask and FastAPI routes, SQLAlchemy
+and Django ORM data access, config, HTTP clients and dependency injection. The decisions of M9 apply.
+
+## Phase 30: Python language foundation (packages, classes, decorators, type hints, tests) ([#207](https://github.com/fatihserhatturan/concentrate/issues/207))
+
+**Milestone:** M12 – Python ecosystem
+**Depends on:** Phase 29
+
+**Goal:** Resolve Python packages, classes and calls as well as Go and Rust, so Phases 31–33 can attach routes, data access and config to real call targets.
+
+- `src/integrations/languages/python/parser.ts` makes `File`, `Import`, `Function`, `Class` and `Call` nodes only; module imports resolve through `src/core/scan/resolution/import-candidates.ts` (`.py`, `__init__.py`).
+- The grammar is pinned to `tree-sitter-python` 0.21.0 (`scripts/build-grammars.mjs`); 0.25.0 is current.
+- There are no decorators, type hints, base classes, method receivers, entrypoints or test classification, and a file with a syntax error is not partial.
+
+### Grammar
+
+- [ ] Upgrade `tree-sitter-python` to 0.25.0 with reviewed golden diffs
+- [ ] A file with `ERROR` nodes keeps a partial graph and gets a scan warning
+
+### Packages and imports
+
+- [ ] Packages from `pyproject.toml` (`[project]`, Poetry, setuptools), `setup.py` / `setup.cfg`, including the `src/` layout, as `Package` nodes
+- [ ] `__init__.py` re-exports and `__all__`; relative imports (`from ..x import y`); `import a.b as c` and `from x import *`
+
+### Declarations
+
+- [ ] Classes with their bases (`EXTENDS`); `Protocol` and `abc.ABC` classes as interfaces with `IMPLEMENTS` for structural or declared implementations
+- [ ] Decorators as `Decorator` nodes (`DECORATED_BY`), as for TypeScript
+- [ ] `parameters` and `returnType` from type hints; module-level variables and constants as `Variable` nodes
+- [ ] Fields of `dataclass`, `NamedTuple`, `TypedDict`, `attrs` and pydantic models
+
+### Calls
+
+- [ ] Module functions through imports and aliases; `self.method()` and `cls.method()`; `super().method()`
+- [ ] Methods on typed receivers (annotated parameters and variables, constructor results, return types)
+- [ ] A call through a base class reaches the overrides, marked as such
+
+### Entrypoints and tests
+
+- [ ] `if __name__ == "__main__":` blocks and `[project.scripts]` / `console_scripts` as `EntryPoint` nodes
+- [ ] pytest (`test_*.py`, `*_test.py`, `conftest.py`, fixtures) and unittest classified as tests
+
+### MCP
+
+- [ ] `find_unused_exports` covers Python modules (`__all__` or public names)
+
+### Acceptance criteria
+
+- [ ] A Python fixture with a package, a base class, decorators and typed method calls has golden graphs
+- [ ] Calls to methods of typed receivers resolve; unresolved calls are counted, never guessed
+
+## Phase 31: Python HTTP routes and entrypoints (Django, Flask, FastAPI, Celery, click/typer) ([#208](https://github.com/fatihserhatturan/concentrate/issues/208))
+
+**Milestone:** M12 – Python ecosystem
+**Depends on:** Phase 30
+
+**Goal:** Find the HTTP routes and other entrypoints of Python services with full paths and their handlers, so routes, callers and impact work for Python backends.
+
+- Routes are written by the framework layer (`src/integrations/frameworks/`), as for Express, NestJS and the Go frameworks; there are no Python frameworks yet.
+- Prefixes compose across files (Django `include`, Flask blueprints, FastAPI `include_router`), as for Go routers.
+
+### Django
+
+- [ ] `urls.py` `path`, `re_path` and `include` (including `include("app.urls")` strings) with full paths
+- [ ] Function views and class-based views; `as_view()` maps HTTP methods to the view's methods
+- [ ] Django REST framework routers (`DefaultRouter.register`) and ViewSet actions (`@action`)
+- [ ] `MIDDLEWARE` in settings as lifecycle steps
+
+### Flask
+
+- [ ] `@app.route` / `@app.get` and friends with `methods`
+- [ ] `Blueprint(url_prefix=…)` and `register_blueprint(url_prefix=…)`; `before_request` / `after_request` as lifecycle steps
+
+### FastAPI and Starlette
+
+- [ ] `@app.get` / `APIRouter(prefix=…)` / `include_router(prefix=…)`
+- [ ] `Depends(...)` in route signatures and `dependencies=[…]` as lifecycle steps
+- [ ] Starlette `Route` / `Mount` lists
+
+### Other entrypoints
+
+- [ ] Celery `@shared_task` / `@app.task` and `.delay()` / `.apply_async()` calls linked to the task
+- [ ] click and typer commands; Django management commands (`BaseCommand.handle`)
+
+### Acceptance criteria
+
+- [ ] Fixtures for Django, Flask and FastAPI have golden routes with full paths and handlers
+- [ ] `list_routes` and `find_route` answer for Python services
+
+## Phase 32: Python data access, config, outbound HTTP and DI (SQLAlchemy, Django ORM, env, requests/httpx) ([#209](https://github.com/fatihserhatturan/concentrate/issues/209))
+
+**Milestone:** M12 – Python ecosystem
+**Depends on:** Phase 31
+
+**Goal:** Link Python code to the tables it reads and writes, the env it uses, the HTTP services it calls and the dependencies it gets injected.
+
+- M9 wrote `Table`, `USES_ENV`, `REQUESTS` and `INJECTS` for Go; M10 Phase 25 adds tables from SQL migrations. Python reuses the same nodes and relationships.
+
+### Data access
+
+- [ ] SQLAlchemy models (`__tablename__`, `Column`, `Mapped[...]`) and queries (`session.query(M)`, `select(M)`, `session.add`)
+- [ ] Django ORM models (`Meta.db_table`) and `Model.objects` queries; reverse relations
+- [ ] DB-API `cursor.execute("…")` SQL (sqlite3, psycopg, asyncpg) mapped to tables
+- [ ] Alembic and Django migrations merged with the tables of M10
+
+### Env and config
+
+- [ ] `os.environ[...]`, `os.environ.get`, `os.getenv` as `USES_ENV`
+- [ ] pydantic `BaseSettings` fields (with `env_prefix`), Django `settings.X`, python-dotenv, `environs` / `decouple`
+
+### Outbound HTTP
+
+- [ ] requests, httpx and aiohttp calls as `REQUESTS`, linked to routes of the scan when the path matches
+
+### Dependency injection
+
+- [ ] FastAPI `Depends` providers and dependency-injector containers as `INJECTS`
+
+### Acceptance criteria
+
+- [ ] Fixtures for SQLAlchemy, Django ORM, env and HTTP clients have golden graphs
+- [ ] `find_table_usage`, `find_env_usage` and frontend → Python backend `REQUESTS` answer for the fixtures
+
+## Phase 33: Python ecosystem measurement (samples, accuracy, agent benchmark, README) ([#210](https://github.com/fatihserhatturan/concentrate/issues/210))
+
+**Milestone:** M12 – Python ecosystem
+**Depends on:** Phase 32
+
+**Goal:** Prove the Python graph with the same measurements as M8, M9 and M11: pinned samples, hand labels, the agent benchmark and README numbers.
+
+- There are no Python samples, labels or agent questions today. Django, FastAPI and Flask RealWorld (Conduit) backends share their API with the existing frontend samples, so frontend → Python backend `REQUESTS` can be measured end to end.
+
+### Samples and labels
+
+- [ ] Pin Django, FastAPI and Flask samples (RealWorld variants where available) in `scripts/samples.json`
+- [ ] Hand labels for routes, calls, data access and env in `bench/labels/`
+- [ ] Golden sample graphs where they stay small enough
+
+### Accuracy and performance
+
+- [ ] Python rows in every `bench:accuracy` section; precision 100%, recall reported
+- [ ] Scan time and memory for the Python samples in `docs/benchmarks.md`
+
+### Agent benchmark
+
+- [ ] Python questions (routes, callers, impact, table users, env, frontend → Python backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
+
+### Docs
+
+- [ ] README "What it sees" table and languages line cover Python
+- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated
+
+### Acceptance criteria
+
+- [ ] Accuracy, performance and agent results for Python are reproducible from scripts
+- [ ] README shows the Python coverage
+
+## M13: C/C++ ecosystem
+
+Phases 34–37 add C and C++: vendored grammars, include resolution, headers linked to
+definitions, namespaces, classes and virtual calls, then CMake, Make and `compile_commands.json` targets,
+Drogon, Crow, Pistache and cpp-httplib routes, gRPC C++ services, Qt signals, SQL, env and libcurl links.
+The preprocessor is not run: macros are read as calls. The decisions of M9 apply.
+
+## Phase 34: C/C++ language foundation (includes, headers, namespaces, classes, templates, macros, tests) ([#211](https://github.com/fatihserhatturan/concentrate/issues/211))
+
+**Milestone:** M13 – C/C++ ecosystem
+**Depends on:** Phase 33
+
+**Goal:** Add C and C++ as languages: vendored grammars, include resolution, declarations and call resolution, so Phases 35–37 can build on them.
+
+- There is no C or C++ support today; `.c`, `.h` and `.cpp` files are skipped (M10 Phase 22 makes them `File` nodes without content).
+- `tree-sitter-c` 0.24.1 and `tree-sitter-cpp` 0.23.4 are on npm and can be vendored with `scripts/build-grammars.mjs`.
+- Headers declare and sources define, so a function has two places; the preprocessor is not run.
+
+### Grammars and files
+
+- [ ] Vendor `tree-sitter-c` and `tree-sitter-cpp`; record the bytes added to `vendor/grammars`
+- [ ] Extensions `.c`, `.h`, `.cc`, `.cpp`, `.cxx`, `.hpp`, `.hh`, `.hxx`, `.ipp`, `.inl`; a `.h` file uses the C++ grammar when the project has C++ sources
+- [ ] A file with `ERROR` nodes (often from macros) keeps a partial graph and gets a scan warning
+
+### Includes
+
+- [ ] `#include "…"` resolves relative to the file, then through the include paths of `compile_commands.json` and CMake (`include_directories`, `target_include_directories`)
+- [ ] `#include <…>` headers outside the scan are external imports
+
+### Declarations
+
+- [ ] Functions, structs, unions, classes (bases, `virtual`, `override`), namespaces, enums, `typedef` / `using` aliases
+- [ ] Templates with their parameters recorded; `#define` macros as nodes
+- [ ] A declaration in a header is linked to its definition in a source file (`Foo::bar` out of class)
+
+### Calls
+
+- [ ] Free and namespace-qualified functions (`ns::f`, `using namespace`, `using ns::f`)
+- [ ] Methods on typed receivers (`T x`, `T* p`, `T& r`, `auto x = T(...)`, `std::make_unique<T>`, `this`)
+- [ ] A virtual call reaches every override, marked as such; macro invocations recorded
+
+### Entrypoints and tests
+
+- [ ] `main` as an `EntryPoint`
+- [ ] GoogleTest (`TEST`, `TEST_F`, `TEST_P`) and Catch2 (`TEST_CASE`, `SECTION`) files classified as tests
+
+### MCP
+
+- [ ] `find_unused_exports` covers non-`static` functions and classes declared in headers
+
+### Acceptance criteria
+
+- [ ] C and C++ fixtures with headers, namespaces, classes and virtual calls have golden graphs
+- [ ] Calls resolve from a source file through the header to the definition; unresolved calls are counted, never guessed
+
+## Phase 35: C/C++ build systems (CMake, Make, compile_commands.json) ([#212](https://github.com/fatihserhatturan/concentrate/issues/212))
+
+**Milestone:** M13 – C/C++ ecosystem
+**Depends on:** Phase 34
+
+**Goal:** Read the build files of C/C++ projects so the graph knows the targets, their sources, their links and the include paths Phase 34 needs.
+
+- There is no CMake grammar on npm, so `CMakeLists.txt` gets a small line reader, as Dockerfile and `.proto` do in M10.
+- M10 Phase 23 parses Makefiles with `tree-sitter-make` and adds `RUNS` from entrypoints to scripts.
+
+### CMake
+
+- [ ] `add_executable` / `add_library` targets with their sources; `target_link_libraries` between targets; `add_subdirectory`
+- [ ] `include_directories` / `target_include_directories` and `target_compile_definitions` passed to include resolution
+- [ ] Variables set with `set(...)` expanded in the arguments above; anything else counted as unresolved
+
+### Targets in the graph
+
+- [ ] Targets as `Package` nodes (`PACKAGE_CONTAINS_FILE`, `PACKAGE_IMPORTS_PACKAGE` from links)
+- [ ] An executable target is an `EntryPoint` with `RUNS` to its `main`
+
+### Make and compile_commands.json
+
+- [ ] Makefile compile and link rules map targets to sources
+- [ ] `compile_commands.json` per-file flags (`-I`, `-D`) used when present
+
+### Acceptance criteria
+
+- [ ] A CMake fixture with two libraries and an executable has golden targets, links and include resolution
+- [ ] Moving include paths into CMake does not lose any resolved include of the Phase 34 fixtures
+
+## Phase 36: C/C++ HTTP and RPC frameworks, data access, config and outbound HTTP (Drogon, Crow, gRPC, Qt, sqlite3, libcurl) ([#213](https://github.com/fatihserhatturan/concentrate/issues/213))
+
+**Milestone:** M13 – C/C++ ecosystem
+**Depends on:** Phase 35
+
+**Goal:** Find the routes, RPC services, signal/slot links, tables, env and outbound HTTP of C/C++ services, reusing the nodes and relationships of M9.
+
+- C++ web frameworks register routes with macros (`CROW_ROUTE`, Drogon `METHOD_ADD`) or method calls (cpp-httplib `svr.Get`); the macros are read as calls, not expanded.
+- gRPC C++ generates `X::Service` base classes and `X::Stub` clients; `src/integrations/frameworks/go/grpc.ts` already links Go clients to servers.
+
+### HTTP routes
+
+- [ ] Drogon (`METHOD_ADD`, `PATH_ADD`, `ADD_METHOD_TO`, `app().registerHandler`)
+- [ ] Crow (`CROW_ROUTE`, `CROW_BP_ROUTE`, blueprints with prefixes)
+- [ ] Pistache (`Routes::Get`, `Routes::bind`) and cpp-httplib (`svr.Get`, `svr.Post`)
+
+### RPC and signals
+
+- [ ] gRPC C++: a subclass of `X::Service` is an `EntryPoint` per method; `stub->Method(...)` calls link to the implementations (`via: "grpc"`)
+- [ ] Qt `connect(sender, &A::signal, receiver, &B::slot)` links signal to slot
+
+### Data and config
+
+- [ ] SQL strings in sqlite3 (`sqlite3_exec`, `sqlite3_prepare_v2`), libpq (`PQexec`, `PQexecParams`) and SOCI calls mapped to tables
+- [ ] `getenv`, `std::getenv` and `secure_getenv` as `USES_ENV`
+
+### Outbound HTTP
+
+- [ ] libcurl (`CURLOPT_URL`) and cpr (`cpr::Get`, `cpr::Post`) calls as `REQUESTS`
+
+### Acceptance criteria
+
+- [ ] Fixtures for Drogon or Crow, cpp-httplib, gRPC C++, Qt, sqlite3 and libcurl have golden graphs
+- [ ] `list_routes`, `find_table_usage` and `find_env_usage` answer for C/C++ services
+
+## Phase 37: C/C++ ecosystem measurement (samples, accuracy, agent benchmark, README) ([#214](https://github.com/fatihserhatturan/concentrate/issues/214))
+
+**Milestone:** M13 – C/C++ ecosystem
+**Depends on:** Phase 36
+
+**Goal:** Prove the C/C++ graph with the same measurements as the other ecosystems: pinned samples, hand labels, the agent benchmark and README numbers.
+
+- There are no C/C++ samples, labels or agent questions today.
+
+### Samples and labels
+
+- [ ] Pin a CMake C++ HTTP service (Drogon or Crow), a C library and a gRPC C++ sample in `scripts/samples.json`
+- [ ] Hand labels for routes, calls, includes, data access and env in `bench/labels/`
+- [ ] Golden sample graphs where they stay small enough
+
+### Accuracy and performance
+
+- [ ] C/C++ rows in every `bench:accuracy` section; precision 100%, recall reported
+- [ ] Scan time and memory for the C/C++ samples in `docs/benchmarks.md`
+
+### Agent benchmark
+
+- [ ] C/C++ questions (routes, callers, impact, header → definition, build targets, env) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
+
+### Docs
+
+- [ ] README "What it sees" table and languages line cover C and C++
+- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated
+
+### Acceptance criteria
+
+- [ ] Accuracy, performance and agent results for C/C++ are reproducible from scripts
+- [ ] README shows the C/C++ coverage
 
 ## Verification (every milestone)
 
