@@ -622,7 +622,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"constructor\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"constructor\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": [
           {
             "target": "constructor",
@@ -631,7 +631,9 @@
             "file": "main.ts",
             "line": 6,
             "expression": "new HttpException",
-            "relationship": "CALLS"
+            "relationship": "CALLS",
+            "targetClassName": "HttpException",
+            "targetFile": "errors.ts"
           },
           {
             "target": "constructor",
@@ -640,7 +642,9 @@
             "file": "main.ts",
             "line": 7,
             "expression": "new NotFound",
-            "relationship": "CALLS"
+            "relationship": "CALLS",
+            "targetClassName": "HttpException",
+            "targetFile": "errors.ts"
           },
           {
             "target": "constructor",
@@ -649,7 +653,9 @@
             "file": "main.ts",
             "line": 9,
             "expression": "new Http",
-            "relationship": "CALLS"
+            "relationship": "CALLS",
+            "targetClassName": "HttpException",
+            "targetFile": "errors.ts"
           },
           {
             "target": "constructor",
@@ -658,13 +664,15 @@
             "file": "main.ts",
             "line": 12,
             "expression": "new Local",
-            "relationship": "CALLS"
+            "relationship": "CALLS",
+            "targetClassName": "Local",
+            "targetFile": "main.ts"
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"constructor\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"constructor\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": [
           {
             "target": "constructor",
@@ -674,7 +682,9 @@
             "file": "client.ts",
             "line": 3,
             "expression": "new Client",
-            "relationship": "CALLS"
+            "relationship": "CALLS",
+            "targetClassName": "Client",
+            "targetFile": "client.ts"
           },
           {
             "target": "constructor",
@@ -684,13 +694,50 @@
             "file": "main.ts",
             "line": 4,
             "expression": "new Local",
-            "relationship": "CALLS"
+            "relationship": "CALLS",
+            "targetClassName": "Local",
+            "targetFile": "main.ts"
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"constructor\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"constructor\" RETURN target.name AS target, target.id AS targetId, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (target:Function) WHERE target.name = \"constructor\" RETURN count(target) AS targets",
+        "rows": [
+          {
+            "targets": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(target:Function) WHERE target.id IN [\"file:errors.ts:function:2:constructor\", \"file:main.ts:function:4:constructor\", \"file:client.ts:function:2:constructor\"] RETURN target.id AS id, cls.name AS className, file.relativePath AS file",
+        "rows": [
+          {
+            "id": "file:client.ts:function:2:constructor",
+            "className": "Client",
+            "file": "client.ts"
+          },
+          {
+            "id": "file:errors.ts:function:2:constructor",
+            "className": "HttpException",
+            "file": "errors.ts"
+          },
+          {
+            "id": "file:main.ts:function:4:constructor",
+            "className": "Local",
+            "file": "main.ts"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(target:Function) WHERE target.id IN [\"file:errors.ts:function:2:constructor\", \"file:main.ts:function:4:constructor\", \"file:client.ts:function:2:constructor\"] RETURN target.id AS id, file.relativePath AS file",
         "rows": []
       },
       {
@@ -718,7 +765,9 @@
           "file": "main.ts",
           "line": 6,
           "expression": "new HttpException",
-          "relationship": "CALLS"
+          "relationship": "CALLS",
+          "targetClassName": "HttpException",
+          "targetFile": "errors.ts"
         },
         {
           "target": "constructor",
@@ -727,7 +776,9 @@
           "file": "main.ts",
           "line": 7,
           "expression": "new NotFound",
-          "relationship": "CALLS"
+          "relationship": "CALLS",
+          "targetClassName": "HttpException",
+          "targetFile": "errors.ts"
         },
         {
           "target": "constructor",
@@ -736,7 +787,9 @@
           "file": "main.ts",
           "line": 9,
           "expression": "new Http",
-          "relationship": "CALLS"
+          "relationship": "CALLS",
+          "targetClassName": "HttpException",
+          "targetFile": "errors.ts"
         },
         {
           "target": "constructor",
@@ -745,7 +798,9 @@
           "file": "main.ts",
           "line": 12,
           "expression": "new Local",
-          "relationship": "CALLS"
+          "relationship": "CALLS",
+          "targetClassName": "Local",
+          "targetFile": "main.ts"
         },
         {
           "target": "constructor",
@@ -755,7 +810,9 @@
           "file": "client.ts",
           "line": 3,
           "expression": "new Client",
-          "relationship": "CALLS"
+          "relationship": "CALLS",
+          "targetClassName": "Client",
+          "targetFile": "client.ts"
         },
         {
           "target": "constructor",
@@ -765,7 +822,9 @@
           "file": "main.ts",
           "line": 4,
           "expression": "new Local",
-          "relationship": "CALLS"
+          "relationship": "CALLS",
+          "targetClassName": "Local",
+          "targetFile": "main.ts"
         }
       ],
       "unresolvedCalls": {
@@ -787,7 +846,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"create\" RETURN target.name AS target, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"create\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": [
           {
             "target": "create",
@@ -811,13 +870,22 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"create\" RETURN target.name AS target, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"create\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"create\" RETURN target.name AS target, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"create\" RETURN target.name AS target, target.id AS targetId, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (target:Function) WHERE target.name = \"create\" RETURN count(target) AS targets",
+        "rows": [
+          {
+            "targets": 1
+          }
+        ]
       },
       {
         "method": "query",
