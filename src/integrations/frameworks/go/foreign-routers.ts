@@ -8,9 +8,10 @@ import { createGoRoutesPlugin, routerPackages, routerTypeOf, type GoForeignRoute
 // A router another package builds (`r := router.New()`, where router.New
 // returns `*echo.Echo`): the parse of the calling file cannot know it is one
 // (the file may not even import echo), so once every file is parsed, each Go
-// file that calls such a function and declared no route is parsed again with
-// the callee marked as a router constructor, and the routes, closures and
-// router arguments that parse finds are added. Runs before goRoutesContributor,
+// file that calls such a function is parsed again with the callee marked as a
+// router constructor, and the routes, closures and router arguments that parse
+// finds are added. Ids are positions, so the routes and closures of the first
+// parse come back with the same ids and are kept as they are. Runs before goRoutesContributor,
 // which finishes them like any other.
 export const goForeignRoutersContributor: ISemanticContributor = {
   async contribute(graph, rootPath) {
@@ -40,14 +41,13 @@ export const goForeignRoutersContributor: ISemanticContributor = {
     }
     if (constructors.size === 0) return;
 
-    const routedFiles = new Set(graph.relationships.filter((rel) => rel.type === "DECLARES_ROUTE").map((rel) => rel.from));
     const hintsByFile = new Map<string, Map<string, GoForeignRouter>>();
     for (const rel of graph.relationships) {
       const type = rel.type === "CALL_RESOLVES_TO" ? constructors.get(rel.to) : undefined;
       const call = type ? nodeById.get(rel.from) : undefined;
       const callerFunctionId = call ? relationshipIndex.callerFunctionByCallId.get(call.id) : undefined;
       const fileId = callerFunctionId ? relationshipIndex.fileByFunctionId.get(callerFunctionId) : undefined;
-      if (!call || !fileId || routedFiles.has(fileId) || relationshipIndex.fileByFunctionId.get(rel.to) === fileId) continue;
+      if (!call || !fileId || relationshipIndex.fileByFunctionId.get(rel.to) === fileId) continue;
       const hints = hintsByFile.get(fileId) ?? new Map<string, GoForeignRouter>();
       hints.set(String(call.properties.expression), type!);
       hintsByFile.set(fileId, hints);

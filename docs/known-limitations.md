@@ -1049,11 +1049,10 @@ Astro).
   when the file imports one framework with that method. Routers stored in
   package variables or built in closures other than chi's and fiber's
   callbacks are not followed. A router a function of another file returns
-  (`r := router.New()` with `func New() *echo.Echo`) is followed when the
-  caller's file declares no route of its own: that file is parsed again with
-  the call marked as a router constructor, so its routes, groups and the
-  routers it passes on get their paths. A file that already declares routes
-  is not parsed again, so a foreign router there stays unknown.
+  (`r := router.New()` with `func New() *echo.Echo`) is followed: the
+  caller's file is parsed again with the call marked as a router constructor,
+  so its routes, groups and the routers it passes on get their paths, next to
+  the routes the file declares on routers of its own.
 - Middleware follows each framework's order. gin, chi, fiber and echo groups
   apply `Use` to what is registered after it; echo's root (`e.Use`, `e.Pre`)
   and gorilla/mux routers apply it to all their routes. The lifecycle steps

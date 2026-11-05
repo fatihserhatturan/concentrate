@@ -20,7 +20,7 @@ describe("Go routers built in another package", () => {
       .map((node) => `${node.properties.method} ${node.properties.fullPath}`)
       .sort();
     assert.deepEqual(routes, [
-      "GET /api/items", "GET /api/items/", "GET /api/items/:name", "GET /health",
+      "GET /admin/status", "GET /api/items", "GET /api/items/", "GET /api/items/:name", "GET /health",
       // `api.NewHandler(store.New()).Register(r.Group("/v2"))`
       "GET /v2/items", "GET /v2/items/", "GET /v2/items/:name",
     ]);

@@ -1,13 +1,19 @@
 package main
 
 import (
+	"github.com/labstack/echo/v4"
+
 	"example.com/split/api"
 	"example.com/split/router"
 	"example.com/split/store"
 )
 
-// main does not import echo: router.New returns the *echo.Echo.
+// router.New returns the *echo.Echo. main also declares a route of its own on
+// an echo it creates, so the file has routes before router.New is known.
 func main() {
+	admin := echo.New()
+	admin.GET("/admin/status", health)
+
 	r := router.New()
 	r.GET("/health", health)
 	v1 := r.Group("/api")
