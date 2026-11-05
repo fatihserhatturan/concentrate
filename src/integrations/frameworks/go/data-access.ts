@@ -37,6 +37,14 @@ import { createDefinitionLookup, descendantsOf, insideFunction, isPackageLevel, 
 //     `With<Edge>` on a `*ent.Client` / `*ent.Tx` of the generated package;
 //     the entity is the schema of that name (`type User struct { ent.Schema }`)
 //     with its `Edges()` as RELATES_TO and `entsql.Annotation{Table}`.
+//   - bun: `db.NewSelect().Model(&x)…Scan(ctx)` (also on a `bun.Tx`), by the
+//     query the chain starts (`NewSelect` reads, `NewInsert` creates or
+//     upserts with `On("CONFLICT …")`, `NewUpdate`, `NewDelete`) once a method
+//     runs it (`Scan`, `Exec`, `Count`, `ScanAndCount`, `Exists`, `Rows`). The
+//     model is the struct of `Model(…)`, its table the embedded
+//     `bun.BaseModel`'s `bun:"table:…"` tag or bun's name (`Account` →
+//     `accounts`); `Table("name")` without a model names the table, and
+//     `Relation("Token")` on a select reads the field's model.
 // READS / WRITES to the tables follow from the JS/TS data-access contributor,
 // which runs after this one.
 
@@ -55,6 +63,10 @@ type GormStruct = { tags: Record<string, string>; embedsModel: boolean };
 const GORM_PACKAGES = new Set(["gorm.io/gorm", "github.com/jinzhu/gorm"]);
 const SQL_PACKAGE = "database/sql";
 const SQLX_PACKAGE = "github.com/jmoiron/sqlx";
+const BUN_PACKAGE = "github.com/uptrace/bun";
+// bun: the query builders and the methods that run a query.
+const bunOperations = new Map([["NewSelect", "read"], ["NewInsert", "create"], ["NewUpdate", "update"], ["NewDelete", "delete"]]);
+const bunRunMethods = new Set(["Scan", "Exec", "Count", "ScanAndCount", "Exists", "Rows"]);
 
 const gormOperations = new Map<string, string>([
   ["Find", "read"], ["First", "read"], ["Last", "read"], ["Take", "read"], ["Scan", "read"], ["Count", "read"],
@@ -87,7 +99,7 @@ const ENT_PACKAGE = "entgo.io/ent";
 const ENT_EDGE_PACKAGE = "entgo.io/ent/schema/edge";
 // The methods of the `DBTX` interface sqlc generates (database/sql and pgx).
 const DBTX_METHODS = new Set(["ExecContext", "PrepareContext", "QueryContext", "QueryRowContext", "Exec", "Query", "QueryRow", "CopyFrom", "SendBatch"]);
-const chainMethods = new Set([...gormOperations.keys(), ...sqlMethods, ...entOperations.keys(), "AutoMigrate", "Association", "Raw"]);
+const chainMethods = new Set([...gormOperations.keys(), ...sqlMethods, ...entOperations.keys(), ...bunOperations.keys(), ...bunRunMethods, "AutoMigrate", "Association", "Raw"]);
 const isChainMethod = (method: string) => chainMethods.has(method) || /^Query[A-Z]/u.test(method);
 
 type EntSchema = { table?: string; edges: Array<{ name: string; target: string; unique: boolean }> };
@@ -267,6 +279,17 @@ export const goDataAccessPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) =
       classNode.properties.goLocalType = true;
       continue;
     }
+    // bun: `bun.BaseModel \`bun:"table:users,alias:u"\``.
+    const bun = imports.get(BUN_PACKAGE);
+    if (bun) {
+      const list = type.namedChildren.find((child) => child.type === "field_declaration_list");
+      for (const declaration of list?.namedChildren ?? []) {
+        if (declaration.type !== "field_declaration" || declaration.childrenForFieldName("name").length > 0) continue;
+        if (declaration.childForFieldName("type")?.text !== `${bun}.BaseModel`) continue;
+        const table = /(?:^|\s)bun:"(?:[^"]*,)?table:([^,"]+)/u.exec(declaration.childForFieldName("tag")?.text.slice(1, -1) ?? "")?.[1];
+        if (table) classNode.properties.goBunTable = table;
+      }
+    }
     if (!gorm) continue;
     const struct: GormStruct = { tags: {}, embedsModel: false };
     const list = type.namedChildren.find((child) => child.type === "field_declaration_list");
@@ -381,6 +404,7 @@ export const goDataAccessContributor: ISemanticContributor = {
         delete node.properties.goVarRoot;
         delete node.properties.goEnt;
         delete node.properties.goSqlc;
+        delete node.properties.goBunTable;
       }
     };
     if (pending.length === 0 && gormClasses.length === 0 && entClasses.length === 0) {
@@ -425,6 +449,7 @@ export const goDataAccessContributor: ISemanticContributor = {
       if (source && GORM_PACKAGES.has(source) && name === "DB") return "gorm";
       if (source === SQL_PACKAGE && ["DB", "Tx", "Conn", "Stmt"].includes(name)) return "database/sql";
       if (source === SQLX_PACKAGE && ["DB", "Tx", "Conn", "Stmt", "NamedStmt"].includes(name)) return "sqlx";
+      if (source === BUN_PACKAGE && ["DB", "Tx", "Conn", "IDB", "IConn"].includes(name)) return "bun";
       return null;
     };
 
@@ -445,6 +470,7 @@ export const goDataAccessContributor: ISemanticContributor = {
         if (source && GORM_PACKAGES.has(source)) return name === "Open" ? "gorm" : null;
         if (source === SQL_PACKAGE) return name === "Open" || name === "OpenDB" ? "database/sql" : null;
         if (source === SQLX_PACKAGE) return /^(?:Open|Connect|ConnectContext|MustConnect|MustOpen|NewDb)$/u.test(name) ? "sqlx" : null;
+        if (source === BUN_PACKAGE) return name === "NewDB" ? "bun" : null;
         const call: GraphNode = { id: `${fileId}:dataroot:${root.factory}`, label: "Call", properties: { expression: root.factory, callee: name, receiver: qualifier } };
         for (const target of resolveGoCall(call, fileId, goIndex)) {
           const fn = nodeById.get(target.functionId);
@@ -503,6 +529,19 @@ export const goDataAccessContributor: ISemanticContributor = {
       nodes.push({ id: model.id, label: "DataModel", properties: { name, library: "gorm", declaredIn: relativePath(ref.fileId), line: ref.classNode.properties.line ?? null } });
       relationships.push({ from: model.id, to: table(tableName, "gorm"), type: "MAPS_TO_TABLE", properties: {} });
       return model;
+    };
+    // bun models: the struct a query's `Model(…)` names.
+    const bunModels = new Map<string, string>();
+    const bunModel = (ref: ModelRef) => {
+      const existing = bunModels.get(ref.classNode.id);
+      if (existing) return existing;
+      const name = String(ref.classNode.properties.name);
+      const tableName = typeof ref.classNode.properties.goBunTable === "string" ? ref.classNode.properties.goBunTable : gormTableName(name);
+      const id = `datamodel:bun:${path.posix.dirname(relativePath(ref.fileId))}:${name}`;
+      bunModels.set(ref.classNode.id, id);
+      nodes.push({ id, label: "DataModel", properties: { name, library: "bun", declaredIn: relativePath(ref.fileId), line: ref.classNode.properties.line ?? null } });
+      relationships.push({ from: id, to: table(tableName, "bun"), type: "MAPS_TO_TABLE", properties: {} });
+      return id;
     };
     for (const node of gormClasses) {
       const fileId = relationshipIndex.fileByClassId.get(node.id);
@@ -607,6 +646,36 @@ export const goDataAccessContributor: ISemanticContributor = {
             const target = /^With[A-Z]/u.test(step.method) ? edgeTarget(step.method.slice("With".length)) : undefined;
             if (target) add(entModel(target).id, "read");
           }
+        }
+        continue;
+      }
+
+      if (library === "bun") {
+        // The query the chain builds, counted at the call that runs it.
+        if (!steps.slice(-(chain.own ?? steps.length)).some((step) => bunRunMethods.has(step.method))) continue;
+        let start = steps.length - 1;
+        while (start >= 0 && !bunOperations.has(steps[start]!.method)) start -= 1;
+        if (start === -1) continue;
+        const query = steps.slice(start);
+        let operation = bunOperations.get(query[0]!.method)!;
+        if (operation === "create" && query.some((step) => step.method === "On" && /^\s*CONFLICT\b/iu.test(step.args[0]?.literal ?? ""))) operation = "upsert";
+        const modelType = query.find((step) => step.method === "Model")?.args[0]?.type;
+        const ref = modelType ? classOf(modelType, fileId) : null;
+        if (ref) {
+          add(bunModel(ref), operation);
+          if (operation === "read") {
+            for (const step of query) {
+              if (step.method !== "Relation" || !step.args[0]?.literal) continue;
+              let current: ModelRef | null = ref;
+              for (const segment of step.args[0].literal.split(".")) {
+                current = current ? fieldModel(current, segment) : null;
+                if (current) add(bunModel(current), "read");
+              }
+            }
+          }
+        } else {
+          const tableName = query.find((step) => step.method === "Table")?.args[0]?.literal;
+          if (tableName && /^\w+(?:\.\w+)?$/u.test(tableName)) add(tableModel(tableName.split(".").pop()!, "bun"), operation);
         }
         continue;
       }

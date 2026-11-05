@@ -1,6 +1,6 @@
 {
   "sample": "internet-go-chi-base",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. chi with cobra (cmd/) and viper, bun on Postgres. Routes: every route api/api.go, api/admin, api/app and auth/pwdless register, with the paths the Mount and Route calls give them (a sub-router's \"/\" is the mount path; trailing slashes are not compared). Env: each viper Get* read (cmd/root.go calls viper.AutomaticEnv, so a key is read as its upper-cased environment variable; SetDefault and BindPFlag are not reads) and the two os.Getenv reads in auth/pwdless/emails.go; *_test.go files are not labeled. Calls and data access are not labeled: the stores in database/ use bun (NewSelect().Model(...)), which Concentrate does not read yet.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. chi with cobra (cmd/) and viper, bun on Postgres. Routes: every route api/api.go, api/admin, api/app and auth/pwdless register, with the paths the Mount and Route calls give them (a sub-router's \"/\" is the mount path; trailing slashes are not compared). Env: each viper Get* read (cmd/root.go calls viper.AutomaticEnv, so a key is read as its upper-cased environment variable; SetDefault and BindPFlag are not reads) and the two os.Getenv reads in auth/pwdless/emails.go; *_test.go files are not labeled. Data access: each bun query the stores in database/ run (NewSelect reads, NewInsert creates, NewUpdate updates, NewDelete deletes; Exists and ScanAndCount run a select), by the struct its Model(...) names, a nil pointer conversion ((*jwt.Token)(nil)) included; Relation(\"Token\") on Account reads the tokens. The structs embed no bun.BaseModel, so tables are bun's names (accounts, tokens, profiles, as the migrations create them); the migrations' CREATE TABLE is not an access. Calls are not labeled.",
   "routes": {
     "scope": [
       "api/",
@@ -120,6 +120,216 @@
         "path": "/auth/logout",
         "file": "auth/pwdless/api.go",
         "line": 78
+      }
+    ]
+  },
+  "dataAccess": {
+    "scope": [
+      "main.go",
+      "api/",
+      "auth/",
+      "cmd/",
+      "database/",
+      "email/",
+      "logging/",
+      "models/"
+    ],
+    "items": [
+      {
+        "file": "database/accountStore.go",
+        "function": "Get",
+        "model": "Account",
+        "operation": "read",
+        "table": "accounts"
+      },
+      {
+        "file": "database/accountStore.go",
+        "function": "Get",
+        "model": "Token",
+        "operation": "read",
+        "table": "tokens"
+      },
+      {
+        "file": "database/accountStore.go",
+        "function": "Update",
+        "model": "Account",
+        "operation": "update",
+        "table": "accounts"
+      },
+      {
+        "file": "database/accountStore.go",
+        "function": "Delete",
+        "model": "Token",
+        "operation": "delete",
+        "table": "tokens"
+      },
+      {
+        "file": "database/accountStore.go",
+        "function": "Delete",
+        "model": "Profile",
+        "operation": "delete",
+        "table": "profiles"
+      },
+      {
+        "file": "database/accountStore.go",
+        "function": "Delete",
+        "model": "Account",
+        "operation": "delete",
+        "table": "accounts"
+      },
+      {
+        "file": "database/accountStore.go",
+        "function": "UpdateToken",
+        "model": "Token",
+        "operation": "update",
+        "table": "tokens"
+      },
+      {
+        "file": "database/accountStore.go",
+        "function": "DeleteToken",
+        "model": "Token",
+        "operation": "delete",
+        "table": "tokens"
+      },
+      {
+        "file": "database/admAccountStore.go",
+        "function": "List",
+        "model": "Account",
+        "operation": "read",
+        "table": "accounts"
+      },
+      {
+        "file": "database/admAccountStore.go",
+        "function": "Create",
+        "model": "Account",
+        "operation": "read",
+        "table": "accounts"
+      },
+      {
+        "file": "database/admAccountStore.go",
+        "function": "Create",
+        "model": "Account",
+        "operation": "create",
+        "table": "accounts"
+      },
+      {
+        "file": "database/admAccountStore.go",
+        "function": "Create",
+        "model": "Profile",
+        "operation": "create",
+        "table": "profiles"
+      },
+      {
+        "file": "database/admAccountStore.go",
+        "function": "Get",
+        "model": "Account",
+        "operation": "read",
+        "table": "accounts"
+      },
+      {
+        "file": "database/admAccountStore.go",
+        "function": "Update",
+        "model": "Account",
+        "operation": "update",
+        "table": "accounts"
+      },
+      {
+        "file": "database/admAccountStore.go",
+        "function": "Delete",
+        "model": "Token",
+        "operation": "delete",
+        "table": "tokens"
+      },
+      {
+        "file": "database/admAccountStore.go",
+        "function": "Delete",
+        "model": "Profile",
+        "operation": "delete",
+        "table": "profiles"
+      },
+      {
+        "file": "database/admAccountStore.go",
+        "function": "Delete",
+        "model": "Account",
+        "operation": "delete",
+        "table": "accounts"
+      },
+      {
+        "file": "database/authStore.go",
+        "function": "GetAccount",
+        "model": "Account",
+        "operation": "read",
+        "table": "accounts"
+      },
+      {
+        "file": "database/authStore.go",
+        "function": "GetAccountByEmail",
+        "model": "Account",
+        "operation": "read",
+        "table": "accounts"
+      },
+      {
+        "file": "database/authStore.go",
+        "function": "UpdateAccount",
+        "model": "Account",
+        "operation": "update",
+        "table": "accounts"
+      },
+      {
+        "file": "database/authStore.go",
+        "function": "GetToken",
+        "model": "Token",
+        "operation": "read",
+        "table": "tokens"
+      },
+      {
+        "file": "database/authStore.go",
+        "function": "CreateOrUpdateToken",
+        "model": "Token",
+        "operation": "create",
+        "table": "tokens"
+      },
+      {
+        "file": "database/authStore.go",
+        "function": "CreateOrUpdateToken",
+        "model": "Token",
+        "operation": "update",
+        "table": "tokens"
+      },
+      {
+        "file": "database/authStore.go",
+        "function": "DeleteToken",
+        "model": "Token",
+        "operation": "delete",
+        "table": "tokens"
+      },
+      {
+        "file": "database/authStore.go",
+        "function": "PurgeExpiredToken",
+        "model": "Token",
+        "operation": "delete",
+        "table": "tokens"
+      },
+      {
+        "file": "database/profileStore.go",
+        "function": "Get",
+        "model": "Profile",
+        "operation": "read",
+        "table": "profiles"
+      },
+      {
+        "file": "database/profileStore.go",
+        "function": "Get",
+        "model": "Profile",
+        "operation": "create",
+        "table": "profiles"
+      },
+      {
+        "file": "database/profileStore.go",
+        "function": "Update",
+        "model": "Profile",
+        "operation": "update",
+        "table": "profiles"
       }
     ]
   },

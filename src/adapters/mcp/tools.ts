@@ -264,7 +264,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_data_access",
-    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, sqlc, sql, sqlx) with the files, functions, routes and entrypoints that run them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
+    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, bun, sqlc, sql, sqlx) with the files, functions, routes and entrypoints that run them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
     inputSchema: objectSchema({
       model: {
         type: "string",
@@ -293,7 +293,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex; Go gorm, ent, sqlc) with columns, the ORM models mapped to them and their relations, and the routes and entrypoints that read or write each. Answers \"which endpoints write the users table?\".",
     inputSchema: objectSchema({
       name: { type: "string", description: "Table name substring." },
-      library: { type: "string", description: "prisma, typeorm, mongoose, drizzle, knex, gorm, ent or sqlc." },
+      library: { type: "string", description: "prisma, typeorm, mongoose, drizzle, knex, gorm, ent, bun or sqlc." },
       limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
     }),
   },

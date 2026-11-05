@@ -163,6 +163,29 @@ describe("Go database/sql and sqlx data access", () => {
   });
 });
 
+describe("Go bun data access", () => {
+  let graph: Graph;
+  before(async () => {
+    graph = await buildCodeGraph(path.resolve("fixtures/go-bun"), { continueOnError: false });
+  });
+
+  it("reads each query a bun chain runs, by its model or table", () => {
+    assert.deepEqual(accesses(graph), [
+      "CountPosts read Post bun",
+      "Purge delete Post bun",
+      "Purge update audit bun",
+      "Save upsert User bun",
+      "User read Post bun",
+      "User read User bun",
+    ]);
+  });
+
+  it("names tables by the BaseModel tag, else bun's name", () => {
+    assert.deepEqual(tablesOf(graph), ["Post=posts", "User=people"]);
+    assert.ok(graph.nodes.every((node) => !("goBunTable" in node.properties)));
+  });
+});
+
 describe("Go sqlc data access", () => {
   let graph: Graph;
   before(async () => {
