@@ -522,8 +522,8 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       failedFiles: 0,
       resolvedImports: 44,
       unresolvedRelativeImports: 0,
-      nodes: 1571,
-      relationships: 2151,
+      nodes: 1577,
+      relationships: 2346,
       fileClassifications: { production: 46, test: 1, fixture: 0, support: 0, generated: 0 },
       graph: {
         schemaVersion: GRAPH_SCHEMA_VERSION,

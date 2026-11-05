@@ -132,7 +132,10 @@ export function valueTypeText(value: SyntaxNode): string | undefined {
   }
   if (value.type === "composite_literal") return value.childForFieldName("type")?.text;
   if (value.type === "call_expression") {
-    const fn = value.childForFieldName("function")?.text;
+    // A conversion to a pointer type: `(*Token)(nil)`.
+    const callee = value.childForFieldName("function");
+    if (callee?.type === "parenthesized_expression" && callee.text.startsWith("(*")) return callee.text.slice(1, -1).trim();
+    const fn = callee?.text;
     const first = value.childForFieldName("arguments")?.namedChildren[0];
     if ((fn === "make" || fn === "new") && first) return fn === "new" ? `*${first.text}` : first.text;
   }

@@ -26,7 +26,7 @@ chosen files); every target was decided by reading the code.
 | --- | --- | --- |
 | Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base | every route declared with a literal path in the scoped files; tests excluded; for the gin sample, the groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`); for the echo sample, the `*echo.Echo` that `router.New()` in another package returns, grouped in `main` and passed to `(*Handler).Register`; for simplebank, gin's `router.Group("/").Use(mw)` and the grpc-gateway `http.ServeMux` mounts in `main.go`; for go-base, chi `Mount` / `Route` / `Group` across packages |
 | Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`), internet-go-echo-realworld (another Conduit Go backend: echo, gorm behind store interfaces, packages `handler`, `store`, `model`, `router`, `db`, `utils`), internet-go-clean-arch (echo + database/sql, repository → service → handler layers joined by interfaces), internet-go-simplebank (gin, gRPC, sqlc on pgx, asynq) | every call site in 2–9 chosen files per sample; for the Go samples, every call of a repository function or method in their production files (13 gin, 21 echo, 11 clean-arch; echo's generated `docs/docs.go` excluded), and 12 chosen files of simplebank (`main.go`, `api/`, the `db/sqlc` transactions, two `gapi` RPCs, a worker task) |
-| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm), internet-go-echo-realworld (gorm), internet-go-clean-arch (database/sql, MySQL), internet-go-simplebank (sqlc) | the services; for the Go samples the production files that query the database; the standing samples have no data layer |
+| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm), internet-go-echo-realworld (gorm), internet-go-clean-arch (database/sql, MySQL), internet-go-simplebank (sqlc), internet-go-chi-base (bun) | the services; for the Go samples the production files that query the database; the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
 | Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project), internet-realworld-go-fullstack (the same frontend with the gin backend) | `frontend/`: every HTTP call that reaches a backend route; the Go pair's labels are the Express pair's, with each route's declaring file moved to the gin `routers.go` that registers it |
@@ -180,13 +180,14 @@ anywhere would count as a false positive (call site not labeled).
 
 | Sample | Labels | TP | FP | FN | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-go-chi-base | 28 | 28 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-clean-arch | 7 | 7 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-echo-realworld | 52 | 52 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-gin-realworld | 41 | 41 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-simplebank | 20 | 20 | 0 | 0 | 100.0% | 100.0% |
 | internet-nest | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 26 | 26 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 163 | 163 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 191 | 191 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Components
 
@@ -329,7 +330,7 @@ matched `ArticleHandler.GetByID(echo.Context)`), a later `if a, ok := …`
 hiding the receiver `a`, the untyped parameter of a closure (`func(q
 *Queries) error`), SQL in a local or passed to a helper, MySQL's `INSERT`
 without `INTO`, gin's `Group("/").Use(mw)`, and viper's `Unmarshal(&cfg)`.
-go-base's data access (bun) and calls are not labeled: bun is not read yet.
+go-base's data access (bun) is labeled too; its calls are not.
 
 The same list, by area, is in [known-limitations.md](known-limitations.md).
 
