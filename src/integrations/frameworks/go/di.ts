@@ -21,7 +21,8 @@ import { descendantsOf } from "./scope.js";
 //     (IMPLEMENTS), else nothing; a provider that returns an interface is
 //     the struct bound to it the same way.
 // Only structs of the scan are linked; `*gorm.DB`, `*zap.Logger` and other
-// dependency types are not. `fx.Invoke` functions and wire injectors have no
+// dependency types are not. A provider returning an interface stands for
+// the bound struct, else the only implementation in its own package. `fx.Invoke` functions and wire injectors have no
 // struct of their own and are not linked; values (`fx.Supply`,
 // `wire.Value`) take no dependencies.
 
@@ -134,7 +135,13 @@ export const goDiContributor: ISemanticContributor = {
 
     // A type as the struct injected: the struct itself, or the one struct
     // an interface is bound to or implemented by.
-    const structOf = (type: TypeRef | null): GraphNode | undefined => {
+    // A provider's result that is an interface without a binding is its
+    // only implementation when that is in the provider's package
+    // (`func NewUserRepo(d *Data) biz.UserRepo { return &userRepo{d} }`);
+    // one elsewhere (the client a gRPC package generates, returned by
+    // `NewUserServiceClient(conf, …) userv1.UserClient`) is not what the
+    // provider builds from its parameters.
+    const structOf = (type: TypeRef | null, providerPackage?: string): GraphNode | undefined => {
       const own = classOf(type);
       if (own) return own;
       const iface = interfaceOf(type);
@@ -143,7 +150,8 @@ export const goDiContributor: ISemanticContributor = {
       if (ids?.size === 1) return nodeById.get([...ids][0]!);
       if (ids && ids.size > 1) return undefined;
       const implementers = index.implementersByInterface.get(iface.id) ?? [];
-      return implementers.length === 1 ? classOf(implementers[0]!) : undefined;
+      if (implementers.length !== 1 || (providerPackage !== undefined && implementers[0]!.pkg !== providerPackage)) return undefined;
+      return classOf(implementers[0]!);
     };
 
     function resultType(provider: Provider): TypeRef | null {
@@ -162,7 +170,7 @@ export const goDiContributor: ISemanticContributor = {
     };
 
     for (const provider of providers) {
-      const consumer = structOf(resultType(provider));
+      const consumer = structOf(resultType(provider), index.packageByFile.get(provider.fileId));
       if (!consumer) continue;
       for (const parameter of parameters(provider.fn)) {
         if (!parameter.type) continue;

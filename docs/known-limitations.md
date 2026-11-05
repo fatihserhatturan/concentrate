@@ -1029,6 +1029,20 @@ Astro).
   implementation's type. The implementation's type must be visible:
   `&server{}`, `new(T)`, a typed local or a constructor (`service.New()`).
   The proto package is not read, so the service is named without it.
+- gRPC calls between services of the scan are linked through the code
+  protoc-gen-go-grpc writes: the generated client's `c.cc.Invoke(ctx,
+  "/pkg.Svc/Method", …)` (a string or a constant of the file) and
+  `NewStream(ctx, desc, "/pkg.Svc/Method")` resolve (`CALL_RESOLVES_TO`,
+  `via: "grpc"`) to `Method` of each struct implementing the server
+  interface the same file's `grpc.ServiceDesc` names (`HandlerType`), an
+  `Unimplemented…Server` stub aside. A caller of `userv1.UserClient.Save`
+  so reaches `UserService.Save` of the other service through
+  `userClient.Save`. Services of another repository, hand-written
+  `Invoke` calls with a computed method and other RPC frameworks (Connect,
+  Twirp) are not linked.
+- A Go file with the `// Code generated … DO NOT EDIT.` line before its
+  package clause (protoc, wire, sqlc, ent, moq…) is classified as
+  generated, wherever it is.
 - A cobra command (`&cobra.Command{Use: "serve", RunE: …}`, at package level
   or in a function) with `RunE` or `Run` is an `EntryPoint` (kind `cli`,
   library `cobra`) handled by that function or closure. Its trigger is the
@@ -1191,7 +1205,8 @@ Astro).
   dynamic: as a segment it matches a route parameter, and at the start of
   the URL it leaves the call unlinked. Requests in `_test.go` files
   (`httptest` with `http.NewRequest`) are linked too. Other clients
-  (`go-retryablehttp`, generated OpenAPI clients, `grpc`) are not read.
+  (`go-retryablehttp`, generated OpenAPI clients) are not read; gRPC is
+  linked as calls (above).
 - Go dependency injection (uber fx, google wire) is `INJECTS` between
   structs, as NestJS injection is between classes: a provider is a function
   passed to `fx.Provide` (directly or as `fx.Annotate(F, …)`, wherever the
@@ -1202,7 +1217,10 @@ Astro).
   name). `wire.Struct(new(T), "*" | "Field"…)` makes T inject those fields'
   types. An interface (as a parameter, or as a provider's result) is the
   struct `wire.Bind(new(I), new(*T))` or `fx.As(new(I))` binds to it
-  anywhere in the scan, else its only implementation, else nothing. Only
+  anywhere in the scan, else its only implementation, else nothing; for a
+  provider's result, that implementation must be in the provider's package
+  (a gRPC client `NewUserServiceClient(conf, …) userv1.UserClient` returns
+  is not built from its parameters). Only
   structs of the scan are linked (`*sql.DB`, `*zap.Logger` are not);
   `fx.Invoke` functions, wire injector functions, `fx.Out` result structs,
   named values (`name:"…"` tags, `fx.ParamTags`) and groups are not read,
@@ -1225,7 +1243,9 @@ Astro).
   (`c.v.GetString`) and keys that are not string literals are not read.
   Struct tags `env:"NAME"` (caarlos0/env, cleanenv, go-envconfig; options
   after a comma dropped, `envPrefix` on a nested struct field of the same
-  file prefixes its fields) are read by the function of the same file that
+  file prefixes its fields; go-flags' `env-namespace:"STORE"` on a group
+  field prefixes them with `STORE_`, nested groups joined the same way, and
+  an anonymous group struct or an embedded struct is read in place) are read by the function of the same file that
   passes the struct to `Parse`, `ParseWithOptions`, `MustParse`, `ReadEnv`,
   `ReadConfig` or `Process`, else by the struct's file; a `Prefix` option is
   not applied. `envconfig.Process("prefix", &spec)` (kelseyhightower) reads

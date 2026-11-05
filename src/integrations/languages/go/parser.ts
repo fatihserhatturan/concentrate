@@ -71,6 +71,11 @@ async function parseGoFile(rootPath: string, filePath: string, plugins: readonly
       .find((child) => child.type === "package_clause")
       ?.namedChildren.find((child) => child.type === "package_identifier")?.text;
     if (packageName) nodes[0]!.properties.packageName = packageName;
+    // Go's convention for generated files (protoc, wire, sqlc, moq…): a
+    // `// Code generated … DO NOT EDIT.` line before the package clause.
+    if (/^\/\/ Code generated .* DO NOT EDIT\.$/mu.test(source.slice(0, tree.rootNode.namedChildren.find((child) => child.type === "package_clause")?.startIndex ?? 0))) {
+      nodes[0]!.properties.isGenerated = true;
+    }
 
     // Package-level `var` and `const` (one node per name).
     for (const declaration of tree.rootNode.namedChildren) {

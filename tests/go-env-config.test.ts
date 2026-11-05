@@ -68,6 +68,14 @@ describe("Go env and config", () => {
     assert.ok(graph.nodes.every((node) => !("goViper" in node.properties)));
   });
 
+  it("joins go-flags env-namespace groups, anonymous and embedded ones included", () => {
+    const names = graph.relationships
+      .filter((rel) => rel.type === "USES_ENV" && rel.from === "file:config/flags.go")
+      .map((rel) => rel.to.slice("env:".length))
+      .sort();
+    assert.deepEqual(names, ["ADMIN_API", "ADMIN_PER_SITE", "IMAGE_FS_PATH", "IMAGE_TYPE", "SERVER_PORT", "STORE_RPC_API", "STORE_TYPE"]);
+  });
+
   it("list_env_config lists Go reads and the .env variables no code reads", async () => {
     const region = await tool("list_env_config", { name: "REGION" });
     assert.deepEqual(region.envConfig.map((row: any) => [row.file, row.line, row.value]), [["server/server.go", 20, "os.Getenv"]]);

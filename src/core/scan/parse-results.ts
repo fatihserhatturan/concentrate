@@ -38,7 +38,10 @@ function addParsedFileToGraph(
 ): void {
   const directoryNodeId = addDirectoryChain(graph, repoNodeId, rootPath, path.dirname(result.filePath));
   const relativePath = path.relative(rootPath, result.filePath);
-  const classification = classifyFile(relativePath);
+  const fileNode = result.parsed.nodes.find((node) => node.id === result.parsed.fileNodeId && node.label === "File");
+  // A parser may know the file is generated from its contents (Go's
+  // `// Code generated … DO NOT EDIT.`).
+  const classification = classifyFile(relativePath, fileNode?.properties.isGenerated === true);
   for (const node of result.parsed.nodes) {
     if (node.id !== result.parsed.fileNodeId || node.label !== "File") continue;
     node.properties = {

@@ -1,7 +1,9 @@
-{"kind":"report","status":"success","discoveredFiles":7,"supportedFiles":5,"parsedFiles":5,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":8,"supportedFiles":6,"parsedFiles":6,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"go-env","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:config","label":"Directory","properties":{"name":"config","path":"<root>/config","relativePath":"config"}}
 {"kind":"node","id":"dir:server","label":"Directory","properties":{"name":"server","path":"<root>/server","relativePath":"server"}}
+{"kind":"node","id":"env:ADMIN_API","label":"EnvVar","properties":{"name":"ADMIN_API"}}
+{"kind":"node","id":"env:ADMIN_PER_SITE","label":"EnvVar","properties":{"name":"ADMIN_PER_SITE"}}
 {"kind":"node","id":"env:APP_LOG_LEVEL","label":"EnvVar","properties":{"name":"APP_LOG_LEVEL"}}
 {"kind":"node","id":"env:APP_MODE","label":"EnvVar","properties":{"name":"APP_MODE"}}
 {"kind":"node","id":"env:APP_PORT","label":"EnvVar","properties":{"name":"APP_PORT"}}
@@ -11,10 +13,15 @@
 {"kind":"node","id":"env:DB_HOST","label":"EnvVar","properties":{"name":"DB_HOST"}}
 {"kind":"node","id":"env:DB_USER","label":"EnvVar","properties":{"name":"DB_USER"}}
 {"kind":"node","id":"env:DEBUG","label":"EnvVar","properties":{"name":"DEBUG"}}
+{"kind":"node","id":"env:IMAGE_FS_PATH","label":"EnvVar","properties":{"name":"IMAGE_FS_PATH"}}
+{"kind":"node","id":"env:IMAGE_TYPE","label":"EnvVar","properties":{"name":"IMAGE_TYPE"}}
 {"kind":"node","id":"env:PORT","label":"EnvVar","properties":{"name":"PORT"}}
 {"kind":"node","id":"env:REDIS_ADDR","label":"EnvVar","properties":{"name":"REDIS_ADDR"}}
 {"kind":"node","id":"env:REGION","label":"EnvVar","properties":{"name":"REGION"}}
 {"kind":"node","id":"env:RELEASE","label":"EnvVar","properties":{"name":"RELEASE"}}
+{"kind":"node","id":"env:SERVER_PORT","label":"EnvVar","properties":{"name":"SERVER_PORT"}}
+{"kind":"node","id":"env:STORE_RPC_API","label":"EnvVar","properties":{"name":"STORE_RPC_API"}}
+{"kind":"node","id":"env:STORE_TYPE","label":"EnvVar","properties":{"name":"STORE_TYPE"}}
 {"kind":"node","id":"env:UNUSED_FLAG","label":"EnvVar","properties":{"name":"UNUSED_FLAG"}}
 {"kind":"node","id":"env:WORKER_LIMITS_BURST","label":"EnvVar","properties":{"name":"WORKER_LIMITS_BURST"}}
 {"kind":"node","id":"env:WORKER_MAX_WORKERS","label":"EnvVar","properties":{"name":"WORKER_MAX_WORKERS"}}
@@ -25,6 +32,11 @@
 {"kind":"node","id":"file:config/config.go:function:16:Load","label":"Function","properties":{"className":null,"endLine":20,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":16,"methodKind":null,"name":"Load","parameters":"[]","returnType":"(Config, error)","visibility":"exported"}}
 {"kind":"node","id":"file:config/config.go:function:16:Load:call:18:8:env.Parse","label":"Call","properties":{"callee":"Parse","columnNumber":8,"expression":"env.Parse","line":18,"name":"env.Parse","receiver":"env"}}
 {"kind":"node","id":"file:config/config.go:import:3:github.com/caarlos0/env/v11","label":"Import","properties":{"line":3,"source":"github.com/caarlos0/env/v11","specifier":"\"github.com/caarlos0/env/v11\""}}
+{"kind":"node","id":"file:config/flags.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"config","path":"<root>/config/flags.go","relativePath":"config/flags.go","sourceType":"production"}}
+{"kind":"node","id":"file:config/flags.go:class:16:StoreGroup","label":"Class","properties":{"endLine":19,"fields":"[{\"name\":\"Type\",\"type\":\"string\"},{\"name\":\"RPC\",\"type\":\"RPCGroup\"}]","isAbstract":false,"isExported":true,"line":16,"name":"StoreGroup","visibility":"exported"}}
+{"kind":"node","id":"file:config/flags.go:class:21:RPCGroup","label":"Class","properties":{"endLine":23,"fields":"[{\"name\":\"API\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":21,"name":"RPCGroup","visibility":"exported"}}
+{"kind":"node","id":"file:config/flags.go:class:26:AdminRPCGroup","label":"Class","properties":{"endLine":29,"fields":"[{\"name\":\"RPCGroup\",\"type\":\"RPCGroup\",\"embedded\":true},{\"name\":\"PerSite\",\"type\":\"bool\"}]","isAbstract":false,"isExported":true,"line":26,"name":"AdminRPCGroup","visibility":"exported"}}
+{"kind":"node","id":"file:config/flags.go:class:4:FlagOptions","label":"Class","properties":{"endLine":14,"fields":"[{\"name\":\"Port\",\"type\":\"int\"},{\"name\":\"Store\",\"type\":\"StoreGroup\"},{\"name\":\"Image\",\"type\":\"struct\",\"fields\":[{\"name\":\"Type\",\"type\":\"string\"},{\"name\":\"FS\",\"type\":\"struct\",\"fields\":[{\"name\":\"Path\",\"type\":\"string\"}]}]},{\"name\":\"Admin\",\"type\":\"AdminRPCGroup\"}]","isAbstract":false,"isExported":true,"line":4,"name":"FlagOptions","visibility":"exported"}}
 {"kind":"node","id":"file:config/spec.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"config","path":"<root>/config/spec.go","relativePath":"config/spec.go","sourceType":"production"}}
 {"kind":"node","id":"file:config/spec.go:class:5:Limits","label":"Class","properties":{"endLine":7,"fields":"[{\"name\":\"Burst\",\"type\":\"int\"}]","isAbstract":false,"isExported":true,"line":5,"name":"Limits","visibility":"exported"}}
 {"kind":"node","id":"file:config/spec.go:class:9:Spec","label":"Class","properties":{"endLine":15,"fields":"[{\"name\":\"MaxWorkers\",\"type\":\"int\"},{\"name\":\"QueueName\",\"type\":\"string\"},{\"name\":\"Secret\",\"type\":\"string\"},{\"name\":\"Limits\",\"type\":\"Limits\"},{\"name\":\"internal\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":9,"name":"Spec","visibility":"exported"}}
@@ -84,6 +96,7 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:server","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
 {"kind":"rel","from":"dir:config","type":"CONTAINS_FILE","to":"file:config/config.go","properties":{}}
+{"kind":"rel","from":"dir:config","type":"CONTAINS_FILE","to":"file:config/flags.go","properties":{}}
 {"kind":"rel","from":"dir:config","type":"CONTAINS_FILE","to":"file:config/spec.go","properties":{}}
 {"kind":"rel","from":"dir:config","type":"CONTAINS_FILE","to":"file:config/viper.go","properties":{}}
 {"kind":"rel","from":"dir:server","type":"CONTAINS_FILE","to":"file:server/server.go","properties":{}}
@@ -98,6 +111,17 @@
 {"kind":"rel","from":"file:config/config.go:function:16:Load","type":"USES_ENV","to":"env:DATABASE_MAX_CONNS","properties":{"access":"env struct tag","line":7}}
 {"kind":"rel","from":"file:config/config.go:function:16:Load","type":"USES_ENV","to":"env:DATABASE_URL","properties":{"access":"env struct tag","line":6}}
 {"kind":"rel","from":"file:config/config.go:function:16:Load","type":"USES_ENV","to":"env:PORT","properties":{"access":"env struct tag","line":11}}
+{"kind":"rel","from":"file:config/flags.go","type":"DEFINES_CLASS","to":"file:config/flags.go:class:16:StoreGroup","properties":{}}
+{"kind":"rel","from":"file:config/flags.go","type":"DEFINES_CLASS","to":"file:config/flags.go:class:21:RPCGroup","properties":{}}
+{"kind":"rel","from":"file:config/flags.go","type":"DEFINES_CLASS","to":"file:config/flags.go:class:26:AdminRPCGroup","properties":{}}
+{"kind":"rel","from":"file:config/flags.go","type":"DEFINES_CLASS","to":"file:config/flags.go:class:4:FlagOptions","properties":{}}
+{"kind":"rel","from":"file:config/flags.go","type":"USES_ENV","to":"env:ADMIN_API","properties":{"access":"env struct tag","line":22}}
+{"kind":"rel","from":"file:config/flags.go","type":"USES_ENV","to":"env:ADMIN_PER_SITE","properties":{"access":"env struct tag","line":28}}
+{"kind":"rel","from":"file:config/flags.go","type":"USES_ENV","to":"env:IMAGE_FS_PATH","properties":{"access":"env struct tag","line":10}}
+{"kind":"rel","from":"file:config/flags.go","type":"USES_ENV","to":"env:IMAGE_TYPE","properties":{"access":"env struct tag","line":8}}
+{"kind":"rel","from":"file:config/flags.go","type":"USES_ENV","to":"env:SERVER_PORT","properties":{"access":"env struct tag","line":5}}
+{"kind":"rel","from":"file:config/flags.go","type":"USES_ENV","to":"env:STORE_RPC_API","properties":{"access":"env struct tag","line":22}}
+{"kind":"rel","from":"file:config/flags.go","type":"USES_ENV","to":"env:STORE_TYPE","properties":{"access":"env struct tag","line":17}}
 {"kind":"rel","from":"file:config/spec.go","type":"DEFINES_CLASS","to":"file:config/spec.go:class:5:Limits","properties":{}}
 {"kind":"rel","from":"file:config/spec.go","type":"DEFINES_CLASS","to":"file:config/spec.go:class:9:Spec","properties":{}}
 {"kind":"rel","from":"file:config/spec.go","type":"DEFINES_FUNCTION","to":"file:config/spec.go:function:17:LoadSpec","properties":{}}
@@ -159,6 +183,7 @@
 {"kind":"rel","from":"file:main.go:function:13:main:call:22:18:config.LogLevel","type":"CALL_RESOLVES_TO","to":"file:config/viper.go:function:16:LogLevel","properties":{}}
 {"kind":"rel","from":"file:main.go:function:13:main:call:23:1:server.Run","type":"CALL_RESOLVES_TO","to":"file:server/server.go:function:10:Run","properties":{}}
 {"kind":"rel","from":"file:main.go:import:7:example.com/envapp/config","type":"RESOLVES_TO","to":"file:config/config.go","properties":{}}
+{"kind":"rel","from":"file:main.go:import:7:example.com/envapp/config","type":"RESOLVES_TO","to":"file:config/flags.go","properties":{}}
 {"kind":"rel","from":"file:main.go:import:7:example.com/envapp/config","type":"RESOLVES_TO","to":"file:config/spec.go","properties":{}}
 {"kind":"rel","from":"file:main.go:import:7:example.com/envapp/config","type":"RESOLVES_TO","to":"file:config/viper.go","properties":{}}
 {"kind":"rel","from":"file:main.go:import:8:example.com/envapp/server","type":"RESOLVES_TO","to":"file:server/server.go","properties":{}}
@@ -183,6 +208,7 @@
 {"kind":"rel","from":"file:server/server.go:function:19:region","type":"CALLS","to":"file:server/server.go:function:19:region:call:20:1:c.String","properties":{}}
 {"kind":"rel","from":"file:server/server.go:function:19:region","type":"USES_ENV","to":"env:REGION","properties":{"access":"os.Getenv","line":20}}
 {"kind":"rel","from":"file:server/server.go:import:6:example.com/envapp/config","type":"RESOLVES_TO","to":"file:config/config.go","properties":{}}
+{"kind":"rel","from":"file:server/server.go:import:6:example.com/envapp/config","type":"RESOLVES_TO","to":"file:config/flags.go","properties":{}}
 {"kind":"rel","from":"file:server/server.go:import:6:example.com/envapp/config","type":"RESOLVES_TO","to":"file:config/spec.go","properties":{}}
 {"kind":"rel","from":"file:server/server.go:import:6:example.com/envapp/config","type":"RESOLVES_TO","to":"file:config/viper.go","properties":{}}
 {"kind":"rel","from":"file:server/server.go:route:12:1:GET:/health","type":"ROUTE_HANDLED_BY","to":"file:server/server.go:function:12:<r.GET:/health:arg1>","properties":{}}
