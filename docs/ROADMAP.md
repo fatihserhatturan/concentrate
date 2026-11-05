@@ -32,8 +32,8 @@ the only runtime dependency left is `web-tree-sitter`.
   `src/integrations/languages/syntax/tree-sitter.ts` imports web-tree-sitter.
   `tests/grammars.test.ts` checks the vendored grammars against their manifest.
 - **Focus.** The Node.js/TypeScript backend niche first, then the whole JS/TS ecosystem including the
-  frontend (M8), then the Go (M9) and Rust (M10) ecosystems with their frameworks; Python stays at
-  least at today's level.
+  frontend (M8), then the Go ecosystem (M9), the non-code files of a project (M10) and the Rust
+  ecosystem (M11); Python stays at least at today's level.
 
 ### Dependency replacement map
 
@@ -58,11 +58,13 @@ the only runtime dependency left is `web-tree-sitter`.
 | M7 – Niche depth | 6b, 7 | Deeper Node.js/TS backend semantics and the remaining MCP tools. |
 | M8 – Full JS/TS ecosystem | 10–17 | Frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular) and vanilla JS: components, pages, frontend → backend API links, stores and DOM events. |
 | M9 – Go ecosystem | 18–21 | Go modules, packages and calls resolved; net/http, gin, echo, chi, fiber and gorilla/mux routes, gRPC and cobra entrypoints; database/sql, sqlx, gorm, env and HTTP clients; measured on pinned samples. |
-| M10 – Rust ecosystem | 22–25 | Cargo workspaces, path calls, traits and attributes; axum, actix-web, Rocket and warp routes; sqlx, diesel, SeaORM, env and reqwest; measured on pinned samples. |
+| M10 – Non-code files | 22–25 | Every file in the graph (styles, JSON, YAML, shell, PowerShell, Dockerfile, Makefile, SQL, `.proto`) with vendored tree-sitter grammars; scripts and infrastructure as entrypoints with their env; CSS linked to components; SQL tables and `.proto` services; measured on pinned samples. |
+| M11 – Rust ecosystem | 26–29 | Cargo workspaces, path calls, traits and attributes; axum, actix-web, Rocket and warp routes; sqlx, diesel, SeaORM, env and reqwest; measured on pinned samples. |
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
-M9, the Go ecosystem (Phases 18 and 19 done; Phase 20 next), then M10, the Rust ecosystem (Phase 22).
+M9, the Go ecosystem, is done. Next is M10, the non-code files of a project (Phase 22), then M11,
+the Rust ecosystem (Phase 26).
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -819,7 +821,7 @@ Completes M8: React-side stores on the `Store` node from Phase 14, store-aware M
 Phases 18–21 give Go the depth the JS/TS graph has: resolved packages and calls, HTTP routes,
 data access, config, outbound HTTP links and dependency injection, measured on pinned samples.
 
-### Decisions (M9 and M10)
+### Decisions (M9 and M11)
 
 - **Still one runtime dependency.** The vendored `go.wasm` and `rust.wasm` are upgraded to current
   grammar releases through `npm run grammars:build`, with the golden diffs reviewed. No new npm
@@ -1004,18 +1006,158 @@ There is no Go framework detection today: `list_routes`, `route_details` and `ap
 - [x] Accuracy, performance and agent results for Go are reproducible from scripts (#183–#185)
 - [x] README shows the Go coverage (#183)
 
-## M10: Rust ecosystem
+## M10: Non-code files
 
-Phases 22–25 do the same for Rust: Cargo workspaces, path calls, traits and attributes, then axum,
+Phases 22–25 bring the rest of a project into the graph: every file as a `File` node, the non-code
+formats parsed with vendored tree-sitter grammars (Dockerfile and `.proto` with small line readers,
+as they have no usable npm grammar), scripts and infrastructure as entrypoints with the env they read
+and set, styles linked to the components that use them, and SQL tables and `.proto` services linked
+to the code. They come before M11 (Rust) so the Rust phases find these files already in the graph.
+
+## Phase 22: Every file in the graph (grammars, file nodes, asset imports) ([#202](https://github.com/fatihserhatturan/concentrate/issues/202))
+
+**Milestone:** M10 – Non-code files
+**Depends on:** Phase 21
+
+**Goal:** Make every file of a project a `File` node, parse the non-code formats with vendored tree-sitter grammars, and resolve imports of styles, JSON and assets, so Phases 23–25 can build on them.
+
+- Only code files become `File` nodes: `detectLanguage` (`src/core/scan/language.ts`) maps TS/JS, HTML, Vue, Svelte, Astro, Python, Go and Rust; every other file is discovered and counted as skipped (`discoveredFiles − supportedFiles`).
+- A few non-code files are read for one fact each: `package.json`, `tsconfig.json` / `jsconfig.json`, `pnpm-workspace.yaml`, `.env*`, `schema.prisma`, `go.mod`.
+- `import "./x.css"`, `import data from "./x.json"` and image imports count as unresolved relative imports (`src/integrations/resolution/imports.ts`).
+- The pinned samples have 391 `.json`, 200 `.md`, 140 `.yml`/`.yaml`, 51 `.css`, 56 `.proto`, 32 `.sql`, 24 `.sh`, 15 `Dockerfile` and 14 `Makefile` files the graph does not show.
+
+### Grammars
+
+- [ ] Add to `scripts/build-grammars.mjs` and `GrammarName` (`src/integrations/languages/syntax/tree-sitter.ts`): `tree-sitter-css`, `tree-sitter-scss` (CSS grammar with a warning if it does not build with the pinned CLI), `tree-sitter-json`, `@tree-sitter-grammars/tree-sitter-yaml`, `tree-sitter-bash`, `tree-sitter-powershell` (a release at least two weeks old), `tree-sitter-make`, `@derekstride/tree-sitter-sql`; record the bytes added to `vendor/grammars`
+- [ ] Dockerfile and `.proto` get small line readers (no usable npm grammar; `tree-sitter-dockerfile` on npm is a security placeholder and must not be used)
+
+### Files
+
+- [ ] `detectLanguage` gains `css`, `scss`, `less`, `json`, `yaml`, `shell`, `powershell`, `dockerfile`, `makefile`, `sql`, `proto`, `markdown`, `toml`; any other discovered file is a `File` node with language `other` (text) or `asset` (binary)
+- [ ] Lockfiles (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, `go.sum`, `Cargo.lock`) and files above a size limit are nodes but are not parsed; lockfiles are `generated`
+- [ ] A `docs` source type for Markdown, `LICENSE` and `docs/` files (`src/core/scan/file-classification.ts`)
+- [ ] A file with syntax errors keeps a partial graph and gets a scan warning
+
+### Imports
+
+- [ ] JS/TS imports of `.css`, `.scss`, `.less`, `.json`, `.svg` and images, and `new URL("./x", import.meta.url)`, resolve to the `File` (`RESOLVES_TO`)
+- [ ] HTML `<link href>` and `<script src>` resolve the same way
+
+### Report and store
+
+- [ ] The scan report and smoke counts split code files from other files; smoke expectations updated for every sample
+- [ ] `SCHEMA_VERSION` bumped; the parse cache follows the code fingerprint (`src/composition/parser-fingerprint.ts`)
+
+### MCP
+
+- [ ] File rows carry `language` and `sourceType`; searches can filter by them. The tool list stays under 19 000 characters (`tests/mcp-protocol.test.ts`, 18 982 today): new output goes into existing tools and descriptions are trimmed to make room
+
+### Acceptance criteria
+
+- [ ] Fixtures with golden coverage: a repo with every listed format, asset imports from JS/TS and HTML, a lockfile and a file with a syntax error
+- [ ] Unresolved relative imports drop on the pinned JS/TS samples; the remaining ones are listed in the PR
+- [ ] `docs/known-limitations.md` has a non-code files section
+
+## Phase 23: Scripts and infrastructure (shell, PowerShell, Docker, Make, npm scripts, compose, CI) ([#203](https://github.com/fatihserhatturan/concentrate/issues/203))
+
+**Milestone:** M10 – Non-code files
+**Depends on:** Phase 22
+
+**Goal:** Show what a project's scripts and infrastructure run and which env they read or set, so an agent can answer "which script starts the server" or "which variables does CI set" from the graph.
+
+- Shell and PowerShell scripts, Dockerfiles, Makefiles, `package.json` scripts, docker-compose files and CI workflows are not in the graph (Phase 22 makes them `File` nodes).
+- Env reads come only from code (`process.env`, `os.Getenv`, struct tags…) and `.env*` files declare variables; variables set by Docker, compose or CI count as undeclared in `list_env_config`.
+
+### Entrypoints
+
+- [ ] `EntryPoint` nodes for a script file (`script`), a Makefile target (`make`), a `package.json` script (`npm-script`), a compose service (`compose-service`), a CI job (`ci-job`) and a Dockerfile `CMD` / `ENTRYPOINT` (`docker`)
+- [ ] `RUNS` from an entrypoint to the project file or entrypoint it starts: `node dist/index.js`, `tsx scripts/x.ts`, `go run ./cmd/server`, `python manage.py`, `./scripts/deploy.sh`, `npm run build`, `make test`, compose `build:` → its Dockerfile
+
+### Env
+
+- [ ] Reads as `USES_ENV`: shell `$VAR` / `${VAR}` (not the script's own locals, positional or special parameters), PowerShell `$env:VAR`, compose `${VAR}`, workflow `${{ env.X }}` / `${{ secrets.X }}`
+- [ ] Declarations (`export VAR=`, Dockerfile `ENV` / `ARG`, compose `environment:` / `env_file:`, workflow `env:`) count like `.env` declarations, so `list_env_config { unread }` and its undeclared check see them
+
+### MCP
+
+- [ ] `list_entrypoints` and `impact_of` include these entrypoints and `RUNS` ("what runs `cmd/server`", "what breaks if `scripts/build.ts` moves")
+
+### Acceptance criteria
+
+- [ ] Fixtures with golden coverage for each source (shell, PowerShell, Dockerfile, Makefile, npm scripts, compose, a GitHub Actions workflow)
+- [ ] Hand labels for script entrypoints, `RUNS` and env declarations on two pinned samples (precision 100%, recall reported)
+
+## Phase 24: CSS and SCSS (selectors, custom properties, CSS modules, class links) ([#204](https://github.com/fatihserhatturan/concentrate/issues/204))
+
+**Milestone:** M10 – Non-code files
+**Depends on:** Phase 23
+
+**Goal:** Connect styles to the components and pages that use them, so the impact of changing a class or a custom property is answerable from the graph.
+
+- CSS and SCSS files are not read; a component's `className` or `class` attribute is text in its template and links to nothing.
+
+### Styles
+
+- [ ] Rules, class and id selectors and custom properties (`--x` definitions, `var(--x)` uses) as nodes of a style label, with file and line
+- [ ] `@import`, `@use`, `@forward` and `url()` as `Import` → `File`
+
+### Links
+
+- [ ] CSS Modules: `import s from "./x.module.css"` with `s.btn` / `s["btn"]` links the function or component to the class
+- [ ] `className="btn"`, `class="btn"` and `:class` / `class:` bindings with literal names in JSX, Vue, Svelte, Angular and HTML templates link to same-named classes, marked as name matches
+
+### MCP
+
+- [ ] `find_references` and `impact_of` on a class or a custom property return the components, pages and files that use it
+
+### Acceptance criteria
+
+- [ ] Fixtures with golden coverage: plain CSS, SCSS with nesting and `@use`, CSS Modules in React and Vue, template class bindings
+- [ ] Hand labels for CSS-module and template class links on two pinned frontend samples (precision 100%, recall reported)
+
+## Phase 25: SQL migrations, .proto services and measurement ([#205](https://github.com/fatihserhatturan/concentrate/issues/205))
+
+**Milestone:** M10 – Non-code files
+**Depends on:** Phase 24
+
+**Goal:** Read database schemas from SQL files and service contracts from `.proto` files, link them to the code that uses them, and measure the milestone on the pinned samples.
+
+- `Table` nodes come from code (ORM models, query strings, Prisma, sqlc) but not from SQL migrations or `schema.sql`.
+- `.proto` files are not read; gRPC is linked only through the generated Go code (`src/integrations/frameworks/go/grpc.ts`, #201).
+
+### SQL
+
+- [ ] `CREATE TABLE`, `ALTER TABLE … ADD COLUMN`, `CREATE VIEW` and `CREATE INDEX` in migrations and schema files as `Table` nodes with columns, merged by name with the tables found from code; migration order recorded
+
+### Protobuf
+
+- [ ] `package`, `service`, `rpc` and `message` read from `.proto` files; an rpc links to the generated Go server interface method and its implementations through the `pkg.Svc` service name
+
+### Measurement
+
+- [ ] Smoke counts and golden graphs updated for every sample
+- [ ] Hand labels on pinned samples for SQL tables and `.proto` rpcs
+- [ ] Agent benchmark questions on non-code files (CI and compose env, which script runs what, CSS class impact, migration tables); paid runs only after a cost estimate and approval
+- [ ] README and `docs/known-limitations.md` describe the non-code file support
+
+### Acceptance criteria
+
+- [ ] Fixtures with golden coverage: migrations that create and alter tables, a `.proto` with two services linked to generated Go code
+- [ ] Every M10 label scores 100% precision; recall reported
+
+
+## M11: Rust ecosystem
+
+Phases 26–29 do the same for Rust: Cargo workspaces, path calls, traits and attributes, then axum,
 actix-web, Rocket and warp routes, sqlx, diesel and SeaORM data access, config and reqwest links.
 The decisions of M9 apply.
 
-## Phase 22: Rust language foundation (Cargo workspaces, paths, traits, enums, attributes) ([#166](https://github.com/fatihserhatturan/concentrate/issues/166))
+## Phase 26: Rust language foundation (Cargo workspaces, paths, traits, enums, attributes) ([#166](https://github.com/fatihserhatturan/concentrate/issues/166))
 
-**Milestone:** M10 – Rust ecosystem
-**Depends on:** Phase 21
+**Milestone:** M11 – Rust ecosystem
+**Depends on:** Phase 25
 
-**Goal:** Give Rust the structural depth JS/TS has, so the framework phases (23, 24) can build on resolved crates, paths, calls, traits and attributes.
+**Goal:** Give Rust the structural depth JS/TS has, so the framework phases (27, 28) can build on resolved crates, paths, calls, traits and attributes.
 
 Rust gets files, `use` / `mod` imports, structs, functions, impl methods, calls and macro invocations today (`src/integrations/languages/rust/`), but:
 - There is no `Cargo.toml` or workspace handling; `use` of another crate of the workspace and external crates are skipped (`resolveRustImport`).
@@ -1060,14 +1202,14 @@ Rust gets files, `use` / `mod` imports, structs, functions, impl methods, calls 
 - [ ] Path call resolution has hand labels on a pinned Rust sample (precision 100%, recall reported)
 - [ ] `docs/known-limitations.md` has a Rust section
 
-## Phase 23: Rust HTTP routes and entrypoints (axum, actix-web, Rocket, warp, tonic, clap) ([#167](https://github.com/fatihserhatturan/concentrate/issues/167))
+## Phase 27: Rust HTTP routes and entrypoints (axum, actix-web, Rocket, warp, tonic, clap) ([#167](https://github.com/fatihserhatturan/concentrate/issues/167))
 
-**Milestone:** M10 – Rust ecosystem
-**Depends on:** Phase 22
+**Milestone:** M11 – Rust ecosystem
+**Depends on:** Phase 26
 
 **Goal:** List every HTTP route of a Rust service with its full path, method, middleware and handler, and the other entrypoints (gRPC services, CLI commands).
 
-There is no Rust framework detection today. The framework-neutral `Route` / `EntryPoint` schema is reused, and framework code goes into a new `src/integrations/frameworks/rust/` layer (parse-time plugin hook plus post-parse contributors), like the Go layer of Phase 19. Attribute routes need the `Decorator` nodes of Phase 22.
+There is no Rust framework detection today. The framework-neutral `Route` / `EntryPoint` schema is reused, and framework code goes into a new `src/integrations/frameworks/rust/` layer (parse-time plugin hook plus post-parse contributors), like the Go layer of Phase 19. Attribute routes need the `Decorator` nodes of Phase 26.
 
 ### Framework layer
 
@@ -1097,10 +1239,10 @@ There is no Rust framework detection today. The framework-neutral `Route` / `Ent
 - [ ] A pinned Rust sample with hand-labelled routes: precision 100%, recall reported in `bench:accuracy`
 - [ ] `list_routes`, `route_details` and `impact_of` answer on the Rust sample; docs updated
 
-## Phase 24: Rust data access, config and outbound HTTP (sqlx, diesel, SeaORM, env, reqwest) ([#168](https://github.com/fatihserhatturan/concentrate/issues/168))
+## Phase 28: Rust data access, config and outbound HTTP (sqlx, diesel, SeaORM, env, reqwest) ([#168](https://github.com/fatihserhatturan/concentrate/issues/168))
 
-**Milestone:** M10 – Rust ecosystem
-**Depends on:** Phase 23
+**Milestone:** M11 – Rust ecosystem
+**Depends on:** Phase 27
 
 **Goal:** Answer "which handler touches this table", "which env variables does this service read" and "which routes does this client call" for Rust code.
 
@@ -1132,10 +1274,10 @@ The data, env and HTTP-client relationships (`Table`, `DataModel`, `READS` / `WR
 - [ ] Hand labels for data access and env on the pinned Rust sample: precision 100%, recall reported
 - [ ] Docs updated (`docs/known-limitations.md`, `docs/mcp-server.md`)
 
-## Phase 25: Rust ecosystem measurement (samples, accuracy, agent benchmark, README) ([#169](https://github.com/fatihserhatturan/concentrate/issues/169))
+## Phase 29: Rust ecosystem measurement (samples, accuracy, agent benchmark, README) ([#169](https://github.com/fatihserhatturan/concentrate/issues/169))
 
-**Milestone:** M10 – Rust ecosystem
-**Depends on:** Phase 24
+**Milestone:** M11 – Rust ecosystem
+**Depends on:** Phase 28
 
 **Goal:** Prove the Rust graph with the same measurements as M8 and M9: pinned samples, hand labels, the agent benchmark and README numbers.
 
