@@ -181,5 +181,9 @@ function routeRelationships(
 export function resolveRef(ref: GoHandlerRef, fileId: string, index: GoCallIndex): string | null {
   if (ref.functionId) return ref.functionId;
   const call: GraphNode = { id: `${fileId}:handler:${ref.expression}`, label: "Call", properties: { ...ref } };
-  return resolveGoCall(call, fileId, index)[0]?.functionId ?? null;
+  const targets = resolveGoCall(call, fileId, index);
+  // A handler on a service interface (kratos' `srv.Register`) runs the
+  // service, not the `Unimplemented…Server` stub protoc-gen-go-grpc writes.
+  const service = targets.length > 1 ? targets.find((target) => !String(index.functionsById.get(target.functionId)?.properties.className ?? "").startsWith("Unimplemented")) : undefined;
+  return (service ?? targets[0])?.functionId ?? null;
 }

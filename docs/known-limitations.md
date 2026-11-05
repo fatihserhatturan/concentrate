@@ -1037,19 +1037,29 @@ Astro).
   newServeCmd()`); `Use` gives each name (its first word). Commands passed
   to `AddCommand` as calls (`root.AddCommand(newServeCmd())`) keep their own
   name.
-- HTTP routes come from `net/http`, gin, echo, chi, fiber, gorilla/mux and
-  go-pkgz/routegroup (`Route.framework` `net/http`, `gin`, `echo`, `chi`,
-  `fiber`, `gorilla/mux`, `routegroup`). A router is known when a function
-  builds it (`gin.Default()`, `echo.New()`, `chi.NewRouter()`, `fiber.New()`,
-  `mux.NewRouter()`, `http.NewServeMux()`, `&http.ServeMux{}`,
-  `routegroup.New(mux)`, `routegroup.Mount(mux, "/api")`, or a function
+- HTTP routes come from `net/http`, gin, echo, chi, fiber, gorilla/mux,
+  go-pkgz/routegroup and kratos' `transport/http` (`Route.framework`
+  `net/http`, `gin`, `echo`, `chi`, `fiber`, `gorilla/mux`, `routegroup`,
+  `kratos`). A router is known when a function builds it (`gin.Default()`,
+  `echo.New()`, `chi.NewRouter()`, `fiber.New()`, `mux.NewRouter()`,
+  `http.NewServeMux()`, `&http.ServeMux{}`, `routegroup.New(mux)`,
+  `routegroup.Mount(mux, "/api")`, kratos' `http.NewServer(…)`, or a function
   of the same file whose declared result is a router type), groups it
   (`r.Group("/api", mw…)`, chi's `Route` / `Group` callbacks and `With`,
   fiber's `Route`, `r.PathPrefix("/api").Subrouter()`, routegroup's `Group`,
-  `Mount("/api")`, `With` and `Route` callbacks), or takes it as a parameter
-  typed as one of the framework's router types (`*gin.RouterGroup`,
-  `*echo.Group`, `chi.Router`, `fiber.Router`, `*mux.Router`,
-  `*http.ServeMux`, `*routegroup.Bundle`, …).
+  `Mount("/api")`, `With` and `Route` callbacks, kratos' `s.Route("/")` and
+  `r.Group("/v1", filters…)`), or takes it as a parameter typed as one of the
+  framework's router types (`*gin.RouterGroup`, `*echo.Group`, `chi.Router`,
+  `fiber.Router`, `*mux.Router`, `*http.ServeMux`, `*routegroup.Bundle`,
+  kratos' `*http.Server` / `*http.Router`, …).
+- kratos routes are mostly in the `*_http.pb.go` files protoc-gen-go-http
+  writes: `r.GET("/v1/x", _Svc_M0_HTTP_Handler(srv))`. Such a handler
+  function calls one method of the service it is given (`srv.M`), and that
+  method of the service's implementation is the route's handler (an
+  `Unimplemented…Server` stub only when nothing else implements it). A
+  route's filters (`r.GET(path, h, filters…)`) and a group's are middleware
+  steps; the server's `http.Middleware(…)` option is not read. A server's
+  `Handle`, `HandleFunc` and `HandlePrefix` are routes with any method.
 - A route on a parameter gets the path and middleware of every call that
   passes a router in, and a named callback (`r.Route("/users", userRoutes)`)
   is such a call. A router a function returns gets the path its callers mount

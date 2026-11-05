@@ -16,7 +16,7 @@ import { cachedForRoot, descendantsOf } from "./scope.js";
 // caller mounts) and handler references are finished once every file is
 // parsed (route-mounts.ts).
 
-export type GoRouteFramework = "gin" | "echo" | "chi" | "fiber" | "gorilla/mux" | "net/http" | "routegroup";
+export type GoRouteFramework = "gin" | "echo" | "chi" | "fiber" | "gorilla/mux" | "net/http" | "routegroup" | "kratos";
 
 // A reference to a handler or middleware, in the shape of a Call node's
 // properties so the Go call resolver can find the function it names; a
@@ -110,6 +110,7 @@ export const routerPackages: Array<[GoRouteFramework, RegExp]> = [
   ["gorilla/mux", /^github\.com\/gorilla\/mux$/u],
   ["net/http", /^net\/http$/u],
   ["routegroup", /^github\.com\/go-pkgz\/routegroup$/u],
+  ["kratos", /^github\.com\/go-kratos\/kratos\/v2\/transport\/http$/u],
 ];
 
 // The types a parameter holding a router has, per framework.
@@ -121,6 +122,7 @@ const routerTypes: Record<GoRouteFramework, Record<string, "root" | "group">> = 
   "gorilla/mux": { Router: "root" },
   "net/http": { ServeMux: "root" },
   routegroup: { Bundle: "root" },
+  kratos: { Server: "root", Router: "group" },
 };
 
 const constructors: Record<GoRouteFramework, string[]> = {
@@ -131,6 +133,7 @@ const constructors: Record<GoRouteFramework, string[]> = {
   "gorilla/mux": ["NewRouter"],
   "net/http": ["NewServeMux"],
   routegroup: ["New"],
+  kratos: ["NewServer"],
 };
 
 const upperMethods = ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"];
@@ -172,6 +175,7 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
     if (framework) routerConstructors.set(String(fn.node.properties.name), framework);
   }
   const callsById = new Map(nodes.filter((node) => node.label === "Call").map((node) => [node.id, node]));
+  const declarations = new Map(functions.filter((fn) => fn.syntax.type === "function_declaration").map((fn) => [String(fn.node.properties.name), fn.syntax]));
   const dynamicCalls: Array<{ line: number; expression: string; framework: string }> = [];
   const newRouter = (framework: GoRouteFramework, kind: "root" | "group" = "root", base: number | null = null): Router => ({
     framework,
@@ -259,6 +263,25 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
       return [handlerRef(node, "route", syntheticName)];
     };
 
+    // A kratos handler protoc-gen-go-http writes
+    // (`_Shop_Register0_HTTP_Handler(srv)`) calls one method of the service
+    // it is given (`srv.Register(ctx, …)`): that method is the handler.
+    const kratosHandler = (node: SyntaxNode, syntheticName: string): GoHandlerRef => {
+      const callee = node.type === "call_expression" ? node.childForFieldName("function") : null;
+      const service = node.childForFieldName("arguments")?.namedChildren[0];
+      const declaration = callee?.type === "identifier" ? declarations.get(callee.text) : undefined;
+      const parameter = declaration ? goParameters(declaration.childForFieldName("parameters"))[0]?.name : undefined;
+      if (declaration && parameter && service?.type === "identifier") {
+        for (const call of descendantsOf(declaration, "call_expression")) {
+          const inner = call.childForFieldName("function");
+          if (inner?.type === "selector_expression" && inner.childForFieldName("operand")?.text === parameter) {
+            return { ...reference(`${service.text}.${inner.childForFieldName("field")!.text}`, locals), scope: "route" };
+          }
+        }
+      }
+      return handlerRef(node, "route", syntheticName);
+    };
+
     const child = (parent: Router, prefix: string | null, own: GoHandlerRef[], global = false): Router => ({
       framework: parent.framework,
       prefix,
@@ -319,6 +342,11 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
       // with the middleware `b` has so far.
       if (receiver.framework === "routegroup" && (method === "Group" || method === "Mount")) {
         return child(receiver, method === "Mount" ? stringValue(args[0]) : "", []);
+      }
+      // kratos: `s.Route("/")` and `r.Group("/v1", filters…)`.
+      if (receiver.framework === "kratos" && (method === "Route" || method === "Group") && args.length >= 1) {
+        const prefix = stringValue(args[0]);
+        return child(receiver, prefix, args.slice(1).map((arg, index) => handlerRef(arg, "router", `<${callee.text}:${prefix ?? "?"}:arg${index + 1}>`)));
       }
       // `r.With(mw).Get(…)`.
       if ((receiver.framework === "chi" || receiver.framework === "routegroup") && method === "With") {
@@ -579,6 +607,28 @@ function routesOf({ fileNodeId, root, nodes, relationships, functions }: Paramet
           const value = stringValue(args[0]);
           if (value === null) dynamic(node, "routegroup");
           else addRoute(node, router, value === "" ? "ALL" : value.toUpperCase(), "", handlerChain(args[1]!, name("", 1)), args[1], receiverName);
+          return;
+        }
+      }
+
+      if (router?.framework === "kratos") {
+        // A Router's `GET(path, h, filters…)` and `Handle(method, path, h,
+        // filters…)`; a Server's `Handle(path, h)`, `HandleFunc` and
+        // `HandlePrefix` (any method).
+        const routeMethod = upperMethods.includes(method) ? method : null;
+        const shape = routeMethod && args.length >= 2 ? { method: routeMethod as string | null, from: 1, kratos: true }
+          : method === "Handle" && args.length >= 3 ? { method: stringValue(args[0]), from: 2, kratos: true }
+            : (method === "Handle" || method === "HandleFunc" || method === "HandlePrefix") && args.length === 2 ? { method: "ALL" as string | null, from: 1, kratos: false } : null;
+        if (shape) {
+          const routePath = stringValue(args[shape.from - 1]);
+          const [handlerArg, ...filters] = args.slice(shape.from);
+          if (routePath === null || shape.method === null) dynamic(node, "kratos");
+          else if (handlerArg) {
+            const refs = shape.kratos
+              ? [...filters.map((arg, index) => handlerRef(arg, "route", name(routePath, index + shape.from + 1))), kratosHandler(handlerArg, name(routePath, shape.from))]
+              : handlerChain(handlerArg, name(routePath, shape.from));
+            addRoute(node, router, shape.method.toUpperCase(), routePath, refs, handlerArg, receiverName);
+          }
           return;
         }
       }
