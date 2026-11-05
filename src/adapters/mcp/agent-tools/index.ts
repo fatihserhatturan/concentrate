@@ -44,14 +44,14 @@ export const agentToolDefinitions = [
   },
   {
     name: "api_consumers",
-    description: `Frontend calls that reach a route (fetch, axios, ky, ofetch, useFetch, SWR, TanStack Query, Angular HttpClient, tRPC), each with its route, calling function, file, line, client, resolved method and URL, and match kind (exact, parameter, catch-all). Filter by the route's method, path, file or framework, or by the calling file or client; with no filter, lists every linked call.`,
+    description: `Client calls that reach a route: frontend (fetch, axios, ky, ofetch, useFetch, SWR, TanStack Query, Angular HttpClient, tRPC) and Go (net/http, resty), each with its route, calling function, file, line, client, resolved method and URL, and match kind (exact, parameter, catch-all). Filter by the route's method, path, file or framework, or by the calling file or client; with no filter, lists every linked call.`,
     inputSchema: objectSchema({
       method: { type: "string", description: "Route method, case-insensitive (GET, post, query, mutation, ...)." },
       path: { type: "string", description: "Route path, full or as declared (/api/users/:id, post.byId)." },
       routeFile: { type: "string", description: "File or directory of the route declaration, or a path suffix." },
-      framework: { type: "string", description: "Route framework, such as express-koa, nextjs, nuxt, sveltekit, astro or trpc." },
+      framework: { type: "string", description: "Route framework, such as express-koa, nextjs, nuxt, sveltekit, trpc, gin or echo." },
       file: { type: "string", description: "File or directory of the calling code, or a path suffix." },
-      client: { type: "string", description: "fetch, axios, ky, ofetch, nuxt, swr, tanstack-query, angular or trpc." },
+      client: { type: "string", description: "fetch, axios, ky, ofetch, nuxt, swr, tanstack-query, angular, trpc, net/http or resty." },
       limit: limit(50),
     }),
   },

@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 69;
+export const SCHEMA_VERSION = 70;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -98,7 +98,7 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "RENDERS", from: "Component", to: "Component", properties: { props: "STRING", line: "INT64", client: "STRING", template: "STRING" } },
   { type: "USES_HOOK", from: "Function", to: "Function", properties: { line: "INT64" } },
   { type: "USES_CONTEXT", from: "Function", to: "Component", properties: { line: "INT64" } },
-  { type: "ROUTE_LIFECYCLE_STEP", from: "Route", to: "Function", properties: { role: "STRING", scope: "STRING", hook: "STRING", orderIndex: "INT64" } },
+  { type: "ROUTE_LIFECYCLE_STEP", from: "Route", to: "Function", properties: { role: "STRING", scope: "STRING", hook: "STRING", orderIndex: "INT64", expression: "STRING" } },
   { type: "LIFECYCLE_PRECEDES", from: "Function", to: "Function", properties: { routeId: "STRING", scope: "STRING", orderIndex: "INT64" } },
   { type: "MOUNTS_VARIABLE", from: "Variable", to: "Variable", properties: { path: "STRING", pathExpression: "STRING", line: "INT64" } },
   { type: "MOUNTS_FUNCTION", from: "Variable", to: "Function", properties: { path: "STRING", pathExpression: "STRING", line: "INT64" } },
@@ -118,10 +118,10 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "CONSUMES_CONFIG_FILE", from: "File", to: "ConfigValue", properties: { localName: "STRING" } },
   { type: "CONSUMES_CONFIG_FUNCTION", from: "Function", to: "ConfigValue", properties: { localName: "STRING" } },
   { type: "CONSUMES_CONFIG_ROUTE", from: "Route", to: "ConfigValue", properties: { localName: "STRING" } },
-  { type: "ACCESSES_DATA_FILE", from: "File", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING" } },
-  { type: "ACCESSES_DATA_FUNCTION", from: "Function", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING" } },
-  { type: "ACCESSES_DATA_ROUTE", from: "Route", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING" } },
-  { type: "ACCESSES_DATA_ENTRYPOINT", from: "EntryPoint", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING" } },
+  { type: "ACCESSES_DATA_FILE", from: "File", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING", file: "STRING", direct: "BOOLEAN" } },
+  { type: "ACCESSES_DATA_FUNCTION", from: "Function", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING", file: "STRING", direct: "BOOLEAN" } },
+  { type: "ACCESSES_DATA_ROUTE", from: "Route", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING", file: "STRING", direct: "BOOLEAN" } },
+  { type: "ACCESSES_DATA_ENTRYPOINT", from: "EntryPoint", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING", file: "STRING", direct: "BOOLEAN" } },
   { type: "MAPS_TO_TABLE", from: "DataModel", to: "Table", properties: {} },
   { type: "RELATES_TO", from: "DataModel", to: "DataModel", properties: { field: "STRING", kind: "STRING", fields: "STRING", references: "STRING", relationName: "STRING", onDelete: "STRING" } },
   { type: "READS_FILE", from: "File", to: "Table", properties: { operation: "STRING", line: "INT64", expression: "STRING", model: "STRING" } },

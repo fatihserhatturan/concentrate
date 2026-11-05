@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 69
+        "result": 70
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 69,
+      "schemaVersion": 70,
       "stats": [
         {
           "table": "Repo",
@@ -635,17 +635,20 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": [
           {
             "sourceKind": "Function",
             "sourceName": "<app.get:/users:arg1>",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:function:10:<app.get:/users:arg1>",
+            "direct": false,
+            "accessFile": "src/users.ts",
             "line": 6,
             "model": "User",
             "library": "prisma",
@@ -657,6 +660,9 @@
             "sourceKind": "Function",
             "sourceName": "<app.patch:/users/:id:arg1>",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:function:14:<app.patch:/users/:id:arg1>",
+            "direct": false,
+            "accessFile": "src/users.ts",
             "line": 10,
             "model": "User",
             "library": "prisma",
@@ -668,6 +674,9 @@
             "sourceKind": "Function",
             "sourceName": "<app.patch:/users/:id:arg1>",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:function:14:<app.patch:/users/:id:arg1>",
+            "direct": true,
+            "accessFile": "src/routes.ts",
             "line": 16,
             "model": "audit_log",
             "library": "knex",
@@ -679,6 +688,9 @@
             "sourceKind": "Function",
             "sourceName": "<app.post:/posts:arg1>",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:function:20:<app.post:/posts:arg1>",
+            "direct": true,
+            "accessFile": "src/routes.ts",
             "line": 21,
             "model": "Post",
             "library": "prisma",
@@ -690,6 +702,9 @@
             "sourceKind": "Function",
             "sourceName": "<app.get:/stats:arg1>",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:function:25:<app.get:/stats:arg1>",
+            "direct": true,
+            "accessFile": "src/routes.ts",
             "line": 26,
             "model": "PostStats",
             "library": "prisma",
@@ -701,6 +716,9 @@
             "sourceKind": "Function",
             "sourceName": "findUsers",
             "file": "src/users.ts",
+            "sourceId": "file:src/users.ts:function:5:findUsers",
+            "direct": true,
+            "accessFile": "src/users.ts",
             "line": 6,
             "model": "User",
             "library": "prisma",
@@ -712,6 +730,9 @@
             "sourceKind": "Function",
             "sourceName": "renameUser",
             "file": "src/users.ts",
+            "sourceId": "file:src/users.ts:function:9:renameUser",
+            "direct": true,
+            "accessFile": "src/users.ts",
             "line": 10,
             "model": "User",
             "library": "prisma",
@@ -723,12 +744,15 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": [
           {
             "sourceKind": "Route",
             "sourceName": "/users",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:route:10:0:GET:/users",
+            "direct": false,
+            "accessFile": "src/users.ts",
             "line": 6,
             "model": "User",
             "library": "prisma",
@@ -740,6 +764,9 @@
             "sourceKind": "Route",
             "sourceName": "/users/:id",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:route:14:0:PATCH:/users/:id",
+            "direct": false,
+            "accessFile": "src/users.ts",
             "line": 10,
             "model": "User",
             "library": "prisma",
@@ -751,6 +778,9 @@
             "sourceKind": "Route",
             "sourceName": "/users/:id",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:route:14:0:PATCH:/users/:id",
+            "direct": false,
+            "accessFile": "src/routes.ts",
             "line": 16,
             "model": "audit_log",
             "library": "knex",
@@ -762,6 +792,9 @@
             "sourceKind": "Route",
             "sourceName": "/posts",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:route:20:0:POST:/posts",
+            "direct": false,
+            "accessFile": "src/routes.ts",
             "line": 21,
             "model": "Post",
             "library": "prisma",
@@ -773,6 +806,9 @@
             "sourceKind": "Route",
             "sourceName": "/stats",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:route:25:0:GET:/stats",
+            "direct": false,
+            "accessFile": "src/routes.ts",
             "line": 26,
             "model": "PostStats",
             "library": "prisma",
@@ -784,41 +820,22 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": []
       }
     ],
     "output": {
       "query": {
+        "direct": false,
         "limit": 50
       },
       "dataAccess": [
         {
           "sourceKind": "Function",
-          "sourceName": "<app.get:/users:arg1>",
-          "file": "src/routes.ts",
-          "line": 6,
-          "model": "User",
-          "library": "prisma",
-          "table": "users",
-          "operation": "read",
-          "expression": "prisma.user.findMany"
-        },
-        {
-          "sourceKind": "Function",
           "sourceName": "<app.patch:/users/:id:arg1>",
           "file": "src/routes.ts",
-          "line": 10,
-          "model": "User",
-          "library": "prisma",
-          "table": "users",
-          "operation": "update",
-          "expression": "prisma.user.update"
-        },
-        {
-          "sourceKind": "Function",
-          "sourceName": "<app.patch:/users/:id:arg1>",
-          "file": "src/routes.ts",
+          "direct": true,
+          "accessFile": "src/routes.ts",
           "line": 16,
           "model": "audit_log",
           "library": "knex",
@@ -830,6 +847,8 @@
           "sourceKind": "Function",
           "sourceName": "<app.post:/posts:arg1>",
           "file": "src/routes.ts",
+          "direct": true,
+          "accessFile": "src/routes.ts",
           "line": 21,
           "model": "Post",
           "library": "prisma",
@@ -841,6 +860,8 @@
           "sourceKind": "Function",
           "sourceName": "<app.get:/stats:arg1>",
           "file": "src/routes.ts",
+          "direct": true,
+          "accessFile": "src/routes.ts",
           "line": 26,
           "model": "PostStats",
           "library": "prisma",
@@ -852,6 +873,8 @@
           "sourceKind": "Function",
           "sourceName": "findUsers",
           "file": "src/users.ts",
+          "direct": true,
+          "accessFile": "src/users.ts",
           "line": 6,
           "model": "User",
           "library": "prisma",
@@ -863,6 +886,34 @@
           "sourceKind": "Function",
           "sourceName": "renameUser",
           "file": "src/users.ts",
+          "direct": true,
+          "accessFile": "src/users.ts",
+          "line": 10,
+          "model": "User",
+          "library": "prisma",
+          "table": "users",
+          "operation": "update",
+          "expression": "prisma.user.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "<app.get:/users:arg1>",
+          "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/users.ts",
+          "line": 6,
+          "model": "User",
+          "library": "prisma",
+          "table": "users",
+          "operation": "read",
+          "expression": "prisma.user.findMany"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "<app.patch:/users/:id:arg1>",
+          "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/users.ts",
           "line": 10,
           "model": "User",
           "library": "prisma",
@@ -874,6 +925,8 @@
           "sourceKind": "Route",
           "sourceName": "/users",
           "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/users.ts",
           "line": 6,
           "model": "User",
           "library": "prisma",
@@ -885,6 +938,8 @@
           "sourceKind": "Route",
           "sourceName": "/users/:id",
           "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/users.ts",
           "line": 10,
           "model": "User",
           "library": "prisma",
@@ -896,6 +951,8 @@
           "sourceKind": "Route",
           "sourceName": "/users/:id",
           "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/routes.ts",
           "line": 16,
           "model": "audit_log",
           "library": "knex",
@@ -907,6 +964,8 @@
           "sourceKind": "Route",
           "sourceName": "/posts",
           "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/routes.ts",
           "line": 21,
           "model": "Post",
           "library": "prisma",
@@ -918,6 +977,8 @@
           "sourceKind": "Route",
           "sourceName": "/stats",
           "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/routes.ts",
           "line": 26,
           "model": "PostStats",
           "library": "prisma",
@@ -1751,17 +1812,20 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"user\")) WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"user\")) WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"user\")) OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"user\")) OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": [
           {
             "sourceKind": "Function",
             "sourceName": "<app.get:/users:arg1>",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:function:10:<app.get:/users:arg1>",
+            "direct": false,
+            "accessFile": "src/users.ts",
             "line": 6,
             "model": "User",
             "library": "prisma",
@@ -1773,6 +1837,9 @@
             "sourceKind": "Function",
             "sourceName": "<app.patch:/users/:id:arg1>",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:function:14:<app.patch:/users/:id:arg1>",
+            "direct": false,
+            "accessFile": "src/users.ts",
             "line": 10,
             "model": "User",
             "library": "prisma",
@@ -1784,6 +1851,9 @@
             "sourceKind": "Function",
             "sourceName": "findUsers",
             "file": "src/users.ts",
+            "sourceId": "file:src/users.ts:function:5:findUsers",
+            "direct": true,
+            "accessFile": "src/users.ts",
             "line": 6,
             "model": "User",
             "library": "prisma",
@@ -1795,6 +1865,9 @@
             "sourceKind": "Function",
             "sourceName": "renameUser",
             "file": "src/users.ts",
+            "sourceId": "file:src/users.ts:function:9:renameUser",
+            "direct": true,
+            "accessFile": "src/users.ts",
             "line": 10,
             "model": "User",
             "library": "prisma",
@@ -1806,12 +1879,15 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"user\")) OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"user\")) OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": [
           {
             "sourceKind": "Route",
             "sourceName": "/users",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:route:10:0:GET:/users",
+            "direct": false,
+            "accessFile": "src/users.ts",
             "line": 6,
             "model": "User",
             "library": "prisma",
@@ -1823,6 +1899,9 @@
             "sourceKind": "Route",
             "sourceName": "/users/:id",
             "file": "src/routes.ts",
+            "sourceId": "file:src/routes.ts:route:14:0:PATCH:/users/:id",
+            "direct": false,
+            "accessFile": "src/users.ts",
             "line": 10,
             "model": "User",
             "library": "prisma",
@@ -1834,42 +1913,23 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"user\")) OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"user\")) OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
         "rows": []
       }
     ],
     "output": {
       "query": {
         "model": "user",
+        "direct": false,
         "limit": 50
       },
       "dataAccess": [
         {
           "sourceKind": "Function",
-          "sourceName": "<app.get:/users:arg1>",
-          "file": "src/routes.ts",
-          "line": 6,
-          "model": "User",
-          "library": "prisma",
-          "table": "users",
-          "operation": "read",
-          "expression": "prisma.user.findMany"
-        },
-        {
-          "sourceKind": "Function",
-          "sourceName": "<app.patch:/users/:id:arg1>",
-          "file": "src/routes.ts",
-          "line": 10,
-          "model": "User",
-          "library": "prisma",
-          "table": "users",
-          "operation": "update",
-          "expression": "prisma.user.update"
-        },
-        {
-          "sourceKind": "Function",
           "sourceName": "findUsers",
           "file": "src/users.ts",
+          "direct": true,
+          "accessFile": "src/users.ts",
           "line": 6,
           "model": "User",
           "library": "prisma",
@@ -1881,6 +1941,34 @@
           "sourceKind": "Function",
           "sourceName": "renameUser",
           "file": "src/users.ts",
+          "direct": true,
+          "accessFile": "src/users.ts",
+          "line": 10,
+          "model": "User",
+          "library": "prisma",
+          "table": "users",
+          "operation": "update",
+          "expression": "prisma.user.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "<app.get:/users:arg1>",
+          "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/users.ts",
+          "line": 6,
+          "model": "User",
+          "library": "prisma",
+          "table": "users",
+          "operation": "read",
+          "expression": "prisma.user.findMany"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "<app.patch:/users/:id:arg1>",
+          "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/users.ts",
           "line": 10,
           "model": "User",
           "library": "prisma",
@@ -1892,6 +1980,8 @@
           "sourceKind": "Route",
           "sourceName": "/users",
           "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/users.ts",
           "line": 6,
           "model": "User",
           "library": "prisma",
@@ -1903,6 +1993,8 @@
           "sourceKind": "Route",
           "sourceName": "/users/:id",
           "file": "src/routes.ts",
+          "direct": false,
+          "accessFile": "src/users.ts",
           "line": 10,
           "model": "User",
           "library": "prisma",
@@ -2038,7 +2130,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex",
+        "cypher": "MATCH (route:Route)-[step:ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(route) IN $ids RETURN id(route) AS route, id(fn) AS fn, step.role AS role, step.scope AS scope, step.hook AS hook, step.orderIndex AS orderIndex, step.expression AS expression",
         "params": {
           "ids": [
             "file:src/routes.ts:route:14:0:PATCH:/users/:id"
@@ -2051,13 +2143,14 @@
             "role": "handler",
             "scope": "route",
             "hook": "handler",
-            "orderIndex": 0
+            "orderIndex": 0,
+            "expression": null
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression",
+        "cypher": "MATCH (route:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE id(route) IN $ids RETURN id(route) AS route, model.name AS model, model.library AS library, rel.operation AS operation, rel.file AS file, rel.line AS line, rel.expression AS expression",
         "params": {
           "ids": [
             "file:src/routes.ts:route:14:0:PATCH:/users/:id"
@@ -2069,6 +2162,7 @@
             "model": "audit_log",
             "library": "knex",
             "operation": "create",
+            "file": "src/routes.ts",
             "line": 16,
             "expression": "knex('audit_log').insert"
           },
@@ -2077,6 +2171,7 @@
             "model": "User",
             "library": "prisma",
             "operation": "update",
+            "file": "src/users.ts",
             "line": 10,
             "expression": "prisma.user.update"
           }
@@ -2133,7 +2228,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.file AS file, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
         "params": {
           "ids": [
             "file:src/routes.ts:function:14:<app.patch:/users/:id:arg1>",
@@ -2145,6 +2240,7 @@
             "model": "User",
             "library": "prisma",
             "operation": "update",
+            "file": "src/users.ts",
             "line": 10,
             "expression": "prisma.user.update",
             "fn": "file:src/users.ts:function:9:renameUser"
@@ -2153,6 +2249,7 @@
             "model": "User",
             "library": "prisma",
             "operation": "update",
+            "file": "src/users.ts",
             "line": 10,
             "expression": "prisma.user.update",
             "fn": "file:src/routes.ts:function:14:<app.patch:/users/:id:arg1>"
@@ -2161,6 +2258,7 @@
             "model": "audit_log",
             "library": "knex",
             "operation": "create",
+            "file": "src/routes.ts",
             "line": 16,
             "expression": "knex('audit_log').insert",
             "fn": "file:src/routes.ts:function:14:<app.patch:/users/:id:arg1>"
@@ -2266,6 +2364,7 @@
               "scope": "route",
               "hook": "handler",
               "orderIndex": 0,
+              "expression": null,
               "name": "<app.patch:/users/:id:arg1>",
               "className": null,
               "file": "src/routes.ts",
@@ -2289,6 +2388,7 @@
               "model": "audit_log",
               "library": "knex",
               "operation": "create",
+              "file": "src/routes.ts",
               "line": 16,
               "expression": "knex('audit_log').insert",
               "usedBy": [
@@ -2305,6 +2405,7 @@
               "model": "User",
               "library": "prisma",
               "operation": "update",
+              "file": "src/users.ts",
               "line": 10,
               "expression": "prisma.user.update",
               "usedBy": [
@@ -2526,7 +2627,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.file AS file, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
         "params": {
           "ids": [
             "file:src/users.ts:function:9:renameUser"
@@ -2537,6 +2638,7 @@
             "model": "User",
             "library": "prisma",
             "operation": "update",
+            "file": "src/users.ts",
             "line": 10,
             "expression": "prisma.user.update",
             "fn": "file:src/users.ts:function:9:renameUser"
@@ -2723,6 +2825,7 @@
           "model": "User",
           "library": "prisma",
           "operation": "update",
+          "file": "src/users.ts",
           "line": 10,
           "expression": "prisma.user.update",
           "usedBy": [

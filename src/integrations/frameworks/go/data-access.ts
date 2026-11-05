@@ -1,3 +1,4 @@
+import { fileOfNodeId } from "../js-ts/resolution/data-access.js";
 import path from "node:path";
 import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
@@ -686,18 +687,26 @@ export const goDataAccessContributor: ISemanticContributor = {
     }
     const accessesByFunction = new Map<string, Access[]>();
     const seen = new Set<string>();
-    const record = (from: string, access: Access) => {
+    const filePaths = new Set(graph.nodes.flatMap((node) => (node.label === "File" && typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : [])));
+    // `direct`: the function that makes the call; its routes, entrypoints
+    // and callers reach it, and `file` says where `line` is.
+    const record = (from: string, access: Access, direct: boolean) => {
       const key = `${from}\0${access.modelId}\0${access.operation}\0${access.library}\0${access.line}\0${access.expression}`;
       if (seen.has(key)) return false;
       seen.add(key);
-      relationships.push({ from, to: access.modelId, type: "ACCESSES_DATA", properties: { operation: access.operation, library: access.library, line: access.line, expression: access.expression } });
+      relationships.push({
+        from,
+        to: access.modelId,
+        type: "ACCESSES_DATA",
+        properties: { operation: access.operation, library: access.library, line: access.line, expression: access.expression, file: fileOfNodeId(access.callId, filePaths), direct },
+      });
       return true;
     };
     for (const access of accesses) {
       const functionId = callerByCall.get(access.callId);
       if (!functionId) continue;
-      if (record(functionId, access)) accessesByFunction.set(functionId, [...accessesByFunction.get(functionId) ?? [], access]);
-      for (const source of [...routesByFunction.get(functionId) ?? [], ...entrypointsByFunction.get(functionId) ?? []]) record(source, access);
+      if (record(functionId, access, true)) accessesByFunction.set(functionId, [...accessesByFunction.get(functionId) ?? [], access]);
+      for (const source of [...routesByFunction.get(functionId) ?? [], ...entrypointsByFunction.get(functionId) ?? []]) record(source, access, false);
     }
     const callersOf = new Map<string, string[]>();
     for (const [callId, targets] of targetsByCall) {
@@ -711,9 +720,9 @@ export const goDataAccessContributor: ISemanticContributor = {
       for (const caller of callersOf.get(functionId) ?? []) {
         let changed = false;
         for (const access of accessesByFunction.get(functionId) ?? []) {
-          if (!record(caller, access)) continue;
+          if (!record(caller, access, false)) continue;
           accessesByFunction.set(caller, [...accessesByFunction.get(caller) ?? [], access]);
-          for (const source of [...routesByFunction.get(caller) ?? [], ...entrypointsByFunction.get(caller) ?? []]) record(source, access);
+          for (const source of [...routesByFunction.get(caller) ?? [], ...entrypointsByFunction.get(caller) ?? []]) record(source, access, false);
           changed = true;
         }
         if (changed) queue.push(caller);
