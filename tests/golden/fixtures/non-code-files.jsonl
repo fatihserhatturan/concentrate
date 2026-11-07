@@ -12,6 +12,10 @@
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"dir:src/assets","label":"Directory","properties":{"name":"assets","path":"<root>/src/assets","relativePath":"src/assets"}}
 {"kind":"node","id":"dir:src/styles","label":"Directory","properties":{"name":"styles","path":"<root>/src/styles","relativePath":"src/styles"}}
+{"kind":"node","id":"entrypoint:make:Makefile:build","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":1,"receiverName":null,"trigger":"build"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:build","label":"EntryPoint","properties":{"handlerName":"sh scripts/build.sh","kind":"npm-script","library":"npm","line":1,"receiverName":null,"trigger":"build"}}
+{"kind":"node","id":"entrypoint:script:scripts/build.sh","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"shell","line":1,"receiverName":null,"trigger":"scripts/build.sh"}}
+{"kind":"node","id":"entrypoint:script:scripts/deploy.ps1","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"powershell","line":1,"receiverName":null,"trigger":"scripts/deploy.ps1"}}
 {"kind":"node","id":"file:Dockerfile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"dockerfile","path":"<root>/Dockerfile","relativePath":"Dockerfile","sourceType":"production"}}
 {"kind":"node","id":"file:LICENSE","label":"File","properties":{"isDocs":true,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/LICENSE","relativePath":"LICENSE","sourceType":"docs"}}
 {"kind":"node","id":"file:Makefile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"makefile","path":"<root>/Makefile","relativePath":"Makefile","sourceType":"production"}}
@@ -74,12 +78,18 @@
 {"kind":"rel","from":"dir:src/assets","type":"CONTAINS_FILE","to":"file:src/assets/logo.svg","properties":{}}
 {"kind":"rel","from":"dir:src/styles","type":"CONTAINS_FILE","to":"file:src/styles/app.css","properties":{}}
 {"kind":"rel","from":"dir:src/styles","type":"CONTAINS_FILE","to":"file:src/styles/theme.scss","properties":{}}
+{"kind":"rel","from":"entrypoint:make:Makefile:build","type":"RUNS","to":"entrypoint:script:scripts/build.sh","properties":{"command":"sh scripts/build.sh","line":2}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:build","type":"RUNS","to":"entrypoint:script:scripts/build.sh","properties":{"command":"sh scripts/build.sh","line":1}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:build","properties":{}}
 {"kind":"rel","from":"file:index.html","type":"IMPORTS","to":"file:index.html:import:4:./src/styles/app.css","properties":{}}
 {"kind":"rel","from":"file:index.html","type":"IMPORTS","to":"file:index.html:import:5:./src/main.ts","properties":{}}
 {"kind":"rel","from":"file:index.html:import:4:./src/styles/app.css","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:index.html:import:4:./src/styles/app.css","type":"RESOLVES_TO","to":"file:src/styles/app.css","properties":{}}
 {"kind":"rel","from":"file:index.html:import:5:./src/main.ts","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:index.html:import:5:./src/main.ts","type":"RESOLVES_TO","to":"file:src/main.ts","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:build","properties":{}}
+{"kind":"rel","from":"file:scripts/build.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/build.sh","properties":{}}
+{"kind":"rel","from":"file:scripts/deploy.ps1","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/deploy.ps1","properties":{}}
 {"kind":"rel","from":"file:src/main.ts","type":"DEFINES_FUNCTION","to":"file:src/main.ts:function:8:render","properties":{}}
 {"kind":"rel","from":"file:src/main.ts","type":"DEFINES_VARIABLE","to":"file:src/main.ts:variable:7:logoUrl","properties":{}}
 {"kind":"rel","from":"file:src/main.ts","type":"IMPORTS","to":"file:src/main.ts:import:1:./styles/app.css","properties":{}}

@@ -1,0 +1,19 @@
+{
+  "name": "scripts-infra",
+  "scripts": {
+    "build": "tsc -p . && node scripts/postbuild.js",
+    "prebuild": "rm -rf dist",
+    "dev": "cross-env NODE_ENV=development LOG_LEVEL=debug tsx watch src/index.ts",
+    "worker": "node -r dotenv/config src/worker.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "check": "npm run build && npm test",
+    "deploy": "./scripts/deploy.sh",
+    "api": "go run ./cmd/server",
+    "migrate": "python app/manage.py migrate",
+    "seed": "python -m app.tools.seed",
+    "all": "concurrently \"npm run dev\" \"npm run worker\"",
+    "serve": "echo $PORT ${HOST:-localhost}",
+    "web": "npm --prefix web run build && make -C web bundle"
+  }
+}

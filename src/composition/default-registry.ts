@@ -7,6 +7,7 @@ import { pythonParser } from "../integrations/languages/python/parser.js";
 import { goDataAccessContributor, goDiContributor, goEntrypointsContributor, goEnvConfigContributor, goForeignRoutersContributor, goFrameworkParser, goGrpcContributor, goHttpClientsContributor, goRoutesContributor } from "../integrations/frameworks/go/index.js";
 import { rustParser } from "../integrations/languages/rust/parser.js";
 import { plainFileParsers } from "../integrations/languages/plain/parser.js";
+import { scriptsContributor } from "../integrations/frameworks/scripts/index.js";
 import {
   nestjsModulesContributor,
   nestjsInjectionContributor,
@@ -66,6 +67,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     httpRequestsContributor,
     envConfigContributor,
     envFilesContributor,
+    scriptsContributor,
     dataAccessContributor,
     nuxtAutoImportsContributor,
     storeAccessContributor,

@@ -1,0 +1,226 @@
+{"kind":"report","status":"success","discoveredFiles":17,"supportedFiles":6,"parsedFiles":6,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"config:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"scripts-infra","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"scripts-infra","valueType":"string"}}
+{"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"false","valueType":"boolean"}}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"scripts-infra","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:app","label":"Directory","properties":{"name":"app","path":"<root>/app","relativePath":"app"}}
+{"kind":"node","id":"dir:app/tools","label":"Directory","properties":{"name":"tools","path":"<root>/app/tools","relativePath":"app/tools"}}
+{"kind":"node","id":"dir:cmd","label":"Directory","properties":{"name":"cmd","path":"<root>/cmd","relativePath":"cmd"}}
+{"kind":"node","id":"dir:cmd/server","label":"Directory","properties":{"name":"server","path":"<root>/cmd/server","relativePath":"cmd/server"}}
+{"kind":"node","id":"dir:scripts","label":"Directory","properties":{"name":"scripts","path":"<root>/scripts","relativePath":"scripts"}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"dir:web","label":"Directory","properties":{"name":"web","path":"<root>/web","relativePath":"web"}}
+{"kind":"node","id":"entrypoint:docker:Dockerfile:10","label":"EntryPoint","properties":{"handlerName":"./scripts/deploy.sh","kind":"docker","library":"docker","line":10,"receiverName":null,"trigger":"ENTRYPOINT"}}
+{"kind":"node","id":"entrypoint:docker:Dockerfile:11","label":"EntryPoint","properties":{"handlerName":"node src/index.ts","kind":"docker","library":"docker","line":11,"receiverName":null,"trigger":"CMD"}}
+{"kind":"node","id":"entrypoint:make:Makefile:all","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":6,"receiverName":null,"trigger":"all"}}
+{"kind":"node","id":"entrypoint:make:Makefile:build","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":8,"receiverName":null,"trigger":"build"}}
+{"kind":"node","id":"entrypoint:make:Makefile:lint","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":16,"receiverName":null,"trigger":"lint"}}
+{"kind":"node","id":"entrypoint:make:Makefile:test","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":12,"receiverName":null,"trigger":"test"}}
+{"kind":"node","id":"entrypoint:make:web/Makefile:bundle","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":1,"receiverName":null,"trigger":"bundle"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:all","label":"EntryPoint","properties":{"handlerName":"concurrently \"npm run dev\" \"npm run worker\"","kind":"npm-script","library":"npm","line":15,"receiverName":null,"trigger":"all"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:api","label":"EntryPoint","properties":{"handlerName":"go run ./cmd/server","kind":"npm-script","library":"npm","line":12,"receiverName":null,"trigger":"api"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:build","label":"EntryPoint","properties":{"handlerName":"tsc -p . && node scripts/postbuild.js","kind":"npm-script","library":"npm","line":4,"receiverName":null,"trigger":"build"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:check","label":"EntryPoint","properties":{"handlerName":"npm run build && npm test","kind":"npm-script","library":"npm","line":10,"receiverName":null,"trigger":"check"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:deploy","label":"EntryPoint","properties":{"handlerName":"./scripts/deploy.sh","kind":"npm-script","library":"npm","line":11,"receiverName":null,"trigger":"deploy"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:dev","label":"EntryPoint","properties":{"handlerName":"cross-env NODE_ENV=development LOG_LEVEL=debug tsx watch src/index.ts","kind":"npm-script","library":"npm","line":6,"receiverName":null,"trigger":"dev"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:migrate","label":"EntryPoint","properties":{"handlerName":"python app/manage.py migrate","kind":"npm-script","library":"npm","line":13,"receiverName":null,"trigger":"migrate"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:prebuild","label":"EntryPoint","properties":{"handlerName":"rm -rf dist","kind":"npm-script","library":"npm","line":5,"receiverName":null,"trigger":"prebuild"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:seed","label":"EntryPoint","properties":{"handlerName":"python -m app.tools.seed","kind":"npm-script","library":"npm","line":14,"receiverName":null,"trigger":"seed"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:serve","label":"EntryPoint","properties":{"handlerName":"echo $PORT ${HOST:-localhost}","kind":"npm-script","library":"npm","line":16,"receiverName":null,"trigger":"serve"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:start","label":"EntryPoint","properties":{"handlerName":"node dist/index.js","kind":"npm-script","library":"npm","line":8,"receiverName":null,"trigger":"start"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:test","label":"EntryPoint","properties":{"handlerName":"vitest run","kind":"npm-script","library":"npm","line":9,"receiverName":null,"trigger":"test"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:web","label":"EntryPoint","properties":{"handlerName":"npm --prefix web run build && make -C web bundle","kind":"npm-script","library":"npm","line":17,"receiverName":null,"trigger":"web"}}
+{"kind":"node","id":"entrypoint:npm-script:package.json:worker","label":"EntryPoint","properties":{"handlerName":"node -r dotenv/config src/worker.ts","kind":"npm-script","library":"npm","line":7,"receiverName":null,"trigger":"worker"}}
+{"kind":"node","id":"entrypoint:npm-script:web/package.json:build","label":"EntryPoint","properties":{"handlerName":"vite build","kind":"npm-script","library":"npm","line":1,"receiverName":null,"trigger":"build"}}
+{"kind":"node","id":"entrypoint:script:scripts/build.sh","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"shell","line":1,"receiverName":null,"trigger":"scripts/build.sh"}}
+{"kind":"node","id":"entrypoint:script:scripts/deploy.sh","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"shell","line":1,"receiverName":null,"trigger":"scripts/deploy.sh"}}
+{"kind":"node","id":"entrypoint:script:scripts/migrate.sh","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"shell","line":1,"receiverName":null,"trigger":"scripts/migrate.sh"}}
+{"kind":"node","id":"entrypoint:script:scripts/setup.ps1","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"powershell","line":1,"receiverName":null,"trigger":"scripts/setup.ps1"}}
+{"kind":"node","id":"entrypoint:script:scripts/setup2.ps1","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"powershell","line":1,"receiverName":null,"trigger":"scripts/setup2.ps1"}}
+{"kind":"node","id":"env:API_TOKEN","label":"EnvVar","properties":{"name":"API_TOKEN"}}
+{"kind":"node","id":"env:APP_ENV","label":"EnvVar","properties":{"name":"APP_ENV"}}
+{"kind":"node","id":"env:APP_VERSION","label":"EnvVar","properties":{"name":"APP_VERSION"}}
+{"kind":"node","id":"env:AWS_REGION","label":"EnvVar","properties":{"name":"AWS_REGION"}}
+{"kind":"node","id":"env:BUILD_ID","label":"EnvVar","properties":{"name":"BUILD_ID"}}
+{"kind":"node","id":"env:BUILD_TAGS","label":"EnvVar","properties":{"name":"BUILD_TAGS"}}
+{"kind":"node","id":"env:CACHE_DIR","label":"EnvVar","properties":{"name":"CACHE_DIR"}}
+{"kind":"node","id":"env:DATABASE_URL","label":"EnvVar","properties":{"name":"DATABASE_URL"}}
+{"kind":"node","id":"env:DB_URL","label":"EnvVar","properties":{"name":"DB_URL"}}
+{"kind":"node","id":"env:DEPLOY_STAGE","label":"EnvVar","properties":{"name":"DEPLOY_STAGE"}}
+{"kind":"node","id":"env:GH_TOKEN","label":"EnvVar","properties":{"name":"GH_TOKEN"}}
+{"kind":"node","id":"env:GOFLAGS","label":"EnvVar","properties":{"name":"GOFLAGS"}}
+{"kind":"node","id":"env:HEREDOC_OPEN","label":"EnvVar","properties":{"name":"HEREDOC_OPEN"}}
+{"kind":"node","id":"env:HOST","label":"EnvVar","properties":{"name":"HOST"}}
+{"kind":"node","id":"env:LEGACY_VAR","label":"EnvVar","properties":{"name":"LEGACY_VAR"}}
+{"kind":"node","id":"env:LOG_LEVEL","label":"EnvVar","properties":{"name":"LOG_LEVEL"}}
+{"kind":"node","id":"env:NODE_ENV","label":"EnvVar","properties":{"name":"NODE_ENV"}}
+{"kind":"node","id":"env:NODE_VERSION","label":"EnvVar","properties":{"name":"NODE_VERSION"}}
+{"kind":"node","id":"env:PORT","label":"EnvVar","properties":{"name":"PORT"}}
+{"kind":"node","id":"env:QUEUE_URL","label":"EnvVar","properties":{"name":"QUEUE_URL"}}
+{"kind":"node","id":"env:REGISTRY","label":"EnvVar","properties":{"name":"REGISTRY"}}
+{"kind":"node","id":"env:SETUP_MODE","label":"EnvVar","properties":{"name":"SETUP_MODE"}}
+{"kind":"node","id":"env:TARGET_OS","label":"EnvVar","properties":{"name":"TARGET_OS"}}
+{"kind":"node","id":"file:Dockerfile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"dockerfile","path":"<root>/Dockerfile","relativePath":"Dockerfile","sourceType":"production"}}
+{"kind":"node","id":"file:Makefile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"makefile","path":"<root>/Makefile","relativePath":"Makefile","sourceType":"production"}}
+{"kind":"node","id":"file:app/manage.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/manage.py","relativePath":"app/manage.py","sourceType":"production"}}
+{"kind":"node","id":"file:app/tools/seed.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/tools/seed.py","relativePath":"app/tools/seed.py","sourceType":"production"}}
+{"kind":"node","id":"file:cmd/server/main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/cmd/server/main.go","relativePath":"cmd/server/main.go","sourceType":"production"}}
+{"kind":"node","id":"file:cmd/server/main.go:entrypoint:3:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":3,"receiverName":null,"trigger":null}}
+{"kind":"node","id":"file:cmd/server/main.go:function:3:main","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":3,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
+{"kind":"node","id":"file:go.mod","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/go.mod","relativePath":"go.mod","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:scripts/build.sh","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"shell","path":"<root>/scripts/build.sh","relativePath":"scripts/build.sh","sourceType":"production"}}
+{"kind":"node","id":"file:scripts/deploy.sh","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"shell","path":"<root>/scripts/deploy.sh","relativePath":"scripts/deploy.sh","sourceType":"production"}}
+{"kind":"node","id":"file:scripts/migrate.sh","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"shell","path":"<root>/scripts/migrate.sh","relativePath":"scripts/migrate.sh","sourceType":"production"}}
+{"kind":"node","id":"file:scripts/postbuild.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/scripts/postbuild.js","relativePath":"scripts/postbuild.js","sourceType":"production"}}
+{"kind":"node","id":"file:scripts/postbuild.js:modulecall:1:0:console.log","label":"Call","properties":{"args":"[\"postbuild\"]","callee":"log","columnNumber":0,"expression":"console.log","line":1,"name":"console.log","receiver":"console"}}
+{"kind":"node","id":"file:scripts/setup.ps1","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"powershell","path":"<root>/scripts/setup.ps1","relativePath":"scripts/setup.ps1","sourceType":"production"}}
+{"kind":"node","id":"file:scripts/setup2.ps1","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"powershell","path":"<root>/scripts/setup2.ps1","relativePath":"scripts/setup2.ps1","sourceType":"production"}}
+{"kind":"node","id":"file:src/index.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/index.ts","relativePath":"src/index.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/index.ts:variable:1:port","label":"Variable","properties":{"isExported":true,"kind":"const","line":1,"name":"port","stringTemplate":"${process.env.PORT}","stringValue":null}}
+{"kind":"node","id":"file:src/worker.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/worker.ts","relativePath":"src/worker.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/worker.ts:variable:1:queue","label":"Variable","properties":{"isExported":true,"kind":"const","line":1,"name":"queue","stringTemplate":"${process.env.QUEUE_URL}","stringValue":null}}
+{"kind":"node","id":"file:web/Makefile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"makefile","path":"<root>/web/Makefile","relativePath":"web/Makefile","sourceType":"production"}}
+{"kind":"node","id":"file:web/package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/web/package.json","relativePath":"web/package.json","sourceType":"production"}}
+{"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":false,"manager":null,"name":"scripts-infra","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"scripts-infra","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:app","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:cmd","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:scripts","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:web","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Dockerfile","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Makefile","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:go.mod","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
+{"kind":"rel","from":"dir:app","type":"CONTAINS_DIRECTORY","to":"dir:app/tools","properties":{}}
+{"kind":"rel","from":"dir:app","type":"CONTAINS_FILE","to":"file:app/manage.py","properties":{}}
+{"kind":"rel","from":"dir:app/tools","type":"CONTAINS_FILE","to":"file:app/tools/seed.py","properties":{}}
+{"kind":"rel","from":"dir:cmd","type":"CONTAINS_DIRECTORY","to":"dir:cmd/server","properties":{}}
+{"kind":"rel","from":"dir:cmd/server","type":"CONTAINS_FILE","to":"file:cmd/server/main.go","properties":{}}
+{"kind":"rel","from":"dir:scripts","type":"CONTAINS_FILE","to":"file:scripts/build.sh","properties":{}}
+{"kind":"rel","from":"dir:scripts","type":"CONTAINS_FILE","to":"file:scripts/deploy.sh","properties":{}}
+{"kind":"rel","from":"dir:scripts","type":"CONTAINS_FILE","to":"file:scripts/migrate.sh","properties":{}}
+{"kind":"rel","from":"dir:scripts","type":"CONTAINS_FILE","to":"file:scripts/postbuild.js","properties":{}}
+{"kind":"rel","from":"dir:scripts","type":"CONTAINS_FILE","to":"file:scripts/setup.ps1","properties":{}}
+{"kind":"rel","from":"dir:scripts","type":"CONTAINS_FILE","to":"file:scripts/setup2.ps1","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/index.ts","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/worker.ts","properties":{}}
+{"kind":"rel","from":"dir:web","type":"CONTAINS_FILE","to":"file:web/Makefile","properties":{}}
+{"kind":"rel","from":"dir:web","type":"CONTAINS_FILE","to":"file:web/package.json","properties":{}}
+{"kind":"rel","from":"entrypoint:docker:Dockerfile:10","type":"RUNS","to":"entrypoint:script:scripts/deploy.sh","properties":{"command":"./scripts/deploy.sh","line":10}}
+{"kind":"rel","from":"entrypoint:docker:Dockerfile:11","type":"RUNS","to":"file:src/index.ts","properties":{"command":"node src/index.ts","line":11}}
+{"kind":"rel","from":"entrypoint:make:Makefile:all","type":"RUNS","to":"entrypoint:make:Makefile:build","properties":{"command":"dependency build","line":6}}
+{"kind":"rel","from":"entrypoint:make:Makefile:all","type":"RUNS","to":"entrypoint:make:Makefile:test","properties":{"command":"dependency test","line":6}}
+{"kind":"rel","from":"entrypoint:make:Makefile:build","type":"RUNS","to":"entrypoint:make:Makefile:lint","properties":{"command":"dependency lint","line":8}}
+{"kind":"rel","from":"entrypoint:make:Makefile:build","type":"RUNS","to":"file:cmd/server/main.go","properties":{"command":"go build ./cmd/server","line":9}}
+{"kind":"rel","from":"entrypoint:make:Makefile:build","type":"USES_ENV","to":"env:TARGET_OS","properties":{"access":"$TARGET_OS","line":10}}
+{"kind":"rel","from":"entrypoint:make:Makefile:lint","type":"RUNS","to":"file:scripts/postbuild.js","properties":{"command":"node scripts/postbuild.js","line":17}}
+{"kind":"rel","from":"entrypoint:make:Makefile:test","type":"RUNS","to":"entrypoint:script:scripts/migrate.sh","properties":{"command":"./scripts/migrate.sh","line":13}}
+{"kind":"rel","from":"entrypoint:make:web/Makefile:bundle","type":"RUNS","to":"entrypoint:npm-script:web/package.json:build","properties":{"command":"npm run build","line":2}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:all","type":"RUNS","to":"entrypoint:npm-script:package.json:dev","properties":{"command":"concurrently \"npm run dev\" \"npm run worker\"","line":15}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:all","type":"RUNS","to":"entrypoint:npm-script:package.json:worker","properties":{"command":"concurrently \"npm run dev\" \"npm run worker\"","line":15}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:api","type":"RUNS","to":"file:cmd/server/main.go","properties":{"command":"go run ./cmd/server","line":12}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:build","type":"RUNS","to":"entrypoint:npm-script:package.json:prebuild","properties":{"command":"pre hook","line":0}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:build","type":"RUNS","to":"file:scripts/postbuild.js","properties":{"command":"node scripts/postbuild.js","line":4}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:check","type":"RUNS","to":"entrypoint:npm-script:package.json:build","properties":{"command":"npm run build","line":10}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:check","type":"RUNS","to":"entrypoint:npm-script:package.json:test","properties":{"command":"npm test","line":10}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:deploy","type":"RUNS","to":"entrypoint:script:scripts/deploy.sh","properties":{"command":"./scripts/deploy.sh","line":11}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:dev","type":"RUNS","to":"file:src/index.ts","properties":{"command":"cross-env NODE_ENV=development LOG_LEVEL=debug tsx watch src/index.ts","line":6}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:migrate","type":"RUNS","to":"file:app/manage.py","properties":{"command":"python app/manage.py migrate","line":13}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:seed","type":"RUNS","to":"file:app/tools/seed.py","properties":{"command":"python -m app.tools.seed","line":14}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:serve","type":"USES_ENV","to":"env:HOST","properties":{"access":"${HOST}","line":16}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:serve","type":"USES_ENV","to":"env:PORT","properties":{"access":"$PORT","line":16}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:web","type":"RUNS","to":"entrypoint:make:web/Makefile:bundle","properties":{"command":"make -C web bundle","line":17}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:web","type":"RUNS","to":"entrypoint:npm-script:web/package.json:build","properties":{"command":"npm --prefix web run build","line":17}}
+{"kind":"rel","from":"entrypoint:npm-script:package.json:worker","type":"RUNS","to":"file:src/worker.ts","properties":{"command":"node -r dotenv/config src/worker.ts","line":7}}
+{"kind":"rel","from":"entrypoint:script:scripts/build.sh","type":"RUNS","to":"file:cmd/server/main.go","properties":{"command":"go build .","line":2}}
+{"kind":"rel","from":"entrypoint:script:scripts/build.sh","type":"RUNS","to":"file:src/index.ts","properties":{"command":"node src/index.ts","line":3}}
+{"kind":"rel","from":"entrypoint:script:scripts/deploy.sh","type":"RUNS","to":"entrypoint:make:Makefile:test","properties":{"command":"make test","line":20}}
+{"kind":"rel","from":"entrypoint:script:scripts/deploy.sh","type":"RUNS","to":"entrypoint:script:scripts/build.sh","properties":{"command":"./scripts/build.sh","line":20}}
+{"kind":"rel","from":"entrypoint:script:scripts/deploy.sh","type":"RUNS","to":"entrypoint:script:scripts/migrate.sh","properties":{"command":"DATABASE_URL=postgres://x ./scripts/migrate.sh","line":19}}
+{"kind":"rel","from":"entrypoint:script:scripts/deploy.sh","type":"USES_ENV","to":"env:API_TOKEN","properties":{"access":"$API_TOKEN","line":10}}
+{"kind":"rel","from":"entrypoint:script:scripts/deploy.sh","type":"USES_ENV","to":"env:DEPLOY_STAGE","properties":{"access":"${DEPLOY_STAGE}","line":3}}
+{"kind":"rel","from":"entrypoint:script:scripts/deploy.sh","type":"USES_ENV","to":"env:HEREDOC_OPEN","properties":{"access":"$HEREDOC_OPEN","line":17}}
+{"kind":"rel","from":"entrypoint:script:scripts/deploy.sh","type":"USES_ENV","to":"env:REGISTRY","properties":{"access":"$REGISTRY","line":10}}
+{"kind":"rel","from":"entrypoint:script:scripts/migrate.sh","type":"USES_ENV","to":"env:DATABASE_URL","properties":{"access":"$DATABASE_URL","line":2}}
+{"kind":"rel","from":"entrypoint:script:scripts/setup.ps1","type":"RUNS","to":"entrypoint:script:scripts/deploy.sh","properties":{"command":"./scripts/deploy.sh","line":6}}
+{"kind":"rel","from":"entrypoint:script:scripts/setup.ps1","type":"RUNS","to":"entrypoint:script:scripts/setup2.ps1","properties":{"command":"pwsh -File ./scripts/setup2.ps1","line":7}}
+{"kind":"rel","from":"entrypoint:script:scripts/setup.ps1","type":"USES_ENV","to":"env:AWS_REGION","properties":{"access":"$env:AWS_REGION","line":3}}
+{"kind":"rel","from":"entrypoint:script:scripts/setup.ps1","type":"USES_ENV","to":"env:GH_TOKEN","properties":{"access":"GetEnvironmentVariable","line":4}}
+{"kind":"rel","from":"entrypoint:script:scripts/setup.ps1","type":"USES_ENV","to":"env:SETUP_MODE","properties":{"access":"$env:SETUP_MODE","line":3}}
+{"kind":"rel","from":"file:Dockerfile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:docker:Dockerfile:10","properties":{}}
+{"kind":"rel","from":"file:Dockerfile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:docker:Dockerfile:11","properties":{}}
+{"kind":"rel","from":"file:Dockerfile","type":"USES_ENV","to":"env:BUILD_ID","properties":{"access":"$BUILD_ID","line":8}}
+{"kind":"rel","from":"file:Dockerfile","type":"USES_ENV","to":"env:NODE_VERSION","properties":{"access":"${NODE_VERSION}","line":1}}
+{"kind":"rel","from":"file:Dockerfile","type":"USES_ENV","to":"env:PORT","properties":{"access":"${PORT}","line":9}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:all","properties":{}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:build","properties":{}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:lint","properties":{}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:test","properties":{}}
+{"kind":"rel","from":"file:cmd/server/main.go","type":"DECLARES_ENTRYPOINT","to":"file:cmd/server/main.go:entrypoint:3:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:cmd/server/main.go","type":"DEFINES_FUNCTION","to":"file:cmd/server/main.go:function:3:main","properties":{}}
+{"kind":"rel","from":"file:cmd/server/main.go:entrypoint:3:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:cmd/server/main.go:function:3:main","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:all","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:api","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:build","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:check","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:deploy","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:dev","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:migrate","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:prebuild","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:seed","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:serve","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:start","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:test","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:web","properties":{}}
+{"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:worker","properties":{}}
+{"kind":"rel","from":"file:scripts/build.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/build.sh","properties":{}}
+{"kind":"rel","from":"file:scripts/deploy.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/deploy.sh","properties":{}}
+{"kind":"rel","from":"file:scripts/migrate.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/migrate.sh","properties":{}}
+{"kind":"rel","from":"file:scripts/postbuild.js","type":"MODULE_CALLS","to":"file:scripts/postbuild.js:modulecall:1:0:console.log","properties":{}}
+{"kind":"rel","from":"file:scripts/setup.ps1","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/setup.ps1","properties":{}}
+{"kind":"rel","from":"file:scripts/setup2.ps1","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/setup2.ps1","properties":{}}
+{"kind":"rel","from":"file:src/index.ts","type":"DEFINES_VARIABLE","to":"file:src/index.ts:variable:1:port","properties":{}}
+{"kind":"rel","from":"file:src/index.ts","type":"USES_ENV","to":"env:PORT","properties":{"access":"member","line":1}}
+{"kind":"rel","from":"file:src/worker.ts","type":"DEFINES_VARIABLE","to":"file:src/worker.ts:variable:1:queue","properties":{}}
+{"kind":"rel","from":"file:src/worker.ts","type":"USES_ENV","to":"env:QUEUE_URL","properties":{"access":"member","line":1}}
+{"kind":"rel","from":"file:web/Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:web/Makefile:bundle","properties":{}}
+{"kind":"rel","from":"file:web/package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:web/package.json:build","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:Dockerfile","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:Makefile","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/manage.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app/tools/seed.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:cmd/server/main.go","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:go.mod","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:scripts/build.sh","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:scripts/deploy.sh","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:scripts/migrate.sh","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:scripts/postbuild.js","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:scripts/setup.ps1","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:scripts/setup2.ps1","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/index.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/worker.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:web/Makefile","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:web/package.json","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_CONFIG","to":"config:package.json:name","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:APP_ENV","properties":{"file":"Dockerfile","line":4}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:APP_VERSION","properties":{"file":"scripts/deploy.sh","line":5}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:BUILD_ID","properties":{"file":"Dockerfile","line":3}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:BUILD_TAGS","properties":{"file":"Makefile","line":2}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:CACHE_DIR","properties":{"file":"scripts/setup.ps1","line":5}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:DATABASE_URL","properties":{"file":"scripts/deploy.sh","line":19}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:DB_URL","properties":{"file":"Makefile","line":14}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:GOFLAGS","properties":{"file":"Makefile","line":1}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:LEGACY_VAR","properties":{"file":"Dockerfile","line":5}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:LOG_LEVEL","properties":{"file":"package.json","line":6}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:NODE_ENV","properties":{"file":"package.json","line":6}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:NODE_VERSION","properties":{"file":"Dockerfile","line":2}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:PORT","properties":{"file":"Dockerfile","line":4}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:REGISTRY","properties":{"file":"scripts/deploy.sh","line":4}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:SETUP_MODE","properties":{"file":"scripts/setup.ps1","line":2}}
+{"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:.","properties":{}}

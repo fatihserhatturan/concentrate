@@ -1,0 +1,2 @@
+bundle:
+	npm run build

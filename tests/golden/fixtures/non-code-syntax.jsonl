@@ -2,6 +2,11 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"non-code-syntax","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:.vscode","label":"Directory","properties":{"name":".vscode","path":"<root>/.vscode","relativePath":".vscode"}}
 {"kind":"node","id":"dir:ci","label":"Directory","properties":{"name":"ci","path":"<root>/ci","relativePath":"ci"}}
+{"kind":"node","id":"entrypoint:docker:Dockerfile.ok:6","label":"EntryPoint","properties":{"handlerName":"node x.js","kind":"docker","library":"docker","line":6,"receiverName":null,"trigger":"CMD"}}
+{"kind":"node","id":"entrypoint:make:Makefile:all","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":1,"receiverName":null,"trigger":"all"}}
+{"kind":"node","id":"entrypoint:script:broken.ps1","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"powershell","line":1,"receiverName":null,"trigger":"broken.ps1"}}
+{"kind":"node","id":"entrypoint:script:broken.sh","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"shell","line":1,"receiverName":null,"trigger":"broken.sh"}}
+{"kind":"node","id":"entrypoint:script:ok.sh","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"shell","line":1,"receiverName":null,"trigger":"ok.sh"}}
 {"kind":"node","id":"file:.vscode/settings.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/.vscode/settings.json","relativePath":".vscode/settings.json","sourceType":"production"}}
 {"kind":"node","id":"file:Dockerfile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"dockerfile","path":"<root>/Dockerfile","relativePath":"Dockerfile","sourceType":"production"}}
 {"kind":"node","id":"file:Dockerfile.ok","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"dockerfile","path":"<root>/Dockerfile.ok","relativePath":"Dockerfile.ok","sourceType":"production"}}
@@ -39,4 +44,9 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:tsconfig.base.json","properties":{}}
 {"kind":"rel","from":"dir:.vscode","type":"CONTAINS_FILE","to":"file:.vscode/settings.json","properties":{}}
 {"kind":"rel","from":"dir:ci","type":"CONTAINS_FILE","to":"file:ci/template.yaml","properties":{}}
+{"kind":"rel","from":"file:Dockerfile.ok","type":"DECLARES_ENTRYPOINT","to":"entrypoint:docker:Dockerfile.ok:6","properties":{}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:all","properties":{}}
+{"kind":"rel","from":"file:broken.ps1","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:broken.ps1","properties":{}}
+{"kind":"rel","from":"file:broken.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:broken.sh","properties":{}}
+{"kind":"rel","from":"file:ok.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:ok.sh","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

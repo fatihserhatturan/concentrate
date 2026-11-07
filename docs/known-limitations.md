@@ -203,6 +203,47 @@ Blocks or informs: MCP `find_callers` and dependency impact analysis.
 
 Blocks or informs: MCP `list_entrypoints` and future backend runtime summaries.
 
+## Scripts and infrastructure
+
+- `package.json` scripts (`npm-script`), Makefile targets (`make`), shell and
+  PowerShell script files (`script`, `.sh`, `.bash`, `.zsh`, `.ps1`) and
+  Dockerfile `CMD` / `ENTRYPOINT` (`docker`) are `EntryPoint` nodes declared by
+  their `File`. Compose services and CI jobs come in a later part of Phase 23.
+  The files are read as text, not run: no variable expansion in commands,
+  functions, aliases, `eval` or `source`d definitions.
+- `RUNS` (`RUNS_FILE`, `RUNS_ENTRYPOINT`; `line`, `command`) links an
+  entrypoint to what a command starts, for `node`, `tsx`, `ts-node`, `bun`,
+  `deno`, `python` (`-m` too), `go run|build ./pkg`, `sh` / `bash` / `pwsh
+  -File`, a script path (`./scripts/deploy.sh`), `npm|pnpm|yarn run x`,
+  `npm test`, `make [-C dir] target`, `run-s`, `concurrently`, and through
+  `NAME=value`, `cross-env`, `npx`, `sudo`, `exec` and `time`. A Go package
+  links to the files that declare `main`; a script file links to its
+  `script` entrypoint. A target outside the scan (`node dist/index.js`, a
+  build output) or with a variable in the path is not linked. Paths resolve
+  against the directory the command runs in (the package, the Makefile, `cd
+  dir && …` on the same line), then the repository root and the script's own
+  directory. `npm run x` finds `x` in the package, then its parent
+  directories; `prebuild` and `postbuild` are run by `build`, and Makefile
+  prerequisites are run by their target.
+- Env reads are `USES_ENV` from the entrypoint (from the `File` for a
+  Dockerfile instruction other than `CMD` / `ENTRYPOINT`): shell `$NAME` and
+  `${NAME…}`, PowerShell `$env:NAME` and `GetEnvironmentVariable`, Makefile
+  recipes (`$$NAME`). Only upper-case names count (`$name` is nearly always a
+  local), and not shell internals or ambient variables (`PATH`, `HOME`, `PWD`,
+  `USER`, `SHELL`, `TERM`, `IFS`, `RANDOM`, `BASH_*`, …), the script's own
+  locals (a plain `NAME=value`, `for`, `read`, `getopts`), positional or
+  special parameters, text in single quotes, comments and quoted heredoc
+  bodies (unquoted ones expand and are read). Make variables `$(NAME)` are not
+  env.
+- Declarations are `DECLARES_ENV` from the repository with the file and line,
+  like `.env` files: shell `export NAME[=…]` and `declare -x`, `NAME=value`
+  before a command (also in `cross-env`, Dockerfile `RUN` and Makefile
+  recipes), PowerShell `$env:NAME = …` and `SetEnvironmentVariable`, Makefile
+  `export NAME`, Dockerfile `ENV` and `ARG`. `list_env_config { unread }`
+  counts these declarations and these reads, so a variable only a script
+  reads is not "unread", and a variable only a script reads and nothing
+  declares is "undeclared" once any declaration exists.
+
 ## Config and Environment
 
 - Environment and config links cover `process.env` and `import.meta.env`
