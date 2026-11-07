@@ -75,7 +75,7 @@ export const envFilesContributor: ISemanticContributor = {
   },
 };
 
-function envVar(graph: IGraphContributor, name: string): string {
+export function envVar(graph: IGraphContributor, name: string): string {
   const id = `env:${name}`;
   graph.addNode({ id, label: "EnvVar", properties: { name, ...(publicPrefixes.test(name) ? { isPublic: true } : {}) } });
   return id;

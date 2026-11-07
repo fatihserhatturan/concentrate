@@ -8,6 +8,10 @@ export function physicalRelationshipType(
     return reExportRelationshipType(relationship, nodeLabelById);
   }
 
+  if (relationship.type === "RUNS") {
+    return nodeLabelById.get(relationship.to) === "EntryPoint" ? "RUNS_ENTRYPOINT" : "RUNS_FILE";
+  }
+
   if (relationship.type === "MOUNTS") {
     return mountsRelationshipType(relationship, nodeLabelById);
   }

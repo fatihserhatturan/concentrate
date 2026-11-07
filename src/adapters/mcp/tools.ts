@@ -766,7 +766,7 @@ async function listEnvConfig(
 // when there is an env file, and not NODE_ENV, which tooling sets).
 async function unreadEnv(engine: GraphQueryEngine, file: string | undefined, name: string | undefined, window: PageWindow) {
   const nameFilter = name ? `AND contains(lower(env.name), lower(${quote(name)}))` : "";
-  const reads = "USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO";
+  const reads = "USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO|USES_ENV_ENTRYPOINT";
   const unread = await engine.query(`
     MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar)
     WHERE true ${nameFilter}
@@ -786,6 +786,12 @@ async function unreadEnv(engine: GraphQueryEngine, file: string | undefined, nam
     readQuery("(file:File)"),
     readQuery("(file:File)-[:DEFINES_FUNCTION]->(:Function)"),
     readQuery("(file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(:Function)"),
+    // Scripts, Makefile targets and `package.json` scripts read env too.
+    engine.query(`
+      MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(:EntryPoint)-[read:USES_ENV_ENTRYPOINT]->(env:EnvVar)
+      WHERE env.name <> 'NODE_ENV' ${nameFilter}
+      RETURN 'undeclared' AS kind, env.name AS name, file.relativePath AS file, read.line AS line
+    `) as Promise<Array<Record<string, unknown>>>,
     engine.query(`
       MATCH (:Repo)-[read:USES_ENV_REPO]->(env:EnvVar)
       WHERE true ${nameFilter}

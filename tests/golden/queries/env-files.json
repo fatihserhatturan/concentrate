@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 73
+        "result": 74
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 73,
+      "schemaVersion": 74,
       "stats": [
         {
           "table": "Repo",
@@ -640,7 +640,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) WHERE true OPTIONAL MATCH ()-[read:USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO]->(env) WITH env, decl, count(read) AS readCount WHERE readCount = 0 RETURN 'unread' AS kind, env.name AS name, decl.file AS file, decl.line AS line",
+        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) WHERE true OPTIONAL MATCH ()-[read:USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO|USES_ENV_ENTRYPOINT]->(env) WITH env, decl, count(read) AS readCount WHERE readCount = 0 RETURN 'unread' AS kind, env.name AS name, decl.file AS file, decl.line AS line",
         "rows": [
           {
             "kind": "unread",
@@ -717,6 +717,11 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(:EntryPoint)-[read:USES_ENV_ENTRYPOINT]->(env:EnvVar) WHERE env.name <> 'NODE_ENV' RETURN 'undeclared' AS kind, env.name AS name, file.relativePath AS file, read.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (:Repo)-[read:USES_ENV_REPO]->(env:EnvVar) WHERE true RETURN 'undeclared' AS kind, env.name AS name, read.file AS file, read.line AS line",
         "rows": [
           {
@@ -762,7 +767,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) WHERE true AND contains(lower(env.name), lower(\"legacy\")) OPTIONAL MATCH ()-[read:USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO]->(env) WITH env, decl, count(read) AS readCount WHERE readCount = 0 RETURN 'unread' AS kind, env.name AS name, decl.file AS file, decl.line AS line",
+        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) WHERE true AND contains(lower(env.name), lower(\"legacy\")) OPTIONAL MATCH ()-[read:USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO|USES_ENV_ENTRYPOINT]->(env) WITH env, decl, count(read) AS readCount WHERE readCount = 0 RETURN 'unread' AS kind, env.name AS name, decl.file AS file, decl.line AS line",
         "rows": [
           {
             "kind": "unread",
@@ -803,6 +808,11 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(:Function)-[read:USES_ENV_FILE|USES_ENV_FUNCTION]->(env:EnvVar) WHERE env.name <> 'NODE_ENV' AND contains(lower(env.name), lower(\"legacy\")) RETURN 'undeclared' AS kind, env.name AS name, file.relativePath AS file, read.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(:EntryPoint)-[read:USES_ENV_ENTRYPOINT]->(env:EnvVar) WHERE env.name <> 'NODE_ENV' AND contains(lower(env.name), lower(\"legacy\")) RETURN 'undeclared' AS kind, env.name AS name, file.relativePath AS file, read.line AS line",
         "rows": []
       },
       {
