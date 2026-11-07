@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 2
+            "count": 3
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 2
+          "count": 3
         },
         {
           "table": "Import",
@@ -684,6 +684,9 @@
         "rows": [
           {
             "file": "app.js"
+          },
+          {
+            "file": "package.json"
           },
           {
             "file": "web.js"

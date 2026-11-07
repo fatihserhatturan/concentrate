@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"ts-class","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:service.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
+{"kind":"node","id":"file:service.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
 {"kind":"node","id":"file:service.ts:class:1:UserService","label":"Class","properties":{"endLine":9,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":1,"name":"UserService","visibility":"public"}}
 {"kind":"node","id":"file:service.ts:function:11:standalone","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":11,"methodKind":null,"name":"standalone","parameters":"[]","returnType":"void","visibility":"public"}}
 {"kind":"node","id":"file:service.ts:function:11:standalone:call:12:2:console.log","label":"Call","properties":{"args":"[\"standalone\"]","callee":"log","columnNumber":2,"expression":"console.log","line":12,"name":"console.log","receiver":"console"}}

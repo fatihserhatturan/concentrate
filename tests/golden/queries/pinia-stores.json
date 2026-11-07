@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 8
+            "count": 9
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 8
+          "count": 9
         },
         {
           "table": "Import",
@@ -1943,31 +1943,52 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "src/components/CartBadge.vue"
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/CartView.vue"
+            "file": "src/components/CartBadge.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/LoginForm.vue"
+            "file": "src/components/CartView.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/composables/storage.ts"
+            "file": "src/components/LoginForm.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/composables/useCheckout.ts"
+            "file": "src/composables/storage.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/stores/cart.ts"
+            "file": "src/composables/useCheckout.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/stores/index.ts"
+            "file": "src/stores/cart.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/stores/user.ts"
+            "file": "src/stores/index.ts",
+            "language": "typescript",
+            "sourceType": "production"
+          },
+          {
+            "file": "src/stores/user.ts",
+            "language": "typescript",
+            "sourceType": "production"
           }
         ]
       },
@@ -2142,6 +2163,8 @@
     ],
     "output": {
       "file": "src/stores/cart.ts",
+      "language": "typescript",
+      "sourceType": "production",
       "imports": [
         {
           "source": "pinia",

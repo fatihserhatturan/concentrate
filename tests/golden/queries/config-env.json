@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 2
+            "count": 4
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 2
+          "count": 4
         },
         {
           "table": "Import",
@@ -870,7 +870,13 @@
             "file": "config.ts"
           },
           {
+            "file": "package.json"
+          },
+          {
             "file": "server.ts"
+          },
+          {
+            "file": "tsconfig.json"
           }
         ]
       },
@@ -1064,7 +1070,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -1078,7 +1084,7 @@
           },
           {
             "table": "File",
-            "count": 2
+            "count": 4
           },
           {
             "table": "Import",
@@ -1100,7 +1106,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "packageName": "config-env-fixture",
       "stats": [
         {
@@ -1109,7 +1115,7 @@
         },
         {
           "table": "File",
-          "count": 2
+          "count": 4
         },
         {
           "table": "Import",

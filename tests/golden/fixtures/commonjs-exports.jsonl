@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"commonjs-exports","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:index.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/index.js","relativePath":"index.js","sourceType":"production"}}
+{"kind":"node","id":"file:index.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/index.js","relativePath":"index.js","sourceType":"production"}}
 {"kind":"node","id":"file:index.js:class:5:ClientFactory","label":"Class","properties":{"endLine":9,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":5,"name":"ClientFactory","visibility":"public"}}
 {"kind":"node","id":"file:index.js:function:19:make","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"arrow_function","line":19,"methodKind":null,"name":"make","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:index.js:function:19:make:call:19:14:createClient","label":"Call","properties":{"args":"[]","callee":"createClient","columnNumber":14,"expression":"createClient","line":19,"name":"createClient","receiver":null}}

@@ -3,7 +3,7 @@
 {"kind":"node","id":"dir:api","label":"Directory","properties":{"name":"api","path":"<root>/api","relativePath":"api"}}
 {"kind":"node","id":"dir:service","label":"Directory","properties":{"name":"service","path":"<root>/service","relativePath":"service"}}
 {"kind":"node","id":"dir:store","label":"Directory","properties":{"name":"store","path":"<root>/store","relativePath":"store"}}
-{"kind":"node","id":"file:api/server.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"api","path":"<root>/api/server.go","relativePath":"api/server.go","sourceType":"production"}}
+{"kind":"node","id":"file:api/server.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"api","path":"<root>/api/server.go","relativePath":"api/server.go","sourceType":"production"}}
 {"kind":"node","id":"file:api/server.go:class:11:Server","label":"Class","properties":{"endLine":14,"fields":"[{\"name\":\"users\",\"type\":\"*service.Users\"},{\"name\":\"mailer\",\"type\":\"*service.Mailer\"}]","isAbstract":false,"isExported":true,"line":11,"name":"Server","visibility":"exported"}}
 {"kind":"node","id":"file:api/server.go:function:16:NewServer","label":"Function","properties":{"className":null,"endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":16,"methodKind":null,"name":"NewServer","parameters":"[{\"name\":\"users\",\"type\":\"*service.Users\"},{\"name\":\"mailer\",\"type\":\"*service.Mailer\"}]","returnType":"*Server","visibility":"exported"}}
 {"kind":"node","id":"file:api/server.go:function:20:Register","label":"Function","properties":{"className":null,"endLine":22,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":20,"methodKind":null,"name":"Register","parameters":"[{\"name\":\"lc\",\"type\":\"fx.Lifecycle\"},{\"name\":\"s\",\"type\":\"*Server\"}]","returnType":null,"visibility":"exported"}}
@@ -11,7 +11,8 @@
 {"kind":"node","id":"file:api/server.go:import:4:context","label":"Import","properties":{"line":4,"source":"context","specifier":"\"context\""}}
 {"kind":"node","id":"file:api/server.go:import:6:go.uber.org/fx","label":"Import","properties":{"line":6,"source":"go.uber.org/fx","specifier":"\"go.uber.org/fx\""}}
 {"kind":"node","id":"file:api/server.go:import:8:example.com/fxapp/service","label":"Import","properties":{"line":8,"source":"example.com/fxapp/service","specifier":"\"example.com/fxapp/service\""}}
-{"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
+{"kind":"node","id":"file:go.mod","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/go.mod","relativePath":"go.mod","sourceType":"production"}}
+{"kind":"node","id":"file:main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
 {"kind":"node","id":"file:main.go:entrypoint:11:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":11,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:main.go:function:11:main","label":"Function","properties":{"className":null,"endLine":22,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":11,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
 {"kind":"node","id":"file:main.go:function:11:main:call:12:1:fx.New","label":"Call","properties":{"callee":"New","columnNumber":1,"expression":"fx.New","line":12,"name":"fx.New","receiver":"fx"}}
@@ -26,7 +27,7 @@
 {"kind":"node","id":"file:main.go:import:6:example.com/fxapp/api","label":"Import","properties":{"line":6,"source":"example.com/fxapp/api","specifier":"\"example.com/fxapp/api\""}}
 {"kind":"node","id":"file:main.go:import:7:example.com/fxapp/service","label":"Import","properties":{"line":7,"source":"example.com/fxapp/service","specifier":"\"example.com/fxapp/service\""}}
 {"kind":"node","id":"file:main.go:import:8:example.com/fxapp/store","label":"Import","properties":{"line":8,"source":"example.com/fxapp/store","specifier":"\"example.com/fxapp/store\""}}
-{"kind":"node","id":"file:service/service.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"service","path":"<root>/service/service.go","relativePath":"service/service.go","sourceType":"production"}}
+{"kind":"node","id":"file:service/service.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"service","path":"<root>/service/service.go","relativePath":"service/service.go","sourceType":"production"}}
 {"kind":"node","id":"file:service/service.go:class:19:MailerParams","label":"Class","properties":{"endLine":24,"fields":"[{\"name\":\"In\",\"type\":\"fx.In\",\"embedded\":true},{\"name\":\"Users\",\"type\":\"*Users\"},{\"name\":\"Audit\",\"type\":\"*store.AuditLog\"}]","isAbstract":false,"isExported":true,"line":19,"name":"MailerParams","visibility":"exported"}}
 {"kind":"node","id":"file:service/service.go:class:26:Mailer","label":"Class","properties":{"endLine":26,"fields":"[]","isAbstract":false,"isExported":true,"line":26,"name":"Mailer","visibility":"exported"}}
 {"kind":"node","id":"file:service/service.go:class:32:Unused","label":"Class","properties":{"endLine":32,"fields":"[]","isAbstract":false,"isExported":true,"line":32,"name":"Unused","visibility":"exported"}}
@@ -37,7 +38,7 @@
 {"kind":"node","id":"file:service/service.go:import:4:go.uber.org/fx","label":"Import","properties":{"line":4,"source":"go.uber.org/fx","specifier":"\"go.uber.org/fx\""}}
 {"kind":"node","id":"file:service/service.go:import:6:example.com/fxapp/store","label":"Import","properties":{"line":6,"source":"example.com/fxapp/store","specifier":"\"example.com/fxapp/store\""}}
 {"kind":"node","id":"file:service/service.go:variable:36:Module","label":"Variable","properties":{"goConstructor":"fx.Module","isExported":true,"kind":"var","line":36,"name":"Module"}}
-{"kind":"node","id":"file:store/store.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"store","path":"<root>/store/store.go","relativePath":"store/store.go","sourceType":"production"}}
+{"kind":"node","id":"file:store/store.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"store","path":"<root>/store/store.go","relativePath":"store/store.go","sourceType":"production"}}
 {"kind":"node","id":"file:store/store.go:class:14:sqlUserStore","label":"Class","properties":{"endLine":16,"fields":"[{\"name\":\"db\",\"type\":\"*sql.DB\"}]","isAbstract":false,"isExported":false,"line":14,"name":"sqlUserStore","visibility":"unexported"}}
 {"kind":"node","id":"file:store/store.go:class:25:AuditLog","label":"Class","properties":{"endLine":25,"fields":"[]","isAbstract":false,"isExported":true,"line":25,"name":"AuditLog","visibility":"exported"}}
 {"kind":"node","id":"file:store/store.go:class:5:Config","label":"Class","properties":{"endLine":7,"fields":"[{\"name\":\"DSN\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":5,"name":"Config","visibility":"exported"}}
@@ -50,6 +51,7 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:api","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:service","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:store","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:go.mod","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
 {"kind":"rel","from":"dir:api","type":"CONTAINS_FILE","to":"file:api/server.go","properties":{}}
 {"kind":"rel","from":"dir:service","type":"CONTAINS_FILE","to":"file:service/service.go","properties":{}}

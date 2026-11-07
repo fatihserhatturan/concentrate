@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 2
+            "count": 3
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 2
+          "count": 3
         },
         {
           "table": "Import",
@@ -653,13 +653,22 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "src/orders.ts"
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           },
           {
-            "file": "src/store.ts"
+            "file": "src/orders.ts",
+            "language": "typescript",
+            "sourceType": "production"
+          },
+          {
+            "file": "src/store.ts",
+            "language": "typescript",
+            "sourceType": "production"
           }
         ]
       },
@@ -813,6 +822,8 @@
     ],
     "output": {
       "file": "src/orders.ts",
+      "language": "typescript",
+      "sourceType": "production",
       "imports": [
         {
           "source": "./store",

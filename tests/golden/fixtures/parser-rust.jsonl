@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"parser-rust","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:lib.rs","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/lib.rs","relativePath":"lib.rs","sourceType":"production"}}
+{"kind":"node","id":"file:lib.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/lib.rs","relativePath":"lib.rs","sourceType":"production"}}
 {"kind":"node","id":"file:lib.rs:class:1:UserService","label":"Class","properties":{"endLine":3,"isAbstract":false,"isExported":true,"line":1,"name":"UserService","visibility":"pub"}}
 {"kind":"node","id":"file:lib.rs:class:5:Internal","label":"Class","properties":{"endLine":5,"isAbstract":false,"isExported":false,"line":5,"name":"Internal","visibility":"private"}}
 {"kind":"node","id":"file:lib.rs:class:7:CrateVisible","label":"Class","properties":{"endLine":7,"isAbstract":false,"isExported":true,"line":7,"name":"CrateVisible","visibility":"pub(crate)"}}

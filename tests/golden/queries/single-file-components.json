@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 4
+            "count": 5
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 4
+          "count": 5
         },
         {
           "table": "Import",
@@ -984,19 +984,32 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "src/components/CartButton.vue"
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Total.svelte"
+            "file": "src/components/CartButton.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/cart.ts"
+            "file": "src/components/Total.svelte",
+            "language": "svelte",
+            "sourceType": "production"
           },
           {
-            "file": "src/pages/index.astro"
+            "file": "src/lib/cart.ts",
+            "language": "typescript",
+            "sourceType": "production"
+          },
+          {
+            "file": "src/pages/index.astro",
+            "language": "astro",
+            "sourceType": "production"
           }
         ]
       },
@@ -1174,6 +1187,8 @@
     ],
     "output": {
       "file": "src/components/CartButton.vue",
+      "language": "vue",
+      "sourceType": "production",
       "imports": [
         {
           "source": "vue",

@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"nestjs-decorators","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:users.controller.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/users.controller.ts","relativePath":"users.controller.ts","sourceType":"production"}}
+{"kind":"node","id":"file:users.controller.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/users.controller.ts","relativePath":"users.controller.ts","sourceType":"production"}}
 {"kind":"node","id":"file:users.controller.ts:class:7:UsersController","label":"Class","properties":{"endLine":29,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":7,"name":"UsersController","visibility":"public"}}
 {"kind":"node","id":"file:users.controller.ts:class:7:UsersController:decorator:5:Controller","label":"Decorator","properties":{"args":"[\"users\"]","expression":"@Controller('users')","line":5,"name":"Controller"}}
 {"kind":"node","id":"file:users.controller.ts:class:7:UsersController:decorator:6:UseGuards","label":"Decorator","properties":{"args":"[\"AuthGuard\"]","expression":"@UseGuards(AuthGuard)","line":6,"name":"UseGuards"}}

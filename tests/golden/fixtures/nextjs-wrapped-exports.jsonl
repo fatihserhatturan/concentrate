@@ -6,9 +6,9 @@
 {"kind":"node","id":"dir:lib","label":"Directory","properties":{"name":"lib","path":"<root>/lib","relativePath":"lib"}}
 {"kind":"node","id":"dir:pages","label":"Directory","properties":{"name":"pages","path":"<root>/pages","relativePath":"pages"}}
 {"kind":"node","id":"dir:pages/api","label":"Directory","properties":{"name":"api","path":"<root>/pages/api","relativePath":"pages/api"}}
-{"kind":"node","id":"file:lib/auth.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/lib/auth.ts","relativePath":"lib/auth.ts","sourceType":"production"}}
+{"kind":"node","id":"file:lib/auth.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/lib/auth.ts","relativePath":"lib/auth.ts","sourceType":"production"}}
 {"kind":"node","id":"file:lib/auth.ts:function:1:withAuth","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"withAuth","parameters":"[{\"name\":\"handler\",\"type\":\"(req: unknown, res: { status(code: number): { json(body: unknown): void } }) => Promise<void>\"}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:middleware.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/middleware.ts","relativePath":"middleware.ts","sourceType":"production"}}
+{"kind":"node","id":"file:middleware.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/middleware.ts","relativePath":"middleware.ts","sourceType":"production"}}
 {"kind":"node","id":"file:middleware.ts:entrypoint:6:0:middleware:/dashboard/:path*, /login","label":"EntryPoint","properties":{"handlerName":"middleware","kind":"middleware","library":"nextjs","line":6,"receiverName":null,"trigger":"/dashboard/:path*, /login"}}
 {"kind":"node","id":"file:middleware.ts:function:6:middleware","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_expression","line":6,"methodKind":null,"name":"middleware","parameters":"[{\"name\":\"req\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:middleware.ts:function:6:middleware:call:7:11:req.nextUrl.pathname.startsWith","label":"Call","properties":{"args":"[\"/login\"]","callee":"startsWith","columnNumber":11,"expression":"req.nextUrl.pathname.startsWith","line":7,"name":"req.nextUrl.pathname.startsWith","receiver":"req.nextUrl.pathname"}}
@@ -18,7 +18,8 @@
 {"kind":"node","id":"file:middleware.ts:initializercall:5:15:withAuth","label":"Call","properties":{"args":"[]","callee":"withAuth","columnNumber":15,"expression":"withAuth","line":5,"name":"withAuth","receiver":null}}
 {"kind":"node","id":"file:middleware.ts:variable:12:config","label":"Variable","properties":{"isExported":true,"kind":"const","line":12,"name":"config","stringValue":null}}
 {"kind":"node","id":"file:middleware.ts:variable:5:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":5,"name":"default"}}
-{"kind":"node","id":"file:pages/api/inline.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/pages/api/inline.ts","relativePath":"pages/api/inline.ts","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:pages/api/inline.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/pages/api/inline.ts","relativePath":"pages/api/inline.ts","sourceType":"production"}}
 {"kind":"node","id":"file:pages/api/inline.ts:function:4:<withAuth:arg0>","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"arrow_function","line":4,"methodKind":null,"name":"<withAuth:arg0>","parameters":"[{\"name\":\"req\",\"type\":null},{\"name\":\"res\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:pages/api/inline.ts:function:4:<withAuth:arg0>:call:5:2:res.status","label":"Call","properties":{"args":"[\"200\"]","callee":"status","columnNumber":2,"expression":"res.status","line":5,"name":"res.status","receiver":"res"}}
 {"kind":"node","id":"file:pages/api/inline.ts:function:4:<withAuth:arg0>:call:5:2:res.status(200).json","label":"Call","properties":{"args":"[]","callee":"json","columnNumber":2,"expression":"res.status(200).json","line":5,"name":"res.status(200).json","receiver":"res"}}
@@ -26,7 +27,7 @@
 {"kind":"node","id":"file:pages/api/inline.ts:initializercall:4:15:withAuth","label":"Call","properties":{"args":"[]","callee":"withAuth","columnNumber":15,"expression":"withAuth","line":4,"name":"withAuth","receiver":null}}
 {"kind":"node","id":"file:pages/api/inline.ts:route:4:0:ALL:/api/inline","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/inline","handlerName":"<withAuth:arg0>","line":4,"method":"ALL","path":"/api/inline","pathExpression":null,"receiverName":null}}
 {"kind":"node","id":"file:pages/api/inline.ts:variable:4:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":4,"name":"default"}}
-{"kind":"node","id":"file:pages/api/session.ts","label":"File","properties":{"defaultExport":"handler","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/pages/api/session.ts","relativePath":"pages/api/session.ts","sourceType":"production"}}
+{"kind":"node","id":"file:pages/api/session.ts","label":"File","properties":{"defaultExport":"handler","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/pages/api/session.ts","relativePath":"pages/api/session.ts","sourceType":"production"}}
 {"kind":"node","id":"file:pages/api/session.ts:import:1:next-auth","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"NextAuth\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"next-auth","specifier":"import NextAuth from 'next-auth';"}}
 {"kind":"node","id":"file:pages/api/session.ts:initializercall:4:16:NextAuth","label":"Call","properties":{"args":"[]","callee":"NextAuth","columnNumber":16,"expression":"NextAuth","line":4,"name":"NextAuth","receiver":null}}
 {"kind":"node","id":"file:pages/api/session.ts:route:6:0:ALL:/api/session","label":"Route","properties":{"framework":"nextjs","fullPath":"/api/session","handlerName":null,"line":6,"method":"ALL","path":"/api/session","pathExpression":null,"receiverName":null}}
@@ -37,6 +38,7 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:lib","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:pages","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:middleware.ts","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"dir:lib","type":"CONTAINS_FILE","to":"file:lib/auth.ts","properties":{}}
 {"kind":"rel","from":"dir:pages","type":"CONTAINS_DIRECTORY","to":"dir:pages/api","properties":{}}
 {"kind":"rel","from":"dir:pages/api","type":"CONTAINS_FILE","to":"file:pages/api/inline.ts","properties":{}}
@@ -71,6 +73,7 @@
 {"kind":"rel","from":"file:pages/api/session.ts:variable:4:handler","type":"INITIALIZED_BY","to":"file:pages/api/session.ts:initializercall:4:16:NextAuth","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:lib/auth.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:middleware.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:pages/api/inline.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:pages/api/session.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}

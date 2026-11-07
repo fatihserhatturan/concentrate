@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 2
+            "count": 5
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 2
+          "count": 5
         },
         {
           "table": "Import",
@@ -496,7 +496,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -510,7 +510,7 @@
           },
           {
             "table": "File",
-            "count": 1
+            "count": 2
           },
           {
             "table": "Import",
@@ -532,7 +532,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "packageName": "@sample/core",
       "stats": [
         {
@@ -541,7 +541,7 @@
         },
         {
           "table": "File",
-          "count": 1
+          "count": 2
         },
         {
           "table": "Import",
@@ -602,8 +602,23 @@
         "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest",
         "rows": [
           {
+            "file": "apps/api/package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
             "file": "apps/api/src/server.ts",
             "language": "typescript",
+            "isTest": false
+          },
+          {
+            "file": "package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
+            "file": "packages/core/package.json",
+            "language": "json",
             "isTest": false
           },
           {
@@ -618,8 +633,20 @@
         "cypher": "MATCH (package:Package)-[:PACKAGE_CONTAINS_FILE]->(file:File) RETURN file.relativePath AS file, coalesce(package.name, package.relativePath) AS package",
         "rows": [
           {
+            "file": "package.json",
+            "package": "workspace-monorepo"
+          },
+          {
+            "file": "apps/api/package.json",
+            "package": "@sample/api"
+          },
+          {
             "file": "apps/api/src/server.ts",
             "package": "@sample/api"
+          },
+          {
+            "file": "packages/core/package.json",
+            "package": "@sample/core"
           },
           {
             "file": "packages/core/src/index.ts",
@@ -774,8 +801,23 @@
         "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest",
         "rows": [
           {
+            "file": "apps/api/package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
             "file": "apps/api/src/server.ts",
             "language": "typescript",
+            "isTest": false
+          },
+          {
+            "file": "package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
+            "file": "packages/core/package.json",
+            "language": "json",
             "isTest": false
           },
           {

@@ -19,14 +19,16 @@
 {"kind":"node","id":"env:VITE_API_URL","label":"EnvVar","properties":{"isPublic":true,"name":"VITE_API_URL"}}
 {"kind":"node","id":"env:VITE_DEBUG_FLAG","label":"EnvVar","properties":{"isPublic":true,"name":"VITE_DEBUG_FLAG"}}
 {"kind":"node","id":"env:VITE_SENTRY_DSN","label":"EnvVar","properties":{"isPublic":true,"name":"VITE_SENTRY_DSN"}}
-{"kind":"node","id":"file:src/client.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/client.ts","relativePath":"src/client.ts","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:src/client.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/client.ts","relativePath":"src/client.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/client.ts:function:3:mode","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"mode","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/client.ts:variable:1:apiUrl","label":"Variable","properties":{"isExported":true,"kind":"const","line":1,"name":"apiUrl","stringTemplate":"${import.meta.env.VITE_API_URL}","stringValue":null}}
-{"kind":"node","id":"file:src/server.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/server.ts","relativePath":"src/server.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/server.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/server.ts","relativePath":"src/server.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/server.ts:function:3:start","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"start","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":false,"manager":null,"name":"env-reads-fixture","path":"<root>","relativePath":".","version":"1.0.0","workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"env-reads","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/client.ts","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/server.ts","properties":{}}
 {"kind":"rel","from":"file:src/client.ts","type":"DEFINES_FUNCTION","to":"file:src/client.ts:function:3:mode","properties":{}}
@@ -50,6 +52,7 @@
 {"kind":"rel","from":"file:src/server.ts","type":"USES_ENV","to":"env:REDIS-URL","properties":{"access":"destructure","line":1}}
 {"kind":"rel","from":"file:src/server.ts:function:3:start","type":"USES_ENV","to":"env:LOG_LEVEL","properties":{"access":"destructure","line":4}}
 {"kind":"rel","from":"file:src/server.ts:function:3:start","type":"USES_ENV","to":"env:NODE_ENV","properties":{"access":"destructure","line":4}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/client.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/server.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}

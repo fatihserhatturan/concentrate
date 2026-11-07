@@ -1,19 +1,18 @@
-import { detectLanguage } from "./language.js";
+import { detectLanguage, isCodeLanguage, type SupportedLanguage } from "./language.js";
 
 export type SupportedSourceFile = {
   filePath: string;
-  language: NonNullable<ReturnType<typeof detectLanguage>>;
+  language: SupportedLanguage;
 };
 
+// Every discovered file with its language. `maxFiles` limits the code files;
+// the other files are always kept (they are not parsed for declarations).
 export function filterSupportedSourceFiles(
   files: string[],
   maxFiles: number | undefined,
 ): SupportedSourceFile[] {
-  const supportedFiles = files
-    .map((filePath) => ({ filePath, language: detectLanguage(filePath) }))
-    .filter((file): file is SupportedSourceFile => file.language !== null);
-
-  return maxFiles !== undefined && maxFiles > 0
-    ? supportedFiles.slice(0, maxFiles)
-    : supportedFiles;
+  const all = files.map((filePath) => ({ filePath, language: detectLanguage(filePath) }));
+  if (maxFiles === undefined || maxFiles <= 0) return all;
+  let code = 0;
+  return all.filter((file) => !isCodeLanguage(file.language) || ++code <= maxFiles);
 }

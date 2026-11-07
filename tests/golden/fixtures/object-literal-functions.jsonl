@@ -4,7 +4,8 @@
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"object-literal-functions","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
-{"kind":"node","id":"file:src/api.ts","label":"File","properties":{"defaultExport":"ArticleAPI","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/api.ts","relativePath":"src/api.ts","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:src/api.ts","label":"File","properties":{"defaultExport":"ArticleAPI","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/api.ts","relativePath":"src/api.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/api.ts:function:11:list","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_expression","line":11,"methodKind":null,"name":"list","parameters":"[{\"name\":\"slug\",\"type\":\"string\"}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/api.ts:function:11:list:call:12:13:request","label":"Call","properties":{"args":"[]","callee":"request","columnNumber":13,"expression":"request","line":12,"name":"request","receiver":null}}
 {"kind":"node","id":"file:src/api.ts:function:20:getAll","label":"Function","properties":{"className":null,"endLine":20,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":20,"methodKind":null,"name":"getAll","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -20,16 +21,16 @@
 {"kind":"node","id":"file:src/api.ts:variable:17:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":17,"name":"default"}}
 {"kind":"node","id":"file:src/api.ts:variable:19:TagAPI","label":"Variable","properties":{"isExported":true,"kind":"const","line":19,"name":"TagAPI","stringValue":null}}
 {"kind":"node","id":"file:src/api.ts:variable:4:ArticleAPI","label":"Variable","properties":{"isExported":false,"kind":"const","line":4,"name":"ArticleAPI","stringValue":null}}
-{"kind":"node","id":"file:src/consumer.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/consumer.ts","relativePath":"src/consumer.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/consumer.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/consumer.ts","relativePath":"src/consumer.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/consumer.ts:function:3:load","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"load","parameters":"[{\"name\":\"slug\",\"type\":\"string\"}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/consumer.ts:function:3:load:call:5:35:ArticleAPI.get","label":"Call","properties":{"args":"[\"slug\"]","callee":"get","columnNumber":35,"expression":"ArticleAPI.get","line":5,"name":"ArticleAPI.get","receiver":"ArticleAPI"}}
 {"kind":"node","id":"file:src/consumer.ts:function:3:load:call:6:2:[1, 2].map","label":"Call","properties":{"args":"[]","callee":"map","columnNumber":2,"expression":"[1, 2].map","line":6,"name":"[1, 2].map","receiver":"[1, 2]"}}
 {"kind":"node","id":"file:src/consumer.ts:function:3:load:call:7:8:TagAPI.getAll","label":"Call","properties":{"args":"[]","callee":"getAll","columnNumber":8,"expression":"TagAPI.getAll","line":7,"name":"TagAPI.getAll","receiver":"TagAPI"}}
 {"kind":"node","id":"file:src/consumer.ts:import:1:./api","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"ArticleAPI\",\"kind\":\"default\"},{\"imported\":\"TagAPI\",\"local\":\"TagAPI\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"./api","specifier":"import ArticleAPI, { TagAPI } from './api';"}}
-{"kind":"node","id":"file:src/http.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/http.ts","relativePath":"src/http.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/http.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/http.ts","relativePath":"src/http.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/http.ts:function:1:request","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"request","parameters":"[{\"name\":\"url\",\"type\":\"string\"}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/http.ts:function:1:request:call:2:9:fetch","label":"Call","properties":{"args":"[\"url\"]","callee":"fetch","columnNumber":9,"expression":"fetch","httpClient":"fetch","httpMethod":"GET","httpUrl":null,"line":2,"name":"fetch","receiver":null}}
-{"kind":"node","id":"file:src/legacy.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/src/legacy.js","relativePath":"src/legacy.js","sourceType":"production"}}
+{"kind":"node","id":"file:src/legacy.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/src/legacy.js","relativePath":"src/legacy.js","sourceType":"production"}}
 {"kind":"node","id":"file:src/legacy.js:function:4:profile","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"method_definition","line":4,"methodKind":"method","name":"profile","parameters":"[{\"name\":\"username\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/legacy.js:function:4:profile:call:5:11:axios.get","label":"Call","properties":{"args":"[]","callee":"get","columnNumber":11,"expression":"axios.get","httpClient":"axios","httpMethod":"GET","httpUrl":"/api/profiles/${username}","line":5,"name":"axios.get","receiver":"axios"}}
 {"kind":"node","id":"file:src/legacy.js:import:1:axios","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"axios\",\"kind\":\"default\"}]","isCjs":true,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"axios","specifier":"require('axios')"}}
@@ -38,6 +39,7 @@
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"object-literal-functions","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"object-literal-functions","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/api.ts","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/consumer.ts","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/http.ts","properties":{}}
@@ -75,6 +77,7 @@
 {"kind":"rel","from":"file:src/legacy.js","type":"IMPORTS","to":"file:src/legacy.js:import:1:axios","properties":{}}
 {"kind":"rel","from":"file:src/legacy.js:function:4:profile","type":"CALLS","to":"file:src/legacy.js:function:4:profile:call:5:11:axios.get","properties":{}}
 {"kind":"rel","from":"file:src/legacy.js:variable:1:axios","type":"INITIALIZED_BY","to":"file:src/legacy.js:initializercall:1:14:require","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/api.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/consumer.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/http.ts","properties":{}}

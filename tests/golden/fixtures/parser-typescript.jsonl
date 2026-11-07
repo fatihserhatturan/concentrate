@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"parser-typescript","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:index.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/index.ts","relativePath":"index.ts","sourceType":"production"}}
+{"kind":"node","id":"file:index.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/index.ts","relativePath":"index.ts","sourceType":"production"}}
 {"kind":"node","id":"file:index.ts:class:31:ApiController","label":"Class","properties":{"endLine":38,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":false,"line":31,"name":"ApiController","visibility":"public"}}
 {"kind":"node","id":"file:index.ts:class:31:ApiController:decorator:31:Injectable","label":"Decorator","properties":{"args":"[]","expression":"@Injectable()","line":31,"name":"Injectable"}}
 {"kind":"node","id":"file:index.ts:class:40:BaseRepository","label":"Class","properties":{"endLine":48,"extendsNames":null,"implementsNames":null,"isAbstract":true,"isExported":true,"line":40,"name":"BaseRepository","visibility":"public"}}

@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"arrow-functions","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:index.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/index.ts","relativePath":"index.ts","sourceType":"production"}}
+{"kind":"node","id":"file:index.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/index.ts","relativePath":"index.ts","sourceType":"production"}}
 {"kind":"node","id":"file:index.ts:function:13:outer","label":"Function","properties":{"className":null,"endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":13,"methodKind":null,"name":"outer","parameters":"[]","returnType":"void","visibility":"public"}}
 {"kind":"node","id":"file:index.ts:function:13:outer:call:17:2:inner","label":"Call","properties":{"args":"[]","callee":"inner","columnNumber":2,"expression":"inner","line":17,"name":"inner","receiver":null}}
 {"kind":"node","id":"file:index.ts:function:14:inner","label":"Function","properties":{"className":null,"endLine":16,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":14,"methodKind":null,"name":"inner","parameters":"[]","returnType":null,"visibility":"public"}}

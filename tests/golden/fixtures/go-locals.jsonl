@@ -2,11 +2,12 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"go-locals","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:config","label":"Directory","properties":{"name":"config","path":"<root>/config","relativePath":"config"}}
 {"kind":"node","id":"dir:store","label":"Directory","properties":{"name":"store","path":"<root>/store","relativePath":"store"}}
-{"kind":"node","id":"file:config/config.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"config","path":"<root>/config/config.go","relativePath":"config/config.go","sourceType":"production"}}
+{"kind":"node","id":"file:config/config.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"config","path":"<root>/config/config.go","relativePath":"config/config.go","sourceType":"production"}}
 {"kind":"node","id":"file:config/config.go:import:3:example.com/locals/store","label":"Import","properties":{"line":3,"source":"example.com/locals/store","specifier":"\"example.com/locals/store\""}}
 {"kind":"node","id":"file:config/config.go:variable:7:DB","label":"Variable","properties":{"goConstructor":"store.New","isExported":true,"kind":"var","line":7,"name":"DB"}}
 {"kind":"node","id":"file:config/config.go:variable:9:Default","label":"Variable","properties":{"goType":"*store.Store","isExported":true,"kind":"var","line":9,"name":"Default"}}
-{"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
+{"kind":"node","id":"file:go.mod","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/go.mod","relativePath":"go.mod","sourceType":"production"}}
+{"kind":"node","id":"file:main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
 {"kind":"node","id":"file:main.go:entrypoint:13:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":13,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:main.go:function:13:main","label":"Function","properties":{"className":null,"endLine":28,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":13,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
 {"kind":"node","id":"file:main.go:function:13:main:call:14:1:local.All","label":"Call","properties":{"callee":"All","columnNumber":1,"expression":"local.All","line":14,"name":"local.All","receiver":"local"}}
@@ -24,7 +25,7 @@
 {"kind":"node","id":"file:main.go:import:6:example.com/locals/config","label":"Import","properties":{"line":6,"source":"example.com/locals/config","specifier":"\"example.com/locals/config\""}}
 {"kind":"node","id":"file:main.go:import:7:example.com/locals/store","label":"Import","properties":{"line":7,"source":"example.com/locals/store","specifier":"\"example.com/locals/store\""}}
 {"kind":"node","id":"file:main.go:variable:11:local","label":"Variable","properties":{"goConstructor":"store.New","isExported":false,"kind":"var","line":11,"name":"local"}}
-{"kind":"node","id":"file:store/store.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"store","path":"<root>/store/store.go","relativePath":"store/store.go","sourceType":"production"}}
+{"kind":"node","id":"file:store/store.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"store","path":"<root>/store/store.go","relativePath":"store/store.go","sourceType":"production"}}
 {"kind":"node","id":"file:store/store.go:class:3:Item","label":"Class","properties":{"endLine":5,"fields":"[{\"name\":\"Name\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":3,"name":"Item","visibility":"exported"}}
 {"kind":"node","id":"file:store/store.go:class:9:Store","label":"Class","properties":{"endLine":11,"fields":"[{\"name\":\"items\",\"type\":\"[]Item\"}]","isAbstract":false,"isExported":true,"line":9,"name":"Store","visibility":"exported"}}
 {"kind":"node","id":"file:store/store.go:function:13:New","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":13,"methodKind":null,"name":"New","parameters":"[]","returnType":"*Store","visibility":"exported"}}
@@ -35,6 +36,7 @@
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-locals","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:config","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:store","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:go.mod","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
 {"kind":"rel","from":"dir:config","type":"CONTAINS_FILE","to":"file:config/config.go","properties":{}}
 {"kind":"rel","from":"dir:store","type":"CONTAINS_FILE","to":"file:store/store.go","properties":{}}

@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"call-graph","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:nested.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/nested.ts","relativePath":"nested.ts","sourceType":"production"}}
+{"kind":"node","id":"file:nested.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/nested.ts","relativePath":"nested.ts","sourceType":"production"}}
 {"kind":"node","id":"file:nested.ts:function:5:outer","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"outer","parameters":"[]","returnType":"void","visibility":"public"}}
 {"kind":"node","id":"file:nested.ts:function:5:outer:call:12:2:finish","label":"Call","properties":{"args":"[]","callee":"finish","columnNumber":2,"expression":"finish","line":12,"name":"finish","receiver":null}}
 {"kind":"node","id":"file:nested.ts:function:5:outer:call:6:2:setup","label":"Call","properties":{"args":"[]","callee":"setup","columnNumber":2,"expression":"setup","line":6,"name":"setup","receiver":null}}

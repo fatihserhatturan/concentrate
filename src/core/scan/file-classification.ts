@@ -1,6 +1,6 @@
 import path from "node:path";
 
-export type FileSourceType = "production" | "test" | "fixture" | "support" | "generated";
+export type FileSourceType = "production" | "test" | "fixture" | "support" | "generated" | "docs";
 
 export type FileClassification = {
   sourceType: FileSourceType;
@@ -8,11 +8,18 @@ export type FileClassification = {
   isFixture: boolean;
   isSupport: boolean;
   isGenerated: boolean;
+  isDocs: boolean;
 };
 
 export type FileClassificationCounts = Record<FileSourceType, number>;
 
-export function classifyFile(relativePath: string, generatedContent = false): FileClassification {
+// Lockfiles are written by package managers.
+const lockfiles = new Set(["package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lockb", "bun.lock", "go.sum", "Cargo.lock", "poetry.lock", "Pipfile.lock", "uv.lock", "composer.lock", "Gemfile.lock"]);
+
+// `code` is false for the files no language parser reads (styles, JSON,
+// Markdown, assets, …): only those can be `docs`, so example code under
+// `docs/` stays production code.
+export function classifyFile(relativePath: string, generatedContent = false, code = true): FileClassification {
   const normalizedPath = relativePath.split(path.sep).join("/");
   const segments = normalizedPath.split("/");
   const fileName = segments.at(-1) ?? normalizedPath;
@@ -26,7 +33,7 @@ export function classifyFile(relativePath: string, generatedContent = false): Fi
     "dist",
     "build",
     "coverage",
-  ]) || /(?:^|[.-])(generated|gen)\.[cm]?[jt]sx?$/u.test(fileName);
+  ]) || /(?:^|[.-])(generated|gen)\.[cm]?[jt]sx?$/u.test(fileName) || lockfiles.has(fileName);
 
   const isFixture = hasSegment(segments, [
     "fixture",
@@ -55,12 +62,19 @@ export function classifyFile(relativePath: string, generatedContent = false): Fi
     "support",
   ]) || /(?:^|[.-])(mock|mocks|stub|stubs|setup|setupTests)\.[cm]?[jt]sx?$/u.test(fileName);
 
+  const isDocs = !code && (
+    /\.(?:md|mdx|markdown|rst|adoc|txt)$/iu.test(fileName)
+    || /^(?:LICEN[CS]E|COPYING|NOTICE|AUTHORS|CONTRIBUTORS|CHANGELOG|CHANGES|HISTORY|README|CODE_OF_CONDUCT|CONTRIBUTING|SECURITY)(?:[.-].*)?$/iu.test(fileName)
+    || hasSegment(segments, ["docs", "doc"])
+  );
+
   return {
-    sourceType: primarySourceType({ isGenerated, isFixture, isTest, isSupport }),
+    sourceType: primarySourceType({ isGenerated, isFixture, isTest, isSupport, isDocs }),
     isTest,
     isFixture,
     isSupport,
     isGenerated,
+    isDocs,
   };
 }
 
@@ -71,6 +85,7 @@ export function createFileClassificationCounts(): FileClassificationCounts {
     fixture: 0,
     support: 0,
     generated: 0,
+    docs: 0,
   };
 }
 
@@ -79,6 +94,7 @@ function primarySourceType(input: Omit<FileClassification, "sourceType">): FileS
   if (input.isFixture) return "fixture";
   if (input.isTest) return "test";
   if (input.isSupport) return "support";
+  if (input.isDocs) return "docs";
   return "production";
 }
 

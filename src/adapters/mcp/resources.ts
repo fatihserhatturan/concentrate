@@ -1,4 +1,5 @@
 import type { IQueryEngine } from "../../core/contracts/query-engine.js";
+import { CODE_LANGUAGES, type SupportedLanguage } from "../../core/scan/language.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
 
 // MCP resources: one JSON summary of the scanned graph, small enough for an
@@ -49,7 +50,9 @@ export async function graphSummary(engine: IQueryEngine): Promise<Record<string,
   const languages = new Map<string, number>();
   const directories = new Map<string, number>();
   let testFiles = 0;
+  let codeFiles = 0;
   for (const row of files) {
+    if (typeof row.language !== "string" || CODE_LANGUAGES.has(row.language as SupportedLanguage)) codeFiles += 1;
     const language = String(row.language ?? "unknown");
     languages.set(language, (languages.get(language) ?? 0) + 1);
     if (row.isTest === true) testFiles += 1;
@@ -65,7 +68,7 @@ export async function graphSummary(engine: IQueryEngine): Promise<Record<string,
   return {
     schemaVersion,
     repo: repos[0] ?? null,
-    files: { total: files.length, tests: testFiles },
+    files: { total: files.length, code: codeFiles, tests: testFiles },
     languages: byCount(languages),
     packages,
     topDirectories: byCount(directories).slice(0, TOP_DIRECTORIES),

@@ -1,7 +1,7 @@
 {"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"go-cobra","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:cmd","label":"Directory","properties":{"name":"cmd","path":"<root>/cmd","relativePath":"cmd"}}
-{"kind":"node","id":"file:cmd/root.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"cmd","path":"<root>/cmd/root.go","relativePath":"cmd/root.go","sourceType":"production"}}
+{"kind":"node","id":"file:cmd/root.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"cmd","path":"<root>/cmd/root.go","relativePath":"cmd/root.go","sourceType":"production"}}
 {"kind":"node","id":"file:cmd/root.go:entrypoint:20:0:init:<none>","label":"EntryPoint","properties":{"handlerName":"init","kind":"init","library":"go","line":20,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:cmd/root.go:function:14:Execute","label":"Function","properties":{"className":null,"endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":14,"methodKind":null,"name":"Execute","parameters":"[]","returnType":null,"visibility":"exported"}}
 {"kind":"node","id":"file:cmd/root.go:function:14:Execute:call:15:11:rootCmd.Execute","label":"Call","properties":{"callee":"Execute","columnNumber":11,"expression":"rootCmd.Execute","line":15,"name":"rootCmd.Execute","receiver":"rootCmd"}}
@@ -12,7 +12,7 @@
 {"kind":"node","id":"file:cmd/root.go:import:4:fmt","label":"Import","properties":{"line":4,"source":"fmt","specifier":"\"fmt\""}}
 {"kind":"node","id":"file:cmd/root.go:import:6:github.com/spf13/cobra","label":"Import","properties":{"line":6,"source":"github.com/spf13/cobra","specifier":"\"github.com/spf13/cobra\""}}
 {"kind":"node","id":"file:cmd/root.go:variable:9:rootCmd","label":"Variable","properties":{"goType":"cobra.Command","isExported":false,"kind":"var","line":9,"name":"rootCmd"}}
-{"kind":"node","id":"file:cmd/serve.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"cmd","path":"<root>/cmd/serve.go","relativePath":"cmd/serve.go","sourceType":"production"}}
+{"kind":"node","id":"file:cmd/serve.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"cmd","path":"<root>/cmd/serve.go","relativePath":"cmd/serve.go","sourceType":"production"}}
 {"kind":"node","id":"file:cmd/serve.go:entrypoint:14:18:cli:version","label":"EntryPoint","properties":{"handlerName":"<versionCmd.Run>","kind":"cli","library":"cobra","line":14,"receiverName":"versionCmd","trigger":"app version"}}
 {"kind":"node","id":"file:cmd/serve.go:entrypoint:30:9:cli:migrate","label":"EntryPoint","properties":{"handlerName":"<cmd.RunE>","kind":"cli","library":"cobra","line":30,"receiverName":"cmd","trigger":"app serve migrate"}}
 {"kind":"node","id":"file:cmd/serve.go:entrypoint:9:16:cli:serve","label":"EntryPoint","properties":{"handlerName":"runServe","kind":"cli","library":"cobra","line":9,"receiverName":"serveCmd","trigger":"app serve"}}
@@ -29,13 +29,15 @@
 {"kind":"node","id":"file:cmd/serve.go:variable:14:versionCmd","label":"Variable","properties":{"goType":"cobra.Command","isExported":false,"kind":"var","line":14,"name":"versionCmd"}}
 {"kind":"node","id":"file:cmd/serve.go:variable:39:migrateCmd","label":"Variable","properties":{"goConstructor":"newMigrateCmd","isExported":false,"kind":"var","line":39,"name":"migrateCmd"}}
 {"kind":"node","id":"file:cmd/serve.go:variable:9:serveCmd","label":"Variable","properties":{"goType":"cobra.Command","isExported":false,"kind":"var","line":9,"name":"serveCmd"}}
-{"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
+{"kind":"node","id":"file:go.mod","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/go.mod","relativePath":"go.mod","sourceType":"production"}}
+{"kind":"node","id":"file:main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
 {"kind":"node","id":"file:main.go:entrypoint:5:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":5,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:main.go:function:5:main","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":5,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
 {"kind":"node","id":"file:main.go:function:5:main:call:6:1:cmd.Execute","label":"Call","properties":{"callee":"Execute","columnNumber":1,"expression":"cmd.Execute","line":6,"name":"cmd.Execute","receiver":"cmd"}}
 {"kind":"node","id":"file:main.go:import:3:example.com/cobraapp/cmd","label":"Import","properties":{"line":3,"source":"example.com/cobraapp/cmd","specifier":"\"example.com/cobraapp/cmd\""}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-cobra","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:cmd","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:go.mod","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
 {"kind":"rel","from":"dir:cmd","type":"CONTAINS_FILE","to":"file:cmd/root.go","properties":{}}
 {"kind":"rel","from":"dir:cmd","type":"CONTAINS_FILE","to":"file:cmd/serve.go","properties":{}}

@@ -5,7 +5,8 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"switch-request-urls","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:server","label":"Directory","properties":{"name":"server","path":"<root>/server","relativePath":"server"}}
 {"kind":"node","id":"dir:web","label":"Directory","properties":{"name":"web","path":"<root>/web","relativePath":"web"}}
-{"kind":"node","id":"file:server/app.js","label":"File","properties":{"defaultExport":"app","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/server/app.js","relativePath":"server/app.js","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:server/app.js","label":"File","properties":{"defaultExport":"app","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/server/app.js","relativePath":"server/app.js","sourceType":"production"}}
 {"kind":"node","id":"file:server/app.js:function:5:<app.get:/api/articles:arg1>","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":5,"methodKind":null,"name":"<app.get:/api/articles:arg1>","parameters":"[{\"name\":\"req\",\"type\":null},{\"name\":\"res\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:server/app.js:function:5:<app.get:/api/articles:arg1>:call:5:39:res.json","label":"Call","properties":{"args":"[]","callee":"json","columnNumber":39,"expression":"res.json","line":5,"name":"res.json","receiver":"res"}}
 {"kind":"node","id":"file:server/app.js:function:6:<app.get:/api/articles/feed:arg1>","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":6,"methodKind":null,"name":"<app.get:/api/articles/feed:arg1>","parameters":"[{\"name\":\"req\",\"type\":null},{\"name\":\"res\",\"type\":null}]","returnType":null,"visibility":"public"}}
@@ -27,7 +28,7 @@
 {"kind":"node","id":"file:server/app.js:route:8:0:GET:/api/profiles/:username","label":"Route","properties":{"framework":"express-koa","fullPath":"/api/profiles/:username","handlerName":null,"line":8,"method":"GET","path":"/api/profiles/:username","pathExpression":"'/api/profiles/:username'","receiverName":"app"}}
 {"kind":"node","id":"file:server/app.js:variable:1:express","label":"Variable","properties":{"isExported":false,"kind":"const","line":1,"name":"express","stringValue":null}}
 {"kind":"node","id":"file:server/app.js:variable:3:app","label":"Variable","properties":{"isExported":false,"kind":"const","line":3,"name":"app","stringValue":null}}
-{"kind":"node","id":"file:web/articles.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/web/articles.ts","relativePath":"web/articles.ts","sourceType":"production"}}
+{"kind":"node","id":"file:web/articles.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/web/articles.ts","relativePath":"web/articles.ts","sourceType":"production"}}
 {"kind":"node","id":"file:web/articles.ts:function:20:loadArticles","label":"Function","properties":{"className":null,"endLine":24,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":20,"methodKind":null,"name":"loadArticles","parameters":"[{\"name\":\"feed\",\"type\":\"boolean\"}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:web/articles.ts:function:20:loadArticles:call:23:9:fetch","label":"Call","properties":{"args":"[\"path\"]","callee":"fetch","columnNumber":9,"expression":"fetch","httpClient":"fetch","httpMethod":"GET","httpUrl":"/api/articles","httpUrlAlternatives":"[\"/api/articles/feed\"]","line":23,"name":"fetch","receiver":null}}
 {"kind":"node","id":"file:web/articles.ts:function:27:loadTags","label":"Function","properties":{"className":null,"endLine":30,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":27,"methodKind":null,"name":"loadTags","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -49,6 +50,7 @@
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"switch-request-urls","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:server","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:web","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"dir:server","type":"CONTAINS_FILE","to":"file:server/app.js","properties":{}}
 {"kind":"rel","from":"dir:web","type":"CONTAINS_FILE","to":"file:web/articles.ts","properties":{}}
 {"kind":"rel","from":"file:server/app.js","type":"DECLARES_ROUTE","to":"file:server/app.js:route:5:0:GET:/api/articles","properties":{}}
@@ -107,6 +109,7 @@
 {"kind":"rel","from":"file:web/articles.ts:function:6:useArticles","type":"CALLS","to":"file:web/articles.ts:function:6:useArticles:call:16:9:useSWR","properties":{}}
 {"kind":"rel","from":"file:web/articles.ts:function:6:useArticles:call:16:9:useSWR","type":"REQUESTS","to":"file:server/app.js:route:5:0:GET:/api/articles","properties":{"match":"exact","method":"GET","url":"/api/articles"}}
 {"kind":"rel","from":"file:web/articles.ts:function:6:useArticles:call:16:9:useSWR","type":"REQUESTS","to":"file:server/app.js:route:6:0:GET:/api/articles/feed","properties":{"match":"exact","method":"GET","url":"/api/articles/feed"}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:server/app.js","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:web/articles.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}

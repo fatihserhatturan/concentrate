@@ -133,14 +133,38 @@ async function parseMarkup(
       relationships: [],
     };
 
-  for (const script of scripts) {
-    if (!script.src) continue;
-    const importNode = createScriptImportNode(fileNodeId, script.src);
+  for (const reference of [...scripts.flatMap((script) => (script.src ? [script.src] : [])), ...linkReferences(documentNode)]) {
+    // `%PUBLIC_URL%/x.js`, `{{ url }}`, `<%= x %>`, `${x}`: filled in by a template or a build step.
+    if (/[%{}<>$]/u.test(reference.value)) continue;
+    const importNode = createScriptImportNode(fileNodeId, reference);
     if (parsed.nodes.some((node) => node.id === importNode.id)) continue;
     parsed.nodes.push(importNode);
     parsed.relationships.push({ from: fileNodeId, to: importNode.id, type: "IMPORTS", properties: {} } satisfies GraphRelationship);
   }
   return parsed;
+}
+
+// `<link rel="stylesheet" href="app.css">` (and icons, manifests, preloads):
+// the page's `href` to a file of the project.
+function linkReferences(root: SyntaxNode): Array<{ value: string; line: number; text: string }> {
+  const links: Array<{ value: string; line: number; text: string }> = [];
+  const visit = (node: SyntaxNode) => {
+    if ((node.type === "start_tag" || node.type === "self_closing_tag") && node.namedChildren.find((child) => child?.type === "tag_name")?.text.toLowerCase() === "link") {
+      for (const attribute of node.namedChildren) {
+        if (attribute?.type !== "attribute") continue;
+        const name = attribute.namedChildren.find((child) => child?.type === "attribute_name")?.text.toLowerCase();
+        if (name !== "href") continue;
+        const value = attributeText(attribute.namedChildren.find((child) => child?.type === "attribute_value" || child?.type === "quoted_attribute_value")).trim();
+        if (value && !value.startsWith("#")) links.push({ value, line: node.startPosition.row + 1, text: node.text });
+      }
+      return;
+    }
+    for (const child of node.namedChildren) {
+      if (child) visit(child);
+    }
+  };
+  visit(root);
+  return links;
 }
 
 function scriptElements(root: SyntaxNode): ScriptElement[] {

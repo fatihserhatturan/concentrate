@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"parser-javascript","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:index.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/index.js","relativePath":"index.js","sourceType":"production"}}
+{"kind":"node","id":"file:index.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/index.js","relativePath":"index.js","sourceType":"production"}}
 {"kind":"node","id":"file:index.js:class:19:Calculator","label":"Class","properties":{"endLine":35,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":19,"name":"Calculator","visibility":"public"}}
 {"kind":"node","id":"file:index.js:config:3:MAX_SIZE","label":"ConfigValue","properties":{"line":3,"name":"MAX_SIZE","value":"100","valueType":"number"}}
 {"kind":"node","id":"file:index.js:config:4:defaultName","label":"ConfigValue","properties":{"line":4,"name":"defaultName","value":"World","valueType":"string"}}

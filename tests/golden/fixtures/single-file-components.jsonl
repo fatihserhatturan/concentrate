@@ -7,7 +7,8 @@
 {"kind":"node","id":"dir:src/components","label":"Directory","properties":{"name":"components","path":"<root>/src/components","relativePath":"src/components"}}
 {"kind":"node","id":"dir:src/lib","label":"Directory","properties":{"name":"lib","path":"<root>/src/lib","relativePath":"src/lib"}}
 {"kind":"node","id":"dir:src/pages","label":"Directory","properties":{"name":"pages","path":"<root>/src/pages","relativePath":"src/pages"}}
-{"kind":"node","id":"file:src/components/CartButton.vue","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/components/CartButton.vue","relativePath":"src/components/CartButton.vue","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/CartButton.vue","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"vue","path":"<root>/src/components/CartButton.vue","relativePath":"src/components/CartButton.vue","sourceType":"production"}}
 {"kind":"node","id":"file:src/components/CartButton.vue:component:1:CartButton","label":"Component","properties":{"endLine":25,"framework":"vue","hooks":null,"isExported":true,"kind":"script-setup","line":1,"name":"CartButton","pendingRenders":null,"props":"id,label"}}
 {"kind":"node","id":"file:src/components/CartButton.vue:config:8:name","label":"ConfigValue","properties":{"line":8,"name":"name","value":"CartButton","valueType":"string"}}
 {"kind":"node","id":"file:src/components/CartButton.vue:entrypoint:2:23:dom-event:click","label":"EntryPoint","properties":{"handlerName":"add","kind":"dom-event","library":"vue","line":2,"receiverName":"button","trigger":"click"}}
@@ -21,7 +22,7 @@
 {"kind":"node","id":"file:src/components/CartButton.vue:variable:15:props","label":"Variable","properties":{"isExported":false,"kind":"const","line":15,"name":"props","stringValue":null}}
 {"kind":"node","id":"file:src/components/CartButton.vue:variable:16:count","label":"Variable","properties":{"isExported":false,"kind":"const","line":16,"name":"count","stringValue":null}}
 {"kind":"node","id":"file:src/components/CartButton.vue:variable:8:name","label":"Variable","properties":{"isExported":true,"kind":"const","line":8,"name":"name","stringValue":"CartButton"}}
-{"kind":"node","id":"file:src/components/Total.svelte","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"svelte","path":"<root>/src/components/Total.svelte","relativePath":"src/components/Total.svelte","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/Total.svelte","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"svelte","path":"<root>/src/components/Total.svelte","relativePath":"src/components/Total.svelte","sourceType":"production"}}
 {"kind":"node","id":"file:src/components/Total.svelte:component:1:Total","label":"Component","properties":{"endLine":20,"framework":"svelte","hooks":null,"isExported":true,"kind":"legacy","line":1,"name":"Total","pendingRenders":null,"props":"cents"}}
 {"kind":"node","id":"file:src/components/Total.svelte:config:2:currency","label":"ConfigValue","properties":{"line":2,"name":"currency","value":"USD","valueType":"string"}}
 {"kind":"node","id":"file:src/components/Total.svelte:entrypoint:17:5:dom-event:click","label":"EntryPoint","properties":{"handlerName":"refresh","kind":"dom-event","library":"svelte","line":17,"receiverName":"p","trigger":"click"}}
@@ -32,11 +33,11 @@
 {"kind":"node","id":"file:src/components/Total.svelte:import:6:../lib/cart","label":"Import","properties":{"bindings":"[{\"imported\":\"formatTotal\",\"local\":\"formatTotal\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":6,"source":"../lib/cart","specifier":"import { formatTotal } from '../lib/cart';"}}
 {"kind":"node","id":"file:src/components/Total.svelte:variable:2:currency","label":"Variable","properties":{"isExported":true,"kind":"const","line":2,"name":"currency","stringValue":"USD"}}
 {"kind":"node","id":"file:src/components/Total.svelte:variable:8:cents","label":"Variable","properties":{"isExported":true,"kind":"let","line":8,"name":"cents","stringValue":null}}
-{"kind":"node","id":"file:src/lib/cart.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/lib/cart.ts","relativePath":"src/lib/cart.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/lib/cart.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/lib/cart.ts","relativePath":"src/lib/cart.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/lib/cart.ts:function:1:addToCart","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"addToCart","parameters":"[{\"name\":\"id\",\"type\":\"string\"}]","returnType":"number","visibility":"public"}}
 {"kind":"node","id":"file:src/lib/cart.ts:function:5:formatTotal","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"formatTotal","parameters":"[{\"name\":\"cents\",\"type\":\"number\"}]","returnType":"string","visibility":"public"}}
 {"kind":"node","id":"file:src/lib/cart.ts:function:5:formatTotal:call:6:13:(cents / 100).toFixed","label":"Call","properties":{"args":"[\"2\"]","callee":"toFixed","columnNumber":13,"expression":"(cents / 100).toFixed","line":6,"name":"(cents / 100).toFixed","receiver":""}}
-{"kind":"node","id":"file:src/pages/index.astro","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"astro","path":"<root>/src/pages/index.astro","relativePath":"src/pages/index.astro","sourceType":"production"}}
+{"kind":"node","id":"file:src/pages/index.astro","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"astro","path":"<root>/src/pages/index.astro","relativePath":"src/pages/index.astro","sourceType":"production"}}
 {"kind":"node","id":"file:src/pages/index.astro:component:1:Index","label":"Component","properties":{"endLine":19,"framework":"astro","hooks":null,"isExported":true,"kind":"astro","line":1,"name":"Index","pendingRenders":null,"props":null}}
 {"kind":"node","id":"file:src/pages/index.astro:entrypoint:16:6:dom-event:click","label":"EntryPoint","properties":{"handlerName":null,"kind":"dom-event","library":"dom","line":16,"receiverName":"document","trigger":"click"}}
 {"kind":"node","id":"file:src/pages/index.astro:function:16:<document.querySelector('p')?.addEventListener:click:arg1>","label":"Function","properties":{"className":null,"endLine":16,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":16,"methodKind":null,"name":"<document.querySelector('p')?.addEventListener:click:arg1>","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -54,6 +55,7 @@
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"single-file-components","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"single-file-components","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/components","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/lib","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/pages","properties":{}}
@@ -130,6 +132,7 @@
 {"kind":"rel","from":"file:src/pages/index.astro:import:4:../lib/cart","type":"RESOLVES_TO","to":"file:src/lib/cart.ts","properties":{}}
 {"kind":"rel","from":"file:src/pages/index.astro:initializercall:7:14:formatTotal","type":"CALL_RESOLVES_TO","to":"file:src/lib/cart.ts:function:5:formatTotal","properties":{}}
 {"kind":"rel","from":"file:src/pages/index.astro:variable:7:total","type":"INITIALIZED_BY","to":"file:src/pages/index.astro:initializercall:7:14:formatTotal","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/CartButton.vue","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Total.svelte","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/lib/cart.ts","properties":{}}

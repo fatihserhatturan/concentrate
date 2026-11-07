@@ -1,6 +1,7 @@
 {"kind":"report","status":"success","discoveredFiles":2,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"go-mux","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
+{"kind":"node","id":"file:go.mod","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/go.mod","relativePath":"go.mod","sourceType":"production"}}
+{"kind":"node","id":"file:main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
 {"kind":"node","id":"file:main.go:entrypoint:21:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":21,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:main.go:function:11:show","label":"Function","properties":{"className":null,"endLine":11,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":11,"methodKind":null,"name":"show","parameters":"[{\"name\":\"w\",\"type\":\"http.ResponseWriter\"},{\"name\":\"r\",\"type\":\"*http.Request\"}]","returnType":null,"visibility":"unexported"}}
 {"kind":"node","id":"file:main.go:function:13:logging","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":13,"methodKind":null,"name":"logging","parameters":"[{\"name\":\"next\",\"type\":\"http.Handler\"}]","returnType":"http.Handler","visibility":"unexported"}}
@@ -35,6 +36,7 @@
 {"kind":"node","id":"file:main.go:route:29:1:GET:/users","label":"Route","properties":{"framework":"gorilla/mux","fullPath":"/api/users","handlerName":"list","line":29,"method":"GET","path":"/users","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"api","scopeFunctionId":"file:main.go:function:21:main"}}
 {"kind":"node","id":"file:main.go:route:31:1:ALL:/static/","label":"Route","properties":{"framework":"gorilla/mux","fullPath":"/static/","handlerName":"http.StripPrefix(\"/static/\", http.FileServer(http.Dir(\".\")))","line":31,"method":"ALL","path":"/static/","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"r","scopeFunctionId":"file:main.go:function:21:main"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-mux","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:go.mod","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
 {"kind":"rel","from":"file:main.go","type":"DECLARES_ENTRYPOINT","to":"file:main.go:entrypoint:21:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:main.go","type":"DECLARES_ROUTE","to":"file:main.go:route:23:1:ALL:/","properties":{}}

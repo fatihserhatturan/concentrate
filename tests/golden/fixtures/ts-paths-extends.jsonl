@@ -3,14 +3,18 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"ts-paths-extends","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"dir:src/lib","label":"Directory","properties":{"name":"lib","path":"<root>/src/lib","relativePath":"src/lib"}}
-{"kind":"node","id":"file:src/index.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/index.ts","relativePath":"src/index.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/index.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/index.ts","relativePath":"src/index.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/index.ts:function:3:main","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/index.ts:function:3:main:call:4:9:helper","label":"Call","properties":{"args":"[]","callee":"helper","columnNumber":9,"expression":"helper","line":4,"name":"helper","receiver":null}}
 {"kind":"node","id":"file:src/index.ts:import:1:@lib/helper","label":"Import","properties":{"bindings":"[{\"imported\":\"helper\",\"local\":\"helper\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"@lib/helper","specifier":"import { helper } from '@lib/helper'"}}
-{"kind":"node","id":"file:src/lib/helper.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/lib/helper.ts","relativePath":"src/lib/helper.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/lib/helper.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/lib/helper.ts","relativePath":"src/lib/helper.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/lib/helper.ts:function:1:helper","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"helper","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:tsconfig.base.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/tsconfig.base.json","relativePath":"tsconfig.base.json","sourceType":"production"}}
+{"kind":"node","id":"file:tsconfig.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/tsconfig.json","relativePath":"tsconfig.json","sourceType":"production"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"ts-paths-extends","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:tsconfig.base.json","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:tsconfig.json","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/lib","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/index.ts","properties":{}}
 {"kind":"rel","from":"dir:src/lib","type":"CONTAINS_FILE","to":"file:src/lib/helper.ts","properties":{}}

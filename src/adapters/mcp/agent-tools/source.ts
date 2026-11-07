@@ -65,10 +65,9 @@ export async function getSymbolSource(engine: IQueryEngine, args: Record<string,
 // get_file_outline: the declarations of one file from the graph, in line order.
 export async function getFileOutline(engine: IQueryEngine, args: Record<string, unknown>, window: PageWindow) {
   const file = requiredString(args.file, "file");
-  const files = (await engine.query("MATCH (file:File) RETURN file.relativePath AS file") as Array<{ file?: unknown }>)
-    .map((row) => String(row.file))
-    .filter((candidate) => matchesFile(candidate, file))
-    .sort();
+  const fileRows = (await engine.query("MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType") as Array<{ file?: unknown; language?: unknown; sourceType?: unknown }>)
+    .filter((row) => matchesFile(String(row.file), file));
+  const files = fileRows.map((row) => String(row.file)).sort();
   if (files.length !== 1) {
     return files.length === 0
       ? { file, outline: null, note: "No scanned file matched." }
@@ -111,8 +110,11 @@ export async function getFileOutline(engine: IQueryEngine, args: Record<string, 
   outline.push(...symbols.filter((symbol) => symbol.kind === "method" && !classNames.has(symbol.className ?? "")).map(entry));
   outline.push(...entrypoints.map((entrypoint) => ({ ...entrypoint, kind: `entrypoint:${String(entrypoint.kind)}` })));
 
+  const row = fileRows.find((candidate) => String(candidate.file) === relativePath);
   return {
     file: relativePath,
+    language: row?.language ?? null,
+    sourceType: row?.sourceType ?? null,
     imports: imports.sort(byFileAndLine),
     outline: window.take(outline.sort(byFileAndLine)),
   };

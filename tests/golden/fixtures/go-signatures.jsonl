@@ -3,11 +3,12 @@
 {"kind":"node","id":"dir:impl","label":"Directory","properties":{"name":"impl","path":"<root>/impl","relativePath":"impl"}}
 {"kind":"node","id":"dir:other","label":"Directory","properties":{"name":"other","path":"<root>/other","relativePath":"other"}}
 {"kind":"node","id":"dir:repo","label":"Directory","properties":{"name":"repo","path":"<root>/repo","relativePath":"repo"}}
-{"kind":"node","id":"file:impl/remote.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"impl","path":"<root>/impl/remote.go","relativePath":"impl/remote.go","sourceType":"production"}}
+{"kind":"node","id":"file:go.mod","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/go.mod","relativePath":"go.mod","sourceType":"production"}}
+{"kind":"node","id":"file:impl/remote.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"impl","path":"<root>/impl/remote.go","relativePath":"impl/remote.go","sourceType":"production"}}
 {"kind":"node","id":"file:impl/remote.go:class:7:Remote","label":"Class","properties":{"endLine":7,"fields":"[]","isAbstract":false,"isExported":true,"line":7,"name":"Remote","visibility":"exported"}}
 {"kind":"node","id":"file:impl/remote.go:function:9:Get","label":"Function","properties":{"className":"Remote","endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":9,"methodKind":null,"name":"Get","parameters":"[{\"name\":\"id\",\"type\":\"int\"}]","returnType":"(repo.User, error)","visibility":"exported"}}
 {"kind":"node","id":"file:impl/remote.go:import:3:example.com/ifaces/repo","label":"Import","properties":{"line":3,"source":"example.com/ifaces/repo","specifier":"\"example.com/ifaces/repo\""}}
-{"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
+{"kind":"node","id":"file:main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
 {"kind":"node","id":"file:main.go:class:5:Service","label":"Class","properties":{"endLine":8,"fields":"[{\"name\":\"users\",\"type\":\"repo.Users\"},{\"name\":\"posts\",\"type\":\"repo.Posts\"}]","isAbstract":false,"isExported":true,"line":5,"name":"Service","visibility":"exported"}}
 {"kind":"node","id":"file:main.go:entrypoint:30:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":30,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:main.go:function:10:Load","label":"Function","properties":{"className":"Service","endLine":21,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":10,"methodKind":null,"name":"Load","parameters":"[{\"name\":\"ids\",\"type\":\"map[int]bool\"}]","returnType":null,"visibility":"exported"}}
@@ -21,12 +22,12 @@
 {"kind":"node","id":"file:main.go:function:30:main:call:32:1:svc.Load","label":"Call","properties":{"callee":"Load","columnNumber":1,"expression":"svc.Load","line":32,"name":"svc.Load","receiver":"svc","receiverType":"Service"}}
 {"kind":"node","id":"file:main.go:function:30:main:call:33:5:save","label":"Call","properties":{"callee":"save","columnNumber":5,"expression":"save","line":33,"name":"save","receiver":null}}
 {"kind":"node","id":"file:main.go:import:3:example.com/ifaces/repo","label":"Import","properties":{"line":3,"source":"example.com/ifaces/repo","specifier":"\"example.com/ifaces/repo\""}}
-{"kind":"node","id":"file:other/other.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"other","path":"<root>/other/other.go","relativePath":"other/other.go","sourceType":"production"}}
+{"kind":"node","id":"file:other/other.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"other","path":"<root>/other/other.go","relativePath":"other/other.go","sourceType":"production"}}
 {"kind":"node","id":"file:other/other.go:class:11:Local","label":"Class","properties":{"endLine":11,"fields":"[]","isAbstract":false,"isExported":true,"line":11,"name":"Local","visibility":"exported"}}
 {"kind":"node","id":"file:other/other.go:class:5:User","label":"Class","properties":{"endLine":5,"fields":"[{\"name\":\"ID\",\"type\":\"int\"}]","isAbstract":false,"isExported":true,"line":5,"name":"User","visibility":"exported"}}
 {"kind":"node","id":"file:other/other.go:function:13:Get","label":"Function","properties":{"className":"Local","endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":13,"methodKind":null,"name":"Get","parameters":"[{\"name\":\"id\",\"type\":\"int\"}]","returnType":"(User, error)","visibility":"exported"}}
 {"kind":"node","id":"file:other/other.go:interface:7:Users","label":"Interface","properties":{"embeds":"[]","endLine":9,"isExported":true,"line":7,"methodSignatures":"{\"Get\":{\"parameters\":[\"int\"],\"returnType\":\"(User, error)\"}}","methods":"[\"Get\"]","name":"Users"}}
-{"kind":"node","id":"file:repo/repo.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"repo","path":"<root>/repo/repo.go","relativePath":"repo/repo.go","sourceType":"production"}}
+{"kind":"node","id":"file:repo/repo.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"repo","path":"<root>/repo/repo.go","relativePath":"repo/repo.go","sourceType":"production"}}
 {"kind":"node","id":"file:repo/repo.go:class:16:UserRepo","label":"Class","properties":{"endLine":16,"fields":"[]","isAbstract":false,"isExported":true,"line":16,"name":"UserRepo","visibility":"exported"}}
 {"kind":"node","id":"file:repo/repo.go:class:20:PostRepo","label":"Class","properties":{"endLine":20,"fields":"[]","isAbstract":false,"isExported":true,"line":20,"name":"PostRepo","visibility":"exported"}}
 {"kind":"node","id":"file:repo/repo.go:class:25:Handler","label":"Class","properties":{"endLine":25,"fields":"[]","isAbstract":false,"isExported":true,"line":25,"name":"Handler","visibility":"exported"}}
@@ -45,6 +46,7 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:impl","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:other","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:repo","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:go.mod","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
 {"kind":"rel","from":"dir:impl","type":"CONTAINS_FILE","to":"file:impl/remote.go","properties":{}}
 {"kind":"rel","from":"dir:other","type":"CONTAINS_FILE","to":"file:other/other.go","properties":{}}
