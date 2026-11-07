@@ -155,7 +155,8 @@ function linkReferences(root: SyntaxNode): Array<{ value: string; line: number; 
         const name = attribute.namedChildren.find((child) => child?.type === "attribute_name")?.text.toLowerCase();
         if (name !== "href") continue;
         const value = attributeText(attribute.namedChildren.find((child) => child?.type === "attribute_value" || child?.type === "quoted_attribute_value")).trim();
-        if (value && !value.startsWith("#")) links.push({ value, line: node.startPosition.row + 1, text: node.text });
+        // Stylesheets and icons of other sites (`https://…`, `//cdn…`) name no file of the project.
+        if (value && !value.startsWith("#") && !/^[a-z][a-z\d+.-]*:/iu.test(value) && !value.startsWith("//")) links.push({ value, line: node.startPosition.row + 1, text: node.text });
       }
       return;
     }
