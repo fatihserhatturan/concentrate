@@ -1,0 +1,3 @@
+all: dep
+	echo "unterminated
+( =

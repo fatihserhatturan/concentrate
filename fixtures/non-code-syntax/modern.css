@@ -1,0 +1,3 @@
+.card { color: red; }
+@media (width <= 768px) { .card { color: blue; } }
+.x { color: red;; }

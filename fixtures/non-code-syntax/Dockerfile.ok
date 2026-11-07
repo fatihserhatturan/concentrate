@@ -1,0 +1,6 @@
+FROM node:22 AS build
+RUN <<EOF
+echo one
+FROM nothing here
+EOF
+CMD ["node", "x.js"]

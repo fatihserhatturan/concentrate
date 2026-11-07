@@ -1267,9 +1267,27 @@ Astro).
   `yaml`, `toml`, `markdown`, `shell`, `powershell`, `dockerfile`, `makefile`,
   `sql`, `proto`) or `other` (text) and `asset` (images, fonts, media,
   archives, and any file with a NUL byte in its first 8 000 bytes). They have
-  no declarations yet: the grammars and readers for them come in a later part
-  of Phase 22 and Phases 23–25. The scan report counts them as `otherFiles`;
+  no declarations yet: Phases 23–25 read them (scripts and infrastructure,
+  CSS, SQL and `.proto`). The scan report counts them as `otherFiles`;
   `supportedFiles` is the number of code files.
+- Vendored grammars (`vendor/grammars`, built with `npm run grammars:build`):
+  `css`, `scss`, `json`, `yaml`, `bash`, `powershell`, `make` and `sql`.
+  `less`, `toml` and `markdown` have none. Dockerfile and `.proto` have small
+  line readers (`src/integrations/languages/plain/`) because npm has no usable
+  grammar for them (`tree-sitter-dockerfile` there is a security placeholder).
+  `tree-sitter-powershell` is pinned to 0.26.4 because 0.26.6 was under two
+  weeks old when it was added; its grammar reports a one-line
+  `param($a) $a` as an error.
+- A syntax error in a JSON, YAML, shell, PowerShell, Makefile, Dockerfile or
+  `.proto` file keeps the `File` node and gives one scan warning
+  (`Syntax error at lines 3, 9`, at most five lines). Not checked, to avoid
+  wrong warnings: CSS, SCSS and SQL (the grammars reject valid CSS range media
+  queries such as `width <= 768px`, MySQL backticks and `/*! … */` comments,
+  `LIMIT $2` and `FOR NO KEY UPDATE`), JSON that tools read with comments
+  (`*.jsonc`, `*.json5`, `tsconfig*.json`, `jsconfig*.json`, `.eslintrc*`,
+  `.babelrc`, `.vscode/`), YAML with `{{ … }}` templates (Helm, Jinja,
+  Ansible), lockfiles, and files over 1 MB (`MAX_PARSED_BYTES`), which stay
+  `File` nodes.
 - The language of a file comes from its extension or name (`Dockerfile`,
   `Makefile`). A shebang is not read, so a script without `.sh` is `other`.
   `.svg` is an `asset` although it is text.
@@ -1289,7 +1307,6 @@ Astro).
   `architecture_overview` and the code counts of the graph summary
   (`files.code`) leave non-code files out, while `files.total` and the
   `languages` list include them.
-- A syntax error in a non-code file is not detected yet (they are not parsed).
 
 ## Review Process
 

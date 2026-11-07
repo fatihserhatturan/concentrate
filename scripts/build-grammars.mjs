@@ -24,6 +24,15 @@ const grammars = [
   { name: "python", package: "tree-sitter-python", version: "0.21.0", dir: "." },
   { name: "go", package: "tree-sitter-go", version: "0.25.0", dir: "." },
   { name: "rust", package: "tree-sitter-rust", version: "0.21.0", dir: "." },
+  // Non-code files (Phase 22). tree-sitter-powershell 0.26.6 is under two weeks old, so 0.26.4.
+  { name: "css", package: "tree-sitter-css", version: "0.25.0", dir: "." },
+  { name: "scss", package: "tree-sitter-scss", version: "1.0.0", dir: "." },
+  { name: "json", package: "tree-sitter-json", version: "0.24.8", dir: "." },
+  { name: "yaml", package: "@tree-sitter-grammars/tree-sitter-yaml", version: "0.7.1", dir: "." },
+  { name: "bash", package: "tree-sitter-bash", version: "0.25.1", dir: "." },
+  { name: "powershell", package: "tree-sitter-powershell", version: "0.26.4", dir: "." },
+  { name: "make", package: "tree-sitter-make", version: "1.1.1", dir: "." },
+  { name: "sql", package: "@derekstride/tree-sitter-sql", version: "0.3.11", dir: "." },
 ];
 
 const only = process.argv.slice(2);

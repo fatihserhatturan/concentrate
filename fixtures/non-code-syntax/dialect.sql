@@ -1,0 +1,2 @@
+SELECT a FROM t WHERE b = $1 LIMIT $2 FOR NO KEY UPDATE;
+CREATE TABLE `t` (`a` int);
