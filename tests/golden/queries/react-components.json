@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 15
+            "count": 16
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 15
+          "count": 16
         },
         {
           "table": "Import",
@@ -1059,52 +1059,87 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "src/App.tsx"
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           },
           {
-            "file": "src/cart/CartContext.tsx"
+            "file": "src/App.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/cart/useCart.ts"
+            "file": "src/cart/CartContext.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Avatar.tsx"
+            "file": "src/cart/useCart.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Button.tsx"
+            "file": "src/components/Avatar.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Card.tsx"
+            "file": "src/components/Button.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/CartBadge.tsx"
+            "file": "src/components/Card.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Input.tsx"
+            "file": "src/components/CartBadge.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Legacy.jsx"
+            "file": "src/components/Input.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Profile.jsx"
+            "file": "src/components/Legacy.jsx",
+            "language": "javascript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Store.js"
+            "file": "src/components/Profile.jsx",
+            "language": "javascript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/index.ts"
+            "file": "src/components/Store.js",
+            "language": "javascript",
+            "sourceType": "production"
           },
           {
-            "file": "src/pages/Reports.tsx"
+            "file": "src/components/index.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/pages/Settings.tsx"
+            "file": "src/pages/Reports.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/pages/routes.tsx"
+            "file": "src/pages/Settings.tsx",
+            "language": "typescript",
+            "sourceType": "production"
+          },
+          {
+            "file": "src/pages/routes.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           }
         ]
       },
@@ -1300,6 +1335,8 @@
     ],
     "output": {
       "file": "src/App.tsx",
+      "language": "typescript",
+      "sourceType": "production",
       "imports": [
         {
           "source": "react-router-dom",

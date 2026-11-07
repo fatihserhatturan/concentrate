@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 8
+            "count": 9
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 8
+          "count": 9
         },
         {
           "table": "Import",
@@ -1434,31 +1434,52 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "src/App.svelte"
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           },
           {
-            "file": "src/Clock.svelte"
+            "file": "src/App.svelte",
+            "language": "svelte",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/cart.svelte.ts"
+            "file": "src/Clock.svelte",
+            "language": "svelte",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/data.ts"
+            "file": "src/lib/cart.svelte.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/index.ts"
+            "file": "src/lib/data.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/logger.ts"
+            "file": "src/lib/index.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/registry.ts"
+            "file": "src/lib/logger.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/stores.ts"
+            "file": "src/lib/registry.ts",
+            "language": "typescript",
+            "sourceType": "production"
+          },
+          {
+            "file": "src/lib/stores.ts",
+            "language": "typescript",
+            "sourceType": "production"
           }
         ]
       },
@@ -1649,6 +1670,8 @@
     ],
     "output": {
       "file": "src/lib/stores.ts",
+      "language": "typescript",
+      "sourceType": "production",
       "imports": [
         {
           "source": "svelte/store",

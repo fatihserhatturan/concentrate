@@ -1259,6 +1259,38 @@ Astro).
   included), so it can miss dead exports but rarely flags used ones. Uses
   from outside the scan (a library's consumers) are not seen.
 
+## Non-code files
+
+- Every discovered file is a `File` node with a `language` and a `sourceType`.
+  Code files (JS/TS, HTML, Vue, Svelte, Astro, Python, Go, Rust) are parsed for
+  declarations. The others are known formats (`css`, `scss`, `less`, `json`,
+  `yaml`, `toml`, `markdown`, `shell`, `powershell`, `dockerfile`, `makefile`,
+  `sql`, `proto`) or `other` (text) and `asset` (images, fonts, media,
+  archives, and any file with a NUL byte in its first 8 000 bytes). They have
+  no declarations yet: the grammars and readers for them come in a later part
+  of Phase 22 and Phases 23–25. The scan report counts them as `otherFiles`;
+  `supportedFiles` is the number of code files.
+- The language of a file comes from its extension or name (`Dockerfile`,
+  `Makefile`). A shebang is not read, so a script without `.sh` is `other`.
+  `.svg` is an `asset` although it is text.
+- `docs` is a source type for Markdown, `LICENSE`, `README`, `CHANGELOG` and
+  similar files, and for any non-code file under `docs/`. Code under `docs/`
+  stays `production`. Lockfiles (`package-lock.json`, `pnpm-lock.yaml`,
+  `yarn.lock`, `go.sum`, `Cargo.lock`, `poetry.lock`, …) are `generated`.
+- JS/TS imports of styles, JSON and images, `new URL("./x.png", import.meta.url)`
+  and HTML `<link href>` / `<script src>` resolve to the `File`. A `new URL`
+  of a path without an extension (a directory alias such as
+  `new URL("./src", import.meta.url)`) and a `src` or `href` with a template
+  placeholder (`%PUBLIC_URL%`, `{{ x }}`, `<%= x %>`, `${x}`) are not imports.
+  Root-relative paths (`/favicon.ico`), URLs, CSS `@import` / `url()` and
+  Markdown links are not followed.
+- `--max-files` limits code files only; the other files are always kept.
+- `get_file_outline` reports a file's `language` and `sourceType`;
+  `architecture_overview` and the code counts of the graph summary
+  (`files.code`) leave non-code files out, while `files.total` and the
+  `languages` list include them.
+- A syntax error in a non-code file is not detected yet (they are not parsed).
+
 ## Review Process
 
 - Smoke reports include empty `falsePositiveFindings`,

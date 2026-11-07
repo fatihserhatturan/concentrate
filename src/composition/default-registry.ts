@@ -6,6 +6,7 @@ import { astroParser, htmlParser, javascriptParser, svelteParser, typescriptPars
 import { pythonParser } from "../integrations/languages/python/parser.js";
 import { goDataAccessContributor, goDiContributor, goEntrypointsContributor, goEnvConfigContributor, goForeignRoutersContributor, goFrameworkParser, goGrpcContributor, goHttpClientsContributor, goRoutesContributor } from "../integrations/frameworks/go/index.js";
 import { rustParser } from "../integrations/languages/rust/parser.js";
+import { plainFileParsers } from "../integrations/languages/plain/parser.js";
 import {
   nestjsModulesContributor,
   nestjsInjectionContributor,
@@ -34,7 +35,7 @@ export { CoreIntegrationRegistry };
 export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry {
   const registry = new CoreIntegrationRegistry();
 
-  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonParser, goFrameworkParser, rustParser]) {
+  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonParser, goFrameworkParser, rustParser, ...plainFileParsers]) {
     registry.registerLanguageParser(parser);
   }
 

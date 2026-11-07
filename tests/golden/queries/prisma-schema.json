@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -21,11 +21,11 @@
           },
           {
             "table": "Directory",
-            "count": 2
+            "count": 3
           },
           {
             "table": "File",
-            "count": 2
+            "count": 4
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -119,11 +119,11 @@
         },
         {
           "table": "Directory",
-          "count": 2
+          "count": 3
         },
         {
           "table": "File",
-          "count": 2
+          "count": 4
         },
         {
           "table": "Import",

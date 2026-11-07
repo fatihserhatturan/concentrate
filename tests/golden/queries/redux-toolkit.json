@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 8
+            "count": 9
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 8
+          "count": 9
         },
         {
           "table": "Import",
@@ -2063,31 +2063,52 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "src/app/hooks.ts"
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           },
           {
-            "file": "src/app/store.ts"
+            "file": "src/app/hooks.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Cart.tsx"
+            "file": "src/app/store.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Profile.tsx"
+            "file": "src/components/Cart.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/features/cart/cartSlice.ts"
+            "file": "src/components/Profile.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/features/user/userSlice.ts"
+            "file": "src/features/cart/cartSlice.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/api.ts"
+            "file": "src/features/user/userSlice.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/slices.ts"
+            "file": "src/lib/api.ts",
+            "language": "typescript",
+            "sourceType": "production"
+          },
+          {
+            "file": "src/lib/slices.ts",
+            "language": "typescript",
+            "sourceType": "production"
           }
         ]
       },
@@ -2294,6 +2315,8 @@
     ],
     "output": {
       "file": "src/features/cart/cartSlice.ts",
+      "language": "typescript",
+      "sourceType": "production",
       "imports": [
         {
           "source": "@reduxjs/toolkit",

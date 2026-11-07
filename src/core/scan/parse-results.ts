@@ -2,6 +2,7 @@ import path from "node:path";
 import { GraphBuilder } from "../graph/builder.js";
 import { addDirectoryChain } from "./directory-graph.js";
 import { classifyFile } from "./file-classification.js";
+import { isCodeLanguage, type SupportedLanguage } from "./language.js";
 import type { ParseResult } from "./parse-source.js";
 import { addUniqueScanWarning, createScanFailure, type ScanReport } from "./report.js";
 
@@ -15,8 +16,7 @@ export function addParseResultsToGraph(
 ): boolean {
   for (const result of parseResults) {
     if (result.ok) {
-      addParsedFileToGraph(graph, repoNodeId, rootPath, result, report);
-      report.parsedFiles += 1;
+      if (addParsedFileToGraph(graph, repoNodeId, rootPath, result, report)) report.parsedFiles += 1;
       continue;
     }
 
@@ -35,13 +35,15 @@ function addParsedFileToGraph(
   rootPath: string,
   result: Extract<ParseResult, { ok: true }>,
   report: ScanReport,
-): void {
+): boolean {
   const directoryNodeId = addDirectoryChain(graph, repoNodeId, rootPath, path.dirname(result.filePath));
   const relativePath = path.relative(rootPath, result.filePath);
   const fileNode = result.parsed.nodes.find((node) => node.id === result.parsed.fileNodeId && node.label === "File");
   // A parser may know the file is generated from its contents (Go's
   // `// Code generated … DO NOT EDIT.`).
-  const classification = classifyFile(relativePath, fileNode?.properties.isGenerated === true);
+  const language = fileNode?.properties.language;
+  const code = typeof language !== "string" || isCodeLanguage(language as SupportedLanguage);
+  const classification = classifyFile(relativePath, fileNode?.properties.isGenerated === true, code);
   for (const node of result.parsed.nodes) {
     if (node.id !== result.parsed.fileNodeId || node.label !== "File") continue;
     node.properties = {
@@ -62,4 +64,5 @@ function addParsedFileToGraph(
     type: "CONTAINS_FILE",
     properties: {},
   });
+  return code;
 }

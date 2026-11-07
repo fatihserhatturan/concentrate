@@ -215,9 +215,9 @@ describe("MCP protocol", () => {
     assert.equal(read.contents[0].mimeType, "application/json");
     const summary = JSON.parse(read.contents[0].text);
     assert.equal(summary.schemaVersion, SCHEMA_VERSION);
-    assert.deepEqual(summary.files, { total: 5, tests: 0 });
-    assert.deepEqual(summary.languages, [{ name: "typescript", count: 5 }]);
-    assert.deepEqual(summary.topDirectories, [{ name: "src", count: 5 }]);
+    assert.deepEqual(summary.files, { total: 6, code: 5, tests: 0 });
+    assert.deepEqual(summary.languages, [{ name: "typescript", count: 5 }, { name: "json", count: 1 }]);
+    assert.deepEqual(summary.topDirectories, [{ name: "src", count: 5 }, { name: ".", count: 1 }]);
     assert.deepEqual(summary.packages.map((entry: any) => entry.name), ["protocol-app"]);
     assert.equal(summary.routesByFramework["express-koa"], 1);
     assert.equal(summary.envVars, 1);
@@ -236,7 +236,7 @@ describe("MCP protocol", () => {
       const routes = await server.request("tools/call", modern({ name: "list_routes", arguments: {} }));
       assert.equal(routes.structuredContent.routes[0].path, "/items");
       const resource = await server.request("resources/read", modern({ uri: GRAPH_SUMMARY_URI }));
-      assert.equal(JSON.parse(resource.contents[0].text).files.total, 5);
+      assert.equal(JSON.parse(resource.contents[0].text).files.code, 5);
       const unsupported = await server.send("tools/list", { _meta: { "io.modelcontextprotocol/protocolVersion": "2020-01-01" } });
       assert.equal(unsupported.error?.code, -32022);
       const unknown = await server.send("tools/call", modern({ name: "nope" }));

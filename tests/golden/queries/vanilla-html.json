@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 5
+            "count": 6
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 5
+          "count": 6
         },
         {
           "table": "Import",
@@ -878,22 +878,37 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "index.html"
+            "file": "index.html",
+            "language": "html",
+            "sourceType": "production"
           },
           {
-            "file": "js/format.js"
+            "file": "js/format.js",
+            "language": "javascript",
+            "sourceType": "production"
           },
           {
-            "file": "js/store.js"
+            "file": "js/store.js",
+            "language": "javascript",
+            "sourceType": "production"
           },
           {
-            "file": "js/todo-item.js"
+            "file": "js/todo-item.js",
+            "language": "javascript",
+            "sourceType": "production"
           },
           {
-            "file": "js/vendor.js"
+            "file": "js/vendor.js",
+            "language": "javascript",
+            "sourceType": "production"
+          },
+          {
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           }
         ]
       },
@@ -1076,6 +1091,8 @@
     ],
     "output": {
       "file": "index.html",
+      "language": "html",
+      "sourceType": "production",
       "imports": [
         {
           "source": "./js/store.js",

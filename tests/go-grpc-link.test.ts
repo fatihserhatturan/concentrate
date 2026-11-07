@@ -28,7 +28,7 @@ describe("Go gRPC between services", () => {
   });
 
   it("classifies a file with Go's generated header as generated", () => {
-    const files = graph.nodes.filter((node) => node.label === "File").map((node) => [node.properties.relativePath, node.properties.sourceType]).sort();
+    const files = graph.nodes.filter((node) => node.label === "File" && node.properties.language === "go").map((node) => [node.properties.relativePath, node.properties.sourceType]).sort();
     assert.deepEqual(files, [["api/user/v1/user_grpc.pb.go", "generated"], ["gateway/gateway.go", "production"], ["user/service.go", "production"]]);
   });
 

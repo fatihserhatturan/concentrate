@@ -6,7 +6,8 @@
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"dir:src/atoms","label":"Directory","properties":{"name":"atoms","path":"<root>/src/atoms","relativePath":"src/atoms"}}
 {"kind":"node","id":"dir:src/components","label":"Directory","properties":{"name":"components","path":"<root>/src/components","relativePath":"src/components"}}
-{"kind":"node","id":"file:src/atoms/counter.ts","label":"File","properties":{"defaultExport":"userAtom","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/atoms/counter.ts","relativePath":"src/atoms/counter.ts","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:src/atoms/counter.ts","label":"File","properties":{"defaultExport":"userAtom","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/atoms/counter.ts","relativePath":"src/atoms/counter.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/atoms/counter.ts:function:10:<atom:arg1>","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"arrow_function","line":10,"methodKind":null,"name":"<atom:arg1>","parameters":"[{\"name\":\"get\",\"type\":null},{\"name\":\"set\",\"type\":null},{\"name\":\"by\",\"type\":\"number\"}]","returnType":null,"storeRefs":"[{\"binding\":\"countAtom\",\"line\":11,\"read\":false,\"write\":true,\"reads\":[],\"writes\":[],\"calls\":[],\"destructured\":[]},{\"binding\":\"countAtom\",\"line\":11,\"read\":true,\"write\":false,\"reads\":[],\"writes\":[],\"calls\":[],\"destructured\":[]}]","visibility":"public"}}
 {"kind":"node","id":"file:src/atoms/counter.ts:function:10:<atom:arg1>:call:11:17:get","label":"Call","properties":{"args":"[\"countAtom\"]","callee":"get","columnNumber":17,"expression":"get","line":11,"name":"get","receiver":null}}
 {"kind":"node","id":"file:src/atoms/counter.ts:function:10:<atom:arg1>:call:11:2:set","label":"Call","properties":{"args":"[\"countAtom\"]","callee":"set","columnNumber":2,"expression":"set","line":11,"name":"set","receiver":null}}
@@ -37,7 +38,7 @@
 {"kind":"node","id":"file:src/atoms/counter.ts:variable:4:countAtom","label":"Variable","properties":{"isExported":true,"kind":"const","line":4,"name":"countAtom","stringValue":null}}
 {"kind":"node","id":"file:src/atoms/counter.ts:variable:6:settingsAtom","label":"Variable","properties":{"isExported":true,"kind":"const","line":6,"name":"settingsAtom","stringValue":null}}
 {"kind":"node","id":"file:src/atoms/counter.ts:variable:8:doubledAtom","label":"Variable","properties":{"isExported":true,"kind":"const","line":8,"name":"doubledAtom","stringValue":null}}
-{"kind":"node","id":"file:src/components/Counter.tsx","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/components/Counter.tsx","relativePath":"src/components/Counter.tsx","sourceType":"production"}}
+{"kind":"node","id":"file:src/components/Counter.tsx","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/components/Counter.tsx","relativePath":"src/components/Counter.tsx","sourceType":"production"}}
 {"kind":"node","id":"file:src/components/Counter.tsx:component:11:Settings","label":"Component","properties":{"defaultExportWrapper":null,"endLine":15,"framework":"react","hooks":"useAtom,useAtomValue","isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":11,"name":"Settings","pendingRenders":null}}
 {"kind":"node","id":"file:src/components/Counter.tsx:component:4:Counter","label":"Component","properties":{"defaultExportWrapper":null,"endLine":9,"framework":"react","hooks":"useAtom,useAtomValue,useSetAtom","isExported":true,"kind":"function","lazyExport":null,"lazySource":null,"line":4,"name":"Counter","pendingRenders":null}}
 {"kind":"node","id":"file:src/components/Counter.tsx:function:11:Settings","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":11,"methodKind":null,"name":"Settings","parameters":"[]","returnType":null,"storeRefs":"[{\"binding\":\"settingsAtom\",\"line\":12,\"read\":true,\"write\":true,\"reads\":[],\"writes\":[],\"calls\":[],\"destructured\":[]},{\"binding\":\"userAtom\",\"line\":13,\"read\":true,\"write\":false,\"reads\":[],\"writes\":[],\"calls\":[],\"destructured\":[]}]","visibility":"public"}}
@@ -54,6 +55,7 @@
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"jotai-atoms-fixture","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"jotai-atoms","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/atoms","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/components","properties":{}}
 {"kind":"rel","from":"dir:src/atoms","type":"CONTAINS_FILE","to":"file:src/atoms/counter.ts","properties":{}}
@@ -124,6 +126,7 @@
 {"kind":"rel","from":"file:src/components/Counter.tsx:function:4:Counter","type":"WRITES_STORE","to":"file:src/atoms/counter.ts:store:10:incrementAtom","properties":{"line":7,"members":""}}
 {"kind":"rel","from":"file:src/components/Counter.tsx:import:2:../atoms/counter","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/components/Counter.tsx:import:2:../atoms/counter","type":"RESOLVES_TO","to":"file:src/atoms/counter.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/atoms/counter.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/components/Counter.tsx","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}

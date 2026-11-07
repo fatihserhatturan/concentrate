@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 4
+            "count": 5
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 4
+          "count": 5
         },
         {
           "table": "Import",
@@ -1912,19 +1912,32 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "src/components/BearCounter.tsx"
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           },
           {
-            "file": "src/stores/bears.ts"
+            "file": "src/components/BearCounter.tsx",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/stores/counter.ts"
+            "file": "src/stores/bears.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/stores/vanilla.ts"
+            "file": "src/stores/counter.ts",
+            "language": "typescript",
+            "sourceType": "production"
+          },
+          {
+            "file": "src/stores/vanilla.ts",
+            "language": "typescript",
+            "sourceType": "production"
           }
         ]
       },
@@ -2099,6 +2112,8 @@
     ],
     "output": {
       "file": "src/stores/bears.ts",
+      "language": "typescript",
+      "sourceType": "production",
       "imports": [
         {
           "source": "zustand",

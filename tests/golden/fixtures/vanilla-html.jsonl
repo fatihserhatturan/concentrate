@@ -4,7 +4,7 @@
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"vanilla-html","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:js","label":"Directory","properties":{"name":"js","path":"<root>/js","relativePath":"js"}}
-{"kind":"node","id":"file:index.html","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"html","path":"<root>/index.html","relativePath":"index.html","sourceType":"production"}}
+{"kind":"node","id":"file:index.html","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"html","path":"<root>/index.html","relativePath":"index.html","sourceType":"production"}}
 {"kind":"node","id":"file:index.html:entrypoint:13:17:dom-event:dblclick","label":"EntryPoint","properties":{"handlerName":null,"kind":"dom-event","library":"dom","line":13,"receiverName":"ul","trigger":"dblclick"}}
 {"kind":"node","id":"file:index.html:entrypoint:14:19:dom-event:click","label":"EntryPoint","properties":{"handlerName":"renderTodos","kind":"dom-event","library":"dom","line":14,"receiverName":"button","trigger":"click"}}
 {"kind":"node","id":"file:index.html:entrypoint:15:8:dom-event:submit","label":"EntryPoint","properties":{"handlerName":null,"kind":"dom-event","library":"dom","line":15,"receiverName":"form","trigger":"submit"}}
@@ -20,13 +20,13 @@
 {"kind":"node","id":"file:index.html:import:8:./js/vendor.js","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":8,"source":"./js/vendor.js","specifier":"<script src=\"js/vendor.js?v=3\" defer>"}}
 {"kind":"node","id":"file:index.html:import:9:https://cdn.example.com/lib.js","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":9,"source":"https://cdn.example.com/lib.js","specifier":"<script src=\"https://cdn.example.com/lib.js\">"}}
 {"kind":"node","id":"file:index.html:modulecall:18:85:renderTodos","label":"Call","properties":{"args":"[]","callee":"renderTodos","columnNumber":85,"expression":"renderTodos","line":18,"name":"renderTodos","receiver":null}}
-{"kind":"node","id":"file:js/format.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/js/format.js","relativePath":"js/format.js","sourceType":"production"}}
+{"kind":"node","id":"file:js/format.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/js/format.js","relativePath":"js/format.js","sourceType":"production"}}
 {"kind":"node","id":"file:js/format.js:function:1:formatTodo","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"formatTodo","parameters":"[{\"name\":\"todo\",\"type\":null}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:js/store.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/js/store.js","relativePath":"js/store.js","sourceType":"production"}}
+{"kind":"node","id":"file:js/store.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/js/store.js","relativePath":"js/store.js","sourceType":"production"}}
 {"kind":"node","id":"file:js/store.js:function:1:loadTodos","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":1,"methodKind":null,"name":"loadTodos","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:js/store.js:function:1:loadTodos:call:2:20:localStorage.getItem","label":"Call","properties":{"args":"[\"todos\"]","callee":"getItem","columnNumber":20,"expression":"localStorage.getItem","line":2,"name":"localStorage.getItem","receiver":"localStorage"}}
 {"kind":"node","id":"file:js/store.js:function:1:loadTodos:call:2:9:JSON.parse","label":"Call","properties":{"args":"[]","callee":"parse","columnNumber":9,"expression":"JSON.parse","line":2,"name":"JSON.parse","receiver":"JSON"}}
-{"kind":"node","id":"file:js/todo-item.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/js/todo-item.js","relativePath":"js/todo-item.js","sourceType":"production"}}
+{"kind":"node","id":"file:js/todo-item.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/js/todo-item.js","relativePath":"js/todo-item.js","sourceType":"production"}}
 {"kind":"node","id":"file:js/todo-item.js:class:1:TodoItem","label":"Class","properties":{"endLine":9,"extendsNames":"[\"HTMLElement\"]","implementsNames":null,"isAbstract":false,"isExported":false,"line":1,"name":"TodoItem","visibility":"public"}}
 {"kind":"node","id":"file:js/todo-item.js:component:19:todo-item","label":"Component","properties":{"framework":"web-components","kind":"web-component","line":19,"name":"TodoItem","tagName":"todo-item"}}
 {"kind":"node","id":"file:js/todo-item.js:entrypoint:12:2:dom-event:click","label":"EntryPoint","properties":{"handlerName":"onAdd","kind":"dom-event","library":"dom","line":12,"receiverName":"document","trigger":"click"}}
@@ -48,11 +48,13 @@
 {"kind":"node","id":"file:js/todo-item.js:modulecall:19:0:customElements.define","label":"Call","properties":{"args":"[\"todo-item\",\"TodoItem\"]","callee":"define","columnNumber":0,"expression":"customElements.define","line":19,"name":"customElements.define","receiver":"customElements"}}
 {"kind":"node","id":"file:js/todo-item.js:modulecall:20:0:window.addEventListener","label":"Call","properties":{"args":"[\"DOMContentLoaded\",\"onReady\"]","callee":"addEventListener","columnNumber":0,"expression":"window.addEventListener","line":20,"name":"window.addEventListener","receiver":"window"}}
 {"kind":"node","id":"file:js/todo-item.js:modulecall:21:0:document.addEventListener","label":"Call","properties":{"args":"[\"keydown\"]","callee":"addEventListener","columnNumber":0,"expression":"document.addEventListener","line":21,"name":"document.addEventListener","receiver":"document"}}
-{"kind":"node","id":"file:js/vendor.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/js/vendor.js","relativePath":"js/vendor.js","sourceType":"production"}}
+{"kind":"node","id":"file:js/vendor.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/js/vendor.js","relativePath":"js/vendor.js","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"vanilla-html","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"vanilla-html","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:js","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:index.html","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"dir:js","type":"CONTAINS_FILE","to":"file:js/format.js","properties":{}}
 {"kind":"rel","from":"dir:js","type":"CONTAINS_FILE","to":"file:js/store.js","properties":{}}
 {"kind":"rel","from":"dir:js","type":"CONTAINS_FILE","to":"file:js/todo-item.js","properties":{}}
@@ -122,6 +124,7 @@
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:js/store.js","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:js/todo-item.js","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:js/vendor.js","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

@@ -12,6 +12,7 @@ import { addProjectConfigNodes } from "./project-config.js";
 import { createScanManifest, type ScanManifest } from "./manifest.js";
 import { ParseCache } from "./parse-cache.js";
 import { filterSupportedSourceFiles } from "./source-files.js";
+import { isCodeLanguage } from "./language.js";
 import { addWorkspacePackageGraph } from "./workspace-packages.js";
 import type { IScanOrchestrator } from "../contracts/scan-orchestrator.js";
 import type { ILanguageParser } from "../contracts/language-parser.js";
@@ -71,7 +72,8 @@ export async function buildCodeGraph(
   const manifest = await createScanManifest(rootPath, supportedFiles);
 
   const graph = new GraphBuilder();
-  const report = createScanReport(files.length, supportedFiles.length);
+  const codeFiles = supportedFiles.filter((file) => isCodeLanguage(file.language)).length;
+  const report = createScanReport(files.length, codeFiles, supportedFiles.length - codeFiles);
   const cache = options.cacheDirectory && deps.parserFingerprint
     ? new ParseCache(options.cacheDirectory, rootPath, await deps.parserFingerprint(), report.parseCache)
     : null;
@@ -114,8 +116,10 @@ export async function buildCodeGraph(
   });
   misses.sort((a, b) => a - b);
 
-  // Pass 2: parse the rest, on worker threads when there are enough of them.
-  const workers = deps.createParserPool ? parseWorkerCount(options.workers, misses.length, deps.autoParseWorkers ?? true) : 0;
+  // Pass 2: parse the rest, on worker threads when there are enough code
+  // files among them (the other files only become `File` nodes).
+  const codeMisses = misses.filter((index) => isCodeLanguage(supportedFiles[index]!.language)).length;
+  const workers = deps.createParserPool ? parseWorkerCount(options.workers, codeMisses, deps.autoParseWorkers ?? true) : 0;
   const pool = workers > 0 ? deps.createParserPool!(workers) : null;
   report.parseWorkers = workers;
   try {
@@ -123,7 +127,7 @@ export async function buildCodeGraph(
       const { filePath, language } = supportedFiles[index]!;
       progress(filePath);
       try {
-        const parser: ILanguageParser = pool
+        const parser: ILanguageParser = pool && isCodeLanguage(language)
           ? { language, parse: (root, file) => pool.parse(language, root, file) }
           : deps.getParser(language);
         const parsed = await parseFileWithContext(rootPath, filePath, language, parser);

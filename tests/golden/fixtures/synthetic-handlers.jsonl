@@ -3,7 +3,7 @@
 {"kind":"node","id":"config:package:.:package.json:name","label":"ConfigValue","properties":{"line":0,"name":"package.json:name","value":"synthetic-handlers","valueType":"string"}}
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"synthetic-handlers","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:app.js","label":"File","properties":{"defaultExport":"app","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/app.js","relativePath":"app.js","sourceType":"production"}}
+{"kind":"node","id":"file:app.js","label":"File","properties":{"defaultExport":"app","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/app.js","relativePath":"app.js","sourceType":"production"}}
 {"kind":"node","id":"file:app.js:function:12:<app.use:arg0>","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_expression","line":12,"methodKind":null,"name":"<app.use:arg0>","parameters":"[{\"name\":\"req\",\"type\":null},{\"name\":\"res\",\"type\":null},{\"name\":\"next\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:app.js:function:12:<app.use:arg0>:call:13:2:res.setHeader","label":"Call","properties":{"args":"[\"x-powered-by\",\"fixture\"]","callee":"setHeader","columnNumber":2,"expression":"res.setHeader","line":13,"name":"res.setHeader","receiver":"res"}}
 {"kind":"node","id":"file:app.js:function:12:<app.use:arg0>:call:14:2:next","label":"Call","properties":{"args":"[]","callee":"next","columnNumber":2,"expression":"next","line":14,"name":"next","receiver":null}}
@@ -44,9 +44,11 @@
 {"kind":"node","id":"file:app.js:variable:1:express","label":"Variable","properties":{"isExported":false,"kind":"const","line":1,"name":"express","stringValue":null}}
 {"kind":"node","id":"file:app.js:variable:3:app","label":"Variable","properties":{"isExported":false,"kind":"const","line":3,"name":"app","stringValue":null}}
 {"kind":"node","id":"file:app.js:variable:42:STATUS_PATH","label":"Variable","properties":{"isExported":false,"kind":"const","line":42,"name":"STATUS_PATH","stringValue":"/status"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"synthetic-handlers","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"synthetic-handlers","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:app.js","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"file:app.js","type":"DECLARES_ROUTE","to":"file:app.js:route:12:0:USE:<none>","properties":{}}
 {"kind":"rel","from":"file:app.js","type":"DECLARES_ROUTE","to":"file:app.js:route:17:0:USE:<none>","properties":{}}
 {"kind":"rel","from":"file:app.js","type":"DECLARES_ROUTE","to":"file:app.js:route:24:0:GET:/health","properties":{}}
@@ -111,6 +113,7 @@
 {"kind":"rel","from":"file:app.js:variable:1:express","type":"INITIALIZED_BY","to":"file:app.js:initializercall:1:16:require","properties":{}}
 {"kind":"rel","from":"file:app.js:variable:3:app","type":"INITIALIZED_BY","to":"file:app.js:initializercall:3:12:express","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app.js","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

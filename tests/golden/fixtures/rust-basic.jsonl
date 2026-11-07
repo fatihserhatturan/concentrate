@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":2,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"rust-basic","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:lib.rs","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/lib.rs","relativePath":"lib.rs","sourceType":"production"}}
+{"kind":"node","id":"file:lib.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/lib.rs","relativePath":"lib.rs","sourceType":"production"}}
 {"kind":"node","id":"file:lib.rs:class:4:Service","label":"Class","properties":{"endLine":6,"isAbstract":false,"isExported":false,"line":4,"name":"Service","visibility":"private"}}
 {"kind":"node","id":"file:lib.rs:function:13:run","label":"Function","properties":{"className":"Service","endLine":16,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":13,"methodKind":null,"name":"run","parameters":null,"returnType":null,"visibility":"private"}}
 {"kind":"node","id":"file:lib.rs:function:13:run:call:14:8:println","label":"Call","properties":{"callee":"println","columnNumber":8,"expression":"println","line":14,"name":"println","receiver":null}}
@@ -17,7 +17,7 @@
 {"kind":"node","id":"file:lib.rs:function:9:new:call:10:21:format","label":"Call","properties":{"callee":"format","columnNumber":21,"expression":"format","line":10,"name":"format","receiver":null}}
 {"kind":"node","id":"file:lib.rs:import:1:crate::utils::format","label":"Import","properties":{"line":1,"source":"crate::utils::format","specifier":"use crate::utils::format;"}}
 {"kind":"node","id":"file:lib.rs:import:2:utils","label":"Import","properties":{"line":2,"source":"utils","specifier":"mod utils;"}}
-{"kind":"node","id":"file:utils.rs","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/utils.rs","relativePath":"utils.rs","sourceType":"production"}}
+{"kind":"node","id":"file:utils.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/utils.rs","relativePath":"utils.rs","sourceType":"production"}}
 {"kind":"node","id":"file:utils.rs:function:1:format","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":1,"methodKind":null,"name":"format","parameters":null,"returnType":null,"visibility":"pub"}}
 {"kind":"node","id":"file:utils.rs:function:1:format:call:2:4:value.trim","label":"Call","properties":{"callee":"trim","columnNumber":4,"expression":"value.trim","line":2,"name":"value.trim","receiver":"value"}}
 {"kind":"node","id":"file:utils.rs:function:1:format:call:2:4:value.trim().to_string","label":"Call","properties":{"callee":"to_string","columnNumber":4,"expression":"value.trim().to_string","line":2,"name":"value.trim().to_string","receiver":"value"}}

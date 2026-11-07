@@ -8,9 +8,12 @@
 {"kind":"node","id":"datamodel:prisma:prisma/schema.prisma:Setting","label":"DataModel","properties":{"declaredIn":"prisma/schema.prisma","library":"prisma","line":42,"name":"Setting"}}
 {"kind":"node","id":"datamodel:prisma:prisma/schema.prisma:User","label":"DataModel","properties":{"declaredIn":"prisma/schema.prisma","library":"prisma","line":18,"name":"User"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"prisma-schema","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:prisma","label":"Directory","properties":{"name":"prisma","path":"<root>/prisma","relativePath":"prisma"}}
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"env:DATABASE_URL","label":"EnvVar","properties":{"name":"DATABASE_URL"}}
-{"kind":"node","id":"file:src/routes.ts","label":"File","properties":{"defaultExport":"app","isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/routes.ts","relativePath":"src/routes.ts","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:prisma/schema.prisma","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/prisma/schema.prisma","relativePath":"prisma/schema.prisma","sourceType":"production"}}
+{"kind":"node","id":"file:src/routes.ts","label":"File","properties":{"defaultExport":"app","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/routes.ts","relativePath":"src/routes.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/routes.ts:function:10:<app.get:/users:arg1>","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"arrow_function","line":10,"methodKind":null,"name":"<app.get:/users:arg1>","parameters":"[{\"name\":\"req\",\"type\":null},{\"name\":\"res\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/routes.ts:function:10:<app.get:/users:arg1>:call:11:17:findUsers","label":"Call","properties":{"args":"[]","callee":"findUsers","columnNumber":17,"expression":"findUsers","line":11,"name":"findUsers","receiver":null}}
 {"kind":"node","id":"file:src/routes.ts:function:10:<app.get:/users:arg1>:call:11:2:res.json","label":"Call","properties":{"args":"[]","callee":"json","columnNumber":2,"expression":"res.json","line":11,"name":"res.json","receiver":"res"}}
@@ -46,7 +49,7 @@
 {"kind":"node","id":"file:src/routes.ts:variable:6:app","label":"Variable","properties":{"isExported":false,"kind":"const","line":6,"name":"app","stringValue":null}}
 {"kind":"node","id":"file:src/routes.ts:variable:7:prisma","label":"Variable","properties":{"isExported":false,"kind":"const","line":7,"name":"prisma","stringValue":null}}
 {"kind":"node","id":"file:src/routes.ts:variable:8:db","label":"Variable","properties":{"isExported":false,"kind":"const","line":8,"name":"db","stringValue":null}}
-{"kind":"node","id":"file:src/users.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/users.ts","relativePath":"src/users.ts","sourceType":"production"}}
+{"kind":"node","id":"file:src/users.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/users.ts","relativePath":"src/users.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/users.ts:function:5:findUsers","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"findUsers","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/users.ts:function:5:findUsers:call:6:9:prisma.user.findMany","label":"Call","properties":{"args":"[]","callee":"findMany","columnNumber":9,"expression":"prisma.user.findMany","line":6,"name":"prisma.user.findMany","receiver":"prisma.user"}}
 {"kind":"node","id":"file:src/users.ts:function:9:renameUser","label":"Function","properties":{"className":null,"endLine":11,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_declaration","line":9,"methodKind":null,"name":"renameUser","parameters":"[{\"name\":\"id\",\"type\":\"number\"},{\"name\":\"name\",\"type\":\"string\"}]","returnType":null,"visibility":"public"}}
@@ -70,7 +73,10 @@
 {"kind":"rel","from":"datamodel:prisma:prisma/schema.prisma:User","type":"RELATES_TO","to":"datamodel:prisma:prisma/schema.prisma:Post","properties":{"field":"posts","fields":"[]","kind":"many","onDelete":null,"references":"[]","relationName":"AuthoredPosts"}}
 {"kind":"rel","from":"datamodel:prisma:prisma/schema.prisma:User","type":"RELATES_TO","to":"datamodel:prisma:prisma/schema.prisma:User","properties":{"field":"invited","fields":"[]","kind":"many","onDelete":null,"references":"[]","relationName":"Invites"}}
 {"kind":"rel","from":"datamodel:prisma:prisma/schema.prisma:User","type":"RELATES_TO","to":"datamodel:prisma:prisma/schema.prisma:User","properties":{"field":"invitedBy","fields":"[\"inviterId\"]","kind":"one","onDelete":null,"references":"[\"id\"]","relationName":"Invites"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:prisma","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
+{"kind":"rel","from":"dir:prisma","type":"CONTAINS_FILE","to":"file:prisma/schema.prisma","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/routes.ts","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/users.ts","properties":{}}
 {"kind":"rel","from":"file:src/routes.ts","type":"DECLARES_ROUTE","to":"file:src/routes.ts:route:10:0:GET:/users","properties":{}}
@@ -155,6 +161,8 @@
 {"kind":"rel","from":"file:src/users.ts:function:9:renameUser","type":"CALLS","to":"file:src/users.ts:function:9:renameUser:call:10:9:prisma.user.update","properties":{}}
 {"kind":"rel","from":"file:src/users.ts:function:9:renameUser","type":"WRITES","to":"table:prisma:prisma/schema.prisma:users","properties":{"expression":"prisma.user.update","line":10,"model":"User","operation":"update"}}
 {"kind":"rel","from":"file:src/users.ts:variable:3:prisma","type":"INITIALIZED_BY","to":"file:src/users.ts:initializercall:3:15:new PrismaClient","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:prisma/schema.prisma","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/routes.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/users.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}

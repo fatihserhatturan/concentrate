@@ -7,24 +7,26 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"package-boundary","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:source","label":"Directory","properties":{"name":"source","path":"<root>/source","relativePath":"source"}}
 {"kind":"node","id":"dir:source/utils","label":"Directory","properties":{"name":"utils","path":"<root>/source/utils","relativePath":"source/utils"}}
-{"kind":"node","id":"file:app.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app.ts","relativePath":"app.ts","sourceType":"production"}}
+{"kind":"node","id":"file:app.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app.ts","relativePath":"app.ts","sourceType":"production"}}
 {"kind":"node","id":"file:app.ts:function:5:run","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"run","parameters":"[]","returnType":"number","visibility":"public"}}
 {"kind":"node","id":"file:app.ts:function:5:run:call:6:9:double","label":"Call","properties":{"args":"[]","callee":"double","columnNumber":9,"expression":"double","line":6,"name":"double","receiver":null}}
 {"kind":"node","id":"file:app.ts:import:1:@sample/pkg","label":"Import","properties":{"bindings":"[{\"imported\":\"rootValue\",\"local\":\"rootValue\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"@sample/pkg","specifier":"import { rootValue } from \"@sample/pkg\";"}}
 {"kind":"node","id":"file:app.ts:import:2:@sample/pkg/feature","label":"Import","properties":{"bindings":"[{\"imported\":\"featureValue\",\"local\":\"featureValue\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"@sample/pkg/feature","specifier":"import { featureValue } from \"@sample/pkg/feature\";"}}
 {"kind":"node","id":"file:app.ts:import:3:@sample/pkg/utils/math","label":"Import","properties":{"bindings":"[{\"imported\":\"double\",\"local\":\"double\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"@sample/pkg/utils/math","specifier":"import { double } from \"@sample/pkg/utils/math\";"}}
-{"kind":"node","id":"file:source/feature.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/source/feature.ts","relativePath":"source/feature.ts","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:source/feature.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/source/feature.ts","relativePath":"source/feature.ts","sourceType":"production"}}
 {"kind":"node","id":"file:source/feature.ts:config:1:featureValue","label":"ConfigValue","properties":{"line":1,"name":"featureValue","value":"2","valueType":"number"}}
 {"kind":"node","id":"file:source/feature.ts:variable:1:featureValue","label":"Variable","properties":{"isExported":true,"kind":"const","line":1,"name":"featureValue","stringValue":null}}
-{"kind":"node","id":"file:source/index.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/source/index.ts","relativePath":"source/index.ts","sourceType":"production"}}
+{"kind":"node","id":"file:source/index.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/source/index.ts","relativePath":"source/index.ts","sourceType":"production"}}
 {"kind":"node","id":"file:source/index.ts:config:1:rootValue","label":"ConfigValue","properties":{"line":1,"name":"rootValue","value":"1","valueType":"number"}}
 {"kind":"node","id":"file:source/index.ts:variable:1:rootValue","label":"Variable","properties":{"isExported":true,"kind":"const","line":1,"name":"rootValue","stringValue":null}}
-{"kind":"node","id":"file:source/utils/math.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/source/utils/math.ts","relativePath":"source/utils/math.ts","sourceType":"production"}}
+{"kind":"node","id":"file:source/utils/math.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/source/utils/math.ts","relativePath":"source/utils/math.ts","sourceType":"production"}}
 {"kind":"node","id":"file:source/utils/math.ts:function:1:double","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"double","parameters":"[{\"name\":\"value\",\"type\":\"number\"}]","returnType":"number","visibility":"public"}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":false,"manager":null,"name":"@sample/pkg","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"package-boundary","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:source","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:app.ts","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"dir:source","type":"CONTAINS_DIRECTORY","to":"dir:source/utils","properties":{}}
 {"kind":"rel","from":"dir:source","type":"CONTAINS_FILE","to":"file:source/feature.ts","properties":{}}
 {"kind":"rel","from":"dir:source","type":"CONTAINS_FILE","to":"file:source/index.ts","properties":{}}
@@ -49,6 +51,7 @@
 {"kind":"rel","from":"file:source/index.ts","type":"DEFINES_VARIABLE","to":"file:source/index.ts:variable:1:rootValue","properties":{}}
 {"kind":"rel","from":"file:source/utils/math.ts","type":"DEFINES_FUNCTION","to":"file:source/utils/math.ts:function:1:double","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app.ts","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:source/feature.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:source/index.ts","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:source/utils/math.ts","properties":{}}

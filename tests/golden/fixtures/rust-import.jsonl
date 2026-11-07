@@ -1,17 +1,17 @@
 {"kind":"report","status":"success","discoveredFiles":3,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"rust-import","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:helpers","label":"Directory","properties":{"name":"helpers","path":"<root>/helpers","relativePath":"helpers"}}
-{"kind":"node","id":"file:helpers/mod.rs","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/helpers/mod.rs","relativePath":"helpers/mod.rs","sourceType":"production"}}
+{"kind":"node","id":"file:helpers/mod.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/helpers/mod.rs","relativePath":"helpers/mod.rs","sourceType":"production"}}
 {"kind":"node","id":"file:helpers/mod.rs:function:3:help","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":3,"methodKind":null,"name":"help","parameters":null,"returnType":null,"visibility":"pub"}}
 {"kind":"node","id":"file:helpers/mod.rs:function:3:help:call:4:4:utils::process","label":"Call","properties":{"callee":"utils::process","columnNumber":4,"expression":"utils::process","line":4,"name":"utils::process","receiver":null}}
 {"kind":"node","id":"file:helpers/mod.rs:import:1:super::utils","label":"Import","properties":{"line":1,"source":"super::utils","specifier":"use super::utils;"}}
-{"kind":"node","id":"file:lib.rs","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/lib.rs","relativePath":"lib.rs","sourceType":"production"}}
+{"kind":"node","id":"file:lib.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/lib.rs","relativePath":"lib.rs","sourceType":"production"}}
 {"kind":"node","id":"file:lib.rs:function:5:run","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":5,"methodKind":null,"name":"run","parameters":null,"returnType":null,"visibility":"private"}}
 {"kind":"node","id":"file:lib.rs:function:5:run:call:6:4:process","label":"Call","properties":{"callee":"process","columnNumber":4,"expression":"process","line":6,"name":"process","receiver":null}}
 {"kind":"node","id":"file:lib.rs:import:1:utils","label":"Import","properties":{"line":1,"source":"utils","specifier":"mod utils;"}}
 {"kind":"node","id":"file:lib.rs:import:2:helpers","label":"Import","properties":{"line":2,"source":"helpers","specifier":"mod helpers;"}}
 {"kind":"node","id":"file:lib.rs:import:3:crate::utils::process","label":"Import","properties":{"line":3,"source":"crate::utils::process","specifier":"use crate::utils::process;"}}
-{"kind":"node","id":"file:utils.rs","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/utils.rs","relativePath":"utils.rs","sourceType":"production"}}
+{"kind":"node","id":"file:utils.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/utils.rs","relativePath":"utils.rs","sourceType":"production"}}
 {"kind":"node","id":"file:utils.rs:function:1:process","label":"Function","properties":{"className":null,"endLine":1,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":1,"methodKind":null,"name":"process","parameters":null,"returnType":null,"visibility":"pub"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"rust-import","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:helpers","properties":{}}

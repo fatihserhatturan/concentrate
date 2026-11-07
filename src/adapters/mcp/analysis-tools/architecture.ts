@@ -1,4 +1,5 @@
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
+import { CODE_LANGUAGES, type SupportedLanguage } from "../../../core/scan/language.js";
 import { optionalInteger, optionalString } from "../args.js";
 import type { PageWindow } from "../paging.js";
 import { loadImports } from "./model.js";
@@ -68,6 +69,8 @@ export async function architectureOverview(engine: IQueryEngine, args: Record<st
   };
   let ungrouped = 0;
   for (const row of files) {
+    // The structure of the code: styles, JSON, docs and assets are left out.
+    if (typeof row.language === "string" && !CODE_LANGUAGES.has(row.language as SupportedLanguage)) continue;
     const file = String(row.file);
     const name = groupOf(file);
     if (name === null) {

@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"backend-entrypoints","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:service.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
+{"kind":"node","id":"file:service.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
 {"kind":"node","id":"file:service.ts:class:28:TasksService","label":"Class","properties":{"endLine":33,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":false,"line":28,"name":"TasksService","visibility":"public"}}
 {"kind":"node","id":"file:service.ts:entrypoint:21:0:event:data","label":"EntryPoint","properties":{"handlerName":"handleData","kind":"event","library":"event-emitter","line":21,"receiverName":"emitter","trigger":"data"}}
 {"kind":"node","id":"file:service.ts:entrypoint:22:0:queue:email","label":"EntryPoint","properties":{"handlerName":"handleJob","kind":"queue","library":"bull","line":22,"receiverName":"queue","trigger":"email"}}

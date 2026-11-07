@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -1585,13 +1585,17 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "main.ts"
+            "file": "main.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "utils.ts"
+            "file": "utils.ts",
+            "language": "typescript",
+            "sourceType": "production"
           }
         ]
       },
@@ -1740,6 +1744,8 @@
     ],
     "output": {
       "file": "main.ts",
+      "language": "typescript",
+      "sourceType": "production",
       "imports": [
         {
           "source": "./utils.js",

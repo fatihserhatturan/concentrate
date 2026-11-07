@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 8
+            "count": 9
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 8
+          "count": 9
         },
         {
           "table": "Import",
@@ -1826,31 +1826,52 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "src/App.svelte"
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/api.ts"
+            "file": "src/App.svelte",
+            "language": "svelte",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/components/Counter.svelte"
+            "file": "src/lib/api.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/components/Footer.svelte"
+            "file": "src/lib/components/Counter.svelte",
+            "language": "svelte",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/components/TodoItem.svelte"
+            "file": "src/lib/components/Footer.svelte",
+            "language": "svelte",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/components/TodoList.svelte"
+            "file": "src/lib/components/TodoItem.svelte",
+            "language": "svelte",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/ui/Button.svelte"
+            "file": "src/lib/components/TodoList.svelte",
+            "language": "svelte",
+            "sourceType": "production"
           },
           {
-            "file": "src/lib/ui/index.ts"
+            "file": "src/lib/ui/Button.svelte",
+            "language": "svelte",
+            "sourceType": "production"
+          },
+          {
+            "file": "src/lib/ui/index.ts",
+            "language": "typescript",
+            "sourceType": "production"
           }
         ]
       },
@@ -2049,6 +2070,8 @@
     ],
     "output": {
       "file": "src/lib/components/TodoItem.svelte",
+      "language": "svelte",
+      "sourceType": "production",
       "imports": [
         {
           "source": "svelte",

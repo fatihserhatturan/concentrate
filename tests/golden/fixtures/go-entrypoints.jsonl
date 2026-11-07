@@ -4,7 +4,7 @@
 {"kind":"node","id":"dir:cmd/tool","label":"Directory","properties":{"name":"tool","path":"<root>/cmd/tool","relativePath":"cmd/tool"}}
 {"kind":"node","id":"dir:config","label":"Directory","properties":{"name":"config","path":"<root>/config","relativePath":"config"}}
 {"kind":"node","id":"dir:mathx","label":"Directory","properties":{"name":"mathx","path":"<root>/mathx","relativePath":"mathx"}}
-{"kind":"node","id":"file:cmd/tool/main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/cmd/tool/main.go","relativePath":"cmd/tool/main.go","sourceType":"production"}}
+{"kind":"node","id":"file:cmd/tool/main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/cmd/tool/main.go","relativePath":"cmd/tool/main.go","sourceType":"production"}}
 {"kind":"node","id":"file:cmd/tool/main.go:entrypoint:12:0:init:<none>","label":"EntryPoint","properties":{"handlerName":"init","kind":"init","library":"go","line":12,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:cmd/tool/main.go:entrypoint:16:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":16,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:cmd/tool/main.go:function:12:init","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":12,"methodKind":null,"name":"init","parameters":"[]","returnType":null,"visibility":"unexported"}}
@@ -17,7 +17,7 @@
 {"kind":"node","id":"file:cmd/tool/main.go:import:6:example.com/tool/config","label":"Import","properties":{"line":6,"source":"example.com/tool/config","specifier":"\"example.com/tool/config\""}}
 {"kind":"node","id":"file:cmd/tool/main.go:import:7:example.com/tool/mathx","label":"Import","properties":{"line":7,"source":"example.com/tool/mathx","specifier":"\"example.com/tool/mathx\""}}
 {"kind":"node","id":"file:cmd/tool/main.go:variable:10:verbose","label":"Variable","properties":{"isExported":false,"kind":"var","line":10,"name":"verbose"}}
-{"kind":"node","id":"file:config/config.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"config","path":"<root>/config/config.go","relativePath":"config/config.go","sourceType":"production"}}
+{"kind":"node","id":"file:config/config.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"config","path":"<root>/config/config.go","relativePath":"config/config.go","sourceType":"production"}}
 {"kind":"node","id":"file:config/config.go:class:14:Options","label":"Class","properties":{"endLine":14,"fields":"[]","isAbstract":false,"isExported":true,"line":14,"name":"Options","visibility":"exported"}}
 {"kind":"node","id":"file:config/config.go:variable:10:Debug","label":"Variable","properties":{"isExported":true,"kind":"var","line":10,"name":"Debug"}}
 {"kind":"node","id":"file:config/config.go:variable:10:Verbose","label":"Variable","properties":{"isExported":true,"kind":"var","line":10,"name":"Verbose"}}
@@ -25,13 +25,14 @@
 {"kind":"node","id":"file:config/config.go:variable:3:DefaultName","label":"Variable","properties":{"isExported":true,"kind":"const","line":3,"name":"DefaultName","stringValue":"tool"}}
 {"kind":"node","id":"file:config/config.go:variable:6:Version","label":"Variable","properties":{"isExported":true,"kind":"const","line":6,"name":"Version","stringValue":"1.0"}}
 {"kind":"node","id":"file:config/config.go:variable:7:retries","label":"Variable","properties":{"isExported":false,"kind":"const","line":7,"name":"retries"}}
-{"kind":"node","id":"file:mathx/mathx.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"mathx","path":"<root>/mathx/mathx.go","relativePath":"mathx/mathx.go","sourceType":"production"}}
+{"kind":"node","id":"file:go.mod","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/go.mod","relativePath":"go.mod","sourceType":"production"}}
+{"kind":"node","id":"file:mathx/mathx.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"mathx","path":"<root>/mathx/mathx.go","relativePath":"mathx/mathx.go","sourceType":"production"}}
 {"kind":"node","id":"file:mathx/mathx.go:function:11:clamp","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":11,"methodKind":null,"name":"clamp","parameters":"[{\"name\":\"value\",\"type\":\"int\"}]","returnType":"int","visibility":"unexported"}}
 {"kind":"node","id":"file:mathx/mathx.go:function:15:forgotten","label":"Function","properties":{"className":null,"endLine":17,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":15,"methodKind":null,"name":"forgotten","parameters":"[]","returnType":"int","visibility":"unexported"}}
 {"kind":"node","id":"file:mathx/mathx.go:function:3:Add","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"Add","parameters":"[{\"name\":\"a\",\"type\":\"int\"},{\"name\":\"b\",\"type\":\"int\"}]","returnType":"int","visibility":"exported"}}
 {"kind":"node","id":"file:mathx/mathx.go:function:3:Add:call:4:8:clamp","label":"Call","properties":{"callee":"clamp","columnNumber":8,"expression":"clamp","line":4,"name":"clamp","receiver":null}}
 {"kind":"node","id":"file:mathx/mathx.go:function:7:Subtract","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":7,"methodKind":null,"name":"Subtract","parameters":"[{\"name\":\"a\",\"type\":\"int\"},{\"name\":\"b\",\"type\":\"int\"}]","returnType":"int","visibility":"exported"}}
-{"kind":"node","id":"file:mathx/mathx_test.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":true,"language":"go","packageName":"mathx","path":"<root>/mathx/mathx_test.go","relativePath":"mathx/mathx_test.go","sourceType":"test"}}
+{"kind":"node","id":"file:mathx/mathx_test.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":true,"language":"go","packageName":"mathx","path":"<root>/mathx/mathx_test.go","relativePath":"mathx/mathx_test.go","sourceType":"test"}}
 {"kind":"node","id":"file:mathx/mathx_test.go:function:11:BenchmarkAdd","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":11,"methodKind":null,"name":"BenchmarkAdd","parameters":"[{\"name\":\"b\",\"type\":\"*testing.B\"}]","returnType":null,"testKind":"benchmark","visibility":"exported"}}
 {"kind":"node","id":"file:mathx/mathx_test.go:function:11:BenchmarkAdd:call:12:1:Add","label":"Call","properties":{"callee":"Add","columnNumber":1,"expression":"Add","line":12,"name":"Add","receiver":null}}
 {"kind":"node","id":"file:mathx/mathx_test.go:function:15:Testable","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":15,"methodKind":null,"name":"Testable","parameters":"[]","returnType":null,"visibility":"exported"}}
@@ -44,6 +45,7 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:cmd","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:config","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:mathx","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:go.mod","properties":{}}
 {"kind":"rel","from":"dir:cmd","type":"CONTAINS_DIRECTORY","to":"dir:cmd/tool","properties":{}}
 {"kind":"rel","from":"dir:cmd/tool","type":"CONTAINS_FILE","to":"file:cmd/tool/main.go","properties":{}}
 {"kind":"rel","from":"dir:config","type":"CONTAINS_FILE","to":"file:config/config.go","properties":{}}

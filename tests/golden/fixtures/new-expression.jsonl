@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"new-expression","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:service.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
+{"kind":"node","id":"file:service.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
 {"kind":"node","id":"file:service.ts:function:3:initialize","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_declaration","line":3,"methodKind":null,"name":"initialize","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:service.ts:function:3:initialize:call:4:18:new EventEmitter","label":"Call","properties":{"args":"[]","callee":"EventEmitter","columnNumber":18,"expression":"new EventEmitter","line":4,"name":"new EventEmitter","receiver":null}}
 {"kind":"node","id":"file:service.ts:function:3:initialize:call:5:13:new PrismaClient","label":"Call","properties":{"args":"[]","callee":"PrismaClient","columnNumber":13,"expression":"new PrismaClient","line":5,"name":"new PrismaClient","receiver":null}}

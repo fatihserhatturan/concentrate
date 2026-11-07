@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 72
+        "result": 73
       },
       {
         "method": "stats",
@@ -25,7 +25,7 @@
           },
           {
             "table": "File",
-            "count": 18
+            "count": 19
           },
           {
             "table": "Import",
@@ -107,7 +107,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 72,
+      "schemaVersion": 73,
       "stats": [
         {
           "table": "Repo",
@@ -123,7 +123,7 @@
         },
         {
           "table": "File",
-          "count": 18
+          "count": 19
         },
         {
           "table": "Import",
@@ -2138,61 +2138,102 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType",
         "rows": [
           {
-            "file": "src/App.vue"
+            "file": "package.json",
+            "language": "json",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Badge.vue"
+            "file": "src/App.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/ListItem.vue"
+            "file": "src/components/Badge.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/SearchBox.vue"
+            "file": "src/components/ListItem.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/Tag.vue"
+            "file": "src/components/SearchBox.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/UserCard.vue"
+            "file": "src/components/Tag.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/components/UserList.vue"
+            "file": "src/components/UserCard.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/composables/useApi.ts"
+            "file": "src/components/UserList.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/composables/useUsers.ts"
+            "file": "src/composables/useApi.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/main.ts"
+            "file": "src/composables/useUsers.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/router/index.ts"
+            "file": "src/main.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/router/routes.ts"
+            "file": "src/router/index.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/views/AboutView.vue"
+            "file": "src/router/routes.ts",
+            "language": "typescript",
+            "sourceType": "production"
           },
           {
-            "file": "src/views/HomeView.vue"
+            "file": "src/views/AboutView.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/views/SettingsLayout.vue"
+            "file": "src/views/HomeView.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/views/SettingsProfile.vue"
+            "file": "src/views/SettingsLayout.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/views/SettingsSecurity.vue"
+            "file": "src/views/SettingsProfile.vue",
+            "language": "vue",
+            "sourceType": "production"
           },
           {
-            "file": "src/views/UserView.vue"
+            "file": "src/views/SettingsSecurity.vue",
+            "language": "vue",
+            "sourceType": "production"
+          },
+          {
+            "file": "src/views/UserView.vue",
+            "language": "vue",
+            "sourceType": "production"
           }
         ]
       },
@@ -2330,6 +2371,8 @@
     ],
     "output": {
       "file": "src/components/UserList.vue",
+      "language": "vue",
+      "sourceType": "production",
       "imports": [
         {
           "source": "vue",

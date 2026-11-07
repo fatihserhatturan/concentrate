@@ -4,7 +4,7 @@
 {"kind":"node","id":"config:package:.:package.json:private","label":"ConfigValue","properties":{"line":0,"name":"package.json:private","value":"true","valueType":"boolean"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"cjs-export-functions","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"env:DEBUG","label":"EnvVar","properties":{"name":"DEBUG"}}
-{"kind":"node","id":"file:app.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/app.js","relativePath":"app.js","sourceType":"production"}}
+{"kind":"node","id":"file:app.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/app.js","relativePath":"app.js","sourceType":"production"}}
 {"kind":"node","id":"file:app.js:function:6:set","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":6,"methodKind":null,"name":"set","parameters":"[{\"name\":\"val\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:app.js:function:6:set:call:7:9:compileETag","label":"Call","properties":{"args":"[\"val\"]","callee":"compileETag","columnNumber":9,"expression":"compileETag","line":7,"name":"compileETag","receiver":null}}
 {"kind":"node","id":"file:app.js:import:3:./utils","label":"Import","properties":{"bindings":"[{\"imported\":\"compileETag\",\"local\":\"compileETag\",\"kind\":\"named\"}]","isCjs":true,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"./utils","specifier":"require('./utils')"}}
@@ -14,7 +14,8 @@
 {"kind":"node","id":"file:app.js:modulecall:11:0:utils.named","label":"Call","properties":{"args":"[\"1\"]","callee":"named","columnNumber":0,"expression":"utils.named","line":11,"name":"utils.named","receiver":"utils"}}
 {"kind":"node","id":"file:app.js:variable:3:compileETag","label":"Variable","properties":{"isExported":false,"kind":"var","line":3,"name":"compileETag","stringValue":null}}
 {"kind":"node","id":"file:app.js:variable:4:utils","label":"Variable","properties":{"isExported":false,"kind":"var","line":4,"name":"utils","stringValue":null}}
-{"kind":"node","id":"file:utils.js","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/utils.js","relativePath":"utils.js","sourceType":"production"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:utils.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/utils.js","relativePath":"utils.js","sourceType":"production"}}
 {"kind":"node","id":"file:utils.js:function:10:inner","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_expression","line":10,"methodKind":null,"name":"inner","parameters":"[{\"name\":\"val\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:utils.js:function:24:normalize","label":"Function","properties":{"className":null,"endLine":26,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":24,"methodKind":null,"name":"normalize","parameters":"[{\"name\":\"val\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:utils.js:function:24:normalize:call:25:9:exports.normalize","label":"Call","properties":{"args":"[\"val\"]","callee":"normalize","columnNumber":9,"expression":"exports.normalize","line":25,"name":"exports.normalize","receiver":"exports"}}
@@ -28,6 +29,7 @@
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"cjs-export-functions","path":"<root>","relativePath":".","version":null,"workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"cjs-export-functions","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:app.js","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:utils.js","properties":{}}
 {"kind":"rel","from":"file:app.js","type":"DEFINES_FUNCTION","to":"file:app.js:function:6:set","properties":{}}
 {"kind":"rel","from":"file:app.js","type":"DEFINES_VARIABLE","to":"file:app.js:variable:3:compileETag","properties":{}}
@@ -57,6 +59,7 @@
 {"kind":"rel","from":"file:utils.js:function:4:compileETag:call:5:9:normalize","type":"CALL_RESOLVES_TO","to":"file:utils.js:function:8:normalize","properties":{}}
 {"kind":"rel","from":"file:utils.js:function:8:normalize","type":"CALLS","to":"file:utils.js:function:8:normalize:call:8:36:String","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app.js","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:package.json","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:utils.js","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:name","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:package.json:private","properties":{}}

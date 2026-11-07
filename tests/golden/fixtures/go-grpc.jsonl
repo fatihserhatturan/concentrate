@@ -2,7 +2,8 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"go-grpc","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:pb","label":"Directory","properties":{"name":"pb","path":"<root>/pb","relativePath":"pb"}}
 {"kind":"node","id":"dir:service","label":"Directory","properties":{"name":"service","path":"<root>/service","relativePath":"service"}}
-{"kind":"node","id":"file:main.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
+{"kind":"node","id":"file:go.mod","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/go.mod","relativePath":"go.mod","sourceType":"production"}}
+{"kind":"node","id":"file:main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/main.go","relativePath":"main.go","sourceType":"production"}}
 {"kind":"node","id":"file:main.go:entrypoint:12:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":12,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:main.go:entrypoint:15:1:grpc:Greeter/SayBye","label":"EntryPoint","properties":{"handlerName":"SayBye","kind":"grpc","library":"grpc","line":15,"receiverName":"s","trigger":"Greeter/SayBye"}}
 {"kind":"node","id":"file:main.go:entrypoint:15:1:grpc:Greeter/SayHello","label":"EntryPoint","properties":{"handlerName":"SayHello","kind":"grpc","library":"grpc","line":15,"receiverName":"s","trigger":"Greeter/SayHello"}}
@@ -16,7 +17,7 @@
 {"kind":"node","id":"file:main.go:import:6:google.golang.org/grpc","label":"Import","properties":{"line":6,"source":"google.golang.org/grpc","specifier":"\"google.golang.org/grpc\""}}
 {"kind":"node","id":"file:main.go:import:8:example.com/grpcapp/pb","label":"Import","properties":{"line":8,"source":"example.com/grpcapp/pb","specifier":"\"example.com/grpcapp/pb\""}}
 {"kind":"node","id":"file:main.go:import:9:example.com/grpcapp/service","label":"Import","properties":{"line":9,"source":"example.com/grpcapp/service","specifier":"\"example.com/grpcapp/service\""}}
-{"kind":"node","id":"file:pb/greeter_grpc.pb.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"pb","path":"<root>/pb/greeter_grpc.pb.go","relativePath":"pb/greeter_grpc.pb.go","sourceType":"production"}}
+{"kind":"node","id":"file:pb/greeter_grpc.pb.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"pb","path":"<root>/pb/greeter_grpc.pb.go","relativePath":"pb/greeter_grpc.pb.go","sourceType":"production"}}
 {"kind":"node","id":"file:pb/greeter_grpc.pb.go:class:10:HelloRequest","label":"Class","properties":{"endLine":10,"fields":"[{\"name\":\"Name\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":10,"name":"HelloRequest","visibility":"exported"}}
 {"kind":"node","id":"file:pb/greeter_grpc.pb.go:class:12:HelloReply","label":"Class","properties":{"endLine":12,"fields":"[{\"name\":\"Message\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":12,"name":"HelloReply","visibility":"exported"}}
 {"kind":"node","id":"file:pb/greeter_grpc.pb.go:class:20:UnimplementedGreeterServer","label":"Class","properties":{"endLine":20,"fields":"[]","isAbstract":false,"isExported":true,"line":20,"name":"UnimplementedGreeterServer","visibility":"exported"}}
@@ -28,7 +29,7 @@
 {"kind":"node","id":"file:pb/greeter_grpc.pb.go:import:5:context","label":"Import","properties":{"line":5,"source":"context","specifier":"\"context\""}}
 {"kind":"node","id":"file:pb/greeter_grpc.pb.go:import:7:google.golang.org/grpc","label":"Import","properties":{"line":7,"source":"google.golang.org/grpc","specifier":"\"google.golang.org/grpc\""}}
 {"kind":"node","id":"file:pb/greeter_grpc.pb.go:interface:14:GreeterServer","label":"Interface","properties":{"embeds":"[]","endLine":18,"isExported":true,"line":14,"methodSignatures":"{\"SayHello\":{\"parameters\":[\"context.Context\",\"*HelloRequest\"],\"returnType\":\"(*HelloReply, error)\"},\"SayBye\":{\"parameters\":[\"context.Context\",\"*HelloRequest\"],\"returnType\":\"(*HelloReply, error)\"},\"mustEmbedUnimplementedGreeterServer\":{\"parameters\":[],\"returnType\":null}}","methods":"[\"SayHello\",\"SayBye\",\"mustEmbedUnimplementedGreeterServer\"]","name":"GreeterServer"}}
-{"kind":"node","id":"file:service/greeter.go","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"service","path":"<root>/service/greeter.go","relativePath":"service/greeter.go","sourceType":"production"}}
+{"kind":"node","id":"file:service/greeter.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"service","path":"<root>/service/greeter.go","relativePath":"service/greeter.go","sourceType":"production"}}
 {"kind":"node","id":"file:service/greeter.go:class:9:Greeter","label":"Class","properties":{"endLine":11,"fields":"[{\"name\":\"UnimplementedGreeterServer\",\"type\":\"pb.UnimplementedGreeterServer\",\"embedded\":true}]","isAbstract":false,"isExported":true,"line":9,"name":"Greeter","visibility":"exported"}}
 {"kind":"node","id":"file:service/greeter.go:function:13:New","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":13,"methodKind":null,"name":"New","parameters":"[]","returnType":"*Greeter","visibility":"exported"}}
 {"kind":"node","id":"file:service/greeter.go:function:17:SayHello","label":"Function","properties":{"className":"Greeter","endLine":19,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":17,"methodKind":null,"name":"SayHello","parameters":"[{\"name\":\"ctx\",\"type\":\"context.Context\"},{\"name\":\"req\",\"type\":\"*pb.HelloRequest\"}]","returnType":"(*pb.HelloReply, error)","visibility":"exported"}}
@@ -38,6 +39,7 @@
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-grpc","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:pb","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:service","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:go.mod","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:main.go","properties":{}}
 {"kind":"rel","from":"dir:pb","type":"CONTAINS_FILE","to":"file:pb/greeter_grpc.pb.go","properties":{}}
 {"kind":"rel","from":"dir:service","type":"CONTAINS_FILE","to":"file:service/greeter.go","properties":{}}

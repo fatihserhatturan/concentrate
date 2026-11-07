@@ -7,7 +7,10 @@ export type ScanStatus = "success" | "partial" | "failed";
 
 export type ScanReport = {
   discoveredFiles: number;
+  // Code files (parsed for declarations) and the other files of the project
+  // (`File` nodes only); skipped files are left out by --max-files.
   supportedFiles: number;
+  otherFiles: number;
   skippedFiles: number;
   parsedFiles: number;
   status: ScanStatus;
@@ -31,11 +34,12 @@ export type ScanWarning = {
   message: string;
 };
 
-export function createScanReport(discoveredFiles: number, supportedFiles: number): ScanReport {
+export function createScanReport(discoveredFiles: number, supportedFiles: number, otherFiles = 0): ScanReport {
   return {
     discoveredFiles,
     supportedFiles,
-    skippedFiles: discoveredFiles - supportedFiles,
+    otherFiles,
+    skippedFiles: discoveredFiles - supportedFiles - otherFiles,
     parsedFiles: 0,
     status: "success",
     fileClassifications: createFileClassificationCounts(),

@@ -1,8 +1,12 @@
 {"kind":"report","status":"success","discoveredFiles":3,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[{"path":"package.json","message":"Expected double-quoted property name in JSON at position 80 (line 5 column 3)"},{"path":"tsconfig.json","message":"Expected double-quoted property name in JSON at position 88 (line 6 column 5)"},{"path":"tsconfig.json","message":"Expected double-quoted property name in JSON at position 93 (line 8 column 1)"}]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"malformed-config","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:index.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/index.ts","relativePath":"index.ts","sourceType":"production"}}
+{"kind":"node","id":"file:index.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/index.ts","relativePath":"index.ts","sourceType":"production"}}
 {"kind":"node","id":"file:index.ts:function:1:main","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"main","parameters":"[]","returnType":"string","visibility":"public"}}
+{"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
+{"kind":"node","id":"file:tsconfig.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/tsconfig.json","relativePath":"tsconfig.json","sourceType":"production"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"malformed-config","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:index.ts","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:package.json","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:tsconfig.json","properties":{}}
 {"kind":"rel","from":"file:index.ts","type":"DEFINES_FUNCTION","to":"file:index.ts:function:1:main","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

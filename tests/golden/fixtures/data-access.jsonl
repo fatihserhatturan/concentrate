@@ -6,7 +6,7 @@
 {"kind":"node","id":"datamodel:typeorm:User","label":"DataModel","properties":{"library":"typeorm","name":"User"}}
 {"kind":"node","id":"datamodel:typeorm:users","label":"DataModel","properties":{"library":"typeorm","name":"users"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"data-access","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:service.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
+{"kind":"node","id":"file:service.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
 {"kind":"node","id":"file:service.ts:class:30:PrismaBackedRepository","label":"Class","properties":{"endLine":36,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":false,"line":30,"name":"PrismaBackedRepository","visibility":"public"}}
 {"kind":"node","id":"file:service.ts:class:30:PrismaBackedRepository:field:31:prisma","label":"Field","properties":{"isInjected":true,"isReadonly":true,"isStatic":false,"line":31,"name":"prisma","typeName":"PrismaClient","visibility":"private"}}
 {"kind":"node","id":"file:service.ts:class:38:TypeOrmBackedRepository","label":"Class","properties":{"endLine":44,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":false,"line":38,"name":"TypeOrmBackedRepository","visibility":"public"}}

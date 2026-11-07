@@ -1,7 +1,7 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"datamodel:typeorm:Repository","label":"DataModel","properties":{"library":"typeorm","name":"Repository"}}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"constructor-parameter-properties","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:service.ts","label":"File","properties":{"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
+{"kind":"node","id":"file:service.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
 {"kind":"node","id":"file:service.ts:class:9:AccountService","label":"Class","properties":{"endLine":21,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":9,"name":"AccountService","visibility":"public"}}
 {"kind":"node","id":"file:service.ts:class:9:AccountService:field:11:repository","label":"Field","properties":{"isInjected":true,"isReadonly":true,"isStatic":false,"line":11,"name":"repository","typeName":"Repository","visibility":"private"}}
 {"kind":"node","id":"file:service.ts:class:9:AccountService:field:12:logger","label":"Field","properties":{"isInjected":true,"isReadonly":false,"isStatic":false,"line":12,"name":"logger","typeName":"Logger","visibility":"protected"}}

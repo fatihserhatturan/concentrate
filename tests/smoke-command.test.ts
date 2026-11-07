@@ -33,6 +33,7 @@ describe("smoke validation", () => {
       expected: {
         discoveredFiles: 1,
         supportedFiles: 1,
+        otherFiles: 0,
         parsedFiles: 1,
         failedFiles: 0,
         resolvedImports: 0,
@@ -45,6 +46,7 @@ describe("smoke validation", () => {
           fixture: 0,
           support: 0,
           generated: 0,
+          docs: 0,
         },
         graph: {
           schemaVersion: SCHEMA_VERSION,

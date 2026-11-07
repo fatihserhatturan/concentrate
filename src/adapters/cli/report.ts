@@ -8,7 +8,8 @@ export function printScanReport(
 ): void {
   console.log("Scan summary");
   console.log(`  Discovered files: ${report.discoveredFiles}`);
-  console.log(`  Supported files:  ${report.supportedFiles}`);
+  console.log(`  Code files:       ${report.supportedFiles}`);
+  console.log(`  Other files:      ${report.otherFiles}`);
   console.log(`  Skipped files:    ${report.skippedFiles}`);
   console.log(`  Parsed files:     ${report.parsedFiles}`);
   console.log(`  Failed files:     ${report.failedFiles.length}`);
@@ -16,7 +17,7 @@ export function printScanReport(
   console.log(`  Status:           ${report.status}`);
   const classes = report.fileClassifications;
   console.log(
-    `  File classes:     production ${classes.production}, test ${classes.test}, fixture ${classes.fixture}, support ${classes.support}, generated ${classes.generated}`,
+    `  File classes:     production ${classes.production}, test ${classes.test}, fixture ${classes.fixture}, support ${classes.support}, generated ${classes.generated}, docs ${classes.docs}`,
   );
   console.log(`  Resolved imports: ${report.resolvedImports}`);
   console.log(`  Unresolved rel:   ${report.unresolvedRelativeImports}`);

@@ -104,6 +104,23 @@ export function walkJsTsNodes(
       }
     }
 
+    // `new URL("./logo.svg", import.meta.url)`: the bundlers' way to name an asset.
+    if (node.type === "new_expression" && node.childForFieldName("constructor")?.text === "URL") {
+      const args = node.childForFieldName("arguments")?.namedChildren ?? [];
+      const [target, base] = args;
+      if (target?.type === "string" && base?.text.replace(/\s+/gu, "") === "import.meta.url") {
+        const source = target.text.replace(/^["']|["']$/gu, "");
+        // A file, not a directory (`new URL("./src", import.meta.url)` is a vite alias).
+        if ((source.startsWith("./") || source.startsWith("../")) && path.posix.extname(source) !== "") {
+          const urlImportNode = createDynamicImportNode(fileNodeId, node, source);
+          if (!nodes.some((n) => n.id === urlImportNode.id)) {
+            nodes.push(urlImportNode);
+            relationships.push({ from: fileNodeId, to: urlImportNode.id, type: "IMPORTS", properties: {} });
+          }
+        }
+      }
+    }
+
     if (node.type === "call_expression") {
       const fn = node.childForFieldName("function");
       if (fn?.type === "import") {

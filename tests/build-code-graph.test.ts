@@ -2058,6 +2058,7 @@ describe("buildCodeGraph", () => {
       fixture: 1,
       support: 2,
       generated: 1,
+      docs: 0,
     });
 
     assertFileClassification(graph.nodes, "src/index.ts", "production", false, false, false, false);
