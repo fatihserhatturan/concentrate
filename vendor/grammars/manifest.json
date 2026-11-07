@@ -42,6 +42,54 @@
       "version": "0.21.0",
       "sha256": "0454347cda990e2fbff14736a9ceae942c74b2e2f912c058b7cc6a4c1147484b",
       "bytes": 1077497
+    },
+    "css": {
+      "package": "tree-sitter-css",
+      "version": "0.25.0",
+      "sha256": "f0fa4c3171f3322560e3a56445989f2da9d77c38bae61e9f07ae0b3e01d88b36",
+      "bytes": 128821
+    },
+    "scss": {
+      "package": "tree-sitter-scss",
+      "version": "1.0.0",
+      "sha256": "54266012ebc1ec7cd38f908f6658dcaf72006b02b02ae117b3cac82cc2f60791",
+      "bytes": 160683
+    },
+    "json": {
+      "package": "tree-sitter-json",
+      "version": "0.24.8",
+      "sha256": "564e489724cbcf9b4563cd758a7fb7f355f896b11127819ae9e8ef71e7c15e60",
+      "bytes": 5962
+    },
+    "yaml": {
+      "package": "@tree-sitter-grammars/tree-sitter-yaml",
+      "version": "0.7.1",
+      "sha256": "f89cf2a8ccd4f29292e502f1c37efb4f1dead281246605e0a890c697d4db88c7",
+      "bytes": 189513
+    },
+    "bash": {
+      "package": "tree-sitter-bash",
+      "version": "0.25.1",
+      "sha256": "e0620a0d97002726b98f2cb97ae0d614f54ea4ec9d80dc8aec8d9d824544231a",
+      "bytes": 1358587
+    },
+    "powershell": {
+      "package": "tree-sitter-powershell",
+      "version": "0.26.4",
+      "sha256": "84555e38f85a391095b349a906b9790d319e3946ce12d9bc21dbec5cded5dad9",
+      "bytes": 990569
+    },
+    "make": {
+      "package": "tree-sitter-make",
+      "version": "1.1.1",
+      "sha256": "3cd0a9967c477e0cf3330d96ae79e2bbc8580119daf7e02266649fa6cd136e76",
+      "bytes": 146608
+    },
+    "sql": {
+      "package": "@derekstride/tree-sitter-sql",
+      "version": "0.3.11",
+      "sha256": "e03fb5079e88cfe0807056c284fd2b0589cee35df9bbb3d07e72f2f4178de8de",
+      "bytes": 2437595
     }
   }
 }

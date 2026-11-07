@@ -14,7 +14,7 @@ export type FileClassification = {
 export type FileClassificationCounts = Record<FileSourceType, number>;
 
 // Lockfiles are written by package managers.
-const lockfiles = new Set(["package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lockb", "bun.lock", "go.sum", "Cargo.lock", "poetry.lock", "Pipfile.lock", "uv.lock", "composer.lock", "Gemfile.lock"]);
+export const lockfiles: ReadonlySet<string> = new Set(["package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lockb", "bun.lock", "go.sum", "Cargo.lock", "poetry.lock", "Pipfile.lock", "uv.lock", "composer.lock", "Gemfile.lock"]);
 
 // `code` is false for the files no language parser reads (styles, JSON,
 // Markdown, assets, …): only those can be `docs`, so example code under

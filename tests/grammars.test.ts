@@ -30,6 +30,14 @@ describe("vendored grammars", () => {
       python: ["a = f(1)", "expression_statement"],
       go: ["package main\nfunc main() {}", "package_clause"],
       rust: ["fn main() {}", "function_item"],
+      css: ["a { b: c; }", "rule_set"],
+      scss: ["$a: 1;\n.b { c: $a; }", "declaration"],
+      json: ["{\"a\": [1, 2]}", "object"],
+      yaml: ["a: 1\nb:\n  - x\n", "document"],
+      bash: ["echo hi\n", "command"],
+      powershell: ["Write-Host hi\n", "statement_list"],
+      make: ["all: dep\n\techo hi\n", "rule"],
+      sql: ["SELECT a FROM t WHERE b = 1;", "statement"],
     };
     const manifest = JSON.parse(await readFile(path.join(grammarsDirectory, "manifest.json"), "utf8")) as Manifest;
 

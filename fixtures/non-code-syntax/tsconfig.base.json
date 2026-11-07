@@ -1,0 +1,4 @@
+{
+  // comments are fine in tsconfig
+  "compilerOptions": { "strict": true, },
+}

@@ -1,0 +1,9 @@
+syntax = "proto3";
+package users.v1;
+import "google/protobuf/empty.proto";
+service Users {
+  rpc Get (Req) returns (Res);
+  rpc Watch (stream Req) returns (stream Res) {}
+}
+message Req {}
+message Res { string id = 1; }
