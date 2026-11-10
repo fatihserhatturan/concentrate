@@ -207,10 +207,15 @@ Blocks or informs: MCP `list_entrypoints` and future backend runtime summaries.
 
 - `package.json` scripts (`npm-script`), Makefile targets (`make`), shell and
   PowerShell script files (`script`, `.sh`, `.bash`, `.zsh`, `.ps1`) and
-  Dockerfile `CMD` / `ENTRYPOINT` (`docker`) are `EntryPoint` nodes declared by
-  their `File`. Compose services and CI jobs come in a later part of Phase 23.
-  The files are read as text, not run: no variable expansion in commands,
-  functions, aliases, `eval` or `source`d definitions.
+  Dockerfile `CMD` / `ENTRYPOINT` (`docker`), compose services
+  (`compose-service`, in `docker-compose*.yml` and `compose*.yaml`) and GitHub
+  Actions jobs (`ci-job`, in `.github/workflows/*.yml`) are `EntryPoint` nodes
+  declared by their `File`. The files are read as text, not run: no variable
+  expansion in commands, functions, aliases, `eval` or `source`d definitions.
+  Compose and workflow YAML is read with the vendored yaml grammar (anchors,
+  aliases and `<<` merges included); a file with a syntax error is skipped.
+  `include:` / `extends:` in compose, GitLab CI, CircleCI and other CI systems
+  are not read.
 - `RUNS` (`RUNS_FILE`, `RUNS_ENTRYPOINT`; `line`, `command`) links an
   entrypoint to what a command starts, for `node`, `tsx`, `ts-node`, `bun`,
   `deno`, `python` (`-m` too), `go run|build ./pkg`, `sh` / `bash` / `pwsh
@@ -224,7 +229,13 @@ Blocks or informs: MCP `list_entrypoints` and future backend runtime summaries.
   dir && …` on the same line), then the repository root and the script's own
   directory. `npm run x` finds `x` in the package, then its parent
   directories; `prebuild` and `postbuild` are run by `build`, and Makefile
-  prerequisites are run by their target.
+  prerequisites are run by their target. A compose service `RUNS` the
+  Dockerfile its `build:` names (`context` and `dockerfile`, relative to the
+  compose file) and what its `command:` / `entrypoint:` start; a workflow
+  job runs the commands of its `run:` steps, in the step's or the job's
+  `working-directory`, and a job with `uses: ./.github/workflows/x.yml` runs
+  that workflow's file. `needs:` is not a link, and neither is `uses:` of an
+  action or of a service's `image:`.
 - Env reads are `USES_ENV` from the entrypoint (from the `File` for a
   Dockerfile instruction other than `CMD` / `ENTRYPOINT`): shell `$NAME` and
   `${NAME…}`, PowerShell `$env:NAME` and `GetEnvironmentVariable`, Makefile
@@ -234,12 +245,21 @@ Blocks or informs: MCP `list_entrypoints` and future backend runtime summaries.
   locals (a plain `NAME=value`, `for`, `read`, `getopts`), positional or
   special parameters, text in single quotes, comments and quoted heredoc
   bodies (unquoted ones expand and are read). Make variables `$(NAME)` are not
-  env.
+  env. In compose, `${VAR}`, `${VAR:-x}` and `$VAR` in any value of a service
+  read the host's env (`$$` is a literal dollar; names in a key are not read).
+  In a workflow, `${{ env.X }}`, `${{ secrets.X }}` and `${{ vars.X }}`
+  (and `secrets.X` in an `if:`) read, and so do `$X` in a `run:` script except
+  what the runner sets (`GITHUB_*`, `RUNNER_*`, `ACTIONS_*`, `CI`); the
+  `run:` text is scanned with `${{ … }}` blanked out.
 - Declarations are `DECLARES_ENV` from the repository with the file and line,
   like `.env` files: shell `export NAME[=…]` and `declare -x`, `NAME=value`
   before a command (also in `cross-env`, Dockerfile `RUN` and Makefile
   recipes), PowerShell `$env:NAME = …` and `SetEnvironmentVariable`, Makefile
-  `export NAME`, Dockerfile `ENV` and `ARG`. `list_env_config { unread }`
+  `export NAME`, Dockerfile `ENV` and `ARG`, compose `environment:` (mapping
+  or `KEY=value` / `KEY` items) and the variables of an `env_file:` that is
+  not a `.env*` file (those are declared by the env file reader), and a
+  workflow's `env:` at the workflow, job and step level. `secrets.X` is read,
+  not declared. `list_env_config { unread }`
   counts these declarations and these reads, so a variable only a script
   reads is not "unread", and a variable only a script reads and nothing
   declares is "undeclared" once any declaration exists.

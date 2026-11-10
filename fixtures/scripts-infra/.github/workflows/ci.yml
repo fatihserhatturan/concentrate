@@ -1,0 +1,30 @@
+name: CI
+on: [push]
+env:
+  CI_REGION: eu
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: |
+          npm run build
+          echo "$DEPLOY_STAGE $GITHUB_SHA $CI"
+      - name: Bundle
+        working-directory: web
+        env:
+          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+        run: make bundle
+      - name: Notify
+        if: secrets.SLACK_WEBHOOK != ''
+        run: ./scripts/deploy.sh ${{ env.CI_REGION }} ${{ vars.APP_NAME }}
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: python app/manage.py test

@@ -12,6 +12,7 @@
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"dir:src/assets","label":"Directory","properties":{"name":"assets","path":"<root>/src/assets","relativePath":"src/assets"}}
 {"kind":"node","id":"dir:src/styles","label":"Directory","properties":{"name":"styles","path":"<root>/src/styles","relativePath":"src/styles"}}
+{"kind":"node","id":"entrypoint:compose-service:docker-compose.yml:app","label":"EntryPoint","properties":{"handlerName":"build","kind":"compose-service","library":"docker-compose","line":2,"receiverName":null,"trigger":"app"}}
 {"kind":"node","id":"entrypoint:make:Makefile:build","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":1,"receiverName":null,"trigger":"build"}}
 {"kind":"node","id":"entrypoint:npm-script:package.json:build","label":"EntryPoint","properties":{"handlerName":"sh scripts/build.sh","kind":"npm-script","library":"npm","line":1,"receiverName":null,"trigger":"build"}}
 {"kind":"node","id":"entrypoint:script:scripts/build.sh","label":"EntryPoint","properties":{"handlerName":null,"kind":"script","library":"shell","line":1,"receiverName":null,"trigger":"scripts/build.sh"}}
@@ -78,9 +79,11 @@
 {"kind":"rel","from":"dir:src/assets","type":"CONTAINS_FILE","to":"file:src/assets/logo.svg","properties":{}}
 {"kind":"rel","from":"dir:src/styles","type":"CONTAINS_FILE","to":"file:src/styles/app.css","properties":{}}
 {"kind":"rel","from":"dir:src/styles","type":"CONTAINS_FILE","to":"file:src/styles/theme.scss","properties":{}}
+{"kind":"rel","from":"entrypoint:compose-service:docker-compose.yml:app","type":"RUNS","to":"file:Dockerfile","properties":{"command":"build Dockerfile","line":2}}
 {"kind":"rel","from":"entrypoint:make:Makefile:build","type":"RUNS","to":"entrypoint:script:scripts/build.sh","properties":{"command":"sh scripts/build.sh","line":2}}
 {"kind":"rel","from":"entrypoint:npm-script:package.json:build","type":"RUNS","to":"entrypoint:script:scripts/build.sh","properties":{"command":"sh scripts/build.sh","line":1}}
 {"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:build","properties":{}}
+{"kind":"rel","from":"file:docker-compose.yml","type":"DECLARES_ENTRYPOINT","to":"entrypoint:compose-service:docker-compose.yml:app","properties":{}}
 {"kind":"rel","from":"file:index.html","type":"IMPORTS","to":"file:index.html:import:4:./src/styles/app.css","properties":{}}
 {"kind":"rel","from":"file:index.html","type":"IMPORTS","to":"file:index.html:import:5:./src/main.ts","properties":{}}
 {"kind":"rel","from":"file:index.html:import:4:./src/styles/app.css","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
