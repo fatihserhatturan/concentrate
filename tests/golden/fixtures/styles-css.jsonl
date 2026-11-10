@@ -1,0 +1,234 @@
+{"kind":"report","status":"success","discoveredFiles":12,"supportedFiles":0,"parsedFiles":0,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"styles-css","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:css","label":"Directory","properties":{"name":"css","path":"<root>/css","relativePath":"css"}}
+{"kind":"node","id":"dir:img","label":"Directory","properties":{"name":"img","path":"<root>/img","relativePath":"img"}}
+{"kind":"node","id":"dir:scss","label":"Directory","properties":{"name":"scss","path":"<root>/scss","relativePath":"scss"}}
+{"kind":"node","id":"dir:scss/components","label":"Directory","properties":{"name":"components","path":"<root>/scss/components","relativePath":"scss/components"}}
+{"kind":"node","id":"file:css/Card.module.css","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"css","path":"<root>/css/Card.module.css","relativePath":"css/Card.module.css","sourceType":"production"}}
+{"kind":"node","id":"file:css/Card.module.css:import:1:./colors.module.css","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"./colors.module.css","specifier":"@value primary from \"./colors.module.css\""}}
+{"kind":"node","id":"file:css/Card.module.css:import:3:./base.module.css","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"./base.module.css","specifier":"composes: base from \"./base.module.css\""}}
+{"kind":"node","id":"file:css/Card.module.css:style:class:card","label":"Style","properties":{"kind":"class","line":3,"name":"card","scope":"module"}}
+{"kind":"node","id":"file:css/Card.module.css:style:class:legacy","label":"Style","properties":{"kind":"class","line":6,"name":"legacy","scope":"global"}}
+{"kind":"node","id":"file:css/Card.module.css:style:class:outside","label":"Style","properties":{"kind":"class","line":7,"name":"outside","scope":"global"}}
+{"kind":"node","id":"file:css/Card.module.css:style:class:title","label":"Style","properties":{"kind":"class","line":4,"name":"title","scope":"module"}}
+{"kind":"node","id":"file:css/Card.module.css:style:rule:3:0","label":"Style","properties":{"atRule":null,"endLine":3,"kind":"rule","line":3,"name":".card","selector":".card"}}
+{"kind":"node","id":"file:css/Card.module.css:style:rule:4:0","label":"Style","properties":{"atRule":null,"endLine":4,"kind":"rule","line":4,"name":".title","selector":".title"}}
+{"kind":"node","id":"file:css/Card.module.css:style:rule:5:0","label":"Style","properties":{"atRule":null,"endLine":5,"kind":"rule","line":5,"name":".card:hover .title","selector":".card:hover .title"}}
+{"kind":"node","id":"file:css/Card.module.css:style:rule:6:0","label":"Style","properties":{"atRule":null,"endLine":6,"kind":"rule","line":6,"name":":global(.legacy) .title","selector":":global(.legacy) .title"}}
+{"kind":"node","id":"file:css/Card.module.css:style:rule:7:0","label":"Style","properties":{"atRule":null,"endLine":7,"kind":"rule","line":7,"name":":global .outside","selector":":global .outside"}}
+{"kind":"node","id":"file:css/base.css","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"css","path":"<root>/css/base.css","relativePath":"css/base.css","sourceType":"production"}}
+{"kind":"node","id":"file:css/base.css:import:13:../img/logo.svg","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":13,"source":"../img/logo.svg","specifier":"url(../img/logo.svg)"}}
+{"kind":"node","id":"file:css/base.css:import:1:./reset.css","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"./reset.css","specifier":"@import \"./reset.css\""}}
+{"kind":"node","id":"file:css/base.css:import:2:./theme.css","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./theme.css","specifier":"@import url(\"theme.css\") screen"}}
+{"kind":"node","id":"file:css/base.css:import:39:../img/logo.svg","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":39,"source":"../img/logo.svg","specifier":"url(\"../img/logo.svg#frag\")"}}
+{"kind":"node","id":"file:css/base.css:style:class:btn","label":"Style","properties":{"kind":"class","line":16,"name":"btn","scope":null}}
+{"kind":"node","id":"file:css/base.css:style:class:btn-primary","label":"Style","properties":{"kind":"class","line":16,"name":"btn-primary","scope":null}}
+{"kind":"node","id":"file:css/base.css:style:class:only-wide","label":"Style","properties":{"kind":"class","line":29,"name":"only-wide","scope":null}}
+{"kind":"node","id":"file:css/base.css:style:class:title","label":"Style","properties":{"kind":"class","line":22,"name":"title","scope":null}}
+{"kind":"node","id":"file:css/base.css:style:custom-property:--color-brand","label":"Style","properties":{"kind":"custom-property","line":6,"name":"--color-brand"}}
+{"kind":"node","id":"file:css/base.css:style:custom-property:--space","label":"Style","properties":{"kind":"custom-property","line":7,"name":"--space"}}
+{"kind":"node","id":"file:css/base.css:style:id:hero","label":"Style","properties":{"kind":"id","line":22,"name":"hero"}}
+{"kind":"node","id":"file:css/base.css:style:rule:11:0","label":"Style","properties":{"atRule":null,"endLine":14,"kind":"rule","line":11,"name":"body","selector":"body"}}
+{"kind":"node","id":"file:css/base.css:style:rule:16:0","label":"Style","properties":{"atRule":null,"endLine":20,"kind":"rule","line":16,"name":".btn, .btn-primary:hover","selector":".btn, .btn-primary:hover"}}
+{"kind":"node","id":"file:css/base.css:style:rule:22:0","label":"Style","properties":{"atRule":null,"endLine":25,"kind":"rule","line":22,"name":"#hero > .title::before","selector":"#hero > .title::before"}}
+{"kind":"node","id":"file:css/base.css:style:rule:28:0","label":"Style","properties":{"atRule":"@media (min-width: 40em)","endLine":28,"kind":"rule","line":28,"name":".btn","selector":".btn"}}
+{"kind":"node","id":"file:css/base.css:style:rule:29:0","label":"Style","properties":{"atRule":"@media (min-width: 40em)","endLine":29,"kind":"rule","line":29,"name":".only-wide","selector":".only-wide"}}
+{"kind":"node","id":"file:css/base.css:style:rule:5:0","label":"Style","properties":{"atRule":null,"endLine":8,"kind":"rule","line":5,"name":":root","selector":":root"}}
+{"kind":"node","id":"file:css/base.module.css","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"css","path":"<root>/css/base.module.css","relativePath":"css/base.module.css","sourceType":"production"}}
+{"kind":"node","id":"file:css/base.module.css:style:class:base","label":"Style","properties":{"kind":"class","line":1,"name":"base","scope":"module"}}
+{"kind":"node","id":"file:css/base.module.css:style:rule:1:0","label":"Style","properties":{"atRule":null,"endLine":1,"kind":"rule","line":1,"name":".base","selector":".base"}}
+{"kind":"node","id":"file:css/colors.module.css","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"css","path":"<root>/css/colors.module.css","relativePath":"css/colors.module.css","sourceType":"production"}}
+{"kind":"node","id":"file:css/colors.module.css:style:class:swatch","label":"Style","properties":{"kind":"class","line":2,"name":"swatch","scope":"module"}}
+{"kind":"node","id":"file:css/colors.module.css:style:rule:2:0","label":"Style","properties":{"atRule":null,"endLine":2,"kind":"rule","line":2,"name":".swatch","selector":".swatch"}}
+{"kind":"node","id":"file:css/reset.css","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"css","path":"<root>/css/reset.css","relativePath":"css/reset.css","sourceType":"production"}}
+{"kind":"node","id":"file:css/reset.css:style:class:visually-hidden","label":"Style","properties":{"kind":"class","line":2,"name":"visually-hidden","scope":null}}
+{"kind":"node","id":"file:css/reset.css:style:rule:1:0","label":"Style","properties":{"atRule":null,"endLine":1,"kind":"rule","line":1,"name":"*, *::before","selector":"*, *::before"}}
+{"kind":"node","id":"file:css/reset.css:style:rule:2:0","label":"Style","properties":{"atRule":null,"endLine":2,"kind":"rule","line":2,"name":".visually-hidden","selector":".visually-hidden"}}
+{"kind":"node","id":"file:css/theme.css","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"css","path":"<root>/css/theme.css","relativePath":"css/theme.css","sourceType":"production"}}
+{"kind":"node","id":"file:css/theme.css:style:class:theme-dark","label":"Style","properties":{"kind":"class","line":7,"name":"theme-dark","scope":null}}
+{"kind":"node","id":"file:css/theme.css:style:custom-property:--accent","label":"Style","properties":{"kind":"custom-property","line":1,"name":"--accent"}}
+{"kind":"node","id":"file:css/theme.css:style:custom-property:--color-brand","label":"Style","properties":{"kind":"custom-property","line":8,"name":"--color-brand"}}
+{"kind":"node","id":"file:css/theme.css:style:rule:7:0","label":"Style","properties":{"atRule":null,"endLine":10,"kind":"rule","line":7,"name":".theme-dark","selector":".theme-dark"}}
+{"kind":"node","id":"file:img/logo.svg","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"asset","path":"<root>/img/logo.svg","relativePath":"img/logo.svg","sourceType":"production"}}
+{"kind":"node","id":"file:scss/_legacy.scss","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"scss","path":"<root>/scss/_legacy.scss","relativePath":"scss/_legacy.scss","sourceType":"production"}}
+{"kind":"node","id":"file:scss/_legacy.scss:style:class:legacy-box","label":"Style","properties":{"kind":"class","line":1,"name":"legacy-box","scope":null}}
+{"kind":"node","id":"file:scss/_legacy.scss:style:rule:1:0","label":"Style","properties":{"atRule":null,"endLine":1,"kind":"rule","line":1,"name":".legacy-box","selector":".legacy-box"}}
+{"kind":"node","id":"file:scss/_vars.scss","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"scss","path":"<root>/scss/_vars.scss","relativePath":"scss/_vars.scss","sourceType":"production"}}
+{"kind":"node","id":"file:scss/components/_button.scss","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"scss","path":"<root>/scss/components/_button.scss","relativePath":"scss/components/_button.scss","sourceType":"production"}}
+{"kind":"node","id":"file:scss/components/_button.scss:style:class:button","label":"Style","properties":{"kind":"class","line":1,"name":"button","scope":null}}
+{"kind":"node","id":"file:scss/components/_button.scss:style:class:button--large","label":"Style","properties":{"kind":"class","line":4,"name":"button--large","scope":null}}
+{"kind":"node","id":"file:scss/components/_button.scss:style:class:disabled","label":"Style","properties":{"kind":"class","line":5,"name":"disabled","scope":null}}
+{"kind":"node","id":"file:scss/components/_button.scss:style:rule:1:0","label":"Style","properties":{"atRule":null,"endLine":6,"kind":"rule","line":1,"name":".button","selector":".button"}}
+{"kind":"node","id":"file:scss/components/_button.scss:style:rule:4:0","label":"Style","properties":{"atRule":null,"endLine":4,"kind":"rule","line":4,"name":"&--large","selector":"&--large"}}
+{"kind":"node","id":"file:scss/components/_button.scss:style:rule:5:0","label":"Style","properties":{"atRule":null,"endLine":5,"kind":"rule","line":5,"name":"&:not(.disabled)","selector":"&:not(.disabled)"}}
+{"kind":"node","id":"file:scss/components/_index.scss","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"scss","path":"<root>/scss/components/_index.scss","relativePath":"scss/components/_index.scss","sourceType":"production"}}
+{"kind":"node","id":"file:scss/components/_index.scss:import:1:button","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"button","specifier":"@forward \"button\""}}
+{"kind":"node","id":"file:scss/main.scss","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"scss","path":"<root>/scss/main.scss","relativePath":"scss/main.scss","sourceType":"production"}}
+{"kind":"node","id":"file:scss/main.scss:import:2:./vars","label":"Import","properties":{"alias":"v","bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"./vars","specifier":"@use \"./vars\" as v"}}
+{"kind":"node","id":"file:scss/main.scss:import:3:components","label":"Import","properties":{"alias":"*","bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"components","specifier":"@use \"components\" as *"}}
+{"kind":"node","id":"file:scss/main.scss:import:4:pkg/theme","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":4,"source":"pkg/theme","specifier":"@use \"pkg/theme\" with ($brand: \"x.css\")"}}
+{"kind":"node","id":"file:scss/main.scss:import:5:./vars","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":5,"source":"./vars","specifier":"@forward \"./vars\" show $brand"}}
+{"kind":"node","id":"file:scss/main.scss:import:6:components/button","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":6,"source":"components/button","specifier":"@import \"legacy\", \"components/button\""}}
+{"kind":"node","id":"file:scss/main.scss:import:6:legacy","label":"Import","properties":{"alias":null,"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":6,"source":"legacy","specifier":"@import \"legacy\", \"components/button\""}}
+{"kind":"node","id":"file:scss/main.scss:style:class:active","label":"Style","properties":{"kind":"class","line":17,"name":"active","scope":null}}
+{"kind":"node","id":"file:scss/main.scss:style:class:badge","label":"Style","properties":{"kind":"class","line":23,"name":"badge","scope":null}}
+{"kind":"node","id":"file:scss/main.scss:style:class:dark","label":"Style","properties":{"kind":"class","line":20,"name":"dark","scope":null}}
+{"kind":"node","id":"file:scss/main.scss:style:class:nav","label":"Style","properties":{"kind":"class","line":9,"name":"nav","scope":null}}
+{"kind":"node","id":"file:scss/main.scss:style:class:nav-wide","label":"Style","properties":{"kind":"class","line":26,"name":"nav-wide","scope":null}}
+{"kind":"node","id":"file:scss/main.scss:style:class:nav__item","label":"Style","properties":{"kind":"class","line":14,"name":"nav__item","scope":null}}
+{"kind":"node","id":"file:scss/main.scss:style:class:uses-placeholder","label":"Style","properties":{"kind":"class","line":36,"name":"uses-placeholder","scope":null}}
+{"kind":"node","id":"file:scss/main.scss:style:custom-property:--nav-height","label":"Style","properties":{"kind":"custom-property","line":11,"name":"--nav-height"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:14:0","label":"Style","properties":{"atRule":null,"endLine":21,"kind":"rule","line":14,"name":"&__item","selector":"&__item"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:17:0","label":"Style","properties":{"atRule":null,"endLine":18,"kind":"rule","line":17,"name":"&.active, &:hover","selector":"&.active, &:hover"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:20:0","label":"Style","properties":{"atRule":null,"endLine":20,"kind":"rule","line":20,"name":".dark &","selector":".dark &"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:23:0","label":"Style","properties":{"atRule":null,"endLine":23,"kind":"rule","line":23,"name":"> .badge","selector":"> .badge"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:26:0","label":"Style","properties":{"atRule":null,"endLine":26,"kind":"rule","line":26,"name":".nav-wide","selector":".nav-wide"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:31:0","label":"Style","properties":{"atRule":null,"endLine":31,"kind":"rule","line":31,"name":".pill-#{$name}","selector":".pill-#{$name}"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:32:0","label":"Style","properties":{"atRule":null,"endLine":32,"kind":"rule","line":32,"name":"&-suffix","selector":"&-suffix"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:35:0","label":"Style","properties":{"atRule":null,"endLine":35,"kind":"rule","line":35,"name":"%placeholder","selector":"%placeholder"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:36:0","label":"Style","properties":{"atRule":null,"endLine":36,"kind":"rule","line":36,"name":".uses-placeholder","selector":".uses-placeholder"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:37:0","label":"Style","properties":{"atRule":null,"endLine":37,"kind":"rule","line":37,"name":".icon-#{v.$name}","selector":".icon-#{v.$name}"}}
+{"kind":"node","id":"file:scss/main.scss:style:rule:9:0","label":"Style","properties":{"atRule":null,"endLine":28,"kind":"rule","line":9,"name":".nav","selector":".nav"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"styles-css","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:css","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:img","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:scss","properties":{}}
+{"kind":"rel","from":"dir:css","type":"CONTAINS_FILE","to":"file:css/Card.module.css","properties":{}}
+{"kind":"rel","from":"dir:css","type":"CONTAINS_FILE","to":"file:css/base.css","properties":{}}
+{"kind":"rel","from":"dir:css","type":"CONTAINS_FILE","to":"file:css/base.module.css","properties":{}}
+{"kind":"rel","from":"dir:css","type":"CONTAINS_FILE","to":"file:css/colors.module.css","properties":{}}
+{"kind":"rel","from":"dir:css","type":"CONTAINS_FILE","to":"file:css/reset.css","properties":{}}
+{"kind":"rel","from":"dir:css","type":"CONTAINS_FILE","to":"file:css/theme.css","properties":{}}
+{"kind":"rel","from":"dir:img","type":"CONTAINS_FILE","to":"file:img/logo.svg","properties":{}}
+{"kind":"rel","from":"dir:scss","type":"CONTAINS_DIRECTORY","to":"dir:scss/components","properties":{}}
+{"kind":"rel","from":"dir:scss","type":"CONTAINS_FILE","to":"file:scss/_legacy.scss","properties":{}}
+{"kind":"rel","from":"dir:scss","type":"CONTAINS_FILE","to":"file:scss/_vars.scss","properties":{}}
+{"kind":"rel","from":"dir:scss","type":"CONTAINS_FILE","to":"file:scss/main.scss","properties":{}}
+{"kind":"rel","from":"dir:scss/components","type":"CONTAINS_FILE","to":"file:scss/components/_button.scss","properties":{}}
+{"kind":"rel","from":"dir:scss/components","type":"CONTAINS_FILE","to":"file:scss/components/_index.scss","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"DECLARES_STYLE","to":"file:css/Card.module.css:style:class:card","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"DECLARES_STYLE","to":"file:css/Card.module.css:style:class:legacy","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"DECLARES_STYLE","to":"file:css/Card.module.css:style:class:outside","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"DECLARES_STYLE","to":"file:css/Card.module.css:style:class:title","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"DECLARES_STYLE","to":"file:css/Card.module.css:style:rule:3:0","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"DECLARES_STYLE","to":"file:css/Card.module.css:style:rule:4:0","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"DECLARES_STYLE","to":"file:css/Card.module.css:style:rule:5:0","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"DECLARES_STYLE","to":"file:css/Card.module.css:style:rule:6:0","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"DECLARES_STYLE","to":"file:css/Card.module.css:style:rule:7:0","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"IMPORTS","to":"file:css/Card.module.css:import:1:./colors.module.css","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"IMPORTS","to":"file:css/Card.module.css:import:3:./base.module.css","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"USES_STYLE","to":"file:css/base.css:style:custom-property:--color-brand","properties":{"expression":"var(--color-brand)","line":3,"match":"name"}}
+{"kind":"rel","from":"file:css/Card.module.css","type":"USES_STYLE","to":"file:css/theme.css:style:custom-property:--color-brand","properties":{"expression":"var(--color-brand)","line":3,"match":"name"}}
+{"kind":"rel","from":"file:css/Card.module.css:import:1:./colors.module.css","type":"RESOLVES_TO","to":"file:css/colors.module.css","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css:import:3:./base.module.css","type":"RESOLVES_TO","to":"file:css/base.module.css","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css:style:rule:3:0","type":"SELECTS_STYLE","to":"file:css/Card.module.css:style:class:card","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css:style:rule:4:0","type":"SELECTS_STYLE","to":"file:css/Card.module.css:style:class:title","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css:style:rule:5:0","type":"SELECTS_STYLE","to":"file:css/Card.module.css:style:class:card","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css:style:rule:5:0","type":"SELECTS_STYLE","to":"file:css/Card.module.css:style:class:title","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css:style:rule:6:0","type":"SELECTS_STYLE","to":"file:css/Card.module.css:style:class:legacy","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css:style:rule:6:0","type":"SELECTS_STYLE","to":"file:css/Card.module.css:style:class:title","properties":{}}
+{"kind":"rel","from":"file:css/Card.module.css:style:rule:7:0","type":"SELECTS_STYLE","to":"file:css/Card.module.css:style:class:outside","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:class:btn","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:class:btn-primary","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:class:only-wide","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:class:title","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:custom-property:--color-brand","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:custom-property:--space","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:id:hero","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:rule:11:0","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:rule:16:0","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:rule:22:0","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:rule:28:0","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:rule:29:0","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"DECLARES_STYLE","to":"file:css/base.css:style:rule:5:0","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"IMPORTS","to":"file:css/base.css:import:13:../img/logo.svg","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"IMPORTS","to":"file:css/base.css:import:1:./reset.css","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"IMPORTS","to":"file:css/base.css:import:2:./theme.css","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"IMPORTS","to":"file:css/base.css:import:39:../img/logo.svg","properties":{}}
+{"kind":"rel","from":"file:css/base.css","type":"USES_STYLE","to":"file:css/base.css:style:custom-property:--color-brand","properties":{"expression":"var(--color-brand)","line":18,"match":"file"}}
+{"kind":"rel","from":"file:css/base.css","type":"USES_STYLE","to":"file:css/base.css:style:custom-property:--space","properties":{"expression":"var(--space)","line":19,"match":"file"}}
+{"kind":"rel","from":"file:css/base.css","type":"USES_STYLE","to":"file:css/base.css:style:custom-property:--space","properties":{"expression":"var(--space)","line":28,"match":"file"}}
+{"kind":"rel","from":"file:css/base.css:import:13:../img/logo.svg","type":"RESOLVES_TO","to":"file:img/logo.svg","properties":{}}
+{"kind":"rel","from":"file:css/base.css:import:1:./reset.css","type":"RESOLVES_TO","to":"file:css/reset.css","properties":{}}
+{"kind":"rel","from":"file:css/base.css:import:2:./theme.css","type":"RESOLVES_TO","to":"file:css/theme.css","properties":{}}
+{"kind":"rel","from":"file:css/base.css:import:39:../img/logo.svg","type":"RESOLVES_TO","to":"file:img/logo.svg","properties":{}}
+{"kind":"rel","from":"file:css/base.css:style:rule:16:0","type":"SELECTS_STYLE","to":"file:css/base.css:style:class:btn","properties":{}}
+{"kind":"rel","from":"file:css/base.css:style:rule:16:0","type":"SELECTS_STYLE","to":"file:css/base.css:style:class:btn-primary","properties":{}}
+{"kind":"rel","from":"file:css/base.css:style:rule:22:0","type":"SELECTS_STYLE","to":"file:css/base.css:style:class:title","properties":{}}
+{"kind":"rel","from":"file:css/base.css:style:rule:22:0","type":"SELECTS_STYLE","to":"file:css/base.css:style:id:hero","properties":{}}
+{"kind":"rel","from":"file:css/base.css:style:rule:28:0","type":"SELECTS_STYLE","to":"file:css/base.css:style:class:btn","properties":{}}
+{"kind":"rel","from":"file:css/base.css:style:rule:29:0","type":"SELECTS_STYLE","to":"file:css/base.css:style:class:only-wide","properties":{}}
+{"kind":"rel","from":"file:css/base.module.css","type":"DECLARES_STYLE","to":"file:css/base.module.css:style:class:base","properties":{}}
+{"kind":"rel","from":"file:css/base.module.css","type":"DECLARES_STYLE","to":"file:css/base.module.css:style:rule:1:0","properties":{}}
+{"kind":"rel","from":"file:css/base.module.css:style:rule:1:0","type":"SELECTS_STYLE","to":"file:css/base.module.css:style:class:base","properties":{}}
+{"kind":"rel","from":"file:css/colors.module.css","type":"DECLARES_STYLE","to":"file:css/colors.module.css:style:class:swatch","properties":{}}
+{"kind":"rel","from":"file:css/colors.module.css","type":"DECLARES_STYLE","to":"file:css/colors.module.css:style:rule:2:0","properties":{}}
+{"kind":"rel","from":"file:css/colors.module.css:style:rule:2:0","type":"SELECTS_STYLE","to":"file:css/colors.module.css:style:class:swatch","properties":{}}
+{"kind":"rel","from":"file:css/reset.css","type":"DECLARES_STYLE","to":"file:css/reset.css:style:class:visually-hidden","properties":{}}
+{"kind":"rel","from":"file:css/reset.css","type":"DECLARES_STYLE","to":"file:css/reset.css:style:rule:1:0","properties":{}}
+{"kind":"rel","from":"file:css/reset.css","type":"DECLARES_STYLE","to":"file:css/reset.css:style:rule:2:0","properties":{}}
+{"kind":"rel","from":"file:css/reset.css:style:rule:2:0","type":"SELECTS_STYLE","to":"file:css/reset.css:style:class:visually-hidden","properties":{}}
+{"kind":"rel","from":"file:css/theme.css","type":"DECLARES_STYLE","to":"file:css/theme.css:style:class:theme-dark","properties":{}}
+{"kind":"rel","from":"file:css/theme.css","type":"DECLARES_STYLE","to":"file:css/theme.css:style:custom-property:--accent","properties":{}}
+{"kind":"rel","from":"file:css/theme.css","type":"DECLARES_STYLE","to":"file:css/theme.css:style:custom-property:--color-brand","properties":{}}
+{"kind":"rel","from":"file:css/theme.css","type":"DECLARES_STYLE","to":"file:css/theme.css:style:rule:7:0","properties":{}}
+{"kind":"rel","from":"file:css/theme.css","type":"USES_STYLE","to":"file:css/theme.css:style:custom-property:--color-brand","properties":{"expression":"var(--color-brand)","line":9,"match":"file"}}
+{"kind":"rel","from":"file:css/theme.css:style:rule:7:0","type":"SELECTS_STYLE","to":"file:css/theme.css:style:class:theme-dark","properties":{}}
+{"kind":"rel","from":"file:scss/_legacy.scss","type":"DECLARES_STYLE","to":"file:scss/_legacy.scss:style:class:legacy-box","properties":{}}
+{"kind":"rel","from":"file:scss/_legacy.scss","type":"DECLARES_STYLE","to":"file:scss/_legacy.scss:style:rule:1:0","properties":{}}
+{"kind":"rel","from":"file:scss/_legacy.scss:style:rule:1:0","type":"SELECTS_STYLE","to":"file:scss/_legacy.scss:style:class:legacy-box","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss","type":"DECLARES_STYLE","to":"file:scss/components/_button.scss:style:class:button","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss","type":"DECLARES_STYLE","to":"file:scss/components/_button.scss:style:class:button--large","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss","type":"DECLARES_STYLE","to":"file:scss/components/_button.scss:style:class:disabled","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss","type":"DECLARES_STYLE","to":"file:scss/components/_button.scss:style:rule:1:0","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss","type":"DECLARES_STYLE","to":"file:scss/components/_button.scss:style:rule:4:0","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss","type":"DECLARES_STYLE","to":"file:scss/components/_button.scss:style:rule:5:0","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss","type":"USES_STYLE","to":"file:css/base.css:style:custom-property:--color-brand","properties":{"expression":"var(--color-brand)","line":2,"match":"name"}}
+{"kind":"rel","from":"file:scss/components/_button.scss","type":"USES_STYLE","to":"file:css/theme.css:style:custom-property:--color-brand","properties":{"expression":"var(--color-brand)","line":2,"match":"name"}}
+{"kind":"rel","from":"file:scss/components/_button.scss:style:rule:1:0","type":"SELECTS_STYLE","to":"file:scss/components/_button.scss:style:class:button","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss:style:rule:4:0","type":"SELECTS_STYLE","to":"file:scss/components/_button.scss:style:class:button--large","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss:style:rule:5:0","type":"SELECTS_STYLE","to":"file:scss/components/_button.scss:style:class:button","properties":{}}
+{"kind":"rel","from":"file:scss/components/_button.scss:style:rule:5:0","type":"SELECTS_STYLE","to":"file:scss/components/_button.scss:style:class:disabled","properties":{}}
+{"kind":"rel","from":"file:scss/components/_index.scss","type":"IMPORTS","to":"file:scss/components/_index.scss:import:1:button","properties":{}}
+{"kind":"rel","from":"file:scss/components/_index.scss:import:1:button","type":"RESOLVES_TO","to":"file:scss/components/_button.scss","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:class:active","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:class:badge","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:class:dark","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:class:nav","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:class:nav-wide","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:class:nav__item","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:class:uses-placeholder","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:custom-property:--nav-height","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:14:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:17:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:20:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:23:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:26:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:31:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:32:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:35:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:36:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:37:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"DECLARES_STYLE","to":"file:scss/main.scss:style:rule:9:0","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"IMPORTS","to":"file:scss/main.scss:import:2:./vars","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"IMPORTS","to":"file:scss/main.scss:import:3:components","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"IMPORTS","to":"file:scss/main.scss:import:4:pkg/theme","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"IMPORTS","to":"file:scss/main.scss:import:5:./vars","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"IMPORTS","to":"file:scss/main.scss:import:6:components/button","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"IMPORTS","to":"file:scss/main.scss:import:6:legacy","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss","type":"USES_STYLE","to":"file:scss/main.scss:style:custom-property:--nav-height","properties":{"expression":"var(--nav-height)","line":12,"match":"file"}}
+{"kind":"rel","from":"file:scss/main.scss:import:2:./vars","type":"RESOLVES_TO","to":"file:scss/_vars.scss","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:import:3:components","type":"RESOLVES_TO","to":"file:scss/components/_index.scss","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:import:5:./vars","type":"RESOLVES_TO","to":"file:scss/_vars.scss","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:import:6:components/button","type":"RESOLVES_TO","to":"file:scss/components/_button.scss","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:import:6:legacy","type":"RESOLVES_TO","to":"file:scss/_legacy.scss","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:style:rule:14:0","type":"SELECTS_STYLE","to":"file:scss/main.scss:style:class:nav__item","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:style:rule:17:0","type":"SELECTS_STYLE","to":"file:scss/main.scss:style:class:active","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:style:rule:17:0","type":"SELECTS_STYLE","to":"file:scss/main.scss:style:class:nav__item","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:style:rule:20:0","type":"SELECTS_STYLE","to":"file:scss/main.scss:style:class:dark","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:style:rule:20:0","type":"SELECTS_STYLE","to":"file:scss/main.scss:style:class:nav__item","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:style:rule:23:0","type":"SELECTS_STYLE","to":"file:scss/main.scss:style:class:badge","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:style:rule:26:0","type":"SELECTS_STYLE","to":"file:scss/main.scss:style:class:nav-wide","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:style:rule:36:0","type":"SELECTS_STYLE","to":"file:scss/main.scss:style:class:uses-placeholder","properties":{}}
+{"kind":"rel","from":"file:scss/main.scss:style:rule:9:0","type":"SELECTS_STYLE","to":"file:scss/main.scss:style:class:nav","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

@@ -1336,8 +1336,8 @@ Astro).
   `yaml`, `toml`, `markdown`, `shell`, `powershell`, `dockerfile`, `makefile`,
   `sql`, `proto`) or `other` (text) and `asset` (images, fonts, media,
   archives, and any file with a NUL byte in its first 8 000 bytes). They have
-  no declarations yet: Phases 23–25 read them (scripts and infrastructure,
-  CSS, SQL and `.proto`). The scan report counts them as `otherFiles`;
+  no declarations unless a later bullet says so (scripts and infrastructure and
+  CSS are read; SQL and `.proto` follow in Phase 25). The scan report counts them as `otherFiles`;
   `supportedFiles` is the number of code files.
 - Vendored grammars (`vendor/grammars`, built with `npm run grammars:build`):
   `css`, `scss`, `json`, `yaml`, `bash`, `powershell`, `make` and `sql`.
@@ -1364,12 +1364,46 @@ Astro).
   similar files, and for any non-code file under `docs/`. Code under `docs/`
   stays `production`. Lockfiles (`package-lock.json`, `pnpm-lock.yaml`,
   `yarn.lock`, `go.sum`, `Cargo.lock`, `poetry.lock`, …) are `generated`.
+- CSS, SCSS and Less files (`.css`, `.scss`, `.sass`, `.less`) are read by a
+  scanner of their own (`languages/plain/styles.ts`), not by the vendored css
+  and scss grammars: those reject valid code (`@use "x" as y`, `--x: #{$v}`,
+  range media queries) and drop the rest of the file at an error. A `Style`
+  node (`DECLARES_STYLE` from the file) is made for each class (`kind: class`),
+  id, custom property definition (`--x: …`, `@property --x`) and rule
+  (`kind: rule`, with `selector`, `line`, `endLine` and the enclosing `atRule`;
+  at most 5 000 rules per file). A rule `SELECTS_STYLE` the classes and ids of
+  its selector. A class or id is one node per file, at its first selector.
+  Nested rules expand `&` (`&__item` in `.nav` is the class `nav__item`) and
+  descendants; names built at compile time (`.a-#{$x}`, `@{x}`), placeholders
+  (`%x`), keyframe steps and `@font-face` / `@page` blocks are not nodes, and
+  neither are classes inside a mixin body that starts with `&-` (no parent
+  to expand). `@extend` is not a link. Classes of a `.module.css` file carry
+  `scope: module` and `:global(.x)` / `:global .x` ones `scope: global`.
+- `var(--x)` in a style file is `USES_STYLE` from the file (`line`, `match`:
+  `file` when the file defines `--x`, otherwise `name`) to the definitions of
+  `--x`: the ones in the same file, else every definition of that name in the
+  project (the cascade decides which applies, the graph cannot). A custom
+  property defined nowhere in the scan (a third-party theme, JS `setProperty`)
+  has no target; uses in JS, templates and inline `style` attributes are not
+  read.
+- `@import`, `@use`, `@forward`, `url()`, CSS Modules `composes: a from "./x"`
+  and `@value a from "./x"` are `Import` nodes of the file, resolved to `File`
+  like JS imports: relative to the style sheet; Sass and Less add the
+  extension and find the partial (`_name.scss`) and a folder's `_index` /
+  `index`. `@use "x" as y` keeps the alias. Not imports: URLs, `data:` URIs,
+  `url(#id)`, root-relative paths (`/fonts/x.woff2`), `~package` paths,
+  `sass:` modules, paths with interpolation or variables, and
+  `composes … from global`. A bare Sass name that is not found beside the
+  sheet (a package in `node_modules`, an `includePaths` folder) is left
+  unresolved and not counted; Sass `loadPaths` and webpack aliases are not
+  read. A `url()` or `@import` with `?query` or `#fragment` links the file
+  without it.
 - JS/TS imports of styles, JSON and images, `new URL("./x.png", import.meta.url)`
   and HTML `<link href>` / `<script src>` resolve to the `File`. A `new URL`
   of a path without an extension (a directory alias such as
   `new URL("./src", import.meta.url)`) and a `src` or `href` with a template
   placeholder (`%PUBLIC_URL%`, `{{ x }}`, `<%= x %>`, `${x}`) are not imports.
-  Root-relative paths (`/favicon.ico`), URLs, CSS `@import` / `url()` and
+  Root-relative paths (`/favicon.ico`), URLs and
   Markdown links are not followed.
 - `--max-files` limits code files only; the other files are always kept.
 - `get_file_outline` reports a file's `language` and `sourceType`;

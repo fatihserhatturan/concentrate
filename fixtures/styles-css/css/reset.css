@@ -1,0 +1,2 @@
+*, *::before { box-sizing: border-box; }
+.visually-hidden { position: absolute; }

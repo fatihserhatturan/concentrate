@@ -1,0 +1,6 @@
+.button {
+  background: var(--color-brand);
+
+  &--large { font-size: 2em; }
+  &:not(.disabled) { cursor: pointer; }
+}

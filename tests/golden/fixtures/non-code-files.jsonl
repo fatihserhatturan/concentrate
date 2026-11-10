@@ -48,7 +48,10 @@
 {"kind":"node","id":"file:src/main.ts:initializercall:7:23:new URL","label":"Call","properties":{"args":"[\"./assets/banner.png\",\"import.meta.url\"]","callee":"URL","columnNumber":23,"expression":"new URL","line":7,"name":"new URL","receiver":null}}
 {"kind":"node","id":"file:src/main.ts:variable:7:logoUrl","label":"Variable","properties":{"isExported":true,"kind":"const","line":7,"name":"logoUrl","stringValue":null}}
 {"kind":"node","id":"file:src/styles/app.css","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"css","path":"<root>/src/styles/app.css","relativePath":"src/styles/app.css","sourceType":"production"}}
+{"kind":"node","id":"file:src/styles/app.css:style:rule:1:0","label":"Style","properties":{"atRule":null,"endLine":1,"kind":"rule","line":1,"name":"body","selector":"body"}}
 {"kind":"node","id":"file:src/styles/theme.scss","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"scss","path":"<root>/src/styles/theme.scss","relativePath":"src/styles/theme.scss","sourceType":"production"}}
+{"kind":"node","id":"file:src/styles/theme.scss:style:class:title","label":"Style","properties":{"kind":"class","line":2,"name":"title","scope":null}}
+{"kind":"node","id":"file:src/styles/theme.scss:style:rule:2:0","label":"Style","properties":{"atRule":null,"endLine":2,"kind":"rule","line":2,"name":".title","selector":".title"}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"non-code-files","path":"<root>","relativePath":".","version":"1.0.0","workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"non-code-files","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:db","properties":{}}
@@ -112,6 +115,10 @@
 {"kind":"rel","from":"file:src/main.ts:import:7:./assets/banner.png","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/main.ts:import:7:./assets/banner.png","type":"RESOLVES_TO","to":"file:src/assets/banner.png","properties":{}}
 {"kind":"rel","from":"file:src/main.ts:variable:7:logoUrl","type":"INITIALIZED_BY","to":"file:src/main.ts:initializercall:7:23:new URL","properties":{}}
+{"kind":"rel","from":"file:src/styles/app.css","type":"DECLARES_STYLE","to":"file:src/styles/app.css:style:rule:1:0","properties":{}}
+{"kind":"rel","from":"file:src/styles/theme.scss","type":"DECLARES_STYLE","to":"file:src/styles/theme.scss:style:class:title","properties":{}}
+{"kind":"rel","from":"file:src/styles/theme.scss","type":"DECLARES_STYLE","to":"file:src/styles/theme.scss:style:rule:2:0","properties":{}}
+{"kind":"rel","from":"file:src/styles/theme.scss:style:rule:2:0","type":"SELECTS_STYLE","to":"file:src/styles/theme.scss:style:class:title","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:Dockerfile","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:LICENSE","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:Makefile","properties":{}}

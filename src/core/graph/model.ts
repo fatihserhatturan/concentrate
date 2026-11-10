@@ -21,7 +21,8 @@ export type GraphNodeLabel =
   | "Table"
   | "Component"
   | "Page"
-  | "Store";
+  | "Store"
+  | "Style";
 
 export type GraphRelationshipType =
   | "CONTAINS_ROOT"
@@ -85,6 +86,9 @@ export type GraphRelationshipType =
   | "READS_STORE"
   | "WRITES_STORE"
   | "REQUESTS"
+  | "DECLARES_STYLE"
+  | "SELECTS_STYLE"
+  | "USES_STYLE"
   | "ACCESSES_DATA"
   | "MAPS_TO_TABLE"
   | "RELATES_TO"

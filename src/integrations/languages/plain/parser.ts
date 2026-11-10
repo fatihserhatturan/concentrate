@@ -1,12 +1,13 @@
 import path from "node:path";
 import { open, readFile, stat } from "node:fs/promises";
 import type { LanguageParser } from "../../../core/contracts/language-parser.js";
-import type { ParsedSourceFile } from "../../../core/graph/model.js";
+import type { GraphNode, ParsedSourceFile } from "../../../core/graph/model.js";
 import { lockfiles } from "../../../core/scan/file-classification.js";
 import { CODE_LANGUAGES, type FileLanguage, type SupportedLanguage } from "../../../core/scan/language.js";
 import { withSyntaxTree, type GrammarName, type SyntaxNode } from "../syntax/tree-sitter.js";
 import { readDockerfile } from "./dockerfile.js";
 import { readProto } from "./proto.js";
+import { styleGraph } from "./style-graph.js";
 
 // The non-code files of a project (styles, JSON, YAML, scripts, docs,
 // assets, …) become `File` nodes so the graph shows every file and imports of
@@ -109,12 +110,17 @@ async function parsePlainFile(rootPath: string, filePath: string, language: File
   const fileNodeId = `file:${relativePath}`;
   const detected = language === "other" && await looksBinary(filePath) ? "asset" : language;
   const warnings = detected === "other" || detected === "asset" ? [] : await syntaxWarnings(filePath, relativePath, detected);
-  return {
+  const fileNode: GraphNode = { id: fileNodeId, label: "File", properties: { path: filePath, relativePath, language: detected } };
+  const parsed: ParsedSourceFile = {
     fileNodeId,
-    nodes: [{ id: fileNodeId, label: "File", properties: { path: filePath, relativePath, language: detected } }],
+    nodes: [fileNode],
     relationships: [],
     ...(warnings.length > 0 ? { warnings } : {}),
   };
+  if ((detected === "css" || detected === "scss" || detected === "less") && !lockfiles.has(path.basename(filePath)) && (await stat(filePath)).size <= MAX_PARSED_BYTES) {
+    styleGraph(fileNodeId, relativePath, detected, await readFile(filePath, "utf8"), parsed);
+  }
+  return parsed;
 }
 
 const fileLanguages: FileLanguage[] = [

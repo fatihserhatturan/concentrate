@@ -1,0 +1,7 @@
+@value primary from "./colors.module.css";
+
+.card { composes: base from "./base.module.css"; border: 1px solid var(--color-brand); }
+.title { font-weight: bold; }
+.card:hover .title { color: red; }
+:global(.legacy) .title { margin: 0; }
+:global .outside { margin: 0; }

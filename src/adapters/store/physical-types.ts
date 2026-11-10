@@ -20,6 +20,11 @@ export function physicalRelationshipType(
     return sourceLabelRelationshipType("USES_ENV", relationship, nodeLabelById);
   }
 
+  if (relationship.type === "USES_STYLE") {
+    const source = nodeLabelById.get(relationship.from);
+    return source === "Function" ? "USES_STYLE_FUNCTION" : source === "Component" ? "USES_STYLE_COMPONENT" : "USES_STYLE_FILE";
+  }
+
   if (relationship.type === "CONSUMES_CONFIG") {
     return sourceLabelRelationshipType("CONSUMES_CONFIG", relationship, nodeLabelById);
   }

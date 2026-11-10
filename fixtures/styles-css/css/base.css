@@ -1,0 +1,40 @@
+@import "./reset.css";
+@import url("theme.css") screen;
+@import url(https://fonts.example.com/inter.css);
+
+:root {
+  --color-brand: #0a66c2;
+  --space: 8px;
+}
+
+/* .not-a-class { } */
+body {
+  margin: 0;
+  background: url(../img/logo.svg) no-repeat;
+}
+
+.btn,
+.btn-primary:hover {
+  color: var(--color-brand);
+  padding: var(--space) calc(var(--space) * 2);
+}
+
+#hero > .title::before {
+  content: ".fake";
+  color: var(--missing, red);
+}
+
+@media (min-width: 40em) {
+  .btn { padding: var(--space); }
+  .only-wide { display: block; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0); }
+  to { transform: rotate(1turn); }
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../img/logo.svg#frag") format("svg"), url(/abs/font.woff2);
+}
