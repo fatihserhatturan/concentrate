@@ -1075,9 +1075,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "id": "file:app/(marketing)/about/page.tsx:entrypoint:4:0:server-action:subscribe",
             "file": "app/(marketing)/about/page.tsx",
             "line": 4,
             "kind": "server-action",
@@ -1087,6 +1088,7 @@
             "handler": "subscribe"
           },
           {
+            "id": "file:app/actions.ts:entrypoint:10:7:server-action:createPost",
             "file": "app/actions.ts",
             "line": 10,
             "kind": "server-action",
@@ -1096,6 +1098,7 @@
             "handler": "createPost"
           },
           {
+            "id": "file:app/actions.ts:entrypoint:14:26:server-action:deletePost",
             "file": "app/actions.ts",
             "line": 14,
             "kind": "server-action",
@@ -1105,6 +1108,7 @@
             "handler": "deletePost"
           },
           {
+            "id": "file:middleware.ts:entrypoint:3:0:middleware:/dashboard/:path*, /api/:path*",
             "file": "middleware.ts",
             "line": 3,
             "kind": "middleware",
@@ -1114,6 +1118,32 @@
             "handler": "middleware"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:app/(marketing)/about/page.tsx:entrypoint:4:0:server-action:subscribe",
+            "file:app/actions.ts:entrypoint:10:7:server-action:createPost",
+            "file:app/actions.ts:entrypoint:14:26:server-action:deletePost",
+            "file:middleware.ts:entrypoint:3:0:middleware:/dashboard/:path*, /api/:path*"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:app/(marketing)/about/page.tsx:entrypoint:4:0:server-action:subscribe",
+            "file:app/actions.ts:entrypoint:10:7:server-action:createPost",
+            "file:app/actions.ts:entrypoint:14:26:server-action:deletePost",
+            "file:middleware.ts:entrypoint:3:0:middleware:/dashboard/:path*, /api/:path*"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {

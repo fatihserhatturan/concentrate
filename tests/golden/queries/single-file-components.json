@@ -561,9 +561,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "id": "file:src/components/CartButton.vue:entrypoint:2:23:dom-event:click",
             "file": "src/components/CartButton.vue",
             "line": 2,
             "kind": "dom-event",
@@ -573,6 +574,7 @@
             "handler": "add"
           },
           {
+            "id": "file:src/components/Total.svelte:entrypoint:17:5:dom-event:click",
             "file": "src/components/Total.svelte",
             "line": 17,
             "kind": "dom-event",
@@ -582,6 +584,7 @@
             "handler": "refresh"
           },
           {
+            "id": "file:src/pages/index.astro:entrypoint:16:6:dom-event:click",
             "file": "src/pages/index.astro",
             "line": 16,
             "kind": "dom-event",
@@ -591,6 +594,30 @@
             "handler": "<document.querySelector('p')?.addEventListener:click:arg1>"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:src/components/CartButton.vue:entrypoint:2:23:dom-event:click",
+            "file:src/components/Total.svelte:entrypoint:17:5:dom-event:click",
+            "file:src/pages/index.astro:entrypoint:16:6:dom-event:click"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:src/components/CartButton.vue:entrypoint:2:23:dom-event:click",
+            "file:src/components/Total.svelte:entrypoint:17:5:dom-event:click",
+            "file:src/pages/index.astro:entrypoint:16:6:dom-event:click"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {

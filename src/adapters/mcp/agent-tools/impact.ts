@@ -5,6 +5,7 @@ import { promisify } from "node:util";
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalInteger, optionalString } from "../args.js";
 import type { PageWindow } from "../paging.js";
+import { loadRunners } from "./runners.js";
 import { callerCompleteness, computeImpact, loadFunctions, loadSymbols, matchesFileOrDirectory, type SymbolInfo, unresolvedCalls } from "./graph.js";
 
 const run = promisify(execFile);
@@ -32,12 +33,20 @@ export async function impactOf(engine: IQueryEngine, args: Record<string, unknow
     `, { symbol }) as Array<{ id?: unknown; file?: unknown }>
     : [];
   const storeIds = storeRows.filter((row) => !file || matchesFileOrDirectory(String(row.file), file)).map((row) => String(row.id));
+  // Scripts, make targets, npm scripts, compose services and CI jobs that
+  // start the file (a file argument), or the files the seeds are in.
+  const seedFiles = new Set(seedIds.map((id) => functions.get(id)!.file));
+  const runners = await loadRunners(engine, (candidate) => (file ? matchesFileOrDirectory(candidate, file) : seedFiles.has(candidate)), maxDepth);
+  const runnersOutput = runners.length > 0 ? { runners: runners.slice(0, window.limit), ...(runners.length > window.limit ? { runnersTruncated: runners.length } : {}) } : {};
   if (seedIds.length === 0 && storeIds.length === 0) {
     return {
       symbol: symbol ?? null,
       file: file ?? null,
       seeds: [],
-      note: "No function, method, class or store matched. Use find_definitions to look the name up; for routes use route_details.",
+      ...runnersOutput,
+      note: runners.length > 0
+        ? "No function, method, class or store matched; runners are the scripts, targets, services and jobs that start the file."
+        : "No function, method, class or store matched. Use find_definitions to look the name up; for routes use route_details.",
     };
   }
   // A named symbol says whether its direct callers are all known; a whole
@@ -48,6 +57,7 @@ export async function impactOf(engine: IQueryEngine, args: Record<string, unknow
     file: file ?? null,
     maxDepth,
     ...await computeImpact(engine, seedIds, maxDepth, window.limit, functions, window, storeIds),
+    ...runnersOutput,
     ...(names.length > 0 ? callerCompleteness(names, await unresolvedCalls(engine, names)) : {}),
   };
 }

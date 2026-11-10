@@ -1,6 +1,6 @@
 {
   "sample": "internet-go-simplebank",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json, doc/** excluded: the generated statik bundle), not from Concentrate output. A gin API (api/), a gRPC server with a grpc-gateway HTTP mux (gapi/, main.go), sqlc queries on pgx (db/sqlc/) and an asynq worker; the Vue frontend/ is not labeled. Routes: the seven routes api/server.go registers (four on router.Group(\"/\").Use(authMiddleware(...)), which gin returns with the middleware) and the two net/http mounts runGatewayServer makes; the grpc-gateway patterns in the generated pb/*.pb.gw.go are not routes Concentrate is labeled for. Calls: every call site in the files listed whose callee is a function or method of this repository (generated pb getters and registration functions included), with the functions it runs; calls into gin, pgx, asynq, zerolog, grpc, gomock and the standard library, and calls of function values (fn, arg.AfterCreate, stop) are not labeled. A call on an interface is labeled with every type in the repository whose method set has the method with the same signature: db.Store with the sqlc Queries method SQLStore promotes (or SQLStore's own transaction method) and the gomock MockStore; worker.TaskDistributor with RedisTaskDistributor and the mock; token.Maker with JWTMaker and PasetoMaker; worker.TaskProcessor and mail.EmailSender have one implementer. q in the closures execTx is passed is a *Queries. Data access: each sqlc query method in db/sqlc/*.sql.go, by the table its SQL names (sqlc models are tables). Env: viper.Unmarshal in util.LoadConfig fills Config, whose mapstructure keys viper's AutomaticEnv reads from the environment.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json, doc/** excluded: the generated statik bundle), not from Concentrate output. A gin API (api/), a gRPC server with a grpc-gateway HTTP mux (gapi/, main.go), sqlc queries on pgx (db/sqlc/) and an asynq worker; the Vue frontend/ is not labeled. Routes: the seven routes api/server.go registers (four on router.Group(\"/\").Use(authMiddleware(...)), which gin returns with the middleware) and the two net/http mounts runGatewayServer makes; the grpc-gateway patterns in the generated pb/*.pb.gw.go are not routes Concentrate is labeled for. Calls: every call site in the files listed whose callee is a function or method of this repository (generated pb getters and registration functions included), with the functions it runs; calls into gin, pgx, asynq, zerolog, grpc, gomock and the standard library, and calls of function values (fn, arg.AfterCreate, stop) are not labeled. A call on an interface is labeled with every type in the repository whose method set has the method with the same signature: db.Store with the sqlc Queries method SQLStore promotes (or SQLStore's own transaction method) and the gomock MockStore; worker.TaskDistributor with RedisTaskDistributor and the mock; token.Maker with JWTMaker and PasetoMaker; worker.TaskProcessor and mail.EmailSender have one implementer. q in the closures execTx is passed is a *Queries. Data access: each sqlc query method in db/sqlc/*.sql.go, by the table its SQL names (sqlc models are tables). Env: viper.Unmarshal in util.LoadConfig fills Config, whose mapstructure keys viper's AutomaticEnv reads from the environment. Scripts and infrastructure (scope: Makefile, Dockerfile, docker-compose.yaml, start.sh, wait-for.sh, eks/ and .github/; the frontend/ package.json is not labeled): entrypoints are the nineteen Makefile targets, the Dockerfile CMD and ENTRYPOINT, the three compose services, the three shell scripts and the two workflow jobs. RUNS: `server` runs main.go; the test job runs `make migrateup` and `make test`; the api service builds the Dockerfile; and, read as a person does, the Dockerfile ENTRYPOINT and the api service's `entrypoint:` run start.sh and wait-for.sh by their container paths (/app/start.sh, /app/wait-for.sh, copied by the Dockerfile). Env declarations: compose `environment:` (postgres and api) and the `env:` of the workflow's postgres service container and of the image build step; `docker run -e` in the Makefile and plain shell assignments (wait-for.sh's TIMEOUT, QUIET, PROTOCOL, HOST, PORT) are not declarations.",
   "routes": {
     "scope": [
       "main.go",
@@ -1466,6 +1466,316 @@
         "line": 40,
         "name": "EMAIL_SENDER_PASSWORD",
         "function": "LoadConfig"
+      }
+    ]
+  },
+  "scripts": {
+    "scope": [
+      "Makefile",
+      "Dockerfile",
+      "docker-compose.yaml",
+      "start.sh",
+      "wait-for.sh",
+      "eks/",
+      ".github/"
+    ],
+    "items": [
+      {
+        "file": "Makefile",
+        "line": 3,
+        "kind": "make",
+        "trigger": "network"
+      },
+      {
+        "file": "Makefile",
+        "line": 6,
+        "kind": "make",
+        "trigger": "postgres"
+      },
+      {
+        "file": "Makefile",
+        "line": 9,
+        "kind": "make",
+        "trigger": "mysql"
+      },
+      {
+        "file": "Makefile",
+        "line": 12,
+        "kind": "make",
+        "trigger": "createdb"
+      },
+      {
+        "file": "Makefile",
+        "line": 15,
+        "kind": "make",
+        "trigger": "dropdb"
+      },
+      {
+        "file": "Makefile",
+        "line": 18,
+        "kind": "make",
+        "trigger": "migrateup"
+      },
+      {
+        "file": "Makefile",
+        "line": 21,
+        "kind": "make",
+        "trigger": "migrateup1"
+      },
+      {
+        "file": "Makefile",
+        "line": 24,
+        "kind": "make",
+        "trigger": "migratedown"
+      },
+      {
+        "file": "Makefile",
+        "line": 27,
+        "kind": "make",
+        "trigger": "migratedown1"
+      },
+      {
+        "file": "Makefile",
+        "line": 30,
+        "kind": "make",
+        "trigger": "new_migration"
+      },
+      {
+        "file": "Makefile",
+        "line": 33,
+        "kind": "make",
+        "trigger": "db_docs"
+      },
+      {
+        "file": "Makefile",
+        "line": 36,
+        "kind": "make",
+        "trigger": "db_schema"
+      },
+      {
+        "file": "Makefile",
+        "line": 39,
+        "kind": "make",
+        "trigger": "sqlc"
+      },
+      {
+        "file": "Makefile",
+        "line": 42,
+        "kind": "make",
+        "trigger": "test"
+      },
+      {
+        "file": "Makefile",
+        "line": 45,
+        "kind": "make",
+        "trigger": "server"
+      },
+      {
+        "file": "Makefile",
+        "line": 48,
+        "kind": "make",
+        "trigger": "mock"
+      },
+      {
+        "file": "Makefile",
+        "line": 52,
+        "kind": "make",
+        "trigger": "proto"
+      },
+      {
+        "file": "Makefile",
+        "line": 62,
+        "kind": "make",
+        "trigger": "evans"
+      },
+      {
+        "file": "Makefile",
+        "line": 65,
+        "kind": "make",
+        "trigger": "redis"
+      },
+      {
+        "file": "Dockerfile",
+        "line": 17,
+        "kind": "docker",
+        "trigger": "CMD"
+      },
+      {
+        "file": "Dockerfile",
+        "line": 18,
+        "kind": "docker",
+        "trigger": "ENTRYPOINT"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "line": 3,
+        "kind": "compose-service",
+        "trigger": "postgres"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "line": 13,
+        "kind": "compose-service",
+        "trigger": "redis"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "line": 15,
+        "kind": "compose-service",
+        "trigger": "api"
+      },
+      {
+        "file": "start.sh",
+        "line": 1,
+        "kind": "script",
+        "trigger": "start.sh"
+      },
+      {
+        "file": "wait-for.sh",
+        "line": 1,
+        "kind": "script",
+        "trigger": "wait-for.sh"
+      },
+      {
+        "file": "eks/install.sh",
+        "line": 1,
+        "kind": "script",
+        "trigger": "eks/install.sh"
+      },
+      {
+        "file": ".github/workflows/test.yml",
+        "line": 10,
+        "kind": "ci-job",
+        "trigger": "test"
+      },
+      {
+        "file": ".github/workflows/deploy.yml",
+        "line": 8,
+        "kind": "ci-job",
+        "trigger": "deploy"
+      }
+    ]
+  },
+  "runs": {
+    "scope": [
+      "Makefile",
+      "Dockerfile",
+      "docker-compose.yaml",
+      "start.sh",
+      "wait-for.sh",
+      "eks/",
+      ".github/"
+    ],
+    "items": [
+      {
+        "file": "Makefile",
+        "kind": "make",
+        "trigger": "server",
+        "target": "main.go"
+      },
+      {
+        "file": ".github/workflows/test.yml",
+        "kind": "ci-job",
+        "trigger": "test",
+        "target": "Makefile#migrateup"
+      },
+      {
+        "file": ".github/workflows/test.yml",
+        "kind": "ci-job",
+        "trigger": "test",
+        "target": "Makefile#test"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "kind": "compose-service",
+        "trigger": "api",
+        "target": "Dockerfile"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "kind": "compose-service",
+        "trigger": "api",
+        "target": "wait-for.sh"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "kind": "compose-service",
+        "trigger": "api",
+        "target": "start.sh"
+      },
+      {
+        "file": "Dockerfile",
+        "kind": "docker",
+        "trigger": "ENTRYPOINT",
+        "target": "start.sh"
+      }
+    ]
+  },
+  "envDeclarations": {
+    "scope": [
+      "Makefile",
+      "Dockerfile",
+      "docker-compose.yaml",
+      "start.sh",
+      "wait-for.sh",
+      "eks/",
+      ".github/"
+    ],
+    "items": [
+      {
+        "file": "docker-compose.yaml",
+        "line": 6,
+        "name": "POSTGRES_USER"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "line": 7,
+        "name": "POSTGRES_PASSWORD"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "line": 8,
+        "name": "POSTGRES_DB"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "line": 23,
+        "name": "DB_SOURCE"
+      },
+      {
+        "file": "docker-compose.yaml",
+        "line": 24,
+        "name": "REDIS_ADDRESS"
+      },
+      {
+        "file": ".github/workflows/test.yml",
+        "line": 18,
+        "name": "POSTGRES_USER"
+      },
+      {
+        "file": ".github/workflows/test.yml",
+        "line": 19,
+        "name": "POSTGRES_PASSWORD"
+      },
+      {
+        "file": ".github/workflows/test.yml",
+        "line": 20,
+        "name": "POSTGRES_DB"
+      },
+      {
+        "file": ".github/workflows/deploy.yml",
+        "line": 38,
+        "name": "ECR_REGISTRY"
+      },
+      {
+        "file": ".github/workflows/deploy.yml",
+        "line": 39,
+        "name": "ECR_REPOSITORY"
+      },
+      {
+        "file": ".github/workflows/deploy.yml",
+        "line": 40,
+        "name": "IMAGE_TAG"
       }
     ]
   }

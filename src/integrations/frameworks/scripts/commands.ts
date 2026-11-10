@@ -104,8 +104,10 @@ export function commandRefs(command: string): CommandRef[] {
   if (base === "go") return goRefs(rest);
   if (base === "npm" || base === "pnpm" || base === "yarn") return packageManagerRefs(base, rest);
   // A script run by path: `./scripts/deploy.sh`, `scripts/build.ps1`, `bin/run.py`.
-  if (/^(?:\.{1,2}\/|[\w.-]+\/)/u.test(name) || /\.(?:sh|bash|ps1|py|js|mjs|cjs|ts)$/u.test(name)) {
-    return [{ kind: "file", path: name }];
+  if (/^(?:\.{1,2}\/|[\/\w.-]+\/)/u.test(name) || /\.(?:sh|bash|ps1|py|js|mjs|cjs|ts)$/u.test(name)) {
+    // `wait-for.sh db:5432 -- ./start.sh`: what follows `--` runs after it.
+    const dash = rest.indexOf("--");
+    return [{ kind: "file", path: name }, ...(dash === -1 ? [] : commandRefs(rest.slice(dash + 1).join(" ")))];
   }
   return [];
 }

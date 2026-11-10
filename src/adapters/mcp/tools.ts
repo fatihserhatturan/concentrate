@@ -130,7 +130,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "find_callers",
-    description: "Call sites that resolve to functions or methods of this name; a caller is a function, a method (with className) or module-level code. A call through an interface reaches every implementation (targetClassName). unresolvedCalls and completeness say whether any call by that name is left unresolved.",
+    description: "Call sites that resolve to functions or methods of this name; a caller is a function, a method (with className) or module-level code. A call through an interface reaches every implementation (targetClassName). unresolvedCalls and completeness say whether any call by that name is unresolved.",
     inputSchema: objectSchema({
       name: {
         type: "string",
@@ -224,7 +224,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_entrypoints",
-    description: "Non-HTTP backend entrypoints: cron, queue, event, realtime and scheduler handlers; Go main, init, gRPC methods and cobra commands (cli).",
+    description: "Non-HTTP backend entrypoints: cron, queue, event, realtime and scheduler handlers; Go main, init, gRPC methods, cobra commands (cli); scripts, make targets, npm scripts, Docker commands, compose services and CI jobs (kinds script, make, npm-script, docker, compose-service, ci-job), with what it runs.",
     inputSchema: objectSchema({
       kind: {
         type: "string",
@@ -290,7 +290,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_tables",
-    description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex; Go gorm, ent, sqlc) with columns, the ORM models mapped to them and their relations, and the routes and entrypoints that read or write each. Answers \"which endpoints write the users table?\".",
+    description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex; Go gorm, ent, sqlc) with columns, the ORM models mapped to them and their relations, and the routes and entrypoints that read or write each.",
     inputSchema: objectSchema({
       name: { type: "string", description: "Table name substring." },
       library: { type: "string", description: "prisma, typeorm, mongoose, drizzle, knex, gorm, ent, bun or sqlc." },
@@ -299,7 +299,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_stores",
-    description: "Frontend state stores (Pinia, Redux Toolkit, Zustand, Jotai, Svelte) with state, getters, actions, the functions that define them, and the functions that read or write them (with the members used). Answers \"what reads the cart store?\"; for the components and pages a store change reaches, use impact_of with the store's name.",
+    description: "Frontend state stores (Pinia, Redux Toolkit, Zustand, Jotai, Svelte) with state, getters, actions, the functions that define them, and the functions that read or write them (with the members used). For the components and pages a store change reaches, use impact_of with its name.",
     inputSchema: objectSchema({
       name: { type: "string", description: "Store name or hook substring." },
       library: { type: "string", description: "pinia, redux, zustand, jotai or svelte." },
@@ -679,7 +679,8 @@ async function listEntrypoints(
       ${kindFilter}
       ${fileFilter}
     OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function)
-    RETURN file.relativePath AS file,
+    RETURN id(entrypoint) AS id,
+      file.relativePath AS file,
       entrypoint.line AS line,
       entrypoint.kind AS kind,
       entrypoint.trigger AS trigger,
@@ -688,9 +689,33 @@ async function listEntrypoints(
       handler.name AS handler
     ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name
     LIMIT ${fetch}
-  `);
+  `) as Array<Record<string, unknown>>;
 
-  return { query: { kind, file, limit }, entrypoints: window.take(rows), ...fileNote };
+  // What scripts, make targets, npm scripts, compose services and CI jobs
+  // start (`RUNS`), for the page's entrypoints.
+  const page = window.take(rows);
+  const ids = page.map((row) => row.id);
+  const [fileRuns, entryRuns] = ids.length === 0 ? [[], []] : await Promise.all([
+    engine.query(`
+      MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File)
+      WHERE id(entrypoint) IN $ids
+      RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command
+      ORDER BY run.line, target.relativePath
+    `, { ids }),
+    engine.query(`
+      MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint)
+      MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target)
+      WHERE id(entrypoint) IN $ids
+      RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command
+      ORDER BY run.line, targetFile.relativePath, target.trigger
+    `, { ids }),
+  ]) as [Array<Record<string, unknown>>, Array<Record<string, unknown>>];
+  const runsById = new Map<unknown, Array<Record<string, unknown>>>();
+  for (const row of fileRuns) runsById.set(row.id, [...runsById.get(row.id) ?? [], { file: row.file, command: row.command }]);
+  for (const row of entryRuns) runsById.set(row.id, [...runsById.get(row.id) ?? [], { file: row.file, entrypoint: `${String(row.kind)}:${String(row.trigger)}`, command: row.command }]);
+  const entrypoints = page.map(({ id, ...row }) => (runsById.has(id) ? { ...row, runs: runsById.get(id) } : row));
+
+  return { query: { kind, file, limit }, entrypoints, ...fileNote };
 }
 
 async function listEnvConfig(

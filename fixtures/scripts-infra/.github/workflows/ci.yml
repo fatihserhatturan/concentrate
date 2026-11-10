@@ -23,6 +23,11 @@ jobs:
       - name: Notify
         if: secrets.SLACK_WEBHOOK != ''
         run: ./scripts/deploy.sh ${{ env.CI_REGION }} ${{ vars.APP_NAME }}
+    services:
+      db:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: ci
   test:
     needs: build
     runs-on: ubuntu-latest

@@ -16,7 +16,7 @@ const limit = (fallback: number) => ({ type: "number", description: `Maximum ite
 export const agentToolDefinitions = [
   {
     name: "impact_of",
-    description: `What a change to a function, method, class or file affects: transitive callers (with depth) and module-level callers, the routes and entrypoints that run them, the components they implement and the components and pages that render those, the frontend calls reaching affected routes (apiConsumers), the stores the code writes with their readers and the components and pages those reach (storeComponents, storePages), and the data models, env vars and config it uses. A store's name or hook as symbol asks what reading that store reaches. For a route, use route_details.`,
+    description: `What a change to a function, method, class or file affects: transitive callers (with depth) and module-level callers, the routes and entrypoints that run them, the scripts, targets, services and jobs that start the file (runners), the components they implement and the components and pages that render those, the frontend calls reaching affected routes (apiConsumers), stores written with their readers and the components and pages those reach (storeComponents, storePages), and the data models, env vars and config used. A store's name or hook as symbol asks what reading it reaches. For a route, use route_details.`,
     inputSchema: objectSchema({
       symbol: { type: "string", description: "Function, method or class name (a class covers all its methods), or a store's name or hook." },
       file: { type: "string", description: "Scan-relative file or directory path, or a path suffix. Alone, covers every function in it; with symbol, narrows it." },
@@ -26,7 +26,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "detect_changes",
-    description: `The git working tree's changes against base (untracked files included) on the graph: changed files, the declarations their changed lines touch, and the impact of the changed functions as in impact_of; files not in the graph go to unscannedFiles.`,
+    description: `Git working-tree changes against base (untracked included) on the graph: changed files, the declarations their lines touch, and the impact of the changed functions as in impact_of; files not in the graph go to unscannedFiles.`,
     inputSchema: objectSchema({
       base: { type: "string", description: "Revision to diff against, such as HEAD, main or HEAD~3. Defaults to HEAD." },
       maxDepth,
@@ -35,7 +35,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "route_details",
-    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the call chain below them (4 levels) with its data access, env vars and config, and the route's consumers (frontend calls) with the components and pages that make them. A GET also lists the UI pages at that path with the component each renders, its load functions, and the same chain and resources.`,
+    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the call chain below them (4 levels) with its data access, env vars and config, and its consumers (frontend calls) with the components and pages that make them. A GET also lists the UI pages at that path with the component each renders, its load functions, and the same chain and resources.`,
     inputSchema: objectSchema({
       method: { type: "string", description: "HTTP method, case-insensitive (GET, post, ...)." },
       path: { type: "string", description: "Route or page path, full or as declared." },
@@ -44,7 +44,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "api_consumers",
-    description: `Client calls that reach a route: frontend (fetch, axios, ky, ofetch, useFetch, SWR, TanStack Query, Angular HttpClient, tRPC) and Go (net/http, resty), each with its route, calling function, file, line, client, resolved method and URL, and match kind (exact, parameter, catch-all). Filter by the route's method, path, file or framework, or by the calling file or client; with no filter, lists every linked call.`,
+    description: `Client calls that reach a route: frontend (fetch, axios, ky, ofetch, useFetch, SWR, TanStack Query, Angular HttpClient, tRPC) and Go (net/http, resty), each with its route, calling function, file, line, client, resolved method and URL, and match kind (exact, parameter, catch-all). Filter by route (method, path, file, framework) or caller (file, client); unfiltered, lists every linked call.`,
     inputSchema: objectSchema({
       method: { type: "string", description: "Route method, case-insensitive (GET, post, query, mutation, ...)." },
       path: { type: "string", description: "Route path, full or as declared (/api/users/:id, post.byId)." },
@@ -85,7 +85,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "find_component_usages",
-    description: `Where a UI component is rendered: each site with the rendering component, file (an Angular component's template file), line, props and Astro client directive; for a context, the functions that read it. Same-named elements that resolved to no component (library components such as Link) come with resolved: false.`,
+    description: `Where a UI component is rendered: each site with the rendering component, file (an Angular component's template file), line, props and Astro client directive; for a context, the functions that read it. Library components such as Link come with resolved: false.`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
       file: { type: "string", description: "File or directory path, or a path suffix, of the component; leaves out unresolved elements." },

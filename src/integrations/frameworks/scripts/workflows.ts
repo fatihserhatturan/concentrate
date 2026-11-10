@@ -53,6 +53,9 @@ export async function addWorkflow(ctx: Context, relative: string, fileId: string
       handlerName: (asText(mapGet(body, "name")?.value) ?? workflowName)?.slice(0, 300) ?? null,
     });
     declareAll(mapGet(body, "env")?.value);
+    // The service containers of the job and its own container have an `env:` too.
+    for (const service of asMap(mapGet(body, "services")?.value)?.entries ?? []) declareAll(mapGet(asMap(service.value), "env")?.value);
+    declareAll(mapGet(asMap(mapGet(body, "container")?.value), "env")?.value);
 
     // `uses: ./.github/workflows/build.yml`: a reusable workflow of the project.
     const reusable = asText(mapGet(body, "uses")?.value);
@@ -95,7 +98,7 @@ export async function addWorkflow(ctx: Context, relative: string, fileId: string
       for (const entry of shell.declarations) declare(entry.name, first + entry.line);
       const directory = asText(mapGet(stepMap, "working-directory")?.value) ?? jobDirectory ?? "";
       const cwd = path.posix.normalize(directory).replace(/^\.$/u, "");
-      ctx.pending.push({ from: id, cwds: cwd === "" ? [""] : [cwd, ""], commands: shell.commands.map((command) => ({ text: command.text, line: first + command.line })) });
+      ctx.pending.push({ from: id, cwds: cwd === "" ? [""] : [cwd, ""], commands: shell.commands.map((command) => ({ text: command.text.replace(/__EXPR__/gu, "${{ … }}"), line: first + command.line })) });
     }
   }
 }

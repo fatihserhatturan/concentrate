@@ -6,6 +6,8 @@ import type { GraphNode } from "../src/core/graph/model.js";
 import { commandRefs, tokenize } from "../src/integrations/frameworks/scripts/commands.js";
 import { scanPowerShell, scanShell, splitCommands } from "../src/integrations/frameworks/scripts/shell.js";
 import { interpolations } from "../src/integrations/frameworks/scripts/compose.js";
+import { containerMap, resolveContainerPath } from "../src/integrations/frameworks/scripts/container.js";
+import { readDockerfile } from "../src/integrations/languages/plain/dockerfile.js";
 import { asMap, asSeq, asText, mapGet, readYaml } from "../src/integrations/frameworks/scripts/yaml.js";
 
 describe("shell scanner", () => {
@@ -44,6 +46,48 @@ describe("shell scanner", () => {
   });
 });
 
+describe("shell assignments", () => {
+  it("does not read arguments of a command, or assignments without a command, as env declarations", () => {
+    const scan = scanShell([
+      "docker run --name db -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres",
+      "TIMEOUT=$((TIMEOUT - 1))",
+      "HOST=$(printf '%s' \"$1\" | cut -d : -f 1)",
+      "TIMEOUT=$2 QUIET=$3 PROTOCOL=$4",
+      "DEBUG=1 LEVEL=warn node app.js",
+      "sudo -E API_KEY=x ./run.sh",
+      "if [ -z \"$A\" ]; then PORT=80 exec nginx; fi",
+    ].join("\n"));
+    assert.deepEqual(scan.declarations.map((declaration) => [declaration.name, declaration.line]), [["DEBUG", 5], ["LEVEL", 5], ["API_KEY", 6], ["PORT", 7]]);
+  });
+});
+
+describe("container paths", () => {
+  const exists = (known: string[]) => (relative: string) => known.includes(relative);
+  it("maps a COPY'd file and a copied directory through WORKDIR, and ignores other stages", () => {
+    const { instructions } = readDockerfile([
+      "FROM alpine AS build", "COPY --from=other /x /app/x",
+      "FROM alpine", "WORKDIR /app", "COPY start.sh .", "COPY tools/run.sh /usr/local/bin/run", "COPY db/migration ./db/migration", "COPY a.txt b.txt /srv/",
+    ].join("\n"));
+    const files = ["start.sh", "tools/run.sh", "db/migration/001.sql", "a.txt", "b.txt"];
+    const map = containerMap(instructions, "", exists(files));
+    const resolve = (containerPath: string) => resolveContainerPath(map, containerPath, exists(files));
+    assert.equal(resolve("/app/start.sh"), "start.sh");
+    assert.equal(resolve("/usr/local/bin/run"), "tools/run.sh");
+    assert.equal(resolve("/app/db/migration/001.sql"), "db/migration/001.sql");
+    assert.equal(resolve("/srv/b.txt"), "b.txt");
+    assert.equal(resolve("/app/x"), null);
+    assert.equal(resolve("/app/main"), null);
+  });
+
+  it("maps the whole context when the Dockerfile does COPY . ., relative to the context directory", () => {
+    const { instructions } = readDockerfile("FROM node\nWORKDIR /srv\nCOPY . .\n");
+    const files = ["api/package.json", "api/dist/main.js"];
+    const map = containerMap(instructions, "api", exists(files));
+    assert.equal(resolveContainerPath(map, "/srv/dist/main.js", exists(files)), "api/dist/main.js");
+    assert.equal(resolveContainerPath(map, "/srv/missing.js", exists(files)), null);
+  });
+});
+
 describe("command references", () => {
   const refs = (command: string) => commandRefs(command);
   it("reads what the common runners start", () => {
@@ -57,6 +101,7 @@ describe("command references", () => {
     assert.deepEqual(refs("./scripts/deploy.sh prod"), [{ kind: "file", path: "./scripts/deploy.sh" }]);
     assert.deepEqual(refs("bash -x scripts/a.sh"), [{ kind: "file", path: "scripts/a.sh" }]);
     assert.deepEqual(refs("pwsh -File ./a.ps1"), [{ kind: "file", path: "./a.ps1" }]);
+    assert.deepEqual(refs("/app/wait-for.sh db:5432 -- /app/start.sh"), [{ kind: "file", path: "/app/wait-for.sh" }, { kind: "file", path: "/app/start.sh" }]);
   });
 
   it("reads package manager and make commands", () => {
@@ -237,7 +282,7 @@ describe("scripts and infrastructure in the graph", () => {
       "FEATURE_FLAG docker-compose.yml:19", "GOFLAGS Makefile:1", "LEGACY_VAR Dockerfile:5",
       "LOG_LEVEL docker-compose.yml:9", "LOG_LEVEL package.json:6", "NODE_ENV .github/workflows/ci.yml:9",
       "NODE_ENV package.json:6", "NODE_VERSION Dockerfile:2", "NPM_TOKEN .github/workflows/release.yml:13",
-      "PORT Dockerfile:4", "POSTGRES_PASSWORD docker-compose.yml:23", "QUEUE_URL docker-compose.yml:18",
+      "PORT Dockerfile:4", "POSTGRES_PASSWORD .github/workflows/ci.yml:30", "POSTGRES_PASSWORD docker-compose.yml:23", "QUEUE_URL docker-compose.yml:18",
       "REGISTRY scripts/deploy.sh:4", "REGISTRY_TOKEN .github/workflows/ci.yml:21", "SETUP_MODE scripts/setup.ps1:2",
       "SMTP_HOST env/app.env:1", "SMTP_PORT env/app.env:2",
     ]);

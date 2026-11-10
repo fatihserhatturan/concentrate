@@ -657,9 +657,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "id": "file:src/components/CartView.vue:entrypoint:5:10:dom-event:click",
             "file": "src/components/CartView.vue",
             "line": 5,
             "kind": "dom-event",
@@ -669,6 +670,7 @@
             "handler": "addSample"
           },
           {
+            "id": "file:src/components/LoginForm.vue:entrypoint:2:8:dom-event:submit",
             "file": "src/components/LoginForm.vue",
             "line": 2,
             "kind": "dom-event",
@@ -678,6 +680,28 @@
             "handler": "submit"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:src/components/CartView.vue:entrypoint:5:10:dom-event:click",
+            "file:src/components/LoginForm.vue:entrypoint:2:8:dom-event:submit"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:src/components/CartView.vue:entrypoint:5:10:dom-event:click",
+            "file:src/components/LoginForm.vue:entrypoint:2:8:dom-event:submit"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1262,6 +1286,36 @@
         "params": {
           "symbol": "add"
         },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entry:EntryPoint) RETURN id(entry) AS id, file.relativePath AS file, entry.kind AS kind, entry.trigger AS trigger, entry.line AS line",
+        "rows": [
+          {
+            "id": "file:src/components/CartView.vue:entrypoint:5:10:dom-event:click",
+            "file": "src/components/CartView.vue",
+            "kind": "dom-event",
+            "trigger": "click",
+            "line": 5
+          },
+          {
+            "id": "file:src/components/LoginForm.vue:entrypoint:2:8:dom-event:submit",
+            "file": "src/components/LoginForm.vue",
+            "kind": "dom-event",
+            "trigger": "submit",
+            "line": 2
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) RETURN id(runner) AS runner, id(target) AS target, run.command AS command",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_FILE]->(target:File) RETURN id(runner) AS runner, target.relativePath AS file, run.command AS command",
         "rows": []
       },
       {
