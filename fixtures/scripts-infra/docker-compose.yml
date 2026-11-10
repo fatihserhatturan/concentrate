@@ -1,0 +1,26 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    command: ["node", "src/index.ts"]
+    environment:
+      DATABASE_URL: postgres://db/${DB_NAME:-app}
+      LOG_LEVEL: debug
+    env_file:
+      - ./env/app.env
+    ports:
+      - "${API_PORT}:3000"
+  worker:
+    build: .
+    entrypoint: ./scripts/deploy.sh
+    environment:
+      - QUEUE_URL=${QUEUE_URL}
+      - FEATURE_FLAG
+  db:
+    image: postgres:${PG_VERSION}
+    environment:
+      POSTGRES_PASSWORD: $$literal
+volumes:
+  data:
+    name: "data_${VOLUME_SUFFIX}"

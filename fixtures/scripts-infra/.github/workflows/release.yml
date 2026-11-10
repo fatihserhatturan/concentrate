@@ -1,0 +1,13 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run deploy
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

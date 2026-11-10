@@ -22,7 +22,7 @@ const AMBIENT = new Set([
 
 // Environment variables are upper case by convention; `$name` is nearly always
 // a local, a loop variable or an argument.
-function isEnvName(name: string): boolean {
+export function isEnvName(name: string): boolean {
   return /^[A-Z_][A-Z0-9_]*$/u.test(name) && !AMBIENT.has(name) && !name.startsWith("BASH_") && !name.startsWith("BASH");
 }
 

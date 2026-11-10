@@ -1,27 +1,21 @@
-import { readFile } from "node:fs/promises";
 import path from "node:path";
-import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
-import type { GraphNode } from "../../../core/graph/model.js";
 import { readDockerfile } from "../../languages/plain/dockerfile.js";
 import { envVar } from "../js-ts/env-files.js";
 import { commandRefs, tokenize, type CommandRef } from "./commands.js";
-import { scanPowerShell, scanShell, splitCommands, type ScriptScan } from "./shell.js";
+import { addCompose, isComposeFile } from "./compose.js";
+import { entrypoint, addEnv, readText, type Context } from "./context.js";
+import { scanPowerShell, scanShell, splitCommands } from "./shell.js";
+import { addWorkflow, isWorkflowFile } from "./workflows.js";
 
 // Scripts and infrastructure in the graph: what a project's `package.json`
-// scripts, Makefile targets, shell and PowerShell scripts and Dockerfiles run
+// scripts, Makefile targets, shell and PowerShell scripts, Dockerfiles, compose
+// services and GitHub Actions jobs run
 // (`EntryPoint` nodes, and `RUNS` to the file or entrypoint each command
 // starts) and which environment they read (`USES_ENV`) and set
 // (`DECLARES_ENV`, like `.env` files do). The files are read as text: a
 // command is understood for `node`, `tsx`, `go run`, `python`, a script
 // path, `npm run` and `make`; anything else is not linked.
-
-type Pending = {
-  from: string;
-  // Directories commands run in (relative to the root, "" for the root), tried in order.
-  cwds: string[];
-  commands: Array<{ text: string; line: number }>;
-};
 
 const NPM_HOOKS = ["pre", "post"];
 
@@ -40,6 +34,7 @@ export const scriptsContributor: ISemanticContributor = {
     }
     const ctx: Context = {
       graph,
+      rootPath,
       repoId: repo.id,
       fileIds,
       npmScripts: new Map(),
@@ -57,45 +52,19 @@ export const scriptsContributor: ISemanticContributor = {
       let text: string | null = null;
       if (name === "package.json") text = await readText(file);
       else if (language === "makefile" || language === "dockerfile" || language === "shell" || language === "powershell") text = await readText(file);
+      else if (language === "yaml" && (isComposeFile(relative) || isWorkflowFile(relative))) text = await readText(file);
       if (text === null) continue;
       if (name === "package.json") addNpmScripts(ctx, relative, fileId, text);
       else if (language === "makefile") addMakefile(ctx, relative, fileId, text);
       else if (language === "dockerfile") addDockerfile(ctx, relative, fileId, text);
+      else if (language === "yaml" && isWorkflowFile(relative)) await addWorkflow(ctx, relative, fileId, text);
+      else if (language === "yaml") await addCompose(ctx, relative, fileId, text);
       else if (language === "shell" || (language === "powershell" && name.toLowerCase().endsWith(".ps1"))) addScript(ctx, relative, fileId, text, language);
     }
 
     resolveRuns(ctx);
   },
 };
-
-type Context = {
-  graph: IGraphContributor;
-  repoId: string;
-  fileIds: Map<string, string>;
-  // `<dir>\0<script>` → entrypoint id, for `npm run` and the pre/post hooks.
-  npmScripts: Map<string, string>;
-  // `<dir>\0<target>` → entrypoint id.
-  makeTargets: Map<string, string>;
-  // script file → entrypoint id.
-  scriptEntries: Map<string, string>;
-  pending: Pending[];
-};
-
-function entrypoint(ctx: Context, fileId: string, id: string, properties: { kind: string; trigger: string; library: string; line: number; handlerName: string | null }): string {
-  const node: GraphNode = { id, label: "EntryPoint", properties: { receiverName: null, ...properties } };
-  ctx.graph.addNode(node);
-  ctx.graph.addRelationship({ from: fileId, to: id, type: "DECLARES_ENTRYPOINT", properties: {} });
-  return id;
-}
-
-function addEnv(ctx: Context, owner: string, relative: string, scan: ScriptScan, lineOffset = 0): void {
-  for (const read of scan.reads) {
-    ctx.graph.addRelationship({ from: owner, to: envVar(ctx.graph, read.name), type: "USES_ENV", properties: { line: read.line + lineOffset, access: read.access } });
-  }
-  for (const declaration of scan.declarations) {
-    ctx.graph.addRelationship({ from: ctx.repoId, to: envVar(ctx.graph, declaration.name), type: "DECLARES_ENV", properties: { file: relative, line: declaration.line + lineOffset } });
-  }
-}
 
 // ---- package.json scripts
 
@@ -369,14 +338,6 @@ function resolveRef(ref: CommandRef, cwds: string[], ctx: Context, goMainFiles: 
       }
       return [];
     }
-  }
-}
-
-async function readText(file: string): Promise<string | null> {
-  try {
-    return await readFile(file, "utf8");
-  } catch {
-    return null;
   }
 }
 

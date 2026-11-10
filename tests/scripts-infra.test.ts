@@ -5,6 +5,8 @@ import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode } from "../src/core/graph/model.js";
 import { commandRefs, tokenize } from "../src/integrations/frameworks/scripts/commands.js";
 import { scanPowerShell, scanShell, splitCommands } from "../src/integrations/frameworks/scripts/shell.js";
+import { interpolations } from "../src/integrations/frameworks/scripts/compose.js";
+import { asMap, asSeq, asText, mapGet, readYaml } from "../src/integrations/frameworks/scripts/yaml.js";
 
 describe("shell scanner", () => {
   it("reads env expansions and leaves out locals, special parameters, comments and single quotes", () => {
@@ -77,6 +79,50 @@ describe("command references", () => {
   });
 });
 
+describe("YAML reader", () => {
+  it("reads mappings, sequences, flow collections, quoted and block scalars with their lines", async () => {
+    const doc = asMap(await readYaml([
+      "a:",
+      "  - A=1",
+      "  - { k: v, n: 2 }",
+      "  - [p, \"q r\"]",
+      "  - run: |",
+      "      echo hi",
+      "      echo there",
+      "b: 'it''s'",
+      "c: \"x\\ty\"",
+      "empty:",
+    ].join("\n")))!;
+    const items = asSeq(mapGet(doc, "a")?.value)!.items;
+    assert.deepEqual(items.map((item) => item.line), [2, 3, 4, 5]);
+    assert.equal(asText(items[0]!.value), "A=1");
+    assert.equal(asText(mapGet(asMap(items[1]!.value), "n")?.value), "2");
+    assert.deepEqual(asSeq(items[2]!.value)!.items.map((item) => asText(item.value)), ["p", "q r"]);
+    const run = mapGet(asMap(items[3]!.value), "run")!;
+    // A block scalar's `line` is its header's: the text starts on the next line.
+    assert.deepEqual([asText(run.value), run.line], ["echo hi\necho there", 5]);
+    assert.equal(asText(mapGet(doc, "b")?.value), "it's");
+    assert.equal(asText(mapGet(doc, "c")?.value), "x\ty");
+    assert.equal(mapGet(doc, "empty")?.value, null);
+  });
+
+  it("resolves anchors, aliases and << merges (keys after the merge win)", async () => {
+    const doc = asMap(await readYaml("base: &base\n  image: pg\n  x: 1\nsvc:\n  <<: *base\n  x: 2\n"))!;
+    const svc = asMap(mapGet(doc, "svc")?.value);
+    assert.deepEqual(svc!.entries.map((entry) => [entry.key, asText(entry.value)]), [["image", "pg"], ["x", "2"]]);
+  });
+
+  it("gives up on a file with syntax errors", async () => {
+    assert.equal(await readYaml("a: [1\nb: }\n"), null);
+  });
+});
+
+describe("compose interpolation", () => {
+  it("reads ${VAR}, ${VAR:-x} and $VAR, not $$VAR, lower case or ambient names", () => {
+    assert.deepEqual(interpolations("postgres://${DB_USER}:${DB_PASS:-x}@$DB_HOST/$$LITERAL ${lower} $HOME ${PATH}"), ["DB_USER", "DB_PASS", "DB_HOST"]);
+  });
+});
+
 describe("scripts and infrastructure in the graph", () => {
   let graph: Awaited<ReturnType<typeof buildCodeGraph>>;
   let byId: Map<string, GraphNode>;
@@ -91,19 +137,21 @@ describe("scripts and infrastructure in the graph", () => {
     return node.label === "File" ? String(node.properties.relativePath) : String(node.properties.name);
   };
   const entrypoints = () => graph.nodes
-    .filter((node) => node.label === "EntryPoint" && ["script", "make", "npm-script", "docker"].includes(String(node.properties.kind)))
+    .filter((node) => node.label === "EntryPoint" && ["script", "make", "npm-script", "docker", "compose-service", "ci-job"].includes(String(node.properties.kind)))
     .map((node) => `${node.properties.kind}:${node.properties.trigger}`).sort();
   const runs = () => graph.relationships.filter((rel) => rel.type === "RUNS").map((rel) => `${name(rel.from)} -> ${name(rel.to)}`).sort();
 
-  it("makes an EntryPoint for each script file, Makefile target, npm script and Dockerfile CMD / ENTRYPOINT", () => {
+  it("makes an EntryPoint for each script file, Makefile target, npm script, Dockerfile CMD / ENTRYPOINT, compose service and CI job", () => {
     assert.deepEqual(entrypoints(), [
-      "docker:CMD", "docker:ENTRYPOINT",
+      "ci-job:build", "ci-job:ci", "ci-job:publish", "ci-job:test",
+      "compose-service:api", "compose-service:db", "compose-service:worker",
+      "docker:CMD", "docker:CMD", "docker:ENTRYPOINT",
       "make:all", "make:build", "make:bundle", "make:lint", "make:test",
       "npm-script:all", "npm-script:api", "npm-script:build", "npm-script:build", "npm-script:check", "npm-script:deploy", "npm-script:dev",
       "npm-script:migrate", "npm-script:prebuild", "npm-script:seed", "npm-script:serve", "npm-script:start", "npm-script:test", "npm-script:web", "npm-script:worker",
       "script:scripts/build.sh", "script:scripts/deploy.sh", "script:scripts/migrate.sh", "script:scripts/setup.ps1", "script:scripts/setup2.ps1",
     ]);
-    const declared = graph.relationships.filter((rel) => rel.type === "DECLARES_ENTRYPOINT" && byId.get(rel.to)?.properties.library !== undefined && ["script", "make", "npm-script", "docker"].includes(String(byId.get(rel.to)?.properties.kind)));
+    const declared = graph.relationships.filter((rel) => rel.type === "DECLARES_ENTRYPOINT" && ["script", "make", "npm-script", "docker", "compose-service", "ci-job"].includes(String(byId.get(rel.to)?.properties.kind)));
     assert.ok(declared.every((rel) => byId.get(rel.from)?.label === "File"));
   });
 
@@ -132,6 +180,16 @@ describe("scripts and infrastructure in the graph", () => {
       "script:scripts/setup.ps1 -> script:scripts/setup2.ps1",
       "docker:ENTRYPOINT -> script:scripts/deploy.sh",
       "docker:CMD -> src/index.ts",
+      "compose-service:api -> api/Dockerfile.dev",
+      "compose-service:api -> src/index.ts",
+      "compose-service:worker -> Dockerfile",
+      "compose-service:worker -> script:scripts/deploy.sh",
+      "ci-job:build -> npm-script:build",
+      "ci-job:build -> make:bundle@web",
+      "ci-job:build -> script:scripts/deploy.sh",
+      "ci-job:test -> app/manage.py",
+      "ci-job:ci -> .github/workflows/ci.yml",
+      "ci-job:publish -> npm-script:deploy",
     ]) assert.ok(links.includes(expected), expected);
     // `node dist/index.js`: the build output is not in the scan.
     assert.ok(!links.some((link) => link.startsWith("npm-script:start ->")));
@@ -151,11 +209,14 @@ describe("scripts and infrastructure in the graph", () => {
 
   it("reads env as USES_ENV from the entrypoint or file that reads it, without locals", () => {
     const reads = graph.relationships
-      .filter((rel) => rel.type === "USES_ENV" && ["EntryPoint", "File"].includes(byId.get(rel.from)!.label) && String(rel.from).match(/script|make|npm|docker|Dockerfile/u))
+      .filter((rel) => rel.type === "USES_ENV" && ["EntryPoint", "File"].includes(byId.get(rel.from)!.label) && String(rel.from).match(/script|make|npm|docker|Dockerfile|ci-job|compose/u))
       .map((rel) => `${name(rel.from)} ${name(rel.to)}`)
       .sort();
     assert.deepEqual(reads, [
       "Dockerfile BUILD_ID", "Dockerfile NODE_VERSION", "Dockerfile PORT",
+      "ci-job:build APP_NAME", "ci-job:build CI_REGION", "ci-job:build DEPLOY_STAGE", "ci-job:build REGISTRY_TOKEN", "ci-job:build SLACK_WEBHOOK", "ci-job:publish NPM_TOKEN",
+      "compose-service:api API_PORT", "compose-service:api DB_NAME", "compose-service:db PG_VERSION", "compose-service:worker QUEUE_URL",
+      "docker-compose.yml VOLUME_SUFFIX",
       "make:build TARGET_OS",
       "npm-script:serve HOST", "npm-script:serve PORT",
       "script:scripts/deploy.sh API_TOKEN", "script:scripts/deploy.sh DEPLOY_STAGE", "script:scripts/deploy.sh HEREDOC_OPEN", "script:scripts/deploy.sh REGISTRY",
@@ -170,9 +231,15 @@ describe("scripts and infrastructure in the graph", () => {
       .map((rel) => `${name(rel.to)} ${rel.properties.file}:${rel.properties.line}`)
       .sort();
     assert.deepEqual(declared, [
-      "APP_ENV Dockerfile:4", "APP_VERSION scripts/deploy.sh:5", "BUILD_ID Dockerfile:3", "BUILD_TAGS Makefile:2", "CACHE_DIR scripts/setup.ps1:5",
-      "DATABASE_URL scripts/deploy.sh:19", "DB_URL Makefile:14", "GOFLAGS Makefile:1", "LEGACY_VAR Dockerfile:5", "LOG_LEVEL package.json:6",
-      "NODE_ENV package.json:6", "NODE_VERSION Dockerfile:2", "PORT Dockerfile:4", "REGISTRY scripts/deploy.sh:4", "SETUP_MODE scripts/setup.ps1:2",
+      "APP_ENV Dockerfile:4", "APP_VERSION scripts/deploy.sh:5", "BUILD_ID Dockerfile:3",
+      "BUILD_TAGS Makefile:2", "CACHE_DIR scripts/setup.ps1:5", "CI_REGION .github/workflows/ci.yml:4",
+      "DATABASE_URL docker-compose.yml:8", "DATABASE_URL scripts/deploy.sh:19", "DB_URL Makefile:14",
+      "FEATURE_FLAG docker-compose.yml:19", "GOFLAGS Makefile:1", "LEGACY_VAR Dockerfile:5",
+      "LOG_LEVEL docker-compose.yml:9", "LOG_LEVEL package.json:6", "NODE_ENV .github/workflows/ci.yml:9",
+      "NODE_ENV package.json:6", "NODE_VERSION Dockerfile:2", "NPM_TOKEN .github/workflows/release.yml:13",
+      "PORT Dockerfile:4", "POSTGRES_PASSWORD docker-compose.yml:23", "QUEUE_URL docker-compose.yml:18",
+      "REGISTRY scripts/deploy.sh:4", "REGISTRY_TOKEN .github/workflows/ci.yml:21", "SETUP_MODE scripts/setup.ps1:2",
+      "SMTP_HOST env/app.env:1", "SMTP_PORT env/app.env:2",
     ]);
   });
 
