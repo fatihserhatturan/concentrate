@@ -15,7 +15,7 @@
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"dir:web","label":"Directory","properties":{"name":"web","path":"<root>/web","relativePath":"web"}}
 {"kind":"node","id":"entrypoint:ci-job:.github/workflows/ci.yml:build","label":"EntryPoint","properties":{"handlerName":"CI","kind":"ci-job","library":"github-actions","line":6,"receiverName":null,"trigger":"build"}}
-{"kind":"node","id":"entrypoint:ci-job:.github/workflows/ci.yml:test","label":"EntryPoint","properties":{"handlerName":"CI","kind":"ci-job","library":"github-actions","line":26,"receiverName":null,"trigger":"test"}}
+{"kind":"node","id":"entrypoint:ci-job:.github/workflows/ci.yml:test","label":"EntryPoint","properties":{"handlerName":"CI","kind":"ci-job","library":"github-actions","line":31,"receiverName":null,"trigger":"test"}}
 {"kind":"node","id":"entrypoint:ci-job:.github/workflows/release.yml:ci","label":"EntryPoint","properties":{"handlerName":"Release","kind":"ci-job","library":"github-actions","line":6,"receiverName":null,"trigger":"ci"}}
 {"kind":"node","id":"entrypoint:ci-job:.github/workflows/release.yml:publish","label":"EntryPoint","properties":{"handlerName":"Release","kind":"ci-job","library":"github-actions","line":8,"receiverName":null,"trigger":"publish"}}
 {"kind":"node","id":"entrypoint:compose-service:docker-compose.yml:api","label":"EntryPoint","properties":{"handlerName":"node src/index.ts","kind":"compose-service","library":"docker-compose","line":2,"receiverName":null,"trigger":"api"}}
@@ -149,13 +149,13 @@
 {"kind":"rel","from":"dir:web","type":"CONTAINS_FILE","to":"file:web/package.json","properties":{}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:build","type":"RUNS","to":"entrypoint:make:web/Makefile:bundle","properties":{"command":"make bundle","line":22}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:build","type":"RUNS","to":"entrypoint:npm-script:package.json:build","properties":{"command":"npm run build","line":16}}
-{"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:build","type":"RUNS","to":"entrypoint:script:scripts/deploy.sh","properties":{"command":"./scripts/deploy.sh __EXPR__ __EXPR__","line":25}}
+{"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:build","type":"RUNS","to":"entrypoint:script:scripts/deploy.sh","properties":{"command":"./scripts/deploy.sh ${{ … }} ${{ … }}","line":25}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:build","type":"USES_ENV","to":"env:APP_NAME","properties":{"access":"${{ APP_NAME }}","line":25}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:build","type":"USES_ENV","to":"env:CI_REGION","properties":{"access":"${{ CI_REGION }}","line":25}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:build","type":"USES_ENV","to":"env:DEPLOY_STAGE","properties":{"access":"$DEPLOY_STAGE","line":17}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:build","type":"USES_ENV","to":"env:REGISTRY_TOKEN","properties":{"access":"${{ REGISTRY_TOKEN }}","line":21}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:build","type":"USES_ENV","to":"env:SLACK_WEBHOOK","properties":{"access":"${{ SLACK_WEBHOOK }}","line":24}}
-{"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:test","type":"RUNS","to":"file:app/manage.py","properties":{"command":"python app/manage.py test","line":30}}
+{"kind":"rel","from":"entrypoint:ci-job:.github/workflows/ci.yml:test","type":"RUNS","to":"file:app/manage.py","properties":{"command":"python app/manage.py test","line":35}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/release.yml:ci","type":"RUNS","to":"file:.github/workflows/ci.yml","properties":{"command":"uses ./.github/workflows/ci.yml","line":6}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/release.yml:publish","type":"RUNS","to":"entrypoint:npm-script:package.json:deploy","properties":{"command":"npm run deploy","line":11}}
 {"kind":"rel","from":"entrypoint:ci-job:.github/workflows/release.yml:publish","type":"USES_ENV","to":"env:NPM_TOKEN","properties":{"access":"${{ NPM_TOKEN }}","line":13}}
@@ -301,6 +301,7 @@
 {"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:NODE_VERSION","properties":{"file":"Dockerfile","line":2}}
 {"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:NPM_TOKEN","properties":{"file":".github/workflows/release.yml","line":13}}
 {"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:PORT","properties":{"file":"Dockerfile","line":4}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:POSTGRES_PASSWORD","properties":{"file":".github/workflows/ci.yml","line":30}}
 {"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:POSTGRES_PASSWORD","properties":{"file":"docker-compose.yml","line":23}}
 {"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:QUEUE_URL","properties":{"file":"docker-compose.yml","line":18}}
 {"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:REGISTRY","properties":{"file":"scripts/deploy.sh","line":4}}

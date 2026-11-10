@@ -733,9 +733,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "id": "file:src/App.vue:entrypoint:11:26:dom-event:click",
             "file": "src/App.vue",
             "line": 11,
             "kind": "dom-event",
@@ -745,6 +746,7 @@
             "handler": "select"
           },
           {
+            "id": "file:src/App.vue:entrypoint:12:10:dom-event:submit",
             "file": "src/App.vue",
             "line": 12,
             "kind": "dom-event",
@@ -754,6 +756,7 @@
             "handler": "save"
           },
           {
+            "id": "file:src/App.vue:entrypoint:13:70:dom-event:input",
             "file": "src/App.vue",
             "line": 13,
             "kind": "dom-event",
@@ -763,6 +766,7 @@
             "handler": null
           },
           {
+            "id": "file:src/App.vue:entrypoint:13:37:dom-event:keydown",
             "file": "src/App.vue",
             "line": 13,
             "kind": "dom-event",
@@ -772,6 +776,7 @@
             "handler": null
           },
           {
+            "id": "file:src/App.vue:entrypoint:13:13:dom-event:keyup",
             "file": "src/App.vue",
             "line": 13,
             "kind": "dom-event",
@@ -781,6 +786,7 @@
             "handler": "save"
           },
           {
+            "id": "file:src/components/SearchBox.vue:entrypoint:2:23:dom-event:keyup",
             "file": "src/components/SearchBox.vue",
             "line": 2,
             "kind": "dom-event",
@@ -790,6 +796,36 @@
             "handler": "submit"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:src/App.vue:entrypoint:11:26:dom-event:click",
+            "file:src/App.vue:entrypoint:12:10:dom-event:submit",
+            "file:src/App.vue:entrypoint:13:70:dom-event:input",
+            "file:src/App.vue:entrypoint:13:37:dom-event:keydown",
+            "file:src/App.vue:entrypoint:13:13:dom-event:keyup",
+            "file:src/components/SearchBox.vue:entrypoint:2:23:dom-event:keyup"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:src/App.vue:entrypoint:11:26:dom-event:click",
+            "file:src/App.vue:entrypoint:12:10:dom-event:submit",
+            "file:src/App.vue:entrypoint:13:70:dom-event:input",
+            "file:src/App.vue:entrypoint:13:37:dom-event:keydown",
+            "file:src/App.vue:entrypoint:13:13:dom-event:keyup",
+            "file:src/components/SearchBox.vue:entrypoint:2:23:dom-event:keyup"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -2519,6 +2555,64 @@
         "params": {
           "symbol": "useApi"
         },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entry:EntryPoint) RETURN id(entry) AS id, file.relativePath AS file, entry.kind AS kind, entry.trigger AS trigger, entry.line AS line",
+        "rows": [
+          {
+            "id": "file:src/App.vue:entrypoint:11:26:dom-event:click",
+            "file": "src/App.vue",
+            "kind": "dom-event",
+            "trigger": "click",
+            "line": 11
+          },
+          {
+            "id": "file:src/App.vue:entrypoint:12:10:dom-event:submit",
+            "file": "src/App.vue",
+            "kind": "dom-event",
+            "trigger": "submit",
+            "line": 12
+          },
+          {
+            "id": "file:src/App.vue:entrypoint:13:13:dom-event:keyup",
+            "file": "src/App.vue",
+            "kind": "dom-event",
+            "trigger": "keyup",
+            "line": 13
+          },
+          {
+            "id": "file:src/App.vue:entrypoint:13:37:dom-event:keydown",
+            "file": "src/App.vue",
+            "kind": "dom-event",
+            "trigger": "keydown",
+            "line": 13
+          },
+          {
+            "id": "file:src/App.vue:entrypoint:13:70:dom-event:input",
+            "file": "src/App.vue",
+            "kind": "dom-event",
+            "trigger": "input",
+            "line": 13
+          },
+          {
+            "id": "file:src/components/SearchBox.vue:entrypoint:2:23:dom-event:keyup",
+            "file": "src/components/SearchBox.vue",
+            "kind": "dom-event",
+            "trigger": "keyup",
+            "line": 2
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) RETURN id(runner) AS runner, id(target) AS target, run.command AS command",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_FILE]->(target:File) RETURN id(runner) AS runner, target.relativePath AS file, run.command AS command",
         "rows": []
       },
       {

@@ -93,25 +93,53 @@ function stripComment(text: string, singles: boolean): string {
   return out;
 }
 
-const ASSIGNMENT = /(?:^|[\s;&|(])(export\s+|local\s+|declare\s+(?:-[a-zA-Z]+\s+)?|typeset\s+|readonly\s+)?([A-Za-z_]\w*)\+?=/gu;
-
 export function scanShell(source: string): ScriptScan {
   return scanLines(logicalLines(source));
 }
 
-// Whether the value that starts at `start` (`NAME=value`) is followed by a
-// command on the same line: `NAME=value node x.js`, not `NAME=value;`.
-function startsCommand(text: string, start: number): boolean {
-  let index = start;
-  if (text[index] === '"' || text[index] === "'") {
-    const end = text.indexOf(text[index]!, index + 1);
-    index = end === -1 ? text.length : end + 1;
-  } else {
-    while (index < text.length && !/[\s;&|)]/u.test(text[index]!)) index += 1;
+// Words of one simple command, split on whitespace outside quotes, `$(…)`,
+// `$((…))`, `${…}` and backticks, quotes kept.
+export function shellWords(command: string): string[] {
+  const words: string[] = [];
+  let current = "";
+  let quote: string | null = null;
+  let depth = 0;
+  for (let index = 0; index < command.length; index += 1) {
+    const char = command[index]!;
+    if (quote) {
+      if (char === "\\" && quote === '"') {
+        current += char + (command[index + 1] ?? "");
+        index += 1;
+        continue;
+      }
+      if (char === quote) quote = null;
+      current += char;
+    } else if (char === "\\") {
+      current += char + (command[index + 1] ?? "");
+      index += 1;
+    } else if (char === '"' || char === "'" || char === "`") {
+      quote = char;
+      current += char;
+    } else if ((char === "$" && (command[index + 1] === "(" || command[index + 1] === "{"))) {
+      depth += 1;
+      current += char + command[index + 1];
+      index += 1;
+    } else if ((char === ")" || char === "}") && depth > 0) {
+      depth -= 1;
+      current += char;
+    } else if (/\s/u.test(char) && depth === 0) {
+      if (current !== "") words.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
   }
-  const rest = text.slice(index).trimStart();
-  return rest !== "" && !/^[;&|)]/u.test(rest) && !/^[A-Za-z_]\w*\+?=/u.test(rest) || /^[A-Za-z_]\w*\+?=\S*\s+[^\s;&|)=]/u.test(rest);
+  if (current !== "") words.push(current);
+  return words;
 }
+
+const ASSIGNMENT_WORD = /^([A-Za-z_]\w*)\+?=/u;
+const WRAPPERS = new Set(["sudo", "exec", "time", "nohup", "command", "env", "nice", "cross-env"]);
 
 function scanLines(lines: Logical[]): ScriptScan {
   const exported = new Set<string>();
@@ -122,23 +150,40 @@ function scanLines(lines: Logical[]): ScriptScan {
 
   // First pass: what the script assigns, exports and iterates over.
   for (const { text, line } of lines) {
-    for (const match of text.matchAll(ASSIGNMENT)) {
-      const name = match[2]!;
-      const keyword = (match[1] ?? "").trim();
-      const prefixOfCommand = keyword === "" && startsCommand(text, (match.index ?? 0) + match[0].length);
-      if (keyword.startsWith("export") || (keyword.startsWith("declare") && /-\w*x/u.test(keyword))) {
-        exported.add(name);
-        if (isEnvName(name)) declarations.push({ name, line });
-      } else if (prefixOfCommand && isEnvName(name)) {
-        // `NAME=value command`: set for that command.
-        declarations.push({ name, line });
-      } else {
-        locals.add(name);
+    for (const command of splitCommands(text)) {
+      const words = shellWords(command);
+      const keyword = words[0];
+      if (keyword === "export" || keyword === "declare" || keyword === "typeset" || keyword === "local" || keyword === "readonly") {
+        // `export A=1 B`, `declare -x C=2`; `local` and a plain `declare` are the script's own.
+        const flags = words.slice(1).filter((word) => word.startsWith("-"));
+        const exports = keyword === "export" || (keyword !== "local" && keyword !== "readonly" && flags.some((flag) => flag.includes("x")));
+        for (const word of words.slice(1)) {
+          const name = /^([A-Za-z_]\w*)/u.exec(word)?.[1];
+          if (word.startsWith("-") || !name) continue;
+          if (exports) {
+            exported.add(name);
+            if (isEnvName(name)) declarations.push({ name, line });
+          } else {
+            locals.add(name);
+          }
+        }
+        continue;
       }
-    }
-    for (const match of text.matchAll(/\bexport\s+([A-Za-z_]\w*)(?![\w=])/gu)) {
-      exported.add(match[1]!);
-      if (isEnvName(match[1]!)) declarations.push({ name: match[1]!, line });
+      // `NAME=value command`: set for that command; `NAME=value` alone is the script's own.
+      let at = 0;
+      const assigns: string[] = [];
+      for (;;) {
+        const word = words[at];
+        if (word === undefined) break;
+        const name = ASSIGNMENT_WORD.exec(word)?.[1];
+        if (name) assigns.push(name);
+        else if (!(assigns.length === 0 && (WRAPPERS.has(word) || word.startsWith("-")))) break;
+        at += 1;
+      }
+      for (const name of assigns) {
+        if (at < words.length && isEnvName(name)) declarations.push({ name, line });
+        else if (at >= words.length) locals.add(name);
+      }
     }
     for (const match of text.matchAll(/\b(?:for|select)\s+([A-Za-z_]\w*)\s+in\b/gu)) locals.add(match[1]!);
     for (const match of text.matchAll(/\bread\s+((?:-\w+\s+)*)([A-Za-z_][\w\s]*)/gu)) {

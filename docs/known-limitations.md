@@ -224,7 +224,12 @@ Blocks or informs: MCP `list_entrypoints` and future backend runtime summaries.
   `NAME=value`, `cross-env`, `npx`, `sudo`, `exec` and `time`. A Go package
   links to the files that declare `main`; a script file links to its
   `script` entrypoint. A target outside the scan (`node dist/index.js`, a
-  build output) or with a variable in the path is not linked. Paths resolve
+  build output) or with a variable in the path is not linked. A path inside a
+  container (`/app/start.sh`) in a Dockerfile `CMD` / `ENTRYPOINT` or a compose
+  `command:` / `entrypoint:` is looked up through that Dockerfile's `COPY` /
+  `ADD` (from the build context, not `--from=`) and `WORKDIR`, a copied
+  directory included; a binary the image builds (`/app/main`) is not a file of
+  the scan. `script.sh args -- cmd` also runs `cmd`. Paths resolve
   against the directory the command runs in (the package, the Makefile, `cd
   dir && …` on the same line), then the repository root and the script's own
   directory. `npm run x` finds `x` in the package, then its parent
@@ -253,12 +258,15 @@ Blocks or informs: MCP `list_entrypoints` and future backend runtime summaries.
   `run:` text is scanned with `${{ … }}` blanked out.
 - Declarations are `DECLARES_ENV` from the repository with the file and line,
   like `.env` files: shell `export NAME[=…]` and `declare -x`, `NAME=value`
-  before a command (also in `cross-env`, Dockerfile `RUN` and Makefile
-  recipes), PowerShell `$env:NAME = …` and `SetEnvironmentVariable`, Makefile
+  before a command (also after `cross-env`, `env` and `sudo`, in a Dockerfile
+  `RUN` and in Makefile recipes; not `docker run -e NAME=value` flags, and
+  not assignments with no command after them such as `A=1 B=2` or
+  `TIMEOUT=$((TIMEOUT - 1))`, which are the script's own), PowerShell `$env:NAME = …` and `SetEnvironmentVariable`, Makefile
   `export NAME`, Dockerfile `ENV` and `ARG`, compose `environment:` (mapping
   or `KEY=value` / `KEY` items) and the variables of an `env_file:` that is
   not a `.env*` file (those are declared by the env file reader), and a
-  workflow's `env:` at the workflow, job and step level. `secrets.X` is read,
+  workflow's `env:` at the workflow, job and step level and the `env:` of a
+  job's service containers and `container:`. `secrets.X` is read,
   not declared. `list_env_config { unread }`
   counts these declarations and these reads, so a variable only a script
   reads is not "unread", and a variable only a script reads and nothing

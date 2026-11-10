@@ -4,7 +4,8 @@ import { readDockerfile } from "../../languages/plain/dockerfile.js";
 import { envVar } from "../js-ts/env-files.js";
 import { commandRefs, tokenize, type CommandRef } from "./commands.js";
 import { addCompose, isComposeFile } from "./compose.js";
-import { entrypoint, addEnv, readText, type Context } from "./context.js";
+import { containerMap, resolveContainerPath, type ContainerMap } from "./container.js";
+import { entrypoint, addEnv, readText, type Context, type Pending } from "./context.js";
 import { scanPowerShell, scanShell, splitCommands } from "./shell.js";
 import { addWorkflow, isWorkflowFile } from "./workflows.js";
 
@@ -40,6 +41,7 @@ export const scriptsContributor: ISemanticContributor = {
       npmScripts: new Map(),
       makeTargets: new Map(),
       scriptEntries: new Map(),
+      dockerfiles: new Map(),
       pending: [],
     };
 
@@ -186,12 +188,13 @@ function addScript(ctx: Context, relative: string, fileId: string, text: string,
 function addDockerfile(ctx: Context, relative: string, fileId: string, text: string): void {
   const directory = path.posix.dirname(relative) === "." ? "" : path.posix.dirname(relative);
   const { instructions } = readDockerfile(text);
+  ctx.dockerfiles.set(relative, instructions);
   for (const { instruction, args, line } of instructions) {
     let owner = fileId;
     if (instruction === "CMD" || instruction === "ENTRYPOINT") {
       const command = dockerCommand(args);
       owner = entrypoint(ctx, fileId, `entrypoint:docker:${relative}:${line}`, { kind: "docker", trigger: instruction, library: "docker", line, handlerName: command.slice(0, 300) });
-      ctx.pending.push({ from: owner, cwds: directory === "" ? [""] : [directory, ""], commands: splitCommands(command).map((part) => ({ text: part, line })) });
+      ctx.pending.push({ from: owner, cwds: directory === "" ? [""] : [directory, ""], commands: splitCommands(command).map((part) => ({ text: part, line })), image: { dockerfile: relative, context: directory } });
     }
     if (instruction === "ENV" || instruction === "ARG") {
       for (const name of dockerDeclared(instruction, args)) {
@@ -267,6 +270,18 @@ function resolveRuns(ctx: Context): void {
     ctx.graph.addRelationship({ from, to, type: "RUNS", properties: { line, command: command.slice(0, 200) } });
   };
 
+  // A path inside the container (`/app/start.sh`), through the Dockerfile's COPY and WORKDIR.
+  const containerMaps = new Map<string, ContainerMap>();
+  const exists = (relative: string) => ctx.fileIds.has(relative);
+  const containerFile = (image: Pending["image"], containerPath: string): string | null => {
+    const instructions = image ? ctx.dockerfiles.get(image.dockerfile) : undefined;
+    if (!image || !instructions) return null;
+    const key = `${image.dockerfile}\0${image.context}`;
+    let map = containerMaps.get(key);
+    if (!map) containerMaps.set(key, map = containerMap(instructions, image.context, exists));
+    return resolveContainerPath(map, containerPath, exists);
+  };
+
   for (const pending of ctx.pending) {
     for (const command of pending.commands) {
       // `cd dir && …` on the same line changes where the next commands look.
@@ -276,7 +291,9 @@ function resolveRuns(ctx: Context): void {
         continue;
       }
       for (const ref of commandRefs(command.text)) {
-        for (const to of resolveRef(ref, pending.cwds, ctx, goMainFiles)) link(pending.from, to, command.line, command.text);
+        const inContainer = ref.kind === "file" && ref.path.startsWith("/") && !/[$`]/u.test(ref.path) ? containerFile(pending.image, ref.path) : null;
+        const targets = inContainer !== null ? [ctx.scriptEntries.get(inContainer) ?? ctx.fileIds.get(inContainer)!] : resolveRef(ref, pending.cwds, ctx, goMainFiles);
+        for (const to of targets) link(pending.from, to, command.line, command.text);
       }
     }
   }

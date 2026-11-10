@@ -1,0 +1,249 @@
+{
+  "sample": "internet-node-express-firebase-mongodb",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output: the scripts and infrastructure of the repository root (package.json, Dockerfile, docker-compose.yml, .github/workflows/*.yml; .env.example is declared by the env file reader and is not labeled here). Entrypoints: each package.json script, each Dockerfile CMD (two stages), the compose service and each workflow job (the commented deploy jobs are not jobs). RUNS: what a command starts that is in the repository: `dev` runs src/server.ts, the compose service builds the Dockerfile, and each workflow job runs the npm scripts it names (`npm i` and `npm run` of a script that only calls a tool are not links; `node ./dist/server.cjs` is a build output, not in the repository). Env declarations: Dockerfile ENV and ARG, compose `environment:`. The `${...}` reads and `secrets.*` reads are not labeled here.",
+  "scripts": {
+    "scope": [
+      "package.json",
+      "Dockerfile",
+      "docker-compose.yml",
+      ".github/"
+    ],
+    "items": [
+      {
+        "file": "package.json",
+        "line": 12,
+        "kind": "npm-script",
+        "trigger": "lint"
+      },
+      {
+        "file": "package.json",
+        "line": 13,
+        "kind": "npm-script",
+        "trigger": "format"
+      },
+      {
+        "file": "package.json",
+        "line": 14,
+        "kind": "npm-script",
+        "trigger": "format:check"
+      },
+      {
+        "file": "package.json",
+        "line": 15,
+        "kind": "npm-script",
+        "trigger": "tsc:check"
+      },
+      {
+        "file": "package.json",
+        "line": 16,
+        "kind": "npm-script",
+        "trigger": "dev"
+      },
+      {
+        "file": "package.json",
+        "line": 17,
+        "kind": "npm-script",
+        "trigger": "build"
+      },
+      {
+        "file": "package.json",
+        "line": 18,
+        "kind": "npm-script",
+        "trigger": "test"
+      },
+      {
+        "file": "Dockerfile",
+        "line": 57,
+        "kind": "docker",
+        "trigger": "CMD"
+      },
+      {
+        "file": "Dockerfile",
+        "line": 65,
+        "kind": "docker",
+        "trigger": "CMD"
+      },
+      {
+        "file": "docker-compose.yml",
+        "line": 2,
+        "kind": "compose-service",
+        "trigger": "app"
+      },
+      {
+        "file": ".github/workflows/main.yml",
+        "line": 9,
+        "kind": "ci-job",
+        "trigger": "test-and-build"
+      },
+      {
+        "file": ".github/workflows/pull-request.yml",
+        "line": 7,
+        "kind": "ci-job",
+        "trigger": "test-and-build"
+      },
+      {
+        "file": ".github/workflows/release.yml",
+        "line": 9,
+        "kind": "ci-job",
+        "trigger": "test-and-build"
+      }
+    ]
+  },
+  "runs": {
+    "scope": [
+      "package.json",
+      "Dockerfile",
+      "docker-compose.yml",
+      ".github/"
+    ],
+    "items": [
+      {
+        "file": "package.json",
+        "kind": "npm-script",
+        "trigger": "dev",
+        "target": "src/server.ts"
+      },
+      {
+        "file": "docker-compose.yml",
+        "kind": "compose-service",
+        "trigger": "app",
+        "target": "Dockerfile"
+      },
+      {
+        "file": ".github/workflows/main.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#lint"
+      },
+      {
+        "file": ".github/workflows/main.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#format:check"
+      },
+      {
+        "file": ".github/workflows/main.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#tsc:check"
+      },
+      {
+        "file": ".github/workflows/main.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#build"
+      },
+      {
+        "file": ".github/workflows/main.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#test"
+      },
+      {
+        "file": ".github/workflows/pull-request.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#lint"
+      },
+      {
+        "file": ".github/workflows/pull-request.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#format:check"
+      },
+      {
+        "file": ".github/workflows/pull-request.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#tsc:check"
+      },
+      {
+        "file": ".github/workflows/pull-request.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#build"
+      },
+      {
+        "file": ".github/workflows/pull-request.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#test"
+      },
+      {
+        "file": ".github/workflows/release.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#lint"
+      },
+      {
+        "file": ".github/workflows/release.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#format:check"
+      },
+      {
+        "file": ".github/workflows/release.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#tsc:check"
+      },
+      {
+        "file": ".github/workflows/release.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#build"
+      },
+      {
+        "file": ".github/workflows/release.yml",
+        "kind": "ci-job",
+        "trigger": "test-and-build",
+        "target": "package.json#test"
+      }
+    ]
+  },
+  "envDeclarations": {
+    "scope": [
+      "package.json",
+      "Dockerfile",
+      "docker-compose.yml",
+      ".github/"
+    ],
+    "items": [
+      {
+        "file": "Dockerfile",
+        "line": 5,
+        "name": "PNPM_VERSION"
+      },
+      {
+        "file": "Dockerfile",
+        "line": 11,
+        "name": "NODE_ENV"
+      },
+      {
+        "file": "Dockerfile",
+        "line": 12,
+        "name": "NODE_ENV"
+      },
+      {
+        "file": "Dockerfile",
+        "line": 15,
+        "name": "GOOGLE_APPLICATION_CREDENTIALS"
+      },
+      {
+        "file": "docker-compose.yml",
+        "line": 6,
+        "name": "NODE_ENV"
+      },
+      {
+        "file": "docker-compose.yml",
+        "line": 7,
+        "name": "DATABASE_URL"
+      },
+      {
+        "file": "docker-compose.yml",
+        "line": 8,
+        "name": "PORT"
+      }
+    ]
+  }
+}

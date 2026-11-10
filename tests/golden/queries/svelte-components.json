@@ -621,9 +621,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "id": "file:src/App.svelte:entrypoint:25:72:dom-event:click",
             "file": "src/App.svelte",
             "line": 25,
             "kind": "dom-event",
@@ -633,6 +634,7 @@
             "handler": "clearDone"
           },
           {
+            "id": "file:src/App.svelte:entrypoint:25:12:dom-event:keydown",
             "file": "src/App.svelte",
             "line": 25,
             "kind": "dom-event",
@@ -642,6 +644,7 @@
             "handler": null
           },
           {
+            "id": "file:src/lib/components/Counter.svelte:entrypoint:17:8:dom-event:click",
             "file": "src/lib/components/Counter.svelte",
             "line": 17,
             "kind": "dom-event",
@@ -651,6 +654,7 @@
             "handler": "increment"
           },
           {
+            "id": "file:src/lib/components/Counter.svelte:entrypoint:18:8:dom-event:click",
             "file": "src/lib/components/Counter.svelte",
             "line": 18,
             "kind": "dom-event",
@@ -660,6 +664,7 @@
             "handler": null
           },
           {
+            "id": "file:src/lib/components/TodoItem.svelte:entrypoint:18:50:dom-event:change",
             "file": "src/lib/components/TodoItem.svelte",
             "line": 18,
             "kind": "dom-event",
@@ -669,6 +674,7 @@
             "handler": "save"
           },
           {
+            "id": "file:src/lib/components/TodoItem.svelte:entrypoint:19:8:dom-event:dblclick",
             "file": "src/lib/components/TodoItem.svelte",
             "line": 19,
             "kind": "dom-event",
@@ -678,6 +684,7 @@
             "handler": "save"
           },
           {
+            "id": "file:src/lib/components/TodoItem.svelte:entrypoint:20:10:dom-event:click",
             "file": "src/lib/components/TodoItem.svelte",
             "line": 20,
             "kind": "dom-event",
@@ -687,6 +694,7 @@
             "handler": "remove"
           },
           {
+            "id": "file:src/lib/components/TodoList.svelte:entrypoint:18:8:dom-event:click",
             "file": "src/lib/components/TodoList.svelte",
             "line": 18,
             "kind": "dom-event",
@@ -696,6 +704,7 @@
             "handler": "select"
           },
           {
+            "id": "file:src/lib/components/TodoList.svelte:entrypoint:19:8:dom-event:click",
             "file": "src/lib/components/TodoList.svelte",
             "line": 19,
             "kind": "dom-event",
@@ -705,6 +714,42 @@
             "handler": "select"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:src/App.svelte:entrypoint:25:72:dom-event:click",
+            "file:src/App.svelte:entrypoint:25:12:dom-event:keydown",
+            "file:src/lib/components/Counter.svelte:entrypoint:17:8:dom-event:click",
+            "file:src/lib/components/Counter.svelte:entrypoint:18:8:dom-event:click",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:18:50:dom-event:change",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:19:8:dom-event:dblclick",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:20:10:dom-event:click",
+            "file:src/lib/components/TodoList.svelte:entrypoint:18:8:dom-event:click",
+            "file:src/lib/components/TodoList.svelte:entrypoint:19:8:dom-event:click"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:src/App.svelte:entrypoint:25:72:dom-event:click",
+            "file:src/App.svelte:entrypoint:25:12:dom-event:keydown",
+            "file:src/lib/components/Counter.svelte:entrypoint:17:8:dom-event:click",
+            "file:src/lib/components/Counter.svelte:entrypoint:18:8:dom-event:click",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:18:50:dom-event:change",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:19:8:dom-event:dblclick",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:20:10:dom-event:click",
+            "file:src/lib/components/TodoList.svelte:entrypoint:18:8:dom-event:click",
+            "file:src/lib/components/TodoList.svelte:entrypoint:19:8:dom-event:click"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1533,9 +1578,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "id": "file:src/App.svelte:entrypoint:25:72:dom-event:click",
             "file": "src/App.svelte",
             "line": 25,
             "kind": "dom-event",
@@ -1545,6 +1591,7 @@
             "handler": "clearDone"
           },
           {
+            "id": "file:src/App.svelte:entrypoint:25:12:dom-event:keydown",
             "file": "src/App.svelte",
             "line": 25,
             "kind": "dom-event",
@@ -1554,6 +1601,7 @@
             "handler": null
           },
           {
+            "id": "file:src/lib/components/Counter.svelte:entrypoint:17:8:dom-event:click",
             "file": "src/lib/components/Counter.svelte",
             "line": 17,
             "kind": "dom-event",
@@ -1563,6 +1611,7 @@
             "handler": "increment"
           },
           {
+            "id": "file:src/lib/components/Counter.svelte:entrypoint:18:8:dom-event:click",
             "file": "src/lib/components/Counter.svelte",
             "line": 18,
             "kind": "dom-event",
@@ -1572,6 +1621,7 @@
             "handler": null
           },
           {
+            "id": "file:src/lib/components/TodoItem.svelte:entrypoint:18:50:dom-event:change",
             "file": "src/lib/components/TodoItem.svelte",
             "line": 18,
             "kind": "dom-event",
@@ -1581,6 +1631,7 @@
             "handler": "save"
           },
           {
+            "id": "file:src/lib/components/TodoItem.svelte:entrypoint:19:8:dom-event:dblclick",
             "file": "src/lib/components/TodoItem.svelte",
             "line": 19,
             "kind": "dom-event",
@@ -1590,6 +1641,7 @@
             "handler": "save"
           },
           {
+            "id": "file:src/lib/components/TodoItem.svelte:entrypoint:20:10:dom-event:click",
             "file": "src/lib/components/TodoItem.svelte",
             "line": 20,
             "kind": "dom-event",
@@ -1599,6 +1651,7 @@
             "handler": "remove"
           },
           {
+            "id": "file:src/lib/components/TodoList.svelte:entrypoint:18:8:dom-event:click",
             "file": "src/lib/components/TodoList.svelte",
             "line": 18,
             "kind": "dom-event",
@@ -1608,6 +1661,7 @@
             "handler": "select"
           },
           {
+            "id": "file:src/lib/components/TodoList.svelte:entrypoint:19:8:dom-event:click",
             "file": "src/lib/components/TodoList.svelte",
             "line": 19,
             "kind": "dom-event",
@@ -1617,6 +1671,42 @@
             "handler": "select"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:src/App.svelte:entrypoint:25:72:dom-event:click",
+            "file:src/App.svelte:entrypoint:25:12:dom-event:keydown",
+            "file:src/lib/components/Counter.svelte:entrypoint:17:8:dom-event:click",
+            "file:src/lib/components/Counter.svelte:entrypoint:18:8:dom-event:click",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:18:50:dom-event:change",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:19:8:dom-event:dblclick",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:20:10:dom-event:click",
+            "file:src/lib/components/TodoList.svelte:entrypoint:18:8:dom-event:click",
+            "file:src/lib/components/TodoList.svelte:entrypoint:19:8:dom-event:click"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:src/App.svelte:entrypoint:25:72:dom-event:click",
+            "file:src/App.svelte:entrypoint:25:12:dom-event:keydown",
+            "file:src/lib/components/Counter.svelte:entrypoint:17:8:dom-event:click",
+            "file:src/lib/components/Counter.svelte:entrypoint:18:8:dom-event:click",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:18:50:dom-event:change",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:19:8:dom-event:dblclick",
+            "file:src/lib/components/TodoItem.svelte:entrypoint:20:10:dom-event:click",
+            "file:src/lib/components/TodoList.svelte:entrypoint:18:8:dom-event:click",
+            "file:src/lib/components/TodoList.svelte:entrypoint:19:8:dom-event:click"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {

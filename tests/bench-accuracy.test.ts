@@ -8,10 +8,13 @@ import {
   compareCalls,
   compareComponents,
   compareDataAccess,
+  compareEnvDeclarations,
   comparePages,
   compareRenders,
   compareRequests,
   compareRoutes,
+  compareRuns,
+  compareScripts,
   compareStoreAccess,
   compareStores,
   fileOfNodeId,
@@ -432,4 +435,78 @@ describe("label files", () => {
       for (const file of named) assert.ok(existsSync(path.join(projectPath, file)), `${file} is missing in ${labels.sample}`);
     });
   }
+});
+
+describe("accuracy comparator: scripts and infrastructure", () => {
+  // `Makefile` declares the target `test` (line 3), which runs `scripts/t.sh`
+  // (a script entrypoint) and the target `lint`; `package.json` has the npm
+  // script `build`, which runs the make target; the workflow job runs it too.
+  const graph: Graph = {
+    nodes: [
+      ...files("Makefile", "scripts/t.sh", "package.json", ".github/workflows/ci.yml", "docs/x.md"),
+      node("e:make:test", "EntryPoint", { kind: "make", trigger: "test", line: 3 }),
+      node("e:make:lint", "EntryPoint", { kind: "make", trigger: "lint", line: 6 }),
+      node("e:script:t", "EntryPoint", { kind: "script", trigger: "scripts/t.sh", line: 1 }),
+      node("e:npm:build", "EntryPoint", { kind: "npm-script", trigger: "build", line: 4 }),
+      node("e:ci:job", "EntryPoint", { kind: "ci-job", trigger: "test", line: 8 }),
+      node("e:go:main", "EntryPoint", { kind: "main", trigger: null, line: 1 }),
+      node("env:A", "EnvVar", { name: "A" }),
+      node("env:B", "EnvVar", { name: "B" }),
+    ],
+    relationships: [
+      rel("file:Makefile", "DECLARES_ENTRYPOINT", "e:make:test"),
+      rel("file:Makefile", "DECLARES_ENTRYPOINT", "e:make:lint"),
+      rel("file:scripts/t.sh", "DECLARES_ENTRYPOINT", "e:script:t"),
+      rel("file:package.json", "DECLARES_ENTRYPOINT", "e:npm:build"),
+      rel("file:.github/workflows/ci.yml", "DECLARES_ENTRYPOINT", "e:ci:job"),
+      rel("file:docs/x.md", "DECLARES_ENTRYPOINT", "e:go:main"),
+      rel("e:make:test", "RUNS", "e:script:t"),
+      rel("e:make:test", "RUNS", "e:make:lint"),
+      rel("e:npm:build", "RUNS", "file:Makefile"),
+      rel("e:ci:job", "RUNS", "e:make:test"),
+      rel("e:ci:job", "RUNS", "e:make:test"),
+      rel("repo", "DECLARES_ENV", "env:A", { file: "Makefile", line: 1 }),
+      rel("repo", "DECLARES_ENV", "env:B", { file: "docs/x.md", line: 1 }),
+    ],
+  };
+
+  it("scores entrypoints of the script kinds by file, kind, trigger and line ±1, in scope only", () => {
+    const labels: NonNullable<Labels["scripts"]> = {
+      scope: ["Makefile", "scripts/", "package.json", ".github/"],
+      items: [
+        { file: "Makefile", line: 4, kind: "make", trigger: "test" },
+        { file: "Makefile", line: 6, kind: "make", trigger: "lint" },
+        { file: "Makefile", line: 9, kind: "make", trigger: "missing" },
+        { file: "scripts/t.sh", line: 1, kind: "script", trigger: "scripts/t.sh" },
+        { file: "package.json", line: 4, kind: "npm-script", trigger: "build" },
+      ],
+    };
+    const result = compareScripts(graph, labels);
+    // `ci-job` is found and not labeled; the Go `main` is not a script kind.
+    assert.deepEqual([result.tp, result.fp, result.fn], [4, 1, 1]);
+    assert.deepEqual(result.falsePositives, [".github/workflows/ci.yml:8 ci-job test"]);
+    assert.deepEqual(result.falseNegatives, ["Makefile:9 make missing"]);
+  });
+
+  it("scores what an entrypoint runs by target, counting a repeated link once", () => {
+    const labels: NonNullable<Labels["runs"]> = {
+      scope: ["Makefile", "package.json", ".github/"],
+      items: [
+        { file: "Makefile", kind: "make", trigger: "test", target: "scripts/t.sh" },
+        { file: "Makefile", kind: "make", trigger: "test", target: "Makefile#lint" },
+        { file: "package.json", kind: "npm-script", trigger: "build", target: "Makefile" },
+        { file: ".github/workflows/ci.yml", kind: "ci-job", trigger: "test", target: "Makefile#test" },
+        { file: ".github/workflows/ci.yml", kind: "ci-job", trigger: "test", target: "scripts/t.sh" },
+      ],
+    };
+    const result = compareRuns(graph, labels);
+    assert.deepEqual([result.tp, result.fp, result.fn], [4, 0, 1]);
+    assert.deepEqual(result.falseNegatives, [".github/workflows/ci.yml ci-job test -> scripts/t.sh"]);
+  });
+
+  it("scores env declarations by file, line and name, in scope only", () => {
+    const result = compareEnvDeclarations(graph, { scope: ["Makefile"], items: [{ file: "Makefile", line: 1, name: "A" }, { file: "Makefile", line: 2, name: "C" }] });
+    assert.deepEqual([result.tp, result.fp, result.fn], [1, 0, 1]);
+    assert.deepEqual(result.falseNegatives, ["Makefile:2 C"]);
+  });
 });

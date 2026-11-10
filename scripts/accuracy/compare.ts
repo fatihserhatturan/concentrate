@@ -16,6 +16,16 @@ export type CallLabel = { file: string; line: number; callee: string; target: Ca
 export type DataAccessLabel = { file: string; function: string; model: string; operation: string; table?: string };
 // An env variable read; function null for a read outside any function.
 export type EnvLabel = { file: string; line: number; name: string; function: string | null };
+// A script, make target, npm script, Dockerfile CMD / ENTRYPOINT, compose
+// service or CI job (EntryPoint of kind script, make, npm-script, docker,
+// compose-service or ci-job); `file` declares it.
+export type ScriptLabel = { file: string; line: number; kind: string; trigger: string };
+// The entrypoint (`file`, `kind`, `trigger`) runs `target`: a file path, or
+// `<file>#<trigger>` for a make target, npm script, compose service, CI job or
+// Dockerfile instruction (a script file is its path).
+export type RunLabel = { file: string; kind: string; trigger: string; target: string };
+// An env variable a script, Dockerfile, compose file or workflow sets, at `file:line`.
+export type EnvDeclarationLabel = { file: string; line: number; name: string };
 export type ComponentLabel = { file: string; name: string; line: number };
 // `file` and `line` are the rendering element's; `parent` is the component it is in.
 export type RenderLabel = { file: string; parent: string; line: number; child: string; childFile: string };
@@ -52,6 +62,12 @@ export type Labels = {
   storeAccess?: { scope: string[]; items: StoreAccessLabel[] };
   // Env variable reads in `scope`.
   env?: { scope: string[]; items: EnvLabel[] };
+  // Scripts and infrastructure declared in the files of `scope`.
+  scripts?: { scope: string[]; items: ScriptLabel[] };
+  // What those entrypoints run.
+  runs?: { scope: string[]; items: RunLabel[] };
+  // Env variables the files of `scope` declare for scripts and infrastructure.
+  envDeclarations?: { scope: string[]; items: EnvDeclarationLabel[] };
 };
 
 export type Score = {
@@ -538,5 +554,94 @@ export function compareEnv(graph: Graph, labels: NonNullable<Labels["env"]>): Sc
     label.file === read.file && label.name === read.name && label.function === read.function && nearLine(label.line, read.line)
   ));
   const describe = (read: EnvLabel) => `${read.file}:${read.line} ${read.function ?? "<file>"}: ${read.name}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+const SCRIPT_KINDS = new Set(["script", "make", "npm-script", "docker", "compose-service", "ci-job"]);
+
+// The file that declares each entrypoint node.
+function declaringFiles(graph: Graph): Map<string, string> {
+  const files = new Map(graph.nodes.flatMap((node) => (node.label === "File" ? [[node.id, String(node.properties.relativePath)] as const] : [])));
+  const declared = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    const file = rel.type === "DECLARES_ENTRYPOINT" ? files.get(rel.from) : undefined;
+    if (file !== undefined) declared.set(rel.to, file);
+  }
+  return declared;
+}
+
+export function scanScripts(graph: Graph): ScriptLabel[] {
+  const declared = declaringFiles(graph);
+  return graph.nodes.flatMap((node) => {
+    const file = declared.get(node.id);
+    if (node.label !== "EntryPoint" || file === undefined || !SCRIPT_KINDS.has(String(node.properties.kind))) return [];
+    return [{ file, line: num(node.properties.line), kind: String(node.properties.kind), trigger: String(node.properties.trigger) }];
+  });
+}
+
+export function compareScripts(graph: Graph, labels: NonNullable<Labels["scripts"]>): Score {
+  const found = scanScripts(graph).filter((script) => inScope(script.file, labels.scope));
+  const result = pair(labels.items, found, (label, script) => (
+    label.file === script.file && label.kind === script.kind && label.trigger === script.trigger && nearLine(label.line, script.line)
+  ));
+  const describe = (script: ScriptLabel) => `${script.file}:${script.line} ${script.kind} ${script.trigger}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+export function scanRuns(graph: Graph): RunLabel[] {
+  const declared = declaringFiles(graph);
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const seen = new Set<string>();
+  const runs: RunLabel[] = [];
+  for (const rel of graph.relationships) {
+    if (rel.type !== "RUNS") continue;
+    const runner = byId.get(rel.from);
+    const target = byId.get(rel.to);
+    const file = declared.get(rel.from);
+    if (!runner || !target || file === undefined) continue;
+    let targetKey: string;
+    if (target.label === "File") {
+      targetKey = String(target.properties.relativePath);
+    } else {
+      const targetFile = declared.get(target.id);
+      if (targetFile === undefined) continue;
+      targetKey = target.properties.kind === "script" ? targetFile : `${targetFile}#${String(target.properties.trigger)}`;
+    }
+    const key = `${rel.from}\0${targetKey}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    runs.push({ file, kind: String(runner.properties.kind), trigger: String(runner.properties.trigger), target: targetKey });
+  }
+  return runs;
+}
+
+export function compareRuns(graph: Graph, labels: NonNullable<Labels["runs"]>): Score {
+  const found = scanRuns(graph).filter((run) => inScope(run.file, labels.scope));
+  const result = pair(labels.items, found, (label, run) => (
+    label.file === run.file && label.kind === run.kind && label.trigger === run.trigger && label.target === run.target
+  ));
+  const describe = (run: RunLabel) => `${run.file} ${run.kind} ${run.trigger} -> ${run.target}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+export function scanEnvDeclarations(graph: Graph): EnvDeclarationLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const seen = new Map<string, EnvDeclarationLabel>();
+  for (const rel of graph.relationships) {
+    if (rel.type !== "DECLARES_ENV") continue;
+    const name = byId.get(rel.to)?.properties.name;
+    if (typeof name !== "string") continue;
+    const declaration = { file: String(rel.properties.file), line: num(rel.properties.line), name };
+    seen.set(`${declaration.file}\0${declaration.line}\0${name}`, declaration);
+  }
+  return [...seen.values()];
+}
+
+export function compareEnvDeclarations(graph: Graph, labels: NonNullable<Labels["envDeclarations"]>): Score {
+  const found = scanEnvDeclarations(graph).filter((declaration) => inScope(declaration.file, labels.scope));
+  const result = pair(labels.items, found, (label, declaration) => (
+    label.file === declaration.file && label.name === declaration.name && label.line === declaration.line
+  ));
+  const describe = (declaration: EnvDeclarationLabel) => `${declaration.file}:${declaration.line} ${declaration.name}`;
   return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
 }

@@ -47,18 +47,20 @@ export async function addCompose(ctx: Context, relative: string, fileId: string,
     // `build: ./api` or `build: { context, dockerfile }`: the Dockerfile the service runs.
     const build = mapGet(body, "build")?.value;
     let context = directory;
+    let buildImage: { dockerfile: string; context: string } | undefined;
     if (build) {
       const buildMap = asMap(build);
       const contextText = buildMap ? asText(mapGet(buildMap, "context")?.value) ?? "." : asText(build) ?? ".";
       const dockerfile = (buildMap ? asText(mapGet(buildMap, "dockerfile")?.value) : null) ?? "Dockerfile";
       context = path.posix.normalize(path.posix.join(directory, contextText));
       const dockerfilePath = path.posix.normalize(path.posix.join(context, dockerfile));
+      buildImage = { dockerfile: dockerfilePath, context: context === "." ? "" : context };
       const target = ctx.fileIds.get(dockerfilePath === "." ? "" : dockerfilePath);
       if (target) ctx.graph.addRelationship({ from: id, to: target, type: "RUNS", properties: { line: service.line, command: `build ${dockerfilePath}`.slice(0, 200) } });
     }
     if (command) {
       const cwds = [...new Set([context === "." ? "" : context, directory, ""])];
-      ctx.pending.push({ from: id, cwds, commands: splitCommands(command).map((part) => ({ text: part, line: service.line })) });
+      ctx.pending.push({ from: id, cwds, commands: splitCommands(command).map((part) => ({ text: part, line: service.line })), ...(buildImage ? { image: buildImage } : {}) });
     }
 
     // `environment:` as a mapping or as `KEY=value` / `KEY` items.

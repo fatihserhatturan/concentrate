@@ -44,7 +44,7 @@ export const analysisToolDefinitions = [
   },
   {
     name: "find_unused_exports",
-    description: "Candidate dead code in JavaScript and TypeScript: exports no other file imports by name or calls, and unexported file-level functions nothing calls or mentions. Package entry points, files imported whole (namespace, dynamic, default), route and entrypoint handlers and tests are skipped (counted under skipped).",
+    description: "Candidate dead code in JavaScript and TypeScript: exports no other file imports or calls, and unexported file-level functions nothing calls or mentions. Package entry points, files imported whole (namespace, dynamic, default), route and entrypoint handlers and tests are skipped (counted in skipped).",
     inputSchema: objectSchema({
       file: { type: "string", description: "File or directory path, or a path suffix, to check." },
       includeTests: { type: "boolean", description: "Also check test and fixture files. Defaults to false." },

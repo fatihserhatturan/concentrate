@@ -492,9 +492,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "id": "file:service.ts:entrypoint:21:0:event:data",
             "file": "service.ts",
             "line": 21,
             "kind": "event",
@@ -504,6 +505,7 @@
             "handler": "handleData"
           },
           {
+            "id": "file:service.ts:entrypoint:22:0:queue:email",
             "file": "service.ts",
             "line": 22,
             "kind": "queue",
@@ -513,6 +515,7 @@
             "handler": "handleJob"
           },
           {
+            "id": "file:service.ts:entrypoint:23:0:cron:*/5 * * * *",
             "file": "service.ts",
             "line": 23,
             "kind": "cron",
@@ -522,6 +525,7 @@
             "handler": "<cron.schedule:*/5 * * * *:arg1>"
           },
           {
+            "id": "file:service.ts:entrypoint:26:0:realtime:connection",
             "file": "service.ts",
             "line": 26,
             "kind": "realtime",
@@ -531,6 +535,7 @@
             "handler": "handleConnection"
           },
           {
+            "id": "file:service.ts:entrypoint:29:0:scheduler:0 * * * *",
             "file": "service.ts",
             "line": 29,
             "kind": "scheduler",
@@ -540,6 +545,34 @@
             "handler": "syncUsers"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:service.ts:entrypoint:21:0:event:data",
+            "file:service.ts:entrypoint:22:0:queue:email",
+            "file:service.ts:entrypoint:23:0:cron:*/5 * * * *",
+            "file:service.ts:entrypoint:26:0:realtime:connection",
+            "file:service.ts:entrypoint:29:0:scheduler:0 * * * *"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:service.ts:entrypoint:21:0:event:data",
+            "file:service.ts:entrypoint:22:0:queue:email",
+            "file:service.ts:entrypoint:23:0:cron:*/5 * * * *",
+            "file:service.ts:entrypoint:26:0:realtime:connection",
+            "file:service.ts:entrypoint:29:0:scheduler:0 * * * *"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -784,9 +817,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true AND entrypoint.kind = \"queue\" OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true AND entrypoint.kind = \"queue\" OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "id": "file:service.ts:entrypoint:22:0:queue:email",
             "file": "service.ts",
             "line": 22,
             "kind": "queue",
@@ -796,6 +830,26 @@
             "handler": "handleJob"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:service.ts:entrypoint:22:0:queue:email"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:service.ts:entrypoint:22:0:queue:email"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -828,9 +882,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 3",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 3",
         "rows": [
           {
+            "id": "file:service.ts:entrypoint:21:0:event:data",
             "file": "service.ts",
             "line": 21,
             "kind": "event",
@@ -840,6 +895,7 @@
             "handler": "handleData"
           },
           {
+            "id": "file:service.ts:entrypoint:22:0:queue:email",
             "file": "service.ts",
             "line": 22,
             "kind": "queue",
@@ -849,6 +905,7 @@
             "handler": "handleJob"
           },
           {
+            "id": "file:service.ts:entrypoint:23:0:cron:*/5 * * * *",
             "file": "service.ts",
             "line": 23,
             "kind": "cron",
@@ -858,6 +915,30 @@
             "handler": "<cron.schedule:*/5 * * * *:arg1>"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:service.ts:entrypoint:21:0:event:data",
+            "file:service.ts:entrypoint:22:0:queue:email",
+            "file:service.ts:entrypoint:23:0:cron:*/5 * * * *"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:service.ts:entrypoint:21:0:event:data",
+            "file:service.ts:entrypoint:22:0:queue:email",
+            "file:service.ts:entrypoint:23:0:cron:*/5 * * * *"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -908,9 +989,10 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true AND file.relativePath IN [\"service.ts\"] OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true AND file.relativePath IN [\"service.ts\"] OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": [
           {
+            "id": "file:service.ts:entrypoint:21:0:event:data",
             "file": "service.ts",
             "line": 21,
             "kind": "event",
@@ -920,6 +1002,7 @@
             "handler": "handleData"
           },
           {
+            "id": "file:service.ts:entrypoint:22:0:queue:email",
             "file": "service.ts",
             "line": 22,
             "kind": "queue",
@@ -929,6 +1012,7 @@
             "handler": "handleJob"
           },
           {
+            "id": "file:service.ts:entrypoint:23:0:cron:*/5 * * * *",
             "file": "service.ts",
             "line": 23,
             "kind": "cron",
@@ -938,6 +1022,7 @@
             "handler": "<cron.schedule:*/5 * * * *:arg1>"
           },
           {
+            "id": "file:service.ts:entrypoint:26:0:realtime:connection",
             "file": "service.ts",
             "line": 26,
             "kind": "realtime",
@@ -947,6 +1032,7 @@
             "handler": "handleConnection"
           },
           {
+            "id": "file:service.ts:entrypoint:29:0:scheduler:0 * * * *",
             "file": "service.ts",
             "line": 29,
             "kind": "scheduler",
@@ -956,6 +1042,34 @@
             "handler": "syncUsers"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:service.ts:entrypoint:21:0:event:data",
+            "file:service.ts:entrypoint:22:0:queue:email",
+            "file:service.ts:entrypoint:23:0:cron:*/5 * * * *",
+            "file:service.ts:entrypoint:26:0:realtime:connection",
+            "file:service.ts:entrypoint:29:0:scheduler:0 * * * *"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:service.ts:entrypoint:21:0:event:data",
+            "file:service.ts:entrypoint:22:0:queue:email",
+            "file:service.ts:entrypoint:23:0:cron:*/5 * * * *",
+            "file:service.ts:entrypoint:26:0:realtime:connection",
+            "file:service.ts:entrypoint:29:0:scheduler:0 * * * *"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1033,7 +1147,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true AND false OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true AND false OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
         "rows": []
       }
     ],

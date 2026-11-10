@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 import type { GraphNode } from "../../../core/graph/model.js";
 import { envVar } from "../js-ts/env-files.js";
+import type { DockerInstruction } from "../../languages/plain/dockerfile.js";
 import type { ScriptScan } from "./shell.js";
 
 // What the readers of scripts and infrastructure share: the entrypoints they
@@ -13,6 +14,9 @@ export type Pending = {
   // Directories commands run in (relative to the root, "" for the root), tried in order.
   cwds: string[];
   commands: Array<{ text: string; line: number }>;
+  // The Dockerfile (and its build context) the commands run in: a path inside
+  // the container (`/app/start.sh`) is looked up in what it copies.
+  image?: { dockerfile: string; context: string };
 };
 
 export type Context = {
@@ -26,6 +30,8 @@ export type Context = {
   makeTargets: Map<string, string>;
   // script file → entrypoint id.
   scriptEntries: Map<string, string>;
+  // Dockerfile → its instructions, for the container paths of `RUNS`.
+  dockerfiles: Map<string, DockerInstruction[]>;
   pending: Pending[];
 };
 
