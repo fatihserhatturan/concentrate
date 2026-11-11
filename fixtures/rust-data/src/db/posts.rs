@@ -59,3 +59,27 @@ pub fn upsert_user(conn: &mut PgConnection, name: &str) {
         .execute(conn)
         .unwrap();
 }
+
+impl Post {
+    // The query is bound to a name that the write root takes.
+    pub fn remove_titled(conn: &mut PgConnection, title: &str) {
+        let target = posts::table.filter(posts::title.eq(title));
+        diesel::delete(target).execute(conn).unwrap();
+    }
+
+    pub fn retitle_first(conn: &mut PgConnection, title: &str) -> Post {
+        let t = posts::table.find(1);
+        diesel::update(t).set(posts::title.eq(title)).get_result::<Post>(conn).unwrap()
+    }
+
+    // A query built by a helper and run with the model as type argument.
+    pub fn by_owner(conn: &mut PgConnection, owner: i32) -> Vec<Self> {
+        let t = Self::owned_by(owner);
+        t.load::<Self>(conn).unwrap()
+    }
+}
+
+pub fn run_titles(conn: &mut PgConnection) -> Vec<Post> {
+    let t = Post::belonging_to(&Account { id: 1, name: String::new() });
+    t.load::<Post>(conn).unwrap()
+}

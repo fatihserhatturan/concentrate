@@ -467,6 +467,11 @@ function evaluateFunction(
         return [{ method: filter, handler: null, handlerName: null, layerRefs: [], layers: [] }];
       }
     }
+    // `use actix_web::web::{get, post}` then `get().to(h)`: the web:: free
+    // functions called bare. They take no arguments, which tells them from axum's `get(h)`.
+    if (framework === "actix-web" && !text.includes("::") && args.length === 0 && methodNames.has(last)) {
+      return [{ method: methodNames.get(last)!, handler: null, handlerName: null, layerRefs: [], layers: [] }];
+    }
     if (framework === "axum" && (methodNames.has(bare) || bare === "any")) {
       return [{ method: bare === "any" ? "ALL" : methodNames.get(bare)!, ...handlerOf(args[0]), layerRefs: [], layers: [] }];
     }

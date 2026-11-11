@@ -46,6 +46,7 @@ type Entity = { module: string; table: string | null; line: number; columns: Col
 type Candidate =
   | { kind: "sql"; owner: string; line: number; expression: string; sql: string; asType: string | null }
   | { kind: "diesel"; owner: string; line: number; expression: string; ident: string; operation: Operation }
+  | { kind: "dieselModel"; owner: string; line: number; expression: string; models: string[] }
   | { kind: "sea"; owner: string; line: number; expression: string; qualifier: string | null; operation: Operation };
 
 type DistributiveOmit<T, K extends string> = T extends unknown ? Omit<T, K> : never;
@@ -67,6 +68,7 @@ const SEA_METHODS = new Map<string, Operation>([
   ["delete", "delete"], ["delete_many", "delete"], ["delete_by_id", "delete"],
 ]);
 const ACTIVE_MODEL_METHODS = new Map<string, Operation>([["insert", "create"], ["update", "update"], ["save", "upsert"], ["delete", "delete"]]);
+const DIESEL_RUNNERS = new Set(["load", "first", "get_result", "get_results"]);
 const DIESEL_ROOTS = new Map<string, Operation>([
   ["insert_into", "create"], ["insert_or_ignore_into", "create"], ["replace_into", "upsert"], ["update", "update"], ["delete", "delete"],
 ]);
@@ -283,6 +285,27 @@ export const rustDataAccessPlugin: RustParsePlugin = ({ fileNodeId, relativePath
       add({ kind: "diesel", line, expression: shorten(chainText(node)), ident, operation: dieselOperation(node) }, line);
     }
   }
+  // diesel queries built elsewhere and run here: `t.first::<User>(conn)`,
+  // `Tag::belonging_to(&a).load::<Tag>(conn)`. The type argument names the
+  // model; chains that name a table or a write root are found above.
+  if (/\bdiesel\b/u.test(source)) {
+    for (const call of root.descendantsOfType("call_expression")) {
+      const generic = call.childForFieldName("function");
+      if (generic?.type !== "generic_function") continue;
+      const callee = generic.childForFieldName("function");
+      if (callee?.type !== "field_expression" || !DIESEL_RUNNERS.has(callee.childForFieldName("field")?.text ?? "")) continue;
+      const chain = chainText(call);
+      if (/::table\b|\b(?:insert_into|insert_or_ignore_into|replace_into|update|delete)\(/u.test(chain)) continue;
+      let implType: string | undefined;
+      for (let parent: SyntaxNode | null = call.parent; parent && implType === undefined; parent = parent.parent) {
+        if (parent.type === "impl_item") implType = bareType(parent.childForFieldName("type")?.text ?? "");
+      }
+      const models = [...new Set((generic.childForFieldName("type_arguments")?.text.match(/\b[A-Z]\w*\b/gu) ?? []).map((name) => (name === "Self" ? implType ?? name : name)))];
+      if (models.length === 0) continue;
+      const line = sqlLine(callee.childForFieldName("field") ?? call);
+      add({ kind: "dieselModel", line, expression: shorten(chain), models }, line);
+    }
+  }
   // SeaORM ActiveModel writes: `user::ActiveModel { … }.insert(db)`.
   for (const call of root.descendantsOfType("call_expression")) {
     const callee = call.childForFieldName("function");
@@ -462,6 +485,11 @@ export const rustDataAccessContributor: ISemanticContributor = {
           for (const access of found) {
             accesses.push({ ...base, modelId: mapped && access.table === single ? mapped : tableModel(access.table, "sqlx"), operation: access.operation, library: "sqlx" });
           }
+        } else if (candidate.kind === "dieselModel") {
+          for (const name of candidate.models) {
+            const modelId = dieselModelByName.get(name);
+            if (modelId) accesses.push({ ...base, modelId, operation: "read", library: "diesel" });
+          }
         } else if (candidate.kind === "diesel") {
           const modelId = dieselModel(candidate.ident);
           if (modelId) accesses.push({ ...base, modelId, operation: candidate.operation, library: "diesel" });
@@ -603,6 +631,22 @@ function dieselOperation(node: SyntaxNode): Operation {
     const operation = DIESEL_ROOTS.get(callee.split("::").pop() ?? "");
     if (!operation) continue;
     return operation === "create" && /\.on_conflict(?:_do_nothing)?\(/u.test(chainText(call)) ? "upsert" : operation;
+  }
+  // `let t = users::table.filter(..); diesel::delete(t).execute(conn)`: the
+  // query is bound to a name that a write root takes later.
+  let statement: SyntaxNode | null = node;
+  while (statement && statement.type !== "let_declaration" && statement.type !== "function_item") statement = statement.parent;
+  const bound = statement?.type === "let_declaration" ? statement.childForFieldName("pattern") : null;
+  if (statement && bound?.type === "identifier") {
+    const body = statement.parent;
+    for (const call of body?.descendantsOfType("call_expression") ?? []) {
+      if (call.startIndex < statement.endIndex) continue;
+      const operation = DIESEL_ROOTS.get(normalize(call.childForFieldName("function")?.text ?? "").replace(/::<.*>$/u, "").split("::").pop() ?? "");
+      if (!operation) continue;
+      const first = call.childForFieldName("arguments")?.namedChildren[0];
+      const name = first?.type === "reference_expression" ? first.childForFieldName("value") : first;
+      if (name?.type === "identifier" && name.text === bound.text) return operation;
+    }
   }
   return "read";
 }

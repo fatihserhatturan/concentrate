@@ -1,5 +1,6 @@
 import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
-import type { GraphNode } from "../../../core/graph/model.js";
+import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
+import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import { rustAttributesOf, type RustParsePlugin } from "../../languages/rust/parser.js";
 
 // Rust env reads, as USES_ENV from the function that reads (the file for an
@@ -28,7 +29,8 @@ const NAME = /^[A-Za-z_]\w*$/u;
 
 export const rustEnvConfigPlugin: RustParsePlugin = ({ fileNodeId, root, nodes, relationships, functions }) => {
   const source = root.text;
-  if (!/\benv\b|\bdotenvy?\b|\bclap\b|\benvy\b|\bconfig\b/u.test(source)) return;
+  // `const` too: a constants file has no env read of its own but names the keys of others.
+  if (!/\benv\b|\bdotenvy?\b|\bclap\b|\benvy\b|\bconfig\b|\bconst\b/u.test(source)) return;
 
   const owners = functions
     .filter((fn) => typeof fn.node.properties.line === "number" && typeof fn.node.properties.endLine === "number")
@@ -45,6 +47,9 @@ export const rustEnvConfigPlugin: RustParsePlugin = ({ fileNodeId, root, nodes, 
     if (name && literal !== null) constants.set(name, literal);
   }
 
+  // Env reads whose key is a constant of another file (`env::var(env_key::X)`),
+  // resolved by rustEnvConfigContributor once every file is parsed.
+  const pending: Array<{ owner: string; line: number; access: string; constant: string }> = [];
   const reads = new Map<string, EnvRead[]>();
   const read = (sourceId: string, entry: EnvRead) => {
     if (!NAME.test(entry.name)) return;
@@ -84,6 +89,10 @@ export const rustEnvConfigPlugin: RustParsePlugin = ({ fileNodeId, root, nodes, 
 
     if (ENV_FUNCTIONS.has(callee) || (bareVar && (callee === "var" || callee === "var_os"))) {
       if (first !== null) read(ownerOf(line), { name: first, line, access: callee.replace(/^std::/u, "") });
+      else if (args[0]) {
+        const constant = constantPath(args[0]);
+        if (constant) pending.push({ owner: ownerOf(line), line, access: callee.replace(/^std::/u, ""), constant });
+      }
       continue;
     }
     // clap builder: `Arg::new("x").env("X")`.
@@ -165,6 +174,10 @@ export const rustEnvConfigPlugin: RustParsePlugin = ({ fileNodeId, root, nodes, 
     for (const item of names) read(fileNodeId, item);
   }
 
+  const fileNode = nodes.find((node) => node.id === fileNodeId);
+  if (fileNode && pending.length > 0) fileNode.properties.rustEnvPending = JSON.stringify(pending);
+  if (fileNode && constants.size > 0 && /\bconst\b/u.test(source)) fileNode.properties.rustEnvConsts = JSON.stringify([...constants]);
+
   // Each read is the file's too, as for Go and JS.
   const seen = new Set<string>();
   const added = new Set<string>();
@@ -182,6 +195,63 @@ export const rustEnvConfigPlugin: RustParsePlugin = ({ fileNodeId, root, nodes, 
       }
     }
   }
+};
+
+// The constant an env key argument names: `KEY`, `env_key::KEY`, `&KEY`.
+function constantPath(node: SyntaxNode): string | null {
+  if (node.type === "reference_expression") {
+    const value = node.childForFieldName("value");
+    return value ? constantPath(value) : null;
+  }
+  if (node.type === "identifier" || node.type === "scoped_identifier") {
+    const name = node.text.replace(/^(?:\w+::)*/u, "");
+    return /^[A-Z][A-Z0-9_]*$/u.test(name) ? name : null;
+  }
+  return null;
+}
+
+// Env reads keyed by a constant declared in another file: the constant's
+// literal is taken when the name is declared once, with one value, in the project.
+export const rustEnvConfigContributor: ISemanticContributor = {
+  contribute(graph) {
+    const files = graph.nodes.filter((node) => node.label === "File" && (typeof node.properties.rustEnvPending === "string" || typeof node.properties.rustEnvConsts === "string"));
+    if (files.length === 0) return;
+    const values = new Map<string, Set<string>>();
+    const pending: Array<{ owner: string; line: number; access: string; constant: string; file: string }> = [];
+    for (const file of files) {
+      if (typeof file.properties.rustEnvConsts === "string") {
+        for (const [name, value] of JSON.parse(file.properties.rustEnvConsts) as Array<[string, string]>) values.set(name, (values.get(name) ?? new Set()).add(value));
+      }
+      if (typeof file.properties.rustEnvPending === "string") {
+        for (const entry of JSON.parse(file.properties.rustEnvPending) as Array<{ owner: string; line: number; access: string; constant: string }>) pending.push({ ...entry, file: file.id });
+      }
+      delete file.properties.rustEnvConsts;
+      delete file.properties.rustEnvPending;
+    }
+    const known = new Set(graph.nodes.filter((node) => node.label === "EnvVar").map((node) => node.id));
+    const nodes: GraphNode[] = [];
+    const relationships: GraphRelationship[] = [];
+    const seen = new Set<string>();
+    for (const entry of pending) {
+      const candidates = values.get(entry.constant);
+      if (!candidates || candidates.size !== 1) continue;
+      const name = [...candidates][0]!;
+      if (!NAME.test(name)) continue;
+      const id = `env:${name}`;
+      if (!known.has(id)) {
+        known.add(id);
+        nodes.push(envVarNode(name));
+      }
+      for (const from of entry.owner === entry.file ? [entry.owner] : [entry.owner, entry.file]) {
+        const key = `${from}\0${name}\0${entry.line}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        relationships.push({ from, to: id, type: "USES_ENV", properties: { line: entry.line, access: entry.access } });
+      }
+    }
+    graph.addNodes(nodes);
+    graph.addRelationships(relationships);
+  },
 };
 
 function envVarNode(name: string): GraphNode {
