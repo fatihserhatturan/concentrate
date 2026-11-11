@@ -1458,7 +1458,7 @@ and Django ORM data access, config, HTTP clients and dependency injection. The d
 
 ### Agent benchmark
 
-- [ ] Python questions (routes, callers, impact, table users, env, frontend → Python backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
+- [x] Python questions (routes, callers, impact, table users, env, frontend → Python backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
 
 ### Docs
 

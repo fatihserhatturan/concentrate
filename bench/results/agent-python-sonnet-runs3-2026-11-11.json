@@ -1,0 +1,3078 @@
+{
+  "recordedAt": "2026-11-11T18:40:39.645Z",
+  "model": "sonnet",
+  "runs": 3,
+  "maxTurns": 25,
+  "totals": {
+    "baseline": {
+      "runs": 36,
+      "correct": 36,
+      "medianInputTokens": 100432.5,
+      "medianOutputTokens": 862.5,
+      "medianToolCalls": 3,
+      "medianTurns": 4,
+      "medianDurationMs": 11106.5,
+      "medianCostUsd": 0.0627,
+      "spread": {
+        "inputTokens": {
+          "min": 64554,
+          "max": 254473
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 7
+        },
+        "durationMs": {
+          "min": 5878,
+          "max": 23050
+        },
+        "costUsd": {
+          "min": 0.0442,
+          "max": 0.1544
+        }
+      },
+      "totalCostUsd": 2.3641,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
+    },
+    "concentrate": {
+      "runs": 36,
+      "correct": 36,
+      "medianInputTokens": 101714.5,
+      "medianOutputTokens": 629.5,
+      "medianToolCalls": 3,
+      "medianTurns": 4,
+      "medianDurationMs": 9615.5,
+      "medianCostUsd": 0.0605,
+      "spread": {
+        "inputTokens": {
+          "min": 66323,
+          "max": 170334
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 8
+        },
+        "durationMs": {
+          "min": 6400,
+          "max": 16776
+        },
+        "costUsd": {
+          "min": 0.0474,
+          "max": 0.0813
+        }
+      },
+      "totalCostUsd": 2.1984,
+      "mcpRuns": 17,
+      "mcpTools": {
+        "api_consumers": 9,
+        "route_details": 9,
+        "impact_of": 3,
+        "list_data_access": 3,
+        "find_callers": 2
+      },
+      "toolSearchCalls": 18
+    }
+  },
+  "categories": {
+    "routes": {
+      "baseline": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 98530,
+        "medianOutputTokens": 578,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 8749,
+        "medianCostUsd": 0.0558,
+        "spread": {
+          "inputTokens": {
+            "min": 64554,
+            "max": 99178
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 5878,
+            "max": 12055
+          },
+          "costUsd": {
+            "min": 0.0442,
+            "max": 0.1544
+          }
+        },
+        "totalCostUsd": 0.5834,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 100232,
+        "medianOutputTokens": 664,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 8767,
+        "medianCostUsd": 0.059,
+        "spread": {
+          "inputTokens": {
+            "min": 66323,
+            "max": 101817
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 6400,
+            "max": 11009
+          },
+          "costUsd": {
+            "min": 0.0474,
+            "max": 0.0616
+          }
+        },
+        "totalCostUsd": 0.4971,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "callers": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 100451,
+        "medianOutputTokens": 758,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 9793,
+        "medianCostUsd": 0.0604,
+        "spread": {
+          "inputTokens": {
+            "min": 100414,
+            "max": 100601
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 9677,
+            "max": 10251
+          },
+          "costUsd": {
+            "min": 0.0584,
+            "max": 0.0626
+          }
+        },
+        "totalCostUsd": 0.1814,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 101067,
+        "medianOutputTokens": 630,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 9172,
+        "medianCostUsd": 0.0584,
+        "spread": {
+          "inputTokens": {
+            "min": 99945,
+            "max": 101073
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 8534,
+            "max": 10649
+          },
+          "costUsd": {
+            "min": 0.0581,
+            "max": 0.0588
+          }
+        },
+        "totalCostUsd": 0.1753,
+        "mcpRuns": 2,
+        "mcpTools": {
+          "find_callers": 2
+        },
+        "toolSearchCalls": 2
+      }
+    },
+    "impact": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 133064,
+        "medianOutputTokens": 1196,
+        "medianToolCalls": 5,
+        "medianTurns": 6,
+        "medianDurationMs": 14735,
+        "medianCostUsd": 0.0681,
+        "spread": {
+          "inputTokens": {
+            "min": 132798,
+            "max": 133432
+          },
+          "toolCalls": {
+            "min": 4,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 13202,
+            "max": 14741
+          },
+          "costUsd": {
+            "min": 0.0651,
+            "max": 0.07
+          }
+        },
+        "totalCostUsd": 0.2033,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 103189,
+        "medianOutputTokens": 908,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 12158,
+        "medianCostUsd": 0.0675,
+        "spread": {
+          "inputTokens": {
+            "min": 101612,
+            "max": 103321
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 10477,
+            "max": 12161
+          },
+          "costUsd": {
+            "min": 0.0603,
+            "max": 0.0682
+          }
+        },
+        "totalCostUsd": 0.1961,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "impact_of": 3
+        },
+        "toolSearchCalls": 3
+      }
+    },
+    "data": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 98096.5,
+        "medianOutputTokens": 770.5,
+        "medianToolCalls": 2.5,
+        "medianTurns": 3.5,
+        "medianDurationMs": 10695,
+        "medianCostUsd": 0.0583,
+        "spread": {
+          "inputTokens": {
+            "min": 65951,
+            "max": 103103
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 9252,
+            "max": 11960
+          },
+          "costUsd": {
+            "min": 0.0532,
+            "max": 0.0729
+          }
+        },
+        "totalCostUsd": 0.3608,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 118853,
+        "medianOutputTokens": 804,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 11191,
+        "medianCostUsd": 0.0645,
+        "spread": {
+          "inputTokens": {
+            "min": 67075,
+            "max": 137995
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 8101,
+            "max": 13200
+          },
+          "costUsd": {
+            "min": 0.054,
+            "max": 0.0737
+          }
+        },
+        "totalCostUsd": 0.383,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "list_data_access": 3
+        },
+        "toolSearchCalls": 4
+      }
+    },
+    "env": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 115866,
+        "medianOutputTokens": 1084.5,
+        "medianToolCalls": 4.5,
+        "medianTurns": 5.5,
+        "medianDurationMs": 13570,
+        "medianCostUsd": 0.0655,
+        "spread": {
+          "inputTokens": {
+            "min": 98114,
+            "max": 134161
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 7
+          },
+          "durationMs": {
+            "min": 10083,
+            "max": 17567
+          },
+          "costUsd": {
+            "min": 0.0553,
+            "max": 0.0745
+          }
+        },
+        "totalCostUsd": 0.394,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 118980,
+        "medianOutputTokens": 1075,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 12921.5,
+        "medianCostUsd": 0.0677,
+        "spread": {
+          "inputTokens": {
+            "min": 66541,
+            "max": 170334
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 8
+          },
+          "durationMs": {
+            "min": 8838,
+            "max": 16776
+          },
+          "costUsd": {
+            "min": 0.0513,
+            "max": 0.0813
+          }
+        },
+        "totalCostUsd": 0.4039,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "frontend-api": {
+      "baseline": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 142722,
+        "medianOutputTokens": 1178,
+        "medianToolCalls": 5,
+        "medianTurns": 6,
+        "medianDurationMs": 14675,
+        "medianCostUsd": 0.0695,
+        "spread": {
+          "inputTokens": {
+            "min": 105862,
+            "max": 254473
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 7
+          },
+          "durationMs": {
+            "min": 10336,
+            "max": 23050
+          },
+          "costUsd": {
+            "min": 0.0568,
+            "max": 0.0896
+          }
+        },
+        "totalCostUsd": 0.6411,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 110167,
+        "medianOutputTokens": 497,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 9169,
+        "medianCostUsd": 0.0608,
+        "spread": {
+          "inputTokens": {
+            "min": 109680,
+            "max": 110279
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 8042,
+            "max": 11023
+          },
+          "costUsd": {
+            "min": 0.0582,
+            "max": 0.0619
+          }
+        },
+        "totalCostUsd": 0.543,
+        "mcpRuns": 9,
+        "mcpTools": {
+          "api_consumers": 9,
+          "route_details": 9
+        },
+        "toolSearchCalls": 9
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "py-fastapi-favorite-route",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 99106,
+            "medianOutputTokens": 1036,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 11922,
+            "medianCostUsd": 0.0617,
+            "spread": {
+              "inputTokens": {
+                "min": 98530,
+                "max": 99178
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 10795,
+                "max": 12055
+              },
+              "costUsd": {
+                "min": 0.057,
+                "max": 0.1544
+              }
+            },
+            "totalCostUsd": 0.2731,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Both handlers are in `app/api/routes/articles/articles_common.py`:\n\n- **POST `/api/articles/{slug}/favorite`** is served by `mark_article_as_favorite` (`articles_common.py:47-74`). The route name is `articles:mark-article-favorite`.\n  - If the article isn't already favorited, it calls `articles_repo.add_article_into_favorites`. It then returns the article with `favorited=True` and `favorites_count + 1`.\n  - If it is already favorited, it raises a 400 with `ARTICLE_IS_ALREADY_FAVORITED`.\n\n- **DELETE `/api/articles/{slug}/favorite`** is served by `remove_article_from_favorites` (`articles_common.py:77-99`). The route name is `articles:unmark-article-favorite`.\n  - If the article is favorited, it calls `articles_repo.remove_article_from_favorites`. It then returns the article with `favorited=False` and `favorites_count - 1`.\n  - The excerpt I read ends at line 99, before the `else` branch. By symmetry with the POST handler, I'd expect a 400 there when the article isn't favorited, but I didn't read that part.\n\nBoth handlers share the same dependencies. `get_article_by_slug_from_path` loads the article, `get_current_user_authorizer()` requires an authenticated user, and `ArticlesRepository` is injected through `get_repository`. Both return `ArticleInResponse`.\n\nThe full path is built from three prefixes. `main.py` adds `settings.api_prefix`, which is `/api`. `articles/api.py` adds `/articles`, and each handler's own path adds `/{slug}/favorite`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11922,
+              "costUsd": 0.15441500000000002,
+              "inputTokens": 6,
+              "outputTokens": 1063,
+              "cacheCreationTokens": 34322,
+              "cacheReadTokens": 64850,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Both handlers are in `app/api/routes/articles/articles_common.py`.\n\n- **POST** `/api/articles/{slug}/favorite` is served by `mark_article_as_favorite` (line 52, route name `articles:mark-article-favorite`).\n  - If the article isn't favorited yet, it calls `articles_repo.add_article_into_favorites(...)`. It returns the article with `favorited=True` and `favorites_count + 1`.\n  - If the article is already favorited, it raises a 400 with `strings.ARTICLE_IS_ALREADY_FAVORITED`.\n\n- **DELETE** `/api/articles/{slug}/favorite` is served by `remove_article_from_favorites` (line 82, route name `articles:unmark-article-favorite`).\n  - If the article is favorited, it calls `articles_repo.remove_article_from_favorites(...)`. It returns the article with `favorited=False` and `favorites_count - 1`.\n  - I only read down to line 99, so I didn't see the `else` branch. By symmetry with the POST handler, it probably raises a 400 when the article isn't favorited.\n\nBoth handlers use the same dependencies:\n- `get_article_by_slug_from_path` loads the article.\n- `get_current_user_authorizer()` requires an authenticated user.\n- `ArticlesRepository` is injected for the database call.\n\nBoth return `ArticleInResponse`.\n\nThe router is mounted with `prefix=\"/articles\"` in `app/api/routes/articles/api.py:7`. That router is then included under the `/api` prefix, which I inferred rather than checked.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12055,
+              "costUsd": 0.0616727,
+              "inputTokens": 6,
+              "outputTokens": 1036,
+              "cacheCreationTokens": 10613,
+              "cacheReadTokens": 88487,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Both handlers are in `app/api/routes/articles/articles_common.py`:\n\n- **POST** `/api/articles/{slug}/favorite` is `mark_article_as_favorite` (line 52). Its route name is `articles:mark-article-favorite`.\n  - It calls `articles_repo.add_article_into_favorites(...)` if the article isn't already favorited. It then returns the article with `favorited=True` and `favorites_count + 1`.\n  - If the article is already favorited, it raises a 400 with `strings.ARTICLE_IS_ALREADY_FAVORITED`.\n\n- **DELETE** `/api/articles/{slug}/favorite` is `remove_article_from_favorites` (line 82). Its route name is `articles:unmark-article-favorite`.\n  - It calls `articles_repo.remove_article_from_favorites(...)` if the article is currently favorited. It then returns the article with `favorited=False` and `favorites_count - 1`.\n  - I only read down to line 98, so I didn't see the `else` branch. By symmetry with the POST handler, it probably raises a 400 when the article isn't favorited.\n\nBoth handlers use the same three dependencies:\n- `get_article_by_slug_from_path` loads the article.\n- `get_current_user_authorizer()` requires an authenticated user.\n- `get_repository(ArticlesRepository)` provides the repository.\n\nThe `/api/articles` prefix comes from the router mounting, which I didn't open.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10795,
+              "costUsd": 0.0570311,
+              "inputTokens": 6,
+              "outputTokens": 796,
+              "cacheCreationTokens": 10053,
+              "cacheReadTokens": 88471,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 101190,
+            "medianOutputTokens": 835,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 10247,
+            "medianCostUsd": 0.0611,
+            "spread": {
+              "inputTokens": {
+                "min": 100778,
+                "max": 101241
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 10241,
+                "max": 11009
+              },
+              "costUsd": {
+                "min": 0.0597,
+                "max": 0.0616
+              }
+            },
+            "totalCostUsd": 0.1824,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Both handlers are in `app/api/routes/articles/articles_common.py`.\n\n- **POST** is `mark_article_as_favorite` (lines 47–74). Its route name is `articles:mark-article-favorite`.\n  - It calls `articles_repo.add_article_into_favorites(...)` and returns the article with `favorited=True` and `favorites_count + 1`.\n  - If the article is already favorited, it raises a 400 with `ARTICLE_IS_ALREADY_FAVORITED`.\n\n- **DELETE** is `remove_article_from_favorites` (lines 77–103). Its route name is `articles:unmark-article-favorite`.\n  - It calls `articles_repo.remove_article_from_favorites(...)` and returns the article with `favorited=False` and `favorites_count - 1`.\n  - If the article isn't favorited, it raises a 400 with `ARTICLE_IS_NOT_FAVORITED`.\n\nBoth handlers share the same dependencies:\n- `get_article_by_slug_from_path` resolves the article from the slug.\n- `get_current_user_authorizer()` requires an authenticated user.\n- `ArticlesRepository` is injected through `get_repository`.\n\nBoth return `ArticleInResponse`.\n\nThe router is mounted under `/api/articles`, which gives the full path `/api/articles/{slug}/favorite`. I read the route definitions but didn't open the router-mounting code to confirm the prefix.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10247,
+              "costUsd": 0.06109629999999999,
+              "inputTokens": 6,
+              "outputTokens": 814,
+              "cacheCreationTokens": 10981,
+              "cacheReadTokens": 90203,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Both handlers are in `app/api/routes/articles/articles_common.py`.\n\n- **POST** `/api/articles/{slug}/favorite` is served by `mark_article_as_favorite` (lines 47–74), with route name `articles:mark-article-favorite`.\n  - If the article isn't already favorited, it calls `articles_repo.add_article_into_favorites(...)`. It then returns the article with `favorited=True` and `favorites_count + 1`.\n  - If the article is already favorited, it raises a 400 with `ARTICLE_IS_ALREADY_FAVORITED`.\n\n- **DELETE** `/api/articles/{slug}/favorite` is served by `remove_article_from_favorites` (lines 77–104), with route name `articles:unmark-article-favorite`.\n  - If the article is favorited, it calls `articles_repo.remove_article_from_favorites(...)`. It then returns the article with `favorited=False` and `favorites_count - 1`.\n  - If the article isn't favorited, it raises a 400 with `ARTICLE_IS_NOT_FAVORITED`.\n\nBoth handlers use the same dependencies:\n- `get_article_by_slug_from_path` loads the article.\n- `get_current_user_authorizer()` requires an authenticated user.\n- `ArticlesRepository` handles the database write.\n\nBoth return an `ArticleInResponse`. The `/api` prefix isn't in this file. I didn't check where the router is mounted, so I'm assuming it comes from the app-level router include.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10241,
+              "costUsd": 0.06156590000000001,
+              "inputTokens": 6,
+              "outputTokens": 839,
+              "cacheCreationTokens": 11036,
+              "cacheReadTokens": 90199,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Both handlers are in `app/api/routes/articles/articles_common.py`:\n\n- **POST** `/api/articles/{slug}/favorite` is served by `mark_article_as_favorite` (line 52). The route name is `articles:mark-article-favorite`. If the article isn't already favorited, it calls `articles_repo.add_article_into_favorites`. It then returns the article with `favorited=True` and `favorites_count + 1`.\n- **DELETE** `/api/articles/{slug}/favorite` is served by `remove_article_from_favorites` (line 82). The route name is `articles:unmark-article-favorite`. If the article is currently favorited, it calls `articles_repo.remove_article_from_favorites`. It then returns the article with `favorited=False` and `favorites_count - 1`.\n\nBoth routes use `get_article_by_slug_from_path` as a dependency to load the article, and both return `ArticleInResponse`. I didn't open the router setup, so the `/api/articles` prefix comes from the usual mounting and I haven't checked it.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11009,
+              "costUsd": 0.059705100000000004,
+              "inputTokens": 6,
+              "outputTokens": 835,
+              "cacheCreationTokens": 10581,
+              "cacheReadTokens": 90191,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-fastapi-token-callers",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 100451,
+            "medianOutputTokens": 758,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 9793,
+            "medianCostUsd": 0.0604,
+            "spread": {
+              "inputTokens": {
+                "min": 100414,
+                "max": 100601
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 9677,
+                "max": 10251
+              },
+              "costUsd": {
+                "min": 0.0584,
+                "max": 0.0626
+              }
+            },
+            "totalCostUsd": 0.1814,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`create_access_token_for_user` is called from four route functions in `app/api/routes/`. Each one calls it as `jwt.create_access_token_for_user(user, str(settings.secret_key.get_secret_value()))`.\n\n| File | Function | Call line |\n|---|---|---|\n| `app/api/routes/authentication.py` | `login` | 41 |\n| `app/api/routes/authentication.py` | `register` | 81 |\n| `app/api/routes/users.py` | `retrieve_current_user` | 23 |\n| `app/api/routes/users.py` | `update_current_user` | 61 |\n\nEach function uses the token to build the `UserWithToken` in its response.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9793,
+              "costUsd": 0.0626271,
+              "inputTokens": 6,
+              "outputTokens": 758,
+              "cacheCreationTokens": 11537,
+              "cacheReadTokens": 88871,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`create_access_token_for_user` is called from four route functions, in two files:\n\n| Function | File | Call line |\n|---|---|---|\n| `login` | `app/api/routes/authentication.py:23` | 41 |\n| `register` | `app/api/routes/authentication.py:62` | 81 |\n| `retrieve_current_user` | `app/api/routes/users.py:19` | 23 |\n| `update_current_user` | `app/api/routes/users.py:39` | 61 |\n\nEach one calls it as `jwt.create_access_token_for_user(...)` and uses the token in the user response it returns.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10251,
+              "costUsd": 0.0604135,
+              "inputTokens": 6,
+              "outputTokens": 791,
+              "cacheCreationTokens": 10880,
+              "cacheReadTokens": 89715,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`create_access_token_for_user` is called from four route handlers, in two files:\n\n| Function | File | Call line |\n|---|---|---|\n| `login` | `app/api/routes/authentication.py` | 41 |\n| `register` | `app/api/routes/authentication.py` | 81 |\n| `retrieve_current_user` | `app/api/routes/users.py` | 23 |\n| `update_current_user` | `app/api/routes/users.py` | 61 |\n\nEach one imports `jwt` from `app.services` and calls it as `jwt.create_access_token_for_user(...)`. They use it to build the token returned in the `UserInResponse`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9677,
+              "costUsd": 0.058407900000000006,
+              "inputTokens": 6,
+              "outputTokens": 652,
+              "cacheCreationTokens": 10726,
+              "cacheReadTokens": 89719,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 101067,
+            "medianOutputTokens": 630,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 9172,
+            "medianCostUsd": 0.0584,
+            "spread": {
+              "inputTokens": {
+                "min": 99945,
+                "max": 101073
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 8534,
+                "max": 10649
+              },
+              "costUsd": {
+                "min": 0.0581,
+                "max": 0.0588
+              }
+            },
+            "totalCostUsd": 0.1753,
+            "mcpRuns": 2,
+            "mcpTools": {
+              "find_callers": 2
+            },
+            "toolSearchCalls": 2
+          },
+          "runs": [
+            {
+              "answer": "Four functions in `app/api/routes/` call `create_access_token_for_user`. All of them call it as `jwt.create_access_token_for_user`.\n\n| Function | File | Line |\n|---|---|---|\n| `login` | `app/api/routes/authentication.py` | 41 |\n| `register` | `app/api/routes/authentication.py` | 81 |\n| `retrieve_current_user` | `app/api/routes/users.py` | 23 |\n| `update_current_user` | `app/api/routes/users.py` | 61 |\n\nThe code-graph lookup and a text search agree, and the graph reports no unresolved calls. Outside the routes, the function is also called from tests: `tests/conftest.py`, `test_authentication.py` and `test_jwt.py`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8534,
+              "costUsd": 0.0581328,
+              "inputTokens": 8,
+              "outputTokens": 559,
+              "cacheCreationTokens": 10877,
+              "cacheReadTokens": 90188,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "create_access_token_for_user"
+                  },
+                  "result": "{\"query\":{\"name\":\"create_access_token_for_user\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"create_access_token_for_user\",\"caller\":\"login\",\"callerKind\":\"Function\",\"file\":\"app/api/routes/authentication.py\",\"line\":41,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"register\",\"callerKind\":\"Function\",\"file\":\"app/api/routes/authentication.py\",\"line\":81,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"retrieve_current_user\",\"callerKind\":\"Function\",\"file\":\"app/api/routes/users.py\",\"line\":23,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"update_current_user\",\"callerKind\":\"Function\",\"file\":\"app/api/routes/users.py\",\"line\":61,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"token\",\"callerKind\":\"Function\",\"file\":\"tests/conftest.py\",\"line\":82,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"test_unable_to_login_when_user_does_not_exist_any_more\",\"callerKind\":\"Function\",\"file\":\"tests/test_api/test_routes/test_authentication.py\",\"line\":25,\"expression\":\"create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"test_creating_token_for_user\",\"callerKind\":\"Function\",\"file\":\"tests/test_services/test_jwt.py\",\"line\":27,\"expression\":\"create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"test_retrieving_token_from_user\",\"callerKind\":\"Function\",\"file\":\"tests/test_services/test_jwt.py\",\"line\":34,\"expression\":\"create_access_token_for_user\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named create_access_token_for_user in the scanned files is left unresolved, so the resolved callers (… (2121 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "In `app/api/routes/`, four call sites in two files call `create_access_token_for_user`. Each is in a different handler.\n\n| Function | File | Call line | Route |\n|---|---|---|---|\n| `login` | `app/api/routes/authentication.py` | 41 | `POST /login` (`auth:login`) |\n| `register` | `app/api/routes/authentication.py` | 81 | `POST` (`auth:register`, route decorator starts at line 56) |\n| `retrieve_current_user` | `app/api/routes/users.py` | 23 | `GET \"\"` (`users:get-current-user`) |\n| `update_current_user` | `app/api/routes/users.py` | 61 | `PUT \"\"` (`users:update-current-user`) |\n\nI found these with a text search for the name, then matched each hit to its enclosing handler by line number. I didn't use the code graph, so a call through an alias or re-export would not have shown up. The call sites are all written as `jwt.create_access_token_for_user(...)`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10649,
+              "costUsd": 0.058379200000000006,
+              "inputTokens": 6,
+              "outputTokens": 880,
+              "cacheCreationTokens": 10147,
+              "cacheReadTokens": 89792,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four functions in `app/api/routes/` call `create_access_token_for_user`. A text search and the code graph agree on this, and the graph reports no unresolved calls.\n\n| Function | File | Line |\n|---|---|---|\n| `login` | `app/api/routes/authentication.py` | 41 |\n| `register` | `app/api/routes/authentication.py` | 81 |\n| `retrieve_current_user` | `app/api/routes/users.py` | 23 |\n| `update_current_user` | `app/api/routes/users.py` | 61 |\n\nEach one calls it as `jwt.create_access_token_for_user(...)`.\n\nThe function is also called from tests, which are outside `app/api/routes/`. Those are the `token` fixture in `tests/conftest.py`, two tests in `tests/test_services/test_jwt.py`, and `test_unable_to_login_when_user_does_not_exist_any_more` in `tests/test_api/test_routes/test_authentication.py`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9172,
+              "costUsd": 0.0588344,
+              "inputTokens": 8,
+              "outputTokens": 630,
+              "cacheCreationTokens": 10875,
+              "cacheReadTokens": 90184,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "create_access_token_for_user"
+                  },
+                  "result": "{\"query\":{\"name\":\"create_access_token_for_user\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"create_access_token_for_user\",\"caller\":\"login\",\"callerKind\":\"Function\",\"file\":\"app/api/routes/authentication.py\",\"line\":41,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"register\",\"callerKind\":\"Function\",\"file\":\"app/api/routes/authentication.py\",\"line\":81,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"retrieve_current_user\",\"callerKind\":\"Function\",\"file\":\"app/api/routes/users.py\",\"line\":23,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"update_current_user\",\"callerKind\":\"Function\",\"file\":\"app/api/routes/users.py\",\"line\":61,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"token\",\"callerKind\":\"Function\",\"file\":\"tests/conftest.py\",\"line\":82,\"expression\":\"jwt.create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"test_unable_to_login_when_user_does_not_exist_any_more\",\"callerKind\":\"Function\",\"file\":\"tests/test_api/test_routes/test_authentication.py\",\"line\":25,\"expression\":\"create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"test_creating_token_for_user\",\"callerKind\":\"Function\",\"file\":\"tests/test_services/test_jwt.py\",\"line\":27,\"expression\":\"create_access_token_for_user\",\"relationship\":\"CALLS\"},{\"target\":\"create_access_token_for_user\",\"caller\":\"test_retrieving_token_from_user\",\"callerKind\":\"Function\",\"file\":\"tests/test_services/test_jwt.py\",\"line\":34,\"expression\":\"create_access_token_for_user\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":0,\"sites\":[]},\"completeness\":\"No call named create_access_token_for_user in the scanned files is left unresolved, so the resolved callers (… (2121 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-fastapi-token-impact",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 133064,
+            "medianOutputTokens": 1196,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 14735,
+            "medianCostUsd": 0.0681,
+            "spread": {
+              "inputTokens": {
+                "min": 132798,
+                "max": 133432
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 13202,
+                "max": 14741
+              },
+              "costUsd": {
+                "min": 0.0651,
+                "max": 0.07
+              }
+            },
+            "totalCostUsd": 0.2033,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Changing the signature of `create_access_token_for_user` (`app/services/jwt.py:27`, currently `(user: User, secret_key: str) -> str`) affects four routes. All of them sit under the `/api` prefix (`api_prefix` in `app/core/settings/app.py:27`).\n\n| Method | Path | Handler | Call site |\n|---|---|---|---|\n| POST | `/api/users/login` | `login` | `app/api/routes/authentication.py:41` |\n| POST | `/api/users` | `register` | `app/api/routes/authentication.py:81` |\n| GET | `/api/user` | `retrieve_current_user` | `app/api/routes/users.py:23` |\n| PUT | `/api/user` | `update_current_user` | `app/api/routes/users.py:61` |\n\nEach of these handlers calls the function to put a fresh token in the `UserInResponse`.\n\nOther callers that would also break, though they aren't HTTP routes:\n- `tests/conftest.py:82` (the token fixture)\n- `tests/test_services/test_jwt.py:27` and `:34`\n- `tests/test_api/test_routes/test_authentication.py:25`\n\nI didn't check whether the `users.py:23` and `users.py:61` call sites are `retrieve_current_user` and `update_current_user` respectively. I inferred that from the line numbers and the handler positions. The other two I confirmed.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 14735,
+              "costUsd": 0.0700426,
+              "inputTokens": 8,
+              "outputTokens": 1196,
+              "cacheCreationTokens": 11484,
+              "cacheReadTokens": 121306,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 4,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four routes call `create_access_token_for_user`. The API prefix is `/api` (`app/core/settings/app.py:27`), and the auth and users routers add their own prefixes on top (`app/api/routes/api.py:7-8`).\n\n| Method | Path | Handler | Call site |\n|---|---|---|---|\n| POST | `/api/users/login` | `login` | `app/api/routes/authentication.py:41` |\n| POST | `/api/users` | `register` | `app/api/routes/authentication.py:81` |\n| GET | `/api/user` | `retrieve_current_user` | `app/api/routes/users.py:23` |\n| PUT | `/api/user` | `update_current_user` | `app/api/routes/users.py:61` |\n\nThe function is defined at `app/services/jwt.py:27` as `(user: User, secret_key: str) -> str`.\n\nA signature change would also break these non-route callers:\n- `tests/conftest.py:82`\n- `tests/test_api/test_routes/test_authentication.py:25`\n- `tests/test_services/test_jwt.py:27` and `:34`\n\nThe `tests/test_services/test_jwt.py` calls use keyword arguments (`user=`, `secret_key=`). Renaming either parameter would break them, but adding an optional parameter would not.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 14741,
+              "costUsd": 0.06813999999999999,
+              "inputTokens": 8,
+              "outputTokens": 1248,
+              "cacheCreationTokens": 10856,
+              "cacheReadTokens": 122200,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 4,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four routes call `create_access_token_for_user`. The function is defined at `app/services/jwt.py:27` as `(user: User, secret_key: str) -> str`. The API prefix is `/api` (`settings.api_prefix`), and the auth and users routers mount under `/users` and `/user`.\n\n| Method | Path | Handler |\n|---|---|---|\n| POST | `/api/users/login` | `login` (`authentication.py:41`) |\n| POST | `/api/users` | `register` (`authentication.py:81`) |\n| GET | `/api/user` | `retrieve_current_user` (`users.py:23`) |\n| PUT | `/api/user` | `update_current_user` (`users.py:61`) |\n\nNo other routes in `app/` call it. A signature change would also break these non-route callers:\n- `tests/conftest.py:82`\n- `tests/test_services/test_jwt.py:27` and `:34`\n- `tests/test_api/test_routes/test_authentication.py:25`",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 13202,
+              "costUsd": 0.0651345,
+              "inputTokens": 8,
+              "outputTokens": 927,
+              "cacheCreationTokens": 10899,
+              "cacheReadTokens": 122525,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 103189,
+            "medianOutputTokens": 908,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 12158,
+            "medianCostUsd": 0.0675,
+            "spread": {
+              "inputTokens": {
+                "min": 101612,
+                "max": 103321
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 10477,
+                "max": 12161
+              },
+              "costUsd": {
+                "min": 0.0603,
+                "max": 0.0682
+              }
+            },
+            "totalCostUsd": 0.1961,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "impact_of": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "Changing the signature of `create_access_token_for_user` (defined at `app/services/jwt.py:27`) affects four HTTP routes:\n\n| Method | Full path | Handler | File |\n|---|---|---|---|\n| POST | `/api/users/login` | `login` | `app/api/routes/authentication.py:23` |\n| POST | `/api/users` | `register` | `app/api/routes/authentication.py:62` |\n| GET | `/api/user` | `retrieve_current_user` | `app/api/routes/users.py:19` |\n| PUT | `/api/user` | `update_current_user` | `app/api/routes/users.py:39` |\n\nEach handler calls the function directly, and the call graph has no unresolved calls, so these are all of the callers.\n\nFour test functions also call it and would need updating:\n- `token` in `tests/conftest.py:81`\n- `test_unable_to_login_when_user_does_not_exist_any_more` in `tests/test_api/test_routes/test_authentication.py:22`\n- `test_creating_token_for_user` in `tests/test_services/test_jwt.py:26`\n- `test_retrieving_token_from_user` in `tests/test_services/test_jwt.py:33`\n\nThe `token` fixture in `conftest.py` is likely used by many other tests, so a signature change could break more of them indirectly.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10477,
+              "costUsd": 0.0603369,
+              "inputTokens": 8,
+              "outputTokens": 611,
+              "cacheCreationTokens": 11295,
+              "cacheReadTokens": 90309,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "symbol": "create_access_token_for_user"
+                  },
+                  "result": "{\"symbol\":\"create_access_token_for_user\",\"file\":null,\"maxDepth\":5,\"seeds\":[{\"name\":\"create_access_token_for_user\",\"className\":null,\"file\":\"app/services/jwt.py\",\"line\":27,\"endLine\":32}],\"callers\":[{\"name\":\"login\",\"className\":null,\"file\":\"app/api/routes/authentication.py\",\"line\":23,\"endLine\":53,\"depth\":1},{\"name\":\"register\",\"className\":null,\"file\":\"app/api/routes/authentication.py\",\"line\":62,\"endLine\":93,\"depth\":1},{\"name\":\"retrieve_current_user\",\"className\":null,\"file\":\"app/api/routes/users.py\",\"line\":19,\"endLine\":35,\"depth\":1},{\"name\":\"update_current_user\",\"className\":null,\"file\":\"app/api/routes/users.py\",\"line\":39,\"endLine\":73,\"depth\":1},{\"name\":\"token\",\"className\":null,\"file\":\"tests/conftest.py\",\"line\":81,\"endLine\":82,\"depth\":1},{\"name\":\"test_unable_to_login_when_user_does_not_exist_any_more\",\"className\":null,\"file\":\"tests/test_api/test_routes/test_authentication.py\",\"line\":22,\"endLine\":32,\"depth\":1},{\"name\":\"test_creating_token_for_user\",\"className\":null,\"file\":\"tests/test_services/test_jwt.py\",\"line\":26,\"endLine\":30,\"depth\":1},{\"name\":\"test_retrieving_token_from_user\",\"className\":null,\"file\":\"tests/test_services/test_jwt.py\",\"line\":33,\"endLine\":36,\"depth\":1}],\"moduleCallers\":[],\"routes\":[{\"method\":\"POST\",\"path\":\"/login\",\"fullPath\":\"/api/users/login\",\"framework\":\"fastapi\",\"file\":\"app/api/routes/authentication.py\",\"line\":22,\"reachedThrough\":[{\"function\":\"login\",\"functionFile\":\"app/api/routes/authentication.py\",\"as\":\"handler\"}]},{\"method\":\"POST\",\"path\":\"\",\"fullPath\":\"/api/users\",\"framework\":\"fastapi\",\"file\":\"app/api/routes/authentication.py\",\"line\":56,\"reachedThrough\":[{\"function\":\"register\",\"functionFile\":\"app/api/routes/authentication.py\",\"as\":\"handler\"}]},{\"method\":\"GET\",\"path\":\"\",\"fullPath\":\"/api/user\",\"framework\":\"fastapi\",\"file\":\"app/api/routes/users.py\",\"line\":18,\"reachedThrough\":[{\"function\":\"retrieve_current_user\",\"functionFile\":\"app/api/routes/users.py\",\"as\":\"handler\"}]},{\"method\":\"PUT\",\"path\":\"\",\"fullPath\":\"/api/user\",\"framework\":\"fastapi\",\"file\":\"app/ap… (2635 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changing the signature of `create_access_token_for_user` (`app/services/jwt.py:27`) affects four HTTP routes:\n\n| Method | Path | Handler |\n|---|---|---|\n| POST | `/api/users/login` | `login` (`app/api/routes/authentication.py:23`) |\n| POST | `/api/users` | `register` (`app/api/routes/authentication.py:62`) |\n| GET | `/api/user` | `retrieve_current_user` (`app/api/routes/users.py:19`) |\n| PUT | `/api/user` | `update_current_user` (`app/api/routes/users.py:39`) |\n\nEach handler calls the function directly to attach a fresh token to its `UserInResponse`. The code graph found no unresolved calls, so these are all the call sites.\n\nSome non-route code calls it too, so a signature change would break these as well:\n- `tests/conftest.py:82` (the `token` fixture)\n- `tests/test_api/test_routes/test_authentication.py:25`\n- `tests/test_services/test_jwt.py:27` and `:34`\n\nThe tests at `tests/test_services/test_jwt.py` and `tests/test_api/test_routes/test_authentication.py` call it with keyword arguments (`user=`, `secret_key=`). Renaming those parameters would break the tests even if positional callers still worked.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 12161,
+              "costUsd": 0.0681976,
+              "inputTokens": 8,
+              "outputTokens": 919,
+              "cacheCreationTokens": 12477,
+              "cacheReadTokens": 90836,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 2,
+                "mcp__concentrate__impact_of": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "symbol": "create_access_token_for_user",
+                    "file": "app/services/jwt.py"
+                  },
+                  "result": "{\"symbol\":\"create_access_token_for_user\",\"file\":\"app/services/jwt.py\",\"maxDepth\":5,\"seeds\":[{\"name\":\"create_access_token_for_user\",\"className\":null,\"file\":\"app/services/jwt.py\",\"line\":27,\"endLine\":32}],\"callers\":[{\"name\":\"login\",\"className\":null,\"file\":\"app/api/routes/authentication.py\",\"line\":23,\"endLine\":53,\"depth\":1},{\"name\":\"register\",\"className\":null,\"file\":\"app/api/routes/authentication.py\",\"line\":62,\"endLine\":93,\"depth\":1},{\"name\":\"retrieve_current_user\",\"className\":null,\"file\":\"app/api/routes/users.py\",\"line\":19,\"endLine\":35,\"depth\":1},{\"name\":\"update_current_user\",\"className\":null,\"file\":\"app/api/routes/users.py\",\"line\":39,\"endLine\":73,\"depth\":1},{\"name\":\"token\",\"className\":null,\"file\":\"tests/conftest.py\",\"line\":81,\"endLine\":82,\"depth\":1},{\"name\":\"test_unable_to_login_when_user_does_not_exist_any_more\",\"className\":null,\"file\":\"tests/test_api/test_routes/test_authentication.py\",\"line\":22,\"endLine\":32,\"depth\":1},{\"name\":\"test_creating_token_for_user\",\"className\":null,\"file\":\"tests/test_services/test_jwt.py\",\"line\":26,\"endLine\":30,\"depth\":1},{\"name\":\"test_retrieving_token_from_user\",\"className\":null,\"file\":\"tests/test_services/test_jwt.py\",\"line\":33,\"endLine\":36,\"depth\":1}],\"moduleCallers\":[],\"routes\":[{\"method\":\"POST\",\"path\":\"/login\",\"fullPath\":\"/api/users/login\",\"framework\":\"fastapi\",\"file\":\"app/api/routes/authentication.py\",\"line\":22,\"reachedThrough\":[{\"function\":\"login\",\"functionFile\":\"app/api/routes/authentication.py\",\"as\":\"handler\"}]},{\"method\":\"POST\",\"path\":\"\",\"fullPath\":\"/api/users\",\"framework\":\"fastapi\",\"file\":\"app/api/routes/authentication.py\",\"line\":56,\"reachedThrough\":[{\"function\":\"register\",\"functionFile\":\"app/api/routes/authentication.py\",\"as\":\"handler\"}]},{\"method\":\"GET\",\"path\":\"\",\"fullPath\":\"/api/user\",\"framework\":\"fastapi\",\"file\":\"app/api/routes/users.py\",\"line\":18,\"reachedThrough\":[{\"function\":\"retrieve_current_user\",\"functionFile\":\"app/api/routes/users.py\",\"as\":\"handler\"}]},{\"method\":\"PUT\",\"path\":\"\",\"fullPath\":\"/api/user\",\"framework\":\"fastap… (2652 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Changing the signature of `create_access_token_for_user` (`app/services/jwt.py:27`, currently `(user: User, secret_key: str) -> str`) affects four HTTP routes:\n\n| Method | Path | Handler | Call site |\n|---|---|---|---|\n| POST | `/api/users/login` | `login` (`app/api/routes/authentication.py:23`) | `authentication.py:41` |\n| POST | `/api/users` | `register` (`app/api/routes/authentication.py:62`) | `authentication.py:81` |\n| GET | `/api/user` | `retrieve_current_user` (`app/api/routes/users.py:19`) | `users.py:23` |\n| PUT | `/api/user` | `update_current_user` (`app/api/routes/users.py:39`) | `users.py:61` |\n\nThose four handlers are the only callers in the app code. The call graph shows no unresolved calls, and a text search found no other uses.\n\nTests also call the function directly, so they would need updating too:\n- `tests/conftest.py:82` (the `token` fixture)\n- `tests/test_api/test_routes/test_authentication.py:25`\n- `tests/test_services/test_jwt.py:27` and `:34`\n\nThe `/api/users/login` and `/api/users` paths are the full paths. They combine the router's own path with its mount prefix.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 12158,
+              "costUsd": 0.06754399999999999,
+              "inputTokens": 8,
+              "outputTokens": 908,
+              "cacheCreationTokens": 12341,
+              "cacheReadTokens": 90840,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 2,
+                "mcp__concentrate__impact_of": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "symbol": "create_access_token_for_user",
+                    "file": "app/services/jwt.py"
+                  },
+                  "result": "{\"symbol\":\"create_access_token_for_user\",\"file\":\"app/services/jwt.py\",\"maxDepth\":5,\"seeds\":[{\"name\":\"create_access_token_for_user\",\"className\":null,\"file\":\"app/services/jwt.py\",\"line\":27,\"endLine\":32}],\"callers\":[{\"name\":\"login\",\"className\":null,\"file\":\"app/api/routes/authentication.py\",\"line\":23,\"endLine\":53,\"depth\":1},{\"name\":\"register\",\"className\":null,\"file\":\"app/api/routes/authentication.py\",\"line\":62,\"endLine\":93,\"depth\":1},{\"name\":\"retrieve_current_user\",\"className\":null,\"file\":\"app/api/routes/users.py\",\"line\":19,\"endLine\":35,\"depth\":1},{\"name\":\"update_current_user\",\"className\":null,\"file\":\"app/api/routes/users.py\",\"line\":39,\"endLine\":73,\"depth\":1},{\"name\":\"token\",\"className\":null,\"file\":\"tests/conftest.py\",\"line\":81,\"endLine\":82,\"depth\":1},{\"name\":\"test_unable_to_login_when_user_does_not_exist_any_more\",\"className\":null,\"file\":\"tests/test_api/test_routes/test_authentication.py\",\"line\":22,\"endLine\":32,\"depth\":1},{\"name\":\"test_creating_token_for_user\",\"className\":null,\"file\":\"tests/test_services/test_jwt.py\",\"line\":26,\"endLine\":30,\"depth\":1},{\"name\":\"test_retrieving_token_from_user\",\"className\":null,\"file\":\"tests/test_services/test_jwt.py\",\"line\":33,\"endLine\":36,\"depth\":1}],\"moduleCallers\":[],\"routes\":[{\"method\":\"POST\",\"path\":\"/login\",\"fullPath\":\"/api/users/login\",\"framework\":\"fastapi\",\"file\":\"app/api/routes/authentication.py\",\"line\":22,\"reachedThrough\":[{\"function\":\"login\",\"functionFile\":\"app/api/routes/authentication.py\",\"as\":\"handler\"}]},{\"method\":\"POST\",\"path\":\"\",\"fullPath\":\"/api/users\",\"framework\":\"fastapi\",\"file\":\"app/api/routes/authentication.py\",\"line\":56,\"reachedThrough\":[{\"function\":\"register\",\"functionFile\":\"app/api/routes/authentication.py\",\"as\":\"handler\"}]},{\"method\":\"GET\",\"path\":\"\",\"fullPath\":\"/api/user\",\"framework\":\"fastapi\",\"file\":\"app/api/routes/users.py\",\"line\":18,\"reachedThrough\":[{\"function\":\"retrieve_current_user\",\"functionFile\":\"app/api/routes/users.py\",\"as\":\"handler\"}]},{\"method\":\"PUT\",\"path\":\"\",\"fullPath\":\"/api/user\",\"framework\":\"fastap… (2652 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-fastapi-favorites-table",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "data",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97974,
+            "medianOutputTokens": 638,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 10372,
+            "medianCostUsd": 0.0539,
+            "spread": {
+              "inputTokens": {
+                "min": 97958,
+                "max": 99502
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 9784,
+                "max": 11018
+              },
+              "costUsd": {
+                "min": 0.0538,
+                "max": 0.0643
+              }
+            },
+            "totalCostUsd": 0.172,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two methods on `ArticlesRepository` write to the `favorites` table. Both are in `app/db/repositories/articles.py`.\n\n- **`add_article_into_favorites(article, user)`** (line 275) calls the `add-article-to-favorites!` query. That query is an `INSERT INTO favorites (user_id, article_id)` with `ON CONFLICT DO NOTHING`, so favoriting twice is harmless. It's defined at `app/db/queries/sql/articles.sql:1`.\n- **`remove_article_from_favorites(article, user)`** (line 282) calls the `remove-article-from-favorites!` query. That query is a `DELETE FROM favorites` for the matching user and article. It's defined at `app/db/queries/sql/articles.sql:8`.\n\nThe other favorites-related repository methods only read. These are `is_article_in_favorites`, `get_favorites_count_for_article_by_slug`, and the favorited filter in the article list query around line 183. No other repository writes to `favorites`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11018,
+              "costUsd": 0.0642719,
+              "inputTokens": 6,
+              "outputTokens": 877,
+              "cacheCreationTokens": 11677,
+              "cacheReadTokens": 87819,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two methods on `ArticlesRepository` write to the `favorites` table. Both are in `app/db/repositories/articles.py`, and each calls a SQL query defined in `app/db/queries/sql/articles.sql`.\n\n- **`add_article_into_favorites`** (line 275) inserts a row, using the `add-article-to-favorites!` query: `INSERT INTO favorites (user_id, article_id)`.\n- **`remove_article_from_favorites`** (line 282) deletes a row, using the `remove-article-from-favorites!` query: `DELETE FROM favorites`.\n\nThe other favorites-related methods only read:\n- `get_favorites_count_for_article_by_slug` (line 261)\n- `is_article_in_favorites` (around line 268)\n- The article-listing query around line 183, which joins `favorites`",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10372,
+              "costUsd": 0.0537969,
+              "inputTokens": 6,
+              "outputTokens": 624,
+              "cacheCreationTokens": 9679,
+              "cacheReadTokens": 88289,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two methods write to the `favorites` table. Both are in `ArticlesRepository` (`app/db/repositories/articles.py`):\n\n- **`add_article_into_favorites(article, user)`** (line 275) inserts a row into `favorites`. It calls the `add-article-to-favorites!` query, which runs `INSERT INTO favorites (user_id, article_id)`.\n- **`remove_article_from_favorites(...)`** (line 282) deletes a row from `favorites`. It calls the `remove-article-from-favorites!` query, which runs `DELETE FROM favorites`.\n\nThe other favorites-related methods only read the table. These are `get_favorites_count_for_article_by_slug`, `is_article_in_favorites`, and the join in the article-filtering query around line 183.\n\nThe SQL itself is in `app/db/queries/sql/articles.sql`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9784,
+              "costUsd": 0.0539275,
+              "inputTokens": 6,
+              "outputTokens": 638,
+              "cacheCreationTokens": 9677,
+              "cacheReadTokens": 88275,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 68183,
+            "medianOutputTokens": 629,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 9471,
+            "medianCostUsd": 0.0567,
+            "spread": {
+              "inputTokens": {
+                "min": 67075,
+                "max": 100407
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 8101,
+                "max": 10231
+              },
+              "costUsd": {
+                "min": 0.054,
+                "max": 0.0599
+              }
+            },
+            "totalCostUsd": 0.1706,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 1
+          },
+          "runs": [
+            {
+              "answer": "Two methods on `ArticlesRepository` in `app/db/repositories/articles.py` write to the `favorites` table:\n\n- **`add_article_into_favorites`** (line 275) inserts a row. It calls the `add-article-to-favorites!` query, which runs `INSERT INTO favorites (user_id, article_id)` (`app/db/queries/sql/articles.sql:1`).\n- **`remove_article_from_favorites`** (line 282) deletes a row. It calls the `remove-article-from-favorites!` query, which runs a `DELETE FROM favorites` (`app/db/queries/sql/articles.sql:8`).\n\nThe other repository methods only read from the table:\n\n- `get_favorites_count_for_article_by_slug` and `is_article_in_favorites` use the `get-favorites-count-for-article` and `is-article-in-favorites` queries.\n- The pypika query around line 183 only joins `favorites` to compute the `favorited` flag.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8101,
+              "costUsd": 0.05398820000000001,
+              "inputTokens": 4,
+              "outputTokens": 621,
+              "cacheCreationTokens": 10529,
+              "cacheReadTokens": 56542,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two repository methods write to the `favorites` table. Both are in `app/db/repositories/articles.py`, on `ArticlesRepository`:\n\n| Method | Line | Operation | SQL query it calls |\n|---|---|---|---|\n| `add_article_into_favorites(article, user)` | 275 | INSERT | `add-article-to-favorites!` (`INSERT INTO favorites (user_id, article_id)`) |\n| `remove_article_from_favorites(article, user)` | 282 | DELETE | `remove-article-from-favorites!` (`DELETE FROM favorites`, as I read it from the `FROM favorites` match) |\n\nBoth queries are defined in `app/db/queries/sql/articles.sql`. I didn't open that file, so the DELETE is inferred from the query name and the `FROM favorites` line.\n\nThe other favorites-related methods only read the table: `get_favorites_count_for_article_by_slug` and the `is_article_in_favorites` check. The article listing query also joins on `favorites`, but only to read.\n\nThe route helpers `favorite_article` and `remove_article_from_favorites` in `app/api/routes/articles/articles_common.py` (around lines 58 and 88) call these two methods. They don't touch the table themselves.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10231,
+              "costUsd": 0.0598679,
+              "inputTokens": 6,
+              "outputTokens": 765,
+              "cacheCreationTokens": 11638,
+              "cacheReadTokens": 56539,
+              "toolCalls": 2,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two methods on `ArticlesRepository` in `app/db/repositories/articles.py` write to the `favorites` table:\n\n- **`add_article_into_favorites(article, user)`** (line 275) calls the `add-article-to-favorites` query. That query runs `INSERT INTO favorites (user_id, article_id)`.\n- **`remove_article_from_favorites(...)`** (line 282) calls the `remove-article-from-favorites` query. That query deletes from `favorites`.\n\nBoth queries are in `app/db/queries/sql/articles.sql`.\n\nThe other repository code that touches `favorites` only reads it:\n\n- `get_favorites_count_for_article_by_slug`\n- `is_article_in_favorites`\n- The join in the article-filtering query around line 183\n\nI didn't check which handlers or routes call the two write methods.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9471,
+              "costUsd": 0.0567461,
+              "inputTokens": 6,
+              "outputTokens": 629,
+              "cacheCreationTokens": 10360,
+              "cacheReadTokens": 90041,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-fastapi-env",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "env",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 133154,
+            "medianOutputTokens": 1531,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 15576,
+            "medianCostUsd": 0.0736,
+            "spread": {
+              "inputTokens": {
+                "min": 133006,
+                "max": 134161
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 7
+              },
+              "durationMs": {
+                "min": 15431,
+                "max": 17567
+              },
+              "costUsd": {
+                "min": 0.0693,
+                "max": 0.0745
+              }
+            },
+            "totalCostUsd": 0.2174,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Settings are Pydantic `BaseSettings` classes in `app/core/settings/`. Pydantic matches env var names to field names case-insensitively, so `DATABASE_URL` fills `database_url`.\n\n**The variable that selects the environment is `APP_ENV`.** It's defined in `base.py:13` and has three valid values:\n- `prod`: the default if unset.\n- `dev`\n- `test`\n\n`get_app_settings()` in `config.py` reads `BaseAppSettings().app_env`. It then returns `DevAppSettings`, `ProdAppSettings` or `TestAppSettings` to match.\n\n**Variables read by `AppSettings` (`app.py`):**\n\n| Variable | Type | Default |\n|---|---|---|\n| `DATABASE_URL` | PostgresDsn | **required** |\n| `SECRET_KEY` | SecretStr | **required** |\n| `DEBUG` | bool | `False` |\n| `DOCS_URL` | str | `/docs` |\n| `OPENAPI_PREFIX` | str | `\"\"` |\n| `OPENAPI_URL` | str | `/openapi.json` |\n| `REDOC_URL` | str | `/redoc` |\n| `TITLE` | str | `FastAPI example application` |\n| `VERSION` | str | `0.0.0` |\n| `MAX_CONNECTION_COUNT` | int | `10` |\n| `MIN_CONNECTION_COUNT` | int | `10` |\n| `API_PREFIX` | str | `/api` |\n| `JWT_TOKEN_PREFIX` | str | `Token` |\n| `ALLOWED_HOSTS` | List[str] | `[\"*\"]` |\n| `LOGGING_LEVEL` | int | `logging.INFO` |\n| `LOGGERS` | Tuple[str, str] | `(\"uvicorn.asgi\", \"uvicorn.access\")` |\n\n**Per-environment differences:**\n- **dev:** `debug=True`, logging level `DEBUG`, and a different title. It reads `.env`.\n- **prod:** it reads `prod.env` instead of `.env`.\n- **test:**\n  - `debug=True` and logging level `DEBUG`.\n  - `SECRET_KEY` defaults to `\"test_secret\"`, so it isn't required.\n  - Connection counts default to 5.\n  - `DATABASE_URL` is still required.\n  - It sets no `env_file` of its own, so it inherits the one from `base.py` (`.env`).\n\n`APP_ENV` is read before the environment-specific class is chosen, and `BaseAppSettings` always reads `.env`. In prod, `APP_ENV` therefore has to come from the real process environment or from `.env`. Putting it only in `prod.env` has no effect, because `prod.env` is read after the environment has already been selected. Real environment variables take precedence over any env file.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 15431,
+              "costUsd": 0.0745358,
+              "inputTokens": 8,
+              "outputTokens": 1531,
+              "cacheCreationTokens": 11768,
+              "cacheReadTokens": 121378,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 3,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The settings use pydantic `BaseSettings`. Each field is read from an environment variable with the same name, case-insensitively, and from the env file.\n\n**The variable that selects the environment is `APP_ENV`.** It is defined in `app/core/settings/base.py:13` as an enum with the values `prod`, `dev` and `test`, and it defaults to `prod`. `get_app_settings()` in `app/core/config.py:19` reads it first. It then picks `ProdAppSettings`, `DevAppSettings` or `TestAppSettings`.\n\n**Variables read through `AppSettings`** (`app/core/settings/app.py`):\n\n| Variable | Type | Default |\n|---|---|---|\n| `DATABASE_URL` | `PostgresDsn` | none, required |\n| `SECRET_KEY` | `SecretStr` | none, required |\n| `DEBUG` | bool | `False` |\n| `DOCS_URL` | str | `/docs` |\n| `OPENAPI_PREFIX` | str | `\"\"` |\n| `OPENAPI_URL` | str | `/openapi.json` |\n| `REDOC_URL` | str | `/redoc` |\n| `TITLE` | str | `FastAPI example application` |\n| `VERSION` | str | `0.0.0` |\n| `MAX_CONNECTION_COUNT` | int | `10` |\n| `MIN_CONNECTION_COUNT` | int | `10` |\n| `API_PREFIX` | str | `/api` |\n| `JWT_TOKEN_PREFIX` | str | `Token` |\n| `ALLOWED_HOSTS` | list of str, given as JSON | `[\"*\"]` |\n| `LOGGING_LEVEL` | int | `INFO` |\n| `LOGGERS` | tuple of two str | `(\"uvicorn.asgi\", \"uvicorn.access\")` |\n\n**Differences by environment**\n- **dev** (`development.py`): reads `.env`. Defaults to `DEBUG=True` and `LOGGING_LEVEL=DEBUG`, and uses a \"Dev\" title.\n- **prod** (`production.py`): reads `prod.env`. The base class also sets `env_file = \".env\"`, so `APP_ENV` itself is resolved from `.env` or from the real environment.\n- **test** (`test.py`): `SECRET_KEY` defaults to `\"test_secret\"`, so it is no longer required. `DATABASE_URL` is still required. `DEBUG` and `LOGGING_LEVEL` default to debug values, and the connection counts default to `5`.\n\nReal environment variables override values in the env file.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 15576,
+              "costUsd": 0.0735904,
+              "inputTokens": 8,
+              "outputTokens": 1621,
+              "cacheCreationTokens": 11269,
+              "cacheReadTokens": 122884,
+              "toolCalls": 7,
+              "toolsByName": {
+                "Glob": 1,
+                "Grep": 1,
+                "Read": 5
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**`APP_ENV` selects the environment.** It's defined in `app/core/settings/base.py:13` as `app_env: AppEnvTypes`, which accepts `prod`, `dev` or `test` and defaults to `prod`. `get_app_settings()` in `app/core/config.py:19` reads it and returns `DevAppSettings`, `ProdAppSettings` or `TestAppSettings` to match.\n\nSettings are pydantic `BaseSettings`, so each field maps to an env var of the same name, case-insensitively. They are also loaded from an env file: `.env` for base and dev, and `prod.env` for prod.\n\n**Required (no default)**\n- `DATABASE_URL` is a `PostgresDsn`. Test also requires it.\n- `SECRET_KEY` is a `SecretStr`. Test defaults it to `\"test_secret\"`.\n\n**Optional (defaults in parentheses)**\n- `DEBUG` (`False`; `True` in dev and test)\n- `DOCS_URL` (`/docs`)\n- `OPENAPI_PREFIX` (empty)\n- `OPENAPI_URL` (`/openapi.json`)\n- `REDOC_URL` (`/redoc`)\n- `TITLE` (`FastAPI example application`; dev and test change it)\n- `VERSION` (`0.0.0`)\n- `MAX_CONNECTION_COUNT` (`10`; `5` in test)\n- `MIN_CONNECTION_COUNT` (`10`; `5` in test)\n- `API_PREFIX` (`/api`)\n- `JWT_TOKEN_PREFIX` (`Token`)\n- `ALLOWED_HOSTS` (`[\"*\"]`, parsed as JSON)\n- `LOGGING_LEVEL` (`logging.INFO`; `DEBUG` in dev and test)\n- `LOGGERS` (`(\"uvicorn.asgi\", \"uvicorn.access\")`)\n\nThe environment-specific classes only override defaults. Because env vars take priority over these defaults, you can still override any of them with an env var.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 17567,
+              "costUsd": 0.0693061,
+              "inputTokens": 8,
+              "outputTokens": 1318,
+              "cacheCreationTokens": 10977,
+              "cacheReadTokens": 122021,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 3,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 137579,
+            "medianOutputTokens": 1413,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 16124,
+            "medianCostUsd": 0.0758,
+            "spread": {
+              "inputTokens": {
+                "min": 136840,
+                "max": 170334
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 8
+              },
+              "durationMs": {
+                "min": 14584,
+                "max": 16776
+              },
+              "costUsd": {
+                "min": 0.0746,
+                "max": 0.0813
+              }
+            },
+            "totalCostUsd": 0.2317,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**`APP_ENV` selects the environment.** The values are `prod` (the default), `dev` and `test`.\n\n`get_app_settings()` in `app/core/config.py:18` reads `BaseAppSettings().app_env`. It then builds `DevAppSettings`, `ProdAppSettings` or `TestAppSettings` to match.\n\nSettings are pydantic `BaseSettings`, so each field maps to an upper-cased environment variable. They also load from a dotenv file: `.env` for base and dev, and `prod.env` for prod. Test has no `env_file` of its own, so it inherits `.env`.\n\n**Required (no default):**\n- `DATABASE_URL`: a Postgres DSN.\n- `SECRET_KEY`: for JWT signing. The test environment defaults it to `test_secret`.\n\n**Optional (defaults in `app/core/settings/app.py`):**\n- `DEBUG` (False)\n- `DOCS_URL` (`/docs`)\n- `OPENAPI_PREFIX` (empty)\n- `OPENAPI_URL` (`/openapi.json`)\n- `REDOC_URL` (`/redoc`)\n- `TITLE`\n- `VERSION` (`0.0.0`)\n- `MAX_CONNECTION_COUNT` (10)\n- `MIN_CONNECTION_COUNT` (10)\n- `API_PREFIX` (`/api`)\n- `JWT_TOKEN_PREFIX` (`Token`)\n- `ALLOWED_HOSTS` (`[\"*\"]`, parsed as JSON)\n- `LOGGING_LEVEL` (`INFO`)\n- `LOGGERS` (`uvicorn.asgi`, `uvicorn.access`)\n\n**What each environment changes:**\n- **dev:** `DEBUG` is true, the logging level is `DEBUG` and the title is changed.\n- **test:** `DEBUG` is true, the logging level is `DEBUG`, `SECRET_KEY` has a default, and the connection counts are 5.\n- **prod:** it inherits the base defaults and reads `prod.env`.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 14584,
+              "costUsd": 0.07457459999999999,
+              "inputTokens": 8,
+              "outputTokens": 1413,
+              "cacheCreationTokens": 11986,
+              "cacheReadTokens": 124846,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1,
+                "Read": 3,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The settings are pydantic `BaseSettings` classes, so each field is read from an environment variable with the same name, case-insensitively. They also read from an env file.\n\n**The variable that selects the environment is `APP_ENV`.** It is defined in `app/core/settings/base.py` as `app_env: AppEnvTypes = prod`. The allowed values are `prod`, `dev` and `test`, and the default is `prod`. `app/core/config.py` uses it to pick the settings class: `DevAppSettings`, `ProdAppSettings` or `TestAppSettings`.\n\n**Required, with no default (except `SECRET_KEY` under `test`):**\n- `DATABASE_URL` is a Postgres DSN.\n- `SECRET_KEY` has a default of `test_secret` only in the `test` environment.\n\n**Optional, with defaults in `app/core/settings/app.py`:**\n- `DEBUG` is `False`. `dev` and `test` set it to `True`.\n- `DOCS_URL` is `/docs`.\n- `OPENAPI_PREFIX` is empty.\n- `OPENAPI_URL` is `/openapi.json`.\n- `REDOC_URL` is `/redoc`.\n- `TITLE` is \"FastAPI example application\". Each environment overrides it.\n- `VERSION` is `0.0.0`.\n- `MAX_CONNECTION_COUNT` is `10`. `test` sets it to `5`.\n- `MIN_CONNECTION_COUNT` is `10`. `test` sets it to `5`.\n- `API_PREFIX` is `/api`.\n- `JWT_TOKEN_PREFIX` is `Token`.\n- `ALLOWED_HOSTS` is `[\"*\"]`.\n- `LOGGING_LEVEL` is `logging.INFO`. `dev` and `test` set it to `DEBUG`.\n- `LOGGERS` is `(\"uvicorn.asgi\", \"uvicorn.access\")`.\n\n**Env files by environment:**\n- The base class and `dev` read `.env`.\n- `prod` reads `prod.env`.\n- `test` does not set `env_file`, so it inherits `.env` from the base class.\n\nReal environment variables take precedence over values in the env file.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 16124,
+              "costUsd": 0.0758216,
+              "inputTokens": 10,
+              "outputTokens": 1381,
+              "cacheCreationTokens": 11528,
+              "cacheReadTokens": 158796,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2,
+                "Bash": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Settings are pydantic v1 `BaseSettings` classes. Each field is read from an environment variable of the same name, case-insensitively, or from the env file. No `env_prefix` is set.\n\n**`APP_ENV` selects the environment.** It is defined in `app/core/settings/base.py:13` and accepts `prod`, `dev` or `test`, defaulting to `prod`. `get_app_settings()` in `app/core/config.py:18-21` reads `APP_ENV` first. It then builds `DevAppSettings`, `ProdAppSettings` or `TestAppSettings` accordingly.\n\n**Variables read by `AppSettings`** (`app/core/settings/app.py`):\n\n| Variable | Type | Default |\n|---|---|---|\n| `DATABASE_URL` | `PostgresDsn` | **required** |\n| `SECRET_KEY` | `SecretStr` | **required** (the test class defaults it to `test_secret`) |\n| `MAX_CONNECTION_COUNT` | int | 10 |\n| `MIN_CONNECTION_COUNT` | int | 10 |\n| `DEBUG` | bool | False |\n| `DOCS_URL` | str | `/docs` |\n| `OPENAPI_PREFIX` | str | `\"\"` |\n| `OPENAPI_URL` | str | `/openapi.json` |\n| `REDOC_URL` | str | `/redoc` |\n| `TITLE` | str | `FastAPI example application` |\n| `VERSION` | str | `0.0.0` |\n| `API_PREFIX` | str | `/api` |\n| `JWT_TOKEN_PREFIX` | str | `Token` |\n| `ALLOWED_HOSTS` | list of str, parsed from JSON | `[\"*\"]` |\n| `LOGGING_LEVEL` | int | `logging.INFO` |\n| `LOGGERS` | tuple of two str | `(\"uvicorn.asgi\", \"uvicorn.access\")` |\n\n**Per-environment differences:**\n- **dev** (`DevAppSettings`): reads `.env`. It defaults `DEBUG` to true and `LOGGING_LEVEL` to DEBUG.\n- **prod** (`ProdAppSettings`): reads `prod.env`. `APP_ENV` itself is resolved by `BaseAppSettings`, which reads `.env`, so it needs to be a real environment variable or live in `.env`.\n- **test** (`TestAppSettings`): sets no env file, so it uses only real environment variables. It defaults `DEBUG` to true, `LOGGING_LEVEL` to DEBUG, `SECRET_KEY` to `test_secret`, and both connection counts to 5. `DATABASE_URL` is still required.\n\nI read the settings classes directly. I didn't check for other `os.environ` reads outside `app/core`. The grep over `app/core` found none.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 16776,
+              "costUsd": 0.0813239,
+              "inputTokens": 8,
+              "outputTokens": 1930,
+              "cacheCreationTokens": 12372,
+              "cacheReadTokens": 125199,
+              "toolCalls": 8,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1,
+                "Read": 6
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-flask-comment-delete-route",
+      "sample": "internet-python-flask-realworld",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64574,
+            "medianOutputTokens": 328,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 6163,
+            "medianCostUsd": 0.0446,
+            "spread": {
+              "inputTokens": {
+                "min": 64554,
+                "max": 64652
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 5878,
+                "max": 7757
+              },
+              "costUsd": {
+                "min": 0.0442,
+                "max": 0.0529
+              }
+            },
+            "totalCostUsd": 0.1417,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`delete_comment_on_article(slug, cid)` serves that route. It's in `conduit/articles/views.py:161`, and the route decorator is on line 159.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 5878,
+              "costUsd": 0.0529141,
+              "inputTokens": 4,
+              "outputTokens": 172,
+              "cacheCreationTokens": 11467,
+              "cacheReadTokens": 53181,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`delete_comment_on_article(slug, cid)` serves that route. It's in `conduit/articles/views.py:161`, registered at line 159 with `@blueprint.route('/api/articles/<slug>/comments/<cid>', methods=('DELETE',))` and protected by `@jwt_required`.\n\nIt looks up the article by `slug` and raises `InvalidUsage.article_not_found()` if there isn't one.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6163,
+              "costUsd": 0.0441547,
+              "inputTokens": 4,
+              "outputTokens": 328,
+              "cacheCreationTokens": 8823,
+              "cacheReadTokens": 55747,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`delete_comment_on_article(slug, cid)` serves that route. It's in `conduit/articles/views.py:161`, registered at line 159 with `methods=('DELETE',)` and protected by `@jwt_required`.\n\nIt looks up the article by slug and raises `InvalidUsage.article_not_found()` if there isn't one. It then finds the comment with that `cid` among comments whose author is the current user's profile, and deletes it.\n\nI only read the first lines of the function. The query uses `.first()` and then calls `comment.delete()` without checking for `None`. If the comment doesn't exist, or belongs to someone else, that line would raise an `AttributeError`. I haven't run it to confirm.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7757,
+              "costUsd": 0.0445881,
+              "inputTokens": 4,
+              "outputTokens": 377,
+              "cacheCreationTokens": 8809,
+              "cacheReadTokens": 55741,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66439,
+            "medianOutputTokens": 268,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 6956,
+            "medianCostUsd": 0.0478,
+            "spread": {
+              "inputTokens": {
+                "min": 66323,
+                "max": 66479
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6781,
+                "max": 7331
+              },
+              "costUsd": {
+                "min": 0.0474,
+                "max": 0.048
+              }
+            },
+            "totalCostUsd": 0.1432,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`delete_comment_on_article(slug, cid)` serves `DELETE /api/articles/<slug>/comments/<cid>`. It's in `conduit/articles/views.py`: the route decorator is at line 159 and the function definition at line 161.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7331,
+              "costUsd": 0.0477583,
+              "inputTokens": 4,
+              "outputTokens": 268,
+              "cacheCreationTokens": 9852,
+              "cacheReadTokens": 56623,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`delete_comment_on_article(slug, cid)` serves that route. It's in `conduit/articles/views.py:161`, and the route decorator is on line 159.\n\nIt requires a JWT (`@jwt_required`). It looks up the article by slug and raises `InvalidUsage.article_not_found()` if there isn't one. It then finds the comment by `cid` among comments authored by the current user's profile, deletes it, and returns `'', 200`.\n\nIf the comment doesn't exist or belongs to someone else, `filter_by(...).first()` returns `None`. The following `comment.delete()` call then fails with an `AttributeError`, so the client gets a 500 instead of a 404.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6956,
+              "costUsd": 0.0480143,
+              "inputTokens": 4,
+              "outputTokens": 356,
+              "cacheCreationTokens": 9696,
+              "cacheReadTokens": 56623,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`delete_comment_on_article(slug, cid)` serves `DELETE /api/articles/<slug>/comments/<cid>`. It's in `conduit/articles/views.py:161`. The route decorator is on line 159, and the view requires a JWT through `@jwt_required`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6781,
+              "costUsd": 0.0474039,
+              "inputTokens": 4,
+              "outputTokens": 247,
+              "cacheCreationTokens": 9816,
+              "cacheReadTokens": 56619,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-flask-comment-table",
+      "sample": "internet-python-flask-realworld",
+      "category": "data",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 98219,
+            "medianOutputTokens": 1002,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 11629,
+            "medianCostUsd": 0.0627,
+            "spread": {
+              "inputTokens": {
+                "min": 65951,
+                "max": 103103
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 9252,
+                "max": 11960
+              },
+              "costUsd": {
+                "min": 0.0532,
+                "max": 0.0729
+              }
+            },
+            "totalCostUsd": 0.1889,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two view functions in `conduit/articles/views.py` write to the comment table:\n\n- **`make_comment_on_article`** (`views.py:150`) creates comments. It handles `POST /api/articles/<slug>/comments`. It builds a `Comment(article, current_user.profile, body, **kwargs)` and calls `comment.save()`.\n- **`delete_comment_on_article`** (`views.py:161`) deletes comments. It handles `DELETE /api/articles/<slug>/comments/<cid>`. It looks up the comment through `article.comments.filter_by(id=cid, author=current_user.profile)` and calls `comment.delete()`.\n\n`save()` and `delete()` come from the shared `Model` base class in `conduit/extensions.py` (lines 27 and 34). The `update()` method on the same class (line 21) is never called for comments, so comments can't be edited.\n\n- **Unchecked lookup:** `delete_comment_on_article` doesn't check whether `.first()` returned `None`. If the comment ID doesn't exist or belongs to another user, `comment.delete()` raises an `AttributeError`, which returns a 500 instead of a 404.\n- **Article deletion:** `delete_article` (`views.py:72`) has no explicit comment cleanup. The `Article.comments` relationship in `models.py:70` is declared without a cascade option. Deleting an article may therefore leave orphaned comment rows or fail on a foreign key, depending on the database. I didn't check how the `Comment` foreign key is declared.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11960,
+              "costUsd": 0.0627345,
+              "inputTokens": 6,
+              "outputTokens": 1075,
+              "cacheCreationTokens": 10808,
+              "cacheReadTokens": 87405,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two view functions in `conduit/articles/views.py` write to the `comment` table directly:\n\n- **`make_comment_on_article(slug, body, **kwargs)`** (`views.py:150`) creates comments. It handles `POST /api/articles/<slug>/comments`. It builds `Comment(article, current_user.profile, body, **kwargs)` and calls `comment.save()`.\n- **`delete_comment_on_article(slug, cid)`** (`views.py:161`) deletes comments. It handles `DELETE /api/articles/<slug>/comments/<cid>`. It finds the current user's comment on the article and calls `comment.delete()`.\n\nOther code touches the table less directly:\n\n- **`Comment.__init__`** (`models.py:45`) only builds the object. It doesn't write to the database until `.save()` is called.\n- **`delete_article`** (`views.py:73`) deletes an article. The `Article.comments` relationship has no `cascade` or `ondelete` setting. So deleting an article that has comments may fail on the foreign key, or leave orphaned comments, depending on the database. I haven't tested this.\n- **Tests:** `tests/test_models.py` calls `Comment(...).save()` directly in `test_make_comment` and `test_make_comments`.\n\n`delete_comment_on_article` has a bug. If `cid` doesn't match one of the current user's comments on that article, `.first()` returns `None`. Then `comment.delete()` raises an `AttributeError`, so the client gets a 500 instead of a 404. `comment_not_owned` exists in `conduit/exceptions.py:46` but isn't used here.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11629,
+              "costUsd": 0.0729098,
+              "inputTokens": 6,
+              "outputTokens": 1002,
+              "cacheCreationTokens": 13479,
+              "cacheReadTokens": 89618,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two view functions in `conduit/articles/views.py` write to the `comment` table. The table is defined by the `Comment` model in `conduit/articles/models.py:34`.\n\n- **`make_comment_on_article(slug, body, **kwargs)`** (`views.py:150`) creates comments. It handles `POST /api/articles/<slug>/comments`, builds `Comment(article, current_user.profile, body, **kwargs)` and calls `comment.save()`.\n- **`delete_comment_on_article(slug, cid)`** (`views.py:161`) deletes comments. It handles `DELETE /api/articles/<slug>/comments/<cid>`. It looks up the comment with `article.comments.filter_by(id=cid, author=current_user.profile).first()` and calls `comment.delete()`.\n\nThe `save()` and `delete()` methods come from the shared `Model` base class, not from `Comment` itself.\n\n`get_comments` (`views.py:139`) only reads. The tests in `tests/test_models.py` also create comments directly through `Comment(...).save()`, but that is test code.\n\nI didn't check whether deleting an article also removes its comments. The `Article.comments` relationship at `models.py:70` sets no `cascade`, so that would depend on the database foreign-key settings.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 9252,
+              "costUsd": 0.053206,
+              "inputTokens": 4,
+              "outputTokens": 664,
+              "cacheCreationTokens": 10247,
+              "cacheReadTokens": 55700,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 137307,
+            "medianOutputTokens": 908,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 13061,
+            "medianCostUsd": 0.0697,
+            "spread": {
+              "inputTokens": {
+                "min": 137299,
+                "max": 137995
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 12151,
+                "max": 13200
+              },
+              "costUsd": {
+                "min": 0.069,
+                "max": 0.0737
+              }
+            },
+            "totalCostUsd": 0.2124,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "list_data_access": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "Two application functions write to the `comment` table, both in `conduit/articles/views.py`:\n\n- **`make_comment_on_article`** (`views.py:150`) creates a comment. It handles `POST /api/articles/<slug>/comments`. It builds a `Comment(article, current_user.profile, body, ...)` and calls `comment.save()` at line 155.\n- **`delete_comment_on_article`** (`views.py:161`) deletes a comment. It handles `DELETE /api/articles/<slug>/comments/<cid>`. It looks up the comment by id and author, then calls `comment.delete()` at line 167.\n\n`save()` and `delete()` come from `CRUDMixin` in `conduit/extensions.py:27-37`. They call `db.session.add` and `db.session.delete`, then commit.\n\n- **Missing check in the delete function:** If the comment id doesn't exist, or belongs to another author, `.first()` returns `None`. The next line then raises `AttributeError`, which gives a 500 instead of a 404.\n- **Tests:** `test_make_comment` and `test_make_comments` in `tests/test_models.py` (lines 163, 174 and 175) also create comments. They are tests, not application code.\n- **Not detected:** The graph tool only picked up the create calls. It missed the delete, probably because `delete()` is inherited from the mixin. I found the delete call with grep and confirmed it by reading the code.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 13061,
+              "costUsd": 0.0736745,
+              "inputTokens": 10,
+              "outputTokens": 1095,
+              "cacheCreationTokens": 12540,
+              "cacheReadTokens": 125445,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_data_access": 1,
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_data_access",
+                  "input": {
+                    "model": "Comment",
+                    "direct": true
+                  },
+                  "result": "{\"query\":{\"model\":\"Comment\",\"direct\":true,\"limit\":50},\"dataAccess\":[{\"sourceKind\":\"Function\",\"sourceName\":\"make_comment_on_article\",\"file\":\"conduit/articles/views.py\",\"direct\":true,\"accessFile\":\"conduit/articles/views.py\",\"line\":155,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment.save()\"},{\"sourceKind\":\"Function\",\"sourceName\":\"test_make_comment\",\"file\":\"tests/test_models.py\",\"direct\":true,\"accessFile\":\"tests/test_models.py\",\"line\":163,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment.save()\"},{\"sourceKind\":\"Function\",\"sourceName\":\"test_make_comments\",\"file\":\"tests/test_models.py\",\"direct\":true,\"accessFile\":\"tests/test_models.py\",\"line\":174,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment.save()\"},{\"sourceKind\":\"Function\",\"sourceName\":\"test_make_comments\",\"file\":\"tests/test_models.py\",\"direct\":true,\"accessFile\":\"tests/test_models.py\",\"line\":175,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment1.save()\"}],\"page\":{\"offset\":0,\"returned\":4}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two application functions write to the `comment` table. Both are in `conduit/articles/views.py`.\n\n- **`make_comment_on_article`** (line 150) creates comments. It handles `POST /api/articles/<slug>/comments`, builds a `Comment(...)` and calls `comment.save()` at line 155.\n- **`delete_comment_on_article`** (line 161) deletes comments. It handles `DELETE /api/articles/<slug>/comments/<cid>`. It looks up the comment by id, restricted to the current user's profile, and calls `comment.delete()` at line 167.\n\nThe code graph only flagged the create path. I found the delete function by reading the file. `get_comments` (line 139) only reads.\n\nTwo test functions in `tests/test_models.py` also create comments: `test_make_comment` and `test_make_comments`. They call `.save()` directly.\n\n`delete_comment_on_article` has a bug. If the comment doesn't exist, or it belongs to another user, `.first()` returns `None`. The next line, `comment.delete()`, then raises `AttributeError` and the request returns a 500.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 12151,
+              "costUsd": 0.06903429999999999,
+              "inputTokens": 10,
+              "outputTokens": 843,
+              "cacheCreationTokens": 12014,
+              "cacheReadTokens": 125283,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_data_access": 1,
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_data_access",
+                  "input": {
+                    "model": "comment",
+                    "direct": true
+                  },
+                  "result": "{\"query\":{\"model\":\"comment\",\"direct\":true,\"limit\":50},\"dataAccess\":[{\"sourceKind\":\"Function\",\"sourceName\":\"make_comment_on_article\",\"file\":\"conduit/articles/views.py\",\"direct\":true,\"accessFile\":\"conduit/articles/views.py\",\"line\":155,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment.save()\"},{\"sourceKind\":\"Function\",\"sourceName\":\"test_make_comment\",\"file\":\"tests/test_models.py\",\"direct\":true,\"accessFile\":\"tests/test_models.py\",\"line\":163,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment.save()\"},{\"sourceKind\":\"Function\",\"sourceName\":\"test_make_comments\",\"file\":\"tests/test_models.py\",\"direct\":true,\"accessFile\":\"tests/test_models.py\",\"line\":174,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment.save()\"},{\"sourceKind\":\"Function\",\"sourceName\":\"test_make_comments\",\"file\":\"tests/test_models.py\",\"direct\":true,\"accessFile\":\"tests/test_models.py\",\"line\":175,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment1.save()\"}],\"page\":{\"offset\":0,\"returned\":4}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two application functions write to the `comment` table. Both are in `conduit/articles/views.py`.\n\n- **`make_comment_on_article`** (line 150) creates comments. It handles `POST /api/articles/<slug>/comments`, builds a `Comment`, and calls `comment.save()` at line 155.\n- **`delete_comment_on_article`** (line 161) deletes comments. It handles `DELETE /api/articles/<slug>/comments/<cid>`. It looks up the comment by id and author, then calls `comment.delete()` at line 167.\n\nThe code-graph query only reported the create. It missed the delete, so I found that one by reading the file. If the graph is your source for audits, it may under-report deletes done through `.delete()`.\n\nTwo tests also write comments: `test_make_comment` and `test_make_comments` in `tests/test_models.py`. They call `.save()` at lines 163 and 174–175.\n\n`get_comments` (line 139) only reads comments.\n\nBoth write endpoints are protected by `@jwt_required`. The delete is also scoped to comments written by the current user's profile.\n\nThe delete has a bug. If `cid` doesn't exist or belongs to another user, `.first()` returns `None`. Then `comment.delete()` raises an `AttributeError`, so the client gets a 500 instead of a 404.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 13200,
+              "costUsd": 0.06966009999999999,
+              "inputTokens": 10,
+              "outputTokens": 908,
+              "cacheCreationTokens": 12008,
+              "cacheReadTokens": 125281,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_data_access": 1,
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_data_access",
+                  "input": {
+                    "model": "comment",
+                    "direct": true
+                  },
+                  "result": "{\"query\":{\"model\":\"comment\",\"direct\":true,\"limit\":50},\"dataAccess\":[{\"sourceKind\":\"Function\",\"sourceName\":\"make_comment_on_article\",\"file\":\"conduit/articles/views.py\",\"direct\":true,\"accessFile\":\"conduit/articles/views.py\",\"line\":155,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment.save()\"},{\"sourceKind\":\"Function\",\"sourceName\":\"test_make_comment\",\"file\":\"tests/test_models.py\",\"direct\":true,\"accessFile\":\"tests/test_models.py\",\"line\":163,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment.save()\"},{\"sourceKind\":\"Function\",\"sourceName\":\"test_make_comments\",\"file\":\"tests/test_models.py\",\"direct\":true,\"accessFile\":\"tests/test_models.py\",\"line\":174,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment.save()\"},{\"sourceKind\":\"Function\",\"sourceName\":\"test_make_comments\",\"file\":\"tests/test_models.py\",\"direct\":true,\"accessFile\":\"tests/test_models.py\",\"line\":175,\"model\":\"Comment\",\"library\":\"sqlalchemy\",\"table\":\"comment\",\"operation\":\"create\",\"expression\":\"comment1.save()\"}],\"page\":{\"offset\":0,\"returned\":4}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-flask-env",
+      "sample": "internet-python-flask-realworld",
+      "category": "env",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 98520,
+            "medianOutputTokens": 841,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 11195,
+            "medianCostUsd": 0.0596,
+            "spread": {
+              "inputTokens": {
+                "min": 98114,
+                "max": 98726
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 10083,
+                "max": 11709
+              },
+              "costUsd": {
+                "min": 0.0553,
+                "max": 0.0617
+              }
+            },
+            "totalCostUsd": 0.1766,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The app's own code reads two environment variables. Both are in `conduit/settings.py`:\n\n| Variable | Line | Default | Used by |\n|---|---|---|---|\n| `CONDUIT_SECRET` | `conduit/settings.py:10` | `'secret-key'` | `Config.SECRET_KEY`, which applies to every config class |\n| `DATABASE_URL` | `conduit/settings.py:37` | `'postgresql://localhost/example'` | `ProdConfig.SQLALCHEMY_DATABASE_URI`. `DevConfig` and `TestConfig` hard-code SQLite URIs and ignore it. |\n\n`CONDUIT_SECRET` has a hard-coded fallback, and the source marks it `# TODO: Change me`. A production deployment that doesn't set it will run with a publicly known secret key.\n\nFlask itself reads `FLASK_APP` and `FLASK_DEBUG`. The CI configs set them (`.travis.yml:11-12` and `.circleci/config.yml:8-9`). `FLASK_APP` points at `autoapp.py`. The app's Python code doesn't read either variable.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 11195,
+              "costUsd": 0.061721899999999996,
+              "inputTokens": 6,
+              "outputTokens": 851,
+              "cacheCreationTokens": 11115,
+              "cacheReadTokens": 87399,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The app reads two environment variables. Both are in `conduit/settings.py`:\n\n| Variable | Line | Default | Used for |\n|---|---|---|---|\n| `CONDUIT_SECRET` | `conduit/settings.py:10` | `'secret-key'` | `SECRET_KEY` in the base `Config`, so every config class inherits it. |\n| `DATABASE_URL` | `conduit/settings.py:37` | `'postgresql://localhost/example'` | `SQLALCHEMY_DATABASE_URI` in `ProdConfig` only. |\n\n- `DevConfig` and `TestConfig` don't read `DATABASE_URL`. Dev uses a local SQLite file, `dev.db`, in the project root. Tests use in-memory SQLite.\n- `CONDUIT_SECRET` has an insecure fallback, and the code carries a `# TODO: Change me` comment. Set it in production.\n- A search of the Python, config and YAML files found no other `os.environ`, `getenv` or dotenv usage. There are no `.env` files in the repo.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10083,
+              "costUsd": 0.05527410000000001,
+              "inputTokens": 6,
+              "outputTokens": 658,
+              "cacheCreationTokens": 9967,
+              "cacheReadTokens": 88141,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The app's own code reads two environment variables. Both are read in `conduit/settings.py` with `os.environ.get`.\n\n| Variable | Line | Default | Used for |\n|---|---|---|---|\n| `CONDUIT_SECRET` | `conduit/settings.py:10` | `'secret-key'` (marked `TODO: Change me`) | `SECRET_KEY` in the base `Config` |\n| `DATABASE_URL` | `conduit/settings.py:37` | `'postgresql://localhost/example'` | `SQLALCHEMY_DATABASE_URI`, in `ProdConfig` only |\n\n`DevConfig` uses a local SQLite file, `dev.db`, and `TestConfig` uses in-memory SQLite. Neither reads `DATABASE_URL`.\n\nFlask and the Flask CLI read two more variables, which the README, `.travis.yml` and `.circleci/config.yml` set:\n- `FLASK_APP`, which points to `autoapp.py`.\n- `FLASK_DEBUG`.\n\nNothing in the Python code reads either of these, and the repo has no `.env` or `.flaskenv` file.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 11709,
+              "costUsd": 0.059591099999999994,
+              "inputTokens": 6,
+              "outputTokens": 841,
+              "cacheCreationTokens": 10589,
+              "cacheReadTokens": 88131,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 100765,
+            "medianOutputTokens": 759,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 10116,
+            "medianCostUsd": 0.06,
+            "spread": {
+              "inputTokens": {
+                "min": 66541,
+                "max": 101120
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 8838,
+                "max": 11259
+              },
+              "costUsd": {
+                "min": 0.0513,
+                "max": 0.0608
+              }
+            },
+            "totalCostUsd": 0.1722,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The app's own code reads two environment variables, both in `conduit/settings.py`:\n\n| Variable | Line | Default | Purpose |\n|---|---|---|---|\n| `CONDUIT_SECRET` | 10 | `'secret-key'` | `SECRET_KEY` for the app. The code has a TODO to change the default. |\n| `DATABASE_URL` | 37 | a fallback URI defined in the file | `SQLALCHEMY_DATABASE_URI` |\n\nThe Flask CLI also reads two variables. They don't appear in the Python code, but the README, `.travis.yml` and `.circleci/config.yml` all mention them:\n- `FLASK_APP` points to `autoapp.py`.\n- `FLASK_DEBUG` turns debug mode on. The README says to make sure it's off in production.\n\nI only searched for `os.environ`/`os.getenv` patterns, so I wouldn't have caught variables read through another mechanism, such as a dotenv loader. I didn't look for one.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8838,
+              "costUsd": 0.0513362,
+              "inputTokens": 4,
+              "outputTokens": 585,
+              "cacheCreationTokens": 9955,
+              "cacheReadTokens": 56582,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The app reads two environment variables. Both are in `conduit/settings.py`:\n\n| Variable | Line | Default | Used for |\n|---|---|---|---|\n| `CONDUIT_SECRET` | `conduit/settings.py:10` | `'secret-key'` | `SECRET_KEY` in the base `Config` class. |\n| `DATABASE_URL` | `conduit/settings.py:37` | `'postgresql://localhost/example'` | `SQLALCHEMY_DATABASE_URI` in `ProdConfig` only. |\n\n- **Where they apply:** `CONDUIT_SECRET` applies to every config, because `DevConfig`, `TestConfig` and `ProdConfig` all inherit it. `DATABASE_URL` is read only in production. `DevConfig` hard-codes a SQLite file (`dev.db`), and `TestConfig` uses in-memory SQLite.\n- **Search:** I searched the Python files for `os.environ`, `getenv` and similar calls. I also looked for `.env`, `.flaskenv`, Dockerfile and docker-compose files and found none. I didn't search non-Python files such as shell scripts or CI configs.\n- **Default secret:** The `CONDUIT_SECRET` fallback is a weak hard-coded value, and the source has a `TODO: Change me` comment on it. Set the variable in production.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11259,
+              "costUsd": 0.059996799999999996,
+              "inputTokens": 6,
+              "outputTokens": 759,
+              "cacheCreationTokens": 10851,
+              "cacheReadTokens": 89908,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The app's own code reads two environment variables. Both are in `conduit/settings.py`:\n\n| Variable | Line | Default | Used for |\n|---|---|---|---|\n| `CONDUIT_SECRET` | 10 | `'secret-key'` | `Config.SECRET_KEY`, which every config class inherits. |\n| `DATABASE_URL` | 37 | `'postgresql://localhost/example'` | `ProdConfig.SQLALCHEMY_DATABASE_URI`. Dev and test use hardcoded SQLite instead. |\n\nFlask itself reads `FLASK_APP` and `FLASK_DEBUG`. The app doesn't read them in Python. They are set in CI:\n- `.travis.yml:11-12`: `FLASK_APP` and `FLASK_DEBUG`.\n- `.circleci/config.yml:8-9`: `FLASK_APP` (`autoapp.py`) and `FLASK_DEBUG`.\n\nThe default `SECRET_KEY` is a placeholder, marked with a `TODO: Change me` comment. In production, set `CONDUIT_SECRET` to a real secret.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10116,
+              "costUsd": 0.060834299999999994,
+              "inputTokens": 6,
+              "outputTokens": 769,
+              "cacheCreationTokens": 11031,
+              "cacheReadTokens": 90083,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-django-favorite-route",
+      "sample": "internet-python-django-realworld",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 98992,
+            "medianOutputTokens": 578,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 8749,
+            "medianCostUsd": 0.0558,
+            "spread": {
+              "inputTokens": {
+                "min": 65140,
+                "max": 99025
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 6222,
+                "max": 9514
+              },
+              "costUsd": {
+                "min": 0.0472,
+                "max": 0.0656
+              }
+            },
+            "totalCostUsd": 0.1686,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`ArticlesFavoriteAPIView` serves both methods. It's defined in `conduit/apps/articles/views.py:160` and is a plain `APIView`. The route is in `conduit/apps/articles/urls.py:18`:\n\n```python\nurl(r'^articles/(?P<article_slug>[-\\w]+)/favorite/?$', ArticlesFavoriteAPIView.as_view()),\n```\n\n- **Permissions:** it requires `IsAuthenticated`.\n- **POST** (`views.py:180`) looks up the article by slug and calls `profile.favorite(article)`. It returns the serialized article with `201 Created`.\n- **DELETE** (`views.py:165`) looks up the article by slug and calls `profile.unfavorite(article)`. It returns the serialized article with `200 OK`.\n- **Missing slug:** both methods raise `NotFound` if no article has that slug.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8749,
+              "costUsd": 0.06561159999999999,
+              "inputTokens": 6,
+              "outputTokens": 600,
+              "cacheCreationTokens": 12743,
+              "cacheReadTokens": 86276,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`ArticlesFavoriteAPIView` serves both methods. It's defined in `conduit/apps/articles/views.py:160` and is a plain `APIView`.\n\n- **DELETE** calls `profile.unfavorite(article)` (line 174).\n- **POST** calls `profile.favorite(article)` (line 189).\n\nThe route is in `conduit/apps/articles/urls.py:18`. The regex `^articles/(?P<article_slug>[-\\w]+)/favorite/?$` makes the trailing slash optional, so `/favorite` and `/favorite/` both match.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6222,
+              "costUsd": 0.0471896,
+              "inputTokens": 4,
+              "outputTokens": 315,
+              "cacheCreationTokens": 9620,
+              "cacheReadTokens": 55516,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`ArticlesFavoriteAPIView` serves both methods. It's in `conduit/apps/articles/views.py:160` and is a plain `APIView` subclass.\n\n- **Routing:** `conduit/apps/articles/urls.py:18` maps `^articles/(?P<article_slug>[-\\w]+)/favorite/?$` to it.\n- **Permissions and rendering:** it requires `IsAuthenticated` and renders with `ArticleJSONRenderer`.\n- **`post`** (line 180): it looks up the article by slug and calls `profile.favorite(article)`. It returns the serialized article with 201. If the slug doesn't exist, it raises `NotFound`.\n- **`delete`** (line 165): it does the same lookup and calls `profile.unfavorite(article)`. It returns the serialized article with 200.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9514,
+              "costUsd": 0.0557748,
+              "inputTokens": 6,
+              "outputTokens": 578,
+              "cacheCreationTokens": 10278,
+              "cacheReadTokens": 88708,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 100232,
+            "medianOutputTokens": 664,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 8767,
+            "medianCostUsd": 0.059,
+            "spread": {
+              "inputTokens": {
+                "min": 66924,
+                "max": 101817
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 6400,
+                "max": 9308
+              },
+              "costUsd": {
+                "min": 0.0511,
+                "max": 0.0615
+              }
+            },
+            "totalCostUsd": 0.1716,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`ArticlesFavoriteAPIView` serves both methods. It's defined in `conduit/apps/articles/views.py:160` and is a plain `APIView`.\n\n- **DELETE** calls `profile.unfavorite(article)` (`views.py:174`).\n- **POST** calls `profile.favorite(article)` (`views.py:189`).\n\nThe route is in `conduit/apps/articles/urls.py:18`: `r'^articles/(?P<article_slug>[-\\w]+)/favorite/?$'`. The trailing slash is optional.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6400,
+              "costUsd": 0.051057500000000006,
+              "inputTokens": 4,
+              "outputTokens": 331,
+              "cacheCreationTokens": 10525,
+              "cacheReadTokens": 56395,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`ArticlesFavoriteAPIView` serves both methods. It's defined in `conduit/apps/articles/views.py:160` and routed in `conduit/apps/articles/urls.py:18`.\n\nIt's a plain `APIView` with `IsAuthenticated` permission. Both handlers look up the article by slug and raise `NotFound` if it doesn't exist.\n\n- **`post`** (`views.py:180`): calls `profile.favorite(article)` and returns the serialized article with **201 Created**.\n- **`delete`** (`views.py:165`): calls `profile.unfavorite(article)` and returns the serialized article with **200 OK**.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8767,
+              "costUsd": 0.0615271,
+              "inputTokens": 6,
+              "outputTokens": 664,
+              "cacheCreationTokens": 11460,
+              "cacheReadTokens": 90351,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`ArticlesFavoriteAPIView` serves both methods. It's defined at `conduit/apps/articles/views.py:160` and is a plain `APIView`. It's wired up in `conduit/apps/articles/urls.py:18`, where the trailing slash is optional.\n\n- **Permissions and rendering:** it requires `IsAuthenticated` and renders output with `ArticleJSONRenderer`.\n- **`post`** (line 180) looks up the article by slug and calls `profile.favorite(article)`. It returns the serialized article with 201. If the slug doesn't match an article, it raises `NotFound`.\n- **`delete`** (line 165) does the same lookup and calls `profile.unfavorite(article)`. It returns the serialized article with 200, and raises `NotFound` for an unknown slug.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9308,
+              "costUsd": 0.05899059999999999,
+              "inputTokens": 6,
+              "outputTokens": 668,
+              "cacheCreationTokens": 10840,
+              "cacheReadTokens": 89386,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-django-fullstack-login",
+      "sample": "internet-realworld-python-django-fullstack",
+      "category": "frontend-api",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 105889,
+            "medianOutputTokens": 831,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 10674,
+            "medianCostUsd": 0.0579,
+            "spread": {
+              "inputTokens": {
+                "min": 105862,
+                "max": 106045
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 10336,
+                "max": 10776
+              },
+              "costUsd": {
+                "min": 0.0568,
+                "max": 0.0764
+              }
+            },
+            "totalCostUsd": 0.1911,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Frontend file:** `frontend/lib/api/user.ts` (`UserAPI.login`, line 22–23). It runs `axios.post(`${SERVER_BASE_URL}/users/login`, …)`.\n\n`SERVER_BASE_URL` is set in `frontend/lib/utils/constant.ts` to `https://conduit.productionready.io/api`. That is an external host, not this repo's Django backend. The path is `/api/users/login`, which matches the Django route, but the sample frontend isn't pointed at the local backend by default.\n\n**Django view:** `LoginAPIView` in `backend/conduit/apps/authentication/views.py:32`.\n\nThe route is wired in two steps:\n- `backend/conduit/urls.py:23` mounts the authentication URLs under `^api/`.\n- `backend/conduit/apps/authentication/urls.py:10` maps `^users/login/?$` to `LoginAPIView.as_view()`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10776,
+              "costUsd": 0.0764475,
+              "inputTokens": 6,
+              "outputTokens": 758,
+              "cacheCreationTokens": 14941,
+              "cacheReadTokens": 90915,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend file:** `frontend/lib/api/user.ts`. The `UserAPI.login` function (lines 20–35) calls `axios.post(`${SERVER_BASE_URL}/users/login`, …)`.\n\n`SERVER_BASE_URL` is set in `frontend/lib/utils/constant.ts` to `https://conduit.productionready.io/api`. In the sample as it stands, that points at the hosted RealWorld demo rather than the local Django backend. The path still lines up with the backend route, which is `/api/users/login`.\n\n**Django view:** `LoginAPIView`, a class-based `APIView` at `backend/conduit/apps/authentication/views.py:32`. The route is wired in two steps:\n- `backend/conduit/urls.py:23` mounts the authentication URLs under `^api/`.\n- `backend/conduit/apps/authentication/urls.py:10` maps `^users/login/?$` to `LoginAPIView.as_view()`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 10674,
+              "costUsd": 0.0578684,
+              "inputTokens": 6,
+              "outputTokens": 874,
+              "cacheCreationTokens": 9875,
+              "cacheReadTokens": 96164,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend file:** `frontend/lib/api/user.ts`. The `UserAPI.login` function (line 20) sends the request with `axios.post(`${SERVER_BASE_URL}/users/login`, ...)`. I didn't open `frontend/lib/utils/constant` to confirm that `SERVER_BASE_URL` ends in `/api`.\n\n**Django view:** `LoginAPIView`, a class-based `APIView` in `backend/conduit/apps/authentication/views.py:32`.\n\n**Route:**\n- `backend/conduit/urls.py` includes the authentication URLs under `^api/`.\n- `backend/conduit/apps/authentication/urls.py:10` maps `^users/login/?$` to `LoginAPIView.as_view()`.\n- Together these give `/api/users/login`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 10336,
+              "costUsd": 0.056798799999999997,
+              "inputTokens": 6,
+              "outputTokens": 831,
+              "cacheCreationTokens": 9715,
+              "cacheReadTokens": 96168,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 109680,
+            "medianOutputTokens": 432,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 8914,
+            "medianCostUsd": 0.0583,
+            "spread": {
+              "inputTokens": {
+                "min": 109680,
+                "max": 109686
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 8042,
+                "max": 9169
+              },
+              "costUsd": {
+                "min": 0.0582,
+                "max": 0.0585
+              }
+            },
+            "totalCostUsd": 0.175,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "api_consumers": 3,
+              "route_details": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "- **Frontend file:** `frontend/lib/api/user.ts:22`. The `login` function calls `axios.post(\"/api/users/login\")`. The URL match is exact, and this is the only consumer of the route.\n- **Django view:** `LoginAPIView`, a Django REST Framework view in `backend/conduit/apps/authentication/views.py`. Its `post` method (lines 37–47) handles the request. The route is declared at `backend/conduit/apps/authentication/urls.py:10`.\n\nThe graph shows no call chain, data access or tables below the `post` handler.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8914,
+              "costUsd": 0.058538999999999994,
+              "inputTokens": 8,
+              "outputTokens": 457,
+              "cacheCreationTokens": 11022,
+              "cacheReadTokens": 98650,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "POST",
+                    "path": "/api/users/login"
+                  },
+                  "result": "{\"query\":{\"method\":\"POST\",\"path\":\"/api/users/login\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/users/login\",\"framework\":\"django-rest-framework\",\"file\":\"backend/conduit/apps/authentication/urls.py\",\"line\":10},\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/users/login\",\"match\":\"exact\",\"file\":\"frontend/lib/api/user.ts\",\"line\":22,\"expression\":\"axios.post\",\"function\":\"login\"}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "POST",
+                    "path": "/api/users/login"
+                  },
+                  "result": "{\"method\":\"POST\",\"path\":\"/api/users/login\",\"routes\":[{\"method\":\"POST\",\"path\":\"users/login\",\"fullPath\":\"/api/users/login\",\"framework\":\"django-rest-framework\",\"handlerName\":\"LoginAPIView\",\"file\":\"backend/conduit/apps/authentication/urls.py\",\"line\":10,\"handlers\":[{\"name\":\"post\",\"className\":\"LoginAPIView\",\"file\":\"backend/conduit/apps/authentication/views.py\",\"line\":37,\"endLine\":47}],\"lifecycle\":[{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":0,\"expression\":null,\"name\":\"post\",\"className\":\"LoginAPIView\",\"file\":\"backend/conduit/apps/authentication/views.py\",\"line\":37,\"endLine\":47}],\"callChain\":[],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/users/login\",\"match\":\"exact\",\"file\":\"frontend/lib/api/user.ts\",\"line\":22,\"expression\":\"axios.post\",\"function\":\"login\"}]}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend file:** `frontend/lib/api/user.ts:22`. The `login` function calls `axios.post` with the exact URL `/api/users/login`.\n\n**Django view:** `LoginAPIView`, a Django REST Framework view. The route is declared at `backend/conduit/apps/authentication/urls.py:10`. Its `post` method is at `backend/conduit/apps/authentication/views.py:37-47`.\n\nThe graph shows no call chain, data access or env vars below the handler.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9169,
+              "costUsd": 0.058288999999999994,
+              "inputTokens": 8,
+              "outputTokens": 432,
+              "cacheCreationTokens": 11022,
+              "cacheReadTokens": 98650,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__route_details": 1,
+                "mcp__concentrate__api_consumers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "POST",
+                    "path": "/api/users/login"
+                  },
+                  "result": "{\"method\":\"POST\",\"path\":\"/api/users/login\",\"routes\":[{\"method\":\"POST\",\"path\":\"users/login\",\"fullPath\":\"/api/users/login\",\"framework\":\"django-rest-framework\",\"handlerName\":\"LoginAPIView\",\"file\":\"backend/conduit/apps/authentication/urls.py\",\"line\":10,\"handlers\":[{\"name\":\"post\",\"className\":\"LoginAPIView\",\"file\":\"backend/conduit/apps/authentication/views.py\",\"line\":37,\"endLine\":47}],\"lifecycle\":[{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":0,\"expression\":null,\"name\":\"post\",\"className\":\"LoginAPIView\",\"file\":\"backend/conduit/apps/authentication/views.py\",\"line\":37,\"endLine\":47}],\"callChain\":[],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/users/login\",\"match\":\"exact\",\"file\":\"frontend/lib/api/user.ts\",\"line\":22,\"expression\":\"axios.post\",\"function\":\"login\"}]}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "POST",
+                    "path": "/api/users/login"
+                  },
+                  "result": "{\"query\":{\"method\":\"POST\",\"path\":\"/api/users/login\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/users/login\",\"framework\":\"django-rest-framework\",\"file\":\"backend/conduit/apps/authentication/urls.py\",\"line\":10},\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/users/login\",\"match\":\"exact\",\"file\":\"frontend/lib/api/user.ts\",\"line\":22,\"expression\":\"axios.post\",\"function\":\"login\"}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "- **Frontend file:** `frontend/lib/api/user.ts:22`. The `login` function calls `axios.post(\"/api/users/login\")`, and the match is exact.\n- **Django view:** `LoginAPIView`, a Django REST Framework class-based view in `backend/conduit/apps/authentication/views.py`. Its `post` method is at lines 37–47. The route is declared in `backend/conduit/apps/authentication/urls.py:10`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8042,
+              "costUsd": 0.0581674,
+              "inputTokens": 8,
+              "outputTokens": 419,
+              "cacheCreationTokens": 11024,
+              "cacheReadTokens": 98654,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "POST",
+                    "path": "/api/users/login"
+                  },
+                  "result": "{\"query\":{\"method\":\"POST\",\"path\":\"/api/users/login\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"POST\",\"fullPath\":\"/api/users/login\",\"framework\":\"django-rest-framework\",\"file\":\"backend/conduit/apps/authentication/urls.py\",\"line\":10},\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/users/login\",\"match\":\"exact\",\"file\":\"frontend/lib/api/user.ts\",\"line\":22,\"expression\":\"axios.post\",\"function\":\"login\"}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "POST",
+                    "path": "/api/users/login"
+                  },
+                  "result": "{\"method\":\"POST\",\"path\":\"/api/users/login\",\"routes\":[{\"method\":\"POST\",\"path\":\"users/login\",\"fullPath\":\"/api/users/login\",\"framework\":\"django-rest-framework\",\"handlerName\":\"LoginAPIView\",\"file\":\"backend/conduit/apps/authentication/urls.py\",\"line\":10,\"handlers\":[{\"name\":\"post\",\"className\":\"LoginAPIView\",\"file\":\"backend/conduit/apps/authentication/views.py\",\"line\":37,\"endLine\":47}],\"lifecycle\":[{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":0,\"expression\":null,\"name\":\"post\",\"className\":\"LoginAPIView\",\"file\":\"backend/conduit/apps/authentication/views.py\",\"line\":37,\"endLine\":47}],\"callChain\":[],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"axios\",\"method\":\"POST\",\"url\":\"/api/users/login\",\"match\":\"exact\",\"file\":\"frontend/lib/api/user.ts\",\"line\":22,\"expression\":\"axios.post\",\"function\":\"login\"}]}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-flask-fullstack-tags",
+      "sample": "internet-realworld-python-flask-fullstack",
+      "category": "frontend-api",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 143917,
+            "medianOutputTokens": 1207,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 14675,
+            "medianCostUsd": 0.0671,
+            "spread": {
+              "inputTokens": {
+                "min": 142722,
+                "max": 179955
+              },
+              "toolCalls": {
+                "min": 5,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 14034,
+                "max": 15065
+              },
+              "costUsd": {
+                "min": 0.0664,
+                "max": 0.0842
+              }
+            },
+            "totalCostUsd": 0.2177,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two frontend files request `GET /api/tags`, and the backend handler is `get_tags`.\n\n**Frontend**\n- `frontend/components/home/Tags.tsx:14` calls `useSWR(`${SERVER_BASE_URL}/tags`, fetcher)`. The home page (`pages/index.tsx`) renders this component in its \"Popular Tags\" sidebar.\n- `frontend/lib/api/tag.ts:6` defines `TagAPI.getAll`, which calls `axios.get(`${SERVER_BASE_URL}/tags`)`. Nothing in the frontend imports or calls it, so it is currently dead code.\n\nThe literal string `/api/tags` appears in neither file. `SERVER_BASE_URL` in `frontend/lib/utils/constant.ts:1` is `https://conduit.productionready.io/api`, so both resolve to `/api/tags`. That base URL is the public hosted Conduit API, not the local Flask backend. The match to this backend is by route path only.\n\n**Backend**\n- `get_tags()` in `backend/conduit/articles/views.py:127-129` handles the route. It is registered with `@blueprint.route('/api/tags', methods=('GET',))`. It returns `jsonify({'tags': [tag.tagname for tag in Tags.query.all()]})`.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 15065,
+              "costUsd": 0.08422679999999999,
+              "inputTokens": 10,
+              "outputTokens": 1178,
+              "cacheCreationTokens": 13957,
+              "cacheReadTokens": 165988,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Backend handler:** `get_tags()` in `backend/conduit/articles/views.py:128`. It is registered with `@blueprint.route('/api/tags', methods=('GET',))` and returns `{'tags': [tag.tagname for tag in Tags.query.all()]}`.\n\n**Frontend files that request the route:**\n- `frontend/components/home/Tags.tsx:14` calls `useSWR(`${SERVER_BASE_URL}/tags`, fetcher)`. The home page, `frontend/pages/index.tsx`, renders it as the \"Popular Tags\" list.\n- `frontend/lib/api/tag.ts:6` defines `TagAPI.getAll`, which calls `axios.get(`${SERVER_BASE_URL}/tags`)`. I found no importer of `TagAPI` in the frontend, so nothing appears to call it.\n\n`SERVER_BASE_URL` is set in `frontend/lib/utils/constant.ts` to `https://conduit.productionready.io/api`. The frontend therefore requests that hosted URL, not the local Flask backend, unless you override the constant. In this sample the link to `get_tags()` is a match on the path `/api/tags`. The code doesn't connect them directly.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 14675,
+              "costUsd": 0.0663586,
+              "inputTokens": 8,
+              "outputTokens": 1265,
+              "cacheCreationTokens": 10108,
+              "cacheReadTokens": 132606,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 4,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Backend handler:** `get_tags()` in `backend/conduit/articles/views.py:127-129`. It's registered with `@blueprint.route('/api/tags', methods=('GET',))` and returns `{'tags': [tag.tagname for tag in Tags.query.all()]}`.\n\n**Frontend callers:** two files build the URL as `${SERVER_BASE_URL}/tags`. `SERVER_BASE_URL` is `https://conduit.productionready.io/api` (`frontend/lib/utils/constant.ts:1`), so both resolve to `/api/tags`:\n\n- `frontend/components/home/Tags.tsx:14` calls `useSWR(`${SERVER_BASE_URL}/tags`, fetcher)`. This is the \"Popular Tags\" sidebar component, rendered from `frontend/pages/index.tsx:25`.\n- `frontend/lib/api/tag.ts:6` defines `TagAPI.getAll`, which calls `axios.get(`${SERVER_BASE_URL}/tags`)`. A search for `TagAPI` and `lib/api/tag` found no importers, so nothing currently calls it.\n\nA plain search for `/api/tags` finds only the backend route. The frontend only matches if you resolve the `SERVER_BASE_URL` prefix. As written, the frontend points at the external `conduit.productionready.io` host, not at this Flask backend.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 14034,
+              "costUsd": 0.06707199999999999,
+              "inputTokens": 8,
+              "outputTokens": 1207,
+              "cacheCreationTokens": 10409,
+              "cacheReadTokens": 133500,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 4,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 110167,
+            "medianOutputTokens": 497,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 9328,
+            "medianCostUsd": 0.0608,
+            "spread": {
+              "inputTokens": {
+                "min": 110164,
+                "max": 110170
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 9261,
+                "max": 11023
+              },
+              "costUsd": {
+                "min": 0.0607,
+                "max": 0.061
+              }
+            },
+            "totalCostUsd": 0.1825,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "api_consumers": 3,
+              "route_details": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "Two frontend files request `GET /api/tags`, and the Flask function `get_tags` handles it.\n\n**Frontend requests (both exact URL matches)**\n- `frontend/components/home/Tags.tsx:14` calls it through `useSWR`, inside the `Tags` component. The `Home` page (`frontend/pages/index.tsx`) renders that component.\n- `frontend/lib/api/tag.ts:6` calls it through `axios.get`, inside `getAll`.\n\n**Backend handler**\n- `get_tags` in `backend/conduit/articles/views.py:128-129`, registered as a Flask route at line 127.\n- It runs `Tags.query.all()` (SQLAlchemy), which reads the `tags` table.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9328,
+              "costUsd": 0.060966,
+              "inputTokens": 8,
+              "outputTokens": 510,
+              "cacheCreationTokens": 11496,
+              "cacheReadTokens": 98660,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__route_details": 1,
+                "mcp__concentrate__api_consumers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"method\":\"GET\",\"path\":\"/api/tags\",\"routes\":[{\"method\":\"GET\",\"path\":\"/api/tags\",\"fullPath\":\"/api/tags\",\"framework\":\"flask\",\"handlerName\":\"get_tags\",\"file\":\"backend/conduit/articles/views.py\",\"line\":127,\"handlers\":[{\"name\":\"get_tags\",\"className\":null,\"file\":\"backend/conduit/articles/views.py\",\"line\":128,\"endLine\":129}],\"lifecycle\":[{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":0,\"expression\":null,\"name\":\"get_tags\",\"className\":null,\"file\":\"backend/conduit/articles/views.py\",\"line\":128,\"endLine\":129}],\"callChain\":[],\"dataAccess\":[{\"model\":\"Tags\",\"library\":\"sqlalchemy\",\"operation\":\"read\",\"file\":\"backend/conduit/articles/views.py\",\"line\":129,\"expression\":\"Tags.query.all()\",\"usedBy\":[{\"route\":true},{\"function\":\"get_tags\",\"functionFile\":\"backend/conduit/articles/views.py\"}]}],\"tables\":[{\"table\":\"tags\",\"kind\":\"table\",\"library\":\"sqlalchemy\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"route\":true},{\"function\":\"get_tags\",\"functionFile\":\"backend/conduit/articles/views.py\"}]}],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"consumerComponents\":[{\"name\":\"Tags\",\"kind\":\"function\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":11,\"depth\":0,\"changedThrough\":[\"Tags\"]},{\"name\":\"Home\",\"kind\":\"function\",\"file\":\"frontend/pages/index.tsx\",\"line\":8,\"depth\":1,\"renders\":[\"Tags\"]}],\"consumerPages\":[]}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"query\":{\"method\":\"GET\",\"path\":\"/api/tags\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"flask\",\"file\":\"backend/conduit/articles/views.py\",\"line\":127},\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"flask\",\"file\":\"backend/conduit/articles/views.py\",\"line\":127},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend files that request `GET /api/tags`** (both are exact URL matches):\n\n- `frontend/components/home/Tags.tsx:14` calls `useSWR` inside the `Tags` component.\n- `frontend/lib/api/tag.ts:6` calls `axios.get` inside `getAll`.\n\nThe `Tags` component is rendered by the `Home` page in `frontend/pages/index.tsx`.\n\n**Backend handler:** the Flask function `get_tags` in `backend/conduit/articles/views.py`. The route is declared at line 127 and the function body is at lines 128–129. It runs `Tags.query.all()` through SQLAlchemy, which reads the `tags` table.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9261,
+              "costUsd": 0.060840200000000004,
+              "inputTokens": 8,
+              "outputTokens": 497,
+              "cacheCreationTokens": 11497,
+              "cacheReadTokens": 98662,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__route_details": 1,
+                "mcp__concentrate__api_consumers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"method\":\"GET\",\"path\":\"/api/tags\",\"routes\":[{\"method\":\"GET\",\"path\":\"/api/tags\",\"fullPath\":\"/api/tags\",\"framework\":\"flask\",\"handlerName\":\"get_tags\",\"file\":\"backend/conduit/articles/views.py\",\"line\":127,\"handlers\":[{\"name\":\"get_tags\",\"className\":null,\"file\":\"backend/conduit/articles/views.py\",\"line\":128,\"endLine\":129}],\"lifecycle\":[{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":0,\"expression\":null,\"name\":\"get_tags\",\"className\":null,\"file\":\"backend/conduit/articles/views.py\",\"line\":128,\"endLine\":129}],\"callChain\":[],\"dataAccess\":[{\"model\":\"Tags\",\"library\":\"sqlalchemy\",\"operation\":\"read\",\"file\":\"backend/conduit/articles/views.py\",\"line\":129,\"expression\":\"Tags.query.all()\",\"usedBy\":[{\"route\":true},{\"function\":\"get_tags\",\"functionFile\":\"backend/conduit/articles/views.py\"}]}],\"tables\":[{\"table\":\"tags\",\"kind\":\"table\",\"library\":\"sqlalchemy\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"route\":true},{\"function\":\"get_tags\",\"functionFile\":\"backend/conduit/articles/views.py\"}]}],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"consumerComponents\":[{\"name\":\"Tags\",\"kind\":\"function\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":11,\"depth\":0,\"changedThrough\":[\"Tags\"]},{\"name\":\"Home\",\"kind\":\"function\",\"file\":\"frontend/pages/index.tsx\",\"line\":8,\"depth\":1,\"renders\":[\"Tags\"]}],\"consumerPages\":[]}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"query\":{\"method\":\"GET\",\"path\":\"/api/tags\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"flask\",\"file\":\"backend/conduit/articles/views.py\",\"line\":127},\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"flask\",\"file\":\"backend/conduit/articles/views.py\",\"line\":127},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend files that request `GET /api/tags`:**\n- `frontend/components/home/Tags.tsx:14` calls `useSWR` inside the `Tags` component. `Home` in `frontend/pages/index.tsx` renders this component.\n- `frontend/lib/api/tag.ts:6` calls `axios.get` inside `getAll`.\n\n**Backend handler:** the Python function is `get_tags` in `backend/conduit/articles/views.py`, with its route declared at line 127 and the function body at lines 128–129. It's a Flask route. It runs `Tags.query.all()` through SQLAlchemy, which reads the `tags` table.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11023,
+              "costUsd": 0.0607144,
+              "inputTokens": 8,
+              "outputTokens": 484,
+              "cacheCreationTokens": 11498,
+              "cacheReadTokens": 98664,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"query\":{\"method\":\"GET\",\"path\":\"/api/tags\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"flask\",\"file\":\"backend/conduit/articles/views.py\",\"line\":127},\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"flask\",\"file\":\"backend/conduit/articles/views.py\",\"line\":127},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                },
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"method\":\"GET\",\"path\":\"/api/tags\",\"routes\":[{\"method\":\"GET\",\"path\":\"/api/tags\",\"fullPath\":\"/api/tags\",\"framework\":\"flask\",\"handlerName\":\"get_tags\",\"file\":\"backend/conduit/articles/views.py\",\"line\":127,\"handlers\":[{\"name\":\"get_tags\",\"className\":null,\"file\":\"backend/conduit/articles/views.py\",\"line\":128,\"endLine\":129}],\"lifecycle\":[{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":0,\"expression\":null,\"name\":\"get_tags\",\"className\":null,\"file\":\"backend/conduit/articles/views.py\",\"line\":128,\"endLine\":129}],\"callChain\":[],\"dataAccess\":[{\"model\":\"Tags\",\"library\":\"sqlalchemy\",\"operation\":\"read\",\"file\":\"backend/conduit/articles/views.py\",\"line\":129,\"expression\":\"Tags.query.all()\",\"usedBy\":[{\"route\":true},{\"function\":\"get_tags\",\"functionFile\":\"backend/conduit/articles/views.py\"}]}],\"tables\":[{\"table\":\"tags\",\"kind\":\"table\",\"library\":\"sqlalchemy\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"route\":true},{\"function\":\"get_tags\",\"functionFile\":\"backend/conduit/articles/views.py\"}]}],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"consumerComponents\":[{\"name\":\"Tags\",\"kind\":\"function\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":11,\"depth\":0,\"changedThrough\":[\"Tags\"]},{\"name\":\"Home\",\"kind\":\"function\",\"file\":\"frontend/pages/index.tsx\",\"line\":8,\"depth\":1,\"renders\":[\"Tags\"]}],\"consumerPages\":[]}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "py-fastapi-fullstack-tags",
+      "sample": "internet-realworld-python-fastapi-fullstack",
+      "category": "frontend-api",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 146324,
+            "medianOutputTokens": 1494,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 16823,
+            "medianCostUsd": 0.0732,
+            "spread": {
+              "inputTokens": {
+                "min": 142656,
+                "max": 254473
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 7
+              },
+              "durationMs": {
+                "min": 15135,
+                "max": 23050
+              },
+              "costUsd": {
+                "min": 0.0695,
+                "max": 0.0896
+              }
+            },
+            "totalCostUsd": 0.2323,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two frontend files build a `GET …/tags` request, but one of them is never used. The backend handler is `get_all_tags`.\n\n**Frontend**\n- `frontend/components/home/Tags.tsx:14` is the live caller. It runs `useSWR(`${SERVER_BASE_URL}/tags`, fetcher)` to load the popular-tags list.\n- `frontend/lib/api/tag.ts:6` defines `TagAPI.getAll`, which calls `axios.get(`${SERVER_BASE_URL}/tags`)`. Nothing imports it, so no request is made from there.\n- `components/editor/TagInput.tsx` only manages tag input state locally and makes no request.\n\n**Caveat about the URL**\n- In this sample, `SERVER_BASE_URL` in `frontend/lib/utils/constant.ts` points at `https://conduit.productionready.io/api`, not the local FastAPI backend. The frontend calls `/api/tags` by path shape, but the sample's default config sends it to the hosted Conduit demo API.\n- I found no literal `/api/tags` string. The `/api` prefix is part of `SERVER_BASE_URL`.\n\n**Backend**\n- `backend/app/api/routes/tags.py` defines `get_all_tags`:\n  ```python\n  @router.get(\"\", response_model=TagsInList, name=\"tags:get-all\")\n  async def get_all_tags(tags_repo = Depends(get_repository(TagsRepository))) -> TagsInList\n  ```\n  It calls `tags_repo.get_all_tags()` and returns `TagsInList(tags=tags)`.\n- The route path is built from three pieces:\n  - `backend/app/api/routes/api.py:16` includes the tags router with `prefix=\"/tags\"`.\n  - `backend/app/main.py:40` includes the API router with `prefix=settings.api_prefix`.\n  - `api_prefix` defaults to `\"/api\"` in `backend/app/core/settings/app.py:27`.\n  - Together these give `GET /api/tags`.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 23050,
+              "costUsd": 0.08960489999999999,
+              "inputTokens": 14,
+              "outputTokens": 1854,
+              "cacheCreationTokens": 11690,
+              "cacheReadTokens": 242769,
+              "toolCalls": 7,
+              "toolsByName": {
+                "Grep": 3,
+                "Bash": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two frontend files request `GET /api/tags`, and the backend handler is `get_all_tags`.\n\n**Frontend**\n\nBoth build the URL as `${SERVER_BASE_URL}/tags`. `SERVER_BASE_URL` is defined in `frontend/lib/utils/constant.ts:1` as `https://conduit.productionready.io/api`, so the path resolves to `/api/tags`.\n\n- `frontend/lib/api/tag.ts:6` is `TagAPI.getAll`, which calls `axios.get(...)`. Nothing else in the frontend imports or calls `TagAPI`, so it is currently dead code.\n- `frontend/components/home/Tags.tsx:14` is the component that actually fetches the tags, using `useSWR` on that URL.\n\n**Backend**\n\nThe handler is `get_all_tags` in `backend/app/api/routes/tags.py:10-15`:\n\n```python\n@router.get(\"\", response_model=TagsInList, name=\"tags:get-all\")\nasync def get_all_tags(tags_repo: TagsRepository = Depends(get_repository(TagsRepository))) -> TagsInList:\n```\n\nIt calls `tags_repo.get_all_tags()` and returns `TagsInList(tags=tags)`.\n\nThe full path is assembled from three pieces:\n\n- `main.py:40` mounts the API router with prefix `/api`.\n- `api.py:16` includes the tags router with prefix `/tags`.\n- The route itself is `\"\"`.\n\nOne caveat: the frontend's base URL points at the hosted `conduit.productionready.io` server, not this FastAPI backend. The two only line up on the path, unless the base URL is changed to point at the local backend.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 16823,
+              "costUsd": 0.06952340000000001,
+              "inputTokens": 8,
+              "outputTokens": 1494,
+              "cacheCreationTokens": 10334,
+              "cacheReadTokens": 132314,
+              "toolCalls": 6,
+              "toolsByName": {
+                "Grep": 5,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend files that request `GET /api/tags`:**\n\n- `frontend/components/home/Tags.tsx:14` calls `useSWR(`${SERVER_BASE_URL}/tags`, fetcher)`. This is the \"Popular Tags\" widget on the home page, rendered from `frontend/pages/index.tsx`.\n- `frontend/lib/api/tag.ts:6` defines `TagAPI.getAll`, which is `axios.get(`${SERVER_BASE_URL}/tags`)`. Nothing in the frontend imports `TagAPI`, so this is a defined client that no code calls.\n\n`SERVER_BASE_URL` in `frontend/lib/utils/constant.ts` is `https://conduit.productionready.io/api`. That is the public RealWorld demo server, not this sample's FastAPI backend. The frontend requests the same path and method, but by default it never reaches the Python handler below.\n\n**Backend handler:** `get_all_tags` in `backend/app/api/routes/tags.py:10-15`.\n\n- The decorator is `@router.get(\"\", response_model=TagsInList, name=\"tags:get-all\")`.\n- The router is mounted with `prefix=\"/tags\"` in `backend/app/api/routes/api.py:16`.\n- `backend/app/main.py:40` adds `settings.api_prefix`, which I assume is `/api`. I didn't open the settings file to confirm.\n- The function calls `TagsRepository.get_all_tags()` and returns `TagsInList(tags=tags)`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 15135,
+              "costUsd": 0.073184,
+              "inputTokens": 8,
+              "outputTokens": 1144,
+              "cacheCreationTokens": 12076,
+              "cacheReadTokens": 134240,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 3,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 110279,
+            "medianOutputTokens": 555,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 9101,
+            "medianCostUsd": 0.0618,
+            "spread": {
+              "inputTokens": {
+                "min": 110276,
+                "max": 110279
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 8580,
+                "max": 9760
+              },
+              "costUsd": {
+                "min": 0.0618,
+                "max": 0.0619
+              }
+            },
+            "totalCostUsd": 0.1855,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "api_consumers": 3,
+              "route_details": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "**Frontend files that request `GET /api/tags`:**\n- `frontend/components/home/Tags.tsx:14` calls it with `useSWR` inside the `Tags` component. The `Home` page (`frontend/pages/index.tsx`) renders that component.\n- `frontend/lib/api/tag.ts:6` calls it with `axios.get` in the `getAll` function.\n\n**Backend handler:** The Python function is `get_all_tags` in `backend/app/api/routes/tags.py` (lines 11–15). The FastAPI route is declared at line 10. It depends on `get_repository(TagsRepository)` from `backend/app/api/dependencies/database.py`. It then calls `TagsRepository.get_all_tags` in `backend/app/db/repositories/tags.py`.\n\nI got this from the Concentrate code graph, so I haven't opened the source files to check it.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9760,
+              "costUsd": 0.061859199999999996,
+              "inputTokens": 8,
+              "outputTokens": 558,
+              "cacheCreationTokens": 11599,
+              "cacheReadTokens": 98672,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"query\":{\"method\":\"GET\",\"path\":\"/api/tags\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"fastapi\",\"file\":\"backend/app/api/routes/tags.py\",\"line\":10},\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"fastapi\",\"file\":\"backend/app/api/routes/tags.py\",\"line\":10},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                },
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"method\":\"GET\",\"path\":\"/api/tags\",\"routes\":[{\"method\":\"GET\",\"path\":\"\",\"fullPath\":\"/api/tags\",\"framework\":\"fastapi\",\"handlerName\":\"get_all_tags\",\"file\":\"backend/app/api/routes/tags.py\",\"line\":10,\"handlers\":[{\"name\":\"get_all_tags\",\"className\":null,\"file\":\"backend/app/api/routes/tags.py\",\"line\":11,\"endLine\":15}],\"lifecycle\":[{\"role\":\"dependency\",\"scope\":\"route\",\"hook\":null,\"orderIndex\":0,\"expression\":\"Depends(get_repository(TagsRepository))\",\"name\":\"get_repository\",\"className\":null,\"file\":\"backend/app/api/dependencies/database.py\",\"line\":22,\"endLine\":30},{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":1,\"expression\":null,\"name\":\"get_all_tags\",\"className\":null,\"file\":\"backend/app/api/routes/tags.py\",\"line\":11,\"endLine\":15}],\"callChain\":[{\"depth\":1,\"caller\":\"get_all_tags\",\"callerFile\":\"backend/app/api/routes/tags.py\",\"line\":12,\"callee\":\"get_repository\",\"calleeClass\":null,\"calleeFile\":\"backend/app/api/dependencies/database.py\"},{\"depth\":1,\"caller\":\"get_all_tags\",\"callerFile\":\"backend/app/api/routes/tags.py\",\"line\":14,\"callee\":\"get_all_tags\",\"calleeClass\":\"TagsRepository\",\"calleeFile\":\"backend/app/db/repositories/tags.py\"}],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"consumerComponents\":[{\"name\":\"Tags\",\"kind\":\"function\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":11,\"depth\":0,\"changedThrough\":[\"Tags\"]},{\"name\":\"Home\",\"kind\":\"function\",\"file\":\"frontend/pages/index.tsx\",\"line\":8,\"depth\":1,\"renders\":[\"Tags\"]}],\"consumerPages\":[]}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend files requesting `GET /api/tags`** (both are exact URL matches):\n\n- `frontend/components/home/Tags.tsx:14` calls `useSWR` from the `Tags` component. `Tags` is rendered by `Home` in `frontend/pages/index.tsx`.\n- `frontend/lib/api/tag.ts:6` calls `axios.get` from the `getAll` function.\n\n**Backend handler:** the Python function `get_all_tags` in `backend/app/api/routes/tags.py`, lines 11–15. It's a FastAPI route.\n\n- It gets its repository through `Depends(get_repository(TagsRepository))`. That dependency is defined in `backend/app/api/dependencies/database.py:22`.\n- It then calls `TagsRepository.get_all_tags` in `backend/app/db/repositories/tags.py`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8580,
+              "costUsd": 0.0617992,
+              "inputTokens": 8,
+              "outputTokens": 552,
+              "cacheCreationTokens": 11599,
+              "cacheReadTokens": 98672,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__route_details": 1,
+                "mcp__concentrate__api_consumers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"method\":\"GET\",\"path\":\"/api/tags\",\"routes\":[{\"method\":\"GET\",\"path\":\"\",\"fullPath\":\"/api/tags\",\"framework\":\"fastapi\",\"handlerName\":\"get_all_tags\",\"file\":\"backend/app/api/routes/tags.py\",\"line\":10,\"handlers\":[{\"name\":\"get_all_tags\",\"className\":null,\"file\":\"backend/app/api/routes/tags.py\",\"line\":11,\"endLine\":15}],\"lifecycle\":[{\"role\":\"dependency\",\"scope\":\"route\",\"hook\":null,\"orderIndex\":0,\"expression\":\"Depends(get_repository(TagsRepository))\",\"name\":\"get_repository\",\"className\":null,\"file\":\"backend/app/api/dependencies/database.py\",\"line\":22,\"endLine\":30},{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":1,\"expression\":null,\"name\":\"get_all_tags\",\"className\":null,\"file\":\"backend/app/api/routes/tags.py\",\"line\":11,\"endLine\":15}],\"callChain\":[{\"depth\":1,\"caller\":\"get_all_tags\",\"callerFile\":\"backend/app/api/routes/tags.py\",\"line\":12,\"callee\":\"get_repository\",\"calleeClass\":null,\"calleeFile\":\"backend/app/api/dependencies/database.py\"},{\"depth\":1,\"caller\":\"get_all_tags\",\"callerFile\":\"backend/app/api/routes/tags.py\",\"line\":14,\"callee\":\"get_all_tags\",\"calleeClass\":\"TagsRepository\",\"calleeFile\":\"backend/app/db/repositories/tags.py\"}],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"consumerComponents\":[{\"name\":\"Tags\",\"kind\":\"function\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":11,\"depth\":0,\"changedThrough\":[\"Tags\"]},{\"name\":\"Home\",\"kind\":\"function\",\"file\":\"frontend/pages/index.tsx\",\"line\":8,\"depth\":1,\"renders\":[\"Tags\"]}],\"consumerPages\":[]}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"query\":{\"method\":\"GET\",\"path\":\"/api/tags\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"fastapi\",\"file\":\"backend/app/api/routes/tags.py\",\"line\":10},\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"fastapi\",\"file\":\"backend/app/api/routes/tags.py\",\"line\":10},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend files that request `GET /api/tags`** (both are exact matches):\n\n| File | Line | Client | Function |\n|---|---|---|---|\n| `frontend/components/home/Tags.tsx` | 14 | SWR (`useSWR`) | `Tags` component |\n| `frontend/lib/api/tag.ts` | 6 | axios (`axios.get`) | `getAll` |\n\nThe `Tags` component is rendered by the `Home` page (`frontend/pages/index.tsx:8`).\n\n**Backend handler:** the Python function `get_all_tags` in `backend/app/api/routes/tags.py` (lines 11–15) serves the route. It's a FastAPI route that takes `Depends(get_repository(TagsRepository))`. It then calls `TagsRepository.get_all_tags` in `backend/app/db/repositories/tags.py`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9101,
+              "costUsd": 0.061825,
+              "inputTokens": 8,
+              "outputTokens": 555,
+              "cacheCreationTokens": 11598,
+              "cacheReadTokens": 98670,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__route_details": 1,
+                "mcp__concentrate__api_consumers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"method\":\"GET\",\"path\":\"/api/tags\",\"routes\":[{\"method\":\"GET\",\"path\":\"\",\"fullPath\":\"/api/tags\",\"framework\":\"fastapi\",\"handlerName\":\"get_all_tags\",\"file\":\"backend/app/api/routes/tags.py\",\"line\":10,\"handlers\":[{\"name\":\"get_all_tags\",\"className\":null,\"file\":\"backend/app/api/routes/tags.py\",\"line\":11,\"endLine\":15}],\"lifecycle\":[{\"role\":\"dependency\",\"scope\":\"route\",\"hook\":null,\"orderIndex\":0,\"expression\":\"Depends(get_repository(TagsRepository))\",\"name\":\"get_repository\",\"className\":null,\"file\":\"backend/app/api/dependencies/database.py\",\"line\":22,\"endLine\":30},{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":1,\"expression\":null,\"name\":\"get_all_tags\",\"className\":null,\"file\":\"backend/app/api/routes/tags.py\",\"line\":11,\"endLine\":15}],\"callChain\":[{\"depth\":1,\"caller\":\"get_all_tags\",\"callerFile\":\"backend/app/api/routes/tags.py\",\"line\":12,\"callee\":\"get_repository\",\"calleeClass\":null,\"calleeFile\":\"backend/app/api/dependencies/database.py\"},{\"depth\":1,\"caller\":\"get_all_tags\",\"callerFile\":\"backend/app/api/routes/tags.py\",\"line\":14,\"callee\":\"get_all_tags\",\"calleeClass\":\"TagsRepository\",\"calleeFile\":\"backend/app/db/repositories/tags.py\"}],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"consumerComponents\":[{\"name\":\"Tags\",\"kind\":\"function\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":11,\"depth\":0,\"changedThrough\":[\"Tags\"]},{\"name\":\"Home\",\"kind\":\"function\",\"file\":\"frontend/pages/index.tsx\",\"line\":8,\"depth\":1,\"renders\":[\"Tags\"]}],\"consumerPages\":[]}],\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                },
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/tags"
+                  },
+                  "result": "{\"query\":{\"method\":\"GET\",\"path\":\"/api/tags\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"fastapi\",\"file\":\"backend/app/api/routes/tags.py\",\"line\":10},\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/components/home/Tags.tsx\",\"line\":14,\"expression\":\"useSWR\",\"function\":\"Tags\"},{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/tags\",\"framework\":\"fastapi\",\"file\":\"backend/app/api/routes/tags.py\",\"line\":10},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/tags\",\"match\":\"exact\",\"file\":\"frontend/lib/api/tag.ts\",\"line\":6,\"expression\":\"axios.get\",\"function\":\"getAll\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
