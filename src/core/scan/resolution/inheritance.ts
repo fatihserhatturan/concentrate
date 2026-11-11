@@ -57,6 +57,23 @@ export function addInheritanceRelationships(graph: IGraphContributor): void {
   }
 
   addGoImplementsRelationships(graph, relationshipIndex);
+
+  // Rust: `impl Trait for Type` blocks the parser recorded on the file (the
+  // type and the trait may live in other files, found through its `use`s).
+  for (const node of graph.nodes) {
+    if (node.label !== "File" || typeof node.properties.rustImpls !== "string") continue;
+    const impls = JSON.parse(node.properties.rustImpls) as Array<{ type: string; trait: string }>;
+    delete node.properties.rustImpls;
+    const seen = new Set<string>();
+    for (const impl of impls) {
+      const classId = resolveNamedNode(impl.type, node.id, classesByFileAndName, importsByFile, relationshipIndex.resolvedFileByImportId);
+      const traitId = resolveNamedNode(impl.trait, node.id, interfacesByFileAndName, importsByFile, relationshipIndex.resolvedFileByImportId);
+      if (classId && traitId && !seen.has(`${classId}\0${traitId}`)) {
+        seen.add(`${classId}\0${traitId}`);
+        graph.addRelationship({ from: classId, to: traitId, type: "IMPLEMENTS", properties: {} });
+      }
+    }
+  }
 }
 
 function resolveNamedNode(

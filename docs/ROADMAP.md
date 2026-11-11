@@ -1180,10 +1180,10 @@ Rust gets files, `use` / `mod` imports, structs, functions, impl methods, calls 
 
 ### Declarations
 
-- [ ] Traits as `Interface` nodes, `impl Trait for X` as `IMPLEMENTS`; trait default methods
-- [ ] Enums (`Enum`), type aliases, generics (type parameters recorded), `const` / `static` as `Variable`
-- [ ] Attributes as `Decorator` nodes (name and arguments), `#[derive(...)]` recorded
-- [ ] `macro_rules!` definitions; `parameters` and `returnType` on functions and methods
+- [x] Traits as `Interface` nodes, `impl Trait for X` as `IMPLEMENTS`; trait default methods
+- [x] Enums (`Enum`), type aliases, generics (type parameters recorded), `const` / `static` as `Variable`
+- [x] Attributes as `Decorator` nodes (name and arguments), `#[derive(...)]` recorded
+- [x] `macro_rules!` definitions; `parameters` and `returnType` on functions and methods
 
 ### Calls
 
@@ -1192,8 +1192,8 @@ Rust gets files, `use` / `mod` imports, structs, functions, impl methods, calls 
 
 ### Entrypoints and tests
 
-- [ ] `fn main`, `#[tokio::main]`, `#[actix_web::main]` as `EntryPoint` nodes
-- [ ] `#[test]`, `#[tokio::test]`, `#[cfg(test)]` modules and `tests/` classified as tests
+- [x] `fn main`, `#[tokio::main]`, `#[actix_web::main]` as `EntryPoint` nodes
+- [x] `#[test]`, `#[tokio::test]`, `#[cfg(test)]` modules and `tests/` classified as tests
 
 ### MCP
 
