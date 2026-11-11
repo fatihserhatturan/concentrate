@@ -2090,6 +2090,9 @@ the call recall leaves out:
   compile command first). CMake and Make are read from the scanned files; a project that
   generates its build files (`configure`, `meson`, `bazel`, `premake`, Qt `qmake`) has the
   include paths only from `compile_commands.json`, if it keeps one.
+- Cost: reading the build files adds about 20 ms to a scan of a small project (cJSON 254 → 273 ms,
+  googletest 1,349 → 1,363 ms, tinyxml2 unchanged at 1.26 s; one process, 2 workers); the
+  files are read once for the includes and once for the targets.
 - Measured (`docs/accuracy.md`, "C and C++ build systems"): CMake and Make targets of
   cJSON (125 labeled facts), tinyxml2 (11) and googletest's `googlemock` (80: 76
   right, the 4 misses are sources the C++ grammar cannot parse), no false positive.
