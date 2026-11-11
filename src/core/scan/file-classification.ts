@@ -50,7 +50,7 @@ export function classifyFile(relativePath: string, generatedContent = false, cod
     "__tests__",
     "spec",
     "specs",
-  ]) || /\.(?:test|spec)\.[cm]?[jt]sx?$/u.test(fileName) || fileName.endsWith("_test.go");
+  ]) || /\.(?:test|spec)\.[cm]?[jt]sx?$/u.test(fileName) || fileName.endsWith("_test.go") || /^tests\.rs$|_tests?\.rs$/u.test(fileName);
 
   const isSupport = hasSegment(segments, [
     "mock",

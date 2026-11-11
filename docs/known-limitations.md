@@ -1357,6 +1357,39 @@ Astro).
   tables, multi-line arrays); `[patch]`, `[replace]` and `.cargo/config.toml`
   path overrides are ignored. Macros that generate `mod` or `use` items are not
   expanded.
+- A trait is an `Interface` (`methods`, `methodSignatures`, supertraits in
+  `embeds`, `typeParameters`). `impl Trait for Type` becomes `IMPLEMENTS` from the
+  type's `Class` to the trait, when both are nodes of the scan and reachable by name
+  in the impl's file or through its `use`s; a std trait (`Display`) has no node.
+  An enum is an `Enum`, which has no `IMPLEMENTS` edge (the schema relates classes to
+  interfaces): its `impl` methods are file-level functions with `className` set.
+  Trait default methods have `methodKind: "trait-default"`, trait impl methods
+  `methodKind: "trait-impl"` and `implementsTrait`.
+- Structs (`Class`) record `fields` (tuple fields are named `0`, `1`…) and
+  `typeParameters`; enums record `variants`; unions, associated types and
+  associated consts inside impls/traits are not nodes. `const` and `static` are
+  `Variable` nodes (kind `const` / `static`) at file or module level only.
+- Attributes are `Decorator` nodes (`name` such as `derive` or `tokio::main`, `args`
+  as the top-level comma-split list) on structs, functions and methods
+  (`HAS_DECORATOR`, `HAS_METHOD_DECORATOR`), enums (`ENUM_HAS_DECORATOR`) and traits
+  (`INTERFACE_HAS_DECORATOR`). Attributes on type aliases, consts, fields, variants,
+  impl blocks and `mod` items are not recorded (`#[cfg(test)]` on a `mod` is read for
+  test classification). Inner attributes (`#![…]`) are ignored. Derive-generated
+  items are not expanded.
+- `macro_rules!` is a `Function` (kind `macro_rules`, exported with `#[macro_export]`)
+  that `name!(…)` calls resolve to by name; macros are not expanded, so calls
+  inside a macro's token tree are not seen.
+- `fn main` of `main.rs`, `build.rs`, `src/bin/**` and `examples/**`, and any
+  top-level function with a `#[…::main]` attribute (`tokio`, `actix-web`,
+  `async-std`…), is an `EntryPoint` (kind `main`, or `build-script`; `library` is
+  `rust` or the runtime). Binaries declared with `[[bin]] path` elsewhere are not.
+- Functions with `#[test]`, `#[…::test]` (`tokio::test`…), `#[rstest]` or
+  `#[test_case]` have `testKind: "test"`, `#[bench]` has `"bench"`, and other
+  functions inside an inline `#[cfg(test)]` module `"helper"`. Files under `tests/`
+  and `tests.rs`, `*_test.rs`, `*_tests.rs` are test files; a file only mounted by
+  `#[cfg(test)] mod x;` under another name is not detected as a test file.
+- `parameters` is `[{name, type}]` (`self` has the type `Self` with its reference
+  prefix, `&mut Self`); `returnType` is the text after `->`.
 
 ## Non-code files
 

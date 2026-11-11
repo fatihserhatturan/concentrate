@@ -46,6 +46,7 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
   const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors("rust", source, statementParents);
   try {
     const importIds = new Set<string>();
+    const impls: Array<{ type: string; trait: string; line: number }> = [];
     walk(tree.rootNode, (node) => {
       if (node.type === "use_declaration" || (node.type === "mod_item" && !node.childForFieldName("body"))) {
         for (const importNode of createImportNodes(fileNodeId, node, importIds)) {
@@ -63,15 +64,52 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
         const classNode = createStructNode(fileNodeId, node);
         if (classNode) {
           nodes.push(classNode);
-          relationships.push({
-            from: fileNodeId,
-            to: classNode.id,
-            type: "DEFINES_CLASS",
-            properties: {},
-          });
+          relationships.push({ from: fileNodeId, to: classNode.id, type: "DEFINES_CLASS", properties: {} });
+          addAttributes(nodes, relationships, classNode.id, "HAS_DECORATOR", node);
+        }
+      } else if (node.type === "enum_item") {
+        const enumNode = createEnumNode(fileNodeId, node);
+        if (enumNode) {
+          nodes.push(enumNode);
+          relationships.push({ from: fileNodeId, to: enumNode.id, type: "DEFINES_ENUM", properties: {} });
+          addAttributes(nodes, relationships, enumNode.id, "ENUM_HAS_DECORATOR", node);
+        }
+      } else if (node.type === "trait_item") {
+        const traitNode = createTraitNode(fileNodeId, node);
+        if (traitNode) {
+          nodes.push(traitNode);
+          relationships.push({ from: fileNodeId, to: traitNode.id, type: "DEFINES_INTERFACE", properties: {} });
+          addAttributes(nodes, relationships, traitNode.id, "INTERFACE_HAS_DECORATOR", node);
+        }
+      } else if (node.type === "type_item" && node.parent?.type !== "declaration_list") {
+        const aliasNode = createTypeAliasNode(fileNodeId, node);
+        if (aliasNode) {
+          nodes.push(aliasNode);
+          relationships.push({ from: fileNodeId, to: aliasNode.id, type: "DEFINES_TYPE_ALIAS", properties: {} });
+        }
+      } else if ((node.type === "const_item" || node.type === "static_item") && isModuleLevel(node)) {
+        const variableNode = createVariableNode(fileNodeId, node);
+        if (variableNode) {
+          nodes.push(variableNode);
+          relationships.push({ from: fileNodeId, to: variableNode.id, type: "DEFINES_VARIABLE", properties: {} });
+        }
+      } else if (node.type === "macro_definition") {
+        const macroNode = createMacroNode(fileNodeId, node);
+        if (macroNode) {
+          nodes.push(macroNode);
+          relationships.push({ from: fileNodeId, to: macroNode.id, type: "DEFINES_FUNCTION", properties: {} });
+        }
+      } else if (node.type === "impl_item") {
+        const trait = node.childForFieldName("trait");
+        const typeName = baseTypeName(node.childForFieldName("type"));
+        const traitName = baseTypeName(trait);
+        if (trait && typeName && traitName) {
+          impls.push({ type: typeName, trait: traitName, line: node.startPosition.row + 1 });
         }
       }
     });
+
+    if (impls.length > 0) nodes[0]!.properties.rustImpls = JSON.stringify(impls);
 
     // Second pass: process functions now that all structs are indexed.
     const classesByName = new Map(
@@ -80,22 +118,57 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
         .map((n) => [String(n.properties.name), n.id]),
     );
 
+    const isBinaryFile = /(^|\/)(main\.rs|build\.rs)$|(^|\/)(src\/bin|examples)\//u.test(relativePath.split(path.sep).join("/"));
     walk(tree.rootNode, (node) => {
       if (node.type !== "function_item") return;
 
-      const implTypeName = extractImplTypeName(node);
-      const classNodeId = implTypeName ? classesByName.get(implTypeName) : undefined;
-      const className = implTypeName ?? undefined;
+      const owner = functionOwner(node);
+      const classNodeId = owner?.kind === "impl" ? classesByName.get(owner.name) : undefined;
 
-      const functionNode = createFunctionNode(fileNodeId, node, className);
+      const functionNode = createFunctionNode(fileNodeId, node, owner?.name);
       if (!functionNode) return;
+      if (owner?.kind === "trait") functionNode.properties.methodKind = "trait-default";
+      if (owner?.kind === "impl" && owner.trait) {
+        functionNode.properties.methodKind = "trait-impl";
+        functionNode.properties.implementsTrait = owner.trait;
+      }
+      const attributes = attributesOf(node);
+      const testKind = attributes.some((attribute) => /(^|::)test$|^rstest$|^test_case$/u.test(attribute.name)) ? "test"
+        : attributes.some((attribute) => attribute.name === "bench") ? "bench"
+        : insideCfgTest(node) ? "helper" : null;
+      if (testKind) functionNode.properties.testKind = testKind;
 
       nodes.push(functionNode);
+      addAttributes(nodes, relationships, functionNode.id, "HAS_METHOD_DECORATOR", node);
 
       if (classNodeId) {
         relationships.push({ from: classNodeId, to: functionNode.id, type: "DEFINES_METHOD", properties: {} });
       } else {
         relationships.push({ from: fileNodeId, to: functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
+      }
+
+      // `fn main` of a binary and `#[tokio::main]` & co. run without a caller.
+      const name = String(functionNode.properties.name);
+      const runtime = attributes.find((attribute) => /(^|::)main$/u.test(attribute.name) && attribute.name !== "main");
+      if (!owner && node.parent?.type === "source_file" && ((name === "main" && isBinaryFile) || runtime)) {
+        const line = node.startPosition.row + 1;
+        const entrypoint: GraphNode = {
+          id: `${fileNodeId}:entrypoint:${line}:${node.startPosition.column}:main:<none>`,
+          label: "EntryPoint",
+          properties: {
+            kind: relativePath.endsWith("build.rs") ? "build-script" : "main",
+            trigger: runtime?.expression ?? null,
+            receiverName: null,
+            library: runtime ? runtimeLibrary(runtime.name) : "rust",
+            line,
+            handlerName: name,
+          },
+        };
+        nodes.push(entrypoint);
+        relationships.push(
+          { from: fileNodeId, to: entrypoint.id, type: "DECLARES_ENTRYPOINT", properties: {} },
+          { from: entrypoint.id, to: functionNode.id, type: "ENTRYPOINT_HANDLED_BY", properties: {} },
+        );
       }
 
       const callNodes = createCallNodes(functionNode.id, node);
@@ -120,10 +193,118 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
   }
 }
 
-function extractImplTypeName(node: SyntaxNode): string | null {
+// The impl block or trait a function sits in directly.
+function functionOwner(node: SyntaxNode): { kind: "impl" | "trait"; name: string; trait?: string } | null {
   if (node.parent?.type !== "declaration_list") return null;
-  if (node.parent?.parent?.type !== "impl_item") return null;
-  return node.parent.parent.childForFieldName("type")?.text ?? null;
+  const owner = node.parent.parent;
+  if (owner?.type === "impl_item") {
+    const name = baseTypeName(owner.childForFieldName("type"));
+    if (!name) return null;
+    const trait = baseTypeName(owner.childForFieldName("trait"));
+    return { kind: "impl", name, ...(trait ? { trait } : {}) };
+  }
+  if (owner?.type === "trait_item") {
+    const name = owner.childForFieldName("name")?.text;
+    return name ? { kind: "trait", name } : null;
+  }
+  return null;
+}
+
+// `Foo<T>`, `&mut Foo`, `a::b::Foo` → `Foo`; null for tuples, arrays, `dyn` and the like.
+function baseTypeName(node: SyntaxNode | null): string | null {
+  if (!node) return null;
+  switch (node.type) {
+    case "type_identifier":
+      return node.text;
+    case "generic_type":
+      return baseTypeName(node.childForFieldName("type"));
+    case "scoped_type_identifier":
+      return node.childForFieldName("name")?.text ?? null;
+    case "reference_type":
+      return baseTypeName(node.childForFieldName("type"));
+    default:
+      return null;
+  }
+}
+
+// Items directly in a file or a `mod` (not in a function, impl or trait).
+function isModuleLevel(node: SyntaxNode): boolean {
+  const parent = node.parent;
+  if (parent?.type === "source_file") return true;
+  return parent?.type === "declaration_list" && parent.parent?.type === "mod_item";
+}
+
+type RustAttribute = { name: string; expression: string; args: string[] };
+
+// The `#[…]` attributes written right before an item.
+function attributesOf(node: SyntaxNode): RustAttribute[] {
+  const attributes: RustAttribute[] = [];
+  for (let sibling = node.previousNamedSibling; sibling && (sibling.type === "attribute_item" || sibling.type === "line_comment" || sibling.type === "block_comment"); sibling = sibling.previousNamedSibling) {
+    if (sibling.type !== "attribute_item") continue;
+    const attribute = sibling.namedChildren.find((child) => child.type === "attribute");
+    if (!attribute) continue;
+    const name = attribute.namedChildren.find((child) => child.type === "identifier" || child.type === "scoped_identifier")?.text.replace(/\s+/gu, "");
+    if (!name) continue;
+    const list = attribute.childForFieldName("arguments");
+    const value = attribute.childForFieldName("value");
+    attributes.unshift({
+      name,
+      expression: sibling.text,
+      args: list ? splitArguments(list.text.slice(1, -1)) : value ? [value.text] : [],
+    });
+  }
+  return attributes;
+}
+
+function splitArguments(text: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let quote = false;
+  let start = 0;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index]!;
+    if (quote) {
+      if (char === "\\") index += 1;
+      else if (char === "\"") quote = false;
+    } else if (char === "\"") {
+      quote = true;
+    } else if ("([{<".includes(char)) {
+      depth += 1;
+    } else if (")]}>".includes(char)) {
+      depth -= 1;
+    } else if (char === "," && depth === 0) {
+      parts.push(text.slice(start, index));
+      start = index + 1;
+    }
+  }
+  parts.push(text.slice(start));
+  return parts.map((part) => part.trim()).filter((part) => part !== "");
+}
+
+function addAttributes(nodes: GraphNode[], relationships: GraphRelationship[], ownerId: string, relation: string, item: SyntaxNode): void {
+  for (const attribute of attributesOf(item)) {
+    const id = `${ownerId}:decorator:${item.startPosition.row + 1}:${attribute.name}`;
+    if (nodes.some((candidate) => candidate.id === id)) continue;
+    nodes.push({
+      id,
+      label: "Decorator",
+      properties: { name: attribute.name, expression: attribute.expression, line: item.startPosition.row + 1, args: JSON.stringify(attribute.args) },
+    });
+    relationships.push({ from: ownerId, to: id, type: relation as GraphRelationship["type"], properties: {} });
+  }
+}
+
+// Inside a `#[cfg(test)]` module (inline), however deeply.
+function insideCfgTest(node: SyntaxNode): boolean {
+  for (let parent = node.parent; parent; parent = parent.parent) {
+    if (parent.type === "mod_item" && attributesOf(parent).some((attribute) => attribute.name === "cfg" && attribute.args.some((arg) => arg === "test"))) return true;
+  }
+  return false;
+}
+
+// `tokio::main` → tokio, `actix_web::main` → actix-web.
+function runtimeLibrary(attribute: string): string {
+  return attribute.split("::")[0]!.replaceAll("_", "-");
 }
 
 type UseEntry = { segments: string[]; alias: string | null; wildcard: boolean };
@@ -234,10 +415,16 @@ function createFunctionNode(fileNodeId: string, node: SyntaxNode, className?: st
       isAsync: node.namedChildren.some((c) => c.type === "function_modifiers" && c.children.some((fc) => fc.type === "async")),
       isAbstract: false,
       visibility: rustVisibility(node),
-      parameters: null,
-      returnType: null,
+      parameters: JSON.stringify(rustParameters(node.childForFieldName("parameters"))),
+      returnType: returnTypeOf(node),
+      ...typeParametersOf(node),
     },
   };
+}
+
+function typeParametersOf(node: SyntaxNode): { typeParameters?: string } {
+  const list = node.childForFieldName("type_parameters");
+  return list ? { typeParameters: list.text } : {};
 }
 
 function createStructNode(fileNodeId: string, node: SyntaxNode): GraphNode | null {
@@ -247,6 +434,21 @@ function createStructNode(fileNodeId: string, node: SyntaxNode): GraphNode | nul
 
   if (!name) {
     return null;
+  }
+
+  const fields: Array<{ name: string; type: string }> = [];
+  const body = node.childForFieldName("body");
+  if (body?.type === "field_declaration_list") {
+    for (const field of body.namedChildren) {
+      if (field.type !== "field_declaration") continue;
+      const fieldName = field.childForFieldName("name")?.text;
+      const type = field.childForFieldName("type")?.text;
+      if (fieldName && type) fields.push({ name: fieldName, type });
+    }
+  } else if (body?.type === "ordered_field_declaration_list") {
+    body.namedChildren
+      .filter((field) => field.type !== "visibility_modifier" && field.type !== "attribute_item")
+      .forEach((field, index) => fields.push({ name: String(index), type: field.text }));
   }
 
   return {
@@ -259,8 +461,148 @@ function createStructNode(fileNodeId: string, node: SyntaxNode): GraphNode | nul
       isExported: rustVisibility(node) !== "private",
       isAbstract: false,
       visibility: rustVisibility(node),
+      ...(fields.length > 0 ? { fields: JSON.stringify(fields) } : {}),
+      ...typeParametersOf(node),
     },
   };
+}
+
+function createEnumNode(fileNodeId: string, node: SyntaxNode): GraphNode | null {
+  const name = node.childForFieldName("name")?.text;
+  if (!name) return null;
+  const variants = (node.childForFieldName("body")?.namedChildren ?? [])
+    .filter((variant) => variant.type === "enum_variant")
+    .map((variant) => variant.childForFieldName("name")?.text)
+    .filter((variant): variant is string => variant !== undefined);
+  return {
+    id: `${fileNodeId}:enum:${node.startPosition.row + 1}:${name}`,
+    label: "Enum",
+    properties: {
+      name,
+      line: node.startPosition.row + 1,
+      endLine: node.endPosition.row + 1,
+      isExported: rustVisibility(node) !== "private",
+      variants: JSON.stringify(variants),
+      ...typeParametersOf(node),
+    },
+  };
+}
+
+// A trait is an Interface: its methods (with signatures) and supertraits.
+function createTraitNode(fileNodeId: string, node: SyntaxNode): GraphNode | null {
+  const name = node.childForFieldName("name")?.text;
+  if (!name) return null;
+  const methods: string[] = [];
+  const signatures: Record<string, { parameters: Array<string | null>; returnType: string | null }> = {};
+  for (const member of node.childForFieldName("body")?.namedChildren ?? []) {
+    if (member.type !== "function_item" && member.type !== "function_signature_item") continue;
+    const methodName = member.childForFieldName("name")?.text;
+    if (!methodName) continue;
+    methods.push(methodName);
+    signatures[methodName] = {
+      parameters: rustParameters(member.childForFieldName("parameters")).map((parameter) => parameter.type),
+      returnType: returnTypeOf(member),
+    };
+  }
+  const embeds = (node.childForFieldName("bounds")?.namedChildren ?? [])
+    .map((bound) => baseTypeName(bound))
+    .filter((bound): bound is string => bound !== null);
+  return {
+    id: `${fileNodeId}:interface:${node.startPosition.row + 1}:${name}`,
+    label: "Interface",
+    properties: {
+      name,
+      line: node.startPosition.row + 1,
+      endLine: node.endPosition.row + 1,
+      isExported: rustVisibility(node) !== "private",
+      methods: JSON.stringify(methods),
+      methodSignatures: JSON.stringify(signatures),
+      embeds: JSON.stringify(embeds),
+      ...typeParametersOf(node),
+    },
+  };
+}
+
+function createTypeAliasNode(fileNodeId: string, node: SyntaxNode): GraphNode | null {
+  const name = node.childForFieldName("name")?.text;
+  const type = node.childForFieldName("type")?.text;
+  if (!name || !type) return null;
+  return {
+    id: `${fileNodeId}:type:${node.startPosition.row + 1}:${name}`,
+    label: "TypeAlias",
+    properties: {
+      name,
+      line: node.startPosition.row + 1,
+      endLine: node.endPosition.row + 1,
+      isExported: rustVisibility(node) !== "private",
+      aliasOf: type,
+      isAlias: true,
+      ...typeParametersOf(node),
+    },
+  };
+}
+
+function createVariableNode(fileNodeId: string, node: SyntaxNode): GraphNode | null {
+  const name = node.childForFieldName("name")?.text;
+  if (!name || name === "_") return null;
+  const value = node.childForFieldName("value");
+  const line = node.startPosition.row + 1;
+  const literal = value?.type === "string_literal" && !value.text.includes("\\") ? value.text.slice(1, -1) : null;
+  return {
+    id: `${fileNodeId}:variable:${line}:${name}`,
+    label: "Variable",
+    properties: {
+      name,
+      kind: node.type === "const_item" ? "const" : "static",
+      isExported: rustVisibility(node) !== "private",
+      line,
+      ...(literal === null ? {} : { stringValue: literal }),
+    },
+  };
+}
+
+// `macro_rules! name { … }` is a function the `name!(…)` calls resolve to.
+function createMacroNode(fileNodeId: string, node: SyntaxNode): GraphNode | null {
+  const name = node.childForFieldName("name")?.text ?? node.namedChildren.find((child) => child.type === "identifier")?.text;
+  if (!name) return null;
+  return {
+    id: `${fileNodeId}:function:${node.startPosition.row + 1}:${name}`,
+    label: "Function",
+    properties: {
+      name,
+      kind: "macro_rules",
+      methodKind: null,
+      line: node.startPosition.row + 1,
+      endLine: node.endPosition.row + 1,
+      className: null,
+      isExported: attributesOf(node).some((attribute) => attribute.name === "macro_export"),
+      isAsync: false,
+      isAbstract: false,
+      visibility: attributesOf(node).some((attribute) => attribute.name === "macro_export") ? "pub" : "private",
+      parameters: null,
+      returnType: null,
+    },
+  };
+}
+
+// `(&self, a: u32, mut b: Vec<T>)` as [{name, type}].
+function rustParameters(list: SyntaxNode | null): Array<{ name: string | null; type: string | null }> {
+  const parameters: Array<{ name: string | null; type: string | null }> = [];
+  for (const child of list?.namedChildren ?? []) {
+    if (child.type === "self_parameter") {
+      parameters.push({ name: "self", type: child.text.replace(/\bself\b/u, "Self").replace(/^mut\s+/u, "") });
+    } else if (child.type === "parameter") {
+      parameters.push({
+        name: child.childForFieldName("pattern")?.text ?? null,
+        type: child.childForFieldName("type")?.text ?? null,
+      });
+    }
+  }
+  return parameters;
+}
+
+function returnTypeOf(node: SyntaxNode): string | null {
+  return node.childForFieldName("return_type")?.text ?? null;
 }
 
 function rustVisibility(node: SyntaxNode): string {
