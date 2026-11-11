@@ -110,6 +110,7 @@ describe("C++ declarations and calls (fixtures/cpp-calls)", () => {
   it("picks the overload by argument count", () => {
     assert.deepEqual(at("src/shape.cpp:9 util::log_line"), ["src/util.cpp#geo::util::log_line header"]);
     assert.deepEqual(at("src/shape.cpp:10 util::log_line"), ["src/util.cpp#geo::util::log_line header"]);
+    assert.deepEqual(at("src/main.cpp:43 util::log_format"), ["src/util.cpp#geo::util::log_format header"], "a variadic function takes any number of extra arguments");
     assert.deepEqual(at("src/util.cpp:9 log_line"), ["src/util.cpp#geo::util::log_line header"]);
   });
 

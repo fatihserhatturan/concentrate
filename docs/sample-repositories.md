@@ -30,6 +30,8 @@ sample test (`tests/golden-samples.test.ts`) all read from there.
 | internet-vue-realworld | internet | mutoe/vue3-realworld-example-app | `741c215ef0f674f90fcb03c5493a1b3a3a7f1b03` |
 | internet-sveltekit-realworld | internet | sveltejs/realworld | `df796708040f5200ec572b28ab7f88ecee5794dd` |
 | internet-angular-realworld | internet | gothinkster/angular-realworld-example-app | `f39866e5241477f3b891a045edfaedf82792be5e` |
+| internet-c-cjson | internet | DaveGamble/cJSON | `6d9f2443ab071f86e5d9b43025a40929ec41c46c` |
+| internet-cpp-tinyxml2 | internet | leethomason/tinyxml2 | `8224e427b655b83dae5e2298f1e6919523a78737` |
 | internet-realworld-fullstack | internet | gothinkster/node-express-realworld-example-app in `backend/`, reck1ess/next-realworld-example-app in `frontend/` | `30b68e1e881462b2f4164ea09ab4c4f5699c7b0b`, `be9ef569bc395975d98c1973fac23ba9277797e7` |
 
 A sample with `parts` is assembled from several repositories, each cloned

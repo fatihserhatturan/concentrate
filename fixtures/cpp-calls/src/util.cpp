@@ -10,4 +10,6 @@ void log_line(const char* text) { log_line(text, 0); }
 
 void log_line(const char* text, int level) { (void)text; (void)level; }
 
+void log_format(const char* format, ...) { (void)format; }
+
 }  // namespace geo::util

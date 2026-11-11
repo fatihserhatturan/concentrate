@@ -40,5 +40,6 @@ int main(int argc, char** argv) {
   clamp_count(argc);
   int limited = CLAMP(argc, 0, 4);
   registry.sum();
+  util::log_format("%d %d", argc, limited);
   return limited;
 }

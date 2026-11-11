@@ -65,8 +65,8 @@ the only runtime dependency left is `web-tree-sitter`.
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
-M9 (Go), M10 (non-code files) and M11 (Rust) are done. Next is M12, the Python ecosystem (Phase 30),
-then M13, the C/C++ ecosystem (Phase 34).
+M9 (Go), M10 (non-code files), M11 (Rust) and M12 (Python) are done. M13, the C/C++ ecosystem, has its
+language foundation (Phase 34); the build systems (Phase 35) come next.
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -1490,40 +1490,40 @@ The preprocessor is not run: macros are read as calls. The decisions of M9 apply
 
 ### Grammars and files
 
-- [ ] Vendor `tree-sitter-c` and `tree-sitter-cpp`; record the bytes added to `vendor/grammars`
-- [ ] Extensions `.c`, `.h`, `.cc`, `.cpp`, `.cxx`, `.hpp`, `.hh`, `.hxx`, `.ipp`, `.inl`; a `.h` file uses the C++ grammar when the project has C++ sources
-- [ ] A file with `ERROR` nodes (often from macros) keeps a partial graph and gets a scan warning
+- [x] Vendor `tree-sitter-c` and `tree-sitter-cpp`; record the bytes added to `vendor/grammars`
+- [x] Extensions `.c`, `.h`, `.cc`, `.cpp`, `.cxx`, `.hpp`, `.hh`, `.hxx`, `.ipp`, `.inl`; a `.h` file uses the C++ grammar when the project has C++ sources
+- [x] A file with `ERROR` nodes (often from macros) keeps a partial graph and gets a scan warning
 
 ### Includes
 
-- [ ] `#include "…"` resolves relative to the file, then through the include paths of `compile_commands.json` and CMake (`include_directories`, `target_include_directories`)
-- [ ] `#include <…>` headers outside the scan are external imports
+- [ ] `#include "…"` resolves relative to the file, then through the include paths of `compile_commands.json` (done) and CMake (`include_directories`, `target_include_directories`; the CMake reader is Phase 35)
+- [x] `#include <…>` headers outside the scan are external imports
 
 ### Declarations
 
-- [ ] Functions, structs, unions, classes (bases, `virtual`, `override`), namespaces, enums, `typedef` / `using` aliases
-- [ ] Templates with their parameters recorded; `#define` macros as nodes
-- [ ] A declaration in a header is linked to its definition in a source file (`Foo::bar` out of class)
+- [x] Functions, structs, unions, classes (bases, `virtual`, `override`), namespaces, enums, `typedef` / `using` aliases
+- [x] Templates with their parameters recorded; `#define` macros as nodes
+- [x] A declaration in a header is linked to its definition in a source file (`Foo::bar` out of class)
 
 ### Calls
 
-- [ ] Free and namespace-qualified functions (`ns::f`, `using namespace`, `using ns::f`)
-- [ ] Methods on typed receivers (`T x`, `T* p`, `T& r`, `auto x = T(...)`, `std::make_unique<T>`, `this`)
-- [ ] A virtual call reaches every override, marked as such; macro invocations recorded
+- [x] Free and namespace-qualified functions (`ns::f`, `using namespace`, `using ns::f`)
+- [x] Methods on typed receivers (`T x`, `T* p`, `T& r`, `auto x = T(...)`, `std::make_unique<T>`, `this`)
+- [x] A virtual call reaches every override, marked as such; macro invocations recorded
 
 ### Entrypoints and tests
 
-- [ ] `main` as an `EntryPoint`
-- [ ] GoogleTest (`TEST`, `TEST_F`, `TEST_P`) and Catch2 (`TEST_CASE`, `SECTION`) files classified as tests
+- [x] `main` as an `EntryPoint`
+- [x] GoogleTest (`TEST`, `TEST_F`, `TEST_P`) and Catch2 (`TEST_CASE`, `SECTION`) files classified as tests
 
 ### MCP
 
-- [ ] `find_unused_exports` covers non-`static` functions and classes declared in headers
+- [x] `find_unused_exports` covers non-`static` functions and classes declared in headers
 
 ### Acceptance criteria
 
-- [ ] C and C++ fixtures with headers, namespaces, classes and virtual calls have golden graphs
-- [ ] Calls resolve from a source file through the header to the definition; unresolved calls are counted, never guessed
+- [x] C and C++ fixtures with headers, namespaces, classes and virtual calls have golden graphs
+- [x] Calls resolve from a source file through the header to the definition; unresolved calls are counted, never guessed
 
 ## Phase 35: C/C++ build systems (CMake, Make, compile_commands.json) ([#212](https://github.com/fatihserhatturan/concentrate/issues/212))
 

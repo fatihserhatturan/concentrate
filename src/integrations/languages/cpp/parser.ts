@@ -590,8 +590,9 @@ function classBases(node: SyntaxNode, kind: string): Array<{ name: string; acces
 // `(int a, const Foo& b, ...)` as [{name, type}]; an unnamed parameter has a null name.
 export function cppParameters(list: SyntaxNode | null): Array<{ name: string | null; type: string | null; optional?: true }> {
   const parameters: Array<{ name: string | null; type: string | null; optional?: true }> = [];
-  for (const parameter of list?.namedChildren ?? []) {
-    if (parameter.type === "variadic_parameter_declaration" || parameter.type === "variadic_parameter") {
+  // `...` is a `variadic_parameter` in C and a bare token in C++.
+  for (const parameter of list?.children ?? []) {
+    if (parameter.type === "variadic_parameter_declaration" || parameter.type === "variadic_parameter" || parameter.type === "...") {
       parameters.push({ name: null, type: "..." });
       continue;
     }
