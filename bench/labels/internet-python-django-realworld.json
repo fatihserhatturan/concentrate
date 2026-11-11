@@ -1,6 +1,6 @@
 {
   "sample": "internet-python-django-realworld",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. gothinkster/django-realworld-example-app. Routes: every `url(..)` of the three app urls modules and the registration of `ArticleViewSet` on the router, one label per HTTP method the view serves (the methods its class defines or inherits from `generics.*APIView`, `mixins.*` and `ViewSet` bases: `ArticleViewSet` has create, list, retrieve and update, no partial_update or destroy; `DefaultRouter(trailing_slash=False)` registers no trailing slash), with the full path through `include(..)` in conduit/urls.py (`^api/`) as a path: the regex `^articles/(?P<article_slug>[-\\w]+)/favorite/?$` is `articles/<article_slug>/favorite` (an optional trailing slash is written without it) and the router's lookup follows `lookup_field = 'slug'`. The line is the `url(..)` call's, or the `router.register` call's for the viewset. The router's API root view and format suffix routes, and `admin.site.urls`, are not labeled.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. gothinkster/django-realworld-example-app. Routes: every `url(..)` of the three app urls modules and the registration of `ArticleViewSet` on the router, one label per HTTP method the view serves (the methods its class defines or inherits from `generics.*APIView`, `mixins.*` and `ViewSet` bases: `ArticleViewSet` has create, list, retrieve and update, no partial_update or destroy; `DefaultRouter(trailing_slash=False)` registers no trailing slash), with the full path through `include(..)` in conduit/urls.py (`^api/`) as a path: the regex `^articles/(?P<article_slug>[-\\w]+)/favorite/?$` is `articles/<article_slug>/favorite` (an optional trailing slash is written without it) and the router's lookup follows `lookup_field = 'slug'`. The line is the `url(..)` call's, or the `router.register` call's for the viewset. The router's API root view and format suffix routes, and `admin.site.urls`, are not labeled. Data access (Phase 32): every `Model.objects…` / `instance.save()` / `instance.delete()` in a function of conduit/apps, one label per (function, model, operation), read from the source; the class-level `queryset = Model.objects…` of the views are not function accesses and are not labelled; `self.model(...)` + `save()` of the user manager and `instance.save()` of a serializer's `update` are labelled although the model is only known from the class. Env: the two `os.environ.setdefault` reads (the project has no other env read).",
   "routes": {
     "scope": [
       "conduit/apps/articles/urls.py",
@@ -121,6 +121,166 @@
         "path": "/api/profiles/<username>/follow",
         "file": "conduit/apps/profiles/urls.py",
         "line": 7
+      }
+    ]
+  },
+  "dataAccess": {
+    "scope": [
+      "conduit/apps/"
+    ],
+    "items": [
+      {
+        "file": "conduit/apps/articles/relations.py",
+        "function": "get_queryset",
+        "model": "Tag",
+        "operation": "read",
+        "table": "articles_tag"
+      },
+      {
+        "file": "conduit/apps/articles/relations.py",
+        "function": "to_internal_value",
+        "model": "Tag",
+        "operation": "create",
+        "table": "articles_tag"
+      },
+      {
+        "file": "conduit/apps/articles/serializers.py",
+        "function": "create",
+        "model": "Article",
+        "operation": "create",
+        "table": "articles_article"
+      },
+      {
+        "file": "conduit/apps/articles/serializers.py",
+        "function": "create",
+        "model": "Comment",
+        "operation": "create",
+        "table": "articles_comment"
+      },
+      {
+        "file": "conduit/apps/articles/views.py",
+        "function": "create",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles_article"
+      },
+      {
+        "file": "conduit/apps/articles/views.py",
+        "function": "destroy",
+        "model": "Comment",
+        "operation": "read",
+        "table": "articles_comment"
+      },
+      {
+        "file": "conduit/apps/articles/views.py",
+        "function": "destroy",
+        "model": "Comment",
+        "operation": "delete",
+        "table": "articles_comment"
+      },
+      {
+        "file": "conduit/apps/articles/views.py",
+        "function": "delete",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles_article"
+      },
+      {
+        "file": "conduit/apps/articles/views.py",
+        "function": "post",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles_article"
+      },
+      {
+        "file": "conduit/apps/articles/views.py",
+        "function": "get_queryset",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles_article"
+      },
+      {
+        "file": "conduit/apps/profiles/views.py",
+        "function": "delete",
+        "model": "Profile",
+        "operation": "read",
+        "table": "profiles_profile"
+      },
+      {
+        "file": "conduit/apps/profiles/views.py",
+        "function": "post",
+        "model": "Profile",
+        "operation": "read",
+        "table": "profiles_profile"
+      },
+      {
+        "file": "conduit/apps/authentication/backends.py",
+        "function": "_authenticate_credentials",
+        "model": "User",
+        "operation": "read",
+        "table": "authentication_user"
+      },
+      {
+        "file": "conduit/apps/authentication/models.py",
+        "function": "create_user",
+        "model": "User",
+        "operation": "create",
+        "table": "authentication_user"
+      },
+      {
+        "file": "conduit/apps/authentication/models.py",
+        "function": "create_superuser",
+        "model": "User",
+        "operation": "create",
+        "table": "authentication_user"
+      },
+      {
+        "file": "conduit/apps/authentication/serializers.py",
+        "function": "create",
+        "model": "User",
+        "operation": "create",
+        "table": "authentication_user"
+      },
+      {
+        "file": "conduit/apps/authentication/serializers.py",
+        "function": "update",
+        "model": "User",
+        "operation": "update",
+        "table": "authentication_user"
+      },
+      {
+        "file": "conduit/apps/authentication/serializers.py",
+        "function": "update",
+        "model": "Profile",
+        "operation": "update",
+        "table": "profiles_profile"
+      },
+      {
+        "file": "conduit/apps/authentication/signals.py",
+        "function": "create_related_profile",
+        "model": "Profile",
+        "operation": "create",
+        "table": "profiles_profile"
+      }
+    ]
+  },
+  "env": {
+    "scope": [
+      "manage.py",
+      "conduit/"
+    ],
+    "items": [
+      {
+        "file": "manage.py",
+        "line": 6,
+        "name": "DJANGO_SETTINGS_MODULE",
+        "function": null
+      },
+      {
+        "file": "conduit/wsgi.py",
+        "line": 14,
+        "name": "DJANGO_SETTINGS_MODULE",
+        "function": null
       }
     ]
   }

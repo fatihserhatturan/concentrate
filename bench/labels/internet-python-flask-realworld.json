@@ -1,6 +1,6 @@
 {
   "sample": "internet-python-flask-realworld",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. gothinkster/flask-realworld-example-app. Routes: every `@blueprint.route(path, methods=(..))` of the three views modules (articles, user, profile), one label per method with the path as written (the paths are absolute: the blueprints have no url_prefix and `register_blueprints` in conduit/app.py registers them without one) and the line of the decorator. Flask's `<converter:name>` syntax is kept as written.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. gothinkster/flask-realworld-example-app. Routes: every `@blueprint.route(path, methods=(..))` of the three views modules (articles, user, profile), one label per method with the path as written (the paths are absolute: the blueprints have no url_prefix and `register_blueprints` in conduit/app.py registers them without one) and the line of the decorator. Flask's `<converter:name>` syntax is kept as written. Data access (Phase 32): every `Model.query…`, `self.query…`, `Model(...)` / typed `.save()` / `.delete()` of the CRUD mixin in a function of conduit/, one label per (function, model, operation). The mixin's own `save` / `delete` / `get_by_id` act on whichever model has the mixin and are not labelled. A `.save()` on a value the code reaches through a relationship (`current_user.profile.save()`, `article.comments…first().delete()`) is labelled although its model is not named. Env: the two `os.environ.get` reads of conduit/settings.py (`request.headers.environ[...]` in conduit/user/views.py is a WSGI dict, not the process environment).",
   "routes": {
     "scope": [
       "conduit/articles/views.py",
@@ -121,6 +121,249 @@
         "path": "/api/profiles/<username>/follow",
         "file": "conduit/profile/views.py",
         "line": 36
+      }
+    ]
+  },
+  "dataAccess": {
+    "scope": [
+      "conduit/"
+    ],
+    "items": [
+      {
+        "file": "conduit/articles/views.py",
+        "function": "get_articles",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "make_article",
+        "model": "Tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "make_article",
+        "model": "Tags",
+        "operation": "create",
+        "table": "tags"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "make_article",
+        "model": "Article",
+        "operation": "create",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "update_article",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "update_article",
+        "model": "Article",
+        "operation": "update",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "delete_article",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "delete_article",
+        "model": "Article",
+        "operation": "delete",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "get_article",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "favorite_an_article",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "favorite_an_article",
+        "model": "Article",
+        "operation": "update",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "unfavorite_an_article",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "unfavorite_an_article",
+        "model": "Article",
+        "operation": "update",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "articles_feed",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "get_tags",
+        "model": "Tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "get_comments",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "make_comment_on_article",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "make_comment_on_article",
+        "model": "Comment",
+        "operation": "create",
+        "table": "comment"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "delete_comment_on_article",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "function": "delete_comment_on_article",
+        "model": "Comment",
+        "operation": "delete",
+        "table": "comment"
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "function": "is_favourite",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "function": "favorited",
+        "model": "Article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "conduit/user/views.py",
+        "function": "register_user",
+        "model": "User",
+        "operation": "create",
+        "table": "users"
+      },
+      {
+        "file": "conduit/user/views.py",
+        "function": "register_user",
+        "model": "UserProfile",
+        "operation": "create",
+        "table": "userprofile"
+      },
+      {
+        "file": "conduit/user/views.py",
+        "function": "login_user",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "conduit/user/views.py",
+        "function": "update_user",
+        "model": "User",
+        "operation": "update",
+        "table": "users"
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "function": "get_profile",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "function": "follow_user",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "function": "follow_user",
+        "model": "UserProfile",
+        "operation": "update",
+        "table": "userprofile"
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "function": "unfollow_user",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "function": "unfollow_user",
+        "model": "UserProfile",
+        "operation": "update",
+        "table": "userprofile"
+      }
+    ]
+  },
+  "env": {
+    "scope": [
+      "conduit/"
+    ],
+    "items": [
+      {
+        "file": "conduit/settings.py",
+        "line": 10,
+        "name": "CONDUIT_SECRET",
+        "function": null
+      },
+      {
+        "file": "conduit/settings.py",
+        "line": 37,
+        "name": "DATABASE_URL",
+        "function": null
       }
     ]
   }

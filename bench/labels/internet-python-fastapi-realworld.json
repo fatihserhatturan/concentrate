@@ -1,6 +1,6 @@
 {
   "sample": "internet-python-fastapi-realworld",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. nsidnev/fastapi-realworld-example-app. Routes: every `@router.<method>(..)` decorator under app/api/routes, one label per route, with the full path composed by hand through `router.include_router(.., prefix=..)` in app/api/routes/api.py and app/api/routes/articles/api.py and `application.include_router(api_router, prefix=settings.api_prefix)` in app/main.py (`api_prefix` is `/api`, assigned in app/core/settings/app.py); the line is the decorator's first line.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. nsidnev/fastapi-realworld-example-app. Routes: every `@router.<method>(..)` decorator under app/api/routes, one label per route, with the full path composed by hand through `router.include_router(.., prefix=..)` in app/api/routes/api.py and app/api/routes/articles/api.py and `application.include_router(api_router, prefix=settings.api_prefix)` in app/main.py (`api_prefix` is `/api`, assigned in app/core/settings/app.py); the line is the decorator's first line. Env (Phase 32): the pydantic v1 `BaseSettings` of app/core/settings (no env_prefix, so each field is the upper-cased variable) read where a function uses `settings.<field>` or `self.<field>` inside the settings class, and `BaseAppSettings().app_env` of get_app_settings. The fields `config()` fills from `environments[app_env]` in get_app_settings are chosen at run time and are not labelled. Data access is not labelled: the repositories use aiosql query files and pypika, which the scan does not read (docs/known-limitations.md).",
   "routes": {
     "scope": [
       "app/api/routes/"
@@ -119,6 +119,145 @@
         "path": "/api/tags",
         "file": "app/api/routes/tags.py",
         "line": 10
+      }
+    ]
+  },
+  "env": {
+    "scope": [
+      "app/"
+    ],
+    "items": [
+      {
+        "file": "app/core/config.py",
+        "line": 19,
+        "name": "APP_ENV",
+        "function": "get_app_settings"
+      },
+      {
+        "file": "app/db/events.py",
+        "line": 12,
+        "name": "DATABASE_URL",
+        "function": "connect_to_db"
+      },
+      {
+        "file": "app/db/events.py",
+        "line": 13,
+        "name": "MIN_CONNECTION_COUNT",
+        "function": "connect_to_db"
+      },
+      {
+        "file": "app/db/events.py",
+        "line": 14,
+        "name": "MAX_CONNECTION_COUNT",
+        "function": "connect_to_db"
+      },
+      {
+        "file": "app/main.py",
+        "line": 22,
+        "name": "ALLOWED_HOSTS",
+        "function": "get_application"
+      },
+      {
+        "file": "app/main.py",
+        "line": 40,
+        "name": "API_PREFIX",
+        "function": "get_application"
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 57,
+        "name": "JWT_TOKEN_PREFIX",
+        "function": "_get_authorization_header"
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 86,
+        "name": "SECRET_KEY",
+        "function": "_get_current_user"
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 43,
+        "name": "SECRET_KEY",
+        "function": "login"
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 83,
+        "name": "SECRET_KEY",
+        "function": "register"
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 25,
+        "name": "SECRET_KEY",
+        "function": "retrieve_current_user"
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 63,
+        "name": "SECRET_KEY",
+        "function": "update_current_user"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 42,
+        "name": "DEBUG",
+        "function": "fastapi_kwargs"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 43,
+        "name": "DOCS_URL",
+        "function": "fastapi_kwargs"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 44,
+        "name": "OPENAPI_PREFIX",
+        "function": "fastapi_kwargs"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 45,
+        "name": "OPENAPI_URL",
+        "function": "fastapi_kwargs"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 46,
+        "name": "REDOC_URL",
+        "function": "fastapi_kwargs"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 47,
+        "name": "TITLE",
+        "function": "fastapi_kwargs"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 48,
+        "name": "VERSION",
+        "function": "fastapi_kwargs"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 53,
+        "name": "LOGGERS",
+        "function": "configure_logging"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 55,
+        "name": "LOGGING_LEVEL",
+        "function": "configure_logging"
+      },
+      {
+        "file": "app/core/settings/app.py",
+        "line": 57,
+        "name": "LOGGING_LEVEL",
+        "function": "configure_logging"
       }
     ]
   }
