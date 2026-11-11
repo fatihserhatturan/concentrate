@@ -177,7 +177,7 @@ even for large repositories; read it first to decide which tools to call.
   lists data-access operations by source, model, library, and operation. Each
   row has the model's `table` when one is known. Go gorm, ent, sqlc,
   `database/sql` and sqlx accesses are included, and Rust sqlx, diesel and
-  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`). Rows with `direct: true`
+  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`), and Python SQLAlchemy, SQLModel and Django ORM ones (`library: sqlalchemy`, `sqlmodel`, `django`) with the literal SQL of DB-API cursors and drivers (`library: dbapi`, the model is the one mapped to the table when there is one). Rows with `direct: true`
   (the file or function that makes the call) come first; the others are the
   callers, routes and entrypoints that reach it. `line` is in `accessFile`,
   the file of the call, which differs from the source's `file` on a
@@ -187,7 +187,8 @@ even for large repositories; read it first to decide which tools to call.
   collections from Prisma schema files, TypeORM entities, Mongoose schemas,
   Drizzle table definitions and Knex calls, Go gorm models, ent schemas and
   sqlc queries, Rust diesel `table!` tables, SeaORM entities and sqlx query
-  tables, and SQL migrations and schema files (`library: sql` when no
+  tables, Python SQLAlchemy / SQLModel / Django models and `Table(...)`s (their
+  Alembic and Django migrations are in `migrations`), and SQL migrations and schema files (`library: sql` when no
   code declares the table; otherwise the SQL is merged into the code's table
   by name). Each table has its `indexes`, its `migrations` (`file`, `line`,
   `order` — 0 for a schema file — and `change` in run order) and its

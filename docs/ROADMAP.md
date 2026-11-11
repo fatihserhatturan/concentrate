@@ -1413,28 +1413,28 @@ and Django ORM data access, config, HTTP clients and dependency injection. The d
 
 ### Data access
 
-- [ ] SQLAlchemy models (`__tablename__`, `Column`, `Mapped[...]`) and queries (`session.query(M)`, `select(M)`, `session.add`)
-- [ ] Django ORM models (`Meta.db_table`) and `Model.objects` queries; reverse relations
-- [ ] DB-API `cursor.execute("…")` SQL (sqlite3, psycopg, asyncpg) mapped to tables
-- [ ] Alembic and Django migrations merged with the tables of M10
+- [x] SQLAlchemy models (`__tablename__`, `Column`, `Mapped[...]`) and queries (`session.query(M)`, `select(M)`, `session.add`)
+- [x] Django ORM models (`Meta.db_table`) and `Model.objects` queries; reverse relations
+- [x] DB-API `cursor.execute("…")` SQL (sqlite3, psycopg, asyncpg) mapped to tables
+- [x] Alembic and Django migrations merged with the tables of M10
 
 ### Env and config
 
-- [ ] `os.environ[...]`, `os.environ.get`, `os.getenv` as `USES_ENV`
-- [ ] pydantic `BaseSettings` fields (with `env_prefix`), Django `settings.X`, python-dotenv, `environs` / `decouple`
+- [x] `os.environ[...]`, `os.environ.get`, `os.getenv` as `USES_ENV`
+- [x] pydantic `BaseSettings` fields (with `env_prefix`), Django `settings.X`, python-dotenv, `environs` / `decouple`
 
 ### Outbound HTTP
 
-- [ ] requests, httpx and aiohttp calls as `REQUESTS`, linked to routes of the scan when the path matches
+- [x] requests, httpx and aiohttp calls as `REQUESTS`, linked to routes of the scan when the path matches
 
 ### Dependency injection
 
-- [ ] FastAPI `Depends` providers and dependency-injector containers as `INJECTS`
+- [x] FastAPI `Depends` providers and dependency-injector containers as `INJECTS`
 
 ### Acceptance criteria
 
-- [ ] Fixtures for SQLAlchemy, Django ORM, env and HTTP clients have golden graphs
-- [ ] `find_table_usage`, `find_env_usage` and frontend → Python backend `REQUESTS` answer for the fixtures
+- [x] Fixtures for SQLAlchemy, Django ORM, env and HTTP clients have golden graphs
+- [x] `find_table_usage`, `find_env_usage` and frontend → Python backend `REQUESTS` answer for the fixtures
 
 ## Phase 33: Python ecosystem measurement (samples, accuracy, agent benchmark, README) ([#210](https://github.com/fatihserhatturan/concentrate/issues/210))
 

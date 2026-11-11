@@ -5,6 +5,7 @@
 {"kind":"node","id":"dir:catalog/management","label":"Directory","properties":{"name":"management","path":"<root>/catalog/management","relativePath":"catalog/management"}}
 {"kind":"node","id":"dir:catalog/management/commands","label":"Directory","properties":{"name":"commands","path":"<root>/catalog/management/commands","relativePath":"catalog/management/commands"}}
 {"kind":"node","id":"dir:shop","label":"Directory","properties":{"name":"shop","path":"<root>/shop","relativePath":"shop"}}
+{"kind":"node","id":"env:DJANGO_SETTINGS_MODULE","label":"EnvVar","properties":{"name":"DJANGO_SETTINGS_MODULE"}}
 {"kind":"node","id":"file:blog/__init__.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/blog/__init__.py","relativePath":"blog/__init__.py","sourceType":"production"}}
 {"kind":"node","id":"file:blog/urls.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/blog/urls.py","relativePath":"blog/urls.py","sourceType":"production"}}
 {"kind":"node","id":"file:blog/urls.py:call:6:4:path","label":"Call","properties":{"callee":"path","columnNumber":4,"expression":"path","line":6,"name":"path","receiver":null}}
@@ -271,10 +272,12 @@
 {"kind":"rel","from":"file:manage.py","type":"IMPORTS","to":"file:manage.py:import:1:os","properties":{}}
 {"kind":"rel","from":"file:manage.py","type":"IMPORTS","to":"file:manage.py:import:3:django.core.management","properties":{}}
 {"kind":"rel","from":"file:manage.py","type":"MODULE_CALLS","to":"file:manage.py:call:12:4:main","properties":{}}
+{"kind":"rel","from":"file:manage.py","type":"USES_ENV","to":"env:DJANGO_SETTINGS_MODULE","properties":{"access":"os.environ.setdefault","line":7}}
 {"kind":"rel","from":"file:manage.py:call:12:4:main","type":"CALL_RESOLVES_TO","to":"file:manage.py:function:6:main","properties":{}}
 {"kind":"rel","from":"file:manage.py:entrypoint:11:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:manage.py:function:6:main","properties":{}}
 {"kind":"rel","from":"file:manage.py:function:6:main","type":"CALLS","to":"file:manage.py:function:6:main:call:7:15:os.environ.setdefault","properties":{}}
 {"kind":"rel","from":"file:manage.py:function:6:main","type":"CALLS","to":"file:manage.py:function:6:main:call:8:4:execute_from_command_line","properties":{}}
+{"kind":"rel","from":"file:manage.py:function:6:main","type":"USES_ENV","to":"env:DJANGO_SETTINGS_MODULE","properties":{"access":"os.environ.setdefault","line":7}}
 {"kind":"rel","from":"file:shop/middleware.py","type":"DEFINES_CLASS","to":"file:shop/middleware.py:class:1:AuditMiddleware","properties":{}}
 {"kind":"rel","from":"file:shop/middleware.py","type":"DEFINES_FUNCTION","to":"file:shop/middleware.py:function:10:middleware","properties":{}}
 {"kind":"rel","from":"file:shop/middleware.py","type":"DEFINES_FUNCTION","to":"file:shop/middleware.py:function:9:timing_middleware","properties":{}}

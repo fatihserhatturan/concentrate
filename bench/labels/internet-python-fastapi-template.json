@@ -1,0 +1,228 @@
+{
+  "sample": "internet-python-fastapi-template",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. fastapi/full-stack-fastapi-template, backend/app (the frontend is excluded by the manifest). Data access (Phase 32): every SQLModel `select(...)`, `delete(...)`, `session.get(Model, ...)`, `session.add(...)` / `session.delete(...)` in a function, and the raw SQL of the Alembic revision that replaces the integer ids (`op.execute`, labelled with the model of the table), one label per (function, model, operation). `session.add(current_user)` in the user routes (the value comes from a `CurrentUser` dependency) is labelled although the model is not named at the call. Env is not labelled for this sample: its settings are read at ~60 sites, which Phase 33 labels with the rest.",
+  "dataAccess": {
+    "scope": [
+      "backend/app/"
+    ],
+    "items": [
+      {
+        "file": "backend/app/crud.py",
+        "function": "create_user",
+        "model": "User",
+        "operation": "create",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/crud.py",
+        "function": "update_user",
+        "model": "User",
+        "operation": "update",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/crud.py",
+        "function": "get_user_by_email",
+        "model": "User",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/crud.py",
+        "function": "authenticate",
+        "model": "User",
+        "operation": "update",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/crud.py",
+        "function": "create_item",
+        "model": "Item",
+        "operation": "create",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/core/db.py",
+        "function": "init_db",
+        "model": "User",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/deps.py",
+        "function": "get_current_user",
+        "model": "User",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/routes/items.py",
+        "function": "read_items",
+        "model": "Item",
+        "operation": "read",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/api/routes/items.py",
+        "function": "read_item",
+        "model": "Item",
+        "operation": "read",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/api/routes/items.py",
+        "function": "create_item",
+        "model": "Item",
+        "operation": "create",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/api/routes/items.py",
+        "function": "update_item",
+        "model": "Item",
+        "operation": "read",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/api/routes/items.py",
+        "function": "update_item",
+        "model": "Item",
+        "operation": "update",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/api/routes/items.py",
+        "function": "delete_item",
+        "model": "Item",
+        "operation": "read",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/api/routes/items.py",
+        "function": "delete_item",
+        "model": "Item",
+        "operation": "delete",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/api/routes/private.py",
+        "function": "create_user",
+        "model": "User",
+        "operation": "create",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/routes/users.py",
+        "function": "read_users",
+        "model": "User",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/routes/users.py",
+        "function": "update_user_me",
+        "model": "User",
+        "operation": "update",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/routes/users.py",
+        "function": "update_password_me",
+        "model": "User",
+        "operation": "update",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/routes/users.py",
+        "function": "delete_user_me",
+        "model": "User",
+        "operation": "delete",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/routes/users.py",
+        "function": "read_user_by_id",
+        "model": "User",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/routes/users.py",
+        "function": "update_user",
+        "model": "User",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/routes/users.py",
+        "function": "delete_user",
+        "model": "User",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/api/routes/users.py",
+        "function": "delete_user",
+        "model": "Item",
+        "operation": "delete",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/api/routes/users.py",
+        "function": "delete_user",
+        "model": "User",
+        "operation": "delete",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/alembic/versions/d98dd8ec85a3_edit_replace_id_integers_in_all_models_.py",
+        "function": "upgrade",
+        "model": "User",
+        "operation": "update",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/alembic/versions/d98dd8ec85a3_edit_replace_id_integers_in_all_models_.py",
+        "function": "upgrade",
+        "model": "Item",
+        "operation": "update",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/alembic/versions/d98dd8ec85a3_edit_replace_id_integers_in_all_models_.py",
+        "function": "upgrade",
+        "model": "User",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/alembic/versions/d98dd8ec85a3_edit_replace_id_integers_in_all_models_.py",
+        "function": "downgrade",
+        "model": "User",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/alembic/versions/d98dd8ec85a3_edit_replace_id_integers_in_all_models_.py",
+        "function": "downgrade",
+        "model": "Item",
+        "operation": "read",
+        "table": "item"
+      },
+      {
+        "file": "backend/app/alembic/versions/d98dd8ec85a3_edit_replace_id_integers_in_all_models_.py",
+        "function": "downgrade",
+        "model": "User",
+        "operation": "update",
+        "table": "user"
+      },
+      {
+        "file": "backend/app/alembic/versions/d98dd8ec85a3_edit_replace_id_integers_in_all_models_.py",
+        "function": "downgrade",
+        "model": "Item",
+        "operation": "update",
+        "table": "item"
+      }
+    ]
+  }
+}

@@ -1,0 +1,187 @@
+{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":4,"parsedFiles":4,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"python-env","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:app","label":"Directory","properties":{"name":"app","path":"<root>/app","relativePath":"app"}}
+{"kind":"node","id":"env:API_TOKEN","label":"EnvVar","properties":{"name":"API_TOKEN"}}
+{"kind":"node","id":"env:APP_DATABASE_URL","label":"EnvVar","properties":{"name":"APP_DATABASE_URL"}}
+{"kind":"node","id":"env:APP_DEBUG","label":"EnvVar","properties":{"name":"APP_DEBUG"}}
+{"kind":"node","id":"env:APP_MAX_CONNECTIONS","label":"EnvVar","properties":{"name":"APP_MAX_CONNECTIONS"}}
+{"kind":"node","id":"env:APP_REGION","label":"EnvVar","properties":{"name":"APP_REGION"}}
+{"kind":"node","id":"env:CACHE_URL","label":"EnvVar","properties":{"name":"CACHE_URL"}}
+{"kind":"node","id":"env:DEBUG","label":"EnvVar","properties":{"name":"DEBUG"}}
+{"kind":"node","id":"env:FALLBACK_TOKEN","label":"EnvVar","properties":{"name":"FALLBACK_TOKEN"}}
+{"kind":"node","id":"env:FROM_DOTENV","label":"EnvVar","properties":{"name":"FROM_DOTENV"}}
+{"kind":"node","id":"env:FROM_DOTENV_2","label":"EnvVar","properties":{"name":"FROM_DOTENV_2"}}
+{"kind":"node","id":"env:KEY_FROM_FILE","label":"EnvVar","properties":{"name":"KEY_FROM_FILE"}}
+{"kind":"node","id":"env:LEGACY_NAME","label":"EnvVar","properties":{"name":"LEGACY_NAME"}}
+{"kind":"node","id":"env:LOCAL_FLAG","label":"EnvVar","properties":{"name":"LOCAL_FLAG"}}
+{"kind":"node","id":"env:MAIL_HOST","label":"EnvVar","properties":{"name":"MAIL_HOST"}}
+{"kind":"node","id":"env:MAIL_PORT","label":"EnvVar","properties":{"name":"MAIL_PORT"}}
+{"kind":"node","id":"env:MAIL_USER","label":"EnvVar","properties":{"name":"MAIL_USER"}}
+{"kind":"node","id":"env:PORT","label":"EnvVar","properties":{"name":"PORT"}}
+{"kind":"node","id":"env:REQUEST_TIMEOUT","label":"EnvVar","properties":{"name":"REQUEST_TIMEOUT"}}
+{"kind":"node","id":"env:SERVICE_SECRET","label":"EnvVar","properties":{"name":"SERVICE_SECRET"}}
+{"kind":"node","id":"env:TRACE","label":"EnvVar","properties":{"name":"TRACE"}}
+{"kind":"node","id":"file:app/keys.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/keys.py","relativePath":"app/keys.py","sourceType":"production"}}
+{"kind":"node","id":"file:app/keys.py:variable:1:REGION_KEY","label":"Variable","properties":{"isExported":true,"kind":"const","line":1,"name":"REGION_KEY","stringValue":"APP_REGION","visibility":"public"}}
+{"kind":"node","id":"file:app/main.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/main.py","relativePath":"app/main.py","sourceType":"production"}}
+{"kind":"node","id":"file:app/main.py:call:5:11:AppSettings","label":"Call","properties":{"callee":"AppSettings","columnNumber":11,"expression":"AppSettings","line":5,"name":"AppSettings","receiver":null}}
+{"kind":"node","id":"file:app/main.py:function:13:secret","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":13,"methodKind":null,"name":"secret","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/main.py:function:17:connections","label":"Function","properties":{"className":null,"endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":17,"methodKind":null,"name":"connections","parameters":"[{\"name\":\"config\",\"type\":\"AppSettings\"}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/main.py:function:9:get_legacy","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":9,"methodKind":null,"name":"get_legacy","parameters":"[]","returnType":"LegacySettings","visibility":"public"}}
+{"kind":"node","id":"file:app/main.py:function:9:get_legacy:call:10:11:LegacySettings","label":"Call","properties":{"callee":"LegacySettings","columnNumber":11,"expression":"LegacySettings","line":10,"name":"LegacySettings","receiver":null}}
+{"kind":"node","id":"file:app/main.py:function:9:get_legacy:decorator:8:lru_cache","label":"Decorator","properties":{"args":"[]","expression":"@lru_cache","line":8,"name":"lru_cache"}}
+{"kind":"node","id":"file:app/main.py:import:1:functools","label":"Import","properties":{"bindings":"[{\"imported\":\"lru_cache\",\"local\":\"lru_cache\",\"kind\":\"named\"}]","line":1,"source":"functools","specifier":"from functools import lru_cache"}}
+{"kind":"node","id":"file:app/main.py:import:3:.settings","label":"Import","properties":{"bindings":"[{\"imported\":\"AppSettings\",\"local\":\"AppSettings\",\"kind\":\"named\"}]","line":3,"source":".settings","specifier":"from .settings import AppSettings, LegacySettings"}}
+{"kind":"node","id":"file:app/main.py:import:3:.settings#2","label":"Import","properties":{"bindings":"[{\"imported\":\"LegacySettings\",\"local\":\"LegacySettings\",\"kind\":\"named\"}]","line":3,"source":".settings","specifier":"from .settings import AppSettings, LegacySettings"}}
+{"kind":"node","id":"file:app/main.py:variable:5:settings","label":"Variable","properties":{"constructorName":"AppSettings","isExported":true,"kind":"variable","line":5,"name":"settings","visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/reads.py","relativePath":"app/reads.py","sourceType":"production"}}
+{"kind":"node","id":"file:app/reads.py:call:10:0:load_dotenv","label":"Call","properties":{"callee":"load_dotenv","columnNumber":0,"expression":"load_dotenv","line":10,"name":"load_dotenv","receiver":null}}
+{"kind":"node","id":"file:app/reads.py:call:11:6:Env","label":"Call","properties":{"callee":"Env","columnNumber":6,"expression":"Env","line":11,"name":"Env","receiver":null}}
+{"kind":"node","id":"file:app/reads.py:call:12:4:env.read_env","label":"Call","properties":{"callee":"read_env","columnNumber":4,"expression":"env.read_env","line":12,"name":"env.read_env","receiver":"env"}}
+{"kind":"node","id":"file:app/reads.py:call:13:9:dotenv_values","label":"Call","properties":{"callee":"dotenv_values","columnNumber":9,"expression":"dotenv_values","line":13,"name":"dotenv_values","receiver":null}}
+{"kind":"node","id":"file:app/reads.py:call:15:22:os.environ.get","label":"Call","properties":{"callee":"get","columnNumber":22,"expression":"os.environ.get","line":15,"name":"os.environ.get","receiver":"os.environ"}}
+{"kind":"node","id":"file:app/reads.py:call:15:7:int","label":"Call","properties":{"callee":"int","columnNumber":7,"expression":"int","line":15,"name":"int","receiver":null}}
+{"kind":"node","id":"file:app/reads.py:call:16:10:decouple_config","label":"Call","properties":{"callee":"decouple_config","columnNumber":10,"expression":"decouple_config","line":16,"name":"decouple_config","receiver":null}}
+{"kind":"node","id":"file:app/reads.py:function:20:debug","label":"Function","properties":{"className":null,"endLine":21,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":20,"methodKind":null,"name":"debug","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:function:24:token","label":"Function","properties":{"className":null,"endLine":26,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":24,"methodKind":null,"name":"token","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:function:24:token:call:26:11:getenv","label":"Call","properties":{"callee":"getenv","columnNumber":11,"expression":"getenv","line":26,"name":"getenv","receiver":null}}
+{"kind":"node","id":"file:app/reads.py:function:24:token:call:26:42:environ.get","label":"Call","properties":{"callee":"get","columnNumber":42,"expression":"environ.get","line":26,"name":"environ.get","receiver":"environ","receiverIsLocal":true}}
+{"kind":"node","id":"file:app/reads.py:function:29:region","label":"Function","properties":{"className":null,"endLine":30,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":29,"methodKind":null,"name":"region","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:function:29:region:call:30:14:os.getenv","label":"Call","properties":{"callee":"getenv","columnNumber":14,"expression":"os.getenv","line":30,"name":"os.getenv","receiver":"os"}}
+{"kind":"node","id":"file:app/reads.py:function:33:local","label":"Function","properties":{"className":null,"endLine":34,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":33,"methodKind":null,"name":"local","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:function:33:local:call:34:14:os.getenv","label":"Call","properties":{"callee":"getenv","columnNumber":14,"expression":"os.getenv","line":34,"name":"os.getenv","receiver":"os"}}
+{"kind":"node","id":"file:app/reads.py:function:37:mail","label":"Function","properties":{"className":null,"endLine":38,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":37,"methodKind":null,"name":"mail","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:function:37:mail:call:38:15:env.str","label":"Call","properties":{"callee":"str","columnNumber":15,"expression":"env.str","line":38,"name":"env.str","receiver":"env"}}
+{"kind":"node","id":"file:app/reads.py:function:37:mail:call:38:37:env.int","label":"Call","properties":{"callee":"int","columnNumber":37,"expression":"env.int","line":38,"name":"env.int","receiver":"env"}}
+{"kind":"node","id":"file:app/reads.py:function:37:mail:call:38:59:env","label":"Call","properties":{"callee":"env","columnNumber":59,"expression":"env","line":38,"name":"env","receiver":null}}
+{"kind":"node","id":"file:app/reads.py:function:41:dotenv","label":"Function","properties":{"className":null,"endLine":42,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":41,"methodKind":null,"name":"dotenv","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:function:41:dotenv:call:42:41:values.get","label":"Call","properties":{"callee":"get","columnNumber":41,"expression":"values.get","line":42,"name":"values.get","receiver":"values"}}
+{"kind":"node","id":"file:app/reads.py:function:41:dotenv:call:42:63:get_key","label":"Call","properties":{"callee":"get_key","columnNumber":63,"expression":"get_key","line":42,"name":"get_key","receiver":null}}
+{"kind":"node","id":"file:app/reads.py:function:45:dynamic","label":"Function","properties":{"className":null,"endLine":46,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":45,"methodKind":null,"name":"dynamic","parameters":"[{\"name\":\"name\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:function:45:dynamic:call:46:22:os.environ.get","label":"Call","properties":{"callee":"get","columnNumber":22,"expression":"os.environ.get","line":46,"name":"os.environ.get","receiver":"os.environ"}}
+{"kind":"node","id":"file:app/reads.py:import:1:os","label":"Import","properties":{"bindings":"[{\"imported\":\"os\",\"local\":\"os\",\"kind\":\"namespace\"}]","line":1,"source":"os","specifier":"import os"}}
+{"kind":"node","id":"file:app/reads.py:import:2:os","label":"Import","properties":{"bindings":"[{\"imported\":\"environ\",\"local\":\"environ\",\"kind\":\"named\"}]","line":2,"source":"os","specifier":"from os import environ, getenv"}}
+{"kind":"node","id":"file:app/reads.py:import:2:os#2","label":"Import","properties":{"bindings":"[{\"imported\":\"getenv\",\"local\":\"getenv\",\"kind\":\"named\"}]","line":2,"source":"os","specifier":"from os import environ, getenv"}}
+{"kind":"node","id":"file:app/reads.py:import:4:decouple","label":"Import","properties":{"alias":"decouple_config","bindings":"[{\"imported\":\"config\",\"local\":\"decouple_config\",\"kind\":\"named\"}]","line":4,"source":"decouple","specifier":"from decouple import config as decouple_config"}}
+{"kind":"node","id":"file:app/reads.py:import:5:dotenv","label":"Import","properties":{"bindings":"[{\"imported\":\"dotenv_values\",\"local\":\"dotenv_values\",\"kind\":\"named\"}]","line":5,"source":"dotenv","specifier":"from dotenv import dotenv_values, get_key, load_dotenv"}}
+{"kind":"node","id":"file:app/reads.py:import:5:dotenv#2","label":"Import","properties":{"bindings":"[{\"imported\":\"get_key\",\"local\":\"get_key\",\"kind\":\"named\"}]","line":5,"source":"dotenv","specifier":"from dotenv import dotenv_values, get_key, load_dotenv"}}
+{"kind":"node","id":"file:app/reads.py:import:5:dotenv#3","label":"Import","properties":{"bindings":"[{\"imported\":\"load_dotenv\",\"local\":\"load_dotenv\",\"kind\":\"named\"}]","line":5,"source":"dotenv","specifier":"from dotenv import dotenv_values, get_key, load_dotenv"}}
+{"kind":"node","id":"file:app/reads.py:import:6:environs","label":"Import","properties":{"bindings":"[{\"imported\":\"Env\",\"local\":\"Env\",\"kind\":\"named\"}]","line":6,"source":"environs","specifier":"from environs import Env"}}
+{"kind":"node","id":"file:app/reads.py:import:8:.keys","label":"Import","properties":{"bindings":"[{\"imported\":\"REGION_KEY\",\"local\":\"REGION_KEY\",\"kind\":\"named\"}]","line":8,"source":".keys","specifier":"from .keys import REGION_KEY"}}
+{"kind":"node","id":"file:app/reads.py:variable:11:env","label":"Variable","properties":{"constructorName":"Env","isExported":true,"kind":"variable","line":11,"name":"env","visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:variable:13:values","label":"Variable","properties":{"constructorName":"dotenv_values","isExported":true,"kind":"variable","line":13,"name":"values","visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:variable:15:PORT","label":"Variable","properties":{"constructorName":"int","isExported":true,"kind":"const","line":15,"name":"PORT","visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:variable:16:TIMEOUT","label":"Variable","properties":{"constructorName":"decouple_config","isExported":true,"kind":"const","line":16,"name":"TIMEOUT","visibility":"public"}}
+{"kind":"node","id":"file:app/reads.py:variable:17:LOCAL_KEY","label":"Variable","properties":{"isExported":true,"kind":"const","line":17,"name":"LOCAL_KEY","stringValue":"LOCAL_FLAG","visibility":"public"}}
+{"kind":"node","id":"file:app/settings.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/settings.py","relativePath":"app/settings.py","sourceType":"production"}}
+{"kind":"node","id":"file:app/settings.py:class:13:AppSettings","label":"Class","properties":{"endLine":15,"extendsNames":"[\"BaseAppSettings\"]","fields":"[{\"name\":\"max_connections\",\"type\":\"int\",\"default\":true},{\"name\":\"cache_url\",\"type\":\"str\",\"default\":true}]","implementsNames":null,"isAbstract":false,"isExported":true,"line":13,"name":"AppSettings","visibility":"public"}}
+{"kind":"node","id":"file:app/settings.py:class:18:LegacySettings","label":"Class","properties":{"endLine":22,"extendsNames":"[\"BaseSettings\"]","fields":"[{\"name\":\"name\",\"type\":\"str\",\"default\":true}]","implementsNames":null,"isAbstract":false,"isExported":true,"kind":"pydantic","line":18,"name":"LegacySettings","visibility":"public"}}
+{"kind":"node","id":"file:app/settings.py:class:21:Config","label":"Class","properties":{"endLine":22,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":false,"line":21,"name":"Config","visibility":"public"}}
+{"kind":"node","id":"file:app/settings.py:class:5:BaseAppSettings","label":"Class","properties":{"endLine":10,"extendsNames":"[\"BaseSettings\"]","fields":"[{\"name\":\"debug\",\"type\":\"bool\",\"default\":true},{\"name\":\"secret_key\",\"type\":\"str\",\"default\":true},{\"name\":\"database_url\",\"type\":\"str\",\"default\":true}]","implementsNames":null,"isAbstract":false,"isExported":true,"kind":"pydantic","line":5,"name":"BaseAppSettings","visibility":"public"}}
+{"kind":"node","id":"file:app/settings.py:import:1:pydantic","label":"Import","properties":{"bindings":"[{\"imported\":\"Field\",\"local\":\"Field\",\"kind\":\"named\"}]","line":1,"source":"pydantic","specifier":"from pydantic import Field"}}
+{"kind":"node","id":"file:app/settings.py:import:2:pydantic_settings","label":"Import","properties":{"bindings":"[{\"imported\":\"BaseSettings\",\"local\":\"BaseSettings\",\"kind\":\"named\"}]","line":2,"source":"pydantic_settings","specifier":"from pydantic_settings import BaseSettings, SettingsConfigDict"}}
+{"kind":"node","id":"file:app/settings.py:import:2:pydantic_settings#2","label":"Import","properties":{"bindings":"[{\"imported\":\"SettingsConfigDict\",\"local\":\"SettingsConfigDict\",\"kind\":\"named\"}]","line":2,"source":"pydantic_settings","specifier":"from pydantic_settings import BaseSettings, SettingsConfigDict"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-env","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:app","properties":{}}
+{"kind":"rel","from":"dir:app","type":"CONTAINS_FILE","to":"file:app/keys.py","properties":{}}
+{"kind":"rel","from":"dir:app","type":"CONTAINS_FILE","to":"file:app/main.py","properties":{}}
+{"kind":"rel","from":"dir:app","type":"CONTAINS_FILE","to":"file:app/reads.py","properties":{}}
+{"kind":"rel","from":"dir:app","type":"CONTAINS_FILE","to":"file:app/settings.py","properties":{}}
+{"kind":"rel","from":"file:app/keys.py","type":"DEFINES_VARIABLE","to":"file:app/keys.py:variable:1:REGION_KEY","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"DEFINES_FUNCTION","to":"file:app/main.py:function:13:secret","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"DEFINES_FUNCTION","to":"file:app/main.py:function:17:connections","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"DEFINES_FUNCTION","to":"file:app/main.py:function:9:get_legacy","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"DEFINES_VARIABLE","to":"file:app/main.py:variable:5:settings","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"IMPORTS","to":"file:app/main.py:import:1:functools","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"IMPORTS","to":"file:app/main.py:import:3:.settings","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"IMPORTS","to":"file:app/main.py:import:3:.settings#2","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"MODULE_CALLS","to":"file:app/main.py:call:5:11:AppSettings","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"USES_ENV","to":"env:APP_DATABASE_URL","properties":{"access":"pydantic settings","line":5}}
+{"kind":"rel","from":"file:app/main.py","type":"USES_ENV","to":"env:APP_DEBUG","properties":{"access":"pydantic settings","line":5}}
+{"kind":"rel","from":"file:app/main.py","type":"USES_ENV","to":"env:APP_MAX_CONNECTIONS","properties":{"access":"pydantic settings","line":5}}
+{"kind":"rel","from":"file:app/main.py","type":"USES_ENV","to":"env:APP_MAX_CONNECTIONS","properties":{"access":"settings.max_connections","line":18}}
+{"kind":"rel","from":"file:app/main.py","type":"USES_ENV","to":"env:CACHE_URL","properties":{"access":"pydantic settings","line":5}}
+{"kind":"rel","from":"file:app/main.py","type":"USES_ENV","to":"env:LEGACY_NAME","properties":{"access":"pydantic settings","line":10}}
+{"kind":"rel","from":"file:app/main.py","type":"USES_ENV","to":"env:SERVICE_SECRET","properties":{"access":"pydantic settings","line":5}}
+{"kind":"rel","from":"file:app/main.py","type":"USES_ENV","to":"env:SERVICE_SECRET","properties":{"access":"settings.secret_key","line":14}}
+{"kind":"rel","from":"file:app/main.py:function:13:secret","type":"USES_ENV","to":"env:SERVICE_SECRET","properties":{"access":"settings.secret_key","line":14}}
+{"kind":"rel","from":"file:app/main.py:function:17:connections","type":"USES_ENV","to":"env:APP_MAX_CONNECTIONS","properties":{"access":"settings.max_connections","line":18}}
+{"kind":"rel","from":"file:app/main.py:function:9:get_legacy","type":"CALLS","to":"file:app/main.py:function:9:get_legacy:call:10:11:LegacySettings","properties":{}}
+{"kind":"rel","from":"file:app/main.py:function:9:get_legacy","type":"HAS_METHOD_DECORATOR","to":"file:app/main.py:function:9:get_legacy:decorator:8:lru_cache","properties":{}}
+{"kind":"rel","from":"file:app/main.py:function:9:get_legacy","type":"USES_ENV","to":"env:LEGACY_NAME","properties":{"access":"pydantic settings","line":10}}
+{"kind":"rel","from":"file:app/main.py:import:3:.settings","type":"RESOLVES_TO","to":"file:app/settings.py","properties":{}}
+{"kind":"rel","from":"file:app/main.py:import:3:.settings#2","type":"RESOLVES_TO","to":"file:app/settings.py","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_FUNCTION","to":"file:app/reads.py:function:20:debug","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_FUNCTION","to":"file:app/reads.py:function:24:token","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_FUNCTION","to":"file:app/reads.py:function:29:region","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_FUNCTION","to":"file:app/reads.py:function:33:local","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_FUNCTION","to":"file:app/reads.py:function:37:mail","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_FUNCTION","to":"file:app/reads.py:function:41:dotenv","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_FUNCTION","to":"file:app/reads.py:function:45:dynamic","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_VARIABLE","to":"file:app/reads.py:variable:11:env","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_VARIABLE","to":"file:app/reads.py:variable:13:values","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_VARIABLE","to":"file:app/reads.py:variable:15:PORT","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_VARIABLE","to":"file:app/reads.py:variable:16:TIMEOUT","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"DEFINES_VARIABLE","to":"file:app/reads.py:variable:17:LOCAL_KEY","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"IMPORTS","to":"file:app/reads.py:import:1:os","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"IMPORTS","to":"file:app/reads.py:import:2:os","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"IMPORTS","to":"file:app/reads.py:import:2:os#2","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"IMPORTS","to":"file:app/reads.py:import:4:decouple","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"IMPORTS","to":"file:app/reads.py:import:5:dotenv","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"IMPORTS","to":"file:app/reads.py:import:5:dotenv#2","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"IMPORTS","to":"file:app/reads.py:import:5:dotenv#3","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"IMPORTS","to":"file:app/reads.py:import:6:environs","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"IMPORTS","to":"file:app/reads.py:import:8:.keys","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"MODULE_CALLS","to":"file:app/reads.py:call:10:0:load_dotenv","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"MODULE_CALLS","to":"file:app/reads.py:call:11:6:Env","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"MODULE_CALLS","to":"file:app/reads.py:call:12:4:env.read_env","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"MODULE_CALLS","to":"file:app/reads.py:call:13:9:dotenv_values","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"MODULE_CALLS","to":"file:app/reads.py:call:15:22:os.environ.get","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"MODULE_CALLS","to":"file:app/reads.py:call:15:7:int","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"MODULE_CALLS","to":"file:app/reads.py:call:16:10:decouple_config","properties":{}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:API_TOKEN","properties":{"access":"os.getenv","line":26}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:APP_REGION","properties":{"access":"os.getenv","line":30}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:DEBUG","properties":{"access":"os.environ","line":21}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:FALLBACK_TOKEN","properties":{"access":"os.environ.get","line":26}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:FROM_DOTENV","properties":{"access":"dotenv_values","line":42}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:FROM_DOTENV_2","properties":{"access":"dotenv_values.get","line":42}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:KEY_FROM_FILE","properties":{"access":"get_key","line":42}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:LOCAL_FLAG","properties":{"access":"os.getenv","line":34}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:MAIL_HOST","properties":{"access":"env.str","line":38}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:MAIL_PORT","properties":{"access":"env.int","line":38}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:MAIL_USER","properties":{"access":"env","line":38}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:PORT","properties":{"access":"os.environ.get","line":15}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:REQUEST_TIMEOUT","properties":{"access":"decouple config","line":16}}
+{"kind":"rel","from":"file:app/reads.py","type":"USES_ENV","to":"env:TRACE","properties":{"access":"os.environ in","line":21}}
+{"kind":"rel","from":"file:app/reads.py:function:20:debug","type":"USES_ENV","to":"env:DEBUG","properties":{"access":"os.environ","line":21}}
+{"kind":"rel","from":"file:app/reads.py:function:20:debug","type":"USES_ENV","to":"env:TRACE","properties":{"access":"os.environ in","line":21}}
+{"kind":"rel","from":"file:app/reads.py:function:24:token","type":"CALLS","to":"file:app/reads.py:function:24:token:call:26:11:getenv","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:function:24:token","type":"CALLS","to":"file:app/reads.py:function:24:token:call:26:42:environ.get","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:function:24:token","type":"USES_ENV","to":"env:API_TOKEN","properties":{"access":"os.getenv","line":26}}
+{"kind":"rel","from":"file:app/reads.py:function:24:token","type":"USES_ENV","to":"env:FALLBACK_TOKEN","properties":{"access":"os.environ.get","line":26}}
+{"kind":"rel","from":"file:app/reads.py:function:29:region","type":"CALLS","to":"file:app/reads.py:function:29:region:call:30:14:os.getenv","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:function:29:region","type":"USES_ENV","to":"env:APP_REGION","properties":{"access":"os.getenv","line":30}}
+{"kind":"rel","from":"file:app/reads.py:function:33:local","type":"CALLS","to":"file:app/reads.py:function:33:local:call:34:14:os.getenv","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:function:33:local","type":"USES_ENV","to":"env:LOCAL_FLAG","properties":{"access":"os.getenv","line":34}}
+{"kind":"rel","from":"file:app/reads.py:function:37:mail","type":"CALLS","to":"file:app/reads.py:function:37:mail:call:38:15:env.str","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:function:37:mail","type":"CALLS","to":"file:app/reads.py:function:37:mail:call:38:37:env.int","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:function:37:mail","type":"CALLS","to":"file:app/reads.py:function:37:mail:call:38:59:env","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:function:37:mail","type":"USES_ENV","to":"env:MAIL_HOST","properties":{"access":"env.str","line":38}}
+{"kind":"rel","from":"file:app/reads.py:function:37:mail","type":"USES_ENV","to":"env:MAIL_PORT","properties":{"access":"env.int","line":38}}
+{"kind":"rel","from":"file:app/reads.py:function:37:mail","type":"USES_ENV","to":"env:MAIL_USER","properties":{"access":"env","line":38}}
+{"kind":"rel","from":"file:app/reads.py:function:41:dotenv","type":"CALLS","to":"file:app/reads.py:function:41:dotenv:call:42:41:values.get","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:function:41:dotenv","type":"CALLS","to":"file:app/reads.py:function:41:dotenv:call:42:63:get_key","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:function:41:dotenv","type":"USES_ENV","to":"env:FROM_DOTENV","properties":{"access":"dotenv_values","line":42}}
+{"kind":"rel","from":"file:app/reads.py:function:41:dotenv","type":"USES_ENV","to":"env:FROM_DOTENV_2","properties":{"access":"dotenv_values.get","line":42}}
+{"kind":"rel","from":"file:app/reads.py:function:41:dotenv","type":"USES_ENV","to":"env:KEY_FROM_FILE","properties":{"access":"get_key","line":42}}
+{"kind":"rel","from":"file:app/reads.py:function:45:dynamic","type":"CALLS","to":"file:app/reads.py:function:45:dynamic:call:46:22:os.environ.get","properties":{}}
+{"kind":"rel","from":"file:app/reads.py:import:8:.keys","type":"RESOLVES_TO","to":"file:app/keys.py","properties":{}}
+{"kind":"rel","from":"file:app/settings.py","type":"DEFINES_CLASS","to":"file:app/settings.py:class:13:AppSettings","properties":{}}
+{"kind":"rel","from":"file:app/settings.py","type":"DEFINES_CLASS","to":"file:app/settings.py:class:18:LegacySettings","properties":{}}
+{"kind":"rel","from":"file:app/settings.py","type":"DEFINES_CLASS","to":"file:app/settings.py:class:21:Config","properties":{}}
+{"kind":"rel","from":"file:app/settings.py","type":"DEFINES_CLASS","to":"file:app/settings.py:class:5:BaseAppSettings","properties":{}}
+{"kind":"rel","from":"file:app/settings.py","type":"IMPORTS","to":"file:app/settings.py:import:1:pydantic","properties":{}}
+{"kind":"rel","from":"file:app/settings.py","type":"IMPORTS","to":"file:app/settings.py:import:2:pydantic_settings","properties":{}}
+{"kind":"rel","from":"file:app/settings.py","type":"IMPORTS","to":"file:app/settings.py:import:2:pydantic_settings#2","properties":{}}
+{"kind":"rel","from":"file:app/settings.py:class:13:AppSettings","type":"EXTENDS","to":"file:app/settings.py:class:5:BaseAppSettings","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

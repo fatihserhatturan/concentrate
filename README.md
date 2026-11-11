@@ -122,7 +122,7 @@ The goal is a code graph an agent can rely on as much as on the source itself. T
 Done so far: the JS/TS backend, the frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular), Go, the non-code files of a project and Rust, plus the agent benchmark v2 and the `init` command.
 
 Next up, in this order:
-- **Python** (M12, [#207](https://github.com/fatihserhatturan/concentrate/issues/207)–[#210](https://github.com/fatihserhatturan/concentrate/issues/210)): packages, classes, decorators and typed calls; Django, Flask, FastAPI, Celery and click/typer; SQLAlchemy, Django ORM, env and HTTP clients. Python files get structure, imports, calls, HTTP routes and entrypoints today (Phases 30 and 31); data access, env and outbound HTTP come with Phase 32.
+- **Python** (M12, [#207](https://github.com/fatihserhatturan/concentrate/issues/207)–[#210](https://github.com/fatihserhatturan/concentrate/issues/210)): packages, classes, decorators and typed calls; Django, Flask, FastAPI, Celery and click/typer; SQLAlchemy, Django ORM, env and HTTP clients. Python files get structure, imports, calls, HTTP routes and entrypoints (Phases 30 and 31), and SQLAlchemy, SQLModel and Django tables, queries and migrations, env and settings reads, requests / httpx / aiohttp calls linked to routes, and dependency injection (Phase 32); the Python measurements come with Phase 33.
 - **C/C++** (M13, [#211](https://github.com/fatihserhatturan/concentrate/issues/211)–[#214](https://github.com/fatihserhatturan/concentrate/issues/214)): includes, headers, namespaces, classes, build systems and the common HTTP and RPC frameworks. Not supported yet.
 
 Publishing to npm is not planned for now.
