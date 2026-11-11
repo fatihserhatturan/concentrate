@@ -46,6 +46,8 @@ describe("Rust data access", () => {
     assert.deepEqual(accesses(graph), [
       // SeaORM: Entity::find, an alias from the prelude, ActiveModel writes, delete_many.
       "bake create Cake sea-orm",
+      // diesel queries typed with the model (`t.load::<Self>`, `Post::belonging_to(..)`) or bound to a name a write root takes.
+      "by_owner read Post diesel",
       "clear delete Filling sea-orm",
       // diesel: the DSL root decides the operation; on_conflict upserts.
       "create_post create Post diesel",
@@ -55,10 +57,13 @@ describe("Rust data access", () => {
       "list_users read User sqlx",
       "purge delete Post diesel",
       "remove delete users sqlx",
+      "remove_titled delete Post diesel",
       "rename update users sqlx",
       "reprice read Cake sea-orm",
       "reprice update Cake sea-orm",
       "retitle update Post diesel",
+      "retitle_first update Post diesel",
+      "run_titles read Post diesel",
       // a const, a join; the dynamic `format!` SQL is left out.
       "stats read orders sqlx",
       "stats read users sqlx",

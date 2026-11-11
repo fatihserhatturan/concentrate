@@ -7,6 +7,7 @@ import { rustHttpClientsPlugin } from "./http-clients.js";
 
 export { rustRoutesContributor } from "./route-mounts.js";
 export { rustEntrypointsContributor } from "./entrypoints.js";
+export { rustEnvConfigContributor } from "./env-config.js";
 export { rustDataAccessContributor } from "./data-access.js";
 export { rustHttpClientsContributor } from "./http-clients.js";
 

@@ -64,6 +64,9 @@ describe("Rust actix-web routes", () => {
   it("reads attribute routes through scopes, resources and configure", async () => {
     const graph = await scan("rust-actix");
     assert.deepEqual(routes(graph), [
+      // verbs imported bare: `get().to(h)`.
+      ["GET", "/bare", "src/bare.rs:17", "index", ["index"]],
+      ["POST", "/bare/new", "src/bare.rs:18", "make", ["make"]],
       ["GET", "/health", "src/main.rs:6", "health", ["health"]],
       ["POST", "/echo", "src/main.rs:19", "echo", ["echo"]],
       ["GET", "/version", "src/main.rs:20", "version", ["version"]],

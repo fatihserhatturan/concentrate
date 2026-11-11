@@ -345,3 +345,45 @@ sample, which has a frontend):
 - `bench:release` now has cases for the tools added since 0.1.0's first
   report (`list_pages`, `list_stores`, `api_consumers`, `component_tree`,
   `find_component_usages`); without them the script refused to run.
+
+## Rust samples (Phase 29)
+
+`npm run bench:release -- --sample internet-rust-axum-realworld --sample
+internet-rust-actix-diesel-realworld --sample internet-realworld-rust-fullstack
+--runs 5 --out bench/results/0.1.0-2026-11-11-rust.json` on the same Apple M4
+(10 CPUs), Node v24.13.0, recorded 2026-11-11 for 0.1.0
+([`bench/results/0.1.0-2026-11-11-rust.json`](../bench/results/0.1.0-2026-11-11-rust.json)).
+The sample list is in `scripts/samples.json`; the full-stack sample passes its
+`apiOrigins` to the scan.
+
+| Sample | Parsed files | Nodes | Rels | Cold scan ms | Cold peak RSS MB | Warm scan ms | Warm peak RSS MB |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-rust-axum-realworld (axum + sqlx) | 12 | 653 | 997 | 171 | 128 | 140 | 111 |
+| internet-rust-actix-diesel-realworld (actix-web + diesel) | 65 | 1972 | 2912 | 248 | 678 | 173 | 132 |
+| internet-realworld-rust-fullstack (axum + Next.js) | 74 | 1633 | 2346 | 301 | 166 | 173 | 126 |
+
+Tool latency, p50 / p95 ms (20 calls; a selection, the JSON has every tool):
+
+| Tool | internet-rust-axum-realworld | internet-rust-actix-diesel-realworld | internet-realworld-rust-fullstack |
+| --- | ---: | ---: | ---: |
+| graph_stats | 0.74 / 1.37 | 0.92 / 2.79 | 0.8 / 1.07 |
+| find_callers | 1.55 / 3.06 | 1.72 / 3.61 | 1.19 / 3.01 |
+| list_routes | 0.27 / 0.33 | 0.26 / 0.27 | 0.26 / 0.29 |
+| list_data_access | 0.89 / 2.07 | 1.07 / 3.03 | 0.83 / 0.87 |
+| list_env_config | 0.26 / 1.29 | 0.25 / 1.57 | 0.26 / 0.29 |
+| impact_of | 1.88 / 4.46 | 3.09 / 4.99 | 2.88 / 5.09 |
+| route_details | 1.5 / 3.57 | 2.5 / 5.83 | 2.62 / 5.71 |
+| api_consumers | 0.72 / 2.61 | 1.72 / 3.7 | 1.87 / 4 |
+| find_unused_exports | 3.09 / 4.95 | 9.13 / 20.02 | 7.64 / 9.69 |
+| detect_changes | 21.63 / 26.34 | 20.99 / 22.61 | 29.48 / 32.68 |
+
+- A Rust scan costs about what a Go scan does per file: 12 files in 171 ms
+  (axum), 65 files in 248 ms (actix-diesel), 74 files in 301 ms with the
+  Next.js frontend. Every tool's p50 is under 10 ms except `detect_changes`
+  (which runs `git`, 21–29 ms).
+- The cold peak RSS of 678 MB on the actix-diesel sample is not the Rust
+  parse: its `e2e/` and `scripts/` directories hold shell scripts, and scanning
+  only those two directories reaches 640–650 MB, the `src/` directory alone
+  stays near 215 MB (`/usr/bin/time -l`, including the `tsx` start). The shell
+  grammar is the cost, as for any project with `.sh` files; the warm scan,
+  which reads the parse cache, is 132 MB.

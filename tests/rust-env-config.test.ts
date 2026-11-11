@@ -56,6 +56,8 @@ describe("Rust env and config", () => {
       ["parse", "DATABASE_URL", 6, "clap env"],
       ["parse", "WORKER_COUNT", 8, "clap env"],
       ["region", "REGION", 21, "env::var"],
+      // a key that is a constant of another file.
+      ["shared", "SHARED_KEY", 26, "env::var"],
       // envy: a typed let, the prefix and serde rename.
       ["worker", "WORKER_MAX_JOBS", 30, "envy"],
       ["worker", "WORKER_QUEUE_NAME", 28, "envy"],
@@ -90,9 +92,10 @@ describe("Rust env and config", () => {
         { file: "src/main.rs", line: 13, name: "DEBUG", function: "main" },
         { file: "src/main.rs", line: 14, name: "GIT_SHA", function: "main" },
         { file: "src/main.rs", line: 21, name: "REGION", function: "region" },
+        { file: "src/main.rs", line: 27, name: "SHARED_KEY", function: "shared" },
         { file: "src/main.rs", line: 30, name: "MISSING", function: "main" },
       ],
     });
-    assert.deepEqual([score.tp, score.fp, score.fn], [5, 0, 1]);
+    assert.deepEqual([score.tp, score.fp, score.fn], [6, 0, 1]);
   });
 });

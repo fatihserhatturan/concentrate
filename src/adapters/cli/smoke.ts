@@ -612,6 +612,47 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     },
   },
   {
+    name: "internet-rust-actix-diesel-realworld",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 96,
+      supportedFiles: 65,
+      otherFiles: 31,
+      parsedFiles: 65,
+      failedFiles: 0,
+      resolvedImports: 264,
+      unresolvedRelativeImports: 0,
+      nodes: 1972,
+      relationships: 2912,
+      fileClassifications: { production: 93, test: 0, fixture: 0, support: 0, generated: 1, docs: 2 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 20,
+      },
+    },
+  },
+  {
+    name: "internet-realworld-rust-fullstack",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 122,
+      supportedFiles: 74,
+      otherFiles: 48,
+      parsedFiles: 74,
+      failedFiles: 0,
+      resolvedImports: 182,
+      unresolvedRelativeImports: 0,
+      nodes: 1633,
+      relationships: 2346,
+      fileClassifications: { production: 116, test: 0, fixture: 0, support: 0, generated: 2, docs: 4 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 19,
+        requests: 33,
+      },
+    },
+  },
+  {
     name: "internet-go-remark42",
     suite: "internet",
     expected: {

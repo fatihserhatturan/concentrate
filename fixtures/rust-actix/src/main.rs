@@ -1,4 +1,4 @@
-mod users;
+mod bare; mod users;
 
 use actix_web::{get, middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
 
@@ -33,6 +33,7 @@ async fn main() -> std::io::Result<()> {
                     .service(web::scope("/v2").service(users::show)),
             )
             .configure(configure_misc)
+            .configure(bare::api)
     })
     .bind(("127.0.0.1", 8080))?
     .run()

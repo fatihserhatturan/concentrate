@@ -1,0 +1,499 @@
+{
+  "sample": "internet-rust-actix-diesel-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. snamiki1212/realworld-v1-rust-actix-web-diesel: actix-web 4 with diesel 2. Routes: every `.route(path, verb().to(handler))` of the nested `web::scope` tree in src/app/drivers/routes.rs (cfg.service(web::scope(\"/api\")...)), one label per method with the joined path as written (`{name}` parameters) and the line of the `.route(` call; the verbs are imported bare (`use actix_web::web::{get, post}`). Data access: the tables each function reads or writes through diesel (insert_into, update, delete, table.filter/inner_join/find + load/first/get_result/execute), one label per function, model (the struct) and operation; the query-building helpers `all` (which starts `tags::table.select(..)` / `users::table.select(..)`) name their table and are labeled; `by_name`, `by_email`, `by_username` and the `with_*` filters only chain a helper and are not, the function that runs the query is. Env: the three `env::var(env_key::X)` reads, the key being a constant of src/constants.rs; `std::env::set_var` in main.rs writes. Calls are not labeled for this sample: the handlers reach the use cases through `state.di_container.<usecase>` fields of `Arc<dyn Trait>`, which the axum sample does not exercise.",
+  "routes": {
+    "scope": [
+      "src/app/drivers/routes.rs"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/api/healthcheck",
+        "file": "src/app/drivers/routes.rs",
+        "line": 10
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags",
+        "file": "src/app/drivers/routes.rs",
+        "line": 13
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/login",
+        "file": "src/app/drivers/routes.rs",
+        "line": 17
+      },
+      {
+        "method": "POST",
+        "path": "/api/users",
+        "file": "src/app/drivers/routes.rs",
+        "line": 21
+      },
+      {
+        "method": "GET",
+        "path": "/api/user",
+        "file": "src/app/drivers/routes.rs",
+        "line": 25
+      },
+      {
+        "method": "PUT",
+        "path": "/api/user",
+        "file": "src/app/drivers/routes.rs",
+        "line": 26
+      },
+      {
+        "method": "GET",
+        "path": "/api/profiles/{username}",
+        "file": "src/app/drivers/routes.rs",
+        "line": 30
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/{username}/follow",
+        "file": "src/app/drivers/routes.rs",
+        "line": 34
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/profiles/{username}/follow",
+        "file": "src/app/drivers/routes.rs",
+        "line": 38
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/feed",
+        "file": "src/app/drivers/routes.rs",
+        "line": 45
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles",
+        "file": "src/app/drivers/routes.rs",
+        "line": 46
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles",
+        "file": "src/app/drivers/routes.rs",
+        "line": 47
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/{article_title_slug}",
+        "file": "src/app/drivers/routes.rs",
+        "line": 50
+      },
+      {
+        "method": "PUT",
+        "path": "/api/articles/{article_title_slug}",
+        "file": "src/app/drivers/routes.rs",
+        "line": 51
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/{article_title_slug}",
+        "file": "src/app/drivers/routes.rs",
+        "line": 52
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/{article_title_slug}/favorite",
+        "file": "src/app/drivers/routes.rs",
+        "line": 55
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/{article_title_slug}/favorite",
+        "file": "src/app/drivers/routes.rs",
+        "line": 59
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/{article_title_slug}/comments",
+        "file": "src/app/drivers/routes.rs",
+        "line": 67
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/{article_title_slug}/comments",
+        "file": "src/app/drivers/routes.rs",
+        "line": 68
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/{article_title_slug}/comments/{comment_id}",
+        "file": "src/app/drivers/routes.rs",
+        "line": 72
+      }
+    ]
+  },
+  "env": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/app/drivers/middlewares/cors.rs",
+        "line": 7,
+        "name": "FRONTEND_ORIGIN",
+        "function": "cors"
+      },
+      {
+        "file": "src/utils/db.rs",
+        "line": 16,
+        "name": "DATABASE_URL",
+        "function": "establish_connection"
+      },
+      {
+        "file": "src/utils/token.rs",
+        "line": 10,
+        "name": "SECRET_KEY",
+        "function": "get_secret_key"
+      }
+    ]
+  },
+  "dataAccess": {
+    "scope": [
+      "src/app/"
+    ],
+    "items": [
+      {
+        "file": "src/app/features/comment/entities.rs",
+        "function": "create",
+        "model": "Comment",
+        "operation": "create",
+        "table": "comments"
+      },
+      {
+        "file": "src/app/features/comment/entities.rs",
+        "function": "delete",
+        "model": "Comment",
+        "operation": "delete",
+        "table": "comments"
+      },
+      {
+        "file": "src/app/features/comment/entities.rs",
+        "function": "delete",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/follow/entities.rs",
+        "function": "create",
+        "model": "Follow",
+        "operation": "create",
+        "table": "follows"
+      },
+      {
+        "file": "src/app/features/follow/entities.rs",
+        "function": "delete",
+        "model": "Follow",
+        "operation": "delete",
+        "table": "follows"
+      },
+      {
+        "file": "src/app/features/follow/entities.rs",
+        "function": "fetch_folowee_ids_by_follower_id",
+        "model": "Follow",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "create",
+        "model": "Article",
+        "operation": "create",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "update",
+        "model": "Article",
+        "operation": "update",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "fetch_by_slug_and_author_id",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "fetch_by_slug_with_author",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "fetch_by_slug_with_author",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "find_with_author",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "find_with_author",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "fetch_ids_by_author_name",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "fetch_ids_by_author_name",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "delete",
+        "model": "Article",
+        "operation": "delete",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "is_favorited_by_user_id",
+        "model": "Favorite",
+        "operation": "read",
+        "table": "favorites"
+      },
+      {
+        "file": "src/app/features/article/entities.rs",
+        "function": "fetch_favorites_count",
+        "model": "Favorite",
+        "operation": "read",
+        "table": "favorites"
+      },
+      {
+        "file": "src/app/features/favorite/entities.rs",
+        "function": "create",
+        "model": "Favorite",
+        "operation": "create",
+        "table": "favorites"
+      },
+      {
+        "file": "src/app/features/favorite/entities.rs",
+        "function": "delete",
+        "model": "Favorite",
+        "operation": "delete",
+        "table": "favorites"
+      },
+      {
+        "file": "src/app/features/favorite/entities.rs",
+        "function": "fetch_favorited_article_ids_by_username",
+        "model": "Favorite",
+        "operation": "read",
+        "table": "favorites"
+      },
+      {
+        "file": "src/app/features/favorite/entities.rs",
+        "function": "fetch_favorited_article_ids_by_username",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/tag/entities.rs",
+        "function": "fetch_by_article_id",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/app/features/tag/entities.rs",
+        "function": "fetch",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/app/features/tag/entities.rs",
+        "function": "fetch_article_ids_by_name",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/app/features/tag/entities.rs",
+        "function": "create_list",
+        "model": "Tag",
+        "operation": "create",
+        "table": "tags"
+      },
+      {
+        "file": "src/app/features/user/entities.rs",
+        "function": "signup",
+        "model": "User",
+        "operation": "create",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/user/entities.rs",
+        "function": "signin",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/user/entities.rs",
+        "function": "find",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/user/entities.rs",
+        "function": "update",
+        "model": "User",
+        "operation": "update",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/user/entities.rs",
+        "function": "find_by_username",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/user/entities.rs",
+        "function": "is_following",
+        "model": "Follow",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "src/app/features/user/entities.rs",
+        "function": "fetch_favorited_article_ids",
+        "model": "Favorite",
+        "operation": "read",
+        "table": "favorites"
+      },
+      {
+        "file": "src/app/features/article/repositories.rs",
+        "function": "fetch_articles",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/article/repositories.rs",
+        "function": "fetch_articles",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/article/repositories.rs",
+        "function": "fetch_articles",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/app/features/article/repositories.rs",
+        "function": "fetch_article_by_slug",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/app/features/article/repositories.rs",
+        "function": "fetch_article",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/app/features/article/repositories.rs",
+        "function": "fetch_following_articles",
+        "model": "Article",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/app/features/article/repositories.rs",
+        "function": "fetch_following_articles",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/article/repositories.rs",
+        "function": "fetch_following_articles",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/app/features/article/repositories.rs",
+        "function": "fetch_following_articles",
+        "model": "Follow",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "src/app/features/comment/repositories.rs",
+        "function": "fetch_comments",
+        "model": "Comment",
+        "operation": "read",
+        "table": "comments"
+      },
+      {
+        "file": "src/app/features/comment/repositories.rs",
+        "function": "fetch_comments",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/user/repositories.rs",
+        "function": "follow_user",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/user/repositories.rs",
+        "function": "unfollow_user",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/app/features/tag/entities.rs",
+        "function": "all",
+        "model": "Tag",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/app/features/user/entities.rs",
+        "function": "all",
+        "model": "User",
+        "operation": "read",
+        "table": "users"
+      }
+    ]
+  }
+}

@@ -1,0 +1,352 @@
+{
+  "version": "0.1.0",
+  "recordedAt": "2026-11-11T11:28:48.219Z",
+  "node": "v24.13.0",
+  "platform": "darwin-arm64",
+  "cpus": 10,
+  "runs": 5,
+  "toolRuns": 20,
+  "results": [
+    {
+      "sample": "internet-rust-axum-realworld",
+      "nodes": 653,
+      "relationships": 997,
+      "scanCold": {
+        "ms": 171,
+        "maxRssMb": 128
+      },
+      "scanWarm": {
+        "ms": 140,
+        "maxRssMb": 111
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.74,
+          "p95": 1.37
+        },
+        "find_definitions": {
+          "p50": 0.57,
+          "p95": 1.15
+        },
+        "find_callers": {
+          "p50": 1.55,
+          "p95": 3.06
+        },
+        "list_exports": {
+          "p50": 0.67,
+          "p95": 2.59
+        },
+        "trace_import_chain": {
+          "p50": 0.26,
+          "p95": 0.92
+        },
+        "list_routes": {
+          "p50": 0.27,
+          "p95": 0.33
+        },
+        "list_entrypoints": {
+          "p50": 0.27,
+          "p95": 0.32
+        },
+        "list_env_config": {
+          "p50": 0.26,
+          "p95": 1.29
+        },
+        "list_data_access": {
+          "p50": 0.89,
+          "p95": 2.07
+        },
+        "list_tables": {
+          "p50": 0.59,
+          "p95": 1.3
+        },
+        "list_rpcs": {
+          "p50": 0.36,
+          "p95": 0.39
+        },
+        "impact_of": {
+          "p50": 1.88,
+          "p95": 4.46
+        },
+        "detect_changes": {
+          "p50": 21.63,
+          "p95": 26.34
+        },
+        "route_details": {
+          "p50": 1.5,
+          "p95": 3.57
+        },
+        "get_symbol_source": {
+          "p50": 0.34,
+          "p95": 0.4
+        },
+        "get_file_outline": {
+          "p50": 0.58,
+          "p95": 2.29
+        },
+        "search_symbols": {
+          "p50": 0.58,
+          "p95": 0.64
+        },
+        "find_references": {
+          "p50": 1.7,
+          "p95": 3.88
+        },
+        "find_import_cycles": {
+          "p50": 0.43,
+          "p95": 4.08
+        },
+        "find_unused_exports": {
+          "p50": 3.09,
+          "p95": 4.95
+        },
+        "architecture_overview": {
+          "p50": 0.97,
+          "p95": 2.6
+        },
+        "list_pages": {
+          "p50": 0.09,
+          "p95": 0.12
+        },
+        "list_stores": {
+          "p50": 0.15,
+          "p95": 0.17
+        },
+        "api_consumers": {
+          "p50": 0.72,
+          "p95": 2.61
+        }
+      }
+    },
+    {
+      "sample": "internet-rust-actix-diesel-realworld",
+      "nodes": 1972,
+      "relationships": 2912,
+      "scanCold": {
+        "ms": 248,
+        "maxRssMb": 678
+      },
+      "scanWarm": {
+        "ms": 173,
+        "maxRssMb": 132
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.92,
+          "p95": 2.79
+        },
+        "find_definitions": {
+          "p50": 0.63,
+          "p95": 2.5
+        },
+        "find_callers": {
+          "p50": 1.72,
+          "p95": 3.61
+        },
+        "list_exports": {
+          "p50": 1.05,
+          "p95": 2.78
+        },
+        "trace_import_chain": {
+          "p50": 0.65,
+          "p95": 2.01
+        },
+        "list_routes": {
+          "p50": 0.26,
+          "p95": 0.27
+        },
+        "list_entrypoints": {
+          "p50": 0.28,
+          "p95": 0.35
+        },
+        "list_env_config": {
+          "p50": 0.25,
+          "p95": 1.57
+        },
+        "list_data_access": {
+          "p50": 1.07,
+          "p95": 3.03
+        },
+        "list_tables": {
+          "p50": 0.61,
+          "p95": 1.83
+        },
+        "list_rpcs": {
+          "p50": 0.47,
+          "p95": 0.53
+        },
+        "impact_of": {
+          "p50": 3.09,
+          "p95": 4.99
+        },
+        "detect_changes": {
+          "p50": 20.99,
+          "p95": 22.61
+        },
+        "route_details": {
+          "p50": 2.5,
+          "p95": 5.83
+        },
+        "get_symbol_source": {
+          "p50": 0.38,
+          "p95": 0.44
+        },
+        "get_file_outline": {
+          "p50": 1.02,
+          "p95": 2.13
+        },
+        "search_symbols": {
+          "p50": 1.24,
+          "p95": 3.25
+        },
+        "find_references": {
+          "p50": 3.96,
+          "p95": 5.97
+        },
+        "find_import_cycles": {
+          "p50": 1.2,
+          "p95": 2.68
+        },
+        "find_unused_exports": {
+          "p50": 9.13,
+          "p95": 20.02
+        },
+        "architecture_overview": {
+          "p50": 2.32,
+          "p95": 4.9
+        },
+        "list_pages": {
+          "p50": 0.09,
+          "p95": 0.11
+        },
+        "list_stores": {
+          "p50": 0.16,
+          "p95": 0.18
+        },
+        "api_consumers": {
+          "p50": 1.72,
+          "p95": 3.7
+        }
+      }
+    },
+    {
+      "sample": "internet-realworld-rust-fullstack",
+      "nodes": 1633,
+      "relationships": 2346,
+      "scanCold": {
+        "ms": 301,
+        "maxRssMb": 166
+      },
+      "scanWarm": {
+        "ms": 173,
+        "maxRssMb": 126
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.8,
+          "p95": 1.07
+        },
+        "find_definitions": {
+          "p50": 0.59,
+          "p95": 0.69
+        },
+        "find_callers": {
+          "p50": 1.19,
+          "p95": 3.01
+        },
+        "list_exports": {
+          "p50": 1.03,
+          "p95": 2.97
+        },
+        "trace_import_chain": {
+          "p50": 0.52,
+          "p95": 2.65
+        },
+        "list_routes": {
+          "p50": 0.26,
+          "p95": 0.29
+        },
+        "list_entrypoints": {
+          "p50": 0.26,
+          "p95": 0.28
+        },
+        "list_env_config": {
+          "p50": 0.26,
+          "p95": 0.29
+        },
+        "list_data_access": {
+          "p50": 0.83,
+          "p95": 0.87
+        },
+        "list_tables": {
+          "p50": 0.56,
+          "p95": 0.64
+        },
+        "list_rpcs": {
+          "p50": 0.45,
+          "p95": 1.81
+        },
+        "impact_of": {
+          "p50": 2.88,
+          "p95": 5.09
+        },
+        "detect_changes": {
+          "p50": 29.48,
+          "p95": 32.68
+        },
+        "route_details": {
+          "p50": 2.62,
+          "p95": 5.71
+        },
+        "get_symbol_source": {
+          "p50": 0.38,
+          "p95": 2.46
+        },
+        "get_file_outline": {
+          "p50": 0.81,
+          "p95": 2.45
+        },
+        "search_symbols": {
+          "p50": 1.03,
+          "p95": 2.96
+        },
+        "find_references": {
+          "p50": 3.3,
+          "p95": 5.26
+        },
+        "find_import_cycles": {
+          "p50": 1.07,
+          "p95": 3.28
+        },
+        "find_unused_exports": {
+          "p50": 7.64,
+          "p95": 9.69
+        },
+        "architecture_overview": {
+          "p50": 1.88,
+          "p95": 3.42
+        },
+        "list_pages": {
+          "p50": 0.09,
+          "p95": 0.1
+        },
+        "list_stores": {
+          "p50": 0.16,
+          "p95": 0.18
+        },
+        "api_consumers": {
+          "p50": 1.87,
+          "p95": 4
+        },
+        "component_tree": {
+          "p50": 1.16,
+          "p95": 3.12
+        },
+        "find_component_usages": {
+          "p50": 0.35,
+          "p95": 2.15
+        }
+      }
+    }
+  ]
+}

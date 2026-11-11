@@ -1,0 +1,209 @@
+{
+  "sample": "internet-realworld-rust-fullstack",
+  "$comment": "Hand-labeled from the pinned sources (scripts/samples.json), not from Concentrate output. The same Next.js frontend as internet-realworld-fullstack and internet-realworld-go-fullstack, with the Rust axum + sqlx RealWorld backend (internet-rust-axum-realworld) in backend/. The frontend calls the deployed API at https://conduit.productionready.io/api (SERVER_BASE_URL); the sample declares that origin in apiOrigins, so its URLs become /api/... paths. The frontend calls are the ones of the Go full-stack sample (same source files and lines); each is labeled with the axum route that serves it, as the `.route(path, verb(handler))` registrations of src/http/{users,profiles,articles/mod,articles/comments}.rs write them (`:slug` and `:comment_id` parameters; routes merged without a prefix by api_router). The frontend's comment delete URL ends in `/${id}`, served by `/api/articles/:slug/comments/:comment_id`. Not labeled, as there: lib/api/user.ts:10 calls axios.get(`/user`) on the frontend's own origin, lib/utils/fetcher.ts:21 requests its url parameter, and useSWR(\"user\", storage) reads local storage. components/article/ArticleList.tsx:60 is labeled with both GET /api/articles and GET /api/articles/feed.",
+  "requests": {
+    "scope": [
+      "frontend/"
+    ],
+    "items": [
+      {
+        "file": "frontend/components/article/ArticleList.tsx",
+        "line": 60,
+        "route": "GET /api/articles",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/components/article/ArticleList.tsx",
+        "line": 60,
+        "route": "GET /api/articles/feed",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/components/article/ArticlePreview.tsx",
+        "line": 43,
+        "route": "DELETE /api/articles/:slug/favorite",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/components/article/ArticlePreview.tsx",
+        "line": 49,
+        "route": "POST /api/articles/:slug/favorite",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/components/comment/CommentInput.tsx",
+        "line": 30,
+        "route": "POST /api/articles/:slug/comments",
+        "routeFile": "backend/src/http/articles/comments.rs"
+      },
+      {
+        "file": "frontend/components/comment/CommentList.tsx",
+        "line": 20,
+        "route": "GET /api/articles/:slug/comments",
+        "routeFile": "backend/src/http/articles/comments.rs"
+      },
+      {
+        "file": "frontend/components/comment/DeleteButton.tsx",
+        "line": 16,
+        "route": "DELETE /api/articles/:slug/comments/:comment_id",
+        "routeFile": "backend/src/http/articles/comments.rs"
+      },
+      {
+        "file": "frontend/components/home/Tags.tsx",
+        "line": 14,
+        "route": "GET /api/tags",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/components/profile/SettingsForm.tsx",
+        "line": 46,
+        "route": "PUT /api/user",
+        "routeFile": "backend/src/http/users.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 8,
+        "route": "GET /api/articles",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 11,
+        "route": "GET /api/articles",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 18,
+        "route": "GET /api/articles",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 26,
+        "route": "DELETE /api/articles/:slug",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 33,
+        "route": "POST /api/articles/:slug/favorite",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 36,
+        "route": "GET /api/articles",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 43,
+        "route": "GET /api/articles/feed",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 45,
+        "route": "GET /api/articles/:slug",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 48,
+        "route": "DELETE /api/articles/:slug/favorite",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 51,
+        "route": "PUT /api/articles/:slug",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/article.ts",
+        "line": 68,
+        "route": "POST /api/articles",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/comment.ts",
+        "line": 8,
+        "route": "POST /api/articles/:slug/comments",
+        "routeFile": "backend/src/http/articles/comments.rs"
+      },
+      {
+        "file": "frontend/lib/api/comment.ts",
+        "line": 19,
+        "route": "DELETE /api/articles/:slug/comments/:comment_id",
+        "routeFile": "backend/src/http/articles/comments.rs"
+      },
+      {
+        "file": "frontend/lib/api/comment.ts",
+        "line": 29,
+        "route": "GET /api/articles/:slug/comments",
+        "routeFile": "backend/src/http/articles/comments.rs"
+      },
+      {
+        "file": "frontend/lib/api/tag.ts",
+        "line": 6,
+        "route": "GET /api/tags",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/lib/api/user.ts",
+        "line": 22,
+        "route": "POST /api/users/login",
+        "routeFile": "backend/src/http/users.rs"
+      },
+      {
+        "file": "frontend/lib/api/user.ts",
+        "line": 38,
+        "route": "POST /api/users",
+        "routeFile": "backend/src/http/users.rs"
+      },
+      {
+        "file": "frontend/lib/api/user.ts",
+        "line": 54,
+        "route": "PUT /api/user",
+        "routeFile": "backend/src/http/users.rs"
+      },
+      {
+        "file": "frontend/lib/api/user.ts",
+        "line": 72,
+        "route": "POST /api/profiles/:username/follow",
+        "routeFile": "backend/src/http/profiles.rs"
+      },
+      {
+        "file": "frontend/lib/api/user.ts",
+        "line": 90,
+        "route": "DELETE /api/profiles/:username/follow",
+        "routeFile": "backend/src/http/profiles.rs"
+      },
+      {
+        "file": "frontend/lib/api/user.ts",
+        "line": 103,
+        "route": "GET /api/profiles/:username",
+        "routeFile": "backend/src/http/profiles.rs"
+      },
+      {
+        "file": "frontend/pages/article/[pid].tsx",
+        "line": 21,
+        "route": "GET /api/articles/:slug",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/pages/editor/[pid].tsx",
+        "line": 43,
+        "route": "PUT /api/articles/:slug",
+        "routeFile": "backend/src/http/articles/mod.rs"
+      },
+      {
+        "file": "frontend/pages/profile/[pid].tsx",
+        "line": 27,
+        "route": "GET /api/profiles/:username",
+        "routeFile": "backend/src/http/profiles.rs"
+      }
+    ]
+  }
+}

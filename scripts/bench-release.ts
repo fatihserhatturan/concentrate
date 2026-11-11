@@ -125,6 +125,7 @@ async function toolCases(store: Awaited<ReturnType<typeof openGraphStore>>): Pro
     { tool: "list_env_config", args: {} },
     { tool: "list_data_access", args: {} },
     { tool: "list_tables", args: {} },
+    { tool: "list_rpcs", args: {} },
     { tool: "impact_of", args: name ? { symbol: name } : null },
     { tool: "detect_changes", args: {} },
     { tool: "route_details", args: route ? { method: route.method, path: route.fullPath ?? route.path } : null },

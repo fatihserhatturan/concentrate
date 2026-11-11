@@ -1288,14 +1288,14 @@ There are no Rust samples, labels or agent questions today. A Rust RealWorld (Co
 
 ### Samples and labels
 
-- [ ] Pin a Rust RealWorld backend (axum + sqlx) and one more Rust service (actix-web with diesel or SeaORM) in `scripts/samples.json`
-- [ ] Hand labels for routes, path calls, data access and env in `bench/labels/`
-- [ ] Golden sample graphs where they stay small enough
+- [x] Pin a Rust RealWorld backend (axum + sqlx) and one more Rust service (actix-web with diesel or SeaORM) in `scripts/samples.json`
+- [x] Hand labels for routes, path calls, data access and env in `bench/labels/`
+- [x] Golden sample graphs where they stay small enough
 
 ### Accuracy and performance
 
-- [ ] Rust rows in every `bench:accuracy` section; precision 100%, recall reported
-- [ ] Scan time and memory for the Rust samples in `docs/benchmarks.md`
+- [x] Rust rows in every `bench:accuracy` section; precision 100%, recall reported
+- [x] Scan time and memory for the Rust samples in `docs/benchmarks.md`
 
 ### Agent benchmark
 
@@ -1303,8 +1303,8 @@ There are no Rust samples, labels or agent questions today. A Rust RealWorld (Co
 
 ### Docs
 
-- [ ] README "What it sees" table and languages line cover Rust
-- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated
+- [x] README "What it sees" table and languages line cover Rust
+- [x] `docs/accuracy.md` and `docs/known-limitations.md` updated
 
 ### Acceptance criteria
 

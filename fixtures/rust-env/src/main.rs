@@ -1,5 +1,5 @@
 mod cli;
-mod settings;
+mod settings; mod keys;
 
 use axum::{routing::get, Router};
 use std::env;
@@ -19,4 +19,9 @@ fn main() {
 
 async fn region() -> String {
     env::var(REGION_KEY).unwrap_or_default()
+}
+
+// The key is a constant of another file.
+fn shared() -> String {
+    env::var(keys::env_key::SHARED_KEY).unwrap_or_default()
 }
