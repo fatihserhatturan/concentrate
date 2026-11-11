@@ -3,10 +3,9 @@ import { addImportPackageRelationships } from "../core/scan/workspace-packages.j
 import { addCallResolutionRelationships } from "../core/scan/resolution/calls.js";
 import { addInheritanceRelationships } from "../core/scan/resolution/inheritance.js";
 import { astroParser, htmlParser, javascriptParser, svelteParser, typescriptParser, vueParser } from "../integrations/frameworks/js-ts/scanner.js";
-import { pythonParser } from "../integrations/languages/python/parser.js";
 import { goDataAccessContributor, goDiContributor, goEntrypointsContributor, goEnvConfigContributor, goForeignRoutersContributor, goFrameworkParser, goGrpcContributor, goHttpClientsContributor, goRoutesContributor } from "../integrations/frameworks/go/index.js";
 import { rustEnvConfigContributor, rustDataAccessContributor, rustHttpClientsContributor, rustEntrypointsContributor, rustFrameworkParser, rustRoutesContributor } from "../integrations/frameworks/rust/index.js";
-import { pythonEntrypointsContributor } from "../integrations/frameworks/python/index.js";
+import { pythonEntrypointsContributor, pythonFrameworkParser, pythonRoutesContributor } from "../integrations/frameworks/python/index.js";
 import { plainFileParsers } from "../integrations/languages/plain/parser.js";
 import { protoContributor } from "../integrations/frameworks/proto/index.js";
 import { sqlSchemaContributor } from "../integrations/frameworks/sql/index.js";
@@ -40,7 +39,7 @@ export { CoreIntegrationRegistry };
 export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry {
   const registry = new CoreIntegrationRegistry();
 
-  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonParser, goFrameworkParser, rustFrameworkParser, ...plainFileParsers]) {
+  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, ...plainFileParsers]) {
     registry.registerLanguageParser(parser);
   }
 
@@ -67,6 +66,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     rustEnvConfigContributor,
     rustDataAccessContributor,
     rustHttpClientsContributor,
+    pythonRoutesContributor,
     pythonEntrypointsContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,

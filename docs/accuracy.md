@@ -24,7 +24,7 @@ chosen files); every target was decided by reading the code.
 
 | Kind | Samples | Scope |
 | --- | --- | --- |
-| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base, internet-rust-axum-realworld, internet-rust-actix-diesel-realworld | every route declared with a literal path in the scoped files; tests excluded; for the gin sample, the groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`); for the echo sample, the `*echo.Echo` that `router.New()` in another package returns, grouped in `main` and passed to `(*Handler).Register`; for simplebank, gin's `router.Group("/").Use(mw)` and the grpc-gateway `http.ServeMux` mounts in `main.go`; for go-base, chi `Mount` / `Route` / `Group` across packages; for the Rust sample, the four axum `router()` functions of `src/http` merged by `api_router` (19 method-path pairs), and for the actix-web sample the nested `web::scope` tree of `src/app/drivers/routes.rs` whose verbs are imported bare (`get().to(h)`, 20 pairs; Rocket and warp are covered by the fixtures only) |
+| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base, internet-rust-axum-realworld, internet-rust-actix-diesel-realworld, internet-python-flask-realworld, internet-python-fastapi-realworld, internet-python-django-realworld | every route declared with a literal path in the scoped files; tests excluded; for the gin sample, the groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`); for the echo sample, the `*echo.Echo` that `router.New()` in another package returns, grouped in `main` and passed to `(*Handler).Register`; for simplebank, gin's `router.Group("/").Use(mw)` and the grpc-gateway `http.ServeMux` mounts in `main.go`; for go-base, chi `Mount` / `Route` / `Group` across packages; for the Rust sample, the four axum `router()` functions of `src/http` merged by `api_router` (19 method-path pairs), for the Python samples the Conduit backends (Flask blueprints with absolute paths, FastAPI routers composed through `include_router` and `settings.api_prefix`, DRF `url()` patterns, one router registration and class-based views, 19 method-path pairs each), and for the actix-web sample the nested `web::scope` tree of `src/app/drivers/routes.rs` whose verbs are imported bare (`get().to(h)`, 20 pairs; Rocket and warp are covered by the fixtures only) |
 | Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`), internet-go-echo-realworld (another Conduit Go backend: echo, gorm behind store interfaces, packages `handler`, `store`, `model`, `router`, `db`, `utils`), internet-go-clean-arch (echo + database/sql, repository → service → handler layers joined by interfaces), internet-go-simplebank (gin, gRPC, sqlc on pgx, asynq), internet-rust-axum-realworld (a Conduit Rust backend: axum, sqlx; one library crate and a bin) | every call site in 2–9 chosen files per sample; for the Go samples, every call of a repository function or method in their production files (13 gin, 21 echo, 11 clean-arch; echo's generated `docs/docs.go` excluded), and 12 chosen files of simplebank (`main.go`, `api/`, the `db/sqlc` transactions, two `gapi` RPCs, a worker task) |
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm), internet-go-echo-realworld (gorm), internet-go-clean-arch (database/sql, MySQL), internet-go-simplebank (sqlc), internet-go-chi-base (bun), internet-rust-axum-realworld (sqlx), internet-rust-actix-diesel-realworld (diesel) | the services; for the Go samples the production files that query the database, for the Rust sample the sqlx queries of `src/http` (labeled from their SQL, data-modifying CTEs included; the diesel sample's labels are the tables each `entities.rs` / `repositories.rs` function reads or writes, query-building helpers included only when they name a table; SeaORM is covered by the fixtures only); the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
@@ -466,9 +466,9 @@ file exists.
 
 ## Python (Phase 30)
 
-There is no hand-labeled Python sample yet (the first one comes with the data and
-config work of Phase 32), so no precision or recall is reported for Python.
-What was checked:
+There is no hand-labeled Python sample for calls (the first comes with the data
+and config work of Phase 32), so no precision or recall is reported for Python
+calls. What was checked:
 
 - The installed `pip`, `anyio`, `pydantic` and `click` packages of a Python 3.14
   site-packages, scanned as one project (no failed files, no syntax warnings):
@@ -483,3 +483,38 @@ What was checked:
 - Fixtures `python-calls`, `python-declarations`, `python-unused` and
   `python-project` pin every resolution rule with golden graphs and tests.
 
+## Python routes (Phase 31)
+
+Three Conduit backends are labeled by hand, one per framework, from their source
+and not from the tool's output (`bench/labels/internet-python-*-realworld.json`);
+the latest run is in
+[`bench/results/accuracy-python-0.1.0-2026-11-11.json`](../bench/results/accuracy-python-0.1.0-2026-11-11.json).
+
+| Sample | Labels | TP | FP | FN | Precision | Recall | Full path |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-python-flask-realworld | 19 | 19 | 0 | 0 | 100.0% | 100.0% | 100.0% (19/19) |
+| internet-python-fastapi-realworld | 19 | 19 | 0 | 0 | 100.0% | 100.0% | 100.0% (19/19) |
+| internet-python-django-realworld | 19 | 19 | 0 | 0 | 100.0% | 100.0% | 100.0% (19/19) |
+
+What the three samples exercise, and what they do not:
+
+- Flask: blueprints with absolute paths, `register_blueprint` in a function
+  (`register_blueprints(app)`), `methods=('GET',)` tuples.
+- FastAPI: three levels of `include_router(prefix=..)` (articles are
+  `api.py` → `articles/api.py` → resource files), empty paths (`@router.get("")`),
+  a prefix read from `settings.api_prefix` (a class attribute through a function
+  `get_app_settings() -> AppSettings` and a local variable), and the dependency
+  chain of each handler.
+- Django: `url(r'^api/', include('conduit.apps.articles.urls', namespace=..))`
+  string includes, `include(router.urls)` with
+  `DefaultRouter(trailing_slash=False)` and `lookup_field = 'slug'`,
+  `APIView` classes, and generic views (`ListCreateAPIView`,
+  `RetrieveUpdateAPIView`, `DestroyAPIView`). The method sets come from the
+  base classes, which the labels were written from.
+- A fourth sample, `internet-python-fastapi-template` (full-stack-fastapi-template,
+  23 routes), is not labeled; all 23 routes have a full path and its
+  `Annotated[..., Depends(..)]` aliases resolve across files (`SessionDep`,
+  `CurrentUser`). Flask-RESTful, Starlette, Celery, click and typer are covered
+  by the fixtures (`python-flask`, `python-starlette`, `python-commands`) only,
+  checked against `click` 8.4 and Flask 3.1 installed locally (click's command
+  names, Flask's `url_map` for blueprint prefixes and repeated registration).

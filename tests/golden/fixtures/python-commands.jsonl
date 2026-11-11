@@ -1,0 +1,163 @@
+{"kind":"report","status":"success","discoveredFiles":6,"supportedFiles":6,"parsedFiles":6,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"python-commands","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"file:caller.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/caller.py","relativePath":"caller.py","sourceType":"production"}}
+{"kind":"node","id":"file:caller.py:function:6:notify","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":6,"methodKind":null,"name":"notify","parameters":"[{\"name\":\"address\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:caller.py:function:6:notify:call:10:8:app.send_task","label":"Call","properties":{"callee":"send_task","columnNumber":8,"expression":"app.send_task","line":10,"name":"app.send_task","receiver":"app"}}
+{"kind":"node","id":"file:caller.py:function:6:notify:call:7:15:send_email.delay","label":"Call","properties":{"callee":"delay","columnNumber":15,"expression":"send_email.delay","line":7,"name":"send_email.delay","receiver":"send_email"}}
+{"kind":"node","id":"file:caller.py:function:6:notify:call:8:17:build_report.apply_async","label":"Call","properties":{"callee":"apply_async","columnNumber":17,"expression":"build_report.apply_async","line":8,"name":"build_report.apply_async","receiver":"build_report"}}
+{"kind":"node","id":"file:caller.py:function:6:notify:call:9:21:tasks.send_email.s","label":"Call","properties":{"callee":"s","columnNumber":21,"expression":"tasks.send_email.s","line":9,"name":"tasks.send_email.s","receiver":"tasks.send_email"}}
+{"kind":"node","id":"file:caller.py:import:1:tasks","label":"Import","properties":{"bindings":"[{\"imported\":\"tasks\",\"local\":\"tasks\",\"kind\":\"namespace\"}]","isModule":true,"line":1,"source":"tasks","specifier":"import tasks"}}
+{"kind":"node","id":"file:caller.py:import:2:celery_app","label":"Import","properties":{"bindings":"[{\"imported\":\"app\",\"local\":\"app\",\"kind\":\"named\"}]","line":2,"source":"celery_app","specifier":"from celery_app import app"}}
+{"kind":"node","id":"file:caller.py:import:3:tasks","label":"Import","properties":{"bindings":"[{\"imported\":\"build_report\",\"local\":\"build_report\",\"kind\":\"named\"}]","line":3,"source":"tasks","specifier":"from tasks import build_report, send_email"}}
+{"kind":"node","id":"file:caller.py:import:3:tasks#2","label":"Import","properties":{"bindings":"[{\"imported\":\"send_email\",\"local\":\"send_email\",\"kind\":\"named\"}]","line":3,"source":"tasks","specifier":"from tasks import build_report, send_email"}}
+{"kind":"node","id":"file:celery_app.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/celery_app.py","relativePath":"celery_app.py","sourceType":"production"}}
+{"kind":"node","id":"file:celery_app.py:call:3:6:Celery","label":"Call","properties":{"callee":"Celery","columnNumber":6,"expression":"Celery","line":3,"name":"Celery","receiver":null}}
+{"kind":"node","id":"file:celery_app.py:import:1:celery","label":"Import","properties":{"bindings":"[{\"imported\":\"Celery\",\"local\":\"Celery\",\"kind\":\"named\"}]","line":1,"source":"celery","specifier":"from celery import Celery"}}
+{"kind":"node","id":"file:celery_app.py:variable:3:app","label":"Variable","properties":{"constructorName":"Celery","isExported":true,"kind":"variable","line":3,"name":"app","visibility":"public"}}
+{"kind":"node","id":"file:cli.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/cli.py","relativePath":"cli.py","sourceType":"production"}}
+{"kind":"node","id":"file:cli.py:call:14:5:cli.group","label":"Call","properties":{"callee":"group","columnNumber":5,"expression":"cli.group","line":14,"name":"cli.group","receiver":"cli"}}
+{"kind":"node","id":"file:cli.py:call:19:4:db.command","label":"Call","properties":{"callee":"command","columnNumber":4,"expression":"db.command","line":19,"name":"db.command","receiver":"db"}}
+{"kind":"node","id":"file:cli.py:call:24:7:click.command","label":"Call","properties":{"callee":"command","columnNumber":7,"expression":"click.command","line":24,"name":"click.command","receiver":"click"}}
+{"kind":"node","id":"file:cli.py:call:29:4:cli.add_command","label":"Call","properties":{"callee":"add_command","columnNumber":4,"expression":"cli.add_command","line":29,"name":"cli.add_command","receiver":"cli"}}
+{"kind":"node","id":"file:cli.py:call:4:7:click.group","label":"Call","properties":{"callee":"group","columnNumber":7,"expression":"click.group","line":4,"name":"click.group","receiver":"click"}}
+{"kind":"node","id":"file:cli.py:call:9:5:cli.command","label":"Call","properties":{"callee":"command","columnNumber":5,"expression":"cli.command","line":9,"name":"cli.command","receiver":"cli"}}
+{"kind":"node","id":"file:cli.py:entrypoint:10:0:cli:run-server","label":"EntryPoint","properties":{"handlerName":"run_server_command","kind":"cli","library":"click","line":10,"receiverName":null,"trigger":"run-server"}}
+{"kind":"node","id":"file:cli.py:entrypoint:15:0:cli:db","label":"EntryPoint","properties":{"handlerName":"db","kind":"cli","library":"click","line":15,"receiverName":null,"trigger":"db"}}
+{"kind":"node","id":"file:cli.py:entrypoint:20:0:cli:db migrate","label":"EntryPoint","properties":{"handlerName":"migrate_db","kind":"cli","library":"click","line":20,"receiverName":null,"trigger":"db migrate"}}
+{"kind":"node","id":"file:cli.py:entrypoint:25:0:cli:solo","label":"EntryPoint","properties":{"handlerName":"standalone","kind":"cli","library":"click","line":25,"receiverName":null,"trigger":"solo"}}
+{"kind":"node","id":"file:cli.py:entrypoint:5:0:cli:cli","label":"EntryPoint","properties":{"handlerName":"cli","kind":"cli","library":"click","line":5,"receiverName":null,"trigger":"cli"}}
+{"kind":"node","id":"file:cli.py:function:10:run_server_command","label":"Function","properties":{"className":null,"endLine":11,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":10,"methodKind":null,"name":"run_server_command","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:cli.py:function:10:run_server_command:decorator:9:cli.command","label":"Decorator","properties":{"args":"[]","expression":"@cli.command()","line":9,"name":"cli.command"}}
+{"kind":"node","id":"file:cli.py:function:15:db","label":"Function","properties":{"className":null,"endLine":16,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":15,"methodKind":null,"name":"db","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:cli.py:function:15:db:decorator:14:cli.group","label":"Decorator","properties":{"args":"[]","expression":"@cli.group()","line":14,"name":"cli.group"}}
+{"kind":"node","id":"file:cli.py:function:20:migrate_db","label":"Function","properties":{"className":null,"endLine":21,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":20,"methodKind":null,"name":"migrate_db","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:cli.py:function:20:migrate_db:decorator:19:db.command","label":"Decorator","properties":{"args":"[\"\\\"migrate\\\"\"]","expression":"@db.command(\"migrate\")","line":19,"name":"db.command"}}
+{"kind":"node","id":"file:cli.py:function:25:standalone","label":"Function","properties":{"className":null,"endLine":26,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":25,"methodKind":null,"name":"standalone","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:cli.py:function:25:standalone:decorator:24:click.command","label":"Decorator","properties":{"args":"[]","expression":"@click.command()","line":24,"name":"click.command"}}
+{"kind":"node","id":"file:cli.py:function:5:cli","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":5,"methodKind":null,"name":"cli","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:cli.py:function:5:cli:decorator:4:click.group","label":"Decorator","properties":{"args":"[]","expression":"@click.group()","line":4,"name":"click.group"}}
+{"kind":"node","id":"file:cli.py:import:1:click","label":"Import","properties":{"bindings":"[{\"imported\":\"click\",\"local\":\"click\",\"kind\":\"namespace\"}]","line":1,"source":"click","specifier":"import click"}}
+{"kind":"node","id":"file:flaskcli.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/flaskcli.py","relativePath":"flaskcli.py","sourceType":"production"}}
+{"kind":"node","id":"file:flaskcli.py:call:3:6:Flask","label":"Call","properties":{"callee":"Flask","columnNumber":6,"expression":"Flask","line":3,"name":"Flask","receiver":null}}
+{"kind":"node","id":"file:flaskcli.py:call:6:9:app.cli.command","label":"Call","properties":{"callee":"command","columnNumber":9,"expression":"app.cli.command","line":6,"name":"app.cli.command","receiver":"app.cli"}}
+{"kind":"node","id":"file:flaskcli.py:entrypoint:7:0:cli:seed","label":"EntryPoint","properties":{"handlerName":"seed","kind":"cli","library":"flask","line":7,"receiverName":null,"trigger":"seed"}}
+{"kind":"node","id":"file:flaskcli.py:function:7:seed","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":7,"methodKind":null,"name":"seed","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:flaskcli.py:function:7:seed:decorator:6:app.cli.command","label":"Decorator","properties":{"args":"[\"\\\"seed\\\"\"]","expression":"@app.cli.command(\"seed\")","line":6,"name":"app.cli.command"}}
+{"kind":"node","id":"file:flaskcli.py:import:1:flask","label":"Import","properties":{"bindings":"[{\"imported\":\"Flask\",\"local\":\"Flask\",\"kind\":\"named\"}]","line":1,"source":"flask","specifier":"from flask import Flask"}}
+{"kind":"node","id":"file:flaskcli.py:variable:3:app","label":"Variable","properties":{"constructorName":"Flask","isExported":true,"kind":"variable","line":3,"name":"app","visibility":"public"}}
+{"kind":"node","id":"file:tasks.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/tasks.py","relativePath":"tasks.py","sourceType":"production"}}
+{"kind":"node","id":"file:tasks.py:call:11:5:app.task","label":"Call","properties":{"callee":"task","columnNumber":5,"expression":"app.task","line":11,"name":"app.task","receiver":"app"}}
+{"kind":"node","id":"file:tasks.py:entrypoint:12:0:queue:reports.build","label":"EntryPoint","properties":{"handlerName":"build_report","kind":"queue","library":"celery","line":12,"receiverName":"app","trigger":"reports.build"}}
+{"kind":"node","id":"file:tasks.py:entrypoint:7:0:queue:tasks.send_email","label":"EntryPoint","properties":{"handlerName":"send_email","kind":"queue","library":"celery","line":7,"receiverName":null,"trigger":"tasks.send_email"}}
+{"kind":"node","id":"file:tasks.py:function:12:build_report","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":12,"methodKind":null,"name":"build_report","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"report_id\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:tasks.py:function:12:build_report:decorator:11:app.task","label":"Decorator","properties":{"args":"[\"name=\\\"reports.build\\\"\",\"bind=True\"]","expression":"@app.task(name=\"reports.build\", bind=True)","line":11,"name":"app.task"}}
+{"kind":"node","id":"file:tasks.py:function:7:send_email","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":7,"methodKind":null,"name":"send_email","parameters":"[{\"name\":\"address\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:tasks.py:function:7:send_email:decorator:6:shared_task","label":"Decorator","properties":{"args":"[]","expression":"@shared_task","line":6,"name":"shared_task"}}
+{"kind":"node","id":"file:tasks.py:import:1:celery","label":"Import","properties":{"bindings":"[{\"imported\":\"shared_task\",\"local\":\"shared_task\",\"kind\":\"named\"}]","line":1,"source":"celery","specifier":"from celery import shared_task"}}
+{"kind":"node","id":"file:tasks.py:import:3:celery_app","label":"Import","properties":{"bindings":"[{\"imported\":\"app\",\"local\":\"app\",\"kind\":\"named\"}]","line":3,"source":"celery_app","specifier":"from celery_app import app"}}
+{"kind":"node","id":"file:tcli.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/tcli.py","relativePath":"tcli.py","sourceType":"production"}}
+{"kind":"node","id":"file:tcli.py:call:13:7:users.command","label":"Call","properties":{"callee":"command","columnNumber":7,"expression":"users.command","line":13,"name":"users.command","receiver":"users"}}
+{"kind":"node","id":"file:tcli.py:call:3:12:typer.Typer","label":"Call","properties":{"callee":"Typer","columnNumber":12,"expression":"typer.Typer","line":3,"name":"typer.Typer","receiver":"typer"}}
+{"kind":"node","id":"file:tcli.py:call:4:14:typer.Typer","label":"Call","properties":{"callee":"Typer","columnNumber":14,"expression":"typer.Typer","line":4,"name":"typer.Typer","receiver":"typer"}}
+{"kind":"node","id":"file:tcli.py:call:5:4:app.add_typer","label":"Call","properties":{"callee":"add_typer","columnNumber":4,"expression":"app.add_typer","line":5,"name":"app.add_typer","receiver":"app"}}
+{"kind":"node","id":"file:tcli.py:call:8:5:app.command","label":"Call","properties":{"callee":"command","columnNumber":5,"expression":"app.command","line":8,"name":"app.command","receiver":"app"}}
+{"kind":"node","id":"file:tcli.py:entrypoint:14:0:cli:users create","label":"EntryPoint","properties":{"handlerName":"create_user","kind":"cli","library":"typer","line":14,"receiverName":null,"trigger":"users create"}}
+{"kind":"node","id":"file:tcli.py:entrypoint:9:0:cli:hello-world","label":"EntryPoint","properties":{"handlerName":"hello_world","kind":"cli","library":"typer","line":9,"receiverName":null,"trigger":"hello-world"}}
+{"kind":"node","id":"file:tcli.py:function:14:create_user","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":14,"methodKind":null,"name":"create_user","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:tcli.py:function:14:create_user:decorator:13:users.command","label":"Decorator","properties":{"args":"[\"\\\"create\\\"\"]","expression":"@users.command(\"create\")","line":13,"name":"users.command"}}
+{"kind":"node","id":"file:tcli.py:function:9:hello_world","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":9,"methodKind":null,"name":"hello_world","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:tcli.py:function:9:hello_world:decorator:8:app.command","label":"Decorator","properties":{"args":"[]","expression":"@app.command()","line":8,"name":"app.command"}}
+{"kind":"node","id":"file:tcli.py:import:1:typer","label":"Import","properties":{"bindings":"[{\"imported\":\"typer\",\"local\":\"typer\",\"kind\":\"namespace\"}]","line":1,"source":"typer","specifier":"import typer"}}
+{"kind":"node","id":"file:tcli.py:variable:3:app","label":"Variable","properties":{"constructorName":"typer.Typer","isExported":true,"kind":"variable","line":3,"name":"app","visibility":"public"}}
+{"kind":"node","id":"file:tcli.py:variable:4:users","label":"Variable","properties":{"constructorName":"typer.Typer","isExported":true,"kind":"variable","line":4,"name":"users","visibility":"public"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-commands","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:caller.py","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:celery_app.py","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:cli.py","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:flaskcli.py","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:tasks.py","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:tcli.py","properties":{}}
+{"kind":"rel","from":"file:caller.py","type":"DEFINES_FUNCTION","to":"file:caller.py:function:6:notify","properties":{}}
+{"kind":"rel","from":"file:caller.py","type":"IMPORTS","to":"file:caller.py:import:1:tasks","properties":{}}
+{"kind":"rel","from":"file:caller.py","type":"IMPORTS","to":"file:caller.py:import:2:celery_app","properties":{}}
+{"kind":"rel","from":"file:caller.py","type":"IMPORTS","to":"file:caller.py:import:3:tasks","properties":{}}
+{"kind":"rel","from":"file:caller.py","type":"IMPORTS","to":"file:caller.py:import:3:tasks#2","properties":{}}
+{"kind":"rel","from":"file:caller.py:function:6:notify","type":"CALLS","to":"file:caller.py:function:6:notify:call:10:8:app.send_task","properties":{}}
+{"kind":"rel","from":"file:caller.py:function:6:notify","type":"CALLS","to":"file:caller.py:function:6:notify:call:7:15:send_email.delay","properties":{}}
+{"kind":"rel","from":"file:caller.py:function:6:notify","type":"CALLS","to":"file:caller.py:function:6:notify:call:8:17:build_report.apply_async","properties":{}}
+{"kind":"rel","from":"file:caller.py:function:6:notify","type":"CALLS","to":"file:caller.py:function:6:notify:call:9:21:tasks.send_email.s","properties":{}}
+{"kind":"rel","from":"file:caller.py:function:6:notify:call:10:8:app.send_task","type":"CALL_RESOLVES_TO","to":"file:tasks.py:function:12:build_report","properties":{"via":"celery"}}
+{"kind":"rel","from":"file:caller.py:function:6:notify:call:7:15:send_email.delay","type":"CALL_RESOLVES_TO","to":"file:tasks.py:function:7:send_email","properties":{"via":"celery"}}
+{"kind":"rel","from":"file:caller.py:function:6:notify:call:8:17:build_report.apply_async","type":"CALL_RESOLVES_TO","to":"file:tasks.py:function:12:build_report","properties":{"via":"celery"}}
+{"kind":"rel","from":"file:caller.py:function:6:notify:call:9:21:tasks.send_email.s","type":"CALL_RESOLVES_TO","to":"file:tasks.py:function:7:send_email","properties":{"via":"celery"}}
+{"kind":"rel","from":"file:caller.py:import:1:tasks","type":"RESOLVES_TO","to":"file:tasks.py","properties":{}}
+{"kind":"rel","from":"file:caller.py:import:2:celery_app","type":"RESOLVES_TO","to":"file:celery_app.py","properties":{}}
+{"kind":"rel","from":"file:caller.py:import:3:tasks","type":"RESOLVES_TO","to":"file:tasks.py","properties":{}}
+{"kind":"rel","from":"file:caller.py:import:3:tasks#2","type":"RESOLVES_TO","to":"file:tasks.py","properties":{}}
+{"kind":"rel","from":"file:celery_app.py","type":"DEFINES_VARIABLE","to":"file:celery_app.py:variable:3:app","properties":{}}
+{"kind":"rel","from":"file:celery_app.py","type":"IMPORTS","to":"file:celery_app.py:import:1:celery","properties":{}}
+{"kind":"rel","from":"file:celery_app.py","type":"MODULE_CALLS","to":"file:celery_app.py:call:3:6:Celery","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DECLARES_ENTRYPOINT","to":"file:cli.py:entrypoint:10:0:cli:run-server","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DECLARES_ENTRYPOINT","to":"file:cli.py:entrypoint:15:0:cli:db","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DECLARES_ENTRYPOINT","to":"file:cli.py:entrypoint:20:0:cli:db migrate","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DECLARES_ENTRYPOINT","to":"file:cli.py:entrypoint:25:0:cli:solo","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DECLARES_ENTRYPOINT","to":"file:cli.py:entrypoint:5:0:cli:cli","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DEFINES_FUNCTION","to":"file:cli.py:function:10:run_server_command","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DEFINES_FUNCTION","to":"file:cli.py:function:15:db","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DEFINES_FUNCTION","to":"file:cli.py:function:20:migrate_db","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DEFINES_FUNCTION","to":"file:cli.py:function:25:standalone","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"DEFINES_FUNCTION","to":"file:cli.py:function:5:cli","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"IMPORTS","to":"file:cli.py:import:1:click","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"MODULE_CALLS","to":"file:cli.py:call:14:5:cli.group","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"MODULE_CALLS","to":"file:cli.py:call:19:4:db.command","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"MODULE_CALLS","to":"file:cli.py:call:24:7:click.command","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"MODULE_CALLS","to":"file:cli.py:call:29:4:cli.add_command","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"MODULE_CALLS","to":"file:cli.py:call:4:7:click.group","properties":{}}
+{"kind":"rel","from":"file:cli.py","type":"MODULE_CALLS","to":"file:cli.py:call:9:5:cli.command","properties":{}}
+{"kind":"rel","from":"file:cli.py:entrypoint:10:0:cli:run-server","type":"ENTRYPOINT_HANDLED_BY","to":"file:cli.py:function:10:run_server_command","properties":{}}
+{"kind":"rel","from":"file:cli.py:entrypoint:15:0:cli:db","type":"ENTRYPOINT_HANDLED_BY","to":"file:cli.py:function:15:db","properties":{}}
+{"kind":"rel","from":"file:cli.py:entrypoint:20:0:cli:db migrate","type":"ENTRYPOINT_HANDLED_BY","to":"file:cli.py:function:20:migrate_db","properties":{}}
+{"kind":"rel","from":"file:cli.py:entrypoint:25:0:cli:solo","type":"ENTRYPOINT_HANDLED_BY","to":"file:cli.py:function:25:standalone","properties":{}}
+{"kind":"rel","from":"file:cli.py:entrypoint:5:0:cli:cli","type":"ENTRYPOINT_HANDLED_BY","to":"file:cli.py:function:5:cli","properties":{}}
+{"kind":"rel","from":"file:cli.py:function:10:run_server_command","type":"HAS_METHOD_DECORATOR","to":"file:cli.py:function:10:run_server_command:decorator:9:cli.command","properties":{}}
+{"kind":"rel","from":"file:cli.py:function:15:db","type":"HAS_METHOD_DECORATOR","to":"file:cli.py:function:15:db:decorator:14:cli.group","properties":{}}
+{"kind":"rel","from":"file:cli.py:function:20:migrate_db","type":"HAS_METHOD_DECORATOR","to":"file:cli.py:function:20:migrate_db:decorator:19:db.command","properties":{}}
+{"kind":"rel","from":"file:cli.py:function:25:standalone","type":"HAS_METHOD_DECORATOR","to":"file:cli.py:function:25:standalone:decorator:24:click.command","properties":{}}
+{"kind":"rel","from":"file:cli.py:function:5:cli","type":"HAS_METHOD_DECORATOR","to":"file:cli.py:function:5:cli:decorator:4:click.group","properties":{}}
+{"kind":"rel","from":"file:flaskcli.py","type":"DECLARES_ENTRYPOINT","to":"file:flaskcli.py:entrypoint:7:0:cli:seed","properties":{}}
+{"kind":"rel","from":"file:flaskcli.py","type":"DEFINES_FUNCTION","to":"file:flaskcli.py:function:7:seed","properties":{}}
+{"kind":"rel","from":"file:flaskcli.py","type":"DEFINES_VARIABLE","to":"file:flaskcli.py:variable:3:app","properties":{}}
+{"kind":"rel","from":"file:flaskcli.py","type":"IMPORTS","to":"file:flaskcli.py:import:1:flask","properties":{}}
+{"kind":"rel","from":"file:flaskcli.py","type":"MODULE_CALLS","to":"file:flaskcli.py:call:3:6:Flask","properties":{}}
+{"kind":"rel","from":"file:flaskcli.py","type":"MODULE_CALLS","to":"file:flaskcli.py:call:6:9:app.cli.command","properties":{}}
+{"kind":"rel","from":"file:flaskcli.py:entrypoint:7:0:cli:seed","type":"ENTRYPOINT_HANDLED_BY","to":"file:flaskcli.py:function:7:seed","properties":{}}
+{"kind":"rel","from":"file:flaskcli.py:function:7:seed","type":"HAS_METHOD_DECORATOR","to":"file:flaskcli.py:function:7:seed:decorator:6:app.cli.command","properties":{}}
+{"kind":"rel","from":"file:tasks.py","type":"DECLARES_ENTRYPOINT","to":"file:tasks.py:entrypoint:12:0:queue:reports.build","properties":{}}
+{"kind":"rel","from":"file:tasks.py","type":"DECLARES_ENTRYPOINT","to":"file:tasks.py:entrypoint:7:0:queue:tasks.send_email","properties":{}}
+{"kind":"rel","from":"file:tasks.py","type":"DEFINES_FUNCTION","to":"file:tasks.py:function:12:build_report","properties":{}}
+{"kind":"rel","from":"file:tasks.py","type":"DEFINES_FUNCTION","to":"file:tasks.py:function:7:send_email","properties":{}}
+{"kind":"rel","from":"file:tasks.py","type":"IMPORTS","to":"file:tasks.py:import:1:celery","properties":{}}
+{"kind":"rel","from":"file:tasks.py","type":"IMPORTS","to":"file:tasks.py:import:3:celery_app","properties":{}}
+{"kind":"rel","from":"file:tasks.py","type":"MODULE_CALLS","to":"file:tasks.py:call:11:5:app.task","properties":{}}
+{"kind":"rel","from":"file:tasks.py:entrypoint:12:0:queue:reports.build","type":"ENTRYPOINT_HANDLED_BY","to":"file:tasks.py:function:12:build_report","properties":{}}
+{"kind":"rel","from":"file:tasks.py:entrypoint:7:0:queue:tasks.send_email","type":"ENTRYPOINT_HANDLED_BY","to":"file:tasks.py:function:7:send_email","properties":{}}
+{"kind":"rel","from":"file:tasks.py:function:12:build_report","type":"HAS_METHOD_DECORATOR","to":"file:tasks.py:function:12:build_report:decorator:11:app.task","properties":{}}
+{"kind":"rel","from":"file:tasks.py:function:7:send_email","type":"HAS_METHOD_DECORATOR","to":"file:tasks.py:function:7:send_email:decorator:6:shared_task","properties":{}}
+{"kind":"rel","from":"file:tasks.py:import:3:celery_app","type":"RESOLVES_TO","to":"file:celery_app.py","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"DECLARES_ENTRYPOINT","to":"file:tcli.py:entrypoint:14:0:cli:users create","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"DECLARES_ENTRYPOINT","to":"file:tcli.py:entrypoint:9:0:cli:hello-world","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"DEFINES_FUNCTION","to":"file:tcli.py:function:14:create_user","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"DEFINES_FUNCTION","to":"file:tcli.py:function:9:hello_world","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"DEFINES_VARIABLE","to":"file:tcli.py:variable:3:app","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"DEFINES_VARIABLE","to":"file:tcli.py:variable:4:users","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"IMPORTS","to":"file:tcli.py:import:1:typer","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"MODULE_CALLS","to":"file:tcli.py:call:13:7:users.command","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"MODULE_CALLS","to":"file:tcli.py:call:3:12:typer.Typer","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"MODULE_CALLS","to":"file:tcli.py:call:4:14:typer.Typer","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"MODULE_CALLS","to":"file:tcli.py:call:5:4:app.add_typer","properties":{}}
+{"kind":"rel","from":"file:tcli.py","type":"MODULE_CALLS","to":"file:tcli.py:call:8:5:app.command","properties":{}}
+{"kind":"rel","from":"file:tcli.py:entrypoint:14:0:cli:users create","type":"ENTRYPOINT_HANDLED_BY","to":"file:tcli.py:function:14:create_user","properties":{}}
+{"kind":"rel","from":"file:tcli.py:entrypoint:9:0:cli:hello-world","type":"ENTRYPOINT_HANDLED_BY","to":"file:tcli.py:function:9:hello_world","properties":{}}
+{"kind":"rel","from":"file:tcli.py:function:14:create_user","type":"HAS_METHOD_DECORATOR","to":"file:tcli.py:function:14:create_user:decorator:13:users.command","properties":{}}
+{"kind":"rel","from":"file:tcli.py:function:9:hello_world","type":"HAS_METHOD_DECORATOR","to":"file:tcli.py:function:9:hello_world:decorator:8:app.command","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

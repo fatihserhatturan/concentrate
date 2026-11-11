@@ -1,0 +1,107 @@
+{"kind":"report","status":"success","discoveredFiles":2,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"python-starlette","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"file:api_routes.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/api_routes.py","relativePath":"api_routes.py","sourceType":"production"}}
+{"kind":"node","id":"file:api_routes.py:call:14:4:Route","label":"Call","properties":{"callee":"Route","columnNumber":4,"expression":"Route","line":14,"name":"Route","receiver":null}}
+{"kind":"node","id":"file:api_routes.py:call:15:4:Route","label":"Call","properties":{"callee":"Route","columnNumber":4,"expression":"Route","line":15,"name":"Route","receiver":null}}
+{"kind":"node","id":"file:api_routes.py:function:5:items","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":5,"methodKind":null,"name":"items","parameters":"[{\"name\":\"request\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:api_routes.py:function:5:items:call:6:11:JSONResponse","label":"Call","properties":{"callee":"JSONResponse","columnNumber":11,"expression":"JSONResponse","line":6,"name":"JSONResponse","receiver":null}}
+{"kind":"node","id":"file:api_routes.py:function:9:item","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":9,"methodKind":null,"name":"item","parameters":"[{\"name\":\"request\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:api_routes.py:function:9:item:call:10:11:JSONResponse","label":"Call","properties":{"callee":"JSONResponse","columnNumber":11,"expression":"JSONResponse","line":10,"name":"JSONResponse","receiver":null}}
+{"kind":"node","id":"file:api_routes.py:import:1:starlette.responses","label":"Import","properties":{"bindings":"[{\"imported\":\"JSONResponse\",\"local\":\"JSONResponse\",\"kind\":\"named\"}]","line":1,"source":"starlette.responses","specifier":"from starlette.responses import JSONResponse"}}
+{"kind":"node","id":"file:api_routes.py:import:2:starlette.routing","label":"Import","properties":{"bindings":"[{\"imported\":\"Route\",\"local\":\"Route\",\"kind\":\"named\"}]","line":2,"source":"starlette.routing","specifier":"from starlette.routing import Route"}}
+{"kind":"node","id":"file:api_routes.py:route:14:0:GET:/items","label":"Route","properties":{"extractors":null,"framework":"starlette","fullPath":"/api/items","handlerName":"items","layers":null,"line":14,"method":"GET","path":"/items","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"api_routes","scopeFunctionId":null}}
+{"kind":"node","id":"file:api_routes.py:route:14:0:POST:/items","label":"Route","properties":{"extractors":null,"framework":"starlette","fullPath":"/api/items","handlerName":"items","layers":null,"line":14,"method":"POST","path":"/items","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"api_routes","scopeFunctionId":null}}
+{"kind":"node","id":"file:api_routes.py:route:15:0:GET:/items/{id:int}","label":"Route","properties":{"extractors":null,"framework":"starlette","fullPath":"/api/items/{id:int}","handlerName":"item","layers":null,"line":15,"method":"GET","path":"/items/{id:int}","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"api_routes","scopeFunctionId":null}}
+{"kind":"node","id":"file:api_routes.py:variable:13:api_routes","label":"Variable","properties":{"isExported":true,"kind":"variable","line":13,"name":"api_routes","visibility":"public"}}
+{"kind":"node","id":"file:app.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app.py","relativePath":"app.py","sourceType":"production"}}
+{"kind":"node","id":"file:app.py:call:27:4:Route","label":"Call","properties":{"callee":"Route","columnNumber":4,"expression":"Route","line":27,"name":"Route","receiver":null}}
+{"kind":"node","id":"file:app.py:call:28:4:Route","label":"Call","properties":{"callee":"Route","columnNumber":4,"expression":"Route","line":28,"name":"Route","receiver":null}}
+{"kind":"node","id":"file:app.py:call:29:4:Mount","label":"Call","properties":{"callee":"Mount","columnNumber":4,"expression":"Mount","line":29,"name":"Mount","receiver":null}}
+{"kind":"node","id":"file:app.py:call:30:21:StaticFiles","label":"Call","properties":{"callee":"StaticFiles","columnNumber":21,"expression":"StaticFiles","line":30,"name":"StaticFiles","receiver":null}}
+{"kind":"node","id":"file:app.py:call:30:4:Mount","label":"Call","properties":{"callee":"Mount","columnNumber":4,"expression":"Mount","line":30,"name":"Mount","receiver":null}}
+{"kind":"node","id":"file:app.py:call:31:4:WebSocketRoute","label":"Call","properties":{"callee":"WebSocketRoute","columnNumber":4,"expression":"WebSocketRoute","line":31,"name":"WebSocketRoute","receiver":null}}
+{"kind":"node","id":"file:app.py:call:34:6:Starlette","label":"Call","properties":{"callee":"Starlette","columnNumber":6,"expression":"Starlette","line":34,"name":"Starlette","receiver":null}}
+{"kind":"node","id":"file:app.py:class:14:UserEndpoint","label":"Class","properties":{"endLine":19,"extendsNames":"[\"HTTPEndpoint\"]","implementsNames":null,"isAbstract":false,"isExported":true,"line":14,"name":"UserEndpoint","visibility":"public"}}
+{"kind":"node","id":"file:app.py:function:10:homepage","label":"Function","properties":{"className":null,"endLine":11,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":10,"methodKind":null,"name":"homepage","parameters":"[{\"name\":\"request\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app.py:function:10:homepage:call:11:11:PlainTextResponse","label":"Call","properties":{"callee":"PlainTextResponse","columnNumber":11,"expression":"PlainTextResponse","line":11,"name":"PlainTextResponse","receiver":null}}
+{"kind":"node","id":"file:app.py:function:15:get","label":"Function","properties":{"className":"UserEndpoint","endLine":16,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":15,"methodKind":"method","name":"get","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"request\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app.py:function:15:get:call:16:15:PlainTextResponse","label":"Call","properties":{"callee":"PlainTextResponse","columnNumber":15,"expression":"PlainTextResponse","line":16,"name":"PlainTextResponse","receiver":null}}
+{"kind":"node","id":"file:app.py:function:18:delete","label":"Function","properties":{"className":"UserEndpoint","endLine":19,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":18,"methodKind":"method","name":"delete","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"request\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app.py:function:18:delete:call:19:15:PlainTextResponse","label":"Call","properties":{"callee":"PlainTextResponse","columnNumber":15,"expression":"PlainTextResponse","line":19,"name":"PlainTextResponse","receiver":null}}
+{"kind":"node","id":"file:app.py:function:22:ws","label":"Function","properties":{"className":null,"endLine":23,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":22,"methodKind":null,"name":"ws","parameters":"[{\"name\":\"websocket\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app.py:function:22:ws:call:23:20:websocket.accept","label":"Call","properties":{"callee":"accept","columnNumber":20,"expression":"websocket.accept","line":23,"name":"websocket.accept","receiver":"websocket","receiverIsLocal":true}}
+{"kind":"node","id":"file:app.py:import:1:starlette.applications","label":"Import","properties":{"bindings":"[{\"imported\":\"Starlette\",\"local\":\"Starlette\",\"kind\":\"named\"}]","line":1,"source":"starlette.applications","specifier":"from starlette.applications import Starlette"}}
+{"kind":"node","id":"file:app.py:import:2:starlette.endpoints","label":"Import","properties":{"bindings":"[{\"imported\":\"HTTPEndpoint\",\"local\":\"HTTPEndpoint\",\"kind\":\"named\"}]","line":2,"source":"starlette.endpoints","specifier":"from starlette.endpoints import HTTPEndpoint"}}
+{"kind":"node","id":"file:app.py:import:3:starlette.responses","label":"Import","properties":{"bindings":"[{\"imported\":\"PlainTextResponse\",\"local\":\"PlainTextResponse\",\"kind\":\"named\"}]","line":3,"source":"starlette.responses","specifier":"from starlette.responses import PlainTextResponse"}}
+{"kind":"node","id":"file:app.py:import:4:starlette.routing","label":"Import","properties":{"bindings":"[{\"imported\":\"Mount\",\"local\":\"Mount\",\"kind\":\"named\"}]","line":4,"source":"starlette.routing","specifier":"from starlette.routing import Mount, Route, WebSocketRoute"}}
+{"kind":"node","id":"file:app.py:import:4:starlette.routing#2","label":"Import","properties":{"bindings":"[{\"imported\":\"Route\",\"local\":\"Route\",\"kind\":\"named\"}]","line":4,"source":"starlette.routing","specifier":"from starlette.routing import Mount, Route, WebSocketRoute"}}
+{"kind":"node","id":"file:app.py:import:4:starlette.routing#3","label":"Import","properties":{"bindings":"[{\"imported\":\"WebSocketRoute\",\"local\":\"WebSocketRoute\",\"kind\":\"named\"}]","line":4,"source":"starlette.routing","specifier":"from starlette.routing import Mount, Route, WebSocketRoute"}}
+{"kind":"node","id":"file:app.py:import:5:starlette.staticfiles","label":"Import","properties":{"bindings":"[{\"imported\":\"StaticFiles\",\"local\":\"StaticFiles\",\"kind\":\"named\"}]","line":5,"source":"starlette.staticfiles","specifier":"from starlette.staticfiles import StaticFiles"}}
+{"kind":"node","id":"file:app.py:import:7:api_routes","label":"Import","properties":{"bindings":"[{\"imported\":\"api_routes\",\"local\":\"api_routes\",\"kind\":\"named\"}]","line":7,"source":"api_routes","specifier":"from api_routes import api_routes"}}
+{"kind":"node","id":"file:app.py:route:27:0:GET:/","label":"Route","properties":{"extractors":null,"framework":"starlette","fullPath":"/","handlerName":"homepage","layers":null,"line":27,"method":"GET","path":"/","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"routes","scopeFunctionId":null}}
+{"kind":"node","id":"file:app.py:route:28:0:DELETE:/users/{name}","label":"Route","properties":{"extractors":null,"framework":"starlette","fullPath":"/users/{name}","handlerName":"UserEndpoint","layers":null,"line":28,"method":"DELETE","path":"/users/{name}","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"routes","scopeFunctionId":null}}
+{"kind":"node","id":"file:app.py:route:28:0:GET:/users/{name}","label":"Route","properties":{"extractors":null,"framework":"starlette","fullPath":"/users/{name}","handlerName":"UserEndpoint","layers":null,"line":28,"method":"GET","path":"/users/{name}","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"routes","scopeFunctionId":null}}
+{"kind":"node","id":"file:app.py:route:31:0:WS:/ws","label":"Route","properties":{"extractors":null,"framework":"starlette","fullPath":"/ws","handlerName":"ws","layers":null,"line":31,"method":"WS","path":"/ws","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"routes","scopeFunctionId":null}}
+{"kind":"node","id":"file:app.py:variable:26:routes","label":"Variable","properties":{"isExported":true,"kind":"variable","line":26,"name":"routes","visibility":"public"}}
+{"kind":"node","id":"file:app.py:variable:34:app","label":"Variable","properties":{"constructorName":"Starlette","isExported":true,"kind":"variable","line":34,"name":"app","visibility":"public"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-starlette","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:api_routes.py","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:app.py","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"DECLARES_ROUTE","to":"file:api_routes.py:route:14:0:GET:/items","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"DECLARES_ROUTE","to":"file:api_routes.py:route:14:0:POST:/items","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"DECLARES_ROUTE","to":"file:api_routes.py:route:15:0:GET:/items/{id:int}","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"DEFINES_FUNCTION","to":"file:api_routes.py:function:5:items","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"DEFINES_FUNCTION","to":"file:api_routes.py:function:9:item","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"DEFINES_VARIABLE","to":"file:api_routes.py:variable:13:api_routes","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"IMPORTS","to":"file:api_routes.py:import:1:starlette.responses","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"IMPORTS","to":"file:api_routes.py:import:2:starlette.routing","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"MODULE_CALLS","to":"file:api_routes.py:call:14:4:Route","properties":{}}
+{"kind":"rel","from":"file:api_routes.py","type":"MODULE_CALLS","to":"file:api_routes.py:call:15:4:Route","properties":{}}
+{"kind":"rel","from":"file:api_routes.py:function:5:items","type":"CALLS","to":"file:api_routes.py:function:5:items:call:6:11:JSONResponse","properties":{}}
+{"kind":"rel","from":"file:api_routes.py:function:9:item","type":"CALLS","to":"file:api_routes.py:function:9:item:call:10:11:JSONResponse","properties":{}}
+{"kind":"rel","from":"file:api_routes.py:route:14:0:GET:/items","type":"ROUTE_HANDLED_BY","to":"file:api_routes.py:function:5:items","properties":{}}
+{"kind":"rel","from":"file:api_routes.py:route:14:0:GET:/items","type":"ROUTE_LIFECYCLE_STEP","to":"file:api_routes.py:function:5:items","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:api_routes.py:route:14:0:POST:/items","type":"ROUTE_HANDLED_BY","to":"file:api_routes.py:function:5:items","properties":{}}
+{"kind":"rel","from":"file:api_routes.py:route:14:0:POST:/items","type":"ROUTE_LIFECYCLE_STEP","to":"file:api_routes.py:function:5:items","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:api_routes.py:route:15:0:GET:/items/{id:int}","type":"ROUTE_HANDLED_BY","to":"file:api_routes.py:function:9:item","properties":{}}
+{"kind":"rel","from":"file:api_routes.py:route:15:0:GET:/items/{id:int}","type":"ROUTE_LIFECYCLE_STEP","to":"file:api_routes.py:function:9:item","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:app.py","type":"DECLARES_ROUTE","to":"file:app.py:route:27:0:GET:/","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"DECLARES_ROUTE","to":"file:app.py:route:28:0:DELETE:/users/{name}","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"DECLARES_ROUTE","to":"file:app.py:route:28:0:GET:/users/{name}","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"DECLARES_ROUTE","to":"file:app.py:route:31:0:WS:/ws","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"DEFINES_CLASS","to":"file:app.py:class:14:UserEndpoint","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"DEFINES_FUNCTION","to":"file:app.py:function:10:homepage","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"DEFINES_FUNCTION","to":"file:app.py:function:22:ws","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"DEFINES_VARIABLE","to":"file:app.py:variable:26:routes","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"DEFINES_VARIABLE","to":"file:app.py:variable:34:app","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:1:starlette.applications","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:2:starlette.endpoints","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:3:starlette.responses","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:4:starlette.routing","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:4:starlette.routing#2","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:4:starlette.routing#3","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:5:starlette.staticfiles","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:7:api_routes","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"MODULE_CALLS","to":"file:app.py:call:27:4:Route","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"MODULE_CALLS","to":"file:app.py:call:28:4:Route","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"MODULE_CALLS","to":"file:app.py:call:29:4:Mount","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"MODULE_CALLS","to":"file:app.py:call:30:21:StaticFiles","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"MODULE_CALLS","to":"file:app.py:call:30:4:Mount","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"MODULE_CALLS","to":"file:app.py:call:31:4:WebSocketRoute","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"MODULE_CALLS","to":"file:app.py:call:34:6:Starlette","properties":{}}
+{"kind":"rel","from":"file:app.py:class:14:UserEndpoint","type":"DEFINES_METHOD","to":"file:app.py:function:15:get","properties":{}}
+{"kind":"rel","from":"file:app.py:class:14:UserEndpoint","type":"DEFINES_METHOD","to":"file:app.py:function:18:delete","properties":{}}
+{"kind":"rel","from":"file:app.py:function:10:homepage","type":"CALLS","to":"file:app.py:function:10:homepage:call:11:11:PlainTextResponse","properties":{}}
+{"kind":"rel","from":"file:app.py:function:15:get","type":"CALLS","to":"file:app.py:function:15:get:call:16:15:PlainTextResponse","properties":{}}
+{"kind":"rel","from":"file:app.py:function:18:delete","type":"CALLS","to":"file:app.py:function:18:delete:call:19:15:PlainTextResponse","properties":{}}
+{"kind":"rel","from":"file:app.py:function:22:ws","type":"CALLS","to":"file:app.py:function:22:ws:call:23:20:websocket.accept","properties":{}}
+{"kind":"rel","from":"file:app.py:import:7:api_routes","type":"RESOLVES_TO","to":"file:api_routes.py","properties":{}}
+{"kind":"rel","from":"file:app.py:route:27:0:GET:/","type":"ROUTE_HANDLED_BY","to":"file:app.py:function:10:homepage","properties":{}}
+{"kind":"rel","from":"file:app.py:route:27:0:GET:/","type":"ROUTE_LIFECYCLE_STEP","to":"file:app.py:function:10:homepage","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:app.py:route:28:0:DELETE:/users/{name}","type":"ROUTE_HANDLED_BY","to":"file:app.py:function:18:delete","properties":{}}
+{"kind":"rel","from":"file:app.py:route:28:0:DELETE:/users/{name}","type":"ROUTE_LIFECYCLE_STEP","to":"file:app.py:function:18:delete","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:app.py:route:28:0:GET:/users/{name}","type":"ROUTE_HANDLED_BY","to":"file:app.py:function:15:get","properties":{}}
+{"kind":"rel","from":"file:app.py:route:28:0:GET:/users/{name}","type":"ROUTE_LIFECYCLE_STEP","to":"file:app.py:function:15:get","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:app.py:route:31:0:WS:/ws","type":"ROUTE_HANDLED_BY","to":"file:app.py:function:22:ws","properties":{}}
+{"kind":"rel","from":"file:app.py:route:31:0:WS:/ws","type":"ROUTE_LIFECYCLE_STEP","to":"file:app.py:function:22:ws","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

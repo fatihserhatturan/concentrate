@@ -34,6 +34,10 @@
     { "name": "internet-realworld-rust-fullstack", "golden": true, "suite": "internet", "parts": [
       { "dir": "backend", "repo": "https://github.com/launchbadge/realworld-axum-sqlx", "sha": "f1b25654773228297e35c292f357d33b7121a101" },
       { "dir": "frontend", "repo": "https://github.com/reck1ess/next-realworld-example-app", "sha": "be9ef569bc395975d98c1973fac23ba9277797e7" }
-    ], "apiOrigins": ["https://conduit.productionready.io"], "continueOnError": true }
+    ], "apiOrigins": ["https://conduit.productionready.io"], "continueOnError": true },
+    { "name": "internet-python-django-realworld", "golden": true, "suite": "internet", "repo": "https://github.com/gothinkster/django-realworld-example-app", "sha": "29c9d42831fa0cfc5a4aa7561f674396eacf20a2" },
+    { "name": "internet-python-flask-realworld", "golden": true, "suite": "internet", "repo": "https://github.com/gothinkster/flask-realworld-example-app", "sha": "4b95fb2227dfeb5dd1a45d89b2bf48630b93fd28" },
+    { "name": "internet-python-fastapi-realworld", "golden": true, "suite": "internet", "repo": "https://github.com/nsidnev/fastapi-realworld-example-app", "sha": "029eb7781c60d5f563ee8990a0cbfb79b244538c" },
+    { "name": "internet-python-fastapi-template", "suite": "internet", "repo": "https://github.com/fastapi/full-stack-fastapi-template", "sha": "13652b51ea0acca7dfe243ac25e2bbdc066f3c4f", "exclude": ["frontend/**"] }
   ]
 }

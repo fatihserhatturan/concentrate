@@ -146,7 +146,7 @@ even for large repositories; read it first to decide which tools to call.
 - `list_routes`: lists detected HTTP route declarations and handlers, Go
   ones included (`framework` `gin`, `echo`, `chi`, `fiber`, `gorilla/mux`,
   `routegroup`, `kratos` or `net/http`), and Rust ones (`axum`, `actix-web`, `rocket`
-  or `warp`; each route also carries its `layers` and the handler's `extractors`).
+  or `warp`; each route also carries its `layers` and the handler's `extractors`), and Python ones (`flask`, `fastapi`, `starlette`, `django`, `django-rest-framework` or `flask-restful`; FastAPI routes carry their `Depends` as `layers`, Django ones their `MIDDLEWARE`).
   Registrations with a method or path computed at runtime
   (`app[method](url, fn)`, `this.get(path, …)` in an `app.resource = function`
   helper) are not routes; they come back in `dynamicRouteCalls` (`file`,

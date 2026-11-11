@@ -1531,11 +1531,114 @@ Astro).
   `from pkg import module` / `import a.b` mark the whole module as used; console
   script handlers and `__main__.py`, `setup.py`, `manage.py`, `wsgi.py`,
   `asgi.py`, `conftest.py` are skipped. Names a framework loads by convention
-  (Django settings, URL confs, Flask views, Celery tasks) show up as candidates
-  until Phase 31 gives them routes and handlers. A library's public API used
-  only outside the repository is a candidate too.
+  (Django settings, Django `AppConfig`s, Celery task classes) show up as
+  candidates; route handlers, lifecycle steps, Celery tasks and click/typer
+  commands are used (Phase 31). A library's public API used only outside the
+  repository is a candidate too.
 - A `Package` now also exists for Python projects, so the files of a repository
   with a root `pyproject.toml` belong to a root package, JS files included.
+
+### Python routes and entrypoints (Phase 31)
+
+Routes and entrypoints are written by the framework layer
+(`src/integrations/frameworks/python/`), after every file is parsed: a route is a
+leaf of a container (a Flask app or blueprint, a FastAPI app or router, a Django
+`urlpatterns` list, a DRF router, a Starlette routes list, a Flask-RESTful `Api`),
+containers are mounted into each other, and a leaf gets one `Route` per way a
+request reaches it (a blueprint registered twice gives two routes), with the full
+path of that way. Paths are kept in the framework's own syntax (`<int:id>` in
+Flask and Django, `{id}` in FastAPI, `{id:int}` in Starlette); a `re_path` /
+`url` regex is written as a path (`^articles/(?P<year>[0-9]{4})/$` is
+`articles/<year>/`, a trailing `/?` is dropped).
+
+- **Flask**: `@app.route`, `@app.get` and friends, `methods=[..]` (one route per
+  method), `add_url_rule`, `MethodView` classes (a route per method the class
+  defines), `Blueprint(url_prefix=..)`, `register_blueprint(url_prefix=..)`
+  (which replaces the blueprint's own prefix, as Flask does), nested
+  blueprints, app factories (`create_app`), and `before_request`,
+  `after_request` and `teardown_request` as lifecycle steps of the routes of
+  their app or blueprint. Flask-RESTful `Api(app).add_resource(Resource, "/x")`.
+  `before_app_request` is a step of its own blueprint's routes only (Flask
+  runs it for every request). Blueprint-level `errorhandler`s and
+  `context_processor`s are no steps.
+- **FastAPI**: `@app.get` and friends, `@router.api_route`, `websocket` (method
+  `WS`), `add_api_route`, `APIRouter(prefix=..)`, `include_router(prefix=..,
+  dependencies=..)`, `app.mount`. `Depends(..)` in a signature (as default or
+  `Annotated[T, Depends(f)]`, also through an alias such as
+  `SessionDep = Annotated[Session, Depends(get_db)]` imported from another
+  file), `dependencies=[..]` of the route, `include_router`, router and app
+  are `ROUTE_LIFECYCLE_STEP`s of role `dependency` (scope `app`, `router` or
+  `route`), nested dependencies first, in the order FastAPI runs them. The
+  handler's `Query`, `Path`, `Body`, `Header`, `Cookie`, `Form` and `File`
+  parameters are the route's `extractors`; `@app.middleware("http")` is an
+  app-level step. Class instances used as dependencies (`OAuth2PasswordBearer`)
+  and `Security` scopes are not steps beyond their `__call__`.
+- **Starlette**: `Route`, `WebSocketRoute`, `Mount(routes=[..])` and `Mount(app=..)`
+  lists, `Starlette(routes=..)`, `Router(routes=..)`, `add_route`, `@app.route`.
+  `Mount("/static", StaticFiles(..))` and other non-container mounts are no
+  routes. `Route(.., middleware=[..])` and `add_middleware` are not read.
+- **Django**: `urlpatterns` with `path`, `re_path` and `url`, `include("app.urls")`
+  (a string module, resolved with the project's import roots), `include(module)`,
+  `include([..])`, `include(router.urls)`, and `urlpatterns += [..]`,
+  `.append`, `.extend`, `+ router.urls`. A function view is method `ALL`, or
+  the methods of `@require_http_methods`, `@require_GET`, `@require_POST`
+  and DRF's `@api_view([..])`. `View.as_view()` gets a route per HTTP method the
+  class defines or inherits from a user class, plus the methods Django's and
+  DRF's generic views bring (`ListAPIView` is GET, `ListCreateAPIView` GET and
+  POST, `TemplateView` GET, …); the handler is the method when the project
+  defines it. DRF routers (`DefaultRouter`, `SimpleRouter`,
+  `trailing_slash=False`) expand `register("prefix", ViewSet)` into the standard
+  actions the class has (defined, or from `ModelViewSet`, `ReadOnlyModelViewSet`
+  and the `*ModelMixin`s) at `prefix/` and `prefix/<lookup>/` (`lookup_field`
+  / `lookup_url_kwarg` read when the class assigns a string), and every
+  `@action(detail=.., methods=[..], url_path=..)`. `MIDDLEWARE` of the
+  settings file (`settings.py`, `settings/base.py`, or the first
+  `settings*` file with a list) is a lifecycle step of every Django route:
+  the middleware class's `__call__`, else its first `process_*` hook, or the
+  middleware function; classes of installed packages are listed in `layers` but
+  are no steps. `MIDDLEWARE_CLASSES` is read too.
+- **Dynamic paths**: a prefix that is a string constant, or an attribute a class
+  assigns (`settings.api_prefix`, `settings.API_V1_STR` with `settings =
+  Settings()` or `get_settings()` annotated `-> Settings`) is resolved. Any
+  other computed prefix (`prefix=f"/v{version}"`, a value read from the
+  environment) leaves `fullPath` null and the expression in `pathExpression`
+  (`${settings.prefix}/articles`). A route with a computed own path has a null
+  `path`.
+- **Not read**: the DRF router's API root view and format-suffix routes
+  (`.json`), `admin.site.urls`, `format_suffix_patterns` beyond unwrapping it,
+  `drf-nested-routers` / `drf-spectacular`, `django-ninja`, Flask `Api(app)`
+  from `flask-restx` and `flask-smorest`, Sanic, Bottle, Tornado, Falcon, aiohttp,
+  Quart blueprints beyond Flask's rules, URLs built in loops or by
+  `functools.partial`, views wrapped in decorators that rebind them
+  (`login_required(views.index)`), `@method_decorator`, class attribute routing
+  (`Resource.as_view` with `methods` set elsewhere) and a router or app that
+  is passed in as a parameter (`def init_app(app)`; a route registered on a
+  parameter is not found, one on a name bound in the same function is).
+  `Router` and `Api` as names of non-framework classes are only treated as
+  containers when they are assigned by a call and used with the framework's
+  methods.
+- **Celery**: `@shared_task` and `@app.task` (also `@current_app.task`,
+  `@celery.task`, with `app = Celery(..)` anywhere in the scan) functions are
+  `EntryPoint`s (kind `queue`, library `celery`, trigger the `name=` argument,
+  else `module.function`). `task.delay(..)`, `.apply_async`, `.s`, `.si`,
+  `.signature`, `.apply`, `.retry` and `app.send_task("name")` are
+  `CALL_RESOLVES_TO` (`via: "celery"`) the task. Task classes
+  (`class T(Task)` with `run`), `beat_schedule` entries, and `chain` /
+  `group` / `chord` structure are not read, and a task called through a variable
+  (`t = send_email; t.delay()`) stays unresolved.
+- **click and typer**: `@click.group()` / `@click.command()` functions,
+  commands attached with `@group.command()` / `@group.group()` or
+  `group.add_command(cmd, name=..)`, and `typer.Typer()` apps with
+  `@app.command()`, `app.add_typer(sub, name=..)` and `typer.run(main)` are
+  `EntryPoint`s (kind `cli`, library `click` / `typer`, trigger the command path
+  below the root group, `db migrate`; a root click group's trigger is its own
+  name). Names follow click 8 (`_` becomes `-`, a `_command` / `_group` suffix
+  is dropped; an explicit name is kept as written) and typer (`_` becomes `-`).
+  `@app.cli.command()` of Flask is library `flask`; Django management commands
+  (`management/commands/<name>.py`, a `Command` class whose `handle` is the
+  handler) are library `django`. Click options and arguments, typer's
+  `@app.callback()`, and groups built by `click.Group(...)` calls or
+  `cls=` arguments are not read.
 
 ## Rust
 

@@ -1,0 +1,60 @@
+{
+  "recordedAt": "2026-11-11T16:47:04.146Z",
+  "samples": [
+    {
+      "sample": "internet-python-flask-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      }
+    },
+    {
+      "sample": "internet-python-fastapi-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      }
+    },
+    {
+      "sample": "internet-python-django-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      }
+    }
+  ],
+  "totals": {
+    "routes": {
+      "tp": 57,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "fullPath": {
+        "correct": 57,
+        "total": 57
+      }
+    }
+  }
+}
