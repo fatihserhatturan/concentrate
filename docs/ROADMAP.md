@@ -1376,31 +1376,31 @@ and Django ORM data access, config, HTTP clients and dependency injection. The d
 
 ### Django
 
-- [ ] `urls.py` `path`, `re_path` and `include` (including `include("app.urls")` strings) with full paths
-- [ ] Function views and class-based views; `as_view()` maps HTTP methods to the view's methods
-- [ ] Django REST framework routers (`DefaultRouter.register`) and ViewSet actions (`@action`)
-- [ ] `MIDDLEWARE` in settings as lifecycle steps
+- [x] `urls.py` `path`, `re_path` and `include` (including `include("app.urls")` strings) with full paths
+- [x] Function views and class-based views; `as_view()` maps HTTP methods to the view's methods
+- [x] Django REST framework routers (`DefaultRouter.register`) and ViewSet actions (`@action`)
+- [x] `MIDDLEWARE` in settings as lifecycle steps
 
 ### Flask
 
-- [ ] `@app.route` / `@app.get` and friends with `methods`
-- [ ] `Blueprint(url_prefix=…)` and `register_blueprint(url_prefix=…)`; `before_request` / `after_request` as lifecycle steps
+- [x] `@app.route` / `@app.get` and friends with `methods`
+- [x] `Blueprint(url_prefix=…)` and `register_blueprint(url_prefix=…)`; `before_request` / `after_request` as lifecycle steps
 
 ### FastAPI and Starlette
 
-- [ ] `@app.get` / `APIRouter(prefix=…)` / `include_router(prefix=…)`
-- [ ] `Depends(...)` in route signatures and `dependencies=[…]` as lifecycle steps
-- [ ] Starlette `Route` / `Mount` lists
+- [x] `@app.get` / `APIRouter(prefix=…)` / `include_router(prefix=…)`
+- [x] `Depends(...)` in route signatures and `dependencies=[…]` as lifecycle steps
+- [x] Starlette `Route` / `Mount` lists
 
 ### Other entrypoints
 
-- [ ] Celery `@shared_task` / `@app.task` and `.delay()` / `.apply_async()` calls linked to the task
-- [ ] click and typer commands; Django management commands (`BaseCommand.handle`)
+- [x] Celery `@shared_task` / `@app.task` and `.delay()` / `.apply_async()` calls linked to the task
+- [x] click and typer commands; Django management commands (`BaseCommand.handle`)
 
 ### Acceptance criteria
 
-- [ ] Fixtures for Django, Flask and FastAPI have golden routes with full paths and handlers
-- [ ] `list_routes` and `find_route` answer for Python services
+- [x] Fixtures for Django, Flask and FastAPI have golden routes with full paths and handlers
+- [x] `list_routes` and `find_route` answer for Python services
 
 ## Phase 32: Python data access, config, outbound HTTP and DI (SQLAlchemy, Django ORM, env, requests/httpx) ([#209](https://github.com/fatihserhatturan/concentrate/issues/209))
 
