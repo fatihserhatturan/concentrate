@@ -1216,31 +1216,31 @@ There is no Rust framework detection today. The framework-neutral `Route` / `Ent
 
 ### Framework layer
 
-- [ ] `src/integrations/frameworks/rust/` with a Rust parser plugin hook and route contributors; `Route.framework` names the framework
+- [x] `src/integrations/frameworks/rust/` with a Rust parser plugin hook and route contributors; `Route.framework` names the framework
 
 ### Routers
 
-- [ ] axum: `Router::new().route("/x", get(h).post(h2))`, `nest`, `merge`, `route_service`, `layer` / `route_layer`, `with_state`
-- [ ] actix-web: `#[get("/x")]` and the other method attributes, `App::new().service(...)`, `web::resource().route()`, `web::scope`, `configure`
-- [ ] Rocket: `#[get("/x")]` attributes, `routes![...]`, `rocket::build().mount("/base", routes)`
-- [ ] warp: `warp::path!` and filter chains (`and`, `or`, `get()`)
+- [x] axum: `Router::new().route("/x", get(h).post(h2))`, `nest`, `merge`, `route_service`, `layer` / `route_layer`, `with_state`
+- [x] actix-web: `#[get("/x")]` and the other method attributes, `App::new().service(...)`, `web::resource().route()`, `web::scope`, `configure`
+- [x] Rocket: `#[get("/x")]` attributes, `routes![...]`, `rocket::build().mount("/base", routes)`
+- [x] warp: `warp::path!` and filter chains (`and`, `or`, `get()`)
 
 ### Route structure
 
-- [ ] Full paths through nested routers and scopes across functions, modules and crates
-- [ ] Middleware / layers / guards as `ROUTE_LIFECYCLE_STEP`; extractors (`Path`, `Query`, `Json`, `State`) recorded on the route
-- [ ] Routes built in loops or from computed paths are reported as dynamic, as for JS/TS (#153)
+- [x] Full paths through nested routers and scopes across functions, modules and crates
+- [x] Middleware / layers / guards as `ROUTE_LIFECYCLE_STEP`; extractors (`Path`, `Query`, `Json`, `State`) recorded on the route
+- [x] Routes built in loops or from computed paths are reported as dynamic, as for JS/TS (#153)
 
 ### Other entrypoints
 
-- [ ] tonic: `XServer::new(impl)` → `EntryPoint` (kind `grpc`) per trait method of the implementation
-- [ ] clap: `#[derive(Parser)]` / `Subcommand` enums and builder `Command::new` → `EntryPoint` (kind `cli`)
+- [x] tonic: `XServer::new(impl)` → `EntryPoint` (kind `grpc`) per trait method of the implementation
+- [x] clap: `#[derive(Parser)]` / `Subcommand` enums and builder `Command::new` → `EntryPoint` (kind `cli`)
 
 ### Acceptance criteria
 
-- [ ] One fixture per framework with golden coverage
-- [ ] A pinned Rust sample with hand-labelled routes: precision 100%, recall reported in `bench:accuracy`
-- [ ] `list_routes`, `route_details` and `impact_of` answer on the Rust sample; docs updated
+- [x] One fixture per framework with golden coverage
+- [x] A pinned Rust sample with hand-labelled routes: precision 100%, recall reported in `bench:accuracy`
+- [x] `list_routes`, `route_details` and `impact_of` answer on the Rust sample; docs updated
 
 ## Phase 28: Rust data access, config and outbound HTTP (sqlx, diesel, SeaORM, env, reqwest) ([#168](https://github.com/fatihserhatturan/concentrate/issues/168))
 
