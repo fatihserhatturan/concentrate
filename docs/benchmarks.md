@@ -387,3 +387,52 @@ Tool latency, p50 / p95 ms (20 calls; a selection, the JSON has every tool):
   stays near 215 MB (`/usr/bin/time -l`, including the `tsx` start). The shell
   grammar is the cost, as for any project with `.sh` files; the warm scan,
   which reads the parse cache, is 132 MB.
+
+## Python samples (Phase 33)
+
+`npm run bench:release -- --sample internet-python-django-realworld --sample
+internet-python-flask-realworld --sample internet-python-fastapi-realworld --sample
+internet-python-fastapi-template --sample internet-realworld-python-django-fullstack
+--sample internet-realworld-python-flask-fullstack --sample
+internet-realworld-python-fastapi-fullstack --runs 5 --out
+bench/results/0.1.0-2026-11-11-python.json` on the same Apple M4 (10 CPUs), Node
+v24.13.0, recorded 2026-11-11 for 0.1.0
+([`bench/results/0.1.0-2026-11-11-python.json`](../bench/results/0.1.0-2026-11-11-python.json)).
+The full-stack samples pass their `apiOrigins` to the scan.
+
+| Sample | Nodes | Rels | Cold scan ms | Cold peak RSS MB | Warm scan ms | Warm peak RSS MB |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-python-django-realworld (DRF, 44 files) | 613 | 793 | 155 | 116 | 125 | 91 |
+| internet-python-flask-realworld (Flask, 30 files) | 1082 | 1493 | 169 | 122 | 134 | 94 |
+| internet-python-fastapi-realworld (FastAPI, 95 files) | 1990 | 3085 | 288 | 667 | 189 | 135 |
+| internet-python-fastapi-template (FastAPI, SQLModel, 47 files) | 1724 | 3167 | 284 | 662 | 193 | 135 |
+| internet-realworld-python-django-fullstack (106 files) | 1593 | 2141 | 290 | 279 | 163 | 110 |
+| internet-realworld-python-flask-fullstack (Next.js + Flask) | 2062 | 2842 | 303 | 165 | 172 | 117 |
+| internet-realworld-python-fastapi-fullstack (Next.js + FastAPI) | 2970 | 4433 | 365 | 800 | 231 | 148 |
+
+Tool latency, p50 / p95 ms (20 calls; a selection, the JSON has every tool), on the
+Django, Flask and FastAPI backends and the FastAPI full-stack sample:
+
+| Tool | django | flask | fastapi | fastapi full-stack |
+| --- | ---: | ---: | ---: | ---: |
+| graph_stats | 0.44 / 2.4 | 0.59 / 3.15 | 0.89 / 3.83 | 1.29 / 1.84 |
+| find_callers | 1.24 / 3.48 | 1.95 / 3.97 | 1.89 / 3.72 | 2.45 / 4.29 |
+| list_routes | 0.21 / 0.23 | 0.23 / 0.24 | 0.26 / 0.29 | 0.32 / 0.35 |
+| list_data_access | 0.46 / 2.1 | 0.62 / 0.72 | 0.25 / 0.27 | 0.36 / 1.9 |
+| list_env_config | 0.22 / 0.23 | 0.22 / 0.24 | 0.29 / 0.33 | 0.38 / 0.43 |
+| impact_of | 2.04 / 4.1 | 2.5 / 4.36 | 3.07 / 5.04 | 5.77 / 7.75 |
+| route_details | 1.21 / 2.86 | 1.5 / 3.5 | 2.05 / 4.12 | 4.01 / 7.32 |
+| api_consumers | 0.64 / 2.45 | 0.94 / 2.9 | 1.44 / 3.55 | 2.9 / 8.09 |
+| find_unused_exports | 2.17 / 4.58 | 2.68 / 5.26 | 4.97 / 10.2 | 10.83 / 13.91 |
+| detect_changes | 19.55 / 21.55 | 19.9 / 22.95 | 20.13 / 21.93 | 29.6 / 37.62 |
+
+- A Python scan costs about what a Go or Rust scan does per file: the Flask backend
+  (30 files) in 169 ms, FastAPI (95 files) in 288 ms, and a Next.js + Python pair
+  (about 100–200 files) in 290–365 ms. Every tool's p50 is under 11 ms except
+  `detect_changes` (which runs `git`, 20–30 ms).
+- The cold peak RSS of 662–800 MB on the FastAPI samples is the shell grammar, not
+  the Python parse: the Conduit sample has one `postman/run-api-tests.sh` (the template has eight
+  `.sh` files), and the FastAPI Conduit scan peaks at 144 MB without it and 709 MB with it
+  (`/usr/bin/time -l`). The Django and Flask samples have no shell script and stay
+  under 280 MB cold; the warm scan of every Python sample is 91–148 MB.
+

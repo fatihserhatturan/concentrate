@@ -1,0 +1,812 @@
+{
+  "version": "0.1.0",
+  "recordedAt": "2026-11-11T18:04:35.087Z",
+  "node": "v24.13.0",
+  "platform": "darwin-arm64",
+  "cpus": 10,
+  "runs": 5,
+  "toolRuns": 20,
+  "results": [
+    {
+      "sample": "internet-realworld-python-django-fullstack",
+      "nodes": 1593,
+      "relationships": 2141,
+      "scanCold": {
+        "ms": 290,
+        "maxRssMb": 279
+      },
+      "scanWarm": {
+        "ms": 163,
+        "maxRssMb": 110
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.99,
+          "p95": 1.4
+        },
+        "find_definitions": {
+          "p50": 0.81,
+          "p95": 1.27
+        },
+        "find_callers": {
+          "p50": 1.46,
+          "p95": 3.17
+        },
+        "list_exports": {
+          "p50": 1.54,
+          "p95": 2.99
+        },
+        "trace_import_chain": {
+          "p50": 0.57,
+          "p95": 3
+        },
+        "list_routes": {
+          "p50": 0.32,
+          "p95": 0.38
+        },
+        "list_entrypoints": {
+          "p50": 0.34,
+          "p95": 0.4
+        },
+        "list_env_config": {
+          "p50": 0.33,
+          "p95": 2.19
+        },
+        "list_data_access": {
+          "p50": 0.63,
+          "p95": 0.7
+        },
+        "list_tables": {
+          "p50": 0.59,
+          "p95": 2.32
+        },
+        "list_rpcs": {
+          "p50": 0.59,
+          "p95": 0.63
+        },
+        "impact_of": {
+          "p50": 3.25,
+          "p95": 6.51
+        },
+        "detect_changes": {
+          "p50": 29.82,
+          "p95": 32.14
+        },
+        "route_details": {
+          "p50": 2.84,
+          "p95": 4.97
+        },
+        "get_symbol_source": {
+          "p50": 0.49,
+          "p95": 0.62
+        },
+        "get_file_outline": {
+          "p50": 1.12,
+          "p95": 2.72
+        },
+        "search_symbols": {
+          "p50": 1.35,
+          "p95": 2.99
+        },
+        "find_references": {
+          "p50": 3.92,
+          "p95": 9.65
+        },
+        "find_import_cycles": {
+          "p50": 1.17,
+          "p95": 3.21
+        },
+        "find_unused_exports": {
+          "p50": 7.1,
+          "p95": 13.21
+        },
+        "architecture_overview": {
+          "p50": 2.18,
+          "p95": 3.83
+        },
+        "list_pages": {
+          "p50": 0.11,
+          "p95": 0.12
+        },
+        "list_stores": {
+          "p50": 0.21,
+          "p95": 0.24
+        },
+        "api_consumers": {
+          "p50": 2.01,
+          "p95": 4.04
+        },
+        "component_tree": {
+          "p50": 1.34,
+          "p95": 3.57
+        },
+        "find_component_usages": {
+          "p50": 0.36,
+          "p95": 0.39
+        }
+      }
+    },
+    {
+      "sample": "internet-realworld-python-flask-fullstack",
+      "nodes": 2062,
+      "relationships": 2842,
+      "scanCold": {
+        "ms": 303,
+        "maxRssMb": 165
+      },
+      "scanWarm": {
+        "ms": 172,
+        "maxRssMb": 117
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.93,
+          "p95": 1.27
+        },
+        "find_definitions": {
+          "p50": 0.75,
+          "p95": 1.2
+        },
+        "find_callers": {
+          "p50": 3.03,
+          "p95": 6.43
+        },
+        "list_exports": {
+          "p50": 1.44,
+          "p95": 2.73
+        },
+        "trace_import_chain": {
+          "p50": 0.57,
+          "p95": 2.69
+        },
+        "list_routes": {
+          "p50": 0.26,
+          "p95": 0.29
+        },
+        "list_entrypoints": {
+          "p50": 0.29,
+          "p95": 2.22
+        },
+        "list_env_config": {
+          "p50": 0.28,
+          "p95": 0.29
+        },
+        "list_data_access": {
+          "p50": 0.71,
+          "p95": 2.43
+        },
+        "list_tables": {
+          "p50": 0.57,
+          "p95": 0.61
+        },
+        "list_rpcs": {
+          "p50": 0.55,
+          "p95": 1.87
+        },
+        "impact_of": {
+          "p50": 4.33,
+          "p95": 6.48
+        },
+        "detect_changes": {
+          "p50": 28.48,
+          "p95": 32.8
+        },
+        "route_details": {
+          "p50": 3.29,
+          "p95": 5.47
+        },
+        "get_symbol_source": {
+          "p50": 0.66,
+          "p95": 2.33
+        },
+        "get_file_outline": {
+          "p50": 1.1,
+          "p95": 2.61
+        },
+        "search_symbols": {
+          "p50": 1.42,
+          "p95": 2.95
+        },
+        "find_references": {
+          "p50": 4.25,
+          "p95": 7.64
+        },
+        "find_import_cycles": {
+          "p50": 1.19,
+          "p95": 3.85
+        },
+        "find_unused_exports": {
+          "p50": 7.5,
+          "p95": 9.62
+        },
+        "architecture_overview": {
+          "p50": 2.32,
+          "p95": 5.43
+        },
+        "list_pages": {
+          "p50": 0.1,
+          "p95": 0.12
+        },
+        "list_stores": {
+          "p50": 0.2,
+          "p95": 0.21
+        },
+        "api_consumers": {
+          "p50": 2.28,
+          "p95": 4.24
+        },
+        "component_tree": {
+          "p50": 1.39,
+          "p95": 3.45
+        },
+        "find_component_usages": {
+          "p50": 0.35,
+          "p95": 0.39
+        }
+      }
+    },
+    {
+      "sample": "internet-realworld-python-fastapi-fullstack",
+      "nodes": 2970,
+      "relationships": 4433,
+      "scanCold": {
+        "ms": 365,
+        "maxRssMb": 800
+      },
+      "scanWarm": {
+        "ms": 231,
+        "maxRssMb": 148
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 1.29,
+          "p95": 1.84
+        },
+        "find_definitions": {
+          "p50": 0.9,
+          "p95": 1.75
+        },
+        "find_callers": {
+          "p50": 2.45,
+          "p95": 4.29
+        },
+        "list_exports": {
+          "p50": 1.97,
+          "p95": 3.98
+        },
+        "trace_import_chain": {
+          "p50": 0.98,
+          "p95": 3.53
+        },
+        "list_routes": {
+          "p50": 0.32,
+          "p95": 0.35
+        },
+        "list_entrypoints": {
+          "p50": 0.35,
+          "p95": 0.43
+        },
+        "list_env_config": {
+          "p50": 0.38,
+          "p95": 0.43
+        },
+        "list_data_access": {
+          "p50": 0.36,
+          "p95": 1.9
+        },
+        "list_tables": {
+          "p50": 0.51,
+          "p95": 0.54
+        },
+        "list_rpcs": {
+          "p50": 0.72,
+          "p95": 1.75
+        },
+        "impact_of": {
+          "p50": 5.77,
+          "p95": 7.75
+        },
+        "detect_changes": {
+          "p50": 29.6,
+          "p95": 37.62
+        },
+        "route_details": {
+          "p50": 4.01,
+          "p95": 7.32
+        },
+        "get_symbol_source": {
+          "p50": 0.59,
+          "p95": 2.57
+        },
+        "get_file_outline": {
+          "p50": 1.35,
+          "p95": 2.73
+        },
+        "search_symbols": {
+          "p50": 1.77,
+          "p95": 3.3
+        },
+        "find_references": {
+          "p50": 6.65,
+          "p95": 9.57
+        },
+        "find_import_cycles": {
+          "p50": 2.16,
+          "p95": 4.06
+        },
+        "find_unused_exports": {
+          "p50": 10.83,
+          "p95": 13.91
+        },
+        "architecture_overview": {
+          "p50": 3.56,
+          "p95": 5.42
+        },
+        "list_pages": {
+          "p50": 0.11,
+          "p95": 0.13
+        },
+        "list_stores": {
+          "p50": 0.23,
+          "p95": 0.28
+        },
+        "api_consumers": {
+          "p50": 2.9,
+          "p95": 8.09
+        },
+        "component_tree": {
+          "p50": 1.57,
+          "p95": 3.48
+        },
+        "find_component_usages": {
+          "p50": 0.36,
+          "p95": 0.39
+        }
+      }
+    },
+    {
+      "sample": "internet-python-django-realworld",
+      "nodes": 613,
+      "relationships": 793,
+      "scanCold": {
+        "ms": 155,
+        "maxRssMb": 116
+      },
+      "scanWarm": {
+        "ms": 125,
+        "maxRssMb": 91
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.44,
+          "p95": 2.4
+        },
+        "find_definitions": {
+          "p50": 0.53,
+          "p95": 0.59
+        },
+        "find_callers": {
+          "p50": 1.24,
+          "p95": 3.48
+        },
+        "list_exports": {
+          "p50": 0.73,
+          "p95": 0.78
+        },
+        "trace_import_chain": {
+          "p50": 0.22,
+          "p95": 2.22
+        },
+        "list_routes": {
+          "p50": 0.21,
+          "p95": 0.23
+        },
+        "list_entrypoints": {
+          "p50": 0.19,
+          "p95": 0.21
+        },
+        "list_env_config": {
+          "p50": 0.22,
+          "p95": 0.23
+        },
+        "list_data_access": {
+          "p50": 0.46,
+          "p95": 2.1
+        },
+        "list_tables": {
+          "p50": 0.4,
+          "p95": 0.46
+        },
+        "list_rpcs": {
+          "p50": 0.39,
+          "p95": 2.88
+        },
+        "impact_of": {
+          "p50": 2.04,
+          "p95": 4.1
+        },
+        "detect_changes": {
+          "p50": 19.55,
+          "p95": 21.55
+        },
+        "route_details": {
+          "p50": 1.21,
+          "p95": 2.86
+        },
+        "get_symbol_source": {
+          "p50": 0.39,
+          "p95": 1.94
+        },
+        "get_file_outline": {
+          "p50": 0.63,
+          "p95": 0.7
+        },
+        "search_symbols": {
+          "p50": 0.73,
+          "p95": 2.3
+        },
+        "find_references": {
+          "p50": 1.76,
+          "p95": 3.7
+        },
+        "find_import_cycles": {
+          "p50": 0.46,
+          "p95": 2.38
+        },
+        "find_unused_exports": {
+          "p50": 2.17,
+          "p95": 4.58
+        },
+        "architecture_overview": {
+          "p50": 1.07,
+          "p95": 2.26
+        },
+        "list_pages": {
+          "p50": 0.09,
+          "p95": 0.1
+        },
+        "list_stores": {
+          "p50": 0.14,
+          "p95": 0.17
+        },
+        "api_consumers": {
+          "p50": 0.64,
+          "p95": 2.45
+        }
+      }
+    },
+    {
+      "sample": "internet-python-flask-realworld",
+      "nodes": 1082,
+      "relationships": 1493,
+      "scanCold": {
+        "ms": 169,
+        "maxRssMb": 122
+      },
+      "scanWarm": {
+        "ms": 134,
+        "maxRssMb": 94
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.59,
+          "p95": 3.15
+        },
+        "find_definitions": {
+          "p50": 0.5,
+          "p95": 0.88
+        },
+        "find_callers": {
+          "p50": 1.95,
+          "p95": 3.97
+        },
+        "list_exports": {
+          "p50": 0.75,
+          "p95": 2.44
+        },
+        "trace_import_chain": {
+          "p50": 0.26,
+          "p95": 0.27
+        },
+        "list_routes": {
+          "p50": 0.23,
+          "p95": 0.24
+        },
+        "list_entrypoints": {
+          "p50": 0.22,
+          "p95": 0.24
+        },
+        "list_env_config": {
+          "p50": 0.22,
+          "p95": 0.24
+        },
+        "list_data_access": {
+          "p50": 0.62,
+          "p95": 0.72
+        },
+        "list_tables": {
+          "p50": 0.47,
+          "p95": 2.4
+        },
+        "list_rpcs": {
+          "p50": 0.35,
+          "p95": 0.37
+        },
+        "impact_of": {
+          "p50": 2.5,
+          "p95": 4.36
+        },
+        "detect_changes": {
+          "p50": 19.9,
+          "p95": 22.95
+        },
+        "route_details": {
+          "p50": 1.5,
+          "p95": 3.5
+        },
+        "get_symbol_source": {
+          "p50": 0.5,
+          "p95": 0.56
+        },
+        "get_file_outline": {
+          "p50": 0.68,
+          "p95": 2.25
+        },
+        "search_symbols": {
+          "p50": 0.76,
+          "p95": 0.79
+        },
+        "find_references": {
+          "p50": 2.26,
+          "p95": 5.14
+        },
+        "find_import_cycles": {
+          "p50": 0.5,
+          "p95": 1.85
+        },
+        "find_unused_exports": {
+          "p50": 2.68,
+          "p95": 5.26
+        },
+        "architecture_overview": {
+          "p50": 1.15,
+          "p95": 3.1
+        },
+        "list_pages": {
+          "p50": 0.09,
+          "p95": 0.1
+        },
+        "list_stores": {
+          "p50": 0.15,
+          "p95": 1.69
+        },
+        "api_consumers": {
+          "p50": 0.94,
+          "p95": 2.9
+        }
+      }
+    },
+    {
+      "sample": "internet-python-fastapi-realworld",
+      "nodes": 1990,
+      "relationships": 3085,
+      "scanCold": {
+        "ms": 288,
+        "maxRssMb": 667
+      },
+      "scanWarm": {
+        "ms": 189,
+        "maxRssMb": 135
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.89,
+          "p95": 3.83
+        },
+        "find_definitions": {
+          "p50": 0.63,
+          "p95": 0.7
+        },
+        "find_callers": {
+          "p50": 1.89,
+          "p95": 3.72
+        },
+        "list_exports": {
+          "p50": 1.24,
+          "p95": 2.86
+        },
+        "trace_import_chain": {
+          "p50": 0.63,
+          "p95": 0.65
+        },
+        "list_routes": {
+          "p50": 0.26,
+          "p95": 1.83
+        },
+        "list_entrypoints": {
+          "p50": 0.26,
+          "p95": 0.3
+        },
+        "list_env_config": {
+          "p50": 0.29,
+          "p95": 0.33
+        },
+        "list_data_access": {
+          "p50": 0.25,
+          "p95": 0.27
+        },
+        "list_tables": {
+          "p50": 0.33,
+          "p95": 0.94
+        },
+        "list_rpcs": {
+          "p50": 0.47,
+          "p95": 0.49
+        },
+        "impact_of": {
+          "p50": 3.07,
+          "p95": 5.04
+        },
+        "detect_changes": {
+          "p50": 20.13,
+          "p95": 21.93
+        },
+        "route_details": {
+          "p50": 2.05,
+          "p95": 4.12
+        },
+        "get_symbol_source": {
+          "p50": 0.36,
+          "p95": 2.22
+        },
+        "get_file_outline": {
+          "p50": 0.83,
+          "p95": 2.28
+        },
+        "search_symbols": {
+          "p50": 1.15,
+          "p95": 5.02
+        },
+        "find_references": {
+          "p50": 4.11,
+          "p95": 6.32
+        },
+        "find_import_cycles": {
+          "p50": 1.42,
+          "p95": 3.47
+        },
+        "find_unused_exports": {
+          "p50": 4.97,
+          "p95": 10.2
+        },
+        "architecture_overview": {
+          "p50": 2.35,
+          "p95": 4.31
+        },
+        "list_pages": {
+          "p50": 0.08,
+          "p95": 0.1
+        },
+        "list_stores": {
+          "p50": 0.15,
+          "p95": 0.17
+        },
+        "api_consumers": {
+          "p50": 1.44,
+          "p95": 3.55
+        }
+      }
+    },
+    {
+      "sample": "internet-python-fastapi-template",
+      "nodes": 1724,
+      "relationships": 3167,
+      "scanCold": {
+        "ms": 284,
+        "maxRssMb": 662
+      },
+      "scanWarm": {
+        "ms": 193,
+        "maxRssMb": 135
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.8,
+          "p95": 1.15
+        },
+        "find_definitions": {
+          "p50": 0.54,
+          "p95": 1.12
+        },
+        "find_callers": {
+          "p50": 1.71,
+          "p95": 3.41
+        },
+        "list_exports": {
+          "p50": 1.09,
+          "p95": 2.78
+        },
+        "trace_import_chain": {
+          "p50": 0.44,
+          "p95": 2.08
+        },
+        "list_routes": {
+          "p50": 0.26,
+          "p95": 1.73
+        },
+        "list_entrypoints": {
+          "p50": 0.49,
+          "p95": 0.56
+        },
+        "list_env_config": {
+          "p50": 0.52,
+          "p95": 1.54
+        },
+        "list_data_access": {
+          "p50": 0.9,
+          "p95": 2.47
+        },
+        "list_tables": {
+          "p50": 0.5,
+          "p95": 0.55
+        },
+        "list_rpcs": {
+          "p50": 0.42,
+          "p95": 1.65
+        },
+        "impact_of": {
+          "p50": 2.81,
+          "p95": 4.99
+        },
+        "detect_changes": {
+          "p50": 20.19,
+          "p95": 22.9
+        },
+        "route_details": {
+          "p50": 1.99,
+          "p95": 4.07
+        },
+        "get_symbol_source": {
+          "p50": 0.36,
+          "p95": 0.41
+        },
+        "get_file_outline": {
+          "p50": 0.72,
+          "p95": 2.04
+        },
+        "search_symbols": {
+          "p50": 0.88,
+          "p95": 4.25
+        },
+        "find_references": {
+          "p50": 3.38,
+          "p95": 5.62
+        },
+        "find_import_cycles": {
+          "p50": 0.93,
+          "p95": 2.83
+        },
+        "find_unused_exports": {
+          "p50": 3.96,
+          "p95": 8.29
+        },
+        "architecture_overview": {
+          "p50": 1.96,
+          "p95": 4.05
+        },
+        "list_pages": {
+          "p50": 0.09,
+          "p95": 0.11
+        },
+        "list_stores": {
+          "p50": 0.16,
+          "p95": 0.18
+        },
+        "api_consumers": {
+          "p50": 1.24,
+          "p95": 3.26
+        }
+      }
+    }
+  ]
+}

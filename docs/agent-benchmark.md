@@ -626,3 +626,67 @@ which the agent called a Concentrate tool:
   the route, table, trait and axum env questions from grep alone.
   A larger Rust repository, where grep cannot read everything, would be the
   fairer test; none is pinned yet.
+
+### Python questions (Phase 33)
+
+[`bench/agent/questions-python.json`](../bench/agent/questions-python.json) has twelve
+questions over the FastAPI, Flask and Django RealWorld backends and the Next.js
+frontend scanned with each of them:
+
+- **routes:** the handlers of FastAPI's `POST` / `DELETE /api/articles/{slug}/favorite`;
+  the function and file of Flask's `DELETE /api/articles/<slug>/comments/<cid>`; the
+  view class of Django's `/api/articles/<article_slug>/favorite`;
+- **callers / impact:** the callers of FastAPI's `create_access_token_for_user`, and the
+  routes a change to it reaches;
+- **data:** the repository methods that write FastAPI's `favorites` table (aiosql
+  query files); the Flask functions that write the `comment` table;
+- **env:** the variables FastAPI's pydantic settings read and the one that selects the
+  environment (`APP_ENV`); the two `os.environ.get` reads of Flask's `settings.py`;
+- **frontend-api:** the frontend files that request `POST /api/users/login` (Django) and
+  `GET /api/tags` (Flask, FastAPI) and the Python view or function that handles it.
+
+Expected answers were written from the source (the `@router` / `@blueprint.route` /
+`urls.py` registrations, call sites, the SQL and the comment functions, the settings
+and `os.environ` reads, the frontend's API calls), not from Concentrate output.
+
+```bash
+npm run bench:agent -- --questions bench/agent/questions-python.json --runs 3 --model sonnet --max-turns 25
+npm run bench:agent -- --questions bench/agent/questions-python.json --runs 3 --model haiku --max-turns 25
+```
+
+Recorded 2026-11-11 with Claude Code 2.1.321, three runs each, `--max-turns 25`, after
+the cost estimate was approved (about $4.7 estimated, $4.89 spent)
+([`agent-python-sonnet-runs3-2026-11-11.json`](../bench/results/agent-python-sonnet-runs3-2026-11-11.json),
+[`agent-python-haiku-runs3-2026-11-11.json`](../bench/results/agent-python-haiku-runs3-2026-11-11.json)).
+Per category, median input tokens (baseline → concentrate) and the runs in which the
+agent called a Concentrate tool:
+
+| Category | Runs | sonnet: correct | sonnet: input tokens | sonnet: MCP runs | haiku: correct | haiku: input tokens | haiku: MCP runs |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| routes | 9 | 9/9 / 9/9 | 98.5k → 100.2k (+2%) | 0/9 | 9/9 / 9/9 | 102.0k → 104.7k (+3%) | 0/9 |
+| callers | 3 | 3/3 / 3/3 | 100.5k → 101.1k (+1%) | 2/3 | 3/3 / 3/3 | 100.7k → 103.5k (+3%) | 1/3 |
+| impact | 3 | 3/3 / 3/3 | 133.1k → 103.2k (−22%) | 3/3 | 3/3 / 3/3 | 139.7k → 105.9k (−24%) | 3/3 |
+| data | 6 | 6/6 / 6/6 | 98.1k → 118.9k (+21%) | 3/6 | 6/6 / 6/6 | 128.4k → 129.5k (+1%) | 3/6 |
+| env | 6 | 6/6 / 6/6 | 115.9k → 119.0k (+3%) | 0/6 | 6/6 / 6/6 | 138.1k → 163.0k (+18%) | 2/6 |
+| frontend-api | 9 | 9/9 / 9/9 | 142.7k → 110.2k (−23%) | 9/9 | 9/9 / 9/9 | 188.4k → 113.6k (−40%) | 9/9 |
+
+| | sonnet: baseline | sonnet: concentrate | haiku: baseline | haiku: concentrate |
+| --- | ---: | ---: | ---: | ---: |
+| Correct | 36/36 | 36/36 | 36/36 | 36/36 |
+| Median input tokens | 100.4k | 101.7k | 138.1k | 113.3k |
+| Median tool calls | 3 | 3 | 4 | 3 |
+| Total cost (CLI estimate) | $2.36 | $2.20 | $0.17 | $0.15 |
+
+- Both modes answered every question correctly in every run (72 of 72 per mode), as
+  for Go and Rust: the samples are small enough for grep, so the result is about cost.
+  The agent that used `impact_of` read 22–24% fewer input tokens, and on the frontend
+  questions (`api_consumers` and `route_details` in 9 of 9 runs) 23% fewer on sonnet
+  and 40% fewer on haiku.
+- The agent reached for Concentrate in 17 of 36 sonnet runs and 18 of 36 haiku runs:
+  always on the frontend questions, on every impact question, rarely on callers, data
+  and env, and never on the route questions. Where it did not need the graph (routes),
+  tokens stayed within 3% of the baseline; the two increases above 15% (sonnet data
+  +21%, haiku env +18%) are runs that called a tool and then read the files as well.
+- Questions this size say little about correctness; a larger Python repository,
+  where grep cannot read everything, would be the fairer test. None is pinned yet.
+

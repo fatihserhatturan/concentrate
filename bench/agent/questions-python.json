@@ -1,0 +1,155 @@
+{
+  "$comment": "Python agent benchmark questions over the FastAPI, Flask and Django RealWorld backends and the Next.js frontend scanned with each of them: routes, callers, change impact, table users, env reads and frontend \u2192 Python backend requests. Expected answers were written by reading the pinned source (the @router / @blueprint.route / urls.py registrations, call sites of create_access_token_for_user, the SQL of the favorites queries and the comment functions, the settings and os.environ reads, the frontend's API calls), not from Concentrate output. Scoring as in questions.json.",
+  "questions": [
+    {
+      "id": "py-fastapi-favorite-route",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "routes",
+      "question": "In this FastAPI backend, which handler functions serve POST and DELETE on /api/articles/{slug}/favorite?",
+      "expected": {
+        "mustInclude": [
+          "mark_article_as_favorite",
+          "remove_article_from_favorites"
+        ]
+      }
+    },
+    {
+      "id": "py-fastapi-token-callers",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "callers",
+      "question": "Which functions call create_access_token_for_user (app/services/jwt.py) in app/api/routes/?",
+      "expected": {
+        "mustInclude": [
+          "login",
+          "register",
+          "retrieve_current_user",
+          "update_current_user"
+        ]
+      }
+    },
+    {
+      "id": "py-fastapi-token-impact",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "impact",
+      "question": "If the signature of create_access_token_for_user changes, which HTTP routes (method and path) are affected?",
+      "expected": {
+        "mustInclude": [
+          "/api/users/login",
+          "/api/users",
+          "/api/user"
+        ]
+      }
+    },
+    {
+      "id": "py-fastapi-favorites-table",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "data",
+      "question": "Which repository methods write to (insert into or delete from) the favorites table?",
+      "expected": {
+        "mustInclude": [
+          "add_article_into_favorites",
+          "remove_article_from_favorites"
+        ]
+      }
+    },
+    {
+      "id": "py-fastapi-env",
+      "sample": "internet-python-fastapi-realworld",
+      "category": "env",
+      "question": "Which environment variables does this backend read through its settings, and which one selects the environment?",
+      "expected": {
+        "mustInclude": [
+          "DATABASE_URL",
+          "SECRET_KEY",
+          "APP_ENV"
+        ]
+      }
+    },
+    {
+      "id": "py-flask-comment-delete-route",
+      "sample": "internet-python-flask-realworld",
+      "category": "routes",
+      "question": "In this Flask backend, which function serves DELETE /api/articles/<slug>/comments/<cid>, and in which file?",
+      "expected": {
+        "mustInclude": [
+          "delete_comment_on_article",
+          "articles/views.py"
+        ]
+      }
+    },
+    {
+      "id": "py-flask-comment-table",
+      "sample": "internet-python-flask-realworld",
+      "category": "data",
+      "question": "Which functions write to the comment table (create or delete comments)?",
+      "expected": {
+        "mustInclude": [
+          "make_comment_on_article",
+          "delete_comment_on_article"
+        ]
+      }
+    },
+    {
+      "id": "py-flask-env",
+      "sample": "internet-python-flask-realworld",
+      "category": "env",
+      "question": "Which environment variables does this Flask app read, and in which file?",
+      "expected": {
+        "mustInclude": [
+          "CONDUIT_SECRET",
+          "DATABASE_URL",
+          "settings.py"
+        ]
+      }
+    },
+    {
+      "id": "py-django-favorite-route",
+      "sample": "internet-python-django-realworld",
+      "category": "routes",
+      "question": "In this Django REST framework backend, which view class serves POST and DELETE on /api/articles/<article_slug>/favorite?",
+      "expected": {
+        "mustInclude": [
+          "ArticlesFavoriteAPIView"
+        ]
+      }
+    },
+    {
+      "id": "py-django-fullstack-login",
+      "sample": "internet-realworld-python-django-fullstack",
+      "category": "frontend-api",
+      "question": "Which frontend file requests POST /api/users/login, and which Django view handles that route?",
+      "expected": {
+        "mustInclude": [
+          "user.ts",
+          "LoginAPIView"
+        ]
+      }
+    },
+    {
+      "id": "py-flask-fullstack-tags",
+      "sample": "internet-realworld-python-flask-fullstack",
+      "category": "frontend-api",
+      "question": "Which frontend files request GET /api/tags, and which Python function in the backend handles that route?",
+      "expected": {
+        "mustInclude": [
+          "Tags.tsx",
+          "tag.ts",
+          "get_tags"
+        ]
+      }
+    },
+    {
+      "id": "py-fastapi-fullstack-tags",
+      "sample": "internet-realworld-python-fastapi-fullstack",
+      "category": "frontend-api",
+      "question": "Which frontend files request GET /api/tags, and which Python function in the backend handles that route?",
+      "expected": {
+        "mustInclude": [
+          "Tags.tsx",
+          "tag.ts",
+          "get_all_tags"
+        ]
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-11T11:27:22.030Z",
+  "recordedAt": "2026-11-11T18:05:45.400Z",
   "samples": [
     {
       "sample": "express",
@@ -378,6 +378,107 @@
       }
     },
     {
+      "sample": "internet-python-django-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      },
+      "dataAccess": {
+        "tp": 15,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.7894736842105263
+      },
+      "env": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-python-fastapi-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      },
+      "calls": {
+        "tp": 79,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.9875
+      },
+      "env": {
+        "tp": 22,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-python-fastapi-template",
+      "dataAccess": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.8709677419354839
+      }
+    },
+    {
+      "sample": "internet-python-flask-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      },
+      "calls": {
+        "tp": 37,
+        "fp": 0,
+        "fn": 26,
+        "precision": 1,
+        "recall": 0.5873015873015873
+      },
+      "dataAccess": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.8709677419354839
+      },
+      "env": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
       "sample": "internet-react-realworld",
       "components": {
         "tp": 31,
@@ -406,6 +507,36 @@
     },
     {
       "sample": "internet-realworld-go-fullstack",
+      "requests": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-python-django-fullstack",
+      "requests": {
+        "tp": 32,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-python-fastapi-fullstack",
+      "requests": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-python-flask-fullstack",
       "requests": {
         "tp": 33,
         "fp": 0,
@@ -625,29 +756,29 @@
   ],
   "totals": {
     "routes": {
-      "tp": 232,
+      "tp": 289,
       "fp": 0,
       "fn": 0,
       "precision": 1,
       "recall": 1,
       "fullPath": {
-        "correct": 232,
-        "total": 232
+        "correct": 289,
+        "total": 289
       }
     },
     "calls": {
-      "tp": 721,
+      "tp": 837,
       "fp": 0,
-      "fn": 14,
+      "fn": 41,
       "precision": 1,
-      "recall": 0.9809523809523809
+      "recall": 0.9533029612756264
     },
     "dataAccess": {
-      "tp": 288,
+      "tp": 357,
       "fp": 0,
-      "fn": 0,
+      "fn": 12,
       "precision": 1,
-      "recall": 1
+      "recall": 0.967479674796748
     },
     "components": {
       "tp": 95,
@@ -671,7 +802,7 @@
       "recall": 1
     },
     "requests": {
-      "tp": 99,
+      "tp": 197,
       "fp": 0,
       "fn": 0,
       "precision": 1,
@@ -692,7 +823,7 @@
       "recall": 1
     },
     "env": {
-      "tp": 51,
+      "tp": 77,
       "fp": 0,
       "fn": 0,
       "precision": 1,

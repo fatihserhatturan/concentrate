@@ -1447,28 +1447,28 @@ and Django ORM data access, config, HTTP clients and dependency injection. The d
 
 ### Samples and labels
 
-- [ ] Pin Django, FastAPI and Flask samples (RealWorld variants where available) in `scripts/samples.json`
-- [ ] Hand labels for routes, calls, data access and env in `bench/labels/`
-- [ ] Golden sample graphs where they stay small enough
+- [x] Pin Django, FastAPI and Flask samples (RealWorld variants where available) in `scripts/samples.json`
+- [x] Hand labels for routes, calls, data access and env in `bench/labels/`
+- [x] Golden sample graphs where they stay small enough
 
 ### Accuracy and performance
 
-- [ ] Python rows in every `bench:accuracy` section; precision 100%, recall reported
-- [ ] Scan time and memory for the Python samples in `docs/benchmarks.md`
+- [x] Python rows in every `bench:accuracy` section; precision 100%, recall reported
+- [x] Scan time and memory for the Python samples in `docs/benchmarks.md`
 
 ### Agent benchmark
 
-- [ ] Python questions (routes, callers, impact, table users, env, frontend → Python backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
+- [x] Python questions (routes, callers, impact, table users, env, frontend → Python backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
 
 ### Docs
 
-- [ ] README "What it sees" table and languages line cover Python
-- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated
+- [x] README "What it sees" table and languages line cover Python
+- [x] `docs/accuracy.md` and `docs/known-limitations.md` updated
 
 ### Acceptance criteria
 
-- [ ] Accuracy, performance and agent results for Python are reproducible from scripts
-- [ ] README shows the Python coverage
+- [x] Accuracy, performance and agent results for Python are reproducible from scripts
+- [x] README shows the Python coverage
 
 ## M13: C/C++ ecosystem
 
