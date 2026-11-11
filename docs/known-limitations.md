@@ -1447,6 +1447,21 @@ Astro).
   a trait or a macro is not followed; routes in `tests/` and test functions are
   ignored; a bare `#[get]` attribute is read only when the file imports actix-web
   or Rocket (not both).
+- Other entrypoints: tonic `XServer::new(value)` / `with_interceptor` / `from_arc`
+  makes an EntryPoint (kind `grpc`, trigger `X/method`) per method of every
+  `impl X for Type` in the scan, narrowed to the value's type when it is a struct
+  literal, a `Type::new()` / `default()` constructor (also in an `Arc` or `Box`) or
+  a typed local or parameter; the trigger has no proto package, and a trait that
+  tonic generates but the scan does not contain (no implementation in the scan) gives
+  none. clap: `#[derive(Parser)]` with `#[derive(Subcommand)]` enums, also nested through
+  `#[derive(Args)]` structs or `#[command(subcommand)]` fields, and the builder's
+  `Command::new("app").subcommand(Command::new("serve"))` give EntryPoints (kind
+  `cli`, trigger the command path such as `db seed`; kebab-case names or
+  `#[command(name = …)]`; a parser with no subcommand is the crate's own name).
+  A command's handler is the first function its `match` arm calls
+  (`Commands::Serve { .. } => serve(..)`, `Some(("serve", m)) => serve(m)`); builder
+  arms are matched by the command's own name, not its path, and a command that has
+  subcommands is not an EntryPoint itself.
 - Measured on the pinned `internet-rust-axum-realworld` (axum + sqlx, one library
   crate and a bin): 47 hand-labeled call sites with a repository target, precision
   100%, recall 70.2% ([accuracy.md](accuracy.md)). Not measured on a multi-crate
