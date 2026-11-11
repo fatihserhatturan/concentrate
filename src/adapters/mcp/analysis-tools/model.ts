@@ -27,6 +27,7 @@ export type Declaration = {
 export type FileInfo = {
   file: string;
   language: string | null;
+  sourceType: string | null;
   isTest: boolean;
   isFixture: boolean;
   isGenerated: boolean;
@@ -129,13 +130,13 @@ export async function loadDeclarations(engine: IQueryEngine): Promise<Declaratio
 export async function loadFiles(engine: IQueryEngine): Promise<Map<string, FileInfo>> {
   const rows = await engine.query(`
     MATCH (file:File)
-    RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest, file.isFixture AS isFixture,
+    RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType, file.isTest AS isTest, file.isFixture AS isFixture,
       file.isGenerated AS isGenerated, file.packageName AS packageName
   `) as Row[];
   return new Map(rows.flatMap((row) => {
     const file = str(row.file);
     return file
-      ? [[file, { file, language: str(row.language), isTest: row.isTest === true, isFixture: row.isFixture === true, isGenerated: row.isGenerated === true, packageName: str(row.packageName) }]]
+      ? [[file, { file, language: str(row.language), sourceType: str(row.sourceType), isTest: row.isTest === true, isFixture: row.isFixture === true, isGenerated: row.isGenerated === true, packageName: str(row.packageName) }]]
       : [];
   }));
 }

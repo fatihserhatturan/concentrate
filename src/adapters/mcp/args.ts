@@ -47,3 +47,21 @@ export function objectSchema(
     additionalProperties: false,
   };
 }
+
+export const SOURCE_TYPES = ["production", "test", "fixture", "support", "generated", "docs"] as const;
+
+// The `sourceType` and `language` arguments of the search tools: they filter on
+// the declaring File node. `language` is the detected language id (typescript,
+// go, ...); an unknown sourceType is an error, an unknown language matches nothing.
+export type FileTypeFilter = { sourceType?: string; language?: string };
+
+export function fileTypeFilter(args: Record<string, unknown>): FileTypeFilter {
+  const sourceType = optionalString(args.sourceType);
+  if (sourceType && !(SOURCE_TYPES as readonly string[]).includes(sourceType)) {
+    throw new Error(`Unknown sourceType ${JSON.stringify(sourceType)}; expected one of ${SOURCE_TYPES.join(", ")}`);
+  }
+  return { sourceType, language: optionalString(args.language)?.toLowerCase() };
+}
+
+export const sourceTypeProperty = { type: "string", description: `Declaring file's type: ${SOURCE_TYPES.join(", ")}.` };
+export const languageProperty = { type: "string", description: "Declaring file's language." };

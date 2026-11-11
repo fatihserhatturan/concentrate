@@ -897,11 +897,12 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated, file.packageName AS packageName",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated, file.packageName AS packageName",
         "rows": [
           {
             "file": "client.ts",
             "language": "typescript",
+            "sourceType": "production",
             "isTest": false,
             "isFixture": false,
             "isGenerated": false,
@@ -910,6 +911,7 @@
           {
             "file": "errors.ts",
             "language": "typescript",
+            "sourceType": "production",
             "isTest": false,
             "isFixture": false,
             "isGenerated": false,
@@ -918,6 +920,7 @@
           {
             "file": "index.ts",
             "language": "typescript",
+            "sourceType": "production",
             "isTest": false,
             "isFixture": false,
             "isGenerated": false,

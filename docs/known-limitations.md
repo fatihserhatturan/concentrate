@@ -1528,6 +1528,11 @@ Astro).
   `architecture_overview` and the code counts of the graph summary
   (`files.code`) leave non-code files out, while `files.total` and the
   `languages` list include them.
+- `search_symbols`, `find_definitions` and `list_exports` filter by
+  `sourceType` and `language` of the declaring file. `find_references` and
+  `find_callers` do not: their rows are use sites, which may sit in other
+  files than the declaration, and the tool list is near its 19 000 character
+  limit. Filter their `file` column afterwards, or call `get_file_outline`.
 
 ## Review Process
 

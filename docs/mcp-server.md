@@ -129,7 +129,8 @@ even for large repositories; read it first to decide which tools to call.
 - `graph_stats`: returns schema version and node counts.
 - `find_definitions`: finds symbols across functions, classes, variables,
   interfaces, type aliases and enums, then class methods (`kind: "Method"`
-  with `className`, including class fields that hold a function).
+  with `className`, including class fields that hold a function). Takes
+  `sourceType` and `language` (see below).
 - `find_callers`: finds call sites that resolve to a named function. It also
   returns `unresolvedCalls` (`count` and up to 10 `sites` with file, line,
   expression and caller): calls with that callee name that resolve to no
@@ -139,7 +140,7 @@ even for large repositories; read it first to decide which tools to call.
   no grep to confirm; otherwise the sites are the lines to check. A substring
   search (`exact: false`) checks the names of up to 20 matching functions.
 - `list_exports`: lists exported definitions and re-exports, optionally scoped
-  to one file.
+  to one file; takes `sourceType` and `language`.
 - `trace_import_chain`: returns a resolved import path between two files when
   one exists.
 - `list_routes`: lists detected HTTP route declarations and handlers, Go
@@ -317,7 +318,19 @@ Example:
 
 ### Search and analysis tools
 
-- `search_symbols({ query, kind?, file?, limit = 20 })`: fuzzy search over
+`search_symbols`, `find_definitions` and `list_exports` take two optional
+filters on the file that declares the symbol: `sourceType` (`production`,
+`test`, `fixture`, `support`, `generated` or `docs`; any other value is an
+error) and `language` (the file's `language`, such as `typescript`, `go` or
+`python`; case-insensitive; an unknown language matches nothing). Both may be
+combined with each other and with `file` and `kind`. The echoed `query` shows
+the filters used. `find_references` and `find_callers` have no such filter:
+they list use sites, so a filter would have to choose between the
+declaration's file and each caller's file, and their results already carry
+the file of every site; the tool list has no room for the extra properties
+either (it stays under 19 000 characters).
+
+- `search_symbols({ query, kind?, file?, sourceType?, language?, limit = 20 })`: fuzzy search over
   declarations (functions, methods, classes, interfaces, types, enums,
   variables). Matches rank by type: `exact`, `exact-ignore-case`, `prefix`,
   `initials` (`gUS` → `getUserService`), `substring` (higher at a word

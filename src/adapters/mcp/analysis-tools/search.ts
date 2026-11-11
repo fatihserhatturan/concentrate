@@ -1,8 +1,8 @@
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
-import { optionalString, requiredString } from "../args.js";
+import { fileTypeFilter, optionalString, requiredString } from "../args.js";
 import { matchesFileOrDirectory } from "../agent-tools/graph.js";
 import type { PageWindow } from "../paging.js";
-import { byFileAndLine, type DeclarationKind, describeDeclaration, loadDeclarations } from "./model.js";
+import { byFileAndLine, type DeclarationKind, describeDeclaration, loadDeclarations, loadFiles } from "./model.js";
 
 export const DECLARATION_KINDS: readonly DeclarationKind[] = ["function", "method", "class", "interface", "type", "enum", "variable"];
 
@@ -28,10 +28,17 @@ export async function searchSymbols(engine: IQueryEngine, args: Record<string, u
     throw new Error(`Unknown kind ${JSON.stringify(kind)}; expected one of ${DECLARATION_KINDS.join(", ")}`);
   }
   const file = optionalString(args.file);
+  const types = fileTypeFilter(args);
+  const files = types.sourceType || types.language ? await loadFiles(engine) : null;
+  const typeMatches = (path: string) => {
+    if (!files) return true;
+    const info = files.get(path);
+    return (!types.sourceType || info?.sourceType === types.sourceType) && (!types.language || info?.language === types.language);
+  };
 
   const qualified = query.includes(".");
   const ranked = (await loadDeclarations(engine))
-    .filter((declaration) => (!kind || declaration.kind === kind) && (!file || matchesFileOrDirectory(declaration.file, file)))
+    .filter((declaration) => (!kind || declaration.kind === kind) && (!file || matchesFileOrDirectory(declaration.file, file)) && typeMatches(declaration.file))
     .flatMap((declaration) => {
       const name = qualified && declaration.className ? `${declaration.className}.${declaration.name}` : declaration.name;
       const match = matchName(name, query);
@@ -44,7 +51,7 @@ export async function searchSymbols(engine: IQueryEngine, args: Record<string, u
       || byFileAndLine(a.declaration, b.declaration));
 
   return {
-    query: { query, kind: kind ?? null, file: file ?? null },
+    query: { query, kind: kind ?? null, file: file ?? null, ...types },
     total: ranked.length,
     symbols: window.take(ranked).map(({ declaration, score, match }) => ({
       ...describeDeclaration(declaration),
