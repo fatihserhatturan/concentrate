@@ -1339,10 +1339,10 @@ and Django ORM data access, config, HTTP clients and dependency injection. The d
 
 ### Declarations
 
-- [ ] Classes with their bases (`EXTENDS`); `Protocol` and `abc.ABC` classes as interfaces with `IMPLEMENTS` for structural or declared implementations
-- [ ] Decorators as `Decorator` nodes (`DECORATED_BY`), as for TypeScript
-- [ ] `parameters` and `returnType` from type hints; module-level variables and constants as `Variable` nodes
-- [ ] Fields of `dataclass`, `NamedTuple`, `TypedDict`, `attrs` and pydantic models
+- [x] Classes with their bases (`EXTENDS`); `Protocol` and `abc.ABC` classes as interfaces with `IMPLEMENTS` for structural or declared implementations
+- [x] Decorators as `Decorator` nodes (`DECORATED_BY`), as for TypeScript
+- [x] `parameters` and `returnType` from type hints; module-level variables and constants as `Variable` nodes
+- [x] Fields of `dataclass`, `NamedTuple`, `TypedDict`, `attrs` and pydantic models
 
 ### Calls
 

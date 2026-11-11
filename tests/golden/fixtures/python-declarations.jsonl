@@ -1,0 +1,176 @@
+{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":5,"parsedFiles":5,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"python-declarations","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:pkg","label":"Directory","properties":{"name":"pkg","path":"<root>/pkg","relativePath":"pkg"}}
+{"kind":"node","id":"file:pkg/__init__.py","label":"File","properties":{"allNames":"[\"Repository\",\"Greeter\"]","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/pkg/__init__.py","relativePath":"pkg/__init__.py","sourceType":"production"}}
+{"kind":"node","id":"file:pkg/__init__.py:import:1:.base","label":"Import","properties":{"bindings":"[{\"imported\":\"Repository\",\"local\":\"Repository\",\"kind\":\"named\"}]","line":1,"source":".base","specifier":"from .base import Repository, Greeter"}}
+{"kind":"node","id":"file:pkg/__init__.py:import:1:.base#2","label":"Import","properties":{"bindings":"[{\"imported\":\"Greeter\",\"local\":\"Greeter\",\"kind\":\"named\"}]","line":1,"source":".base","specifier":"from .base import Repository, Greeter"}}
+{"kind":"node","id":"file:pkg/base.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/pkg/base.py","relativePath":"pkg/base.py","sourceType":"production"}}
+{"kind":"node","id":"file:pkg/base.py:class:20:Plain","label":"Class","properties":{"endLine":21,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":20,"name":"Plain","visibility":"public"}}
+{"kind":"node","id":"file:pkg/base.py:function:10:load","label":"Function","properties":{"className":"Repository","endLine":10,"isAbstract":true,"isAsync":false,"isExported":true,"kind":"function_definition","line":10,"methodKind":"interface-method","name":"load","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"key\",\"type\":\"str\"}]","returnType":"str","visibility":"public"}}
+{"kind":"node","id":"file:pkg/base.py:function:10:load:decorator:9:abstractmethod","label":"Decorator","properties":{"args":"[]","expression":"@abstractmethod","line":9,"name":"abstractmethod"}}
+{"kind":"node","id":"file:pkg/base.py:function:12:describe","label":"Function","properties":{"className":"Repository","endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":12,"methodKind":"interface-method","name":"describe","parameters":"[{\"name\":\"self\",\"type\":null}]","returnType":"str","visibility":"public"}}
+{"kind":"node","id":"file:pkg/base.py:function:17:greet","label":"Function","properties":{"className":"Greeter","endLine":17,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":17,"methodKind":"interface-method","name":"greet","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"name\",\"type\":\"str\"}]","returnType":"str","visibility":"public"}}
+{"kind":"node","id":"file:pkg/base.py:function:7:save","label":"Function","properties":{"className":"Repository","endLine":7,"isAbstract":true,"isAsync":false,"isExported":true,"kind":"function_definition","line":7,"methodKind":"interface-method","name":"save","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"item\",\"type\":\"str\"}]","returnType":"None","visibility":"public"}}
+{"kind":"node","id":"file:pkg/base.py:function:7:save:decorator:6:abstractmethod","label":"Decorator","properties":{"args":"[]","expression":"@abstractmethod","line":6,"name":"abstractmethod"}}
+{"kind":"node","id":"file:pkg/base.py:import:1:abc","label":"Import","properties":{"bindings":"[{\"imported\":\"ABC\",\"local\":\"ABC\",\"kind\":\"named\"}]","line":1,"source":"abc","specifier":"from abc import ABC, abstractmethod"}}
+{"kind":"node","id":"file:pkg/base.py:import:1:abc#2","label":"Import","properties":{"bindings":"[{\"imported\":\"abstractmethod\",\"local\":\"abstractmethod\",\"kind\":\"named\"}]","line":1,"source":"abc","specifier":"from abc import ABC, abstractmethod"}}
+{"kind":"node","id":"file:pkg/base.py:import:2:typing","label":"Import","properties":{"bindings":"[{\"imported\":\"Protocol\",\"local\":\"Protocol\",\"kind\":\"named\"}]","line":2,"source":"typing","specifier":"from typing import Protocol"}}
+{"kind":"node","id":"file:pkg/base.py:interface:16:Greeter","label":"Interface","properties":{"embeds":"[]","endLine":17,"isExported":true,"kind":"protocol","line":16,"methodSignatures":"{\"greet\":{\"parameters\":[\"str\"],\"returnType\":\"str\"}}","methods":"[\"greet\"]","name":"Greeter","visibility":"public"}}
+{"kind":"node","id":"file:pkg/base.py:interface:5:Repository","label":"Interface","properties":{"embeds":"[]","endLine":13,"isExported":true,"kind":"abc","line":5,"methodSignatures":"{\"save\":{\"parameters\":[\"str\"],\"returnType\":\"None\"},\"load\":{\"parameters\":[\"str\"],\"returnType\":\"str\"},\"describe\":{\"parameters\":[],\"returnType\":\"str\"}}","methods":"[\"save\",\"load\",\"describe\"]","name":"Repository","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/pkg/impl.py","relativePath":"pkg/impl.py","sourceType":"production"}}
+{"kind":"node","id":"file:pkg/impl.py:class:15:UserRepo","label":"Class","properties":{"endLine":16,"extendsNames":"[\"SqlRepo\"]","implementsNames":null,"isAbstract":false,"isExported":true,"line":15,"name":"UserRepo","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:class:19:Cache","label":"Class","properties":{"endLine":21,"extendsNames":"[\"Repository\"]","implementsNames":null,"isAbstract":false,"isExported":true,"line":19,"name":"Cache","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:class:24:Loud","label":"Class","properties":{"endLine":26,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":24,"name":"Loud","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:class:29:Quiet","label":"Class","properties":{"endLine":31,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":29,"name":"Quiet","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:class:34:Mixed","label":"Class","properties":{"endLine":35,"extendsNames":"[\"base.Plain\",\"Loud\"]","implementsNames":null,"isAbstract":false,"isExported":true,"line":34,"name":"Mixed","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:class:7:SqlRepo","label":"Class","properties":{"endLine":12,"extendsNames":"[\"base.Repository\"]","implementsNames":null,"isAbstract":false,"isExported":true,"line":7,"name":"SqlRepo","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:function:11:load","label":"Function","properties":{"className":"SqlRepo","endLine":12,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":11,"methodKind":"method","name":"load","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"key\",\"type\":\"str\"}]","returnType":"str","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:function:20:save","label":"Function","properties":{"className":"Cache","endLine":21,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":20,"methodKind":"method","name":"save","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"item\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:function:25:greet","label":"Function","properties":{"className":"Loud","endLine":26,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":25,"methodKind":"method","name":"greet","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"name\",\"type\":\"str\"}]","returnType":"str","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:function:25:greet:call:26:15:name.upper","label":"Call","properties":{"callee":"upper","columnNumber":15,"expression":"name.upper","line":26,"name":"name.upper","receiver":"name"}}
+{"kind":"node","id":"file:pkg/impl.py:function:30:whisper","label":"Function","properties":{"className":"Quiet","endLine":31,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":30,"methodKind":"method","name":"whisper","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"name\",\"type\":\"str\"}]","returnType":"str","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:function:38:welcome","label":"Function","properties":{"className":null,"endLine":39,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":38,"methodKind":null,"name":"welcome","parameters":"[{\"name\":\"greeter\",\"type\":\"Greeter\"},{\"name\":\"user\",\"type\":\"User\"}]","returnType":"str","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:function:38:welcome:call:39:11:greeter.greet","label":"Call","properties":{"callee":"greet","columnNumber":11,"expression":"greeter.greet","line":39,"name":"greeter.greet","receiver":"greeter"}}
+{"kind":"node","id":"file:pkg/impl.py:function:8:save","label":"Function","properties":{"className":"SqlRepo","endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":8,"methodKind":"method","name":"save","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"item\",\"type\":\"str\"}]","returnType":"None","visibility":"public"}}
+{"kind":"node","id":"file:pkg/impl.py:import:1:.","label":"Import","properties":{"bindings":"[{\"imported\":\"base\",\"local\":\"base\",\"kind\":\"named\"}]","isModule":true,"line":1,"source":".","specifier":"from . import base"}}
+{"kind":"node","id":"file:pkg/impl.py:import:2:.base","label":"Import","properties":{"bindings":"[{\"imported\":\"Greeter\",\"local\":\"Greeter\",\"kind\":\"named\"}]","line":2,"source":".base","specifier":"from .base import Greeter"}}
+{"kind":"node","id":"file:pkg/impl.py:import:3:pkg","label":"Import","properties":{"bindings":"[{\"imported\":\"Repository\",\"local\":\"Repository\",\"kind\":\"named\"}]","line":3,"source":"pkg","specifier":"from pkg import Repository"}}
+{"kind":"node","id":"file:pkg/impl.py:import:4:.models","label":"Import","properties":{"bindings":"[{\"imported\":\"User\",\"local\":\"User\",\"kind\":\"named\"}]","line":4,"source":".models","specifier":"from .models import User"}}
+{"kind":"node","id":"file:pkg/models.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/pkg/models.py","relativePath":"pkg/models.py","sourceType":"production"}}
+{"kind":"node","id":"file:pkg/models.py:class:16:User","label":"Class","properties":{"endLine":20,"extendsNames":null,"fields":"[{\"name\":\"name\",\"type\":\"str\"},{\"name\":\"age\",\"type\":\"int\",\"default\":true},{\"name\":\"tags\",\"type\":\"list\",\"default\":true}]","implementsNames":null,"isAbstract":false,"isExported":true,"kind":"dataclass","line":16,"name":"User","visibility":"public"}}
+{"kind":"node","id":"file:pkg/models.py:class:16:User:decorator:15:dataclass","label":"Decorator","properties":{"args":"[\"frozen=True\"]","expression":"@dataclass(frozen=True)","line":15,"name":"dataclass"}}
+{"kind":"node","id":"file:pkg/models.py:class:23:Point","label":"Class","properties":{"endLine":25,"extendsNames":"[\"NamedTuple\"]","fields":"[{\"name\":\"x\",\"type\":\"float\"},{\"name\":\"y\",\"type\":\"float\",\"default\":true}]","implementsNames":null,"isAbstract":false,"isExported":true,"kind":"namedtuple","line":23,"name":"Point","visibility":"public"}}
+{"kind":"node","id":"file:pkg/models.py:class:28:Movie","label":"Class","properties":{"endLine":30,"extendsNames":"[\"TypedDict\"]","fields":"[{\"name\":\"title\",\"type\":\"str\"},{\"name\":\"year\",\"type\":\"int\"}]","implementsNames":null,"isAbstract":false,"isExported":true,"kind":"typeddict","line":28,"name":"Movie","visibility":"public"}}
+{"kind":"node","id":"file:pkg/models.py:class:34:Legacy","label":"Class","properties":{"endLine":36,"extendsNames":null,"fields":"[{\"name\":\"name\",\"type\":null,\"default\":true},{\"name\":\"size\",\"type\":\"int\",\"default\":true}]","implementsNames":null,"isAbstract":false,"isExported":true,"kind":"attrs","line":34,"name":"Legacy","visibility":"public"}}
+{"kind":"node","id":"file:pkg/models.py:class:34:Legacy:decorator:33:attr.s","label":"Decorator","properties":{"args":"[]","expression":"@attr.s","line":33,"name":"attr.s"}}
+{"kind":"node","id":"file:pkg/models.py:class:39:Item","label":"Class","properties":{"endLine":41,"extendsNames":"[\"BaseModel\"]","fields":"[{\"name\":\"sku\",\"type\":\"str\"},{\"name\":\"price\",\"type\":\"float\",\"default\":true}]","implementsNames":null,"isAbstract":false,"isExported":true,"kind":"pydantic","line":39,"name":"Item","visibility":"public"}}
+{"kind":"node","id":"file:pkg/models.py:class:44:Color","label":"Class","properties":{"endLine":46,"extendsNames":"[\"enum.Enum\"]","implementsNames":null,"isAbstract":false,"isExported":true,"kind":"enum","line":44,"name":"Color","visibility":"public"}}
+{"kind":"node","id":"file:pkg/models.py:import:1:enum","label":"Import","properties":{"bindings":"[{\"imported\":\"enum\",\"local\":\"enum\",\"kind\":\"namespace\"}]","line":1,"source":"enum","specifier":"import enum"}}
+{"kind":"node","id":"file:pkg/models.py:import:2:collections","label":"Import","properties":{"bindings":"[{\"imported\":\"namedtuple\",\"local\":\"namedtuple\",\"kind\":\"named\"}]","line":2,"source":"collections","specifier":"from collections import namedtuple"}}
+{"kind":"node","id":"file:pkg/models.py:import:3:dataclasses","label":"Import","properties":{"bindings":"[{\"imported\":\"dataclass\",\"local\":\"dataclass\",\"kind\":\"named\"}]","line":3,"source":"dataclasses","specifier":"from dataclasses import dataclass, field"}}
+{"kind":"node","id":"file:pkg/models.py:import:3:dataclasses#2","label":"Import","properties":{"bindings":"[{\"imported\":\"field\",\"local\":\"field\",\"kind\":\"named\"}]","line":3,"source":"dataclasses","specifier":"from dataclasses import dataclass, field"}}
+{"kind":"node","id":"file:pkg/models.py:import:4:typing","label":"Import","properties":{"bindings":"[{\"imported\":\"ClassVar\",\"local\":\"ClassVar\",\"kind\":\"named\"}]","line":4,"source":"typing","specifier":"from typing import ClassVar, NamedTuple, TypedDict"}}
+{"kind":"node","id":"file:pkg/models.py:import:4:typing#2","label":"Import","properties":{"bindings":"[{\"imported\":\"NamedTuple\",\"local\":\"NamedTuple\",\"kind\":\"named\"}]","line":4,"source":"typing","specifier":"from typing import ClassVar, NamedTuple, TypedDict"}}
+{"kind":"node","id":"file:pkg/models.py:import:4:typing#3","label":"Import","properties":{"bindings":"[{\"imported\":\"TypedDict\",\"local\":\"TypedDict\",\"kind\":\"named\"}]","line":4,"source":"typing","specifier":"from typing import ClassVar, NamedTuple, TypedDict"}}
+{"kind":"node","id":"file:pkg/models.py:import:6:attr","label":"Import","properties":{"bindings":"[{\"imported\":\"attr\",\"local\":\"attr\",\"kind\":\"namespace\"}]","line":6,"source":"attr","specifier":"import attr"}}
+{"kind":"node","id":"file:pkg/models.py:import:7:pydantic","label":"Import","properties":{"bindings":"[{\"imported\":\"BaseModel\",\"local\":\"BaseModel\",\"kind\":\"named\"}]","line":7,"source":"pydantic","specifier":"from pydantic import BaseModel"}}
+{"kind":"node","id":"file:pkg/models.py:variable:10:DEFAULT_LIMIT","label":"Variable","properties":{"isExported":true,"kind":"const","line":10,"name":"DEFAULT_LIMIT","typeName":"int","visibility":"public"}}
+{"kind":"node","id":"file:pkg/models.py:variable:11:registry","label":"Variable","properties":{"isExported":true,"kind":"variable","line":11,"name":"registry","visibility":"public"}}
+{"kind":"node","id":"file:pkg/models.py:variable:12:_private","label":"Variable","properties":{"isExported":false,"kind":"variable","line":12,"name":"_private","visibility":"private"}}
+{"kind":"node","id":"file:pkg/models.py:variable:49:Pair","label":"Variable","properties":{"isExported":true,"kind":"variable","line":49,"name":"Pair","visibility":"public"}}
+{"kind":"node","id":"file:pkg/models.py:variable:9:VERSION","label":"Variable","properties":{"isExported":true,"kind":"const","line":9,"name":"VERSION","stringValue":"1.0","visibility":"public"}}
+{"kind":"node","id":"file:pkg/service.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/pkg/service.py","relativePath":"pkg/service.py","sourceType":"production"}}
+{"kind":"node","id":"file:pkg/service.py:class:8:Service","label":"Class","properties":{"endLine":28,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":8,"name":"Service","visibility":"public"}}
+{"kind":"node","id":"file:pkg/service.py:function:12:make","label":"Function","properties":{"className":"Service","endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":12,"methodKind":"staticmethod","name":"make","parameters":"[{\"name\":\"name\",\"type\":\"str\"},{\"name\":\"*args\",\"type\":null},{\"name\":\"size\",\"type\":\"int\",\"default\":true},{\"name\":\"**options\",\"type\":null}]","returnType":"\"Service\"","visibility":"public"}}
+{"kind":"node","id":"file:pkg/service.py:function:12:make:call:13:15:Service","label":"Call","properties":{"callee":"Service","columnNumber":15,"expression":"Service","line":13,"name":"Service","receiver":null}}
+{"kind":"node","id":"file:pkg/service.py:function:12:make:decorator:11:staticmethod","label":"Decorator","properties":{"args":"[]","expression":"@staticmethod","line":11,"name":"staticmethod"}}
+{"kind":"node","id":"file:pkg/service.py:function:16:build","label":"Function","properties":{"className":"Service","endLine":17,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":16,"methodKind":"classmethod","name":"build","parameters":"[{\"name\":\"cls\",\"type\":null},{\"name\":\"config\",\"type\":\"dict[str, int] | None\",\"default\":true}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:pkg/service.py:function:16:build:call:17:15:cls","label":"Call","properties":{"callee":"cls","columnNumber":15,"expression":"cls","line":17,"name":"cls","receiver":null}}
+{"kind":"node","id":"file:pkg/service.py:function:16:build:decorator:15:classmethod","label":"Decorator","properties":{"args":"[]","expression":"@classmethod","line":15,"name":"classmethod"}}
+{"kind":"node","id":"file:pkg/service.py:function:20:label","label":"Function","properties":{"className":"Service","endLine":21,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":20,"methodKind":"property","name":"label","parameters":"[{\"name\":\"self\",\"type\":null}]","returnType":"str","visibility":"public"}}
+{"kind":"node","id":"file:pkg/service.py:function:20:label:decorator:19:property","label":"Decorator","properties":{"args":"[]","expression":"@property","line":19,"name":"property"}}
+{"kind":"node","id":"file:pkg/service.py:function:24:cached","label":"Function","properties":{"className":"Service","endLine":25,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":24,"methodKind":"method","name":"cached","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"key\",\"type\":null}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:pkg/service.py:function:24:cached:decorator:23:functools.lru_cache","label":"Decorator","properties":{"args":"[\"maxsize=8\"]","expression":"@functools.lru_cache(maxsize=8)","line":23,"name":"functools.lru_cache"}}
+{"kind":"node","id":"file:pkg/service.py:function:27:fetch","label":"Function","properties":{"className":"Service","endLine":28,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":27,"methodKind":"method","name":"fetch","parameters":"[{\"name\":\"self\",\"type\":null},{\"name\":\"url\",\"type\":\"str\"},{\"name\":\"retries\",\"type\":null,\"default\":true},{\"name\":\"timeout\",\"type\":\"float\",\"default\":true}]","returnType":"bytes","visibility":"public"}}
+{"kind":"node","id":"file:pkg/service.py:function:32:health","label":"Function","properties":{"className":null,"endLine":33,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":32,"methodKind":null,"name":"health","parameters":"[]","returnType":"dict","visibility":"public"}}
+{"kind":"node","id":"file:pkg/service.py:function:32:health:decorator:31:app.route","label":"Decorator","properties":{"args":"[\"\\\"/health\\\"\",\"methods=[\\\"GET\\\"]\"]","expression":"@app.route(\"/health\", methods=[\"GET\"])","line":31,"name":"app.route"}}
+{"kind":"node","id":"file:pkg/service.py:function:38:stacked","label":"Function","properties":{"className":null,"endLine":39,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":38,"methodKind":null,"name":"stacked","parameters":"[{\"name\":\"a\",\"type\":null},{\"name\":\"b\",\"type\":\"int\",\"default\":true}]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:pkg/service.py:function:38:stacked:decorator:36:functools.wraps","label":"Decorator","properties":{"args":"[\"health\"]","expression":"@functools.wraps(health)","line":36,"name":"functools.wraps"}}
+{"kind":"node","id":"file:pkg/service.py:function:38:stacked:decorator:37:app.get","label":"Decorator","properties":{"args":"[\"\\\"/x\\\"\"]","expression":"@app.get(\"/x\")","line":37,"name":"app.get"}}
+{"kind":"node","id":"file:pkg/service.py:import:1:functools","label":"Import","properties":{"bindings":"[{\"imported\":\"functools\",\"local\":\"functools\",\"kind\":\"namespace\"}]","line":1,"source":"functools","specifier":"import functools"}}
+{"kind":"node","id":"file:pkg/service.py:import:3:flask","label":"Import","properties":{"bindings":"[{\"imported\":\"Flask\",\"local\":\"Flask\",\"kind\":\"named\"}]","line":3,"source":"flask","specifier":"from flask import Flask"}}
+{"kind":"node","id":"file:pkg/service.py:variable:5:app","label":"Variable","properties":{"isExported":true,"kind":"variable","line":5,"name":"app","visibility":"public"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-declarations","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:pkg","properties":{}}
+{"kind":"rel","from":"dir:pkg","type":"CONTAINS_FILE","to":"file:pkg/__init__.py","properties":{}}
+{"kind":"rel","from":"dir:pkg","type":"CONTAINS_FILE","to":"file:pkg/base.py","properties":{}}
+{"kind":"rel","from":"dir:pkg","type":"CONTAINS_FILE","to":"file:pkg/impl.py","properties":{}}
+{"kind":"rel","from":"dir:pkg","type":"CONTAINS_FILE","to":"file:pkg/models.py","properties":{}}
+{"kind":"rel","from":"dir:pkg","type":"CONTAINS_FILE","to":"file:pkg/service.py","properties":{}}
+{"kind":"rel","from":"file:pkg/__init__.py","type":"IMPORTS","to":"file:pkg/__init__.py:import:1:.base","properties":{}}
+{"kind":"rel","from":"file:pkg/__init__.py","type":"IMPORTS","to":"file:pkg/__init__.py:import:1:.base#2","properties":{}}
+{"kind":"rel","from":"file:pkg/__init__.py:import:1:.base","type":"RESOLVES_TO","to":"file:pkg/base.py","properties":{}}
+{"kind":"rel","from":"file:pkg/__init__.py:import:1:.base#2","type":"RESOLVES_TO","to":"file:pkg/base.py","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"DEFINES_CLASS","to":"file:pkg/base.py:class:20:Plain","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"DEFINES_FUNCTION","to":"file:pkg/base.py:function:10:load","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"DEFINES_FUNCTION","to":"file:pkg/base.py:function:12:describe","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"DEFINES_FUNCTION","to":"file:pkg/base.py:function:17:greet","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"DEFINES_FUNCTION","to":"file:pkg/base.py:function:7:save","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"DEFINES_INTERFACE","to":"file:pkg/base.py:interface:16:Greeter","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"DEFINES_INTERFACE","to":"file:pkg/base.py:interface:5:Repository","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"IMPORTS","to":"file:pkg/base.py:import:1:abc","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"IMPORTS","to":"file:pkg/base.py:import:1:abc#2","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py","type":"IMPORTS","to":"file:pkg/base.py:import:2:typing","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py:function:10:load","type":"HAS_METHOD_DECORATOR","to":"file:pkg/base.py:function:10:load:decorator:9:abstractmethod","properties":{}}
+{"kind":"rel","from":"file:pkg/base.py:function:7:save","type":"HAS_METHOD_DECORATOR","to":"file:pkg/base.py:function:7:save:decorator:6:abstractmethod","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"DEFINES_CLASS","to":"file:pkg/impl.py:class:15:UserRepo","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"DEFINES_CLASS","to":"file:pkg/impl.py:class:19:Cache","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"DEFINES_CLASS","to":"file:pkg/impl.py:class:24:Loud","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"DEFINES_CLASS","to":"file:pkg/impl.py:class:29:Quiet","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"DEFINES_CLASS","to":"file:pkg/impl.py:class:34:Mixed","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"DEFINES_CLASS","to":"file:pkg/impl.py:class:7:SqlRepo","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"DEFINES_FUNCTION","to":"file:pkg/impl.py:function:38:welcome","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"IMPORTS","to":"file:pkg/impl.py:import:1:.","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"IMPORTS","to":"file:pkg/impl.py:import:2:.base","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"IMPORTS","to":"file:pkg/impl.py:import:3:pkg","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py","type":"IMPORTS","to":"file:pkg/impl.py:import:4:.models","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:15:UserRepo","type":"EXTENDS","to":"file:pkg/impl.py:class:7:SqlRepo","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:19:Cache","type":"DEFINES_METHOD","to":"file:pkg/impl.py:function:20:save","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:19:Cache","type":"IMPLEMENTS","to":"file:pkg/base.py:interface:5:Repository","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:24:Loud","type":"DEFINES_METHOD","to":"file:pkg/impl.py:function:25:greet","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:24:Loud","type":"IMPLEMENTS","to":"file:pkg/base.py:interface:16:Greeter","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:29:Quiet","type":"DEFINES_METHOD","to":"file:pkg/impl.py:function:30:whisper","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:34:Mixed","type":"EXTENDS","to":"file:pkg/base.py:class:20:Plain","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:34:Mixed","type":"EXTENDS","to":"file:pkg/impl.py:class:24:Loud","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:7:SqlRepo","type":"DEFINES_METHOD","to":"file:pkg/impl.py:function:11:load","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:7:SqlRepo","type":"DEFINES_METHOD","to":"file:pkg/impl.py:function:8:save","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:class:7:SqlRepo","type":"IMPLEMENTS","to":"file:pkg/base.py:interface:5:Repository","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:function:25:greet","type":"CALLS","to":"file:pkg/impl.py:function:25:greet:call:26:15:name.upper","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:function:38:welcome","type":"CALLS","to":"file:pkg/impl.py:function:38:welcome:call:39:11:greeter.greet","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:import:1:.","type":"RESOLVES_TO","to":"file:pkg/base.py","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:import:2:.base","type":"RESOLVES_TO","to":"file:pkg/base.py","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:import:3:pkg","type":"RESOLVES_TO","to":"file:pkg/__init__.py","properties":{}}
+{"kind":"rel","from":"file:pkg/impl.py:import:4:.models","type":"RESOLVES_TO","to":"file:pkg/models.py","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_CLASS","to":"file:pkg/models.py:class:16:User","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_CLASS","to":"file:pkg/models.py:class:23:Point","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_CLASS","to":"file:pkg/models.py:class:28:Movie","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_CLASS","to":"file:pkg/models.py:class:34:Legacy","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_CLASS","to":"file:pkg/models.py:class:39:Item","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_CLASS","to":"file:pkg/models.py:class:44:Color","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_VARIABLE","to":"file:pkg/models.py:variable:10:DEFAULT_LIMIT","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_VARIABLE","to":"file:pkg/models.py:variable:11:registry","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_VARIABLE","to":"file:pkg/models.py:variable:12:_private","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_VARIABLE","to":"file:pkg/models.py:variable:49:Pair","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"DEFINES_VARIABLE","to":"file:pkg/models.py:variable:9:VERSION","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"IMPORTS","to":"file:pkg/models.py:import:1:enum","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"IMPORTS","to":"file:pkg/models.py:import:2:collections","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"IMPORTS","to":"file:pkg/models.py:import:3:dataclasses","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"IMPORTS","to":"file:pkg/models.py:import:3:dataclasses#2","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"IMPORTS","to":"file:pkg/models.py:import:4:typing","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"IMPORTS","to":"file:pkg/models.py:import:4:typing#2","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"IMPORTS","to":"file:pkg/models.py:import:4:typing#3","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"IMPORTS","to":"file:pkg/models.py:import:6:attr","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py","type":"IMPORTS","to":"file:pkg/models.py:import:7:pydantic","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py:class:16:User","type":"HAS_DECORATOR","to":"file:pkg/models.py:class:16:User:decorator:15:dataclass","properties":{}}
+{"kind":"rel","from":"file:pkg/models.py:class:34:Legacy","type":"HAS_DECORATOR","to":"file:pkg/models.py:class:34:Legacy:decorator:33:attr.s","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py","type":"DEFINES_CLASS","to":"file:pkg/service.py:class:8:Service","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py","type":"DEFINES_FUNCTION","to":"file:pkg/service.py:function:32:health","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py","type":"DEFINES_FUNCTION","to":"file:pkg/service.py:function:38:stacked","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py","type":"DEFINES_VARIABLE","to":"file:pkg/service.py:variable:5:app","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py","type":"IMPORTS","to":"file:pkg/service.py:import:1:functools","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py","type":"IMPORTS","to":"file:pkg/service.py:import:3:flask","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:class:8:Service","type":"DEFINES_METHOD","to":"file:pkg/service.py:function:12:make","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:class:8:Service","type":"DEFINES_METHOD","to":"file:pkg/service.py:function:16:build","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:class:8:Service","type":"DEFINES_METHOD","to":"file:pkg/service.py:function:20:label","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:class:8:Service","type":"DEFINES_METHOD","to":"file:pkg/service.py:function:24:cached","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:class:8:Service","type":"DEFINES_METHOD","to":"file:pkg/service.py:function:27:fetch","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:function:12:make","type":"CALLS","to":"file:pkg/service.py:function:12:make:call:13:15:Service","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:function:12:make","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:12:make:decorator:11:staticmethod","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:function:16:build","type":"CALLS","to":"file:pkg/service.py:function:16:build:call:17:15:cls","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:function:16:build","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:16:build:decorator:15:classmethod","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:function:20:label","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:20:label:decorator:19:property","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:function:24:cached","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:24:cached:decorator:23:functools.lru_cache","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:function:32:health","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:32:health:decorator:31:app.route","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:function:38:stacked","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:38:stacked:decorator:36:functools.wraps","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:function:38:stacked","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:38:stacked:decorator:37:app.get","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

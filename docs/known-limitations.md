@@ -1436,6 +1436,46 @@ Astro).
 - Only project modules count as unresolved: `import os`, `import requests` and
   other names without a directory or file in a source root are standard library
   or third-party and are not counted. A relative import that finds nothing is.
+- A class whose bases include `Protocol`, or `ABC` / `metaclass=ABCMeta`, is an
+  `Interface` (`kind` `protocol` or `abc`) with its methods and signatures; the
+  methods are `Function` nodes of the file (`methodKind` `interface-method`,
+  `className` the interface), abstract ones with `isAbstract`. An ABC without
+  abstract methods is still an interface. A subclass lists every base in
+  `extendsNames`: a base that is a class of the scan is `EXTENDS`, one that is an
+  interface `IMPLEMENTS`. Bases are found through `from m import X [as Y]`,
+  `import a.b as c` / `a.b.X` and `__init__.py` re-exports (`from .x import X`,
+  `import *`); a base that is not in the scan (`Exception`, `dict`, framework
+  classes) is only a name. `Generic[T]`, `object` and `Protocol` itself are not bases.
+- A class implements a `Protocol` structurally when it has every (non-dunder)
+  method of it by name and lives in the Protocol's file or in a file that imports
+  that file. Signatures are not compared, inherited methods are not counted, and a
+  class in a file that only imports the Protocol through a package `__init__.py`
+  is not linked.
+- `@decorators` become `Decorator` nodes (`HAS_DECORATOR` on classes,
+  `HAS_METHOD_DECORATOR` on functions and methods) with the dotted `name`, the full
+  `expression` and the arguments as written (`args`). Decorated methods belong to
+  their class (before, a decorated method was a plain function). `methodKind` is
+  `staticmethod`, `classmethod`, `property` (also `cached_property`) or `method`.
+  Decorators are not evaluated: `@functools.wraps` and framework decorators
+  change nothing about the node.
+- `parameters` are `[{name, type, default?}]` from the signature as written
+  (`self` and `cls` included, `*args` / `**kw` keep their stars, `*` and `/`
+  separators are left out) and `returnType` is the annotation text (a quoted
+  forward reference keeps its quotes). Nothing is inferred without annotations.
+- Module-level `NAME = value` and `NAME: Type = value` are `Variable` nodes
+  (`const` for UPPER_CASE names), `typeName` the annotation, `stringValue` a plain
+  string literal. Only single-name targets directly in the module: not tuple
+  unpacking, not assignments inside `if` / `try`, not `__all__`. `isExported` is
+  membership in `__all__` when there is one, else a name without a leading `_`.
+- Fields (`Class.fields` `[{name, type, default?}]`, `Class.kind`) come from
+  annotated assignments in the class body, for `@dataclass`, `NamedTuple`,
+  `TypedDict`, attrs (`@attr.s` / `@define`, `x = attr.ib()`) and pydantic
+  (`BaseModel`, `BaseSettings`, `SQLModel`, `RootModel`); `ClassVar` is skipped.
+  The kind is decided from the class's own bases and decorators: a subclass of a
+  user-defined model or dataclass has no `kind`, and the functional
+  `namedtuple("P", ["a"])` is a variable. Enum classes get `kind` `enum` and no
+  fields.
+
 - A `Package` now also exists for Python projects, so the files of a repository
   with a root `pyproject.toml` belong to a root package, JS files included.
 

@@ -1,6 +1,7 @@
 import type { IGraphContributor } from "../../contracts/graph-contributor.js";
 import type { GraphNode } from "../../graph/model.js";
 import { addGoImplementsRelationships } from "./go-calls.js";
+import { addPythonInheritanceRelationships } from "./python-inheritance.js";
 import {
   createResolutionRelationshipIndex,
   indexImportNodesByFile,
@@ -18,6 +19,8 @@ export function addInheritanceRelationships(graph: IGraphContributor): void {
 
     const fileId = relationshipIndex.fileByClassId.get(node.id);
     if (!fileId) continue;
+    // Python bases are looked up through its import bindings and re-exports.
+    if (fileId.endsWith(".py")) continue;
 
     for (const extendsName of parseNameList(node.properties.extendsNames)) {
       const targetClassId = resolveNamedNode(
@@ -57,6 +60,7 @@ export function addInheritanceRelationships(graph: IGraphContributor): void {
   }
 
   addGoImplementsRelationships(graph, relationshipIndex);
+  addPythonInheritanceRelationships(graph, relationshipIndex, classesByFileAndName, interfacesByFileAndName, importsByFile);
 
   // Rust: `impl Trait for Type` blocks the parser recorded on the file (the
   // type and the trait may live in other files, found through its `use`s).
