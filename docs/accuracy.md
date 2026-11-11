@@ -638,3 +638,67 @@ samples.
   32–33 requests, none of the parameterised ones; `tests/python-route-requests.test.ts`
   pins it). `<path:rest>` is a catch-all.
 
+## C and C++ build systems (Phase 35)
+
+Two new label kinds measure the build files: **buildTargets** and **includes**
+(`bench/labels/internet-c-cjson.json`, `internet-cpp-tinyxml2.json`,
+`internet-cpp-googletest.json`; rows in
+[`bench/results/accuracy-0.1.0-2026-11-12.json`](../bench/results/accuracy-0.1.0-2026-11-12.json)).
+Reproduce with `npm run samples:fetch -- --suite internet` and
+`npm run bench:accuracy -- --sample <name>`. The labels were written from the build
+files, not from the tool's output: the targets, sources and links of every
+`CMakeLists.txt` read by hand, the Makefile ones checked against `make -n -B all`
+(run on macOS, so cJSON's shared libraries are `libcjson.dylib.1.7.19`; on Linux
+the Makefile names them `.so` and four labeled facts would not match).
+
+**Build targets.** One fact per target (build file, system, name, executable or
+library), per source it compiles and per target it links. A sample's `scope` is
+its build files; a target the scan finds in them that no label names is a false
+positive. Every `if` branch counts except the ones a POSIX GCC/Clang build does
+not take (see `docs/known-limitations.md#build-systems-cmake-make-compile_commandsjson`).
+
+| Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-c-cjson (29 CMake targets in three files, 5 Makefile targets) | 125 | 125 | 0 | 0 | 100.0% | 100.0% |
+| internet-cpp-tinyxml2 (CMake library and test, Makefile library and test) | 11 | 11 | 0 | 0 | 100.0% | 100.0% |
+| internet-cpp-googletest (`googlemock/CMakeLists.txt`, 26 targets through `cxx_library`, `cxx_test` and `cxx_executable`) | 80 | 76 | 0 | 4 | 100.0% | 95.0% |
+| **all** | 216 | 212 | 0 | 4 | **100.0%** | **98.1%** |
+
+- **googletest, 95.0%.** The four misses are the same source,
+  `googlemock/src/gmock_main.cc` (the sources of `gmock_main`,
+  `gmock_main_no_exception`, `gmock_main_no_rtti` and `shared_gmock_main`): the C++
+  grammar fails on it, so it is no `File` node and the target lists it as an
+  unresolved argument. The functions are read as CMake runs them: `cxx_test(name libs)`
+  calls `cxx_test_with_flags`, which calls `cxx_executable_with_flags`, which calls
+  `add_executable` and links `libs` inside a `foreach`. Before functions were
+  expanded, googletest had no target at all. The same file's `if (MSVC)` branch lists
+  `gtest-all.cc` in `gmock`; the scan skips it, as the POSIX build does.
+- **cJSON.** `tests/CMakeLists.txt` creates 21 executables in two `foreach` loops over
+  `set(...)` lists, with `unity_setup.c` added only for MSVC (skipped), linked to
+  `cjson`, `unity` and, for the utils tests, `cjson_utils`. The Makefile has the
+  executable, two static and two shared libraries; the second shared library also
+  links `cJSON.o`, as `make -n` shows.
+- **Executables run their `main`.** In cJSON 23 of the 24 executable CMake targets
+  `RUNS` the `main` entrypoint of their source (the golden graph pins it). The 24th,
+  `afl-main`, has none: no function of `fuzzing/afl.c` is a node (a Phase 34 gap in
+  that file), so there is no `main` to run.
+
+**Includes.** Every `#include` of the C and C++ files of cJSON (31 files, not its
+vendored Unity) and tinyxml2 (4 files), labeled with the scanned file it names (null
+for a header outside the scan).
+
+| Sample | Labels (resolved) | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-c-cjson | 73 | 73 | 0 | 0 | 100.0% | 100.0% |
+| internet-cpp-tinyxml2 | 3 | 3 | 0 | 0 | 100.0% | 100.0% |
+
+Every quoted include of these samples names a file next to the includer, so they
+resolved before Phase 35 and the same 90, 995 and 362 imports (cJSON, tinyxml2,
+googletest) resolve now, with 1, 10 and 40 unresolved: the CMake include directories
+change nothing here. The includes the CMake paths decide are pinned by the fixtures:
+`fixtures/cpp-cmake` (`<core/core.h>` from another library's PUBLIC directory, a
+`config/` directory from `include_directories`, `#include APP_CONFIG_HEADER` from
+`target_compile_definitions`), and `tests/cpp-build.test.ts` moves the include paths
+of `fixtures/cpp-includes` from `compile_commands.json` into CMake and gets the same
+resolved includes.
+
