@@ -16,9 +16,9 @@ const limit = (fallback: number) => ({ type: "number", description: `Maximum ite
 export const agentToolDefinitions = [
   {
     name: "impact_of",
-    description: `What a change to a function, method, class or file affects: transitive callers (with depth) and module-level callers, the routes and entrypoints that run them, the scripts, targets, services and jobs that start the file (runners), the components they implement and the components and pages that render those, the frontend calls reaching affected routes (apiConsumers), stores written with their readers and the components and pages those reach (storeComponents, storePages), and the data models, env vars and config used. A store's name or hook as symbol asks what reading it reaches. For a route, use route_details.`,
+    description: `What a change to a function, method, class or file affects: transitive callers (with depth) and module-level callers, the routes and entrypoints that run them, the scripts, targets, services and jobs that start the file (runners), the components they implement and the components and pages that render those, the frontend calls reaching affected routes (apiConsumers), stores written with their readers and the components and pages those reach (storeComponents, storePages), and the data models, env vars and config used. A store's name or hook as symbol asks what reading it reaches; a style (.btn, --color) or CSS file, its users.`,
     inputSchema: objectSchema({
-      symbol: { type: "string", description: "Function, method or class name (a class covers all its methods), or a store's name or hook." },
+      symbol: { type: "string", description: "Function, method or class name (a class covers all its methods), a store's name or hook, or .class, #id, --property." },
       file: { type: "string", description: "Scan-relative file or directory path, or a path suffix. Alone, covers every function in it; with symbol, narrows it." },
       maxDepth,
       limit: limit(50),
@@ -44,7 +44,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "api_consumers",
-    description: `Client calls that reach a route: frontend (fetch, axios, ky, ofetch, useFetch, SWR, TanStack Query, Angular HttpClient, tRPC) and Go (net/http, resty), each with its route, calling function, file, line, client, resolved method and URL, and match kind (exact, parameter, catch-all). Filter by route (method, path, file, framework) or caller (file, client); unfiltered, lists every linked call.`,
+    description: `Client calls that reach a route: frontend (fetch, axios, ky, ofetch, useFetch, SWR, TanStack Query, Angular HttpClient, tRPC) and Go (net/http, resty), each with route, caller, file, line, client, resolved method and URL, and match kind (exact, parameter, catch-all). Filter by route or caller; unfiltered, every linked call.`,
     inputSchema: objectSchema({
       method: { type: "string", description: "Route method, case-insensitive (GET, post, query, mutation, ...)." },
       path: { type: "string", description: "Route path, full or as declared (/api/users/:id, post.byId)." },

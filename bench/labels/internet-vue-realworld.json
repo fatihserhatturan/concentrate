@@ -1,6 +1,6 @@
 {
   "sample": "internet-vue-realworld",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Components: every .vue file under src/ outside tests (App.vue, src/components/, src/pages/), one script-setup or template component each, named after its file. Renders: every element in a template that renders a component of the repository, one label per element; <AppLink> renders src/components/AppLink.vue through app.component('AppLink', AppLink) in src/plugins/global-components.ts. RouterLink, RouterView and Suspense are library components. Pages: every route record in src/router.ts; lazy components (() => import('./pages/Home.vue')) count as the component the page renders. Calls: every call site in the listed files; generated API client methods (api.users.login) and Vue/Pinia functions stay unresolved, a destructured store action (updateUser) resolves to the setup store's function, and HttpClient.setSecurityData is a class field holding an arrow function.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Components: every .vue file under src/ outside tests (App.vue, src/components/, src/pages/), one script-setup or template component each, named after its file. Renders: every element in a template that renders a component of the repository, one label per element; <AppLink> renders src/components/AppLink.vue through app.component('AppLink', AppLink) in src/plugins/global-components.ts. RouterLink, RouterView and Suspense are library components. Pages: every route record in src/router.ts; lazy components (() => import('./pages/Home.vue')) count as the component the page renders. Calls: every call site in the listed files; generated API client methods (api.users.login) and Vue/Pinia functions stay unresolved, a destructured store action (updateUser) resolves to the setup store's function, and HttpClient.setSecurityData is a class field holding an arrow function. Class links (styleLinks): the static class=\"...\" attributes and the string and object-key literals of :class in the .vue templates under src/, whose class public/main.css declares (index.html loads that stylesheet by a root-relative <link>, which is not a file import, so every link is a name match); found by a separate regex pass over the templates, not from Concentrate output. Class names the stylesheet does not declare (ion-*, auth-page, settings-page, align-left, space) and computed ones (:class=\"link.icon\") are not labeled.",
   "components": {
     "scope": [
       "src/"
@@ -807,6 +807,1700 @@
           "isAuthorized"
         ],
         "writes": []
+      }
+    ]
+  },
+  "styleLinks": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/components/AppFooter.vue",
+        "line": 3,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppFooter.vue",
+        "line": 5,
+        "style": ".logo-font",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppFooter.vue",
+        "line": 10,
+        "style": ".attribution",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppFooter.vue",
+        "line": 14,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppFooter.vue",
+        "line": 16,
+        "style": ".attribution",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 2,
+        "style": ".navbar",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 2,
+        "style": ".navbar-light",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 3,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 5,
+        "style": ".navbar-brand",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 11,
+        "style": ".nav",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 11,
+        "style": ".navbar-nav",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 11,
+        "style": ".pull-xs-right",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 15,
+        "style": ".nav-item",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppNavigation.vue",
+        "line": 18,
+        "style": ".nav-link",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppPagination.vue",
+        "line": 2,
+        "style": ".pagination",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppPagination.vue",
+        "line": 6,
+        "style": ".page-item",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppPagination.vue",
+        "line": 7,
+        "style": ".active",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/AppPagination.vue",
+        "line": 10,
+        "style": ".page-link",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 2,
+        "style": ".banner",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 3,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 14,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 14,
+        "style": ".page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 15,
+        "style": ".row",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 15,
+        "style": ".article-content",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 19,
+        "style": ".col-md-12",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 26,
+        "style": ".tag-list",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 30,
+        "style": ".tag-default",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 30,
+        "style": ".tag-pill",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 30,
+        "style": ".tag-outline",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetail.vue",
+        "line": 40,
+        "style": ".article-actions",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "line": 2,
+        "style": ".card",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "line": 3,
+        "style": ".card-block",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "line": 4,
+        "style": ".card-text",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "line": 9,
+        "style": ".card-footer",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "line": 11,
+        "style": ".comment-author",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "line": 16,
+        "style": ".comment-author-img",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "line": 25,
+        "style": ".comment-author",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "line": 32,
+        "style": ".date-posted",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailComment.vue",
+        "line": 34,
+        "style": ".mod-options",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 11,
+        "style": ".card",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 11,
+        "style": ".comment-form",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 14,
+        "style": ".card-block",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 16,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 23,
+        "style": ".card-footer",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 25,
+        "style": ".comment-author-img",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 31,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 31,
+        "style": ".btn-sm",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailCommentsForm.vue",
+        "line": 31,
+        "style": ".btn-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 2,
+        "style": ".article-meta",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 10,
+        "style": ".info",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 12,
+        "style": ".author",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 19,
+        "style": ".date",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 24,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 24,
+        "style": ".btn-sm",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 24,
+        "style": ".btn-outline-secondary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 24,
+        "style": ".space",
+        "styleFile": "src/components/ArticleDetailMeta.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 29,
+        "style": ".space",
+        "styleFile": "src/components/ArticleDetailMeta.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 34,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 34,
+        "style": ".btn-sm",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 34,
+        "style": ".space",
+        "styleFile": "src/components/ArticleDetailMeta.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 35,
+        "style": ".btn-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 35,
+        "style": ".btn-outline-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 40,
+        "style": ".space",
+        "styleFile": "src/components/ArticleDetailMeta.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 42,
+        "style": ".counter",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 47,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 47,
+        "style": ".btn-outline-secondary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 47,
+        "style": ".btn-sm",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 47,
+        "style": ".space",
+        "styleFile": "src/components/ArticleDetailMeta.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 52,
+        "style": ".space",
+        "styleFile": "src/components/ArticleDetailMeta.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 57,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 57,
+        "style": ".btn-outline-danger",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticleDetailMeta.vue",
+        "line": 57,
+        "style": ".btn-sm",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesList.vue",
+        "line": 10,
+        "style": ".article-preview",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesList.vue",
+        "line": 17,
+        "style": ".article-preview",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 2,
+        "style": ".article-preview",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 3,
+        "style": ".article-meta",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 10,
+        "style": ".info",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 12,
+        "style": ".author",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 18,
+        "style": ".date",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 21,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 21,
+        "style": ".btn-sm",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 21,
+        "style": ".pull-xs-right",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 22,
+        "style": ".btn-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 22,
+        "style": ".btn-outline-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 32,
+        "style": ".preview-link",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 39,
+        "style": ".tag-list",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 43,
+        "style": ".tag-default",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 43,
+        "style": ".tag-pill",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListArticlePreview.vue",
+        "line": 43,
+        "style": ".tag-outline",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListNavigation.vue",
+        "line": 2,
+        "style": ".articles-toggle",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListNavigation.vue",
+        "line": 3,
+        "style": ".nav",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListNavigation.vue",
+        "line": 3,
+        "style": ".nav-pills",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListNavigation.vue",
+        "line": 3,
+        "style": ".outline-active",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListNavigation.vue",
+        "line": 7,
+        "style": ".nav-item",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/ArticlesListNavigation.vue",
+        "line": 10,
+        "style": ".nav-link",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/PopularTags.vue",
+        "line": 4,
+        "style": ".tag-list",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/PopularTags.vue",
+        "line": 8,
+        "style": ".tag-pill",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/components/PopularTags.vue",
+        "line": 8,
+        "style": ".tag-default",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "line": 2,
+        "style": ".article-page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "line": 6,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "line": 6,
+        "style": ".page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "line": 13,
+        "style": ".row",
+        "styleFile": "src/pages/Article.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "line": 14,
+        "style": ".col-xs-12",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "line": 14,
+        "style": ".col-md-8",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "line": 14,
+        "style": ".offset-md-2",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "line": 19,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Article.vue",
+        "line": 19,
+        "style": ".page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 2,
+        "style": ".editor-page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 3,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 3,
+        "style": ".page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 4,
+        "style": ".row",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 5,
+        "style": ".col-md-10",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 5,
+        "style": ".offset-md-1",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 5,
+        "style": ".col-xs-12",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 7,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 10,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 10,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 16,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 19,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 19,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 25,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 27,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 34,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 37,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 44,
+        "style": ".tag-list",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 48,
+        "style": ".tag-default",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 48,
+        "style": ".tag-pill",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 64,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 64,
+        "style": ".btn-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 64,
+        "style": ".pull-xs-right",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/EditArticle.vue",
+        "line": 64,
+        "style": ".btn-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 2,
+        "style": ".home-page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 3,
+        "style": ".banner",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 4,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 5,
+        "style": ".logo-font",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 12,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 12,
+        "style": ".page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 13,
+        "style": ".row",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 14,
+        "style": ".col-md-9",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 27,
+        "style": ".col-md-3",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Home.vue",
+        "line": 28,
+        "style": ".sidebar",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 3,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 3,
+        "style": ".page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 4,
+        "style": ".row",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 5,
+        "style": ".col-md-6",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 5,
+        "style": ".offset-md-3",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 5,
+        "style": ".col-xs-12",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 6,
+        "style": ".text-xs-center",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 9,
+        "style": ".text-xs-center",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 14,
+        "style": ".error-messages",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 28,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 33,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 33,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 40,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 43,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 43,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 52,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 52,
+        "style": ".btn-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 52,
+        "style": ".btn-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Login.vue",
+        "line": 52,
+        "style": ".pull-xs-right",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/NotFound.vue",
+        "line": 2,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/NotFound.vue",
+        "line": 2,
+        "style": ".page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/NotFound.vue",
+        "line": 3,
+        "style": ".row",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/NotFound.vue",
+        "line": 4,
+        "style": ".col-md-8",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/NotFound.vue",
+        "line": 4,
+        "style": ".offset-md-2",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/NotFound.vue",
+        "line": 8,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/NotFound.vue",
+        "line": 8,
+        "style": ".btn-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 2,
+        "style": ".profile-page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 3,
+        "style": ".user-info",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 4,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 5,
+        "style": ".row",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 6,
+        "style": ".col-xs-12",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 6,
+        "style": ".col-md-10",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 6,
+        "style": ".offset-md-1",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 9,
+        "style": ".align-left",
+        "styleFile": "src/pages/Profile.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 15,
+        "style": ".user-img",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 28,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 28,
+        "style": ".btn-sm",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 28,
+        "style": ".btn-outline-secondary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 28,
+        "style": ".action-btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 32,
+        "style": ".space",
+        "styleFile": "src/pages/Profile.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 38,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 38,
+        "style": ".btn-sm",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 38,
+        "style": ".btn-outline-secondary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 38,
+        "style": ".action-btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 42,
+        "style": ".space",
+        "styleFile": "src/pages/Profile.vue",
+        "match": "import"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 51,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 52,
+        "style": ".row",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 53,
+        "style": ".col-xs-12",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 53,
+        "style": ".col-md-10",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Profile.vue",
+        "line": 53,
+        "style": ".offset-md-1",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 3,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 3,
+        "style": ".page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 4,
+        "style": ".row",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 5,
+        "style": ".col-md-6",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 5,
+        "style": ".offset-md-3",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 5,
+        "style": ".col-xs-12",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 6,
+        "style": ".text-xs-center",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 9,
+        "style": ".text-xs-center",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 14,
+        "style": ".error-messages",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 27,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 30,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 30,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 37,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 40,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 40,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 47,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 50,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 50,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 60,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 60,
+        "style": ".btn-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 60,
+        "style": ".btn-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Register.vue",
+        "line": 60,
+        "style": ".pull-xs-right",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 3,
+        "style": ".container",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 3,
+        "style": ".page",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 4,
+        "style": ".row",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 5,
+        "style": ".col-md-6",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 5,
+        "style": ".offset-md-3",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 5,
+        "style": ".col-xs-12",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 6,
+        "style": ".text-xs-center",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 10,
+        "style": ".error-messages",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 18,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 21,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 27,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 30,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 30,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 36,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 38,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 38,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 45,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 48,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 48,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 54,
+        "style": ".form-group",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 57,
+        "style": ".form-control",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 57,
+        "style": ".form-control-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 65,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 65,
+        "style": ".btn-lg",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 65,
+        "style": ".btn-primary",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 65,
+        "style": ".pull-xs-right",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 76,
+        "style": ".btn",
+        "styleFile": "public/main.css",
+        "match": "name"
+      },
+      {
+        "file": "src/pages/Settings.vue",
+        "line": 76,
+        "style": ".btn-outline-danger",
+        "styleFile": "public/main.css",
+        "match": "name"
       }
     ]
   }

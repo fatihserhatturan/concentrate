@@ -151,6 +151,11 @@ Rules:
   FN.
 - **Scripts:** file, kind, trigger and line (±1). **Runs:** file, kind,
   trigger and target. **Env declarations:** file, line and name.
+- **Class links:** the user's file (a component's or function's declaring
+  file), line, the class and the style file it is declared in, and the match
+  kind (`module`, `import` or `name`) all match. Only classes the project's
+  style sheets declare are labeled; `styles[position]`, `:class="link.icon"`
+  and `btn-${size}` are not.
 
 ## Results (2026-11-10, schema 74)
 
@@ -303,6 +308,32 @@ Makefile and the plain assignments of `wait-for.sh`, such as
 `env:` of the workflow's postgres service container). Two samples with a few
 dozen labels each: the numbers show that these rules hold on a JS app and a
 Go service, not that every Dockerfile, Makefile or workflow is read right.
+
+### Class links
+
+| Kind | Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Class links | internet-remark42-frontend | 263 | 263 | 0 | 0 | 100.0% | 100.0% |
+| Class links | internet-vue-realworld | 241 | 241 | 0 | 0 | 100.0% | 100.0% |
+
+`internet-remark42-frontend` is remark42's Preact frontend (the same commit
+as `internet-go-remark42`, whose smoke entry leaves `frontend/**` out): 259
+exact `styles.x` links of 29 CSS Modules files and 4 name matches of global
+classes (`raw-content`, `preloader`). `internet-vue-realworld` has no CSS
+Modules; its 241 links are the `class` and `:class` literals of the templates
+(219 to `public/main.css`, which `index.html` loads by a root-relative
+`<link>`, so they are name matches, and 22 to the component's own `<style>`).
+
+These labels were not typed in by hand: each sample was read by a separate
+regex pass over the sources (never by Concentrate), and the lines the pass
+could not decide were read: the operand of `theme === 'dark'` is not a class,
+and a class a component's own `<style>` declares wins over the project
+sheet. The first Vue pass scored 90.9% precision, and every false positive
+was a defect in the labels (templates cut at a nested `</template>`, the
+components' own `<style>` blocks not read), not in the graph. Both passes
+read static names only, so they and the graph can agree on a template that
+builds names at run time; recall here says the graph finds what a regex
+finds, not what a person could infer.
 
 ## What the misses are
 

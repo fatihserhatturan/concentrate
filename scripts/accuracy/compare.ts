@@ -26,6 +26,11 @@ export type ScriptLabel = { file: string; line: number; kind: string; trigger: s
 export type RunLabel = { file: string; kind: string; trigger: string; target: string };
 // An env variable a script, Dockerfile, compose file or workflow sets, at `file:line`.
 export type EnvDeclarationLabel = { file: string; line: number; name: string };
+// A use of the class or id `style` (`.btn`, `#hero`) declared in `styleFile`,
+// at (file, line) of the component, function or file that uses it; `match` is
+// module (styles.btn of a CSS Modules import), import (a sheet the file
+// imports) or name (the same class name elsewhere).
+export type StyleLinkLabel = { file: string; line: number; style: string; styleFile: string; match: string };
 export type ComponentLabel = { file: string; name: string; line: number };
 // `file` and `line` are the rendering element's; `parent` is the component it is in.
 export type RenderLabel = { file: string; parent: string; line: number; child: string; childFile: string };
@@ -68,6 +73,8 @@ export type Labels = {
   runs?: { scope: string[]; items: RunLabel[] };
   // Env variables the files of `scope` declare for scripts and infrastructure.
   envDeclarations?: { scope: string[]; items: EnvDeclarationLabel[] };
+  // Class and id uses (USES_STYLE) in the files of `scope`.
+  styleLinks?: { scope: string[]; items: StyleLinkLabel[] };
 };
 
 export type Score = {
@@ -643,5 +650,47 @@ export function compareEnvDeclarations(graph: Graph, labels: NonNullable<Labels[
     label.file === declaration.file && label.name === declaration.name && label.line === declaration.line
   ));
   const describe = (declaration: EnvDeclarationLabel) => `${declaration.file}:${declaration.line} ${declaration.name}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+export function scanStyleLinks(graph: Graph): StyleLinkLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const fileOf = new Map<string, string>();
+  const classFile = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    const from = byId.get(rel.from);
+    if (!from) continue;
+    if (rel.type === "DECLARES_STYLE" || rel.type === "DECLARES_COMPONENT" || rel.type === "DEFINES_FUNCTION" || rel.type === "DEFINES_CLASS") {
+      if (from.label === "File") fileOf.set(rel.to, String(from.properties.relativePath));
+    }
+    if (rel.type === "DEFINES_METHOD" && fileOf.has(rel.from)) classFile.set(rel.to, fileOf.get(rel.from)!);
+  }
+  const seen = new Map<string, StyleLinkLabel>();
+  for (const rel of graph.relationships) {
+    if (rel.type !== "USES_STYLE") continue;
+    const owner = byId.get(rel.from);
+    const style = byId.get(rel.to);
+    if (!owner || !style || (style.properties.kind !== "class" && style.properties.kind !== "id")) continue;
+    const file = owner.label === "File" ? String(owner.properties.relativePath) : fileOf.get(owner.id) ?? classFile.get(owner.id);
+    const styleFile = fileOf.get(style.id);
+    if (file === undefined || styleFile === undefined) continue;
+    const link = {
+      file,
+      line: num(rel.properties.line),
+      style: `${style.properties.kind === "id" ? "#" : "."}${String(style.properties.name)}`,
+      styleFile,
+      match: String(rel.properties.match),
+    };
+    seen.set(`${link.file}\0${link.line}\0${link.style}\0${link.styleFile}`, link);
+  }
+  return [...seen.values()];
+}
+
+export function compareStyleLinks(graph: Graph, labels: NonNullable<Labels["styleLinks"]>): Score {
+  const found = scanStyleLinks(graph).filter((link) => inScope(link.file, labels.scope));
+  const result = pair(labels.items, found, (label, link) => (
+    label.file === link.file && label.line === link.line && label.style === link.style && label.styleFile === link.styleFile && label.match === link.match
+  ));
+  const describe = (link: StyleLinkLabel) => `${link.file}:${link.line} ${link.style} (${link.styleFile}, ${link.match})`;
   return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
 }

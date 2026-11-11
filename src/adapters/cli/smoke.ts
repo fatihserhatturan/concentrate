@@ -612,6 +612,25 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     },
   },
   {
+    name: "internet-remark42-frontend",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 426,
+      supportedFiles: 273,
+      otherFiles: 153,
+      parsedFiles: 273,
+      failedFiles: 0,
+      resolvedImports: 307,
+      unresolvedRelativeImports: 4,
+      nodes: 13000,
+      relationships: 16967,
+      fileClassifications: { production: 308, test: 87, fixture: 0, support: 11, generated: 2, docs: 18 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+      },
+    },
+  },
+  {
     name: "internet-nextjs-taxonomy",
     suite: "internet",
     expected: {

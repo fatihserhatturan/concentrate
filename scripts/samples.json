@@ -19,6 +19,7 @@
     { "name": "internet-go-simplebank", "suite": "internet", "repo": "https://github.com/techschool/simplebank", "sha": "97f000fe58ad01a0774179ffa8884ac7784cf263", "exclude": ["doc/**"] },
     { "name": "internet-go-kratos-beer-shop", "suite": "internet", "repo": "https://github.com/go-kratos/beer-shop", "sha": "f762a4251b7c74120c74406033b370a132cc1fde" },
     { "name": "internet-go-remark42", "suite": "internet", "repo": "https://github.com/umputun/remark42", "sha": "a479228ac26bad909fa26ca20027d81d3be3e24e", "exclude": ["backend/vendor/**", "frontend/**", "site/**"] },
+    { "name": "internet-remark42-frontend", "suite": "internet", "repo": "https://github.com/umputun/remark42", "sha": "a479228ac26bad909fa26ca20027d81d3be3e24e", "exclude": ["backend/**", "site/**"] },
     { "name": "internet-nextjs-taxonomy", "suite": "internet", "repo": "https://github.com/shadcn-ui/taxonomy", "sha": "298a8857c7128a0d121e7f699dfd729f23b3966d" },
     { "name": "internet-realworld-fullstack", "suite": "internet", "parts": [
       { "dir": "backend", "repo": "https://github.com/gothinkster/node-express-realworld-example-app", "sha": "30b68e1e881462b2f4164ea09ab4c4f5699c7b0b" },

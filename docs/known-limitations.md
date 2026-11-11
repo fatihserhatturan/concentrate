@@ -1420,6 +1420,20 @@ Astro).
     scan does not read has no `import` link, so its classes only match as
     `name`. Utility classes (Tailwind) have no rule in the project and link
     nothing.
+- MCP: `find_references` and `impact_of` take `.class`, `#id` and
+  `--custom-property` as `symbol` (`file` narrows to the sheets it matches),
+  and `impact_of` takes a style file alone (every class, id and custom
+  property it declares). `find_references` lists the rules whose selector
+  holds the class or id (`rule`) and the uses (`component-use`,
+  `function-use`, `file-use`, `var`) with `detail` (`styles.btn, module
+  match`); name matches from a sheet the file does not import are
+  `possible: true`. `impact_of` returns `styles`, `users`, `rules`, the
+  components that use them and render them (`components`, with depth) and the
+  `pages` that render those; for a custom property, also the files that
+  import the style files using it (`importers`) and their components. A
+  plain name is still a function, class or store: a class is asked as
+  `.name`. Tailwind utilities and classes only built at run time are not in
+  the graph, so an empty answer is not proof that nothing uses a class.
 - `@import`, `@use`, `@forward`, `url()`, CSS Modules `composes: a from "./x"`
   and `@value a from "./x"` are `Import` nodes of the file, resolved to `File`
   like JS imports: relative to the style sheet; Sass and Less add the

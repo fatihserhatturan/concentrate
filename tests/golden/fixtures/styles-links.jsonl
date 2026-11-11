@@ -14,10 +14,12 @@
 {"kind":"node","id":"file:public/index.html","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"html","path":"<root>/public/index.html","relativePath":"public/index.html","sourceType":"production"}}
 {"kind":"node","id":"file:public/index.html:import:3:./site.css","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"./site.css","specifier":"<link rel=\"stylesheet\" href=\"site.css\">"}}
 {"kind":"node","id":"file:public/site.css","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"css","path":"<root>/public/site.css","relativePath":"public/site.css","sourceType":"production"}}
-{"kind":"node","id":"file:public/site.css:style:class:note","label":"Style","properties":{"kind":"class","line":2,"name":"note","scope":null}}
-{"kind":"node","id":"file:public/site.css:style:class:page","label":"Style","properties":{"kind":"class","line":1,"name":"page","scope":null}}
-{"kind":"node","id":"file:public/site.css:style:rule:1:0","label":"Style","properties":{"atRule":null,"endLine":1,"kind":"rule","line":1,"name":".page","selector":".page"}}
-{"kind":"node","id":"file:public/site.css:style:rule:2:0","label":"Style","properties":{"atRule":null,"endLine":2,"kind":"rule","line":2,"name":".note","selector":".note"}}
+{"kind":"node","id":"file:public/site.css:style:class:note","label":"Style","properties":{"kind":"class","line":3,"name":"note","scope":null}}
+{"kind":"node","id":"file:public/site.css:style:class:page","label":"Style","properties":{"kind":"class","line":2,"name":"page","scope":null}}
+{"kind":"node","id":"file:public/site.css:style:custom-property:--panel-color","label":"Style","properties":{"kind":"custom-property","line":1,"name":"--panel-color"}}
+{"kind":"node","id":"file:public/site.css:style:rule:1:0","label":"Style","properties":{"atRule":null,"endLine":1,"kind":"rule","line":1,"name":":root","selector":":root"}}
+{"kind":"node","id":"file:public/site.css:style:rule:2:0","label":"Style","properties":{"atRule":null,"endLine":2,"kind":"rule","line":2,"name":".page","selector":".page"}}
+{"kind":"node","id":"file:public/site.css:style:rule:3:0","label":"Style","properties":{"atRule":null,"endLine":3,"kind":"rule","line":3,"name":".note","selector":".note"}}
 {"kind":"node","id":"file:src/angular/app.component.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/angular/app.component.ts","relativePath":"src/angular/app.component.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/angular/app.component.ts:class:7:AppComponent","label":"Class","properties":{"endLine":11,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":7,"name":"AppComponent","visibility":"public"}}
 {"kind":"node","id":"file:src/angular/app.component.ts:class:7:AppComponent:decorator:3:Component","label":"Decorator","properties":{"args":"[]","expression":"@Component({\n  selector: \"app-root\",\n  template: `<nav class=\"nav\" [ngClass]=\"{ open: isOpen, 'is-wide': wide }\" [class.sticky]=\"sticky\"></nav>`,\n})","line":3,"name":"Component"}}
@@ -148,10 +150,12 @@
 {"kind":"rel","from":"file:public/index.html:import:3:./site.css","type":"RESOLVES_TO","to":"file:public/site.css","properties":{}}
 {"kind":"rel","from":"file:public/site.css","type":"DECLARES_STYLE","to":"file:public/site.css:style:class:note","properties":{}}
 {"kind":"rel","from":"file:public/site.css","type":"DECLARES_STYLE","to":"file:public/site.css:style:class:page","properties":{}}
+{"kind":"rel","from":"file:public/site.css","type":"DECLARES_STYLE","to":"file:public/site.css:style:custom-property:--panel-color","properties":{}}
 {"kind":"rel","from":"file:public/site.css","type":"DECLARES_STYLE","to":"file:public/site.css:style:rule:1:0","properties":{}}
 {"kind":"rel","from":"file:public/site.css","type":"DECLARES_STYLE","to":"file:public/site.css:style:rule:2:0","properties":{}}
-{"kind":"rel","from":"file:public/site.css:style:rule:1:0","type":"SELECTS_STYLE","to":"file:public/site.css:style:class:page","properties":{}}
-{"kind":"rel","from":"file:public/site.css:style:rule:2:0","type":"SELECTS_STYLE","to":"file:public/site.css:style:class:note","properties":{}}
+{"kind":"rel","from":"file:public/site.css","type":"DECLARES_STYLE","to":"file:public/site.css:style:rule:3:0","properties":{}}
+{"kind":"rel","from":"file:public/site.css:style:rule:2:0","type":"SELECTS_STYLE","to":"file:public/site.css:style:class:page","properties":{}}
+{"kind":"rel","from":"file:public/site.css:style:rule:3:0","type":"SELECTS_STYLE","to":"file:public/site.css:style:class:note","properties":{}}
 {"kind":"rel","from":"file:src/angular/app.component.ts","type":"DECLARES_COMPONENT","to":"file:src/angular/app.component.ts:component:7:AppComponent","properties":{}}
 {"kind":"rel","from":"file:src/angular/app.component.ts","type":"DEFINES_CLASS","to":"file:src/angular/app.component.ts:class:7:AppComponent","properties":{}}
 {"kind":"rel","from":"file:src/angular/app.component.ts","type":"IMPORTS","to":"file:src/angular/app.component.ts:import:1:@angular/core","properties":{}}
@@ -293,6 +297,7 @@
 {"kind":"rel","from":"file:src/vue/Panel.vue","type":"DEFINES_FUNCTION","to":"file:src/vue/Panel.vue:function:1:<script setup>","properties":{}}
 {"kind":"rel","from":"file:src/vue/Panel.vue","type":"DEFINES_VARIABLE","to":"file:src/vue/Panel.vue:variable:3:on","properties":{}}
 {"kind":"rel","from":"file:src/vue/Panel.vue","type":"IMPORTS","to":"file:src/vue/Panel.vue:import:2:vue","properties":{}}
+{"kind":"rel","from":"file:src/vue/Panel.vue","type":"USES_STYLE","to":"file:public/site.css:style:custom-property:--panel-color","properties":{"expression":"var(--panel-color)","line":24,"match":"name"}}
 {"kind":"rel","from":"file:src/vue/Panel.vue:component:1:Panel","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/vue/Panel.vue:function:1:<script setup>","properties":{}}
 {"kind":"rel","from":"file:src/vue/Panel.vue:component:1:Panel","type":"USES_STYLE","to":"file:src/vue/Panel.vue:style:class:body","properties":{"expression":"$style[\"body\"]","line":9,"match":"module"}}
 {"kind":"rel","from":"file:src/vue/Panel.vue:component:1:Panel","type":"USES_STYLE","to":"file:src/vue/Panel.vue:style:class:header","properties":{"expression":"$style.header","line":8,"match":"module"}}
