@@ -1,0 +1,476 @@
+{
+  "sample": "internet-rust-axum-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. launchbadge/realworld-axum-sqlx: one library crate plus a bin (src/main.rs). Calls: every call site in src/ whose target is a function or method written in the repository (path calls `module::f()`, `Type::f()`, `Self::f()`, free calls, method calls on typed receivers and on chains, and the `on_constraint` extension method of the `ResultExt` impl for `Result`); calls into axum, sqlx, std or generated code (clap's `Config::parse`, `Extension::from_request`, the sqlx macros) have no repository target and are not labeled. A method call's line is the line of its method name. Handlers named in `.route(..., post(handler))` are passed, not called, and `ArticleFromQuery::into_article` / `CommentFromQuery::into_comment` handed to `map_ok` are not call sites. The first labeling pass listed call sites by grepping a hand-picked set of names and missed `to_jwt` (4 sites) and `get_current_user`; a second pass over every function name defined in src/ added them (they were real repository calls the scan had already resolved, found as unlabeled call sites). Calls inside macro token trees (`assert_eq!(slugify(..), ..)`) are labeled even though the scan does not see them.",
+  "calls": {
+    "files": [
+      "src/main.rs",
+      "src/lib.rs",
+      "src/config.rs",
+      "src/http/mod.rs",
+      "src/http/error.rs",
+      "src/http/extractor.rs",
+      "src/http/types.rs",
+      "src/http/users.rs",
+      "src/http/profiles.rs",
+      "src/http/articles/mod.rs",
+      "src/http/articles/comments.rs",
+      "src/http/articles/listing.rs"
+    ],
+    "items": [
+      {
+        "file": "src/http/articles/comments.rs",
+        "line": 109,
+        "callee": "user_id",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "user_id",
+          "className": "MaybeAuthUser"
+        }
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "line": 158,
+        "callee": "into_comment",
+        "target": {
+          "file": "src/http/articles/comments.rs",
+          "name": "into_comment",
+          "className": "CommentFromQuery"
+        }
+      },
+      {
+        "file": "src/http/articles/listing.rs",
+        "line": 134,
+        "callee": "user_id",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "user_id",
+          "className": "MaybeAuthUser"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 38,
+        "callee": "router",
+        "target": {
+          "file": "src/http/articles/comments.rs",
+          "name": "router"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 142,
+        "callee": "slugify",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "slugify"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 194,
+        "callee": "on_constraint",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "on_constraint",
+          "className": "Result"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 195,
+        "callee": "unprocessable_entity",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "unprocessable_entity",
+          "className": "Error"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 199,
+        "callee": "into_article",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "into_article",
+          "className": "ArticleFromQuery"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 285,
+        "callee": "on_constraint",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "on_constraint",
+          "className": "Result"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 286,
+        "callee": "unprocessable_entity",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "unprocessable_entity",
+          "className": "Error"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 291,
+        "callee": "into_article",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "into_article",
+          "className": "ArticleFromQuery"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 383,
+        "callee": "user_id",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "user_id",
+          "className": "MaybeAuthUser"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 389,
+        "callee": "into_article",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "into_article",
+          "className": "ArticleFromQuery"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 430,
+        "callee": "article_by_id",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "article_by_id"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 465,
+        "callee": "article_by_id",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "article_by_id"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 539,
+        "callee": "into_article",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "into_article",
+          "className": "ArticleFromQuery"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 601,
+        "callee": "slugify",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "slugify"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 606,
+        "callee": "slugify",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "slugify"
+        }
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "line": 611,
+        "callee": "slugify",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "slugify"
+        }
+      },
+      {
+        "file": "src/http/error.rs",
+        "line": 135,
+        "callee": "status_code",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "status_code",
+          "className": "Error"
+        }
+      },
+      {
+        "file": "src/http/error.rs",
+        "line": 169,
+        "callee": "status_code",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "status_code",
+          "className": "Error"
+        }
+      },
+      {
+        "file": "src/http/extractor.rs",
+        "line": 165,
+        "callee": "from_authorization",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "from_authorization",
+          "className": "AuthUser"
+        }
+      },
+      {
+        "file": "src/http/extractor.rs",
+        "line": 183,
+        "callee": "from_authorization",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "from_authorization",
+          "className": "AuthUser"
+        }
+      },
+      {
+        "file": "src/http/mod.rs",
+        "line": 71,
+        "callee": "api_router",
+        "target": {
+          "file": "src/http/mod.rs",
+          "name": "api_router"
+        }
+      },
+      {
+        "file": "src/http/mod.rs",
+        "line": 97,
+        "callee": "router",
+        "target": {
+          "file": "src/http/users.rs",
+          "name": "router"
+        }
+      },
+      {
+        "file": "src/http/mod.rs",
+        "line": 98,
+        "callee": "router",
+        "target": {
+          "file": "src/http/profiles.rs",
+          "name": "router"
+        }
+      },
+      {
+        "file": "src/http/mod.rs",
+        "line": 99,
+        "callee": "router",
+        "target": {
+          "file": "src/http/articles/mod.rs",
+          "name": "router"
+        }
+      },
+      {
+        "file": "src/http/profiles.rs",
+        "line": 66,
+        "callee": "user_id",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "user_id",
+          "className": "MaybeAuthUser"
+        }
+      },
+      {
+        "file": "src/http/profiles.rs",
+        "line": 120,
+        "callee": "on_constraint",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "on_constraint",
+          "className": "Result"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 64,
+        "callee": "hash_password",
+        "target": {
+          "file": "src/http/users.rs",
+          "name": "hash_password"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 80,
+        "callee": "on_constraint",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "on_constraint",
+          "className": "Result"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 81,
+        "callee": "unprocessable_entity",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "unprocessable_entity",
+          "className": "Error"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 83,
+        "callee": "on_constraint",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "on_constraint",
+          "className": "Result"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 84,
+        "callee": "unprocessable_entity",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "unprocessable_entity",
+          "className": "Error"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 90,
+        "callee": "to_jwt",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "to_jwt",
+          "className": "AuthUser"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 112,
+        "callee": "unprocessable_entity",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "unprocessable_entity",
+          "className": "Error"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 114,
+        "callee": "verify_password",
+        "target": {
+          "file": "src/http/users.rs",
+          "name": "verify_password"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 122,
+        "callee": "to_jwt",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "to_jwt",
+          "className": "AuthUser"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 150,
+        "callee": "to_jwt",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "to_jwt",
+          "className": "AuthUser"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 168,
+        "callee": "get_current_user",
+        "target": {
+          "file": "src/http/users.rs",
+          "name": "get_current_user"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 173,
+        "callee": "hash_password",
+        "target": {
+          "file": "src/http/users.rs",
+          "name": "hash_password"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 200,
+        "callee": "on_constraint",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "on_constraint",
+          "className": "Result"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 201,
+        "callee": "unprocessable_entity",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "unprocessable_entity",
+          "className": "Error"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 203,
+        "callee": "on_constraint",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "on_constraint",
+          "className": "Result"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 204,
+        "callee": "unprocessable_entity",
+        "target": {
+          "file": "src/http/error.rs",
+          "name": "unprocessable_entity",
+          "className": "Error"
+        }
+      },
+      {
+        "file": "src/http/users.rs",
+        "line": 210,
+        "callee": "to_jwt",
+        "target": {
+          "file": "src/http/extractor.rs",
+          "name": "to_jwt",
+          "className": "AuthUser"
+        }
+      },
+      {
+        "file": "src/main.rs",
+        "line": 48,
+        "callee": "serve",
+        "target": {
+          "file": "src/http/mod.rs",
+          "name": "serve"
+        }
+      }
+    ]
+  }
+}

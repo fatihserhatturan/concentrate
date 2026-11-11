@@ -1390,6 +1390,47 @@ Astro).
   `#[cfg(test)] mod x;` under another name is not detected as a test file.
 - `parameters` is `[{name, type}]` (`self` has the type `Self` with its reference
   prefix, `&mut Self`); `returnType` is the text after `->`.
+- Calls resolve by name, from the file's own items and what its `use` / `mod`
+  declarations bind (an import binds a module, or an item of the file it resolves
+  to), with each file's crate and module path (`File.rustCrate`, `rustCrateName`,
+  `rustModule`): `f()`, `module::f()`, `crate::` / `self::` / `super::` paths,
+  `Type::new()` / `Type::method()` / `Self::method()`, `Trait::method(x)`,
+  `<T as Trait>::method()`, `name!()` macros, and another crate by its `use` name
+  (`my_core::util::f()` also without a `use`). Turbofish (`Vec::<u8>::new`) is dropped.
+  A crate renamed with `package =` is found only through a `use` of the rename.
+- A method call `x.m()` takes `x`'s type from `self` (the impl type; a trait for a
+  default method), a typed parameter or `let x: T`, a struct literal, or a
+  constructor call (`let x = T::new()`, `?`, `.await`, `.unwrap()` and `.expect()`
+  after it: the function's return type, `Self` and `Result<T, _>` unwrapped);
+  then `self.field.m()` follows the struct's `fields`. References, `Box`/`Arc`/`Rc`/
+  `RefCell`/`Mutex`/`RwLock` and generics are looked through; a type alias is
+  followed. A type found by name in the file or its imports, else the only type of
+  that name in the crate. Not typed: closure parameters, `if let` / `match` /
+  `for` bindings, results of method chains, fields of non-struct values, statics.
+- A method on a trait object (`&dyn T`, `Box<dyn T>`), an `impl T` argument or a
+  bounded type parameter (`N: Notifier`, also in a `where` clause) resolves to the
+  trait's default method and every `impl T for X` method, marked `via: "trait"`;
+  `Trait::method(x)` the same. A supertrait's methods are searched when the trait
+  has none. Implementations are matched by trait name across the scan. The method
+  of an extension trait of the repository implemented for a type outside it
+  (`impl<T, E> ResultExt<T> for Result<T, E>`) is the target of any method call
+  of that name whose receiver is untyped, also on a chain.
+- Calls inside a macro's token tree (`println!("{}", f())`, `sqlx::query!(…, x.m())`,
+  `assert_eq!(f(), 1)`, `vec![f()]`) are not seen; a macro is not expanded. A call
+  through a function pointer, closure or generic trait bound without a repository
+  trait is not resolved. A method call's line is the line of its method name.
+- `find_unused_exports` covers Rust by crate: a `pub` item (not `pub(crate)` /
+  `pub(super)` / `pub(in …)`) counts as used when another crate of the scan calls it
+  or names it (calls and re-exports through the graph; types, constants, enums
+  and traits by a whole-word mention in another crate's `.rs` files). Items of binary
+  crates (`main.rs`, `build.rs`, `src/bin`, `examples`, `tests`, `benches`) and test
+  code are skipped, and items a library offers to consumers outside the scan are
+  not seen. `deadFunctions` skips `#[test]` functions and `cfg(test)` helpers.
+- Measured on the pinned `internet-rust-axum-realworld` (axum + sqlx, one library
+  crate and a bin): 47 hand-labeled call sites with a repository target, precision
+  100%, recall 70.2% ([accuracy.md](accuracy.md)). Not measured on a multi-crate
+  workspace sample: cross-crate paths are covered by the `rust-workspace` and
+  `rust-calls` fixtures only.
 
 ## Non-code files
 

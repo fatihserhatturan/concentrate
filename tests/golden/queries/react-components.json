@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 79
+        "result": 80
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 79,
+      "schemaVersion": 80,
       "stats": [
         {
           "table": "Repo",
@@ -1452,7 +1452,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind",
         "rows": [
           {
             "id": "file:src/App.tsx:function:10:Profile",
@@ -1460,7 +1460,9 @@
             "className": null,
             "file": "src/App.tsx",
             "line": 10,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/App.tsx:function:20:FormatDate",
@@ -1468,7 +1470,9 @@
             "className": null,
             "file": "src/App.tsx",
             "line": 20,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/App.tsx:function:25:renderRow",
@@ -1476,7 +1480,9 @@
             "className": null,
             "file": "src/App.tsx",
             "line": 25,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/App.tsx:function:29:App",
@@ -1484,7 +1490,9 @@
             "className": null,
             "file": "src/App.tsx",
             "line": 29,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/cart/CartContext.tsx:function:7:CartProvider",
@@ -1492,7 +1500,9 @@
             "className": null,
             "file": "src/cart/CartContext.tsx",
             "line": 7,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/cart/CartContext.tsx:function:9:add",
@@ -1500,7 +1510,9 @@
             "className": null,
             "file": "src/cart/CartContext.tsx",
             "line": 9,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/cart/useCart.ts:function:4:useCart",
@@ -1508,7 +1520,9 @@
             "className": null,
             "file": "src/cart/useCart.ts",
             "line": 4,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/cart/useCart.ts:function:10:useCartCount",
@@ -1516,7 +1530,9 @@
             "className": null,
             "file": "src/cart/useCart.ts",
             "line": 10,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/components/Avatar.tsx:function:3:Avatar",
@@ -1524,7 +1540,9 @@
             "className": null,
             "file": "src/components/Avatar.tsx",
             "line": 3,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/components/Button.tsx:function:3:Button",
@@ -1532,7 +1550,9 @@
             "className": null,
             "file": "src/components/Button.tsx",
             "line": 3,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/components/Card.tsx:function:4:Card",
@@ -1540,7 +1560,9 @@
             "className": null,
             "file": "src/components/Card.tsx",
             "line": 4,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/components/CartBadge.tsx:function:4:CartBadge",
@@ -1548,7 +1570,9 @@
             "className": null,
             "file": "src/components/CartBadge.tsx",
             "line": 4,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/components/Input.tsx:function:3:<forwardRef:arg0>",
@@ -1556,7 +1580,9 @@
             "className": null,
             "file": "src/components/Input.tsx",
             "line": 3,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/components/Profile.jsx:function:5:mapStateToProps",
@@ -1564,7 +1590,9 @@
             "className": null,
             "file": "src/components/Profile.jsx",
             "line": 5,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/components/Profile.jsx:function:9:ProfileView",
@@ -1572,7 +1600,9 @@
             "className": null,
             "file": "src/components/Profile.jsx",
             "line": 9,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/components/Store.js:function:3:reducer",
@@ -1580,7 +1610,9 @@
             "className": null,
             "file": "src/components/Store.js",
             "line": 3,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/pages/Reports.tsx:function:3:Reports",
@@ -1588,7 +1620,9 @@
             "className": null,
             "file": "src/pages/Reports.tsx",
             "line": 3,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/pages/Settings.tsx:function:1:Settings",
@@ -1596,7 +1630,9 @@
             "className": null,
             "file": "src/pages/Settings.tsx",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/pages/routes.tsx:function:4:<lazy:arg0>",
@@ -1604,7 +1640,9 @@
             "className": null,
             "file": "src/pages/routes.tsx",
             "line": 4,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/pages/routes.tsx:function:5:<lazy:arg0>",
@@ -1612,7 +1650,9 @@
             "className": null,
             "file": "src/pages/routes.tsx",
             "line": 5,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/pages/routes.tsx:function:9:loadArchive",
@@ -1620,7 +1660,9 @@
             "className": null,
             "file": "src/pages/routes.tsx",
             "line": 9,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:src/pages/routes.tsx:function:12:Pages",
@@ -1628,7 +1670,9 @@
             "className": null,
             "file": "src/pages/routes.tsx",
             "line": 12,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           }
         ]
       },
@@ -1648,7 +1692,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": [
           {
             "id": "file:src/components/Legacy.jsx:class:4:Legacy",
@@ -1656,18 +1700,19 @@
             "className": null,
             "file": "src/components/Legacy.jsx",
             "line": 4,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public"
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": [
           {
             "id": "file:src/App.tsx:type-alias:8:User",
@@ -1675,7 +1720,8 @@
             "className": null,
             "file": "src/App.tsx",
             "line": 8,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:src/cart/CartContext.tsx:type-alias:3:Cart",
@@ -1683,7 +1729,8 @@
             "className": null,
             "file": "src/cart/CartContext.tsx",
             "line": 3,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:src/components/Button.tsx:type-alias:1:ButtonProps",
@@ -1691,18 +1738,19 @@
             "className": null,
             "file": "src/components/Button.tsx",
             "line": 1,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": [
           {
             "id": "file:src/cart/CartContext.tsx:variable:5:CartContext",
@@ -1710,7 +1758,8 @@
             "className": null,
             "file": "src/cart/CartContext.tsx",
             "line": 5,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:src/components/Avatar.tsx:variable:5:default",
@@ -1718,7 +1767,8 @@
             "className": null,
             "file": "src/components/Avatar.tsx",
             "line": 5,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:src/components/Card.tsx:variable:4:Card",
@@ -1726,7 +1776,8 @@
             "className": null,
             "file": "src/components/Card.tsx",
             "line": 4,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:src/components/Input.tsx:variable:3:Input",
@@ -1734,7 +1785,8 @@
             "className": null,
             "file": "src/components/Input.tsx",
             "line": 3,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:src/components/Profile.jsx:variable:11:default",
@@ -1742,7 +1794,8 @@
             "className": null,
             "file": "src/components/Profile.jsx",
             "line": 11,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:src/components/Store.js:variable:6:default",
@@ -1750,7 +1803,8 @@
             "className": null,
             "file": "src/components/Store.js",
             "line": 6,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:src/pages/routes.tsx:variable:4:Settings",
@@ -1758,7 +1812,8 @@
             "className": null,
             "file": "src/pages/routes.tsx",
             "line": 4,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:src/pages/routes.tsx:variable:5:Reports",
@@ -1766,7 +1821,8 @@
             "className": null,
             "file": "src/pages/routes.tsx",
             "line": 5,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:src/pages/routes.tsx:variable:10:Archive",
@@ -1774,7 +1830,8 @@
             "className": null,
             "file": "src/pages/routes.tsx",
             "line": 10,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           }
         ]
       },

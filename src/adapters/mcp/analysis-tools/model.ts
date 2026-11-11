@@ -22,6 +22,10 @@ export type Declaration = {
   // Exported by its own declaration (`export function f`) or by a local
   // `export { f }` in its file.
   isExported: boolean;
+  // Rust: `pub`, `pub(crate)`, … (null for other languages).
+  visibility?: string | null;
+  // Rust: `test`, `bench` or `helper` for functions of test code.
+  testKind?: string | null;
 };
 
 export type FileInfo = {
@@ -33,6 +37,8 @@ export type FileInfo = {
   isGenerated: boolean;
   // Go: the package clause.
   packageName?: string | null;
+  // Rust: the root file of the file's crate.
+  rustCrate?: string | null;
 };
 
 export type ImportBinding = { imported: string; local: string; kind: string };
@@ -62,7 +68,7 @@ const declarationQueries: Array<{ kind: DeclarationKind; cypher: string }> = [
     cypher: `
       MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function)
       RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line,
-        n.isExported AS isExported
+        n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind
     `,
   },
   {
@@ -84,7 +90,7 @@ const declarationQueries: Array<{ kind: DeclarationKind; cypher: string }> = [
     cypher: `
       MATCH (file:File)-[:${relationship}]->(n:${label})
       RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line,
-        n.isExported AS isExported
+        n.isExported AS isExported, n.visibility AS visibility
     `,
   })),
 ];
@@ -121,6 +127,8 @@ export async function loadDeclarations(engine: IQueryEngine): Promise<Declaratio
         file: str(row.file) ?? "",
         line: num(row.line),
         isExported: row.isExported === true || reExported.has(id),
+        visibility: str(row.visibility),
+        testKind: str(row.testKind),
       });
     }
   });
@@ -131,12 +139,12 @@ export async function loadFiles(engine: IQueryEngine): Promise<Map<string, FileI
   const rows = await engine.query(`
     MATCH (file:File)
     RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType, file.isTest AS isTest, file.isFixture AS isFixture,
-      file.isGenerated AS isGenerated, file.packageName AS packageName
+      file.isGenerated AS isGenerated, file.packageName AS packageName, file.rustCrate AS rustCrate
   `) as Row[];
   return new Map(rows.flatMap((row) => {
     const file = str(row.file);
     return file
-      ? [[file, { file, language: str(row.language), sourceType: str(row.sourceType), isTest: row.isTest === true, isFixture: row.isFixture === true, isGenerated: row.isGenerated === true, packageName: str(row.packageName) }]]
+      ? [[file, { file, language: str(row.language), sourceType: str(row.sourceType), isTest: row.isTest === true, isFixture: row.isFixture === true, isGenerated: row.isGenerated === true, packageName: str(row.packageName), rustCrate: str(row.rustCrate) }]]
       : [];
   }));
 }

@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 79
+        "result": 80
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 79,
+      "schemaVersion": 80,
       "stats": [
         {
           "table": "Repo",
@@ -845,7 +845,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind",
         "rows": [
           {
             "id": "file:packages/app/src/main.ts:function:4:run",
@@ -853,7 +853,9 @@
             "className": null,
             "file": "packages/app/src/main.ts",
             "line": 4,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:packages/core/src/greet.ts:function:1:greet",
@@ -861,7 +863,9 @@
             "className": null,
             "file": "packages/core/src/greet.ts",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:packages/core/src/math.ts:function:1:add",
@@ -869,7 +873,9 @@
             "className": null,
             "file": "packages/core/src/math.ts",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:packages/core/src/nested/multiply.ts:function:1:multiply",
@@ -877,7 +883,9 @@
             "className": null,
             "file": "packages/core/src/nested/multiply.ts",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:packages/core/src/report.ts:function:3:report",
@@ -885,7 +893,9 @@
             "className": null,
             "file": "packages/core/src/report.ts",
             "line": 3,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           }
         ]
       },
@@ -896,27 +906,27 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {

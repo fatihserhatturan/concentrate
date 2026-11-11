@@ -1187,8 +1187,8 @@ Rust gets files, `use` / `mod` imports, structs, functions, impl methods, calls 
 
 ### Calls
 
-- [ ] Path calls `module::func()`, `Type::new()`, `Type::method()` and `Trait::method()` resolve through `use` and the module tree
-- [ ] Method calls on typed receivers (`let x: T`, `T::new()` return types, `self` fields); trait method calls to every implementation, marked
+- [x] Path calls `module::func()`, `Type::new()`, `Type::method()` and `Trait::method()` resolve through `use` and the module tree
+- [x] Method calls on typed receivers (`let x: T`, `T::new()` return types, `self` fields); trait method calls to every implementation, marked
 
 ### Entrypoints and tests
 
@@ -1197,13 +1197,13 @@ Rust gets files, `use` / `mod` imports, structs, functions, impl methods, calls 
 
 ### MCP
 
-- [ ] `find_unused_exports` covers Rust (`pub` items not used outside their crate)
+- [x] `find_unused_exports` covers Rust (`pub` items not used outside their crate)
 
 ### Acceptance criteria
 
-- [ ] Fixtures with golden coverage: Cargo workspace with two crates, nested `mod` trees, traits with implementations, enums, attributes, a file with a syntax error
-- [ ] Path call resolution has hand labels on a pinned Rust sample (precision 100%, recall reported)
-- [ ] `docs/known-limitations.md` has a Rust section
+- [x] Fixtures with golden coverage: Cargo workspace with two crates, nested `mod` trees, traits with implementations, enums, attributes, a file with a syntax error
+- [x] Path call resolution has hand labels on a pinned Rust sample (precision 100%, recall reported)
+- [x] `docs/known-limitations.md` has a Rust section
 
 ## Phase 27: Rust HTTP routes and entrypoints (axum, actix-web, Rocket, warp, tonic, clap) ([#167](https://github.com/fatihserhatturan/concentrate/issues/167))
 

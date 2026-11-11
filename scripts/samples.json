@@ -28,6 +28,12 @@
     { "name": "internet-realworld-go-fullstack", "golden": true, "suite": "internet", "parts": [
       { "dir": "backend", "repo": "https://github.com/realworld-apps/golang-gin-realworld-example-app", "sha": "a41289b2a4951e7cc09066f86742a27f85121c9b" },
       { "dir": "frontend", "repo": "https://github.com/reck1ess/next-realworld-example-app", "sha": "be9ef569bc395975d98c1973fac23ba9277797e7" }
-    ], "apiOrigins": ["https://conduit.productionready.io"], "continueOnError": true }
+    ], "apiOrigins": ["https://conduit.productionready.io"], "continueOnError": true },
+    {
+      "name": "internet-rust-axum-realworld",
+      "suite": "internet",
+      "repo": "https://github.com/launchbadge/realworld-axum-sqlx",
+      "sha": "f1b25654773228297e35c292f357d33b7121a101"
+    }
   ]
 }

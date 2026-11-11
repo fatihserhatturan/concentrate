@@ -316,3 +316,28 @@ describe("file type filters", () => {
     }
   });
 });
+
+describe("analysis MCP tools on Rust", () => {
+  let store: GraphStore;
+  const tool = async (name: string, args: Record<string, unknown>) => (await callMcpTool(store, name, args)).structuredContent as Record<string, any>;
+
+  before(async () => {
+    const graph = await buildCodeGraph(path.resolve("fixtures/rust-unused"), { continueOnError: false });
+    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-unused-")), "graph"));
+    await store.reset();
+    await store.write(graph.nodes, graph.relationships);
+  });
+  after(async () => {
+    await store.close();
+  });
+
+  it("find_unused_exports judges pub items by crate", async () => {
+    const result = await tool("find_unused_exports", {});
+    // The tool crate calls used_fn and geometry::area and names Mode, Used and
+    // LIMIT; pub(crate) internal is no export; main_helper sits in a binary crate.
+    assert.deepEqual(result.unusedExports.map((entry: any) => entry.name).sort(), ["Alias", "Orphan", "Plugin", "UNUSED_LIMIT", "perimeter", "unused_fn"]);
+    // private_dead is only used by a test; only_in_tests is test code.
+    assert.deepEqual(result.deadFunctions.map((entry: any) => entry.name), []);
+    assert.ok(result.skipped.rustBinary >= 1);
+  });
+});
