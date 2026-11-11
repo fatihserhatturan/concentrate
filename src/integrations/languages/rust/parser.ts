@@ -22,12 +22,33 @@ const statementParents = new Set([
   "match_block",
 ]);
 
-export const rustParser: LanguageParser = {
-  language: "rust",
-  parse: (rootPath, filePath) => parseRustFile(rootPath, filePath),
-};
+// A function or method of the file with the syntax it was built from.
+export type RustParsedFunction = { syntax: SyntaxNode; node: GraphNode; ownerType: string | null };
 
-async function parseRustFile(rootPath: string, filePath: string): Promise<ParsedSourceFile> {
+// Parse-time semantics a framework layer adds to a Rust file once its
+// structure is built (routes, entrypoints): it may add nodes and relationships.
+export type RustParsePlugin = (file: {
+  fileNodeId: string;
+  relativePath: string;
+  root: SyntaxNode;
+  nodes: GraphNode[];
+  relationships: GraphRelationship[];
+  functions: RustParsedFunction[];
+}) => void;
+
+export function createRustParser(plugins: readonly RustParsePlugin[] = []): LanguageParser {
+  return {
+    language: "rust",
+    parse: (rootPath, filePath) => parseRustFile(rootPath, filePath, plugins),
+  };
+}
+
+export const rustParser: LanguageParser = createRustParser();
+
+export { attributesOf as rustAttributesOf, splitArguments as rustSplitArguments, baseTypeName as rustBaseTypeName };
+export type { RustAttribute };
+
+async function parseRustFile(rootPath: string, filePath: string, plugins: readonly RustParsePlugin[]): Promise<ParsedSourceFile> {
   const source = await readFile(filePath, "utf8");
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
@@ -119,6 +140,7 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
         .map((n) => [String(n.properties.name), n.id]),
     );
 
+    const parsedFunctions: RustParsedFunction[] = [];
     const isBinaryFile = /(^|\/)(main\.rs|build\.rs)$|(^|\/)(src\/bin|examples)\//u.test(relativePath.split(path.sep).join("/"));
     walk(tree.rootNode, (node) => {
       if (node.type !== "function_item") return;
@@ -140,6 +162,7 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
       if (testKind) functionNode.properties.testKind = testKind;
 
       nodes.push(functionNode);
+      parsedFunctions.push({ syntax: node, node: functionNode, ownerType: owner?.name ?? null });
       addAttributes(nodes, relationships, functionNode.id, "HAS_METHOD_DECORATOR", node);
 
       if (classNodeId) {
@@ -183,6 +206,8 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
         })),
       );
     });
+
+    for (const plugin of plugins) plugin({ fileNodeId, relativePath, root: tree.rootNode, nodes, relationships, functions: parsedFunctions });
 
     const parsed: ParsedSourceFile = { fileNodeId, nodes, relationships };
     if (skippedLines.length > 0) {

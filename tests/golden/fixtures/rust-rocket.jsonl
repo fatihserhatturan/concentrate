@@ -1,0 +1,97 @@
+{"kind":"report","status":"success","discoveredFiles":3,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"rust-rocket","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"file:Cargo.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/Cargo.toml","relativePath":"Cargo.toml","sourceType":"production"}}
+{"kind":"node","id":"file:src/main.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/main.rs","relativePath":"src/main.rs","rustCrate":"src/main.rs","rustCrateName":"rust_rocket","rustModule":"","sourceType":"production"}}
+{"kind":"node","id":"file:src/main.rs:function:14:health","label":"Function","properties":{"className":null,"endLine":17,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":14,"methodKind":null,"name":"health","parameters":"[{\"name\":\"verbose\",\"type\":\"Option<bool>\"}]","returnType":"&'static str","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:function:14:health:decorator:14:get","label":"Decorator","properties":{"args":"[\"\\\"/health?<verbose>\\\"\"]","expression":"#[get(\"/health?<verbose>\")]","line":14,"name":"get"}}
+{"kind":"node","id":"file:src/main.rs:function:20:rocket","label":"Function","properties":{"className":null,"endLine":24,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":20,"methodKind":null,"name":"rocket","parameters":"[]","returnType":"_","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:function:20:rocket:call:21:4:rocket::build","label":"Call","properties":{"callee":"build","columnNumber":4,"expression":"rocket::build","line":21,"name":"rocket::build","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:20:rocket:call:22:20:routes!","label":"Call","properties":{"callee":"routes","columnNumber":20,"expression":"routes!","line":22,"name":"routes","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:20:rocket:call:22:9:rocket::build().mount","label":"Call","properties":{"callee":"mount","columnNumber":9,"expression":"rocket::build().mount","line":22,"name":"rocket::build().mount","receiver":"rocket::build"}}
+{"kind":"node","id":"file:src/main.rs:function:20:rocket:call:23:25:posts::routes","label":"Call","properties":{"callee":"routes","columnNumber":25,"expression":"posts::routes","line":23,"name":"posts::routes","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:20:rocket:call:23:9:rocket::build().mount(\"/\",routes![index,health]).mount","label":"Call","properties":{"callee":"mount","columnNumber":9,"expression":"rocket::build().mount(\"/\",routes![index,health]).mount","line":23,"name":"rocket::build().mount(\"/\",routes![index,health]).mount","receiver":"rocket::build"}}
+{"kind":"node","id":"file:src/main.rs:function:20:rocket:decorator:20:launch","label":"Decorator","properties":{"args":"[]","expression":"#[launch]","line":20,"name":"launch"}}
+{"kind":"node","id":"file:src/main.rs:function:27:unused","label":"Function","properties":{"className":null,"endLine":29,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":27,"methodKind":null,"name":"unused","parameters":"[]","returnType":"Json<u8>","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:function:27:unused:call:28:4:Json","label":"Call","properties":{"callee":"Json","columnNumber":4,"expression":"Json","line":28,"name":"Json","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:27:unused:decorator:27:allow","label":"Decorator","properties":{"args":"[\"dead_code\"]","expression":"#[allow(dead_code)]","line":27,"name":"allow"}}
+{"kind":"node","id":"file:src/main.rs:function:9:index","label":"Function","properties":{"className":null,"endLine":11,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":9,"methodKind":null,"name":"index","parameters":"[]","returnType":"&'static str","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:function:9:index:decorator:9:get","label":"Decorator","properties":{"args":"[\"\\\"/\\\"\"]","expression":"#[get(\"/\")]","line":9,"name":"get"}}
+{"kind":"node","id":"file:src/main.rs:import:4:posts","label":"Import","properties":{"isModule":true,"line":4,"source":"posts","specifier":"mod posts;"}}
+{"kind":"node","id":"file:src/main.rs:import:6:rocket::serde::json::Json","label":"Import","properties":{"line":6,"source":"rocket::serde::json::Json","specifier":"use rocket::serde::json::Json;"}}
+{"kind":"node","id":"file:src/main.rs:route:14:0:GET:/health","label":"Route","properties":{"extractors":null,"framework":"rocket","fullPath":"/health","handlerName":"health","layers":null,"line":14,"method":"GET","path":"/health","pathExpression":null,"pendingHandlerRefs":null,"receiverName":null,"scopeFunctionId":"file:src/main.rs:function:14:health"}}
+{"kind":"node","id":"file:src/main.rs:route:9:0:GET:/","label":"Route","properties":{"extractors":null,"framework":"rocket","fullPath":"/","handlerName":"index","layers":null,"line":9,"method":"GET","path":"/","pathExpression":null,"pendingHandlerRefs":null,"receiverName":null,"scopeFunctionId":"file:src/main.rs:function:9:index"}}
+{"kind":"node","id":"file:src/posts.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/posts.rs","relativePath":"src/posts.rs","rustCrate":"src/main.rs","rustCrateName":"rust_rocket","rustModule":"posts","sourceType":"production"}}
+{"kind":"node","id":"file:src/posts.rs:class:4:Store","label":"Class","properties":{"endLine":4,"isAbstract":false,"isExported":true,"line":4,"name":"Store","visibility":"pub"}}
+{"kind":"node","id":"file:src/posts.rs:function:13:show","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":13,"methodKind":null,"name":"show","parameters":"[{\"name\":\"id\",\"type\":\"u32\"}]","returnType":"String","visibility":"private"}}
+{"kind":"node","id":"file:src/posts.rs:function:13:show:call:14:7:id.to_string","label":"Call","properties":{"callee":"to_string","columnNumber":7,"expression":"id.to_string","line":14,"name":"id.to_string","receiver":"id","receiverIsLocal":true,"receiverType":"u32"}}
+{"kind":"node","id":"file:src/posts.rs:function:13:show:decorator:13:get","label":"Decorator","properties":{"args":"[\"\\\"/<id>\\\"\"]","expression":"#[get(\"/<id>\")]","line":13,"name":"get"}}
+{"kind":"node","id":"file:src/posts.rs:function:18:create","label":"Function","properties":{"className":null,"endLine":20,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":18,"methodKind":null,"name":"create","parameters":"[{\"name\":\"post\",\"type\":\"Json<String>\"}]","returnType":"Json<String>","visibility":"private"}}
+{"kind":"node","id":"file:src/posts.rs:function:18:create:decorator:18:post","label":"Decorator","properties":{"args":"[\"\\\"/\\\"\",\"data = \\\"<post>\\\"\"]","expression":"#[post(\"/\", data = \"<post>\")]","line":18,"name":"post"}}
+{"kind":"node","id":"file:src/posts.rs:function:22:routes","label":"Function","properties":{"className":null,"endLine":24,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":22,"methodKind":null,"name":"routes","parameters":"[]","returnType":"Vec<Route>","visibility":"pub"}}
+{"kind":"node","id":"file:src/posts.rs:function:22:routes:call:23:4:routes!","label":"Call","properties":{"callee":"routes","columnNumber":4,"expression":"routes!","line":23,"name":"routes","receiver":null}}
+{"kind":"node","id":"file:src/posts.rs:function:7:list","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":7,"methodKind":null,"name":"list","parameters":"[{\"name\":\"store\",\"type\":\"&State<Store>\"}]","returnType":"Json<Vec<String>>","visibility":"private"}}
+{"kind":"node","id":"file:src/posts.rs:function:7:list:call:9:4:Json","label":"Call","properties":{"callee":"Json","columnNumber":4,"expression":"Json","line":9,"name":"Json","receiver":null}}
+{"kind":"node","id":"file:src/posts.rs:function:7:list:call:9:9:Vec::new","label":"Call","properties":{"callee":"new","columnNumber":9,"expression":"Vec::new","line":9,"name":"Vec::new","receiver":null}}
+{"kind":"node","id":"file:src/posts.rs:function:7:list:decorator:7:get","label":"Decorator","properties":{"args":"[\"\\\"/\\\"\"]","expression":"#[get(\"/\")]","line":7,"name":"get"}}
+{"kind":"node","id":"file:src/posts.rs:import:1:rocket::serde::json::Json","label":"Import","properties":{"line":1,"source":"rocket::serde::json::Json","specifier":"use rocket::serde::json::Json;"}}
+{"kind":"node","id":"file:src/posts.rs:import:2:rocket::Route","label":"Import","properties":{"line":2,"source":"rocket::Route","specifier":"use rocket::{Route, State};"}}
+{"kind":"node","id":"file:src/posts.rs:import:2:rocket::State","label":"Import","properties":{"line":2,"source":"rocket::State","specifier":"use rocket::{Route, State};"}}
+{"kind":"node","id":"file:src/posts.rs:route:13:0:GET:/<id>","label":"Route","properties":{"extractors":null,"framework":"rocket","fullPath":"/posts/<id>","handlerName":"show","layers":null,"line":13,"method":"GET","path":"/<id>","pathExpression":null,"pendingHandlerRefs":null,"receiverName":null,"scopeFunctionId":"file:src/posts.rs:function:13:show"}}
+{"kind":"node","id":"file:src/posts.rs:route:18:0:POST:/","label":"Route","properties":{"extractors":"[{\"kind\":\"json\",\"type\":\"Json<String>\"}]","framework":"rocket","fullPath":"/posts","handlerName":"create","layers":null,"line":18,"method":"POST","path":"/","pathExpression":null,"pendingHandlerRefs":null,"receiverName":null,"scopeFunctionId":"file:src/posts.rs:function:18:create"}}
+{"kind":"node","id":"file:src/posts.rs:route:7:0:GET:/","label":"Route","properties":{"extractors":"[{\"kind\":\"state\",\"type\":\"State<Store>\"}]","framework":"rocket","fullPath":"/posts","handlerName":"list","layers":null,"line":7,"method":"GET","path":"/","pathExpression":null,"pendingHandlerRefs":null,"receiverName":null,"scopeFunctionId":"file:src/posts.rs:function:7:list"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"rust-rocket","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Cargo.toml","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.rs","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/posts.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ROUTE","to":"file:src/main.rs:route:14:0:GET:/health","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ROUTE","to":"file:src/main.rs:route:9:0:GET:/","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:14:health","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:20:rocket","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:27:unused","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:9:index","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:4:posts","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:6:rocket::serde::json::Json","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:14:health","type":"HAS_METHOD_DECORATOR","to":"file:src/main.rs:function:14:health:decorator:14:get","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:20:rocket","type":"CALLS","to":"file:src/main.rs:function:20:rocket:call:21:4:rocket::build","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:20:rocket","type":"CALLS","to":"file:src/main.rs:function:20:rocket:call:22:20:routes!","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:20:rocket","type":"CALLS","to":"file:src/main.rs:function:20:rocket:call:22:9:rocket::build().mount","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:20:rocket","type":"CALLS","to":"file:src/main.rs:function:20:rocket:call:23:25:posts::routes","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:20:rocket","type":"CALLS","to":"file:src/main.rs:function:20:rocket:call:23:9:rocket::build().mount(\"/\",routes![index,health]).mount","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:20:rocket","type":"HAS_METHOD_DECORATOR","to":"file:src/main.rs:function:20:rocket:decorator:20:launch","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:20:rocket:call:23:25:posts::routes","type":"CALL_RESOLVES_TO","to":"file:src/posts.rs:function:22:routes","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:27:unused","type":"CALLS","to":"file:src/main.rs:function:27:unused:call:28:4:Json","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:27:unused","type":"HAS_METHOD_DECORATOR","to":"file:src/main.rs:function:27:unused:decorator:27:allow","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:9:index","type":"HAS_METHOD_DECORATOR","to":"file:src/main.rs:function:9:index:decorator:9:get","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:4:posts","type":"RESOLVES_TO","to":"file:src/posts.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:route:14:0:GET:/health","type":"ROUTE_HANDLED_BY","to":"file:src/main.rs:function:14:health","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:route:14:0:GET:/health","type":"ROUTE_LIFECYCLE_STEP","to":"file:src/main.rs:function:14:health","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:src/main.rs:route:9:0:GET:/","type":"ROUTE_HANDLED_BY","to":"file:src/main.rs:function:9:index","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:route:9:0:GET:/","type":"ROUTE_LIFECYCLE_STEP","to":"file:src/main.rs:function:9:index","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:src/posts.rs","type":"DECLARES_ROUTE","to":"file:src/posts.rs:route:13:0:GET:/<id>","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"DECLARES_ROUTE","to":"file:src/posts.rs:route:18:0:POST:/","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"DECLARES_ROUTE","to":"file:src/posts.rs:route:7:0:GET:/","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"DEFINES_CLASS","to":"file:src/posts.rs:class:4:Store","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"DEFINES_FUNCTION","to":"file:src/posts.rs:function:13:show","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"DEFINES_FUNCTION","to":"file:src/posts.rs:function:18:create","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"DEFINES_FUNCTION","to":"file:src/posts.rs:function:22:routes","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"DEFINES_FUNCTION","to":"file:src/posts.rs:function:7:list","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"IMPORTS","to":"file:src/posts.rs:import:1:rocket::serde::json::Json","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"IMPORTS","to":"file:src/posts.rs:import:2:rocket::Route","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs","type":"IMPORTS","to":"file:src/posts.rs:import:2:rocket::State","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:function:13:show","type":"CALLS","to":"file:src/posts.rs:function:13:show:call:14:7:id.to_string","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:function:13:show","type":"HAS_METHOD_DECORATOR","to":"file:src/posts.rs:function:13:show:decorator:13:get","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:function:18:create","type":"HAS_METHOD_DECORATOR","to":"file:src/posts.rs:function:18:create:decorator:18:post","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:function:22:routes","type":"CALLS","to":"file:src/posts.rs:function:22:routes:call:23:4:routes!","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:function:22:routes:call:23:4:routes!","type":"CALL_RESOLVES_TO","to":"file:src/posts.rs:function:22:routes","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:function:7:list","type":"CALLS","to":"file:src/posts.rs:function:7:list:call:9:4:Json","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:function:7:list","type":"CALLS","to":"file:src/posts.rs:function:7:list:call:9:9:Vec::new","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:function:7:list","type":"HAS_METHOD_DECORATOR","to":"file:src/posts.rs:function:7:list:decorator:7:get","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:route:13:0:GET:/<id>","type":"ROUTE_HANDLED_BY","to":"file:src/posts.rs:function:13:show","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:route:13:0:GET:/<id>","type":"ROUTE_LIFECYCLE_STEP","to":"file:src/posts.rs:function:13:show","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:src/posts.rs:route:18:0:POST:/","type":"ROUTE_HANDLED_BY","to":"file:src/posts.rs:function:18:create","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:route:18:0:POST:/","type":"ROUTE_LIFECYCLE_STEP","to":"file:src/posts.rs:function:18:create","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:src/posts.rs:route:7:0:GET:/","type":"ROUTE_HANDLED_BY","to":"file:src/posts.rs:function:7:list","properties":{}}
+{"kind":"rel","from":"file:src/posts.rs:route:7:0:GET:/","type":"ROUTE_LIFECYCLE_STEP","to":"file:src/posts.rs:function:7:list","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
