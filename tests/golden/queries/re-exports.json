@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 83
+        "result": 84
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 83,
+      "schemaVersion": 84,
       "stats": [
         {
           "table": "Repo",
@@ -1014,9 +1014,10 @@
         "generated": 0,
         "handlers": 0,
         "goMain": 0,
-        "rustBinary": 0
+        "rustBinary": 0,
+        "pythonEntry": 0
       },
-      "note": "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. Rust: only `pub` items count; one counts as used when another crate calls it or mentions its name; binary crates (main.rs, src/bin, examples, tests, benches) are skipped, and library items consumed outside the repository are not seen. JavaScript, TypeScript, Go and Rust.",
+      "note": "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. Rust: only `pub` items count; one counts as used when another crate calls it or mentions its name; binary crates (main.rs, src/bin, examples, tests, benches) are skipped, and library items consumed outside the repository are not seen. Python: module-level names that are not private (or are listed in `__all__`); `from m import *` marks the whole module as used, and `__main__.py`, `setup.py`, `manage.py`, `wsgi.py`, `asgi.py` and `conftest.py` are skipped. JavaScript, TypeScript, Python, Go and Rust.",
       "page": {
         "offset": 0,
         "returned": 0

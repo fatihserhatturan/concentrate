@@ -463,3 +463,23 @@ data access) or `files` list (calls) complete (every route, call or access in
 it labeled), and run `npm test`: `tests/bench-accuracy.test.ts` checks that
 the entries are complete and, when the samples are fetched, that every named
 file exists.
+
+## Python (Phase 30)
+
+There is no hand-labeled Python sample yet (the first one comes with the data and
+config work of Phase 32), so no precision or recall is reported for Python.
+What was checked:
+
+- The installed `pip`, `anyio`, `pydantic` and `click` packages of a Python 3.14
+  site-packages, scanned as one project (no failed files, no syntax warnings):
+  31,835 calls, 9,428 resolved (29.6%). The rest are builtins (`len`, `str`),
+  methods of builtin types, library calls outside the scan, and calls on untyped
+  parameters; none of them is guessed.
+- 40 resolved calls were drawn with a fixed seed and 6 of them read against the
+  code (`self.method`, `super().convert`, `op.serialize()` with `op: Op`,
+  a class constructor, an aliased module function, a method through an annotated
+  parameter): all 6 landed on the right function. This is a spot check, not a
+  measurement.
+- Fixtures `python-calls`, `python-declarations`, `python-unused` and
+  `python-project` pin every resolution rule with golden graphs and tests.
+

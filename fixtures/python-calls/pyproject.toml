@@ -1,0 +1,10 @@
+[project]
+name = "shop-calls"
+version = "0.1.0"
+
+[project.scripts]
+shop = "shop.cli:main"
+shop-admin = "shop.cli:Admin.run"
+
+[tool.setuptools.packages.find]
+where = ["src"]

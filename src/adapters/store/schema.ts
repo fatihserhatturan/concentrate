@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 83;
+export const SCHEMA_VERSION = 84;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -25,16 +25,16 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Repo", properties: { path: "STRING", name: "STRING" } },
   { label: "Package", properties: { path: "STRING", relativePath: "STRING", name: "STRING", version: "STRING", isPrivate: "BOOLEAN", manager: "STRING", workspaceRoot: "BOOLEAN" } },
   { label: "Directory", properties: { path: "STRING", relativePath: "STRING", name: "STRING" } },
-  { label: "File", properties: { path: "STRING", relativePath: "STRING", language: "STRING", defaultExport: "STRING", defaultExportFrom: "STRING", sourceType: "STRING", isTest: "BOOLEAN", isFixture: "BOOLEAN", isSupport: "BOOLEAN", isGenerated: "BOOLEAN", isDocs: "BOOLEAN", dynamicRouteCalls: "STRING", packageName: "STRING", rustCrate: "STRING", rustCrateName: "STRING", rustModule: "STRING" } },
+  { label: "File", properties: { path: "STRING", relativePath: "STRING", language: "STRING", defaultExport: "STRING", defaultExportFrom: "STRING", sourceType: "STRING", isTest: "BOOLEAN", isFixture: "BOOLEAN", isSupport: "BOOLEAN", isGenerated: "BOOLEAN", isDocs: "BOOLEAN", dynamicRouteCalls: "STRING", packageName: "STRING", rustCrate: "STRING", rustCrateName: "STRING", rustModule: "STRING", allNames: "STRING" } },
   { label: "Import", properties: { source: "STRING", specifier: "STRING", line: "INT64", isReExport: "BOOLEAN", isWildcard: "BOOLEAN", isDynamic: "BOOLEAN", isCjs: "BOOLEAN", isTypeOnly: "BOOLEAN", bindings: "STRING", alias: "STRING", isModule: "BOOLEAN", inlineModules: "STRING", pathAttribute: "STRING" } },
   { label: "Function", properties: { name: "STRING", kind: "STRING", methodKind: "STRING", line: "INT64", endLine: "INT64", className: "STRING", isExported: "BOOLEAN", isAsync: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", parameters: "STRING", returnType: "STRING", storeRefs: "STRING", storeSelects: "STRING", formAction: "STRING", typeParameters: "STRING", testKind: "STRING", implementsTrait: "STRING" } },
-  { label: "Class", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", extendsNames: "STRING", implementsNames: "STRING", fields: "STRING", typeParameters: "STRING", kind: "STRING" } },
+  { label: "Class", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", extendsNames: "STRING", implementsNames: "STRING", fields: "STRING", typeParameters: "STRING", kind: "STRING", attributes: "STRING" } },
   { label: "Interface", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", methods: "STRING", methodSignatures: "STRING", embeds: "STRING", typeParameters: "STRING", visibility: "STRING", kind: "STRING" } },
   { label: "TypeAlias", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", aliasOf: "STRING", isAlias: "BOOLEAN", typeParameters: "STRING", visibility: "STRING" } },
   { label: "Enum", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", variants: "STRING", typeParameters: "STRING", visibility: "STRING" } },
   { label: "Call", properties: { name: "STRING", expression: "STRING", callee: "STRING", receiver: "STRING", requireSource: "STRING", line: "INT64", columnNumber: "INT64", args: "STRING", httpClient: "STRING", httpReceiver: "STRING", httpMethod: "STRING", httpUrl: "STRING", httpUrlAlternatives: "STRING", storeAccess: "STRING", reduxAccess: "STRING", receiverType: "STRING", receiverConstructor: "STRING", receiverIsLocal: "BOOLEAN" } },
   { label: "Field", properties: { name: "STRING", typeName: "STRING", isStatic: "BOOLEAN", isReadonly: "BOOLEAN", visibility: "STRING", line: "INT64", isInjected: "BOOLEAN" } },
-  { label: "Variable", properties: { name: "STRING", kind: "STRING", isExported: "BOOLEAN", line: "INT64", stringValue: "STRING", stringTemplate: "STRING", goType: "STRING", goConstructor: "STRING", httpClient: "STRING", httpBaseUrl: "STRING", trpcRouter: "BOOLEAN", trpcMounts: "STRING", visibility: "STRING", typeName: "STRING" } },
+  { label: "Variable", properties: { name: "STRING", kind: "STRING", isExported: "BOOLEAN", line: "INT64", stringValue: "STRING", stringTemplate: "STRING", goType: "STRING", goConstructor: "STRING", httpClient: "STRING", httpBaseUrl: "STRING", trpcRouter: "BOOLEAN", trpcMounts: "STRING", visibility: "STRING", typeName: "STRING", constructorName: "STRING" } },
   { label: "Decorator", properties: { name: "STRING", expression: "STRING", line: "INT64", args: "STRING" } },
   { label: "Route", properties: { method: "STRING", path: "STRING", fullPath: "STRING", pathExpression: "STRING", receiverName: "STRING", line: "INT64", framework: "STRING", handlerName: "STRING", pendingHandlerRefs: "STRING", scopeFunctionId: "STRING", layers: "STRING", extractors: "STRING" } },
   { label: "EntryPoint", properties: { kind: "STRING", trigger: "STRING", receiverName: "STRING", library: "STRING", line: "INT64", handlerName: "STRING" } },

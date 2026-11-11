@@ -91,7 +91,9 @@
 {"kind":"node","id":"file:Makefile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"makefile","path":"<root>/Makefile","relativePath":"Makefile","sourceType":"production"}}
 {"kind":"node","id":"file:api/Dockerfile.dev","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"dockerfile","path":"<root>/api/Dockerfile.dev","relativePath":"api/Dockerfile.dev","sourceType":"production"}}
 {"kind":"node","id":"file:app/manage.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/manage.py","relativePath":"app/manage.py","sourceType":"production"}}
+{"kind":"node","id":"file:app/manage.py:call:1:0:print","label":"Call","properties":{"callee":"print","columnNumber":0,"expression":"print","line":1,"name":"print","receiver":null}}
 {"kind":"node","id":"file:app/tools/seed.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/tools/seed.py","relativePath":"app/tools/seed.py","sourceType":"production"}}
+{"kind":"node","id":"file:app/tools/seed.py:call:1:0:print","label":"Call","properties":{"callee":"print","columnNumber":0,"expression":"print","line":1,"name":"print","receiver":null}}
 {"kind":"node","id":"file:cmd/server/main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/cmd/server/main.go","relativePath":"cmd/server/main.go","sourceType":"production"}}
 {"kind":"node","id":"file:cmd/server/main.go:entrypoint:3:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":3,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:cmd/server/main.go:function:3:main","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":3,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
@@ -223,6 +225,8 @@
 {"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:lint","properties":{}}
 {"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:test","properties":{}}
 {"kind":"rel","from":"file:api/Dockerfile.dev","type":"DECLARES_ENTRYPOINT","to":"entrypoint:docker:api/Dockerfile.dev:2","properties":{}}
+{"kind":"rel","from":"file:app/manage.py","type":"MODULE_CALLS","to":"file:app/manage.py:call:1:0:print","properties":{}}
+{"kind":"rel","from":"file:app/tools/seed.py","type":"MODULE_CALLS","to":"file:app/tools/seed.py:call:1:0:print","properties":{}}
 {"kind":"rel","from":"file:cmd/server/main.go","type":"DECLARES_ENTRYPOINT","to":"file:cmd/server/main.go:entrypoint:3:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:cmd/server/main.go","type":"DEFINES_FUNCTION","to":"file:cmd/server/main.go:function:3:main","properties":{}}
 {"kind":"rel","from":"file:cmd/server/main.go:entrypoint:3:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:cmd/server/main.go:function:3:main","properties":{}}

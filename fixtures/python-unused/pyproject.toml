@@ -1,0 +1,9 @@
+[project]
+name = "kit"
+version = "0.1.0"
+
+[project.scripts]
+kit = "kit.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

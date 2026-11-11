@@ -19,6 +19,7 @@
 {"kind":"node","id":"file:lib/poetrylib/core.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/lib/poetrylib/core.py","relativePath":"lib/poetrylib/core.py","sourceType":"production"}}
 {"kind":"node","id":"file:lib/poetrylib/core.py:function:1:run","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":1,"methodKind":null,"name":"run","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:pyproject.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/pyproject.toml","relativePath":"pyproject.toml","sourceType":"production"}}
+{"kind":"node","id":"file:pyproject.toml:entrypoint:0:0:script:demo","label":"EntryPoint","properties":{"handlerName":"run","kind":"script","library":"python","line":0,"receiverName":null,"trigger":"demo"}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":false,"manager":"poetry","name":"poetry-demo","path":"<root>","relativePath":".","version":"0.3.0","workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-poetry","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:lib","properties":{}}
@@ -34,6 +35,7 @@
 {"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:4:.sibling","properties":{}}
 {"kind":"rel","from":"file:app.py:function:7:main","type":"CALLS","to":"file:app.py:function:7:main:call:8:11:run","properties":{}}
 {"kind":"rel","from":"file:app.py:function:7:main","type":"CALLS","to":"file:app.py:function:7:main:call:8:19:go","properties":{}}
+{"kind":"rel","from":"file:app.py:function:7:main:call:8:11:run","type":"CALL_RESOLVES_TO","to":"file:lib/poetrylib/core.py:function:1:run","properties":{}}
 {"kind":"rel","from":"file:app.py:function:7:main:call:8:19:go","type":"CALL_RESOLVES_TO","to":"file:lib/poetrylib/core.py:function:1:run","properties":{}}
 {"kind":"rel","from":"file:app.py:import:1:poetrylib","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:app.py:import:1:poetrylib","type":"RESOLVES_TO","to":"file:lib/poetrylib/__init__.py","properties":{}}
@@ -43,6 +45,8 @@
 {"kind":"rel","from":"file:lib/poetrylib/__init__.py:import:1:.core","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:lib/poetrylib/__init__.py:import:1:.core","type":"RESOLVES_TO","to":"file:lib/poetrylib/core.py","properties":{}}
 {"kind":"rel","from":"file:lib/poetrylib/core.py","type":"DEFINES_FUNCTION","to":"file:lib/poetrylib/core.py:function:1:run","properties":{}}
+{"kind":"rel","from":"file:pyproject.toml","type":"DECLARES_ENTRYPOINT","to":"file:pyproject.toml:entrypoint:0:0:script:demo","properties":{}}
+{"kind":"rel","from":"file:pyproject.toml:entrypoint:0:0:script:demo","type":"ENTRYPOINT_HANDLED_BY","to":"file:lib/poetrylib/core.py:function:1:run","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app.py","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:lib/poetrylib/__init__.py","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:lib/poetrylib/core.py","properties":{}}

@@ -9,6 +9,7 @@
 {"kind":"node","id":"dir:src/shop/services","label":"Directory","properties":{"name":"services","path":"<root>/src/shop/services","relativePath":"src/shop/services"}}
 {"kind":"node","id":"dir:tests","label":"Directory","properties":{"name":"tests","path":"<root>/tests","relativePath":"tests"}}
 {"kind":"node","id":"file:pyproject.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/pyproject.toml","relativePath":"pyproject.toml","sourceType":"production"}}
+{"kind":"node","id":"file:pyproject.toml:entrypoint:0:0:script:shop","label":"EntryPoint","properties":{"handlerName":"main","kind":"script","library":"python","line":0,"receiverName":null,"trigger":"shop"}}
 {"kind":"node","id":"file:src/shop/__init__.py","label":"File","properties":{"allNames":"[\"Order\",\"Customer\",\"place\",\"VERSION\"]","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/shop/__init__.py","relativePath":"src/shop/__init__.py","sourceType":"production"}}
 {"kind":"node","id":"file:src/shop/__init__.py:import:1:.models","label":"Import","properties":{"bindings":"[{\"imported\":\"Order\",\"local\":\"Order\",\"kind\":\"named\"}]","line":1,"source":".models","specifier":"from .models import Order, Customer"}}
 {"kind":"node","id":"file:src/shop/__init__.py:import:1:.models#2","label":"Import","properties":{"bindings":"[{\"imported\":\"Customer\",\"local\":\"Customer\",\"kind\":\"named\"}]","line":1,"source":".models","specifier":"from .models import Order, Customer"}}
@@ -31,7 +32,7 @@
 {"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":17,"methodKind":null,"name":"place_order","parameters":"[{\"name\":\"name\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:18:12:Order","label":"Call","properties":{"callee":"Order","columnNumber":12,"expression":"Order","line":18,"name":"Order","receiver":null}}
 {"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:18:18:Buyer","label":"Call","properties":{"callee":"Buyer","columnNumber":18,"expression":"Buyer","line":18,"name":"Buyer","receiver":null}}
-{"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:19:11:pricing.price","label":"Call","properties":{"callee":"price","columnNumber":11,"expression":"pricing.price","line":19,"name":"pricing.price","receiver":"pricing"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:19:19:pricing.price","label":"Call","properties":{"callee":"price","columnNumber":19,"expression":"pricing.price","line":19,"name":"pricing.price","receiver":"pricing"}}
 {"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:19:34:len","label":"Call","properties":{"callee":"len","columnNumber":34,"expression":"len","line":19,"name":"len","receiver":null}}
 {"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:19:38:slugify","label":"Call","properties":{"callee":"slugify","columnNumber":38,"expression":"slugify","line":19,"name":"slugify","receiver":null}}
 {"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:19:55:len","label":"Call","properties":{"callee":"len","columnNumber":55,"expression":"len","line":19,"name":"len","receiver":null}}
@@ -49,11 +50,11 @@
 {"kind":"node","id":"file:src/shop/services/pricing.py:function:1:price","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":1,"methodKind":null,"name":"price","parameters":"[{\"name\":\"order\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:src/shop/utils.py","label":"File","properties":{"allNames":"[\"slugify\"]","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/shop/utils.py","relativePath":"src/shop/utils.py","sourceType":"production"}}
 {"kind":"node","id":"file:src/shop/utils.py:function:4:slugify","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":4,"methodKind":null,"name":"slugify","parameters":"[{\"name\":\"text\",\"type\":null}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:src/shop/utils.py:function:4:slugify:call:5:11:text.lower","label":"Call","properties":{"callee":"lower","columnNumber":11,"expression":"text.lower","line":5,"name":"text.lower","receiver":"text"}}
-{"kind":"node","id":"file:src/shop/utils.py:function:4:slugify:call:5:11:text.lower().replace","label":"Call","properties":{"callee":"replace","columnNumber":11,"expression":"text.lower().replace","line":5,"name":"text.lower().replace","receiver":"text"}}
+{"kind":"node","id":"file:src/shop/utils.py:function:4:slugify:call:5:16:text.lower","label":"Call","properties":{"callee":"lower","columnNumber":16,"expression":"text.lower","line":5,"name":"text.lower","receiver":"text","receiverIsLocal":true}}
+{"kind":"node","id":"file:src/shop/utils.py:function:4:slugify:call:5:24:text.lower().replace","label":"Call","properties":{"callee":"replace","columnNumber":24,"expression":"text.lower().replace","line":5,"name":"text.lower().replace","receiver":"text","receiverIsLocal":true}}
 {"kind":"node","id":"file:src/shop/utils.py:function:8:_internal","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_definition","line":8,"methodKind":null,"name":"_internal","parameters":"[]","returnType":null,"visibility":"private"}}
 {"kind":"node","id":"file:tests/test_orders.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":true,"language":"python","path":"<root>/tests/test_orders.py","relativePath":"tests/test_orders.py","sourceType":"test"}}
-{"kind":"node","id":"file:tests/test_orders.py:function:6:test_place_order","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":6,"methodKind":null,"name":"test_place_order","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:tests/test_orders.py:function:6:test_place_order","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":6,"methodKind":null,"name":"test_place_order","parameters":"[]","returnType":null,"testKind":"test","visibility":"public"}}
 {"kind":"node","id":"file:tests/test_orders.py:function:6:test_place_order:call:7:11:place_order","label":"Call","properties":{"callee":"place_order","columnNumber":11,"expression":"place_order","line":7,"name":"place_order","receiver":null}}
 {"kind":"node","id":"file:tests/test_orders.py:import:1:shop.services.orders","label":"Import","properties":{"bindings":"[{\"imported\":\"place_order\",\"local\":\"place_order\",\"kind\":\"named\"}]","line":1,"source":"shop.services.orders","specifier":"from shop.services.orders import place_order"}}
 {"kind":"node","id":"file:tests/test_orders.py:import:2:shop.services","label":"Import","properties":{"bindings":"[{\"imported\":\"pricing\",\"local\":\"pricing\",\"kind\":\"named\"}]","isModule":true,"line":2,"source":"shop.services","specifier":"from shop.services import pricing"}}
@@ -73,6 +74,8 @@
 {"kind":"rel","from":"dir:src/shop/services","type":"CONTAINS_FILE","to":"file:src/shop/services/orders.py","properties":{}}
 {"kind":"rel","from":"dir:src/shop/services","type":"CONTAINS_FILE","to":"file:src/shop/services/pricing.py","properties":{}}
 {"kind":"rel","from":"dir:tests","type":"CONTAINS_FILE","to":"file:tests/test_orders.py","properties":{}}
+{"kind":"rel","from":"file:pyproject.toml","type":"DECLARES_ENTRYPOINT","to":"file:pyproject.toml:entrypoint:0:0:script:shop","properties":{}}
+{"kind":"rel","from":"file:pyproject.toml:entrypoint:0:0:script:shop","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/shop/cli.py:function:6:main","properties":{}}
 {"kind":"rel","from":"file:src/shop/__init__.py","type":"DEFINES_VARIABLE","to":"file:src/shop/__init__.py:variable:8:VERSION","properties":{}}
 {"kind":"rel","from":"file:src/shop/__init__.py","type":"IMPORTS","to":"file:src/shop/__init__.py:import:1:.models","properties":{}}
 {"kind":"rel","from":"file:src/shop/__init__.py","type":"IMPORTS","to":"file:src/shop/__init__.py:import:1:.models#2","properties":{}}
@@ -90,6 +93,7 @@
 {"kind":"rel","from":"file:src/shop/cli.py","type":"IMPORTS","to":"file:src/shop/cli.py:import:1:sys","properties":{}}
 {"kind":"rel","from":"file:src/shop/cli.py","type":"IMPORTS","to":"file:src/shop/cli.py:import:3:shop","properties":{}}
 {"kind":"rel","from":"file:src/shop/cli.py:function:6:main","type":"CALLS","to":"file:src/shop/cli.py:function:6:main:call:7:11:place","properties":{}}
+{"kind":"rel","from":"file:src/shop/cli.py:function:6:main:call:7:11:place","type":"CALL_RESOLVES_TO","to":"file:src/shop/services/orders.py:function:17:place_order","properties":{}}
 {"kind":"rel","from":"file:src/shop/cli.py:import:3:shop","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/shop/cli.py:import:3:shop","type":"RESOLVES_TO","to":"file:src/shop/__init__.py","properties":{}}
 {"kind":"rel","from":"file:src/shop/models.py","type":"DEFINES_CLASS","to":"file:src/shop/models.py:class:1:Customer","properties":{}}
@@ -112,10 +116,13 @@
 {"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:9:..","properties":{}}
 {"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:18:12:Order","properties":{}}
 {"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:18:18:Buyer","properties":{}}
-{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:19:11:pricing.price","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:19:19:pricing.price","properties":{}}
 {"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:19:34:len","properties":{}}
 {"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:19:38:slugify","properties":{}}
 {"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:19:55:len","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order:call:18:12:Order","type":"CALL_RESOLVES_TO","to":"file:src/shop/models.py:function:7:__init__","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order:call:18:18:Buyer","type":"CALL_RESOLVES_TO","to":"file:src/shop/models.py:function:2:__init__","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order:call:19:19:pricing.price","type":"CALL_RESOLVES_TO","to":"file:src/shop/services/pricing.py:function:1:price","properties":{}}
 {"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order:call:19:38:slugify","type":"CALL_RESOLVES_TO","to":"file:src/shop/utils.py:function:4:slugify","properties":{}}
 {"kind":"rel","from":"file:src/shop/services/orders.py:import:10:..models","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/shop/services/orders.py:import:10:..models","type":"RESOLVES_TO","to":"file:src/shop/models.py","properties":{}}
@@ -136,8 +143,8 @@
 {"kind":"rel","from":"file:src/shop/services/pricing.py","type":"DEFINES_FUNCTION","to":"file:src/shop/services/pricing.py:function:1:price","properties":{}}
 {"kind":"rel","from":"file:src/shop/utils.py","type":"DEFINES_FUNCTION","to":"file:src/shop/utils.py:function:4:slugify","properties":{}}
 {"kind":"rel","from":"file:src/shop/utils.py","type":"DEFINES_FUNCTION","to":"file:src/shop/utils.py:function:8:_internal","properties":{}}
-{"kind":"rel","from":"file:src/shop/utils.py:function:4:slugify","type":"CALLS","to":"file:src/shop/utils.py:function:4:slugify:call:5:11:text.lower","properties":{}}
-{"kind":"rel","from":"file:src/shop/utils.py:function:4:slugify","type":"CALLS","to":"file:src/shop/utils.py:function:4:slugify:call:5:11:text.lower().replace","properties":{}}
+{"kind":"rel","from":"file:src/shop/utils.py:function:4:slugify","type":"CALLS","to":"file:src/shop/utils.py:function:4:slugify:call:5:16:text.lower","properties":{}}
+{"kind":"rel","from":"file:src/shop/utils.py:function:4:slugify","type":"CALLS","to":"file:src/shop/utils.py:function:4:slugify:call:5:24:text.lower().replace","properties":{}}
 {"kind":"rel","from":"file:tests/test_orders.py","type":"DEFINES_FUNCTION","to":"file:tests/test_orders.py:function:6:test_place_order","properties":{}}
 {"kind":"rel","from":"file:tests/test_orders.py","type":"IMPORTS","to":"file:tests/test_orders.py:import:1:shop.services.orders","properties":{}}
 {"kind":"rel","from":"file:tests/test_orders.py","type":"IMPORTS","to":"file:tests/test_orders.py:import:2:shop.services","properties":{}}

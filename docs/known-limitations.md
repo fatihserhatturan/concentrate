@@ -1425,8 +1425,8 @@ Astro).
   per module or name, with `source` as written (`.sibling`, `..parent.mod`, `.`),
   `bindings` and `alias`; `from m import *` has `isWildcard`. `from pkg import
   name` resolves to the submodule `pkg.name` when there is one, else to `pkg`
-  (its `__init__.py`); it is not followed into the module that `__init__.py`
-  re-exports `name` from. Imports under `if TYPE_CHECKING:` have `isTypeOnly`.
+  (its `__init__.py`); the `RESOLVES_TO` link stays on that file, but bases and
+  calls follow the name on into the module `__init__.py` re-exports it from. Imports under `if TYPE_CHECKING:` have `isTypeOnly`.
   Imports in functions, `try`/`except ImportError` and `if` branches are all
   kept (no branch is evaluated). `__import__()` and `importlib.import_module()`
   are not seen.
@@ -1476,6 +1476,64 @@ Astro).
   `namedtuple("P", ["a"])` is a variable. Enum classes get `kind` `enum` and no
   fields.
 
+- Calls (`CALL_RESOLVES_TO`) resolve through names and types, and a call that
+  they do not settle stays unresolved and is counted as such:
+  `f()` (a function of the file or an imported one, through aliases and
+  `__init__.py` re-exports), `Foo()` (the `__init__` of the class, own or
+  inherited; none when the class has no `__init__`, e.g. a dataclass),
+  `mod.f()` / `pkg.mod.f()` (through the module an import names), `Foo.method()`,
+  `self.m()` / `cls.m()` (the enclosing class, then its bases depth first),
+  `super().m()` (the first base that has `m`; no overrides) and `x.m()` where `x`
+  is an annotated parameter, an annotated or constructor-assigned local
+  (`x = Foo()`, `with Foo() as x`, `except E as x`), the result of a function with
+  a return annotation (`x = make()`), or a module-level variable (annotation or
+  `NAME = Foo()`). `self.a.b.m()` follows the attributes through `self.a = …` in
+  the class's methods (an annotated assignment, an annotated `__init__`
+  parameter, a constructor call) and the class's annotated fields.
+- Types are annotation text reduced to one name: `Optional[X]`, `X | None`,
+  `Union[X, None]`, `Annotated[X, …]` and quoted forward references give `X`,
+  `list[X]` gives `list`. A union of two classes, `Type[X]`, `TypeVar`s, aliases
+  and `Protocol` generics give nothing. Without an annotation or a constructor
+  call a name has no type: `def test(service): service.place()` stays
+  unresolved, and so do methods of builtins (`list.append`) and of libraries
+  outside the scan. A name assigned twice with different values has no type; a
+  local assigned in a branch the scan cannot evaluate keeps the first/consistent
+  value only. Closures: `self` inside a nested function or lambda is not known.
+- A call through a class also reaches the overrides in its subclasses and
+  implementers, as extra `CALL_RESOLVES_TO` edges with `via: "override"`
+  (`self.m()` in a base, `x.m()` with `x: Base`, a call of an abstract method).
+  Dynamic dispatch the scan cannot see (monkeypatching, `getattr`, mixins added
+  at runtime, `__getattr__`) is not followed, and metaclass or descriptor
+  behavior is ignored. Decorated functions resolve as the function itself, not
+  as what the decorator returns.
+- The scan keeps the calls of a file's top-level code (`MODULE_CALLS`), including
+  decorator expressions (`@app.route("/")`) and `app = Flask(__name__)`, but not
+  calls in class bodies (`x = Field()`), default values or lambdas' own scope.
+- `if __name__ == "__main__":` is an `EntryPoint` (`kind` `main`) handled by the
+  first function of the file the block calls; console scripts of
+  `[project.scripts]`, Poetry scripts and `setup.cfg` / `setup.py`
+  `console_scripts` are `EntryPoint`s (`kind` `script`, `trigger` the command)
+  declared by the metadata file and handled by `module:function` or
+  `module:Class.method`. A target the module only re-exports is not followed;
+  `python -m pkg` (`__main__.py`) and `entry_points` groups other than
+  `console_scripts` are not entrypoints.
+- Tests: `test_*.py`, `*_test.py`, `tests.py`, `conftest.py` and anything under
+  `tests/` are test files (`File.isTest`). Functions get `testKind`: `test`
+  (`test*` functions of test files, `test*` methods of `Test*` classes and of
+  `unittest.TestCase`-style classes), `fixture` (`@pytest.fixture`, the
+  `setUp` / `tearDown` hooks) and `helper` (the rest of a test file or
+  `TestCase`). Test discovery configuration (`python_files`,
+  `python_classes`, `testpaths`) is not read, and a test in a file that does not
+  match these names is not classified.
+- `find_unused_exports` covers Python: module-level functions, classes and
+  variables that are not private (or are listed in `__all__`) and that no other
+  file imports by name, calls, extends or implements. `from m import *` and
+  `from pkg import module` / `import a.b` mark the whole module as used; console
+  script handlers and `__main__.py`, `setup.py`, `manage.py`, `wsgi.py`,
+  `asgi.py`, `conftest.py` are skipped. Names a framework loads by convention
+  (Django settings, URL confs, Flask views, Celery tasks) show up as candidates
+  until Phase 31 gives them routes and handlers. A library's public API used
+  only outside the repository is a candidate too.
 - A `Package` now also exists for Python projects, so the files of a repository
   with a root `pyproject.toml` belong to a root package, JS files included.
 

@@ -13,7 +13,7 @@ type Row = Record<string, unknown>;
 // (namespace, dynamic or default imports, `export * as`).
 type SurfaceReason = "packageEntry" | "wholeFileImported";
 
-const LANGUAGES = new Set(["typescript", "javascript", "go", "rust"]);
+const LANGUAGES = new Set(["typescript", "javascript", "go", "rust", "python"]);
 const MAX_DEAD_FUNCTIONS = 100;
 
 // find_unused_exports: exported declarations nothing in another file uses,
@@ -58,6 +58,11 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
   for (const entry of await packageEntries(roots, files)) markSurface(entry, "packageEntry");
   for (const edge of imports) {
     if (!edge.target || edge.isReExport) continue;
+    // `from m import *` takes every public name of `m` (or its `__all__`).
+    if (edge.isWildcard && isPython(edge.file)) {
+      markSurface(edge.target, "wholeFileImported");
+      continue;
+    }
     if (edge.bindings.length === 0) {
       if (edge.isDynamic) markSurface(edge.target, "wholeFileImported");
       continue;
@@ -93,7 +98,7 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     const info = files.get(declaration.file);
     return info !== undefined && LANGUAGES.has(info.language ?? "") && (!file || matchesFileOrDirectory(declaration.file, file));
   };
-  const skipped: Record<string, number> = { packageEntry: 0, wholeFileImported: 0, defaultExports: 0, tests: 0, generated: 0, handlers: 0, goMain: 0, rustBinary: 0 };
+  const skipped: Record<string, number> = { packageEntry: 0, wholeFileImported: 0, defaultExports: 0, tests: 0, generated: 0, handlers: 0, goMain: 0, rustBinary: 0, pythonEntry: 0 };
   // Go names the graph has no edges for (types, variables, functions used as
   // values) count as used when another package's Go file mentions them.
   const goMentions = await goIdentifierIndex(links.rootPath, files, declarations.some((declaration) => isGo(declaration.file)));
@@ -106,6 +111,8 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     if (!includeTests && (info.isTest || info.isFixture)) return "tests";
     // Nothing imports a Go main package; init and main run without a caller.
     if (isGo(declaration.file) && (info.packageName === "main" || declaration.name === "init")) return "goMain";
+    // Python files that tools run or load by name, not by import.
+    if (isPython(declaration.file) && /(?:^|\/)(?:__main__|setup|manage|wsgi|asgi|conftest)\.py$/u.test(declaration.file)) return "pythonEntry";
     if (info.isGenerated) return "generated";
     if (links.handlers.has(declaration.id)) return "handlers";
     // Default exports are what tools and frameworks load by convention (configs, pages).
@@ -169,12 +176,16 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     unusedExports: window.take(unused),
     deadFunctions,
     skipped,
-    note: "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. Rust: only `pub` items count; one counts as used when another crate calls it or mentions its name; binary crates (main.rs, src/bin, examples, tests, benches) are skipped, and library items consumed outside the repository are not seen. JavaScript, TypeScript, Go and Rust.",
+    note: "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. Rust: only `pub` items count; one counts as used when another crate calls it or mentions its name; binary crates (main.rs, src/bin, examples, tests, benches) are skipped, and library items consumed outside the repository are not seen. Python: module-level names that are not private (or are listed in `__all__`); `from m import *` marks the whole module as used, and `__main__.py`, `setup.py`, `manage.py`, `wsgi.py`, `asgi.py` and `conftest.py` are skipped. JavaScript, TypeScript, Python, Go and Rust.",
   };
 }
 
 function isGo(file: string): boolean {
   return file.endsWith(".go");
+}
+
+function isPython(file: string): boolean {
+  return file.endsWith(".py");
 }
 
 function isRust(file: string): boolean {
