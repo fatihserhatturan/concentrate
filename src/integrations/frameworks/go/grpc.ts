@@ -76,7 +76,8 @@ export const goGrpcContributor: ISemanticContributor = {
   contribute(graph) {
     const files = graph.nodes.filter((node) => node.label === "File" && typeof node.properties.goGrpcServices === "string");
     const calls = graph.nodes.filter((node) => node.label === "Call" && typeof node.properties.grpcMethod === "string");
-    if (files.length === 0 || calls.length === 0) {
+    const rpcs = graph.nodes.filter((node) => node.label === "Rpc");
+    if (files.length === 0 || (calls.length === 0 && rpcs.length === 0)) {
       for (const node of [...files, ...calls]) {
         delete node.properties.goGrpcServices;
         delete node.properties.grpcMethod;
@@ -85,6 +86,8 @@ export const goGrpcContributor: ISemanticContributor = {
     }
     const index = createGoCallIndex(graph, createResolutionRelationshipIndex(graph.relationships));
     const targets = new Map<string, string[]>();
+    // service name → the generated server interface, and the implementations of each method
+    const served = new Map<string, { interfaceId: string; methods: Map<string, string[]> }>();
     for (const file of files) {
       const services = JSON.parse(String(file.properties.goGrpcServices)) as GrpcService[];
       delete file.properties.goGrpcServices;
@@ -94,15 +97,27 @@ export const goGrpcContributor: ISemanticContributor = {
         const iface = index.interfacesByPackage.get(pkg)?.get(handlerType);
         if (!iface) continue;
         const implementers = (index.implementersByInterface.get(iface.node.id) ?? []).filter((type) => !type.anonymous && !type.name.startsWith("Unimplemented"));
+        const servedMethods = new Map<string, string[]>();
+        served.set(service, { interfaceId: iface.node.id, methods: servedMethods });
         for (const method of methods) {
           const ids = implementers
             .map((type) => index.methodsByPackage.get(type.pkg)?.get(`${type.name}.${method}`))
             .filter((id): id is string => id !== undefined);
+          servedMethods.set(method, [...new Set(ids)].sort());
           if (ids.length > 0) targets.set(`/${service}/${method}`, [...new Set(ids)].sort());
         }
       }
     }
     const relationships: GraphRelationship[] = [];
+    // `.proto` rpcs: the generated server interface of the service (when its
+    // ServiceDesc lists the method) and the methods that implement it.
+    for (const rpc of rpcs) {
+      const entry = served.get(String(rpc.properties.service));
+      const implementations = entry?.methods.get(String(rpc.properties.name));
+      if (!entry || !implementations) continue;
+      relationships.push({ from: rpc.id, to: entry.interfaceId, type: "RPC_SERVED_BY", properties: { method: String(rpc.properties.name) } });
+      for (const to of implementations) relationships.push({ from: rpc.id, to, type: "RPC_IMPLEMENTED_BY", properties: {} });
+    }
     for (const call of calls) {
       const fullMethod = String(call.properties.grpcMethod);
       delete call.properties.grpcMethod;

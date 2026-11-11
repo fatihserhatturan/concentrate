@@ -8,6 +8,7 @@ import { withSyntaxTree, type GrammarName, type SyntaxNode } from "../syntax/tre
 import { readDockerfile } from "./dockerfile.js";
 import { readProto } from "./proto.js";
 import { styleGraph } from "./style-graph.js";
+import { protoGraph } from "./proto-graph.js";
 
 // The non-code files of a project (styles, JSON, YAML, scripts, docs,
 // assets, …) become `File` nodes so the graph shows every file and imports of
@@ -119,6 +120,9 @@ async function parsePlainFile(rootPath: string, filePath: string, language: File
   };
   if ((detected === "css" || detected === "scss" || detected === "less") && !lockfiles.has(path.basename(filePath)) && (await stat(filePath)).size <= MAX_PARSED_BYTES) {
     styleGraph(fileNodeId, relativePath, detected, await readFile(filePath, "utf8"), parsed);
+  }
+  if (detected === "proto" && (await stat(filePath)).size <= MAX_PARSED_BYTES) {
+    protoGraph(fileNodeId, await readFile(filePath, "utf8"), parsed);
   }
   return parsed;
 }

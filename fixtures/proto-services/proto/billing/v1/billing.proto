@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package billing.v1;
+
+import "user/v1/user.proto";
+
+message ChargeReq {
+  user.v1.SaveReq payer = 1;
+  int64 cents = 2;
+}
+
+message ChargeReply {
+  bool ok = 1;
+}
+
+service Billing {
+  rpc Charge (ChargeReq) returns (ChargeReply);
+  rpc Refund (stream ChargeReq) returns (ChargeReply);
+  rpc Audit (.user.v1.SaveReq) returns (ChargeReply);
+}
+
+// Declared in the proto but not in any generated Go code.
+service Reports {
+  rpc Daily (ChargeReq) returns (ChargeReply);
+}

@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 76;
+export const SCHEMA_VERSION = 77;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -45,6 +45,9 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "ConfigValue", properties: { name: "STRING", value: "STRING", valueType: "STRING", line: "INT64" } },
   { label: "DataModel", properties: { name: "STRING", library: "STRING", declaredIn: "STRING", line: "INT64" } },
   { label: "Style", properties: { name: "STRING", kind: "STRING", selector: "STRING", scope: "STRING", atRule: "STRING", line: "INT64", endLine: "INT64" } },
+  { label: "Service", properties: { name: "STRING", package: "STRING", fullName: "STRING", line: "INT64" } },
+  { label: "Rpc", properties: { name: "STRING", service: "STRING", package: "STRING", request: "STRING", response: "STRING", clientStreaming: "BOOLEAN", serverStreaming: "BOOLEAN", line: "INT64" } },
+  { label: "Message", properties: { name: "STRING", package: "STRING", fullName: "STRING", line: "INT64" } },
   { label: "Table", properties: { name: "STRING", kind: "STRING", library: "STRING", schemaName: "STRING", provider: "STRING", declaredIn: "STRING", line: "INT64", columns: "STRING", migrations: "STRING", indexes: "STRING" } },
 ];
 
@@ -131,6 +134,13 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "USES_STYLE_FILE", from: "File", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING" } },
   { type: "USES_STYLE_FUNCTION", from: "Function", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING" } },
   { type: "USES_STYLE_COMPONENT", from: "Component", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING" } },
+  { type: "DECLARES_SERVICE", from: "File", to: "Service", properties: {} },
+  { type: "DECLARES_MESSAGE", from: "File", to: "Message", properties: {} },
+  { type: "HAS_RPC", from: "Service", to: "Rpc", properties: {} },
+  { type: "RPC_REQUEST", from: "Rpc", to: "Message", properties: {} },
+  { type: "RPC_RESPONSE", from: "Rpc", to: "Message", properties: {} },
+  { type: "RPC_SERVED_BY", from: "Rpc", to: "Interface", properties: { method: "STRING" } },
+  { type: "RPC_IMPLEMENTED_BY", from: "Rpc", to: "Function", properties: {} },
   { type: "MAPS_TO_TABLE", from: "DataModel", to: "Table", properties: {} },
   { type: "RELATES_TO", from: "DataModel", to: "DataModel", properties: { field: "STRING", kind: "STRING", fields: "STRING", references: "STRING", relationName: "STRING", onDelete: "STRING" } },
   { type: "READS_FILE", from: "File", to: "Table", properties: { operation: "STRING", line: "INT64", expression: "STRING", model: "STRING" } },
@@ -169,6 +179,9 @@ export const nodeLabels = [
   "Page",
   "Store",
   "Style",
+  "Service",
+  "Rpc",
+  "Message",
 ] as const;
 export const relationshipTypes = relationshipTables.map((table) => table.type);
 

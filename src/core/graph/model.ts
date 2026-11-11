@@ -22,7 +22,10 @@ export type GraphNodeLabel =
   | "Component"
   | "Page"
   | "Store"
-  | "Style";
+  | "Style"
+  | "Service"
+  | "Rpc"
+  | "Message";
 
 export type GraphRelationshipType =
   | "CONTAINS_ROOT"
@@ -86,6 +89,13 @@ export type GraphRelationshipType =
   | "READS_STORE"
   | "WRITES_STORE"
   | "REQUESTS"
+  | "DECLARES_SERVICE"
+  | "DECLARES_MESSAGE"
+  | "HAS_RPC"
+  | "RPC_REQUEST"
+  | "RPC_RESPONSE"
+  | "RPC_SERVED_BY"
+  | "RPC_IMPLEMENTED_BY"
   | "DECLARES_STYLE"
   | "SELECTS_STYLE"
   | "USES_STYLE"

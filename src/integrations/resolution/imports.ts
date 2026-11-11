@@ -18,6 +18,7 @@ import {
   shouldResolveAbsoluteImport,
 } from "../../core/scan/resolution/file-kind.js";
 import { isStyleFile, resolveStyleImport } from "../languages/plain/style-resolution.js";
+import { isProtoFile, resolveProtoImport } from "../languages/plain/proto-resolution.js";
 import { resolveImport } from "../languages/js-ts/resolution/import-dispatch.js";
 import { createFileIndex, createImporterIndex } from "../languages/js-ts/resolution/import-indexes.js";
 import { existsSync } from "node:fs";
@@ -86,6 +87,15 @@ export async function addImportResolutionRelationships(
         resolved += 1;
       } else if (source.startsWith(".")) {
         unresolved += 1;
+      }
+      continue;
+    }
+
+    if (importerFileId && isProtoFile(importerFileId)) {
+      const targetFileId = resolveProtoImport(source, importerFileId, fileIdByRelativePath);
+      if (targetFileId) {
+        graph.addRelationship({ from: node.id, to: targetFileId, type: "RESOLVES_TO", properties: {} });
+        resolved += 1;
       }
       continue;
     }

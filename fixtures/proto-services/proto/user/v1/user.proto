@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "example.com/protosvc/gen/user/v1;v1";
+
+message SaveReq {
+  string name = 1;
+}
+
+message SaveReply {
+  int64 id = 1;
+}
+
+message Profile {
+  message Address { string city = 1; }
+  string name = 1;
+}
+
+// User accounts.
+service User {
+  rpc Save (SaveReq) returns (SaveReply);
+  rpc Get (SaveReq) returns (Profile) {
+    option deprecated = true;
+  }
+  rpc Watch (SaveReq) returns (stream SaveReply);
+  rpc Ping (google.protobuf.Empty) returns (google.protobuf.Empty);
+}

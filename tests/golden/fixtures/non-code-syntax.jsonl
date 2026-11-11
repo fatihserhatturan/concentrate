@@ -25,6 +25,12 @@
 {"kind":"node","id":"file:modern.css:style:rule:2:0","label":"Style","properties":{"atRule":"@media (width <= 768px)","endLine":2,"kind":"rule","line":2,"name":".card","selector":".card"}}
 {"kind":"node","id":"file:modern.css:style:rule:3:0","label":"Style","properties":{"atRule":null,"endLine":3,"kind":"rule","line":3,"name":".x","selector":".x"}}
 {"kind":"node","id":"file:ok.proto","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"proto","path":"<root>/ok.proto","relativePath":"ok.proto","sourceType":"production"}}
+{"kind":"node","id":"file:ok.proto:import:3:google/protobuf/empty.proto","label":"Import","properties":{"bindings":null,"isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"google/protobuf/empty.proto","specifier":"import \"google/protobuf/empty.proto\""}}
+{"kind":"node","id":"file:ok.proto:message:Req","label":"Message","properties":{"fullName":"users.v1.Req","line":8,"name":"Req","package":"users.v1"}}
+{"kind":"node","id":"file:ok.proto:message:Res","label":"Message","properties":{"fullName":"users.v1.Res","line":9,"name":"Res","package":"users.v1"}}
+{"kind":"node","id":"file:ok.proto:rpc:Users.Get","label":"Rpc","properties":{"clientStreaming":false,"line":5,"name":"Get","package":"users.v1","request":"Req","response":"Res","serverStreaming":false,"service":"users.v1.Users"}}
+{"kind":"node","id":"file:ok.proto:rpc:Users.Watch","label":"Rpc","properties":{"clientStreaming":true,"line":6,"name":"Watch","package":"users.v1","request":"Req","response":"Res","serverStreaming":true,"service":"users.v1.Users"}}
+{"kind":"node","id":"file:ok.proto:service:Users","label":"Service","properties":{"fullName":"users.v1.Users","line":4,"name":"Users","package":"users.v1"}}
 {"kind":"node","id":"file:ok.sh","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"shell","path":"<root>/ok.sh","relativePath":"ok.sh","sourceType":"production"}}
 {"kind":"node","id":"file:ok.yml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"yaml","path":"<root>/ok.yml","relativePath":"ok.yml","sourceType":"production"}}
 {"kind":"node","id":"file:settings.jsonc","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/settings.jsonc","relativePath":"settings.jsonc","sourceType":"production"}}
@@ -62,5 +68,15 @@
 {"kind":"rel","from":"file:modern.css:style:rule:1:0","type":"SELECTS_STYLE","to":"file:modern.css:style:class:card","properties":{}}
 {"kind":"rel","from":"file:modern.css:style:rule:2:0","type":"SELECTS_STYLE","to":"file:modern.css:style:class:card","properties":{}}
 {"kind":"rel","from":"file:modern.css:style:rule:3:0","type":"SELECTS_STYLE","to":"file:modern.css:style:class:x","properties":{}}
+{"kind":"rel","from":"file:ok.proto","type":"DECLARES_MESSAGE","to":"file:ok.proto:message:Req","properties":{}}
+{"kind":"rel","from":"file:ok.proto","type":"DECLARES_MESSAGE","to":"file:ok.proto:message:Res","properties":{}}
+{"kind":"rel","from":"file:ok.proto","type":"DECLARES_SERVICE","to":"file:ok.proto:service:Users","properties":{}}
+{"kind":"rel","from":"file:ok.proto","type":"IMPORTS","to":"file:ok.proto:import:3:google/protobuf/empty.proto","properties":{}}
+{"kind":"rel","from":"file:ok.proto:rpc:Users.Get","type":"RPC_REQUEST","to":"file:ok.proto:message:Req","properties":{}}
+{"kind":"rel","from":"file:ok.proto:rpc:Users.Get","type":"RPC_RESPONSE","to":"file:ok.proto:message:Res","properties":{}}
+{"kind":"rel","from":"file:ok.proto:rpc:Users.Watch","type":"RPC_REQUEST","to":"file:ok.proto:message:Req","properties":{}}
+{"kind":"rel","from":"file:ok.proto:rpc:Users.Watch","type":"RPC_RESPONSE","to":"file:ok.proto:message:Res","properties":{}}
+{"kind":"rel","from":"file:ok.proto:service:Users","type":"HAS_RPC","to":"file:ok.proto:rpc:Users.Get","properties":{}}
+{"kind":"rel","from":"file:ok.proto:service:Users","type":"HAS_RPC","to":"file:ok.proto:rpc:Users.Watch","properties":{}}
 {"kind":"rel","from":"file:ok.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:ok.sh","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
