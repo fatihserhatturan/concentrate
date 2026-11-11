@@ -1640,6 +1640,104 @@ Flask and Django, `{id}` in FastAPI, `{id:int}` in Starlette); a `re_path` /
   `@app.callback()`, and groups built by `click.Group(...)` calls or
   `cls=` arguments are not read.
 
+### Python data access, config, outbound HTTP and DI (Phase 32)
+
+The framework layer (`src/integrations/frameworks/python/`: `data-facts.ts`,
+`data-access.ts`, `env-config.ts`, `http-clients.ts`, `di.ts`) records what a file
+says at parse time and resolves it with the names of the whole scan once every
+file is parsed, after the routes, so a route reaches the tables its handler (or
+what the handler calls) uses. Measured on the four Python samples: precision 100%,
+recall 85% for data access (81 labels) and 100% for env (26 labels),
+see [accuracy](accuracy.md#python-data-access-config-and-env-phase-32).
+
+- **Models.** SQLAlchemy (`__tablename__`, `Column`, `Mapped[...]` /
+  `mapped_column`, `relationship` with `backref`, `back_populates`, `secondary`,
+  `Table(...)`), Flask-SQLAlchemy (`db.Model` takes the snake-cased class name as
+  its table, as the library does), SQLModel (`table=True`) and Django models
+  (`Meta.db_table`, else `<app>_<model>`; the app is the directory of
+  `models.py`, or `Meta.app_label`) become `Table` and `DataModel` nodes with
+  columns, inherited from abstract bases and mixins. A relationship whose key is
+  made by a helper (a function returning `db.Column(...)`) has no foreign key to
+  read: it is `one` unless its name is plural. Django reverse relations are
+  `RELATES_TO` edges named by `related_name` (else `<model>_set`); queries through
+  them (`user.article_set.all()`) are not followed. A model needs its base
+  chain to name `Model`, `SQLModel` or `DeclarativeBase`-style `__tablename__`: a
+  model built with `type()`, `declarative_base()` aliases or metaclass tricks is
+  not seen. Django proxy and abstract models have no table; multi-table
+  inheritance, `through` tables and generic relations are not modelled.
+- **Queries.** `session.query(M)`, `select/insert/update/delete(M)`,
+  `session.get`, `session.add/add_all/merge/delete` (the model comes from a
+  constructor call, an annotated parameter, `session.get` or a row a query
+  returns), `M.query` and `self.query` (Flask-SQLAlchemy), Django
+  `M.objects.<method>` and custom managers declared in the class, and `.save()` /
+  `.delete()` of a variable typed that way or of `M(...)`. The operation follows
+  the chain (`.delete()`, `.update()` after a `filter`). The receiver of
+  `session.query` must be named like a session (`session`, `db`, `sess`, `s`).
+  A model reached through a value the code does not type (`current_user.save()`,
+  `instance.save()` of an unannotated parameter, `self.model(...)` of a manager,
+  `article.comments.filter(...)`) is not found: that is where the recall of the
+  samples is lost. Class-level `queryset = M.objects...` belongs to the methods
+  of the class. `QuerySet` helpers, raw managers (`M.objects.raw`) are a read;
+  `bulk_*`, `values().update()` and Django signals are read by their method name only.
+- **Raw SQL.** A first argument of `execute`, `executemany`, `executescript`,
+  `fetch`, `fetchrow`, `fetchval`, `prepare` (sqlite3, psycopg, asyncpg,
+  SQLAlchemy `text(...)`, `sql.SQL(...)`) or `read_sql*` that is a literal, a
+  constant of the file or class, or an f-string / `%` / `.format` template is
+  read for its tables (an f-string hole becomes `?`, so `FROM {table}` names
+  nothing) and must start with `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `REPLACE`,
+  `WITH` or `MERGE`. A statement built by `+` over a variable, read from a file
+  (aiosql `.sql` query files), or written with a query builder (pypika, `psycopg.sql.Composed`)
+  is not read. The table is the model's when a model has that table name, else
+  a `DataModel` of library `dbapi`; the Table merges by name with the tables of
+  the SQL files of Phase 25.
+- **Migrations.** Alembic (`op.create_table`, `add_column`, `drop_column`,
+  `drop_table`) and Django (`CreateModel`, `AddField`, `RemoveField`,
+  `DeleteModel`) are merged into the table by name, with the file, line and
+  change in run order, or become a table of their own (library `alembic` or
+  `django`) when no model declares it. `op.execute("…")` of a revision is a
+  data access of its `upgrade` / `downgrade`. Data migrations (`RunPython`),
+  `alter_column`, renames and constraint operations are not read; the order is the
+  file name's, not the `down_revision` chain.
+- **Env.** `os.environ[...]`, `.get`, `.setdefault`, `.pop`, `"X" in os.environ`,
+  `os.getenv` (and bare `environ` / `getenv` from `os`), `dotenv_values`,
+  `get_key`, environs / django-environ `Env` objects and decouple's `config`
+  (also under another name) are `USES_ENV` with a literal key, a constant of the
+  file or a constant of another file; a computed key (`os.environ.get(name)`)
+  is skipped. pydantic `BaseSettings` / pydantic-settings fields are read where
+  the class is instantiated (`Settings()`, also inside `get_settings()`), named
+  by the field (upper-cased) with `env_prefix` of `model_config` / `class Config`
+  inherited from bases, or by `Field(env=…)`, `alias` and `validation_alias`
+  (no prefix); `settings.field` reads the field of an instance (a module variable,
+  a parameter annotated with the class, a local bound to a function annotated
+  `-> Settings`, `self` inside the class), and `settings.X` of Django's settings
+  reads the variables the settings module's `X = …` assignment reads. A settings
+  class chosen at run time (`environments[env]()`), nested models with
+  `env_nested_delimiter`, `env_file` contents (the `.env` file is declared by
+  the env files contributor) and `SettingsConfigDict` built elsewhere are not
+  followed.
+- **Outbound HTTP.** `requests.get/post/put/patch/delete/head/options` and
+  `request("GET", url)`, a `requests.Session()`, `httpx.get(...)`, `httpx.Client` /
+  `AsyncClient` (with `base_url`), `aiohttp.ClientSession` (a name bound by
+  assignment, `with … as`, an annotated parameter, or `self.client`) are recorded
+  on the `Call` node and linked to the route they reach by the same rules as the
+  JS/TS, Go and Rust clients (`REQUESTS`, `${env:X}` from the nearest `.env`).
+  Test files are skipped, and so is a client made with `app=` or an ASGI / WSGI
+  transport. A client received from another function without an annotation
+  (`client = get_client()`), `urllib` / `urlopen`, `http.client`, SDKs and
+  `requests_mock` are not seen; a URL made by a function is `${…}` and matches a
+  route parameter or nothing.
+- **DI.** dependency-injector providers (`Factory`, `Singleton`, `Callable`,
+  `Resource`, … written in a `DeclarativeContainer`, also inline) make
+  `INJECTS` from the class a provider builds to the classes of the providers it
+  is given; `Provide[...]` markers on functions, `wiring_config`, `Configuration`
+  values, `Selector`, `Dict` / `List` and overriding are not modelled. FastAPI
+  `Depends` makes `INJECTS` from the class a provider function builds (it must
+  be named in some `Depends(...)`, return a class by annotation and call it by name) and
+  from a class whose `__init__` takes `Depends(...)`, to the class each dependency
+  provides; the chain of a route's own dependencies stays its lifecycle steps
+  (Phase 31). `INJECTS` is between classes, so a handler or a provider that
+  returns a dict, a pydantic response model or nothing has none.
+
 ## Rust
 
 - The Rust grammar is tree-sitter-rust 0.24.0. A file with a syntax error is
