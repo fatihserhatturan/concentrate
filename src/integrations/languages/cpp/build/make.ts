@@ -99,13 +99,15 @@ function readMakefile(file: string, text: string, input: MakeInput): State {
         if (/^\s*endef\b/u.test(raw)) inDefine = false;
         continue;
       }
-      if (raw.startsWith("\t")) {
+      if (raw.startsWith("\t") && current.length > 0) {
         const recipe = raw.replace(/^\t+/u, "").trim();
         if (recipe !== "" && !recipe.startsWith("#")) for (const rule of current) rule.recipe.push(recipe.replace(/^[@\-+]+/u, "").trim());
         continue;
       }
       const line = stripComment(raw).trim();
       if (line === "") continue;
+      // A tab-indented line outside a rule is an ordinary line (an assignment inside a conditional), never a rule.
+      if (raw.startsWith("\t") && !/^(?:(?:export|override|private)\s+)*[A-Za-z_][\w.-]*\s*(?:::=|:=|\?=|\+=|!=|=)/u.test(line) && !/^(?:ifeq|ifneq|ifdef|ifndef|else|endif|-?include)\b/u.test(line)) continue;
       if (/^define\b/u.test(line)) {
         inDefine = true;
         current = [];
@@ -551,6 +553,25 @@ function buildTargets(file: string, state: State, input: MakeInput, result: Make
         linkTokens.set(target, tokens.slice(1));
         break;
       }
+    }
+  }
+
+  // The built-in rule `%: %.c`: `app: app.c libx.a` with no recipe links an executable.
+  for (const rule of state.rules) {
+    for (const target of rule.targets) {
+      if (linked.has(target) || path.posix.extname(target) !== "" || rule.recipe.length > 0) continue;
+      if (state.rules.some((other) => other.targets.includes(target) && other.recipe.length > 0)) continue;
+      const tokens = [...rule.prereqs];
+      const sources = objectsToSources(tokens);
+      if (sources.length === 0) continue;
+      for (const source of sources) {
+        if (tokens.some((token) => findSource(token) === source)) noteCompile(source, flagsOfRule(null, source, target));
+      }
+      linked.set(target, {
+        system: "make", name: target, type: "executable", dir: directory, file, line: rule.line, sources,
+        links: [], includePrivate: [], includeInterface: [], definitionsPrivate: [], definitionsInterface: [], unresolved: 0,
+      });
+      linkTokens.set(target, tokens);
     }
   }
 

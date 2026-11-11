@@ -155,3 +155,89 @@ describe("include paths", () => {
     }
   });
 });
+
+describe("CMake functions, macros and conditions", () => {
+  async function project(files: Record<string, string>): Promise<string> {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "concentrate-cmake-"));
+    for (const [name, text] of Object.entries(files)) {
+      await mkdir(path.dirname(path.join(directory, name)), { recursive: true });
+      await writeFile(path.join(directory, name), text);
+    }
+    return directory;
+  }
+
+  it("expands functions and macros (ARGN, parameters, PARENT_SCOPE) and foreach over IN LISTS", async () => {
+    const directory = await project({
+      "CMakeLists.txt": `function(add_tool name)
+  add_executable(\${name} src/\${name}.c \${ARGN})
+  target_link_libraries(\${name} PRIVATE base)
+endfunction()
+macro(add_lib name)
+  add_library(\${name} src/\${name}.c)
+endmacro()
+add_lib(base)
+add_tool(one)
+add_tool(two src/extra.c)
+set(NAMES a b)
+foreach(n IN LISTS NAMES)
+  add_executable(\${n}_bin src/\${n}.c)
+endforeach()
+`,
+      "src/base.c": "int base(void) { return 1; }\n",
+      "src/one.c": "int main(void) { return 0; }\n",
+      "src/two.c": "int main(void) { return 0; }\n",
+      "src/extra.c": "int extra(void) { return 0; }\n",
+      "src/a.c": "int main(void) { return 0; }\n",
+      "src/b.c": "int main(void) { return 0; }\n",
+    });
+    try {
+      assert.deepEqual(targets(await scan(directory)), [
+        "cmake:a_bin executable [src/a.c] -> [] unresolved=0",
+        "cmake:b_bin executable [src/b.c] -> [] unresolved=0",
+        "cmake:base library [src/base.c] -> [] unresolved=0",
+        "cmake:one executable [src/one.c] -> [base] unresolved=0",
+        "cmake:two executable [src/extra.c,src/two.c] -> [base] unresolved=0",
+      ]);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
+  it("skips branches that only a Windows or MSVC build takes, and reads every branch of an unknown condition", async () => {
+    const directory = await project({
+      "CMakeLists.txt": `add_executable(app main.c)
+if(MSVC)
+  target_sources(app PRIVATE win.c)
+elseif(UNIX AND NOT APPLE)
+  target_sources(app PRIVATE linux.c)
+else()
+  target_sources(app PRIVATE other.c)
+endif()
+if(WIN32 OR MINGW)
+  target_sources(app PRIVATE win2.c)
+endif()
+if(NOT MSVC)
+  target_sources(app PRIVATE posix.c)
+endif()
+if(SOME_OPTION)
+  target_sources(app PRIVATE optional.c)
+else()
+  target_sources(app PRIVATE fallback.c)
+endif()
+if("\${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
+  target_sources(app PRIVATE msvc.c)
+endif()
+`,
+      ...Object.fromEntries(["main", "win", "win2", "linux", "other", "posix", "optional", "fallback", "msvc"].map((name) => [`${name}.c`, `int ${name}_f(void) { return 0; }\n`])),
+    });
+    try {
+      assert.deepEqual(targets(await scan(directory)), [
+        // `UNIX AND NOT APPLE` is unknown (APPLE is not decided), so linux.c and the else branch both count.
+        "cmake:app executable [fallback.c,linux.c,main.c,optional.c,other.c,posix.c] -> [] unresolved=0",
+      ]);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+});
+

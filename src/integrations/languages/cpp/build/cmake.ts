@@ -9,8 +9,17 @@ import type { BuildTarget, TargetType } from "./types.js";
 // `target_link_libraries`, `include_directories`, `target_include_directories`,
 // `add_definitions`, `add_compile_definitions` and `target_compile_definitions`.
 //
-// Honest limits: every branch of an `if` runs (conditions are not evaluated),
-// functions and macros are not expanded, `foreach(... RANGE ...)` is skipped,
+// Functions and macros the project defines are expanded when called (their
+// parameters, `ARGN` and `ARGV` bound; `return()` is ignored).
+//
+// Conditions are evaluated only for platform and compiler tests that are decided
+// for the POSIX GCC/Clang build the scan assumes (`MSVC`, `WIN32`, `MINGW`,
+// `CYGWIN`, `UNIX`, `CMAKE_<LANG>_COMPILER_ID STREQUAL "MSVC"`, and `NOT`,
+// `AND`, `OR` of them): a branch for Windows or MSVC is skipped. Every other
+// branch of an `if` runs.
+//
+// Honest limits: options and variables in conditions are not evaluated,
+// `cmake_parse_arguments` is not read, `foreach(... RANGE ...)` is skipped,
 // and generator expressions other than `$<BUILD_INTERFACE:>`,
 // `$<INSTALL_INTERFACE:>` and `$<TARGET_OBJECTS:>` are not read. An argument
 // that names an unset variable, such an expression or a file the scan does not
@@ -43,6 +52,9 @@ type Scope = {
   // Targets created in this directory: later directory-level commands reach them too.
   targets: BuildTarget[];
   isRoot: boolean;
+  // Where `set(... PARENT_SCOPE)` writes: the caller of a function, the
+  // directory that added this one.
+  parentVars?: Map<string, string>;
 };
 
 const BUILD_MARKER = "/__cmake-build__";
@@ -94,6 +106,8 @@ export function interpretCMake(input: CMakeInput): CMakeResult {
   }
 
   type Value = { values: string[]; unresolved: number };
+  type Definition = { params: string[]; body: CMakeCommand[]; macro: boolean };
+  const definitions = new Map<string, Definition>();
 
   // `${A}`, nested `${A_${B}}` and `$ENV{A}` replaced in `text`; a name with no
   // value is empty and counted.
@@ -102,7 +116,7 @@ export function interpretCMake(input: CMakeInput): CMakeResult {
     let value = text;
     // Generator expressions: the build-tree form of an include directory is
     // the path itself; the install form is gone; anything else is opaque.
-    value = value.replace(/\$<BUILD_INTERFACE:([^<>]*)>/gu, "$1").replace(/\$<INSTALL_INTERFACE:[^<>]*>/gu, "");
+    value = unwrapGenex(value);
     for (let round = 0; round < 40; round += 1) {
       const match = /\$(ENV)?\{([^${}]*)\}/u.exec(value);
       if (!match) break;
@@ -221,14 +235,46 @@ export function interpretCMake(input: CMakeInput): CMakeResult {
       switch (command.name) {
         case "function":
         case "macro": {
-          // Bodies are not expanded: skip to the matching end.
+          // The body is kept for calls; it runs where it is called.
           const end = command.name === "function" ? "endfunction" : "endmacro";
+          const start = index + 1;
           let nesting = 1;
           while (nesting > 0 && index + 1 < commands.length) {
             index += 1;
             const next = commands[index]!.name;
             if (next === command.name) nesting += 1;
             else if (next === end) nesting -= 1;
+          }
+          const name = command.args[0]?.text.toLowerCase();
+          if (name && !/[${]/u.test(name)) {
+            definitions.set(name, { params: command.args.slice(1).map((arg) => arg.text), body: commands.slice(start, index), macro: command.name === "macro" });
+          }
+          break;
+        }
+        case "if": {
+          // Branches: the commands up to the matching elseif, else or endif.
+          const branches: Array<{ condition: CMakeCommand | null; body: CMakeCommand[] }> = [{ condition: command, body: [] }];
+          let nesting = 1;
+          let end = index;
+          while (nesting > 0 && end + 1 < commands.length) {
+            end += 1;
+            const next = commands[end]!;
+            if (next.name === "if") nesting += 1;
+            else if (next.name === "endif") nesting -= 1;
+            else if (nesting === 1 && (next.name === "elseif" || next.name === "else")) {
+              branches.push({ condition: next.name === "elseif" ? next : null, body: [] });
+              continue;
+            }
+            if (nesting > 0) branches.at(-1)!.body.push(next);
+          }
+          index = end;
+          let uncertain = false;
+          for (const branch of branches) {
+            const decided = branch.condition === null ? true : evaluateCondition(branch.condition.args.map((arg) => arg.text));
+            if (decided === false) continue;
+            run(branch.body, scope, file, depth);
+            if (decided === true && !uncertain) break;
+            if (decided === null) uncertain = true;
           }
           break;
         }
@@ -296,6 +342,7 @@ export function interpretCMake(input: CMakeInput): CMakeResult {
           // `set(VAR)` unsets; PARENT_SCOPE writes are not visible to this directory.
           if (command.args.length === 1) scope.vars.delete(name);
           else if (!parent) scope.vars.set(name, values.join(";"));
+          else scope.parentVars?.set(name, values.join(";"));
           if (name === "CMAKE_INCLUDE_CURRENT_DIR" && /^(ON|TRUE|YES|Y|1)$/iu.test(values[0] ?? "")) addDirectoryIncludes(scope, [relative(scope.sourceDir) ?? ""]);
           break;
         }
@@ -386,6 +433,7 @@ export function interpretCMake(input: CMakeInput): CMakeResult {
             dirDefinitions: [...scope.dirDefinitions],
             targets: [],
             isRoot: false,
+            parentVars: scope.vars,
           };
           run(read.commands, child, lists, depth + 1);
           break;
@@ -508,8 +556,41 @@ export function interpretCMake(input: CMakeInput): CMakeResult {
           }
           break;
         }
-        default:
+        default: {
+          const definition = definitions.get(command.name);
+          if (!definition || depth > 20) break;
+          const given: string[] = [];
+          for (const arg of command.args) {
+            if (arg.bracket) {
+              given.push(arg.text);
+              continue;
+            }
+            const result = substitute(arg.text, scope);
+            if (result.opaque) addUnresolved(1);
+            else if (arg.quoted) given.push(result.value);
+            else for (const part of result.value.split(";")) if (part !== "") given.push(part);
+          }
+          const bound = new Map<string, string>();
+          definition.params.forEach((param, at) => bound.set(param, given[at] ?? ""));
+          bound.set("ARGN", given.slice(definition.params.length).join(";"));
+          bound.set("ARGV", given.join(";"));
+          bound.set("ARGC", String(given.length));
+          given.forEach((value, at) => bound.set(`ARGV${at}`, value));
+          if (definition.macro) {
+            // A macro runs in the caller's scope; its parameters are visible only during the call.
+            const saved = new Map<string, string | undefined>([...bound.keys()].map((name) => [name, scope.vars.get(name)]));
+            for (const [name, value] of bound) scope.vars.set(name, value);
+            run(definition.body, scope, file, depth + 1);
+            for (const [name, value] of saved) {
+              if (value === undefined) scope.vars.delete(name);
+              else scope.vars.set(name, value);
+            }
+          } else {
+            const local: Scope = { ...scope, vars: new Map([...scope.vars, ...bound]), parentVars: scope.vars };
+            run(definition.body, local, file, depth + 1);
+          }
           break;
+        }
       }
     }
   };
@@ -591,4 +672,85 @@ function globRegex(pattern: string): RegExp {
     } else source += char.replace(/[.+^${}()|\\]/gu, "\\$&");
   }
   return new RegExp(`^${source}$`, "u");
+}
+
+// `$<BUILD_INTERFACE:x>` is `x` (the path in the build tree); `$<INSTALL_INTERFACE:...>`
+// (which may hold other expressions, `$<INSTALL_PREFIX>`) is gone.
+function unwrapGenex(text: string): string {
+  let value = text;
+  for (let round = 0; round < 20; round += 1) {
+    const match = /\$<(BUILD_INTERFACE|INSTALL_INTERFACE):/u.exec(value);
+    if (!match) break;
+    let depth = 1;
+    let end = match.index + match[0].length;
+    while (end < value.length && depth > 0) {
+      if (value.startsWith("$<", end)) {
+        depth += 1;
+        end += 2;
+        continue;
+      }
+      if (value[end] === ">") depth -= 1;
+      end += 1;
+    }
+    const inner = value.slice(match.index + match[0].length, depth === 0 ? end - 1 : end);
+    value = value.slice(0, match.index) + (match[1] === "BUILD_INTERFACE" ? inner : "") + value.slice(end);
+  }
+  return value;
+}
+
+const FALSE_VARIABLES = new Set(["MSVC", "WIN32", "MINGW", "CYGWIN", "MSYS", "BORLAND", "WINDOWS_STORE", "XCODE", "CMAKE_HOST_WIN32", "CMAKE_CL_64"]);
+const TRUE_VARIABLES = new Set(["UNIX", "CMAKE_HOST_UNIX"]);
+
+// true / false for a condition made of tests the assumed build decides, null otherwise.
+function evaluateCondition(tokens: string[]): boolean | null {
+  let position = 0;
+  const peek = () => tokens[position]?.toUpperCase();
+  const primary = (): boolean | null => {
+    const token = tokens[position];
+    if (token === undefined) return null;
+    if (peek() === "NOT") {
+      position += 1;
+      const inner = primary();
+      return inner === null ? null : !inner;
+    }
+    if (token === "(") {
+      position += 1;
+      const inner = or();
+      if (tokens[position] === ")") position += 1;
+      return inner;
+    }
+    position += 1;
+    // `"${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC"` (also MATCHES and the other languages).
+    if (/^\$\{CMAKE_(?:C|CXX|CUDA|OBJC)_COMPILER_ID\}$/u.test(token) && /^(?:STREQUAL|MATCHES|EQUAL)$/iu.test(tokens[position] ?? "")) {
+      const operand = tokens[position + 1] ?? "";
+      position += 2;
+      return /^\^?MSVC\$?$/u.test(operand) ? false : null;
+    }
+    if (FALSE_VARIABLES.has(token)) return false;
+    if (TRUE_VARIABLES.has(token)) return true;
+    // Any other word starts a test this reader cannot decide: skip the operands of a binary operator.
+    if (/^(?:STREQUAL|EQUAL|MATCHES|LESS|GREATER|VERSION_[A-Z_]+|IN_LIST|DEFINED|EXISTS|COMMAND|TARGET|IS_DIRECTORY)$/iu.test(tokens[position] ?? "")) position += 2;
+    return null;
+  };
+  const and = (): boolean | null => {
+    let result = primary();
+    while (peek() === "AND") {
+      position += 1;
+      const right = primary();
+      result = result === false || right === false ? false : result === true && right === true ? true : null;
+    }
+    return result;
+  };
+  const or = (): boolean | null => {
+    let result = and();
+    while (peek() === "OR") {
+      position += 1;
+      const right = and();
+      result = result === true || right === true ? true : result === false && right === false ? false : null;
+    }
+    return result;
+  };
+  const decided = or();
+  // Tokens left over mean a shape the evaluator does not know.
+  return position < tokens.length ? null : decided;
 }
