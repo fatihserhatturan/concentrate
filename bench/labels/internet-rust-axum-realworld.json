@@ -1,6 +1,6 @@
 {
   "sample": "internet-rust-axum-realworld",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. launchbadge/realworld-axum-sqlx: one library crate plus a bin (src/main.rs). Calls: every call site in src/ whose target is a function or method written in the repository (path calls `module::f()`, `Type::f()`, `Self::f()`, free calls, method calls on typed receivers and on chains, and the `on_constraint` extension method of the `ResultExt` impl for `Result`); calls into axum, sqlx, std or generated code (clap's `Config::parse`, `Extension::from_request`, the sqlx macros) have no repository target and are not labeled. A method call's line is the line of its method name. Handlers named in `.route(..., post(handler))` are passed, not called, and `ArticleFromQuery::into_article` / `CommentFromQuery::into_comment` handed to `map_ok` are not call sites. The first labeling pass listed call sites by grepping a hand-picked set of names and missed `to_jwt` (4 sites) and `get_current_user`; a second pass over every function name defined in src/ added them (they were real repository calls the scan had already resolved, found as unlabeled call sites). Calls inside macro token trees (`assert_eq!(slugify(..), ..)`) are labeled even though the scan does not see them. Routes: every `.route(path, get(h).post(h2))` registration of the four `router()` functions (users, profiles, articles, comments), one label per method with the path as written (the paths are absolute, `api_router` merges the routers without a prefix) and the line of the `.route(` call; the middleware and the `Extension` layer in `src/http/mod.rs` register no routes.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. launchbadge/realworld-axum-sqlx: one library crate plus a bin (src/main.rs). Calls: every call site in src/ whose target is a function or method written in the repository (path calls `module::f()`, `Type::f()`, `Self::f()`, free calls, method calls on typed receivers and on chains, and the `on_constraint` extension method of the `ResultExt` impl for `Result`); calls into axum, sqlx, std or generated code (clap's `Config::parse`, `Extension::from_request`, the sqlx macros) have no repository target and are not labeled. A method call's line is the line of its method name. Handlers named in `.route(..., post(handler))` are passed, not called, and `ArticleFromQuery::into_article` / `CommentFromQuery::into_comment` handed to `map_ok` are not call sites. The first labeling pass listed call sites by grepping a hand-picked set of names and missed `to_jwt` (4 sites) and `get_current_user`; a second pass over every function name defined in src/ added them (they were real repository calls the scan had already resolved, found as unlabeled call sites). Calls inside macro token trees (`assert_eq!(slugify(..), ..)`) are labeled even though the scan does not see them. Routes: every `.route(path, get(h).post(h2))` registration of the four `router()` functions (users, profiles, articles, comments), one label per method with the path as written (the paths are absolute, `api_router` merges the routers without a prefix) and the line of the `.route(` call; the middleware and the `Extension` layer in `src/http/mod.rs` register no routes. Data access (hand-labeled from the SQL of each sqlx query in src/http, before the tool was run on it): the tables each function reads and writes, data-modifying CTEs included (`with inserted as (insert into …)`); the sample has no diesel or SeaORM, which the fixtures cover only.",
   "routes": {
     "scope": [
       "src/http/users.rs",
@@ -614,6 +614,356 @@
         "line": 26,
         "name": "HMAC_KEY",
         "function": null
+      }
+    ]
+  },
+  "dataAccess": {
+    "scope": [
+      "src/http/"
+    ],
+    "items": [
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "get_article_comments",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "get_article_comments",
+        "model": "article_comment",
+        "operation": "read",
+        "table": "article_comment"
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "get_article_comments",
+        "model": "follow",
+        "operation": "read",
+        "table": "follow"
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "get_article_comments",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "add_comment",
+        "model": "article_comment",
+        "operation": "create",
+        "table": "article_comment"
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "add_comment",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "add_comment",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "delete_comment",
+        "model": "article_comment",
+        "operation": "delete",
+        "table": "article_comment"
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "delete_comment",
+        "model": "article_comment",
+        "operation": "read",
+        "table": "article_comment"
+      },
+      {
+        "file": "src/http/articles/comments.rs",
+        "function": "delete_comment",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/listing.rs",
+        "function": "list_articles",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/listing.rs",
+        "function": "list_articles",
+        "model": "article_favorite",
+        "operation": "read",
+        "table": "article_favorite"
+      },
+      {
+        "file": "src/http/articles/listing.rs",
+        "function": "list_articles",
+        "model": "follow",
+        "operation": "read",
+        "table": "follow"
+      },
+      {
+        "file": "src/http/articles/listing.rs",
+        "function": "list_articles",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/articles/listing.rs",
+        "function": "feed_articles",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/listing.rs",
+        "function": "feed_articles",
+        "model": "article_favorite",
+        "operation": "read",
+        "table": "article_favorite"
+      },
+      {
+        "file": "src/http/articles/listing.rs",
+        "function": "feed_articles",
+        "model": "follow",
+        "operation": "read",
+        "table": "follow"
+      },
+      {
+        "file": "src/http/articles/listing.rs",
+        "function": "feed_articles",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "create_article",
+        "model": "article",
+        "operation": "create",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "create_article",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "update_article",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "update_article",
+        "model": "article",
+        "operation": "update",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "update_article",
+        "model": "article_favorite",
+        "operation": "read",
+        "table": "article_favorite"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "update_article",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "delete_article",
+        "model": "article",
+        "operation": "delete",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "delete_article",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "get_article",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "get_article",
+        "model": "article_favorite",
+        "operation": "read",
+        "table": "article_favorite"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "get_article",
+        "model": "follow",
+        "operation": "read",
+        "table": "follow"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "get_article",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "favorite_article",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "favorite_article",
+        "model": "article_favorite",
+        "operation": "upsert",
+        "table": "article_favorite"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "unfavorite_article",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "unfavorite_article",
+        "model": "article_favorite",
+        "operation": "delete",
+        "table": "article_favorite"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "get_tags",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "article_by_id",
+        "model": "article",
+        "operation": "read",
+        "table": "article"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "article_by_id",
+        "model": "article_favorite",
+        "operation": "read",
+        "table": "article_favorite"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "article_by_id",
+        "model": "follow",
+        "operation": "read",
+        "table": "follow"
+      },
+      {
+        "file": "src/http/articles/mod.rs",
+        "function": "article_by_id",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/profiles.rs",
+        "function": "get_user_profile",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/profiles.rs",
+        "function": "get_user_profile",
+        "model": "follow",
+        "operation": "read",
+        "table": "follow"
+      },
+      {
+        "file": "src/http/profiles.rs",
+        "function": "follow_user",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/profiles.rs",
+        "function": "follow_user",
+        "model": "follow",
+        "operation": "upsert",
+        "table": "follow"
+      },
+      {
+        "file": "src/http/profiles.rs",
+        "function": "unfollow_user",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/profiles.rs",
+        "function": "unfollow_user",
+        "model": "follow",
+        "operation": "delete",
+        "table": "follow"
+      },
+      {
+        "file": "src/http/users.rs",
+        "function": "create_user",
+        "model": "user",
+        "operation": "create",
+        "table": "user"
+      },
+      {
+        "file": "src/http/users.rs",
+        "function": "login_user",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/users.rs",
+        "function": "get_current_user",
+        "model": "user",
+        "operation": "read",
+        "table": "user"
+      },
+      {
+        "file": "src/http/users.rs",
+        "function": "update_user",
+        "model": "user",
+        "operation": "update",
+        "table": "user"
       }
     ]
   }

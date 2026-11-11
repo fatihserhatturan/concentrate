@@ -5,6 +5,8 @@
 //                                  optional (`INSERT article SET …`)
 //   UPDATE a SET … FROM b        → update a, read b
 //   DELETE FROM a USING b        → delete a, read b
+//   WITH x AS (INSERT INTO a …) SELECT … → the CTE's own statement counts
+//                                  (create a), apart from the main query
 // Names defined by WITH are not tables; a schema-qualified name keeps its
 // last part. Other statements (DDL, transactions) touch no table here.
 
@@ -17,12 +19,13 @@ const ALIAS = String.raw`(?:\s+(?:AS\s+)?(?!${KEYWORD})${NAME})?`;
 const NOT_TABLES = new Set(["select", "lateral", "unnest", "values", "only", "dual"]);
 
 export function sqlTableAccesses(sql: string): SqlTableAccess[] {
-  const text = sql
+  const cleaned = sql
     .replace(/--[^\n]*/gu, " ")
     .replace(/\/\*[\s\S]*?\*\//gu, " ")
     .replace(/'(?:[^']|'')*'/gu, "''")
     .replace(/\s+/gu, " ")
     .trim();
+  const { text, nested } = extractDmlCtes(cleaned);
   const ctes = new Set([...text.matchAll(new RegExp(String.raw`(?:\bWITH(?:\s+RECURSIVE)?|,)\s+(${NAME})\s*(?:\([^)]*\)\s*)?AS\s*\(`, "giu"))].map((match) => tableName(match[1]!)));
   const accesses: SqlTableAccess[] = [];
   const add = (raw: string, operation: SqlTableAccess["operation"]) => {
@@ -30,6 +33,8 @@ export function sqlTableAccesses(sql: string): SqlTableAccess[] {
     if (!table || ctes.has(table) || NOT_TABLES.has(table.toLowerCase())) return;
     if (!accesses.some((access) => access.table === table && access.operation === operation)) accesses.push({ table, operation });
   };
+
+  for (const access of nested) add(access.table, access.operation);
 
   // The statement after any WITH clauses.
   const main = /\b(INSERT|UPDATE|DELETE|SELECT|REPLACE|MERGE)\b/iu.exec(stripCtes(text));
@@ -68,19 +73,49 @@ export function sqlTableAccesses(sql: string): SqlTableAccess[] {
   return accesses;
 }
 
+// Data-modifying CTEs (`WITH ins AS (INSERT INTO a … RETURNING …)`): their
+// accesses are the statement's own, and the body is blanked so its `FROM` /
+// `USING` is not read as a table the main query reads.
+function extractDmlCtes(text: string): { text: string; nested: SqlTableAccess[] } {
+  const nested: SqlTableAccess[] = [];
+  let result = text;
+  const pattern = new RegExp(String.raw`(?:\bWITH(?:\s+RECURSIVE)?|,)\s+${NAME}\s*(?:\([^)]*\)\s*)?AS\s*(?:NOT\s+MATERIALIZED\s+|MATERIALIZED\s+)?\(`, "giu");
+  for (const match of text.matchAll(pattern)) {
+    const start = match.index + match[0].length;
+    let depth = 1;
+    let end = start;
+    for (; end < text.length && depth > 0; end += 1) {
+      if (text[end] === "(") depth += 1;
+      else if (text[end] === ")") depth -= 1;
+    }
+    const body = text.slice(start, end - 1);
+    if (!/^\s*(?:INSERT|UPDATE|DELETE)\b/iu.test(body)) continue;
+    nested.push(...sqlTableAccesses(body));
+    result = result.replace(body, " ");
+  }
+  return { text: result, nested };
+}
+
+// The statement after the leading WITH clause: each definition is
+// `name [(columns)] AS [MATERIALIZED] ( body )`, separated by commas.
 function stripCtes(text: string): string {
   if (!/^\s*WITH\b/iu.test(text)) return text;
-  // Skip balanced parentheses of each CTE body.
-  let depth = 0;
-  let last = 0;
-  for (let index = 0; index < text.length; index += 1) {
-    if (text[index] === "(") depth += 1;
-    else if (text[index] === ")") {
-      depth -= 1;
-      if (depth === 0) last = index + 1;
+  const definition = new RegExp(String.raw`^\s*(?:RECURSIVE\s+)?${NAME}\s*(?:\([^)]*\)\s*)?AS\s*(?:NOT\s+MATERIALIZED\s+|MATERIALIZED\s+)?\(`, "iu");
+  let rest = text.replace(/^\s*WITH\b/iu, "");
+  for (;;) {
+    const match = definition.exec(rest);
+    if (!match) return rest;
+    let depth = 1;
+    let index = match[0].length;
+    for (; index < rest.length && depth > 0; index += 1) {
+      if (rest[index] === "(") depth += 1;
+      else if (rest[index] === ")") depth -= 1;
     }
+    rest = rest.slice(index);
+    const comma = /^\s*,/u.exec(rest);
+    if (!comma) return rest;
+    rest = rest.slice(comma[0].length);
   }
-  return text.slice(last);
 }
 
 function tableName(raw: string): string {
