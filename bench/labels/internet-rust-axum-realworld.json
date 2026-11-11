@@ -1,6 +1,131 @@
 {
   "sample": "internet-rust-axum-realworld",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. launchbadge/realworld-axum-sqlx: one library crate plus a bin (src/main.rs). Calls: every call site in src/ whose target is a function or method written in the repository (path calls `module::f()`, `Type::f()`, `Self::f()`, free calls, method calls on typed receivers and on chains, and the `on_constraint` extension method of the `ResultExt` impl for `Result`); calls into axum, sqlx, std or generated code (clap's `Config::parse`, `Extension::from_request`, the sqlx macros) have no repository target and are not labeled. A method call's line is the line of its method name. Handlers named in `.route(..., post(handler))` are passed, not called, and `ArticleFromQuery::into_article` / `CommentFromQuery::into_comment` handed to `map_ok` are not call sites. The first labeling pass listed call sites by grepping a hand-picked set of names and missed `to_jwt` (4 sites) and `get_current_user`; a second pass over every function name defined in src/ added them (they were real repository calls the scan had already resolved, found as unlabeled call sites). Calls inside macro token trees (`assert_eq!(slugify(..), ..)`) are labeled even though the scan does not see them.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. launchbadge/realworld-axum-sqlx: one library crate plus a bin (src/main.rs). Calls: every call site in src/ whose target is a function or method written in the repository (path calls `module::f()`, `Type::f()`, `Self::f()`, free calls, method calls on typed receivers and on chains, and the `on_constraint` extension method of the `ResultExt` impl for `Result`); calls into axum, sqlx, std or generated code (clap's `Config::parse`, `Extension::from_request`, the sqlx macros) have no repository target and are not labeled. A method call's line is the line of its method name. Handlers named in `.route(..., post(handler))` are passed, not called, and `ArticleFromQuery::into_article` / `CommentFromQuery::into_comment` handed to `map_ok` are not call sites. The first labeling pass listed call sites by grepping a hand-picked set of names and missed `to_jwt` (4 sites) and `get_current_user`; a second pass over every function name defined in src/ added them (they were real repository calls the scan had already resolved, found as unlabeled call sites). Calls inside macro token trees (`assert_eq!(slugify(..), ..)`) are labeled even though the scan does not see them. Routes: every `.route(path, get(h).post(h2))` registration of the four `router()` functions (users, profiles, articles, comments), one label per method with the path as written (the paths are absolute, `api_router` merges the routers without a prefix) and the line of the `.route(` call; the middleware and the `Extension` layer in `src/http/mod.rs` register no routes.",
+  "routes": {
+    "scope": [
+      "src/http/users.rs",
+      "src/http/profiles.rs",
+      "src/http/articles/mod.rs",
+      "src/http/articles/comments.rs",
+      "src/http/mod.rs"
+    ],
+    "items": [
+      {
+        "method": "POST",
+        "path": "/api/users",
+        "file": "src/http/users.rs",
+        "line": 16
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/login",
+        "file": "src/http/users.rs",
+        "line": 17
+      },
+      {
+        "method": "GET",
+        "path": "/api/user",
+        "file": "src/http/users.rs",
+        "line": 18
+      },
+      {
+        "method": "PUT",
+        "path": "/api/user",
+        "file": "src/http/users.rs",
+        "line": 18
+      },
+      {
+        "method": "GET",
+        "path": "/api/profiles/:username",
+        "file": "src/http/profiles.rs",
+        "line": 14
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/:username/follow",
+        "file": "src/http/profiles.rs",
+        "line": 15
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/profiles/:username/follow",
+        "file": "src/http/profiles.rs",
+        "line": 15
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles",
+        "file": "src/http/articles/mod.rs",
+        "line": 21
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles",
+        "file": "src/http/articles/mod.rs",
+        "line": 21
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/feed",
+        "file": "src/http/articles/mod.rs",
+        "line": 26
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/:slug",
+        "file": "src/http/articles/mod.rs",
+        "line": 27
+      },
+      {
+        "method": "PUT",
+        "path": "/api/articles/:slug",
+        "file": "src/http/articles/mod.rs",
+        "line": 27
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/:slug",
+        "file": "src/http/articles/mod.rs",
+        "line": 27
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/:slug/favorite",
+        "file": "src/http/articles/mod.rs",
+        "line": 31
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/:slug/favorite",
+        "file": "src/http/articles/mod.rs",
+        "line": 31
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags",
+        "file": "src/http/articles/mod.rs",
+        "line": 37
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/:slug/comments",
+        "file": "src/http/articles/comments.rs",
+        "line": 15
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/:slug/comments",
+        "file": "src/http/articles/comments.rs",
+        "line": 15
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/:slug/comments/:comment_id",
+        "file": "src/http/articles/comments.rs",
+        "line": 19
+      }
+    ]
+  },
   "calls": {
     "files": [
       "src/main.rs",

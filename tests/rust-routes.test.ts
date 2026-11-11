@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
+import { mkdtemp } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
-import { describe, it } from "node:test";
+import { after, before, describe, it } from "node:test";
+import { callMcpTool } from "../src/adapters/mcp/tools.js";
+import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 
@@ -93,5 +97,37 @@ describe("Rust warp routes", () => {
       ["POST", "/api/users", "src/main.rs:14", "create_user", ["create_user"]],
       ["GET", "/health", "src/main.rs:21", "<closure>", []],
     ]);
+  });
+});
+
+describe("route MCP tools on Rust", () => {
+  let store: GraphStore;
+  const tool = async (name: string, args: Record<string, unknown>) => (await callMcpTool(store, name, args)).structuredContent as Record<string, any>;
+
+  before(async () => {
+    const graph = await scan("rust-axum");
+    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-routes-")), "graph"));
+    await store.reset();
+    await store.write(graph.nodes, graph.relationships);
+  });
+  after(async () => {
+    await store.close();
+  });
+
+  it("list_routes, route_details and impact_of work on axum routes", async () => {
+    const listed = await tool("list_routes", { framework: "axum" });
+    assert.equal(listed.routes.length, 9);
+    assert.deepEqual(listed.dynamicRouteCalls, [{ file: "src/api/public.rs", line: 6, expression: "router.route", framework: "axum" }]);
+
+    const details = await tool("route_details", { method: "get", path: "/admin/stats" });
+    assert.equal(details.routes.length, 1);
+    assert.deepEqual(details.routes[0].lifecycle.map((step: any) => [step.role, step.name]), [
+      ["middleware", "log_requests"],
+      ["middleware", "require_admin"],
+      ["handler", "stats"],
+    ]);
+
+    const impact = await tool("impact_of", { symbol: "show_user" });
+    assert.deepEqual(impact.routes.map((route: any) => route.fullPath), ["/api/users/:id"]);
   });
 });

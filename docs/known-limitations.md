@@ -1463,7 +1463,9 @@ Astro).
   arms are matched by the command's own name, not its path, and a command that has
   subcommands is not an EntryPoint itself.
 - Measured on the pinned `internet-rust-axum-realworld` (axum + sqlx, one library
-  crate and a bin): 47 hand-labeled call sites with a repository target, precision
+  crate and a bin): 19 hand-labeled routes, precision 100%, recall 100%, full path
+  19/19 (the only Rust sample, and axum only: actix-web, Rocket, warp, tonic and clap are
+  covered by fixtures); 47 hand-labeled call sites with a repository target, precision
   100%, recall 70.2% ([accuracy.md](accuracy.md)). Not measured on a multi-crate
   workspace sample: cross-crate paths are covered by the `rust-workspace` and
   `rust-calls` fixtures only.
