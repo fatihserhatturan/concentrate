@@ -8,7 +8,7 @@ import { createVariableResolver } from "./variable-resolver.js";
 // http-clients and trpc parse plugins) to the Route it reaches, matched on the method
 // and the route's full path. Only same-origin paths (`/api/users`) are
 // matched. A `${…}` segment of a template URL matches a route parameter
-// (`:id`, `[id]`, `{id}`); a literal segment matches the same literal or a
+// (`:id`, `[id]`, `{id}`, Flask and Django `<id>` / `<int:id>`; `<path:p>` is a catch-all); a literal segment matches the same literal or a
 // parameter; a catch-all (`*`, `[...slug]`, `[[...slug]]`, `:path*`) takes
 // the rest. Of the routes that match, the most specific one wins (literal
 // segments over parameters over catch-alls); a tie between routes leaves the
@@ -235,7 +235,8 @@ function routeSegments(fullPath: string): RouteSegment[] {
     if (/^\[\.\.\..+\]$/u.test(segment) || segment === "*" || /^:[^/]+[*+]$/u.test(segment) || segment === "(.*)") {
       return { kind: "catch-all", optional: segment.endsWith("*") && segment !== "*" };
     }
-    if (/^(?::[^/]+|\[[^/]+\]|\{[^/]+\})$/u.test(segment)) return { kind: "param" };
+    if (/^<path:[^/>]+>$/u.test(segment)) return { kind: "catch-all", optional: false };
+    if (/^(?::[^/]+|\[[^/]+\]|\{[^/]+\}|<[^/]+>)$/u.test(segment)) return { kind: "param" };
     return { kind: "literal", value: decodeSegment(segment) };
   });
 }

@@ -1,6 +1,6 @@
 {
   "sample": "internet-python-fastapi-realworld",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. nsidnev/fastapi-realworld-example-app. Routes: every `@router.<method>(..)` decorator under app/api/routes, one label per route, with the full path composed by hand through `router.include_router(.., prefix=..)` in app/api/routes/api.py and app/api/routes/articles/api.py and `application.include_router(api_router, prefix=settings.api_prefix)` in app/main.py (`api_prefix` is `/api`, assigned in app/core/settings/app.py); the line is the decorator's first line. Env (Phase 32): the pydantic v1 `BaseSettings` of app/core/settings (no env_prefix, so each field is the upper-cased variable) read where a function uses `settings.<field>` or `self.<field>` inside the settings class, and `BaseAppSettings().app_env` of get_app_settings. The fields `config()` fills from `environments[app_env]` in get_app_settings are chosen at run time and are not labelled. Data access is not labelled: the repositories use aiosql query files and pypika, which the scan does not read (docs/known-limitations.md).",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. nsidnev/fastapi-realworld-example-app. Routes: every `@router.<method>(..)` decorator under app/api/routes, one label per route, with the full path composed by hand through `router.include_router(.., prefix=..)` in app/api/routes/api.py and app/api/routes/articles/api.py and `application.include_router(api_router, prefix=settings.api_prefix)` in app/main.py (`api_prefix` is `/api`, assigned in app/core/settings/app.py); the line is the decorator's first line. Env (Phase 32): the pydantic v1 `BaseSettings` of app/core/settings (no env_prefix, so each field is the upper-cased variable) read where a function uses `settings.<field>` or `self.<field>` inside the settings class, and `BaseAppSettings().app_env` of get_app_settings. The fields `config()` fills from `environments[app_env]` in get_app_settings are chosen at run time and are not labelled. Data access is not labelled: the repositories use aiosql query files and pypika, which the scan does not read (docs/known-limitations.md). Calls (Phase 33): every call site in app/api/ and app/services/ whose callee name is a function, method or class written in the repository, listed with Python's own ast module and decided by reading the code, not from the tool's output. A method called on a repository is labeled with the class of the receiver's annotation (articles_repo: ArticlesRepository, repo: UsersRepository); a call of a class runs its __init__, and a class without one (the pydantic models, RWAPIKeyHeader) runs library code: target null; super().__call__ in RWAPIKeyHeader runs fastapi's APIKeyHeader (target null); user.check_password in routes/authentication.py runs UserInDB.check_password (the repository returns UserInDB). get_repository(...) and get_current_user_authorizer(...) inside Depends(...) are calls and are labeled. Library calls with a name that nothing in the repository defines are not listed.",
   "routes": {
     "scope": [
       "app/api/routes/"
@@ -119,6 +119,957 @@
         "path": "/api/tags",
         "file": "app/api/routes/tags.py",
         "line": 10
+      }
+    ]
+  },
+  "calls": {
+    "files": [
+      "app/api/__init__.py",
+      "app/api/dependencies/__init__.py",
+      "app/api/dependencies/articles.py",
+      "app/api/dependencies/authentication.py",
+      "app/api/dependencies/comments.py",
+      "app/api/dependencies/database.py",
+      "app/api/dependencies/profiles.py",
+      "app/api/errors/__init__.py",
+      "app/api/errors/http_error.py",
+      "app/api/errors/validation_error.py",
+      "app/api/routes/__init__.py",
+      "app/api/routes/api.py",
+      "app/api/routes/articles/__init__.py",
+      "app/api/routes/articles/api.py",
+      "app/api/routes/articles/articles_common.py",
+      "app/api/routes/articles/articles_resource.py",
+      "app/api/routes/authentication.py",
+      "app/api/routes/comments.py",
+      "app/api/routes/profiles.py",
+      "app/api/routes/tags.py",
+      "app/api/routes/users.py",
+      "app/services/__init__.py",
+      "app/services/articles.py",
+      "app/services/authentication.py",
+      "app/services/comments.py",
+      "app/services/jwt.py",
+      "app/services/security.py"
+    ],
+    "items": [
+      {
+        "file": "app/api/dependencies/articles.py",
+        "line": 28,
+        "callee": "ArticlesFilters",
+        "target": null
+      },
+      {
+        "file": "app/api/dependencies/articles.py",
+        "line": 39,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/dependencies/articles.py",
+        "line": 40,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/dependencies/articles.py",
+        "line": 43,
+        "callee": "get_article_by_slug",
+        "target": {
+          "file": "app/db/repositories/articles.py",
+          "name": "get_article_by_slug",
+          "className": "ArticlesRepository"
+        }
+      },
+      {
+        "file": "app/api/dependencies/articles.py",
+        "line": 53,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/dependencies/articles.py",
+        "line": 55,
+        "callee": "check_user_can_modify_article",
+        "target": {
+          "file": "app/services/articles.py",
+          "name": "check_user_can_modify_article"
+        }
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 27,
+        "callee": "__call__",
+        "target": null
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 47,
+        "callee": "RWAPIKeyHeader",
+        "target": null
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 68,
+        "callee": "RWAPIKeyHeader",
+        "target": null
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 73,
+        "callee": "_get_authorization_header",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "_get_authorization_header"
+        }
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 79,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 80,
+        "callee": "_get_authorization_header_retriever",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "_get_authorization_header_retriever"
+        }
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 84,
+        "callee": "get_username_from_token",
+        "target": {
+          "file": "app/services/jwt.py",
+          "name": "get_username_from_token"
+        }
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 95,
+        "callee": "get_user_by_username",
+        "target": {
+          "file": "app/db/repositories/users.py",
+          "name": "get_user_by_username",
+          "className": "UsersRepository"
+        }
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 104,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 105,
+        "callee": "_get_authorization_header_retriever",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "_get_authorization_header_retriever"
+        }
+      },
+      {
+        "file": "app/api/dependencies/authentication.py",
+        "line": 109,
+        "callee": "_get_current_user",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "_get_current_user"
+        }
+      },
+      {
+        "file": "app/api/dependencies/comments.py",
+        "line": 20,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/dependencies/comments.py",
+        "line": 23,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/dependencies/comments.py",
+        "line": 27,
+        "callee": "get_comment_by_id",
+        "target": {
+          "file": "app/db/repositories/comments.py",
+          "name": "get_comment_by_id",
+          "className": "CommentsRepository"
+        }
+      },
+      {
+        "file": "app/api/dependencies/comments.py",
+        "line": 41,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/dependencies/comments.py",
+        "line": 43,
+        "callee": "check_user_can_modify_comment",
+        "target": {
+          "file": "app/services/comments.py",
+          "name": "check_user_can_modify_comment"
+        }
+      },
+      {
+        "file": "app/api/dependencies/profiles.py",
+        "line": 17,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/dependencies/profiles.py",
+        "line": 18,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/dependencies/profiles.py",
+        "line": 21,
+        "callee": "get_profile_by_username",
+        "target": {
+          "file": "app/db/repositories/profiles.py",
+          "name": "get_profile_by_username",
+          "className": "ProfilesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 30,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 31,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 33,
+        "callee": "get_articles_for_user_feed",
+        "target": {
+          "file": "app/db/repositories/articles.py",
+          "name": "get_articles_for_user_feed",
+          "className": "ArticlesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 39,
+        "callee": "ArticleForResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 41,
+        "callee": "ListOfArticlesInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 54,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 55,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 58,
+        "callee": "add_article_into_favorites",
+        "target": {
+          "file": "app/db/repositories/articles.py",
+          "name": "add_article_into_favorites",
+          "className": "ArticlesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 60,
+        "callee": "ArticleInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 84,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 85,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 88,
+        "callee": "remove_article_from_favorites",
+        "target": {
+          "file": "app/db/repositories/articles.py",
+          "name": "remove_article_from_favorites",
+          "className": "ArticlesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_common.py",
+        "line": 90,
+        "callee": "ArticleInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 33,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 34,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 36,
+        "callee": "filter_articles",
+        "target": {
+          "file": "app/db/repositories/articles.py",
+          "name": "filter_articles",
+          "className": "ArticlesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 47,
+        "callee": "ListOfArticlesInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 61,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 62,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 64,
+        "callee": "get_slug_for_article",
+        "target": {
+          "file": "app/services/articles.py",
+          "name": "get_slug_for_article"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 65,
+        "callee": "check_article_exists",
+        "target": {
+          "file": "app/services/articles.py",
+          "name": "check_article_exists"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 71,
+        "callee": "create_article",
+        "target": {
+          "file": "app/db/repositories/articles.py",
+          "name": "create_article",
+          "className": "ArticlesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 79,
+        "callee": "ArticleInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 86,
+        "callee": "ArticleInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 98,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 100,
+        "callee": "get_slug_for_article",
+        "target": {
+          "file": "app/services/articles.py",
+          "name": "get_slug_for_article"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 101,
+        "callee": "update_article",
+        "target": {
+          "file": "app/db/repositories/articles.py",
+          "name": "update_article",
+          "className": "ArticlesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 106,
+        "callee": "ArticleInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 118,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/articles/articles_resource.py",
+        "line": 120,
+        "callee": "delete_article",
+        "target": {
+          "file": "app/db/repositories/articles.py",
+          "name": "delete_article",
+          "className": "ArticlesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 25,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 34,
+        "callee": "get_user_by_email",
+        "target": {
+          "file": "app/db/repositories/users.py",
+          "name": "get_user_by_email",
+          "className": "UsersRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 38,
+        "callee": "check_password",
+        "target": {
+          "file": "app/models/domain/users.py",
+          "name": "check_password",
+          "className": "UserInDB"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 41,
+        "callee": "create_access_token_for_user",
+        "target": {
+          "file": "app/services/jwt.py",
+          "name": "create_access_token_for_user"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 45,
+        "callee": "UserInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 46,
+        "callee": "UserWithToken",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 64,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 67,
+        "callee": "check_username_is_taken",
+        "target": {
+          "file": "app/services/authentication.py",
+          "name": "check_username_is_taken"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 73,
+        "callee": "check_email_is_taken",
+        "target": {
+          "file": "app/services/authentication.py",
+          "name": "check_email_is_taken"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 79,
+        "callee": "create_user",
+        "target": {
+          "file": "app/db/repositories/users.py",
+          "name": "create_user",
+          "className": "UsersRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 81,
+        "callee": "create_access_token_for_user",
+        "target": {
+          "file": "app/services/jwt.py",
+          "name": "create_access_token_for_user"
+        }
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 85,
+        "callee": "UserInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/authentication.py",
+        "line": 86,
+        "callee": "UserWithToken",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 33,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 34,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 36,
+        "callee": "get_comments_for_article",
+        "target": {
+          "file": "app/db/repositories/comments.py",
+          "name": "get_comments_for_article",
+          "className": "CommentsRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 37,
+        "callee": "ListOfCommentsInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 49,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 50,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 52,
+        "callee": "create_comment_for_article",
+        "target": {
+          "file": "app/db/repositories/comments.py",
+          "name": "create_comment_for_article",
+          "className": "CommentsRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 57,
+        "callee": "CommentInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 69,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/comments.py",
+        "line": 71,
+        "callee": "delete_comment",
+        "target": {
+          "file": "app/db/repositories/comments.py",
+          "name": "delete_comment",
+          "className": "CommentsRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/profiles.py",
+        "line": 24,
+        "callee": "ProfileInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/profiles.py",
+        "line": 34,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/profiles.py",
+        "line": 35,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/profiles.py",
+        "line": 49,
+        "callee": "add_user_into_followers",
+        "target": {
+          "file": "app/db/repositories/profiles.py",
+          "name": "add_user_into_followers",
+          "className": "ProfilesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/profiles.py",
+        "line": 54,
+        "callee": "ProfileInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/profiles.py",
+        "line": 64,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/profiles.py",
+        "line": 65,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/profiles.py",
+        "line": 79,
+        "callee": "remove_user_from_followers",
+        "target": {
+          "file": "app/db/repositories/profiles.py",
+          "name": "remove_user_from_followers",
+          "className": "ProfilesRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/profiles.py",
+        "line": 84,
+        "callee": "ProfileInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/tags.py",
+        "line": 12,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/tags.py",
+        "line": 14,
+        "callee": "get_all_tags",
+        "target": {
+          "file": "app/db/repositories/tags.py",
+          "name": "get_all_tags",
+          "className": "TagsRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/tags.py",
+        "line": 15,
+        "callee": "TagsInList",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 20,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 23,
+        "callee": "create_access_token_for_user",
+        "target": {
+          "file": "app/services/jwt.py",
+          "name": "create_access_token_for_user"
+        }
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 27,
+        "callee": "UserInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 28,
+        "callee": "UserWithToken",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 41,
+        "callee": "get_current_user_authorizer",
+        "target": {
+          "file": "app/api/dependencies/authentication.py",
+          "name": "get_current_user_authorizer"
+        }
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 42,
+        "callee": "get_repository",
+        "target": {
+          "file": "app/api/dependencies/database.py",
+          "name": "get_repository"
+        }
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 46,
+        "callee": "check_username_is_taken",
+        "target": {
+          "file": "app/services/authentication.py",
+          "name": "check_username_is_taken"
+        }
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 53,
+        "callee": "check_email_is_taken",
+        "target": {
+          "file": "app/services/authentication.py",
+          "name": "check_email_is_taken"
+        }
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 59,
+        "callee": "update_user",
+        "target": {
+          "file": "app/db/repositories/users.py",
+          "name": "update_user",
+          "className": "UsersRepository"
+        }
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 61,
+        "callee": "create_access_token_for_user",
+        "target": {
+          "file": "app/services/jwt.py",
+          "name": "create_access_token_for_user"
+        }
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 65,
+        "callee": "UserInResponse",
+        "target": null
+      },
+      {
+        "file": "app/api/routes/users.py",
+        "line": 66,
+        "callee": "UserWithToken",
+        "target": null
+      },
+      {
+        "file": "app/services/articles.py",
+        "line": 11,
+        "callee": "get_article_by_slug",
+        "target": {
+          "file": "app/db/repositories/articles.py",
+          "name": "get_article_by_slug",
+          "className": "ArticlesRepository"
+        }
+      },
+      {
+        "file": "app/services/authentication.py",
+        "line": 7,
+        "callee": "get_user_by_username",
+        "target": {
+          "file": "app/db/repositories/users.py",
+          "name": "get_user_by_username",
+          "className": "UsersRepository"
+        }
+      },
+      {
+        "file": "app/services/authentication.py",
+        "line": 16,
+        "callee": "get_user_by_email",
+        "target": {
+          "file": "app/db/repositories/users.py",
+          "name": "get_user_by_email",
+          "className": "UsersRepository"
+        }
+      },
+      {
+        "file": "app/services/jwt.py",
+        "line": 23,
+        "callee": "JWTMeta",
+        "target": null
+      },
+      {
+        "file": "app/services/jwt.py",
+        "line": 28,
+        "callee": "create_jwt_token",
+        "target": {
+          "file": "app/services/jwt.py",
+          "name": "create_jwt_token"
+        }
+      },
+      {
+        "file": "app/services/jwt.py",
+        "line": 29,
+        "callee": "JWTUser",
+        "target": null
+      },
+      {
+        "file": "app/services/jwt.py",
+        "line": 37,
+        "callee": "JWTUser",
+        "target": null
       }
     ]
   },

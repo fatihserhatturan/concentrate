@@ -1,6 +1,6 @@
 {
   "sample": "internet-python-flask-realworld",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. gothinkster/flask-realworld-example-app. Routes: every `@blueprint.route(path, methods=(..))` of the three views modules (articles, user, profile), one label per method with the path as written (the paths are absolute: the blueprints have no url_prefix and `register_blueprints` in conduit/app.py registers them without one) and the line of the decorator. Flask's `<converter:name>` syntax is kept as written. Data access (Phase 32): every `Model.query…`, `self.query…`, `Model(...)` / typed `.save()` / `.delete()` of the CRUD mixin in a function of conduit/, one label per (function, model, operation). The mixin's own `save` / `delete` / `get_by_id` act on whichever model has the mixin and are not labelled. A `.save()` on a value the code reaches through a relationship (`current_user.profile.save()`, `article.comments…first().delete()`) is labelled although its model is not named. Env: the two `os.environ.get` reads of conduit/settings.py (`request.headers.environ[...]` in conduit/user/views.py is a WSGI dict, not the process environment).",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. gothinkster/flask-realworld-example-app. Routes: every `@blueprint.route(path, methods=(..))` of the three views modules (articles, user, profile), one label per method with the path as written (the paths are absolute: the blueprints have no url_prefix and `register_blueprints` in conduit/app.py registers them without one) and the line of the decorator. Flask's `<converter:name>` syntax is kept as written. Data access (Phase 32): every `Model.query\u2026`, `self.query\u2026`, `Model(...)` / typed `.save()` / `.delete()` of the CRUD mixin in a function of conduit/, one label per (function, model, operation). The mixin's own `save` / `delete` / `get_by_id` act on whichever model has the mixin and are not labelled. A `.save()` on a value the code reaches through a relationship (`current_user.profile.save()`, `article.comments\u2026first().delete()`) is labelled although its model is not named. Env: the two `os.environ.get` reads of conduit/settings.py (`request.headers.environ[...]` in conduit/user/views.py is a WSGI dict, not the process environment). Calls (Phase 33): every call site of conduit/ whose callee name is a function, method or class written in the repository, listed with Python's own ast module and decided by reading the code, not from the tool's output; nested functions (execute_tool in conduit/commands.py) count as written in the repository. A call of a class runs its __init__ (the class itself when it has none: the marshmallow schemas); db.Model.__init__ and Exception.__init__ run library code (target null). .save / .update / .delete on a model run CRUDMixin in conduit/extensions.py, the model_class passed to SQLAlchemy(model_class=CRUDMixin), and so do the calls through current_user.profile; User.get_by_id runs SurrogatePK.get_by_id. error.to_json in the errorhandler is registered for InvalidUsage at runtime and is marked dynamic. Library calls with a name that nothing in the repository defines are not listed.",
   "routes": {
     "scope": [
       "conduit/articles/views.py",
@@ -121,6 +121,743 @@
         "path": "/api/profiles/<username>/follow",
         "file": "conduit/profile/views.py",
         "line": 36
+      }
+    ]
+  },
+  "calls": {
+    "files": [
+      "conduit/__init__.py",
+      "conduit/app.py",
+      "conduit/articles/__init__.py",
+      "conduit/articles/models.py",
+      "conduit/articles/serializers.py",
+      "conduit/articles/views.py",
+      "conduit/commands.py",
+      "conduit/compat.py",
+      "conduit/database.py",
+      "conduit/exceptions.py",
+      "conduit/extensions.py",
+      "conduit/profile/__init__.py",
+      "conduit/profile/models.py",
+      "conduit/profile/serializers.py",
+      "conduit/profile/views.py",
+      "conduit/settings.py",
+      "conduit/user/__init__.py",
+      "conduit/user/models.py",
+      "conduit/user/serializers.py",
+      "conduit/user/views.py",
+      "conduit/utils.py"
+    ],
+    "items": [
+      {
+        "file": "conduit/app.py",
+        "line": 20,
+        "callee": "register_extensions",
+        "target": {
+          "file": "conduit/app.py",
+          "name": "register_extensions"
+        }
+      },
+      {
+        "file": "conduit/app.py",
+        "line": 21,
+        "callee": "register_blueprints",
+        "target": {
+          "file": "conduit/app.py",
+          "name": "register_blueprints"
+        }
+      },
+      {
+        "file": "conduit/app.py",
+        "line": 22,
+        "callee": "register_errorhandlers",
+        "target": {
+          "file": "conduit/app.py",
+          "name": "register_errorhandlers"
+        }
+      },
+      {
+        "file": "conduit/app.py",
+        "line": 23,
+        "callee": "register_shellcontext",
+        "target": {
+          "file": "conduit/app.py",
+          "name": "register_shellcontext"
+        }
+      },
+      {
+        "file": "conduit/app.py",
+        "line": 24,
+        "callee": "register_commands",
+        "target": {
+          "file": "conduit/app.py",
+          "name": "register_commands"
+        }
+      },
+      {
+        "file": "conduit/app.py",
+        "line": 52,
+        "callee": "to_json",
+        "dynamic": true
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "line": 28,
+        "callee": "__init__",
+        "target": null
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "line": 41,
+        "callee": "reference_col",
+        "target": {
+          "file": "conduit/database.py",
+          "name": "reference_col"
+        }
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "line": 43,
+        "callee": "reference_col",
+        "target": {
+          "file": "conduit/database.py",
+          "name": "reference_col"
+        }
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "line": 46,
+        "callee": "__init__",
+        "target": null
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "line": 59,
+        "callee": "reference_col",
+        "target": {
+          "file": "conduit/database.py",
+          "name": "reference_col"
+        }
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "line": 73,
+        "callee": "__init__",
+        "target": null
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "line": 77,
+        "callee": "is_favourite",
+        "target": {
+          "file": "conduit/articles/models.py",
+          "name": "is_favourite",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "conduit/articles/models.py",
+        "line": 83,
+        "callee": "is_favourite",
+        "target": {
+          "file": "conduit/articles/models.py",
+          "name": "is_favourite",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "conduit/articles/serializers.py",
+        "line": 85,
+        "callee": "ArticleSchema",
+        "target": null
+      },
+      {
+        "file": "conduit/articles/serializers.py",
+        "line": 86,
+        "callee": "ArticleSchemas",
+        "target": null
+      },
+      {
+        "file": "conduit/articles/serializers.py",
+        "line": 87,
+        "callee": "CommentSchema",
+        "target": null
+      },
+      {
+        "file": "conduit/articles/serializers.py",
+        "line": 88,
+        "callee": "CommentsSchema",
+        "target": null
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 44,
+        "callee": "Article",
+        "target": {
+          "file": "conduit/articles/models.py",
+          "name": "__init__",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 50,
+        "callee": "Tags",
+        "target": {
+          "file": "conduit/articles/models.py",
+          "name": "__init__",
+          "className": "Tags"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 51,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 52,
+        "callee": "add_tag",
+        "target": {
+          "file": "conduit/articles/models.py",
+          "name": "add_tag",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 53,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 64,
+        "callee": "article_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "article_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 65,
+        "callee": "update",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "update",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 66,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 74,
+        "callee": "delete",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "delete",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 84,
+        "callee": "article_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "article_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 95,
+        "callee": "article_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "article_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 96,
+        "callee": "favourite",
+        "target": {
+          "file": "conduit/articles/models.py",
+          "name": "favourite",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 97,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 108,
+        "callee": "article_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "article_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 109,
+        "callee": "unfavourite",
+        "target": {
+          "file": "conduit/articles/models.py",
+          "name": "unfavourite",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 110,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 142,
+        "callee": "article_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "article_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 153,
+        "callee": "article_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "article_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 154,
+        "callee": "Comment",
+        "target": {
+          "file": "conduit/articles/models.py",
+          "name": "__init__",
+          "className": "Comment"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 155,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 164,
+        "callee": "article_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "article_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/articles/views.py",
+        "line": 167,
+        "callee": "delete",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "delete",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/commands.py",
+        "line": 46,
+        "callee": "execute_tool",
+        "target": {
+          "file": "conduit/commands.py",
+          "name": "execute_tool"
+        }
+      },
+      {
+        "file": "conduit/commands.py",
+        "line": 47,
+        "callee": "execute_tool",
+        "target": {
+          "file": "conduit/commands.py",
+          "name": "execute_tool"
+        }
+      },
+      {
+        "file": "conduit/exceptions.py",
+        "line": 8,
+        "callee": "template",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "template"
+        }
+      },
+      {
+        "file": "conduit/exceptions.py",
+        "line": 9,
+        "callee": "template",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "template"
+        }
+      },
+      {
+        "file": "conduit/exceptions.py",
+        "line": 10,
+        "callee": "template",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "template"
+        }
+      },
+      {
+        "file": "conduit/exceptions.py",
+        "line": 11,
+        "callee": "template",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "template"
+        }
+      },
+      {
+        "file": "conduit/exceptions.py",
+        "line": 12,
+        "callee": "template",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "template"
+        }
+      },
+      {
+        "file": "conduit/exceptions.py",
+        "line": 19,
+        "callee": "__init__",
+        "target": null
+      },
+      {
+        "file": "conduit/extensions.py",
+        "line": 19,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/extensions.py",
+        "line": 25,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/extensions.py",
+        "line": 36,
+        "callee": "delete",
+        "target": null
+      },
+      {
+        "file": "conduit/profile/models.py",
+        "line": 18,
+        "callee": "reference_col",
+        "target": {
+          "file": "conduit/database.py",
+          "name": "reference_col"
+        }
+      },
+      {
+        "file": "conduit/profile/models.py",
+        "line": 28,
+        "callee": "__init__",
+        "target": null
+      },
+      {
+        "file": "conduit/profile/models.py",
+        "line": 34,
+        "callee": "is_following",
+        "target": {
+          "file": "conduit/profile/models.py",
+          "name": "is_following",
+          "className": "UserProfile"
+        }
+      },
+      {
+        "file": "conduit/profile/models.py",
+        "line": 40,
+        "callee": "is_following",
+        "target": {
+          "file": "conduit/profile/models.py",
+          "name": "is_following",
+          "className": "UserProfile"
+        }
+      },
+      {
+        "file": "conduit/profile/models.py",
+        "line": 48,
+        "callee": "is_following",
+        "target": {
+          "file": "conduit/profile/models.py",
+          "name": "is_following",
+          "className": "UserProfile"
+        }
+      },
+      {
+        "file": "conduit/profile/serializers.py",
+        "line": 26,
+        "callee": "ProfileSchema",
+        "target": null
+      },
+      {
+        "file": "conduit/profile/serializers.py",
+        "line": 27,
+        "callee": "ProfileSchema",
+        "target": null
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "line": 20,
+        "callee": "user_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "user_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "line": 30,
+        "callee": "user_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "user_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "line": 31,
+        "callee": "follow",
+        "target": {
+          "file": "conduit/profile/models.py",
+          "name": "follow",
+          "className": "UserProfile"
+        }
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "line": 32,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "line": 42,
+        "callee": "user_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "user_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "line": 43,
+        "callee": "unfollow",
+        "target": {
+          "file": "conduit/profile/models.py",
+          "name": "unfollow",
+          "className": "UserProfile"
+        }
+      },
+      {
+        "file": "conduit/profile/views.py",
+        "line": 44,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/user/models.py",
+        "line": 23,
+        "callee": "__init__",
+        "target": null
+      },
+      {
+        "file": "conduit/user/models.py",
+        "line": 25,
+        "callee": "set_password",
+        "target": {
+          "file": "conduit/user/models.py",
+          "name": "set_password",
+          "className": "User"
+        }
+      },
+      {
+        "file": "conduit/user/serializers.py",
+        "line": 37,
+        "callee": "UserSchema",
+        "target": null
+      },
+      {
+        "file": "conduit/user/serializers.py",
+        "line": 38,
+        "callee": "UserSchema",
+        "target": null
+      },
+      {
+        "file": "conduit/user/views.py",
+        "line": 22,
+        "callee": "User",
+        "target": {
+          "file": "conduit/user/models.py",
+          "name": "__init__",
+          "className": "User"
+        }
+      },
+      {
+        "file": "conduit/user/views.py",
+        "line": 22,
+        "callee": "UserProfile",
+        "target": {
+          "file": "conduit/profile/models.py",
+          "name": "__init__",
+          "className": "UserProfile"
+        }
+      },
+      {
+        "file": "conduit/user/views.py",
+        "line": 22,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/user/views.py",
+        "line": 22,
+        "callee": "save",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "save",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/user/views.py",
+        "line": 26,
+        "callee": "user_already_registered",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "user_already_registered",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/user/views.py",
+        "line": 36,
+        "callee": "check_password",
+        "target": {
+          "file": "conduit/user/models.py",
+          "name": "check_password",
+          "className": "User"
+        }
+      },
+      {
+        "file": "conduit/user/views.py",
+        "line": 40,
+        "callee": "user_not_found",
+        "target": {
+          "file": "conduit/exceptions.py",
+          "name": "user_not_found",
+          "className": "InvalidUsage"
+        }
+      },
+      {
+        "file": "conduit/user/views.py",
+        "line": 62,
+        "callee": "set_password",
+        "target": {
+          "file": "conduit/user/models.py",
+          "name": "set_password",
+          "className": "User"
+        }
+      },
+      {
+        "file": "conduit/user/views.py",
+        "line": 65,
+        "callee": "update",
+        "target": {
+          "file": "conduit/extensions.py",
+          "name": "update",
+          "className": "CRUDMixin"
+        }
+      },
+      {
+        "file": "conduit/utils.py",
+        "line": 7,
+        "callee": "get_by_id",
+        "target": {
+          "file": "conduit/database.py",
+          "name": "get_by_id",
+          "className": "SurrogatePK"
+        }
       }
     ]
   },
