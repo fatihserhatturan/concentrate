@@ -1,0 +1,183 @@
+{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"rust-env","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"env:API_TOKEN","label":"EnvVar","properties":{"name":"API_TOKEN"}}
+{"kind":"node","id":"env:APP_LOG_LEVEL","label":"EnvVar","properties":{"name":"APP_LOG_LEVEL"}}
+{"kind":"node","id":"env:APP_SERVER__HOST","label":"EnvVar","properties":{"name":"APP_SERVER__HOST"}}
+{"kind":"node","id":"env:APP_SERVER__LISTEN_PORT","label":"EnvVar","properties":{"name":"APP_SERVER__LISTEN_PORT"}}
+{"kind":"node","id":"env:BUILD_TAG","label":"EnvVar","properties":{"name":"BUILD_TAG"}}
+{"kind":"node","id":"env:DATABASE_URL","label":"EnvVar","properties":{"name":"DATABASE_URL"}}
+{"kind":"node","id":"env:DEBUG","label":"EnvVar","properties":{"name":"DEBUG"}}
+{"kind":"node","id":"env:GIT_SHA","label":"EnvVar","properties":{"name":"GIT_SHA"}}
+{"kind":"node","id":"env:PORT","label":"EnvVar","properties":{"name":"PORT"}}
+{"kind":"node","id":"env:REGION","label":"EnvVar","properties":{"name":"REGION"}}
+{"kind":"node","id":"env:UNUSED_FLAG","label":"EnvVar","properties":{"name":"UNUSED_FLAG"}}
+{"kind":"node","id":"env:WORKER_COUNT","label":"EnvVar","properties":{"name":"WORKER_COUNT"}}
+{"kind":"node","id":"env:WORKER_MAX_JOBS","label":"EnvVar","properties":{"name":"WORKER_MAX_JOBS"}}
+{"kind":"node","id":"env:WORKER_QUEUE_NAME","label":"EnvVar","properties":{"name":"WORKER_QUEUE_NAME"}}
+{"kind":"node","id":"file:.env.example","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/.env.example","relativePath":".env.example","sourceType":"production"}}
+{"kind":"node","id":"file:Cargo.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/Cargo.toml","relativePath":"Cargo.toml","sourceType":"production"}}
+{"kind":"node","id":"file:src/cli.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/cli.rs","relativePath":"src/cli.rs","rustCrate":"src/main.rs","rustCrateName":"rust_env","rustModule":"cli","sourceType":"production"}}
+{"kind":"node","id":"file:src/cli.rs:class:4:Cli","label":"Class","properties":{"endLine":11,"fields":"[{\"name\":\"database_url\",\"type\":\"String\"},{\"name\":\"worker_count\",\"type\":\"u32\"},{\"name\":\"plain\",\"type\":\"bool\"}]","isAbstract":false,"isExported":false,"line":4,"name":"Cli","visibility":"private"}}
+{"kind":"node","id":"file:src/cli.rs:class:4:Cli:decorator:4:derive","label":"Decorator","properties":{"args":"[\"Parser\"]","expression":"#[derive(Parser)]","line":4,"name":"derive"}}
+{"kind":"node","id":"file:src/cli.rs:entrypoint:18:4:cli:tool","label":"EntryPoint","properties":{"handlerName":"tool","kind":"cli","library":"clap","line":18,"receiverName":null,"trigger":"tool"}}
+{"kind":"node","id":"file:src/cli.rs:entrypoint:4:0:cli:rust_env","label":"EntryPoint","properties":{"handlerName":"Cli","kind":"cli","library":"clap","line":4,"receiverName":"Cli","trigger":"rust_env"}}
+{"kind":"node","id":"file:src/cli.rs:function:13:parse","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":13,"methodKind":null,"name":"parse","parameters":"[]","returnType":"Cli","visibility":"pub"}}
+{"kind":"node","id":"file:src/cli.rs:function:13:parse:call:14:4:Cli::parse","label":"Call","properties":{"callee":"parse","columnNumber":4,"expression":"Cli::parse","line":14,"name":"Cli::parse","receiver":null}}
+{"kind":"node","id":"file:src/cli.rs:function:17:builder","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":17,"methodKind":null,"name":"builder","parameters":"[]","returnType":"clap::Command","visibility":"pub"}}
+{"kind":"node","id":"file:src/cli.rs:function:17:builder:call:18:31:clap::Command::new(\"tool\").arg","label":"Call","properties":{"callee":"arg","columnNumber":31,"expression":"clap::Command::new(\"tool\").arg","line":18,"name":"clap::Command::new(\"tool\").arg","receiver":"clap::Command::new"}}
+{"kind":"node","id":"file:src/cli.rs:function:17:builder:call:18:35:Arg::new","label":"Call","properties":{"callee":"new","columnNumber":35,"expression":"Arg::new","line":18,"name":"Arg::new","receiver":null}}
+{"kind":"node","id":"file:src/cli.rs:function:17:builder:call:18:4:clap::Command::new","label":"Call","properties":{"callee":"new","columnNumber":4,"expression":"clap::Command::new","line":18,"name":"clap::Command::new","receiver":null}}
+{"kind":"node","id":"file:src/cli.rs:function:17:builder:call:18:53:Arg::new(\"token\").env","label":"Call","properties":{"callee":"env","columnNumber":53,"expression":"Arg::new(\"token\").env","line":18,"name":"Arg::new(\"token\").env","receiver":"Arg::new"}}
+{"kind":"node","id":"file:src/cli.rs:import:1:clap::Arg","label":"Import","properties":{"line":1,"source":"clap::Arg","specifier":"use clap::{Arg, Parser};"}}
+{"kind":"node","id":"file:src/cli.rs:import:1:clap::Parser","label":"Import","properties":{"line":1,"source":"clap::Parser","specifier":"use clap::{Arg, Parser};"}}
+{"kind":"node","id":"file:src/main.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/main.rs","relativePath":"src/main.rs","rustCrate":"src/main.rs","rustCrateName":"rust_env","rustModule":"","sourceType":"production"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:10:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"rust","line":10,"receiverName":null,"trigger":null}}
+{"kind":"node","id":"file:src/main.rs:function:10:main","label":"Function","properties":{"className":null,"endLine":18,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":10,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:function:10:main:call:11:22:dotenvy::dotenv().ok","label":"Call","properties":{"callee":"ok","columnNumber":22,"expression":"dotenvy::dotenv().ok","line":11,"name":"dotenvy::dotenv().ok","receiver":"dotenvy::dotenv"}}
+{"kind":"node","id":"file:src/main.rs:function:10:main:call:11:4:dotenvy::dotenv","label":"Call","properties":{"callee":"dotenv","columnNumber":4,"expression":"dotenvy::dotenv","line":11,"name":"dotenvy::dotenv","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:10:main:call:12:15:env::var","label":"Call","properties":{"callee":"var","columnNumber":15,"expression":"env::var","line":12,"name":"env::var","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:10:main:call:12:32:env::var(\"PORT\").unwrap_or_default","label":"Call","properties":{"callee":"unwrap_or_default","columnNumber":32,"expression":"env::var(\"PORT\").unwrap_or_default","line":12,"name":"env::var(\"PORT\").unwrap_or_default","receiver":"env::var"}}
+{"kind":"node","id":"file:src/main.rs:function:10:main:call:13:16:std::env::var_os","label":"Call","properties":{"callee":"var_os","columnNumber":16,"expression":"std::env::var_os","line":13,"name":"std::env::var_os","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:10:main:call:14:14:option_env!","label":"Call","properties":{"callee":"option_env","columnNumber":14,"expression":"option_env!","line":14,"name":"option_env","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:10:main:call:16:14:Router::new","label":"Call","properties":{"callee":"new","columnNumber":14,"expression":"Router::new","line":16,"name":"Router::new","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:10:main:call:16:28:Router::new().route","label":"Call","properties":{"callee":"route","columnNumber":28,"expression":"Router::new().route","line":16,"name":"Router::new().route","receiver":"Router::new"}}
+{"kind":"node","id":"file:src/main.rs:function:10:main:call:16:45:get","label":"Call","properties":{"callee":"get","columnNumber":45,"expression":"get","line":16,"name":"get","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:20:region","label":"Function","properties":{"className":null,"endLine":22,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_item","line":20,"methodKind":null,"name":"region","parameters":"[]","returnType":"String","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:function:20:region:call:21:25:env::var(REGION_KEY).unwrap_or_default","label":"Call","properties":{"callee":"unwrap_or_default","columnNumber":25,"expression":"env::var(REGION_KEY).unwrap_or_default","line":21,"name":"env::var(REGION_KEY).unwrap_or_default","receiver":"env::var"}}
+{"kind":"node","id":"file:src/main.rs:function:20:region:call:21:4:env::var","label":"Call","properties":{"callee":"var","columnNumber":4,"expression":"env::var","line":21,"name":"env::var","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:import:1:cli","label":"Import","properties":{"isModule":true,"line":1,"source":"cli","specifier":"mod cli;"}}
+{"kind":"node","id":"file:src/main.rs:import:2:settings","label":"Import","properties":{"isModule":true,"line":2,"source":"settings","specifier":"mod settings;"}}
+{"kind":"node","id":"file:src/main.rs:import:4:axum::Router","label":"Import","properties":{"line":4,"source":"axum::Router","specifier":"use axum::{routing::get, Router};"}}
+{"kind":"node","id":"file:src/main.rs:import:4:axum::routing::get","label":"Import","properties":{"line":4,"source":"axum::routing::get","specifier":"use axum::{routing::get, Router};"}}
+{"kind":"node","id":"file:src/main.rs:import:5:std::env","label":"Import","properties":{"line":5,"source":"std::env","specifier":"use std::env;"}}
+{"kind":"node","id":"file:src/main.rs:route:16:28:GET:/region","label":"Route","properties":{"extractors":null,"framework":"axum","fullPath":"/region","handlerName":"region","layers":null,"line":16,"method":"GET","path":"/region","pathExpression":null,"pendingHandlerRefs":null,"receiverName":null,"scopeFunctionId":"file:src/main.rs:function:10:main"}}
+{"kind":"node","id":"file:src/main.rs:variable:7:REGION_KEY","label":"Variable","properties":{"isExported":false,"kind":"const","line":7,"name":"REGION_KEY","stringValue":"REGION","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:variable:8:BUILD_TAG","label":"Variable","properties":{"isExported":false,"kind":"static","line":8,"name":"BUILD_TAG","visibility":"private"}}
+{"kind":"node","id":"file:src/settings.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/settings.rs","relativePath":"src/settings.rs","rustCrate":"src/main.rs","rustCrateName":"rust_env","rustModule":"settings","sourceType":"production"}}
+{"kind":"node","id":"file:src/settings.rs:class:12:Settings","label":"Class","properties":{"endLine":15,"fields":"[{\"name\":\"server\",\"type\":\"Server\"},{\"name\":\"log_level\",\"type\":\"String\"}]","isAbstract":false,"isExported":false,"line":12,"name":"Settings","visibility":"private"}}
+{"kind":"node","id":"file:src/settings.rs:class:12:Settings:decorator:12:derive","label":"Decorator","properties":{"args":"[\"Deserialize\"]","expression":"#[derive(Deserialize)]","line":12,"name":"derive"}}
+{"kind":"node","id":"file:src/settings.rs:class:27:Worker","label":"Class","properties":{"endLine":31,"fields":"[{\"name\":\"queue_name\",\"type\":\"String\"},{\"name\":\"max\",\"type\":\"u32\"}]","isAbstract":false,"isExported":false,"line":27,"name":"Worker","visibility":"private"}}
+{"kind":"node","id":"file:src/settings.rs:class:27:Worker:decorator:27:derive","label":"Decorator","properties":{"args":"[\"Deserialize\"]","expression":"#[derive(Deserialize)]","line":27,"name":"derive"}}
+{"kind":"node","id":"file:src/settings.rs:class:5:Server","label":"Class","properties":{"endLine":9,"fields":"[{\"name\":\"host\",\"type\":\"String\"},{\"name\":\"port\",\"type\":\"u16\"}]","isAbstract":false,"isExported":false,"line":5,"name":"Server","visibility":"private"}}
+{"kind":"node","id":"file:src/settings.rs:class:5:Server:decorator:5:derive","label":"Decorator","properties":{"args":"[\"Deserialize\"]","expression":"#[derive(Deserialize)]","line":5,"name":"derive"}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load","label":"Function","properties":{"className":null,"endLine":24,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":17,"methodKind":null,"name":"load","parameters":"[]","returnType":"Settings","visibility":"pub"}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load:call:18:14:Config::builder","label":"Call","properties":{"callee":"builder","columnNumber":14,"expression":"Config::builder","line":18,"name":"Config::builder","receiver":null}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load:call:19:20:Environment::with_prefix","label":"Call","properties":{"callee":"with_prefix","columnNumber":20,"expression":"Environment::with_prefix","line":19,"name":"Environment::with_prefix","receiver":null}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load:call:19:52:Environment::with_prefix(\"APP\").separator","label":"Call","properties":{"callee":"separator","columnNumber":52,"expression":"Environment::with_prefix(\"APP\").separator","line":19,"name":"Environment::with_prefix(\"APP\").separator","receiver":"Environment::with_prefix"}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load:call:19:9:Config::builder().add_source","label":"Call","properties":{"callee":"add_source","columnNumber":9,"expression":"Config::builder().add_source","line":19,"name":"Config::builder().add_source","receiver":"Config::builder"}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load:call:20:9:Config::builder().add_source(Environment::with_prefix(\"APP\").separator(\"__\")).build","label":"Call","properties":{"callee":"build","columnNumber":9,"expression":"Config::builder().add_source(Environment::with_prefix(\"APP\").separator(\"__\")).build","line":20,"name":"Config::builder().add_source(Environment::with_prefix(\"APP\").separator(\"__\")).build","receiver":"Config::builder"}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load:call:21:9:Config::builder().add_source(Environment::with_prefix(\"APP\").separator(\"__\")).build().unwrap","label":"Call","properties":{"callee":"unwrap","columnNumber":9,"expression":"Config::builder().add_source(Environment::with_prefix(\"APP\").separator(\"__\")).build().unwrap","line":21,"name":"Config::builder().add_source(Environment::with_prefix(\"APP\").separator(\"__\")).build().unwrap","receiver":"Config::builder"}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load:call:22:21:cfg.get_string","label":"Call","properties":{"callee":"get_string","columnNumber":21,"expression":"cfg.get_string","line":22,"name":"cfg.get_string","receiver":"cfg","receiverIsLocal":true}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load:call:23:38:cfg.try_deserialize().unwrap","label":"Call","properties":{"callee":"unwrap","columnNumber":38,"expression":"cfg.try_deserialize().unwrap","line":23,"name":"cfg.try_deserialize().unwrap","receiver":"cfg","receiverIsLocal":true}}
+{"kind":"node","id":"file:src/settings.rs:function:17:load:call:23:8:cfg.try_deserialize","label":"Call","properties":{"callee":"try_deserialize","columnNumber":8,"expression":"cfg.try_deserialize","line":23,"name":"cfg.try_deserialize","receiver":"cfg","receiverIsLocal":true}}
+{"kind":"node","id":"file:src/settings.rs:function:33:worker","label":"Function","properties":{"className":null,"endLine":36,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":33,"methodKind":null,"name":"worker","parameters":"[]","returnType":"Worker","visibility":"pub"}}
+{"kind":"node","id":"file:src/settings.rs:function:33:worker:call:34:20:envy::prefixed","label":"Call","properties":{"callee":"prefixed","columnNumber":20,"expression":"envy::prefixed","line":34,"name":"envy::prefixed","receiver":null}}
+{"kind":"node","id":"file:src/settings.rs:function:33:worker:call:34:46:envy::prefixed(\"WORKER_\").from_env","label":"Call","properties":{"callee":"from_env","columnNumber":46,"expression":"envy::prefixed(\"WORKER_\").from_env","line":34,"name":"envy::prefixed(\"WORKER_\").from_env","receiver":"envy::prefixed"}}
+{"kind":"node","id":"file:src/settings.rs:function:33:worker:call:34:57:envy::prefixed(\"WORKER_\").from_env().unwrap","label":"Call","properties":{"callee":"unwrap","columnNumber":57,"expression":"envy::prefixed(\"WORKER_\").from_env().unwrap","line":34,"name":"envy::prefixed(\"WORKER_\").from_env().unwrap","receiver":"envy::prefixed"}}
+{"kind":"node","id":"file:src/settings.rs:import:1:config::Config","label":"Import","properties":{"line":1,"source":"config::Config","specifier":"use config::{Config, Environment};"}}
+{"kind":"node","id":"file:src/settings.rs:import:1:config::Environment","label":"Import","properties":{"line":1,"source":"config::Environment","specifier":"use config::{Config, Environment};"}}
+{"kind":"node","id":"file:src/settings.rs:import:2:serde::Deserialize","label":"Import","properties":{"line":2,"source":"serde::Deserialize","specifier":"use serde::Deserialize;"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"rust-env","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:.env.example","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Cargo.toml","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/cli.rs","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.rs","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/settings.rs","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/cli.rs:entrypoint:18:4:cli:tool","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/cli.rs:entrypoint:4:0:cli:rust_env","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs","type":"DEFINES_CLASS","to":"file:src/cli.rs:class:4:Cli","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs","type":"DEFINES_FUNCTION","to":"file:src/cli.rs:function:13:parse","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs","type":"DEFINES_FUNCTION","to":"file:src/cli.rs:function:17:builder","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs","type":"IMPORTS","to":"file:src/cli.rs:import:1:clap::Arg","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs","type":"IMPORTS","to":"file:src/cli.rs:import:1:clap::Parser","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs","type":"USES_ENV","to":"env:API_TOKEN","properties":{"access":"clap env","line":18}}
+{"kind":"rel","from":"file:src/cli.rs","type":"USES_ENV","to":"env:DATABASE_URL","properties":{"access":"clap env","line":6}}
+{"kind":"rel","from":"file:src/cli.rs","type":"USES_ENV","to":"env:WORKER_COUNT","properties":{"access":"clap env","line":8}}
+{"kind":"rel","from":"file:src/cli.rs:class:4:Cli","type":"HAS_DECORATOR","to":"file:src/cli.rs:class:4:Cli:decorator:4:derive","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs:function:13:parse","type":"CALLS","to":"file:src/cli.rs:function:13:parse:call:14:4:Cli::parse","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs:function:13:parse","type":"USES_ENV","to":"env:DATABASE_URL","properties":{"access":"clap env","line":6}}
+{"kind":"rel","from":"file:src/cli.rs:function:13:parse","type":"USES_ENV","to":"env:WORKER_COUNT","properties":{"access":"clap env","line":8}}
+{"kind":"rel","from":"file:src/cli.rs:function:17:builder","type":"CALLS","to":"file:src/cli.rs:function:17:builder:call:18:31:clap::Command::new(\"tool\").arg","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs:function:17:builder","type":"CALLS","to":"file:src/cli.rs:function:17:builder:call:18:35:Arg::new","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs:function:17:builder","type":"CALLS","to":"file:src/cli.rs:function:17:builder:call:18:4:clap::Command::new","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs:function:17:builder","type":"CALLS","to":"file:src/cli.rs:function:17:builder:call:18:53:Arg::new(\"token\").env","properties":{}}
+{"kind":"rel","from":"file:src/cli.rs:function:17:builder","type":"USES_ENV","to":"env:API_TOKEN","properties":{"access":"clap env","line":18}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:10:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ROUTE","to":"file:src/main.rs:route:16:28:GET:/region","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:10:main","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:20:region","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_VARIABLE","to":"file:src/main.rs:variable:7:REGION_KEY","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_VARIABLE","to":"file:src/main.rs:variable:8:BUILD_TAG","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:1:cli","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:2:settings","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:4:axum::Router","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:4:axum::routing::get","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:5:std::env","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"USES_ENV","to":"env:BUILD_TAG","properties":{"access":"env!","line":8}}
+{"kind":"rel","from":"file:src/main.rs","type":"USES_ENV","to":"env:DEBUG","properties":{"access":"env::var_os","line":13}}
+{"kind":"rel","from":"file:src/main.rs","type":"USES_ENV","to":"env:GIT_SHA","properties":{"access":"option_env!","line":14}}
+{"kind":"rel","from":"file:src/main.rs","type":"USES_ENV","to":"env:PORT","properties":{"access":"env::var","line":12}}
+{"kind":"rel","from":"file:src/main.rs","type":"USES_ENV","to":"env:REGION","properties":{"access":"env::var","line":21}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:10:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/main.rs:function:10:main","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:11:22:dotenvy::dotenv().ok","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:11:4:dotenvy::dotenv","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:12:15:env::var","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:12:32:env::var(\"PORT\").unwrap_or_default","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:13:16:std::env::var_os","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:14:14:option_env!","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:16:14:Router::new","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:16:28:Router::new().route","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:16:45:get","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"USES_ENV","to":"env:DEBUG","properties":{"access":"env::var_os","line":13}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"USES_ENV","to":"env:GIT_SHA","properties":{"access":"option_env!","line":14}}
+{"kind":"rel","from":"file:src/main.rs:function:10:main","type":"USES_ENV","to":"env:PORT","properties":{"access":"env::var","line":12}}
+{"kind":"rel","from":"file:src/main.rs:function:20:region","type":"CALLS","to":"file:src/main.rs:function:20:region:call:21:25:env::var(REGION_KEY).unwrap_or_default","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:20:region","type":"CALLS","to":"file:src/main.rs:function:20:region:call:21:4:env::var","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:20:region","type":"USES_ENV","to":"env:REGION","properties":{"access":"env::var","line":21}}
+{"kind":"rel","from":"file:src/main.rs:import:1:cli","type":"RESOLVES_TO","to":"file:src/cli.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:2:settings","type":"RESOLVES_TO","to":"file:src/settings.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:route:16:28:GET:/region","type":"ROUTE_HANDLED_BY","to":"file:src/main.rs:function:20:region","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:route:16:28:GET:/region","type":"ROUTE_LIFECYCLE_STEP","to":"file:src/main.rs:function:20:region","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:src/main.rs:route:16:28:GET:/region","type":"USES_ENV","to":"env:REGION","properties":{"access":"env::var","line":21}}
+{"kind":"rel","from":"file:src/settings.rs","type":"DEFINES_CLASS","to":"file:src/settings.rs:class:12:Settings","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs","type":"DEFINES_CLASS","to":"file:src/settings.rs:class:27:Worker","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs","type":"DEFINES_CLASS","to":"file:src/settings.rs:class:5:Server","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs","type":"DEFINES_FUNCTION","to":"file:src/settings.rs:function:17:load","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs","type":"DEFINES_FUNCTION","to":"file:src/settings.rs:function:33:worker","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs","type":"IMPORTS","to":"file:src/settings.rs:import:1:config::Config","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs","type":"IMPORTS","to":"file:src/settings.rs:import:1:config::Environment","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs","type":"IMPORTS","to":"file:src/settings.rs:import:2:serde::Deserialize","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs","type":"USES_ENV","to":"env:APP_LOG_LEVEL","properties":{"access":"config get_string","line":22}}
+{"kind":"rel","from":"file:src/settings.rs","type":"USES_ENV","to":"env:APP_LOG_LEVEL","properties":{"access":"config try_deserialize","line":14}}
+{"kind":"rel","from":"file:src/settings.rs","type":"USES_ENV","to":"env:APP_SERVER__HOST","properties":{"access":"config try_deserialize","line":6}}
+{"kind":"rel","from":"file:src/settings.rs","type":"USES_ENV","to":"env:APP_SERVER__LISTEN_PORT","properties":{"access":"config try_deserialize","line":8}}
+{"kind":"rel","from":"file:src/settings.rs","type":"USES_ENV","to":"env:WORKER_MAX_JOBS","properties":{"access":"envy","line":30}}
+{"kind":"rel","from":"file:src/settings.rs","type":"USES_ENV","to":"env:WORKER_QUEUE_NAME","properties":{"access":"envy","line":28}}
+{"kind":"rel","from":"file:src/settings.rs:class:12:Settings","type":"HAS_DECORATOR","to":"file:src/settings.rs:class:12:Settings:decorator:12:derive","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:class:27:Worker","type":"HAS_DECORATOR","to":"file:src/settings.rs:class:27:Worker:decorator:27:derive","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:class:5:Server","type":"HAS_DECORATOR","to":"file:src/settings.rs:class:5:Server:decorator:5:derive","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"CALLS","to":"file:src/settings.rs:function:17:load:call:18:14:Config::builder","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"CALLS","to":"file:src/settings.rs:function:17:load:call:19:20:Environment::with_prefix","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"CALLS","to":"file:src/settings.rs:function:17:load:call:19:52:Environment::with_prefix(\"APP\").separator","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"CALLS","to":"file:src/settings.rs:function:17:load:call:19:9:Config::builder().add_source","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"CALLS","to":"file:src/settings.rs:function:17:load:call:20:9:Config::builder().add_source(Environment::with_prefix(\"APP\").separator(\"__\")).build","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"CALLS","to":"file:src/settings.rs:function:17:load:call:21:9:Config::builder().add_source(Environment::with_prefix(\"APP\").separator(\"__\")).build().unwrap","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"CALLS","to":"file:src/settings.rs:function:17:load:call:22:21:cfg.get_string","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"CALLS","to":"file:src/settings.rs:function:17:load:call:23:38:cfg.try_deserialize().unwrap","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"CALLS","to":"file:src/settings.rs:function:17:load:call:23:8:cfg.try_deserialize","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"USES_ENV","to":"env:APP_LOG_LEVEL","properties":{"access":"config get_string","line":22}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"USES_ENV","to":"env:APP_LOG_LEVEL","properties":{"access":"config try_deserialize","line":14}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"USES_ENV","to":"env:APP_SERVER__HOST","properties":{"access":"config try_deserialize","line":6}}
+{"kind":"rel","from":"file:src/settings.rs:function:17:load","type":"USES_ENV","to":"env:APP_SERVER__LISTEN_PORT","properties":{"access":"config try_deserialize","line":8}}
+{"kind":"rel","from":"file:src/settings.rs:function:33:worker","type":"CALLS","to":"file:src/settings.rs:function:33:worker:call:34:20:envy::prefixed","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:33:worker","type":"CALLS","to":"file:src/settings.rs:function:33:worker:call:34:46:envy::prefixed(\"WORKER_\").from_env","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:33:worker","type":"CALLS","to":"file:src/settings.rs:function:33:worker:call:34:57:envy::prefixed(\"WORKER_\").from_env().unwrap","properties":{}}
+{"kind":"rel","from":"file:src/settings.rs:function:33:worker","type":"USES_ENV","to":"env:WORKER_MAX_JOBS","properties":{"access":"envy","line":30}}
+{"kind":"rel","from":"file:src/settings.rs:function:33:worker","type":"USES_ENV","to":"env:WORKER_QUEUE_NAME","properties":{"access":"envy","line":28}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:APP_LOG_LEVEL","properties":{"file":".env.example","line":3}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:DATABASE_URL","properties":{"file":".env.example","line":2}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:PORT","properties":{"file":".env.example","line":1}}
+{"kind":"rel","from":"repo:<root>","type":"DECLARES_ENV","to":"env:UNUSED_FLAG","properties":{"file":".env.example","line":4}}

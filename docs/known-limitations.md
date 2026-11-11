@@ -1296,6 +1296,29 @@ Astro).
   and providers are not scoped to the `fx.New` / injector that registers
   them. Values (`fx.Supply`, `wire.Value`) take no dependencies. The calls
   in wire's generated `wire_gen.go` are ordinary calls.
+- Rust env reads are `USES_ENV` from the function that reads (and from its
+  file; an item-level read such as a `static` initializer is the file's):
+  `std::env::var` / `env::var_os`, `dotenvy::var` / `dotenv::var` (and a
+  bare `var` imported from `std::env`) with a string literal or same-file
+  `const` name, and the compile-time `env!` / `option_env!`. `env::set_var`
+  is a write and not recorded. clap derive: `#[arg(env = "X")]` /
+  `#[clap(env = "X")]` and the bare `env` (the field name upper-cased) are
+  read by the function of the same file that calls `Type::parse()` /
+  `parse_from` / `try_parse`, else by the struct's file; a `Parser` parsed in
+  another file (`Config::parse()` in `main.rs`) is the struct's file's read
+  only. The builder's `Arg::new("x").env("X")` is read where it is written.
+  envy: the fields of a same-file struct `envy::from_env::<T>()`,
+  `envy::prefixed("APP_").from_env::<T>()` or a `let x: T = … from_env()`
+  fills, upper-cased (`#[serde(rename = "x")]` honored; `rename_all` and
+  `flatten` are not). The config crate (a file using `Environment`):
+  `Environment::with_prefix("APP")` / `.prefix`, `.prefix_separator`, and
+  `.separator("__")`; `get_string` / `get_int` / `get_bool` / `get_float` /
+  `get_array` / `get_table` / `get::<T>` with a literal key, and the fields
+  of the same-file struct `try_deserialize::<T>()` fills (nested structs
+  followed, joined with the separator). The builder and the reads must be in
+  one file, a dotted key without a `.separator(..)` is not named, and
+  `default_value` / file sources are not env. Variables loaded by `dotenvy`
+  come from the `.env` files, which declare them for Rust projects too.
 - Go env reads are `USES_ENV` from the function that reads (and from its
   file; a package-level read is the file's): `os.Getenv`, `os.LookupEnv`,
   `syscall.Getenv` with a string-literal name, and each `$NAME` / `${NAME}`
