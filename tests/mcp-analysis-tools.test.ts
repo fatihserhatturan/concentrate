@@ -369,3 +369,26 @@ describe("find_unused_exports on Python", () => {
     assert.ok(result.skipped.pythonEntry >= 1);
   });
 });
+
+describe("find_unused_exports on C++", () => {
+  let store: GraphStore;
+  const tool = async (name: string, args: Record<string, unknown>) => (await callMcpTool(store, name, args)).structuredContent as Record<string, any>;
+
+  before(async () => {
+    const graph = await buildCodeGraph(path.resolve("fixtures/cpp-unused"), { continueOnError: false });
+    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-cpp-unused-")), "graph"));
+    await store.reset();
+    await store.write(graph.nodes, graph.relationships);
+  });
+  after(async () => {
+    await store.close();
+  });
+
+  it("judges non-static functions, classes and enums by the unit (foo.h with foo.cpp) that uses them", async () => {
+    const result = await tool("find_unused_exports", {});
+    // Engine and used_api are used from main.cpp; unused_api, Spare and Mode are named by no other unit;
+    // main is an entrypoint; dead_static is a static function nothing calls.
+    assert.deepEqual(result.unusedExports.map((entry: any) => entry.name).sort(), ["Mode", "Spare", "unused_api"]);
+    assert.deepEqual(result.deadFunctions.map((entry: any) => entry.name), ["dead_static"]);
+  });
+});

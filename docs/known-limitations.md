@@ -1924,6 +1924,105 @@ the call recall leaves out:
   multi-crate workspace sample: cross-crate paths are covered by the
   `rust-workspace` and `rust-calls` fixtures only.
 
+## C and C++
+
+- The grammars are tree-sitter-c 0.24.1 and tree-sitter-cpp 0.23.4, vendored as
+  `vendor/grammars/c.wasm` (625,963 bytes) and `cpp.wasm` (3,435,982 bytes). The
+  extensions are `.c`, `.h`, `.cc`, `.cpp`, `.cxx`, `.hpp`, `.hh`, `.hxx`, `.ipp` and
+  `.inl`; a `.h` file is C unless the scan has a C++ source (any of the other
+  extensions but `.c`), then every `.h` is read as C++. The preprocessor is not run.
+- A file with a syntax error is kept: the declaration or statement with the error
+  is left out (lines are listed in a scan warning). Unknown macros are the usual
+  cause: a statement macro (`cJSON_ArrayForEach(a, b) { … }`, `FOO_BEGIN`), a macro
+  that wraps a whole declaration, and `#if` / `#else` branches that open or close a
+  brace on only one side. Three patterns are read as blanks of the same length so
+  they do not cost the declaration: an export or calling-convention macro whose name
+  ends in `_API`, `_LIB`, `_EXPORT`, `_CDECL`, `_STDCALL`, `_CALL`, `_DECL`,
+  `_CONSTANT`, `_VISIBLE`, `_PUBLIC`, `_INLINE` (`class TINYXML2_LIB XMLNode`,
+  `static void * CJSON_CDECL f()`); `#ifdef __cplusplus` / `extern "C" {` / `#endif`
+  guards; and Catch2's string-named tests (`TEST_CASE("name", "[tag]") { … }`,
+  `SECTION("…") { … }`). A macro of another name before a declaration
+  (`MY_EXPORT int f();` is fine, `DECLARE_THING int f();` is not) still drops it.
+  `CJSON_PUBLIC(type) name(…)` style wrappers keep the declaration; the return type is
+  read from inside the wrapper.
+- `#include "…"` resolves relative to the including file, then through the `-I`,
+  `-iquote`, `-isystem` and `-idirafter` directories of `compile_commands.json` (read
+  from the scan root, `build/`, `out/`, `cmake-build-debug/` or `cmake-build-release/`;
+  a file's own command first, the union of all commands for headers), and finally to
+  the only scanned file whose path ends with the written path (a project without
+  compile commands). `#include <…>` resolves only through the include directories;
+  one that does not is external and not counted. A quoted include nothing resolves
+  is counted in `unresolvedRelativeImports`. CMake's `include_directories` and
+  `target_include_directories` are not read yet (Phase 35); neither are `-include`
+  flags, `#include_next`, macro-named includes (`#include MACRO`) or `.def` files.
+- Names are visible through includes: a call sees the declarations of its own file and
+  of every file it includes, transitively. A name that is only reachable because the
+  include did not resolve, or that comes from a library outside the scan, leaves the
+  call unresolved. Nothing is guessed from a bare name. A `.c` file that includes
+  another `.c` (cJSON's tests include `../cJSON.c`) sees its static functions, as the
+  compiler does.
+- Declarations are `Function`, `Class` (struct, union and class, with `bases`,
+  `virtual`, `override`, `isAbstract` for a pure virtual member, and fields with their
+  types), `Enum`, `TypeAlias` (`typedef` and `using`), `Variable` (file-level
+  variables, and object-like `#define` macros with kind `macro`) and, for a
+  function-like `#define`, a `Function` of kind `macro`. Namespaces are not nodes: each
+  declaration carries `namespace` and `qualifiedName` (`geo::Circle::area`), and the
+  file lists `namespaces`, `using namespace`, `using ns::name` and namespace aliases
+  in `cppScope`. `typedef struct { … } Name;` is a struct named `Name`; `typedef struct
+  Tag { … } Name;` is the struct `Tag` and an alias `Name`. Template parameters are
+  kept as written in `typeParameters`; templates are not instantiated.
+- A prototype in a header is a `Function` with `isDeclaration`, linked by `DEFINED_BY`
+  to its definition: the definition of the same qualified name and parameter count (and
+  parameter types when several match) in a file that includes the header, or else the
+  only non-static definition of the name in the scan. A call resolves to the
+  definition (`via: header`); to the prototype only when no definition is scanned
+  (`via: declaration`). Prototypes and macros are not declarations for
+  `find_unused_exports`.
+- Calls: free functions (`f()`, `ns::f()`, `::f()`, `using namespace`, `using ns::f`,
+  namespace aliases, names from enclosing namespaces), members of the enclosing class
+  and its bases, and methods on typed receivers: `T x`, `T* p`, `T& r`, `const T&`
+  parameters, `auto x = T(…)`, `new T`, `std::make_unique<T>` / `make_shared<T>`,
+  smart pointers (`unique_ptr<T>` is a `T`), `this`, fields (also inherited and
+  chained, `a.b.c()`), global variables, `auto x = f()` through `f`'s return type, and
+  `typedef` / `using` aliases. Overloads are chosen by argument count (defaults and
+  `...` allowed); several candidates of one count are all linked (`via: overload`).
+  A virtual call (`virtual` or `override` member, on a base-class receiver) links the
+  base (`via: virtual`) and every override in the classes below it (`via: override`);
+  an explicit `Base::f()` call is not virtual. A macro call resolves to the macro
+  (`via: macro`) because the preprocessor runs first. Constructor calls (`T x(…)`,
+  `new T(…)`, `T(…)`) and destructors, operators, function pointers and calls through
+  `std::function` are not linked; the result of a method call is not typed, so
+  `doc.FirstChildElement("a")->Attribute("b")` leaves the second call unresolved (only a
+  free function's result is typed); templates are not instantiated, so a call on a type
+  that is a template parameter or `decltype` is unresolved, and so is ADL (a call
+  found only through the namespace of its argument).
+- `main` is an `EntryPoint`. GoogleTest `TEST`, `TEST_F`, `TEST_P`, `TYPED_TEST` and
+  `TYPED_TEST_P` (named `Suite.Name`) and Catch2 `TEST_CASE`, `SCENARIO`,
+  `TEST_CASE_METHOD` and the template variants (named by their string) are `Function`
+  nodes of kind `test` with `testKind` `gtest` or `catch2`; a file with one is a test
+  file, and so are `*_test.cc`, `*_unittest.cpp`, `test_*.c` and `*Test.cpp`. Catch2's
+  `SECTION`, `GIVEN`, `WHEN` and `THEN` are read as blocks of their test; they are not
+  nodes. Unity's `TEST_ASSERT*` and `RUN_TEST` are macros and resolve like any macro.
+- `find_unused_exports` judges non-static functions, classes, structs and enums
+  (anything outside an anonymous namespace). `foo.h` and `foo.cpp` count as one unit:
+  a name is used when a call from another unit reaches its definition, or another unit
+  mentions it (a function: in a source file, so a prototype in some other header is no
+  use). `static` and anonymous-namespace functions are checked as `deadFunctions`.
+  Uses through function pointers or macros, and by code outside the scan, are not
+  seen.
+- Measured on the pinned samples (`docs/accuracy.md`): cJSON, 110 of 110 labeled
+  call targets, no false positive; tinyxml2, 9 of 9 on the labeled program, and 642 of
+  the 691 call sites of `tinyxml2.cpp` resolve (the whole sample: 2,674 of 4,871 call sites,
+  54.9%, since `xmltest.cpp` chains method results and calls the C library; cJSON: 2,475
+  of 2,917, 84.8%, the rest mostly `memcpy`, `sprintf`, `strlen` and function pointers in
+  hook structs). Cost: loading the C++ grammar adds
+  about 11 MB of RSS; parsing a header whose macros the grammar cannot read grows the
+  WebAssembly heap (tinyxml2.h before the export macro was read as blank: +285 MB RSS
+  once, reused afterwards), and each parse worker has its own heap. cJSON (161
+  files, 55 code files) scans in 0.25 s and tinyxml2 (272 files) in 1.2 s.
+- Not read yet: CMake and Make (Phase 35), HTTP and RPC frameworks, env and data access
+  (Phase 36).
+
 ## Non-code files
 
 - Every discovered file is a `File` node with a `language` and a `sourceType`.

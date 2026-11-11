@@ -90,6 +90,18 @@
       "version": "0.3.11",
       "sha256": "e03fb5079e88cfe0807056c284fd2b0589cee35df9bbb3d07e72f2f4178de8de",
       "bytes": 2437595
+    },
+    "c": {
+      "package": "tree-sitter-c",
+      "version": "0.24.1",
+      "sha256": "f199f55ba29e49b6c32d7006e49f377d6376dce40b27d2d442c3a34920999c70",
+      "bytes": 625963
+    },
+    "cpp": {
+      "package": "tree-sitter-cpp",
+      "version": "0.23.4",
+      "sha256": "f5ff3ba7af054af846f37dfd2525bdfede95530d5747a8fe30df87d070ece607",
+      "bytes": 3435982
     }
   }
 }

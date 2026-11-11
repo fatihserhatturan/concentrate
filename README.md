@@ -10,7 +10,7 @@
   <img alt="Node.js 22+" src="https://img.shields.io/badge/node-%E2%89%A522-339933.svg">
   <img alt="Runtime dependencies: 1" src="https://img.shields.io/badge/runtime%20deps-1-brightgreen.svg">
   <img alt="MCP: 26 tools" src="https://img.shields.io/badge/MCP-26%20tools-6f42c1.svg">
-  <img alt="Languages" src="https://img.shields.io/badge/languages-TS%20%7C%20JS%20%7C%20Python%20%7C%20Go%20%7C%20Rust-informational.svg">
+  <img alt="Languages" src="https://img.shields.io/badge/languages-TS%20%7C%20JS%20%7C%20Python%20%7C%20Go%20%7C%20Rust%20%7C%20C%2FC%2B%2B-informational.svg">
 </p>
 
 ---
@@ -25,7 +25,7 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 
 | | |
 | --- | --- |
-| **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints (Go `main`, gRPC services and cobra commands, Rust `main`, tonic services and clap commands, Python `__main__` blocks, Celery tasks and click/typer commands included) |
+| **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints (Go `main`, gRPC services and cobra commands, Rust `main`, tonic services and clap commands, Python `__main__` blocks, Celery tasks and click/typer commands, C and C++ `main` and GoogleTest / Catch2 tests included) |
 | **Calls** | call sites resolved to their target declaration across files, barrels and re-exports |
 | **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers; Next.js, Nuxt, SvelteKit and Astro server routes, and tRPC procedures; Go `net/http`, gin, echo, chi, fiber, gorilla/mux, go-pkgz/routegroup and kratos, with groups and routers passed between functions; Rust axum, actix-web, Rocket and warp, with nested routers, scopes and `configure` functions; Python Django and Django REST framework, Flask, FastAPI and Starlette, with blueprints, `include_router` prefixes and `url()` includes |
 | **Components** | React, Vue, Svelte, Astro, Angular and web components, and which component renders which, with the props passed |
@@ -40,7 +40,7 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 | **SQL and protobuf** | tables, columns, indexes and migration order from SQL migrations and schema files, merged with the tables code declares; `.proto` services and rpcs linked to the generated Go server interface and the methods that implement them |
 | **Workspaces** | packages and the dependencies between them, both declared and used in source |
 
-Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux, routegroup, kratos), entrypoints, env reads, data access, outbound HTTP, gRPC calls between services and dependency injection (fx, wire); Rust adds Cargo workspaces, module trees, traits, enums, attributes and path and method call resolution, and the same framework layer as Go: HTTP routes (axum, actix-web, Rocket, warp), tonic and clap entrypoints, env reads, data access (sqlx, diesel, SeaORM) and outbound HTTP (reqwest); Python adds packages, classes, decorators and typed calls plus HTTP routes (Django and Django REST framework, Flask, FastAPI, Starlette) and entrypoints (Celery tasks, click and typer commands, Django management commands); the other languages get structure, imports and calls. Every other file (styles, JSON, YAML, TOML, Markdown, shell, Dockerfile, Makefile, SQL, `.proto`, images) is a `File` node too; [what is read from them](docs/known-limitations.md#non-code-files).
+Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go, Rust, C and C++. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux, routegroup, kratos), entrypoints, env reads, data access, outbound HTTP, gRPC calls between services and dependency injection (fx, wire); Rust adds Cargo workspaces, module trees, traits, enums, attributes and path and method call resolution, and the same framework layer as Go: HTTP routes (axum, actix-web, Rocket, warp), tonic and clap entrypoints, env reads, data access (sqlx, diesel, SeaORM) and outbound HTTP (reqwest); Python adds packages, classes, decorators and typed calls plus HTTP routes (Django and Django REST framework, Flask, FastAPI, Starlette) and entrypoints (Celery tasks, click and typer commands, Django management commands); C and C++ add `#include` resolution (including `compile_commands.json`), namespaces, classes with virtual dispatch, header declarations linked to their definitions, macros and tests ([details](docs/known-limitations.md#c-and-c)); the other languages get structure, imports and calls. Every other file (styles, JSON, YAML, TOML, Markdown, shell, Dockerfile, Makefile, SQL, `.proto`, images) is a `File` node too; [what is read from them](docs/known-limitations.md#non-code-files).
 
 ## How it works
 

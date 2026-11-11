@@ -49,6 +49,7 @@ export type GraphRelationshipType =
   | "HAS_DECORATOR"
   | "HAS_METHOD_DECORATOR"
   | "EXTENDS"
+  | "DEFINED_BY"
   | "IMPLEMENTS"
   | "RE_EXPORTS"
   | "CALLS"

@@ -1,5 +1,6 @@
 import type { IGraphContributor } from "../../contracts/graph-contributor.js";
 import type { GraphNode } from "../../graph/model.js";
+import { addCppRelationships } from "./cpp-calls.js";
 import { addGoImplementsRelationships } from "./go-calls.js";
 import { addPythonInheritanceRelationships } from "./python-inheritance.js";
 import {
@@ -60,6 +61,7 @@ export function addInheritanceRelationships(graph: IGraphContributor): void {
   }
 
   addGoImplementsRelationships(graph, relationshipIndex);
+  addCppRelationships(graph, relationshipIndex);
   addPythonInheritanceRelationships(graph, relationshipIndex, classesByFileAndName, interfacesByFileAndName, importsByFile);
 
   // Rust: `impl Trait for Type` blocks the parser recorded on the file (the

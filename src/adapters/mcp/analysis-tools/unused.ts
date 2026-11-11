@@ -13,7 +13,7 @@ type Row = Record<string, unknown>;
 // (namespace, dynamic or default imports, `export * as`).
 type SurfaceReason = "packageEntry" | "wholeFileImported";
 
-const LANGUAGES = new Set(["typescript", "javascript", "go", "rust", "python"]);
+const LANGUAGES = new Set(["typescript", "javascript", "go", "rust", "python", "c", "cpp"]);
 const MAX_DEAD_FUNCTIONS = 100;
 
 // find_unused_exports: exported declarations nothing in another file uses,
@@ -85,7 +85,8 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
   // Uses through calls, callbacks and class relations from other files (for
   // Go, other packages: its exports are what a package offers others).
   const fileOf = (id: string) => declarationsById.get(id)?.file ?? functions.get(id)?.file ?? null;
-  const scopeOf = (file: string) => (isGo(file) ? path.posix.dirname(file) : isRust(file) ? (files.get(file)?.rustCrate ?? file) : file);
+  // C and C++: `foo.h` and `foo.cpp` are one unit (a header's names are used by its source).
+  const scopeOf = (file: string) => (isGo(file) ? path.posix.dirname(file) : isRust(file) ? (files.get(file)?.rustCrate ?? file) : isCpp(file) ? file.replace(/\.[^./]+$/u, "") : file);
   const calledAnywhere = new Set<string>();
   for (const link of links.uses) {
     calledAnywhere.add(link.target);
@@ -105,6 +106,9 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
   // Rust: identifier counts per crate, for items the graph has no edges for
   // (types, consts, traits, enums).
   const rustMentions = await identifierIndex(links.rootPath, files, declarations.some((declaration) => isRust(declaration.file)), isRust, scopeOf);
+  // C and C++: identifier counts per unit; a function counts only where it
+  // is written in a source file (a prototype in a header is not a use).
+  const cppMentions = await cppIdentifierIndexes(links.rootPath, files, declarations.some((declaration) => isCpp(declaration.file)), scopeOf);
   const skipReason = (declaration: Declaration, info: FileInfo): string | null => {
     // A binary crate (main.rs, src/bin, examples, tests, benches) has no dependents.
     if (isRust(declaration.file) && isRustBinaryCrate(info.rustCrate)) return "rustBinary";
@@ -128,6 +132,10 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     if (isRust(declaration.file)) {
       if (declaration.visibility !== "pub" || declaration.testKind) continue;
       if (mentionedOutside(rustMentions, declaration.name, scopeOf(declaration.file))) continue;
+    }
+    if (isCpp(declaration.file)) {
+      if (declaration.testKind) continue;
+      if (mentionedOutside(declaration.kind === "function" ? cppMentions.sources : cppMentions.all, declaration.name, scopeOf(declaration.file))) continue;
     }
     const reason = skipReason(declaration, files.get(declaration.file)!);
     if (reason) {
@@ -176,7 +184,7 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     unusedExports: window.take(unused),
     deadFunctions,
     skipped,
-    note: "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. Rust: only `pub` items count; one counts as used when another crate calls it or mentions its name; binary crates (main.rs, src/bin, examples, tests, benches) are skipped, and library items consumed outside the repository are not seen. Python: module-level names that are not private (or are listed in `__all__`); `from m import *` marks the whole module as used, and `__main__.py`, `setup.py`, `manage.py`, `wsgi.py`, `asgi.py` and `conftest.py` are skipped. JavaScript, TypeScript, Python, Go and Rust.",
+    note: "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. Rust: only `pub` items count; one counts as used when another crate calls it or mentions its name; binary crates (main.rs, src/bin, examples, tests, benches) are skipped, and library items consumed outside the repository are not seen. Python: module-level names that are not private (or are listed in `__all__`); `from m import *` marks the whole module as used, and `__main__.py`, `setup.py`, `manage.py`, `wsgi.py`, `asgi.py` and `conftest.py` are skipped. C and C++: a non-static function, class, struct or enum counts as used when a call from another unit (foo.h with foo.cpp is one unit) reaches its definition or another unit mentions its name (for a function, in a source file: a prototype in a header is no use); static and anonymous-namespace functions are checked as deadFunctions only; macros and prototypes are not judged, and uses through function pointers, macros or code outside the repository are not seen. JavaScript, TypeScript, Python, Go, Rust, C and C++.",
   };
 }
 
@@ -190,6 +198,37 @@ function isPython(file: string): boolean {
 
 function isRust(file: string): boolean {
   return file.endsWith(".rs");
+}
+
+function isCpp(file: string): boolean {
+  return /\.(?:c|h|cc|cpp|cxx|hpp|hh|hxx|ipp|inl)$/u.test(file);
+}
+
+const CPP_HEADER = /\.(?:h|hpp|hh|hxx|ipp|inl)$/u;
+
+async function cppIdentifierIndexes(
+  rootPath: string | null,
+  files: ReadonlyMap<string, FileInfo>,
+  needed: boolean,
+  scopeOf: (file: string) => string,
+): Promise<{ all: Map<string, Map<string, number>>; sources: Map<string, Map<string, number>> }> {
+  const all = new Map<string, Map<string, number>>();
+  const sources = new Map<string, Map<string, number>>();
+  if (!needed || !rootPath) return { all, sources };
+  for (const file of files.keys()) {
+    if (!isCpp(file)) continue;
+    const text = await readFile(path.join(rootPath, file), "utf8").catch(() => null);
+    if (text === null) continue;
+    const scope = scopeOf(file);
+    for (const name of text.match(/[A-Za-z_]\w*/gu) ?? []) {
+      for (const index of CPP_HEADER.test(file) ? [all] : [all, sources]) {
+        let byScope = index.get(name);
+        if (!byScope) index.set(name, byScope = new Map());
+        byScope.set(scope, (byScope.get(scope) ?? 0) + 1);
+      }
+    }
+  }
+  return { all, sources };
 }
 
 function isRustBinaryCrate(crateRoot: string | null | undefined): boolean {

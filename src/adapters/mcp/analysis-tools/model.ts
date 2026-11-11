@@ -68,7 +68,7 @@ const declarationQueries: Array<{ kind: DeclarationKind; cypher: string }> = [
     cypher: `
       MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function)
       RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line,
-        n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind
+        n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind, n.isDeclaration AS isDeclaration, n.kind AS nodeKind
     `,
   },
   {
@@ -76,7 +76,7 @@ const declarationQueries: Array<{ kind: DeclarationKind; cypher: string }> = [
     cypher: `
       MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function)
       RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, n.line AS line,
-        false AS isExported
+        false AS isExported, n.isDeclaration AS isDeclaration, n.kind AS nodeKind
     `,
   },
   ...([
@@ -115,6 +115,8 @@ export async function loadDeclarations(engine: IQueryEngine): Promise<Declaratio
       const id = str(row.id);
       const name = str(row.name);
       if (!id || !name || name.startsWith("<") || seen.has(id)) continue;
+      // C and C++: a prototype stands for its definition, and a macro is no function.
+      if (row.isDeclaration === true || row.nodeKind === "macro") continue;
       seen.add(id);
       const className = str(row.className);
       declarations.push({

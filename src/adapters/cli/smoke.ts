@@ -591,6 +591,46 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     },
   },
   {
+    name: "internet-c-cjson",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 161,
+      supportedFiles: 55,
+      otherFiles: 106,
+      parsedFiles: 55,
+      failedFiles: 0,
+      resolvedImports: 90,
+      unresolvedRelativeImports: 1,
+      nodes: 4829,
+      relationships: 7611,
+      fileClassifications: { production: 41, test: 105, fixture: 7, support: 0, generated: 0, docs: 8 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        entrypoints: 52,
+      },
+    },
+  },
+  {
+    name: "internet-cpp-tinyxml2",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 272,
+      supportedFiles: 191,
+      otherFiles: 81,
+      parsedFiles: 191,
+      failedFiles: 0,
+      resolvedImports: 995,
+      unresolvedRelativeImports: 10,
+      nodes: 8592,
+      relationships: 28637,
+      fileClassifications: { production: 207, test: 1, fixture: 0, support: 0, generated: 0, docs: 64 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        entrypoints: 308,
+      },
+    },
+  },
+  {
     name: "internet-rust-axum-realworld",
     suite: "internet",
     expected: {

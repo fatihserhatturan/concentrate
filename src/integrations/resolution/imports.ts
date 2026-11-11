@@ -14,9 +14,11 @@ import {
 import {
   isGoFile,
   isJsTsFile,
+  isCppFile,
   isPythonFile,
   isRustFile,
 } from "../../core/scan/resolution/file-kind.js";
+import { createCppFileIndex, readCppIncludeConfig, resolveCppInclude } from "../languages/cpp/resolution.js";
 import { readPythonProjects } from "../languages/python/project.js";
 import { createPythonResolver, type PythonResolver } from "../languages/python/resolution.js";
 import { readCargoConfig } from "../languages/rust/cargo.js";
@@ -49,6 +51,9 @@ export async function addImportResolutionRelationships(
   const goConfig = await readGoResolutionConfig(rootPath, fileIdByRelativePath.keys());
   const goFilesByDirectory = indexGoFilesByDirectory(fileIdByRelativePath);
   const pythonResolver = await createPythonResolverFor(rootPath, graph, fileIdByRelativePath, importerFileIdByImportId);
+  const importsCpp = [...importerFileIdByImportId.values()].some((importer) => isCppFile(importer));
+  const cppIndex = importsCpp ? createCppFileIndex(fileIdByRelativePath.keys()) : null;
+  const cppConfig = importsCpp ? await readCppIncludeConfig(rootPath) : null;
   const rustTree = await createRustTree(rootPath, graph, fileIdByRelativePath, importerFileIdByImportId);
   // A bare specifier tried only because of `baseUrl` (`next/link` against
   // `baseUrl: "."`) is a package import, not an unresolved one, unless its
@@ -114,6 +119,20 @@ export async function addImportResolutionRelationships(
       }
       if (result.files.length > 0) resolved += 1;
       else if (result.expected) unresolved += 1;
+      continue;
+    }
+
+    // An `#include` is a header of the including file's directory, of an
+    // include directory of compile_commands.json, or external (not counted).
+    if (importerFileId && cppIndex && cppConfig && isCppFile(importerFileId)) {
+      const target = resolveCppInclude(source, node.properties.isSystem === true, importerFileId.slice("file:".length), cppIndex, cppConfig);
+      const targetFileId = target ? fileIdByRelativePath.get(target) : undefined;
+      if (targetFileId) {
+        graph.addRelationship({ from: node.id, to: targetFileId, type: "RESOLVES_TO", properties: {} });
+        resolved += 1;
+      } else if (node.properties.isSystem !== true) {
+        unresolved += 1;
+      }
       continue;
     }
 

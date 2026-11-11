@@ -30,6 +30,8 @@ describe("vendored grammars", () => {
       python: ["a = f(1)", "expression_statement"],
       go: ["package main\nfunc main() {}", "package_clause"],
       rust: ["fn main() {}", "function_item"],
+      c: ["int main(void) { return 0; }", "function_definition"],
+      cpp: ["namespace a { class B {}; }", "namespace_definition"],
       css: ["a { b: c; }", "rule_set"],
       scss: ["$a: 1;\n.b { c: $a; }", "declaration"],
       json: ["{\"a\": [1, 2]}", "object"],

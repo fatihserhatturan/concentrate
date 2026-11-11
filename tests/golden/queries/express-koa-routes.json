@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 84
+        "result": 85
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 84,
+      "schemaVersion": 85,
       "stats": [
         {
           "table": "Repo",
@@ -2678,7 +2678,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind, n.isDeclaration AS isDeclaration, n.kind AS nodeKind",
         "rows": [
           {
             "id": "file:routes.ts:function:10:listUsers",
@@ -2688,7 +2688,9 @@
             "line": 10,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "function_declaration"
           },
           {
             "id": "file:routes.ts:function:14:createUser",
@@ -2698,7 +2700,9 @@
             "line": 14,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "function_declaration"
           },
           {
             "id": "file:routes.ts:function:18:authenticate",
@@ -2708,7 +2712,9 @@
             "line": 18,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "function_declaration"
           },
           {
             "id": "file:routes.ts:function:22:validateUser",
@@ -2718,7 +2724,9 @@
             "line": 22,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "function_declaration"
           },
           {
             "id": "file:routes.ts:function:29:<router.delete:/users/:id:arg1>",
@@ -2728,7 +2736,9 @@
             "line": 29,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "arrow_function"
           },
           {
             "id": "file:routes.ts:function:34:<adminRouter.get:/dashboard:arg1>",
@@ -2738,13 +2748,15 @@
             "line": 34,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "arrow_function"
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, n.line AS line, false AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, n.line AS line, false AS isExported, n.isDeclaration AS isDeclaration, n.kind AS nodeKind",
         "rows": []
       },
       {
@@ -3025,7 +3037,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind, n.isDeclaration AS isDeclaration, n.kind AS nodeKind",
         "rows": [
           {
             "id": "file:routes.ts:function:10:listUsers",
@@ -3035,7 +3047,9 @@
             "line": 10,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "function_declaration"
           },
           {
             "id": "file:routes.ts:function:14:createUser",
@@ -3045,7 +3059,9 @@
             "line": 14,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "function_declaration"
           },
           {
             "id": "file:routes.ts:function:18:authenticate",
@@ -3055,7 +3071,9 @@
             "line": 18,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "function_declaration"
           },
           {
             "id": "file:routes.ts:function:22:validateUser",
@@ -3065,7 +3083,9 @@
             "line": 22,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "function_declaration"
           },
           {
             "id": "file:routes.ts:function:29:<router.delete:/users/:id:arg1>",
@@ -3075,7 +3095,9 @@
             "line": 29,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "arrow_function"
           },
           {
             "id": "file:routes.ts:function:34:<adminRouter.get:/dashboard:arg1>",
@@ -3085,13 +3107,15 @@
             "line": 34,
             "isExported": false,
             "visibility": "public",
-            "testKind": null
+            "testKind": null,
+            "isDeclaration": null,
+            "nodeKind": "arrow_function"
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, n.line AS line, false AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function) RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, n.line AS line, false AS isExported, n.isDeclaration AS isDeclaration, n.kind AS nodeKind",
         "rows": []
       },
       {
