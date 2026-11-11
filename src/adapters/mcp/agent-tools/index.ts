@@ -16,17 +16,17 @@ const limit = (fallback: number) => ({ type: "number", description: `Items per l
 export const agentToolDefinitions = [
   {
     name: "impact_of",
-    description: `What a change to a function, method, class or file affects: transitive callers (with depth) and module-level callers, the routes and entrypoints that run them, the scripts, targets, services and jobs that start the file (runners), the components they implement and the components and pages that render those, the frontend calls reaching affected routes (apiConsumers), stores written with their readers and the components and pages those reach (storeComponents, storePages), and the data models, env vars and config used. A store's name or hook as symbol asks what reading it reaches; a style (.btn, --color) or CSS file, its users.`,
+    description: `What a change to a function, method, class or file affects: transitive callers (with depth), module-level callers, the routes and entrypoints that run them, the scripts, targets, services and jobs starting the file (runners), the components implementing them and the components and pages rendering those, frontend calls reaching affected routes (apiConsumers), stores written with their readers and the components and pages those reach (storeComponents, storePages), and data models, env vars and config used. A store's name or hook as symbol: what reading it reaches; a style (.btn, --color) or CSS file: its users.`,
     inputSchema: objectSchema({
       symbol: { type: "string", description: "Function, method or class name (a class covers all its methods), a store's name or hook, or .class, #id, --property." },
-      file: { type: "string", description: "Scan-relative file or directory path, or a path suffix. Alone, covers every function in it; with symbol, narrows it." },
+      file: { type: "string", description: "File or directory path, or a path suffix. Alone, covers every function in it; with symbol, narrows it." },
       maxDepth,
       limit: limit(50),
     }),
   },
   {
     name: "detect_changes",
-    description: `Git working-tree changes against base (untracked included) on the graph: changed files, the declarations their lines touch, and the impact of the changed functions as in impact_of; files not in the graph go to unscannedFiles.`,
+    description: `Git working-tree changes against base (untracked included): changed files, the declarations their lines touch, and the impact of changed functions as in impact_of; files not in the graph go to unscannedFiles.`,
     inputSchema: objectSchema({
       base: { type: "string", description: "Revision to diff against, such as HEAD, main or HEAD~3. Defaults to HEAD." },
       maxDepth,
@@ -35,7 +35,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "route_details",
-    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the call chain below them (4 levels) with its data access, env vars and config, and its consumers (frontend calls) with their components and pages. A GET also lists the UI pages at that path, with their components, load functions, chain and resources.`,
+    description: `What runs for an HTTP route: handlers, middleware and lifecycle steps in order, the call chain below (4 levels) with data access, env vars and config, and its frontend consumers (components, pages). A GET also lists the UI pages at that path with components, load functions, chain and resources.`,
     inputSchema: objectSchema({
       method: { type: "string", description: "HTTP method, case-insensitive (GET, post, ...)." },
       path: { type: "string", description: "Route or page path, full or as declared." },
@@ -44,7 +44,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "api_consumers",
-    description: `Client calls that reach a route: frontend (fetch, axios, ky, useFetch, SWR, TanStack Query, HttpClient, tRPC) and Go (net/http, resty), each with route, caller, file, line, client, resolved method and URL, and match kind (exact, parameter, catch-all). Filter by route or caller; unfiltered, every linked call.`,
+    description: `Client calls reaching a route: frontend (fetch, axios, ky, useFetch, SWR, TanStack Query, HttpClient, tRPC) and Go (net/http, resty), each with route, caller, file, line, client, resolved method, URL and match kind (exact, parameter, catch-all). Unfiltered, every linked call.`,
     inputSchema: objectSchema({
       method: { type: "string", description: "Route method, case-insensitive (GET, post, query, mutation, ...)." },
       path: { type: "string", description: "Route path, full or as declared (/api/users/:id, post.byId)." },
@@ -57,7 +57,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "get_symbol_source",
-    description: `Source of a declaration, read from disk at the line span of the last scan (at most 400 lines each).`,
+    description: `Source of a declaration, read from disk at its last-scan line span (at most 400 lines each).`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact declaration name; Class.method selects one class's method." },
       file: { type: "string", description: "File or directory path (scan-relative), or a path suffix." },
@@ -67,7 +67,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "get_file_outline",
-    description: `One file's declarations in line order: imports, functions, classes with methods and fields, interfaces, types, enums, variables, routes and entrypoints.`,
+    description: `One file's declarations in line order: imports, functions, classes (methods, fields), interfaces, types, enums, variables, routes, entrypoints.`,
     inputSchema: objectSchema({
       file: { type: "string", description: "Scan-relative file path or a unique path suffix." },
       limit: limit(200),
@@ -75,7 +75,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "component_tree",
-    description: `A UI component's tree, depth levels each way: what it renders and what renders it (props, line, an Astro island's client directive, an Angular template file), unresolved elements (library components), its defining function or class, hooks, and the contexts it reads.`,
+    description: `A UI component's tree, depth levels each way: what it renders and what renders it (props, line, Astro client directive, Angular template file), unresolved (library) elements, its defining function or class, hooks and the contexts it reads.`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
       file: { type: "string", description: "File or directory path, or a path suffix, of the component." },
@@ -85,7 +85,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "find_component_usages",
-    description: `Where a UI component is rendered: each site with the rendering component, file (an Angular component's template file), line, props and Astro client directive; for a context, the functions that read it. Library components such as Link come with resolved: false.`,
+    description: `Where a UI component is rendered: each site with rendering component, file (Angular: template file), line, props and Astro client directive; for a context, its readers. Library components (Link) have resolved: false.`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
       file: { type: "string", description: "File or directory path, or a path suffix, of the component; leaves out unresolved elements." },

@@ -2,7 +2,7 @@ import type { IQueryEngine } from "../../core/contracts/query-engine.js";
 import { quote } from "./cypher.js";
 import { agentTools, agentToolDefinitions } from "./agent-tools/index.js";
 import { analysisTools, analysisToolDefinitions } from "./analysis-tools/index.js";
-import { asObject, objectSchema, optionalBoolean, optionalLimit, optionalString, requiredString } from "./args.js";
+import { asObject, fileTypeFilter, languageProperty, objectSchema, sourceTypeProperty, optionalBoolean, optionalLimit, optionalString, requiredString } from "./args.js";
 import { fitToBudget } from "./budget.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
 import { pagedResult, pageWindow, type PageWindow } from "./paging.js";
@@ -115,7 +115,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "find_definitions",
-    description: "Definitions by name: functions, classes, variables, interfaces (with implementations), type aliases, enums, and class methods (last, with className).",
+    description: "Definitions by name: functions, classes, variables, interfaces (with implementations), type aliases, enums, class methods (last, with className).",
     inputSchema: objectSchema({
       name: {
         type: "string",
@@ -125,6 +125,8 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
         type: "boolean",
         description: "Match the name exactly. Defaults to false.",
       },
+      sourceType: sourceTypeProperty,
+      language: languageProperty,
       limit: {
         type: "number",
         description: "Page size. Defaults to 20.",
@@ -133,7 +135,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "find_callers",
-    description: "Call sites that resolve to functions or methods of this name; a caller is a function, a method (with className) or module-level code. A call through an interface reaches every implementation (targetClassName). unresolvedCalls and completeness say whether any call by that name is unresolved.",
+    description: "Call sites resolving to functions or methods of this name; a caller is a function, a method (with className) or module-level code. A call through an interface reaches every implementation (targetClassName). unresolvedCalls and completeness say whether any call by that name is unresolved.",
     inputSchema: objectSchema({
       name: {
         type: "string",
@@ -157,6 +159,8 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
         type: "string",
         description: "File or directory path (scan-relative), or a path suffix.",
       },
+      sourceType: sourceTypeProperty,
+      language: languageProperty,
       limit: {
         type: "number",
         description: "Page size. Defaults to 50.",
@@ -183,7 +187,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_routes",
-    description: "HTTP routes with file, line, method, path, full path, framework and handler. Registrations whose method or path is computed at runtime (`app[method](url, fn)`) come back in dynamicRouteCalls. unconsumed: true lists the routes no scanned frontend call reaches.",
+    description: "HTTP routes with file, line, method, path, full path, framework and handler. Runtime-computed registrations (`app[method](url, fn)`) are in dynamicRouteCalls.",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -195,7 +199,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       unconsumed: {
         type: "boolean",
-        description: "Only routes no call in the graph requests (see api_consumers), middleware mounts left out. Defaults to false.",
+        description: "Only routes no scanned frontend call reaches, middleware mounts left out. Defaults to false.",
       },
       limit: {
         type: "number",
@@ -205,7 +209,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_pages",
-    description: "UI pages (Next.js, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit, Astro, Angular Router) with file, line, path, full URL path, router, kind and the component each renders.",
+    description: "UI pages (Next.js, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit, Astro, Angular Router) with file, line, path, full URL path, router, kind and rendered component.",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -227,7 +231,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_entrypoints",
-    description: "Non-HTTP backend entrypoints: cron, queue, event, realtime and scheduler handlers; Go main, init, gRPC methods, cobra commands (cli); scripts, make targets, npm scripts, Docker, compose services and CI jobs (kinds script, make, npm-script, docker, compose-service, ci-job), with what each runs.",
+    description: "Non-HTTP entrypoints: cron, queue, event, realtime and scheduler handlers; Go main, init, gRPC methods, cobra commands (cli); scripts, make targets, npm scripts, Docker, compose services, CI jobs (kinds script, make, npm-script, docker, compose-service, ci-job), with what each runs.",
     inputSchema: objectSchema({
       kind: {
         type: "string",
@@ -245,7 +249,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_env_config",
-    description: "Env variable reads, and config declarations with their consumers. unread: true lists the variables .env files declare that no code reads, and those code reads that no env file declares.",
+    description: "Env variable reads, and config declarations with consumers. unread: true lists variables .env files declare that no code reads, and reads no env file declares.",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -267,7 +271,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_data_access",
-    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, bun, sqlc, sql, sqlx) with the files, functions, routes and entrypoints that run them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
+    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, bun, sqlc, sql, sqlx) with the files, functions, routes and entrypoints running them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
     inputSchema: objectSchema({
       model: {
         type: "string",
@@ -293,7 +297,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_tables",
-    description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex; Go gorm, ent, sqlc; SQL migrations) with columns, indexes, migration history, the models mapped to them and their relations, and the routes and entrypoints that use each.",
+    description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex; Go gorm, ent, sqlc; SQL migrations) with columns, indexes, migration history, mapped models, relations, and the routes and entrypoints using each.",
     inputSchema: objectSchema({
       name: { type: "string", description: "Table name substring." },
       library: { type: "string", description: "prisma, typeorm, mongoose, drizzle, knex, gorm, ent, bun, sqlc or sql." },
@@ -302,7 +306,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_rpcs",
-    description: "Rpcs of .proto files: messages, streaming, the generated Go server interface and the methods that implement each.",
+    description: "Rpcs of .proto files: messages, streaming, the generated Go server interface and implementing methods.",
     inputSchema: objectSchema({
       name: { type: "string", description: "Service or rpc substring (user.v1.User/Save)." },
       file: { type: "string", description: ".proto file or directory path, or a path suffix." },
@@ -311,7 +315,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_stores",
-    description: "Frontend state stores (Pinia, Redux Toolkit, Zustand, Jotai, Svelte) with state, getters, actions, the functions that define them, and the functions that read or write them (with the members used). For the components and pages a store change reaches, use impact_of with its name.",
+    description: "Frontend state stores (Pinia, Redux Toolkit, Zustand, Jotai, Svelte) with state, getters, actions, defining functions, and the functions that read or write them (with members used). Components and pages a change reaches: impact_of.",
     inputSchema: objectSchema({
       name: { type: "string", description: "Store name or hook substring." },
       library: { type: "string", description: "pinia, redux, zustand, jotai or svelte." },
@@ -360,21 +364,23 @@ async function findDefinitions(
 ): Promise<Record<string, unknown>> {
   const name = requiredString(args.name, "name");
   const exact = optionalBoolean(args.exact) ?? false;
+  const types = fileTypeFilter(args);
+  const typeFilter = fileTypeCypher(types);
   const { limit, fetch } = window;
   const rows = await definitionQueries(name, exact, fetch);
 
-  return { query: { name, exact, limit }, definitions: await withImplementations(engine, window.take(rows) as DefinitionRow[]) };
+  return { query: { name, exact, ...types, limit }, definitions: await withImplementations(engine, window.take(rows) as DefinitionRow[]) };
 
   async function definitionQueries(symbolName: string, exactMatch: boolean, rowLimit: number): Promise<unknown[]> {
     const queries = [
-      definitionQuery("Function", "DEFINES_FUNCTION", symbolName, exactMatch, rowLimit),
-      definitionQuery("Class", "DEFINES_CLASS", symbolName, exactMatch, rowLimit),
-      definitionQuery("Variable", "DEFINES_VARIABLE", symbolName, exactMatch, rowLimit),
-      definitionQuery("Interface", "DEFINES_INTERFACE", symbolName, exactMatch, rowLimit),
-      definitionQuery("TypeAlias", "DEFINES_TYPE_ALIAS", symbolName, exactMatch, rowLimit),
-      definitionQuery("Enum", "DEFINES_ENUM", symbolName, exactMatch, rowLimit),
+      definitionQuery("Function", "DEFINES_FUNCTION", symbolName, exactMatch, rowLimit, typeFilter),
+      definitionQuery("Class", "DEFINES_CLASS", symbolName, exactMatch, rowLimit, typeFilter),
+      definitionQuery("Variable", "DEFINES_VARIABLE", symbolName, exactMatch, rowLimit, typeFilter),
+      definitionQuery("Interface", "DEFINES_INTERFACE", symbolName, exactMatch, rowLimit, typeFilter),
+      definitionQuery("TypeAlias", "DEFINES_TYPE_ALIAS", symbolName, exactMatch, rowLimit, typeFilter),
+      definitionQuery("Enum", "DEFINES_ENUM", symbolName, exactMatch, rowLimit, typeFilter),
       // Last, so methods never push declarations off the first page.
-      methodDefinitionQuery(symbolName, exactMatch, rowLimit),
+      methodDefinitionQuery(symbolName, exactMatch, rowLimit, typeFilter),
     ];
     const results = await Promise.all(queries.map((query) => engine.query(query)));
     return results.flat();
@@ -522,8 +528,11 @@ async function listExports(
   window: PageWindow,
 ): Promise<Record<string, unknown>> {
   const file = optionalString(args.file);
+  const types = fileTypeFilter(args);
   const { limit, fetch } = window;
-  const { fileFilter, fileNote } = await fileScope(engine, file);
+  const scope = await fileScope(engine, file);
+  const fileFilter = scope.fileFilter + fileTypeCypher(types);
+  const { fileNote } = scope;
   const queries = [
     exportQuery("Function", "DEFINES_FUNCTION", fileFilter, fetch),
     exportQuery("Class", "DEFINES_CLASS", fileFilter, fetch),
@@ -539,7 +548,7 @@ async function listExports(
   const rows = (await Promise.all(queries.map((query) => engine.query(query)))).flat();
 
   return {
-    query: { file, limit },
+    query: { file, ...types, limit },
     exports: window.take(rows),
     ...fileNote,
   };
@@ -944,10 +953,11 @@ function definitionQuery(
   value: string,
   exact: boolean,
   limit: number,
+  typeFilter = "",
 ): string {
   return `
     MATCH (file:File)-[:${relationship}]->(n:${label})
-    WHERE ${namePredicate("n.name", value, exact)}
+    WHERE ${namePredicate("n.name", value, exact)}${typeFilter}
     RETURN n.name AS name,
       '${label}' AS kind,
       file.relativePath AS file,
@@ -961,10 +971,10 @@ function definitionQuery(
 
 // Methods of classes, including class fields that hold a function. A method
 // is exported when its class is.
-function methodDefinitionQuery(value: string, exact: boolean, limit: number): string {
+function methodDefinitionQuery(value: string, exact: boolean, limit: number, typeFilter = ""): string {
   return `
     MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function)
-    WHERE ${namePredicate("n.name", value, exact)}
+    WHERE ${namePredicate("n.name", value, exact)}${typeFilter}
     RETURN n.name AS name,
       'Method' AS kind,
       file.relativePath AS file,
@@ -985,6 +995,14 @@ async function fileScope(engine: GraphQueryEngine, file: string | undefined) {
   return files.length === 0
     ? { fileFilter: "AND false", fileNote: { note: NO_FILE_MATCHED } }
     : { fileFilter: `AND file.relativePath IN [${files.map(quote).join(", ")}]`, fileNote: {} };
+}
+
+// sourceType / language arguments as a Cypher filter on `file`.
+function fileTypeCypher(types: { sourceType?: string; language?: string }): string {
+  return [
+    types.sourceType ? ` AND file.sourceType = ${quote(types.sourceType)}` : "",
+    types.language ? ` AND file.language = ${quote(types.language)}` : "",
+  ].join("");
 }
 
 function exportQuery(label: string, relationship: string, fileFilter: string, limit: number): string {

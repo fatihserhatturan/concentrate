@@ -2303,11 +2303,12 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated, file.packageName AS packageName",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated, file.packageName AS packageName",
         "rows": [
           {
             "file": "main.ts",
             "language": "typescript",
+            "sourceType": "production",
             "isTest": false,
             "isFixture": false,
             "isGenerated": false,
@@ -2316,6 +2317,7 @@
           {
             "file": "utils.ts",
             "language": "typescript",
+            "sourceType": "production",
             "isTest": false,
             "isFixture": false,
             "isGenerated": false,

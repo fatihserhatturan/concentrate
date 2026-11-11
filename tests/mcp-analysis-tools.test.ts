@@ -56,10 +56,10 @@ const PROJECT_FILES: Record<string, string> = {
   "packages/app/src/shapes.test.ts": "import { Square } from './shapes';\nexport const sample = new Square();\n",
 };
 
-async function createProject() {
+async function createProject(files: Record<string, string> = PROJECT_FILES) {
   const root = await mkdtemp(path.join(os.tmpdir(), "concentrate-analysis-"));
   const projectPath = path.join(root, "project");
-  for (const [file, content] of Object.entries(PROJECT_FILES)) {
+  for (const [file, content] of Object.entries(files)) {
     await mkdir(path.dirname(path.join(projectPath, file)), { recursive: true });
     await writeFile(path.join(projectPath, file), content, "utf8");
   }
@@ -271,3 +271,48 @@ describe("analysis MCP tools on Go", () => {
   });
 });
 
+describe("file type filters", () => {
+  it("search_symbols, find_definitions and list_exports filter by sourceType and language", async () => {
+    const typed = await createProject({
+      "package.json": JSON.stringify({ name: "t", private: true }),
+      "src/add.ts": "export function add(a: number, b: number) {\n  return a + b;\n}\n",
+      "src/add.test.ts": "export const sample = 1;\n",
+      "tools/add.go": "package tools\n\nfunc Add(a, b int) int {\n\treturn a + b\n}\n",
+    });
+    try {
+    const tool = async (name: string, args: Record<string, unknown>) => (await callMcpTool(typed.store, name, args)).structuredContent as Record<string, any>;
+    const names = (rows: Array<{ name: string }>) => rows.map((row) => row.name).sort();
+    const all = await tool("search_symbols", { query: "add" });
+    assert.ok(names(all.symbols).includes("add") && names(all.symbols).includes("Add"));
+    const goOnly = await tool("search_symbols", { query: "add", language: "go" });
+    assert.deepEqual(names(goOnly.symbols), ["Add"]);
+    assert.equal(goOnly.query.language, "go");
+    const ts = await tool("search_symbols", { query: "add", language: "TypeScript" });
+    assert.deepEqual(names(ts.symbols), ["add"]);
+
+    const tests = await tool("search_symbols", { query: "sample", sourceType: "test" });
+    assert.deepEqual(names(tests.symbols), ["sample"]);
+    assert.equal((await tool("search_symbols", { query: "sample", sourceType: "production" })).total, 0);
+    assert.equal((await tool("search_symbols", { query: "sample", sourceType: "test", language: "go" })).total, 0);
+    assert.equal((await tool("search_symbols", { query: "sample", language: "cobol" })).total, 0);
+
+    const defsAll = await tool("find_definitions", { name: "sample" });
+    assert.equal(defsAll.definitions.length, 1);
+    assert.equal((await tool("find_definitions", { name: "sample", sourceType: "test" })).definitions.length, 1);
+    assert.equal((await tool("find_definitions", { name: "sample", sourceType: "production" })).definitions.length, 0);
+    const goDefs = await tool("find_definitions", { name: "add", language: "go" });
+    assert.deepEqual(goDefs.definitions.map((row: any) => row.file), ["tools/add.go"]);
+    assert.equal(goDefs.query.language, "go");
+
+    const testExports = await tool("list_exports", { sourceType: "test" });
+    assert.deepEqual(testExports.exports.map((row: any) => row.file), ["src/add.test.ts"]);
+    const goExports = await tool("list_exports", { language: "go" });
+    assert.deepEqual(goExports.exports.map((row: any) => row.name), ["Add"]);
+
+    await assert.rejects(callMcpTool(typed.store, "search_symbols", { query: "x", sourceType: "prod" }), /Unknown sourceType/);
+    await assert.rejects(callMcpTool(typed.store, "find_definitions", { name: "x", sourceType: "prod" }), /Unknown sourceType/);
+    } finally {
+      await typed.store.close();
+    }
+  });
+});
