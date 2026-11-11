@@ -1336,8 +1336,8 @@ Astro).
   `yaml`, `toml`, `markdown`, `shell`, `powershell`, `dockerfile`, `makefile`,
   `sql`, `proto`) or `other` (text) and `asset` (images, fonts, media,
   archives, and any file with a NUL byte in its first 8 000 bytes). They have
-  no declarations unless a later bullet says so (scripts and infrastructure and
-  CSS are read; SQL and `.proto` follow in Phase 25). The scan report counts them as `otherFiles`;
+  no declarations unless a later bullet says so (scripts and infrastructure,
+  CSS, SQL and `.proto` files are read). The scan report counts them as `otherFiles`;
   `supportedFiles` is the number of code files.
 - Vendored grammars (`vendor/grammars`, built with `npm run grammars:build`):
   `css`, `scss`, `json`, `yaml`, `bash`, `powershell`, `make` and `sql`.
@@ -1411,7 +1411,10 @@ Astro).
     stub aside. A service without generated Go code in the scan, a different
     package spelled in `ServiceName`, and clients (calls through
     `Invoke` / `NewStream` already resolve to the implementations) get no rpc
-    link. Other languages' generated code is not read.
+    link. Other languages' generated code is not read. `list_rpcs` returns
+    each rpc with its messages, `servedBy` and `implementations`; an rpc
+    whose generated Go server declares it with no implementation has
+    `servedBy` and an empty `implementations`.
 - SQL files (`.sql`) are read by a scanner of their own
   (`languages/plain/sql-schema.ts`; the vendored sql grammar rejects valid
   code) into `Table` nodes (`library: sql`, `kind: table` or `view`,

@@ -543,3 +543,20 @@ concentrate) and the runs in which the agent called a Concentrate tool:
 - **The cross-service question is out of the graph's reach.** No edge links
   the gateway's `userv1.UserClient.Save` call to `UserService.Save` in the
   user service, so both modes read both sides.
+
+## Non-code files (Phase 25)
+
+[`bench/agent/questions-non-code.json`](../bench/agent/questions-non-code.json)
+has ten questions on files that are not source: Makefile and CI runs, workflow
+env, SQL migration tables, `.proto` rpcs and the Go methods that implement them,
+and CSS class use (`internet-go-simplebank`, `internet-go-kratos-beer-shop`,
+`internet-remark42-frontend`). Expected answers were written from the sample
+files. **Not run yet**: a run costs money, so it waits for approval. Estimate
+from the Go runs above (48 sonnet runs cost $3.45, 48 haiku runs $0.27, so
+about $0.07 and $0.006 a run): ten questions, two modes, three runs is 60
+runs per model, about $4.3 for sonnet and $0.35 for haiku, $4.7 together.
+
+```bash
+npm run bench:agent -- --questions bench/agent/questions-non-code.json --runs 3 --model sonnet --max-turns 25
+npm run bench:agent -- --questions bench/agent/questions-non-code.json --runs 3 --model haiku --max-turns 25
+```

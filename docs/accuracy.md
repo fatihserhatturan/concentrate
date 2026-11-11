@@ -151,13 +151,22 @@ Rules:
   FN.
 - **Scripts:** file, kind, trigger and line (±1). **Runs:** file, kind,
   trigger and target. **Env declarations:** file, line and name.
+- **SQL tables:** one item per table the SQL files declare (a `Table` with
+  migrations, matched by the file that declares it): name, kind and the
+  columns in DDL order, each as `name:type` (lower case, as written), then
+  `?` when nullable, ` pk`, ` unique` and ` -> table.column`. Any difference
+  in a column is an FP and an FN.
+- **Proto rpcs:** file, service (`package.Service`), name, request and
+  response as written, streaming, the generated Go server interface that
+  serves it (or none) and the set of methods that implement it
+  (`path#Type.Method`).
 - **Class links:** the user's file (a component's or function's declaring
   file), line, the class and the style file it is declared in, and the match
   kind (`module`, `import` or `name`) all match. Only classes the project's
   style sheets declare are labeled; `styles[position]`, `:class="link.icon"`
   and `btn-${size}` are not.
 
-## Results (2026-11-10, schema 74)
+## Results (2026-11-11, schema 77)
 
 ### Routes
 
@@ -308,6 +317,30 @@ Makefile and the plain assignments of `wait-for.sh`, such as
 `env:` of the workflow's postgres service container). Two samples with a few
 dozen labels each: the numbers show that these rules hold on a JS app and a
 Go service, not that every Dockerfile, Makefile or workflow is read right.
+
+### SQL tables and proto rpcs
+
+| Kind | Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SQL tables | internet-go-simplebank | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
+| SQL tables | internet-go-clean-arch | 4 | 4 | 0 | 0 | 100.0% | 100.0% |
+| Proto rpcs | internet-go-simplebank | 4 | 4 | 0 | 0 | 100.0% | 100.0% |
+| Proto rpcs | internet-go-kratos-beer-shop | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
+
+Both were written by reading the files, not from the graph's output: simplebank's
+five up migrations (the `ALTER TABLE … ADD FOREIGN KEY` references, the two
+columns added later to `users`), the MySQL dump of go-clean-arch (backticks,
+`int(11) unsigned`, `COLLATE`, `/*! … */` lines, data and `LOCK TABLES` that
+are not DDL), and the `.proto` and `_grpc.pb.go` files with the Go services.
+Catalog's `DeleteBeer` is the labeled case of an rpc a generated server
+interface declares and no type implements, and `listBeerNextTokenReq` is a
+request type spelled with a lower-case first letter in the sample. Neither
+set found a defect: these scanners were fixture-tested against the same
+kinds of statements first, so 100% says the rules hold on a Go service's
+migrations and gRPC code, not that every migration tool or `.proto` layout
+is read. Only the services Concentrate resolves through a generated Go
+server are labeled; the User, ShopInterface, ShopAdmin and Courier services
+of beer-shop are not.
 
 ### Class links
 

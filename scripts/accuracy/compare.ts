@@ -31,6 +31,16 @@ export type EnvDeclarationLabel = { file: string; line: number; name: string };
 // module (styles.btn of a CSS Modules import), import (a sheet the file
 // imports) or name (the same class name elsewhere).
 export type StyleLinkLabel = { file: string; line: number; style: string; styleFile: string; match: string };
+// A table the SQL files declare (a Table with migrations), by name and kind,
+// with its columns in DDL order as `name:type`, then `?` when nullable, ` pk`,
+// ` unique` and ` -> table.column` for a reference; `scope` matches the file
+// that declares it.
+export type SqlTableLabel = { name: string; kind: string; columns: string[] };
+// An rpc of a `.proto` file (`file`), its messages as written, `streaming`
+// (none, client, server or both), the generated Go server interface that
+// serves it (null when none does) and the methods that implement it
+// (`path#Type.Method`).
+export type RpcLabel = { file: string; service: string; name: string; request: string; response: string; streaming: string; served: string | null; implementations: string[] };
 export type ComponentLabel = { file: string; name: string; line: number };
 // `file` and `line` are the rendering element's; `parent` is the component it is in.
 export type RenderLabel = { file: string; parent: string; line: number; child: string; childFile: string };
@@ -75,6 +85,10 @@ export type Labels = {
   envDeclarations?: { scope: string[]; items: EnvDeclarationLabel[] };
   // Class and id uses (USES_STYLE) in the files of `scope`.
   styleLinks?: { scope: string[]; items: StyleLinkLabel[] };
+  // Tables declared by the SQL files of `scope`.
+  sqlTables?: { scope: string[]; items: SqlTableLabel[] };
+  // Rpcs of the `.proto` files of `scope`.
+  rpcs?: { scope: string[]; items: RpcLabel[] };
 };
 
 export type Score = {
@@ -692,5 +706,74 @@ export function compareStyleLinks(graph: Graph, labels: NonNullable<Labels["styl
     label.file === link.file && label.line === link.line && label.style === link.style && label.styleFile === link.styleFile && label.match === link.match
   ));
   const describe = (link: StyleLinkLabel) => `${link.file}:${link.line} ${link.style} (${link.styleFile}, ${link.match})`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+export function scanSqlTables(graph: Graph): Array<SqlTableLabel & { declaredIn: string }> {
+  return graph.nodes.flatMap((node) => {
+    if (node.label !== "Table" || typeof node.properties.migrations !== "string" || node.properties.migrations === "[]") return [];
+    const columns = (JSON.parse(String(node.properties.columns ?? "[]")) as Array<Record<string, unknown>>).map((column) =>
+      `${String(column.name)}:${String(column.type).toLowerCase()}${column.optional ? "?" : ""}${column.isId ? " pk" : ""}${column.isUnique ? " unique" : ""}${column.references ? ` -> ${String(column.references)}` : ""}`);
+    return [{ name: String(node.properties.name), kind: String(node.properties.kind), columns, declaredIn: String(node.properties.declaredIn) }];
+  });
+}
+
+export function compareSqlTables(graph: Graph, labels: NonNullable<Labels["sqlTables"]>): Score {
+  const found = scanSqlTables(graph).filter((table) => inScope(table.declaredIn, labels.scope));
+  const result = pair(labels.items, found, (label, table) => (
+    label.name === table.name && label.kind === table.kind && JSON.stringify(label.columns) === JSON.stringify(table.columns)
+  ));
+  const describe = (table: SqlTableLabel) => `${table.name} (${table.kind}) ${table.columns.join(", ")}`;
+  return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+export function scanRpcs(graph: Graph): Array<RpcLabel> {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const serviceFile = new Map<string, string>();
+  const rpcService = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    if (rel.type === "DECLARES_SERVICE") serviceFile.set(rel.to, String(byId.get(rel.from)?.properties.relativePath));
+    if (rel.type === "HAS_RPC") rpcService.set(rel.to, rel.from);
+  }
+  const served = new Map<string, string>();
+  const implementations = new Map<string, string[]>();
+  for (const rel of graph.relationships) {
+    if (rel.type === "RPC_SERVED_BY") served.set(rel.from, String(byId.get(rel.to)?.properties.name));
+    if (rel.type === "RPC_IMPLEMENTED_BY") {
+      const fn = byId.get(rel.to);
+      if (!fn) continue;
+      const file = rel.to.replace(/^file:/u, "").split(":function:")[0]!;
+      const list = implementations.get(rel.from) ?? [];
+      list.push(`${file}#${fn.properties.className ?? ""}.${String(fn.properties.name)}`);
+      implementations.set(rel.from, list);
+    }
+  }
+  return graph.nodes.flatMap((node) => {
+    if (node.label !== "Rpc") return [];
+    const file = serviceFile.get(rpcService.get(node.id) ?? "");
+    if (file === undefined) return [];
+    const client = node.properties.clientStreaming === true;
+    const server = node.properties.serverStreaming === true;
+    return [{
+      file,
+      service: String(node.properties.service),
+      name: String(node.properties.name),
+      request: String(node.properties.request),
+      response: String(node.properties.response),
+      streaming: client && server ? "both" : client ? "client" : server ? "server" : "none",
+      served: served.get(node.id) ?? null,
+      implementations: (implementations.get(node.id) ?? []).sort(),
+    }];
+  });
+}
+
+export function compareRpcs(graph: Graph, labels: NonNullable<Labels["rpcs"]>): Score {
+  const found = scanRpcs(graph).filter((rpc) => inScope(rpc.file, labels.scope));
+  const result = pair(labels.items, found, (label, rpc) => (
+    label.file === rpc.file && label.service === rpc.service && label.name === rpc.name && label.request === rpc.request
+    && label.response === rpc.response && label.streaming === rpc.streaming && label.served === rpc.served
+    && JSON.stringify([...label.implementations].sort()) === JSON.stringify(rpc.implementations)
+  ));
+  const describe = (rpc: RpcLabel) => `${rpc.service}/${rpc.name} (${rpc.request}) -> ${rpc.response} [${rpc.streaming}] served by ${rpc.served ?? "-"}; ${rpc.implementations.join(", ") || "no implementation"}`;
   return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
 }

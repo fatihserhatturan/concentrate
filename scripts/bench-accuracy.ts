@@ -16,7 +16,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { readSampleManifest, samplesDirectory } from "../src/adapters/cli/smoke.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
-import { compareCalls, compareComponents, compareDataAccess, compareEnv, compareEnvDeclarations, comparePages, compareRenders, compareRequests, compareRoutes, compareRuns, compareScripts, compareStoreAccess, compareStyleLinks, compareStores, sumScores, type Labels, type RouteScore, type Score } from "./accuracy/compare.js";
+import { compareCalls, compareComponents, compareDataAccess, compareEnv, compareEnvDeclarations, comparePages, compareRenders, compareRequests, compareRoutes, compareRuns, compareRpcs, compareScripts, compareSqlTables, compareStoreAccess, compareStyleLinks, compareStores, sumScores, type Labels, type RouteScore, type Score } from "./accuracy/compare.js";
 
 const { values } = parseArgs({
   options: {
@@ -27,12 +27,12 @@ const { values } = parseArgs({
 });
 
 const labelsDirectory = new URL("../bench/labels/", import.meta.url);
-const kinds = ["routes", "calls", "dataAccess", "components", "renders", "pages", "requests", "stores", "storeAccess", "env", "scripts", "runs", "envDeclarations", "styleLinks"] as const;
+const kinds = ["routes", "calls", "dataAccess", "components", "renders", "pages", "requests", "stores", "storeAccess", "env", "scripts", "runs", "envDeclarations", "styleLinks", "sqlTables", "rpcs"] as const;
 type Kind = (typeof kinds)[number];
 
 const labelFiles = (await readdir(labelsDirectory)).filter((file) => file.endsWith(".json")).sort();
 const manifest = await readSampleManifest();
-type Scores = { routes?: RouteScore; calls?: Score; dataAccess?: Score; components?: Score; renders?: Score; pages?: Score; requests?: Score; stores?: Score; storeAccess?: Score; env?: Score; scripts?: Score; runs?: Score; envDeclarations?: Score; styleLinks?: Score };
+type Scores = { routes?: RouteScore; calls?: Score; dataAccess?: Score; components?: Score; renders?: Score; pages?: Score; requests?: Score; stores?: Score; storeAccess?: Score; env?: Score; scripts?: Score; runs?: Score; envDeclarations?: Score; styleLinks?: Score; sqlTables?: Score; rpcs?: Score };
 const results: Array<{ sample: string; scores: Scores }> = [];
 
 for (const labelFile of labelFiles) {
@@ -60,6 +60,8 @@ for (const labelFile of labelFiles) {
   if (labels.runs) scores.runs = compareRuns(graph, labels.runs);
   if (labels.envDeclarations) scores.envDeclarations = compareEnvDeclarations(graph, labels.envDeclarations);
   if (labels.styleLinks) scores.styleLinks = compareStyleLinks(graph, labels.styleLinks);
+  if (labels.sqlTables) scores.sqlTables = compareSqlTables(graph, labels.sqlTables);
+  if (labels.rpcs) scores.rpcs = compareRpcs(graph, labels.rpcs);
   results.push({ sample: labels.sample, scores });
 }
 
@@ -79,6 +81,8 @@ const titles: Record<Kind, string> = {
   runs: "What entrypoints run (RUNS)",
   envDeclarations: "Env declarations (scripts and infrastructure)",
   styleLinks: "Class links (CSS Modules and template class names)",
+  sqlTables: "SQL tables (columns, keys, references)",
+  rpcs: "Proto rpcs (messages, Go server interface, implementations)",
 };
 
 // Routes get one more column: detected routes whose full path is right.

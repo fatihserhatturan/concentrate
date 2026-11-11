@@ -9,6 +9,7 @@ import { pagedResult, pageWindow, type PageWindow } from "./paging.js";
 import { byFileAndLine, callerCompleteness, filesMatching, matchesFileOrDirectory, NO_FILE_MATCHED, unresolvedCalls } from "./agent-tools/graph.js";
 import { listStores } from "./stores.js";
 import { listTables } from "./tables.js";
+import { listRpcs } from "./rpcs.js";
 
 export type McpToolContent = {
   type: "text";
@@ -47,6 +48,7 @@ const graphTools: Record<string, McpTool> = {
   list_env_config: { handler: listEnvConfig, listKey: "envConfig", defaultLimit: 50 },
   list_data_access: { handler: listDataAccess, listKey: "dataAccess", defaultLimit: 50 },
   list_tables: { handler: listTables, listKey: "tables", defaultLimit: 20 },
+  list_rpcs: { handler: listRpcs, listKey: "rpcs", defaultLimit: 20 },
   list_stores: { handler: listStores, listKey: "stores", defaultLimit: 20 },
 };
 const tools: Record<string, McpTool> = { ...graphTools, ...agentTools, ...analysisTools };
@@ -63,6 +65,7 @@ const titles: Record<string, string> = {
   list_env_config: "List env vars and config",
   list_data_access: "List data access",
   list_tables: "List database tables",
+  list_rpcs: "List proto rpcs",
   list_stores: "List state stores",
   impact_of: "Impact of a change",
   detect_changes: "Detect working-tree changes",
@@ -84,7 +87,7 @@ const titles: Record<string, string> = {
 const annotations = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 const cursorProperty = {
   type: "string",
-  description: "page.nextCursor of the previous result.",
+  description: "Previous page.nextCursor.",
 };
 
 function describeTool(definition: McpToolDefinition): McpToolDefinition {
@@ -202,7 +205,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_pages",
-    description: "UI pages (Next.js App and Pages Router, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit, Astro, Angular Router) with file, line, path as declared, full URL path, router, kind (page, layout, index, ...) and the component each renders.",
+    description: "UI pages (Next.js, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit, Astro, Angular Router) with file, line, path, full URL path, router, kind and the component each renders.",
     inputSchema: objectSchema({
       file: {
         type: "string",
@@ -294,6 +297,15 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       name: { type: "string", description: "Table name substring." },
       library: { type: "string", description: "prisma, typeorm, mongoose, drizzle, knex, gorm, ent, bun, sqlc or sql." },
+      limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
+    }),
+  },
+  {
+    name: "list_rpcs",
+    description: "Rpcs of .proto files: messages, streaming, the generated Go server interface and the methods that implement each.",
+    inputSchema: objectSchema({
+      name: { type: "string", description: "Service or rpc substring (user.v1.User/Save)." },
+      file: { type: "string", description: ".proto file or directory path, or a path suffix." },
       limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
     }),
   },

@@ -9,7 +9,7 @@
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
   <img alt="Node.js 22+" src="https://img.shields.io/badge/node-%E2%89%A522-339933.svg">
   <img alt="Runtime dependencies: 1" src="https://img.shields.io/badge/runtime%20deps-1-brightgreen.svg">
-  <img alt="MCP: 25 tools" src="https://img.shields.io/badge/MCP-25%20tools-6f42c1.svg">
+  <img alt="MCP: 26 tools" src="https://img.shields.io/badge/MCP-26%20tools-6f42c1.svg">
   <img alt="Languages" src="https://img.shields.io/badge/languages-TS%20%7C%20JS%20%7C%20Python%20%7C%20Go%20%7C%20Rust-informational.svg">
 </p>
 
@@ -35,9 +35,12 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 | **Dependency injection** | NestJS constructor and property injection chains; Go uber fx and google wire providers |
 | **Configuration** | `process.env.*` and `import.meta.env` reads; Go `os.Getenv`, viper and env struct tags (caarlos0/env, envconfig); linked to the functions and routes that use them and to the variables `.env` files declare |
 | **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle; Go gorm, ent, sqlc, `database/sql` and sqlx (literal SQL): models, tables, and read and write operations |
+| **Scripts and infrastructure** | `package.json` scripts, Makefile targets, shell and PowerShell scripts, Dockerfiles, compose services and GitHub Actions jobs as entrypoints, what each runs, and the env they read and set |
+| **Styles** | CSS, SCSS and Less: classes, ids, custom properties and rules, `@import` / `@use` / `url()` to the files they name, and the components and templates that use a class (CSS Modules exactly; `className`, `class`, `:class` and `[ngClass]` by name), so a class or `--property` change has an impact answer |
+| **SQL and protobuf** | tables, columns, indexes and migration order from SQL migrations and schema files, merged with the tables code declares; `.proto` services and rpcs linked to the generated Go server interface and the methods that implement them |
 | **Workspaces** | packages and the dependencies between them, both declared and used in source |
 
-Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux, routegroup, kratos), entrypoints, env reads, data access, outbound HTTP, gRPC calls between services and dependency injection (fx, wire); the other languages get structure, imports and calls.
+Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux, routegroup, kratos), entrypoints, env reads, data access, outbound HTTP, gRPC calls between services and dependency injection (fx, wire); the other languages get structure, imports and calls. Every other file (styles, JSON, YAML, TOML, Markdown, shell, Dockerfile, Makefile, SQL, `.proto`, images) is a `File` node too; [what is read from them](docs/known-limitations.md#non-code-files).
 
 ## How it works
 
@@ -47,7 +50,7 @@ flowchart LR
   B --> C[Extract<br/>languages + frameworks]
   C --> D[Resolve<br/>across files]
   D --> E[(Graph<br/>snapshot)]
-  E --> F[MCP · 25 tools]
+  E --> F[MCP · 26 tools]
   E --> G[Cypher]
   E --> H[CLI · export]
 ```
@@ -122,7 +125,7 @@ The full plan is in [docs/ROADMAP.md](docs/ROADMAP.md).
 | | |
 | --- | --- |
 | [Getting started](docs/getting-started.md) | install, scan, query, watch, and connect an agent |
-| [MCP server](docs/mcp-server.md) | client setup and the reference for all 25 tools |
+| [MCP server](docs/mcp-server.md) | client setup and the reference for all 26 tools |
 | [Cypher subset](docs/cypher.md) | querying the graph directly |
 | [Architecture](docs/architecture.md) | the scan pipeline and source layout |
 | [Accuracy](docs/accuracy.md) · [Benchmarks](docs/benchmarks.md) · [Agent benchmark](docs/agent-benchmark.md) | how the numbers above are measured |

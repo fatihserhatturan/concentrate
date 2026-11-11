@@ -1,6 +1,6 @@
 {
   "sample": "internet-go-clean-arch",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. echo v4 with database/sql (MySQL); repository -> service -> REST handler layers joined by interfaces. Routes: the four routes NewArticleHandler registers on the echo instance main.go creates. Calls: every call site in the production Go files (the mockery mocks under article/mocks and internal/rest/mocks, and *_test.go files, are not call files) whose callee is a function or method of this repository, with the functions it runs; calls into echo, database/sql, logrus, errgroup, validator and the standard library, and calls of parameters (next) are not labeled, so any target they get counts as a false positive. A call on an interface (a.articleRepo.Fetch, a.Service.Fetch) is labeled with the method of every type in the repository whose method set has the interface's methods with the same signatures, as Go decides (class hierarchy analysis): the MySQL repository, the mockery mocks, and article.Service, whose methods match ArticleRepository's and rest.ArticleService's (both interfaces have the same six methods); AuthorRepository (GetByID returning domain.Author) is implemented only by the MySQL AuthorRepository and its mock. Data access: each repository method's SQL, by the table it names (the model is the table: database/sql has no models); the SQL of Fetch, GetByID and GetByTitle runs in the fetch helper they pass it to, and author GetByID's in getOne, so the access is labeled on the method that holds the SQL. MySQL's INSERT without INTO (Store) creates. Env: the seven os.Getenv reads in main (godotenv.Load in init loads .env and is not a read).",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. echo v4 with database/sql (MySQL); repository -> service -> REST handler layers joined by interfaces. Routes: the four routes NewArticleHandler registers on the echo instance main.go creates. Calls: every call site in the production Go files (the mockery mocks under article/mocks and internal/rest/mocks, and *_test.go files, are not call files) whose callee is a function or method of this repository, with the functions it runs; calls into echo, database/sql, logrus, errgroup, validator and the standard library, and calls of parameters (next) are not labeled, so any target they get counts as a false positive. A call on an interface (a.articleRepo.Fetch, a.Service.Fetch) is labeled with the method of every type in the repository whose method set has the interface's methods with the same signatures, as Go decides (class hierarchy analysis): the MySQL repository, the mockery mocks, and article.Service, whose methods match ArticleRepository's and rest.ArticleService's (both interfaces have the same six methods); AuthorRepository (GetByID returning domain.Author) is implemented only by the MySQL AuthorRepository and its mock. Data access: each repository method's SQL, by the table it names (the model is the table: database/sql has no models); the SQL of Fetch, GetByID and GetByTitle runs in the fetch helper they pass it to, and author GetByID's in getOne, so the access is labeled on the method that holds the SQL. MySQL's INSERT without INTO (Store) creates. Env: the seven os.Getenv reads in main (godotenv.Load in init loads .env and is not a read). SQL tables (sqlTables): the four tables of the MySQL dump article.sql, read by hand from its CREATE TABLE statements (backticks, int(11), COLLATE and DEFAULT clauses; data, LOCK TABLES and /*! \u2026 */ lines are not DDL); `?` marks a column without NOT NULL, the composite UNIQUE KEY on article_category marks no column.",
   "routes": {
     "scope": [
       "app/main.go",
@@ -688,6 +688,55 @@
         "line": 84,
         "name": "SERVER_ADDRESS",
         "function": "main"
+      }
+    ]
+  },
+  "sqlTables": {
+    "scope": [
+      "article.sql"
+    ],
+    "items": [
+      {
+        "name": "article",
+        "kind": "table",
+        "columns": [
+          "id:int(11) pk",
+          "title:varchar(45)",
+          "content:longtext",
+          "author_id:int(11)?",
+          "updated_at:datetime?",
+          "created_at:datetime?"
+        ]
+      },
+      {
+        "name": "article_category",
+        "kind": "table",
+        "columns": [
+          "id:int(11) pk",
+          "article_id:int(11)",
+          "category_id:int(11)"
+        ]
+      },
+      {
+        "name": "author",
+        "kind": "table",
+        "columns": [
+          "id:int(11) unsigned pk",
+          "name:varchar(200)?",
+          "created_at:datetime?",
+          "updated_at:datetime?"
+        ]
+      },
+      {
+        "name": "category",
+        "kind": "table",
+        "columns": [
+          "id:int(11) pk",
+          "name:varchar(45)",
+          "tag:varchar(45)",
+          "created_at:datetime?",
+          "updated_at:datetime?"
+        ]
       }
     ]
   }

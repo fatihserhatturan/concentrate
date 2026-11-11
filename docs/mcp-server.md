@@ -94,7 +94,7 @@ JSON text block for clients that only read `content`. Every tool has a
 
 The tool list is part of every request an agent sends, so it is kept short:
 names, descriptions and input schemas come to about 18,000 characters (about
-4,500 tokens) for the 25 tools. Rules that hold for every tool (paging, the
+4,500 tokens) for the 26 tools. Rules that hold for every tool (paging, the
 24,000-character result budget) are stated once in the server
 `instructions`, not in each description; an argument without `required` is
 optional. The instructions also name, for every tool, the question it answers
@@ -182,14 +182,25 @@ even for large repositories; read it first to decide which tools to call.
   rows.
 - `list_tables({ name?, library?, limit = 20 })`: database tables, views and
   collections from Prisma schema files, TypeORM entities, Mongoose schemas,
-  Drizzle table definitions and Knex calls, and Go gorm models, ent schemas
-  and sqlc queries. Each table has its
+  Drizzle table definitions and Knex calls, Go gorm models, ent schemas and
+  sqlc queries, and SQL migrations and schema files (`library: sql` when no
+  code declares the table; otherwise the SQL is merged into the code's table
+  by name). Each table has its `indexes`, its `migrations` (`file`, `line`,
+  `order` — 0 for a schema file — and `change` in run order) and its
   `columns` (with the database `column` name when `@map` renames it, and
   `isId` / `isUnique` / `optional` / `list` flags), the `models` that map to it
   with their `relations` (`field`, `kind` one or many, target `model`,
   `relationName`, `onDelete`), `readBy` / `writtenBy` counts of routes,
   entrypoints and functions, and up to 20 `routes` and `entrypoints` with the
   operations they perform. Answers "which endpoints write the users table?".
+- `list_rpcs({ name?, file?, limit = 20 })`: the rpcs of `.proto` files, each
+  with its `service`, `file`, `line`, `request` and `response` as written and
+  as the `requestMessage` / `responseMessage` they resolve to, `streaming`
+  (`client`, `server` or `both`), `servedBy` (the generated Go server
+  interface) and `implementations` (every method that implements it, the
+  `Unimplemented` stub aside). `name` is a substring of `package.Service/Rpc`.
+  An rpc with `servedBy` and no implementations is declared but not
+  implemented; one without `servedBy` has no generated Go code in the scan.
 - `list_stores({ name?, library?, file?, limit = 20 })`: frontend state stores
   (Pinia, Redux Toolkit, Zustand, Jotai, Svelte), filtered by a substring of
   the name or hook, the `library` or the declaring file. Each store has its
@@ -224,6 +235,12 @@ These answer a whole question in one call instead of a chain of lookups.
   those readers (and their callers) reach, and the `dataAccess`, `tables`,
   `envVars` and `config` of the seeds themselves. A store's name or hook as
   `symbol` makes that store the change. For a route, use `route_details`.
+  A style, `.class`, `#id` or `--custom-property` as `symbol` (or a style file
+  as `file` alone, for every class, id and custom property it declares), asks
+  who uses it: `styles`, `users` (components, functions and files naming it,
+  with `match` module, import or name), `rules`, `components` (the users and
+  the components that render them, with `depth`) and `pages`; a custom
+  property also returns the `importers` of the style files that use it.
   With a `symbol`, `unresolvedCalls` and `completeness` say, as in
   `find_callers`, whether calls by the seeds' names are left unresolved.
 - `detect_changes({ base = "HEAD", maxDepth = 5, limit = 50 })`: runs
@@ -322,6 +339,10 @@ Example:
     role);
   - `extends`, `implements` and `injects` for classes and interfaces (Go
     structs too: fx and wire providers).
+  - for a style, `.class`, `#id` or `--custom-property` as `symbol`: `rule`
+    (a rule whose selector holds it) and `component-use`, `function-use`,
+    `file-use` and `var` uses with the `match` kind in `detail`; name matches
+    from a sheet the file does not import are `possible: true`.
   `Class.method` selects one class's method (calls only). `counts` sums the
   references by kind.
 - `find_import_cycles({ scope = "file", path?, limit = 20 })`: strongly connected
