@@ -8,8 +8,8 @@
 {"kind":"node","id":"file:lib.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/lib.rs","relativePath":"lib.rs","sourceType":"production"}}
 {"kind":"node","id":"file:lib.rs:function:5:run","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":5,"methodKind":null,"name":"run","parameters":null,"returnType":null,"visibility":"private"}}
 {"kind":"node","id":"file:lib.rs:function:5:run:call:6:4:process","label":"Call","properties":{"callee":"process","columnNumber":4,"expression":"process","line":6,"name":"process","receiver":null}}
-{"kind":"node","id":"file:lib.rs:import:1:utils","label":"Import","properties":{"line":1,"source":"utils","specifier":"mod utils;"}}
-{"kind":"node","id":"file:lib.rs:import:2:helpers","label":"Import","properties":{"line":2,"source":"helpers","specifier":"mod helpers;"}}
+{"kind":"node","id":"file:lib.rs:import:1:utils","label":"Import","properties":{"isModule":true,"line":1,"source":"utils","specifier":"mod utils;"}}
+{"kind":"node","id":"file:lib.rs:import:2:helpers","label":"Import","properties":{"isModule":true,"line":2,"source":"helpers","specifier":"mod helpers;"}}
 {"kind":"node","id":"file:lib.rs:import:3:crate::utils::process","label":"Import","properties":{"line":3,"source":"crate::utils::process","specifier":"use crate::utils::process;"}}
 {"kind":"node","id":"file:utils.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/utils.rs","relativePath":"utils.rs","sourceType":"production"}}
 {"kind":"node","id":"file:utils.rs:function:1:process","label":"Function","properties":{"className":null,"endLine":1,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":1,"methodKind":null,"name":"process","parameters":null,"returnType":null,"visibility":"pub"}}

@@ -39,9 +39,9 @@
     },
     "rust": {
       "package": "tree-sitter-rust",
-      "version": "0.21.0",
-      "sha256": "0454347cda990e2fbff14736a9ceae942c74b2e2f912c058b7cc6a4c1147484b",
-      "bytes": 1077497
+      "version": "0.24.0",
+      "sha256": "fa27598c3bff4efa87765cd1e057712158f951be652efd83ee71a1b523a220fc",
+      "bytes": 1113154
     },
     "css": {
       "package": "tree-sitter-css",

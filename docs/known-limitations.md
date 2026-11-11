@@ -383,7 +383,7 @@ Blocks or informs: future query server design.
 ## Parsing
 
 - Grammars are pinned (go upgraded since the native binding): javascript
-  0.23.1, typescript and tsx 0.23.2, python 0.21.0, go 0.25.0, rust 0.21.0
+  0.23.1, typescript and tsx 0.23.2, python 0.21.0, go 0.25.0, rust 0.24.0
   (see `vendor/grammars/manifest.json`). Newer syntax that only later grammar
   releases understand produces `ERROR` nodes.
 - Inline JSX event handlers create no nodes of their own, so a call inside
@@ -1327,6 +1327,36 @@ Astro).
   of the name in another package's files as a use (comments and strings
   included), so it can miss dead exports but rarely flags used ones. Uses
   from outside the scan (a library's consumers) are not seen.
+
+## Rust
+
+- The Rust grammar is tree-sitter-rust 0.24.0. A file with a syntax error is
+  kept: the item, statement or member with the error is left out (lines are
+  listed in a scan warning), the rest of the file stays in the graph.
+- Crates come from every `Cargo.toml` with a `[package]` in the scan. Crate roots
+  are `src/lib.rs`, `src/main.rs`, `[lib] path`, `[[bin]] path`, `src/bin/*.rs`
+  and the direct children of `tests/`, `examples/` and `benches/`. `[workspace]
+  members` globs are not read: every package found is a member.
+- A `use` path resolves through the `mod` tree of its crate: `mod.rs`,
+  `foo.rs` + `foo/`, `#[path = "…"]` and inline `mod x { … }` (an inline module
+  is not a file: a path into it resolves to the file that holds it). It follows
+  `pub use` re-exports (items, aliases and globs) up to eight steps. `use` groups
+  are split into one `Import` per path; `as` aliases are kept in `alias`, globs in
+  `isWildcard`, `pub use` in `isReExport`.
+- An import resolves to the file of the deepest module the path names; the item
+  after it (`Type`, `func`) is not a node link yet. A `use` of an enum variant or
+  an associated item stops at the enum's file.
+- Another crate is found by its dependency key (`-` → `_`, `package =` renames,
+  `workspace = true`, `path = …`) or by its package name. Only packages inside
+  the scan resolve; `std`, `core`, `alloc` and crates.io dependencies are never
+  counted as unresolved.
+- `#[cfg(...)]` is not evaluated: a `mod x;` behind a feature that is off still
+  resolves, and two `#[cfg]`-alternative files for one module resolve to the
+  first. A file claimed by two crates (shared with `#[path]`) belongs to the first.
+- `Cargo.toml` is read with a small tolerant reader (tables, dotted keys, inline
+  tables, multi-line arrays); `[patch]`, `[replace]` and `.cargo/config.toml`
+  path overrides are ignored. Macros that generate `mod` or `use` items are not
+  expanded.
 
 ## Non-code files
 

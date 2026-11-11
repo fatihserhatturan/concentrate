@@ -1,0 +1,9 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+my-core.workspace = true
+core-alias = { package = "my-core", path = "../my-core" }
+tokio = { version = "1", features = ["full"] }

@@ -2,7 +2,6 @@ import path from "node:path";
 import type { JsTsResolutionConfig } from "./config.js";
 import {
   isJsTsFile,
-  isRustFile,
   shouldResolveAbsoluteImport,
 } from "../../../../core/scan/resolution/file-kind.js";
 import {
@@ -10,7 +9,6 @@ import {
   createRelativeImportCandidates,
 } from "../../../../core/scan/resolution/import-candidates.js";
 import { resolveJsTsConfiguredImport } from "./js-ts-imports.js";
-import { resolveRustImport } from "../../../../integrations/languages/rust/resolution.js";
 
 export function resolveImport(
   source: string,
@@ -42,10 +40,6 @@ function resolveAbsoluteImport(
 ): string | null {
   if (isJsTsFile(importerFileId)) {
     return resolveJsTsConfiguredImport(source, fileIdByRelativePath, jsTsConfig);
-  }
-
-  if (isRustFile(importerFileId)) {
-    return resolveRustImport(source, importerFileId, fileIdByRelativePath);
   }
 
   if (!shouldResolveAbsoluteImport(importerFileId)) {

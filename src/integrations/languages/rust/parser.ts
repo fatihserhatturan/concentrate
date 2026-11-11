@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { parseSyntaxTree, type SyntaxNode } from "../syntax/tree-sitter.js";
+import { parseSyntaxTreeSkippingErrors, type SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { LanguageParser } from "../../../core/contracts/language-parser.js";
 import {
@@ -8,6 +8,18 @@ import {
   walk,
   walkScoped,
 } from "../tree-sitter-utils.js";
+
+// Node types whose children are items, members or statements: one with a
+// syntax error is left out on its own, and the rest of the file is kept.
+const statementParents = new Set([
+  "source_file",
+  "declaration_list",
+  "block",
+  "field_declaration_list",
+  "enum_variant_list",
+  "ordered_field_declaration_list",
+  "match_block",
+]);
 
 export const rustParser: LanguageParser = {
   language: "rust",
@@ -31,16 +43,12 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
   ];
   const relationships: GraphRelationship[] = [];
 
-  const tree = await parseSyntaxTree("rust", source);
+  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors("rust", source, statementParents);
   try {
-    if (tree.rootNode.hasError) {
-      throw new Error("Syntax error");
-    }
-
+    const importIds = new Set<string>();
     walk(tree.rootNode, (node) => {
-      if (node.type === "use_declaration" || node.type === "mod_item") {
-        const importNode = createImportNode(fileNodeId, node);
-        if (importNode) {
+      if (node.type === "use_declaration" || (node.type === "mod_item" && !node.childForFieldName("body"))) {
+        for (const importNode of createImportNodes(fileNodeId, node, importIds)) {
           nodes.push(importNode);
           relationships.push({
             from: fileNodeId,
@@ -102,7 +110,11 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
       );
     });
 
-    return { fileNodeId, nodes, relationships };
+    const parsed: ParsedSourceFile = { fileNodeId, nodes, relationships };
+    if (skippedLines.length > 0) {
+      parsed.warnings = [`Syntax error: left out the statement${skippedLines.length === 1 ? "" : "s"} at line${skippedLines.length === 1 ? "" : "s"} ${skippedLines.join(", ")}`];
+    }
+    return parsed;
   } finally {
     tree.delete();
   }
@@ -114,24 +126,89 @@ function extractImplTypeName(node: SyntaxNode): string | null {
   return node.parent.parent.childForFieldName("type")?.text ?? null;
 }
 
-function createImportNode(fileNodeId: string, node: SyntaxNode): GraphNode | null {
-  const source = node.type === "mod_item"
-    ? node.namedChildren.find((child) => child.type === "identifier")?.text
-    : node.namedChildren[0]?.text;
+type UseEntry = { segments: string[]; alias: string | null; wildcard: boolean };
 
-  if (!source) {
-    return null;
+// One Import per imported path: `use a::{b, c as d, e::*}` is three.
+function createImportNodes(fileNodeId: string, node: SyntaxNode, ids: Set<string>): GraphNode[] {
+  const line = node.startPosition.row + 1;
+  const inlineModules = enclosingInlineModules(node);
+  const attribute = pathAttribute(node);
+  const base: Record<string, unknown> = {
+    specifier: node.text,
+    line,
+    ...(inlineModules.length > 0 ? { inlineModules: JSON.stringify(inlineModules) } : {}),
+  };
+  const make = (source: string, extra: Record<string, unknown>): GraphNode => {
+    let id = `${fileNodeId}:import:${line}:${source}`;
+    for (let n = 2; ids.has(id); n += 1) id = `${fileNodeId}:import:${line}:${source}#${n}`;
+    ids.add(id);
+    return { id, label: "Import", properties: { source, ...base, ...extra } } as GraphNode;
+  };
+
+  if (node.type === "mod_item") {
+    const name = node.childForFieldName("name")?.text;
+    if (!name) return [];
+    return [make(name, { isModule: true, ...(attribute ? { pathAttribute: attribute } : {}) })];
   }
 
-  return {
-    id: `${fileNodeId}:import:${node.startPosition.row + 1}:${source}`,
-    label: "Import",
-    properties: {
-      source,
-      specifier: node.text,
-      line: node.startPosition.row + 1,
-    },
-  };
+  const argument = node.childForFieldName("argument");
+  if (!argument) return [];
+  const isPublic = node.namedChildren.some((child) => child.type === "visibility_modifier");
+  return flattenUse(argument, []).map((entry) => make(entry.segments.join("::"), {
+    ...(isPublic ? { isReExport: true } : {}),
+    ...(entry.wildcard ? { isWildcard: true } : {}),
+    ...(entry.alias && entry.alias !== "_" ? { alias: entry.alias } : {}),
+  }));
+}
+
+function flattenUse(node: SyntaxNode, prefix: string[]): UseEntry[] {
+  const segmentsOf = (path: SyntaxNode | null): string[] => (path ? path.text.replace(/\s+/gu, "").split("::").filter((part) => part !== "") : []);
+  switch (node.type) {
+    case "use_list":
+      return node.namedChildren.flatMap((child) => flattenUse(child, prefix));
+    case "scoped_use_list": {
+      const list = node.childForFieldName("list");
+      const next = [...prefix, ...segmentsOf(node.childForFieldName("path"))];
+      return list ? flattenUse(list, next) : [];
+    }
+    case "use_as_clause": {
+      const target = node.childForFieldName("path");
+      return [{ segments: normalizeSelf([...prefix, ...segmentsOf(target)]), alias: node.childForFieldName("alias")?.text ?? null, wildcard: false }];
+    }
+    case "use_wildcard": {
+      const target = node.namedChildren[0] ?? null;
+      return [{ segments: [...prefix, ...segmentsOf(target)], alias: null, wildcard: true }];
+    }
+    case "self":
+      return prefix.length > 0 ? [{ segments: prefix, alias: null, wildcard: false }] : [{ segments: ["self"], alias: null, wildcard: false }];
+    default:
+      return [{ segments: normalizeSelf([...prefix, ...segmentsOf(node)]), alias: null, wildcard: false }];
+  }
+}
+
+// `a::b::self` names `a::b`.
+function normalizeSelf(segments: string[]): string[] {
+  return segments.length > 1 && segments[segments.length - 1] === "self" ? segments.slice(0, -1) : segments;
+}
+
+function enclosingInlineModules(node: SyntaxNode): string[] {
+  const names: string[] = [];
+  for (let parent = node.parent; parent; parent = parent.parent) {
+    if (parent.type === "mod_item" && parent.childForFieldName("body")) {
+      const name = parent.childForFieldName("name")?.text;
+      if (name) names.unshift(name);
+    }
+  }
+  return names;
+}
+
+// `#[path = "x.rs"] mod y;`
+function pathAttribute(node: SyntaxNode): string | null {
+  for (let sibling = node.previousNamedSibling; sibling && (sibling.type === "attribute_item" || sibling.type === "line_comment" || sibling.type === "block_comment"); sibling = sibling.previousNamedSibling) {
+    const match = /^#\[\s*path\s*=\s*"([^"]*)"\s*\]$/u.exec(sibling.text.trim());
+    if (match) return match[1]!;
+  }
+  return null;
 }
 
 function createFunctionNode(fileNodeId: string, node: SyntaxNode, className?: string): GraphNode | null {
