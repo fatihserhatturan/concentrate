@@ -24,13 +24,13 @@ chosen files); every target was decided by reading the code.
 
 | Kind | Samples | Scope |
 | --- | --- | --- |
-| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base, internet-rust-axum-realworld | every route declared with a literal path in the scoped files; tests excluded; for the gin sample, the groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`); for the echo sample, the `*echo.Echo` that `router.New()` in another package returns, grouped in `main` and passed to `(*Handler).Register`; for simplebank, gin's `router.Group("/").Use(mw)` and the grpc-gateway `http.ServeMux` mounts in `main.go`; for go-base, chi `Mount` / `Route` / `Group` across packages; for the Rust sample, the four axum `router()` functions of `src/http` merged by `api_router` (19 method-path pairs; one small sample, so the recall says little about actix-web, Rocket or warp, which the fixtures cover only) |
+| Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base, internet-rust-axum-realworld, internet-rust-actix-diesel-realworld | every route declared with a literal path in the scoped files; tests excluded; for the gin sample, the groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`); for the echo sample, the `*echo.Echo` that `router.New()` in another package returns, grouped in `main` and passed to `(*Handler).Register`; for simplebank, gin's `router.Group("/").Use(mw)` and the grpc-gateway `http.ServeMux` mounts in `main.go`; for go-base, chi `Mount` / `Route` / `Group` across packages; for the Rust sample, the four axum `router()` functions of `src/http` merged by `api_router` (19 method-path pairs), and for the actix-web sample the nested `web::scope` tree of `src/app/drivers/routes.rs` whose verbs are imported bare (`get().to(h)`, 20 pairs; Rocket and warp are covered by the fixtures only) |
 | Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`), internet-go-echo-realworld (another Conduit Go backend: echo, gorm behind store interfaces, packages `handler`, `store`, `model`, `router`, `db`, `utils`), internet-go-clean-arch (echo + database/sql, repository → service → handler layers joined by interfaces), internet-go-simplebank (gin, gRPC, sqlc on pgx, asynq), internet-rust-axum-realworld (a Conduit Rust backend: axum, sqlx; one library crate and a bin) | every call site in 2–9 chosen files per sample; for the Go samples, every call of a repository function or method in their production files (13 gin, 21 echo, 11 clean-arch; echo's generated `docs/docs.go` excluded), and 12 chosen files of simplebank (`main.go`, `api/`, the `db/sqlc` transactions, two `gapi` RPCs, a worker task) |
-| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm), internet-go-echo-realworld (gorm), internet-go-clean-arch (database/sql, MySQL), internet-go-simplebank (sqlc), internet-go-chi-base (bun), internet-rust-axum-realworld (sqlx) | the services; for the Go samples the production files that query the database, for the Rust sample the sqlx queries of `src/http` (labeled from their SQL, data-modifying CTEs included; no diesel or SeaORM in the sample); the standing samples have no data layer |
+| Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm), internet-go-echo-realworld (gorm), internet-go-clean-arch (database/sql, MySQL), internet-go-simplebank (sqlc), internet-go-chi-base (bun), internet-rust-axum-realworld (sqlx), internet-rust-actix-diesel-realworld (diesel) | the services; for the Go samples the production files that query the database, for the Rust sample the sqlx queries of `src/http` (labeled from their SQL, data-modifying CTEs included; the diesel sample's labels are the tables each `entities.rs` / `repositories.rs` function reads or writes, query-building helpers included only when they name a table; SeaORM is covered by the fixtures only); the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
-| Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project), internet-realworld-go-fullstack (the same frontend with the gin backend) | `frontend/`: every HTTP call that reaches a backend route; the Go pair's labels are the Express pair's, with each route's declaring file moved to the gin `routers.go` that registers it |
-| Env reads | internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base, internet-rust-axum-realworld | every env read in the production and test files: `os.Getenv` (gin, clean-arch, go-base), viper `Get*` with `AutomaticEnv` (go-base) and the `mapstructure` keys `viper.Unmarshal` fills (simplebank); the echo sample reads none (its secret and database path are constants) |
+| Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project), internet-realworld-go-fullstack (the same frontend with the gin backend), internet-realworld-rust-fullstack (the same frontend with the axum backend) | `frontend/`: every HTTP call that reaches a backend route; the Go pair's labels are the Express pair's, with each route's declaring file moved to the gin `routers.go` that registers it; the Rust pair's labels are the Go pair's, with each route the axum `.route(..)` registration that serves it |
+| Env reads | internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base, internet-rust-axum-realworld, internet-rust-actix-diesel-realworld | every env read in the production and test files: `os.Getenv` (gin, clean-arch, go-base), viper `Get*` with `AutomaticEnv` (go-base) and the `mapstructure` keys `viper.Unmarshal` fills (simplebank); the echo sample reads none (its secret and database path are constants) |
 | Stores, store reads and writes | internet-vue-realworld (its Pinia setup store) | `src/`: every store and every call of a store's hook, tests included |
 | Scripts, what they run, env declarations | internet-node-express-firebase-mongodb (root `package.json`, `Dockerfile`, `docker-compose.yml`, `.github/`), internet-go-simplebank (`Makefile`, `Dockerfile`, `docker-compose.yaml`, `start.sh`, `wait-for.sh`, `eks/`, `.github/`; the Vue `frontend/` is not labeled) | every package.json script, Makefile target, shell script, Dockerfile `CMD` / `ENTRYPOINT`, compose service and CI job; what each runs; every env variable they declare. Labeled from the files, before the tool was run on them (see the results) |
 
@@ -181,10 +181,11 @@ Rules:
 | internet-go-simplebank | 9 | 9 | 0 | 0 | 100.0% | 100.0% | 100.0% (9/9) |
 | internet-nextjs-taxonomy | 9 | 9 | 0 | 0 | 100.0% | 100.0% | 100.0% (9/9) |
 | internet-node-express-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
+| internet-rust-actix-diesel-realworld | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
 | internet-rust-axum-realworld | 19 | 19 | 0 | 0 | 100.0% | 100.0% | 100.0% (19/19) |
 | internet-sveltekit-realworld | 11 | 11 | 0 | 0 | 100.0% | 100.0% | 100.0% (11/11) |
 | nestjs-starter | 1 | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% (1/1) |
-| **all** | 212 | 212 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (212/212)** |
+| **all** | 232 | 232 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (232/232)** |
 
 ### Call resolution
 
@@ -227,8 +228,9 @@ literal (`AuthUser { user_id }.to_jwt(&ctx)`, 2).
 | internet-go-simplebank | 20 | 20 | 0 | 0 | 100.0% | 100.0% |
 | internet-nest | 17 | 17 | 0 | 0 | 100.0% | 100.0% |
 | internet-node-express-realworld | 26 | 26 | 0 | 0 | 100.0% | 100.0% |
+| internet-rust-actix-diesel-realworld | 48 | 48 | 0 | 0 | 100.0% | 100.0% |
 | internet-rust-axum-realworld | 49 | 49 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 240 | 240 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 288 | 288 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Components
 
@@ -266,7 +268,8 @@ literal (`AuthUser { user_id }.to_jwt(&ctx)`, 2).
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | internet-realworld-fullstack | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
 | internet-realworld-go-fullstack | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 66 | 66 | 0 | 0 | **100.0%** | **100.0%** |
+| internet-realworld-rust-fullstack | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
+| **all** | 99 | 99 | 0 | 0 | **100.0%** | **100.0%** |
 
 ### Stores
 
@@ -298,14 +301,15 @@ not a Redux Toolkit store.
 | internet-go-echo-realworld | 0 | 0 | 0 | 0 | – | – |
 | internet-go-gin-realworld | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
 | internet-go-simplebank | 13 | 13 | 0 | 0 | 100.0% | 100.0% |
+| internet-rust-actix-diesel-realworld | 3 | 3 | 0 | 0 | 100.0% | 100.0% |
 | internet-rust-axum-realworld | 2 | 2 | 0 | 0 | 100.0% | 100.0% |
-| **all** | 48 | 48 | 0 | 0 | **100.0%** | **100.0%** |
+| **all** | 51 | 51 | 0 | 0 | **100.0%** | **100.0%** |
 
 Struct-tag config (`env:"…"`, envconfig) and `os.ExpandEnv` are covered by
 `fixtures/go-env` and its golden graph only; the samples read env with
 `os.Getenv` and viper. The Rust sample's two reads are clap `#[clap(long, env)]`
 fields of `Config`; `std::env::var`, `env!`, envy and the config crate are
-covered by `fixtures/rust-env` and its golden graph only.
+covered by `fixtures/rust-env` and its golden graph only. The actix-diesel sample's three reads are `env::var(env_key::X)` with the keys declared as constants in another file, resolved across files. Calls are not labeled for that sample: its handlers reach the use cases through `state.di_container.<usecase>` fields of `Arc<dyn Trait>`, which the scan does not type (a known limitation, see `docs/known-limitations.md`).
 
 ### Scripts and infrastructure
 

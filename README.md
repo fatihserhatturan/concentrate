@@ -25,22 +25,22 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 
 | | |
 | --- | --- |
-| **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints (Go `main`, gRPC services and cobra commands included) |
+| **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints (Go `main`, gRPC services and cobra commands, Rust `main`, tonic services and clap commands included) |
 | **Calls** | call sites resolved to their target declaration across files, barrels and re-exports |
-| **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers; Next.js, Nuxt, SvelteKit and Astro server routes, and tRPC procedures; Go `net/http`, gin, echo, chi, fiber, gorilla/mux, go-pkgz/routegroup and kratos, with groups and routers passed between functions |
+| **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers; Next.js, Nuxt, SvelteKit and Astro server routes, and tRPC procedures; Go `net/http`, gin, echo, chi, fiber, gorilla/mux, go-pkgz/routegroup and kratos, with groups and routers passed between functions; Rust axum, actix-web, Rocket and warp, with nested routers, scopes and `configure` functions |
 | **Components** | React, Vue, Svelte, Astro, Angular and web components, and which component renders which, with the props passed |
 | **Pages** | Next.js, Nuxt, SvelteKit and Astro file routes; React Router, TanStack Router, Vue Router and Angular Router records, each linked to the component it renders |
-| **Frontend requests** | fetch, axios, ky, ofetch, SWR, TanStack Query, Angular `HttpClient` and tRPC calls, and Go `net/http` and resty clients, linked to the backend route they reach |
+| **Frontend requests** | fetch, axios, ky, ofetch, SWR, TanStack Query, Angular `HttpClient` and tRPC calls, and Go `net/http` and resty clients and Rust reqwest, linked to the backend route they reach |
 | **State stores** | Pinia, Redux Toolkit, Zustand, Jotai and Svelte stores: their state and actions, and the functions and components that read and write them |
 | **Dependency injection** | NestJS constructor and property injection chains; Go uber fx and google wire providers |
-| **Configuration** | `process.env.*` and `import.meta.env` reads; Go `os.Getenv`, viper and env struct tags (caarlos0/env, envconfig); linked to the functions and routes that use them and to the variables `.env` files declare |
-| **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle; Go gorm, ent, sqlc, `database/sql` and sqlx (literal SQL): models, tables, and read and write operations |
+| **Configuration** | `process.env.*` and `import.meta.env` reads; Go `os.Getenv`, viper and env struct tags (caarlos0/env, envconfig); Rust `std::env`, `env!`, clap, envy and the config crate; linked to the functions and routes that use them and to the variables `.env` files declare |
+| **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle; Go gorm, ent, sqlc, `database/sql` and sqlx (literal SQL); Rust sqlx, diesel and SeaORM: models, tables, and read and write operations |
 | **Scripts and infrastructure** | `package.json` scripts, Makefile targets, shell and PowerShell scripts, Dockerfiles, compose services and GitHub Actions jobs as entrypoints, what each runs, and the env they read and set |
 | **Styles** | CSS, SCSS and Less: classes, ids, custom properties and rules, `@import` / `@use` / `url()` to the files they name, and the components and templates that use a class (CSS Modules exactly; `className`, `class`, `:class` and `[ngClass]` by name), so a class or `--property` change has an impact answer |
 | **SQL and protobuf** | tables, columns, indexes and migration order from SQL migrations and schema files, merged with the tables code declares; `.proto` services and rpcs linked to the generated Go server interface and the methods that implement them |
 | **Workspaces** | packages and the dependencies between them, both declared and used in source |
 
-Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux, routegroup, kratos), entrypoints, env reads, data access, outbound HTTP, gRPC calls between services and dependency injection (fx, wire); Rust adds Cargo workspaces, module trees, traits, enums, attributes and path and method call resolution; the other languages get structure, imports and calls. Every other file (styles, JSON, YAML, TOML, Markdown, shell, Dockerfile, Makefile, SQL, `.proto`, images) is a `File` node too; [what is read from them](docs/known-limitations.md#non-code-files).
+Languages: TypeScript and JavaScript (JSX/TSX included), HTML pages and single-file components (`.vue`, `.svelte`, `.astro`: their scripts and markup), Python, Go and Rust. Framework semantics cover the JavaScript and TypeScript ecosystem, backend and frontend, and Go HTTP routes (`net/http`, gin, echo, chi, fiber, gorilla/mux, routegroup, kratos), entrypoints, env reads, data access, outbound HTTP, gRPC calls between services and dependency injection (fx, wire); Rust adds Cargo workspaces, module trees, traits, enums, attributes and path and method call resolution, and the same framework layer as Go: HTTP routes (axum, actix-web, Rocket, warp), tonic and clap entrypoints, env reads, data access (sqlx, diesel, SeaORM) and outbound HTTP (reqwest); the other languages get structure, imports and calls. Every other file (styles, JSON, YAML, TOML, Markdown, shell, Dockerfile, Makefile, SQL, `.proto`, images) is a `File` node too; [what is read from them](docs/known-limitations.md#non-code-files).
 
 ## How it works
 
@@ -82,6 +82,7 @@ Every number below comes from pinned open-source repositories and can be reprodu
 
 **The graph is trustworthy.**
 - Against hand-written labels, 100% of reported routes, call targets, database accesses, React, Vue, Svelte and Angular components, component renders, pages, frontend → backend API requests and Pinia store reads and writes are correct.
+- On the Rust samples (a Conduit backend each in axum + sqlx and actix-web + diesel, and the Next.js frontend against the axum one), 39 routes, 97 data accesses, 5 env reads and 33 frontend requests are all 100% precision and 100% recall; the 47 labeled call sites of the axum sample reach 100% precision and 70% recall ([accuracy.md](docs/accuracy.md)).
 - Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React, Vue, SvelteKit and Angular frontends) are 100%.
 - Call recall is 100% on the 497 labeled call sites with a project target (372 of them in two Go backends, gin and echo); API requests are 100% on 66 (the same Next.js frontend against an Express and a gin backend); the remaining gap (components 99%) is in [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 

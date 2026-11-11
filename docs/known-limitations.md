@@ -1342,8 +1342,9 @@ Astro).
 - Rust env reads are `USES_ENV` from the function that reads (and from its
   file; an item-level read such as a `static` initializer is the file's):
   `std::env::var` / `env::var_os`, `dotenvy::var` / `dotenv::var` (and a
-  bare `var` imported from `std::env`) with a string literal or same-file
-  `const` name, and the compile-time `env!` / `option_env!`. `env::set_var`
+  bare `var` imported from `std::env`) with a string literal or a `const` name
+  (a constant of another file such as `env_key::DATABASE_URL` is resolved when
+  the name is declared once in the project with one value), and the compile-time `env!` / `option_env!`. `env::set_var`
   is a write and not recorded. clap derive: `#[arg(env = "X")]` /
   `#[clap(env = "X")]` and the bare `env` (the field name upper-cased) are
   read by the function of the same file that calls `Type::parse()` /
@@ -1528,13 +1529,24 @@ Astro).
   (`Commands::Serve { .. } => serve(..)`, `Some(("serve", m)) => serve(m)`); builder
   arms are matched by the command's own name, not its path, and a command that has
   subcommands is not an EntryPoint itself.
-- Measured on the pinned `internet-rust-axum-realworld` (axum + sqlx, one library
-  crate and a bin): 19 hand-labeled routes, precision 100%, recall 100%, full path
-  19/19 (the only Rust sample, and axum only: actix-web, Rocket, warp, tonic and clap are
-  covered by fixtures); 47 hand-labeled call sites with a repository target, precision
-  100%, recall 70.2% ([accuracy.md](accuracy.md)). Not measured on a multi-crate
-  workspace sample: cross-crate paths are covered by the `rust-workspace` and
-  `rust-calls` fixtures only.
+- Measured on three pinned Rust samples ([accuracy.md](accuracy.md)):
+  `internet-rust-axum-realworld` (axum + sqlx, one library crate and a bin: 19
+  hand-labeled routes, precision 100%, recall 100%; 47 call sites with a
+  repository target, precision 100%, recall 70.2%; 49 data accesses and 2 env
+  reads, both 100%), `internet-rust-actix-diesel-realworld` (actix-web 4 +
+  diesel 2: 20 routes, 48 data accesses and 3 env reads, all 100%) and
+  `internet-realworld-rust-fullstack` (the Next.js Conduit frontend with the axum
+  backend: 33 frontend requests linked to routes, 100%). Rocket, warp, tonic,
+  clap, SeaORM, envy and the config crate are covered by fixtures only. Hand-
+  labeling the actix-diesel sample found three gaps, now fixed: verbs imported
+  bare (`use actix_web::web::{get, post}`; `get().to(h)`) registered no routes,
+  `let t = table.filter(..); diesel::delete(t)` was read as a read, and
+  queries built by a helper and run as `t.load::<Model>(conn)` were not
+  seen. Calls are not labeled for the actix-diesel sample: its handlers reach
+  the use cases through `state.di_container.<usecase>` fields of
+  `Arc<dyn Trait>`, whose method calls the scan does not type. Not measured on a
+  multi-crate workspace sample: cross-crate paths are covered by the
+  `rust-workspace` and `rust-calls` fixtures only.
 
 ## Non-code files
 
