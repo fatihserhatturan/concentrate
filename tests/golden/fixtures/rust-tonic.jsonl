@@ -1,0 +1,141 @@
+{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"rust-tonic","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"file:Cargo.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/Cargo.toml","relativePath":"Cargo.toml","sourceType":"production"}}
+{"kind":"node","id":"file:src/greeter.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/greeter.rs","relativePath":"src/greeter.rs","rustCrate":"src/main.rs","rustCrateName":"rust_tonic","rustModule":"greeter","sourceType":"production"}}
+{"kind":"node","id":"file:src/greeter.rs:class:15:GreeterServer","label":"Class","properties":{"endLine":17,"fields":"[{\"name\":\"inner\",\"type\":\"T\"}]","isAbstract":false,"isExported":true,"line":15,"name":"GreeterServer","typeParameters":"<T>","visibility":"pub"}}
+{"kind":"node","id":"file:src/greeter.rs:class:26:MyGreeter","label":"Class","properties":{"endLine":26,"isAbstract":false,"isExported":true,"line":26,"name":"MyGreeter","visibility":"pub"}}
+{"kind":"node","id":"file:src/greeter.rs:class:26:MyGreeter:decorator:26:derive","label":"Decorator","properties":{"args":"[\"Default\"]","expression":"#[derive(Default)]","line":26,"name":"derive"}}
+{"kind":"node","id":"file:src/greeter.rs:class:3:HelloRequest","label":"Class","properties":{"endLine":5,"fields":"[{\"name\":\"name\",\"type\":\"String\"}]","isAbstract":false,"isExported":true,"line":3,"name":"HelloRequest","visibility":"pub"}}
+{"kind":"node","id":"file:src/greeter.rs:class:7:HelloReply","label":"Class","properties":{"endLine":9,"fields":"[{\"name\":\"message\",\"type\":\"String\"}]","isAbstract":false,"isExported":true,"line":7,"name":"HelloReply","visibility":"pub"}}
+{"kind":"node","id":"file:src/greeter.rs:function:20:new","label":"Function","properties":{"className":"GreeterServer","endLine":22,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":20,"methodKind":null,"name":"new","parameters":"[{\"name\":\"inner\",\"type\":\"T\"}]","returnType":"Self","visibility":"pub"}}
+{"kind":"node","id":"file:src/greeter.rs:function:30:say_hello","label":"Function","properties":{"className":"MyGreeter","endLine":32,"implementsTrait":"Greeter","isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_item","line":30,"methodKind":"trait-impl","name":"say_hello","parameters":"[{\"name\":\"self\",\"type\":\"&Self\"},{\"name\":\"request\",\"type\":\"Request<HelloRequest>\"}]","returnType":"Result<Response<HelloReply>, Status>","visibility":"private"}}
+{"kind":"node","id":"file:src/greeter.rs:function:30:say_hello:call:31:11:Response::new","label":"Call","properties":{"callee":"new","columnNumber":11,"expression":"Response::new","line":31,"name":"Response::new","receiver":null}}
+{"kind":"node","id":"file:src/greeter.rs:function:30:say_hello:call:31:47:format!","label":"Call","properties":{"callee":"format","columnNumber":47,"expression":"format!","line":31,"name":"format","receiver":null}}
+{"kind":"node","id":"file:src/greeter.rs:function:30:say_hello:call:31:8:Ok","label":"Call","properties":{"callee":"Ok","columnNumber":8,"expression":"Ok","line":31,"name":"Ok","receiver":null}}
+{"kind":"node","id":"file:src/greeter.rs:function:34:say_goodbye","label":"Function","properties":{"className":"MyGreeter","endLine":36,"implementsTrait":"Greeter","isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_item","line":34,"methodKind":"trait-impl","name":"say_goodbye","parameters":"[{\"name\":\"self\",\"type\":\"&Self\"},{\"name\":\"request\",\"type\":\"Request<HelloRequest>\"}]","returnType":"Result<Response<HelloReply>, Status>","visibility":"private"}}
+{"kind":"node","id":"file:src/greeter.rs:function:34:say_goodbye:call:35:11:Response::new","label":"Call","properties":{"callee":"new","columnNumber":11,"expression":"Response::new","line":35,"name":"Response::new","receiver":null}}
+{"kind":"node","id":"file:src/greeter.rs:function:34:say_goodbye:call:35:55:request.into_inner","label":"Call","properties":{"callee":"into_inner","columnNumber":55,"expression":"request.into_inner","line":35,"name":"request.into_inner","receiver":"request","receiverIsLocal":true,"receiverType":"Request"}}
+{"kind":"node","id":"file:src/greeter.rs:function:34:say_goodbye:call:35:8:Ok","label":"Call","properties":{"callee":"Ok","columnNumber":8,"expression":"Ok","line":35,"name":"Ok","receiver":null}}
+{"kind":"node","id":"file:src/greeter.rs:function:40:helper","label":"Function","properties":{"className":"MyGreeter","endLine":40,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":40,"methodKind":null,"name":"helper","parameters":"[{\"name\":\"self\",\"type\":\"&Self\"}]","returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:src/greeter.rs:import:1:tonic::Request","label":"Import","properties":{"line":1,"source":"tonic::Request","specifier":"use tonic::{Request, Response, Status};"}}
+{"kind":"node","id":"file:src/greeter.rs:import:1:tonic::Response","label":"Import","properties":{"line":1,"source":"tonic::Response","specifier":"use tonic::{Request, Response, Status};"}}
+{"kind":"node","id":"file:src/greeter.rs:import:1:tonic::Status","label":"Import","properties":{"line":1,"source":"tonic::Status","specifier":"use tonic::{Request, Response, Status};"}}
+{"kind":"node","id":"file:src/greeter.rs:interface:11:Greeter","label":"Interface","properties":{"embeds":"[]","endLine":13,"isExported":true,"line":11,"methodSignatures":"{\"say_hello\":{\"parameters\":[\"&Self\"],\"returnType\":null}}","methods":"[\"say_hello\"]","name":"Greeter","visibility":"pub"}}
+{"kind":"node","id":"file:src/main.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/main.rs","relativePath":"src/main.rs","rustCrate":"src/main.rs","rustCrateName":"rust_tonic","rustModule":"","sourceType":"production"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:12:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"tokio","line":12,"receiverName":null,"trigger":"#[tokio::main]"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:17:21:grpc:Greeter/say_goodbye","label":"EntryPoint","properties":{"handlerName":"say_goodbye","kind":"grpc","library":"tonic","line":17,"receiverName":"GreeterServer","trigger":"Greeter/say_goodbye"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:17:21:grpc:Greeter/say_hello","label":"EntryPoint","properties":{"handlerName":"say_hello","kind":"grpc","library":"tonic","line":17,"receiverName":"GreeterServer","trigger":"Greeter/say_hello"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:18:21:grpc:Inventory/list_items","label":"EntryPoint","properties":{"handlerName":"list_items","kind":"grpc","library":"tonic","line":18,"receiverName":"InventoryServer","trigger":"Inventory/list_items"}}
+{"kind":"node","id":"file:src/main.rs:function:12:main","label":"Function","properties":{"className":null,"endLine":22,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_item","line":12,"methodKind":null,"name":"main","parameters":"[]","returnType":"Result<(), Box<dyn std::error::Error>>","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:13:29:\"[::1]:50051\".parse","label":"Call","properties":{"callee":"parse","columnNumber":29,"expression":"\"[::1]:50051\".parse","line":13,"name":"\"[::1]:50051\".parse","receiver":"\"[::1]:50051\""}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:14:18:MyGreeter::default","label":"Call","properties":{"callee":"default","columnNumber":18,"expression":"MyGreeter::default","line":14,"name":"MyGreeter::default","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:15:16:Arc::new","label":"Call","properties":{"callee":"new","columnNumber":16,"expression":"Arc::new","line":15,"name":"Arc::new","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:15:25:StoreService::new","label":"Call","properties":{"callee":"new","columnNumber":25,"expression":"StoreService::new","line":15,"name":"StoreService::new","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:16:4:Server::builder","label":"Call","properties":{"callee":"builder","columnNumber":4,"expression":"Server::builder","line":16,"name":"Server::builder","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:17:21:GreeterServer::new","label":"Call","properties":{"callee":"new","columnNumber":21,"expression":"GreeterServer::new","line":17,"name":"GreeterServer::new","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:17:9:Server::builder().add_service","label":"Call","properties":{"callee":"add_service","columnNumber":9,"expression":"Server::builder().add_service","line":17,"name":"Server::builder().add_service","receiver":"Server::builder"}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:18:21:InventoryServer::from_arc","label":"Call","properties":{"callee":"from_arc","columnNumber":21,"expression":"InventoryServer::from_arc","line":18,"name":"InventoryServer::from_arc","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:18:9:Server::builder().add_service(GreeterServer::new(greeter)).add_service","label":"Call","properties":{"callee":"add_service","columnNumber":9,"expression":"Server::builder().add_service(GreeterServer::new(greeter)).add_service","line":18,"name":"Server::builder().add_service(GreeterServer::new(greeter)).add_service","receiver":"Server::builder"}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:19:9:Server::builder().add_service(GreeterServer::new(greeter)).add_service(InventoryServer::from_arc(store)).serve","label":"Call","properties":{"callee":"serve","columnNumber":9,"expression":"Server::builder().add_service(GreeterServer::new(greeter)).add_service(InventoryServer::from_arc(store)).serve","line":19,"name":"Server::builder().add_service(GreeterServer::new(greeter)).add_service(InventoryServer::from_arc(store)).serve","receiver":"Server::builder"}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:call:21:4:Ok","label":"Call","properties":{"callee":"Ok","columnNumber":4,"expression":"Ok","line":21,"name":"Ok","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:12:main:decorator:12:tokio::main","label":"Decorator","properties":{"args":"[]","expression":"#[tokio::main]","line":12,"name":"tokio::main"}}
+{"kind":"node","id":"file:src/main.rs:import:1:greeter","label":"Import","properties":{"isModule":true,"line":1,"source":"greeter","specifier":"mod greeter;"}}
+{"kind":"node","id":"file:src/main.rs:import:2:store","label":"Import","properties":{"isModule":true,"line":2,"source":"store","specifier":"mod store;"}}
+{"kind":"node","id":"file:src/main.rs:import:4:std::sync::Arc","label":"Import","properties":{"line":4,"source":"std::sync::Arc","specifier":"use std::sync::Arc;"}}
+{"kind":"node","id":"file:src/main.rs:import:6:tonic::transport::Server","label":"Import","properties":{"line":6,"source":"tonic::transport::Server","specifier":"use tonic::transport::Server;"}}
+{"kind":"node","id":"file:src/main.rs:import:8:crate::greeter::GreeterServer","label":"Import","properties":{"line":8,"source":"crate::greeter::GreeterServer","specifier":"use crate::greeter::{GreeterServer, MyGreeter};"}}
+{"kind":"node","id":"file:src/main.rs:import:8:crate::greeter::MyGreeter","label":"Import","properties":{"line":8,"source":"crate::greeter::MyGreeter","specifier":"use crate::greeter::{GreeterServer, MyGreeter};"}}
+{"kind":"node","id":"file:src/main.rs:import:9:crate::store::InventoryServer","label":"Import","properties":{"line":9,"source":"crate::store::InventoryServer","specifier":"use crate::store::{InventoryServer, StoreService};"}}
+{"kind":"node","id":"file:src/main.rs:import:9:crate::store::StoreService","label":"Import","properties":{"line":9,"source":"crate::store::StoreService","specifier":"use crate::store::{InventoryServer, StoreService};"}}
+{"kind":"node","id":"file:src/store.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/store.rs","relativePath":"src/store.rs","rustCrate":"src/main.rs","rustCrateName":"rust_tonic","rustModule":"store","sourceType":"production"}}
+{"kind":"node","id":"file:src/store.rs:class:13:StoreService","label":"Class","properties":{"endLine":13,"isAbstract":false,"isExported":true,"line":13,"name":"StoreService","visibility":"pub"}}
+{"kind":"node","id":"file:src/store.rs:class:3:InventoryServer","label":"Class","properties":{"endLine":5,"fields":"[{\"name\":\"inner\",\"type\":\"T\"}]","isAbstract":false,"isExported":true,"line":3,"name":"InventoryServer","typeParameters":"<T>","visibility":"pub"}}
+{"kind":"node","id":"file:src/store.rs:function:16:new","label":"Function","properties":{"className":"StoreService","endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":16,"methodKind":null,"name":"new","parameters":"[]","returnType":"Self","visibility":"pub"}}
+{"kind":"node","id":"file:src/store.rs:function:23:list_items","label":"Function","properties":{"className":"StoreService","endLine":25,"implementsTrait":"Inventory","isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_item","line":23,"methodKind":"trait-impl","name":"list_items","parameters":"[{\"name\":\"self\",\"type\":\"&Self\"},{\"name\":\"request\",\"type\":\"Request<()>\"}]","returnType":"Result<Response<()>, Status>","visibility":"private"}}
+{"kind":"node","id":"file:src/store.rs:function:23:list_items:call:24:11:Response::new","label":"Call","properties":{"callee":"new","columnNumber":11,"expression":"Response::new","line":24,"name":"Response::new","receiver":null}}
+{"kind":"node","id":"file:src/store.rs:function:23:list_items:call:24:8:Ok","label":"Call","properties":{"callee":"Ok","columnNumber":8,"expression":"Ok","line":24,"name":"Ok","receiver":null}}
+{"kind":"node","id":"file:src/store.rs:function:8:from_arc","label":"Function","properties":{"className":"InventoryServer","endLine":10,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":8,"methodKind":null,"name":"from_arc","parameters":"[{\"name\":\"inner\",\"type\":\"std::sync::Arc<T>\"}]","returnType":"Self","visibility":"pub"}}
+{"kind":"node","id":"file:src/store.rs:function:8:from_arc:call:9:33:todo!","label":"Call","properties":{"callee":"todo","columnNumber":33,"expression":"todo!","line":9,"name":"todo","receiver":null}}
+{"kind":"node","id":"file:src/store.rs:import:1:tonic::Request","label":"Import","properties":{"line":1,"source":"tonic::Request","specifier":"use tonic::{Request, Response, Status};"}}
+{"kind":"node","id":"file:src/store.rs:import:1:tonic::Response","label":"Import","properties":{"line":1,"source":"tonic::Response","specifier":"use tonic::{Request, Response, Status};"}}
+{"kind":"node","id":"file:src/store.rs:import:1:tonic::Status","label":"Import","properties":{"line":1,"source":"tonic::Status","specifier":"use tonic::{Request, Response, Status};"}}
+{"kind":"node","id":"file:src/store.rs:interface:28:Inventory","label":"Interface","properties":{"embeds":"[]","endLine":28,"isExported":true,"line":28,"methodSignatures":"{}","methods":"[]","name":"Inventory","visibility":"pub"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"rust-tonic","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Cargo.toml","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/greeter.rs","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.rs","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/store.rs","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs","type":"DEFINES_CLASS","to":"file:src/greeter.rs:class:15:GreeterServer","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs","type":"DEFINES_CLASS","to":"file:src/greeter.rs:class:26:MyGreeter","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs","type":"DEFINES_CLASS","to":"file:src/greeter.rs:class:3:HelloRequest","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs","type":"DEFINES_CLASS","to":"file:src/greeter.rs:class:7:HelloReply","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs","type":"DEFINES_INTERFACE","to":"file:src/greeter.rs:interface:11:Greeter","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs","type":"IMPORTS","to":"file:src/greeter.rs:import:1:tonic::Request","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs","type":"IMPORTS","to":"file:src/greeter.rs:import:1:tonic::Response","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs","type":"IMPORTS","to":"file:src/greeter.rs:import:1:tonic::Status","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:class:15:GreeterServer","type":"DEFINES_METHOD","to":"file:src/greeter.rs:function:20:new","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:class:26:MyGreeter","type":"DEFINES_METHOD","to":"file:src/greeter.rs:function:30:say_hello","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:class:26:MyGreeter","type":"DEFINES_METHOD","to":"file:src/greeter.rs:function:34:say_goodbye","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:class:26:MyGreeter","type":"DEFINES_METHOD","to":"file:src/greeter.rs:function:40:helper","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:class:26:MyGreeter","type":"HAS_DECORATOR","to":"file:src/greeter.rs:class:26:MyGreeter:decorator:26:derive","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:class:26:MyGreeter","type":"IMPLEMENTS","to":"file:src/greeter.rs:interface:11:Greeter","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:function:30:say_hello","type":"CALLS","to":"file:src/greeter.rs:function:30:say_hello:call:31:11:Response::new","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:function:30:say_hello","type":"CALLS","to":"file:src/greeter.rs:function:30:say_hello:call:31:47:format!","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:function:30:say_hello","type":"CALLS","to":"file:src/greeter.rs:function:30:say_hello:call:31:8:Ok","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:function:34:say_goodbye","type":"CALLS","to":"file:src/greeter.rs:function:34:say_goodbye:call:35:11:Response::new","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:function:34:say_goodbye","type":"CALLS","to":"file:src/greeter.rs:function:34:say_goodbye:call:35:55:request.into_inner","properties":{}}
+{"kind":"rel","from":"file:src/greeter.rs:function:34:say_goodbye","type":"CALLS","to":"file:src/greeter.rs:function:34:say_goodbye:call:35:8:Ok","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:12:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:17:21:grpc:Greeter/say_goodbye","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:17:21:grpc:Greeter/say_hello","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:18:21:grpc:Inventory/list_items","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:12:main","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:1:greeter","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:2:store","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:4:std::sync::Arc","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:6:tonic::transport::Server","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:8:crate::greeter::GreeterServer","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:8:crate::greeter::MyGreeter","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:9:crate::store::InventoryServer","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:9:crate::store::StoreService","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:12:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/main.rs:function:12:main","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:17:21:grpc:Greeter/say_goodbye","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/greeter.rs:function:34:say_goodbye","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:17:21:grpc:Greeter/say_hello","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/greeter.rs:function:30:say_hello","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:18:21:grpc:Inventory/list_items","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/store.rs:function:23:list_items","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:13:29:\"[::1]:50051\".parse","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:14:18:MyGreeter::default","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:15:16:Arc::new","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:15:25:StoreService::new","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:16:4:Server::builder","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:17:21:GreeterServer::new","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:17:9:Server::builder().add_service","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:18:21:InventoryServer::from_arc","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:18:9:Server::builder().add_service(GreeterServer::new(greeter)).add_service","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:19:9:Server::builder().add_service(GreeterServer::new(greeter)).add_service(InventoryServer::from_arc(store)).serve","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"CALLS","to":"file:src/main.rs:function:12:main:call:21:4:Ok","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main","type":"HAS_METHOD_DECORATOR","to":"file:src/main.rs:function:12:main:decorator:12:tokio::main","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main:call:15:25:StoreService::new","type":"CALL_RESOLVES_TO","to":"file:src/store.rs:function:16:new","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main:call:17:21:GreeterServer::new","type":"CALL_RESOLVES_TO","to":"file:src/greeter.rs:function:20:new","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:12:main:call:18:21:InventoryServer::from_arc","type":"CALL_RESOLVES_TO","to":"file:src/store.rs:function:8:from_arc","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:1:greeter","type":"RESOLVES_TO","to":"file:src/greeter.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:2:store","type":"RESOLVES_TO","to":"file:src/store.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:8:crate::greeter::GreeterServer","type":"RESOLVES_TO","to":"file:src/greeter.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:8:crate::greeter::MyGreeter","type":"RESOLVES_TO","to":"file:src/greeter.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:9:crate::store::InventoryServer","type":"RESOLVES_TO","to":"file:src/store.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:9:crate::store::StoreService","type":"RESOLVES_TO","to":"file:src/store.rs","properties":{}}
+{"kind":"rel","from":"file:src/store.rs","type":"DEFINES_CLASS","to":"file:src/store.rs:class:13:StoreService","properties":{}}
+{"kind":"rel","from":"file:src/store.rs","type":"DEFINES_CLASS","to":"file:src/store.rs:class:3:InventoryServer","properties":{}}
+{"kind":"rel","from":"file:src/store.rs","type":"DEFINES_INTERFACE","to":"file:src/store.rs:interface:28:Inventory","properties":{}}
+{"kind":"rel","from":"file:src/store.rs","type":"IMPORTS","to":"file:src/store.rs:import:1:tonic::Request","properties":{}}
+{"kind":"rel","from":"file:src/store.rs","type":"IMPORTS","to":"file:src/store.rs:import:1:tonic::Response","properties":{}}
+{"kind":"rel","from":"file:src/store.rs","type":"IMPORTS","to":"file:src/store.rs:import:1:tonic::Status","properties":{}}
+{"kind":"rel","from":"file:src/store.rs:class:13:StoreService","type":"DEFINES_METHOD","to":"file:src/store.rs:function:16:new","properties":{}}
+{"kind":"rel","from":"file:src/store.rs:class:13:StoreService","type":"DEFINES_METHOD","to":"file:src/store.rs:function:23:list_items","properties":{}}
+{"kind":"rel","from":"file:src/store.rs:class:13:StoreService","type":"IMPLEMENTS","to":"file:src/store.rs:interface:28:Inventory","properties":{}}
+{"kind":"rel","from":"file:src/store.rs:class:3:InventoryServer","type":"DEFINES_METHOD","to":"file:src/store.rs:function:8:from_arc","properties":{}}
+{"kind":"rel","from":"file:src/store.rs:function:23:list_items","type":"CALLS","to":"file:src/store.rs:function:23:list_items:call:24:11:Response::new","properties":{}}
+{"kind":"rel","from":"file:src/store.rs:function:23:list_items","type":"CALLS","to":"file:src/store.rs:function:23:list_items:call:24:8:Ok","properties":{}}
+{"kind":"rel","from":"file:src/store.rs:function:8:from_arc","type":"CALLS","to":"file:src/store.rs:function:8:from_arc:call:9:33:todo!","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

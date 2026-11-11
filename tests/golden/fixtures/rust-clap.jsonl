@@ -1,0 +1,129 @@
+{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"rust-clap","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"file:Cargo.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/Cargo.toml","relativePath":"Cargo.toml","sourceType":"production"}}
+{"kind":"node","id":"file:src/builder.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/builder.rs","relativePath":"src/builder.rs","sourceType":"production"}}
+{"kind":"node","id":"file:src/builder.rs:entrypoint:5:20:cli:builder build","label":"EntryPoint","properties":{"handlerName":"build","kind":"cli","library":"clap","line":5,"receiverName":null,"trigger":"build"}}
+{"kind":"node","id":"file:src/builder.rs:entrypoint:6:20:cli:builder clean","label":"EntryPoint","properties":{"handlerName":"clean","kind":"cli","library":"clap","line":6,"receiverName":null,"trigger":"clean"}}
+{"kind":"node","id":"file:src/builder.rs:function:18:build_project","label":"Function","properties":{"className":null,"endLine":18,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":18,"methodKind":null,"name":"build_project","parameters":"[]","returnType":null,"visibility":"private"}}
+{"kind":"node","id":"file:src/builder.rs:function:20:clean_project","label":"Function","properties":{"className":null,"endLine":20,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":20,"methodKind":null,"name":"clean_project","parameters":"[]","returnType":null,"visibility":"private"}}
+{"kind":"node","id":"file:src/builder.rs:function:3:cli","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":3,"methodKind":null,"name":"cli","parameters":"[]","returnType":"Command","visibility":"pub"}}
+{"kind":"node","id":"file:src/builder.rs:function:3:cli:call:4:4:Command::new","label":"Call","properties":{"callee":"new","columnNumber":4,"expression":"Command::new","line":4,"name":"Command::new","receiver":null}}
+{"kind":"node","id":"file:src/builder.rs:function:3:cli:call:5:20:Command::new","label":"Call","properties":{"callee":"new","columnNumber":20,"expression":"Command::new","line":5,"name":"Command::new","receiver":null}}
+{"kind":"node","id":"file:src/builder.rs:function:3:cli:call:5:42:Command::new(\"build\").about","label":"Call","properties":{"callee":"about","columnNumber":42,"expression":"Command::new(\"build\").about","line":5,"name":"Command::new(\"build\").about","receiver":"Command::new"}}
+{"kind":"node","id":"file:src/builder.rs:function:3:cli:call:5:9:Command::new(\"builder\").subcommand","label":"Call","properties":{"callee":"subcommand","columnNumber":9,"expression":"Command::new(\"builder\").subcommand","line":5,"name":"Command::new(\"builder\").subcommand","receiver":"Command::new"}}
+{"kind":"node","id":"file:src/builder.rs:function:3:cli:call:6:20:Command::new","label":"Call","properties":{"callee":"new","columnNumber":20,"expression":"Command::new","line":6,"name":"Command::new","receiver":null}}
+{"kind":"node","id":"file:src/builder.rs:function:3:cli:call:6:9:Command::new(\"builder\").subcommand(Command::new(\"build\").about(\"Buildit\")).subcommand","label":"Call","properties":{"callee":"subcommand","columnNumber":9,"expression":"Command::new(\"builder\").subcommand(Command::new(\"build\").about(\"Buildit\")).subcommand","line":6,"name":"Command::new(\"builder\").subcommand(Command::new(\"build\").about(\"Buildit\")).subcommand","receiver":"Command::new"}}
+{"kind":"node","id":"file:src/builder.rs:function:9:run","label":"Function","properties":{"className":null,"endLine":16,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":9,"methodKind":null,"name":"run","parameters":"[]","returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:src/builder.rs:function:9:run:call:10:18:cli","label":"Call","properties":{"callee":"cli","columnNumber":18,"expression":"cli","line":10,"name":"cli","receiver":null}}
+{"kind":"node","id":"file:src/builder.rs:function:9:run:call:10:24:cli().get_matches","label":"Call","properties":{"callee":"get_matches","columnNumber":24,"expression":"cli().get_matches","line":10,"name":"cli().get_matches","receiver":"cli"}}
+{"kind":"node","id":"file:src/builder.rs:function:9:run:call:11:18:matches.subcommand","label":"Call","properties":{"callee":"subcommand","columnNumber":18,"expression":"matches.subcommand","line":11,"name":"matches.subcommand","receiver":"matches","receiverIsLocal":true}}
+{"kind":"node","id":"file:src/builder.rs:function:9:run:call:12:33:build_project","label":"Call","properties":{"callee":"build_project","columnNumber":33,"expression":"build_project","line":12,"name":"build_project","receiver":null}}
+{"kind":"node","id":"file:src/builder.rs:function:9:run:call:13:33:clean_project","label":"Call","properties":{"callee":"clean_project","columnNumber":33,"expression":"clean_project","line":13,"name":"clean_project","receiver":null}}
+{"kind":"node","id":"file:src/builder.rs:import:1:clap::Command","label":"Import","properties":{"line":1,"source":"clap::Command","specifier":"use clap::Command;"}}
+{"kind":"node","id":"file:src/commands.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/commands.rs","relativePath":"src/commands.rs","rustCrate":"src/main.rs","rustCrateName":"rust_clap","rustModule":"commands","sourceType":"production"}}
+{"kind":"node","id":"file:src/commands.rs:function:11:seed","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":11,"methodKind":null,"name":"seed","parameters":"[{\"name\":\"count\",\"type\":\"u32\"}]","returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:src/commands.rs:function:1:serve","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":1,"methodKind":null,"name":"serve","parameters":"[{\"name\":\"port\",\"type\":\"u16\"}]","returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:src/commands.rs:function:5:migrate","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":5,"methodKind":null,"name":"migrate","parameters":"[{\"name\":\"dry_run\",\"type\":\"bool\"}]","returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:src/commands.rs:function:9:reset","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":9,"methodKind":null,"name":"reset","parameters":"[]","returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:src/main.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/main.rs","relativePath":"src/main.rs","rustCrate":"src/main.rs","rustCrateName":"rust_clap","rustModule":"","sourceType":"production"}}
+{"kind":"node","id":"file:src/main.rs:class:28:MigrateArgs","label":"Class","properties":{"endLine":30,"fields":"[{\"name\":\"dry_run\",\"type\":\"bool\"}]","isAbstract":false,"isExported":false,"line":28,"name":"MigrateArgs","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:class:28:MigrateArgs:decorator:28:derive","label":"Decorator","properties":{"args":"[\"Args\"]","expression":"#[derive(Args)]","line":28,"name":"derive"}}
+{"kind":"node","id":"file:src/main.rs:class:33:DbArgs","label":"Class","properties":{"endLine":36,"fields":"[{\"name\":\"action\",\"type\":\"DbCommands\"}]","isAbstract":false,"isExported":false,"line":33,"name":"DbArgs","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:class:33:DbArgs:decorator:33:derive","label":"Decorator","properties":{"args":"[\"Args\"]","expression":"#[derive(Args)]","line":33,"name":"derive"}}
+{"kind":"node","id":"file:src/main.rs:class:7:Cli","label":"Class","properties":{"endLine":12,"fields":"[{\"name\":\"verbose\",\"type\":\"bool\"},{\"name\":\"command\",\"type\":\"Commands\"}]","isAbstract":false,"isExported":false,"line":7,"name":"Cli","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:class:7:Cli:decorator:7:command","label":"Decorator","properties":{"args":"[\"name = \\\"tool\\\"\",\"version\"]","expression":"#[command(name = \"tool\", version)]","line":7,"name":"command"}}
+{"kind":"node","id":"file:src/main.rs:class:7:Cli:decorator:7:derive","label":"Decorator","properties":{"args":"[\"Parser\"]","expression":"#[derive(Parser)]","line":7,"name":"derive"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:17:4:cli:serve","label":"EntryPoint","properties":{"handlerName":"Serve","kind":"cli","library":"clap","line":17,"receiverName":"Commands","trigger":"serve"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:21:4:cli:run-migrations","label":"EntryPoint","properties":{"handlerName":"RunMigrations","kind":"cli","library":"clap","line":21,"receiverName":"Commands","trigger":"run-migrations"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:24:4:cli:version-info","label":"EntryPoint","properties":{"handlerName":"Version","kind":"cli","library":"clap","line":24,"receiverName":"Commands","trigger":"version-info"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:40:4:cli:db reset","label":"EntryPoint","properties":{"handlerName":"Reset","kind":"cli","library":"clap","line":40,"receiverName":"DbCommands","trigger":"db reset"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:41:4:cli:db seed","label":"EntryPoint","properties":{"handlerName":"Seed","kind":"cli","library":"clap","line":41,"receiverName":"DbCommands","trigger":"db seed"}}
+{"kind":"node","id":"file:src/main.rs:entrypoint:44:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"rust","line":44,"receiverName":null,"trigger":null}}
+{"kind":"node","id":"file:src/main.rs:enum:15:Commands","label":"Enum","properties":{"endLine":25,"isExported":false,"line":15,"name":"Commands","variants":"[\"Serve\",\"RunMigrations\",\"Db\",\"Version\"]","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:enum:15:Commands:decorator:15:derive","label":"Decorator","properties":{"args":"[\"Subcommand\"]","expression":"#[derive(Subcommand)]","line":15,"name":"derive"}}
+{"kind":"node","id":"file:src/main.rs:enum:39:DbCommands","label":"Enum","properties":{"endLine":42,"isExported":false,"line":39,"name":"DbCommands","variants":"[\"Reset\",\"Seed\"]","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:enum:39:DbCommands:decorator:39:derive","label":"Decorator","properties":{"args":"[\"Subcommand\"]","expression":"#[derive(Subcommand)]","line":39,"name":"derive"}}
+{"kind":"node","id":"file:src/main.rs:function:44:main","label":"Function","properties":{"className":null,"endLine":55,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":44,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:function:44:main:call:45:14:Cli::parse","label":"Call","properties":{"callee":"parse","columnNumber":14,"expression":"Cli::parse","line":45,"name":"Cli::parse","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:44:main:call:47:36:commands::serve","label":"Call","properties":{"callee":"serve","columnNumber":36,"expression":"commands::serve","line":47,"name":"commands::serve","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:44:main:call:48:41:commands::migrate","label":"Call","properties":{"callee":"migrate","columnNumber":41,"expression":"commands::migrate","line":48,"name":"commands::migrate","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:44:main:call:50:33:commands::reset","label":"Call","properties":{"callee":"reset","columnNumber":33,"expression":"commands::reset","line":50,"name":"commands::reset","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:44:main:call:51:42:commands::seed","label":"Call","properties":{"callee":"seed","columnNumber":42,"expression":"commands::seed","line":51,"name":"commands::seed","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:44:main:call:53:29:println!","label":"Call","properties":{"callee":"println","columnNumber":29,"expression":"println!","line":53,"name":"println","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:import:1:commands","label":"Import","properties":{"isModule":true,"line":1,"source":"commands","specifier":"mod commands;"}}
+{"kind":"node","id":"file:src/main.rs:import:3:clap::Args","label":"Import","properties":{"line":3,"source":"clap::Args","specifier":"use clap::{Args, Parser, Subcommand};"}}
+{"kind":"node","id":"file:src/main.rs:import:3:clap::Parser","label":"Import","properties":{"line":3,"source":"clap::Parser","specifier":"use clap::{Args, Parser, Subcommand};"}}
+{"kind":"node","id":"file:src/main.rs:import:3:clap::Subcommand","label":"Import","properties":{"line":3,"source":"clap::Subcommand","specifier":"use clap::{Args, Parser, Subcommand};"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"rust-clap","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Cargo.toml","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/builder.rs","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/commands.rs","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.rs","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/builder.rs:entrypoint:5:20:cli:builder build","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/builder.rs:entrypoint:6:20:cli:builder clean","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs","type":"DEFINES_FUNCTION","to":"file:src/builder.rs:function:18:build_project","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs","type":"DEFINES_FUNCTION","to":"file:src/builder.rs:function:20:clean_project","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs","type":"DEFINES_FUNCTION","to":"file:src/builder.rs:function:3:cli","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs","type":"DEFINES_FUNCTION","to":"file:src/builder.rs:function:9:run","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs","type":"IMPORTS","to":"file:src/builder.rs:import:1:clap::Command","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:entrypoint:5:20:cli:builder build","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/builder.rs:function:18:build_project","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:entrypoint:6:20:cli:builder clean","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/builder.rs:function:20:clean_project","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:3:cli","type":"CALLS","to":"file:src/builder.rs:function:3:cli:call:4:4:Command::new","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:3:cli","type":"CALLS","to":"file:src/builder.rs:function:3:cli:call:5:20:Command::new","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:3:cli","type":"CALLS","to":"file:src/builder.rs:function:3:cli:call:5:42:Command::new(\"build\").about","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:3:cli","type":"CALLS","to":"file:src/builder.rs:function:3:cli:call:5:9:Command::new(\"builder\").subcommand","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:3:cli","type":"CALLS","to":"file:src/builder.rs:function:3:cli:call:6:20:Command::new","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:3:cli","type":"CALLS","to":"file:src/builder.rs:function:3:cli:call:6:9:Command::new(\"builder\").subcommand(Command::new(\"build\").about(\"Buildit\")).subcommand","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:9:run","type":"CALLS","to":"file:src/builder.rs:function:9:run:call:10:18:cli","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:9:run","type":"CALLS","to":"file:src/builder.rs:function:9:run:call:10:24:cli().get_matches","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:9:run","type":"CALLS","to":"file:src/builder.rs:function:9:run:call:11:18:matches.subcommand","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:9:run","type":"CALLS","to":"file:src/builder.rs:function:9:run:call:12:33:build_project","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:9:run","type":"CALLS","to":"file:src/builder.rs:function:9:run:call:13:33:clean_project","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:9:run:call:10:18:cli","type":"CALL_RESOLVES_TO","to":"file:src/builder.rs:function:3:cli","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:9:run:call:12:33:build_project","type":"CALL_RESOLVES_TO","to":"file:src/builder.rs:function:18:build_project","properties":{}}
+{"kind":"rel","from":"file:src/builder.rs:function:9:run:call:13:33:clean_project","type":"CALL_RESOLVES_TO","to":"file:src/builder.rs:function:20:clean_project","properties":{}}
+{"kind":"rel","from":"file:src/commands.rs","type":"DEFINES_FUNCTION","to":"file:src/commands.rs:function:11:seed","properties":{}}
+{"kind":"rel","from":"file:src/commands.rs","type":"DEFINES_FUNCTION","to":"file:src/commands.rs:function:1:serve","properties":{}}
+{"kind":"rel","from":"file:src/commands.rs","type":"DEFINES_FUNCTION","to":"file:src/commands.rs:function:5:migrate","properties":{}}
+{"kind":"rel","from":"file:src/commands.rs","type":"DEFINES_FUNCTION","to":"file:src/commands.rs:function:9:reset","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:17:4:cli:serve","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:21:4:cli:run-migrations","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:24:4:cli:version-info","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:40:4:cli:db reset","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:41:4:cli:db seed","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:44:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_CLASS","to":"file:src/main.rs:class:28:MigrateArgs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_CLASS","to":"file:src/main.rs:class:33:DbArgs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_CLASS","to":"file:src/main.rs:class:7:Cli","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_ENUM","to":"file:src/main.rs:enum:15:Commands","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_ENUM","to":"file:src/main.rs:enum:39:DbCommands","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:44:main","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:1:commands","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:3:clap::Args","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:3:clap::Parser","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:3:clap::Subcommand","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:class:28:MigrateArgs","type":"HAS_DECORATOR","to":"file:src/main.rs:class:28:MigrateArgs:decorator:28:derive","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:class:33:DbArgs","type":"HAS_DECORATOR","to":"file:src/main.rs:class:33:DbArgs:decorator:33:derive","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:class:7:Cli","type":"HAS_DECORATOR","to":"file:src/main.rs:class:7:Cli:decorator:7:command","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:class:7:Cli","type":"HAS_DECORATOR","to":"file:src/main.rs:class:7:Cli:decorator:7:derive","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:17:4:cli:serve","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/commands.rs:function:1:serve","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:21:4:cli:run-migrations","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/commands.rs:function:5:migrate","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:40:4:cli:db reset","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/commands.rs:function:9:reset","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:41:4:cli:db seed","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/commands.rs:function:11:seed","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:entrypoint:44:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/main.rs:function:44:main","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:enum:15:Commands","type":"ENUM_HAS_DECORATOR","to":"file:src/main.rs:enum:15:Commands:decorator:15:derive","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:enum:39:DbCommands","type":"ENUM_HAS_DECORATOR","to":"file:src/main.rs:enum:39:DbCommands:decorator:39:derive","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main","type":"CALLS","to":"file:src/main.rs:function:44:main:call:45:14:Cli::parse","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main","type":"CALLS","to":"file:src/main.rs:function:44:main:call:47:36:commands::serve","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main","type":"CALLS","to":"file:src/main.rs:function:44:main:call:48:41:commands::migrate","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main","type":"CALLS","to":"file:src/main.rs:function:44:main:call:50:33:commands::reset","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main","type":"CALLS","to":"file:src/main.rs:function:44:main:call:51:42:commands::seed","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main","type":"CALLS","to":"file:src/main.rs:function:44:main:call:53:29:println!","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main:call:47:36:commands::serve","type":"CALL_RESOLVES_TO","to":"file:src/commands.rs:function:1:serve","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main:call:48:41:commands::migrate","type":"CALL_RESOLVES_TO","to":"file:src/commands.rs:function:5:migrate","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main:call:50:33:commands::reset","type":"CALL_RESOLVES_TO","to":"file:src/commands.rs:function:9:reset","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:44:main:call:51:42:commands::seed","type":"CALL_RESOLVES_TO","to":"file:src/commands.rs:function:11:seed","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:1:commands","type":"RESOLVES_TO","to":"file:src/commands.rs","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
