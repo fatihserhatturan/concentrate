@@ -75,7 +75,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "component_tree",
-    description: `A UI component's tree, depth levels each way: what it renders and what renders it (props, line, an Astro island's client directive, an Angular template file), elements that resolved to no component (library components), its defining function or class, its hooks, and the contexts it reads (directly or through custom hooks).`,
+    description: `A UI component's tree, depth levels each way: what it renders and what renders it (props, line, an Astro island's client directive, an Angular template file), unresolved elements (library components), its defining function or class, hooks, and the contexts it reads.`,
     inputSchema: objectSchema({
       name: { type: "string", description: "Exact component name." },
       file: { type: "string", description: "File or directory path, or a path suffix, of the component." },

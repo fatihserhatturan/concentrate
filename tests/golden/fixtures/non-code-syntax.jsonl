@@ -30,6 +30,7 @@
 {"kind":"node","id":"file:settings.jsonc","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/settings.jsonc","relativePath":"settings.jsonc","sourceType":"production"}}
 {"kind":"node","id":"file:tsconfig.base.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/tsconfig.base.json","relativePath":"tsconfig.base.json","sourceType":"production"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"non-code-syntax","path":"<root>"}}
+{"kind":"node","id":"table:sql:-:t","label":"Table","properties":{"columns":"[{\"name\":\"a\",\"column\":\"a\",\"type\":\"int\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false}]","declaredIn":"dialect.sql","indexes":"[]","kind":"table","library":"sql","line":2,"migrations":"[{\"file\":\"dialect.sql\",\"line\":2,\"order\":0,\"change\":\"create\"}]","name":"t","provider":null,"schemaName":null}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:.vscode","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:ci","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Dockerfile","properties":{}}

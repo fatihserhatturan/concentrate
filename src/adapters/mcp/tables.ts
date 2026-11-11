@@ -10,7 +10,7 @@ const USERS_PER_TABLE = 20;
 const str = (value: unknown): string | null => (typeof value === "string" ? value : null);
 
 // list_tables: database tables and collections (from Prisma schemas, TypeORM
-// entities, Mongoose schemas, Drizzle tables and Knex calls) with their columns, the models that map to them, those models'
+// entities, Mongoose schemas, Drizzle tables and Knex calls, and SQL migrations and schema files merged into them by name) with their columns, the models that map to them, those models'
 // relations, and the routes and entrypoints that read or write them.
 export async function listTables(engine: IQueryEngine, args: Record<string, unknown>, window: PageWindow) {
   const name = optionalString(args.name);
@@ -27,7 +27,7 @@ export async function listTables(engine: IQueryEngine, args: Record<string, unkn
       MATCH (table:Table) ${where}
       RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library,
         table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn,
-        table.line AS line, table.columns AS columns
+        table.line AS line, table.columns AS columns, table.migrations AS migrations, table.indexes AS indexes
     `, params),
     engine.query(`
       MATCH (model:DataModel)-[:MAPS_TO_TABLE]->(table:Table) ${where}
@@ -88,6 +88,8 @@ export async function listTables(engine: IQueryEngine, args: Record<string, unkn
         declaredIn: table.declaredIn ?? null,
         line: table.line ?? null,
         columns: columns(table.columns),
+        ...(jsonList(table.indexes).length > 0 ? { indexes: jsonList(table.indexes) } : {}),
+        ...(jsonList(table.migrations).length > 0 ? { migrations: jsonList(table.migrations) } : {}),
         models: tableModels.map((model) => ({
           name: model.model,
           relations: (relationsByModel.get(String(model.modelId)) ?? [])
@@ -114,7 +116,7 @@ export async function listTables(engine: IQueryEngine, args: Record<string, unkn
     query: { name, library },
     totalTables: result.length,
     tables: window.take(result),
-    note: `Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions and Knex calls. readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to ${USERS_PER_TABLE} routes and entrypoints.`,
+    note: `Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to ${USERS_PER_TABLE} routes and entrypoints.`,
   };
 }
 
@@ -166,8 +168,19 @@ function columns(value: unknown): Row[] {
         ...(column.list ? { list: true } : {}),
         ...(column.isId ? { isId: true } : {}),
         ...(column.isUnique ? { isUnique: true } : {}),
+        ...(column.references ? { references: column.references } : {}),
       }))
       : [];
+  } catch {
+    return [];
+  }
+}
+
+function jsonList(value: unknown): Row[] {
+  if (typeof value !== "string") return [];
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    return Array.isArray(parsed) ? parsed as Row[] : [];
   } catch {
     return [];
   }

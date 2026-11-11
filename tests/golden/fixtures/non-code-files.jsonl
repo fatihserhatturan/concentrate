@@ -54,6 +54,7 @@
 {"kind":"node","id":"file:src/styles/theme.scss:style:rule:2:0","label":"Style","properties":{"atRule":null,"endLine":2,"kind":"rule","line":2,"name":".title","selector":".title"}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":true,"manager":null,"name":"non-code-files","path":"<root>","relativePath":".","version":"1.0.0","workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"non-code-files","path":"<root>"}}
+{"kind":"node","id":"table:sql:-:users","label":"Table","properties":{"columns":"[{\"name\":\"id\",\"column\":\"id\",\"type\":\"INTEGER\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false}]","declaredIn":"db/schema.sql","indexes":"[]","kind":"table","library":"sql","line":1,"migrations":"[{\"file\":\"db/schema.sql\",\"line\":1,\"order\":0,\"change\":\"create\"}]","name":"users","provider":null,"schemaName":null}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:db","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:docs","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:proto","properties":{}}
