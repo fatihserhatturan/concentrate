@@ -85,6 +85,12 @@ describe("C++ declarations and calls (fixtures/cpp-calls)", () => {
     assert.equal(imports[0]!.properties.isSystem, true);
   });
 
+  it("reads a class behind an export macro", () => {
+    assert.ok(result.nodes.some((node) => node.label === "Class" && node.properties.qualifiedName === "geo::Widget"));
+    assert.ok(result.nodes.some((node) => node.label === "Function" && node.properties.qualifiedName === "geo::Widget::size"));
+    assert.deepEqual(result.report.warnings, []);
+  });
+
   it("links a declaration in a header to its definition in a source file", () => {
     const pairs = result.relationships.filter((relationship) => relationship.type === "DEFINED_BY").map((relationship) => `${relationship.from.replace(/^file:/u, "").replace(":function:", "@")} -> ${relationship.to.replace(/^file:/u, "").replace(":function:", "@")}`);
     assert.ok(pairs.includes("include/geo/shape.h@17:geo::Circle::area -> src/shape.cpp@15:geo::Circle::area"));
@@ -140,6 +146,9 @@ describe("C (fixtures/c-basic)", () => {
     const at = callTargets(result);
     assert.deepEqual(result.nodes.filter((node) => node.label === "Class").map((node) => `${node.properties.name}:${node.properties.kind}`).sort(), ["List:struct", "Node:struct"]);
     assert.ok(result.nodes.some((node) => node.label === "TypeAlias" === false && node.label === "Enum" && node.properties.name === "ListError"));
+    // The header's `extern "C" {` guards and the LIST_API macro leave its declarations intact.
+    assert.equal(result.nodes.filter((node) => node.label === "Function" && node.id.startsWith("file:include/list.h:") && node.properties.isDeclaration === true).length, 3);
+    assert.deepEqual(result.report.warnings, []);
     assert.deepEqual(at("src/main.c:10 list_push"), ["src/list.c#list_push header"]);
     assert.deepEqual(at("src/main.c:5 list_sum"), ["src/list.c#list_sum header"]);
     assert.deepEqual(at("src/main.c:12 LIST_EMPTY"), ["include/list.h#LIST_EMPTY macro"]);
@@ -183,8 +192,8 @@ describe("syntax errors (fixtures/cpp-syntax-error)", () => {
   it("keeps a partial graph and warns about the statements left out", async () => {
     const result = await scan("cpp-syntax-error");
     assert.deepEqual(result.report.failedFiles, []);
-    assert.deepEqual(result.report.warnings.map((warning) => `${warning.path}: ${warning.message}`), ["broken.cpp: Syntax error: left out the statements at lines 5, 8"]);
+    assert.deepEqual(result.report.warnings.map((warning) => `${warning.path}: ${warning.message}`), ["broken.cpp: Syntax error: left out the statement at line 8"]);
     const names = result.nodes.filter((node) => node.label === "Function" && node.id.includes("broken.cpp")).map((node) => node.properties.name);
-    assert.deepEqual(names, ["before", "DECLARE_HANDLER", "after"]);
+    assert.deepEqual(names, ["before", "exported", "DECLARE_HANDLER", "after"]);
   });
 });

@@ -54,6 +54,28 @@ function catchStandIn(text: string): string {
       `${"if".padEnd(name.length, " ")}${space}(${blankStrings(args)})`);
 }
 
+// Export and calling-convention macros that stand before a name
+// (`class TINYXML2_LIB XMLNode : …`, `static void * CJSON_CDECL f()`,
+// `TINYXML2_CONSTANT int x`) are not part of the grammar; they are read as
+// blanks of the same length.
+const attributeMacro = /(?<!#[ \t]*define[ \t]+)(?<=^|[\s(,])[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*_(?:API|LIB|EXPORT|EXPORTS|CDECL|STDCALL|CALL|DECL|CONSTANT|VISIBLE|PUBLIC|INLINE|NOINLINE|ATTR)\b(?=\s+[A-Za-z_*])/gmu;
+
+// `#ifdef __cplusplus` / `extern "C" {` / `#endif` opens a block that only
+// a second `#ifdef __cplusplus` / `}` / `#endif` closes; the grammar sees one
+// brace of each, so both are read as blanks (line breaks stay).
+const cplusplusGuard = String.raw`#[ \t]*if(?:def)?[ \t]+(?:defined[ \t]*\(?[ \t]*)?__cplusplus\)?[^\n]*\n\s*`;
+const externCOpen = new RegExp(`(${cplusplusGuard})(extern\\s+"C"\\s*\\{)`, "gu");
+const externCClose = new RegExp(`(${cplusplusGuard})\\}`, "gu");
+
+function cppStandIn(text: string): string {
+  const blank = (match: string) => match.replace(/[^\r\n]/gu, " ");
+  if (text.includes("__cplusplus")) {
+    text = text.replace(externCOpen, (_match, guard: string, open: string) => `${guard}${blank(open)}`)
+      .replace(externCClose, (_match, guard: string) => `${guard} `);
+  }
+  return catchStandIn(text.replace(attributeMacro, blank).replace(/\b(class|struct|union)(\s+)([A-Z][A-Z0-9_]{2,})(?=\s+[A-Za-z_]\w*\s*(?:final\s*)?[:{])/gu, (_match, keyword: string, space: string, macro: string) => `${keyword}${space}${blank(macro)}`));
+}
+
 type Context = {
   scope: string[];
   className: string | null;
@@ -86,7 +108,7 @@ async function parseCppFile(language: CppLanguage, rootPath: string, filePath: s
   const namespaceAliases: Record<string, string> = {};
   let hasTests = false;
 
-  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors(language, source, statementParents, 4, catchStandIn);
+  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors(language, source, statementParents, 4, cppStandIn);
   try {
     const uniqueId = (base: string, node: SyntaxNode) => {
       let id = base;
@@ -152,7 +174,7 @@ async function parseCppFile(language: CppLanguage, rootPath: string, filePath: s
           isAbstract: isPureVirtual(node),
           visibility: inClass ? context.access : isStatic || context.anonymous ? "internal" : "external",
           parameters: JSON.stringify(cppParameters(declarator.childForFieldName("parameters"))),
-          returnType: typeNode ? normalizeCppType(typeNode.text) ?? typeNode.text : null,
+          returnType: typeNode ? returnTypeOf(typeNode.text) : null,
           ...(context.template ? { typeParameters: context.template } : {}),
           namespace: scope.join("::"),
           qualifiedName,
@@ -479,6 +501,12 @@ async function parseCppFile(language: CppLanguage, rootPath: string, filePath: s
   } finally {
     tree.delete();
   }
+}
+
+// `CJSON_PUBLIC(cJSON *)` is a cJSON * (an export macro that wraps the type).
+function returnTypeOf(text: string): string {
+  const unwrapped = /^[A-Z_][A-Z0-9_]*\((.+)\)$/u.exec(text.trim())?.[1] ?? text;
+  return normalizeCppType(unwrapped) ?? unwrapped;
 }
 
 function joinScope(scope: string[], name: string): string {

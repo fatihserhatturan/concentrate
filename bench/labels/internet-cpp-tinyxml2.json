@@ -1,0 +1,101 @@
+{
+  "sample": "internet-cpp-tinyxml2",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Calls of contrib/html5-printer.cpp, which derives XMLPrinterHTML5 from tinyxml2::XMLPrinter: every call whose callee is a function or method of this repository, with the definition it runs (a method declared in tinyxml2.h and defined out of class in tinyxml2.cpp is labeled with the definition; methods defined in the class body with the header). isVoidElement is virtual and nothing below XMLPrinterHTML5 overrides it; _stack is a DynArray field of the base XMLPrinter; XMLPrinter::CloseElement() is an explicit call of the base implementation. strcasecmp is the C library's and not labeled, so any target it gets counts as a false positive.",
+  "calls": {
+    "files": [
+      "contrib/html5-printer.cpp"
+    ],
+    "items": [
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 67,
+        "callee": "isVoidElement",
+        "target": {
+          "file": "contrib/html5-printer.cpp",
+          "className": "XMLPrinterHTML5",
+          "name": "isVoidElement"
+        }
+      },
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 67,
+        "callee": "PeekTop",
+        "target": {
+          "file": "tinyxml2.h",
+          "className": "DynArray",
+          "name": "PeekTop"
+        }
+      },
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 68,
+        "callee": "SealElementIfJustOpened",
+        "target": {
+          "file": "tinyxml2.cpp",
+          "className": "XMLPrinter",
+          "name": "SealElementIfJustOpened"
+        }
+      },
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 70,
+        "callee": "CloseElement",
+        "target": {
+          "file": "tinyxml2.cpp",
+          "className": "XMLPrinter",
+          "name": "CloseElement"
+        }
+      },
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 95,
+        "callee": "Parse",
+        "target": {
+          "file": "tinyxml2.cpp",
+          "className": "XMLDocument",
+          "name": "Parse"
+        }
+      },
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 100,
+        "callee": "Print",
+        "target": {
+          "file": "tinyxml2.cpp",
+          "className": "XMLDocument",
+          "name": "Print"
+        }
+      },
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 101,
+        "callee": "CStr",
+        "target": {
+          "file": "tinyxml2.h",
+          "className": "XMLPrinter",
+          "name": "CStr"
+        }
+      },
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 104,
+        "callee": "Print",
+        "target": {
+          "file": "tinyxml2.cpp",
+          "className": "XMLDocument",
+          "name": "Print"
+        }
+      },
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 105,
+        "callee": "CStr",
+        "target": {
+          "file": "tinyxml2.h",
+          "className": "XMLPrinter",
+          "name": "CStr"
+        }
+      }
+    ]
+  }
+}

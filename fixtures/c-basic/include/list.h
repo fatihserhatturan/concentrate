@@ -5,6 +5,7 @@
 
 #define LIST_INIT { NULL, 0 }
 #define LIST_EMPTY(l) ((l)->length == 0)
+#define LIST_API
 
 typedef struct Node {
   int value;
@@ -18,8 +19,17 @@ typedef struct {
 
 enum ListError { LIST_OK, LIST_FULL };
 
-void list_push(List* list, int value);
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+LIST_API void list_push(List* list, int value);
 int list_sum(const List* list);
 size_t list_length(const List* list);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
