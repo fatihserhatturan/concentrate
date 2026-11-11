@@ -20,15 +20,36 @@ import {
 // are statements as well.
 const statementParents = new Set(["module", "block", "ERROR"]);
 
-export const pythonParser: LanguageParser = {
-  language: "python",
-  parse: (rootPath, filePath) => parsePythonFile(rootPath, filePath, "python"),
-};
+// A function or method of the file with the syntax it was built from;
+// `ownerName` is the class it is written in.
+export type PythonParsedFunction = { syntax: SyntaxNode; node: GraphNode; ownerName: string | null };
+
+// Parse-time semantics a framework layer adds to a Python file once its
+// structure is built (routes, entrypoints): it may add to the nodes and
+// relationships.
+export type PythonParsePlugin = (file: {
+  fileNodeId: string;
+  relativePath: string;
+  root: SyntaxNode;
+  nodes: GraphNode[];
+  relationships: GraphRelationship[];
+  functions: PythonParsedFunction[];
+}) => void;
+
+export function createPythonParser(plugins: readonly PythonParsePlugin[] = []): LanguageParser {
+  return {
+    language: "python",
+    parse: (rootPath, filePath) => parsePythonFile(rootPath, filePath, "python", plugins),
+  };
+}
+
+export const pythonParser: LanguageParser = createPythonParser();
 
 async function parsePythonFile(
   rootPath: string,
   filePath: string,
   language: SupportedLanguage,
+  plugins: readonly PythonParsePlugin[],
 ): Promise<ParsedSourceFile> {
   const source = await readFile(filePath, "utf8");
   const relativePath = path.relative(rootPath, filePath);
@@ -52,7 +73,8 @@ async function parsePythonFile(
     const allNames = readDunderAll(tree.rootNode);
     if (allNames) nodes[0]!.properties.allNames = JSON.stringify(allNames);
 
-    const context: FileContext = { allNames, isTestFile: classifyFile(relativePath, false, true).isTest };
+    const parsedFunctions: PythonParsedFunction[] = [];
+    const context: FileContext = { allNames, isTestFile: classifyFile(relativePath, false, true).isTest, parsedFunctions };
     walk(tree.rootNode, (node) => {
       if (node.type === "import_statement" || node.type === "import_from_statement") {
         for (const importNode of createPythonImportNodes(fileNodeId, node, importIds)) {
@@ -78,6 +100,8 @@ async function parsePythonFile(
         relationships.push({ from: fileNodeId, to: variable.id, type: "DEFINES_VARIABLE", properties: {} });
       }
     }
+
+    for (const plugin of plugins) plugin({ fileNodeId, relativePath, root: tree.rootNode, nodes, relationships, functions: parsedFunctions });
 
     const parsed: ParsedSourceFile = { fileNodeId, nodes, relationships };
     if (skippedLines.length > 0) {
@@ -111,7 +135,7 @@ function addDecorators(nodes: GraphNode[], relationships: GraphRelationship[], o
   return decorators;
 }
 
-type FileContext = { allNames: string[] | null; isTestFile: boolean };
+type FileContext = { allNames: string[] | null; isTestFile: boolean; parsedFunctions: PythonParsedFunction[] };
 
 // Importable from other modules: defined at module level, not private (or listed in `__all__`).
 function isModuleLevel(node: SyntaxNode): boolean {
@@ -225,6 +249,7 @@ function addFunction(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], r
   const testKind = testKindOf(node, functionNode, owner, decorators, context);
   if (testKind) functionNode.properties.testKind = testKind;
   nodes.push(functionNode);
+  context.parsedFunctions.push({ syntax: node, node: functionNode, ownerName });
 
   const ownerBases = owner ? classBases(owner) : null;
   const ownerKind = owner && ownerBases ? classKind(ownerBases, decoratorsOf(owner)) : null;

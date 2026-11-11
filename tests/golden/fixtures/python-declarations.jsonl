@@ -85,6 +85,8 @@
 {"kind":"node","id":"file:pkg/service.py:function:38:stacked:decorator:37:app.get","label":"Decorator","properties":{"args":"[\"\\\"/x\\\"\"]","expression":"@app.get(\"/x\")","line":37,"name":"app.get"}}
 {"kind":"node","id":"file:pkg/service.py:import:1:functools","label":"Import","properties":{"bindings":"[{\"imported\":\"functools\",\"local\":\"functools\",\"kind\":\"namespace\"}]","line":1,"source":"functools","specifier":"import functools"}}
 {"kind":"node","id":"file:pkg/service.py:import:3:flask","label":"Import","properties":{"bindings":"[{\"imported\":\"Flask\",\"local\":\"Flask\",\"kind\":\"named\"}]","line":3,"source":"flask","specifier":"from flask import Flask"}}
+{"kind":"node","id":"file:pkg/service.py:route:31:0:GET:/health","label":"Route","properties":{"extractors":null,"framework":"flask","fullPath":"/health","handlerName":"health","layers":null,"line":31,"method":"GET","path":"/health","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"app","scopeFunctionId":null}}
+{"kind":"node","id":"file:pkg/service.py:route:37:0:GET:/x","label":"Route","properties":{"extractors":null,"framework":"flask","fullPath":"/x","handlerName":"stacked","layers":null,"line":37,"method":"GET","path":"/x","pathExpression":null,"pendingHandlerRefs":null,"receiverName":"app","scopeFunctionId":null}}
 {"kind":"node","id":"file:pkg/service.py:variable:5:app","label":"Variable","properties":{"constructorName":"Flask","isExported":true,"kind":"variable","line":5,"name":"app","visibility":"public"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-declarations","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:pkg","properties":{}}
@@ -163,6 +165,8 @@
 {"kind":"rel","from":"file:pkg/models.py","type":"MODULE_CALLS","to":"file:pkg/models.py:call:49:7:namedtuple","properties":{}}
 {"kind":"rel","from":"file:pkg/models.py:class:16:User","type":"HAS_DECORATOR","to":"file:pkg/models.py:class:16:User:decorator:15:dataclass","properties":{}}
 {"kind":"rel","from":"file:pkg/models.py:class:34:Legacy","type":"HAS_DECORATOR","to":"file:pkg/models.py:class:34:Legacy:decorator:33:attr.s","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py","type":"DECLARES_ROUTE","to":"file:pkg/service.py:route:31:0:GET:/health","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py","type":"DECLARES_ROUTE","to":"file:pkg/service.py:route:37:0:GET:/x","properties":{}}
 {"kind":"rel","from":"file:pkg/service.py","type":"DEFINES_CLASS","to":"file:pkg/service.py:class:8:Service","properties":{}}
 {"kind":"rel","from":"file:pkg/service.py","type":"DEFINES_FUNCTION","to":"file:pkg/service.py:function:32:health","properties":{}}
 {"kind":"rel","from":"file:pkg/service.py","type":"DEFINES_FUNCTION","to":"file:pkg/service.py:function:38:stacked","properties":{}}
@@ -187,4 +191,8 @@
 {"kind":"rel","from":"file:pkg/service.py:function:32:health","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:32:health:decorator:31:app.route","properties":{}}
 {"kind":"rel","from":"file:pkg/service.py:function:38:stacked","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:38:stacked:decorator:36:functools.wraps","properties":{}}
 {"kind":"rel","from":"file:pkg/service.py:function:38:stacked","type":"HAS_METHOD_DECORATOR","to":"file:pkg/service.py:function:38:stacked:decorator:37:app.get","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:route:31:0:GET:/health","type":"ROUTE_HANDLED_BY","to":"file:pkg/service.py:function:32:health","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:route:31:0:GET:/health","type":"ROUTE_LIFECYCLE_STEP","to":"file:pkg/service.py:function:32:health","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
+{"kind":"rel","from":"file:pkg/service.py:route:37:0:GET:/x","type":"ROUTE_HANDLED_BY","to":"file:pkg/service.py:function:38:stacked","properties":{}}
+{"kind":"rel","from":"file:pkg/service.py:route:37:0:GET:/x","type":"ROUTE_LIFECYCLE_STEP","to":"file:pkg/service.py:function:38:stacked","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
