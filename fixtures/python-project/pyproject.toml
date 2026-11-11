@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shop-app"
+version = "1.2.0"
+dependencies = ["requests>=2.31", "pydantic[email]>=2; python_version >= '3.9'"]
+
+[project.scripts]
+shop = "shop.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

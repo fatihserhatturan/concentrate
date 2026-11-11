@@ -11,6 +11,7 @@ import { GraphStore } from "../src/adapters/store/store.js";
 import { parseJsTsWithRootNode } from "../src/integrations/languages/js-ts/parser.js";
 import { applyExpressKoaParseSemantics } from "../src/integrations/frameworks/js-ts/express-koa.js";
 import { applyFastifyParseSemantics } from "../src/integrations/frameworks/js-ts/fastify.js";
+import { failPythonParsingOfBrokenFiles } from "./helpers/failing-parser.js";
 import { parseTsconfig } from "../src/integrations/languages/js-ts/resolution/tsconfig.js";
 import type { GraphNode, GraphRelationship, GraphNodeLabel, GraphRelationshipType } from "../src/core/graph/model.js";
 
@@ -70,11 +71,12 @@ describe("buildCodeGraph", () => {
     assert.deepEqual(callsByFunction.get("inner"), ["nestedOnly"]);
   });
 
-  it("continues after syntax errors when requested", async () => {
+  it("continues after a failed file when requested", async () => {
     const fixturePath = await createScanErrorFixture();
+    const restore = failPythonParsingOfBrokenFiles();
     const graph = await buildCodeGraph(fixturePath, {
       continueOnError: true,
-    });
+    }).finally(restore);
 
     assert.equal(graph.report.discoveredFiles, 2);
     assert.equal(graph.report.supportedFiles, 2);
@@ -223,6 +225,7 @@ describe("buildCodeGraph", () => {
     const manifestPath = path.join(path.dirname(databasePath), "manifest.json");
     const previousExitCode = process.exitCode;
 
+    const restore = failPythonParsingOfBrokenFiles();
     await scanCommand(fixturePath, {
       database: databasePath,
       continueOnError: true,
@@ -231,7 +234,7 @@ describe("buildCodeGraph", () => {
       retryLock: true,
       manifest: manifestPath,
       cacheDir: path.join(path.dirname(databasePath), "cache"),
-    });
+    }).finally(restore);
 
     assert.equal(process.exitCode, 1);
     process.exitCode = previousExitCode;
@@ -275,7 +278,7 @@ describe("buildCodeGraph", () => {
     );
     assertRelationship(
       graph.relationships,
-      "file:main.py:import:1:./utils",
+      "file:main.py:import:1:.utils",
       "RESOLVES_TO",
       "file:utils.py",
     );
@@ -323,13 +326,13 @@ describe("buildCodeGraph", () => {
 
     assertRelationship(
       graph.relationships,
-      "file:app/main.py:import:1:./utils",
+      "file:app/main.py:import:1:.",
       "RESOLVES_TO",
       "file:app/utils.py",
     );
     assertRelationship(
       graph.relationships,
-      "file:app/main.py:import:2:./../core",
+      "file:app/main.py:import:2:..core",
       "RESOLVES_TO",
       "file:core.py",
     );
@@ -2078,7 +2081,7 @@ async function createScanErrorFixture(): Promise<string> {
     "export function good(): string {\n  return \"ok\";\n}\n",
     "utf8",
   );
-  // JS/TS files with syntax errors produce partial graphs; Python ones still fail.
+  // Code files with syntax errors produce partial graphs; the tests make the Python parser fail `bad.py`.
   await writeFile(path.join(fixturePath, "bad.py"), "def bad(:\n", "utf8");
   return fixturePath;
 }

@@ -22,7 +22,24 @@ type WorkspacePackage = PackageMetadata & {
   absolutePath: string;
   relativePath: string;
   workspaceRoot: boolean;
+  // The file the metadata came from (`package.json`, `pyproject.toml`).
+  metadataFile: string;
 };
+
+// A package another language declares (a Python project): read by an adapter
+// the scan is given, so core does not know the formats.
+export type ProjectPackage = {
+  // Directory of the metadata file, relative to the scan root.
+  dir: string;
+  name: string | null;
+  version: string | null;
+  manager: string;
+  dependencies: string[];
+  // Metadata files read; the first names the config values.
+  files: string[];
+};
+
+export type ProjectPackageReader = (rootPath: string, relativePaths: string[]) => Promise<ProjectPackage[]>;
 
 const dependencyFields = [
   "dependencies",
@@ -43,8 +60,11 @@ export async function addWorkspacePackageGraph(
   repoNodeId: string,
   rootPath: string,
   report: ScanReport,
+  readProjectPackages?: ProjectPackageReader,
 ): Promise<void> {
   const packages = await detectWorkspacePackages(rootPath, report);
+  if (readProjectPackages) packages.push(...await detectProjectPackages(rootPath, graph, packages, readProjectPackages));
+  packages.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
   if (packages.length === 0) {
     return;
   }
@@ -145,11 +165,43 @@ async function detectWorkspacePackages(rootPath: string, report: ScanReport): Pr
       absolutePath: path.dirname(absolutePackageJsonPath),
       relativePath,
       workspaceRoot: relativePath === ".",
+      metadataFile: "package.json",
       ...metadata,
     });
   }
 
   return packages.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
+}
+
+// Projects of other languages (Python's `pyproject.toml`) are packages too,
+// unless a `package.json` already owns the directory.
+async function detectProjectPackages(
+  rootPath: string,
+  graph: IGraphContributor,
+  taken: WorkspacePackage[],
+  read: ProjectPackageReader,
+): Promise<WorkspacePackage[]> {
+  const relativePaths: string[] = [];
+  for (const node of graph.nodes) {
+    if (node.label === "File" && typeof node.properties.relativePath === "string") relativePaths.push(toPosix(node.properties.relativePath));
+  }
+  const projects = await read(rootPath, relativePaths);
+  const packages: WorkspacePackage[] = [];
+  for (const project of projects) {
+    if (taken.some((existing) => existing.relativePath === project.dir)) continue;
+    packages.push({
+      absolutePath: path.join(rootPath, project.dir),
+      relativePath: project.dir,
+      workspaceRoot: project.dir === ".",
+      metadataFile: path.posix.basename(project.files[0] ?? "project"),
+      name: project.name,
+      version: project.version,
+      private: false,
+      packageManager: project.manager,
+      dependencies: project.dependencies.map((name) => ({ name, type: "dependencies" as const })),
+    });
+  }
+  return packages;
 }
 
 async function readPackageMetadata(
@@ -293,12 +345,12 @@ function addPackageConfigNodes(
       continue;
     }
 
-    const nodeId = `config:package:${workspacePackage.relativePath}:package.json:${key}`;
+    const nodeId = `config:package:${workspacePackage.relativePath}:${workspacePackage.metadataFile}:${key}`;
     graph.addNode({
       id: nodeId,
       label: "ConfigValue",
       properties: {
-        name: `package.json:${key}`,
+        name: `${workspacePackage.metadataFile}:${key}`,
         value: String(value),
         valueType: typeof value,
         line: 0,

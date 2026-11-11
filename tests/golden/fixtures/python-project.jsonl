@@ -1,0 +1,163 @@
+{"kind":"report","status":"success","discoveredFiles":9,"supportedFiles":8,"parsedFiles":8,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"config:package:.:pyproject.toml:name","label":"ConfigValue","properties":{"line":0,"name":"pyproject.toml:name","value":"shop-app","valueType":"string"}}
+{"kind":"node","id":"config:package:.:pyproject.toml:packageManager","label":"ConfigValue","properties":{"line":0,"name":"pyproject.toml:packageManager","value":"setuptools","valueType":"string"}}
+{"kind":"node","id":"config:package:.:pyproject.toml:private","label":"ConfigValue","properties":{"line":0,"name":"pyproject.toml:private","value":"false","valueType":"boolean"}}
+{"kind":"node","id":"config:package:.:pyproject.toml:version","label":"ConfigValue","properties":{"line":0,"name":"pyproject.toml:version","value":"1.2.0","valueType":"string"}}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"python-project","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"dir:src/shop","label":"Directory","properties":{"name":"shop","path":"<root>/src/shop","relativePath":"src/shop"}}
+{"kind":"node","id":"dir:src/shop/services","label":"Directory","properties":{"name":"services","path":"<root>/src/shop/services","relativePath":"src/shop/services"}}
+{"kind":"node","id":"dir:tests","label":"Directory","properties":{"name":"tests","path":"<root>/tests","relativePath":"tests"}}
+{"kind":"node","id":"file:pyproject.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/pyproject.toml","relativePath":"pyproject.toml","sourceType":"production"}}
+{"kind":"node","id":"file:src/shop/__init__.py","label":"File","properties":{"allNames":"[\"Order\",\"Customer\",\"place\",\"VERSION\"]","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/shop/__init__.py","relativePath":"src/shop/__init__.py","sourceType":"production"}}
+{"kind":"node","id":"file:src/shop/__init__.py:import:1:.models","label":"Import","properties":{"bindings":"[{\"imported\":\"Order\",\"local\":\"Order\",\"kind\":\"named\"}]","line":1,"source":".models","specifier":"from .models import Order, Customer"}}
+{"kind":"node","id":"file:src/shop/__init__.py:import:1:.models#2","label":"Import","properties":{"bindings":"[{\"imported\":\"Customer\",\"local\":\"Customer\",\"kind\":\"named\"}]","line":1,"source":".models","specifier":"from .models import Order, Customer"}}
+{"kind":"node","id":"file:src/shop/__init__.py:import:2:.services","label":"Import","properties":{"alias":"place","bindings":"[{\"imported\":\"place_order\",\"local\":\"place\",\"kind\":\"named\"}]","line":2,"source":".services","specifier":"from .services import place_order as place"}}
+{"kind":"node","id":"file:src/shop/__init__.py:import:3:.utils","label":"Import","properties":{"isWildcard":true,"line":3,"source":".utils","specifier":"from .utils import *"}}
+{"kind":"node","id":"file:src/shop/cli.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/shop/cli.py","relativePath":"src/shop/cli.py","sourceType":"production"}}
+{"kind":"node","id":"file:src/shop/cli.py:function:6:main","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":6,"methodKind":null,"name":"main","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/shop/cli.py:function:6:main:call:7:11:place","label":"Call","properties":{"callee":"place","columnNumber":11,"expression":"place","line":7,"name":"place","receiver":null}}
+{"kind":"node","id":"file:src/shop/cli.py:import:1:sys","label":"Import","properties":{"bindings":"[{\"imported\":\"sys\",\"local\":\"sys\",\"kind\":\"namespace\"}]","line":1,"source":"sys","specifier":"import sys"}}
+{"kind":"node","id":"file:src/shop/cli.py:import:3:shop","label":"Import","properties":{"bindings":"[{\"imported\":\"place\",\"local\":\"place\",\"kind\":\"named\"}]","line":3,"source":"shop","specifier":"from shop import place"}}
+{"kind":"node","id":"file:src/shop/models.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/shop/models.py","relativePath":"src/shop/models.py","sourceType":"production"}}
+{"kind":"node","id":"file:src/shop/models.py:class:1:Customer","label":"Class","properties":{"endLine":3,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":1,"name":"Customer","visibility":"public"}}
+{"kind":"node","id":"file:src/shop/models.py:class:6:Order","label":"Class","properties":{"endLine":9,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":6,"name":"Order","visibility":"public"}}
+{"kind":"node","id":"file:src/shop/models.py:function:2:__init__","label":"Function","properties":{"className":"Customer","endLine":3,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_definition","line":2,"methodKind":null,"name":"__init__","parameters":null,"returnType":null,"visibility":"dunder"}}
+{"kind":"node","id":"file:src/shop/models.py:function:7:__init__","label":"Function","properties":{"className":"Order","endLine":9,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_definition","line":7,"methodKind":null,"name":"__init__","parameters":null,"returnType":null,"visibility":"dunder"}}
+{"kind":"node","id":"file:src/shop/services/__init__.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/shop/services/__init__.py","relativePath":"src/shop/services/__init__.py","sourceType":"production"}}
+{"kind":"node","id":"file:src/shop/services/__init__.py:import:1:.orders","label":"Import","properties":{"bindings":"[{\"imported\":\"place_order\",\"local\":\"place_order\",\"kind\":\"named\"}]","line":1,"source":".orders","specifier":"from .orders import place_order"}}
+{"kind":"node","id":"file:src/shop/services/orders.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/shop/services/orders.py","relativePath":"src/shop/services/orders.py","sourceType":"production"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":17,"methodKind":null,"name":"place_order","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:18:12:Order","label":"Call","properties":{"callee":"Order","columnNumber":12,"expression":"Order","line":18,"name":"Order","receiver":null}}
+{"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:18:18:Buyer","label":"Call","properties":{"callee":"Buyer","columnNumber":18,"expression":"Buyer","line":18,"name":"Buyer","receiver":null}}
+{"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:19:11:pricing.price","label":"Call","properties":{"callee":"price","columnNumber":11,"expression":"pricing.price","line":19,"name":"pricing.price","receiver":"pricing"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:19:34:len","label":"Call","properties":{"callee":"len","columnNumber":34,"expression":"len","line":19,"name":"len","receiver":null}}
+{"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:19:38:slugify","label":"Call","properties":{"callee":"slugify","columnNumber":38,"expression":"slugify","line":19,"name":"slugify","receiver":null}}
+{"kind":"node","id":"file:src/shop/services/orders.py:function:17:place_order:call:19:55:len","label":"Call","properties":{"callee":"len","columnNumber":55,"expression":"len","line":19,"name":"len","receiver":null}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:10:..models","label":"Import","properties":{"bindings":"[{\"imported\":\"Order\",\"local\":\"Order\",\"kind\":\"named\"}]","line":10,"source":"..models","specifier":"from ..models import Order, Customer as Buyer"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:10:..models#2","label":"Import","properties":{"alias":"Buyer","bindings":"[{\"imported\":\"Customer\",\"local\":\"Buyer\",\"kind\":\"named\"}]","line":10,"source":"..models","specifier":"from ..models import Order, Customer as Buyer"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:11:shop.utils","label":"Import","properties":{"isWildcard":true,"line":11,"source":"shop.utils","specifier":"from shop.utils import *"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:14:..cli","label":"Import","properties":{"bindings":"[{\"imported\":\"main\",\"local\":\"main\",\"kind\":\"named\"}]","isTypeOnly":true,"line":14,"source":"..cli","specifier":"from ..cli import main"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:3:os","label":"Import","properties":{"bindings":"[{\"imported\":\"os\",\"local\":\"os\",\"kind\":\"namespace\"}]","line":3,"source":"os","specifier":"import os"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:4:shop.models","label":"Import","properties":{"alias":"m","bindings":"[{\"imported\":\"shop.models\",\"local\":\"m\",\"kind\":\"namespace\"}]","line":4,"source":"shop.models","specifier":"import shop.models as m"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:5:shop.utils","label":"Import","properties":{"bindings":"[{\"imported\":\"shop.utils\",\"local\":\"shop.utils\",\"kind\":\"namespace\"}]","line":5,"source":"shop.utils","specifier":"import shop.utils"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:6:typing","label":"Import","properties":{"bindings":"[{\"imported\":\"TYPE_CHECKING\",\"local\":\"TYPE_CHECKING\",\"kind\":\"named\"}]","line":6,"source":"typing","specifier":"from typing import TYPE_CHECKING"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:8:.","label":"Import","properties":{"bindings":"[{\"imported\":\"pricing\",\"local\":\"pricing\",\"kind\":\"named\"}]","line":8,"source":".","specifier":"from . import pricing"}}
+{"kind":"node","id":"file:src/shop/services/orders.py:import:9:..","label":"Import","properties":{"alias":"helpers","bindings":"[{\"imported\":\"utils\",\"local\":\"helpers\",\"kind\":\"named\"}]","line":9,"source":"..","specifier":"from .. import utils as helpers"}}
+{"kind":"node","id":"file:src/shop/services/pricing.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/shop/services/pricing.py","relativePath":"src/shop/services/pricing.py","sourceType":"production"}}
+{"kind":"node","id":"file:src/shop/services/pricing.py:function:1:price","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":1,"methodKind":null,"name":"price","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/shop/utils.py","label":"File","properties":{"allNames":"[\"slugify\"]","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/shop/utils.py","relativePath":"src/shop/utils.py","sourceType":"production"}}
+{"kind":"node","id":"file:src/shop/utils.py:function:4:slugify","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":4,"methodKind":null,"name":"slugify","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/shop/utils.py:function:4:slugify:call:5:11:text.lower","label":"Call","properties":{"callee":"lower","columnNumber":11,"expression":"text.lower","line":5,"name":"text.lower","receiver":"text"}}
+{"kind":"node","id":"file:src/shop/utils.py:function:4:slugify:call:5:11:text.lower().replace","label":"Call","properties":{"callee":"replace","columnNumber":11,"expression":"text.lower().replace","line":5,"name":"text.lower().replace","receiver":"text"}}
+{"kind":"node","id":"file:src/shop/utils.py:function:8:_internal","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_definition","line":8,"methodKind":null,"name":"_internal","parameters":null,"returnType":null,"visibility":"private"}}
+{"kind":"node","id":"file:tests/test_orders.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":true,"language":"python","path":"<root>/tests/test_orders.py","relativePath":"tests/test_orders.py","sourceType":"test"}}
+{"kind":"node","id":"file:tests/test_orders.py:function:6:test_place_order","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":6,"methodKind":null,"name":"test_place_order","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:tests/test_orders.py:function:6:test_place_order:call:7:11:place_order","label":"Call","properties":{"callee":"place_order","columnNumber":11,"expression":"place_order","line":7,"name":"place_order","receiver":null}}
+{"kind":"node","id":"file:tests/test_orders.py:import:1:shop.services.orders","label":"Import","properties":{"bindings":"[{\"imported\":\"place_order\",\"local\":\"place_order\",\"kind\":\"named\"}]","line":1,"source":"shop.services.orders","specifier":"from shop.services.orders import place_order"}}
+{"kind":"node","id":"file:tests/test_orders.py:import:2:shop.services","label":"Import","properties":{"bindings":"[{\"imported\":\"pricing\",\"local\":\"pricing\",\"kind\":\"named\"}]","line":2,"source":"shop.services","specifier":"from shop.services import pricing"}}
+{"kind":"node","id":"file:tests/test_orders.py:import:3:requests","label":"Import","properties":{"bindings":"[{\"imported\":\"requests\",\"local\":\"requests\",\"kind\":\"namespace\"}]","line":3,"source":"requests","specifier":"import requests"}}
+{"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":false,"manager":"setuptools","name":"shop-app","path":"<root>","relativePath":".","version":"1.2.0","workspaceRoot":true}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-project","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:tests","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:pyproject.toml","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_DIRECTORY","to":"dir:src/shop","properties":{}}
+{"kind":"rel","from":"dir:src/shop","type":"CONTAINS_DIRECTORY","to":"dir:src/shop/services","properties":{}}
+{"kind":"rel","from":"dir:src/shop","type":"CONTAINS_FILE","to":"file:src/shop/__init__.py","properties":{}}
+{"kind":"rel","from":"dir:src/shop","type":"CONTAINS_FILE","to":"file:src/shop/cli.py","properties":{}}
+{"kind":"rel","from":"dir:src/shop","type":"CONTAINS_FILE","to":"file:src/shop/models.py","properties":{}}
+{"kind":"rel","from":"dir:src/shop","type":"CONTAINS_FILE","to":"file:src/shop/utils.py","properties":{}}
+{"kind":"rel","from":"dir:src/shop/services","type":"CONTAINS_FILE","to":"file:src/shop/services/__init__.py","properties":{}}
+{"kind":"rel","from":"dir:src/shop/services","type":"CONTAINS_FILE","to":"file:src/shop/services/orders.py","properties":{}}
+{"kind":"rel","from":"dir:src/shop/services","type":"CONTAINS_FILE","to":"file:src/shop/services/pricing.py","properties":{}}
+{"kind":"rel","from":"dir:tests","type":"CONTAINS_FILE","to":"file:tests/test_orders.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py","type":"IMPORTS","to":"file:src/shop/__init__.py:import:1:.models","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py","type":"IMPORTS","to":"file:src/shop/__init__.py:import:1:.models#2","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py","type":"IMPORTS","to":"file:src/shop/__init__.py:import:2:.services","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py","type":"IMPORTS","to":"file:src/shop/__init__.py:import:3:.utils","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py:import:1:.models","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py:import:1:.models","type":"RESOLVES_TO","to":"file:src/shop/models.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py:import:1:.models#2","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py:import:1:.models#2","type":"RESOLVES_TO","to":"file:src/shop/models.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py:import:2:.services","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py:import:2:.services","type":"RESOLVES_TO","to":"file:src/shop/services/__init__.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py:import:3:.utils","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/__init__.py:import:3:.utils","type":"RESOLVES_TO","to":"file:src/shop/utils.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/cli.py","type":"DEFINES_FUNCTION","to":"file:src/shop/cli.py:function:6:main","properties":{}}
+{"kind":"rel","from":"file:src/shop/cli.py","type":"IMPORTS","to":"file:src/shop/cli.py:import:1:sys","properties":{}}
+{"kind":"rel","from":"file:src/shop/cli.py","type":"IMPORTS","to":"file:src/shop/cli.py:import:3:shop","properties":{}}
+{"kind":"rel","from":"file:src/shop/cli.py:function:6:main","type":"CALLS","to":"file:src/shop/cli.py:function:6:main:call:7:11:place","properties":{}}
+{"kind":"rel","from":"file:src/shop/cli.py:import:3:shop","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/cli.py:import:3:shop","type":"RESOLVES_TO","to":"file:src/shop/__init__.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/models.py","type":"DEFINES_CLASS","to":"file:src/shop/models.py:class:1:Customer","properties":{}}
+{"kind":"rel","from":"file:src/shop/models.py","type":"DEFINES_CLASS","to":"file:src/shop/models.py:class:6:Order","properties":{}}
+{"kind":"rel","from":"file:src/shop/models.py:class:1:Customer","type":"DEFINES_METHOD","to":"file:src/shop/models.py:function:2:__init__","properties":{}}
+{"kind":"rel","from":"file:src/shop/models.py:class:6:Order","type":"DEFINES_METHOD","to":"file:src/shop/models.py:function:7:__init__","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/__init__.py","type":"IMPORTS","to":"file:src/shop/services/__init__.py:import:1:.orders","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/__init__.py:import:1:.orders","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/__init__.py:import:1:.orders","type":"RESOLVES_TO","to":"file:src/shop/services/orders.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"DEFINES_FUNCTION","to":"file:src/shop/services/orders.py:function:17:place_order","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:10:..models","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:10:..models#2","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:11:shop.utils","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:14:..cli","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:3:os","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:4:shop.models","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:5:shop.utils","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:6:typing","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:8:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py","type":"IMPORTS","to":"file:src/shop/services/orders.py:import:9:..","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:18:12:Order","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:18:18:Buyer","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:19:11:pricing.price","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:19:34:len","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:19:38:slugify","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order","type":"CALLS","to":"file:src/shop/services/orders.py:function:17:place_order:call:19:55:len","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:function:17:place_order:call:19:38:slugify","type":"CALL_RESOLVES_TO","to":"file:src/shop/utils.py:function:4:slugify","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:10:..models","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:10:..models","type":"RESOLVES_TO","to":"file:src/shop/models.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:10:..models#2","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:10:..models#2","type":"RESOLVES_TO","to":"file:src/shop/models.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:11:shop.utils","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:11:shop.utils","type":"RESOLVES_TO","to":"file:src/shop/utils.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:14:..cli","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:14:..cli","type":"RESOLVES_TO","to":"file:src/shop/cli.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:4:shop.models","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:4:shop.models","type":"RESOLVES_TO","to":"file:src/shop/models.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:5:shop.utils","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:5:shop.utils","type":"RESOLVES_TO","to":"file:src/shop/utils.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:8:.","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:8:.","type":"RESOLVES_TO","to":"file:src/shop/services/pricing.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:9:..","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/orders.py:import:9:..","type":"RESOLVES_TO","to":"file:src/shop/utils.py","properties":{}}
+{"kind":"rel","from":"file:src/shop/services/pricing.py","type":"DEFINES_FUNCTION","to":"file:src/shop/services/pricing.py:function:1:price","properties":{}}
+{"kind":"rel","from":"file:src/shop/utils.py","type":"DEFINES_FUNCTION","to":"file:src/shop/utils.py:function:4:slugify","properties":{}}
+{"kind":"rel","from":"file:src/shop/utils.py","type":"DEFINES_FUNCTION","to":"file:src/shop/utils.py:function:8:_internal","properties":{}}
+{"kind":"rel","from":"file:src/shop/utils.py:function:4:slugify","type":"CALLS","to":"file:src/shop/utils.py:function:4:slugify:call:5:11:text.lower","properties":{}}
+{"kind":"rel","from":"file:src/shop/utils.py:function:4:slugify","type":"CALLS","to":"file:src/shop/utils.py:function:4:slugify:call:5:11:text.lower().replace","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py","type":"DEFINES_FUNCTION","to":"file:tests/test_orders.py:function:6:test_place_order","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py","type":"IMPORTS","to":"file:tests/test_orders.py:import:1:shop.services.orders","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py","type":"IMPORTS","to":"file:tests/test_orders.py:import:2:shop.services","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py","type":"IMPORTS","to":"file:tests/test_orders.py:import:3:requests","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py:function:6:test_place_order","type":"CALLS","to":"file:tests/test_orders.py:function:6:test_place_order:call:7:11:place_order","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py:function:6:test_place_order:call:7:11:place_order","type":"CALL_RESOLVES_TO","to":"file:src/shop/services/orders.py:function:17:place_order","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py:import:1:shop.services.orders","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py:import:1:shop.services.orders","type":"RESOLVES_TO","to":"file:src/shop/services/orders.py","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py:import:2:shop.services","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:tests/test_orders.py:import:2:shop.services","type":"RESOLVES_TO","to":"file:src/shop/services/pricing.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:pyproject.toml","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/shop/__init__.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/shop/cli.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/shop/models.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/shop/services/__init__.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/shop/services/orders.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/shop/services/pricing.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:src/shop/utils.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:tests/test_orders.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:pyproject.toml:name","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:pyproject.toml:packageManager","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:pyproject.toml:private","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:pyproject.toml:version","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:.","properties":{}}

@@ -383,7 +383,7 @@ Blocks or informs: future query server design.
 ## Parsing
 
 - Grammars are pinned (go upgraded since the native binding): javascript
-  0.23.1, typescript and tsx 0.23.2, python 0.21.0, go 0.25.0, rust 0.24.0
+  0.23.1, typescript and tsx 0.23.2, python 0.25.0, go 0.25.0, rust 0.24.0
   (see `vendor/grammars/manifest.json`). Newer syntax that only later grammar
   releases understand produces `ERROR` nodes.
 - Inline JSX event handlers create no nodes of their own, so a call inside
@@ -399,8 +399,8 @@ Blocks or informs: future query server design.
   A bare `&` before a letter in JSX text (`<p>a&b</p>`) is still an error.
   A Go file with syntax errors is handled the same way (declarations,
   statements, struct fields and interface members are left out one by one).
-  Python and Rust files with syntax errors are still reported as failed
-  files (`--continue-on-error` keeps the rest of the scan).
+  Rust and Python files are handled the same way. No code language fails a
+  file on a syntax error any more; the scan warns with the lines left out.
 
 - HTML pages (`.html`, `.htm`): `<script src>` becomes an `Import` of the
   page; a relative path resolves like `./path` (without `?query` / `#hash`).
@@ -1394,6 +1394,50 @@ Astro).
   of the name in another package's files as a use (comments and strings
   included), so it can miss dead exports but rarely flags used ones. Uses
   from outside the scan (a library's consumers) are not seen.
+
+## Python
+
+- The Python grammar is tree-sitter-python 0.25.0. A file with a syntax error is
+  kept: the statement with the error is left out (lines are listed in a scan
+  warning), the rest stays. A broken `def` header is the weak spot: the grammar
+  folds the statements after it into one error region, so everything up to the
+  next statement that parses on its own is left out with it (a method after a
+  broken method header can lose its class).
+- Projects come from `pyproject.toml` (`[project]`, Poetry, setuptools, hatch),
+  `setup.cfg` and `setup.py`, each a `Package` node (`manager` is the build
+  backend: `setuptools`, `poetry`, `hatch`, `flit`, `pdm`, `maturin`, or `pip`
+  for a bare `setup.py`). `pyproject.toml` wins over `setup.cfg`, which wins over
+  `setup.py`. `setup.py` is never run: only literal `name=`, `version=`,
+  `package_dir={"": "src"}`, `find_packages(where=…)`, `install_requires=[…]` and
+  `console_scripts` lists are read, so a `setup.py` that computes them yields
+  nothing. A `pyproject.toml` that only configures tools is not a project. A
+  dependency matches a project of the scan by its exact name (`my-lib` does not
+  match `my_lib`).
+- An import resolves against source roots: the ones the metadata declares
+  (`src/` layout, `package-dir`, `[tool.setuptools.packages.find] where`, Poetry
+  `packages = [{ from = … }]`, hatch wheel `packages`), a conventional `src/`,
+  the project directory, the scan root, and the directory pytest or a script puts
+  on the path (the first parent without `__init__.py`). Namespace packages
+  (directories without `__init__.py`) are importable but have no file. The real
+  `sys.path` (virtualenvs, `PYTHONPATH`, `.pth` files, `sys.path.insert`) is not
+  known, so an import of a name that only exists through them stays unresolved.
+- `import a.b`, `import a.b as c` and `from m import x as y` become one `Import`
+  per module or name, with `source` as written (`.sibling`, `..parent.mod`, `.`),
+  `bindings` and `alias`; `from m import *` has `isWildcard`. `from pkg import
+  name` resolves to the submodule `pkg.name` when there is one, else to `pkg`
+  (its `__init__.py`); it is not followed into the module that `__init__.py`
+  re-exports `name` from. Imports under `if TYPE_CHECKING:` have `isTypeOnly`.
+  Imports in functions, `try`/`except ImportError` and `if` branches are all
+  kept (no branch is evaluated). `__import__()` and `importlib.import_module()`
+  are not seen.
+- `__all__` of a module (`= [...]`, `+= [...]`, `.extend([...])`, `.append(…)`,
+  list or tuple of string literals) is kept as the file's `allNames`; a computed
+  `__all__` is ignored.
+- Only project modules count as unresolved: `import os`, `import requests` and
+  other names without a directory or file in a source root are standard library
+  or third-party and are not counted. A relative import that finds nothing is.
+- A `Package` now also exists for Python projects, so the files of a repository
+  with a root `pyproject.toml` belong to a root package, JS files included.
 
 ## Rust
 

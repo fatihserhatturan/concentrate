@@ -1,6 +1,7 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { indexOfNode, parseSyntaxTree, type SyntaxNode } from "../syntax/tree-sitter.js";
+import { parseSyntaxTreeSkippingErrors, type SyntaxNode } from "../syntax/tree-sitter.js";
+import { createPythonImportNodes, readDunderAll } from "./imports.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { SupportedLanguage } from "../../../core/scan/language.js";
 import type { LanguageParser } from "../../../core/contracts/language-parser.js";
@@ -9,6 +10,12 @@ import {
   walk,
   walkScoped,
 } from "../tree-sitter-utils.js";
+
+// Node types whose children are statements: one with a syntax error is left
+// out on its own, and the rest of the file is kept. A broken `def` header makes
+// the grammar wrap the statements around it in one ERROR node, whose children
+// are statements as well.
+const statementParents = new Set(["module", "block", "ERROR"]);
 
 export const pythonParser: LanguageParser = {
   language: "python",
@@ -36,16 +43,15 @@ async function parsePythonFile(
   ];
   const relationships: GraphRelationship[] = [];
 
-  const tree = await parseSyntaxTree("python", source);
+  const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors("python", source, statementParents);
   try {
-    if (tree.rootNode.hasError) {
-      throw new Error("Syntax error");
-    }
+    const importIds = new Set<string>();
+    const allNames = readDunderAll(tree.rootNode);
+    if (allNames) nodes[0]!.properties.allNames = JSON.stringify(allNames);
 
     walk(tree.rootNode, (node) => {
       if (node.type === "import_statement" || node.type === "import_from_statement") {
-        const importNode = createImportNode(fileNodeId, node);
-        if (importNode) {
+        for (const importNode of createPythonImportNodes(fileNodeId, node, importIds)) {
           nodes.push(importNode);
           relationships.push({
             from: fileNodeId,
@@ -122,89 +128,14 @@ async function parsePythonFile(
       }
     });
 
-    return { fileNodeId, nodes, relationships };
+    const parsed: ParsedSourceFile = { fileNodeId, nodes, relationships };
+    if (skippedLines.length > 0) {
+      parsed.warnings = [`Syntax error: left out the statement${skippedLines.length === 1 ? "" : "s"} at line${skippedLines.length === 1 ? "" : "s"} ${skippedLines.join(", ")}`];
+    }
+    return parsed;
   } finally {
     tree.delete();
   }
-}
-
-function createImportNode(fileNodeId: string, node: SyntaxNode): GraphNode | null {
-  const source = node.type === "import_from_statement"
-    ? extractImportFromSource(node)
-    : extractImportStatementSource(node);
-
-  if (!source) {
-    return null;
-  }
-
-  return {
-    id: `${fileNodeId}:import:${node.startPosition.row + 1}:${source}`,
-    label: "Import",
-    properties: {
-      source,
-      specifier: node.text,
-      line: node.startPosition.row + 1,
-    },
-  };
-}
-
-function extractImportFromSource(node: SyntaxNode): string | null {
-  const relativeImport = node.namedChildren.find((child) => child.type === "relative_import");
-  if (relativeImport) {
-    return normalizePythonRelativeImport(relativeImport.text, getImportedName(node));
-  }
-
-  const dottedName = node.namedChildren.find((child) => child.type === "dotted_name");
-  return dottedName?.text ?? null;
-}
-
-function getImportedName(node: SyntaxNode): string | null {
-  const importSourceNode = node.namedChildren.find((child) => (
-    child.type === "relative_import" || child.type === "dotted_name"
-  ));
-  const importSourceIndex = importSourceNode ? indexOfNode(node.namedChildren, importSourceNode) : -1;
-  const importedName = node.namedChildren
-    .slice(importSourceIndex + 1)
-    .find((child) => child.type === "dotted_name" || child.type === "aliased_import");
-
-  if (!importedName) {
-    return null;
-  }
-
-  const dottedName = importedName.type === "aliased_import"
-    ? importedName.namedChildren.find((child) => child.type === "dotted_name")
-    : importedName;
-
-  return dottedName?.text ?? null;
-}
-
-function extractImportStatementSource(node: SyntaxNode): string | null {
-  const firstImport = node.namedChildren.find((child) => (
-    child.type === "dotted_name" || child.type === "aliased_import"
-  ));
-
-  if (!firstImport) {
-    return null;
-  }
-
-  const dottedName = firstImport.type === "aliased_import"
-    ? firstImport.namedChildren.find((child) => child.type === "dotted_name")
-    : firstImport;
-
-  return dottedName?.text ?? null;
-}
-
-function normalizePythonRelativeImport(source: string, importedName: string | null): string {
-  const dotCount = source.match(/^\.+/)?.[0].length ?? 0;
-  const modulePath = source.slice(dotCount).replaceAll(".", "/");
-  const parentPrefix = dotCount <= 1 ? "." : [".", ...Array.from({ length: dotCount - 1 }, () => "..")].join("/");
-  const importedPath = importedName?.replaceAll(".", "/") ?? null;
-
-  if (modulePath) {
-    return `${parentPrefix}/${modulePath}`;
-  }
-
-  return importedPath ? `${parentPrefix}/${importedPath}` : parentPrefix;
 }
 
 function isPythonClassMethod(node: SyntaxNode): boolean {

@@ -9,10 +9,10 @@
 {"kind":"node","id":"file:app/main.py:function:7:main:call:8:29:thing","label":"Call","properties":{"callee":"thing","columnNumber":29,"expression":"thing","line":8,"name":"thing","receiver":null}}
 {"kind":"node","id":"file:app/main.py:function:7:main:call:8:39:exported","label":"Call","properties":{"callee":"exported","columnNumber":39,"expression":"exported","line":8,"name":"exported","receiver":null}}
 {"kind":"node","id":"file:app/main.py:function:7:main:call:8:52:nested.value","label":"Call","properties":{"callee":"value","columnNumber":52,"expression":"nested.value","line":8,"name":"nested.value","receiver":"nested"}}
-{"kind":"node","id":"file:app/main.py:import:1:./utils","label":"Import","properties":{"line":1,"source":"./utils","specifier":"from . import utils"}}
-{"kind":"node","id":"file:app/main.py:import:2:./../core","label":"Import","properties":{"line":2,"source":"./../core","specifier":"from ..core import thing"}}
-{"kind":"node","id":"file:app/main.py:import:3:pkg.module","label":"Import","properties":{"line":3,"source":"pkg.module","specifier":"from pkg.module import exported"}}
-{"kind":"node","id":"file:app/main.py:import:4:pkg.nested","label":"Import","properties":{"line":4,"source":"pkg.nested","specifier":"import pkg.nested as nested"}}
+{"kind":"node","id":"file:app/main.py:import:1:.","label":"Import","properties":{"bindings":"[{\"imported\":\"utils\",\"local\":\"utils\",\"kind\":\"named\"}]","line":1,"source":".","specifier":"from . import utils"}}
+{"kind":"node","id":"file:app/main.py:import:2:..core","label":"Import","properties":{"bindings":"[{\"imported\":\"thing\",\"local\":\"thing\",\"kind\":\"named\"}]","line":2,"source":"..core","specifier":"from ..core import thing"}}
+{"kind":"node","id":"file:app/main.py:import:3:pkg.module","label":"Import","properties":{"bindings":"[{\"imported\":\"exported\",\"local\":\"exported\",\"kind\":\"named\"}]","line":3,"source":"pkg.module","specifier":"from pkg.module import exported"}}
+{"kind":"node","id":"file:app/main.py:import:4:pkg.nested","label":"Import","properties":{"alias":"nested","bindings":"[{\"imported\":\"pkg.nested\",\"local\":\"nested\",\"kind\":\"namespace\"}]","line":4,"source":"pkg.nested","specifier":"import pkg.nested as nested"}}
 {"kind":"node","id":"file:app/utils.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/utils.py","relativePath":"app/utils.py","sourceType":"production"}}
 {"kind":"node","id":"file:app/utils.py:function:1:utility","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":1,"methodKind":null,"name":"utility","parameters":null,"returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:core.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/core.py","relativePath":"core.py","sourceType":"production"}}
@@ -33,8 +33,8 @@
 {"kind":"rel","from":"dir:pkg","type":"CONTAINS_FILE","to":"file:pkg/module.py","properties":{}}
 {"kind":"rel","from":"dir:pkg/nested","type":"CONTAINS_FILE","to":"file:pkg/nested/__init__.py","properties":{}}
 {"kind":"rel","from":"file:app/main.py","type":"DEFINES_FUNCTION","to":"file:app/main.py:function:7:main","properties":{}}
-{"kind":"rel","from":"file:app/main.py","type":"IMPORTS","to":"file:app/main.py:import:1:./utils","properties":{}}
-{"kind":"rel","from":"file:app/main.py","type":"IMPORTS","to":"file:app/main.py:import:2:./../core","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"IMPORTS","to":"file:app/main.py:import:1:.","properties":{}}
+{"kind":"rel","from":"file:app/main.py","type":"IMPORTS","to":"file:app/main.py:import:2:..core","properties":{}}
 {"kind":"rel","from":"file:app/main.py","type":"IMPORTS","to":"file:app/main.py:import:3:pkg.module","properties":{}}
 {"kind":"rel","from":"file:app/main.py","type":"IMPORTS","to":"file:app/main.py:import:4:pkg.nested","properties":{}}
 {"kind":"rel","from":"file:app/main.py:function:7:main","type":"CALLS","to":"file:app/main.py:function:7:main:call:8:11:utils.utility","properties":{}}
@@ -43,8 +43,9 @@
 {"kind":"rel","from":"file:app/main.py:function:7:main","type":"CALLS","to":"file:app/main.py:function:7:main:call:8:52:nested.value","properties":{}}
 {"kind":"rel","from":"file:app/main.py:function:7:main:call:8:29:thing","type":"CALL_RESOLVES_TO","to":"file:core.py:function:1:thing","properties":{}}
 {"kind":"rel","from":"file:app/main.py:function:7:main:call:8:39:exported","type":"CALL_RESOLVES_TO","to":"file:pkg/module.py:function:1:exported","properties":{}}
-{"kind":"rel","from":"file:app/main.py:import:1:./utils","type":"RESOLVES_TO","to":"file:app/utils.py","properties":{}}
-{"kind":"rel","from":"file:app/main.py:import:2:./../core","type":"RESOLVES_TO","to":"file:core.py","properties":{}}
+{"kind":"rel","from":"file:app/main.py:function:7:main:call:8:52:nested.value","type":"CALL_RESOLVES_TO","to":"file:pkg/nested/__init__.py:function:1:value","properties":{}}
+{"kind":"rel","from":"file:app/main.py:import:1:.","type":"RESOLVES_TO","to":"file:app/utils.py","properties":{}}
+{"kind":"rel","from":"file:app/main.py:import:2:..core","type":"RESOLVES_TO","to":"file:core.py","properties":{}}
 {"kind":"rel","from":"file:app/main.py:import:3:pkg.module","type":"RESOLVES_TO","to":"file:pkg/module.py","properties":{}}
 {"kind":"rel","from":"file:app/main.py:import:4:pkg.nested","type":"RESOLVES_TO","to":"file:pkg/nested/__init__.py","properties":{}}
 {"kind":"rel","from":"file:app/utils.py","type":"DEFINES_FUNCTION","to":"file:app/utils.py:function:1:utility","properties":{}}

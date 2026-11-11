@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { describe, it } from "node:test";
+import { failPythonParsingOfBrokenFiles } from "./helpers/failing-parser.js";
 import { startWatch, type WatchScan } from "../src/adapters/cli/watch.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 
@@ -66,13 +67,18 @@ describe("watch", () => {
       assert.ok((scan.result?.report.parseCache.misses ?? 0) >= 1);
 
       from = scans.length;
-      await writeFile(path.join(root, "src/c.py"), "def broken(:\n");
-      scan = await scanWhere(handle, scans, from, async (last) => last.result?.report.status === "failed");
+      const restore = failPythonParsingOfBrokenFiles();
+      await writeFile(path.join(root, "src/broken.py"), "def broken(:\n");
+      try {
+        scan = await scanWhere(handle, scans, from, async (last) => last.result?.report.status === "failed");
+      } finally {
+        restore();
+      }
       assert.deepEqual(await functionNames(reader), ["three", "two"], "a failed scan keeps the last graph");
 
       from = scans.length;
       await rm(path.join(root, "src/b.ts"));
-      await rm(path.join(root, "src/c.py"));
+      await rm(path.join(root, "src/broken.py"));
       scan = await scanWhere(handle, scans, from, async () => await names() === "two");
       assert.equal(scan.result?.report.status, "success");
 

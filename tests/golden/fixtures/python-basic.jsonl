@@ -10,7 +10,7 @@
 {"kind":"node","id":"file:main.py:function:4:main:call:5:11:utility","label":"Call","properties":{"callee":"utility","columnNumber":11,"expression":"utility","line":5,"name":"utility","receiver":null}}
 {"kind":"node","id":"file:main.py:function:8:fetch","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":8,"methodKind":null,"name":"fetch","parameters":null,"returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:main.py:function:8:fetch:call:9:11:utility","label":"Call","properties":{"callee":"utility","columnNumber":11,"expression":"utility","line":9,"name":"utility","receiver":null}}
-{"kind":"node","id":"file:main.py:import:1:./utils","label":"Import","properties":{"line":1,"source":"./utils","specifier":"from .utils import utility"}}
+{"kind":"node","id":"file:main.py:import:1:.utils","label":"Import","properties":{"bindings":"[{\"imported\":\"utility\",\"local\":\"utility\",\"kind\":\"named\"}]","line":1,"source":".utils","specifier":"from .utils import utility"}}
 {"kind":"node","id":"file:utils.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/utils.py","relativePath":"utils.py","sourceType":"production"}}
 {"kind":"node","id":"file:utils.py:function:1:utility","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":1,"methodKind":null,"name":"utility","parameters":null,"returnType":null,"visibility":"public"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-basic","path":"<root>"}}
@@ -19,7 +19,7 @@
 {"kind":"rel","from":"file:main.py","type":"DEFINES_CLASS","to":"file:main.py:class:12:Service","properties":{}}
 {"kind":"rel","from":"file:main.py","type":"DEFINES_FUNCTION","to":"file:main.py:function:4:main","properties":{}}
 {"kind":"rel","from":"file:main.py","type":"DEFINES_FUNCTION","to":"file:main.py:function:8:fetch","properties":{}}
-{"kind":"rel","from":"file:main.py","type":"IMPORTS","to":"file:main.py:import:1:./utils","properties":{}}
+{"kind":"rel","from":"file:main.py","type":"IMPORTS","to":"file:main.py:import:1:.utils","properties":{}}
 {"kind":"rel","from":"file:main.py:class:12:Service","type":"DEFINES_METHOD","to":"file:main.py:function:13:run","properties":{}}
 {"kind":"rel","from":"file:main.py:class:12:Service","type":"DEFINES_METHOD","to":"file:main.py:function:16:helper","properties":{}}
 {"kind":"rel","from":"file:main.py:function:13:run","type":"CALLS","to":"file:main.py:function:13:run:call:14:15:self.helper","properties":{}}
@@ -30,6 +30,6 @@
 {"kind":"rel","from":"file:main.py:function:4:main:call:5:11:utility","type":"CALL_RESOLVES_TO","to":"file:utils.py:function:1:utility","properties":{}}
 {"kind":"rel","from":"file:main.py:function:8:fetch","type":"CALLS","to":"file:main.py:function:8:fetch:call:9:11:utility","properties":{}}
 {"kind":"rel","from":"file:main.py:function:8:fetch:call:9:11:utility","type":"CALL_RESOLVES_TO","to":"file:utils.py:function:1:utility","properties":{}}
-{"kind":"rel","from":"file:main.py:import:1:./utils","type":"RESOLVES_TO","to":"file:utils.py","properties":{}}
+{"kind":"rel","from":"file:main.py:import:1:.utils","type":"RESOLVES_TO","to":"file:utils.py","properties":{}}
 {"kind":"rel","from":"file:utils.py","type":"DEFINES_FUNCTION","to":"file:utils.py:function:1:utility","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

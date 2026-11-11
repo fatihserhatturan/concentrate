@@ -2,12 +2,8 @@ import path from "node:path";
 import type { JsTsResolutionConfig } from "./config.js";
 import {
   isJsTsFile,
-  shouldResolveAbsoluteImport,
 } from "../../../../core/scan/resolution/file-kind.js";
-import {
-  createPythonModuleCandidates,
-  createRelativeImportCandidates,
-} from "../../../../core/scan/resolution/import-candidates.js";
+import { createRelativeImportCandidates } from "../../../../core/scan/resolution/import-candidates.js";
 import { resolveJsTsConfiguredImport } from "./js-ts-imports.js";
 
 export function resolveImport(
@@ -40,16 +36,6 @@ function resolveAbsoluteImport(
 ): string | null {
   if (isJsTsFile(importerFileId)) {
     return resolveJsTsConfiguredImport(source, fileIdByRelativePath, jsTsConfig);
-  }
-
-  if (!shouldResolveAbsoluteImport(importerFileId)) {
-    return null;
-  }
-
-  const importBasePath = source.replaceAll(".", "/");
-  for (const candidate of createPythonModuleCandidates(importBasePath)) {
-    const targetFileId = fileIdByRelativePath.get(candidate);
-    if (targetFileId) return targetFileId;
   }
 
   return null;
