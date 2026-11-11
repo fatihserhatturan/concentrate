@@ -1296,6 +1296,33 @@ Astro).
   and providers are not scoped to the `fx.New` / injector that registers
   them. Values (`fx.Supply`, `wire.Value`) take no dependencies. The calls
   in wire's generated `wire_gen.go` are ordinary calls.
+- Rust data access covers sqlx, diesel and SeaORM, as ACCESSES_DATA from the
+  function that makes the call (and its routes, entrypoints and callers) to a
+  DataModel; READS / WRITES follow. sqlx: the tables of the SQL literal (or
+  same-file `const`) of `query!`, `query_as!`, `query_scalar!` (and
+  `_unchecked`), `sqlx::query(…)`, `query_as::<_, T>(…)`, `query_scalar` and
+  `QueryBuilder::new(…)`, each a DataModel named by its table; a `FromRow`
+  struct is a DataModel that `query_as` maps to the table when the SQL touches
+  exactly one. SQL built with `format!`, passed as a parameter, or read with
+  `query_file!` is not read. Data-modifying CTEs (`with ins as (insert into
+  …)`) count as the statement's own writes. diesel: `table!` tables (columns,
+  `#[sql_name]`) anywhere in the repo; `#[diesel(table_name = users)]` or
+  `#[table_name = "users"]` structs deriving `Queryable`, `Insertable`,
+  `AsChangeset`, `Identifiable`, `Selectable` or `Associations` are models;
+  `belongs_to(User)` and `joinable!` are RELATES_TO. `users::table` /
+  `users::dsl::users` is a read, or the write of the `insert_into` /
+  `update` / `delete` it is an argument of (`replace_into` and `.on_conflict`
+  upsert); a bare `users` counts when `users::dsl::*` is imported and nothing
+  shadows it. Raw `sql_query` and the `sql::<T>(…)` fragments are not read.
+  SeaORM: `DeriveEntityModel` entities (the module or file name identifies
+  the entity; `table_name`, columns as fields, `Relation` variants with
+  `has_many` / `has_one` / `belongs_to` as RELATES_TO); `X::Entity::find()`,
+  `find_by_id`, `insert`, `insert_many`, `update_many`, `delete_many`,
+  `delete_by_id` (an `Entity as Alias` re-export counts), and
+  `X::ActiveModel { … }.insert(db)` / `update` / `save` / `delete`, also on a
+  local typed `X::ActiveModel`. An `ActiveModel` that comes from a parameter,
+  a struct field or `.into_active_model()` is not followed, nor are
+  `find_with_related` joins' second entity or `Statement::from_string` SQL.
 - Rust env reads are `USES_ENV` from the function that reads (and from its
   file; an item-level read such as a `static` initializer is the file's):
   `std::env::var` / `env::var_os`, `dotenvy::var` / `dotenv::var` (and a

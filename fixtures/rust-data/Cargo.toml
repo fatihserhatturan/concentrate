@@ -1,0 +1,10 @@
+[package]
+name = "rust-data"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.7"
+sqlx = { version = "0.7", features = ["postgres", "runtime-tokio"] }
+diesel = { version = "2", features = ["postgres"] }
+sea-orm = "0.12"

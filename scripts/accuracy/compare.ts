@@ -303,7 +303,9 @@ export function scanDataAccess(graph: Graph): FoundAccess[] {
     const source = byId.get(rel.from);
     const model = byId.get(rel.to);
     if (source?.label !== "Function" || !model) return [];
-    const own = (callsByFunction.get(rel.from) ?? []).some((call) => (
+    // The function's own access: a call it makes (by line and expression), or
+    // one a framework layer marked direct (Rust macros are not Call nodes).
+    const own = rel.properties.direct === true || (callsByFunction.get(rel.from) ?? []).some((call) => (
       call.line === num(rel.properties.line) && call.expression === String(rel.properties.expression)
     ));
     const file = fileOfNodeId(rel.from, paths);
