@@ -1386,6 +1386,32 @@ Astro).
   property defined nowhere in the scan (a third-party theme, JS `setProperty`)
   has no target; uses in JS, templates and inline `style` attributes are not
   read.
+- `.proto` files are read by the line reader in `languages/plain/proto.ts` into
+  `Service` (`name`, `package`, `fullName`, `line`; `DECLARES_SERVICE` from
+  the file), `Rpc` (`HAS_RPC` from its service: `name`, `service`, `package`,
+  `request`, `response` as written, `clientStreaming`, `serverStreaming`,
+  `line`) and `Message` (`DECLARES_MESSAGE`, top-level messages only: nested
+  messages, enums, fields and options are not nodes) nodes, and an `Import`
+  per `import "x.proto"`.
+  - Imports resolve beside the importing file, from the scan root, or to the
+    one file whose path ends with the import path (the closest when several
+    do), since the include roots (`protoc -I`, buf modules) are not known.
+    Well-known imports (`google/protobuf/empty.proto`) and unfound ones stay
+    unresolved and are not counted.
+  - `RPC_REQUEST` / `RPC_RESPONSE` link an rpc to its messages the way
+    protobuf scopes names: from the rpc's own package outwards (`a.b.Req`,
+    `a.Req`, `Req`), or as written when qualified or leading with a dot.
+    `google.protobuf.*` and other types no scanned `.proto` declares are not
+    linked.
+  - Go: `RPC_SERVED_BY` links an rpc to the generated server interface
+    (`UserServer`, found through the `grpc.ServiceDesc` of the generated
+    `_grpc.pb.go` whose `ServiceName` is the rpc's `package.Service`, and only
+    when that descriptor lists the method) and `RPC_IMPLEMENTED_BY` to the
+    method of each struct that implements the interface, the `Unimplemented…`
+    stub aside. A service without generated Go code in the scan, a different
+    package spelled in `ServiceName`, and clients (calls through
+    `Invoke` / `NewStream` already resolve to the implementations) get no rpc
+    link. Other languages' generated code is not read.
 - SQL files (`.sql`) are read by a scanner of their own
   (`languages/plain/sql-schema.ts`; the vendored sql grammar rejects valid
   code) into `Table` nodes (`library: sql`, `kind: table` or `view`,

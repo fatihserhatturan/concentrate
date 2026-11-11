@@ -31,6 +31,8 @@
 {"kind":"node","id":"file:package-lock.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":true,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package-lock.json","relativePath":"package-lock.json","sourceType":"generated"}}
 {"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
 {"kind":"node","id":"file:proto/user.proto","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"proto","path":"<root>/proto/user.proto","relativePath":"proto/user.proto","sourceType":"production"}}
+{"kind":"node","id":"file:proto/user.proto:rpc:User.Get","label":"Rpc","properties":{"clientStreaming":false,"line":2,"name":"Get","package":null,"request":"Req","response":"Res","serverStreaming":false,"service":"User"}}
+{"kind":"node","id":"file:proto/user.proto:service:User","label":"Service","properties":{"fullName":"User","line":2,"name":"User","package":null}}
 {"kind":"node","id":"file:scripts/build.sh","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"shell","path":"<root>/scripts/build.sh","relativePath":"scripts/build.sh","sourceType":"production"}}
 {"kind":"node","id":"file:scripts/deploy.ps1","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"powershell","path":"<root>/scripts/deploy.ps1","relativePath":"scripts/deploy.ps1","sourceType":"production"}}
 {"kind":"node","id":"file:settings.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/settings.toml","relativePath":"settings.toml","sourceType":"production"}}
@@ -95,6 +97,8 @@
 {"kind":"rel","from":"file:index.html:import:5:./src/main.ts","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:index.html:import:5:./src/main.ts","type":"RESOLVES_TO","to":"file:src/main.ts","properties":{}}
 {"kind":"rel","from":"file:package.json","type":"DECLARES_ENTRYPOINT","to":"entrypoint:npm-script:package.json:build","properties":{}}
+{"kind":"rel","from":"file:proto/user.proto","type":"DECLARES_SERVICE","to":"file:proto/user.proto:service:User","properties":{}}
+{"kind":"rel","from":"file:proto/user.proto:service:User","type":"HAS_RPC","to":"file:proto/user.proto:rpc:User.Get","properties":{}}
 {"kind":"rel","from":"file:scripts/build.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/build.sh","properties":{}}
 {"kind":"rel","from":"file:scripts/deploy.ps1","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/deploy.ps1","properties":{}}
 {"kind":"rel","from":"file:src/main.ts","type":"DEFINES_FUNCTION","to":"file:src/main.ts:function:8:render","properties":{}}

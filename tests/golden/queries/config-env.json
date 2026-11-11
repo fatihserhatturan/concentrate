@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 76
+        "result": 77
       },
       {
         "method": "stats",
@@ -106,12 +106,24 @@
           {
             "table": "Style",
             "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
           }
         ]
       }
     ],
     "output": {
-      "schemaVersion": 76,
+      "schemaVersion": 77,
       "stats": [
         {
           "table": "Repo",
@@ -207,6 +219,18 @@
         },
         {
           "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
           "count": 0
         }
       ]
@@ -1078,7 +1102,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 76
+        "result": 77
       },
       {
         "method": "stats",
@@ -1114,7 +1138,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 76,
+      "schemaVersion": 77,
       "packageName": "config-env-fixture",
       "stats": [
         {
