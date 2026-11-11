@@ -25,6 +25,7 @@ import { applyZustandSemantics } from "./zustand.js";
 import { applyJotaiSemantics } from "./jotai.js";
 import { applyAngularParseSemantics } from "./angular.js";
 import { applyAngularRouterSemantics } from "./angular-router.js";
+import { stylesJsPlugin, stylesMarkupPlugin } from "../styles/plugins.js";
 
 // Framework semantics for JS/TS files, in the order they run. Later plugins see
 // the nodes earlier ones added (NestJS routes, for example, read decorators).
@@ -175,6 +176,8 @@ export const jsTsFrameworkPlugins: readonly JsTsFrameworkPlugin[] = [
     name: "trpc",
     onFile: applyTrpcSemantics,
   },
+  // Class names in JSX and members of style imports.
+  stylesJsPlugin,
 ];
 
 export const javascriptParser = createJsTsParser("javascript", jsTsFrameworkPlugins);
@@ -210,6 +213,8 @@ const markupPlugins: readonly HtmlPagePlugin[] = [
     name: "astro-components",
     onPage: applyAstroMarkupSemantics,
   },
+  // Class attributes and <style> blocks.
+  stylesMarkupPlugin,
 ];
 
 export const htmlParser = createMarkupParser("html", jsTsFrameworkPlugins, markupPlugins);
