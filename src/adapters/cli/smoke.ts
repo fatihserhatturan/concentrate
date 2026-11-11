@@ -591,6 +591,27 @@ export const defaultSampleExpectations: SampleExpectation[] = [
     },
   },
   {
+    name: "internet-rust-axum-realworld",
+    suite: "internet",
+    expected: {
+      discoveredFiles: 24,
+      supportedFiles: 12,
+      otherFiles: 12,
+      parsedFiles: 12,
+      failedFiles: 0,
+      resolvedImports: 50,
+      unresolvedRelativeImports: 0,
+      nodes: 628,
+      relationships: 708,
+      fileClassifications: { production: 20, test: 0, fixture: 0, support: 0, generated: 1, docs: 3 },
+      graph: {
+        schemaVersion: GRAPH_SCHEMA_VERSION,
+        routes: 0,
+        entrypoints: 2,
+      },
+    },
+  },
+  {
     name: "internet-go-remark42",
     suite: "internet",
     expected: {

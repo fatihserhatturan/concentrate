@@ -1,0 +1,6 @@
+[package]
+name = "tool"
+version = "0.1.0"
+
+[dependencies]
+kit = { path = "../kit" }

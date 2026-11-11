@@ -588,7 +588,7 @@ describe("buildCodeGraph", () => {
     );
 
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "new"), ["format"]);
-    assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "run"), ["println", "self.helper"]);
+    assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "run"), ["println!", "self.helper"]);
     assert.deepEqual(callsForFunction(graph.nodes, graph.relationships, "make"), ["Service::new", "String::new"]);
     assert.equal(graph.nodes.find((n) => n.properties.name === "make")?.properties.isExported, false);
     assert.equal(graph.nodes.find((n) => n.properties.name === "fetch")?.properties.isExported, true);

@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 79
+        "result": 80
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 79,
+      "schemaVersion": 80,
       "stats": [
         {
           "table": "Repo",
@@ -566,7 +566,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind",
         "rows": [
           {
             "id": "file:client.ts:function:1:createClient",
@@ -574,7 +574,9 @@
             "className": null,
             "file": "client.ts",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           }
         ]
       },
@@ -585,7 +587,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": [
           {
             "id": "file:errors.ts:class:1:ClientError",
@@ -593,28 +595,29 @@
             "className": null,
             "file": "errors.ts",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public"
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
@@ -810,7 +813,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind",
         "rows": [
           {
             "id": "file:client.ts:function:1:createClient",
@@ -818,7 +821,9 @@
             "className": null,
             "file": "client.ts",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public",
+            "testKind": null
           }
         ]
       },
@@ -829,7 +834,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": [
           {
             "id": "file:errors.ts:class:1:ClientError",
@@ -837,28 +842,29 @@
             "className": null,
             "file": "errors.ts",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": "public"
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
@@ -897,7 +903,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated, file.packageName AS packageName",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.sourceType AS sourceType, file.isTest AS isTest, file.isFixture AS isFixture, file.isGenerated AS isGenerated, file.packageName AS packageName, file.rustCrate AS rustCrate",
         "rows": [
           {
             "file": "client.ts",
@@ -906,7 +912,8 @@
             "isTest": false,
             "isFixture": false,
             "isGenerated": false,
-            "packageName": null
+            "packageName": null,
+            "rustCrate": null
           },
           {
             "file": "errors.ts",
@@ -915,7 +922,8 @@
             "isTest": false,
             "isFixture": false,
             "isGenerated": false,
-            "packageName": null
+            "packageName": null,
+            "rustCrate": null
           },
           {
             "file": "index.ts",
@@ -924,7 +932,8 @@
             "isTest": false,
             "isFixture": false,
             "isGenerated": false,
-            "packageName": null
+            "packageName": null,
+            "rustCrate": null
           }
         ]
       },
@@ -1004,9 +1013,10 @@
         "tests": 0,
         "generated": 0,
         "handlers": 0,
-        "goMain": 0
+        "goMain": 0,
+        "rustBinary": 0
       },
-      "note": "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. JavaScript, TypeScript and Go.",
+      "note": "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. Rust: only `pub` items count; one counts as used when another crate calls it or mentions its name; binary crates (main.rs, src/bin, examples, tests, benches) are skipped, and library items consumed outside the repository are not seen. JavaScript, TypeScript, Go and Rust.",
       "page": {
         "offset": 0,
         "returned": 0

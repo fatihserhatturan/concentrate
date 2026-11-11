@@ -35,6 +35,8 @@ export type RustModuleTree = {
   // The crate a file belongs to, as the root file of that crate.
   crateOf(file: string): string | null;
   modulePath(file: string): string[] | null;
+  // The crate (root file and `use` name) and module path (`a::b`, "" for the root) of a file.
+  fileInfo(file: string): { crate: string; crateName: string; module: string } | null;
 };
 
 function isInsideRoot(file: string): boolean {
@@ -48,6 +50,7 @@ export function createRustModuleTree(
   records: RustImportRecord[],
   hasFile: (relativePath: string) => boolean,
   filesInDirectory: (dir: string) => string[],
+  rustFiles: Iterable<string> = [],
 ): RustModuleTree {
   const modules = new Map<string, RustModule>();
   const importsByFile = new Map<string, RustImportRecord[]>();
@@ -74,7 +77,7 @@ export function createRustModuleTree(
   }
   // Without a Cargo.toml (a loose sample, a vendored snippet) a `lib.rs` or
   // `main.rs` is still the root of a crate of its own.
-  for (const file of importsByFile.keys()) {
+  for (const file of new Set([...importsByFile.keys(), ...rustFiles])) {
     const name = path.posix.basename(file);
     if ((name === "lib.rs" || name === "main.rs") && !roots.has(file) && !isInsideRoot(file)) {
       const dir = path.posix.dirname(file);
@@ -259,6 +262,12 @@ export function createRustModuleTree(
     },
     crateOf(file) {
       return moduleFor(file, [])?.crateRoot ?? null;
+    },
+    fileInfo(file) {
+      const crate = this.crateOf(file);
+      const names = this.modulePath(file);
+      if (crate === null || names === null) return null;
+      return { crate, crateName: packageByCrateRoot.get(crate)?.libName ?? "", module: names.join("::") };
     },
     modulePath(file) {
       let module = modules.get(moduleKey(file, []));

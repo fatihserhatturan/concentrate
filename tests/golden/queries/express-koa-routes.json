@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 79
+        "result": 80
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 79,
+      "schemaVersion": 80,
       "stats": [
         {
           "table": "Repo",
@@ -2678,7 +2678,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind",
         "rows": [
           {
             "id": "file:routes.ts:function:10:listUsers",
@@ -2686,7 +2686,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 10,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:14:createUser",
@@ -2694,7 +2696,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 14,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:18:authenticate",
@@ -2702,7 +2706,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 18,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:22:validateUser",
@@ -2710,7 +2716,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 22,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:29:<router.delete:/users/:id:arg1>",
@@ -2718,7 +2726,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 29,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:34:<adminRouter.get:/dashboard:arg1>",
@@ -2726,7 +2736,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 34,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           }
         ]
       },
@@ -2737,27 +2749,27 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": [
           {
             "id": "file:paths.ts:variable:1:USERS_PATH",
@@ -2765,7 +2777,8 @@
             "className": null,
             "file": "paths.ts",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:paths.ts:variable:2:ADMIN_PATH",
@@ -2773,7 +2786,8 @@
             "className": null,
             "file": "paths.ts",
             "line": 2,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:4:API_PREFIX",
@@ -2781,7 +2795,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 4,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:5:app",
@@ -2789,7 +2804,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 5,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:6:router",
@@ -2797,7 +2813,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 6,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:7:adminRouter",
@@ -2805,7 +2822,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 7,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:8:cache",
@@ -2813,7 +2831,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 8,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           }
         ]
       },
@@ -3006,7 +3025,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) RETURN id(n) AS id, n.name AS name, n.className AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility, n.testKind AS testKind",
         "rows": [
           {
             "id": "file:routes.ts:function:10:listUsers",
@@ -3014,7 +3033,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 10,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:14:createUser",
@@ -3022,7 +3043,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 14,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:18:authenticate",
@@ -3030,7 +3053,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 18,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:22:validateUser",
@@ -3038,7 +3063,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 22,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:29:<router.delete:/users/:id:arg1>",
@@ -3046,7 +3073,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 29,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           },
           {
             "id": "file:routes.ts:function:34:<adminRouter.get:/dashboard:arg1>",
@@ -3054,7 +3083,9 @@
             "className": null,
             "file": "routes.ts",
             "line": 34,
-            "isExported": false
+            "isExported": false,
+            "visibility": "public",
+            "testKind": null
           }
         ]
       },
@@ -3065,27 +3096,27 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) RETURN id(n) AS id, n.name AS name, NULL AS className, file.relativePath AS file, n.line AS line, n.isExported AS isExported, n.visibility AS visibility",
         "rows": [
           {
             "id": "file:paths.ts:variable:1:USERS_PATH",
@@ -3093,7 +3124,8 @@
             "className": null,
             "file": "paths.ts",
             "line": 1,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:paths.ts:variable:2:ADMIN_PATH",
@@ -3101,7 +3133,8 @@
             "className": null,
             "file": "paths.ts",
             "line": 2,
-            "isExported": true
+            "isExported": true,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:4:API_PREFIX",
@@ -3109,7 +3142,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 4,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:5:app",
@@ -3117,7 +3151,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 5,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:6:router",
@@ -3125,7 +3160,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 6,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:7:adminRouter",
@@ -3133,7 +3169,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 7,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           },
           {
             "id": "file:routes.ts:variable:8:cache",
@@ -3141,7 +3178,8 @@
             "className": null,
             "file": "routes.ts",
             "line": 8,
-            "isExported": false
+            "isExported": false,
+            "visibility": null
           }
         ]
       }

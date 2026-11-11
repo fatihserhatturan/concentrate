@@ -1,5 +1,6 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
+import { rustBaseType } from "../../../core/scan/resolution/rust-types.js";
 import { parseSyntaxTreeSkippingErrors, type SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { LanguageParser } from "../../../core/contracts/language-parser.js";
@@ -171,7 +172,7 @@ async function parseRustFile(rootPath: string, filePath: string): Promise<Parsed
         );
       }
 
-      const callNodes = createCallNodes(functionNode.id, node);
+      const callNodes = createCallNodes(functionNode.id, node, owner?.name ?? null);
       nodes.push(...callNodes);
       relationships.push(
         ...callNodes.map((callNode) => ({
@@ -482,6 +483,7 @@ function createEnumNode(fileNodeId: string, node: SyntaxNode): GraphNode | null 
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       isExported: rustVisibility(node) !== "private",
+      visibility: rustVisibility(node),
       variants: JSON.stringify(variants),
       ...typeParametersOf(node),
     },
@@ -515,6 +517,7 @@ function createTraitNode(fileNodeId: string, node: SyntaxNode): GraphNode | null
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       isExported: rustVisibility(node) !== "private",
+      visibility: rustVisibility(node),
       methods: JSON.stringify(methods),
       methodSignatures: JSON.stringify(signatures),
       embeds: JSON.stringify(embeds),
@@ -535,6 +538,7 @@ function createTypeAliasNode(fileNodeId: string, node: SyntaxNode): GraphNode | 
       line: node.startPosition.row + 1,
       endLine: node.endPosition.row + 1,
       isExported: rustVisibility(node) !== "private",
+      visibility: rustVisibility(node),
       aliasOf: type,
       isAlias: true,
       ...typeParametersOf(node),
@@ -555,6 +559,7 @@ function createVariableNode(fileNodeId: string, node: SyntaxNode): GraphNode | n
       name,
       kind: node.type === "const_item" ? "const" : "static",
       isExported: rustVisibility(node) !== "private",
+      visibility: rustVisibility(node),
       line,
       ...(literal === null ? {} : { stringValue: literal }),
     },
@@ -618,35 +623,191 @@ function rustVisibility(node: SyntaxNode): string {
   return modifier.startsWith("pub") ? modifier : "private";
 }
 
-function createCallNodes(functionNodeId: string, node: SyntaxNode): GraphNode[] {
+type LocalType = { type: string } | { constructor: string };
+
+function createCallNodes(functionNodeId: string, node: SyntaxNode, selfType: string | null): GraphNode[] {
   const calls: GraphNode[] = [];
+  const bounds = typeBounds(node);
+  const locals = localTypes(node, bounds, selfType);
 
   walkScoped(node, (child) => {
     if (child.type !== "call_expression" && child.type !== "macro_invocation") {
       return;
     }
 
-    const expression = child.type === "macro_invocation"
-      ? child.namedChildren.find((candidate) => candidate.type === "identifier")?.text
-      : child.childForFieldName("function")?.text;
-    const callExpression = analyzeMemberCallExpression(expression);
+    if (child.type === "macro_invocation") {
+      const macro = child.childForFieldName("macro") ?? child.namedChildren.find((candidate) => candidate.type === "identifier" || candidate.type === "scoped_identifier");
+      const name = macro?.text.replace(/\s+/gu, "");
+      if (!name) return;
+      const callee = name.split("::").at(-1)!;
+      calls.push({
+        id: `${functionNodeId}:call:${child.startPosition.row + 1}:${child.startPosition.column}:${name}!`,
+        label: "Call",
+        properties: {
+          name,
+          expression: `${name}!`,
+          callee,
+          receiver: null,
+          line: child.startPosition.row + 1,
+          columnNumber: child.startPosition.column,
+        },
+      });
+      return;
+    }
+
+    let functionNode = child.childForFieldName("function");
+    if (functionNode?.type === "generic_function") functionNode = functionNode.childForFieldName("function") ?? functionNode;
+    const raw = functionNode?.text;
+    if (!raw) return;
+    const text = normalizeCallPath(raw);
+    const callExpression = analyzeMemberCallExpression(text);
     if (!callExpression) {
       return;
     }
 
+    // A method call of a multi-line chain is at its method name's line, not
+    // at the start of the chain.
+    const position = functionNode?.type === "field_expression" ? (functionNode.childForFieldName("field") ?? child).startPosition : child.startPosition;
+    const properties: Record<string, unknown> = {
+      name: callExpression.expression,
+      expression: callExpression.expression,
+      // `a::b::f` is a path call: its callee is the last segment.
+      callee: functionNode?.type === "field_expression" ? callExpression.callee : (callExpression.expression.split("::").at(-1) ?? callExpression.callee),
+      receiver: callExpression.receiver,
+      line: position.row + 1,
+      columnNumber: position.column,
+    };
+
+    // The type a method call lands on: `self`, a typed local or parameter,
+    // or the result of a constructor (`let x = Service::new()`).
+    const root = (callExpression.receiver ?? (functionNode?.type === "identifier" ? callExpression.expression : null))?.split(".")[0];
+    const local = root ? locals.get(root) : undefined;
+    if (root && locals.has(root)) properties.receiverIsLocal = true;
+    if (callExpression.receiver && local && !/[()[\]?]/u.test(callExpression.receiver)) {
+      if ("type" in local) properties.receiverType = local.type;
+      else properties.receiverConstructor = local.constructor;
+    }
+
     calls.push({
-      id: `${functionNodeId}:call:${child.startPosition.row + 1}:${child.startPosition.column}:${callExpression.expression}`,
+      id: `${functionNodeId}:call:${position.row + 1}:${position.column}:${callExpression.expression}`,
       label: "Call",
-      properties: {
-        name: callExpression.expression,
-        expression: callExpression.expression,
-        callee: callExpression.callee,
-        receiver: callExpression.receiver,
-        line: child.startPosition.row + 1,
-        columnNumber: child.startPosition.column,
-      },
+      properties: properties as GraphNode["properties"],
     });
   }, (child) => child.type === "function_item");
 
   return calls;
 }
+
+// `Vec::<u8>::new` → `Vec::new`; `<T as Shape>::area` → `Shape::area`.
+function normalizeCallPath(text: string): string {
+  let value = text.replace(/\s+/gu, "");
+  const qualified = /^<[^<>]*(?:<[^<>]*>[^<>]*)*as([\w:]+)(?:<.*>)?>::(\w+)$/u.exec(value);
+  if (qualified) return `${qualified[1]}::${qualified[2]}`;
+  for (let previous = ""; previous !== value;) {
+    previous = value;
+    value = value.replace(/::<[^<>]*>/gu, "");
+  }
+  return value;
+}
+
+// Trait bounds of the type parameters in scope (`T: Shape + Display`, from
+// the generics and where clauses of the function and its impl or trait).
+function typeBounds(fn: SyntaxNode): Map<string, string> {
+  const bounds = new Map<string, string>();
+  const scopes = [fn];
+  const owner = fn.parent?.type === "declaration_list" ? fn.parent.parent : null;
+  if (owner) scopes.push(owner);
+  for (const scope of scopes) {
+    const lists = [scope.childForFieldName("type_parameters"), scope.namedChildren.find((child) => child.type === "where_clause") ?? null];
+    for (const list of lists) {
+      for (const entry of list?.namedChildren ?? []) {
+        if (entry.type !== "constrained_type_parameter" && entry.type !== "where_predicate" && entry.type !== "type_parameter") continue;
+        const left = (entry.childForFieldName("left") ?? entry.childForFieldName("name") ?? entry.namedChildren[0])?.text;
+        const names = (entry.childForFieldName("bounds")?.namedChildren ?? [])
+          .map((bound) => baseTypeName(bound))
+          .filter((name): name is string => name !== null && !["Send", "Sync", "Sized", "Unpin", "Copy", "Clone", "Debug"].includes(name));
+        if (left && names.length > 0) bounds.set(left, names.join("+"));
+      }
+    }
+  }
+  return bounds;
+}
+
+// Parameters and `let`s of a function (not of its closures' own scopes: a
+// closure's names are rare enough to ignore) with the type of each: a written
+// type, a struct literal or the constructor call it is bound to. `self` is the
+// impl's type.
+function localTypes(fn: SyntaxNode, bounds: ReadonlyMap<string, string>, selfType: string | null): Map<string, LocalType | null> {
+  const locals = new Map<string, LocalType | null>();
+  for (const parameter of fn.childForFieldName("parameters")?.namedChildren ?? []) {
+    if (parameter.type === "self_parameter") {
+      locals.set("self", selfType ? { type: selfType } : null);
+    } else if (parameter.type === "parameter") {
+      const name = identifierOf(parameter.childForFieldName("pattern"));
+      const type = parameter.childForFieldName("type")?.text;
+      if (name) locals.set(name, type ? typed(type, bounds, selfType) : null);
+    }
+  }
+  const body = fn.childForFieldName("body");
+  if (!body) return locals;
+  walkScoped(body, (child) => {
+    if (child.type !== "let_declaration") return;
+    const name = identifierOf(child.childForFieldName("pattern"));
+    if (!name) return;
+    const type = child.childForFieldName("type")?.text;
+    if (type) {
+      locals.set(name, typed(type, bounds, selfType));
+      return;
+    }
+    locals.set(name, valueType(child.childForFieldName("value"), selfType));
+  }, (child) => child.type === "function_item");
+  return locals;
+}
+
+function typed(type: string, bounds: ReadonlyMap<string, string>, selfType: string | null): LocalType | null {
+  const name = rustBaseType(type, bounds, selfType);
+  return name ? { type: name } : null;
+}
+
+function identifierOf(pattern: SyntaxNode | null): string | null {
+  if (!pattern) return null;
+  if (pattern.type === "identifier") return pattern.text;
+  if (pattern.type === "mut_pattern" || pattern.type === "ref_pattern") return identifierOf(pattern.namedChildren.find((child) => child.type === "identifier") ?? null);
+  return null;
+}
+
+// `Foo { … }` is a Foo; `Foo::new(…)` (also `?`, `.await`, `.unwrap()`,
+// `.expect(…)` after it) is whatever that function returns.
+function valueType(value: SyntaxNode | null, selfType: string | null): LocalType | null {
+  if (!value) return null;
+  let unwrap = false;
+  let current: SyntaxNode | null = value;
+  for (let depth = 0; current && depth < 6; depth += 1) {
+    if (current.type === "try_expression" || current.type === "await_expression") {
+      unwrap = current.type === "try_expression" || unwrap;
+      current = current.namedChildren[0] ?? null;
+    } else if (current.type === "call_expression" && current.childForFieldName("function")?.type === "field_expression") {
+      const method = current.childForFieldName("function")!.childForFieldName("field")?.text;
+      if (method !== "unwrap" && method !== "expect" && method !== "unwrap_or_default") return null;
+      unwrap = true;
+      current = current.childForFieldName("function")!.childForFieldName("value");
+    } else {
+      break;
+    }
+  }
+  if (!current) return null;
+  if (current.type === "struct_expression") {
+    const name = baseTypeName(current.childForFieldName("name"));
+    return name ? { type: name === "Self" && selfType ? selfType : name } : null;
+  }
+  if (current.type === "call_expression") {
+    let target = current.childForFieldName("function");
+    if (target?.type === "generic_function") target = target.childForFieldName("function");
+    if (target && (target.type === "scoped_identifier" || target.type === "identifier")) {
+      const path = normalizeCallPath(target.text);
+      return { constructor: `${path}${unwrap ? "?" : ""}` };
+    }
+  }
+  return null;
+}
+

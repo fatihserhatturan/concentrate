@@ -13,7 +13,7 @@ type Row = Record<string, unknown>;
 // (namespace, dynamic or default imports, `export * as`).
 type SurfaceReason = "packageEntry" | "wholeFileImported";
 
-const LANGUAGES = new Set(["typescript", "javascript", "go"]);
+const LANGUAGES = new Set(["typescript", "javascript", "go", "rust"]);
 const MAX_DEAD_FUNCTIONS = 100;
 
 // find_unused_exports: exported declarations nothing in another file uses,
@@ -80,7 +80,7 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
   // Uses through calls, callbacks and class relations from other files (for
   // Go, other packages: its exports are what a package offers others).
   const fileOf = (id: string) => declarationsById.get(id)?.file ?? functions.get(id)?.file ?? null;
-  const scopeOf = (file: string) => (isGo(file) ? path.posix.dirname(file) : file);
+  const scopeOf = (file: string) => (isGo(file) ? path.posix.dirname(file) : isRust(file) ? (files.get(file)?.rustCrate ?? file) : file);
   const calledAnywhere = new Set<string>();
   for (const link of links.uses) {
     calledAnywhere.add(link.target);
@@ -93,11 +93,16 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     const info = files.get(declaration.file);
     return info !== undefined && LANGUAGES.has(info.language ?? "") && (!file || matchesFileOrDirectory(declaration.file, file));
   };
-  const skipped: Record<string, number> = { packageEntry: 0, wholeFileImported: 0, defaultExports: 0, tests: 0, generated: 0, handlers: 0, goMain: 0 };
+  const skipped: Record<string, number> = { packageEntry: 0, wholeFileImported: 0, defaultExports: 0, tests: 0, generated: 0, handlers: 0, goMain: 0, rustBinary: 0 };
   // Go names the graph has no edges for (types, variables, functions used as
   // values) count as used when another package's Go file mentions them.
   const goMentions = await goIdentifierIndex(links.rootPath, files, declarations.some((declaration) => isGo(declaration.file)));
+  // Rust: identifier counts per crate, for items the graph has no edges for
+  // (types, consts, traits, enums).
+  const rustMentions = await identifierIndex(links.rootPath, files, declarations.some((declaration) => isRust(declaration.file)), isRust, scopeOf);
   const skipReason = (declaration: Declaration, info: FileInfo): string | null => {
+    // A binary crate (main.rs, src/bin, examples, tests, benches) has no dependents.
+    if (isRust(declaration.file) && isRustBinaryCrate(info.rustCrate)) return "rustBinary";
     if (!includeTests && (info.isTest || info.isFixture)) return "tests";
     // Nothing imports a Go main package; init and main run without a caller.
     if (isGo(declaration.file) && (info.packageName === "main" || declaration.name === "init")) return "goMain";
@@ -112,6 +117,11 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
   for (const declaration of declarations) {
     if (!declaration.isExported || declaration.kind === "method" || used.has(declaration.id) || !inScope(declaration)) continue;
     if (isGo(declaration.file) && mentionedOutside(goMentions, declaration.name, path.posix.dirname(declaration.file))) continue;
+    // Rust: only `pub` leaves the crate; test code is no API.
+    if (isRust(declaration.file)) {
+      if (declaration.visibility !== "pub" || declaration.testKind) continue;
+      if (mentionedOutside(rustMentions, declaration.name, scopeOf(declaration.file))) continue;
+    }
     const reason = skipReason(declaration, files.get(declaration.file)!);
     if (reason) {
       skipped[reason] = (skipped[reason] ?? 0) + 1;
@@ -130,6 +140,7 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     && !exportedNames.has(`${declaration.file}\0${declaration.name}`)
     && !calledAnywhere.has(declaration.id)
     && !links.handlers.has(declaration.id)
+    && !declaration.testKind
     && inScope(declaration)
     && skipReason(declaration, files.get(declaration.file)!) !== "tests");
   const deadFunctions = [];
@@ -158,12 +169,45 @@ export async function findUnusedExports(engine: IQueryEngine, args: Record<strin
     unusedExports: window.take(unused),
     deadFunctions,
     skipped,
-    note: "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. JavaScript, TypeScript and Go.",
+    note: "Candidates only. An export counts as used when another file imports it by name (through barrels too) or calls, passes, extends, implements or injects it. Files imported whole (namespace, dynamic or default imports), package entry points and exports named default are skipped; uses outside the scanned repository, string-based lookups and framework conventions are not seen. usedInFile: the export is only used inside its own file. deadFunctions are unexported file-level functions with no calls and no other mention of their name in the file. Go: an export (capitalized name) counts as used when another package calls it or mentions its name; main packages and init are skipped, and deadFunctions look for mentions in the whole package. Rust: only `pub` items count; one counts as used when another crate calls it or mentions its name; binary crates (main.rs, src/bin, examples, tests, benches) are skipped, and library items consumed outside the repository are not seen. JavaScript, TypeScript, Go and Rust.",
   };
 }
 
 function isGo(file: string): boolean {
   return file.endsWith(".go");
+}
+
+function isRust(file: string): boolean {
+  return file.endsWith(".rs");
+}
+
+function isRustBinaryCrate(crateRoot: string | null | undefined): boolean {
+  return crateRoot !== null && crateRoot !== undefined
+    && /(^|\/)(main\.rs|build\.rs)$|(^|\/)(src\/bin|examples|tests|benches)\//u.test(crateRoot);
+}
+
+// Identifier occurrences in the scan's files of one language: name -> scope -> count.
+async function identifierIndex(
+  rootPath: string | null,
+  files: ReadonlyMap<string, FileInfo>,
+  needed: boolean,
+  matches: (file: string) => boolean,
+  scopeOf: (file: string) => string,
+): Promise<Map<string, Map<string, number>>> {
+  const index = new Map<string, Map<string, number>>();
+  if (!needed || !rootPath) return index;
+  for (const file of files.keys()) {
+    if (!matches(file)) continue;
+    const source = await readFile(path.join(rootPath, file), "utf8").catch(() => null);
+    if (source === null) continue;
+    const scope = scopeOf(file);
+    for (const name of source.match(/[A-Za-z_]\w*/gu) ?? []) {
+      let byScope = index.get(name);
+      if (!byScope) index.set(name, byScope = new Map());
+      byScope.set(scope, (byScope.get(scope) ?? 0) + 1);
+    }
+  }
+  return index;
 }
 
 // Identifier occurrences in the scan's Go files: name -> directory -> count.

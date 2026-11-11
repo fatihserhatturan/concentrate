@@ -203,5 +203,16 @@ async function createRustTree(
     list.push(file);
     directories.set(dir, list);
   }
-  return createRustModuleTree(config, records, (file) => fileIdByRelativePath.has(file), (dir) => directories.get(dir) ?? []);
+  const tree = createRustModuleTree(config, records, (file) => fileIdByRelativePath.has(file), (dir) => directories.get(dir) ?? [], [...fileIdByRelativePath.keys()].filter((file) => file.endsWith(".rs")));
+  // The call resolver (core) cannot see the tree: each file carries its crate
+  // and module path.
+  for (const node of graph.nodes) {
+    if (node.label !== "File" || node.properties.language !== "rust") continue;
+    const info = tree.fileInfo(String(node.properties.relativePath).replaceAll("\\", "/"));
+    if (!info) continue;
+    node.properties.rustCrate = info.crate;
+    node.properties.rustCrateName = info.crateName;
+    node.properties.rustModule = info.module;
+  }
+  return tree;
 }
