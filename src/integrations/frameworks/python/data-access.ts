@@ -277,6 +277,7 @@ export function addPythonDataAccess(context: PythonContext): void {
         if (!chain.some((member) => member.model.managers.includes(candidate.manager!))) continue;
       }
       if (candidate.kind === "model" && candidate.manager === undefined && item.entry.model.library === "django") continue;
+      // `.save()` / `.delete()` of a Flask-SQLAlchemy mixin is a write of any model that has the mixin.
       accesses.push({ ...base, modelId: modelIdOf(item.entry), operation: candidate.operation, library: item.entry.model.library });
     }
   }

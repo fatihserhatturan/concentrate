@@ -44,6 +44,8 @@ export type PyEnvFacts = {
   uses: SettingsUse[];
   // The file imports Django's `settings`.
   djangoSettings: boolean;
+  // `settings = get_settings()` of a function, by `function id|name`: the called expression.
+  locals?: Record<string, string>;
 };
 
 const NAME = /^[A-Za-z_]\w*$/u;
@@ -194,20 +196,41 @@ export const pythonEnvPlugin: PythonParsePlugin = ({ fileNodeId, root, nodes, re
 
   // `settings.X` (or any `<root>.UPPER`) reads of an instance or of Django's settings.
   const typesOf = new Map<string, Map<string, string>>();
-  for (const fn of functions) typesOf.set(fn.node.id, parameterTypes(fn.syntax));
+  const ownerClassOf = new Map<string, string>();
+  const settingsClassNames = new Set(facts.classes.map((cls) => cls.name));
+  for (const fn of functions) {
+    typesOf.set(fn.node.id, parameterTypes(fn.syntax));
+    if (fn.ownerName) ownerClassOf.set(fn.node.id, fn.ownerName);
+  }
+  // `settings = get_settings()` in a function: the call, resolved with the scan's names by the contributor.
+  const localCalls = new Map<string, string>();
+  for (const fn of functions) {
+    for (const assignment of fn.syntax.descendantsOfType("assignment")) {
+      const left = assignment.childForFieldName("left");
+      const right = unwrap(assignment.childForFieldName("right"));
+      if (left?.type === "identifier" && right?.type === "call") localCalls.set(`${fn.node.id}|${left.text}`, compact(right.childForFieldName("function")?.text ?? ""));
+    }
+  }
   walk(root, (node) => {
     if (node.type !== "attribute") return;
     const object = node.childForFieldName("object");
     const attribute = node.childForFieldName("attribute")?.text;
     if (object?.type !== "identifier" || !attribute) return;
     if (node.parent?.type === "assignment" && node.parent.childForFieldName("left")?.id === node.id) return;
-    if (!(SETTINGS_ROOT.test(object.text) || /^[A-Z][A-Z0-9_]*$/u.test(attribute))) return;
-    if (object.text === "os" || object.text === "self" || object.text === "cls") return;
     const line = node.startPosition.row + 1;
     const owner = ownerOf(line);
+    // `self.max_connections` inside a settings class reads the field.
+    if (object.text === "self") {
+      const ownerName = ownerClassOf.get(owner);
+      if (ownerName && settingsClassNames.has(ownerName)) facts.uses.push({ owner, name: attribute, line, root: "self", type: ownerName });
+      return;
+    }
+    if (!(SETTINGS_ROOT.test(object.text) || /^[A-Z][A-Z0-9_]*$/u.test(attribute))) return;
+    if (object.text === "os" || object.text === "cls") return;
     facts.uses.push({ owner, name: attribute, line, root: object.text, type: typesOf.get(owner)?.get(object.text) ?? null });
   });
 
+  facts.locals = Object.fromEntries(localCalls);
   const written = new Set<string>();
   for (const entry of reads) {
     for (const from of entry.owner === fileNodeId ? [fileNodeId] : [entry.owner, fileNodeId]) {
@@ -415,6 +438,18 @@ export function addPythonEnv(context: PythonContext): void {
       if (typeName) {
         const classId = index.lookupType(typeName, file.id);
         settings = classId ? settingsByClass.get(classId) : undefined;
+      }
+      if (!settings && !entry.type) {
+        // A local bound to `get_settings()`: the class its return annotation names.
+        const called = facts.locals?.[`${entry.owner}|${entry.root}`];
+        if (called) {
+          const classId = index.lookupType(called, file.id);
+          const functionId = classId ? null : index.lookupFunction(called, file.id);
+          const returned = functionId ? index.functionsById.get(functionId)?.properties.returnType : undefined;
+          const functionFile = functionId ? index.fileByFunctionId.get(functionId) : undefined;
+          const resolved = classId ?? (typeof returned === "string" && functionFile ? index.lookupType(returned.replace(/^["']|["']$/gu, "").replace(/^Optional\[(.*)\]$/u, "$1"), functionFile) : null);
+          settings = resolved ? settingsByClass.get(resolved) : undefined;
+        }
       }
       if (!settings && !entry.type) {
         const variableId = index.lookupVariable(entry.root, file.id);

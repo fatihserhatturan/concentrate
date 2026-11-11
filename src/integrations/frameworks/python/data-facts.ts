@@ -74,7 +74,7 @@ const DJANGO_QUERY_METHODS = new Map<string, Operation>([
   ["values", "read"], ["values_list", "read"], ["aggregate", "read"], ["annotate", "read"], ["select_related", "read"], ["prefetch_related", "read"],
   ["order_by", "read"], ["iterator", "read"], ["in_bulk", "read"], ["latest", "read"], ["earliest", "read"], ["distinct", "read"], ["none", "read"],
   ["only", "read"], ["defer", "read"], ["raw", "read"], ["select_for_update", "read"], ["reverse", "read"], ["union", "read"], ["alias", "read"], ["using", "read"],
-  ["create", "create"], ["get_or_create", "create"], ["bulk_create", "create"], ["update_or_create", "upsert"], ["update", "update"], ["bulk_update", "update"], ["delete", "delete"],
+  ["create", "create"], ["create_user", "create"], ["create_superuser", "create"], ["get_or_create", "create"], ["bulk_create", "create"], ["update_or_create", "upsert"], ["update", "update"], ["bulk_update", "update"], ["delete", "delete"],
 ]);
 const SA_FUNCTIONS = new Map<string, Operation>([["select", "read"], ["insert", "create"], ["update", "update"], ["delete", "delete"]]);
 const SIGNAL = /sqlalchemy|sqlmodel|django|\bmodels\b|\.query\b|\bselect\b|\binsert\b|\bexecute|\bfetch|read_sql|__tablename__|alembic|\bop\.|\bobjects\b|\bsession\b|\bTable\(/iu;
@@ -158,6 +158,12 @@ export const pythonDataPlugin: PythonParsePlugin = ({ fileNodeId, relativePath, 
       const right = unwrap(node.childForFieldName("right"));
       if (left?.type !== "identifier" || right?.type !== "call") return;
       const callee = compact(right.childForFieldName("function")?.text ?? "");
+      // `x = Model.query.filter(..).first()`, `Model.objects.get(..)`, `session.query(Model)..one()`: a row of the model.
+      const row = rowModel(right);
+      if (row) {
+        typed.set(left.text, { name: row, constructed: false });
+        return;
+      }
       const construct = /^([A-Za-z_][\w.]*?)(?:\.(?:model_validate|from_orm|parse_obj|from_dict))?$/u.exec(callee);
       if (construct && /^[A-Z]/u.test(lastSegment(construct[1]!))) typed.set(left.text, { name: construct[1]!, constructed: true });
       else if (/\.get$/u.test(callee) && SESSION_RECEIVER.test(callee.split(".").slice(-2)[0] ?? "")) {
@@ -219,9 +225,11 @@ export const pythonDataPlugin: PythonParsePlugin = ({ fileNodeId, relativePath, 
       }
       continue;
     }
-    if (object?.type === "attribute" && object.childForFieldName("attribute")?.text === "query" && /^[A-Z]/u.test(lastSegment(compact(object.childForFieldName("object")?.text ?? "")))) {
-      // `User.query.filter(...)`: reported once, at the first method after `.query`.
-      const name = compact(object.childForFieldName("object")!.text);
+    const queryOwner = object?.type === "attribute" && object.childForFieldName("attribute")?.text === "query" ? compact(object.childForFieldName("object")?.text ?? "") : null;
+    if (queryOwner !== null && (/^[A-Z]/u.test(lastSegment(queryOwner)) || queryOwner === "self" || queryOwner === "cls")) {
+      // `User.query.filter(...)`, `self.query…` of a model's own method: reported once, at the first method after `.query`.
+      const name = queryOwner === "self" || queryOwner === "cls" ? classAround(line) : queryOwner;
+      if (!name) continue;
       add({ kind: "model", ...where, line, expression: expressionOf(call), name, operation: writeOf(chainTop(call).text, "read") });
       continue;
     }
@@ -254,10 +262,17 @@ export const pythonDataPlugin: PythonParsePlugin = ({ fileNodeId, relativePath, 
       }
       continue;
     }
-    // `instance.save()` / `instance.delete()` of a typed variable (Django).
-    if ((method === "save" || method === "delete") && object?.type === "identifier" && hasDjango) {
-      const typed = typedByFunction.get(where.owner)?.get(object.text);
-      if (typed) add({ kind: "instance", ...where, line, expression: expressionOf(call), name: typed.name, operation: method === "delete" ? "delete" : typed.constructed ? "create" : "update" });
+    // `instance.save()` / `instance.delete()` of a typed variable or a constructor call (Django, and the `save` / `delete` of
+    // a Flask-SQLAlchemy mixin); the contributor keeps those of a class that is a model.
+    if ((method === "save" || method === "delete") && object && positional.length === 0) {
+      const receiver = unwrap(object);
+      if (receiver?.type === "identifier") {
+        const typed = typedByFunction.get(where.owner)?.get(receiver.text);
+        if (typed) add({ kind: "instance", ...where, line, expression: expressionOf(call), name: typed.name, operation: method === "delete" ? "delete" : typed.constructed ? "create" : "update" });
+      } else if (receiver?.type === "call") {
+        const constructed = compact(receiver.childForFieldName("function")?.text ?? "");
+        if (/^[A-Za-z_][\w.]*$/u.test(constructed) && /^[A-Z]/u.test(lastSegment(constructed))) add({ kind: "instance", ...where, line, expression: expressionOf(call), name: constructed, operation: method === "delete" ? "delete" : "create" });
+      }
       continue;
     }
     // Django `M.objects.method(...)`, `M.published.method(...)`.
@@ -276,6 +291,15 @@ export const pythonDataPlugin: PythonParsePlugin = ({ fileNodeId, relativePath, 
       const sql = stringValue(first, constants, () => "?");
       if (sql !== null && /^\s*(?:(?:--[^\n]*\n|\/\*[\s\S]*?\*\/)\s*)*\(?\s*(?:select|insert|update|delete|replace|with|merge)\b/iu.test(sql)) add({ kind: "sql", ...where, line, expression: shorten(call.text), sql });
     }
+  }
+
+  // `res = Article.query`: the query object itself, not followed by a method.
+  for (const attribute of root.descendantsOfType("attribute")) {
+    if (attribute.childForFieldName("attribute")?.text !== "query" || attribute.parent?.type === "attribute") continue;
+    const owner = compact(attribute.childForFieldName("object")?.text ?? "");
+    if (!/^[A-Za-z_][\w.]*$/u.test(owner) || !/^[A-Z]/u.test(lastSegment(owner))) continue;
+    const line = attribute.startPosition.row + 1;
+    add({ kind: "model", ...classOwner(line), line, expression: shorten(chainTop(attribute).text), name: owner, operation: "read" });
   }
 
   if (facts.models.length + facts.tables.length + facts.migrations.length + facts.candidates.length === 0) return;
@@ -509,6 +533,43 @@ function columnOf(call: SyntaxNode, field: string, annotation: string | null, co
     isUnique: LITERAL_TRUE(keywords.get("unique")),
     ...(references ? { references } : {}),
   };
+}
+
+// The model a query chain ends in one row of: `Model.query.filter(..).first()`,
+// `Model.objects.get(..)`, `session.query(Model).filter(..).one()`.
+const ROW_METHODS = new Set(["first", "one", "one_or_none", "get", "get_or_404", "first_or_404", "last", "latest", "earliest", "scalar", "scalar_one", "scalar_one_or_none"]);
+function rowModel(call: SyntaxNode): string | null {
+  let current: SyntaxNode | null = unwrap(call);
+  if (current?.type !== "call") return null;
+  const last = current.childForFieldName("function");
+  if (last?.type !== "attribute" || !ROW_METHODS.has(last.childForFieldName("attribute")?.text ?? "")) return null;
+  // Walk to the start of the chain.
+  while (current) {
+    if (current.type === "call") {
+      const callee: SyntaxNode | null = current.childForFieldName("function");
+      if (callee?.type === "attribute") {
+        const object = callee.childForFieldName("object");
+        const name = callee.childForFieldName("attribute")?.text;
+        const objectText = compact(object?.text ?? "");
+        if (name === "query" && /session|^db$|sess/iu.test(objectText.split(".").at(-1) ?? "")) {
+          const model = argsOf(current).positional[0];
+          return model && /^[A-Za-z_][\w.]*$/u.test(compact(model.text)) ? compact(model.text) : null;
+        }
+        current = object;
+        continue;
+      }
+      return null;
+    }
+    if (current.type === "attribute") {
+      const attribute = current.childForFieldName("attribute")?.text;
+      const owner = compact(current.childForFieldName("object")?.text ?? "");
+      if ((attribute === "query" || attribute === "objects") && /^[A-Za-z_][\w.]*$/u.test(owner) && /^[A-Z]/u.test(lastSegment(owner))) return owner;
+      current = current.childForFieldName("object");
+      continue;
+    }
+    return null;
+  }
+  return null;
 }
 
 function typeOf(annotation: string | null): string | null {
