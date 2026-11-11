@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":6,"supportedFiles":4,"parsedFiles":4,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"rust-env","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
 {"kind":"node","id":"env:API_TOKEN","label":"EnvVar","properties":{"name":"API_TOKEN"}}
@@ -11,6 +11,7 @@
 {"kind":"node","id":"env:GIT_SHA","label":"EnvVar","properties":{"name":"GIT_SHA"}}
 {"kind":"node","id":"env:PORT","label":"EnvVar","properties":{"name":"PORT"}}
 {"kind":"node","id":"env:REGION","label":"EnvVar","properties":{"name":"REGION"}}
+{"kind":"node","id":"env:SHARED_KEY","label":"EnvVar","properties":{"name":"SHARED_KEY"}}
 {"kind":"node","id":"env:UNUSED_FLAG","label":"EnvVar","properties":{"name":"UNUSED_FLAG"}}
 {"kind":"node","id":"env:WORKER_COUNT","label":"EnvVar","properties":{"name":"WORKER_COUNT"}}
 {"kind":"node","id":"env:WORKER_MAX_JOBS","label":"EnvVar","properties":{"name":"WORKER_MAX_JOBS"}}
@@ -31,6 +32,8 @@
 {"kind":"node","id":"file:src/cli.rs:function:17:builder:call:18:53:Arg::new(\"token\").env","label":"Call","properties":{"callee":"env","columnNumber":53,"expression":"Arg::new(\"token\").env","line":18,"name":"Arg::new(\"token\").env","receiver":"Arg::new"}}
 {"kind":"node","id":"file:src/cli.rs:import:1:clap::Arg","label":"Import","properties":{"line":1,"source":"clap::Arg","specifier":"use clap::{Arg, Parser};"}}
 {"kind":"node","id":"file:src/cli.rs:import:1:clap::Parser","label":"Import","properties":{"line":1,"source":"clap::Parser","specifier":"use clap::{Arg, Parser};"}}
+{"kind":"node","id":"file:src/keys.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/keys.rs","relativePath":"src/keys.rs","rustCrate":"src/main.rs","rustCrateName":"rust_env","rustModule":"keys","sourceType":"production"}}
+{"kind":"node","id":"file:src/keys.rs:variable:2:SHARED_KEY","label":"Variable","properties":{"isExported":true,"kind":"const","line":2,"name":"SHARED_KEY","stringValue":"SHARED_KEY","visibility":"pub"}}
 {"kind":"node","id":"file:src/main.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/main.rs","relativePath":"src/main.rs","rustCrate":"src/main.rs","rustCrateName":"rust_env","rustModule":"","sourceType":"production"}}
 {"kind":"node","id":"file:src/main.rs:entrypoint:10:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"rust","line":10,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:src/main.rs:function:10:main","label":"Function","properties":{"className":null,"endLine":18,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":10,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"private"}}
@@ -46,7 +49,11 @@
 {"kind":"node","id":"file:src/main.rs:function:20:region","label":"Function","properties":{"className":null,"endLine":22,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_item","line":20,"methodKind":null,"name":"region","parameters":"[]","returnType":"String","visibility":"private"}}
 {"kind":"node","id":"file:src/main.rs:function:20:region:call:21:25:env::var(REGION_KEY).unwrap_or_default","label":"Call","properties":{"callee":"unwrap_or_default","columnNumber":25,"expression":"env::var(REGION_KEY).unwrap_or_default","line":21,"name":"env::var(REGION_KEY).unwrap_or_default","receiver":"env::var"}}
 {"kind":"node","id":"file:src/main.rs:function:20:region:call:21:4:env::var","label":"Call","properties":{"callee":"var","columnNumber":4,"expression":"env::var","line":21,"name":"env::var","receiver":null}}
+{"kind":"node","id":"file:src/main.rs:function:25:shared","label":"Function","properties":{"className":null,"endLine":27,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":25,"methodKind":null,"name":"shared","parameters":"[]","returnType":"String","visibility":"private"}}
+{"kind":"node","id":"file:src/main.rs:function:25:shared:call:26:40:env::var(keys::env_key::SHARED_KEY).unwrap_or_default","label":"Call","properties":{"callee":"unwrap_or_default","columnNumber":40,"expression":"env::var(keys::env_key::SHARED_KEY).unwrap_or_default","line":26,"name":"env::var(keys::env_key::SHARED_KEY).unwrap_or_default","receiver":"env::var"}}
+{"kind":"node","id":"file:src/main.rs:function:25:shared:call:26:4:env::var","label":"Call","properties":{"callee":"var","columnNumber":4,"expression":"env::var","line":26,"name":"env::var","receiver":null}}
 {"kind":"node","id":"file:src/main.rs:import:1:cli","label":"Import","properties":{"isModule":true,"line":1,"source":"cli","specifier":"mod cli;"}}
+{"kind":"node","id":"file:src/main.rs:import:2:keys","label":"Import","properties":{"isModule":true,"line":2,"source":"keys","specifier":"mod keys;"}}
 {"kind":"node","id":"file:src/main.rs:import:2:settings","label":"Import","properties":{"isModule":true,"line":2,"source":"settings","specifier":"mod settings;"}}
 {"kind":"node","id":"file:src/main.rs:import:4:axum::Router","label":"Import","properties":{"line":4,"source":"axum::Router","specifier":"use axum::{routing::get, Router};"}}
 {"kind":"node","id":"file:src/main.rs:import:4:axum::routing::get","label":"Import","properties":{"line":4,"source":"axum::routing::get","specifier":"use axum::{routing::get, Router};"}}
@@ -83,6 +90,7 @@
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:.env.example","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Cargo.toml","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/cli.rs","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/keys.rs","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.rs","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/settings.rs","properties":{}}
 {"kind":"rel","from":"file:src/cli.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/cli.rs:entrypoint:18:4:cli:tool","properties":{}}
@@ -104,13 +112,16 @@
 {"kind":"rel","from":"file:src/cli.rs:function:17:builder","type":"CALLS","to":"file:src/cli.rs:function:17:builder:call:18:4:clap::Command::new","properties":{}}
 {"kind":"rel","from":"file:src/cli.rs:function:17:builder","type":"CALLS","to":"file:src/cli.rs:function:17:builder:call:18:53:Arg::new(\"token\").env","properties":{}}
 {"kind":"rel","from":"file:src/cli.rs:function:17:builder","type":"USES_ENV","to":"env:API_TOKEN","properties":{"access":"clap env","line":18}}
+{"kind":"rel","from":"file:src/keys.rs","type":"DEFINES_VARIABLE","to":"file:src/keys.rs:variable:2:SHARED_KEY","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/main.rs:entrypoint:10:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"DECLARES_ROUTE","to":"file:src/main.rs:route:16:28:GET:/region","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:10:main","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:20:region","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"DEFINES_FUNCTION","to":"file:src/main.rs:function:25:shared","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"DEFINES_VARIABLE","to":"file:src/main.rs:variable:7:REGION_KEY","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"DEFINES_VARIABLE","to":"file:src/main.rs:variable:8:BUILD_TAG","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:1:cli","properties":{}}
+{"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:2:keys","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:2:settings","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:4:axum::Router","properties":{}}
 {"kind":"rel","from":"file:src/main.rs","type":"IMPORTS","to":"file:src/main.rs:import:4:axum::routing::get","properties":{}}
@@ -120,6 +131,7 @@
 {"kind":"rel","from":"file:src/main.rs","type":"USES_ENV","to":"env:GIT_SHA","properties":{"access":"option_env!","line":14}}
 {"kind":"rel","from":"file:src/main.rs","type":"USES_ENV","to":"env:PORT","properties":{"access":"env::var","line":12}}
 {"kind":"rel","from":"file:src/main.rs","type":"USES_ENV","to":"env:REGION","properties":{"access":"env::var","line":21}}
+{"kind":"rel","from":"file:src/main.rs","type":"USES_ENV","to":"env:SHARED_KEY","properties":{"access":"env::var","line":26}}
 {"kind":"rel","from":"file:src/main.rs:entrypoint:10:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/main.rs:function:10:main","properties":{}}
 {"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:11:22:dotenvy::dotenv().ok","properties":{}}
 {"kind":"rel","from":"file:src/main.rs:function:10:main","type":"CALLS","to":"file:src/main.rs:function:10:main:call:11:4:dotenvy::dotenv","properties":{}}
@@ -136,7 +148,11 @@
 {"kind":"rel","from":"file:src/main.rs:function:20:region","type":"CALLS","to":"file:src/main.rs:function:20:region:call:21:25:env::var(REGION_KEY).unwrap_or_default","properties":{}}
 {"kind":"rel","from":"file:src/main.rs:function:20:region","type":"CALLS","to":"file:src/main.rs:function:20:region:call:21:4:env::var","properties":{}}
 {"kind":"rel","from":"file:src/main.rs:function:20:region","type":"USES_ENV","to":"env:REGION","properties":{"access":"env::var","line":21}}
+{"kind":"rel","from":"file:src/main.rs:function:25:shared","type":"CALLS","to":"file:src/main.rs:function:25:shared:call:26:40:env::var(keys::env_key::SHARED_KEY).unwrap_or_default","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:25:shared","type":"CALLS","to":"file:src/main.rs:function:25:shared:call:26:4:env::var","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:function:25:shared","type":"USES_ENV","to":"env:SHARED_KEY","properties":{"access":"env::var","line":26}}
 {"kind":"rel","from":"file:src/main.rs:import:1:cli","type":"RESOLVES_TO","to":"file:src/cli.rs","properties":{}}
+{"kind":"rel","from":"file:src/main.rs:import:2:keys","type":"RESOLVES_TO","to":"file:src/keys.rs","properties":{}}
 {"kind":"rel","from":"file:src/main.rs:import:2:settings","type":"RESOLVES_TO","to":"file:src/settings.rs","properties":{}}
 {"kind":"rel","from":"file:src/main.rs:route:16:28:GET:/region","type":"ROUTE_HANDLED_BY","to":"file:src/main.rs:function:20:region","properties":{}}
 {"kind":"rel","from":"file:src/main.rs:route:16:28:GET:/region","type":"ROUTE_LIFECYCLE_STEP","to":"file:src/main.rs:function:20:region","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
