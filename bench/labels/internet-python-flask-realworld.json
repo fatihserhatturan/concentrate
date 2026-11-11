@@ -1,0 +1,127 @@
+{
+  "sample": "internet-python-flask-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. gothinkster/flask-realworld-example-app. Routes: every `@blueprint.route(path, methods=(..))` of the three views modules (articles, user, profile), one label per method with the path as written (the paths are absolute: the blueprints have no url_prefix and `register_blueprints` in conduit/app.py registers them without one) and the line of the decorator. Flask's `<converter:name>` syntax is kept as written.",
+  "routes": {
+    "scope": [
+      "conduit/articles/views.py",
+      "conduit/user/views.py",
+      "conduit/profile/views.py"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/api/articles",
+        "file": "conduit/articles/views.py",
+        "line": 23
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles",
+        "file": "conduit/articles/views.py",
+        "line": 39
+      },
+      {
+        "method": "PUT",
+        "path": "/api/articles/<slug>",
+        "file": "conduit/articles/views.py",
+        "line": 57
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/<slug>",
+        "file": "conduit/articles/views.py",
+        "line": 70
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/<slug>",
+        "file": "conduit/articles/views.py",
+        "line": 78
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/<slug>/favorite",
+        "file": "conduit/articles/views.py",
+        "line": 88
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/<slug>/favorite",
+        "file": "conduit/articles/views.py",
+        "line": 101
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/feed",
+        "file": "conduit/articles/views.py",
+        "line": 114
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags",
+        "file": "conduit/articles/views.py",
+        "line": 127
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/<slug>/comments",
+        "file": "conduit/articles/views.py",
+        "line": 137
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/<slug>/comments",
+        "file": "conduit/articles/views.py",
+        "line": 146
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/<slug>/comments/<cid>",
+        "file": "conduit/articles/views.py",
+        "line": 159
+      },
+      {
+        "method": "POST",
+        "path": "/api/users",
+        "file": "conduit/user/views.py",
+        "line": 17
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/login",
+        "file": "conduit/user/views.py",
+        "line": 30
+      },
+      {
+        "method": "GET",
+        "path": "/api/user",
+        "file": "conduit/user/views.py",
+        "line": 43
+      },
+      {
+        "method": "PUT",
+        "path": "/api/user",
+        "file": "conduit/user/views.py",
+        "line": 53
+      },
+      {
+        "method": "GET",
+        "path": "/api/profiles/<username>",
+        "file": "conduit/profile/views.py",
+        "line": 14
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/<username>/follow",
+        "file": "conduit/profile/views.py",
+        "line": 24
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/profiles/<username>/follow",
+        "file": "conduit/profile/views.py",
+        "line": 36
+      }
+    ]
+  }
+}

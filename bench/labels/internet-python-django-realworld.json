@@ -1,0 +1,127 @@
+{
+  "sample": "internet-python-django-realworld",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. gothinkster/django-realworld-example-app. Routes: every `url(..)` of the three app urls modules and the registration of `ArticleViewSet` on the router, one label per HTTP method the view serves (the methods its class defines or inherits from `generics.*APIView`, `mixins.*` and `ViewSet` bases: `ArticleViewSet` has create, list, retrieve and update, no partial_update or destroy; `DefaultRouter(trailing_slash=False)` registers no trailing slash), with the full path through `include(..)` in conduit/urls.py (`^api/`) as a path: the regex `^articles/(?P<article_slug>[-\\w]+)/favorite/?$` is `articles/<article_slug>/favorite` (an optional trailing slash is written without it) and the router's lookup follows `lookup_field = 'slug'`. The line is the `url(..)` call's, or the `router.register` call's for the viewset. The router's API root view and format suffix routes, and `admin.site.urls`, are not labeled.",
+  "routes": {
+    "scope": [
+      "conduit/apps/articles/urls.py",
+      "conduit/apps/authentication/urls.py",
+      "conduit/apps/profiles/urls.py"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/api/articles",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 11
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 11
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/<slug>",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 11
+      },
+      {
+        "method": "PUT",
+        "path": "/api/articles/<slug>",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 11
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/feed",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 16
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/<article_slug>/favorite",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 18
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/<article_slug>/favorite",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 18
+      },
+      {
+        "method": "GET",
+        "path": "/api/articles/<article_slug>/comments",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 21
+      },
+      {
+        "method": "POST",
+        "path": "/api/articles/<article_slug>/comments",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 21
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/articles/<article_slug>/comments/<comment_pk>",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 24
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags",
+        "file": "conduit/apps/articles/urls.py",
+        "line": 27
+      },
+      {
+        "method": "GET",
+        "path": "/api/user",
+        "file": "conduit/apps/authentication/urls.py",
+        "line": 8
+      },
+      {
+        "method": "PUT",
+        "path": "/api/user",
+        "file": "conduit/apps/authentication/urls.py",
+        "line": 8
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/user",
+        "file": "conduit/apps/authentication/urls.py",
+        "line": 8
+      },
+      {
+        "method": "POST",
+        "path": "/api/users",
+        "file": "conduit/apps/authentication/urls.py",
+        "line": 9
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/login",
+        "file": "conduit/apps/authentication/urls.py",
+        "line": 10
+      },
+      {
+        "method": "GET",
+        "path": "/api/profiles/<username>",
+        "file": "conduit/apps/profiles/urls.py",
+        "line": 6
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/<username>/follow",
+        "file": "conduit/apps/profiles/urls.py",
+        "line": 7
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/profiles/<username>/follow",
+        "file": "conduit/apps/profiles/urls.py",
+        "line": 7
+      }
+    ]
+  }
+}
