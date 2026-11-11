@@ -3,6 +3,7 @@ import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
 import type { GraphNode } from "../../../core/graph/model.js";
 import type { PythonParsePlugin } from "../../languages/python/parser.js";
 import { walk } from "../../languages/tree-sitter-utils.js";
+import { classifyFile } from "../../../core/scan/file-classification.js";
 import { ENV_VALUE_FILES, readEnvFiles } from "../js-ts/env-files.js";
 import type { PythonContext } from "./context.js";
 import { argsOf, compact, createOwnerOf, lastSegment, stringConstants, stringOnly, stringValue, unwrap } from "./syntax.js";
@@ -17,6 +18,7 @@ import { argsOf, compact, createOwnerOf, lastSegment, stringConstants, stringOnl
 //     `httpx.AsyncClient(...)` (also `with … as client`, `self.client`, an
 //     annotated parameter), `client.request("GET", url)` and `stream`;
 //   - aiohttp: the methods of an `aiohttp.ClientSession(...)`.
+// Test files are skipped: their clients drive the app in process.
 // The method is the function's name or the `request` argument. The URL is a
 // string literal, a module or class constant, an f-string, `%` / `.format`
 // template, `+` concatenation or `urljoin`; a client's `base_url` is put in
@@ -35,9 +37,11 @@ const CLIENT_TYPES = new Map<string, "requests" | "httpx" | "aiohttp">([
   ["requests.Session", "requests"], ["Session", "requests"], ["httpx.Client", "httpx"], ["httpx.AsyncClient", "httpx"], ["Client", "httpx"], ["AsyncClient", "httpx"], ["aiohttp.ClientSession", "aiohttp"], ["ClientSession", "aiohttp"],
 ]);
 
-export const pythonHttpPlugin: PythonParsePlugin = ({ fileNodeId, root, nodes, relationships, functions }) => {
+export const pythonHttpPlugin: PythonParsePlugin = ({ fileNodeId, relativePath, root, nodes, relationships, functions }) => {
   const source = root.text;
   if (!/\brequests\b|\bhttpx\b|\baiohttp\b/u.test(source)) return;
+  // A test drives the app in process (a client of `app=app`, fixtures): not an outbound request.
+  if (classifyFile(relativePath, false, true).isTest) return;
   const constants = stringConstants(root);
   const ownerOf = createOwnerOf(fileNodeId, functions);
   const functionById = new Map(functions.map((fn) => [fn.node.id, fn]));
