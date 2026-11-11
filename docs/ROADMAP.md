@@ -1130,23 +1130,23 @@ to the code. They come before M11 (Rust) so the Rust phases find these files alr
 
 ### SQL
 
-- [ ] `CREATE TABLE`, `ALTER TABLE … ADD COLUMN`, `CREATE VIEW` and `CREATE INDEX` in migrations and schema files as `Table` nodes with columns, merged by name with the tables found from code; migration order recorded
+- [x] `CREATE TABLE`, `ALTER TABLE … ADD COLUMN`, `CREATE VIEW` and `CREATE INDEX` in migrations and schema files as `Table` nodes with columns, merged by name with the tables found from code; migration order recorded (#224)
 
 ### Protobuf
 
-- [ ] `package`, `service`, `rpc` and `message` read from `.proto` files; an rpc links to the generated Go server interface method and its implementations through the `pkg.Svc` service name
+- [x] `package`, `service`, `rpc` and `message` read from `.proto` files; an rpc links to the generated Go server interface method and its implementations through the `pkg.Svc` service name (#225, #226)
 
 ### Measurement
 
-- [ ] Smoke counts and golden graphs updated for every sample
-- [ ] Hand labels on pinned samples for SQL tables and `.proto` rpcs
-- [ ] Agent benchmark questions on non-code files (CI and compose env, which script runs what, CSS class impact, migration tables); paid runs only after a cost estimate and approval
-- [ ] README and `docs/known-limitations.md` describe the non-code file support
+- [x] Smoke counts and golden graphs updated for every sample (#216–#226)
+- [x] Hand labels on pinned samples for SQL tables and `.proto` rpcs (#226)
+- [x] Agent benchmark questions on non-code files (CI and compose env, which script runs what, CSS class impact, migration tables); paid runs only after a cost estimate and approval (questions in #226; the paid run was declined, not run)
+- [x] README and `docs/known-limitations.md` describe the non-code file support (#224–#226)
 
 ### Acceptance criteria
 
-- [ ] Fixtures with golden coverage: migrations that create and alter tables, a `.proto` with two services linked to generated Go code
-- [ ] Every M10 label scores 100% precision; recall reported
+- [x] Fixtures with golden coverage: migrations that create and alter tables, a `.proto` with two services linked to generated Go code (#224, #225)
+- [x] Every M10 label scores 100% precision; recall reported (#226)
 
 
 ## M11: Rust ecosystem
