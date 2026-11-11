@@ -1335,7 +1335,7 @@ and Django ORM data access, config, HTTP clients and dependency injection. The d
 ### Packages and imports
 
 - [x] Packages from `pyproject.toml` (`[project]`, Poetry, setuptools), `setup.py` / `setup.cfg`, including the `src/` layout, as `Package` nodes
-- [ ] `__init__.py` re-exports and `__all__` (`__all__` and imports done; re-exports followed in calls, part 3); relative imports (`from ..x import y`); `import a.b as c` and `from x import *`
+- [x] `__init__.py` re-exports and `__all__`; relative imports (`from ..x import y`); `import a.b as c` and `from x import *`
 
 ### Declarations
 
@@ -1346,23 +1346,23 @@ and Django ORM data access, config, HTTP clients and dependency injection. The d
 
 ### Calls
 
-- [ ] Module functions through imports and aliases; `self.method()` and `cls.method()`; `super().method()`
-- [ ] Methods on typed receivers (annotated parameters and variables, constructor results, return types)
-- [ ] A call through a base class reaches the overrides, marked as such
+- [x] Module functions through imports and aliases; `self.method()` and `cls.method()`; `super().method()`
+- [x] Methods on typed receivers (annotated parameters and variables, constructor results, return types)
+- [x] A call through a base class reaches the overrides, marked as such
 
 ### Entrypoints and tests
 
-- [ ] `if __name__ == "__main__":` blocks and `[project.scripts]` / `console_scripts` as `EntryPoint` nodes
-- [ ] pytest (`test_*.py`, `*_test.py`, `conftest.py`, fixtures) and unittest classified as tests
+- [x] `if __name__ == "__main__":` blocks and `[project.scripts]` / `console_scripts` as `EntryPoint` nodes
+- [x] pytest (`test_*.py`, `*_test.py`, `conftest.py`, fixtures) and unittest classified as tests
 
 ### MCP
 
-- [ ] `find_unused_exports` covers Python modules (`__all__` or public names)
+- [x] `find_unused_exports` covers Python modules (`__all__` or public names)
 
 ### Acceptance criteria
 
-- [ ] A Python fixture with a package, a base class, decorators and typed method calls has golden graphs
-- [ ] Calls to methods of typed receivers resolve; unresolved calls are counted, never guessed
+- [x] A Python fixture with a package, a base class, decorators and typed method calls has golden graphs
+- [x] Calls to methods of typed receivers resolve; unresolved calls are counted, never guessed
 
 ## Phase 31: Python HTTP routes and entrypoints (Django, Flask, FastAPI, Celery, click/typer) ([#208](https://github.com/fatihserhatturan/concentrate/issues/208))
 

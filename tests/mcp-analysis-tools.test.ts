@@ -341,3 +341,31 @@ describe("analysis MCP tools on Rust", () => {
     assert.ok(result.skipped.rustBinary >= 1);
   });
 });
+
+describe("find_unused_exports on Python", () => {
+  let store: GraphStore;
+  const tool = async (name: string, args: Record<string, unknown>) => (await callMcpTool(store, name, args)).structuredContent as Record<string, any>;
+
+  before(async () => {
+    const graph = await buildCodeGraph(path.resolve("fixtures/python-unused"), { continueOnError: false });
+    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-unused-")), "graph"));
+    await store.reset();
+    await store.write(graph.nodes, graph.relationships);
+  });
+  after(async () => {
+    await store.close();
+  });
+
+  it("judges public module-level names, honoring __all__, star imports and console scripts", async () => {
+    const result = await tool("find_unused_exports", {});
+    // used_fn (imported through the package), UsedClass and LIMIT (imported by name), starred (star import),
+    // via_module (module imported whole) and main (console script) are not candidates; not_listed (outside __all__) is dead, not an export;
+    // `app.main.run` is public and nothing imports it.
+    assert.deepEqual(result.unusedExports.map((entry: any) => entry.name).sort(), ["OrphanClass", "UNUSED_LIMIT", "listed", "run", "unused_fn"]);
+    assert.deepEqual(result.deadFunctions.map((entry: any) => entry.name), ["_private_dead", "not_listed"]);
+    // test files are not judged; `__main__.py` is run, not imported.
+    assert.ok(result.skipped.tests >= 1);
+    assert.ok(result.skipped.handlers >= 1, "the console script's main");
+    assert.ok(result.skipped.pythonEntry >= 1);
+  });
+});

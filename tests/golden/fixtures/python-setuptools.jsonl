@@ -11,12 +11,14 @@
 {"kind":"node","id":"file:pylib/legacy/helpers.py:function:1:assist","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":1,"methodKind":null,"name":"assist","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:pylib/legacy/tool.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/pylib/legacy/tool.py","relativePath":"pylib/legacy/tool.py","sourceType":"production"}}
 {"kind":"node","id":"file:pylib/legacy/tool.py:function:5:main","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":5,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:pylib/legacy/tool.py:function:5:main:call:6:11:helpers.assist","label":"Call","properties":{"callee":"assist","columnNumber":11,"expression":"helpers.assist","line":6,"name":"helpers.assist","receiver":"helpers"}}
-{"kind":"node","id":"file:pylib/legacy/tool.py:function:5:main:call:6:30:h.assist","label":"Call","properties":{"callee":"assist","columnNumber":30,"expression":"h.assist","line":6,"name":"h.assist","receiver":"h"}}
+{"kind":"node","id":"file:pylib/legacy/tool.py:function:5:main:call:6:19:helpers.assist","label":"Call","properties":{"callee":"assist","columnNumber":19,"expression":"helpers.assist","line":6,"name":"helpers.assist","receiver":"helpers"}}
+{"kind":"node","id":"file:pylib/legacy/tool.py:function:5:main:call:6:32:h.assist","label":"Call","properties":{"callee":"assist","columnNumber":32,"expression":"h.assist","line":6,"name":"h.assist","receiver":"h"}}
 {"kind":"node","id":"file:pylib/legacy/tool.py:import:1:legacy","label":"Import","properties":{"bindings":"[{\"imported\":\"helpers\",\"local\":\"helpers\",\"kind\":\"named\"}]","isModule":true,"line":1,"source":"legacy","specifier":"from legacy import helpers"}}
 {"kind":"node","id":"file:pylib/legacy/tool.py:import:2:legacy.helpers","label":"Import","properties":{"alias":"h","bindings":"[{\"imported\":\"legacy.helpers\",\"local\":\"h\",\"kind\":\"namespace\"}]","isModule":true,"line":2,"source":"legacy.helpers","specifier":"import legacy.helpers as h"}}
 {"kind":"node","id":"file:setup.cfg","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"other","path":"<root>/setup.cfg","relativePath":"setup.cfg","sourceType":"production"}}
+{"kind":"node","id":"file:setup.cfg:entrypoint:0:0:script:cfg-demo","label":"EntryPoint","properties":{"handlerName":"main","kind":"script","library":"python","line":0,"receiverName":null,"trigger":"cfg-demo"}}
 {"kind":"node","id":"file:setup.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/setup.py","relativePath":"setup.py","sourceType":"production"}}
+{"kind":"node","id":"file:setup.py:call:3:0:setup","label":"Call","properties":{"callee":"setup","columnNumber":0,"expression":"setup","line":3,"name":"setup","receiver":null}}
 {"kind":"node","id":"file:setup.py:import:1:setuptools","label":"Import","properties":{"bindings":"[{\"imported\":\"setup\",\"local\":\"setup\",\"kind\":\"named\"}]","line":1,"source":"setuptools","specifier":"from setuptools import setup"}}
 {"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":false,"manager":"setuptools","name":"cfg-demo","path":"<root>","relativePath":".","version":"0.1.0","workspaceRoot":true}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-setuptools","path":"<root>"}}
@@ -31,14 +33,18 @@
 {"kind":"rel","from":"file:pylib/legacy/tool.py","type":"DEFINES_FUNCTION","to":"file:pylib/legacy/tool.py:function:5:main","properties":{}}
 {"kind":"rel","from":"file:pylib/legacy/tool.py","type":"IMPORTS","to":"file:pylib/legacy/tool.py:import:1:legacy","properties":{}}
 {"kind":"rel","from":"file:pylib/legacy/tool.py","type":"IMPORTS","to":"file:pylib/legacy/tool.py:import:2:legacy.helpers","properties":{}}
-{"kind":"rel","from":"file:pylib/legacy/tool.py:function:5:main","type":"CALLS","to":"file:pylib/legacy/tool.py:function:5:main:call:6:11:helpers.assist","properties":{}}
-{"kind":"rel","from":"file:pylib/legacy/tool.py:function:5:main","type":"CALLS","to":"file:pylib/legacy/tool.py:function:5:main:call:6:30:h.assist","properties":{}}
-{"kind":"rel","from":"file:pylib/legacy/tool.py:function:5:main:call:6:30:h.assist","type":"CALL_RESOLVES_TO","to":"file:pylib/legacy/helpers.py:function:1:assist","properties":{}}
+{"kind":"rel","from":"file:pylib/legacy/tool.py:function:5:main","type":"CALLS","to":"file:pylib/legacy/tool.py:function:5:main:call:6:19:helpers.assist","properties":{}}
+{"kind":"rel","from":"file:pylib/legacy/tool.py:function:5:main","type":"CALLS","to":"file:pylib/legacy/tool.py:function:5:main:call:6:32:h.assist","properties":{}}
+{"kind":"rel","from":"file:pylib/legacy/tool.py:function:5:main:call:6:19:helpers.assist","type":"CALL_RESOLVES_TO","to":"file:pylib/legacy/helpers.py:function:1:assist","properties":{}}
+{"kind":"rel","from":"file:pylib/legacy/tool.py:function:5:main:call:6:32:h.assist","type":"CALL_RESOLVES_TO","to":"file:pylib/legacy/helpers.py:function:1:assist","properties":{}}
 {"kind":"rel","from":"file:pylib/legacy/tool.py:import:1:legacy","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:pylib/legacy/tool.py:import:1:legacy","type":"RESOLVES_TO","to":"file:pylib/legacy/helpers.py","properties":{}}
 {"kind":"rel","from":"file:pylib/legacy/tool.py:import:2:legacy.helpers","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:pylib/legacy/tool.py:import:2:legacy.helpers","type":"RESOLVES_TO","to":"file:pylib/legacy/helpers.py","properties":{}}
+{"kind":"rel","from":"file:setup.cfg","type":"DECLARES_ENTRYPOINT","to":"file:setup.cfg:entrypoint:0:0:script:cfg-demo","properties":{}}
+{"kind":"rel","from":"file:setup.cfg:entrypoint:0:0:script:cfg-demo","type":"ENTRYPOINT_HANDLED_BY","to":"file:pylib/legacy/tool.py:function:5:main","properties":{}}
 {"kind":"rel","from":"file:setup.py","type":"IMPORTS","to":"file:setup.py:import:1:setuptools","properties":{}}
+{"kind":"rel","from":"file:setup.py","type":"MODULE_CALLS","to":"file:setup.py:call:3:0:setup","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:pylib/legacy/__init__.py","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:pylib/legacy/helpers.py","properties":{}}
 {"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:pylib/legacy/tool.py","properties":{}}

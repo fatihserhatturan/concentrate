@@ -2,6 +2,8 @@ import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { parseSyntaxTreeSkippingErrors, type SyntaxNode } from "../syntax/tree-sitter.js";
 import { createPythonImportNodes, readDunderAll } from "./imports.js";
+import { classAttributes, calledName, localTypes, normalizeType, type LocalType } from "./locals.js";
+import { classifyFile } from "../../../core/scan/file-classification.js";
 import { classBases, classFields, classKind, decoratorsOf, pythonParameters, type PythonDecorator } from "./declarations.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { SupportedLanguage } from "../../../core/scan/language.js";
@@ -50,6 +52,7 @@ async function parsePythonFile(
     const allNames = readDunderAll(tree.rootNode);
     if (allNames) nodes[0]!.properties.allNames = JSON.stringify(allNames);
 
+    const context: FileContext = { allNames, isTestFile: classifyFile(relativePath, false, true).isTest };
     walk(tree.rootNode, (node) => {
       if (node.type === "import_statement" || node.type === "import_from_statement") {
         for (const importNode of createPythonImportNodes(fileNodeId, node, importIds)) {
@@ -59,11 +62,14 @@ async function parsePythonFile(
       }
 
       if (node.type === "class_definition") {
-        addClass(fileNodeId, node, nodes, relationships);
+        addClass(fileNodeId, node, nodes, relationships, context);
       } else if (node.type === "function_definition") {
-        addFunction(fileNodeId, node, nodes, relationships);
+        addFunction(fileNodeId, node, nodes, relationships, context);
       }
     });
+
+    addModuleCalls(fileNodeId, tree.rootNode, nodes, relationships);
+    addMainEntrypoint(fileNodeId, tree.rootNode, nodes, relationships);
 
     for (const statement of tree.rootNode.namedChildren) {
       const variable = createVariableNode(fileNodeId, statement, allNames);
@@ -105,7 +111,20 @@ function addDecorators(nodes: GraphNode[], relationships: GraphRelationship[], o
   return decorators;
 }
 
-function addClass(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], relationships: GraphRelationship[]): void {
+type FileContext = { allNames: string[] | null; isTestFile: boolean };
+
+// Importable from other modules: defined at module level, not private (or listed in `__all__`).
+function isModuleLevel(node: SyntaxNode): boolean {
+  const holder = node.parent?.type === "decorated_definition" ? node.parent : node;
+  return holder.parent?.type === "module";
+}
+
+function exportedAs(node: SyntaxNode, name: string, context: FileContext): boolean {
+  if (!isModuleLevel(node)) return false;
+  return context.allNames ? context.allNames.includes(name) : !name.startsWith("_");
+}
+
+function addClass(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], relationships: GraphRelationship[], context: FileContext): void {
   const name = extractName(node);
   if (!name) return;
   const bases = classBases(node);
@@ -119,7 +138,7 @@ function addClass(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], rela
     name,
     line,
     endLine: node.endPosition.row + 1,
-    isExported: !name.startsWith("_"),
+    isExported: exportedAs(node, name, context),
     visibility: pythonVisibility(name),
     ...(typeParameters ? { typeParameters } : {}),
   };
@@ -152,6 +171,7 @@ function addClass(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], rela
   }
 
   const fields = classFields(body, kind);
+  const attributes = classAttributes(body);
   const hasAbstractMethod = methodDefinitions(body).some((method) => isAbstractMethod(method.node));
   const classNode: GraphNode = {
     id: `${fileNodeId}:class:${line}:${name}`,
@@ -163,6 +183,7 @@ function addClass(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], rela
       implementsNames: null,
       ...(kind ? { kind } : {}),
       ...(fields.length > 0 ? { fields: JSON.stringify(fields) } : {}),
+      ...(Object.keys(attributes).length > 0 ? { attributes: JSON.stringify(attributes) } : {}),
     },
   };
   nodes.push(classNode);
@@ -185,11 +206,13 @@ function isAbstractMethod(node: SyntaxNode): boolean {
   return decoratorsOf(node).some((decorator) => /(?:^|\.)abstract(?:method|property|classmethod|staticmethod)$/u.test(decorator.name));
 }
 
-function addFunction(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], relationships: GraphRelationship[]): void {
+function addFunction(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], relationships: GraphRelationship[], context: FileContext): void {
   const owner = enclosingClass(node);
   const ownerName = owner ? extractName(owner) : null;
   const functionNode = createFunctionNode(fileNodeId, node, ownerName ?? undefined);
   if (!functionNode) return;
+  if (!owner) functionNode.properties.isExported = exportedAs(node, String(functionNode.properties.name), context);
+  else if (!isModuleLevel(owner)) functionNode.properties.isExported = false;
   const decorators = addDecorators(nodes, relationships, functionNode.id, "HAS_METHOD_DECORATOR", node);
   if (owner) {
     const decoratorNames = decorators.map((decorator) => decorator.name.split(".").at(-1)!);
@@ -199,6 +222,8 @@ function addFunction(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], r
           : "method";
   }
   functionNode.properties.isAbstract = isAbstractMethod(node);
+  const testKind = testKindOf(node, functionNode, owner, decorators, context);
+  if (testKind) functionNode.properties.testKind = testKind;
   nodes.push(functionNode);
 
   const ownerBases = owner ? classBases(owner) : null;
@@ -212,9 +237,30 @@ function addFunction(fileNodeId: string, node: SyntaxNode, nodes: GraphNode[], r
     relationships.push({ from: fileNodeId, to: functionNode.id, type: "DEFINES_FUNCTION", properties: {} });
   }
 
-  const callNodes = createCallNodes(functionNode.id, node);
+  const locals = localTypes(node, ownerName, String(functionNode.properties.methodKind ?? ""));
+  const callNodes = createCallNodes(functionNode.id, node, locals);
   nodes.push(...callNodes);
   relationships.push(...callNodes.map((callNode) => ({ from: functionNode.id, to: callNode.id, type: "CALLS" as const, properties: {} })));
+}
+
+const UNITTEST_FIXTURES = new Set(["setUp", "tearDown", "setUpClass", "tearDownClass", "setUpModule", "tearDownModule", "asyncSetUp", "asyncTearDown"]);
+
+// pytest: `test*` functions (and methods of `Test*` classes) of test files, and
+// `@pytest.fixture`s anywhere; unittest: `test*` methods and the set-up/tear-down
+// hooks of `TestCase` classes. Other functions of a test file are helpers.
+function testKindOf(node: SyntaxNode, functionNode: GraphNode, owner: SyntaxNode | null, decorators: PythonDecorator[], context: FileContext): string | null {
+  const name = String(functionNode.properties.name);
+  if (decorators.some((decorator) => /^(?:pytest\.)?(?:fixture|yield_fixture)$|^pytest_asyncio\.fixture$/u.test(decorator.name))) return "fixture";
+  const ownerName = owner ? extractName(owner) ?? "" : "";
+  const isTestCase = owner !== null && classBases(owner).names.some((base) => /(?:^|\.)(?:TestCase|IsolatedAsyncioTestCase|AsyncTestCase|TransactionTestCase|SimpleTestCase|LiveServerTestCase)$/u.test(base));
+  if (isTestCase) {
+    if (UNITTEST_FIXTURES.has(name)) return "fixture";
+    return /^test/u.test(name) ? "test" : "helper";
+  }
+  if (!context.isTestFile) return null;
+  if (owner) return /^test/u.test(name) && /^Test/u.test(ownerName) ? "test" : "helper";
+  if (isModuleLevel(node)) return /^test/u.test(name) ? "test" : "helper";
+  return "helper";
 }
 
 // `NAME = value` and `NAME: Type = value` at module level.
@@ -240,7 +286,8 @@ function createVariableNode(fileNodeId: string, statement: SyntaxNode, allNames:
       isExported: allNames ? allNames.includes(name) : !name.startsWith("_"),
       visibility: pythonVisibility(name),
       line,
-      ...(type ? { typeName: type } : {}),
+      ...(type ? { typeName: normalizeType(type) ?? type } : {}),
+      ...(!type && calledName(value) ? { constructorName: calledName(value)! } : {}),
       ...(literal === null ? {} : { stringValue: literal }),
     },
   };
@@ -285,34 +332,99 @@ function serializeNameList(names: string[]): string | null {
   return names.length > 0 ? JSON.stringify(names) : null;
 }
 
-function createCallNodes(functionNodeId: string, node: SyntaxNode): GraphNode[] {
+function callNode(idPrefix: string, child: SyntaxNode, locals: Map<string, LocalType | null> | null): GraphNode | null {
+  const functionNode = child.childForFieldName("function");
+  const callExpression = analyzeMemberCallExpression(functionNode?.text);
+  if (!callExpression) return null;
+
+  // A method call of a multi-line chain is at its method name's line, not at the start of the chain.
+  const position = functionNode?.type === "attribute" ? (functionNode.childForFieldName("attribute") ?? child).startPosition : child.startPosition;
+  const properties: Record<string, unknown> = {
+    name: callExpression.expression,
+    expression: callExpression.expression,
+    callee: callExpression.callee,
+    receiver: callExpression.receiver,
+    line: position.row + 1,
+    columnNumber: position.column,
+  };
+
+  // The type a method call lands on: `self`, an annotated parameter or
+  // variable, or the result of a constructor (`repo = Repo()`).
+  if (locals) {
+    const root = (callExpression.receiver ?? (functionNode?.type === "identifier" ? callExpression.expression : null))?.split(".")[0];
+    if (root && locals.has(root)) {
+      properties.receiverIsLocal = true;
+      const local = locals.get(root);
+      if (callExpression.receiver && local && !/[()[\]]/u.test(callExpression.receiver)) {
+        if ("type" in local) properties.receiverType = local.type;
+        else properties.receiverConstructor = local.constructor;
+      }
+    }
+  }
+
+  return {
+    id: `${idPrefix}:call:${position.row + 1}:${position.column}:${callExpression.expression}`,
+    label: "Call",
+    properties: properties as GraphNode["properties"],
+  };
+}
+
+const isDefinition = (child: SyntaxNode) => child.type === "function_definition" || child.type === "class_definition";
+
+function createCallNodes(functionNodeId: string, node: SyntaxNode, locals: Map<string, LocalType | null>): GraphNode[] {
   const calls: GraphNode[] = [];
-
   walkScoped(node, (child) => {
-    if (child.type !== "call") {
-      return;
-    }
-
-    const callExpression = analyzeMemberCallExpression(child.childForFieldName("function")?.text);
-    if (!callExpression) {
-      return;
-    }
-
-    calls.push({
-      id: `${functionNodeId}:call:${child.startPosition.row + 1}:${child.startPosition.column}:${callExpression.expression}`,
-      label: "Call",
-      properties: {
-        name: callExpression.expression,
-        expression: callExpression.expression,
-        callee: callExpression.callee,
-        receiver: callExpression.receiver,
-        line: child.startPosition.row + 1,
-        columnNumber: child.startPosition.column,
-      },
-    });
-  }, (child) => child.type === "function_definition" || child.type === "class_definition");
-
+    if (child.type !== "call") return;
+    const created = callNode(functionNodeId, child, locals);
+    if (created) calls.push(created);
+  }, isDefinition);
   return calls;
+}
+
+// Calls of the file's top-level code, decorators included (`@app.route("/")`,
+// `app = Flask(__name__)`); not those inside functions or class bodies.
+function addModuleCalls(fileNodeId: string, root: SyntaxNode, nodes: GraphNode[], relationships: GraphRelationship[]): void {
+  walkScoped(root, (child) => {
+    if (child.type !== "call") return;
+    const created = callNode(fileNodeId, child, null);
+    if (!created) return;
+    nodes.push(created);
+    relationships.push({ from: fileNodeId, to: created.id, type: "MODULE_CALLS", properties: {} });
+  }, isDefinition);
+}
+
+// `if __name__ == "__main__":` runs when the file is executed: an EntryPoint
+// handled by the function the block calls.
+function addMainEntrypoint(fileNodeId: string, root: SyntaxNode, nodes: GraphNode[], relationships: GraphRelationship[]): void {
+  for (const statement of root.namedChildren) {
+    if (statement.type !== "if_statement") continue;
+    const condition = statement.childForFieldName("condition");
+    if (condition?.type !== "comparison_operator" || !/^\s*(?:__name__\s*==\s*["']__main__["']|["']__main__["']\s*==\s*__name__)\s*$/u.test(condition.text)) continue;
+    const line = statement.startPosition.row + 1;
+    const consequence = statement.childForFieldName("consequence");
+    let handlerName: string | null = null;
+    let handlerId: string | null = null;
+    if (consequence) {
+      walkScoped(consequence, (child) => {
+        if (handlerId || child.type !== "call") return;
+        const function_ = child.childForFieldName("function");
+        if (function_?.type !== "identifier") return;
+        const target = nodes.find((candidate) => candidate.label === "Function" && candidate.properties.name === function_.text && candidate.properties.className === null && candidate.id.startsWith(`${fileNodeId}:function:`));
+        if (target) {
+          handlerName = function_.text;
+          handlerId = target.id;
+        }
+      }, isDefinition);
+    }
+    const entrypoint: GraphNode = {
+      id: `${fileNodeId}:entrypoint:${line}:0:main:<none>`,
+      label: "EntryPoint",
+      properties: { kind: "main", trigger: "__name__ == \"__main__\"", receiverName: null, library: "python", line, handlerName },
+    };
+    nodes.push(entrypoint);
+    relationships.push({ from: fileNodeId, to: entrypoint.id, type: "DECLARES_ENTRYPOINT", properties: {} });
+    if (handlerId) relationships.push({ from: entrypoint.id, to: handlerId, type: "ENTRYPOINT_HANDLED_BY", properties: {} });
+  }
 }
 
 function extractName(node: SyntaxNode): string | null {

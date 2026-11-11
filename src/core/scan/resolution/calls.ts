@@ -1,7 +1,8 @@
 import type { IGraphContributor } from "../../contracts/graph-contributor.js";
 import type { GraphNode } from "../../graph/model.js";
 import { resolveCall, resolveDeclaration, resolveImportedFreeCall } from "./call-targets.js";
-import { isGoFile, isRustFile } from "./file-kind.js";
+import { isGoFile, isPythonFile, isRustFile } from "./file-kind.js";
+import { createPythonCallIndex, resolvePythonCall, type PythonCallIndex } from "./python-calls.js";
 import { createRustCallIndex, resolveRustCall, type RustCallIndex } from "./rust-calls.js";
 import { createGoCallIndex, resolveGoCall, type GoCallIndex } from "./go-calls.js";
 import {
@@ -33,6 +34,7 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
   const scopes = indexScopes(graph, functionsByFileAndName, importNodesByFile);
   let goIndex: GoCallIndex | null = null;
   let rustIndex: RustCallIndex | null = null;
+  let pythonIndex: PythonCallIndex | null = null;
 
   let resolved = 0;
   let unresolved = 0;
@@ -72,6 +74,17 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
     if (isRustFile(callerFileId)) {
       rustIndex ??= createRustCallIndex(graph, relationshipIndex);
       const targets = resolveRustCall(node, callerFileId, callerFunctionId, rustIndex);
+      for (const target of targets) {
+        graph.addRelationship({ from: node.id, to: target.functionId, type: "CALL_RESOLVES_TO", properties: target.via ? { via: target.via } : {} });
+      }
+      if (targets.length > 0) resolved++;
+      else unresolved++;
+      continue;
+    }
+
+    if (isPythonFile(callerFileId)) {
+      pythonIndex ??= createPythonCallIndex(graph, relationshipIndex);
+      const targets = resolvePythonCall(node, callerFileId, callerFunctionId, pythonIndex);
       for (const target of targets) {
         graph.addRelationship({ from: node.id, to: target.functionId, type: "CALL_RESOLVES_TO", properties: target.via ? { via: target.via } : {} });
       }
