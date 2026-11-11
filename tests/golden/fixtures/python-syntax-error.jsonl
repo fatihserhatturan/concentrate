@@ -1,0 +1,30 @@
+{"kind":"report","status":"success","discoveredFiles":2,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[{"path":"broken.py","message":"Syntax error: left out the statements at lines 4, 12, 21"}]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"python-syntax-error","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"file:broken.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/broken.py","relativePath":"broken.py","sourceType":"production"}}
+{"kind":"node","id":"file:broken.py:class:16:After","label":"Class","properties":{"endLine":24,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":true,"line":16,"name":"After","visibility":"public"}}
+{"kind":"node","id":"file:broken.py:function:11:broken","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":11,"methodKind":null,"name":"broken","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:broken.py:function:17:kept","label":"Function","properties":{"className":"After","endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":17,"methodKind":null,"name":"kept","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:broken.py:function:20:bad","label":"Function","properties":{"className":"After","endLine":20,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":20,"methodKind":null,"name":"bad","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:broken.py:function:23:also_kept","label":"Function","properties":{"className":"After","endLine":24,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":23,"methodKind":null,"name":"also_kept","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:broken.py:function:7:before","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":7,"methodKind":null,"name":"before","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:broken.py:function:7:before:call:8:11:fine","label":"Call","properties":{"callee":"fine","columnNumber":11,"expression":"fine","line":8,"name":"fine","receiver":null}}
+{"kind":"node","id":"file:broken.py:import:1:os","label":"Import","properties":{"bindings":"[{\"imported\":\"os\",\"local\":\"os\",\"kind\":\"namespace\"}]","line":1,"source":"os","specifier":"import os"}}
+{"kind":"node","id":"file:broken.py:import:2:good","label":"Import","properties":{"bindings":"[{\"imported\":\"fine\",\"local\":\"fine\",\"kind\":\"named\"}]","line":2,"source":"good","specifier":"from good import fine"}}
+{"kind":"node","id":"file:good.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/good.py","relativePath":"good.py","sourceType":"production"}}
+{"kind":"node","id":"file:good.py:function:1:fine","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":1,"methodKind":null,"name":"fine","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-syntax-error","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:broken.py","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:good.py","properties":{}}
+{"kind":"rel","from":"file:broken.py","type":"DEFINES_CLASS","to":"file:broken.py:class:16:After","properties":{}}
+{"kind":"rel","from":"file:broken.py","type":"DEFINES_FUNCTION","to":"file:broken.py:function:11:broken","properties":{}}
+{"kind":"rel","from":"file:broken.py","type":"DEFINES_FUNCTION","to":"file:broken.py:function:7:before","properties":{}}
+{"kind":"rel","from":"file:broken.py","type":"IMPORTS","to":"file:broken.py:import:1:os","properties":{}}
+{"kind":"rel","from":"file:broken.py","type":"IMPORTS","to":"file:broken.py:import:2:good","properties":{}}
+{"kind":"rel","from":"file:broken.py:class:16:After","type":"DEFINES_METHOD","to":"file:broken.py:function:17:kept","properties":{}}
+{"kind":"rel","from":"file:broken.py:class:16:After","type":"DEFINES_METHOD","to":"file:broken.py:function:20:bad","properties":{}}
+{"kind":"rel","from":"file:broken.py:class:16:After","type":"DEFINES_METHOD","to":"file:broken.py:function:23:also_kept","properties":{}}
+{"kind":"rel","from":"file:broken.py:function:7:before","type":"CALLS","to":"file:broken.py:function:7:before:call:8:11:fine","properties":{}}
+{"kind":"rel","from":"file:broken.py:function:7:before:call:8:11:fine","type":"CALL_RESOLVES_TO","to":"file:good.py:function:1:fine","properties":{}}
+{"kind":"rel","from":"file:broken.py:import:2:good","type":"RESOLVES_TO","to":"file:good.py","properties":{}}
+{"kind":"rel","from":"file:good.py","type":"DEFINES_FUNCTION","to":"file:good.py:function:1:fine","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

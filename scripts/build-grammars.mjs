@@ -21,7 +21,7 @@ const grammars = [
   { name: "typescript", package: "tree-sitter-typescript", version: "0.23.2", dir: "typescript" },
   { name: "tsx", package: "tree-sitter-typescript", version: "0.23.2", dir: "tsx" },
   { name: "html", package: "tree-sitter-html", version: "0.23.2", dir: "." },
-  { name: "python", package: "tree-sitter-python", version: "0.21.0", dir: "." },
+  { name: "python", package: "tree-sitter-python", version: "0.25.0", dir: "." },
   { name: "go", package: "tree-sitter-go", version: "0.25.0", dir: "." },
   { name: "rust", package: "tree-sitter-rust", version: "0.24.0", dir: "." },
   // Non-code files (Phase 22). tree-sitter-powershell 0.26.6 is under two weeks old, so 0.26.4.

@@ -13,7 +13,7 @@ import { createScanManifest, type ScanManifest } from "./manifest.js";
 import { ParseCache } from "./parse-cache.js";
 import { filterSupportedSourceFiles } from "./source-files.js";
 import { isCodeLanguage } from "./language.js";
-import { addWorkspacePackageGraph } from "./workspace-packages.js";
+import { addWorkspacePackageGraph, type ProjectPackageReader } from "./workspace-packages.js";
 import type { IScanOrchestrator } from "../contracts/scan-orchestrator.js";
 import type { ILanguageParser } from "../contracts/language-parser.js";
 import type { IParserPool } from "../contracts/parser-pool.js";
@@ -27,6 +27,8 @@ export interface ScanDependencies {
   getParser: (language: string) => ILanguageParser;
   resolvers: readonly ILanguageResolver[];
   contributors: readonly ISemanticContributor[];
+  // Packages declared outside package.json (Python projects), added to the package graph.
+  readProjectPackages?: ProjectPackageReader;
   // Identifies the parser code; required for the parse cache (options.cacheDirectory).
   parserFingerprint?: () => Promise<string>;
   // Starts worker threads that parse files; without it every file is parsed
@@ -158,7 +160,7 @@ export async function buildCodeGraph(
   }
 
   await cache?.prune();
-  await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report);
+  await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report, deps.readProjectPackages);
   await finalizeGraphRelationships(graph, rootPath, report, deps.resolvers, deps.contributors, files, { apiOrigins: options.apiOrigins ?? [] });
   report.status = report.failedFiles.length > 0 ? "partial" : "success";
 

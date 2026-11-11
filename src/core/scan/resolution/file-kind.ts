@@ -1,7 +1,5 @@
 import path from "node:path";
 
-const absoluteModuleLanguages = new Set(["python"]);
-
 export function isJsTsFile(fileId: string): boolean {
   const extension = fileExtension(fileId);
   // Markup files import with JS/TS rules too (`@/components/Card.vue`).
@@ -12,13 +10,12 @@ export function isGoFile(fileId: string): boolean {
   return fileExtension(fileId) === ".go";
 }
 
-export function isRustFile(fileId: string): boolean {
-  return fileExtension(fileId) === ".rs";
+export function isPythonFile(fileId: string): boolean {
+  return fileExtension(fileId) === ".py";
 }
 
-export function shouldResolveAbsoluteImport(importerFileId: string): boolean {
-  const extension = fileExtension(importerFileId);
-  return extension === ".py" || absoluteModuleLanguages.has(extension);
+export function isRustFile(fileId: string): boolean {
+  return fileExtension(fileId) === ".rs";
 }
 
 function fileExtension(fileId: string): string {

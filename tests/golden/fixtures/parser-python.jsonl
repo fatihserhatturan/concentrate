@@ -13,7 +13,7 @@
 {"kind":"node","id":"file:module.py:function:4:greet:call:5:11:str","label":"Call","properties":{"callee":"str","columnNumber":11,"expression":"str","line":5,"name":"str","receiver":null}}
 {"kind":"node","id":"file:module.py:function:8:fetch","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":true,"isExported":true,"kind":"function_definition","line":8,"methodKind":null,"name":"fetch","parameters":null,"returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:module.py:function:8:fetch:call:9:11:str","label":"Call","properties":{"callee":"str","columnNumber":11,"expression":"str","line":9,"name":"str","receiver":null}}
-{"kind":"node","id":"file:module.py:import:1:os","label":"Import","properties":{"line":1,"source":"os","specifier":"import os"}}
+{"kind":"node","id":"file:module.py:import:1:os","label":"Import","properties":{"bindings":"[{\"imported\":\"os\",\"local\":\"os\",\"kind\":\"namespace\"}]","line":1,"source":"os","specifier":"import os"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"parser-python","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:module.py","properties":{}}
 {"kind":"rel","from":"file:module.py","type":"DEFINES_CLASS","to":"file:module.py:class:20:UserService","properties":{}}

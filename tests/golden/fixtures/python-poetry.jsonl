@@ -1,0 +1,55 @@
+{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"config:package:.:pyproject.toml:name","label":"ConfigValue","properties":{"line":0,"name":"pyproject.toml:name","value":"poetry-demo","valueType":"string"}}
+{"kind":"node","id":"config:package:.:pyproject.toml:packageManager","label":"ConfigValue","properties":{"line":0,"name":"pyproject.toml:packageManager","value":"poetry","valueType":"string"}}
+{"kind":"node","id":"config:package:.:pyproject.toml:private","label":"ConfigValue","properties":{"line":0,"name":"pyproject.toml:private","value":"false","valueType":"boolean"}}
+{"kind":"node","id":"config:package:.:pyproject.toml:version","label":"ConfigValue","properties":{"line":0,"name":"pyproject.toml:version","value":"0.3.0","valueType":"string"}}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"python-poetry","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:lib","label":"Directory","properties":{"name":"lib","path":"<root>/lib","relativePath":"lib"}}
+{"kind":"node","id":"dir:lib/poetrylib","label":"Directory","properties":{"name":"poetrylib","path":"<root>/lib/poetrylib","relativePath":"lib/poetrylib"}}
+{"kind":"node","id":"file:app.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app.py","relativePath":"app.py","sourceType":"production"}}
+{"kind":"node","id":"file:app.py:function:7:main","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":7,"methodKind":null,"name":"main","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:app.py:function:7:main:call:8:11:run","label":"Call","properties":{"callee":"run","columnNumber":11,"expression":"run","line":8,"name":"run","receiver":null}}
+{"kind":"node","id":"file:app.py:function:7:main:call:8:19:go","label":"Call","properties":{"callee":"go","columnNumber":19,"expression":"go","line":8,"name":"go","receiver":null}}
+{"kind":"node","id":"file:app.py:import:1:poetrylib","label":"Import","properties":{"bindings":"[{\"imported\":\"run\",\"local\":\"run\",\"kind\":\"named\"}]","line":1,"source":"poetrylib","specifier":"from poetrylib import run"}}
+{"kind":"node","id":"file:app.py:import:2:poetrylib.core","label":"Import","properties":{"alias":"go","bindings":"[{\"imported\":\"run\",\"local\":\"go\",\"kind\":\"named\"}]","line":2,"source":"poetrylib.core","specifier":"from poetrylib.core import run as go"}}
+{"kind":"node","id":"file:app.py:import:3:missing_package.inner","label":"Import","properties":{"bindings":"[{\"imported\":\"nothing\",\"local\":\"nothing\",\"kind\":\"named\"}]","line":3,"source":"missing_package.inner","specifier":"from missing_package.inner import nothing"}}
+{"kind":"node","id":"file:app.py:import:4:.sibling","label":"Import","properties":{"bindings":"[{\"imported\":\"ghost\",\"local\":\"ghost\",\"kind\":\"named\"}]","line":4,"source":".sibling","specifier":"from .sibling import ghost"}}
+{"kind":"node","id":"file:lib/poetrylib/__init__.py","label":"File","properties":{"allNames":"[\"run\"]","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/lib/poetrylib/__init__.py","relativePath":"lib/poetrylib/__init__.py","sourceType":"production"}}
+{"kind":"node","id":"file:lib/poetrylib/__init__.py:import:1:.core","label":"Import","properties":{"bindings":"[{\"imported\":\"run\",\"local\":\"run\",\"kind\":\"named\"}]","line":1,"source":".core","specifier":"from .core import run"}}
+{"kind":"node","id":"file:lib/poetrylib/core.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/lib/poetrylib/core.py","relativePath":"lib/poetrylib/core.py","sourceType":"production"}}
+{"kind":"node","id":"file:lib/poetrylib/core.py:function:1:run","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":1,"methodKind":null,"name":"run","parameters":null,"returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:pyproject.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/pyproject.toml","relativePath":"pyproject.toml","sourceType":"production"}}
+{"kind":"node","id":"package:.","label":"Package","properties":{"isPrivate":false,"manager":"poetry","name":"poetry-demo","path":"<root>","relativePath":".","version":"0.3.0","workspaceRoot":true}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"python-poetry","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:lib","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:app.py","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:pyproject.toml","properties":{}}
+{"kind":"rel","from":"dir:lib","type":"CONTAINS_DIRECTORY","to":"dir:lib/poetrylib","properties":{}}
+{"kind":"rel","from":"dir:lib/poetrylib","type":"CONTAINS_FILE","to":"file:lib/poetrylib/__init__.py","properties":{}}
+{"kind":"rel","from":"dir:lib/poetrylib","type":"CONTAINS_FILE","to":"file:lib/poetrylib/core.py","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"DEFINES_FUNCTION","to":"file:app.py:function:7:main","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:1:poetrylib","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:2:poetrylib.core","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:3:missing_package.inner","properties":{}}
+{"kind":"rel","from":"file:app.py","type":"IMPORTS","to":"file:app.py:import:4:.sibling","properties":{}}
+{"kind":"rel","from":"file:app.py:function:7:main","type":"CALLS","to":"file:app.py:function:7:main:call:8:11:run","properties":{}}
+{"kind":"rel","from":"file:app.py:function:7:main","type":"CALLS","to":"file:app.py:function:7:main:call:8:19:go","properties":{}}
+{"kind":"rel","from":"file:app.py:function:7:main:call:8:19:go","type":"CALL_RESOLVES_TO","to":"file:lib/poetrylib/core.py:function:1:run","properties":{}}
+{"kind":"rel","from":"file:app.py:import:1:poetrylib","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:app.py:import:1:poetrylib","type":"RESOLVES_TO","to":"file:lib/poetrylib/__init__.py","properties":{}}
+{"kind":"rel","from":"file:app.py:import:2:poetrylib.core","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:app.py:import:2:poetrylib.core","type":"RESOLVES_TO","to":"file:lib/poetrylib/core.py","properties":{}}
+{"kind":"rel","from":"file:lib/poetrylib/__init__.py","type":"IMPORTS","to":"file:lib/poetrylib/__init__.py:import:1:.core","properties":{}}
+{"kind":"rel","from":"file:lib/poetrylib/__init__.py:import:1:.core","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
+{"kind":"rel","from":"file:lib/poetrylib/__init__.py:import:1:.core","type":"RESOLVES_TO","to":"file:lib/poetrylib/core.py","properties":{}}
+{"kind":"rel","from":"file:lib/poetrylib/core.py","type":"DEFINES_FUNCTION","to":"file:lib/poetrylib/core.py:function:1:run","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:app.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:lib/poetrylib/__init__.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:lib/poetrylib/core.py","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_CONTAINS_FILE","to":"file:pyproject.toml","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:pyproject.toml:name","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:pyproject.toml:packageManager","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:pyproject.toml:private","properties":{}}
+{"kind":"rel","from":"package:.","type":"PACKAGE_DECLARES_CONFIG","to":"config:package:.:pyproject.toml:version","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:.","properties":{}}

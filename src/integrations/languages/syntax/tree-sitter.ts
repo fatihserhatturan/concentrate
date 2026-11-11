@@ -48,7 +48,8 @@ export async function parseSyntaxTree(grammar: GrammarName, source: string, pars
 // ERROR or MISSING node (all characters but line breaks become spaces, so
 // positions stay the same) and parses again: a statement is the nearest node
 // whose parent type is in `statementParents`, or, in the last round, the
-// nearest child of the root. Returns the tree and the first line of every
+// nearest child of the root. When `ERROR` is in `statementParents`, the children
+// of an ERROR node that wraps statements count as statements. Returns the tree and the first line of every
 // left-out statement; throws when the source cannot be cleaned up.
 // `standIn`, when given, maps the text to what the grammar reads (see
 // `parseSyntaxTree`); it must keep every character's position.
@@ -86,6 +87,12 @@ export async function parseSyntaxTreeSkippingErrors(
 function errorStatementRanges(root: SyntaxNode, statementParents: ReadonlySet<string>): Array<{ start: number; end: number; line: number }> {
   const ranges = new Map<number, { start: number; end: number; line: number }>();
   const visit = (node: SyntaxNode) => {
+    // When ERROR itself is a statement parent (Python), an ERROR node that wraps
+    // statements is looked into; one with nothing to look into is left out whole.
+    if (node.isError && statementParents.has("ERROR") && node.namedChildren.some((child) => child.hasError || child.isMissing)) {
+      for (const child of node.namedChildren) if (child.hasError || child.isMissing) visit(child);
+      return;
+    }
     if (node.isError || node.isMissing) {
       let statement = node;
       while (statement.parent && !statementParents.has(statement.parent.type)) statement = statement.parent;

@@ -29,10 +29,3 @@ export function createRelativeImportCandidates(importBasePath: string): string[]
 
   return [...candidates];
 }
-
-export function createPythonModuleCandidates(importBasePath: string): string[] {
-  return [
-    `${importBasePath}.py`,
-    path.posix.join(importBasePath, "__init__.py"),
-  ];
-}

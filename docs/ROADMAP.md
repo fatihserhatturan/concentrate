@@ -1324,18 +1324,18 @@ and Django ORM data access, config, HTTP clients and dependency injection. The d
 **Goal:** Resolve Python packages, classes and calls as well as Go and Rust, so Phases 31–33 can attach routes, data access and config to real call targets.
 
 - `src/integrations/languages/python/parser.ts` makes `File`, `Import`, `Function`, `Class` and `Call` nodes only; module imports resolve through `src/core/scan/resolution/import-candidates.ts` (`.py`, `__init__.py`).
-- The grammar is pinned to `tree-sitter-python` 0.21.0 (`scripts/build-grammars.mjs`); 0.25.0 is current.
+- The grammar is pinned to `tree-sitter-python` 0.21.0 (`scripts/build-grammars.mjs`; upgraded to 0.25.0 in part 1).
 - There are no decorators, type hints, base classes, method receivers, entrypoints or test classification, and a file with a syntax error is not partial.
 
 ### Grammar
 
-- [ ] Upgrade `tree-sitter-python` to 0.25.0 with reviewed golden diffs
-- [ ] A file with `ERROR` nodes keeps a partial graph and gets a scan warning
+- [x] Upgrade `tree-sitter-python` to 0.25.0 with reviewed golden diffs
+- [x] A file with `ERROR` nodes keeps a partial graph and gets a scan warning
 
 ### Packages and imports
 
-- [ ] Packages from `pyproject.toml` (`[project]`, Poetry, setuptools), `setup.py` / `setup.cfg`, including the `src/` layout, as `Package` nodes
-- [ ] `__init__.py` re-exports and `__all__`; relative imports (`from ..x import y`); `import a.b as c` and `from x import *`
+- [x] Packages from `pyproject.toml` (`[project]`, Poetry, setuptools), `setup.py` / `setup.cfg`, including the `src/` layout, as `Package` nodes
+- [ ] `__init__.py` re-exports and `__all__` (`__all__` and imports done; re-exports followed in calls, part 3); relative imports (`from ..x import y`); `import a.b as c` and `from x import *`
 
 ### Declarations
 

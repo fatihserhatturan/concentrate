@@ -14,9 +14,11 @@ import {
 import {
   isGoFile,
   isJsTsFile,
+  isPythonFile,
   isRustFile,
-  shouldResolveAbsoluteImport,
 } from "../../core/scan/resolution/file-kind.js";
+import { readPythonProjects } from "../languages/python/project.js";
+import { createPythonResolver, type PythonResolver } from "../languages/python/resolution.js";
 import { readCargoConfig } from "../languages/rust/cargo.js";
 import { createRustModuleTree, type RustImportRecord } from "../languages/rust/resolution.js";
 import { isStyleFile, resolveStyleImport } from "../languages/plain/style-resolution.js";
@@ -46,6 +48,7 @@ export async function addImportResolutionRelationships(
   });
   const goConfig = await readGoResolutionConfig(rootPath, fileIdByRelativePath.keys());
   const goFilesByDirectory = indexGoFilesByDirectory(fileIdByRelativePath);
+  const pythonResolver = await createPythonResolverFor(rootPath, graph, fileIdByRelativePath, importerFileIdByImportId);
   const rustTree = await createRustTree(rootPath, graph, fileIdByRelativePath, importerFileIdByImportId);
   // A bare specifier tried only because of `baseUrl` (`next/link` against
   // `baseUrl: "."`) is a package import, not an unresolved one, unless its
@@ -114,6 +117,21 @@ export async function addImportResolutionRelationships(
       continue;
     }
 
+    // A Python import goes through the project's source roots and `__init__.py` packages.
+    if (importerFileId && isPythonFile(importerFileId)) {
+      const result = pythonResolver!.resolveImport({
+        importerFile: importerFileId.slice("file:".length),
+        source,
+        importedName: pythonImportedName(node.properties),
+      });
+      for (const targetFileId of result.files.map((file) => fileIdByRelativePath.get(file)).filter((id): id is string => id !== undefined)) {
+        graph.addRelationship({ from: node.id, to: targetFileId, type: "RESOLVES_TO", properties: {} });
+      }
+      if (result.files.length > 0) resolved += 1;
+      else if (result.expected) unresolved += 1;
+      continue;
+    }
+
     if (!importerFileId || !shouldAttemptResolution(source, importerFileId, jsTsConfig, goConfig)) {
       continue;
     }
@@ -167,7 +185,7 @@ function shouldAttemptResolution(
     return goPackageDirectory(source, goConfig) !== null;
   }
 
-  return shouldResolveAbsoluteImport(importerFileId);
+  return false;
 }
 
 export function rustImportRecord(properties: Record<string, unknown>, importerFileId: string): RustImportRecord {
@@ -215,4 +233,31 @@ async function createRustTree(
     node.properties.rustModule = info.module;
   }
   return tree;
+}
+
+// `x` of `from m import x`: the one named binding of a per-name Import.
+function pythonImportedName(properties: Record<string, unknown>): string | null {
+  if (typeof properties.bindings !== "string") return null;
+  const [binding] = JSON.parse(properties.bindings) as Array<{ imported: string; kind: string }>;
+  return binding && binding.kind === "named" ? binding.imported : null;
+}
+
+async function createPythonResolverFor(
+  rootPath: string,
+  graph: IGraphContributor,
+  fileIdByRelativePath: Map<string, string>,
+  importerFileIdByImportId: Map<string, string>,
+): Promise<PythonResolver | null> {
+  let any = false;
+  for (const node of graph.nodes) {
+    if (node.label !== "Import") continue;
+    const importer = importerFileIdByImportId.get(node.id);
+    if (importer && isPythonFile(importer)) {
+      any = true;
+      break;
+    }
+  }
+  if (!any) return null;
+  const projects = await readPythonProjects(rootPath, fileIdByRelativePath.keys());
+  return createPythonResolver(projects, new Set(fileIdByRelativePath.keys()));
 }

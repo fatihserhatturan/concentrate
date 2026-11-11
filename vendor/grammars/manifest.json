@@ -27,9 +27,9 @@
     },
     "python": {
       "package": "tree-sitter-python",
-      "version": "0.21.0",
-      "sha256": "bbf740d0a067a72432bd564df78f56595163a894257207e873bf4f08f9b3d42c",
-      "bytes": 475404
+      "version": "0.25.0",
+      "sha256": "3523e4dc3d12894bbb2f7ea4b86b50eec69aed321c3d9b49271d82ed9f5f79b0",
+      "bytes": 456723
     },
     "go": {
       "package": "tree-sitter-go",

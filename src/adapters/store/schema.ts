@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 81;
+export const SCHEMA_VERSION = 82;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
