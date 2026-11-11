@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 75;
+export const SCHEMA_VERSION = 76;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -45,7 +45,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "ConfigValue", properties: { name: "STRING", value: "STRING", valueType: "STRING", line: "INT64" } },
   { label: "DataModel", properties: { name: "STRING", library: "STRING", declaredIn: "STRING", line: "INT64" } },
   { label: "Style", properties: { name: "STRING", kind: "STRING", selector: "STRING", scope: "STRING", atRule: "STRING", line: "INT64", endLine: "INT64" } },
-  { label: "Table", properties: { name: "STRING", kind: "STRING", library: "STRING", schemaName: "STRING", provider: "STRING", declaredIn: "STRING", line: "INT64", columns: "STRING" } },
+  { label: "Table", properties: { name: "STRING", kind: "STRING", library: "STRING", schemaName: "STRING", provider: "STRING", declaredIn: "STRING", line: "INT64", columns: "STRING", migrations: "STRING", indexes: "STRING" } },
 ];
 
 export const relationshipTables: readonly RelationshipTable[] = [

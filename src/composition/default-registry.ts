@@ -7,6 +7,7 @@ import { pythonParser } from "../integrations/languages/python/parser.js";
 import { goDataAccessContributor, goDiContributor, goEntrypointsContributor, goEnvConfigContributor, goForeignRoutersContributor, goFrameworkParser, goGrpcContributor, goHttpClientsContributor, goRoutesContributor } from "../integrations/frameworks/go/index.js";
 import { rustParser } from "../integrations/languages/rust/parser.js";
 import { plainFileParsers } from "../integrations/languages/plain/parser.js";
+import { sqlSchemaContributor } from "../integrations/frameworks/sql/index.js";
 import { stylesContributor } from "../integrations/frameworks/styles/index.js";
 import { scriptsContributor } from "../integrations/frameworks/scripts/index.js";
 import {
@@ -78,6 +79,8 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     vueGlobalComponentsContributor,
     nextjsPagesContributor,
     nuxtPagesContributor,
+    // After every contributor that makes Table nodes: SQL files merge into them by name.
+    sqlSchemaContributor,
   ]) {
     registry.registerSemanticContributor(contributor);
   }

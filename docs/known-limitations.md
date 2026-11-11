@@ -1386,6 +1386,47 @@ Astro).
   property defined nowhere in the scan (a third-party theme, JS `setProperty`)
   has no target; uses in JS, templates and inline `style` attributes are not
   read.
+- SQL files (`.sql`) are read by a scanner of their own
+  (`languages/plain/sql-schema.ts`; the vendored sql grammar rejects valid
+  code) into `Table` nodes (`library: sql`, `kind: table` or `view`,
+  `declaredIn` and `line` of the `CREATE`, `columns`, `indexes`, and
+  `migrations`: each change as `{ file, line, order, change }`).
+  - Read: `CREATE [TEMP] TABLE` (columns with type, nullability, `PRIMARY KEY`,
+    `UNIQUE`, `REFERENCES` / `FOREIGN KEY`, inline and as table constraints;
+    `CREATE TABLE … AS`, `LIKE` and `PARTITION OF` have no columns),
+    `CREATE [MATERIALIZED] VIEW` (columns only when listed), `CREATE
+    [UNIQUE] INDEX`, `ALTER TABLE` (`ADD [COLUMN]`, `DROP COLUMN`, `RENAME
+    COLUMN`, `RENAME TO`, `ALTER COLUMN … TYPE | SET NOT NULL | DROP NOT
+    NULL`, MySQL `MODIFY` / `CHANGE`, `ADD CONSTRAINT` primary key, unique and
+    foreign key), `DROP TABLE | VIEW | INDEX`, MySQL `RENAME TABLE`.
+    Statements are applied in order and what stands at the end is the table:
+    a dropped table is not a node (its history is not kept), a renamed one is
+    under its new name. Not read: triggers, functions, procedures, sequences,
+    grants, `INSERT` and other data, `CHECK` expressions, `DEFAULT` values and
+    the columns a view selects; `$$ … $$` bodies, strings and comments are
+    skipped, so DDL inside a function declares nothing. Dialect-specific
+    DDL outside the list is skipped, not an error.
+  - Order: dump and schema files (`schema.sql`, `structure.sql`, anything not
+    named like a migration) first, `order` 0, then migrations (`migrations/`
+    folders, `0001_x.sql`, `20240101120000_x.up.sql`, Flyway `V3__x.sql`,
+    Prisma `migrations/<version>_<name>/migration.sql`) by the number their
+    name or, for `migration.sql`, folder starts with, `order` 1, 2, … in
+    that sequence; a migration without a number goes after the numbered
+    ones, by path. `.down.sql` files and `down/` folders are skipped, and so
+    is everything after a `-- +goose Down` or `-- +migrate Down` line.
+    Rails `db/migrate/*.rb` and ORM migration code (Knex, TypeORM, Alembic,
+    Django) are not read.
+  - Merging: a table is matched by name, ignoring case and schema
+    (`public.users` and `Users` are one table; two schemas with the same
+    table name are not told apart). A table that code already declares (an
+    ORM model, a Prisma schema, a query string: any `Table` node of kind table
+    or view) is not duplicated: it keeps its columns, gets the SQL ones it
+    lacks, `declaredIn` when it had none, and the `migrations` and `indexes`.
+    Names that differ (a Prisma model `Account` mapped to `accounts` without
+    `@@map`) are two tables. Files over 1 MB are not read.
+  - `list_tables` returns `indexes` and `migrations`, and a column's
+    `references` (`orgs.id`); `library: sql` selects the tables only SQL
+    files declare.
 - `<style>` blocks of `.vue`, `.svelte` and `.astro` files are read like style
   sheets (`lang` of css, scss or less; `sass`, `stylus` and `src=` blocks are
   not) and declared by the file. Their classes carry `scope: module`

@@ -346,7 +346,7 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       failedFiles: 0,
       resolvedImports: 49,
       unresolvedRelativeImports: 0,
-      nodes: 738,
+      nodes: 741,
       relationships: 1326,
       fileClassifications: { production: 55, test: 7, fixture: 0, support: 3, generated: 1, docs: 1 },
       graph: {
@@ -517,7 +517,7 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       failedFiles: 0,
       resolvedImports: 23,
       unresolvedRelativeImports: 0,
-      nodes: 965,
+      nodes: 967,
       relationships: 1316,
       fileClassifications: { production: 28, test: 5, fixture: 0, support: 0, generated: 4, docs: 4 },
       graph: {
@@ -641,7 +641,7 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       failedFiles: 0,
       resolvedImports: 267,
       unresolvedRelativeImports: 11,
-      nodes: 2408,
+      nodes: 2413,
       relationships: 4063,
       fileClassifications: { production: 170, test: 0, fixture: 0, support: 0, generated: 1, docs: 17 },
       graph: {
@@ -663,7 +663,7 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       failedFiles: 0,
       resolvedImports: 181,
       unresolvedRelativeImports: 0,
-      nodes: 1708,
+      nodes: 1711,
       relationships: 2549,
       fileClassifications: { production: 151, test: 7, fixture: 0, support: 3, generated: 2, docs: 2 },
       graph: {

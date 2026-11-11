@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 75
+        "result": 76
       },
       {
         "method": "stats",
@@ -111,7 +111,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 75,
+      "schemaVersion": 76,
       "stats": [
         {
           "table": "Repo",
@@ -1450,7 +1450,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (table:Table) RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library, table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn, table.line AS line, table.columns AS columns",
+        "cypher": "MATCH (table:Table) RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library, table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn, table.line AS line, table.columns AS columns, table.migrations AS migrations, table.indexes AS indexes",
         "params": {
           "name": "",
           "library": ""
@@ -1465,7 +1465,9 @@
             "provider": "postgresql",
             "declaredIn": "src/drizzle/schema.ts",
             "line": 3,
-            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"serial\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"handle\",\"column\":\"handle\",\"type\":\"text\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":true},{\"name\":\"bio\",\"column\":\"bio\",\"type\":\"text\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"serial\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"handle\",\"column\":\"handle\",\"type\":\"text\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":true},{\"name\":\"bio\",\"column\":\"bio\",\"type\":\"text\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:drizzle:src/drizzle/schema.ts:sessions",
@@ -1476,7 +1478,9 @@
             "provider": "postgresql",
             "declaredIn": "src/drizzle/schema.ts",
             "line": 9,
-            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"serial\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"accountId\",\"column\":\"account_id\",\"type\":\"integer\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"serial\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"accountId\",\"column\":\"account_id\",\"type\":\"integer\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:mongoose:src/mongoose/cat.schema.ts:felines",
@@ -1487,7 +1491,9 @@
             "provider": "mongodb",
             "declaredIn": "src/mongoose/cat.schema.ts",
             "line": 5,
-            "columns": "[{\"name\":\"name\",\"column\":\"name\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":true}]"
+            "columns": "[{\"name\":\"name\",\"column\":\"name\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":true}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:mongoose:src/mongoose/cat.schema.ts:cats",
@@ -1498,7 +1504,9 @@
             "provider": "mongodb",
             "declaredIn": "src/mongoose/cat.schema.ts",
             "line": 11,
-            "columns": "[{\"name\":\"name\",\"column\":\"name\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"age\",\"column\":\"age\",\"type\":\"number\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"owner\",\"column\":\"owner\",\"type\":\"ObjectId\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"tags\",\"column\":\"tags\",\"type\":\"string\",\"optional\":true,\"list\":true,\"isId\":false,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"name\",\"column\":\"name\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"age\",\"column\":\"age\",\"type\":\"number\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"owner\",\"column\":\"owner\",\"type\":\"ObjectId\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"tags\",\"column\":\"tags\",\"type\":\"string\",\"optional\":true,\"list\":true,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:mongoose:src/mongoose/toy.model.js:toys",
@@ -1509,7 +1517,9 @@
             "provider": "mongodb",
             "declaredIn": "src/mongoose/toy.model.js",
             "line": 3,
-            "columns": "[{\"name\":\"label\",\"column\":\"label\",\"type\":\"String\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"price\",\"column\":\"price\",\"type\":\"Number\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"cat\",\"column\":\"cat\",\"type\":\"ObjectId\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"colors\",\"column\":\"colors\",\"type\":\"String\",\"optional\":true,\"list\":true,\"isId\":false,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"label\",\"column\":\"label\",\"type\":\"String\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"price\",\"column\":\"price\",\"type\":\"Number\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"cat\",\"column\":\"cat\",\"type\":\"ObjectId\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"colors\",\"column\":\"colors\",\"type\":\"String\",\"optional\":true,\"list\":true,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:typeorm:src/typeorm/photo.entity.ts:photo_album",
@@ -1520,7 +1530,9 @@
             "provider": null,
             "declaredIn": "src/typeorm/photo.entity.ts",
             "line": 5,
-            "columns": "[{\"name\":\"slug\",\"column\":\"slug\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"slug\",\"column\":\"slug\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:typeorm:src/typeorm/photo.entity.ts:photo",
@@ -1531,7 +1543,9 @@
             "provider": null,
             "declaredIn": "src/typeorm/photo.entity.ts",
             "line": 11,
-            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"url\",\"column\":\"url\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"url\",\"column\":\"url\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:typeorm:src/typeorm/user.entity.ts:app_users",
@@ -1542,7 +1556,9 @@
             "provider": null,
             "declaredIn": "src/typeorm/user.entity.ts",
             "line": 5,
-            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"number\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"email\",\"column\":\"email_address\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":true},{\"name\":\"nickname\",\"column\":\"nickname\",\"type\":\"varchar\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"createdAt\",\"column\":\"createdAt\",\"type\":\"Date\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"number\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"email\",\"column\":\"email_address\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":true},{\"name\":\"nickname\",\"column\":\"nickname\",\"type\":\"varchar\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"createdAt\",\"column\":\"createdAt\",\"type\":\"Date\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:typeorm:src/typeorm/user.entity.ts:user_photo_counts",
@@ -1553,7 +1569,9 @@
             "provider": null,
             "declaredIn": "src/typeorm/user.entity.ts",
             "line": 23,
-            "columns": "[{\"name\":\"userId\",\"column\":\"userId\",\"type\":\"number\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"userId\",\"column\":\"userId\",\"type\":\"number\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           }
         ]
       },
@@ -2224,7 +2242,7 @@
           "entrypoints": []
         }
       ],
-      "note": "Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions and Knex calls. readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.",
+      "note": "Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.",
       "page": {
         "offset": 0,
         "returned": 9
@@ -2239,7 +2257,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (table:Table) WHERE table.library = $library RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library, table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn, table.line AS line, table.columns AS columns",
+        "cypher": "MATCH (table:Table) WHERE table.library = $library RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library, table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn, table.line AS line, table.columns AS columns, table.migrations AS migrations, table.indexes AS indexes",
         "params": {
           "name": "",
           "library": "mongoose"
@@ -2254,7 +2272,9 @@
             "provider": "mongodb",
             "declaredIn": "src/mongoose/cat.schema.ts",
             "line": 5,
-            "columns": "[{\"name\":\"name\",\"column\":\"name\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":true}]"
+            "columns": "[{\"name\":\"name\",\"column\":\"name\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":true}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:mongoose:src/mongoose/cat.schema.ts:cats",
@@ -2265,7 +2285,9 @@
             "provider": "mongodb",
             "declaredIn": "src/mongoose/cat.schema.ts",
             "line": 11,
-            "columns": "[{\"name\":\"name\",\"column\":\"name\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"age\",\"column\":\"age\",\"type\":\"number\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"owner\",\"column\":\"owner\",\"type\":\"ObjectId\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"tags\",\"column\":\"tags\",\"type\":\"string\",\"optional\":true,\"list\":true,\"isId\":false,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"name\",\"column\":\"name\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"age\",\"column\":\"age\",\"type\":\"number\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"owner\",\"column\":\"owner\",\"type\":\"ObjectId\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"tags\",\"column\":\"tags\",\"type\":\"string\",\"optional\":true,\"list\":true,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           },
           {
             "id": "table:mongoose:src/mongoose/toy.model.js:toys",
@@ -2276,7 +2298,9 @@
             "provider": "mongodb",
             "declaredIn": "src/mongoose/toy.model.js",
             "line": 3,
-            "columns": "[{\"name\":\"label\",\"column\":\"label\",\"type\":\"String\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"price\",\"column\":\"price\",\"type\":\"Number\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"cat\",\"column\":\"cat\",\"type\":\"ObjectId\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"colors\",\"column\":\"colors\",\"type\":\"String\",\"optional\":true,\"list\":true,\"isId\":false,\"isUnique\":false}]"
+            "columns": "[{\"name\":\"label\",\"column\":\"label\",\"type\":\"String\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"price\",\"column\":\"price\",\"type\":\"Number\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"cat\",\"column\":\"cat\",\"type\":\"ObjectId\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"colors\",\"column\":\"colors\",\"type\":\"String\",\"optional\":true,\"list\":true,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
           }
         ]
       },
@@ -2538,7 +2562,7 @@
           "entrypoints": []
         }
       ],
-      "note": "Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions and Knex calls. readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.",
+      "note": "Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.",
       "page": {
         "offset": 0,
         "returned": 3
