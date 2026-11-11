@@ -11,7 +11,7 @@
 
 - [Architecture](architecture.md): the scan pipeline, source layout and dependencies.
 - [Layered core architecture](layered-core-architecture.md): layer boundaries and the rules each layer follows.
-- [Roadmap](ROADMAP.md): phases M1–M7 and their status.
+- [Roadmap](ROADMAP.md): milestones M1–M13, their phases and status.
 
 ## How well it works
 

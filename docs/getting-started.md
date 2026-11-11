@@ -1,6 +1,6 @@
 # Getting started
 
-Concentrate is not published to npm yet (that is Phase 9 in the
+Concentrate is not published to npm (not planned for now, see the
 [roadmap](ROADMAP.md)), so it runs from a checkout. It needs Node.js 22 or
 newer. `npm install` compiles nothing: the only runtime dependency,
 `web-tree-sitter`, is plain JavaScript and WebAssembly.

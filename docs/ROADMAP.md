@@ -65,9 +65,8 @@ the only runtime dependency left is `web-tree-sitter`.
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
-M9, the Go ecosystem, is done. Next is M10, the non-code files of a project (Phase 22), then M11,
-the Rust ecosystem (Phase 26), M12, the Python ecosystem (Phase 30), and M13, the C/C++ ecosystem
-(Phase 34).
+M9 (Go), M10 (non-code files) and M11 (Rust) are done. Next is M12, the Python ecosystem (Phase 30),
+then M13, the C/C++ ecosystem (Phase 34).
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).

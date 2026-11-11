@@ -112,12 +112,15 @@ See [benchmarks.md](docs/benchmarks.md#release-report).
 The goal is a code graph an agent can rely on as much as on the source itself. That means three things:
 - recall as high as precision;
 - the backend and frontend semantics agents ask about most;
-- easy installation in any MCP client.
+- easy setup in any MCP client (`concentrate init` writes the configuration for Claude Code, Cursor and Codex).
+
+Done so far: the JS/TS backend, the frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular), Go, the non-code files of a project and Rust, plus the agent benchmark v2 and the `init` command.
 
 Next up, in this order:
-- **Agent benchmark v2** ([#73](https://github.com/fatihserhatturan/concentrate/issues/73)): call-resolution and graph-gap questions, more models, per-category results.
-- **The whole JS/TS ecosystem** (M8, [#75](https://github.com/fatihserhatturan/concentrate/issues/75)–[#82](https://github.com/fatihserhatturan/concentrate/issues/82)): React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular and vanilla JS, with components, pages, stores, DOM events and frontend → backend API links.
-- **Distribution** (Phase 9): npm publishing, an `init` command and CI ([#16](https://github.com/fatihserhatturan/concentrate/issues/16)).
+- **Python** (M12, [#207](https://github.com/fatihserhatturan/concentrate/issues/207)–[#210](https://github.com/fatihserhatturan/concentrate/issues/210)): packages, classes, decorators and typed calls; Django, Flask, FastAPI, Celery and click/typer; SQLAlchemy, Django ORM, env and HTTP clients. Python files get structure, imports and calls today, nothing more.
+- **C/C++** (M13, [#211](https://github.com/fatihserhatturan/concentrate/issues/211)–[#214](https://github.com/fatihserhatturan/concentrate/issues/214)): includes, headers, namespaces, classes, build systems and the common HTTP and RPC frameworks. Not supported yet.
+
+Publishing to npm is not planned for now.
 
 The full plan is in [docs/ROADMAP.md](docs/ROADMAP.md).
 
