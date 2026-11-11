@@ -15,6 +15,8 @@ export type PythonImportResult = {
   files: string[];
   // True when the import names a module of the project that was not found.
   expected: boolean;
+  // True when the import names a module (`import a.b`, `from pkg import submodule`), not something inside one.
+  isModule: boolean;
 };
 
 export type PythonResolver = {
@@ -81,16 +83,16 @@ export function createPythonResolver(projects: PythonProject[], files: ReadonlyS
     const rest = source.slice(level).split(".").filter((part) => part !== "");
     let base = path.posix.dirname(importer);
     for (let up = 1; up < level; up += 1) base = path.posix.dirname(base);
-    if (base === "." && level > 1 && path.posix.dirname(importer) === ".") return { files: [], expected: true };
+    if (base === "." && level > 1 && path.posix.dirname(importer) === ".") return { files: [], expected: true, isModule: false };
 
     if (importedName) {
       const submodule = findModule(base, [...rest, importedName]);
-      if (submodule.file) return { files: [submodule.file], expected: false };
-      if (submodule.directory) return { files: [], expected: false };
+      if (submodule.file) return { files: [submodule.file], expected: false, isModule: true };
+      if (submodule.directory) return { files: [], expected: false, isModule: true };
     }
     const module = findModule(base, rest);
-    if (module.file) return { files: [module.file], expected: false };
-    return { files: [], expected: !module.directory };
+    if (module.file) return { files: [module.file], expected: false, isModule: importedName === null };
+    return { files: [], expected: !module.directory, isModule: importedName === null };
   };
 
   const resolveImport = (record: PythonImportRecord): PythonImportResult => {
@@ -98,13 +100,13 @@ export function createPythonResolver(projects: PythonProject[], files: ReadonlyS
 
     if (record.importedName) {
       const submodule = resolveAbsolute(`${record.source}.${record.importedName}`, record.importerFile);
-      if (submodule.file) return { files: [submodule.file], expected: false };
-      if (submodule.directory) return { files: [], expected: false };
+      if (submodule.file) return { files: [submodule.file], expected: false, isModule: true };
+      if (submodule.directory) return { files: [], expected: false, isModule: true };
     }
     const module = resolveAbsolute(record.source, record.importerFile);
-    if (module.file) return { files: [module.file], expected: false };
+    if (module.file) return { files: [module.file], expected: false, isModule: record.importedName === null };
     // `import os`, `import requests`: not part of the scan, not a miss.
-    return { files: [], expected: module.local && !module.directory };
+    return { files: [], expected: module.local && !module.directory, isModule: record.importedName === null };
   };
 
   const moduleCache = new Map<string, string | null>();

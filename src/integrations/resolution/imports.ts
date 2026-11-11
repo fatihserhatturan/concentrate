@@ -127,6 +127,7 @@ export async function addImportResolutionRelationships(
       for (const targetFileId of result.files.map((file) => fileIdByRelativePath.get(file)).filter((id): id is string => id !== undefined)) {
         graph.addRelationship({ from: node.id, to: targetFileId, type: "RESOLVES_TO", properties: {} });
       }
+      if (result.files.length > 0 && result.isModule && node.properties.isWildcard !== true) node.properties.isModule = true;
       if (result.files.length > 0) resolved += 1;
       else if (result.expected) unresolved += 1;
       continue;
