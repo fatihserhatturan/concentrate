@@ -11,7 +11,7 @@ import { getFileOutline, getSymbolSource } from "./source.js";
 // once, not each description); each pages one primary list.
 
 const maxDepth = { type: "number", description: "How many call levels to follow upward. Defaults to 5." };
-const limit = (fallback: number) => ({ type: "number", description: `Maximum items per list. Defaults to ${fallback}.` });
+const limit = (fallback: number) => ({ type: "number", description: `Items per list. Default ${fallback}.` });
 
 export const agentToolDefinitions = [
   {
@@ -35,7 +35,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "route_details",
-    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the call chain below them (4 levels) with its data access, env vars and config, and its consumers (frontend calls) with the components and pages that make them. A GET also lists the UI pages at that path with the component each renders, its load functions, and the same chain and resources.`,
+    description: `Everything that runs for an HTTP route: handlers, middleware and lifecycle steps in order, the call chain below them (4 levels) with its data access, env vars and config, and its consumers (frontend calls) with their components and pages. A GET also lists the UI pages at that path, with their components, load functions, chain and resources.`,
     inputSchema: objectSchema({
       method: { type: "string", description: "HTTP method, case-insensitive (GET, post, ...)." },
       path: { type: "string", description: "Route or page path, full or as declared." },
@@ -44,7 +44,7 @@ export const agentToolDefinitions = [
   },
   {
     name: "api_consumers",
-    description: `Client calls that reach a route: frontend (fetch, axios, ky, ofetch, useFetch, SWR, TanStack Query, Angular HttpClient, tRPC) and Go (net/http, resty), each with route, caller, file, line, client, resolved method and URL, and match kind (exact, parameter, catch-all). Filter by route or caller; unfiltered, every linked call.`,
+    description: `Client calls that reach a route: frontend (fetch, axios, ky, useFetch, SWR, TanStack Query, HttpClient, tRPC) and Go (net/http, resty), each with route, caller, file, line, client, resolved method and URL, and match kind (exact, parameter, catch-all). Filter by route or caller; unfiltered, every linked call.`,
     inputSchema: objectSchema({
       method: { type: "string", description: "Route method, case-insensitive (GET, post, query, mutation, ...)." },
       path: { type: "string", description: "Route path, full or as declared (/api/users/:id, post.byId)." },

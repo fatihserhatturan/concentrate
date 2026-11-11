@@ -1,0 +1,138 @@
+{
+  "$comment": "Non-code file questions (Phase 25, #205) on pinned samples: Makefile and CI runs, workflow env, SQL migration tables, proto rpcs and their Go implementations, CSS class use. Expected answers were written from the sample files (Makefile, .github/workflows, db/migration/*.up.sql, the .proto and _grpc.pb.go files with the services' Go code, the TSX and CSS of the remark42 frontend). Not run yet: paid, see docs/agent-benchmark.md for the estimate.",
+  "questions": [
+    {
+      "id": "nc-simplebank-script-server",
+      "sample": "internet-go-simplebank",
+      "category": "scripts",
+      "question": "Which Makefile target starts the Go server, and which file does it run?",
+      "expected": {
+        "mustInclude": [
+          "server",
+          "main.go"
+        ]
+      }
+    },
+    {
+      "id": "nc-simplebank-ci-migrate",
+      "sample": "internet-go-simplebank",
+      "category": "scripts",
+      "question": "Which GitHub Actions workflow job runs the migrateup Makefile target, and in which workflow file?",
+      "expected": {
+        "mustInclude": [
+          "test",
+          "test.yml"
+        ]
+      }
+    },
+    {
+      "id": "nc-simplebank-deploy-env",
+      "sample": "internet-go-simplebank",
+      "category": "env",
+      "question": "Which environment variables does the deploy workflow set in its steps (names only), and in which file?",
+      "expected": {
+        "mustInclude": [
+          "ECR_REGISTRY",
+          "ECR_REPOSITORY",
+          "IMAGE_TAG",
+          "deploy.yml"
+        ]
+      }
+    },
+    {
+      "id": "nc-simplebank-users-columns",
+      "sample": "internet-go-simplebank",
+      "category": "tables",
+      "question": "After all up migrations in db/migration, which columns does the users table have, and which migration adds the last one?",
+      "expected": {
+        "mustInclude": [
+          "username",
+          "hashed_password",
+          "full_name",
+          "email",
+          "password_changed_at",
+          "created_at",
+          "is_email_verified",
+          "role",
+          "000005"
+        ]
+      }
+    },
+    {
+      "id": "nc-simplebank-accounts-fk",
+      "sample": "internet-go-simplebank",
+      "category": "tables",
+      "question": "Which columns of other tables reference accounts.id through a foreign key?",
+      "expected": {
+        "mustInclude": [
+          "entries",
+          "account_id",
+          "transfers",
+          "from_account_id",
+          "to_account_id"
+        ]
+      }
+    },
+    {
+      "id": "nc-simplebank-rpc-impl",
+      "sample": "internet-go-simplebank",
+      "category": "rpc",
+      "question": "Which Go method implements the CreateUser rpc of the pb.SimpleBank gRPC service, in which file, and which message does the rpc return?",
+      "expected": {
+        "mustInclude": [
+          "gapi/rpc_create_user.go",
+          "CreateUserResponse"
+        ]
+      }
+    },
+    {
+      "id": "nc-beershop-rpc-unimplemented",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "rpc",
+      "question": "Which rpc of the catalog.service.v1.Catalog service is declared in the generated CatalogServer interface but has no method implementing it in the catalog service code?",
+      "expected": {
+        "mustInclude": [
+          "DeleteBeer"
+        ]
+      }
+    },
+    {
+      "id": "nc-beershop-rpc-streams",
+      "sample": "internet-go-kratos-beer-shop",
+      "category": "rpc",
+      "question": "Which Go method implements the Catalog ListBeerNextToken rpc, in which file, and what is the request message called in the .proto?",
+      "expected": {
+        "mustInclude": [
+          "CatalogService.ListBeerNextToken",
+          "beer.go",
+          "listBeerNextTokenReq"
+        ]
+      }
+    },
+    {
+      "id": "nc-remark42-raw-content",
+      "sample": "internet-remark42-frontend",
+      "category": "css",
+      "question": "Which component files use the global CSS class raw-content, and in which style file is it defined?",
+      "expected": {
+        "mustInclude": [
+          "comment.tsx",
+          "comment-form.tsx",
+          "raw-content.css"
+        ]
+      }
+    },
+    {
+      "id": "nc-remark42-tooltip-class",
+      "sample": "internet-remark42-frontend",
+      "category": "css",
+      "question": "Which component uses the CSS Modules class tooltipPermanent, and which style file declares it?",
+      "expected": {
+        "mustInclude": [
+          "tooltip.tsx",
+          "tooltip.module.css"
+        ]
+      }
+    }
+  ]
+}

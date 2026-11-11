@@ -1,0 +1,217 @@
+{
+  "sample": "internet-go-kratos-beer-shop",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Proto rpcs (rpcs): every rpc of the Catalog, Cart, Order, Payment and Shipping services (api/<service>/service/v1/*.proto), with the request and response as written in the .proto (Catalog.ListBeerNextToken's request is spelled listBeerNextTokenReq there), the generated <Service>Server interface in the _grpc.pb.go next to it, and the method of <Service>Service under app/<service>/service/internal/service/ that implements it. Catalog.DeleteBeer is in the generated server interface but nothing implements it (CatalogService has no such method), so it has no implementation. The User, ShopInterface, ShopAdmin and Courier services are not labeled.",
+  "rpcs": {
+    "scope": [
+      "api/catalog/service/v1/catalog.proto",
+      "api/cart/service/v1/cart.proto",
+      "api/order/service/v1/order.proto",
+      "api/payment/service/v1/payment.proto",
+      "api/shipping/service/v1/shipping.proto"
+    ],
+    "items": [
+      {
+        "file": "api/catalog/service/v1/catalog.proto",
+        "service": "catalog.service.v1.Catalog",
+        "name": "ListBeer",
+        "request": "ListBeerReq",
+        "response": "ListBeerReply",
+        "streaming": "none",
+        "served": "CatalogServer",
+        "implementations": [
+          "app/catalog/service/internal/service/beer.go#CatalogService.ListBeer"
+        ]
+      },
+      {
+        "file": "api/catalog/service/v1/catalog.proto",
+        "service": "catalog.service.v1.Catalog",
+        "name": "ListBeerNextToken",
+        "request": "listBeerNextTokenReq",
+        "response": "ListBeerReplyNextToken",
+        "streaming": "none",
+        "served": "CatalogServer",
+        "implementations": [
+          "app/catalog/service/internal/service/beer.go#CatalogService.ListBeerNextToken"
+        ]
+      },
+      {
+        "file": "api/catalog/service/v1/catalog.proto",
+        "service": "catalog.service.v1.Catalog",
+        "name": "CreateBeer",
+        "request": "CreateBeerReq",
+        "response": "CreateBeerReply",
+        "streaming": "none",
+        "served": "CatalogServer",
+        "implementations": [
+          "app/catalog/service/internal/service/beer.go#CatalogService.CreateBeer"
+        ]
+      },
+      {
+        "file": "api/catalog/service/v1/catalog.proto",
+        "service": "catalog.service.v1.Catalog",
+        "name": "GetBeer",
+        "request": "GetBeerReq",
+        "response": "GetBeerReply",
+        "streaming": "none",
+        "served": "CatalogServer",
+        "implementations": [
+          "app/catalog/service/internal/service/beer.go#CatalogService.GetBeer"
+        ]
+      },
+      {
+        "file": "api/catalog/service/v1/catalog.proto",
+        "service": "catalog.service.v1.Catalog",
+        "name": "UpdateBeer",
+        "request": "UpdateBeerReq",
+        "response": "UpdateBeerReply",
+        "streaming": "none",
+        "served": "CatalogServer",
+        "implementations": [
+          "app/catalog/service/internal/service/beer.go#CatalogService.UpdateBeer"
+        ]
+      },
+      {
+        "file": "api/catalog/service/v1/catalog.proto",
+        "service": "catalog.service.v1.Catalog",
+        "name": "DeleteBeer",
+        "request": "DeleteBeerReq",
+        "response": "DeleteBeerReply",
+        "streaming": "none",
+        "served": "CatalogServer",
+        "implementations": []
+      },
+      {
+        "file": "api/cart/service/v1/cart.proto",
+        "service": "cart.service.v1.Cart",
+        "name": "GetCart",
+        "request": "GetCartReq",
+        "response": "GetCartReply",
+        "streaming": "none",
+        "served": "CartServer",
+        "implementations": [
+          "app/cart/service/internal/service/cart.go#CartService.GetCart"
+        ]
+      },
+      {
+        "file": "api/cart/service/v1/cart.proto",
+        "service": "cart.service.v1.Cart",
+        "name": "DeleteCart",
+        "request": "DeleteCartReq",
+        "response": "DeleteCartReply",
+        "streaming": "none",
+        "served": "CartServer",
+        "implementations": [
+          "app/cart/service/internal/service/cart.go#CartService.DeleteCart"
+        ]
+      },
+      {
+        "file": "api/cart/service/v1/cart.proto",
+        "service": "cart.service.v1.Cart",
+        "name": "AddItem",
+        "request": "AddItemReq",
+        "response": "AddItemReply",
+        "streaming": "none",
+        "served": "CartServer",
+        "implementations": [
+          "app/cart/service/internal/service/cart.go#CartService.AddItem"
+        ]
+      },
+      {
+        "file": "api/cart/service/v1/cart.proto",
+        "service": "cart.service.v1.Cart",
+        "name": "UpdateItem",
+        "request": "UpdateItemReq",
+        "response": "UpdateItemReply",
+        "streaming": "none",
+        "served": "CartServer",
+        "implementations": [
+          "app/cart/service/internal/service/cart.go#CartService.UpdateItem"
+        ]
+      },
+      {
+        "file": "api/cart/service/v1/cart.proto",
+        "service": "cart.service.v1.Cart",
+        "name": "DeleteItem",
+        "request": "DeleteItemReq",
+        "response": "DeleteItemReply",
+        "streaming": "none",
+        "served": "CartServer",
+        "implementations": [
+          "app/cart/service/internal/service/cart.go#CartService.DeleteItem"
+        ]
+      },
+      {
+        "file": "api/order/service/v1/order.proto",
+        "service": "order.service.v1.Order",
+        "name": "ListOrder",
+        "request": "ListOrderReq",
+        "response": "ListOrderReply",
+        "streaming": "none",
+        "served": "OrderServer",
+        "implementations": [
+          "app/order/service/internal/service/order.go#OrderService.ListOrder"
+        ]
+      },
+      {
+        "file": "api/order/service/v1/order.proto",
+        "service": "order.service.v1.Order",
+        "name": "CreateOrder",
+        "request": "CreateOrderReq",
+        "response": "CreateOrderReply",
+        "streaming": "none",
+        "served": "OrderServer",
+        "implementations": [
+          "app/order/service/internal/service/order.go#OrderService.CreateOrder"
+        ]
+      },
+      {
+        "file": "api/order/service/v1/order.proto",
+        "service": "order.service.v1.Order",
+        "name": "GetOrder",
+        "request": "GetOrderReq",
+        "response": "GetOrderReply",
+        "streaming": "none",
+        "served": "OrderServer",
+        "implementations": [
+          "app/order/service/internal/service/order.go#OrderService.GetOrder"
+        ]
+      },
+      {
+        "file": "api/order/service/v1/order.proto",
+        "service": "order.service.v1.Order",
+        "name": "UpdateOrder",
+        "request": "UpdateOrderReq",
+        "response": "UpdateOrderReply",
+        "streaming": "none",
+        "served": "OrderServer",
+        "implementations": [
+          "app/order/service/internal/service/order.go#OrderService.UpdateOrder"
+        ]
+      },
+      {
+        "file": "api/payment/service/v1/payment.proto",
+        "service": "payment.service.v1.Payment",
+        "name": "PaymentAuth",
+        "request": "PaymentAuthReq",
+        "response": "PaymentAuthReply",
+        "streaming": "none",
+        "served": "PaymentServer",
+        "implementations": [
+          "app/payment/service/internal/service/payment.go#PaymentService.PaymentAuth"
+        ]
+      },
+      {
+        "file": "api/shipping/service/v1/shipping.proto",
+        "service": "shipping.service.v1.Shipping",
+        "name": "ShipOrder",
+        "request": "ShipOrderReq",
+        "response": "ShipOrderReply",
+        "streaming": "none",
+        "served": "ShippingServer",
+        "implementations": [
+          "app/shipping/service/internal/service/shipping.go#ShippingService.ShipOrder"
+        ]
+      }
+    ]
+  }
+}
