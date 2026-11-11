@@ -19,6 +19,11 @@
 {"kind":"node","id":"file:ci/template.yaml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"yaml","path":"<root>/ci/template.yaml","relativePath":"ci/template.yaml","sourceType":"production"}}
 {"kind":"node","id":"file:dialect.sql","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"sql","path":"<root>/dialect.sql","relativePath":"dialect.sql","sourceType":"production"}}
 {"kind":"node","id":"file:modern.css","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"css","path":"<root>/modern.css","relativePath":"modern.css","sourceType":"production"}}
+{"kind":"node","id":"file:modern.css:style:class:card","label":"Style","properties":{"kind":"class","line":1,"name":"card","scope":null}}
+{"kind":"node","id":"file:modern.css:style:class:x","label":"Style","properties":{"kind":"class","line":3,"name":"x","scope":null}}
+{"kind":"node","id":"file:modern.css:style:rule:1:0","label":"Style","properties":{"atRule":null,"endLine":1,"kind":"rule","line":1,"name":".card","selector":".card"}}
+{"kind":"node","id":"file:modern.css:style:rule:2:0","label":"Style","properties":{"atRule":"@media (width <= 768px)","endLine":2,"kind":"rule","line":2,"name":".card","selector":".card"}}
+{"kind":"node","id":"file:modern.css:style:rule:3:0","label":"Style","properties":{"atRule":null,"endLine":3,"kind":"rule","line":3,"name":".x","selector":".x"}}
 {"kind":"node","id":"file:ok.proto","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"proto","path":"<root>/ok.proto","relativePath":"ok.proto","sourceType":"production"}}
 {"kind":"node","id":"file:ok.sh","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"shell","path":"<root>/ok.sh","relativePath":"ok.sh","sourceType":"production"}}
 {"kind":"node","id":"file:ok.yml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"yaml","path":"<root>/ok.yml","relativePath":"ok.yml","sourceType":"production"}}
@@ -48,5 +53,13 @@
 {"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:all","properties":{}}
 {"kind":"rel","from":"file:broken.ps1","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:broken.ps1","properties":{}}
 {"kind":"rel","from":"file:broken.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:broken.sh","properties":{}}
+{"kind":"rel","from":"file:modern.css","type":"DECLARES_STYLE","to":"file:modern.css:style:class:card","properties":{}}
+{"kind":"rel","from":"file:modern.css","type":"DECLARES_STYLE","to":"file:modern.css:style:class:x","properties":{}}
+{"kind":"rel","from":"file:modern.css","type":"DECLARES_STYLE","to":"file:modern.css:style:rule:1:0","properties":{}}
+{"kind":"rel","from":"file:modern.css","type":"DECLARES_STYLE","to":"file:modern.css:style:rule:2:0","properties":{}}
+{"kind":"rel","from":"file:modern.css","type":"DECLARES_STYLE","to":"file:modern.css:style:rule:3:0","properties":{}}
+{"kind":"rel","from":"file:modern.css:style:rule:1:0","type":"SELECTS_STYLE","to":"file:modern.css:style:class:card","properties":{}}
+{"kind":"rel","from":"file:modern.css:style:rule:2:0","type":"SELECTS_STYLE","to":"file:modern.css:style:class:card","properties":{}}
+{"kind":"rel","from":"file:modern.css:style:rule:3:0","type":"SELECTS_STYLE","to":"file:modern.css:style:class:x","properties":{}}
 {"kind":"rel","from":"file:ok.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:ok.sh","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

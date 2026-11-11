@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 74;
+export const SCHEMA_VERSION = 75;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -44,6 +44,7 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Store", properties: { name: "STRING", library: "STRING", kind: "STRING", hook: "STRING", state: "STRING", getters: "STRING", actions: "STRING", line: "INT64", endLine: "INT64", reducer: "STRING", slices: "STRING" } },
   { label: "ConfigValue", properties: { name: "STRING", value: "STRING", valueType: "STRING", line: "INT64" } },
   { label: "DataModel", properties: { name: "STRING", library: "STRING", declaredIn: "STRING", line: "INT64" } },
+  { label: "Style", properties: { name: "STRING", kind: "STRING", selector: "STRING", scope: "STRING", atRule: "STRING", line: "INT64", endLine: "INT64" } },
   { label: "Table", properties: { name: "STRING", kind: "STRING", library: "STRING", schemaName: "STRING", provider: "STRING", declaredIn: "STRING", line: "INT64", columns: "STRING" } },
 ];
 
@@ -125,6 +126,11 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "ACCESSES_DATA_FUNCTION", from: "Function", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING", file: "STRING", direct: "BOOLEAN" } },
   { type: "ACCESSES_DATA_ROUTE", from: "Route", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING", file: "STRING", direct: "BOOLEAN" } },
   { type: "ACCESSES_DATA_ENTRYPOINT", from: "EntryPoint", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING", file: "STRING", direct: "BOOLEAN" } },
+  { type: "DECLARES_STYLE", from: "File", to: "Style", properties: {} },
+  { type: "SELECTS_STYLE", from: "Style", to: "Style", properties: {} },
+  { type: "USES_STYLE_FILE", from: "File", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING" } },
+  { type: "USES_STYLE_FUNCTION", from: "Function", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING" } },
+  { type: "USES_STYLE_COMPONENT", from: "Component", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING" } },
   { type: "MAPS_TO_TABLE", from: "DataModel", to: "Table", properties: {} },
   { type: "RELATES_TO", from: "DataModel", to: "DataModel", properties: { field: "STRING", kind: "STRING", fields: "STRING", references: "STRING", relationName: "STRING", onDelete: "STRING" } },
   { type: "READS_FILE", from: "File", to: "Table", properties: { operation: "STRING", line: "INT64", expression: "STRING", model: "STRING" } },
@@ -162,6 +168,7 @@ export const nodeLabels = [
   "Component",
   "Page",
   "Store",
+  "Style",
 ] as const;
 export const relationshipTypes = relationshipTables.map((table) => table.type);
 

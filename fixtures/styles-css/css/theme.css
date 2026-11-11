@@ -1,0 +1,10 @@
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: teal;
+}
+
+.theme-dark {
+  --color-brand: #8ab4f8;
+  --accent: var(--color-brand);
+}
