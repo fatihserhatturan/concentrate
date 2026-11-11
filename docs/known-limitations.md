@@ -1426,6 +1426,27 @@ Astro).
   crates (`main.rs`, `build.rs`, `src/bin`, `examples`, `tests`, `benches`) and test
   code are skipped, and items a library offers to consumers outside the scan are
   not seen. `deadFunctions` skips `#[test]` functions and `cfg(test)` helpers.
+- HTTP routes (`src/integrations/frameworks/rust/`, schema 81): axum
+  (`Router::new().route(path, get(h).post(h2))`, `nest`, `merge`, `route_service`,
+  `layer` / `route_layer`), actix-web (`#[get("/x")]` and `#[route(…)]`,
+  `App::new().service(…)`, `web::scope`, `web::resource`, `.route(…)`, `.configure(f)`),
+  Rocket (`#[get("/x")]` attributes with the query part dropped, `routes![…]`,
+  `.mount(base, …)`) and warp (`warp::path!`, `warp::path(…)`, `and` / `or`, method
+  filters, `and_then` / `map`). Paths are joined through nested routers across
+  functions, modules and crates (a function returning a router, a scope, a
+  `ServiceConfig` function or a `routes![…]` list is mounted where it is called; one
+  Route per distinct mount). Layers / `wrap` / `from_fn` middleware that resolve to a
+  function are `ROUTE_LIFECYCLE_STEP`s, outermost first; every layer is also in
+  `Route.layers`, and the handler's `Path` / `Query` / `Json` / `State` / `Form` / `Data`
+  parameters are in `Route.extractors`. Limits: a layer applies to what the chain
+  registered before it (axum's rule; actix `wrap` and warp `with` are read the same
+  way); a registration whose path is not a literal or a constant of the file, a
+  route registered in a loop and a computed mount are reported in
+  `File.dynamicRouteCalls`, not as Routes; warp routes get `:param` / `:u32`
+  segments and a closure handler has no function; a router built through a field,
+  a trait or a macro is not followed; routes in `tests/` and test functions are
+  ignored; a bare `#[get]` attribute is read only when the file imports actix-web
+  or Rocket (not both).
 - Measured on the pinned `internet-rust-axum-realworld` (axum + sqlx, one library
   crate and a bin): 47 hand-labeled call sites with a repository target, precision
   100%, recall 70.2% ([accuracy.md](accuracy.md)). Not measured on a multi-crate

@@ -41,6 +41,7 @@
 {"kind":"node","id":"file:src/runtime.rs:function:5:serve:decorator:5:actix_web::main","label":"Decorator","properties":{"args":"[]","expression":"#[actix_web::main]","line":5,"name":"actix_web::main"}}
 {"kind":"node","id":"file:src/runtime.rs:function:8:async_case","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_item","line":8,"methodKind":null,"name":"async_case","parameters":"[]","returnType":null,"testKind":"test","visibility":"private"}}
 {"kind":"node","id":"file:src/runtime.rs:function:8:async_case:decorator:8:tokio::test","label":"Decorator","properties":{"args":"[]","expression":"#[tokio::test]","line":8,"name":"tokio::test"}}
+{"kind":"node","id":"file:src/runtime.rs:route:11:0:GET:/health","label":"Route","properties":{"extractors":null,"framework":"actix-web","fullPath":"/health","handlerName":"health","layers":null,"line":11,"method":"GET","path":"/health","pathExpression":null,"pendingHandlerRefs":null,"receiverName":null,"scopeFunctionId":"file:src/runtime.rs:function:11:health"}}
 {"kind":"node","id":"file:src/shapes.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/src/shapes.rs","relativePath":"src/shapes.rs","rustCrate":"src/lib.rs","rustCrateName":"declarations","rustModule":"shapes","sourceType":"production"}}
 {"kind":"node","id":"file:src/shapes.rs:class:15:Circle","label":"Class","properties":{"endLine":17,"fields":"[{\"name\":\"radius\",\"type\":\"f64\"}]","isAbstract":false,"isExported":true,"line":15,"name":"Circle","visibility":"pub"}}
 {"kind":"node","id":"file:src/shapes.rs:class:15:Circle:decorator:15:derive","label":"Decorator","properties":{"args":"[\"Debug\",\"Clone\",\"PartialEq\"]","expression":"#[derive(Debug, Clone, PartialEq)]","line":15,"name":"derive"}}
@@ -110,6 +111,7 @@
 {"kind":"rel","from":"file:src/lib.rs:import:5:tests","type":"RESOLVES_TO","to":"file:src/tests.rs","properties":{}}
 {"kind":"rel","from":"file:src/runtime.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/runtime.rs:entrypoint:2:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:src/runtime.rs","type":"DECLARES_ENTRYPOINT","to":"file:src/runtime.rs:entrypoint:5:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:src/runtime.rs","type":"DECLARES_ROUTE","to":"file:src/runtime.rs:route:11:0:GET:/health","properties":{}}
 {"kind":"rel","from":"file:src/runtime.rs","type":"DEFINES_FUNCTION","to":"file:src/runtime.rs:function:11:health","properties":{}}
 {"kind":"rel","from":"file:src/runtime.rs","type":"DEFINES_FUNCTION","to":"file:src/runtime.rs:function:2:main","properties":{}}
 {"kind":"rel","from":"file:src/runtime.rs","type":"DEFINES_FUNCTION","to":"file:src/runtime.rs:function:5:serve","properties":{}}
@@ -120,6 +122,8 @@
 {"kind":"rel","from":"file:src/runtime.rs:function:2:main","type":"HAS_METHOD_DECORATOR","to":"file:src/runtime.rs:function:2:main:decorator:2:tokio::main","properties":{}}
 {"kind":"rel","from":"file:src/runtime.rs:function:5:serve","type":"HAS_METHOD_DECORATOR","to":"file:src/runtime.rs:function:5:serve:decorator:5:actix_web::main","properties":{}}
 {"kind":"rel","from":"file:src/runtime.rs:function:8:async_case","type":"HAS_METHOD_DECORATOR","to":"file:src/runtime.rs:function:8:async_case:decorator:8:tokio::test","properties":{}}
+{"kind":"rel","from":"file:src/runtime.rs:route:11:0:GET:/health","type":"ROUTE_HANDLED_BY","to":"file:src/runtime.rs:function:11:health","properties":{}}
+{"kind":"rel","from":"file:src/runtime.rs:route:11:0:GET:/health","type":"ROUTE_LIFECYCLE_STEP","to":"file:src/runtime.rs:function:11:health","properties":{"hook":"handler","orderIndex":0,"role":"handler","scope":"route"}}
 {"kind":"rel","from":"file:src/shapes.rs","type":"DEFINES_CLASS","to":"file:src/shapes.rs:class:15:Circle","properties":{}}
 {"kind":"rel","from":"file:src/shapes.rs","type":"DEFINES_CLASS","to":"file:src/shapes.rs:class:20:Meters","properties":{}}
 {"kind":"rel","from":"file:src/shapes.rs","type":"DEFINES_CLASS","to":"file:src/shapes.rs:class:22:Wrapper","properties":{}}

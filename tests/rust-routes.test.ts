@@ -36,8 +36,8 @@ describe("Rust axum routes", () => {
       ["GET", "/about", "src/api/public.rs:4", "about", ["log_requests", "about"]],
       ["GET", "/api/users", "src/api/users.rs:11", "list_users", ["log_requests", "list_users"]],
       ["POST", "/api/users", "src/api/users.rs:11", "create_user", ["log_requests", "create_user"]],
-      ["GET", "/api/users/:id", "src/api/users.rs:12", "show_user", ["log_requests", "show_user"]],
       ["DELETE", "/api/users/:id", "src/api/users.rs:12", "delete_user", ["log_requests", "delete_user"]],
+      ["GET", "/api/users/:id", "src/api/users.rs:12", "show_user", ["log_requests", "show_user"]],
       // A router no function mounts is a root of its own.
       ["POST", "/dead", "src/api/users.rs:40", "create_user", ["create_user"]],
       ["GET", "/admin/stats", "src/main.rs:16", "stats", ["log_requests", "require_admin", "stats"]],
