@@ -1,0 +1,80 @@
+{"kind":"report","status":"success","discoveredFiles":6,"supportedFiles":5,"parsedFiles":5,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"cpp-make","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:include","label":"Directory","properties":{"name":"include","path":"<root>/include","relativePath":"include"}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"entrypoint:make:Makefile:all","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":9,"receiverName":null,"trigger":"all"}}
+{"kind":"node","id":"entrypoint:make:Makefile:bin/app","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":11,"receiverName":null,"trigger":"bin/app"}}
+{"kind":"node","id":"entrypoint:make:Makefile:clean","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":21,"receiverName":null,"trigger":"clean"}}
+{"kind":"node","id":"entrypoint:make:Makefile:libtools.a","label":"EntryPoint","properties":{"handlerName":null,"kind":"make","library":"make","line":14,"receiverName":null,"trigger":"libtools.a"}}
+{"kind":"node","id":"file:Makefile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"makefile","path":"<root>/Makefile","relativePath":"Makefile","sourceType":"production"}}
+{"kind":"node","id":"file:include/parser.h","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"c","path":"<root>/include/parser.h","relativePath":"include/parser.h","sourceType":"production"}}
+{"kind":"node","id":"file:include/parser.h:function:3:parse_number","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":3,"methodKind":null,"name":"parse_number","namespace":"","parameters":"[{\"name\":\"text\",\"type\":\"const char*\"}]","qualifiedName":"parse_number","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:include/parser.h:variable:2:PARSER_H","label":"Variable","properties":{"isExported":false,"kind":"macro","line":2,"name":"PARSER_H","typeName":null}}
+{"kind":"node","id":"file:include/util.h","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"c","path":"<root>/include/util.h","relativePath":"include/util.h","sourceType":"production"}}
+{"kind":"node","id":"file:include/util.h:function:3:util_double","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":3,"methodKind":null,"name":"util_double","namespace":"","parameters":"[{\"name\":\"value\",\"type\":\"int\"}]","qualifiedName":"util_double","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:include/util.h:variable:2:UTIL_H","label":"Variable","properties":{"isExported":false,"kind":"macro","line":2,"name":"UTIL_H","typeName":null}}
+{"kind":"node","id":"file:src/main.c","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"c","path":"<root>/src/main.c","relativePath":"src/main.c","sourceType":"production"}}
+{"kind":"node","id":"file:src/main.c:entrypoint:4:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"c","line":4,"receiverName":null,"trigger":null}}
+{"kind":"node","id":"file:src/main.c:function:4:main","label":"Function","properties":{"className":null,"endLine":4,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":4,"methodKind":null,"name":"main","namespace":"","parameters":"[]","qualifiedName":"main","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:src/main.c:function:4:main:call:4:24:parse_number","label":"Call","properties":{"argCount":1,"callee":"parse_number","columnNumber":24,"expression":"parse_number","line":4,"name":"parse_number","receiver":null}}
+{"kind":"node","id":"file:src/main.c:function:4:main:call:4:44:util_double","label":"Call","properties":{"argCount":1,"callee":"util_double","columnNumber":44,"expression":"util_double","line":4,"name":"util_double","receiver":null}}
+{"kind":"node","id":"file:src/main.c:import:1:parser.h","label":"Import","properties":{"isSystem":false,"line":1,"source":"parser.h","specifier":"#include \"parser.h\""}}
+{"kind":"node","id":"file:src/main.c:import:2:util.h","label":"Import","properties":{"isSystem":false,"line":2,"source":"util.h","specifier":"#include \"util.h\""}}
+{"kind":"node","id":"file:src/parser.c","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"c","path":"<root>/src/parser.c","relativePath":"src/parser.c","sourceType":"production"}}
+{"kind":"node","id":"file:src/parser.c:function:4:parse_number","label":"Function","properties":{"className":null,"endLine":4,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":4,"methodKind":null,"name":"parse_number","namespace":"","parameters":"[{\"name\":\"text\",\"type\":\"const char*\"}]","qualifiedName":"parse_number","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:src/parser.c:function:4:parse_number:call:4:44:util_double","label":"Call","properties":{"argCount":1,"callee":"util_double","columnNumber":44,"expression":"util_double","line":4,"name":"util_double","receiver":null}}
+{"kind":"node","id":"file:src/parser.c:import:1:parser.h","label":"Import","properties":{"isSystem":false,"line":1,"source":"parser.h","specifier":"#include \"parser.h\""}}
+{"kind":"node","id":"file:src/parser.c:import:2:util.h","label":"Import","properties":{"isSystem":false,"line":2,"source":"util.h","specifier":"#include \"util.h\""}}
+{"kind":"node","id":"file:src/util.c","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"c","path":"<root>/src/util.c","relativePath":"src/util.c","sourceType":"production"}}
+{"kind":"node","id":"file:src/util.c:function:3:util_double","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":3,"methodKind":null,"name":"util_double","namespace":"","parameters":"[{\"name\":\"value\",\"type\":\"int\"}]","qualifiedName":"util_double","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:src/util.c:import:1:util.h","label":"Import","properties":{"isSystem":false,"line":1,"source":"util.h","specifier":"#include \"util.h\""}}
+{"kind":"node","id":"package:make::bin/app","label":"Package","properties":{"buildFile":"Makefile","isPrivate":false,"manager":"make","name":"bin/app","path":"<root>","relativePath":".","targetType":"executable","unresolved":0,"version":null,"workspaceRoot":false}}
+{"kind":"node","id":"package:make::libtools.a","label":"Package","properties":{"buildFile":"Makefile","isPrivate":false,"manager":"make","name":"libtools.a","path":"<root>","relativePath":".","targetType":"static","unresolved":0,"version":null,"workspaceRoot":false}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"cpp-make","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:include","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Makefile","properties":{}}
+{"kind":"rel","from":"dir:include","type":"CONTAINS_FILE","to":"file:include/parser.h","properties":{}}
+{"kind":"rel","from":"dir:include","type":"CONTAINS_FILE","to":"file:include/util.h","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.c","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/parser.c","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/util.c","properties":{}}
+{"kind":"rel","from":"entrypoint:make:Makefile:bin/app","type":"RUNS","to":"file:src/main.c:entrypoint:4:0:main:<none>","properties":{"command":"make target bin/app","line":11}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:all","properties":{}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:bin/app","properties":{}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:clean","properties":{}}
+{"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:libtools.a","properties":{}}
+{"kind":"rel","from":"file:include/parser.h","type":"DEFINES_FUNCTION","to":"file:include/parser.h:function:3:parse_number","properties":{}}
+{"kind":"rel","from":"file:include/parser.h","type":"DEFINES_VARIABLE","to":"file:include/parser.h:variable:2:PARSER_H","properties":{}}
+{"kind":"rel","from":"file:include/parser.h:function:3:parse_number","type":"DEFINED_BY","to":"file:src/parser.c:function:4:parse_number","properties":{}}
+{"kind":"rel","from":"file:include/util.h","type":"DEFINES_FUNCTION","to":"file:include/util.h:function:3:util_double","properties":{}}
+{"kind":"rel","from":"file:include/util.h","type":"DEFINES_VARIABLE","to":"file:include/util.h:variable:2:UTIL_H","properties":{}}
+{"kind":"rel","from":"file:include/util.h:function:3:util_double","type":"DEFINED_BY","to":"file:src/util.c:function:3:util_double","properties":{}}
+{"kind":"rel","from":"file:src/main.c","type":"DECLARES_ENTRYPOINT","to":"file:src/main.c:entrypoint:4:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:src/main.c","type":"DEFINES_FUNCTION","to":"file:src/main.c:function:4:main","properties":{}}
+{"kind":"rel","from":"file:src/main.c","type":"IMPORTS","to":"file:src/main.c:import:1:parser.h","properties":{}}
+{"kind":"rel","from":"file:src/main.c","type":"IMPORTS","to":"file:src/main.c:import:2:util.h","properties":{}}
+{"kind":"rel","from":"file:src/main.c:entrypoint:4:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/main.c:function:4:main","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:4:main","type":"CALLS","to":"file:src/main.c:function:4:main:call:4:24:parse_number","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:4:main","type":"CALLS","to":"file:src/main.c:function:4:main:call:4:44:util_double","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:4:main:call:4:24:parse_number","type":"CALL_RESOLVES_TO","to":"file:src/parser.c:function:4:parse_number","properties":{"via":"header"}}
+{"kind":"rel","from":"file:src/main.c:function:4:main:call:4:44:util_double","type":"CALL_RESOLVES_TO","to":"file:src/util.c:function:3:util_double","properties":{"via":"header"}}
+{"kind":"rel","from":"file:src/main.c:import:1:parser.h","type":"RESOLVES_TO","to":"file:include/parser.h","properties":{}}
+{"kind":"rel","from":"file:src/main.c:import:2:util.h","type":"RESOLVES_TO","to":"file:include/util.h","properties":{}}
+{"kind":"rel","from":"file:src/parser.c","type":"DEFINES_FUNCTION","to":"file:src/parser.c:function:4:parse_number","properties":{}}
+{"kind":"rel","from":"file:src/parser.c","type":"IMPORTS","to":"file:src/parser.c:import:1:parser.h","properties":{}}
+{"kind":"rel","from":"file:src/parser.c","type":"IMPORTS","to":"file:src/parser.c:import:2:util.h","properties":{}}
+{"kind":"rel","from":"file:src/parser.c:function:4:parse_number","type":"CALLS","to":"file:src/parser.c:function:4:parse_number:call:4:44:util_double","properties":{}}
+{"kind":"rel","from":"file:src/parser.c:function:4:parse_number:call:4:44:util_double","type":"CALL_RESOLVES_TO","to":"file:src/util.c:function:3:util_double","properties":{"via":"header"}}
+{"kind":"rel","from":"file:src/parser.c:import:1:parser.h","type":"RESOLVES_TO","to":"file:include/parser.h","properties":{}}
+{"kind":"rel","from":"file:src/parser.c:import:2:util.h","type":"RESOLVES_TO","to":"file:include/util.h","properties":{}}
+{"kind":"rel","from":"file:src/util.c","type":"DEFINES_FUNCTION","to":"file:src/util.c:function:3:util_double","properties":{}}
+{"kind":"rel","from":"file:src/util.c","type":"IMPORTS","to":"file:src/util.c:import:1:util.h","properties":{}}
+{"kind":"rel","from":"file:src/util.c:import:1:util.h","type":"RESOLVES_TO","to":"file:include/util.h","properties":{}}
+{"kind":"rel","from":"package:make::bin/app","type":"PACKAGE_CONTAINS_FILE","to":"file:src/main.c","properties":{}}
+{"kind":"rel","from":"package:make::bin/app","type":"PACKAGE_IMPORTS_PACKAGE","to":"package:make::libtools.a","properties":{"dependencyType":"link"}}
+{"kind":"rel","from":"package:make::libtools.a","type":"PACKAGE_CONTAINS_FILE","to":"file:src/parser.c","properties":{}}
+{"kind":"rel","from":"package:make::libtools.a","type":"PACKAGE_CONTAINS_FILE","to":"file:src/util.c","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:make::bin/app","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"HAS_PACKAGE","to":"package:make::libtools.a","properties":{}}
