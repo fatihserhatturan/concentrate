@@ -41,6 +41,15 @@ export type SqlTableLabel = { name: string; kind: string; columns: string[] };
 // serves it (null when none does) and the methods that implement it
 // (`path#Type.Method`).
 export type RpcLabel = { file: string; service: string; name: string; request: string; response: string; streaming: string; served: string | null; implementations: string[] };
+// A target of a CMake file or Makefile (a Package of manager cmake or make):
+// `file` is the build file that creates it, `kind` executable or library
+// (static, shared, module, object and interface libraries), `sources` the
+// files it compiles and `links` the targets it links, in some configuration
+// (every `if` branch of a CMake file counts).
+export type BuildTargetLabel = { file: string; system: string; name: string; kind: string; sources: string[]; links: string[] };
+// An `#include` (`source` as written) of a C or C++ file at (file, line) and
+// the scanned file it names; null for a header outside the scan (system, third party).
+export type IncludeLabel = { file: string; line: number; source: string; target: string | null };
 export type ComponentLabel = { file: string; name: string; line: number };
 // `file` and `line` are the rendering element's; `parent` is the component it is in.
 export type RenderLabel = { file: string; parent: string; line: number; child: string; childFile: string };
@@ -89,6 +98,10 @@ export type Labels = {
   sqlTables?: { scope: string[]; items: SqlTableLabel[] };
   // Rpcs of the `.proto` files of `scope`.
   rpcs?: { scope: string[]; items: RpcLabel[] };
+  // Targets declared by the CMake files and Makefiles of `scope`.
+  buildTargets?: { scope: string[]; items: BuildTargetLabel[] };
+  // Every `#include` of the C and C++ files in `files`.
+  includes?: { files: string[]; items: IncludeLabel[] };
 };
 
 export type Score = {
@@ -778,4 +791,79 @@ export function compareRpcs(graph: Graph, labels: NonNullable<Labels["rpcs"]>): 
   ));
   const describe = (rpc: RpcLabel) => `${rpc.service}/${rpc.name} (${rpc.request}) -> ${rpc.response} [${rpc.streaming}] served by ${rpc.served ?? "-"}; ${rpc.implementations.join(", ") || "no implementation"}`;
   return score(result.matched, result.unmatchedFound.map(describe), result.unmatchedLabels.map(describe));
+}
+
+// Targets as atoms: the target itself (build file, system, name, kind), each
+// source it compiles and each target it links.
+export function scanBuildTargets(graph: Graph): BuildTargetLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const targets = new Map<string, BuildTargetLabel>();
+  for (const node of graph.nodes) {
+    if (node.label !== "Package" || (node.properties.manager !== "cmake" && node.properties.manager !== "make")) continue;
+    targets.set(node.id, {
+      file: String(node.properties.buildFile),
+      system: String(node.properties.manager),
+      name: String(node.properties.name),
+      kind: node.properties.targetType === "executable" ? "executable" : "library",
+      sources: [],
+      links: [],
+    });
+  }
+  for (const rel of graph.relationships) {
+    const target = targets.get(rel.from);
+    if (!target) continue;
+    if (rel.type === "PACKAGE_CONTAINS_FILE") target.sources.push(rel.to.replace(/^file:/u, ""));
+    else if (rel.type === "PACKAGE_IMPORTS_PACKAGE") target.links.push(String(byId.get(rel.to)?.properties.name));
+  }
+  return [...targets.values()];
+}
+
+function buildTargetAtoms(targets: readonly BuildTargetLabel[]): string[] {
+  return targets.flatMap((target) => [
+    `target ${target.file} ${target.system}:${target.name} ${target.kind}`,
+    ...target.sources.map((source) => `source ${target.system}:${target.name} ${source}`),
+    ...target.links.map((link) => `link ${target.system}:${target.name} -> ${link}`),
+  ]);
+}
+
+export function compareBuildTargets(graph: Graph, labels: NonNullable<Labels["buildTargets"]>): Score {
+  const found = buildTargetAtoms(scanBuildTargets(graph).filter((target) => inScope(target.file, labels.scope)));
+  const expected = buildTargetAtoms(labels.items);
+  const result = pair(expected, found, (label, atom) => label === atom);
+  return score(result.matched, result.unmatchedFound, result.unmatchedLabels);
+}
+
+export function scanIncludes(graph: Graph): IncludeLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const owner = new Map<string, string>();
+  const target = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    if (rel.type === "IMPORTS") owner.set(rel.to, rel.from.replace(/^file:/u, ""));
+    else if (rel.type === "RESOLVES_TO" && rel.from.includes(":import:")) target.set(rel.from, rel.to.replace(/^file:/u, ""));
+  }
+  return [...owner].flatMap(([id, file]) => {
+    const node = byId.get(id);
+    if (!node || typeof node.properties.isSystem !== "boolean" || !/\.(?:c|cc|cpp|cxx|h|hh|hpp|hxx|inl|ipp)$/u.test(file)) return [];
+    return [{ file, line: num(node.properties.line), source: String(node.properties.source), target: target.get(id) ?? null }];
+  });
+}
+
+export function compareIncludes(graph: Graph, labels: NonNullable<Labels["includes"]>): Score {
+  const found = scanIncludes(graph).filter((item) => labels.files.includes(item.file));
+  const key = (item: IncludeLabel) => `${item.file}:${item.line} ${item.source}`;
+  const labeled = new Map(labels.items.map((item) => [key(item), item.target]));
+  const falsePositives: string[] = [];
+  const falseNegatives: string[] = [];
+  let tp = 0;
+  for (const item of found) {
+    const expected = labeled.get(key(item));
+    if (item.target === null) continue;
+    if (expected === item.target) tp += 1;
+    else falsePositives.push(`${key(item)} -> ${item.target} (labeled ${expected ?? "<unlabeled>"})`);
+  }
+  const resolved = new Map(found.map((item) => [key(item), item.target]));
+  for (const item of labels.items) {
+    if (item.target !== null && resolved.get(key(item)) === null) falseNegatives.push(`${key(item)} -> ${item.target}`);
+  }
+  return score(tp, falsePositives, falseNegatives);
 }
