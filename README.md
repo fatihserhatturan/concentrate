@@ -78,7 +78,7 @@ Lower-level tools and a Cypher subset are there for everything else.
 
 Every number below comes from pinned open-source repositories and can be reproduced with one command. Each caption links to the full report, including the weaker numbers.
 
-<p align="center"><img src="docs/assets/precision.svg" alt="Precision by relation type: HTTP routes 100%, call targets 100%, data access 100%" width="640"></p>
+<p align="center"><img src="docs/assets/precision.svg" alt="Precision and recall by relation type on 24 pinned samples: precision 100% for every type; recall 100% except call targets 98.1% and components 99.0%" width="860"></p>
 
 **The graph is trustworthy.**
 - Against hand-written labels, 100% of reported routes, call targets, database accesses, React, Vue, Svelte and Angular components, component renders, pages, frontend → backend API requests and Pinia store reads and writes are correct.
@@ -95,17 +95,22 @@ Every number below comes from pinned open-source repositories and can be reprodu
 
 On callers, impact, diffs and narrow questions an agent with grep reaches the same answers at about the same cost, sometimes more; the full method and per-category results are in [agent-benchmark.md](docs/agent-benchmark.md).
 
-<p align="center"><img src="docs/assets/scan-scaling.svg" alt="Cold scan time grows linearly with graph size: nestjs/nest, 52.7k nodes, in 1.7 s and 541 MB" width="820"></p>
+<p align="center"><img src="docs/assets/agent-languages.svg" alt="Agent benchmark on Go and Rust, sonnet and haiku: every answer correct with and without Concentrate; median input tokens change between -8% and +18%" width="860"></p>
+
+**On Go and Rust the agent is just as right, at about the same cost.** The 26 Go and Rust questions (small RealWorld backends, two larger Go repositories, and Conduit backends in axum + sqlx and actix-web + diesel) were answered correctly in every run, with and without Concentrate (156 of 156 runs per mode, sonnet and haiku together). Those repositories are small enough for grep, so median input tokens moved between −8% and +18%; the graph pays off on whole-repository questions like the cycles above ([agent-benchmark.md](docs/agent-benchmark.md#rust-questions-phase-29)).
+
+<p align="center"><img src="docs/assets/scan-scaling.svg" alt="Cold scan time grows linearly with graph size across JS/TS, Go and Rust samples: nestjs/nest, 52.7k nodes, in 1.7 s and 541 MB" width="820"></p>
 
 **Scans are fast and scale linearly.**
 - A cold scan of all of nestjs/nest builds 52.7k nodes and 69.5k relationships in 1.7 s, at a peak of 541 MB.
 - Small projects take about 0.1 s.
+- The Go and Rust samples scan in 0.2–0.4 s: gin (21 files) in 267 ms, echo in 193 ms, the gin + Next.js full-stack sample (83 files) in 389 ms; Rust axum + sqlx (12 files) in 171 ms, actix-web + diesel (65 files) in 248 ms, axum + Next.js (74 files) in 301 ms. One outlier: the actix-diesel sample peaks at 678 MB because its shell scripts load the shell grammar, which costs about 650 MB.
 
 See [benchmarks.md](docs/benchmarks.md#release-report).
 
 <p align="center"><img src="docs/assets/tool-latency.svg" alt="MCP tool latency on nestjs/nest: p50 between 0.4 ms and 123 ms" width="640"></p>
 
-**Answers come back in milliseconds.** On the nestjs/nest graph, the median latency of the 20 MCP tools measured in the 0.1.0 release benchmark is between 0.4 ms and 123 ms.
+**Answers come back in milliseconds.** On the nestjs/nest graph, the median latency of the 20 MCP tools measured in the 0.1.0 release benchmark is between 0.4 ms and 123 ms. On the Go samples the median of every tool is under 15 ms, and on the Rust samples under 10 ms, except `detect_changes`, which runs `git` (20–30 ms) ([benchmarks.md](docs/benchmarks.md#go-samples-phase-21)).
 
 ## Where it is going
 
