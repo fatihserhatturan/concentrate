@@ -18,6 +18,10 @@ export function isRustFile(fileId: string): boolean {
   return fileExtension(fileId) === ".rs";
 }
 
+export function isCppFile(fileId: string): boolean {
+  return [".c", ".h", ".cc", ".cpp", ".cxx", ".hpp", ".hh", ".hxx", ".ipp", ".inl"].includes(fileExtension(fileId));
+}
+
 function fileExtension(fileId: string): string {
   return path.posix.extname(fileId.slice("file:".length));
 }

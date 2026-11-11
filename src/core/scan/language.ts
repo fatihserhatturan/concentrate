@@ -1,7 +1,7 @@
 import path from "node:path";
 
 // Languages with a parser that reads declarations, imports and calls.
-export type CodeLanguage = "javascript" | "typescript" | "html" | "vue" | "svelte" | "astro" | "python" | "go" | "rust";
+export type CodeLanguage = "javascript" | "typescript" | "html" | "vue" | "svelte" | "astro" | "python" | "go" | "rust" | "c" | "cpp";
 
 // Every other file of a project is a `File` node too: a known format, `other`
 // (text) or `asset` (binary: images, fonts, media, archives).
@@ -13,7 +13,7 @@ export type FileLanguage =
 export type SupportedLanguage = CodeLanguage | FileLanguage;
 
 export const CODE_LANGUAGES: ReadonlySet<SupportedLanguage> = new Set<CodeLanguage>([
-  "javascript", "typescript", "html", "vue", "svelte", "astro", "python", "go", "rust",
+  "javascript", "typescript", "html", "vue", "svelte", "astro", "python", "go", "rust", "c", "cpp",
 ]);
 
 export function isCodeLanguage(language: SupportedLanguage): language is CodeLanguage {
@@ -37,6 +37,17 @@ const extensionToLanguage = new Map<string, SupportedLanguage>([
   [".py", "python"],
   [".go", "go"],
   [".rs", "rust"],
+  [".c", "c"],
+  // A header is C unless the project has C++ sources (see filterSupportedSourceFiles).
+  [".h", "c"],
+  [".cc", "cpp"],
+  [".cpp", "cpp"],
+  [".cxx", "cpp"],
+  [".hpp", "cpp"],
+  [".hh", "cpp"],
+  [".hxx", "cpp"],
+  [".ipp", "cpp"],
+  [".inl", "cpp"],
   [".css", "css"],
   [".scss", "scss"],
   [".sass", "scss"],

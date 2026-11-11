@@ -1,0 +1,4 @@
+[
+  { "directory": ".", "command": "c++ -Iinclude -isystem third_party -std=c++17 -c src/config.cpp", "file": "src/config.cpp" },
+  { "directory": ".", "arguments": ["c++", "-I", "include", "-c", "src/main.cpp"], "file": "src/main.cpp" }
+]

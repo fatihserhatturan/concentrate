@@ -19,7 +19,7 @@ export const lockfiles: ReadonlySet<string> = new Set(["package-lock.json", "npm
 // `code` is false for the files no language parser reads (styles, JSON,
 // Markdown, assets, …): only those can be `docs`, so example code under
 // `docs/` stays production code.
-export function classifyFile(relativePath: string, generatedContent = false, code = true): FileClassification {
+export function classifyFile(relativePath: string, generatedContent = false, code = true, testContent = false): FileClassification {
   const normalizedPath = relativePath.split(path.sep).join("/");
   const segments = normalizedPath.split("/");
   const fileName = segments.at(-1) ?? normalizedPath;
@@ -50,7 +50,10 @@ export function classifyFile(relativePath: string, generatedContent = false, cod
     "__tests__",
     "spec",
     "specs",
-  ]) || /\.(?:test|spec)\.[cm]?[jt]sx?$/u.test(fileName) || fileName.endsWith("_test.go") || /^tests\.rs$|_tests?\.rs$/u.test(fileName) || /^(?:test_.*|.*_test|conftest|tests)\.py$/u.test(fileName);
+  ]) || /\.(?:test|spec)\.[cm]?[jt]sx?$/u.test(fileName) || fileName.endsWith("_test.go") || /^tests\.rs$|_tests?\.rs$/u.test(fileName) || /^(?:test_.*|.*_test|conftest|tests)\.py$/u.test(fileName)
+    // C and C++: `foo_test.cc`, `foo_unittest.cpp`, `test_foo.c`, `FooTest.cpp`; a file of GoogleTest or Catch2 tests is one too.
+    || /(?:_(?:unit)?tests?|[a-z]Tests?)\.(?:c|cc|cpp|cxx)$|^test_.+\.(?:c|cc|cpp|cxx)$/u.test(fileName)
+    || testContent;
 
   const isSupport = hasSegment(segments, [
     "mock",

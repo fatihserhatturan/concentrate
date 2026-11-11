@@ -1,7 +1,8 @@
 import type { IGraphContributor } from "../../contracts/graph-contributor.js";
 import type { GraphNode } from "../../graph/model.js";
 import { resolveCall, resolveDeclaration, resolveImportedFreeCall } from "./call-targets.js";
-import { isGoFile, isPythonFile, isRustFile } from "./file-kind.js";
+import { cppIndexFor, resolveCppCall, type CppIndex } from "./cpp-calls.js";
+import { isCppFile, isGoFile, isPythonFile, isRustFile } from "./file-kind.js";
 import { createPythonCallIndex, resolvePythonCall, type PythonCallIndex } from "./python-calls.js";
 import { createRustCallIndex, resolveRustCall, type RustCallIndex } from "./rust-calls.js";
 import { createGoCallIndex, resolveGoCall, type GoCallIndex } from "./go-calls.js";
@@ -34,6 +35,7 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
   const scopes = indexScopes(graph, functionsByFileAndName, importNodesByFile);
   let goIndex: GoCallIndex | null = null;
   let rustIndex: RustCallIndex | null = null;
+  let cppIndex: CppIndex | null = null;
   let pythonIndex: PythonCallIndex | null = null;
 
   let resolved = 0;
@@ -57,6 +59,17 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
       : relationshipIndex.callerFileByModuleCallId.get(node.id);
     if (!callerFileId) {
       unresolved++;
+      continue;
+    }
+
+    if (isCppFile(callerFileId)) {
+      cppIndex ??= cppIndexFor(graph, relationshipIndex);
+      const targets = resolveCppCall(node, callerFileId, callerFunctionId, cppIndex);
+      for (const target of targets) {
+        graph.addRelationship({ from: node.id, to: target.functionId, type: "CALL_RESOLVES_TO", properties: target.via ? { via: target.via } : {} });
+      }
+      if (targets.length > 0) resolved++;
+      else unresolved++;
       continue;
     }
 

@@ -43,7 +43,7 @@ function addParsedFileToGraph(
   // `// Code generated … DO NOT EDIT.`).
   const language = fileNode?.properties.language;
   const code = typeof language !== "string" || isCodeLanguage(language as SupportedLanguage);
-  const classification = classifyFile(relativePath, fileNode?.properties.isGenerated === true, code);
+  const classification = classifyFile(relativePath, fileNode?.properties.isGenerated === true, code, fileNode?.properties.isTest === true);
   for (const node of result.parsed.nodes) {
     if (node.id !== result.parsed.fileNodeId || node.label !== "File") continue;
     node.properties = {
