@@ -5,6 +5,7 @@ import type { GraphNode, ParsedSourceFile } from "../../../core/graph/model.js";
 import { lockfiles } from "../../../core/scan/file-classification.js";
 import { CODE_LANGUAGES, type FileLanguage, type SupportedLanguage } from "../../../core/scan/language.js";
 import { withSyntaxTree, type GrammarName, type SyntaxNode } from "../syntax/tree-sitter.js";
+import { readCMake } from "./cmake.js";
 import { readDockerfile } from "./dockerfile.js";
 import { readProto } from "./proto.js";
 import { styleGraph } from "./style-graph.js";
@@ -39,7 +40,7 @@ const grammars: Partial<Record<FileLanguage, GrammarName>> = {
 // `;;`, MySQL backticks and `/*! … */` comments, `LIMIT $2`, `FOR NO KEY
 // UPDATE`), so a warning would be wrong more often than right.
 const warnsOnSyntaxErrors: ReadonlySet<FileLanguage> = new Set([
-  "json", "yaml", "shell", "powershell", "makefile", "dockerfile", "proto",
+  "json", "yaml", "shell", "powershell", "makefile", "dockerfile", "proto", "cmake",
 ]);
 
 // JSON that tools read with comments and trailing commas.
@@ -89,7 +90,7 @@ async function syntaxWarnings(filePath: string, relativePath: string, language: 
   if (lockfiles.has(path.basename(filePath)) || path.basename(filePath) === "package.json") return [];
   if (!warnsOnSyntaxErrors.has(language)) return [];
   const grammar = grammars[language];
-  const hasReader = language === "dockerfile" || language === "proto";
+  const hasReader = language === "dockerfile" || language === "proto" || language === "cmake";
   if (!grammar && !hasReader) return [];
   if (language === "json" && allowsComments(relativePath)) return [];
   if ((await stat(filePath)).size > MAX_PARSED_BYTES) return [];
@@ -101,7 +102,7 @@ async function syntaxWarnings(filePath: string, relativePath: string, language: 
     const lines = await withSyntaxTree(grammar, source, (tree) => (tree.rootNode.hasError ? errorLines(tree.rootNode, 5) : []));
     return lines.length > 0 ? [syntaxWarning(lines)] : [];
   }
-  const errors = language === "dockerfile" ? readDockerfile(source).errors : readProto(source).errors;
+  const errors = language === "dockerfile" ? readDockerfile(source).errors : language === "cmake" ? readCMake(source).errors : readProto(source).errors;
   const lines = [...new Set(errors.map((error) => error.line))].slice(0, 5);
   return lines.length > 0 ? [syntaxWarning(lines)] : [];
 }
@@ -129,7 +130,7 @@ async function parsePlainFile(rootPath: string, filePath: string, language: File
 
 const fileLanguages: FileLanguage[] = [
   "css", "scss", "less", "json", "yaml", "toml", "markdown",
-  "shell", "powershell", "dockerfile", "makefile", "sql", "proto",
+  "shell", "powershell", "dockerfile", "makefile", "cmake", "sql", "proto",
   "other", "asset",
 ];
 

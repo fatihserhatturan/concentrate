@@ -7,7 +7,7 @@ export type CodeLanguage = "javascript" | "typescript" | "html" | "vue" | "svelt
 // (text) or `asset` (binary: images, fonts, media, archives).
 export type FileLanguage =
   | "css" | "scss" | "less" | "json" | "yaml" | "toml" | "markdown"
-  | "shell" | "powershell" | "dockerfile" | "makefile" | "sql" | "proto"
+  | "shell" | "powershell" | "dockerfile" | "makefile" | "cmake" | "sql" | "proto"
   | "other" | "asset";
 
 export type SupportedLanguage = CodeLanguage | FileLanguage;
@@ -69,6 +69,7 @@ const extensionToLanguage = new Map<string, SupportedLanguage>([
   [".psd1", "powershell"],
   [".dockerfile", "dockerfile"],
   [".mk", "makefile"],
+  [".cmake", "cmake"],
   [".sql", "sql"],
   [".proto", "proto"],
 ]);
@@ -86,6 +87,7 @@ const assetExtensions = new Set([
 function languageByName(fileName: string): SupportedLanguage | null {
   if (fileName === "Dockerfile" || fileName.startsWith("Dockerfile.") || fileName === "Containerfile") return "dockerfile";
   if (fileName === "Makefile" || fileName === "makefile" || fileName === "GNUmakefile") return "makefile";
+  if (fileName === "CMakeLists.txt") return "cmake";
   return null;
 }
 

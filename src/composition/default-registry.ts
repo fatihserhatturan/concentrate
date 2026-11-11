@@ -12,6 +12,7 @@ import { protoContributor } from "../integrations/frameworks/proto/index.js";
 import { sqlSchemaContributor } from "../integrations/frameworks/sql/index.js";
 import { stylesContributor } from "../integrations/frameworks/styles/index.js";
 import { scriptsContributor } from "../integrations/frameworks/scripts/index.js";
+import { cppBuildContributor } from "../integrations/frameworks/cpp/build.js";
 import {
   nestjsModulesContributor,
   nestjsInjectionContributor,
@@ -79,6 +80,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     envConfigContributor,
     envFilesContributor,
     scriptsContributor,
+    cppBuildContributor,
     stylesContributor,
     dataAccessContributor,
     nuxtAutoImportsContributor,

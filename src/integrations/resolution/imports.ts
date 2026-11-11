@@ -53,7 +53,7 @@ export async function addImportResolutionRelationships(
   const pythonResolver = await createPythonResolverFor(rootPath, graph, fileIdByRelativePath, importerFileIdByImportId);
   const importsCpp = [...importerFileIdByImportId.values()].some((importer) => isCppFile(importer));
   const cppIndex = importsCpp ? createCppFileIndex(fileIdByRelativePath.keys()) : null;
-  const cppConfig = importsCpp ? await readCppIncludeConfig(rootPath) : null;
+  const cppConfig = importsCpp ? await readCppIncludeConfig(rootPath, fileIdByRelativePath.keys()) : null;
   const rustTree = await createRustTree(rootPath, graph, fileIdByRelativePath, importerFileIdByImportId);
   // A bare specifier tried only because of `baseUrl` (`next/link` against
   // `baseUrl: "."`) is a package import, not an unresolved one, unless its

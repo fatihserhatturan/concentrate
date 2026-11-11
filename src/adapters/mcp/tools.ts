@@ -231,7 +231,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_entrypoints",
-    description: "Non-HTTP entrypoints: cron, queue, event, realtime and scheduler handlers; Go main, init, gRPC methods, cobra commands (cli); scripts, make targets, npm scripts, Docker, compose services, CI jobs (kinds script, make, npm-script, docker, compose-service, ci-job), with what each runs.",
+    description: "Non-HTTP entrypoints: cron, queue, event, realtime and scheduler handlers; Go main, init, gRPC methods, cobra commands (cli); scripts, make targets, npm scripts, Docker, compose services, CI jobs (kinds script, make, npm-script, docker, compose-service, ci-job, cmake-executable) and what they run.",
     inputSchema: objectSchema({
       kind: {
         type: "string",
