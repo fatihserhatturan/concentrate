@@ -1,0 +1,2746 @@
+{
+  "recordedAt": "2026-11-11T12:21:44.567Z",
+  "model": "haiku",
+  "runs": 3,
+  "maxTurns": 25,
+  "totals": {
+    "baseline": {
+      "runs": 30,
+      "correct": 30,
+      "medianInputTokens": 102939.5,
+      "medianOutputTokens": 939,
+      "medianToolCalls": 3,
+      "medianTurns": 4,
+      "medianDurationMs": 8586.5,
+      "medianCostUsd": 0.0039,
+      "spread": {
+        "inputTokens": {
+          "min": 66232,
+          "max": 194583
+        },
+        "toolCalls": {
+          "min": 2,
+          "max": 8
+        },
+        "durationMs": {
+          "min": 6138,
+          "max": 20014
+        },
+        "costUsd": {
+          "min": 0.0028,
+          "max": 0.0082
+        }
+      },
+      "totalCostUsd": 0.1286,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
+    },
+    "concentrate": {
+      "runs": 30,
+      "correct": 30,
+      "medianInputTokens": 113242,
+      "medianOutputTokens": 895.5,
+      "medianToolCalls": 3,
+      "medianTurns": 4,
+      "medianDurationMs": 8935,
+      "medianCostUsd": 0.004,
+      "spread": {
+        "inputTokens": {
+          "min": 67992,
+          "max": 177120
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 6
+        },
+        "durationMs": {
+          "min": 6387,
+          "max": 14441
+        },
+        "costUsd": {
+          "min": 0.003,
+          "max": 0.0048
+        }
+      },
+      "totalCostUsd": 0.1203,
+      "mcpRuns": 15,
+      "mcpTools": {
+        "list_env_config": 7,
+        "find_callers": 4,
+        "api_consumers": 3,
+        "impact_of": 3,
+        "route_details": 3,
+        "list_data_access": 2,
+        "list_tables": 2,
+        "list_routes": 1
+      },
+      "toolSearchCalls": 15
+    }
+  },
+  "categories": {
+    "routes": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 106481.5,
+        "medianOutputTokens": 758.5,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 7871.5,
+        "medianCostUsd": 0.0043,
+        "spread": {
+          "inputTokens": {
+            "min": 102786,
+            "max": 110236
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 6908,
+            "max": 8706
+          },
+          "costUsd": {
+            "min": 0.0036,
+            "max": 0.0082
+          }
+        },
+        "totalCostUsd": 0.029,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 123607.5,
+        "medianOutputTokens": 909,
+        "medianToolCalls": 3.5,
+        "medianTurns": 4.5,
+        "medianDurationMs": 8562.5,
+        "medianCostUsd": 0.0041,
+        "spread": {
+          "inputTokens": {
+            "min": 68885,
+            "max": 177120
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 6781,
+            "max": 10886
+          },
+          "costUsd": {
+            "min": 0.003,
+            "max": 0.0047
+          }
+        },
+        "totalCostUsd": 0.0241,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "callers": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 99274,
+        "medianOutputTokens": 813,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 8259,
+        "medianCostUsd": 0.0031,
+        "spread": {
+          "inputTokens": {
+            "min": 99261,
+            "max": 99692
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 7210,
+            "max": 8651
+          },
+          "costUsd": {
+            "min": 0.0031,
+            "max": 0.0035
+          }
+        },
+        "totalCostUsd": 0.0097,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 104376,
+        "medianOutputTokens": 848,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 7976,
+        "medianCostUsd": 0.0038,
+        "spread": {
+          "inputTokens": {
+            "min": 104341,
+            "max": 106755
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 7473,
+            "max": 9362
+          },
+          "costUsd": {
+            "min": 0.0038,
+            "max": 0.0044
+          }
+        },
+        "totalCostUsd": 0.012,
+        "mcpRuns": 1,
+        "mcpTools": {
+          "find_callers": 1
+        },
+        "toolSearchCalls": 1
+      }
+    },
+    "impact": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 103999,
+        "medianOutputTokens": 2027,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 13158,
+        "medianCostUsd": 0.0042,
+        "spread": {
+          "inputTokens": {
+            "min": 101669,
+            "max": 144609
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 7
+          },
+          "durationMs": {
+            "min": 10770,
+            "max": 14013
+          },
+          "costUsd": {
+            "min": 0.0041,
+            "max": 0.0053
+          }
+        },
+        "totalCostUsd": 0.0136,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 141339,
+        "medianOutputTokens": 1244,
+        "medianToolCalls": 4,
+        "medianTurns": 5,
+        "medianDurationMs": 10587,
+        "medianCostUsd": 0.0044,
+        "spread": {
+          "inputTokens": {
+            "min": 141330,
+            "max": 142488
+          },
+          "toolCalls": {
+            "min": 4,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 9388,
+            "max": 11307
+          },
+          "costUsd": {
+            "min": 0.0043,
+            "max": 0.0045
+          }
+        },
+        "totalCostUsd": 0.0132,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "find_callers": 3,
+          "impact_of": 3
+        },
+        "toolSearchCalls": 3
+      }
+    },
+    "data": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 134647,
+        "medianOutputTokens": 938,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 8658,
+        "medianCostUsd": 0.0038,
+        "spread": {
+          "inputTokens": {
+            "min": 101114,
+            "max": 136483
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 8097,
+            "max": 8833
+          },
+          "costUsd": {
+            "min": 0.0034,
+            "max": 0.0041
+          }
+        },
+        "totalCostUsd": 0.0113,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 105816,
+        "medianOutputTokens": 784,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 9203,
+        "medianCostUsd": 0.004,
+        "spread": {
+          "inputTokens": {
+            "min": 105711,
+            "max": 140865
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 7488,
+            "max": 9748
+          },
+          "costUsd": {
+            "min": 0.004,
+            "max": 0.0043
+          }
+        },
+        "totalCostUsd": 0.0122,
+        "mcpRuns": 2,
+        "mcpTools": {
+          "list_data_access": 2,
+          "list_tables": 2
+        },
+        "toolSearchCalls": 2
+      }
+    },
+    "env": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 136515.5,
+        "medianOutputTokens": 1510,
+        "medianToolCalls": 5.5,
+        "medianTurns": 6.5,
+        "medianDurationMs": 12263,
+        "medianCostUsd": 0.0043,
+        "spread": {
+          "inputTokens": {
+            "min": 100789,
+            "max": 173679
+          },
+          "toolCalls": {
+            "min": 4,
+            "max": 8
+          },
+          "durationMs": {
+            "min": 8347,
+            "max": 14099
+          },
+          "costUsd": {
+            "min": 0.0036,
+            "max": 0.0052
+          }
+        },
+        "totalCostUsd": 0.0262,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 139617,
+        "medianOutputTokens": 1447.5,
+        "medianToolCalls": 6,
+        "medianTurns": 7,
+        "medianDurationMs": 11879.5,
+        "medianCostUsd": 0.0045,
+        "spread": {
+          "inputTokens": {
+            "min": 136832,
+            "max": 173267
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 6
+          },
+          "durationMs": {
+            "min": 8802,
+            "max": 14441
+          },
+          "costUsd": {
+            "min": 0.0038,
+            "max": 0.0048
+          }
+        },
+        "totalCostUsd": 0.0265,
+        "mcpRuns": 6,
+        "mcpTools": {
+          "list_env_config": 7
+        },
+        "toolSearchCalls": 6
+      }
+    },
+    "traits": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 83315,
+        "medianOutputTokens": 760,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 7546.5,
+        "medianCostUsd": 0.0032,
+        "spread": {
+          "inputTokens": {
+            "min": 66232,
+            "max": 102229
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 6138,
+            "max": 9196
+          },
+          "costUsd": {
+            "min": 0.0028,
+            "max": 0.0037
+          }
+        },
+        "totalCostUsd": 0.0192,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 85487,
+        "medianOutputTokens": 807,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 7222.5,
+        "medianCostUsd": 0.0033,
+        "spread": {
+          "inputTokens": {
+            "min": 67992,
+            "max": 105676
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 6387,
+            "max": 9068
+          },
+          "costUsd": {
+            "min": 0.003,
+            "max": 0.0042
+          }
+        },
+        "totalCostUsd": 0.0207,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "frontend-api": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 191815,
+        "medianOutputTokens": 2885,
+        "medianToolCalls": 5,
+        "medianTurns": 6,
+        "medianDurationMs": 18317,
+        "medianCostUsd": 0.0069,
+        "spread": {
+          "inputTokens": {
+            "min": 191658,
+            "max": 194583
+          },
+          "toolCalls": {
+            "min": 4,
+            "max": 5
+          },
+          "durationMs": {
+            "min": 16850,
+            "max": 20014
+          },
+          "costUsd": {
+            "min": 0.0058,
+            "max": 0.0071
+          }
+        },
+        "totalCostUsd": 0.0197,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 113255,
+        "medianOutputTokens": 743,
+        "medianToolCalls": 3,
+        "medianTurns": 4,
+        "medianDurationMs": 8015,
+        "medianCostUsd": 0.0038,
+        "spread": {
+          "inputTokens": {
+            "min": 113229,
+            "max": 113340
+          },
+          "toolCalls": {
+            "min": 3,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 7457,
+            "max": 8482
+          },
+          "costUsd": {
+            "min": 0.0038,
+            "max": 0.0039
+          }
+        },
+        "totalCostUsd": 0.0115,
+        "mcpRuns": 3,
+        "mcpTools": {
+          "api_consumers": 3,
+          "route_details": 3,
+          "list_routes": 1
+        },
+        "toolSearchCalls": 3
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "rust-axum-favorite-route",
+      "sample": "internet-rust-axum-realworld",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 102897,
+            "medianOutputTokens": 767,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 7239,
+            "medianCostUsd": 0.0036,
+            "spread": {
+              "inputTokens": {
+                "min": 102786,
+                "max": 102982
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 6908,
+                "max": 7877
+              },
+              "costUsd": {
+                "min": 0.0036,
+                "max": 0.0082
+              }
+            },
+            "totalCostUsd": 0.0154,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Both methods on `/api/articles/:slug/favorite` are handled in `src/http/articles/mod.rs`, where the route is registered:\n\n```rust\n.route(\n    \"/api/articles/:slug/favorite\",\n    post(favorite_article).delete(unfavorite_article),\n)\n```\n\n- **POST** → `favorite_article` (line 395). It marks the article as favorited by the authenticated user and returns the updated article. Re-favoriting is a no-op thanks to `on conflict do nothing`.\n- **DELETE** → `unfavorite_article` (line 435). It removes the user's favorite and returns the updated article.\n\nBoth take `AuthUser`, so they require authentication.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7877,
+              "costUsd": 0.0081892,
+              "inputTokens": 6,
+              "outputTokens": 767,
+              "cacheCreationTokens": 35670,
+              "cacheReadTokens": 67110,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The route is registered in `src/http/articles/mod.rs` (lines 31–34):\n\n```rust\n.route(\n    \"/api/articles/:slug/favorite\",\n    post(favorite_article).delete(unfavorite_article),\n)\n```\n\n- **POST** → `favorite_article` (`src/http/articles/mod.rs:395`). It inserts a row into `article_favorite` for the authenticated user, ignoring duplicates via `on conflict do nothing`, then returns the updated article.\n- **DELETE** → `unfavorite_article` (`src/http/articles/mod.rs:435`). It removes the user's favorite row for the article and returns the updated article.\n\nBoth take an `AuthUser` extractor, so authentication is required.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7239,
+              "costUsd": 0.00360917,
+              "inputTokens": 6,
+              "outputTokens": 750,
+              "cacheCreationTokens": 11599,
+              "cacheReadTokens": 91377,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two handlers serve that path, both in `src/http/articles/mod.rs`:\n\n- **POST**: `favorite_article` (line 395). It inserts a row into `article_favorite` and returns the updated article.\n- **DELETE**: `unfavorite_article` (line 435). It removes the favorite row and returns the updated article.\n\nThe route is registered at lines 31–34:\n\n```rust\n.route(\n    \"/api/articles/:slug/favorite\",\n    post(favorite_article).delete(unfavorite_article),\n)\n```\n\nBoth handlers take an `AuthUser`, so the endpoint requires authentication.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 6908,
+              "costUsd": 0.0036211600000000004,
+              "inputTokens": 6,
+              "outputTokens": 819,
+              "cacheCreationTokens": 11485,
+              "cacheReadTokens": 91406,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 105268,
+            "medianOutputTokens": 643,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 6821,
+            "medianCostUsd": 0.0037,
+            "spread": {
+              "inputTokens": {
+                "min": 68885,
+                "max": 105444
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 6781,
+                "max": 7543
+              },
+              "costUsd": {
+                "min": 0.003,
+                "max": 0.0038
+              }
+            },
+            "totalCostUsd": 0.0105,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two handlers in `src/http/articles/mod.rs`, both registered on the same route at lines 32–33:\n\n```rust\n\"/api/articles/:slug/favorite\",\npost(favorite_article).delete(unfavorite_article),\n```\n\n- **POST** → `favorite_article` (line 395). It inserts a row into `article_favorite` with `on conflict do nothing`, so favoriting twice is harmless. It returns `404` if no article has that slug, then responds with the updated article.\n- **DELETE** → `unfavorite_article` (line 435). It removes the user's favorite for the article. Unfavoriting an article the user never favorited does nothing and still succeeds. It returns the updated article.\n\nBoth take `AuthUser`, so the caller must be authenticated.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 6781,
+              "costUsd": 0.0036684,
+              "inputTokens": 6,
+              "outputTokens": 643,
+              "cacheCreationTokens": 12072,
+              "cacheReadTokens": 93190,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The route is registered in `src/http/articles/mod.rs` at lines 31–34:\n\n```rust\n.route(\n    \"/api/articles/:slug/favorite\",\n    post(favorite_article).delete(unfavorite_article),\n)\n```\n\n- **POST** is handled by `favorite_article` (`src/http/articles/mod.rs:395`). It inserts into `article_favorite` with `on conflict do nothing`, so favoriting twice is harmless, and returns the updated article.\n- **DELETE** is handled by `unfavorite_article` (`src/http/articles/mod.rs:435`). It removes the favorite row for the authenticated user and returns the updated article.\n\nBoth handlers take `AuthUser`, so they require authentication. Both return `Error::NotFound` when the slug doesn't match an article.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7543,
+              "costUsd": 0.0038176900000000003,
+              "inputTokens": 6,
+              "outputTokens": 867,
+              "cacheCreationTokens": 12259,
+              "cacheReadTokens": 93179,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two handlers, both in `src/http/articles/mod.rs`:\n\n- **POST** → `favorite_article` (line 395)\n- **DELETE** → `unfavorite_article` (line 435)\n\nThe route is registered at lines 32–33:\n\n```rust\n\"/api/articles/:slug/favorite\",\npost(favorite_article).delete(unfavorite_article),\n```\n\nBoth handlers write to the `article_favorite` table, which is defined in `migrations/4_article.sql:42`. I didn't open the handler bodies, so I haven't checked their auth or response details.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6821,
+              "costUsd": 0.0030224100000000005,
+              "inputTokens": 4,
+              "outputTokens": 494,
+              "cacheCreationTokens": 10980,
+              "cacheReadTokens": 57901,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rust-axum-to-jwt-callers",
+      "sample": "internet-rust-axum-realworld",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 99274,
+            "medianOutputTokens": 813,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 8259,
+            "medianCostUsd": 0.0031,
+            "spread": {
+              "inputTokens": {
+                "min": 99261,
+                "max": 99692
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 7210,
+                "max": 8651
+              },
+              "costUsd": {
+                "min": 0.0031,
+                "max": 0.0035
+              }
+            },
+            "totalCostUsd": 0.0097,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`AuthUser::to_jwt` is called from four functions, all in `src/http/users.rs`:\n\n- **`create_user`** (`src/http/users.rs:90`): builds `AuthUser { user_id }.to_jwt(&ctx)` for the new user's token.\n- **`login_user`** (`src/http/users.rs:122`): calls `.to_jwt(&ctx)` on the authenticated user.\n- **`get_current_user`** (`src/http/users.rs:150`): calls `auth_user.to_jwt(&ctx)` to return a token for the current user.\n- **`update_user`** (`src/http/users.rs:210`): calls `auth_user.to_jwt(&ctx)` to issue a refreshed token.\n\nThe method itself is defined at `src/http/extractor.rs:45` as `pub(in crate::http) fn to_jwt(&self, ctx: &ApiContext) -> String`.\n\nI matched call sites to functions by line range, so the mapping is accurate to the function boundaries I found. I didn't check whether any of these functions is called from elsewhere.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8651,
+              "costUsd": 0.00346471,
+              "inputTokens": 6,
+              "outputTokens": 1049,
+              "cacheCreationTokens": 10225,
+              "cacheReadTokens": 89461,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`to_jwt` is defined in `src/http/extractor.rs:45` and called from four functions, all in `src/http/users.rs`:\n\n- **`create_user`** (`users.rs:90`): `AuthUser { user_id }.to_jwt(&ctx)`, building the token for a newly registered user.\n- **`login_user`** (`users.rs:122`): called on the result of a login, to issue the token.\n- **`get_current_user`** (`users.rs:150`): `auth_user.to_jwt(&ctx)`, refreshing the token for the current user.\n- **`update_user`** (`users.rs:210`): `auth_user.to_jwt(&ctx)`, reissuing the token after an update.\n\nThe method is `pub(in crate::http)`, so only code under `crate::http` can call it. No other files in `src/` reference it.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 7210,
+              "costUsd": 0.00310924,
+              "inputTokens": 6,
+              "outputTokens": 751,
+              "cacheCreationTokens": 9161,
+              "cacheReadTokens": 90094,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The `to_jwt` method is called in four functions, all in `src/http/users.rs`:\n\n- **`create_user`** (`src/http/users.rs:90`): builds `AuthUser { user_id }.to_jwt(&ctx)` for the new user's token.\n- **`login_user`** (`src/http/users.rs:122`): calls `.to_jwt(&ctx)` on the authenticated user.\n- **`get_current_user`** (`src/http/users.rs:150`): calls `auth_user.to_jwt(&ctx)`.\n- **`update_user`** (`src/http/users.rs:210`): calls `auth_user.to_jwt(&ctx)`.\n\nThe method itself is defined at `src/http/extractor.rs:45` as `pub(in crate::http) fn to_jwt(&self, ctx: &ApiContext) -> String`. Its only call sites are the four above.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8259,
+              "costUsd": 0.0031417,
+              "inputTokens": 6,
+              "outputTokens": 813,
+              "cacheCreationTokens": 9168,
+              "cacheReadTokens": 90100,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 104376,
+            "medianOutputTokens": 848,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 7976,
+            "medianCostUsd": 0.0038,
+            "spread": {
+              "inputTokens": {
+                "min": 104341,
+                "max": 106755
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 7473,
+                "max": 9362
+              },
+              "costUsd": {
+                "min": 0.0038,
+                "max": 0.0044
+              }
+            },
+            "totalCostUsd": 0.012,
+            "mcpRuns": 1,
+            "mcpTools": {
+              "find_callers": 1
+            },
+            "toolSearchCalls": 1
+          },
+          "runs": [
+            {
+              "answer": "Four functions call `AuthUser::to_jwt` in `src/`, all in `src/http/users.rs`:\n\n- **`create_user`** (`users.rs:90`): issues a token for the newly inserted user.\n- **`login_user`** (`users.rs:122`): issues a token after the password check.\n- **`get_current_user`** (`users.rs:150`): returns a freshly generated token with the current user.\n- **`update_user`** (`users.rs:210`): returns a token with the updated user. When the request has no fields to update, it delegates to `get_current_user` (`users.rs:168`), which also calls `to_jwt`.\n\nThe method is defined at `src/http/extractor.rs:45`. A text search across `src/` found no other call sites.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 7473,
+              "costUsd": 0.00382604,
+              "inputTokens": 6,
+              "outputTokens": 848,
+              "cacheCreationTokens": 12411,
+              "cacheReadTokens": 91924,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`AuthUser::to_jwt` is defined in `src/http/extractor.rs:45` and is called from four places, all in `src/http/users.rs`:\n\n| Call site | Function | Purpose |\n|---|---|---|\n| `users.rs:90` | `create_user` | Issues a token for the newly registered user |\n| `users.rs:122` | `login_user` | Issues a token after a successful password check |\n| `users.rs:150` | `get_current_user` | Returns a freshly generated token alongside the user |\n| `users.rs:210` | `update_user` | Returns a freshly generated token after the update |\n\n`update_user` also calls `get_current_user` at line 168 when there are no fields to update, so that path reaches `to_jwt` indirectly.\n\nThe grep covered the literal name `to_jwt` in `src/`, so it would also catch any call through a method reference. I didn't check for other callers outside `src/`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 7976,
+              "costUsd": 0.00377638,
+              "inputTokens": 6,
+              "outputTokens": 740,
+              "cacheCreationTokens": 12432,
+              "cacheReadTokens": 91938,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four functions in `src/` call `AuthUser::to_jwt`, all in `src/http/users.rs`:\n\n| Function | Line | Call |\n|---|---|---|\n| `create_user` | 90 | `AuthUser { user_id }.to_jwt(&ctx)` |\n| `login_user` | 122 | `AuthUser { user_id: user.user_id }.to_jwt(&ctx)` |\n| `get_current_user` | 150 | `auth_user.to_jwt(&ctx)` |\n| `update_user` | 210 | `auth_user.to_jwt(&ctx)` |\n\nThe method is defined at `src/http/extractor.rs:45` as `pub(in crate::http) fn to_jwt(&self, ctx: &ApiContext) -> String`.\n\nThe concentrate code graph resolved only `get_current_user` and `update_user`. It reported the `create_user` and `login_user` calls as unresolved, because they build the struct inline (`AuthUser { ... }.to_jwt(...)`). I confirmed those two by reading the file.\n\n`update_user` also reaches `to_jwt` indirectly. When the update body is empty, it returns `get_current_user(auth_user, ctx)` (line 168), which generates the token.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 9362,
+              "costUsd": 0.00437247,
+              "inputTokens": 6,
+              "outputTokens": 1136,
+              "cacheCreationTokens": 14402,
+              "cacheReadTokens": 92347,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "ToolSearch": 1,
+                "mcp__concentrate__find_callers": 1,
+                "Read": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "to_jwt"
+                  },
+                  "result": "{\"query\":{\"name\":\"to_jwt\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"to_jwt\",\"caller\":\"get_current_user\",\"callerKind\":\"Function\",\"file\":\"src/http/users.rs\",\"line\":150,\"expression\":\"auth_user.to_jwt\",\"relationship\":\"CALLS\"},{\"target\":\"to_jwt\",\"caller\":\"update_user\",\"callerKind\":\"Function\",\"file\":\"src/http/users.rs\",\"line\":210,\"expression\":\"auth_user.to_jwt\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":2,\"sites\":[{\"file\":\"src/http/users.rs\",\"line\":90,\"expression\":\"AuthUser{user_id}.to_jwt\",\"caller\":\"create_user\"},{\"file\":\"src/http/users.rs\",\"line\":122,\"expression\":\"AuthUser{user_id:user.user_id,}.to_jwt\",\"caller\":\"login_user\"}]},\"completeness\":\"2 calls named to_jwt resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rust-axum-to-jwt-impact",
+      "sample": "internet-rust-axum-realworld",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 103999,
+            "medianOutputTokens": 2027,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 13158,
+            "medianCostUsd": 0.0042,
+            "spread": {
+              "inputTokens": {
+                "min": 101669,
+                "max": 144609
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 7
+              },
+              "durationMs": {
+                "min": 10770,
+                "max": 14013
+              },
+              "costUsd": {
+                "min": 0.0041,
+                "max": 0.0053
+              }
+            },
+            "totalCostUsd": 0.0136,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "If `AuthUser::to_jwt` changes signature, four HTTP routes are directly affected. All four are in `src/http/users.rs`, and they are the only callers:\n\n| Method | Path | Handler | Call site |\n|---|---|---|---|\n| POST | `/api/users` | `create_user` | `users.rs:90` |\n| POST | `/api/users/login` | `login_user` | `users.rs:122` |\n| GET | `/api/user` | `get_current_user` | `users.rs:150` |\n| PUT | `/api/user` | `update_user` | `users.rs:210` |\n\nThe signature is `pub(in crate::http) fn to_jwt(&self, ctx: &ApiContext) -> String` in `src/http/extractor.rs:45`. Because it is only called from these four handlers, a signature change would fail to compile at exactly these sites and nowhere else.\n\nThe other routes that use `AuthUser` or `MaybeAuthUser` (article, comment, profile follow, and favorite routes) only parse tokens through `from_authorization`. They do not call `to_jwt`, so they are not affected by a signature change. They would only be affected by a change to the token format itself, such as the `AuthUserClaims` fields or the HMAC scheme, and that would show up at runtime rather than at compile time.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 14013,
+              "costUsd": 0.005335540000000001,
+              "inputTokens": 8,
+              "outputTokens": 2052,
+              "cacheCreationTokens": 15067,
+              "cacheReadTokens": 129534,
+              "toolCalls": 7,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "If the signature of `AuthUser::to_jwt` changes, four routes are affected. These are the handlers that call it directly:\n\n| Method | Path | Handler | Call site |\n|---|---|---|---|\n| POST | `/api/users` | `create_user` | `src/http/users.rs:90` |\n| POST | `/api/users/login` | `login_user` | `src/http/users.rs:122` |\n| GET | `/api/user` | `get_current_user` | `src/http/users.rs:150` |\n| PUT | `/api/user` | `update_user` | `src/http/users.rs:210` |\n\nThe routes are registered in `src/http/users.rs:15-19`. `GET` and `PUT` share `/api/user`.\n\nNo other route is affected. `to_jwt` is defined in `src/http/extractor.rs:45` and is only called from `users.rs`. The `AuthUser` extractor's own `from_authorization` path (line 58) does not call it, so routes that only take `AuthUser` as an argument, such as article, comment, profile and follow routes, will not break from the signature change alone.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 13158,
+              "costUsd": 0.00410059,
+              "inputTokens": 6,
+              "outputTokens": 2027,
+              "cacheCreationTokens": 10894,
+              "cacheReadTokens": 90769,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "If `AuthUser::to_jwt` changes signature, four routes are affected, all in `src/http/users.rs`. Those are the only call sites, and `to_jwt` is `pub(in crate::http)`, so nothing outside the `http` module can call it.\n\n| Method | Path | Handler | Call site |\n|---|---|---|---|\n| POST | `/api/users` | `create_user` | `users.rs:90` |\n| POST | `/api/users/login` | `login_user` | `users.rs:119-122` |\n| GET | `/api/user` | `get_current_user` | `users.rs:150` |\n| PUT | `/api/user` | `update_user` | `users.rs:210` |\n\nRoutes that only extract `AuthUser` (for example, the article, comment, and profile routes that take `auth_user: AuthUser` or `MaybeAuthUser`) do not call `to_jwt`. They go through `from_authorization` and the token-parsing path, so they are unaffected by a change to `to_jwt` alone. They would be affected by a change to the `AuthUser` struct or the `AuthUserClaims` shape, since both sides of the token format depend on it.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10770,
+              "costUsd": 0.0041653,
+              "inputTokens": 6,
+              "outputTokens": 1449,
+              "cacheCreationTokens": 12633,
+              "cacheReadTokens": 91360,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 141339,
+            "medianOutputTokens": 1244,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 10587,
+            "medianCostUsd": 0.0044,
+            "spread": {
+              "inputTokens": {
+                "min": 141330,
+                "max": 142488
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 9388,
+                "max": 11307
+              },
+              "costUsd": {
+                "min": 0.0043,
+                "max": 0.0045
+              }
+            },
+            "totalCostUsd": 0.0132,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "find_callers": 3,
+              "impact_of": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "If the signature of `AuthUser::to_jwt` changes, four HTTP routes are affected:\n\n| Method | Path | Handler | Call site |\n|---|---|---|---|\n| GET | `/api/user` | `get_current_user` | `src/http/users.rs:150` |\n| PUT | `/api/user` | `update_user` | `src/http/users.rs:210` |\n| POST | `/api/users` | `create_user` | `src/http/users.rs:90` |\n| POST | `/api/users/login` | `login_user` | `src/http/users.rs:122` |\n\nThe first two are resolved by the code graph. `get_current_user` and `update_user` call `auth_user.to_jwt` directly, and both are registered at `src/http/users.rs:16-18`.\n\nThe last two are not resolved by the graph. `create_user` and `login_user` build the value inline as `AuthUser{user_id}.to_jwt()`, so the tool reports them as unresolved. I confirmed them by reading the route table in `src/http/users.rs:16-17`, which maps `POST /api/users` to `create_user` and `POST /api/users/login` to `login_user`. They are affected too, and any signature change must be checked at those two lines as well.\n\nThe graph found no frontend consumers, components, or pages for these routes. It also found no entrypoints, stores, or env vars involved.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 10587,
+              "costUsd": 0.0044970800000000005,
+              "inputTokens": 8,
+              "outputTokens": 1244,
+              "cacheCreationTokens": 12892,
+              "cacheReadTokens": 129588,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_callers": 1,
+                "Grep": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "symbol": "to_jwt",
+                    "limit": 100
+                  },
+                  "result": "{\"symbol\":\"to_jwt\",\"file\":null,\"maxDepth\":5,\"seeds\":[{\"name\":\"to_jwt\",\"className\":\"AuthUser\",\"file\":\"src/http/extractor.rs\",\"line\":45,\"endLine\":55}],\"callers\":[{\"name\":\"get_current_user\",\"className\":null,\"file\":\"src/http/users.rs\",\"line\":131,\"endLine\":156,\"depth\":1},{\"name\":\"update_user\",\"className\":null,\"file\":\"src/http/users.rs\",\"line\":161,\"endLine\":216,\"depth\":1}],\"moduleCallers\":[],\"routes\":[{\"method\":\"GET\",\"path\":\"/api/user\",\"fullPath\":\"/api/user\",\"framework\":\"axum\",\"file\":\"src/http/users.rs\",\"line\":18,\"reachedThrough\":[{\"function\":\"get_current_user\",\"functionFile\":\"src/http/users.rs\",\"as\":\"handler\"}]},{\"method\":\"PUT\",\"path\":\"/api/user\",\"fullPath\":\"/api/user\",\"framework\":\"axum\",\"file\":\"src/http/users.rs\",\"line\":18,\"reachedThrough\":[{\"function\":\"update_user\",\"functionFile\":\"src/http/users.rs\",\"as\":\"handler\"}]}],\"entrypoints\":[],\"components\":[],\"pages\":[],\"apiConsumers\":[],\"consumerComponents\":[],\"consumerPages\":[],\"stores\":[],\"storeComponents\":[],\"storePages\":[],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"unresolvedCalls\":{\"count\":2,\"sites\":[{\"file\":\"src/http/users.rs\",\"line\":90,\"expression\":\"AuthUser{user_id}.to_jwt\",\"caller\":\"create_user\"},{\"file\":\"src/http/users.rs\",\"line\":122,\"expression\":\"AuthUser{user_id:user.user_id,}.to_jwt\",\"caller\":\"login_user\"}]},\"completeness\":\"2 calls named to_jwt resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "to_jwt",
+                    "exact": true,
+                    "limit": 100
+                  },
+                  "result": "{\"query\":{\"name\":\"to_jwt\",\"exact\":true,\"limit\":100},\"callers\":[{\"target\":\"to_jwt\",\"caller\":\"get_current_user\",\"callerKind\":\"Function\",\"file\":\"src/http/users.rs\",\"line\":150,\"expression\":\"auth_user.to_jwt\",\"relationship\":\"CALLS\"},{\"target\":\"to_jwt\",\"caller\":\"update_user\",\"callerKind\":\"Function\",\"file\":\"src/http/users.rs\",\"line\":210,\"expression\":\"auth_user.to_jwt\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":2,\"sites\":[{\"file\":\"src/http/users.rs\",\"line\":90,\"expression\":\"AuthUser{user_id}.to_jwt\",\"caller\":\"create_user\"},{\"file\":\"src/http/users.rs\",\"line\":122,\"expression\":\"AuthUser{user_id:user.user_id,}.to_jwt\",\"caller\":\"login_user\"}]},\"completeness\":\"2 calls named to_jwt resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "If `AuthUser::to_jwt` (defined at `src/http/extractor.rs:45`) changes signature, four routes are affected:\n\n| Method | Path | Handler | Call site |\n|---|---|---|---|\n| POST | `/api/users` | `create_user` | `src/http/users.rs:90` |\n| POST | `/api/users/login` | `login_user` | `src/http/users.rs:122` |\n| GET | `/api/user` | `get_current_user` | `src/http/users.rs:150` |\n| PUT | `/api/user` | `update_user` | `src/http/users.rs:210` |\n\nThe route table is at `src/http/users.rs:16-18`.\n\nThe first two are easy to miss. The call graph does not resolve them because they call `to_jwt` on a freshly built `AuthUser { ... }` literal rather than on a variable, so they appear only as unresolved call sites. The GET and PUT routes call it on an existing `auth_user` value, so the graph resolves those.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 9388,
+              "costUsd": 0.00432531,
+              "inputTokens": 8,
+              "outputTokens": 1133,
+              "cacheCreationTokens": 12341,
+              "cacheReadTokens": 128981,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_callers": 1,
+                "Grep": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "symbol": "to_jwt",
+                    "limit": 100
+                  },
+                  "result": "{\"symbol\":\"to_jwt\",\"file\":null,\"maxDepth\":5,\"seeds\":[{\"name\":\"to_jwt\",\"className\":\"AuthUser\",\"file\":\"src/http/extractor.rs\",\"line\":45,\"endLine\":55}],\"callers\":[{\"name\":\"get_current_user\",\"className\":null,\"file\":\"src/http/users.rs\",\"line\":131,\"endLine\":156,\"depth\":1},{\"name\":\"update_user\",\"className\":null,\"file\":\"src/http/users.rs\",\"line\":161,\"endLine\":216,\"depth\":1}],\"moduleCallers\":[],\"routes\":[{\"method\":\"GET\",\"path\":\"/api/user\",\"fullPath\":\"/api/user\",\"framework\":\"axum\",\"file\":\"src/http/users.rs\",\"line\":18,\"reachedThrough\":[{\"function\":\"get_current_user\",\"functionFile\":\"src/http/users.rs\",\"as\":\"handler\"}]},{\"method\":\"PUT\",\"path\":\"/api/user\",\"fullPath\":\"/api/user\",\"framework\":\"axum\",\"file\":\"src/http/users.rs\",\"line\":18,\"reachedThrough\":[{\"function\":\"update_user\",\"functionFile\":\"src/http/users.rs\",\"as\":\"handler\"}]}],\"entrypoints\":[],\"components\":[],\"pages\":[],\"apiConsumers\":[],\"consumerComponents\":[],\"consumerPages\":[],\"stores\":[],\"storeComponents\":[],\"storePages\":[],\"dataAccess\":[],\"tables\":[],\"envVars\":[],\"config\":[],\"unresolvedCalls\":{\"count\":2,\"sites\":[{\"file\":\"src/http/users.rs\",\"line\":90,\"expression\":\"AuthUser{user_id}.to_jwt\",\"caller\":\"create_user\"},{\"file\":\"src/http/users.rs\",\"line\":122,\"expression\":\"AuthUser{user_id:user.user_id,}.to_jwt\",\"caller\":\"login_user\"}]},\"completeness\":\"2 calls named to_jwt resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "to_jwt",
+                    "limit": 100
+                  },
+                  "result": "{\"query\":{\"name\":\"to_jwt\",\"exact\":true,\"limit\":100},\"callers\":[{\"target\":\"to_jwt\",\"caller\":\"get_current_user\",\"callerKind\":\"Function\",\"file\":\"src/http/users.rs\",\"line\":150,\"expression\":\"auth_user.to_jwt\",\"relationship\":\"CALLS\"},{\"target\":\"to_jwt\",\"caller\":\"update_user\",\"callerKind\":\"Function\",\"file\":\"src/http/users.rs\",\"line\":210,\"expression\":\"auth_user.to_jwt\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":2,\"sites\":[{\"file\":\"src/http/users.rs\",\"line\":90,\"expression\":\"AuthUser{user_id}.to_jwt\",\"caller\":\"create_user\"},{\"file\":\"src/http/users.rs\",\"line\":122,\"expression\":\"AuthUser{user_id:user.user_id,}.to_jwt\",\"caller\":\"login_user\"}]},\"completeness\":\"2 calls named to_jwt resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "If `AuthUser::to_jwt`'s signature changes, four HTTP routes are affected, all defined in `src/http/users.rs`:\n\n| Method | Path | Handler | Call site |\n|---|---|---|---|\n| POST | `/api/users` | `create_user` | `users.rs:90` (unresolved by the graph) |\n| POST | `/api/users/login` | `login_user` | `users.rs:122` (unresolved by the graph) |\n| GET | `/api/user` | `get_current_user` | `users.rs:150` |\n| PUT | `/api/user` | `update_user` | `users.rs:210` |\n\n`update_user` also calls `get_current_user` at line 168, so the GET handler's behaviour carries into the PUT route too.\n\nThe two POST routes are missed by the call graph because `to_jwt` is invoked on a struct literal (`AuthUser{user_id}.to_jwt()`), not on a variable. The line numbers and handler names come from the source, so the list should be complete for `src/http/users.rs`. I did not search for other `to_jwt` callers outside `src/`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 11307,
+              "costUsd": 0.00441166,
+              "inputTokens": 8,
+              "outputTokens": 1304,
+              "cacheCreationTokens": 12345,
+              "cacheReadTokens": 128986,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__impact_of": 1,
+                "mcp__concentrate__find_callers": 1,
+                "Grep": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "impact_of",
+                  "input": {
+                    "symbol": "to_jwt",
+                    "file": "AuthUser"
+                  },
+                  "result": "{\"symbol\":\"to_jwt\",\"file\":\"AuthUser\",\"seeds\":[],\"note\":\"No function, method, class or store matched. Use find_definitions to look the name up; for routes use route_details.\"}",
+                  "isError": false
+                },
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "to_jwt"
+                  },
+                  "result": "{\"query\":{\"name\":\"to_jwt\",\"exact\":true,\"limit\":20},\"callers\":[{\"target\":\"to_jwt\",\"caller\":\"get_current_user\",\"callerKind\":\"Function\",\"file\":\"src/http/users.rs\",\"line\":150,\"expression\":\"auth_user.to_jwt\",\"relationship\":\"CALLS\"},{\"target\":\"to_jwt\",\"caller\":\"update_user\",\"callerKind\":\"Function\",\"file\":\"src/http/users.rs\",\"line\":210,\"expression\":\"auth_user.to_jwt\",\"relationship\":\"CALLS\"}],\"unresolvedCalls\":{\"count\":2,\"sites\":[{\"file\":\"src/http/users.rs\",\"line\":90,\"expression\":\"AuthUser{user_id}.to_jwt\",\"caller\":\"create_user\"},{\"file\":\"src/http/users.rs\",\"line\":122,\"expression\":\"AuthUser{user_id:user.user_id,}.to_jwt\",\"caller\":\"login_user\"}]},\"completeness\":\"2 calls named to_jwt resolve to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.\",\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rust-axum-favorite-table",
+      "sample": "internet-rust-axum-realworld",
+      "category": "data",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 134647,
+            "medianOutputTokens": 938,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 8658,
+            "medianCostUsd": 0.0038,
+            "spread": {
+              "inputTokens": {
+                "min": 101114,
+                "max": 136483
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 8097,
+                "max": 8833
+              },
+              "costUsd": {
+                "min": 0.0034,
+                "max": 0.0041
+              }
+            },
+            "totalCostUsd": 0.0113,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two functions write directly to `article_favorite`, both in `src/http/articles/mod.rs`:\n\n- **`favorite_article`** (`mod.rs:395`) inserts a row (`insert into article_favorite(article_id, user_id) ... on conflict do nothing`, lines 414–418). Favoriting an already-favorited article is a no-op.\n- **`unfavorite_article`** (`mod.rs:435`) deletes the row (`delete from article_favorite where article_id = ... and user_id = $2`, lines 451–453).\n\nBoth are reached through the favorite and unfavorite endpoints, and both run as a single CTE query that also looks up the article by slug.\n\nRows can also disappear without either function running. `migrations/4_article.sql` declares `article_favorite` with `on delete cascade` on both `article_id` and `user_id` (lines 44–45), so deleting an article or a user removes its favorite rows through the database. The only explicit writes are the two above.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8658,
+              "costUsd": 0.00407655,
+              "inputTokens": 8,
+              "outputTokens": 938,
+              "cacheCreationTokens": 11800,
+              "cacheReadTokens": 124675,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two functions write to `article_favorite`, both in `src/http/articles/mod.rs`:\n\n- **`favorite_article`** (line 395): inserts a row into `article_favorite` (`insert into article_favorite(article_id, user_id)`, line 414). It uses `on conflict do nothing`, so favoriting an already-favorited article is a no-op.\n- **`unfavorite_article`** (line 435): deletes the row for this article and user (`delete from article_favorite ...`, line 451).\n\nOther references in `mod.rs` and `listing.rs` are `select`s only. I did not check `migrations/4_article.sql` for foreign keys with `ON DELETE CASCADE`. If they exist, deleting an article or user would also remove favorite rows, but no application function does that directly.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8097,
+              "costUsd": 0.0034321200000000003,
+              "inputTokens": 6,
+              "outputTokens": 803,
+              "cacheCreationTokens": 10626,
+              "cacheReadTokens": 90482,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two application functions write to `article_favorite`, both in `src/http/articles/mod.rs`:\n\n- **`favorite_article`** (line 395) runs `insert into article_favorite(article_id, user_id)` at line 414.\n- **`unfavorite_article`** (line 435) runs `delete from article_favorite` at line 451.\n\nNothing else in the codebase inserts into or deletes from the table. `listing.rs` and the other `mod.rs` queries only read from it.\n\nThere is also a database-level delete path. The table in `migrations/4_article.sql:42` has `on delete cascade` on both `article_id` and `user_id`, so deleting an article (`delete_article`, line 300) or a user removes their favorite rows without any explicit query against the table.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8833,
+              "costUsd": 0.0037667800000000004,
+              "inputTokens": 8,
+              "outputTokens": 940,
+              "cacheCreationTokens": 10261,
+              "cacheReadTokens": 124378,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 105816,
+            "medianOutputTokens": 784,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 9203,
+            "medianCostUsd": 0.004,
+            "spread": {
+              "inputTokens": {
+                "min": 105711,
+                "max": 140865
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 7488,
+                "max": 9748
+              },
+              "costUsd": {
+                "min": 0.004,
+                "max": 0.0043
+              }
+            },
+            "totalCostUsd": 0.0122,
+            "mcpRuns": 2,
+            "mcpTools": {
+              "list_data_access": 2,
+              "list_tables": 2
+            },
+            "toolSearchCalls": 2
+          },
+          "runs": [
+            {
+              "answer": "Two functions write to `article_favorite`, both in `src/http/articles/mod.rs`:\n\n- **`favorite_article`** (line 408) does an upsert, reached by `POST /api/articles/:slug/favorite`.\n- **`unfavorite_article`** (line 445) does a delete, reached by `DELETE /api/articles/:slug/favorite`.\n\nThe table is declared in `migrations/4_article.sql` (line 42). Its columns are `article_id`, `user_id`, `created_at` and `updated_at`. The code graph reports these writes. I did not open the SQL to confirm the exact statements.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9203,
+              "costUsd": 0.00399556,
+              "inputTokens": 6,
+              "outputTokens": 784,
+              "cacheCreationTokens": 13394,
+              "cacheReadTokens": 92416,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_data_access": 1,
+                "mcp__concentrate__list_tables": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_data_access",
+                  "input": {
+                    "model": "favorite",
+                    "limit": 200
+                  },
+                  "result": "{\"query\":{\"model\":\"favorite\",\"direct\":false,\"limit\":200},\"dataAccess\":[{\"sourceKind\":\"Function\",\"sourceName\":\"list_articles\",\"file\":\"src/http/articles/listing.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/listing.rs\",\"line\":85,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"expression\":\"sqlx::query_as!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"feed_articles\",\"file\":\"src/http/articles/listing.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/listing.rs\",\"line\":163,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"expression\":\"sqlx::query_as!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"update_article\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":237,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"expression\":\"sqlx::query_as!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"get_article\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":356,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"expression\":\"sqlx::query_as!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"favorite_article\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":408,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"upsert\",\"expression\":\"sqlx::query_scalar!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"unfavorite_article\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":445,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"delete\",\"expression\":\"sqlx::query_scalar!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"article_by_id\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":506,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"e… (4905 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "list_tables",
+                  "input": {
+                    "name": "article_favorite"
+                  },
+                  "result": "{\"query\":{\"name\":\"article_favorite\"},\"totalTables\":1,\"tables\":[{\"name\":\"article_favorite\",\"kind\":\"table\",\"library\":\"sqlx\",\"declaredIn\":\"migrations/4_article.sql\",\"line\":42,\"columns\":[{\"name\":\"article_id\",\"type\":\"uuid\",\"isId\":true,\"references\":\"article.article_id\"},{\"name\":\"user_id\",\"type\":\"uuid\",\"isId\":true,\"references\":\"user.user_id\"},{\"name\":\"created_at\",\"type\":\"timestamptz\"},{\"name\":\"updated_at\",\"type\":\"timestamptz\",\"optional\":true}],\"migrations\":[{\"file\":\"migrations/4_article.sql\",\"line\":42,\"order\":4,\"change\":\"create\"}],\"models\":[{\"name\":\"article_favorite\",\"relations\":[]}],\"readBy\":{\"routes\":6,\"entrypoints\":0,\"functions\":7},\"writtenBy\":{\"routes\":2,\"entrypoints\":0,\"functions\":2},\"routes\":[{\"method\":\"GET\",\"path\":\"/api/articles\",\"file\":\"src/http/articles/mod.rs\",\"line\":21,\"reads\":[\"read\"]},{\"method\":\"GET\",\"path\":\"/api/articles/feed\",\"file\":\"src/http/articles/mod.rs\",\"line\":26,\"reads\":[\"read\"]},{\"method\":\"GET\",\"path\":\"/api/articles/:slug\",\"file\":\"src/http/articles/mod.rs\",\"line\":27,\"reads\":[\"read\"]},{\"method\":\"PUT\",\"path\":\"/api/articles/:slug\",\"file\":\"src/http/articles/mod.rs\",\"line\":27,\"reads\":[\"read\"]},{\"method\":\"DELETE\",\"path\":\"/api/articles/:slug/favorite\",\"file\":\"src/http/articles/mod.rs\",\"line\":31,\"reads\":[\"read\"],\"writes\":[\"delete\"]},{\"method\":\"POST\",\"path\":\"/api/articles/:slug/favorite\",\"file\":\"src/http/articles/mod.rs\",\"line\":31,\"reads\":[\"read\"],\"writes\":[\"upsert\"]}],\"entrypoints\":[]}],\"note\":\"Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two application functions write to `article_favorite`, both in `src/http/articles/mod.rs`:\n\n- **`favorite_article`** (`src/http/articles/mod.rs:395`) runs an `INSERT INTO article_favorite(article_id, user_id)` at line 414. It uses `ON CONFLICT DO NOTHING`, so favoriting an already-favorited article is a no-op.\n- **`unfavorite_article`** (`src/http/articles/mod.rs:435`) runs a `DELETE FROM article_favorite` at line 451, filtered by the article and the current user. Unfavoriting an article that isn't favorited does nothing.\n\nOther references to the table are reads only (`exists(...)` and `count(*)` subqueries in `mod.rs` and `listing.rs`). Rows are also removed indirectly when an article or user is deleted, because the table's foreign keys use `on delete cascade` (`migrations/4_article.sql:44-45`). No application function deletes those rows directly.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9748,
+              "costUsd": 0.00428925,
+              "inputTokens": 8,
+              "outputTokens": 1047,
+              "cacheCreationTokens": 12402,
+              "cacheReadTokens": 128455,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two functions write to `article_favorite`, both in `src/http/articles/mod.rs`:\n\n- **`favorite_article`** (line 408): upserts a row. It's the handler for `POST /api/articles/:slug/favorite`.\n- **`unfavorite_article`** (line 445): deletes a row. It's the handler for `DELETE /api/articles/:slug/favorite`.\n\nThe table is declared in `migrations/4_article.sql` (line 42). The concentrate code graph reports these two writers. I didn't open the source to confirm the SQL, so the upsert and delete come from the graph's classification.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7488,
+              "costUsd": 0.00395613,
+              "inputTokens": 6,
+              "outputTokens": 727,
+              "cacheCreationTokens": 13342,
+              "cacheReadTokens": 92363,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_data_access": 1,
+                "mcp__concentrate__list_tables": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_data_access",
+                  "input": {
+                    "model": "favorite",
+                    "limit": 200
+                  },
+                  "result": "{\"query\":{\"model\":\"favorite\",\"direct\":false,\"limit\":200},\"dataAccess\":[{\"sourceKind\":\"Function\",\"sourceName\":\"list_articles\",\"file\":\"src/http/articles/listing.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/listing.rs\",\"line\":85,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"expression\":\"sqlx::query_as!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"feed_articles\",\"file\":\"src/http/articles/listing.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/listing.rs\",\"line\":163,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"expression\":\"sqlx::query_as!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"update_article\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":237,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"expression\":\"sqlx::query_as!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"get_article\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":356,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"expression\":\"sqlx::query_as!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"favorite_article\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":408,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"upsert\",\"expression\":\"sqlx::query_scalar!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"unfavorite_article\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":445,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"delete\",\"expression\":\"sqlx::query_scalar!\"},{\"sourceKind\":\"Function\",\"sourceName\":\"article_by_id\",\"file\":\"src/http/articles/mod.rs\",\"direct\":true,\"accessFile\":\"src/http/articles/mod.rs\",\"line\":506,\"model\":\"article_favorite\",\"library\":\"sqlx\",\"table\":\"article_favorite\",\"operation\":\"read\",\"e… (4905 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "list_tables",
+                  "input": {
+                    "name": "article_favorite"
+                  },
+                  "result": "{\"query\":{\"name\":\"article_favorite\"},\"totalTables\":1,\"tables\":[{\"name\":\"article_favorite\",\"kind\":\"table\",\"library\":\"sqlx\",\"declaredIn\":\"migrations/4_article.sql\",\"line\":42,\"columns\":[{\"name\":\"article_id\",\"type\":\"uuid\",\"isId\":true,\"references\":\"article.article_id\"},{\"name\":\"user_id\",\"type\":\"uuid\",\"isId\":true,\"references\":\"user.user_id\"},{\"name\":\"created_at\",\"type\":\"timestamptz\"},{\"name\":\"updated_at\",\"type\":\"timestamptz\",\"optional\":true}],\"migrations\":[{\"file\":\"migrations/4_article.sql\",\"line\":42,\"order\":4,\"change\":\"create\"}],\"models\":[{\"name\":\"article_favorite\",\"relations\":[]}],\"readBy\":{\"routes\":6,\"entrypoints\":0,\"functions\":7},\"writtenBy\":{\"routes\":2,\"entrypoints\":0,\"functions\":2},\"routes\":[{\"method\":\"GET\",\"path\":\"/api/articles\",\"file\":\"src/http/articles/mod.rs\",\"line\":21,\"reads\":[\"read\"]},{\"method\":\"GET\",\"path\":\"/api/articles/feed\",\"file\":\"src/http/articles/mod.rs\",\"line\":26,\"reads\":[\"read\"]},{\"method\":\"GET\",\"path\":\"/api/articles/:slug\",\"file\":\"src/http/articles/mod.rs\",\"line\":27,\"reads\":[\"read\"]},{\"method\":\"PUT\",\"path\":\"/api/articles/:slug\",\"file\":\"src/http/articles/mod.rs\",\"line\":27,\"reads\":[\"read\"]},{\"method\":\"DELETE\",\"path\":\"/api/articles/:slug/favorite\",\"file\":\"src/http/articles/mod.rs\",\"line\":31,\"reads\":[\"read\"],\"writes\":[\"delete\"]},{\"method\":\"POST\",\"path\":\"/api/articles/:slug/favorite\",\"file\":\"src/http/articles/mod.rs\",\"line\":31,\"reads\":[\"read\"],\"writes\":[\"upsert\"]}],\"entrypoints\":[]}],\"note\":\"Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.\",\"page\":{\"offset\":0,\"returned\":1}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rust-axum-env",
+      "sample": "internet-rust-axum-realworld",
+      "category": "env",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 101580,
+            "medianOutputTokens": 1081,
+            "medianToolCalls": 4,
+            "medianTurns": 5,
+            "medianDurationMs": 8396,
+            "medianCostUsd": 0.0036,
+            "spread": {
+              "inputTokens": {
+                "min": 100789,
+                "max": 135642
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 8347,
+                "max": 11851
+              },
+              "costUsd": {
+                "min": 0.0036,
+                "max": 0.0041
+              }
+            },
+            "totalCostUsd": 0.0114,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The backend reads two environment variables, both declared in `src/config.rs`:\n\n- **`DATABASE_URL`**: `database_url: String` (`src/config.rs:18-19`). The Postgres connection URL.\n- **`HMAC_KEY`**: `hmac_key: String` (`src/config.rs:25-26`). The HMAC key used to sign and verify JWTs.\n\nThe struct is `Config`, which derives `clap::Parser` with `#[clap(long, env)]` on each field. Each field can therefore come from a `--database-url` / `--hmac-key` command-line flag or from the matching environment variable. `src/main.rs:20` calls `dotenv::dotenv().ok()`, so a `.env` file in the working directory is loaded first. `.env.sample` documents both variables.\n\nTwo more variables are read, but not by the application's own code:\n\n- **`RUST_LOG`** is read by `env_logger`, not by `Config`. `.env.sample:24` sets it to `realworld_axum_sqlx=debug,tower_http=debug`.\n- **`DATABASE_URL`** is also set in `.github/workflows/rust.yml:35` for CI.\n\nMy search for `env::var` and `std::env` found no other direct reads, so no other application-level variables exist.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 8347,
+              "costUsd": 0.0036343700000000005,
+              "inputTokens": 6,
+              "outputTokens": 1081,
+              "cacheCreationTokens": 10976,
+              "cacheReadTokens": 89807,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The backend reads two environment variables through the `Config` struct, plus one more read by a library.\n\n**`Config`** in `src/config.rs:21-33` is a `clap::Parser` struct. Each field has `#[clap(long, env)]`, so it can come from an environment variable or a command-line flag:\n\n- **`DATABASE_URL`** → `database_url: String`. The Postgres connection URL, used in `src/main.rs` to open the connection pool.\n- **`HMAC_KEY`** → `hmac_key: String`. The HMAC key used to sign and verify login JWTs.\n\n`src/main.rs:20` calls `dotenv::dotenv().ok()` before `Config::parse()`, so both values can also come from a `.env` file in the working directory. The `.ok()` means a missing `.env` file is not an error.\n\n**`RUST_LOG`** is not on the struct. `src/main.rs:23` calls `env_logger::init()`, and `env_logger` reads it itself. `.env.sample` documents it.\n\nI found no other `env::var` or `std::env` reads in the Rust source. `.env.sample` lists the same three variables.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 8396,
+              "costUsd": 0.00364527,
+              "inputTokens": 6,
+              "outputTokens": 1060,
+              "cacheCreationTokens": 11047,
+              "cacheReadTokens": 90527,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 2,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The backend reads two environment variables through the `Config` struct, plus `RUST_LOG` through `env_logger`.\n\n**`Config`** in `src/config.rs` derives `clap::Parser`, so each field can come from a CLI flag or an environment variable:\n\n- **`DATABASE_URL`** → `database_url: String` (`src/config.rs`, `#[clap(long, env)]`). The Postgres connection URL. `src/main.rs` passes it to `PgPoolOptions::connect`.\n- **`HMAC_KEY`** → `hmac_key: String` (`src/config.rs`, `#[clap(long, env)]`). The key used to sign and verify login JWTs.\n\n**Other variables read outside `Config`:**\n\n- **`RUST_LOG`** is read by `env_logger::init()` in `src/main.rs:23`. The application does not parse it. `.env.sample` says so explicitly.\n- **`.env` file**: `dotenv::dotenv().ok()` in `src/main.rs:20` loads a `.env` file from the working directory if one exists. Missing files are ignored.\n\nI found no other `env::var` calls or port/bind-address variables in `src/`. The server's listen address was not in the parts I read, so I haven't confirmed whether it is hardcoded.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 11851,
+              "costUsd": 0.0040869899999999995,
+              "inputTokens": 8,
+              "outputTokens": 1255,
+              "cacheCreationTokens": 11065,
+              "cacheReadTokens": 124569,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Glob": 1,
+                "Bash": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 139208,
+            "medianOutputTokens": 1238,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 10294,
+            "medianCostUsd": 0.0042,
+            "spread": {
+              "inputTokens": {
+                "min": 136832,
+                "max": 140026
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 8802,
+                "max": 11644
+              },
+              "costUsd": {
+                "min": 0.0038,
+                "max": 0.0044
+              }
+            },
+            "totalCostUsd": 0.0124,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "list_env_config": 4
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "The backend reads two environment variables through the `Config` struct. A third, `RUST_LOG`, is read by `env_logger` rather than by the app.\n\n**`Config` in `src/config.rs`** (`#[derive(clap::Parser)] pub struct Config`), with `#[clap(long, env)]` on each field, so each can also be passed as a CLI flag:\n\n| Env var | Field | Line | Purpose |\n|---|---|---|---|\n| `DATABASE_URL` | `database_url: String` | 19 | Postgres connection URL |\n| `HMAC_KEY` | `hmac_key: String` | 26 | HMAC key used to sign and verify login JWTs |\n\nThe struct's doc comment says `.env` is loaded in development. `src/main.rs:20` calls `dotenv::dotenv().ok()`, which loads `.env` from the working directory.\n\n**`RUST_LOG`** is declared only in `.env.sample` (line 24). It is not on `Config`. The sample notes that `env_logger` reads it. The current scan shows no code reading it, so it is set up for `env_logger` but not referenced in the source.\n\n**Other env references**, found in `.github/workflows/rust.yml` and not read by the app: `CARGO_TERM_COLOR`, `POSTGRES_PASSWORD`, and `APIURL`. These are CI settings.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 11644,
+              "costUsd": 0.00440895,
+              "inputTokens": 8,
+              "outputTokens": 1394,
+              "cacheCreationTokens": 12163,
+              "cacheReadTokens": 127855,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__list_env_config": 2,
+                "Bash": 2
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_env_config",
+                  "input": {},
+                  "result": "{\"query\":{\"limit\":50},\"envConfig\":[{\"kind\":\"env\",\"file\":\"src/config.rs\",\"line\":19,\"name\":\"DATABASE_URL\",\"value\":\"clap env\",\"valueType\":null,\"consumer\":\"src/config.rs\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"src/config.rs\",\"line\":26,\"name\":\"HMAC_KEY\",\"value\":\"clap env\",\"valueType\":null,\"consumer\":\"src/config.rs\",\"consumerKind\":\"File\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                },
+                {
+                  "tool": "list_env_config",
+                  "input": {
+                    "unread": true
+                  },
+                  "result": "{\"query\":{\"unread\":true,\"limit\":50},\"envConfig\":[{\"kind\":\"unread\",\"name\":\"RUST_LOG\",\"file\":\".env.sample\",\"line\":24},{\"kind\":\"unread\",\"name\":\"CARGO_TERM_COLOR\",\"file\":\".github/workflows/rust.yml\",\"line\":10},{\"kind\":\"unread\",\"name\":\"POSTGRES_PASSWORD\",\"file\":\".github/workflows/rust.yml\",\"line\":25},{\"kind\":\"unread\",\"name\":\"APIURL\",\"file\":\".github/workflows/rust.yml\",\"line\":59}],\"page\":{\"offset\":0,\"returned\":4}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The backend reads two environment variables, both declared in one struct: `Config` in `src/config.rs`.\n\n| Variable | Field | Declared at | Purpose |\n|---|---|---|---|\n| `DATABASE_URL` | `database_url: String` | `src/config.rs:19` | Postgres connection URL |\n| `HMAC_KEY` | `hmac_key: String` | `src/config.rs:26` | HMAC key for signing and verifying login JWTs |\n\n`Config` derives `clap::Parser`, and each field uses `#[clap(long, env)]`. That means each value can come from a command-line flag (`--database-url`, `--hmac-key`) or from the environment variable with the uppercased field name. The struct doc comment says environment variables are preferred for Kubernetes Secrets.\n\n`src/main.rs:20` calls `dotenv::dotenv().ok()` before parsing, so a `.env` file in the working directory is loaded for local development. A missing `.env` is ignored. The `README.md` and `Cargo.toml` (`dotenv = \"0.15.0\"`) confirm this setup.\n\nThe concentrate graph reports the same two variables. I found no other direct `env::var` reads in `src/`.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 10294,
+              "costUsd": 0.00421352,
+              "inputTokens": 8,
+              "outputTokens": 1238,
+              "cacheCreationTokens": 11588,
+              "cacheReadTokens": 127612,
+              "toolCalls": 5,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "Grep": 1,
+                "mcp__concentrate__list_env_config": 1,
+                "Bash": 1,
+                "Read": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_env_config",
+                  "input": {},
+                  "result": "{\"query\":{\"limit\":50},\"envConfig\":[{\"kind\":\"env\",\"file\":\"src/config.rs\",\"line\":19,\"name\":\"DATABASE_URL\",\"value\":\"clap env\",\"valueType\":null,\"consumer\":\"src/config.rs\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"src/config.rs\",\"line\":26,\"name\":\"HMAC_KEY\",\"value\":\"clap env\",\"valueType\":null,\"consumer\":\"src/config.rs\",\"consumerKind\":\"File\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The backend reads two environment variables, both declared in the `Config` struct in `src/config.rs:16`:\n\n| Variable | Field | Type | Declared at | Purpose |\n|---|---|---|---|---|\n| `DATABASE_URL` | `database_url` | `String` | `src/config.rs:19` | Connection URL for the Postgres database |\n| `HMAC_KEY` | `hmac_key` | `String` | `src/config.rs:26` | HMAC key for signing and verifying login JWTs |\n\nThe struct derives `clap::Parser`, and each field uses `#[clap(long, env)]`. That means each value can also be passed as a command-line flag (`--database-url`, `--hmac-key`), and clap reads the environment variable by the uppercased field name.\n\nThe `list_env_config` graph query returned the same two entries, so nothing else in the code reads environment variables directly. The struct's doc comment says a `.env` file in the working directory is supported for development, and points to `.env.sample` in the repo root. I did not check where that file gets loaded.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8802,
+              "costUsd": 0.00375745,
+              "inputTokens": 8,
+              "outputTokens": 734,
+              "cacheCreationTokens": 10639,
+              "cacheReadTokens": 126185,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_env_config": 1,
+                "Read": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_env_config",
+                  "input": {},
+                  "result": "{\"query\":{\"limit\":50},\"envConfig\":[{\"kind\":\"env\",\"file\":\"src/config.rs\",\"line\":19,\"name\":\"DATABASE_URL\",\"value\":\"clap env\",\"valueType\":null,\"consumer\":\"src/config.rs\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"src/config.rs\",\"line\":26,\"name\":\"HMAC_KEY\",\"value\":\"clap env\",\"valueType\":null,\"consumer\":\"src/config.rs\",\"consumerKind\":\"File\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rust-axum-fromrequest-impls",
+      "sample": "internet-rust-axum-realworld",
+      "category": "traits",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 100540,
+            "medianOutputTokens": 899,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 8522,
+            "medianCostUsd": 0.0035,
+            "spread": {
+              "inputTokens": {
+                "min": 100391,
+                "max": 102229
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 8083,
+                "max": 9196
+              },
+              "costUsd": {
+                "min": 0.0035,
+                "max": 0.0037
+              }
+            },
+            "totalCostUsd": 0.0107,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two types in this project implement `FromRequest`, both in `src/http/extractor.rs`:\n\n1. **`AuthUser`** (`src/http/extractor.rs:150`). Requires a valid `Authorization` header and returns `Error::Unauthorized` if it is missing.\n2. **`MaybeAuthUser`** (`src/http/extractor.rs:170`). Same as `AuthUser`, but a missing header yields `None` instead of an error.\n\nBoth use `RequestParts<Body>` and the old axum 0.5-style `async_trait` signature. There are no other `FromRequest` or `FromRequestParts` impls in the repository.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8083,
+              "costUsd": 0.0034850500000000004,
+              "inputTokens": 6,
+              "outputTokens": 899,
+              "cacheCreationTokens": 10690,
+              "cacheReadTokens": 89695,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two types in this project implement `FromRequest`, both in `src/http/extractor.rs`:\n\n1. **`AuthUser`** (line 150): requires an `Authorization` header. It returns `Error::Unauthorized` if the header is missing, otherwise it parses it through `AuthUser::from_authorization`.\n2. **`MaybeAuthUser`** (line 170): the optional version. It parses the `Authorization` header if one is present and wraps the result in `Option`-like form, so a request without the header still succeeds.\n\nBoth use `#[async_trait]`, `type Rejection = Error`, and `RequestParts<Body>`. That is the axum 0.5-era extractor API. Newer axum versions use `FromRequestParts` and `Request` instead, so the code would need changes after an axum upgrade.\n\nI searched only for `FromRequest` in `*.rs` files and for `impl` blocks matching it, so this covers the project's own code. Any impls in dependencies are not included.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9196,
+              "costUsd": 0.00348473,
+              "inputTokens": 6,
+              "outputTokens": 1104,
+              "cacheCreationTokens": 10141,
+              "cacheReadTokens": 90393,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two types implement `FromRequest` in this project, both in `src/http/extractor.rs`:\n\n- **`AuthUser`** (`src/http/extractor.rs:150`): requires a valid `Authorization: Token <jwt>` header. It rejects with `Error::Unauthorized` when the header is missing, malformed, or the JWT is invalid or expired.\n- **`MaybeAuthUser`** (`src/http/extractor.rs:170`): wraps `Option<AuthUser>`. It yields `None` when the header is absent and only rejects when a header is present but invalid.\n\nThe code uses the older axum API (`RequestParts<Body>` and `async_trait`), so it targets an axum version before 0.6. I found no other `impl FromRequest` or `FromRequestParts` blocks in the project.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8522,
+              "costUsd": 0.0037306300000000004,
+              "inputTokens": 6,
+              "outputTokens": 772,
+              "cacheCreationTokens": 12220,
+              "cacheReadTokens": 90003,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 104937,
+            "medianOutputTokens": 924,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 8416,
+            "medianCostUsd": 0.004,
+            "spread": {
+              "inputTokens": {
+                "min": 102971,
+                "max": 105676
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 7664,
+                "max": 9068
+              },
+              "costUsd": {
+                "min": 0.0036,
+                "max": 0.0042
+              }
+            },
+            "totalCostUsd": 0.0117,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Two types in this project implement `FromRequest`, both in `src/http/extractor.rs`:\n\n- **`AuthUser`** (`src/http/extractor.rs:150`): requires a valid `Authorization: Token <jwt>` header and rejects with `Error::Unauthorized` otherwise.\n- **`MaybeAuthUser`** (`src/http/extractor.rs:170`): wraps `Option<AuthUser>`. It returns `None` when the header is absent and only errors when a header is present but invalid.\n\nBoth impls use `#[async_trait]` and `type Rejection = Error`. I found these with a text search over the `.rs` files, not the code graph, so a macro-generated impl would not show up here.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8416,
+              "costUsd": 0.00395337,
+              "inputTokens": 6,
+              "outputTokens": 816,
+              "cacheCreationTokens": 13134,
+              "cacheReadTokens": 91797,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two types in this project implement `FromRequest`, both in `src/http/extractor.rs`:\n\n1. **`AuthUser`** (`src/http/extractor.rs:150`). It requires a valid `Authorization` header and returns `Error::Unauthorized` if the header is missing.\n2. **`MaybeAuthUser`** (`src/http/extractor.rs:170`). It wraps an optional `AuthUser`, so a missing or invalid header is not an error.\n\nI searched the whole project for `impl.*FromRequest`, which also matches `FromRequestParts`, and found no other implementations. Both impls use `#[async_trait]` and the axum 0.5-style `RequestParts<Body>` signature.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7664,
+              "costUsd": 0.00361759,
+              "inputTokens": 6,
+              "outputTokens": 924,
+              "cacheCreationTokens": 11186,
+              "cacheReadTokens": 91779,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two types in this project implement `FromRequest`, both in `src/http/extractor.rs`:\n\n- **`AuthUser`** (`src/http/extractor.rs:150`): requires a valid `Authorization: Token <jwt>` header. It rejects with `Error::Unauthorized` when the header is missing or the token is invalid or expired.\n- **`MaybeAuthUser`** (`src/http/extractor.rs:170`): wraps `Option<AuthUser>`. It returns `Self(None)` when the header is absent, and only rejects when a header is present but invalid.\n\nI searched the whole repository for `FromRequest` and found no other implementations. The code uses the older axum API (`RequestParts<Body>`, `#[async_trait]`), so it targets an axum version from before 0.7.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 9068,
+              "costUsd": 0.00415693,
+              "inputTokens": 6,
+              "outputTokens": 1059,
+              "cacheCreationTokens": 13527,
+              "cacheReadTokens": 92143,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rust-actix-unfavorite-route",
+      "sample": "internet-rust-actix-diesel-realworld",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 110108,
+            "medianOutputTokens": 722,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 7988,
+            "medianCostUsd": 0.0043,
+            "spread": {
+              "inputTokens": {
+                "min": 109981,
+                "max": 110236
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 7866,
+                "max": 8706
+              },
+              "costUsd": {
+                "min": 0.0043,
+                "max": 0.0049
+              }
+            },
+            "totalCostUsd": 0.0136,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The handler is **`unfavorite`** in `src/app/features/favorite/controllers.rs:21`.\n\nIt's registered in `src/app/drivers/routes.rs:59-63`, under the `/favorite` scope nested inside `/{article_title_slug}`. It gets the current user from the request, takes the slug from the path, and calls `state.di_container.favorite_usecase.unfavorite_article(...)`. The use case then calls the repository's `unfavorite_article` in `src/app/features/favorite/repositories.rs:53`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7988,
+              "costUsd": 0.00491111,
+              "inputTokens": 6,
+              "outputTokens": 714,
+              "cacheCreationTokens": 18171,
+              "cacheReadTokens": 91931,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The handler is **`unfavorite`** in `src/app/features/favorite/controllers.rs` (lines 21–32).\n\nIt's registered in `src/app/drivers/routes.rs` (lines 53–64), under the `/api/articles/{article_title_slug}/favorite` scope, with `delete().to(app::features::favorite::controllers::unfavorite)`. The handler gets the current user from the request, takes the slug from the path, and passes both to `favorite_usecase.unfavorite_article`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7866,
+              "costUsd": 0.00433651,
+              "inputTokens": 6,
+              "outputTokens": 722,
+              "cacheCreationTokens": 15119,
+              "cacheReadTokens": 95111,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The handler is `unfavorite` in `src/app/features/favorite/controllers.rs`, lines 21–32.\n\n```rust\npub async fn unfavorite(\n    state: web::Data<AppState>,\n    req: HttpRequest,\n    path: web::Path<ArticleIdSlug>,\n) -> ApiResponse {\n    let current_user = auth::get_current_user(&req)?;\n    let article_title_slug = path.into_inner();\n    state\n        .di_container\n        .favorite_usecase\n        .unfavorite_article(current_user, article_title_slug)\n}\n```\n\nIt is registered in `src/app/drivers/routes.rs` (lines 54–63). The `/favorite` scope has `post()` mapped to `favorite` and `delete()` mapped to `unfavorite`, so `DELETE /api/articles/{slug}/favorite` reaches this function. The handler takes the current user from the request, then calls `FavoriteUsecase::unfavorite_article`, which uses the favorite repository.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8706,
+              "costUsd": 0.00431275,
+              "inputTokens": 6,
+              "outputTokens": 778,
+              "cacheCreationTokens": 14860,
+              "cacheReadTokens": 95115,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 142194,
+            "medianOutputTokens": 1179,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 10542,
+            "medianCostUsd": 0.0045,
+            "spread": {
+              "inputTokens": {
+                "min": 141771,
+                "max": 177120
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 9582,
+                "max": 10886
+              },
+              "costUsd": {
+                "min": 0.0045,
+                "max": 0.0047
+              }
+            },
+            "totalCostUsd": 0.0136,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The handler is `unfavorite` in `src/app/features/favorite/controllers.rs`, at line 21.\n\nIt is wired in `src/app/drivers/routes.rs` (lines 53–63). Under `/api/articles/{article_title_slug}/favorite`, the `delete()` route points to `app::features::favorite::controllers::unfavorite`.\n\nThe handler gets the current user from the request, takes the slug from the path, and calls `unfavorite_article` on `favorite_usecase` in the DI container.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 10886,
+              "costUsd": 0.0046644,
+              "inputTokens": 10,
+              "outputTokens": 951,
+              "cacheCreationTokens": 12720,
+              "cacheReadTokens": 164390,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The handler is `unfavorite`, in `src/app/features/favorite/controllers.rs` (lines 21–32).\n\nIt is registered in `src/app/drivers/routes.rs` (lines 53–64). Under the `/api/articles/{article_title_slug}` scope, a `/favorite` sub-scope maps `DELETE` on its root to `app::features::favorite::controllers::unfavorite`.\n\nThe handler gets the current user from the request, takes the slug from the path, and calls `state.di_container.favorite_usecase.unfavorite_article(current_user, article_title_slug)`. The database delete happens in `src/app/features/favorite/repositories.rs` (around line 66, `Favorite::delete`).",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 10542,
+              "costUsd": 0.00447437,
+              "inputTokens": 8,
+              "outputTokens": 1200,
+              "cacheCreationTokens": 12926,
+              "cacheReadTokens": 128837,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The handler is `unfavorite` in `src/app/features/favorite/controllers.rs` (lines 21–32).\n\nIt's wired up in `src/app/drivers/routes.rs` (lines 53–64), inside the `/api/articles/{article_title_slug}` scope, as the `delete()` route on the `/favorite` sub-scope. It gets the current user from the request, takes the slug from the path, and calls `favorite_usecase.unfavorite_article(...)`. The POST counterpart is `favorite` in the same controller file.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 9582,
+              "costUsd": 0.00449717,
+              "inputTokens": 8,
+              "outputTokens": 1179,
+              "cacheCreationTokens": 13079,
+              "cacheReadTokens": 129107,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 3,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rust-actix-repository-impls",
+      "sample": "internet-rust-actix-diesel-realworld",
+      "category": "traits",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66232,
+            "medianOutputTokens": 729,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 6335,
+            "medianCostUsd": 0.0028,
+            "spread": {
+              "inputTokens": {
+                "min": 66232,
+                "max": 66239
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 6138,
+                "max": 7010
+              },
+              "costUsd": {
+                "min": 0.0028,
+                "max": 0.0029
+              }
+            },
+            "totalCostUsd": 0.0085,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Each of the three traits has exactly one implementing type in the project:\n\n- **`CommentRepository`** is implemented by `CommentRepositoryImpl` in `src/app/features/comment/repositories.rs:44`.\n- **`FavoriteRepository`** is implemented by `FavoriteRepositoryImpl` in `src/app/features/favorite/repositories.rs:27`.\n- **`TagRepository`** is implemented by `TagRepositoryImpl` in `src/app/features/tag/repositories.rs:20`.\n\nI searched for `impl ... Trait for` lines on a single line, so an implementation split across lines or generated by a macro would not show up. I didn't check that case.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 6138,
+              "costUsd": 0.00289628,
+              "inputTokens": 4,
+              "outputTokens": 728,
+              "cacheCreationTokens": 9840,
+              "cacheReadTokens": 56388,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Each trait has one implementation in the codebase:\n\n- **`CommentRepository`** (`src/app/features/comment/repositories.rs:44`): `CommentRepositoryImpl`\n- **`FavoriteRepository`** (`src/app/features/favorite/repositories.rs:27`): `FavoriteRepositoryImpl`\n- **`TagRepository`** (`src/app/features/tag/repositories.rs:20`): `TagRepositoryImpl`\n\nThe traits are declared in the same files (`comment/repositories.rs:13`, `favorite/repositories.rs:7`, `tag/repositories.rs:5`). I searched the whole project, so there are no test mocks or other implementations.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 7010,
+              "costUsd": 0.0027919700000000004,
+              "inputTokens": 4,
+              "outputTokens": 748,
+              "cacheCreationTokens": 9238,
+              "cacheReadTokens": 56997,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Each of the three traits has exactly one implementation in the codebase:\n\n- **`CommentRepository`** is implemented by `CommentRepositoryImpl` in `src/app/features/comment/repositories.rs:44`.\n- **`FavoriteRepository`** is implemented by `FavoriteRepositoryImpl` in `src/app/features/favorite/repositories.rs:27`.\n- **`TagRepository`** is implemented by `TagRepositoryImpl` in `src/app/features/tag/repositories.rs:20`.\n\nThe search covered the whole project for `impl ... <TraitName>` and found no other implementations, including test mocks or generic blanket impls.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 6335,
+              "costUsd": 0.0027814500000000004,
+              "inputTokens": 4,
+              "outputTokens": 729,
+              "cacheCreationTokens": 9233,
+              "cacheReadTokens": 56995,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 67995,
+            "medianOutputTokens": 798,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 6703,
+            "medianCostUsd": 0.003,
+            "spread": {
+              "inputTokens": {
+                "min": 67992,
+                "max": 68003
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 6387,
+                "max": 6781
+              },
+              "costUsd": {
+                "min": 0.003,
+                "max": 0.003
+              }
+            },
+            "totalCostUsd": 0.009,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Each of the three traits has exactly one implementing type in the codebase:\n\n| Trait | Defined in | Implemented by |\n|---|---|---|\n| `CommentRepository` | `src/app/features/comment/repositories.rs:13` | `CommentRepositoryImpl` (`src/app/features/comment/repositories.rs:44`) |\n| `FavoriteRepository` | `src/app/features/favorite/repositories.rs:7` | `FavoriteRepositoryImpl` (`src/app/features/favorite/repositories.rs:27`) |\n| `TagRepository` | `src/app/features/tag/repositories.rs:5` | `TagRepositoryImpl` (`src/app/features/tag/repositories.rs:20`) |\n\nI searched with ripgrep for `impl ... for` and the trait definitions, so this covers direct implementations only. If you want to know which code depends on these traits, I can run a caller search through the concentrate code graph.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 6387,
+              "costUsd": 0.00300078,
+              "inputTokens": 4,
+              "outputTokens": 798,
+              "cacheCreationTokens": 10113,
+              "cacheReadTokens": 57878,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Each of the three traits has exactly one implementing type, all in the same repository's `src/app/features/` tree:\n\n| Trait | Defined in | Implemented by |\n|---|---|---|\n| `CommentRepository` | `src/app/features/comment/repositories.rs:13` | `CommentRepositoryImpl` (`src/app/features/comment/repositories.rs:44`) |\n| `FavoriteRepository` | `src/app/features/favorite/repositories.rs:7` | `FavoriteRepositoryImpl` (`src/app/features/favorite/repositories.rs:27`) |\n| `TagRepository` | `src/app/features/tag/repositories.rs:5` | `TagRepositoryImpl` (`src/app/features/tag/repositories.rs:20`) |\n\nI found these with a text search over `impl` and `trait` declarations. It would not catch implementations generated by macros, so I didn't check for those.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 6703,
+              "costUsd": 0.0030025699999999995,
+              "inputTokens": 4,
+              "outputTokens": 798,
+              "cacheCreationTokens": 10122,
+              "cacheReadTokens": 57877,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Each of the three traits has one implementing type in the codebase:\n\n- **`CommentRepository`** is implemented by `CommentRepositoryImpl` in `src/app/features/comment/repositories.rs:44`.\n- **`FavoriteRepository`** is implemented by `FavoriteRepositoryImpl` in `src/app/features/favorite/repositories.rs:27`.\n- **`TagRepository`** is implemented by `TagRepositoryImpl` in `src/app/features/tag/repositories.rs:20`.\n\nI found these with a text search for `impl … for` lines naming each trait, so I haven't checked for impls spread across multiple lines or generic blanket impls.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 6781,
+              "costUsd": 0.00296875,
+              "inputTokens": 4,
+              "outputTokens": 734,
+              "cacheCreationTokens": 10113,
+              "cacheReadTokens": 57875,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rust-actix-env",
+      "sample": "internet-rust-actix-diesel-realworld",
+      "category": "env",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 140645,
+            "medianOutputTokens": 1915,
+            "medianToolCalls": 8,
+            "medianTurns": 9,
+            "medianDurationMs": 13317,
+            "medianCostUsd": 0.0051,
+            "spread": {
+              "inputTokens": {
+                "min": 137389,
+                "max": 173679
+              },
+              "toolCalls": {
+                "min": 7,
+                "max": 8
+              },
+              "durationMs": {
+                "min": 12675,
+                "max": 14099
+              },
+              "costUsd": {
+                "min": 0.0046,
+                "max": 0.0052
+              }
+            },
+            "totalCostUsd": 0.0148,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "This backend reads four environment variables, three directly and one through the `dotenv` crate. I found them by searching `src/` for `env::var` and related calls, and checked the constants in `src/constants.rs`.\n\n| Variable | Read by | Behavior if unset |\n|---|---|---|\n| `DATABASE_URL` | `establish_connection()` in `src/utils/db.rs:16` | Panics: \"DATABASE_URL must be set\" |\n| `SECRET_KEY` | `get_secret_key()` in `src/utils/token.rs:10`, called by `decode()` and `generate()` | Panics: \"SECRET_KEY must be set\" on every token encode or decode |\n| `FRONTEND_ORIGIN` | `cors()` in `src/app/drivers/middlewares/cors.rs:7` | Falls back to `\"*\"` (any origin) |\n\n`establish_connection()` calls `dotenv().ok()` first, so the variables can come from a `.env` file. The repo has a `.env.example` with `DATABASE_URL`, `FRONTEND_ORIGIN` and `SECRET_KEY`.\n\nTwo related points:\n- `src/main.rs:18` sets `RUST_LOG=actix_web=trace` with `std::env::set_var`. That is a write, not a read, so it is not a configuration input. Whatever logger reads `RUST_LOG` at startup does consume it.\n- The bind address is hard-coded as `0.0.0.0:8080` in `src/constants.rs:3`, so no variable controls the port or host.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 14099,
+              "costUsd": 0.00517602,
+              "inputTokens": 10,
+              "outputTokens": 1915,
+              "cacheCreationTokens": 13057,
+              "cacheReadTokens": 160612,
+              "toolCalls": 8,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1,
+                "Read": 5
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "This backend reads three environment variables directly, and one more indirectly through a logging library.\n\n| Variable | Read in | Behavior |\n|---|---|---|\n| `DATABASE_URL` | `establish_connection()` in `src/utils/db.rs:16` | Required. Panics with \"DATABASE_URL must be set\" if missing. Used to build the Diesel r2d2 Postgres pool. |\n| `SECRET_KEY` | `get_secret_key()` in `src/utils/token.rs:10` | Required. Panics with \"SECRET_KEY must be set\" if missing. Used as the HMAC secret for signing and verifying JWTs in `generate()` and `decode()`. |\n| `FRONTEND_ORIGIN` | `cors()` in `src/app/drivers/middlewares/cors.rs:7` | Optional. Defaults to `\"*\"` if unset. Sets the allowed CORS origin. |\n| `RUST_LOG` | `main()` in `src/main.rs:18` | Not read by the app's code. `main` sets it to `actix_web=trace` before calling `env_logger::init()`, which reads it. So this value overrides any `RUST_LOG` set in the environment. |\n\n`establish_connection()` calls `dotenv()` first, so a `.env` file in the working directory can supply `DATABASE_URL` and the other variables. `.env.example` lists `DATABASE_URL`, `FRONTEND_ORIGIN` and `SECRET_KEY`.",
+              "isError": false,
+              "turns": 9,
+              "durationMs": 13317,
+              "costUsd": 0.00505636,
+              "inputTokens": 8,
+              "outputTokens": 1921,
+              "cacheCreationTokens": 14151,
+              "cacheReadTokens": 126486,
+              "toolCalls": 8,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1,
+                "Read": 5
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The backend reads three environment variables, all through `std::env::var`. Each is named in the `env_key` module in `src/constants.rs`.\n\n| Variable | Read by | Behavior if unset |\n|---|---|---|\n| `DATABASE_URL` | `establish_connection()` in `src/utils/db.rs:14-18` | Panics: \"DATABASE_URL must be set\" |\n| `SECRET_KEY` | `get_secret_key()` in `src/utils/token.rs:9-11`, called by `generate()` and `decode()` | Panics: \"SECRET_KEY must be set\" |\n| `FRONTEND_ORIGIN` | `cors()` in `src/app/drivers/middlewares/cors.rs:6-7` | Falls back to `\"*\"` |\n\n`establish_connection()` calls `dotenv().ok()` first, so `DATABASE_URL` and `SECRET_KEY` can come from a `.env` file. `.env.example` lists all three. The `cors()` read happens without a `dotenv()` call of its own, so `FRONTEND_ORIGIN` from `.env` only takes effect if `establish_connection()` has already run. I did not check the order in `main.rs`.\n\n`src/main.rs:18` also calls `std::env::set_var(\"RUST_LOG\", \"actix_web=trace\")`. That sets the variable rather than reading it, so I left it out of the table.",
+              "isError": false,
+              "turns": 8,
+              "durationMs": 12675,
+              "costUsd": 0.00458632,
+              "inputTokens": 8,
+              "outputTokens": 1765,
+              "cacheCreationTokens": 12259,
+              "cacheReadTokens": 125122,
+              "toolCalls": 7,
+              "toolsByName": {
+                "Grep": 2,
+                "Glob": 1,
+                "Read": 4
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 173069,
+            "medianOutputTokens": 1541,
+            "medianToolCalls": 6,
+            "medianTurns": 7,
+            "medianDurationMs": 12826,
+            "medianCostUsd": 0.0047,
+            "spread": {
+              "inputTokens": {
+                "min": 138993,
+                "max": 173267
+              },
+              "toolCalls": {
+                "min": 6,
+                "max": 6
+              },
+              "durationMs": {
+                "min": 12115,
+                "max": 14441
+              },
+              "costUsd": {
+                "min": 0.0046,
+                "max": 0.0048
+              }
+            },
+            "totalCostUsd": 0.0141,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "list_env_config": 3
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "The backend reads three environment variables, all through `std::env::var`:\n\n| Variable | Read in | Function | Behavior if unset |\n|---|---|---|---|\n| `DATABASE_URL` | `src/utils/db.rs:16` | `establish_connection()` | Panics: \"DATABASE_URL must be set\". It calls `dotenv().ok()` first, so a `.env` file works. |\n| `SECRET_KEY` | `src/utils/token.rs:10` | `get_secret_key()`, called by `generate()` and `decode()` | Panics: \"SECRET_KEY must be set\". It is read on every token generate or decode, not cached. |\n| `FRONTEND_ORIGIN` | `src/app/drivers/middlewares/cors.rs:7` | `cors()` | Falls back to `\"*\"`. |\n\nNotes:\n- The concentrate graph reports only the file for each read, not the function. I got the function names by reading the source.\n- A text search for `env::var`, `std::env` and `dotenv` found no other reads. `src/main.rs:18` calls `std::env::set_var(\"RUST_LOG\", ...)`, which is a write, not a read.\n- `FRONTEND_ORIGIN` falls back to `\"*\"`, and that value is passed to `allowed_origin`. I did not check how `actix-cors` treats a literal `\"*\"` there, so I can't say whether that fallback allows all origins or none.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 12826,
+              "costUsd": 0.0045699700000000005,
+              "inputTokens": 8,
+              "outputTokens": 1541,
+              "cacheCreationTokens": 12678,
+              "cacheReadTokens": 126307,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_env_config": 1,
+                "Grep": 1,
+                "Read": 3
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_env_config",
+                  "input": {},
+                  "result": "{\"query\":{\"limit\":50},\"envConfig\":[{\"kind\":\"env\",\"file\":\"src/app/drivers/middlewares/cors.rs\",\"line\":7,\"name\":\"FRONTEND_ORIGIN\",\"value\":\"env::var\",\"valueType\":null,\"consumer\":\"src/app/drivers/middlewares/cors.rs\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"src/utils/db.rs\",\"line\":16,\"name\":\"DATABASE_URL\",\"value\":\"env::var\",\"valueType\":null,\"consumer\":\"src/utils/db.rs\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"src/utils/token.rs\",\"line\":10,\"name\":\"SECRET_KEY\",\"value\":\"env::var\",\"valueType\":null,\"consumer\":\"src/utils/token.rs\",\"consumerKind\":\"File\"}],\"page\":{\"offset\":0,\"returned\":3}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The backend reads three environment variables, and the source grep confirms the graph's list.\n\n| Variable | Read by | Where | Notes |\n|---|---|---|---|\n| `DATABASE_URL` | `establish_connection()` | `src/utils/db.rs:16` | Loads `.env` via `dotenv()` first. Panics with \"DATABASE_URL must be set\" if missing. |\n| `SECRET_KEY` | `get_secret_key()` | `src/utils/token.rs:10` | Used for JWT signing and decoding. Panics with \"SECRET_KEY must be set\" if missing. |\n| `FRONTEND_ORIGIN` | `cors()` | `src/app/drivers/middlewares/cors.rs:7` | Optional. Falls back to `\"*\"` (any origin) if unset. |\n\nTwo notes:\n\n- `src/main.rs:18` sets `RUST_LOG` to `actix_web=trace` with `std::env::set_var`. That is a write, not a read, so I left it out of the table.\n- `dotenv` is only called in `establish_connection()`, so `SECRET_KEY` and `FRONTEND_ORIGIN` are read from the real process environment. They are only picked up from a `.env` file if something loads it before they are read.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 14441,
+              "costUsd": 0.004819230000000001,
+              "inputTokens": 10,
+              "outputTokens": 1701,
+              "cacheCreationTokens": 11764,
+              "cacheReadTokens": 161493,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_env_config": 1,
+                "Grep": 4
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_env_config",
+                  "input": {
+                    "limit": 200
+                  },
+                  "result": "{\"query\":{\"limit\":200},\"envConfig\":[{\"kind\":\"env\",\"file\":\"src/app/drivers/middlewares/cors.rs\",\"line\":7,\"name\":\"FRONTEND_ORIGIN\",\"value\":\"env::var\",\"valueType\":null,\"consumer\":\"src/app/drivers/middlewares/cors.rs\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"src/utils/db.rs\",\"line\":16,\"name\":\"DATABASE_URL\",\"value\":\"env::var\",\"valueType\":null,\"consumer\":\"src/utils/db.rs\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"src/utils/token.rs\",\"line\":10,\"name\":\"SECRET_KEY\",\"value\":\"env::var\",\"valueType\":null,\"consumer\":\"src/utils/token.rs\",\"consumerKind\":\"File\"}],\"page\":{\"offset\":0,\"returned\":3}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The backend reads three environment variables, all through `std::env::var` (the `env_key` constants resolve to these names):\n\n| Variable | Read by | Behavior if missing |\n|---|---|---|\n| `DATABASE_URL` | `establish_connection()` in `src/utils/db.rs:14-16` | Panics: \"DATABASE_URL must be set\". It calls `dotenv().ok()` first, so a `.env` file works. |\n| `SECRET_KEY` | `get_secret_key()` in `src/utils/token.rs:9-10`, which is used by the JWT `generate` and `decode` functions | Panics: \"SECRET_KEY must be set\" |\n| `FRONTEND_ORIGIN` | `cors()` in `src/app/drivers/middlewares/cors.rs:6-7` | Falls back to `\"*\"`, which allows any origin |\n\nThe concentrate `list_env_config` tool reports the same three reads, but it attributes them to files rather than functions, so I confirmed the function names by reading the source.\n\nTwo other env-related lines exist but are not reads of config for the app. `src/main.rs:18` sets `RUST_LOG` to `actix_web=trace` in code, so it does not read it. The tool also reported no variables declared in a `.env` file that go unread.",
+              "isError": false,
+              "turns": 7,
+              "durationMs": 12115,
+              "costUsd": 0.004709650000000001,
+              "inputTokens": 10,
+              "outputTokens": 1501,
+              "cacheCreationTokens": 11724,
+              "cacheReadTokens": 161335,
+              "toolCalls": 6,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__list_env_config": 1,
+                "Grep": 4
+              },
+              "mcpCalls": [
+                {
+                  "tool": "list_env_config",
+                  "input": {},
+                  "result": "{\"query\":{\"limit\":50},\"envConfig\":[{\"kind\":\"env\",\"file\":\"src/app/drivers/middlewares/cors.rs\",\"line\":7,\"name\":\"FRONTEND_ORIGIN\",\"value\":\"env::var\",\"valueType\":null,\"consumer\":\"src/app/drivers/middlewares/cors.rs\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"src/utils/db.rs\",\"line\":16,\"name\":\"DATABASE_URL\",\"value\":\"env::var\",\"valueType\":null,\"consumer\":\"src/utils/db.rs\",\"consumerKind\":\"File\"},{\"kind\":\"env\",\"file\":\"src/utils/token.rs\",\"line\":10,\"name\":\"SECRET_KEY\",\"value\":\"env::var\",\"valueType\":null,\"consumer\":\"src/utils/token.rs\",\"consumerKind\":\"File\"}],\"page\":{\"offset\":0,\"returned\":3}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rust-fullstack-profile-frontend",
+      "sample": "internet-realworld-rust-fullstack",
+      "category": "frontend-api",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 191815,
+            "medianOutputTokens": 2885,
+            "medianToolCalls": 5,
+            "medianTurns": 6,
+            "medianDurationMs": 18317,
+            "medianCostUsd": 0.0069,
+            "spread": {
+              "inputTokens": {
+                "min": 191658,
+                "max": 194583
+              },
+              "toolCalls": {
+                "min": 4,
+                "max": 5
+              },
+              "durationMs": {
+                "min": 16850,
+                "max": 20014
+              },
+              "costUsd": {
+                "min": 0.0058,
+                "max": 0.0071
+              }
+            },
+            "totalCostUsd": 0.0197,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Frontend callers** of `GET /api/profiles/:username`:\n\n1. **`frontend/lib/api/user.ts`** (line 103): `UserAPI.get` runs `axios.get(`${SERVER_BASE_URL}/profiles/${username}`)`.\n2. **`frontend/pages/profile/[pid].tsx`**, two places:\n   - `Profile.getInitialProps` (line 105) calls `UserAPI.get(pid)` to load the profile before render.\n   - The `useSWR` call (line 28) fetches `${SERVER_BASE_URL}/profiles/${encodeURIComponent(pid)}` on the client, using `initialProfile` as the initial data.\n\nThe profile page's follow and unfollow handlers (lines 44–59) also hit `/profiles/${pid}`, but those are the `/follow` routes, not the GET.\n\n**Backend handler:** `get_user_profile` in **`backend/src/http/profiles.rs`**. The route is registered at line 14 with `.route(\"/api/profiles/:username\", get(get_user_profile))`. `profiles::router()` is merged into the API router in `backend/src/http/mod.rs` (line 98). The handler takes `Path(username)` and an optional auth user, runs a `query_as!` for the user's username, bio, image and a `following` flag, and returns `ProfileBody` as JSON, or `Error::NotFound` if no row matches.\n\n**Caveat:** `SERVER_BASE_URL` in `frontend/lib/utils/constant.ts` is hardcoded to `https://conduit.productionready.io/api`, a public demo backend, not this repo's Rust server. As configured, the frontend does not call the Rust handler above. Pointing it at the local backend would mean changing that constant, or making it read from an environment variable.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 20014,
+              "costUsd": 0.00707093,
+              "inputTokens": 10,
+              "outputTokens": 2893,
+              "cacheCreationTokens": 19502,
+              "cacheReadTokens": 172303,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend files that send `GET /api/profiles/:username`:**\n\n- `frontend/lib/api/user.ts:103`: `UserAPI.get(username)` calls `axios.get(\\`${SERVER_BASE_URL}/profiles/${username}\\`)`. This is the shared GET helper.\n- `frontend/pages/profile/[pid].tsx:105`: `getServerSideProps` calls `UserAPI.get(pid)` to fetch `initialProfile` on the server.\n- `frontend/pages/profile/[pid].tsx:28`: the client-side `useSWR` fetches `${SERVER_BASE_URL}/profiles/${encodeURIComponent(pid)}`.\n\n`[pid].tsx` lines 44–59 also reference the same URL, but only as SWR `mutate`/`trigger` keys for revalidation after follow and unfollow. Those revalidations re-issue the GET, but those lines are not separate requests. The follow and unfollow calls themselves go through `UserAPI.follow`/`unfollow` at `user.ts:73` and `:91`, which are POST and DELETE on `/profiles/:username/follow`.\n\n`SERVER_BASE_URL` is defined in `frontend/lib/utils/constant.js` as `https://conduit.productionready.io/api`. Unless you change it to a local server, these requests go to that hosted API, not to this repo's backend.\n\n**Backend handler:** `get_user_profile` in `backend/src/http/profiles.rs`.\n\n- The route is registered at `profiles.rs:14` in `router()`, which is `.merge`d into the app at `backend/src/http/mod.rs:98`.\n- It takes `Path(username)` and optional auth via `MaybeAuthUser`. It runs a `query_as!` on `\"user\"` and computes `following` by checking the `follow` table against the caller's user ID.\n- It returns `Error::NotFound` when no user matches, and otherwise `Json<ProfileBody>`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 18317,
+              "costUsd": 0.0068538800000000006,
+              "inputTokens": 10,
+              "outputTokens": 2885,
+              "cacheCreationTokens": 18235,
+              "cacheReadTokens": 176338,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend callers of `GET /api/profiles/:username`:**\n\n1. **`frontend/pages/profile/[pid].tsx`**\n   - Line 28: `useSWR` fetches `${SERVER_BASE_URL}/profiles/${encodeURIComponent(pid)}` on the client, using `initialProfile` as the initial data.\n   - Line 105: `Profile.getInitialProps` calls `UserAPI.get(pid)` for server-side rendering.\n2. **`frontend/lib/api/user.ts`**, line 103: defines `UserAPI.get`, which runs `axios.get(`${SERVER_BASE_URL}/profiles/${username}`)`. This is the only definition of the request, and the page reaches it through `getInitialProps`.\n\n`SERVER_BASE_URL` is `https://conduit.productionready.io/api` (`frontend/lib/utils/constant.ts:1`), so the full request is `GET https://conduit.productionready.io/api/profiles/:username`.\n\nThe other `/profiles/...` calls in those files are `POST`/`DELETE` to `/profiles/:username/follow` (`[pid].tsx` lines 44–59 and `user.ts` lines 73 and 91). They are not part of this question.\n\n**Backend handler:** `get_user_profile` in `backend/src/http/profiles.rs`.\n- The route is registered at line 14: `.route(\"/api/profiles/:username\", get(get_user_profile))`.\n- The router is merged into the app at `backend/src/http/mod.rs:98` via `profiles::router()`.\n- The function takes an optional auth extractor (`MaybeAuthUser`) so that `following` can be computed for logged-in viewers. It queries `\"user\"` by `username`, returns `Error::NotFound` if no row matches, and responds with `ProfileBody { profile }`.",
+              "isError": false,
+              "turns": 6,
+              "durationMs": 16850,
+              "costUsd": 0.00576311,
+              "inputTokens": 10,
+              "outputTokens": 2418,
+              "cacheCreationTokens": 13877,
+              "cacheReadTokens": 177771,
+              "toolCalls": 5,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 113255,
+            "medianOutputTokens": 743,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 8015,
+            "medianCostUsd": 0.0038,
+            "spread": {
+              "inputTokens": {
+                "min": 113229,
+                "max": 113340
+              },
+              "toolCalls": {
+                "min": 3,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 7457,
+                "max": 8482
+              },
+              "costUsd": {
+                "min": 0.0038,
+                "max": 0.0039
+              }
+            },
+            "totalCostUsd": 0.0115,
+            "mcpRuns": 3,
+            "mcpTools": {
+              "api_consumers": 3,
+              "route_details": 3,
+              "list_routes": 1
+            },
+            "toolSearchCalls": 3
+          },
+          "runs": [
+            {
+              "answer": "**Frontend callers (2):**\n\n- `frontend/lib/api/user.ts:103`: `axios.get` with URL `/api/profiles/${username}`, inside the `get` function.\n- `frontend/pages/profile/[pid].tsx:27`: `useSWR` with URL `/api/profiles/${encodeURIComponent(String(pid))}`, inside the `Profile` component (declared at line 18).\n\n**Backend handler:** `get_user_profile` in `backend/src/http/profiles.rs`, lines 37–73. The axum route is declared at `backend/src/http/profiles.rs:14`. It reads from the `user` and `follow` tables through `sqlx::query_as!` at line 51.\n\nThe `axios` call in `user.ts` is a generic `get` wrapper, so the graph only shows the route is reached through that function. Whatever calls `get` from there is outside this route's consumer list.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 8482,
+              "costUsd": 0.0038810600000000004,
+              "inputTokens": 6,
+              "outputTokens": 821,
+              "cacheCreationTokens": 12298,
+              "cacheReadTokens": 101036,
+              "toolCalls": 4,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 1,
+                "mcp__concentrate__list_routes": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "path": "/api/profiles/:username",
+                    "method": "GET"
+                  },
+                  "result": "{\"query\":{\"method\":\"GET\",\"path\":\"/api/profiles/:username\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"axum\",\"file\":\"backend/src/http/profiles.rs\",\"line\":14},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/profiles/${username}\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":103,\"expression\":\"axios.get\",\"function\":\"get\"},{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"axum\",\"file\":\"backend/src/http/profiles.rs\",\"line\":14},\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/profiles/${encodeURIComponent(String(pid))}\",\"match\":\"parameter\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":27,\"expression\":\"useSWR\",\"function\":\"Profile\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                },
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/profiles/:username"
+                  },
+                  "result": "{\"method\":\"GET\",\"path\":\"/api/profiles/:username\",\"routes\":[{\"method\":\"GET\",\"path\":\"/api/profiles/:username\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"axum\",\"handlerName\":\"get_user_profile\",\"file\":\"backend/src/http/profiles.rs\",\"line\":14,\"handlers\":[{\"name\":\"get_user_profile\",\"className\":null,\"file\":\"backend/src/http/profiles.rs\",\"line\":37,\"endLine\":73}],\"lifecycle\":[{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":0,\"expression\":null,\"name\":\"get_user_profile\",\"className\":null,\"file\":\"backend/src/http/profiles.rs\",\"line\":37,\"endLine\":73}],\"callChain\":[],\"dataAccess\":[{\"model\":\"follow\",\"library\":\"sqlx\",\"operation\":\"read\",\"file\":\"backend/src/http/profiles.rs\",\"line\":51,\"expression\":\"sqlx::query_as!\",\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]},{\"model\":\"user\",\"library\":\"sqlx\",\"operation\":\"read\",\"file\":\"backend/src/http/profiles.rs\",\"line\":51,\"expression\":\"sqlx::query_as!\",\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]}],\"tables\":[{\"table\":\"follow\",\"kind\":\"table\",\"library\":\"sqlx\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]},{\"table\":\"user\",\"kind\":\"table\",\"library\":\"sqlx\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]}],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/profiles/${username}\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":103,\"expression\":\"axios.get\",\"function\":\"get\"},{\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/profiles/${encodeURIComponent(String(pid))}\",\"match\":\"parameter\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":27,\"expression\":\"useSWR\",\"function\":\"Profile\"}],\"consumerComponents\":[{\"name\":\"Profile\",\"kind\":\"function\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":18,\"depth\":0,\"changedThroug… (2071 chars)",
+                  "isError": false
+                },
+                {
+                  "tool": "list_routes",
+                  "input": {
+                    "file": "profile"
+                  },
+                  "result": "{\"query\":{\"file\":\"profile\",\"limit\":50},\"routes\":[],\"page\":{\"offset\":0,\"returned\":0}}",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two frontend files request `GET /api/profiles/:username`, and the Rust handler is `get_user_profile`.\n\n**Frontend callers**\n- `frontend/pages/profile/[pid].tsx:27`: a `useSWR` call inside the `Profile` component (line 18). It requests `/api/profiles/${encodeURIComponent(String(pid))}`.\n- `frontend/lib/api/user.ts:103`: an `axios.get` call inside a function named `get`. It requests `/api/profiles/${username}`. This is a generic wrapper, so the graph does not show which page or component calls it. Other code may reach this route through it.\n\n**Backend handler**\n- The route is declared in `backend/src/http/profiles.rs:14` under axum.\n- The handler is `get_user_profile`, defined at `backend/src/http/profiles.rs:37-73`.\n- It runs two `sqlx::query_as!` reads at line 51, one on the `follow` table and one on the `user` table. It has no env vars or config.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 8015,
+              "costUsd": 0.0038175800000000005,
+              "inputTokens": 6,
+              "outputTokens": 743,
+              "cacheCreationTokens": 12175,
+              "cacheReadTokens": 101048,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "path": "/api/profiles/:username",
+                    "method": "GET"
+                  },
+                  "result": "{\"query\":{\"method\":\"GET\",\"path\":\"/api/profiles/:username\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"axum\",\"file\":\"backend/src/http/profiles.rs\",\"line\":14},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/profiles/${username}\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":103,\"expression\":\"axios.get\",\"function\":\"get\"},{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"axum\",\"file\":\"backend/src/http/profiles.rs\",\"line\":14},\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/profiles/${encodeURIComponent(String(pid))}\",\"match\":\"parameter\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":27,\"expression\":\"useSWR\",\"function\":\"Profile\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                },
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/profiles/:username"
+                  },
+                  "result": "{\"method\":\"GET\",\"path\":\"/api/profiles/:username\",\"routes\":[{\"method\":\"GET\",\"path\":\"/api/profiles/:username\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"axum\",\"handlerName\":\"get_user_profile\",\"file\":\"backend/src/http/profiles.rs\",\"line\":14,\"handlers\":[{\"name\":\"get_user_profile\",\"className\":null,\"file\":\"backend/src/http/profiles.rs\",\"line\":37,\"endLine\":73}],\"lifecycle\":[{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":0,\"expression\":null,\"name\":\"get_user_profile\",\"className\":null,\"file\":\"backend/src/http/profiles.rs\",\"line\":37,\"endLine\":73}],\"callChain\":[],\"dataAccess\":[{\"model\":\"follow\",\"library\":\"sqlx\",\"operation\":\"read\",\"file\":\"backend/src/http/profiles.rs\",\"line\":51,\"expression\":\"sqlx::query_as!\",\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]},{\"model\":\"user\",\"library\":\"sqlx\",\"operation\":\"read\",\"file\":\"backend/src/http/profiles.rs\",\"line\":51,\"expression\":\"sqlx::query_as!\",\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]}],\"tables\":[{\"table\":\"follow\",\"kind\":\"table\",\"library\":\"sqlx\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]},{\"table\":\"user\",\"kind\":\"table\",\"library\":\"sqlx\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]}],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/profiles/${username}\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":103,\"expression\":\"axios.get\",\"function\":\"get\"},{\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/profiles/${encodeURIComponent(String(pid))}\",\"match\":\"parameter\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":27,\"expression\":\"useSWR\",\"function\":\"Profile\"}],\"consumerComponents\":[{\"name\":\"Profile\",\"kind\":\"function\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":18,\"depth\":0,\"changedThroug… (2071 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Frontend callers (2):**\n\n1. `frontend/lib/api/user.ts:103`: `axios.get` with URL `/api/profiles/${username}`, inside the exported `get` function.\n2. `frontend/pages/profile/[pid].tsx:27`: `useSWR` with URL `/api/profiles/${encodeURIComponent(String(pid))}`, inside the `Profile` component (line 18). The page's dynamic segment is named `pid`, but it fills the same `:username` path parameter.\n\n**Backend handler:** `get_user_profile` in `backend/src/http/profiles.rs`, defined at lines 37–73. The route is registered at line 14 with axum. The handler reads the `follow` and `user` tables through `sqlx::query_as!` at line 51. It reads no env vars or config.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 7457,
+              "costUsd": 0.00380319,
+              "inputTokens": 6,
+              "outputTokens": 708,
+              "cacheCreationTokens": 12190,
+              "cacheReadTokens": 101059,
+              "toolCalls": 3,
+              "toolsByName": {
+                "ToolSearch": 1,
+                "mcp__concentrate__api_consumers": 1,
+                "mcp__concentrate__route_details": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "api_consumers",
+                  "input": {
+                    "path": "/api/profiles/:username",
+                    "method": "GET"
+                  },
+                  "result": "{\"query\":{\"method\":\"GET\",\"path\":\"/api/profiles/:username\",\"routeFile\":null,\"framework\":null,\"file\":null,\"client\":null,\"limit\":50},\"consumers\":[{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"axum\",\"file\":\"backend/src/http/profiles.rs\",\"line\":14},\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/profiles/${username}\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":103,\"expression\":\"axios.get\",\"function\":\"get\"},{\"route\":{\"method\":\"GET\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"axum\",\"file\":\"backend/src/http/profiles.rs\",\"line\":14},\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/profiles/${encodeURIComponent(String(pid))}\",\"match\":\"parameter\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":27,\"expression\":\"useSWR\",\"function\":\"Profile\"}],\"page\":{\"offset\":0,\"returned\":2}}",
+                  "isError": false
+                },
+                {
+                  "tool": "route_details",
+                  "input": {
+                    "method": "GET",
+                    "path": "/api/profiles/:username"
+                  },
+                  "result": "{\"method\":\"GET\",\"path\":\"/api/profiles/:username\",\"routes\":[{\"method\":\"GET\",\"path\":\"/api/profiles/:username\",\"fullPath\":\"/api/profiles/:username\",\"framework\":\"axum\",\"handlerName\":\"get_user_profile\",\"file\":\"backend/src/http/profiles.rs\",\"line\":14,\"handlers\":[{\"name\":\"get_user_profile\",\"className\":null,\"file\":\"backend/src/http/profiles.rs\",\"line\":37,\"endLine\":73}],\"lifecycle\":[{\"role\":\"handler\",\"scope\":\"route\",\"hook\":\"handler\",\"orderIndex\":0,\"expression\":null,\"name\":\"get_user_profile\",\"className\":null,\"file\":\"backend/src/http/profiles.rs\",\"line\":37,\"endLine\":73}],\"callChain\":[],\"dataAccess\":[{\"model\":\"follow\",\"library\":\"sqlx\",\"operation\":\"read\",\"file\":\"backend/src/http/profiles.rs\",\"line\":51,\"expression\":\"sqlx::query_as!\",\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]},{\"model\":\"user\",\"library\":\"sqlx\",\"operation\":\"read\",\"file\":\"backend/src/http/profiles.rs\",\"line\":51,\"expression\":\"sqlx::query_as!\",\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]}],\"tables\":[{\"table\":\"follow\",\"kind\":\"table\",\"library\":\"sqlx\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]},{\"table\":\"user\",\"kind\":\"table\",\"library\":\"sqlx\",\"reads\":[\"read\"],\"writes\":[],\"usedBy\":[{\"route\":true},{\"function\":\"get_user_profile\",\"functionFile\":\"backend/src/http/profiles.rs\"}]}],\"envVars\":[],\"config\":[],\"consumers\":[{\"client\":\"axios\",\"method\":\"GET\",\"url\":\"/api/profiles/${username}\",\"match\":\"parameter\",\"file\":\"frontend/lib/api/user.ts\",\"line\":103,\"expression\":\"axios.get\",\"function\":\"get\"},{\"client\":\"swr\",\"method\":\"GET\",\"url\":\"/api/profiles/${encodeURIComponent(String(pid))}\",\"match\":\"parameter\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":27,\"expression\":\"useSWR\",\"function\":\"Profile\"}],\"consumerComponents\":[{\"name\":\"Profile\",\"kind\":\"function\",\"file\":\"frontend/pages/profile/[pid].tsx\",\"line\":18,\"depth\":0,\"changedThroug… (2071 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

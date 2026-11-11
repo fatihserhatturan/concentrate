@@ -1,0 +1,131 @@
+{
+  "$comment": "Rust agent benchmark questions over the axum + sqlx and actix-web + diesel RealWorld backends and the Next.js frontend scanned with the axum backend: routes, callers, change impact, table users, env reads (a constant-keyed read, a clap derive), trait implementations and frontend \u2192 Rust backend requests. Expected answers were written by reading the pinned source (the .route(..) registrations, call sites of to_jwt, the SQL of the favorite queries, the clap fields and env::var(env_key::X) reads, the impl blocks, the frontend's API calls), not from Concentrate output. Scoring as in questions.json.",
+  "questions": [
+    {
+      "id": "rust-axum-favorite-route",
+      "sample": "internet-rust-axum-realworld",
+      "category": "routes",
+      "question": "In this axum backend, which handler functions serve POST and DELETE on /api/articles/:slug/favorite?",
+      "expected": {
+        "mustInclude": [
+          "favorite_article",
+          "unfavorite_article"
+        ]
+      }
+    },
+    {
+      "id": "rust-axum-to-jwt-callers",
+      "sample": "internet-rust-axum-realworld",
+      "category": "callers",
+      "question": "Which functions call AuthUser::to_jwt (the `to_jwt` method) in src/?",
+      "expected": {
+        "mustInclude": [
+          "create_user",
+          "login_user",
+          "get_current_user",
+          "update_user"
+        ]
+      }
+    },
+    {
+      "id": "rust-axum-to-jwt-impact",
+      "sample": "internet-rust-axum-realworld",
+      "category": "impact",
+      "question": "If the signature of AuthUser::to_jwt changes, which HTTP routes (method and path) are affected?",
+      "expected": {
+        "mustInclude": [
+          "/api/users/login",
+          "/api/user"
+        ]
+      }
+    },
+    {
+      "id": "rust-axum-favorite-table",
+      "sample": "internet-rust-axum-realworld",
+      "category": "data",
+      "question": "Which functions write to (insert into or delete from) the article_favorite table?",
+      "expected": {
+        "mustInclude": [
+          "favorite_article",
+          "unfavorite_article"
+        ]
+      }
+    },
+    {
+      "id": "rust-axum-env",
+      "sample": "internet-rust-axum-realworld",
+      "category": "env",
+      "question": "Which environment variables does this backend read, and which struct declares them?",
+      "expected": {
+        "mustInclude": [
+          "DATABASE_URL",
+          "HMAC_KEY",
+          "Config"
+        ]
+      }
+    },
+    {
+      "id": "rust-axum-fromrequest-impls",
+      "sample": "internet-rust-axum-realworld",
+      "category": "traits",
+      "question": "Which types implement the FromRequest trait in this project?",
+      "expected": {
+        "mustInclude": [
+          "AuthUser",
+          "MaybeAuthUser"
+        ]
+      }
+    },
+    {
+      "id": "rust-actix-unfavorite-route",
+      "sample": "internet-rust-actix-diesel-realworld",
+      "category": "routes",
+      "question": "In this actix-web backend, which handler function serves DELETE /api/articles/{article_title_slug}/favorite, and in which file?",
+      "expected": {
+        "mustInclude": [
+          "unfavorite",
+          "favorite/controllers.rs"
+        ]
+      }
+    },
+    {
+      "id": "rust-actix-repository-impls",
+      "sample": "internet-rust-actix-diesel-realworld",
+      "category": "traits",
+      "question": "Which types implement the CommentRepository, FavoriteRepository and TagRepository traits?",
+      "expected": {
+        "mustInclude": [
+          "CommentRepositoryImpl",
+          "FavoriteRepositoryImpl",
+          "TagRepositoryImpl"
+        ]
+      }
+    },
+    {
+      "id": "rust-actix-env",
+      "sample": "internet-rust-actix-diesel-realworld",
+      "category": "env",
+      "question": "Which environment variables does this backend read? Name each variable and the function that reads it.",
+      "expected": {
+        "mustInclude": [
+          "DATABASE_URL",
+          "SECRET_KEY",
+          "FRONTEND_ORIGIN"
+        ]
+      }
+    },
+    {
+      "id": "rust-fullstack-profile-frontend",
+      "sample": "internet-realworld-rust-fullstack",
+      "category": "frontend-api",
+      "question": "Which frontend files request GET /api/profiles/:username, and which Rust function in the backend handles that route?",
+      "expected": {
+        "mustInclude": [
+          "user.ts",
+          "[pid].tsx",
+          "get_user_profile"
+        ]
+      }
+    }
+  ]
+}
