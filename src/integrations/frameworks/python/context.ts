@@ -5,6 +5,9 @@ import { createPythonCallIndex, type PythonCallIndex } from "../../../core/scan/
 import { readPythonProjects } from "../../languages/python/project.js";
 import { createPythonResolver, type PythonResolver } from "../../languages/python/resolution.js";
 import type { PyCall, PyFacts, PyList } from "./facts.js";
+import type { PyEnvFacts } from "./env-config.js";
+import type { PyDataFacts } from "./data-facts.js";
+import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
 
 export type Decorator = { name: string; args: string[]; kwargs: Record<string, string>; positional: string[]; line: number };
 
@@ -13,6 +16,10 @@ export type PythonContext = {
   fileIds: Map<string, string>;
   relativeOf: Map<string, string>;
   factsByFile: Map<string, PyFacts>;
+  // What the env and data plugins recorded per file (removed from the File nodes).
+  envByFile: Map<string, PyEnvFacts>;
+  dataByFile: Map<string, PyDataFacts>;
+  relationshipIndex: ResolutionRelationshipIndex;
   index: PythonCallIndex;
   resolver: PythonResolver;
   decoratorsOf: (functionId: string) => Decorator[];
@@ -36,6 +43,8 @@ export type PythonContext = {
 // and the decorators of each function.
 export async function createPythonContext(graph: IGraphContributor, rootPath: string): Promise<PythonContext | null> {
   const factsByFile = new Map<string, PyFacts>();
+  const envByFile = new Map<string, PyEnvFacts>();
+  const dataByFile = new Map<string, PyDataFacts>();
   const fileIds = new Map<string, string>();
   const relativeOf = new Map<string, string>();
   for (const node of graph.nodes) {
@@ -48,6 +57,14 @@ export async function createPythonContext(graph: IGraphContributor, rootPath: st
     if (typeof node.properties.pyFacts === "string") {
       factsByFile.set(node.id, JSON.parse(node.properties.pyFacts) as PyFacts);
       delete node.properties.pyFacts;
+    }
+    if (typeof node.properties.pyEnv === "string") {
+      envByFile.set(node.id, JSON.parse(node.properties.pyEnv) as PyEnvFacts);
+      delete node.properties.pyEnv;
+    }
+    if (typeof node.properties.pyData === "string") {
+      dataByFile.set(node.id, JSON.parse(node.properties.pyData) as PyDataFacts);
+      delete node.properties.pyData;
     }
   }
   const hasPython = [...fileIds.keys()].some((file) => file.endsWith(".py"));
@@ -155,6 +172,9 @@ export async function createPythonContext(graph: IGraphContributor, rootPath: st
     fileIds,
     relativeOf,
     factsByFile,
+    envByFile,
+    dataByFile,
+    relationshipIndex,
     index,
     resolver,
     decoratorsOf: (functionId) => decoratorsByFunction.get(functionId) ?? [],

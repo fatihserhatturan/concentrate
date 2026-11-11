@@ -135,7 +135,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "find_callers",
-    description: "Call sites resolving to functions or methods of this name; a caller is a function, a method (with className) or module-level code. A call through an interface reaches every implementation (targetClassName). unresolvedCalls and completeness say whether any call by that name is unresolved.",
+    description: "Call sites resolving to functions or methods of this name; a caller is a function, a method (with className) or module-level code. A call through an interface reaches every implementation (targetClassName). unresolvedCalls and completeness flag unresolved calls.",
     inputSchema: objectSchema({
       name: {
         type: "string",
@@ -271,7 +271,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_data_access",
-    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, bun, sqlc, sql, sqlx) with the files, functions, routes and entrypoints running them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
+    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, bun, sqlc, sql, sqlx; Python SQLAlchemy, Django, SQL) with the files, functions, routes and entrypoints running them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
     inputSchema: objectSchema({
       model: {
         type: "string",
@@ -297,10 +297,10 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_tables",
-    description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex; Go gorm, ent, sqlc; SQL migrations) with columns, indexes, migration history, mapped models, relations, and the routes and entrypoints using each.",
+    description: "Database tables, views and collections (Prisma, TypeORM, Mongoose, Drizzle, Knex; Go gorm, ent, sqlc; Python SQLAlchemy, Django; SQL migrations) with columns, indexes, migration history, mapped models, relations, and the routes and entrypoints using each.",
     inputSchema: objectSchema({
       name: { type: "string", description: "Table name substring." },
-      library: { type: "string", description: "prisma, typeorm, mongoose, drizzle, knex, gorm, ent, bun, sqlc or sql." },
+      library: { type: "string", description: "prisma, typeorm, mongoose, drizzle, knex, gorm, ent, bun, sqlc, sqlalchemy, django or sql." },
       limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
     }),
   },
@@ -315,7 +315,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_stores",
-    description: "Frontend state stores (Pinia, Redux Toolkit, Zustand, Jotai, Svelte) with state, getters, actions, defining functions, and the functions that read or write them (with members used). Components and pages a change reaches: impact_of.",
+    description: "Frontend state stores (Pinia, Redux Toolkit, Zustand, Jotai, Svelte) with state, getters, actions, defining functions, and the functions that read or write them (with members used).",
     inputSchema: objectSchema({
       name: { type: "string", description: "Store name or hook substring." },
       library: { type: "string", description: "pinia, redux, zustand, jotai or svelte." },
