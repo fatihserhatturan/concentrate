@@ -4,6 +4,7 @@ import { loadFunctions, matchesFileOrDirectory } from "../agent-tools/graph.js";
 import type { PageWindow } from "../paging.js";
 import { byFileAndLine, type Declaration, type DeclarationKind, describeDeclaration, ExportIndex, loadDeclarations, loadImports } from "./model.js";
 import { DECLARATION_KINDS } from "./search.js";
+import { describeStyle, loadStyleTargets, loadStyleUses, parseStyleSymbol } from "../agent-tools/styles.js";
 
 type Row = Record<string, unknown>;
 
@@ -30,6 +31,7 @@ const MAX_DECLARATIONS = 20;
 export async function findReferences(engine: IQueryEngine, args: Record<string, unknown>, window: PageWindow) {
   const symbol = requiredString(args.symbol, "symbol");
   const file = optionalString(args.file);
+  if (parseStyleSymbol(symbol)) return findStyleReferences(engine, symbol, file, window);
   const kind = optionalString(args.kind);
   if (kind && !DECLARATION_KINDS.includes(kind as DeclarationKind)) {
     throw new Error(`Unknown kind ${JSON.stringify(kind)}; expected one of ${DECLARATION_KINDS.join(", ")}`);
@@ -232,4 +234,47 @@ export async function findReferences(engine: IQueryEngine, args: Record<string, 
 
 async function query(engine: IQueryEngine, ids: readonly string[], cypher: string): Promise<Row[]> {
   return ids.length === 0 ? [] : engine.query(cypher, { ids: [...ids] }) as Promise<Row[]>;
+}
+
+// `.btn`, `#hero` and `--color-brand`: the rules that select the class or id,
+// and the components, functions and files that use it (`possible: true` for a
+// class matched by name only, from a sheet the file does not import).
+async function findStyleReferences(engine: IQueryEngine, symbol: string, file: string | undefined, window: PageWindow) {
+  const targets = await loadStyleTargets(engine, symbol, file);
+  if (targets.length === 0) {
+    return { symbol, declarations: [], note: "No class, id or custom property matched. Use search_symbols for a fuzzy search." };
+  }
+  const several = targets.length > 1;
+  const byId = new Map(targets.map((target) => [target.id, target]));
+  const label = (id: string) => (several ? { target: `${byId.get(id)?.file}:${byId.get(id)?.line ?? "?"}` } : {});
+  const { uses, rules } = await loadStyleUses(engine, targets.map((target) => target.id));
+  const references: Reference[] = [
+    ...rules.map((row): Reference => ({
+      kind: "rule",
+      file: String(row.file),
+      line: typeof row.line === "number" ? row.line : null,
+      detail: String(row.selector ?? ""),
+      ...label(String(row.style)),
+    })),
+    ...uses.map((use): Reference => ({
+      kind: use.expression?.startsWith("var(") ? "var" : `${use.as}-use`,
+      file: use.file ?? "",
+      line: use.line,
+      ...(use.as === "file" ? {} : { from: use.name }),
+      detail: [use.expression, use.match ? `${use.match} match` : null].filter(Boolean).join(", "),
+      ...(use.match === "name" ? { possible: true as const } : {}),
+      ...label(use.style),
+    })),
+  ];
+  references.sort((a, b) => byFileAndLine(a, b) || a.kind.localeCompare(b.kind));
+  const counts: Record<string, number> = {};
+  for (const reference of references) counts[reference.kind] = (counts[reference.kind] ?? 0) + 1;
+  return {
+    symbol,
+    declarations: targets.slice(0, MAX_DECLARATIONS).map(describeStyle),
+    total: references.length,
+    counts,
+    references: window.take(references),
+    note: "rule: a rule whose selector holds the class or id; component-use, function-use and file-use: className, class, :class, styles.x and var() uses. match module is exact; import and name match by class name only, and possible: true marks name matches from a sheet the file does not import.",
+  };
 }

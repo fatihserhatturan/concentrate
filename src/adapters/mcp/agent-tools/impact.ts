@@ -6,6 +6,7 @@ import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalInteger, optionalString } from "../args.js";
 import type { PageWindow } from "../paging.js";
 import { loadRunners } from "./runners.js";
+import { isStyleFilePath, loadStyleTargets, parseStyleSymbol, styleImpact } from "./styles.js";
 import { callerCompleteness, computeImpact, loadFunctions, loadSymbols, matchesFileOrDirectory, type SymbolInfo, unresolvedCalls } from "./graph.js";
 
 const run = promisify(execFile);
@@ -19,6 +20,21 @@ export async function impactOf(engine: IQueryEngine, args: Record<string, unknow
   const file = optionalString(args.file);
   if (!symbol && !file) throw new Error("impact_of needs a symbol or a file argument");
   const maxDepth = optionalInteger(args.maxDepth, 5, 1, 20);
+
+  // `.btn`, `#hero`, `--color-brand`, or a style sheet alone: who uses it.
+  if (parseStyleSymbol(symbol) || (!symbol && isStyleFilePath(file))) {
+    const targets = await loadStyleTargets(engine, symbol, file);
+    if (targets.length === 0) {
+      return { symbol: symbol ?? null, file: file ?? null, styles: [], note: "No class, id or custom property matched. Use search_symbols or find_definitions to look the name up." };
+    }
+    return {
+      symbol: symbol ?? null,
+      file: file ?? null,
+      maxDepth,
+      ...await styleImpact(engine, targets, maxDepth, window.limit),
+      note: "users: components, functions and files naming the style; match module is exact, import and name are matches by class name only. A custom property reaches the components of the style files that use it and of the files importing them.",
+    };
+  }
 
   const functions = await loadFunctions(engine);
   const seedIds = [...functions.values()]

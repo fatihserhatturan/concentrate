@@ -1,0 +1,1853 @@
+{
+  "sample": "internet-remark42-frontend",
+  "$comment": "Class links of the CSS Modules components of remark42's Preact frontend (pinned at the same commit as internet-go-remark42, whose smoke entry excludes frontend/**; the Go backend and site are excluded here). Extracted from the sample source by a separate regex pass over every .ts/.tsx file under frontend/apps/remark42/app/components and common (each default import of a relative *.css file, then every styles.x and styles['x'] member whose class exists in that file), and a second pass over className=\"...\" and the string literals of className={...} expressions for the project's non-module stylesheets (a class of a sheet the file imports is an import match, otherwise a name match; the operand of theme === 'dark' is a comparison, not a class, and is not labeled). Both passes were checked by reading the dropdown, spinner, tooltip, avatar, button, root, thread and comment components; not from Concentrate output. Computed members such as styles[position] and the three members of classes the CSS does not declare (auth.tsx:208 form, comment-votes.tsx:61 downVoteIcon, telegram-link.tsx:51 error) are not labeled.",
+  "styleLinks": {
+    "scope": [
+      "frontend/apps/remark42/app/components/",
+      "frontend/apps/remark42/app/common/"
+    ],
+    "items": [
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.test.tsx",
+        "line": 52,
+        "style": ".adminAction",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.test.tsx",
+        "line": 63,
+        "style": ".adminAction",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.test.tsx",
+        "line": 76,
+        "style": ".column",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.test.tsx",
+        "line": 90,
+        "style": ".adminAction",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 63,
+        "style": ".user",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 65,
+        "style": ".userButton",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 69,
+        "style": ".userAvatar",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 74,
+        "style": ".userLogoutButton",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 86,
+        "style": ".column",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 107,
+        "style": ".column",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 117,
+        "style": ".adminAction",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 135,
+        "style": ".adminAction",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 154,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 155,
+        "style": ".column",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 158,
+        "style": ".column",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth-panel/auth-panel.tsx",
+        "line": 158,
+        "style": ".columnSeparated",
+        "styleFile": "frontend/apps/remark42/app/components/auth-panel/auth-panel.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 191,
+        "style": ".error",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 199,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 204,
+        "style": ".dropdown",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 206,
+        "style": ".error",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 211,
+        "style": ".row",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 212,
+        "style": ".backButton",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 215,
+        "style": ".backButtonArrow",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 234,
+        "style": ".closeButton",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 250,
+        "style": ".row",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 251,
+        "style": ".backButton",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 254,
+        "style": ".backButtonArrow",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 273,
+        "style": ".closeButton",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 280,
+        "style": ".row",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 283,
+        "style": ".textarea",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 294,
+        "style": ".title",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 301,
+        "style": ".divider",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 306,
+        "style": ".title",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 308,
+        "style": ".tabs",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 312,
+        "style": ".radio",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 320,
+        "style": ".provider",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 327,
+        "style": ".row",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 345,
+        "style": ".row",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/auth.tsx",
+        "line": 357,
+        "style": ".honeypot",
+        "styleFile": "frontend/apps/remark42/app/components/auth/auth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/components/button.tsx",
+        "line": 18,
+        "style": ".button",
+        "styleFile": "frontend/apps/remark42/app/components/auth/components/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/components/button.tsx",
+        "line": 19,
+        "style": ".selected",
+        "styleFile": "frontend/apps/remark42/app/components/auth/components/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/components/button.tsx",
+        "line": 24,
+        "style": ".suffix",
+        "styleFile": "frontend/apps/remark42/app/components/auth/components/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/components/oauth.tsx",
+        "line": 29,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/auth/components/oauth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/components/oauth.tsx",
+        "line": 34,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/auth/components/oauth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/auth/components/oauth.tsx",
+        "line": 40,
+        "style": ".button",
+        "styleFile": "frontend/apps/remark42/app/components/auth/components/oauth.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/avatar/avatar.tsx",
+        "line": 16,
+        "style": ".avatar",
+        "styleFile": "frontend/apps/remark42/app/components/avatar/avatar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/avatar/avatar.tsx",
+        "line": 16,
+        "style": ".avatarGhost",
+        "styleFile": "frontend/apps/remark42/app/components/avatar/avatar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/button/button.tsx",
+        "line": 9,
+        "style": ".kindPrimary",
+        "styleFile": "frontend/apps/remark42/app/components/button/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/button/button.tsx",
+        "line": 10,
+        "style": ".kindSecondary",
+        "styleFile": "frontend/apps/remark42/app/components/button/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/button/button.tsx",
+        "line": 11,
+        "style": ".kindLink",
+        "styleFile": "frontend/apps/remark42/app/components/button/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/button/button.tsx",
+        "line": 15,
+        "style": ".sizeMiddle",
+        "styleFile": "frontend/apps/remark42/app/components/button/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/button/button.tsx",
+        "line": 16,
+        "style": ".sizeLarge",
+        "styleFile": "frontend/apps/remark42/app/components/button/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/button/button.tsx",
+        "line": 31,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/button/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/button/button.tsx",
+        "line": 34,
+        "style": ".themeDark",
+        "styleFile": "frontend/apps/remark42/app/components/button/button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.test.tsx",
+        "line": 78,
+        "style": ".title",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.test.tsx",
+        "line": 86,
+        "style": ".subscribed",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 83,
+        "style": ".title",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 108,
+        "style": ".tokenInput",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 243,
+        "style": ".subscribed",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 245,
+        "style": ".button",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 254,
+        "style": ".unsubscribed",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 259,
+        "style": ".button",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 271,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 271,
+        "style": ".themeDark",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 271,
+        "style": ".themeLight",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 277,
+        "style": ".error",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 282,
+        "style": ".button",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/comment-form__subscribe-by-email.tsx",
+        "line": 288,
+        "style": ".preloader",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-email/subscribe-by-email.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-rss/comment-form__subscribe-by-rss.test.tsx",
+        "line": 24,
+        "style": ".link",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-rss/subscribe-by-rss.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-rss/comment-form__subscribe-by-rss.test.tsx",
+        "line": 29,
+        "style": ".link",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-rss/subscribe-by-rss.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-rss/comment-form__subscribe-by-rss.tsx",
+        "line": 55,
+        "style": ".rssDropdown",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-rss/subscribe-by-rss.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-rss/comment-form__subscribe-by-rss.tsx",
+        "line": 60,
+        "style": ".link",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-rss/subscribe-by-rss.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-telegram/comment-form__subscribe-by-telegram.tsx",
+        "line": 150,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-telegram/comment-form__subscribe-by-telegram.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-telegram/comment-form__subscribe-by-telegram.tsx",
+        "line": 151,
+        "style": ".preloader",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/__subscribe-by-telegram/comment-form__subscribe-by-telegram.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 372,
+        "style": ".markdown",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 378,
+        "style": ".markdownLink",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 442,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 443,
+        "style": ".themeDark",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 443,
+        "style": ".themeLight",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 444,
+        "style": ".typeReply",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 445,
+        "style": ".simple",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 455,
+        "style": ".controlPanel",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 464,
+        "style": ".fieldWrapper",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 470,
+        "style": ".field",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 481,
+        "style": ".counter",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 486,
+        "style": ".error",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 491,
+        "style": ".actions",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 500,
+        "style": ".button",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 507,
+        "style": ".button",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 513,
+        "style": ".rss",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 531,
+        "style": ".previewWrapper",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 533,
+        "style": ".preview",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/comment-form.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar-icons/bold-icon.tsx",
+        "line": 7,
+        "style": ".icon",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar-icons/code-icon.tsx",
+        "line": 7,
+        "style": ".icon",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar-icons/header-icon.tsx",
+        "line": 7,
+        "style": ".icon",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar-icons/image-icon.tsx",
+        "line": 7,
+        "style": ".icon",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar-icons/italic-icon.tsx",
+        "line": 7,
+        "style": ".icon",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar-icons/link-icon.tsx",
+        "line": 7,
+        "style": ".icon",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar-icons/ordered-list-icon.tsx",
+        "line": 7,
+        "style": ".icon",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar-icons/quote-icon.tsx",
+        "line": 7,
+        "style": ".icon",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar-icons/unordered-list-icon.tsx",
+        "line": 7,
+        "style": ".icon",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 101,
+        "style": ".toolbar",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 102,
+        "style": ".group",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 103,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 106,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 109,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 113,
+        "style": ".group",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 114,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 117,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 120,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 124,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 125,
+        "style": ".fileInput",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 130,
+        "style": ".group",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 131,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.tsx",
+        "line": 134,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/markdown-toolbar.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/text-expander.tsx",
+        "line": 22,
+        "style": ".suggester",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/text-expander.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/text-expander.tsx",
+        "line": 22,
+        "style": ".suggesterDark",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/text-expander.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/text-expander.tsx",
+        "line": 28,
+        "style": ".suggesterItem",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/text-expander.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/text-expander.tsx",
+        "line": 28,
+        "style": ".suggesterItemDark",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/text-expander.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/text-expander.tsx",
+        "line": 31,
+        "style": ".emojiResult",
+        "styleFile": "frontend/apps/remark42/app/components/comment-form/text-expander.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-actions.tsx",
+        "line": 65,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-actions.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-actions.tsx",
+        "line": 80,
+        "style": ".countdown",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-actions.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-actions.tsx",
+        "line": 89,
+        "style": ".additionalActions",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-actions.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 52,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 52,
+        "style": ".rootDisabled",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 55,
+        "style": ".voteButton",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 55,
+        "style": ".downVoteButton",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 55,
+        "style": ".downVoteButtonActive",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 65,
+        "style": ".errorMessage",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 80,
+        "style": ".votes",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 81,
+        "style": ".votesNegative",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 82,
+        "style": ".votesPositive",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 90,
+        "style": ".voteButton",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 90,
+        "style": ".upVoteButton",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 90,
+        "style": ".upVoteButtonActive",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment-votes.tsx",
+        "line": 96,
+        "style": ".upVoteIcon",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment-votes.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 326,
+        "style": ".viewAdmin",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 328,
+        "style": ".viewUser",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 330,
+        "style": ".viewPreview",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 334,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 335,
+        "style": ".themeDark",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 335,
+        "style": ".themeLight",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 337,
+        "style": ".useless",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 338,
+        "style": ".replying",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 339,
+        "style": ".editing",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 340,
+        "style": ".level6",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 341,
+        "style": ".collapsed",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 348,
+        "style": ".body",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 350,
+        "style": ".title",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 351,
+        "style": ".titleLink",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 356,
+        "style": ".info",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 360,
+        "style": ".username",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 366,
+        "style": ".text",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 395,
+        "style": ".title",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 396,
+        "style": ".titleLink",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 401,
+        "style": ".info",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 403,
+        "style": ".avatar",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 408,
+        "style": ".user",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 410,
+        "style": ".username",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 416,
+        "style": ".verificationButton",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 422,
+        "style": ".verificationIcon",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 422,
+        "style": ".verificationIconInactive",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 427,
+        "style": ".verificationIcon",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 439,
+        "style": ".time",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 445,
+        "style": ".threadStarterAnchor",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 460,
+        "style": ".status",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 466,
+        "style": ".status",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 480,
+        "style": ".body",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 483,
+        "style": ".text",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 526,
+        "style": ".input",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 544,
+        "style": ".input",
+        "styleFile": "frontend/apps/remark42/app/components/comment/comment.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/dropdown/__item/dropdown__item.tsx",
+        "line": 12,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/dropdown/__item/dropdown-item.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/dropdown/__item/dropdown__item.tsx",
+        "line": 12,
+        "style": ".separator",
+        "styleFile": "frontend/apps/remark42/app/components/dropdown/__item/dropdown-item.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/dropdown/dropdown.tsx",
+        "line": 224,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/dropdown/dropdown.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/dropdown/dropdown.tsx",
+        "line": 225,
+        "style": ".active",
+        "styleFile": "frontend/apps/remark42/app/components/dropdown/dropdown.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/dropdown/dropdown.tsx",
+        "line": 226,
+        "style": ".themeDark",
+        "styleFile": "frontend/apps/remark42/app/components/dropdown/dropdown.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/dropdown/dropdown.tsx",
+        "line": 226,
+        "style": ".themeLight",
+        "styleFile": "frontend/apps/remark42/app/components/dropdown/dropdown.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/dropdown/dropdown.tsx",
+        "line": 237,
+        "style": ".title",
+        "styleFile": "frontend/apps/remark42/app/components/dropdown/dropdown.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/dropdown/dropdown.tsx",
+        "line": 246,
+        "style": ".content",
+        "styleFile": "frontend/apps/remark42/app/components/dropdown/dropdown.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/dropdown/dropdown.tsx",
+        "line": 252,
+        "style": ".items",
+        "styleFile": "frontend/apps/remark42/app/components/dropdown/dropdown.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/icon-button/icon-button.tsx",
+        "line": 11,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/icon-button/icon-button.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/input/input.tsx",
+        "line": 12,
+        "style": ".input",
+        "styleFile": "frontend/apps/remark42/app/components/input/input.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/input/input.tsx",
+        "line": 12,
+        "style": ".invalid",
+        "styleFile": "frontend/apps/remark42/app/components/input/input.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/list-comments/list-comments.tsx",
+        "line": 26,
+        "style": ".item",
+        "styleFile": "frontend/apps/remark42/app/components/list-comments/list-comments.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/components/counter/counter.tsx",
+        "line": 10,
+        "style": ".container",
+        "styleFile": "frontend/apps/remark42/app/components/profile/components/counter/counter.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 79,
+        "style": ".rootAppear",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 80,
+        "style": ".rootDisappear",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 125,
+        "style": ".rootAppear",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 137,
+        "style": ".titleWrapper",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 138,
+        "style": ".title",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 146,
+        "style": ".counterWrapper",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 164,
+        "style": ".loadMoreWrapper",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 176,
+        "style": ".emptyState",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 182,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 186,
+        "style": ".closeButtonWrapper",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 191,
+        "style": ".sidebar",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 192,
+        "style": ".header",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 193,
+        "style": ".avatar",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 196,
+        "style": ".info",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 197,
+        "style": ".name",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 198,
+        "style": ".id",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 202,
+        "style": ".signout",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 211,
+        "style": ".content",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 213,
+        "style": ".errorContent",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 214,
+        "style": ".error",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 222,
+        "style": ".preloader",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/profile/profile.tsx",
+        "line": 226,
+        "style": ".footer",
+        "styleFile": "frontend/apps/remark42/app/components/profile/profile.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 230,
+        "style": ".preloader",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 268,
+        "style": ".input",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 278,
+        "style": ".pinnedComments",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 291,
+        "style": ".pinnedComment",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 296,
+        "style": ".sortPicker",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 325,
+        "style": ".threads",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 327,
+        "style": ".preloader",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 333,
+        "style": ".moreComments",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 344,
+        "style": ".copyrightLink",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 358,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 358,
+        "style": ".themeDark",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 358,
+        "style": ".themeLight",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/root/root.tsx",
+        "line": 362,
+        "style": ".copyright",
+        "styleFile": "frontend/apps/remark42/app/components/root/root.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/select/select.tsx",
+        "line": 36,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/select/select.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/select/select.tsx",
+        "line": 37,
+        "style": ".rootFocused",
+        "styleFile": "frontend/apps/remark42/app/components/select/select.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/select/select.tsx",
+        "line": 43,
+        "style": ".arrow",
+        "styleFile": "frontend/apps/remark42/app/components/select/select.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/select/select.tsx",
+        "line": 48,
+        "style": ".select",
+        "styleFile": "frontend/apps/remark42/app/components/select/select.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 103,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 103,
+        "style": ".themeDark",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 103,
+        "style": ".themeLight",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 104,
+        "style": ".section",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 109,
+        "style": ".dimmed",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 114,
+        "style": ".list",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 119,
+        "style": ".listItem",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 120,
+        "style": ".username",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 120,
+        "style": ".invisible",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 124,
+        "style": ".action",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 128,
+        "style": ".action",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 133,
+        "style": ".userId",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 144,
+        "style": ".section",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 150,
+        "style": ".dimmed",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 156,
+        "style": ".list",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 161,
+        "style": ".listItem",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 162,
+        "style": ".username",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 162,
+        "style": ".invisible",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 170,
+        "style": ".action",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 175,
+        "style": ".action",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/settings/settings.tsx",
+        "line": 180,
+        "style": ".userId",
+        "styleFile": "frontend/apps/remark42/app/components/settings/settings.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/spinner/spinner.tsx",
+        "line": 17,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/spinner/spinner.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/spinner/spinner.tsx",
+        "line": 17,
+        "style": ".dark",
+        "styleFile": "frontend/apps/remark42/app/components/spinner/spinner.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/telegram/telegram-link.tsx",
+        "line": 30,
+        "style": ".telegram",
+        "styleFile": "frontend/apps/remark42/app/components/telegram/telegram-link.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/telegram/telegram-link.tsx",
+        "line": 47,
+        "style": ".telegramQR",
+        "styleFile": "frontend/apps/remark42/app/components/telegram/telegram-link.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/telegram/telegram-link.tsx",
+        "line": 56,
+        "style": ".button",
+        "styleFile": "frontend/apps/remark42/app/components/telegram/telegram-link.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/thread/thread.tsx",
+        "line": 54,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/thread/thread.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/thread/thread.tsx",
+        "line": 55,
+        "style": ".indented",
+        "styleFile": "frontend/apps/remark42/app/components/thread/thread.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/thread/thread.tsx",
+        "line": 56,
+        "style": ".level6",
+        "styleFile": "frontend/apps/remark42/app/components/thread/thread.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/thread/thread.tsx",
+        "line": 57,
+        "style": ".themeDark",
+        "styleFile": "frontend/apps/remark42/app/components/thread/thread.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/thread/thread.tsx",
+        "line": 85,
+        "style": ".collapsed",
+        "styleFile": "frontend/apps/remark42/app/components/thread/thread.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/thread/thread.tsx",
+        "line": 85,
+        "style": ".collapse",
+        "styleFile": "frontend/apps/remark42/app/components/thread/thread.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/tooltip/tooltip.tsx",
+        "line": 34,
+        "style": ".root",
+        "styleFile": "frontend/apps/remark42/app/components/tooltip/tooltip.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/tooltip/tooltip.tsx",
+        "line": 38,
+        "style": ".tooltip",
+        "styleFile": "frontend/apps/remark42/app/components/tooltip/tooltip.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/tooltip/tooltip.tsx",
+        "line": 38,
+        "style": ".tooltipPermanent",
+        "styleFile": "frontend/apps/remark42/app/components/tooltip/tooltip.module.css",
+        "match": "module"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment-form/comment-form.tsx",
+        "line": 533,
+        "style": ".raw-content",
+        "styleFile": "frontend/apps/remark42/app/components/comment/raw-content.css",
+        "match": "name"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 366,
+        "style": ".raw-content",
+        "styleFile": "frontend/apps/remark42/app/components/comment/raw-content.css",
+        "match": "name"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/comment/comment.tsx",
+        "line": 483,
+        "style": ".raw-content",
+        "styleFile": "frontend/apps/remark42/app/components/comment/raw-content.css",
+        "match": "name"
+      },
+      {
+        "file": "frontend/apps/remark42/app/components/preloader.tsx",
+        "line": 9,
+        "style": ".preloader",
+        "styleFile": "frontend/apps/remark42/app/styles/global.css",
+        "match": "name"
+      }
+    ]
+  }
+}

@@ -25,7 +25,7 @@ export const analysisToolDefinitions = [
   },
   {
     name: "find_references",
-    description: "Where a declaration is used, each with kind, file and line: calls and callbacks, imports and re-exports (through barrels; namespace and dynamic imports marked possible), subclasses, implementations, injection sites, and the routes and entrypoints a function handles.",
+    description: "Where a declaration is used, each with kind, file and line: calls and callbacks, imports and re-exports (through barrels; namespace and dynamic imports marked possible), subclasses, implementations, injection sites, handled routes and entrypoints; .class, #id, --property: rules and users.",
     inputSchema: objectSchema({
       symbol: { type: "string", description: "Exact declaration name; Class.method selects one class's method." },
       file: { type: "string", description: "File or directory path, or a path suffix, of the declaration." },
