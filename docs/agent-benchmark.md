@@ -560,3 +560,69 @@ runs per model, about $4.3 for sonnet and $0.35 for haiku, $4.7 together.
 npm run bench:agent -- --questions bench/agent/questions-non-code.json --runs 3 --model sonnet --max-turns 25
 npm run bench:agent -- --questions bench/agent/questions-non-code.json --runs 3 --model haiku --max-turns 25
 ```
+
+### Rust questions (Phase 29)
+
+[`bench/agent/questions-rust.json`](../bench/agent/questions-rust.json) has ten
+questions over the axum + sqlx and actix-web + diesel RealWorld backends and the
+Next.js frontend scanned with the axum backend:
+
+- **routes:** the handlers of axum's `POST` / `DELETE
+  /api/articles/:slug/favorite`; the handler and file of actix's `DELETE
+  /api/articles/{article_title_slug}/favorite`;
+- **callers / impact:** the callers of axum's `AuthUser::to_jwt`, and the
+  routes a change to it reaches;
+- **data:** the functions that write the `article_favorite` table;
+- **env:** the variables axum's clap `Config` declares, and actix's three
+  `env::var(env_key::X)` reads, whose keys are constants of another file;
+- **traits:** the types that implement `FromRequest` (axum) and the
+  `CommentRepository`, `FavoriteRepository` and `TagRepository` traits (actix);
+- **frontend-api:** the frontend files that request `GET
+  /api/profiles/:username` and the Rust function that handles it
+  (`internet-realworld-rust-fullstack`).
+
+Expected answers were written from the source (the `.route(..)` registrations,
+call sites, the SQL of the favorite queries, the clap fields and `env::var`
+reads, the `impl` blocks, the frontend's API calls), not from Concentrate output.
+
+```bash
+npm run bench:agent -- --questions bench/agent/questions-rust.json --runs 3 --model sonnet --max-turns 25
+npm run bench:agent -- --questions bench/agent/questions-rust.json --runs 3 --model haiku --max-turns 25
+```
+
+Recorded 2026-11-11 with Claude Code 2.1.321, three runs each,
+`--max-turns 25`, after the cost estimate was approved (about $4.6 estimated,
+$3.91 spent)
+([`agent-rust-sonnet-runs3-2026-11-11.json`](../bench/results/agent-rust-sonnet-runs3-2026-11-11.json),
+[`agent-rust-haiku-runs3-2026-11-11.json`](../bench/results/agent-rust-haiku-runs3-2026-11-11.json)).
+Per category, median input tokens (baseline → concentrate) and the runs in
+which the agent called a Concentrate tool:
+
+| Category | Runs | sonnet: correct | sonnet: input tokens | sonnet: MCP runs | haiku: correct | haiku: input tokens | haiku: MCP runs |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| routes | 6 | 6/6 / 6/6 | 83.0k → 102.8k (+24%) | 0/6 | 6/6 / 6/6 | 106.5k → 123.6k (+16%) | 0/6 |
+| callers | 3 | 3/3 / 3/3 | 96.6k → 100.2k (+4%) | 3/3 | 3/3 / 3/3 | 99.3k → 104.4k (+5%) | 1/3 |
+| impact | 3 | 3/3 / 3/3 | 99.2k → 136.4k (+37%) | 3/3 | 3/3 / 3/3 | 104.0k → 141.3k (+36%) | 3/3 |
+| data | 3 | 3/3 / 3/3 | 131.1k → 100.8k (−23%) | 0/3 | 3/3 / 3/3 | 134.6k → 105.8k (−21%) | 2/3 |
+| env | 6 | 6/6 / 6/6 | 97.8k → 100.6k (+3%) | 1/6 | 6/6 / 6/6 | 136.5k → 139.6k (+2%) | 6/6 |
+| traits | 6 | 6/6 / 6/6 | 80.4k → 82.5k (+3%) | 0/6 | 6/6 / 6/6 | 83.3k → 85.5k (+3%) | 0/6 |
+| frontend-api | 3 | 3/3 / 3/3 | 106.7k → 109.8k (+3%) | 3/3 | 3/3 / 3/3 | 191.8k → 113.3k (−41%) | 3/3 |
+
+| | sonnet: baseline | sonnet: concentrate | haiku: baseline | haiku: concentrate |
+| --- | ---: | ---: | ---: | ---: |
+| Correct | 30/30 | 30/30 | 30/30 | 30/30 |
+| Median input tokens | 97.7k | 100.5k | 102.9k | 113.2k |
+| Median tool calls | 2 | 3 | 3 | 3 |
+| Total cost (CLI estimate) | $1.84 | $1.82 | $0.13 | $0.12 |
+
+- Both modes answered every question correctly in every run (60 of 60 per
+  mode), so, as for Go, the samples are small enough for grep and the result is
+  about cost, not correctness: input tokens are within a few percent of the
+  baseline, except the impact questions, where the agent that used `impact_of`
+  read more (+37% on sonnet, +36% on haiku), and the frontend question on haiku
+  (−41%, `api_consumers` and `route_details` in 3 of 3 runs).
+- The agent reached for Concentrate in 10 of 30 sonnet runs, on the callers,
+  impact and frontend questions and once on actix's env question; it answered
+  the route, table, trait and axum env questions from grep alone.
+  A larger Rust repository, where grep cannot read everything, would be the
+  fairer test; none is pinned yet.

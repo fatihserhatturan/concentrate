@@ -1299,7 +1299,7 @@ There are no Rust samples, labels or agent questions today. A Rust RealWorld (Co
 
 ### Agent benchmark
 
-- [ ] Rust questions (routes, callers, impact, table users, env, trait implementations, frontend → Rust backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
+- [x] Rust questions (routes, callers, impact, table users, env, trait implementations, frontend → Rust backend) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
 
 ### Docs
 
@@ -1308,8 +1308,8 @@ There are no Rust samples, labels or agent questions today. A Rust RealWorld (Co
 
 ### Acceptance criteria
 
-- [ ] Accuracy, performance and agent results for Rust are reproducible from scripts
-- [ ] README shows the Rust coverage
+- [x] Accuracy, performance and agent results for Rust are reproducible from scripts
+- [x] README shows the Rust coverage
 
 ## M12: Python ecosystem
 
