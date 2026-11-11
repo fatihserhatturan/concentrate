@@ -1991,7 +1991,9 @@ the call recall leaves out:
   an explicit `Base::f()` call is not virtual. A macro call resolves to the macro
   (`via: macro`) because the preprocessor runs first. Constructor calls (`T x(…)`,
   `new T(…)`, `T(…)`) and destructors, operators, function pointers and calls through
-  `std::function` are not linked; templates are not instantiated, so a call on a type
+  `std::function` are not linked; the result of a method call is not typed, so
+  `doc.FirstChildElement("a")->Attribute("b")` leaves the second call unresolved (only a
+  free function's result is typed); templates are not instantiated, so a call on a type
   that is a template parameter or `decltype` is unresolved, and so is ADL (a call
   found only through the namespace of its argument).
 - `main` is an `EntryPoint`. GoogleTest `TEST`, `TEST_F`, `TEST_P`, `TYPED_TEST` and
@@ -2010,7 +2012,10 @@ the call recall leaves out:
   seen.
 - Measured on the pinned samples (`docs/accuracy.md`): cJSON, 110 of 110 labeled
   call targets, no false positive; tinyxml2, 9 of 9 on the labeled program, and 642 of
-  the 691 call sites of `tinyxml2.cpp` resolve. Cost: loading the C++ grammar adds
+  the 691 call sites of `tinyxml2.cpp` resolve (the whole sample: 2,674 of 4,871 call sites,
+  54.9%, since `xmltest.cpp` chains method results and calls the C library; cJSON: 2,475
+  of 2,917, 84.8%, the rest mostly `memcpy`, `sprintf`, `strlen` and function pointers in
+  hook structs). Cost: loading the C++ grammar adds
   about 11 MB of RSS; parsing a header whose macros the grammar cannot read grows the
   WebAssembly heap (tinyxml2.h before the export macro was read as blank: +285 MB RSS
   once, reused afterwards), and each parse worker has its own heap. cJSON (161
