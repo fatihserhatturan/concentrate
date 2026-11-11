@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":5,"parsedFiles":5,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":6,"supportedFiles":6,"parsedFiles":6,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"cpp-calls","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:include","label":"Directory","properties":{"name":"include","path":"<root>/include","relativePath":"include"}}
 {"kind":"node","id":"dir:include/geo","label":"Directory","properties":{"name":"geo","path":"<root>/include/geo","relativePath":"include/geo"}}
@@ -24,6 +24,11 @@
 {"kind":"node","id":"file:include/geo/util.h:function:8:geo::util::clamp_count","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":8,"methodKind":null,"name":"clamp_count","namespace":"geo::util","parameters":"[{\"name\":\"count\",\"type\":\"int\"}]","qualifiedName":"geo::util::clamp_count","returnType":"int","visibility":"external"}}
 {"kind":"node","id":"file:include/geo/util.h:function:9:geo::util::log_line","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":9,"methodKind":null,"name":"log_line","namespace":"geo::util","parameters":"[{\"name\":\"text\",\"type\":\"const char*\"}]","qualifiedName":"geo::util::log_line","returnType":"void","visibility":"external"}}
 {"kind":"node","id":"file:include/geo/util.h:variable:4:MAX_SHAPES","label":"Variable","properties":{"isExported":false,"kind":"macro","line":4,"name":"MAX_SHAPES","typeName":"16"}}
+{"kind":"node","id":"file:include/geo/widget.h","label":"File","properties":{"cppScope":"{\"namespaces\":[\"geo\"]}","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/include/geo/widget.h","relativePath":"include/geo/widget.h","sourceType":"production"}}
+{"kind":"node","id":"file:include/geo/widget.h:class:7:geo::Widget","label":"Class","properties":{"bases":"[]","endLine":11,"fields":"[]","isAbstract":false,"isExported":true,"kind":"class","line":7,"name":"Widget","namespace":"geo","qualifiedName":"geo::Widget","visibility":null}}
+{"kind":"node","id":"file:include/geo/widget.h:function:10:geo::Widget::size","label":"Function","properties":{"className":"Widget","endLine":10,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"method","line":10,"methodKind":null,"name":"size","namespace":"geo::Widget","parameters":"[]","qualifiedName":"geo::Widget::size","returnType":"int","visibility":"public"}}
+{"kind":"node","id":"file:include/geo/widget.h:function:9:geo::Widget::Widget","label":"Function","properties":{"className":"Widget","endLine":9,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"constructor","line":9,"methodKind":null,"name":"Widget","namespace":"geo::Widget","parameters":"[]","qualifiedName":"geo::Widget::Widget","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:include/geo/widget.h:variable:3:GEO_API","label":"Variable","properties":{"isExported":false,"kind":"macro","line":3,"name":"GEO_API","typeName":"__attribute__((visibility(\"default\")))"}}
 {"kind":"node","id":"file:src/main.cpp","label":"File","properties":{"cppScope":"{\"usingNamespaces\":[\"geo\"],\"usingNames\":[{\"name\":\"geo::util::clamp_count\"}]}","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/src/main.cpp","relativePath":"src/main.cpp","sourceType":"production"}}
 {"kind":"node","id":"file:src/main.cpp:class:9:Registry","label":"Class","properties":{"bases":"[]","endLine":19,"fields":"[{\"name\":\"shapes\",\"type\":\"std::vector\",\"access\":\"public\",\"isStatic\":false},{\"name\":\"favourite\",\"type\":\"Circle\",\"access\":\"public\",\"isStatic\":false}]","isAbstract":false,"isExported":true,"kind":"struct","line":9,"name":"Registry","namespace":"","qualifiedName":"Registry","visibility":null}}
 {"kind":"node","id":"file:src/main.cpp:entrypoint:26:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"cpp","line":26,"receiverName":null,"trigger":null}}
@@ -84,6 +89,7 @@
 {"kind":"rel","from":"dir:include","type":"CONTAINS_DIRECTORY","to":"dir:include/geo","properties":{}}
 {"kind":"rel","from":"dir:include/geo","type":"CONTAINS_FILE","to":"file:include/geo/shape.h","properties":{}}
 {"kind":"rel","from":"dir:include/geo","type":"CONTAINS_FILE","to":"file:include/geo/util.h","properties":{}}
+{"kind":"rel","from":"dir:include/geo","type":"CONTAINS_FILE","to":"file:include/geo/widget.h","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.cpp","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/shape.cpp","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/util.cpp","properties":{}}
@@ -117,6 +123,10 @@
 {"kind":"rel","from":"file:include/geo/util.h:function:10:geo::util::log_line","type":"DEFINED_BY","to":"file:src/util.cpp:function:11:geo::util::log_line","properties":{}}
 {"kind":"rel","from":"file:include/geo/util.h:function:8:geo::util::clamp_count","type":"DEFINED_BY","to":"file:src/util.cpp:function:7:geo::util::clamp_count","properties":{}}
 {"kind":"rel","from":"file:include/geo/util.h:function:9:geo::util::log_line","type":"DEFINED_BY","to":"file:src/util.cpp:function:9:geo::util::log_line","properties":{}}
+{"kind":"rel","from":"file:include/geo/widget.h","type":"DEFINES_CLASS","to":"file:include/geo/widget.h:class:7:geo::Widget","properties":{}}
+{"kind":"rel","from":"file:include/geo/widget.h","type":"DEFINES_VARIABLE","to":"file:include/geo/widget.h:variable:3:GEO_API","properties":{}}
+{"kind":"rel","from":"file:include/geo/widget.h:class:7:geo::Widget","type":"DEFINES_METHOD","to":"file:include/geo/widget.h:function:10:geo::Widget::size","properties":{}}
+{"kind":"rel","from":"file:include/geo/widget.h:class:7:geo::Widget","type":"DEFINES_METHOD","to":"file:include/geo/widget.h:function:9:geo::Widget::Widget","properties":{}}
 {"kind":"rel","from":"file:src/main.cpp","type":"DECLARES_ENTRYPOINT","to":"file:src/main.cpp:entrypoint:26:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:src/main.cpp","type":"DEFINES_CLASS","to":"file:src/main.cpp:class:9:Registry","properties":{}}
 {"kind":"rel","from":"file:src/main.cpp","type":"DEFINES_FUNCTION","to":"file:src/main.cpp:function:21:print_all","properties":{}}
