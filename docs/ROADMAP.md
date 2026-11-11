@@ -1101,22 +1101,22 @@ to the code. They come before M11 (Rust) so the Rust phases find these files alr
 
 ### Styles
 
-- [ ] Rules, class and id selectors and custom properties (`--x` definitions, `var(--x)` uses) as nodes of a style label, with file and line
-- [ ] `@import`, `@use`, `@forward` and `url()` as `Import` → `File`
+- [x] Rules, class and id selectors and custom properties (`--x` definitions, `var(--x)` uses) as nodes of a style label, with file and line (#221)
+- [x] `@import`, `@use`, `@forward` and `url()` as `Import` → `File` (#221)
 
 ### Links
 
-- [ ] CSS Modules: `import s from "./x.module.css"` with `s.btn` / `s["btn"]` links the function or component to the class
-- [ ] `className="btn"`, `class="btn"` and `:class` / `class:` bindings with literal names in JSX, Vue, Svelte, Angular and HTML templates link to same-named classes, marked as name matches
+- [x] CSS Modules: `import s from "./x.module.css"` with `s.btn` / `s["btn"]` links the function or component to the class (#222)
+- [x] `className="btn"`, `class="btn"` and `:class` / `class:` bindings with literal names in JSX, Vue, Svelte, Angular and HTML templates link to same-named classes, marked as name matches (#222)
 
 ### MCP
 
-- [ ] `find_references` and `impact_of` on a class or a custom property return the components, pages and files that use it
+- [x] `find_references` and `impact_of` on a class or a custom property return the components, pages and files that use it (#223)
 
 ### Acceptance criteria
 
-- [ ] Fixtures with golden coverage: plain CSS, SCSS with nesting and `@use`, CSS Modules in React and Vue, template class bindings
-- [ ] Hand labels for CSS-module and template class links on two pinned frontend samples (precision 100%, recall reported)
+- [x] Fixtures with golden coverage: plain CSS, SCSS with nesting and `@use`, CSS Modules in React and Vue, template class bindings (#221, #222)
+- [x] Hand labels for CSS-module and template class links on two pinned frontend samples (precision 100%, recall reported) (#223)
 
 ## Phase 25: SQL migrations, .proto services and measurement ([#205](https://github.com/fatihserhatturan/concentrate/issues/205))
 
