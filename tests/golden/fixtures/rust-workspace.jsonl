@@ -1,0 +1,197 @@
+{"kind":"report","status":"success","discoveredFiles":14,"supportedFiles":11,"parsedFiles":11,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"rust-workspace","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:crates","label":"Directory","properties":{"name":"crates","path":"<root>/crates","relativePath":"crates"}}
+{"kind":"node","id":"dir:crates/app","label":"Directory","properties":{"name":"app","path":"<root>/crates/app","relativePath":"crates/app"}}
+{"kind":"node","id":"dir:crates/app/src","label":"Directory","properties":{"name":"src","path":"<root>/crates/app/src","relativePath":"crates/app/src"}}
+{"kind":"node","id":"dir:crates/app/tests","label":"Directory","properties":{"name":"tests","path":"<root>/crates/app/tests","relativePath":"crates/app/tests"}}
+{"kind":"node","id":"dir:crates/my-core","label":"Directory","properties":{"name":"my-core","path":"<root>/crates/my-core","relativePath":"crates/my-core"}}
+{"kind":"node","id":"dir:crates/my-core/src","label":"Directory","properties":{"name":"src","path":"<root>/crates/my-core/src","relativePath":"crates/my-core/src"}}
+{"kind":"node","id":"dir:crates/my-core/src/inline","label":"Directory","properties":{"name":"inline","path":"<root>/crates/my-core/src/inline","relativePath":"crates/my-core/src/inline"}}
+{"kind":"node","id":"dir:crates/my-core/src/legacy","label":"Directory","properties":{"name":"legacy","path":"<root>/crates/my-core/src/legacy","relativePath":"crates/my-core/src/legacy"}}
+{"kind":"node","id":"dir:crates/my-core/src/net","label":"Directory","properties":{"name":"net","path":"<root>/crates/my-core/src/net","relativePath":"crates/my-core/src/net"}}
+{"kind":"node","id":"dir:crates/my-core/src/store","label":"Directory","properties":{"name":"store","path":"<root>/crates/my-core/src/store","relativePath":"crates/my-core/src/store"}}
+{"kind":"node","id":"file:Cargo.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/Cargo.toml","relativePath":"Cargo.toml","sourceType":"production"}}
+{"kind":"node","id":"file:crates/app/Cargo.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/crates/app/Cargo.toml","relativePath":"crates/app/Cargo.toml","sourceType":"production"}}
+{"kind":"node","id":"file:crates/app/src/config.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/app/src/config.rs","relativePath":"crates/app/src/config.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/app/src/config.rs:class:5:Level","label":"Class","properties":{"endLine":5,"isAbstract":false,"isExported":true,"line":5,"name":"Level","visibility":"pub"}}
+{"kind":"node","id":"file:crates/app/src/config.rs:class:8:Settings","label":"Class","properties":{"endLine":8,"isAbstract":false,"isExported":true,"line":8,"name":"Settings","visibility":"pub"}}
+{"kind":"node","id":"file:crates/app/src/config.rs:import:1:crate::config::defaults::Level","label":"Import","properties":{"line":1,"source":"crate::config::defaults::Level","specifier":"use crate::config::defaults::Level;"}}
+{"kind":"node","id":"file:crates/app/src/config.rs:import:2:super::config","label":"Import","properties":{"line":2,"source":"super::config","specifier":"use super::config;"}}
+{"kind":"node","id":"file:crates/app/src/main.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/app/src/main.rs","relativePath":"crates/app/src/main.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:function:10:main","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":10,"methodKind":null,"name":"main","parameters":null,"returnType":null,"visibility":"private"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:function:10:main:call:11:12:open","label":"Call","properties":{"callee":"open","columnNumber":12,"expression":"open","line":11,"name":"open","receiver":null}}
+{"kind":"node","id":"file:crates/app/src/main.rs:function:10:main:call:12:43:shout","label":"Call","properties":{"callee":"shout","columnNumber":43,"expression":"shout","line":12,"name":"shout","receiver":null}}
+{"kind":"node","id":"file:crates/app/src/main.rs:function:10:main:call:12:65:HashMap::<u8, u8>::new","label":"Call","properties":{"callee":"HashMap::<u8, u8>::new","columnNumber":65,"expression":"HashMap::<u8, u8>::new","line":12,"name":"HashMap::<u8, u8>::new","receiver":null}}
+{"kind":"node","id":"file:crates/app/src/main.rs:import:1:config","label":"Import","properties":{"isModule":true,"line":1,"source":"config","specifier":"mod config;"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:import:3:my_core::prelude","label":"Import","properties":{"isWildcard":true,"line":3,"source":"my_core::prelude","specifier":"use my_core::prelude::*;"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:import:4:my_core::InMemory","label":"Import","properties":{"line":4,"source":"my_core::InMemory","specifier":"use my_core::{InMemory, store::memory, net::client::connect as open};"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:import:4:my_core::net::client::connect","label":"Import","properties":{"alias":"open","line":4,"source":"my_core::net::client::connect","specifier":"use my_core::{InMemory, store::memory, net::client::connect as open};"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:import:4:my_core::store::memory","label":"Import","properties":{"line":4,"source":"my_core::store::memory","specifier":"use my_core::{InMemory, store::memory, net::client::connect as open};"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:import:5:core_alias::util::shout","label":"Import","properties":{"line":5,"source":"core_alias::util::shout","specifier":"use core_alias::util::shout;"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:import:6:config::Settings","label":"Import","properties":{"line":6,"source":"config::Settings","specifier":"use config::Settings;"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:import:7:serde::Serialize","label":"Import","properties":{"line":7,"source":"serde::Serialize","specifier":"use serde::Serialize;"}}
+{"kind":"node","id":"file:crates/app/src/main.rs:import:8:std::collections::HashMap","label":"Import","properties":{"line":8,"source":"std::collections::HashMap","specifier":"use std::collections::HashMap;"}}
+{"kind":"node","id":"file:crates/app/tests/smoke.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":true,"language":"rust","path":"<root>/crates/app/tests/smoke.rs","relativePath":"crates/app/tests/smoke.rs","sourceType":"test"}}
+{"kind":"node","id":"file:crates/app/tests/smoke.rs:function:5:it_works","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":5,"methodKind":null,"name":"it_works","parameters":null,"returnType":null,"visibility":"private"}}
+{"kind":"node","id":"file:crates/app/tests/smoke.rs:function:5:it_works:call:6:12:deep::deep","label":"Call","properties":{"callee":"deep::deep","columnNumber":12,"expression":"deep::deep","line":6,"name":"deep::deep","receiver":null}}
+{"kind":"node","id":"file:crates/app/tests/smoke.rs:import:1:app_support::helper","label":"Import","properties":{"line":1,"source":"app_support::helper","specifier":"use app_support::helper;"}}
+{"kind":"node","id":"file:crates/app/tests/smoke.rs:import:2:my_core::inline::deep","label":"Import","properties":{"line":2,"source":"my_core::inline::deep","specifier":"use my_core::inline::deep;"}}
+{"kind":"node","id":"file:crates/my-core/Cargo.toml","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"toml","path":"<root>/crates/my-core/Cargo.toml","relativePath":"crates/my-core/Cargo.toml","sourceType":"production"}}
+{"kind":"node","id":"file:crates/my-core/src/inline/deep.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/my-core/src/inline/deep.rs","relativePath":"crates/my-core/src/inline/deep.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/my-core/src/inline/deep.rs:function:1:deep","label":"Function","properties":{"className":null,"endLine":1,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":1,"methodKind":null,"name":"deep","parameters":null,"returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:crates/my-core/src/legacy/old_helpers.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/my-core/src/legacy/old_helpers.rs","relativePath":"crates/my-core/src/legacy/old_helpers.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/my-core/src/legacy/old_helpers.rs:function:1:legacy","label":"Function","properties":{"className":null,"endLine":1,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":1,"methodKind":null,"name":"legacy","parameters":null,"returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/my-core/src/lib.rs","relativePath":"crates/my-core/src/lib.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:function:17:here","label":"Function","properties":{"className":null,"endLine":17,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":17,"methodKind":null,"name":"here","parameters":null,"returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:11:crate::store::Repo","label":"Import","properties":{"inlineModules":"[\"prelude\"]","isReExport":true,"line":11,"source":"crate::store::Repo","specifier":"pub use crate::store::Repo;"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:12:crate::net::client","label":"Import","properties":{"inlineModules":"[\"prelude\"]","isReExport":true,"isWildcard":true,"line":12,"source":"crate::net::client","specifier":"pub use crate::net::client::*;"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:16:deep","label":"Import","properties":{"inlineModules":"[\"inline\"]","isModule":true,"line":16,"source":"deep","specifier":"pub mod deep;"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:1:store","label":"Import","properties":{"isModule":true,"line":1,"source":"store","specifier":"pub mod store;"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:2:net","label":"Import","properties":{"isModule":true,"line":2,"source":"net","specifier":"pub mod net;"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:3:util","label":"Import","properties":{"isModule":true,"line":3,"source":"util","specifier":"mod util;"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:5:old_helpers","label":"Import","properties":{"isModule":true,"line":5,"pathAttribute":"legacy/old_helpers.rs","source":"old_helpers","specifier":"mod old_helpers;"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:7:store::Repo","label":"Import","properties":{"isReExport":true,"line":7,"source":"store::Repo","specifier":"pub use store::{Repo, memory::MemoryRepo as InMemory};"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:7:store::memory::MemoryRepo","label":"Import","properties":{"alias":"InMemory","isReExport":true,"line":7,"source":"store::memory::MemoryRepo","specifier":"pub use store::{Repo, memory::MemoryRepo as InMemory};"}}
+{"kind":"node","id":"file:crates/my-core/src/lib.rs:import:8:util","label":"Import","properties":{"isReExport":true,"isWildcard":true,"line":8,"source":"util","specifier":"pub use util::*;"}}
+{"kind":"node","id":"file:crates/my-core/src/net.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/my-core/src/net.rs","relativePath":"crates/my-core/src/net.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/my-core/src/net.rs:import:1:client","label":"Import","properties":{"isModule":true,"line":1,"source":"client","specifier":"pub mod client;"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/my-core/src/net/client.rs","relativePath":"crates/my-core/src/net/client.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:class:13:Connection","label":"Class","properties":{"endLine":13,"isAbstract":false,"isExported":true,"line":13,"name":"Connection","visibility":"pub"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:class:5:Wire","label":"Class","properties":{"endLine":5,"isAbstract":false,"isExported":true,"line":5,"name":"Wire","visibility":"pub"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:function:15:connect","label":"Function","properties":{"className":null,"endLine":21,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":15,"methodKind":null,"name":"connect","parameters":null,"returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:function:15:connect:call:16:12:util::shout","label":"Call","properties":{"callee":"util::shout","columnNumber":12,"expression":"util::shout","line":16,"name":"util::shout","receiver":null}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:function:15:connect:call:19:4:inner::tag","label":"Call","properties":{"callee":"inner::tag","columnNumber":4,"expression":"inner::tag","line":19,"name":"inner::tag","receiver":null}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:function:6:tag","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":6,"methodKind":null,"name":"tag","parameters":null,"returnType":null,"visibility":"pub(super)"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:function:9:up","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":9,"methodKind":null,"name":"up","parameters":null,"returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:import:1:self::inner::Wire","label":"Import","properties":{"line":1,"source":"self::inner::Wire","specifier":"use self::inner::Wire;"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:import:2:crate::store","label":"Import","properties":{"line":2,"source":"crate::store","specifier":"use crate::{store::{self, Repo}, util};"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:import:2:crate::store::Repo","label":"Import","properties":{"line":2,"source":"crate::store::Repo","specifier":"use crate::{store::{self, Repo}, util};"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:import:2:crate::util","label":"Import","properties":{"line":2,"source":"crate::util","specifier":"use crate::{store::{self, Repo}, util};"}}
+{"kind":"node","id":"file:crates/my-core/src/net/client.rs:import:8:super::super::Connection","label":"Import","properties":{"inlineModules":"[\"inner\",\"nested\"]","line":8,"source":"super::super::Connection","specifier":"use super::super::Connection;"}}
+{"kind":"node","id":"file:crates/my-core/src/store/memory.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/my-core/src/store/memory.rs","relativePath":"crates/my-core/src/store/memory.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/my-core/src/store/memory.rs:class:4:MemoryRepo","label":"Class","properties":{"endLine":4,"isAbstract":false,"isExported":true,"line":4,"name":"MemoryRepo","visibility":"pub"}}
+{"kind":"node","id":"file:crates/my-core/src/store/memory.rs:function:7:get","label":"Function","properties":{"className":"MemoryRepo","endLine":9,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_item","line":7,"methodKind":null,"name":"get","parameters":null,"returnType":null,"visibility":"private"}}
+{"kind":"node","id":"file:crates/my-core/src/store/memory.rs:function:7:get:call:8:13:shout","label":"Call","properties":{"callee":"shout","columnNumber":13,"expression":"shout","line":8,"name":"shout","receiver":null}}
+{"kind":"node","id":"file:crates/my-core/src/store/memory.rs:function:7:get:call:8:20:id.to_string","label":"Call","properties":{"callee":"to_string","columnNumber":20,"expression":"id.to_string","line":8,"name":"id.to_string","receiver":"id"}}
+{"kind":"node","id":"file:crates/my-core/src/store/memory.rs:function:7:get:call:8:8:Some","label":"Call","properties":{"callee":"Some","columnNumber":8,"expression":"Some","line":8,"name":"Some","receiver":null}}
+{"kind":"node","id":"file:crates/my-core/src/store/memory.rs:import:1:super::Repo","label":"Import","properties":{"line":1,"source":"super::Repo","specifier":"use super::Repo;"}}
+{"kind":"node","id":"file:crates/my-core/src/store/memory.rs:import:2:crate::util::shout","label":"Import","properties":{"line":2,"source":"crate::util::shout","specifier":"use crate::util::shout;"}}
+{"kind":"node","id":"file:crates/my-core/src/store/mod.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/my-core/src/store/mod.rs","relativePath":"crates/my-core/src/store/mod.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/my-core/src/store/mod.rs:import:1:memory","label":"Import","properties":{"isModule":true,"line":1,"source":"memory","specifier":"pub mod memory;"}}
+{"kind":"node","id":"file:crates/my-core/src/util.rs","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"rust","path":"<root>/crates/my-core/src/util.rs","relativePath":"crates/my-core/src/util.rs","sourceType":"production"}}
+{"kind":"node","id":"file:crates/my-core/src/util.rs:function:1:shout","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_item","line":1,"methodKind":null,"name":"shout","parameters":null,"returnType":null,"visibility":"pub"}}
+{"kind":"node","id":"file:crates/my-core/src/util.rs:function:1:shout:call:2:4:text.to_uppercase","label":"Call","properties":{"callee":"to_uppercase","columnNumber":4,"expression":"text.to_uppercase","line":2,"name":"text.to_uppercase","receiver":"text"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"rust-workspace","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:crates","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:Cargo.toml","properties":{}}
+{"kind":"rel","from":"dir:crates","type":"CONTAINS_DIRECTORY","to":"dir:crates/app","properties":{}}
+{"kind":"rel","from":"dir:crates","type":"CONTAINS_DIRECTORY","to":"dir:crates/my-core","properties":{}}
+{"kind":"rel","from":"dir:crates/app","type":"CONTAINS_DIRECTORY","to":"dir:crates/app/src","properties":{}}
+{"kind":"rel","from":"dir:crates/app","type":"CONTAINS_DIRECTORY","to":"dir:crates/app/tests","properties":{}}
+{"kind":"rel","from":"dir:crates/app","type":"CONTAINS_FILE","to":"file:crates/app/Cargo.toml","properties":{}}
+{"kind":"rel","from":"dir:crates/app/src","type":"CONTAINS_FILE","to":"file:crates/app/src/config.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/app/src","type":"CONTAINS_FILE","to":"file:crates/app/src/main.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/app/tests","type":"CONTAINS_FILE","to":"file:crates/app/tests/smoke.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core","type":"CONTAINS_DIRECTORY","to":"dir:crates/my-core/src","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core","type":"CONTAINS_FILE","to":"file:crates/my-core/Cargo.toml","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src","type":"CONTAINS_DIRECTORY","to":"dir:crates/my-core/src/inline","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src","type":"CONTAINS_DIRECTORY","to":"dir:crates/my-core/src/legacy","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src","type":"CONTAINS_DIRECTORY","to":"dir:crates/my-core/src/net","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src","type":"CONTAINS_DIRECTORY","to":"dir:crates/my-core/src/store","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src","type":"CONTAINS_FILE","to":"file:crates/my-core/src/lib.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src","type":"CONTAINS_FILE","to":"file:crates/my-core/src/net.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src","type":"CONTAINS_FILE","to":"file:crates/my-core/src/util.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src/inline","type":"CONTAINS_FILE","to":"file:crates/my-core/src/inline/deep.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src/legacy","type":"CONTAINS_FILE","to":"file:crates/my-core/src/legacy/old_helpers.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src/net","type":"CONTAINS_FILE","to":"file:crates/my-core/src/net/client.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src/store","type":"CONTAINS_FILE","to":"file:crates/my-core/src/store/memory.rs","properties":{}}
+{"kind":"rel","from":"dir:crates/my-core/src/store","type":"CONTAINS_FILE","to":"file:crates/my-core/src/store/mod.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/config.rs","type":"DEFINES_CLASS","to":"file:crates/app/src/config.rs:class:5:Level","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/config.rs","type":"DEFINES_CLASS","to":"file:crates/app/src/config.rs:class:8:Settings","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/config.rs","type":"IMPORTS","to":"file:crates/app/src/config.rs:import:1:crate::config::defaults::Level","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/config.rs","type":"IMPORTS","to":"file:crates/app/src/config.rs:import:2:super::config","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/config.rs:import:1:crate::config::defaults::Level","type":"RESOLVES_TO","to":"file:crates/app/src/config.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/config.rs:import:2:super::config","type":"RESOLVES_TO","to":"file:crates/app/src/config.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"DEFINES_FUNCTION","to":"file:crates/app/src/main.rs:function:10:main","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"IMPORTS","to":"file:crates/app/src/main.rs:import:1:config","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"IMPORTS","to":"file:crates/app/src/main.rs:import:3:my_core::prelude","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"IMPORTS","to":"file:crates/app/src/main.rs:import:4:my_core::InMemory","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"IMPORTS","to":"file:crates/app/src/main.rs:import:4:my_core::net::client::connect","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"IMPORTS","to":"file:crates/app/src/main.rs:import:4:my_core::store::memory","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"IMPORTS","to":"file:crates/app/src/main.rs:import:5:core_alias::util::shout","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"IMPORTS","to":"file:crates/app/src/main.rs:import:6:config::Settings","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"IMPORTS","to":"file:crates/app/src/main.rs:import:7:serde::Serialize","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs","type":"IMPORTS","to":"file:crates/app/src/main.rs:import:8:std::collections::HashMap","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:function:10:main","type":"CALLS","to":"file:crates/app/src/main.rs:function:10:main:call:11:12:open","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:function:10:main","type":"CALLS","to":"file:crates/app/src/main.rs:function:10:main:call:12:43:shout","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:function:10:main","type":"CALLS","to":"file:crates/app/src/main.rs:function:10:main:call:12:65:HashMap::<u8, u8>::new","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:function:10:main:call:12:43:shout","type":"CALL_RESOLVES_TO","to":"file:crates/my-core/src/util.rs:function:1:shout","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:import:1:config","type":"RESOLVES_TO","to":"file:crates/app/src/config.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:import:3:my_core::prelude","type":"RESOLVES_TO","to":"file:crates/my-core/src/lib.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:import:4:my_core::InMemory","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/memory.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:import:4:my_core::net::client::connect","type":"RESOLVES_TO","to":"file:crates/my-core/src/net/client.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:import:4:my_core::store::memory","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/memory.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:import:5:core_alias::util::shout","type":"RESOLVES_TO","to":"file:crates/my-core/src/util.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/src/main.rs:import:6:config::Settings","type":"RESOLVES_TO","to":"file:crates/app/src/config.rs","properties":{}}
+{"kind":"rel","from":"file:crates/app/tests/smoke.rs","type":"DEFINES_FUNCTION","to":"file:crates/app/tests/smoke.rs:function:5:it_works","properties":{}}
+{"kind":"rel","from":"file:crates/app/tests/smoke.rs","type":"IMPORTS","to":"file:crates/app/tests/smoke.rs:import:1:app_support::helper","properties":{}}
+{"kind":"rel","from":"file:crates/app/tests/smoke.rs","type":"IMPORTS","to":"file:crates/app/tests/smoke.rs:import:2:my_core::inline::deep","properties":{}}
+{"kind":"rel","from":"file:crates/app/tests/smoke.rs:function:5:it_works","type":"CALLS","to":"file:crates/app/tests/smoke.rs:function:5:it_works:call:6:12:deep::deep","properties":{}}
+{"kind":"rel","from":"file:crates/app/tests/smoke.rs:import:2:my_core::inline::deep","type":"RESOLVES_TO","to":"file:crates/my-core/src/inline/deep.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/inline/deep.rs","type":"DEFINES_FUNCTION","to":"file:crates/my-core/src/inline/deep.rs:function:1:deep","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/legacy/old_helpers.rs","type":"DEFINES_FUNCTION","to":"file:crates/my-core/src/legacy/old_helpers.rs:function:1:legacy","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"DEFINES_FUNCTION","to":"file:crates/my-core/src/lib.rs:function:17:here","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:11:crate::store::Repo","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:12:crate::net::client","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:16:deep","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:1:store","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:2:net","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:3:util","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:5:old_helpers","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:7:store::Repo","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:7:store::memory::MemoryRepo","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs","type":"IMPORTS","to":"file:crates/my-core/src/lib.rs:import:8:util","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:11:crate::store::Repo","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/mod.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:12:crate::net::client","type":"RESOLVES_TO","to":"file:crates/my-core/src/net/client.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:16:deep","type":"RESOLVES_TO","to":"file:crates/my-core/src/inline/deep.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:1:store","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/mod.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:2:net","type":"RESOLVES_TO","to":"file:crates/my-core/src/net.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:3:util","type":"RESOLVES_TO","to":"file:crates/my-core/src/util.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:5:old_helpers","type":"RESOLVES_TO","to":"file:crates/my-core/src/legacy/old_helpers.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:7:store::Repo","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/mod.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:7:store::memory::MemoryRepo","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/memory.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/lib.rs:import:8:util","type":"RESOLVES_TO","to":"file:crates/my-core/src/util.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net.rs","type":"IMPORTS","to":"file:crates/my-core/src/net.rs:import:1:client","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net.rs:import:1:client","type":"RESOLVES_TO","to":"file:crates/my-core/src/net/client.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"DEFINES_CLASS","to":"file:crates/my-core/src/net/client.rs:class:13:Connection","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"DEFINES_CLASS","to":"file:crates/my-core/src/net/client.rs:class:5:Wire","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"DEFINES_FUNCTION","to":"file:crates/my-core/src/net/client.rs:function:15:connect","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"DEFINES_FUNCTION","to":"file:crates/my-core/src/net/client.rs:function:6:tag","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"DEFINES_FUNCTION","to":"file:crates/my-core/src/net/client.rs:function:9:up","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"IMPORTS","to":"file:crates/my-core/src/net/client.rs:import:1:self::inner::Wire","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"IMPORTS","to":"file:crates/my-core/src/net/client.rs:import:2:crate::store","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"IMPORTS","to":"file:crates/my-core/src/net/client.rs:import:2:crate::store::Repo","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"IMPORTS","to":"file:crates/my-core/src/net/client.rs:import:2:crate::util","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs","type":"IMPORTS","to":"file:crates/my-core/src/net/client.rs:import:8:super::super::Connection","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs:function:15:connect","type":"CALLS","to":"file:crates/my-core/src/net/client.rs:function:15:connect:call:16:12:util::shout","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs:function:15:connect","type":"CALLS","to":"file:crates/my-core/src/net/client.rs:function:15:connect:call:19:4:inner::tag","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs:import:1:self::inner::Wire","type":"RESOLVES_TO","to":"file:crates/my-core/src/net/client.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs:import:2:crate::store","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/mod.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs:import:2:crate::store::Repo","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/mod.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs:import:2:crate::util","type":"RESOLVES_TO","to":"file:crates/my-core/src/util.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/net/client.rs:import:8:super::super::Connection","type":"RESOLVES_TO","to":"file:crates/my-core/src/net/client.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs","type":"DEFINES_CLASS","to":"file:crates/my-core/src/store/memory.rs:class:4:MemoryRepo","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs","type":"IMPORTS","to":"file:crates/my-core/src/store/memory.rs:import:1:super::Repo","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs","type":"IMPORTS","to":"file:crates/my-core/src/store/memory.rs:import:2:crate::util::shout","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs:class:4:MemoryRepo","type":"DEFINES_METHOD","to":"file:crates/my-core/src/store/memory.rs:function:7:get","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs:function:7:get","type":"CALLS","to":"file:crates/my-core/src/store/memory.rs:function:7:get:call:8:13:shout","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs:function:7:get","type":"CALLS","to":"file:crates/my-core/src/store/memory.rs:function:7:get:call:8:20:id.to_string","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs:function:7:get","type":"CALLS","to":"file:crates/my-core/src/store/memory.rs:function:7:get:call:8:8:Some","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs:function:7:get:call:8:13:shout","type":"CALL_RESOLVES_TO","to":"file:crates/my-core/src/util.rs:function:1:shout","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs:import:1:super::Repo","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/mod.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/memory.rs:import:2:crate::util::shout","type":"RESOLVES_TO","to":"file:crates/my-core/src/util.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/mod.rs","type":"IMPORTS","to":"file:crates/my-core/src/store/mod.rs:import:1:memory","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/store/mod.rs:import:1:memory","type":"RESOLVES_TO","to":"file:crates/my-core/src/store/memory.rs","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/util.rs","type":"DEFINES_FUNCTION","to":"file:crates/my-core/src/util.rs:function:1:shout","properties":{}}
+{"kind":"rel","from":"file:crates/my-core/src/util.rs:function:1:shout","type":"CALLS","to":"file:crates/my-core/src/util.rs:function:1:shout:call:2:4:text.to_uppercase","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

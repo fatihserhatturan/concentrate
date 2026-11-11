@@ -23,7 +23,7 @@ const grammars = [
   { name: "html", package: "tree-sitter-html", version: "0.23.2", dir: "." },
   { name: "python", package: "tree-sitter-python", version: "0.21.0", dir: "." },
   { name: "go", package: "tree-sitter-go", version: "0.25.0", dir: "." },
-  { name: "rust", package: "tree-sitter-rust", version: "0.21.0", dir: "." },
+  { name: "rust", package: "tree-sitter-rust", version: "0.24.0", dir: "." },
   // Non-code files (Phase 22). tree-sitter-powershell 0.26.6 is under two weeks old, so 0.26.4.
   { name: "css", package: "tree-sitter-css", version: "0.25.0", dir: "." },
   { name: "scss", package: "tree-sitter-scss", version: "1.0.0", dir: "." },

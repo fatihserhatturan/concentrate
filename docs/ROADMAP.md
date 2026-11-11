@@ -1170,13 +1170,13 @@ Rust gets files, `use` / `mod` imports, structs, functions, impl methods, calls 
 
 ### Grammar
 
-- [ ] Upgrade the vendored `rust.wasm` (tree-sitter-rust 0.21.0) to the current release through `npm run grammars:build`; review the golden diffs
-- [ ] Partial graph plus a scan warning for files with `ERROR` nodes
+- [x] Upgrade the vendored `rust.wasm` (tree-sitter-rust 0.21.0 → 0.24.0) to the current release through `npm run grammars:build`; review the golden diffs
+- [x] Partial graph plus a scan warning for files with `ERROR` nodes
 
 ### Crates and modules
 
-- [ ] `Cargo.toml` packages and `[workspace]` members; crate names (with `-` → `_`) in `use` resolve to the crate's `lib.rs` / `main.rs`
-- [ ] `mod` trees (`mod.rs`, `foo.rs` + `foo/`, `#[path]`), `pub use` re-exports, `use` groups, aliases and globs
+- [x] `Cargo.toml` packages and `[workspace]` members; crate names (with `-` → `_`) in `use` resolve to the crate's `lib.rs` / `main.rs`
+- [x] `mod` trees (`mod.rs`, `foo.rs` + `foo/`, `#[path]`), `pub use` re-exports, `use` groups, aliases and globs
 
 ### Declarations
 

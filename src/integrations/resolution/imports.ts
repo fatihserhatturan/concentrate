@@ -17,6 +17,8 @@ import {
   isRustFile,
   shouldResolveAbsoluteImport,
 } from "../../core/scan/resolution/file-kind.js";
+import { readCargoConfig } from "../languages/rust/cargo.js";
+import { createRustModuleTree, type RustImportRecord } from "../languages/rust/resolution.js";
 import { isStyleFile, resolveStyleImport } from "../languages/plain/style-resolution.js";
 import { isProtoFile, resolveProtoImport } from "../languages/plain/proto-resolution.js";
 import { resolveImport } from "../languages/js-ts/resolution/import-dispatch.js";
@@ -44,6 +46,7 @@ export async function addImportResolutionRelationships(
   });
   const goConfig = await readGoResolutionConfig(rootPath, fileIdByRelativePath.keys());
   const goFilesByDirectory = indexGoFilesByDirectory(fileIdByRelativePath);
+  const rustTree = await createRustTree(rootPath, graph, fileIdByRelativePath, importerFileIdByImportId);
   // A bare specifier tried only because of `baseUrl` (`next/link` against
   // `baseUrl: "."`) is a package import, not an unresolved one, unless its
   // first segment names a file or folder under baseUrl (`types` for
@@ -100,6 +103,17 @@ export async function addImportResolutionRelationships(
       continue;
     }
 
+    // A Rust path goes through the Cargo crates and the `mod` tree.
+    if (importerFileId && isRustFile(importerFileId)) {
+      const result = rustTree.resolveImport(rustImportRecord(node.properties, importerFileId));
+      for (const targetFileId of result.files.map((file) => fileIdByRelativePath.get(file)).filter((id): id is string => id !== undefined)) {
+        graph.addRelationship({ from: node.id, to: targetFileId, type: "RESOLVES_TO", properties: {} });
+      }
+      if (result.files.length > 0) resolved += 1;
+      else if (result.expected) unresolved += 1;
+      continue;
+    }
+
     if (!importerFileId || !shouldAttemptResolution(source, importerFileId, jsTsConfig, goConfig)) {
       continue;
     }
@@ -153,9 +167,41 @@ function shouldAttemptResolution(
     return goPackageDirectory(source, goConfig) !== null;
   }
 
-  if (isRustFile(importerFileId)) {
-    return source.startsWith("crate::") || source.startsWith("super::") || !source.includes("::");
-  }
-
   return shouldResolveAbsoluteImport(importerFileId);
+}
+
+export function rustImportRecord(properties: Record<string, unknown>, importerFileId: string): RustImportRecord {
+  return {
+    importerFile: importerFileId.slice("file:".length),
+    source: String(properties.source),
+    isModule: properties.isModule === true,
+    isReExport: properties.isReExport === true,
+    isWildcard: properties.isWildcard === true,
+    alias: typeof properties.alias === "string" ? properties.alias : null,
+    inlineModules: typeof properties.inlineModules === "string" ? JSON.parse(properties.inlineModules) as string[] : [],
+    pathAttribute: typeof properties.pathAttribute === "string" ? properties.pathAttribute : null,
+  };
+}
+
+async function createRustTree(
+  rootPath: string,
+  graph: IGraphContributor,
+  fileIdByRelativePath: Map<string, string>,
+  importerFileIdByImportId: Map<string, string>,
+) {
+  const records: RustImportRecord[] = [];
+  for (const node of graph.nodes) {
+    if (node.label !== "Import") continue;
+    const importer = importerFileIdByImportId.get(node.id);
+    if (importer && isRustFile(importer)) records.push(rustImportRecord(node.properties, importer));
+  }
+  const config = records.length === 0 ? { packages: [] } : await readCargoConfig(rootPath, fileIdByRelativePath.keys());
+  const directories = new Map<string, string[]>();
+  for (const file of fileIdByRelativePath.keys()) {
+    const dir = path.posix.dirname(file);
+    const list = directories.get(dir) ?? [];
+    list.push(file);
+    directories.set(dir, list);
+  }
+  return createRustModuleTree(config, records, (file) => fileIdByRelativePath.has(file), (dir) => directories.get(dir) ?? []);
 }
