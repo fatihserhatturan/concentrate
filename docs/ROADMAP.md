@@ -1253,29 +1253,29 @@ The data, env and HTTP-client relationships (`Table`, `DataModel`, `READS` / `WR
 
 ### Data access
 
-- [ ] sqlx: `query!`, `query_as!`, `query_scalar!` and `sqlx::query(...)` with literal SQL → `Table` with `READS` / `WRITES`; `#[derive(FromRow)]` structs as `DataModel`
-- [ ] diesel: `table!` macros (`schema.rs`) as `Table`, `#[derive(Queryable, Insertable)]` + `#[diesel(table_name)]` models, query DSL (`users::table.filter(...)`, `insert_into`, `update`, `delete`)
-- [ ] SeaORM: `DeriveEntityModel` entities with `table_name`, `Entity::find()`, `ActiveModel` inserts / updates; relations as `RELATES_TO`
+- [x] sqlx: `query!`, `query_as!`, `query_scalar!` and `sqlx::query(...)` with literal SQL → `Table` with `READS` / `WRITES`; `#[derive(FromRow)]` structs as `DataModel`
+- [x] diesel: `table!` macros (`schema.rs`) as `Table`, `#[derive(Queryable, Insertable)]` + `#[diesel(table_name)]` models, query DSL (`users::table.filter(...)`, `insert_into`, `update`, `delete`)
+- [x] SeaORM: `DeriveEntityModel` entities with `table_name`, `Entity::find()`, `ActiveModel` inserts / updates; relations as `RELATES_TO`
 
 ### Config and env
 
-- [ ] `std::env::var`, `env::var_os`, `env!` / `option_env!` → `USES_ENV`
-- [ ] dotenvy / dotenv loading; `.env` files declare variables for Rust projects too
-- [ ] The `config` crate (`Config::builder().add_source(Environment::with_prefix(...))`, `get_string`), envy, and clap `#[arg(env = "X")]` → `ConfigValue` / `EnvVar`
+- [x] `std::env::var`, `env::var_os`, `env!` / `option_env!` → `USES_ENV`
+- [x] dotenvy / dotenv loading; `.env` files declare variables for Rust projects too
+- [x] The `config` crate (`Config::builder().add_source(Environment::with_prefix(...))`, `get_string`), envy, and clap `#[arg(env = "X")]` → `ConfigValue` / `EnvVar`
 
 ### Outbound HTTP
 
-- [ ] reqwest (`reqwest::get`, `Client::get/post/request`, `.send()`) → `REQUESTS` to project routes, with the `--api-origin` rules
+- [x] reqwest (`reqwest::get`, `Client::get/post/request`, `.send()`) → `REQUESTS` to project routes, with the `--api-origin` rules
 
 ### MCP
 
-- [ ] `list_data_access`, `list_tables`, `list_env_config` and `impact_of` cover Rust
+- [x] `list_data_access`, `list_tables`, `list_env_config` and `impact_of` cover Rust
 
 ### Acceptance criteria
 
-- [ ] Fixtures with golden coverage for each library above
-- [ ] Hand labels for data access and env on the pinned Rust sample: precision 100%, recall reported
-- [ ] Docs updated (`docs/known-limitations.md`, `docs/mcp-server.md`)
+- [x] Fixtures with golden coverage for each library above
+- [x] Hand labels for data access and env on the pinned Rust sample: precision 100%, recall reported
+- [x] Docs updated (`docs/known-limitations.md`, `docs/mcp-server.md`)
 
 ## Phase 29: Rust ecosystem measurement (samples, accuracy, agent benchmark, README) ([#169](https://github.com/fatihserhatturan/concentrate/issues/169))
 

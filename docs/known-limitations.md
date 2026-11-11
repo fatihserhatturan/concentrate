@@ -1323,6 +1323,22 @@ Astro).
   local typed `X::ActiveModel`. An `ActiveModel` that comes from a parameter,
   a struct field or `.into_active_model()` is not followed, nor are
   `find_with_related` joins' second entity or `Statement::from_string` SQL.
+- Rust outbound HTTP is recorded on the call like the JS and Go clients and
+  linked by the same matcher (`REQUESTS`, `api_consumers`, with the
+  `--api-origin` rules): reqwest's `reqwest::get` (and `blocking::get`), and
+  `get` / `post` / `put` / `patch` / `delete` / `head` / `request(Method::X,
+  url)` on a `Client` (`Client::new()`, `Client::builder()….build()`, a
+  parameter, local, `static`, or a `self` / state-struct field typed
+  `reqwest::Client`, `blocking::Client` or `ClientWithMiddleware`). The URL is
+  a literal, a `const` / `static` or local one, `format!` (known strings
+  substituted, other parts written `${expression}`), `String::from`,
+  `.to_string()`, `Url::parse` and `+`; `std::env::var("X")` / `env!("X")` is
+  resolved from the nearest `.env*` file when it gives a URL or path, and the
+  query string is dropped. A base URL held in a struct field
+  (`format!("{}/x", self.base)`), a `const` of another file, `Url::join`
+  builders, `RequestBuilder`s passed between functions and other HTTP crates
+  (hyper, ureq, surf, isahc) are not read; a URL that starts with an unknown
+  part leaves the call unlinked.
 - Rust env reads are `USES_ENV` from the function that reads (and from its
   file; an item-level read such as a `static` initializer is the file's):
   `std::env::var` / `env::var_os`, `dotenvy::var` / `dotenv::var` (and a
