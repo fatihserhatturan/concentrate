@@ -1,0 +1,13 @@
+---
+const { dark } = Astro.props;
+---
+<section class="hero" class:list={["wide", { dark }]}>
+  <slot />
+</section>
+
+<style>
+  .hero { padding: 1rem; }
+</style>
+<style is:global>
+  .wide { max-width: 100%; }
+</style>

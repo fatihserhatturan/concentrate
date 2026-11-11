@@ -7,6 +7,7 @@ import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 import type { PendingRender } from "./react.js";
 import { createEntrypointNode, listenerHandlerName } from "./entrypoint-graph.js";
 import { stripStringQuotes } from "./file-index.js";
+import { addStyleRefs, templateStyleRefs, type StyleRef } from "../styles/class-refs.js";
 
 // Angular components, in files that import from `@angular/core`: each class
 // decorated with `@Component({…})` is a Component (framework `angular`, kind
@@ -32,7 +33,7 @@ import { stripStringQuotes } from "./file-index.js";
 // parameter property, so the injection resolver adds INJECTS and resolves
 // `this.users.load()`.
 
-type InlineFacts = { renders: PendingRender[]; listeners: TemplateListener[] };
+type InlineFacts = { renders: PendingRender[]; listeners: TemplateListener[]; classes?: StyleRef[] };
 type TemplateListener = { row: number; column: number; trigger: string; tag: string; handlerName: string | null };
 
 export async function applyAngularParseSemantics({ fileNodeId, rootNode, parsed }: JsTsParsedFile): Promise<void> {
@@ -134,9 +135,12 @@ export async function applyAngularParseSemantics({ fileNodeId, rootNode, parsed 
     if (template && (template.type === "string" || (template.type === "template_string" && !template.namedChildren.some((child) => child?.type === "template_substitution")))) {
       const start = template.startPosition;
       const prefix = "\n".repeat(start.row) + " ".repeat(start.column + 1);
-      facts = await parseTemplate(prefix + template.text.slice(1, -1));
+      facts = await parseTemplate(prefix + template.text.slice(1, -1), true);
     }
     for (const listener of facts.listeners) addListener(listener);
+    // Class names of an inline template belong to the component.
+    const componentId = `${fileNodeId}:component:${Number(classNode.properties.line)}:${className}`;
+    addStyleRefs(parsed, fileNodeId, (facts.classes ?? []).map((ref) => ({ ...ref, o: componentId })));
 
     const line = Number(classNode.properties.line);
     const node: GraphNode = {
@@ -238,7 +242,7 @@ const builtInElements = new Set(["ng-template", "ng-container", "ng-content"]);
 // The renders and listeners of a template. `{{ … }}` interpolations and the
 // conditions of `@if (…)`-style blocks are masked for the HTML grammar (a `<`
 // in them would read as a tag); node text still comes from `source`.
-export async function parseTemplate(source: string): Promise<InlineFacts> {
+export async function parseTemplate(source: string, withClasses = false): Promise<InlineFacts> {
   const tree = await parseSyntaxTree("html", source, maskTemplateSyntax(source));
   try {
     const facts: InlineFacts = { renders: [], listeners: [] };
@@ -267,6 +271,7 @@ export async function parseTemplate(source: string): Promise<InlineFacts> {
       }
     };
     visit(tree.rootNode);
+    if (withClasses) facts.classes = await templateStyleRefs(tree.rootNode, source, "angular", null);
     return facts;
   } finally {
     tree.delete();

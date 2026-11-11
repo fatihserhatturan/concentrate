@@ -35,9 +35,16 @@ export function addStyleReading(
   reading: StyleReading,
   parsed: ParsedSourceFile,
   lineOffset: number,
+  // The scope of the file's classes when the block says so: `module` for
+  // `<style module>`, `scoped` for styles bound to one component.
+  blockScope: "module" | "scoped" | null = null,
 ): void {
   const moduleFile = isStyleModule(relativePath);
+  const existing = new Set(parsed.nodes.filter((node) => node.label === "Style").map((node) => node.id));
   const declared = (node: GraphNode) => {
+    // Two `<style>` blocks of a component can name the same class.
+    if (existing.has(node.id)) return;
+    existing.add(node.id);
     parsed.nodes.push(node);
     parsed.relationships.push({ from: fileNodeId, to: node.id, type: "DECLARES_STYLE", properties: {} });
   };
@@ -48,7 +55,7 @@ export function addStyleReading(
     declared({
       id,
       label: "Style",
-      properties: { name: entry.name, kind: "class", line: entry.line + lineOffset, scope: entry.scope ?? (moduleFile ? "module" : null) },
+      properties: { name: entry.name, kind: "class", line: entry.line + lineOffset, scope: entry.scope ?? blockScope ?? (moduleFile ? "module" : null) },
     });
   }
   for (const entry of reading.ids.values()) {

@@ -1386,6 +1386,40 @@ Astro).
   property defined nowhere in the scan (a third-party theme, JS `setProperty`)
   has no target; uses in JS, templates and inline `style` attributes are not
   read.
+- `<style>` blocks of `.vue`, `.svelte` and `.astro` files are read like style
+  sheets (`lang` of css, scss or less; `sass`, `stylus` and `src=` blocks are
+  not) and declared by the file. Their classes carry `scope: module`
+  (`<style module>`), `scoped` (Vue `scoped`, every Svelte and Astro style
+  except `is:global`) or none; `:global(.x)` is global.
+- `USES_STYLE` also links a function, component or file to a class
+  (`line`, `match`, `expression`): from the `Component` a function defines
+  (React, Preact, Solid, class components: the method's class), else from the
+  `Function`, else the `File`; `.vue` / `.svelte` / `.astro` templates and
+  Angular `templateUrl` files link from their component, an Angular inline
+  `template` from its component, other HTML from the file.
+  - `match: "module"`: `styles.btn` and `styles["btn"]` of a default or
+    namespace import of a style file, and Vue's `$style.btn` (to the file's
+    `<style module>`). Exact: only a class the file declares is linked, and
+    `const { btn } = styles`, `useCssModule()` and named imports are not read.
+  - `match: "import"` and `"name"` are matches by name only: the literal
+    names of `className="a b"` / `class=`, `classList`, a conditional,
+    `&&` or `||` of strings, an array, a static template literal, and the
+    string and object-key arguments of `clsx`, `classnames`, `classNames`,
+    `cn`, `cx`, `twMerge`, `twJoin`, `cc` and `classcat`; Vue `:class` /
+    `v-bind:class`; Svelte `class="a {b}"` and `class:name`; Astro `class` and
+    `class:list`; Angular `class`, `[class.x]`, `[class]` and `[ngClass]`
+    (read in every `.html` file). Names built at run time (`btn-${size}`,
+    `class="a-{b}"`, `{{ x }}`) and variables are not read; a ternary or
+    `&&` operand that is a variable names nothing. A class of a style sheet
+    the file imports, directly or through `@import` / `@use`, or of the file's
+    own `<style>`, is `import`; with none of those the global classes of
+    that name anywhere in the project are `name` (at most 20: more than that
+    is too ambiguous and links nothing). Classes of `.module.css` files and
+    scoped styles are never matched by name from another file. A `CSS` file
+    loaded by an HTML `<link>`, a bundler entry or a framework config the
+    scan does not read has no `import` link, so its classes only match as
+    `name`. Utility classes (Tailwind) have no rule in the project and link
+    nothing.
 - `@import`, `@use`, `@forward`, `url()`, CSS Modules `composes: a from "./x"`
   and `@value a from "./x"` are `Import` nodes of the file, resolved to `File`
   like JS imports: relative to the style sheet; Sass and Less add the

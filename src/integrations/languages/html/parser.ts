@@ -41,7 +41,7 @@ type CodeRange = { start: number; end: number; separator: number | null };
 // from it by position.
 export interface HtmlPagePlugin {
   readonly name: string;
-  onPage(page: { fileNodeId: string; documentNode: SyntaxNode; parsed: ParsedSourceFile; source: string }): void;
+  onPage(page: { fileNodeId: string; documentNode: SyntaxNode; parsed: ParsedSourceFile; source: string }): void | Promise<void>;
 }
 
 export function createMarkupParser(
@@ -78,7 +78,7 @@ export async function parseMarkupFile(
   const tree = await parseSyntaxTree("html", markup);
   try {
     const parsed = await parseMarkup(rootPath, filePath, source, language, frontmatter?.code ?? null, tree.rootNode, plugins);
-    for (const plugin of pagePlugins) plugin.onPage({ fileNodeId: parsed.fileNodeId, documentNode: tree.rootNode, parsed, source });
+    for (const plugin of pagePlugins) await plugin.onPage({ fileNodeId: parsed.fileNodeId, documentNode: tree.rootNode, parsed, source });
     return parsed;
   } finally {
     tree.delete();

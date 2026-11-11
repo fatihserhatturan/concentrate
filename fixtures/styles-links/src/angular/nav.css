@@ -1,0 +1,5 @@
+.nav { display: flex; }
+.open { color: red; }
+.sticky { position: sticky; }
+.list { margin: 0; }
+.striped { color: gray; }
