@@ -66,7 +66,7 @@ the only runtime dependency left is `web-tree-sitter`.
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
 M9 (Go), M10 (non-code files), M11 (Rust) and M12 (Python) are done. M13, the C/C++ ecosystem, has its
-language foundation (Phase 34); the build systems (Phase 35) come next.
+language foundation (Phase 34) and its build systems (Phase 35); the frameworks and data access (Phase 36) come next.
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -1496,7 +1496,7 @@ The preprocessor is not run: macros are read as calls. The decisions of M9 apply
 
 ### Includes
 
-- [ ] `#include "…"` resolves relative to the file, then through the include paths of `compile_commands.json` (done) and CMake (`include_directories`, `target_include_directories`; the CMake reader is Phase 35)
+- [x] `#include "…"` resolves relative to the file, then through the include paths of `compile_commands.json` and CMake (`include_directories`, `target_include_directories`; done in Phase 35)
 - [x] `#include <…>` headers outside the scan are external imports
 
 ### Declarations
@@ -1537,24 +1537,24 @@ The preprocessor is not run: macros are read as calls. The decisions of M9 apply
 
 ### CMake
 
-- [ ] `add_executable` / `add_library` targets with their sources; `target_link_libraries` between targets; `add_subdirectory`
-- [ ] `include_directories` / `target_include_directories` and `target_compile_definitions` passed to include resolution
-- [ ] Variables set with `set(...)` expanded in the arguments above; anything else counted as unresolved
+- [x] `add_executable` / `add_library` targets with their sources; `target_link_libraries` between targets; `add_subdirectory`
+- [x] `include_directories` / `target_include_directories` and `target_compile_definitions` passed to include resolution
+- [x] Variables set with `set(...)` expanded in the arguments above; anything else counted as unresolved
 
 ### Targets in the graph
 
-- [ ] Targets as `Package` nodes (`PACKAGE_CONTAINS_FILE`, `PACKAGE_IMPORTS_PACKAGE` from links)
-- [ ] An executable target is an `EntryPoint` with `RUNS` to its `main`
+- [x] Targets as `Package` nodes (`PACKAGE_CONTAINS_FILE`, `PACKAGE_IMPORTS_PACKAGE` from links)
+- [x] An executable target is an `EntryPoint` with `RUNS` to its `main`
 
 ### Make and compile_commands.json
 
-- [ ] Makefile compile and link rules map targets to sources
-- [ ] `compile_commands.json` per-file flags (`-I`, `-D`) used when present
+- [x] Makefile compile and link rules map targets to sources
+- [x] `compile_commands.json` per-file flags (`-I`, `-D`) used when present
 
 ### Acceptance criteria
 
-- [ ] A CMake fixture with two libraries and an executable has golden targets, links and include resolution
-- [ ] Moving include paths into CMake does not lose any resolved include of the Phase 34 fixtures
+- [x] A CMake fixture with two libraries and an executable has golden targets, links and include resolution
+- [x] Moving include paths into CMake does not lose any resolved include of the Phase 34 fixtures
 
 ## Phase 36: C/C++ HTTP and RPC frameworks, data access, config and outbound HTTP (Drogon, Crow, gRPC, Qt, sqlite3, libcurl) ([#213](https://github.com/fatihserhatturan/concentrate/issues/213))
 
