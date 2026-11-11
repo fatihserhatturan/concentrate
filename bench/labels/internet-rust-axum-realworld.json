@@ -597,5 +597,24 @@
         }
       }
     ]
+  },
+  "env": {
+    "scope": [
+      "src/"
+    ],
+    "items": [
+      {
+        "file": "src/config.rs",
+        "line": 19,
+        "name": "DATABASE_URL",
+        "function": null
+      },
+      {
+        "file": "src/config.rs",
+        "line": 26,
+        "name": "HMAC_KEY",
+        "function": null
+      }
+    ]
   }
 }
