@@ -1,0 +1,58 @@
+{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":4,"parsedFiles":4,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"cpp-includes","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:include","label":"Directory","properties":{"name":"include","path":"<root>/include","relativePath":"include"}}
+{"kind":"node","id":"dir:include/app","label":"Directory","properties":{"name":"app","path":"<root>/include/app","relativePath":"include/app"}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"dir:third_party","label":"Directory","properties":{"name":"third_party","path":"<root>/third_party","relativePath":"third_party"}}
+{"kind":"node","id":"dir:third_party/fmt","label":"Directory","properties":{"name":"fmt","path":"<root>/third_party/fmt","relativePath":"third_party/fmt"}}
+{"kind":"node","id":"file:compile_commands.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/compile_commands.json","relativePath":"compile_commands.json","sourceType":"production"}}
+{"kind":"node","id":"file:include/app/config.h","label":"File","properties":{"cppScope":"{\"namespaces\":[\"app\"]}","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/include/app/config.h","relativePath":"include/app/config.h","sourceType":"production"}}
+{"kind":"node","id":"file:include/app/config.h:function:2:app::version","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":2,"methodKind":null,"name":"version","namespace":"app","parameters":"[]","qualifiedName":"app::version","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:src/config.cpp","label":"File","properties":{"cppScope":"{\"namespaces\":[\"app\"]}","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/src/config.cpp","relativePath":"src/config.cpp","sourceType":"production"}}
+{"kind":"node","id":"file:src/config.cpp:function:7:app::version","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":7,"methodKind":null,"name":"version","namespace":"app","parameters":"[]","qualifiedName":"app::version","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:src/config.cpp:function:7:app::version:call:7:23:fmt::pad","label":"Call","properties":{"argCount":1,"callee":"pad","columnNumber":23,"expression":"fmt::pad","line":7,"name":"fmt::pad","qualifier":"fmt","receiver":null}}
+{"kind":"node","id":"file:src/config.cpp:import:1:app/config.h","label":"Import","properties":{"isSystem":false,"line":1,"source":"app/config.h","specifier":"#include \"app/config.h\""}}
+{"kind":"node","id":"file:src/config.cpp:import:2:fmt/format.h","label":"Import","properties":{"isSystem":true,"line":2,"source":"fmt/format.h","specifier":"#include <fmt/format.h>"}}
+{"kind":"node","id":"file:src/config.cpp:import:3:vector","label":"Import","properties":{"isSystem":true,"line":3,"source":"vector","specifier":"#include <vector>"}}
+{"kind":"node","id":"file:src/config.cpp:import:4:missing/nothing.h","label":"Import","properties":{"isSystem":false,"line":4,"source":"missing/nothing.h","specifier":"#include \"missing/nothing.h\""}}
+{"kind":"node","id":"file:src/main.cpp","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/src/main.cpp","relativePath":"src/main.cpp","sourceType":"production"}}
+{"kind":"node","id":"file:src/main.cpp:entrypoint:4:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"cpp","line":4,"receiverName":null,"trigger":null}}
+{"kind":"node","id":"file:src/main.cpp:function:4:main","label":"Function","properties":{"className":null,"endLine":4,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":4,"methodKind":null,"name":"main","namespace":"","parameters":"[]","qualifiedName":"main","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:src/main.cpp:function:4:main:call:4:20:app::version","label":"Call","properties":{"argCount":0,"callee":"version","columnNumber":20,"expression":"app::version","line":4,"name":"app::version","qualifier":"app","receiver":null}}
+{"kind":"node","id":"file:src/main.cpp:import:1:app/config.h","label":"Import","properties":{"isSystem":false,"line":1,"source":"app/config.h","specifier":"#include \"app/config.h\""}}
+{"kind":"node","id":"file:src/main.cpp:import:2:../include/app/config.h","label":"Import","properties":{"isSystem":false,"line":2,"source":"../include/app/config.h","specifier":"#include \"../include/app/config.h\""}}
+{"kind":"node","id":"file:third_party/fmt/format.h","label":"File","properties":{"cppScope":"{\"namespaces\":[\"fmt\"]}","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/third_party/fmt/format.h","relativePath":"third_party/fmt/format.h","sourceType":"production"}}
+{"kind":"node","id":"file:third_party/fmt/format.h:function:2:fmt::pad","label":"Function","properties":{"className":null,"endLine":2,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":2,"methodKind":null,"name":"pad","namespace":"fmt","parameters":"[{\"name\":\"width\",\"type\":\"int\"}]","qualifiedName":"fmt::pad","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"cpp-includes","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:include","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:third_party","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:compile_commands.json","properties":{}}
+{"kind":"rel","from":"dir:include","type":"CONTAINS_DIRECTORY","to":"dir:include/app","properties":{}}
+{"kind":"rel","from":"dir:include/app","type":"CONTAINS_FILE","to":"file:include/app/config.h","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/config.cpp","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.cpp","properties":{}}
+{"kind":"rel","from":"dir:third_party","type":"CONTAINS_DIRECTORY","to":"dir:third_party/fmt","properties":{}}
+{"kind":"rel","from":"dir:third_party/fmt","type":"CONTAINS_FILE","to":"file:third_party/fmt/format.h","properties":{}}
+{"kind":"rel","from":"file:include/app/config.h","type":"DEFINES_FUNCTION","to":"file:include/app/config.h:function:2:app::version","properties":{}}
+{"kind":"rel","from":"file:include/app/config.h:function:2:app::version","type":"DEFINED_BY","to":"file:src/config.cpp:function:7:app::version","properties":{}}
+{"kind":"rel","from":"file:src/config.cpp","type":"DEFINES_FUNCTION","to":"file:src/config.cpp:function:7:app::version","properties":{}}
+{"kind":"rel","from":"file:src/config.cpp","type":"IMPORTS","to":"file:src/config.cpp:import:1:app/config.h","properties":{}}
+{"kind":"rel","from":"file:src/config.cpp","type":"IMPORTS","to":"file:src/config.cpp:import:2:fmt/format.h","properties":{}}
+{"kind":"rel","from":"file:src/config.cpp","type":"IMPORTS","to":"file:src/config.cpp:import:3:vector","properties":{}}
+{"kind":"rel","from":"file:src/config.cpp","type":"IMPORTS","to":"file:src/config.cpp:import:4:missing/nothing.h","properties":{}}
+{"kind":"rel","from":"file:src/config.cpp:function:7:app::version","type":"CALLS","to":"file:src/config.cpp:function:7:app::version:call:7:23:fmt::pad","properties":{}}
+{"kind":"rel","from":"file:src/config.cpp:function:7:app::version:call:7:23:fmt::pad","type":"CALL_RESOLVES_TO","to":"file:third_party/fmt/format.h:function:2:fmt::pad","properties":{}}
+{"kind":"rel","from":"file:src/config.cpp:import:1:app/config.h","type":"RESOLVES_TO","to":"file:include/app/config.h","properties":{}}
+{"kind":"rel","from":"file:src/config.cpp:import:2:fmt/format.h","type":"RESOLVES_TO","to":"file:third_party/fmt/format.h","properties":{}}
+{"kind":"rel","from":"file:src/main.cpp","type":"DECLARES_ENTRYPOINT","to":"file:src/main.cpp:entrypoint:4:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:src/main.cpp","type":"DEFINES_FUNCTION","to":"file:src/main.cpp:function:4:main","properties":{}}
+{"kind":"rel","from":"file:src/main.cpp","type":"IMPORTS","to":"file:src/main.cpp:import:1:app/config.h","properties":{}}
+{"kind":"rel","from":"file:src/main.cpp","type":"IMPORTS","to":"file:src/main.cpp:import:2:../include/app/config.h","properties":{}}
+{"kind":"rel","from":"file:src/main.cpp:entrypoint:4:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/main.cpp:function:4:main","properties":{}}
+{"kind":"rel","from":"file:src/main.cpp:function:4:main","type":"CALLS","to":"file:src/main.cpp:function:4:main:call:4:20:app::version","properties":{}}
+{"kind":"rel","from":"file:src/main.cpp:function:4:main:call:4:20:app::version","type":"CALL_RESOLVES_TO","to":"file:src/config.cpp:function:7:app::version","properties":{"via":"header"}}
+{"kind":"rel","from":"file:src/main.cpp:import:1:app/config.h","type":"RESOLVES_TO","to":"file:include/app/config.h","properties":{}}
+{"kind":"rel","from":"file:src/main.cpp:import:2:../include/app/config.h","type":"RESOLVES_TO","to":"file:include/app/config.h","properties":{}}
+{"kind":"rel","from":"file:third_party/fmt/format.h","type":"DEFINES_FUNCTION","to":"file:third_party/fmt/format.h:function:2:fmt::pad","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

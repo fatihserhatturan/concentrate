@@ -1,0 +1,89 @@
+{"kind":"report","status":"success","discoveredFiles":3,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"c-basic","path":"<root>","relativePath":"."}}
+{"kind":"node","id":"dir:include","label":"Directory","properties":{"name":"include","path":"<root>/include","relativePath":"include"}}
+{"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
+{"kind":"node","id":"file:include/list.h","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"c","path":"<root>/include/list.h","relativePath":"include/list.h","sourceType":"production"}}
+{"kind":"node","id":"file:include/list.h:class:14:List","label":"Class","properties":{"bases":"[]","endLine":17,"fields":"[{\"name\":\"head\",\"type\":\"Node\",\"access\":\"public\",\"isStatic\":false},{\"name\":\"length\",\"type\":\"size_t\",\"access\":\"public\",\"isStatic\":false}]","isAbstract":false,"isExported":true,"kind":"struct","line":14,"name":"List","namespace":"","qualifiedName":"List","visibility":null}}
+{"kind":"node","id":"file:include/list.h:class:9:Node","label":"Class","properties":{"bases":"[]","endLine":12,"fields":"[{\"name\":\"value\",\"type\":\"int\",\"access\":\"public\",\"isStatic\":false},{\"name\":\"next\",\"type\":\"Node\",\"access\":\"public\",\"isStatic\":false}]","isAbstract":false,"isExported":true,"kind":"struct","line":9,"name":"Node","namespace":"","qualifiedName":"Node","visibility":null}}
+{"kind":"node","id":"file:include/list.h:enum:19:ListError","label":"Enum","properties":{"endLine":19,"isExported":true,"line":19,"name":"ListError","namespace":"","qualifiedName":"ListError","variants":"[\"LIST_OK\",\"LIST_FULL\"]","visibility":null}}
+{"kind":"node","id":"file:include/list.h:function:21:list_push","label":"Function","properties":{"className":null,"endLine":21,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":21,"methodKind":null,"name":"list_push","namespace":"","parameters":"[{\"name\":\"list\",\"type\":\"List*\"},{\"name\":\"value\",\"type\":\"int\"}]","qualifiedName":"list_push","returnType":"void","visibility":"external"}}
+{"kind":"node","id":"file:include/list.h:function:22:list_sum","label":"Function","properties":{"className":null,"endLine":22,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":22,"methodKind":null,"name":"list_sum","namespace":"","parameters":"[{\"name\":\"list\",\"type\":\"const List*\"}]","qualifiedName":"list_sum","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:include/list.h:function:23:list_length","label":"Function","properties":{"className":null,"endLine":23,"isAbstract":false,"isAsync":false,"isDeclaration":true,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":23,"methodKind":null,"name":"list_length","namespace":"","parameters":"[{\"name\":\"list\",\"type\":\"const List*\"}]","qualifiedName":"list_length","returnType":"size_t","visibility":"external"}}
+{"kind":"node","id":"file:include/list.h:function:7:LIST_EMPTY","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":false,"isOverride":false,"isVirtual":false,"kind":"macro","line":7,"methodKind":null,"name":"LIST_EMPTY","namespace":"","parameters":"[{\"name\":\"l\",\"type\":null}]","qualifiedName":"LIST_EMPTY","returnType":null,"visibility":"external"}}
+{"kind":"node","id":"file:include/list.h:import:4:stddef.h","label":"Import","properties":{"isSystem":true,"line":4,"source":"stddef.h","specifier":"#include <stddef.h>"}}
+{"kind":"node","id":"file:include/list.h:variable:2:LIST_H","label":"Variable","properties":{"isExported":false,"kind":"macro","line":2,"name":"LIST_H","typeName":null}}
+{"kind":"node","id":"file:include/list.h:variable:6:LIST_INIT","label":"Variable","properties":{"isExported":false,"kind":"macro","line":6,"name":"LIST_INIT","typeName":"{ NULL, 0 }"}}
+{"kind":"node","id":"file:src/list.c","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"c","path":"<root>/src/list.c","relativePath":"src/list.c","sourceType":"production"}}
+{"kind":"node","id":"file:src/list.c:function:11:list_push","label":"Function","properties":{"className":null,"endLine":16,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":11,"methodKind":null,"name":"list_push","namespace":"","parameters":"[{\"name\":\"list\",\"type\":\"List*\"},{\"name\":\"value\",\"type\":\"int\"}]","qualifiedName":"list_push","returnType":"void","visibility":"external"}}
+{"kind":"node","id":"file:src/list.c:function:11:list_push:call:12:15:make_node","label":"Call","properties":{"argCount":1,"callee":"make_node","columnNumber":15,"expression":"make_node","line":12,"name":"make_node","receiver":null}}
+{"kind":"node","id":"file:src/list.c:function:18:list_sum","label":"Function","properties":{"className":null,"endLine":22,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":18,"methodKind":null,"name":"list_sum","namespace":"","parameters":"[{\"name\":\"list\",\"type\":\"const List*\"}]","qualifiedName":"list_sum","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:src/list.c:function:24:list_length","label":"Function","properties":{"className":null,"endLine":24,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":24,"methodKind":null,"name":"list_length","namespace":"","parameters":"[{\"name\":\"list\",\"type\":\"const List*\"}]","qualifiedName":"list_length","returnType":"size_t","visibility":"external"}}
+{"kind":"node","id":"file:src/list.c:function:26:unused_helper","label":"Function","properties":{"className":null,"endLine":26,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":false,"isOverride":false,"isVirtual":false,"kind":"function","line":26,"methodKind":null,"name":"unused_helper","namespace":"","parameters":"[]","qualifiedName":"unused_helper","returnType":"void","visibility":"internal"}}
+{"kind":"node","id":"file:src/list.c:function:4:make_node","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":false,"isOverride":false,"isVirtual":false,"kind":"function","line":4,"methodKind":null,"name":"make_node","namespace":"","parameters":"[{\"name\":\"value\",\"type\":\"int\"}]","qualifiedName":"make_node","returnType":"Node","visibility":"internal"}}
+{"kind":"node","id":"file:src/list.c:function:4:make_node:call:5:15:malloc","label":"Call","properties":{"argCount":1,"callee":"malloc","columnNumber":15,"expression":"malloc","line":5,"name":"malloc","receiver":null}}
+{"kind":"node","id":"file:src/list.c:import:1:stdlib.h","label":"Import","properties":{"isSystem":true,"line":1,"source":"stdlib.h","specifier":"#include <stdlib.h>"}}
+{"kind":"node","id":"file:src/list.c:import:2:list.h","label":"Import","properties":{"isSystem":false,"line":2,"source":"list.h","specifier":"#include \"list.h\""}}
+{"kind":"node","id":"file:src/main.c","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"c","path":"<root>/src/main.c","relativePath":"src/main.c","sourceType":"production"}}
+{"kind":"node","id":"file:src/main.c:entrypoint:8:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"c","line":8,"receiverName":null,"trigger":null}}
+{"kind":"node","id":"file:src/main.c:function:4:report","label":"Function","properties":{"className":null,"endLine":6,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":false,"isOverride":false,"isVirtual":false,"kind":"function","line":4,"methodKind":null,"name":"report","namespace":"","parameters":"[{\"name\":\"list\",\"type\":\"const List*\"}]","qualifiedName":"report","returnType":"void","visibility":"internal"}}
+{"kind":"node","id":"file:src/main.c:function:4:report:call:5:24:list_sum","label":"Call","properties":{"argCount":1,"callee":"list_sum","columnNumber":24,"expression":"list_sum","line":5,"name":"list_sum","receiver":null}}
+{"kind":"node","id":"file:src/main.c:function:4:report:call:5:2:printf","label":"Call","properties":{"argCount":3,"callee":"printf","columnNumber":2,"expression":"printf","line":5,"name":"printf","receiver":null}}
+{"kind":"node","id":"file:src/main.c:function:4:report:call:5:40:list_length","label":"Call","properties":{"argCount":1,"callee":"list_length","columnNumber":40,"expression":"list_length","line":5,"name":"list_length","receiver":null}}
+{"kind":"node","id":"file:src/main.c:function:8:main","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":8,"methodKind":null,"name":"main","namespace":"","parameters":"[]","qualifiedName":"main","returnType":"int","visibility":"external"}}
+{"kind":"node","id":"file:src/main.c:function:8:main:call:10:2:list_push","label":"Call","properties":{"argCount":2,"callee":"list_push","columnNumber":2,"expression":"list_push","line":10,"name":"list_push","receiver":null}}
+{"kind":"node","id":"file:src/main.c:function:8:main:call:11:2:list_push","label":"Call","properties":{"argCount":2,"callee":"list_push","columnNumber":2,"expression":"list_push","line":11,"name":"list_push","receiver":null}}
+{"kind":"node","id":"file:src/main.c:function:8:main:call:12:26:report","label":"Call","properties":{"argCount":1,"callee":"report","columnNumber":26,"expression":"report","line":12,"name":"report","receiver":null}}
+{"kind":"node","id":"file:src/main.c:function:8:main:call:12:7:LIST_EMPTY","label":"Call","properties":{"argCount":1,"callee":"LIST_EMPTY","columnNumber":7,"expression":"LIST_EMPTY","line":12,"name":"LIST_EMPTY","receiver":null}}
+{"kind":"node","id":"file:src/main.c:import:1:stdio.h","label":"Import","properties":{"isSystem":true,"line":1,"source":"stdio.h","specifier":"#include <stdio.h>"}}
+{"kind":"node","id":"file:src/main.c:import:2:list.h","label":"Import","properties":{"isSystem":false,"line":2,"source":"list.h","specifier":"#include \"list.h\""}}
+{"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"c-basic","path":"<root>"}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:include","properties":{}}
+{"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
+{"kind":"rel","from":"dir:include","type":"CONTAINS_FILE","to":"file:include/list.h","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/list.c","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/main.c","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"DEFINES_CLASS","to":"file:include/list.h:class:14:List","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"DEFINES_CLASS","to":"file:include/list.h:class:9:Node","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"DEFINES_ENUM","to":"file:include/list.h:enum:19:ListError","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"DEFINES_FUNCTION","to":"file:include/list.h:function:21:list_push","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"DEFINES_FUNCTION","to":"file:include/list.h:function:22:list_sum","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"DEFINES_FUNCTION","to":"file:include/list.h:function:23:list_length","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"DEFINES_FUNCTION","to":"file:include/list.h:function:7:LIST_EMPTY","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"DEFINES_VARIABLE","to":"file:include/list.h:variable:2:LIST_H","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"DEFINES_VARIABLE","to":"file:include/list.h:variable:6:LIST_INIT","properties":{}}
+{"kind":"rel","from":"file:include/list.h","type":"IMPORTS","to":"file:include/list.h:import:4:stddef.h","properties":{}}
+{"kind":"rel","from":"file:include/list.h:function:21:list_push","type":"DEFINED_BY","to":"file:src/list.c:function:11:list_push","properties":{}}
+{"kind":"rel","from":"file:include/list.h:function:22:list_sum","type":"DEFINED_BY","to":"file:src/list.c:function:18:list_sum","properties":{}}
+{"kind":"rel","from":"file:include/list.h:function:23:list_length","type":"DEFINED_BY","to":"file:src/list.c:function:24:list_length","properties":{}}
+{"kind":"rel","from":"file:src/list.c","type":"DEFINES_FUNCTION","to":"file:src/list.c:function:11:list_push","properties":{}}
+{"kind":"rel","from":"file:src/list.c","type":"DEFINES_FUNCTION","to":"file:src/list.c:function:18:list_sum","properties":{}}
+{"kind":"rel","from":"file:src/list.c","type":"DEFINES_FUNCTION","to":"file:src/list.c:function:24:list_length","properties":{}}
+{"kind":"rel","from":"file:src/list.c","type":"DEFINES_FUNCTION","to":"file:src/list.c:function:26:unused_helper","properties":{}}
+{"kind":"rel","from":"file:src/list.c","type":"DEFINES_FUNCTION","to":"file:src/list.c:function:4:make_node","properties":{}}
+{"kind":"rel","from":"file:src/list.c","type":"IMPORTS","to":"file:src/list.c:import:1:stdlib.h","properties":{}}
+{"kind":"rel","from":"file:src/list.c","type":"IMPORTS","to":"file:src/list.c:import:2:list.h","properties":{}}
+{"kind":"rel","from":"file:src/list.c:function:11:list_push","type":"CALLS","to":"file:src/list.c:function:11:list_push:call:12:15:make_node","properties":{}}
+{"kind":"rel","from":"file:src/list.c:function:11:list_push:call:12:15:make_node","type":"CALL_RESOLVES_TO","to":"file:src/list.c:function:4:make_node","properties":{}}
+{"kind":"rel","from":"file:src/list.c:function:4:make_node","type":"CALLS","to":"file:src/list.c:function:4:make_node:call:5:15:malloc","properties":{}}
+{"kind":"rel","from":"file:src/list.c:import:2:list.h","type":"RESOLVES_TO","to":"file:include/list.h","properties":{}}
+{"kind":"rel","from":"file:src/main.c","type":"DECLARES_ENTRYPOINT","to":"file:src/main.c:entrypoint:8:0:main:<none>","properties":{}}
+{"kind":"rel","from":"file:src/main.c","type":"DEFINES_FUNCTION","to":"file:src/main.c:function:4:report","properties":{}}
+{"kind":"rel","from":"file:src/main.c","type":"DEFINES_FUNCTION","to":"file:src/main.c:function:8:main","properties":{}}
+{"kind":"rel","from":"file:src/main.c","type":"IMPORTS","to":"file:src/main.c:import:1:stdio.h","properties":{}}
+{"kind":"rel","from":"file:src/main.c","type":"IMPORTS","to":"file:src/main.c:import:2:list.h","properties":{}}
+{"kind":"rel","from":"file:src/main.c:entrypoint:8:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/main.c:function:8:main","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:4:report","type":"CALLS","to":"file:src/main.c:function:4:report:call:5:24:list_sum","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:4:report","type":"CALLS","to":"file:src/main.c:function:4:report:call:5:2:printf","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:4:report","type":"CALLS","to":"file:src/main.c:function:4:report:call:5:40:list_length","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:4:report:call:5:24:list_sum","type":"CALL_RESOLVES_TO","to":"file:src/list.c:function:18:list_sum","properties":{"via":"header"}}
+{"kind":"rel","from":"file:src/main.c:function:4:report:call:5:40:list_length","type":"CALL_RESOLVES_TO","to":"file:src/list.c:function:24:list_length","properties":{"via":"header"}}
+{"kind":"rel","from":"file:src/main.c:function:8:main","type":"CALLS","to":"file:src/main.c:function:8:main:call:10:2:list_push","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:8:main","type":"CALLS","to":"file:src/main.c:function:8:main:call:11:2:list_push","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:8:main","type":"CALLS","to":"file:src/main.c:function:8:main:call:12:26:report","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:8:main","type":"CALLS","to":"file:src/main.c:function:8:main:call:12:7:LIST_EMPTY","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:8:main:call:10:2:list_push","type":"CALL_RESOLVES_TO","to":"file:src/list.c:function:11:list_push","properties":{"via":"header"}}
+{"kind":"rel","from":"file:src/main.c:function:8:main:call:11:2:list_push","type":"CALL_RESOLVES_TO","to":"file:src/list.c:function:11:list_push","properties":{"via":"header"}}
+{"kind":"rel","from":"file:src/main.c:function:8:main:call:12:26:report","type":"CALL_RESOLVES_TO","to":"file:src/main.c:function:4:report","properties":{}}
+{"kind":"rel","from":"file:src/main.c:function:8:main:call:12:7:LIST_EMPTY","type":"CALL_RESOLVES_TO","to":"file:include/list.h:function:7:LIST_EMPTY","properties":{"via":"macro"}}
+{"kind":"rel","from":"file:src/main.c:import:2:list.h","type":"RESOLVES_TO","to":"file:include/list.h","properties":{}}
+{"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
