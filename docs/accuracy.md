@@ -25,11 +25,11 @@ chosen files); every target was decided by reading the code.
 | Kind | Samples | Scope |
 | --- | --- | --- |
 | Routes | express, fastify, nestjs-starter, internet-node-express-realworld, internet-nextjs-taxonomy, internet-sveltekit-realworld, internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base, internet-rust-axum-realworld, internet-rust-actix-diesel-realworld, internet-python-flask-realworld, internet-python-fastapi-realworld, internet-python-django-realworld | every route declared with a literal path in the scoped files; tests excluded; for the gin sample, the groups that register functions receive from `main` (`users.UsersRegister(v1.Group("/users"))`); for the echo sample, the `*echo.Echo` that `router.New()` in another package returns, grouped in `main` and passed to `(*Handler).Register`; for simplebank, gin's `router.Group("/").Use(mw)` and the grpc-gateway `http.ServeMux` mounts in `main.go`; for go-base, chi `Mount` / `Route` / `Group` across packages; for the Rust sample, the four axum `router()` functions of `src/http` merged by `api_router` (19 method-path pairs), for the Python samples the Conduit backends (Flask blueprints with absolute paths, FastAPI routers composed through `include_router` and `settings.api_prefix`, DRF `url()` patterns, one router registration and class-based views, 19 method-path pairs each), and for the actix-web sample the nested `web::scope` tree of `src/app/drivers/routes.rs` whose verbs are imported bare (`get().to(h)`, 20 pairs; Rocket and warp are covered by the fixtures only) |
-| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`), internet-go-echo-realworld (another Conduit Go backend: echo, gorm behind store interfaces, packages `handler`, `store`, `model`, `router`, `db`, `utils`), internet-go-clean-arch (echo + database/sql, repository → service → handler layers joined by interfaces), internet-go-simplebank (gin, gRPC, sqlc on pgx, asynq), internet-rust-axum-realworld (a Conduit Rust backend: axum, sqlx; one library crate and a bin) | every call site in 2–9 chosen files per sample; for the Go samples, every call of a repository function or method in their production files (13 gin, 21 echo, 11 clean-arch; echo's generated `docs/docs.go` excluded), and 12 chosen files of simplebank (`main.go`, `api/`, the `db/sqlc` transactions, two `gapi` RPCs, a worker task) |
+| Calls | express, fastify, nestjs-starter, ky, internet-node-express-realworld, internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld, internet-go-gin-realworld (the Conduit Go backend: gin, gorm, packages `users`, `articles`, `common`), internet-go-echo-realworld (another Conduit Go backend: echo, gorm behind store interfaces, packages `handler`, `store`, `model`, `router`, `db`, `utils`), internet-go-clean-arch (echo + database/sql, repository → service → handler layers joined by interfaces), internet-go-simplebank (gin, gRPC, sqlc on pgx, asynq), internet-rust-axum-realworld (a Conduit Rust backend: axum, sqlx; one library crate and a bin), internet-python-flask-realworld (Flask, Flask-SQLAlchemy; the whole `conduit/` package), internet-python-fastapi-realworld (FastAPI, pydantic, repositories; `app/api/` and `app/services/`) | every call site in 2–9 chosen files per sample; for the Go samples, every call of a repository function or method in their production files (13 gin, 21 echo, 11 clean-arch; echo's generated `docs/docs.go` excluded), and 12 chosen files of simplebank (`main.go`, `api/`, the `db/sqlc` transactions, two `gapi` RPCs, a worker task) |
 | Data access | internet-node-express-realworld, internet-nest (05-sql-typeorm, 06-mongoose, 13-mongo-typeorm, 14-mongoose-base, 22-graphql-prisma), internet-go-gin-realworld (gorm), internet-go-echo-realworld (gorm), internet-go-clean-arch (database/sql, MySQL), internet-go-simplebank (sqlc), internet-go-chi-base (bun), internet-rust-axum-realworld (sqlx), internet-rust-actix-diesel-realworld (diesel), internet-python-django-realworld (Django ORM), internet-python-flask-realworld (Flask-SQLAlchemy), internet-python-fastapi-template (SQLModel, Alembic) | the services; for the Go samples the production files that query the database, for the Rust sample the sqlx queries of `src/http` (labeled from their SQL, data-modifying CTEs included; the diesel sample's labels are the tables each `entities.rs` / `repositories.rs` function reads or writes, query-building helpers included only when they name a table; SeaORM is covered by the fixtures only; for the Python samples every `Model.objects…` / `Model.query…` / `session…` access of a function, the CRUD-mixin `save` / `delete` of the Flask sample being unlabeled because they act on any model, and the raw `op.execute` SQL of the template's Alembic revision); the standing samples have no data layer |
 | Components, renders | internet-react-realworld (the RealWorld "Conduit" React + Redux frontend), internet-vue-realworld (the Conduit Vue 3 frontend: `<script setup>`, Vue Router, Pinia), internet-sveltekit-realworld (the official SvelteKit Conduit app: Svelte 5, form actions, server `load` functions), internet-angular-realworld (the Conduit Angular frontend: standalone components, `templateUrl` templates, signals, constructor injection) | `src/components/` (React); every `.vue` / `.svelte` file under `src/` (Vue, Svelte); every `@Component` class under `src/` (Angular): every component and every element that renders one |
 | Pages | internet-nextjs-taxonomy (shadcn's Next.js 13 App Router app), internet-vue-realworld, internet-sveltekit-realworld, internet-angular-realworld | `app/` and `pages/`: every page, layout, loading and not-found file (Next.js); every route record in `src/router.ts` (Vue); every `+page`, `+layout` and `+error` `.svelte` file under `src/routes/` (SvelteKit); every route object of the Angular Router arrays, lazy `loadChildren` arrays mounted under their parent (Angular) |
-| Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project), internet-realworld-go-fullstack (the same frontend with the gin backend), internet-realworld-rust-fullstack (the same frontend with the axum backend) | `frontend/`: every HTTP call that reaches a backend route; the Go pair's labels are the Express pair's, with each route's declaring file moved to the gin `routers.go` that registers it; the Rust pair's labels are the Go pair's, with each route the axum `.route(..)` registration that serves it |
+| Requests | internet-realworld-fullstack (the RealWorld Express backend and a Next.js + SWR frontend, scanned as one project), internet-realworld-go-fullstack (the same frontend with the gin backend), internet-realworld-rust-fullstack (the same frontend with the axum backend) | `frontend/`: every HTTP call that reaches a backend route; the Go pair's labels are the Express pair's, with each route's declaring file moved to the gin `routers.go` that registers it; the Rust pair's labels are the Go pair's, with each route the axum `.route(..)` registration that serves it; the three Python pairs (internet-realworld-python-{django,flask,fastapi}-fullstack) use the same frontend with a Conduit backend each, labeled with the route declaration that serves each call (Django has no `DELETE /api/articles/:slug`, so that call is not labeled there) |
 | Env reads | internet-go-gin-realworld, internet-go-echo-realworld, internet-go-clean-arch, internet-go-simplebank, internet-go-chi-base, internet-rust-axum-realworld, internet-rust-actix-diesel-realworld, internet-python-django-realworld, internet-python-flask-realworld, internet-python-fastapi-realworld | every env read in the production and test files: `os.Getenv` (gin, clean-arch, go-base), viper `Get*` with `AutomaticEnv` (go-base) and the `mapstructure` keys `viper.Unmarshal` fills (simplebank); the echo sample reads none (its secret and database path are constants); for the Python samples `os.environ` reads, Django's `manage.py` and `wsgi.py`, and the pydantic settings fields of the FastAPI sample read as `settings.<field>` (the fields `config()` fills at run time are not labeled) |
 | Stores, store reads and writes | internet-vue-realworld (its Pinia setup store) | `src/`: every store and every call of a store's hook, tests included |
 | Scripts, what they run, env declarations | internet-node-express-firebase-mongodb (root `package.json`, `Dockerfile`, `docker-compose.yml`, `.github/`), internet-go-simplebank (`Makefile`, `Dockerfile`, `docker-compose.yaml`, `start.sh`, `wait-for.sh`, `eks/`, `.github/`; the Vue `frontend/` is not labeled) | every package.json script, Makefile target, shell script, Dockerfile `CMD` / `ENTRYPOINT`, compose service and CI job; what each runs; every env variable they declare. Labeled from the files, before the tool was run on them (see the results) |
@@ -466,9 +466,9 @@ file exists.
 
 ## Python (Phase 30)
 
-There is no hand-labeled Python sample for calls (the labels come with the
-measurement of Phase 33), so no precision or recall is reported for Python
-calls. What was checked:
+Call resolution is measured on two labeled samples in Phase 33 (see
+[Python samples](#python-samples-phase-33)). Before that, this is what was
+checked:
 
 - The installed `pip`, `anyio`, `pydantic` and `click` packages of a Python 3.14
   site-packages, scanned as one project (no failed files, no syntax warnings):
@@ -566,3 +566,59 @@ requests (frontend → Python backend is measured end to end by the Phase 33
 samples). The `python-http-clients` fixture links 11 requests, the TypeScript
 `fetch` calls and the Python `requests`, `httpx` and `aiohttp` calls, to the
 FastAPI routes they reach.
+
+## Python samples (Phase 33)
+
+Phase 33 completes the Python measurement: call labels for two Conduit
+backends and three full-stack samples (the Next.js frontend of the Express, Go
+and Rust pairs with a Django, a Flask and a FastAPI backend) for frontend →
+Python backend requests. The labels are written from the source, not from the
+tool's output (`bench/labels/internet-python-*.json`,
+`bench/labels/internet-realworld-python-*-fullstack.json`); every row below is
+in [`bench/results/accuracy-0.1.0-2026-11-11.json`](../bench/results/accuracy-0.1.0-2026-11-11.json)
+and the Python rows alone in
+[`bench/results/accuracy-python-0.1.0-2026-11-11.json`](../bench/results/accuracy-python-0.1.0-2026-11-11.json).
+Reproduce with `npm run samples:fetch -- --suite internet` and
+`npm run bench:accuracy -- --sample <name>`.
+
+| Sample | Section | Labels | TP | FP | FN | Precision | Recall |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-python-flask-realworld | Call resolution | 63 | 37 | 0 | 26 | 100.0% | 58.7% |
+| internet-python-fastapi-realworld | Call resolution | 80 | 79 | 0 | 1 | 100.0% | 98.8% |
+| internet-realworld-python-django-fullstack | API requests | 32 | 32 | 0 | 0 | 100.0% | 100.0% |
+| internet-realworld-python-flask-fullstack | API requests | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
+| internet-realworld-python-fastapi-fullstack | API requests | 33 | 33 | 0 | 0 | 100.0% | 100.0% |
+
+Together with the route, data-access and env rows of Phases 31 and 32 (57 routes,
+100% precision and recall), every `bench:accuracy` section that applies to
+Python has a Python row; components, pages and stores have none, as Python has
+no UI. Precision is 100% everywhere: nothing the scan links is wrong in these
+samples.
+
+- **Calls.** Every call site whose callee name is a function, method or class
+  written in the repository was listed with Python's own `ast` module and
+  decided by reading the code (Flask: all of `conduit/`, 63 labeled sites; FastAPI:
+  `app/api/` and `app/services/`, 80). A call of a class runs its `__init__`; a
+  class without one (pydantic models, marshmallow schemas) runs library code and is
+  labeled null, so the scan must not link it.
+- **FastAPI, 98.8%.** The one miss is `user.check_password(..)` in the login
+  route, where `user = await users_repo.get_user_by_email(..)` is typed only by
+  the repository method's return annotation behind an `await` inside `try`.
+- **Flask, 58.7%.** The 26 misses have three causes, none of them guessed at:
+  (1) `Model = db.Model` where `db = SQLAlchemy(model_class=CRUDMixin)`, so
+  `article.save()`, `comment.delete()`, `user.update(..)` run `CRUDMixin` in
+  `conduit/extensions.py` only through a runtime argument (15 sites);
+  (2) methods called on a value from an ORM query chain
+  (`Article.query.filter_by(..).first()` then `.favourite(..)`, `.set_password(..)`,
+  `.check_password(..)`) or on `current_user.profile` (a `LocalProxy`);
+  (3) calls in a class body (`reference_col(..)` in model column definitions).
+  `error.to_json()` in the errorhandler is registered for `InvalidUsage` at run time
+  and is marked dynamic, not scored.
+- **Requests.** The frontend calls are the Rust pair's (same files and lines),
+  each labeled with the Python route declaration that serves it, with the path as
+  the backend writes it. Flask and Django write parameters as `<slug>` and
+  `<int:id>`; a `${…}` URL segment now matches them as it matches `:slug`,
+  `[slug]` and `{slug}` (before Phase 33 the Flask and Django pairs linked 14 of
+  32–33 requests, none of the parameterised ones; `tests/python-route-requests.test.ts`
+  pins it). `<path:rest>` is a catch-all.
+

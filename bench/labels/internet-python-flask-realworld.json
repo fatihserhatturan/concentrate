@@ -198,7 +198,8 @@
         "file": "conduit/app.py",
         "line": 52,
         "callee": "to_json",
-        "dynamic": true
+        "dynamic": true,
+        "target": null
       },
       {
         "file": "conduit/articles/models.py",

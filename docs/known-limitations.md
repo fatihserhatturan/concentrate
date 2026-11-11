@@ -1738,6 +1738,39 @@ see [accuracy](accuracy.md#python-data-access-config-and-env-phase-32).
   (Phase 31). `INJECTS` is between classes, so a handler or a provider that
   returns a dict, a pydantic response model or nothing has none.
 
+### Python measurement (Phase 33)
+
+Measured on pinned samples ([accuracy](accuracy.md#python-samples-phase-33)):
+call resolution has 100% precision on the Flask (63 labeled sites, recall 58.7%) and
+FastAPI (80 sites, recall 98.8%) Conduit backends, and the Django, Flask and FastAPI
+full-stack samples link 32, 33 and 33 of 32, 33 and 33 labeled frontend requests. What
+the call recall leaves out:
+
+- **A base class chosen at run time.** `Model = db.Model` with
+  `db = SQLAlchemy(model_class=CRUDMixin)` hands every model the methods of
+  `CRUDMixin`, but only through an argument; `article.save()` has no target. The
+  same holds for any base passed to a factory.
+- **Receivers from a query chain or a proxy.** `Article.query.filter_by(..).first()`
+  and `current_user.profile` have no static type, so the methods called on them
+  (`.favourite(..)`, `.follow(..)`, `.set_password(..)`) are not linked. An
+  `await`ed call is typed by the return annotation of the function it calls only
+  when the result is assigned directly; `user = await repo.get_user_by_email(..)`
+  inside `try` is still a gap (one FastAPI site).
+- **Class-body calls.** `reference_col(..)` in a column definition at class level
+  is not linked.
+- **Classes without `__init__`.** A call of a pydantic model or a marshmallow schema
+  that has no `__init__` of its own has no target (it runs library code).
+- **Frontend requests.** A Flask or Django route written with converters
+  (`<int:id>`, `<slug>`) is reached by a `${…}` URL segment; `<path:rest>` takes the
+  rest of the path. Django's regex routes (`url(r'^articles/(?P<slug>[-\w]+)/?$')`)
+  are read as the path the scan composes, and a request to a route the backend does
+  not have (`DELETE /api/articles/:slug` on the Django sample) stays unlinked, as it
+  should.
+- **Memory.** A project with a shell script loads the shell grammar, which costs
+  about 650 MB peak: the FastAPI Conduit samples peak at 667 and 800 MB cold
+  because of one `postman/run-api-tests.sh` (the template has eight `.sh` files); without that file the scan peaks at
+  144 MB (`/usr/bin/time -l`). The warm scan, which reads the parse cache, is 135–148 MB.
+
 ## Rust
 
 - The Rust grammar is tree-sitter-rust 0.24.0. A file with a syntax error is

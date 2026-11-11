@@ -25,16 +25,16 @@ Concentrate does that reading ahead of time. It parses the whole repository and 
 
 | | |
 | --- | --- |
-| **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints (Go `main`, gRPC services and cobra commands, Rust `main`, tonic services and clap commands included) |
+| **Structure** | files, functions, classes, methods, variables, decorators, imports, exports, entrypoints (Go `main`, gRPC services and cobra commands, Rust `main`, tonic services and clap commands, Python `__main__` blocks, Celery tasks and click/typer commands included) |
 | **Calls** | call sites resolved to their target declaration across files, barrels and re-exports |
-| **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers; Next.js, Nuxt, SvelteKit and Astro server routes, and tRPC procedures; Go `net/http`, gin, echo, chi, fiber, gorilla/mux, go-pkgz/routegroup and kratos, with groups and routers passed between functions; Rust axum, actix-web, Rocket and warp, with nested routers, scopes and `configure` functions |
+| **HTTP routes** | Express, Koa, Fastify and NestJS, with the full path composed through mounts, prefixes and controllers; Next.js, Nuxt, SvelteKit and Astro server routes, and tRPC procedures; Go `net/http`, gin, echo, chi, fiber, gorilla/mux, go-pkgz/routegroup and kratos, with groups and routers passed between functions; Rust axum, actix-web, Rocket and warp, with nested routers, scopes and `configure` functions; Python Django and Django REST framework, Flask, FastAPI and Starlette, with blueprints, `include_router` prefixes and `url()` includes |
 | **Components** | React, Vue, Svelte, Astro, Angular and web components, and which component renders which, with the props passed |
 | **Pages** | Next.js, Nuxt, SvelteKit and Astro file routes; React Router, TanStack Router, Vue Router and Angular Router records, each linked to the component it renders |
-| **Frontend requests** | fetch, axios, ky, ofetch, SWR, TanStack Query, Angular `HttpClient` and tRPC calls, and Go `net/http` and resty clients and Rust reqwest, linked to the backend route they reach |
+| **Frontend requests** | fetch, axios, ky, ofetch, SWR, TanStack Query, Angular `HttpClient` and tRPC calls, and Go `net/http` and resty clients, Rust reqwest and Python requests, httpx and aiohttp, linked to the backend route they reach |
 | **State stores** | Pinia, Redux Toolkit, Zustand, Jotai and Svelte stores: their state and actions, and the functions and components that read and write them |
-| **Dependency injection** | NestJS constructor and property injection chains; Go uber fx and google wire providers |
-| **Configuration** | `process.env.*` and `import.meta.env` reads; Go `os.Getenv`, viper and env struct tags (caarlos0/env, envconfig); Rust `std::env`, `env!`, clap, envy and the config crate; linked to the functions and routes that use them and to the variables `.env` files declare |
-| **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle; Go gorm, ent, sqlc, `database/sql` and sqlx (literal SQL); Rust sqlx, diesel and SeaORM: models, tables, and read and write operations |
+| **Dependency injection** | NestJS constructor and property injection chains; Go uber fx and google wire providers; Python dependency-injector and FastAPI `Depends` |
+| **Configuration** | `process.env.*` and `import.meta.env` reads; Go `os.Getenv`, viper and env struct tags (caarlos0/env, envconfig); Rust `std::env`, `env!`, clap, envy and the config crate; Python `os.environ`, `os.getenv`, python-dotenv and pydantic settings; linked to the functions and routes that use them and to the variables `.env` files declare |
+| **Data access** | Prisma, TypeORM, Sequelize, Knex, Mongoose and Drizzle; Go gorm, ent, sqlc, `database/sql` and sqlx (literal SQL); Rust sqlx, diesel and SeaORM; Python SQLAlchemy, SQLModel, Django ORM and DB-API SQL: models, tables, and read and write operations |
 | **Scripts and infrastructure** | `package.json` scripts, Makefile targets, shell and PowerShell scripts, Dockerfiles, compose services and GitHub Actions jobs as entrypoints, what each runs, and the env they read and set |
 | **Styles** | CSS, SCSS and Less: classes, ids, custom properties and rules, `@import` / `@use` / `url()` to the files they name, and the components and templates that use a class (CSS Modules exactly; `className`, `class`, `:class` and `[ngClass]` by name), so a class or `--property` change has an impact answer |
 | **SQL and protobuf** | tables, columns, indexes and migration order from SQL migrations and schema files, merged with the tables code declares; `.proto` services and rpcs linked to the generated Go server interface and the methods that implement them |
@@ -83,6 +83,7 @@ Every number below comes from pinned open-source repositories and can be reprodu
 **The graph is trustworthy.**
 - Against hand-written labels, 100% of reported routes, call targets, database accesses, React, Vue, Svelte and Angular components, component renders, pages, frontend → backend API requests and Pinia store reads and writes are correct.
 - On the Rust samples (a Conduit backend each in axum + sqlx and actix-web + diesel, and the Next.js frontend against the axum one), 39 routes, 97 data accesses, 5 env reads and 33 frontend requests are all 100% precision and 100% recall; the 47 labeled call sites of the axum sample reach 100% precision and 70% recall ([accuracy.md](docs/accuracy.md)).
+- On the Python samples (a Conduit backend each in Django REST framework, Flask and FastAPI, a Next.js frontend against each, and the FastAPI full-stack template), 57 routes, 81 data accesses, 26 env reads and 98 frontend requests are all 100% precision, with recall 100% for routes, env and requests and 85% for data access; the 143 labeled call sites of the Flask and FastAPI backends reach 100% precision and 58.7% and 98.8% recall ([accuracy.md](docs/accuracy.md)).
 - Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React, Vue, SvelteKit and Angular frontends) are 100%.
 - Call recall is 100% on the 497 labeled call sites with a project target (372 of them in two Go backends, gin and echo); API requests are 100% on 66 (the same Next.js frontend against an Express and a gin backend); the remaining gap (components 99%) is in [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 
@@ -104,7 +105,7 @@ On callers, impact, diffs and narrow questions an agent with grep reaches the sa
 **Scans are fast and scale linearly.**
 - A cold scan of all of nestjs/nest builds 52.7k nodes and 69.5k relationships in 1.7 s, at a peak of 541 MB.
 - Small projects take about 0.1 s.
-- The Go and Rust samples scan in 0.2–0.4 s: gin (21 files) in 267 ms, echo in 193 ms, the gin + Next.js full-stack sample (83 files) in 389 ms; Rust axum + sqlx (12 files) in 171 ms, actix-web + diesel (65 files) in 248 ms, axum + Next.js (74 files) in 301 ms. One outlier: the actix-diesel sample peaks at 678 MB because its shell scripts load the shell grammar, which costs about 650 MB.
+- The Go and Rust samples scan in 0.2–0.4 s: gin (21 files) in 267 ms, echo in 193 ms, the gin + Next.js full-stack sample (83 files) in 389 ms; Rust axum + sqlx (12 files) in 171 ms, actix-web + diesel (65 files) in 248 ms, axum + Next.js (74 files) in 301 ms. One outlier: the actix-diesel sample peaks at 678 MB because its shell scripts load the shell grammar, which costs about 650 MB. Python samples scan in the same range: Flask (30 files) in 169 ms, FastAPI (95 files) in 288 ms, Next.js + FastAPI (about 200 files) in 365 ms; the FastAPI samples peak at 660–800 MB for the same shell-grammar reason (one `.sh` file), the Flask and Django ones under 280 MB.
 
 See [benchmarks.md](docs/benchmarks.md#release-report).
 
@@ -119,10 +120,9 @@ The goal is a code graph an agent can rely on as much as on the source itself. T
 - the backend and frontend semantics agents ask about most;
 - easy setup in any MCP client (`concentrate init` writes the configuration for Claude Code, Cursor and Codex).
 
-Done so far: the JS/TS backend, the frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular), Go, the non-code files of a project and Rust, plus the agent benchmark v2 and the `init` command.
+Done so far: the JS/TS backend, the frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular), Go, the non-code files of a project, Rust and Python, plus the agent benchmark v2 and the `init` command.
 
-Next up, in this order:
-- **Python** (M12, [#207](https://github.com/fatihserhatturan/concentrate/issues/207)–[#210](https://github.com/fatihserhatturan/concentrate/issues/210)): packages, classes, decorators and typed calls; Django, Flask, FastAPI, Celery and click/typer; SQLAlchemy, Django ORM, env and HTTP clients. Python files get structure, imports, calls, HTTP routes and entrypoints (Phases 30 and 31), and SQLAlchemy, SQLModel and Django tables, queries and migrations, env and settings reads, requests / httpx / aiohttp calls linked to routes, and dependency injection (Phase 32); the Python measurements come with Phase 33.
+Next up:
 - **C/C++** (M13, [#211](https://github.com/fatihserhatturan/concentrate/issues/211)–[#214](https://github.com/fatihserhatturan/concentrate/issues/214)): includes, headers, namespaces, classes, build systems and the common HTTP and RPC frameworks. Not supported yet.
 
 Publishing to npm is not planned for now.

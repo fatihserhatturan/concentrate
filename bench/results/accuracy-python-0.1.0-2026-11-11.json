@@ -1,55 +1,6 @@
 {
-  "recordedAt": "2026-11-11T17:30:38.000Z",
+  "recordedAt": "2026-11-11T18:05:45.400Z",
   "samples": [
-    {
-      "sample": "internet-python-flask-realworld",
-      "routes": {
-        "tp": 19,
-        "fp": 0,
-        "fn": 0,
-        "precision": 1,
-        "recall": 1,
-        "fullPath": {
-          "correct": 19,
-          "total": 19
-        }
-      },
-      "dataAccess": {
-        "tp": 27,
-        "fp": 0,
-        "fn": 4,
-        "precision": 1,
-        "recall": 0.8709677419354839
-      },
-      "env": {
-        "tp": 2,
-        "fp": 0,
-        "fn": 0,
-        "precision": 1,
-        "recall": 1
-      }
-    },
-    {
-      "sample": "internet-python-fastapi-realworld",
-      "routes": {
-        "tp": 19,
-        "fp": 0,
-        "fn": 0,
-        "precision": 1,
-        "recall": 1,
-        "fullPath": {
-          "correct": 19,
-          "total": 19
-        }
-      },
-      "env": {
-        "tp": 22,
-        "fp": 0,
-        "fn": 0,
-        "precision": 1,
-        "recall": 1
-      }
-    },
     {
       "sample": "internet-python-django-realworld",
       "routes": {
@@ -79,6 +30,34 @@
       }
     },
     {
+      "sample": "internet-python-fastapi-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      },
+      "calls": {
+        "tp": 79,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.9875
+      },
+      "env": {
+        "tp": 22,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
       "sample": "internet-python-fastapi-template",
       "dataAccess": {
         "tp": 27,
@@ -87,33 +66,71 @@
         "precision": 1,
         "recall": 0.8709677419354839
       }
-    }
-  ],
-  "totals": {
-    "routes": {
-      "tp": 57,
-      "fp": 0,
-      "fn": 0,
-      "fullPath": {
-        "correct": 57,
-        "total": 57
+    },
+    {
+      "sample": "internet-python-flask-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
       },
-      "precision": 1.0,
-      "recall": 1.0
+      "calls": {
+        "tp": 37,
+        "fp": 0,
+        "fn": 26,
+        "precision": 1,
+        "recall": 0.5873015873015873
+      },
+      "dataAccess": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.8709677419354839
+      },
+      "env": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
     },
-    "dataAccess": {
-      "tp": 69,
-      "fp": 0,
-      "fn": 12,
-      "precision": 1.0,
-      "recall": 0.8518518518518519
+    {
+      "sample": "internet-realworld-python-django-fullstack",
+      "requests": {
+        "tp": 32,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
     },
-    "env": {
-      "tp": 26,
-      "fp": 0,
-      "fn": 0,
-      "precision": 1.0,
-      "recall": 1.0
+    {
+      "sample": "internet-realworld-python-fastapi-fullstack",
+      "requests": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-python-flask-fullstack",
+      "requests": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
     }
-  }
+  ]
 }
