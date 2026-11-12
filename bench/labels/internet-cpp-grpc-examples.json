@@ -1493,6 +1493,7 @@
         "file": "examples/cpp/helloworld/greeter_client.cc",
         "line": 63,
         "callee": "SayHello",
+        "target": null,
         "targets": [
           {
             "file": "examples/cpp/helloworld/greeter_callback_server.cc",
@@ -1928,6 +1929,7 @@
         "file": "examples/cpp/route_guide/route_guide_client.cc",
         "line": 105,
         "callee": "ListFeatures",
+        "target": null,
         "targets": [
           {
             "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
@@ -1945,6 +1947,7 @@
         "file": "examples/cpp/route_guide/route_guide_client.cc",
         "line": 132,
         "callee": "RecordRoute",
+        "target": null,
         "targets": [
           {
             "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
@@ -1962,6 +1965,7 @@
         "file": "examples/cpp/route_guide/route_guide_client.cc",
         "line": 162,
         "callee": "RouteChat",
+        "target": null,
         "targets": [
           {
             "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
@@ -2015,6 +2019,7 @@
         "file": "examples/cpp/route_guide/route_guide_client.cc",
         "line": 194,
         "callee": "GetFeature",
+        "target": null,
         "targets": [
           {
             "file": "examples/cpp/route_guide/route_guide_callback_server.cc",

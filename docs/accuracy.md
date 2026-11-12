@@ -777,3 +777,67 @@ measured as counts against an independent grep, not as precision and recall:
 `main`: cJSON 180 → 186 ms, tinyxml2 1,082 → 1,096 ms, googletest 1,180 → 1,231 ms (the
 plugins read each file's text once; about 3 to 4%). The graphs of cJSON and tinyxml2 are
 unchanged (the sample goldens pass).
+
+## C and C++ samples (Phase 37)
+
+`npm run bench:accuracy` now has C and C++ rows in every section that applies
+(routes, calls, data access, requests, env reads, rpcs, build targets, includes).
+Latest run:
+[`bench/results/accuracy-cpp-0.1.0-2026-11-12.json`](../bench/results/accuracy-cpp-0.1.0-2026-11-12.json).
+The labels were written from the pinned sources (Crow, Drogon, cpp-httplib,
+SQLiteCpp, gRPC C++, Qt SQL and googletest sparse checkouts of `scripts/samples.json`,
+plus cJSON and tinyxml2 from Phase 34), not from Concentrate output. Routes were counted
+independently with grep over each framework's registration macros and calls; build targets
+were expanded by hand from the CMake files and Makefiles; the in-repository call sites
+were found by searching every function name defined in the labeled files.
+
+| Kind | Samples | Labels | TP | FP | FN | Precision | Recall |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Routes | Crow, Drogon, cpp-httplib examples | 118 | 117 | 0 | 1 | 100% | 99.2% |
+| Calls | cJSON, tinyxml2, gRPC route_guide and helloworld | 192 | 188 | 0 | 4 | 100% | 97.9% |
+| Data access | SQLiteCpp, Qt SQL examples | 26 | 21 | 0 | 5 | 100% | 80.8% |
+| Requests | cpp-httplib examples | 2 | 2 | 0 | 0 | 100% | 100% |
+| Env reads | googletest | 7 | 3 | 4 | 4 | 42.9% | 42.9% |
+| Rpcs | gRPC examples (10 rpcs in 5 services, with the C++ methods that implement them) | 10 | 10 | 0 | 0 | 100% | 100% |
+| Build targets | cJSON, tinyxml2, Crow, Drogon, SQLiteCpp, gRPC (CMake and Make) | 317 | 311 | 0 | 6 | 100% | 98.1% |
+| Includes | cJSON, tinyxml2, Drogon, gRPC | 95 | 95 | 0 | 0 | 100% | 100% |
+
+The other ecosystems' rows did not move (the totals of every non-C/C++ section are
+the same as before the phase; the new rows only add to them).
+
+### What the misses are
+
+- **googletest env (4 FP, 4 FN, the only precision below 100%).** The reads are found
+  (`posix::GetEnv`, with literal names and constants such as `kTestTotalShards`) but four of
+  them sit in functions of `gtest.cc` that the graph has no node for, so they are attributed to
+  the file instead of the function (`ShouldUseColor`, `UnitTest::Run`,
+  `PrettyUnitTestResultPrinter::OnTestIterationStart`, `WriteToShardStatusFileIfNeeded`) and
+  count as one false positive and one false negative each. The cause is the C++ parser, not the env
+  reader: `gtest.cc` (6,900 lines, heavy in unknown macros such as thread-safety annotations
+  after a declarator, `__try` / `__except` and `->*` calls) leaves 23 statements out, and the scan warning lists line 397, the
+  `namespace testing {` itself, so the file keeps 5 of its functions. Reading unknown macros better is a follow-up (see
+  [known limitations](known-limitations.md#c-and-c)).
+- **Qt data access (5 FN).** `QSqlQueryModel::setQuery("select * from person")` (2) and
+  `QSqlTableModel::setTable("person")` with a literal table (3) are reads of a table; only
+  `QSqlQuery::exec` / `prepare` are read.
+- **Calls (4 FN).** `GetFeatureName` and `GetDistance` called in
+  `route_guide_callback_server.cc` (lines 102, 122, 204, 208) inside a call argument or a
+  reactor class are not resolved, while the same calls in `route_guide_server.cc` are.
+- **Routes (1 FN).** `CROW_CATCHALL_ROUTE(app)` (a route for every unmatched path) has no
+  path to give.
+- **Build targets (6 FN).** Crow's `example_vs` (declared inside `if(MSVC)`; the labels count
+  every `if` branch) and Drogon's `redis_chat` (an `add_executable(${PROJECT_NAME} …)` after
+  several `if` branches) are missing: the target, its source and its link for `example_vs`,
+  the target and two sources for `redis_chat`. Why is not found yet.
+
+### Fixes made while labeling
+
+- A client call links to the route of its own program when several programs of one
+  repository register the same path (the cpp-httplib examples all have `/hi` and
+  `/post`): 0 of 2 before, 2 of 2 after. The tie-break (same file) applies to every
+  language and changed no other sample.
+- googletest's `posix::GetEnv` wrapper is an env read (the name may be namespaced).
+- `GTEST_DEFINE_bool_(…)`-style flags (a prefix and a trailing underscore) and a statement macro at
+  column 0 without a `;` (`GTEST_REPEATER_METHOD_(OnTestStart, TestInfo)`) are read as
+  blanks; googletest's left-out statements fell from 38 to 23.
+

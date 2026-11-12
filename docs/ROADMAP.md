@@ -65,8 +65,8 @@ the only runtime dependency left is `web-tree-sitter`.
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
-M9 (Go), M10 (non-code files), M11 (Rust) and M12 (Python) are done. M13, the C/C++ ecosystem, has its
-language foundation (Phase 34), its build systems (Phase 35) and its frameworks, data access, env and outbound HTTP (Phase 36); the measurement (Phase 37) comes next.
+M9 (Go), M10 (non-code files), M11 (Rust), M12 (Python) and M13 (C/C++) are done: every planned phase
+(M1–M13) is finished.
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -1598,18 +1598,18 @@ The preprocessor is not run: macros are read as calls. The decisions of M9 apply
 
 **Goal:** Prove the C/C++ graph with the same measurements as the other ecosystems: pinned samples, hand labels, the agent benchmark and README numbers.
 
-- There are no C/C++ samples, labels or agent questions today.
+- Done in one PR: the samples were pinned by Phases 34–36 (Crow, Drogon, cpp-httplib, SQLiteCpp, gRPC, Qt SQL, googletest, cJSON, tinyxml2, libcurl examples); this phase adds labels, accuracy, scan cost, goldens, agent questions and docs.
 
 ### Samples and labels
 
-- [ ] Pin a CMake C++ HTTP service (Drogon or Crow), a C library and a gRPC C++ sample in `scripts/samples.json`
-- [ ] Hand labels for routes, calls, includes, data access and env in `bench/labels/`
-- [ ] Golden sample graphs where they stay small enough
+- [x] Pin a CMake C++ HTTP service (Drogon or Crow), a C library and a gRPC C++ sample in `scripts/samples.json`
+- [x] Hand labels for routes, calls, includes, data access and env in `bench/labels/`
+- [x] Golden sample graphs where they stay small enough
 
 ### Accuracy and performance
 
-- [ ] C/C++ rows in every `bench:accuracy` section; precision 100%, recall reported
-- [ ] Scan time and memory for the C/C++ samples in `docs/benchmarks.md`
+- [x] C/C++ rows in every `bench:accuracy` section; precision 100% (googletest env reads 42.9%, see accuracy.md), recall reported
+- [x] Scan time and memory for the C/C++ samples in `docs/benchmarks.md`
 
 ### Agent benchmark
 
@@ -1617,13 +1617,13 @@ The preprocessor is not run: macros are read as calls. The decisions of M9 apply
 
 ### Docs
 
-- [ ] README "What it sees" table and languages line cover C and C++
-- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated
+- [x] README "What it sees" table and languages line cover C and C++
+- [x] `docs/accuracy.md` and `docs/known-limitations.md` updated
 
 ### Acceptance criteria
 
 - [ ] Accuracy, performance and agent results for C/C++ are reproducible from scripts
-- [ ] README shows the C/C++ coverage
+- [x] README shows the C/C++ coverage
 
 ## Verification (every milestone)
 

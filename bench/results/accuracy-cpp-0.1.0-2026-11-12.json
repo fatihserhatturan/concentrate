@@ -1,0 +1,1096 @@
+{
+  "recordedAt": "2026-11-12T07:08:37.046Z",
+  "samples": [
+    {
+      "sample": "express",
+      "routes": {
+        "tp": 59,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 59,
+          "total": 59
+        }
+      },
+      "calls": {
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "fastify",
+      "routes": {
+        "tp": 14,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 14,
+          "total": 14
+        }
+      },
+      "calls": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-angular-realworld",
+      "calls": {
+        "tp": 21,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "components": {
+        "tp": 18,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "renders": {
+        "tp": 23,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "pages": {
+        "tp": 14,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-c-cjson",
+      "calls": {
+        "tp": 110,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "buildTargets": {
+        "tp": 125,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "includes": {
+        "tp": 73,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-cpp-crow-examples",
+      "routes": {
+        "tp": 59,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.9833333333333333,
+        "fullPath": {
+          "correct": 59,
+          "total": 59
+        }
+      },
+      "buildTargets": {
+        "tp": 51,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1,
+        "recall": 0.9444444444444444
+      },
+      "includes": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null
+      }
+    },
+    {
+      "sample": "internet-cpp-drogon-examples",
+      "routes": {
+        "tp": 38,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 38,
+          "total": 38
+        }
+      },
+      "buildTargets": {
+        "tp": 58,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1,
+        "recall": 0.9508196721311475
+      },
+      "includes": {
+        "tp": 15,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-cpp-googletest",
+      "env": {
+        "tp": 3,
+        "fp": 4,
+        "fn": 4,
+        "precision": 0.42857142857142855,
+        "recall": 0.42857142857142855
+      }
+    },
+    {
+      "sample": "internet-cpp-grpc-examples",
+      "calls": {
+        "tp": 69,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.9452054794520548
+      },
+      "rpcs": {
+        "tp": 10,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "buildTargets": {
+        "tp": 63,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "includes": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-cpp-httplib-examples",
+      "routes": {
+        "tp": 20,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 20,
+          "total": 20
+        }
+      },
+      "requests": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "includes": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null
+      }
+    },
+    {
+      "sample": "internet-cpp-qt-network-examples",
+      "dataAccess": {
+        "tp": 14,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1,
+        "recall": 0.7368421052631579
+      }
+    },
+    {
+      "sample": "internet-cpp-sqlitecpp-examples",
+      "dataAccess": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "buildTargets": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "includes": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null
+      }
+    },
+    {
+      "sample": "internet-cpp-tinyxml2",
+      "calls": {
+        "tp": 9,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "buildTargets": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "includes": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-go-chi-base",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      },
+      "dataAccess": {
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "env": {
+        "tp": 20,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-go-clean-arch",
+      "routes": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 4,
+          "total": 4
+        }
+      },
+      "calls": {
+        "tp": 68,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "dataAccess": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "env": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "sqlTables": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-go-echo-realworld",
+      "routes": {
+        "tp": 20,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 20,
+          "total": 20
+        }
+      },
+      "calls": {
+        "tp": 149,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "dataAccess": {
+        "tp": 52,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "env": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null
+      }
+    },
+    {
+      "sample": "internet-go-gin-realworld",
+      "routes": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 27,
+          "total": 27
+        }
+      },
+      "calls": {
+        "tp": 223,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "dataAccess": {
+        "tp": 41,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "env": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-go-kratos-beer-shop",
+      "rpcs": {
+        "tp": 17,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-go-simplebank",
+      "routes": {
+        "tp": 9,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 9,
+          "total": 9
+        }
+      },
+      "calls": {
+        "tp": 123,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "dataAccess": {
+        "tp": 20,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "env": {
+        "tp": 13,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "scripts": {
+        "tp": 29,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "runs": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "envDeclarations": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "sqlTables": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "rpcs": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-nest",
+      "dataAccess": {
+        "tp": 17,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-nextjs-taxonomy",
+      "routes": {
+        "tp": 9,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 9,
+          "total": 9
+        }
+      },
+      "pages": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-node-express-firebase-mongodb",
+      "scripts": {
+        "tp": 13,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "runs": {
+        "tp": 17,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "envDeclarations": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-node-express-realworld",
+      "routes": {
+        "tp": 20,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 20,
+          "total": 20
+        }
+      },
+      "calls": {
+        "tp": 24,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "dataAccess": {
+        "tp": 26,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-python-django-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      },
+      "dataAccess": {
+        "tp": 15,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.7894736842105263
+      },
+      "env": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-python-fastapi-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      },
+      "calls": {
+        "tp": 79,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.9875
+      },
+      "env": {
+        "tp": 22,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-python-fastapi-template",
+      "dataAccess": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.8709677419354839
+      }
+    },
+    {
+      "sample": "internet-python-flask-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      },
+      "calls": {
+        "tp": 37,
+        "fp": 0,
+        "fn": 26,
+        "precision": 1,
+        "recall": 0.5873015873015873
+      },
+      "dataAccess": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.8709677419354839
+      },
+      "env": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-react-realworld",
+      "components": {
+        "tp": 31,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.96875
+      },
+      "renders": {
+        "tp": 29,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-fullstack",
+      "requests": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-go-fullstack",
+      "requests": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-python-django-fullstack",
+      "requests": {
+        "tp": 32,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-python-fastapi-fullstack",
+      "requests": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-python-flask-fullstack",
+      "requests": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-realworld-rust-fullstack",
+      "requests": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-remark42-frontend",
+      "styleLinks": {
+        "tp": 263,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-rust-actix-diesel-realworld",
+      "routes": {
+        "tp": 20,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 20,
+          "total": 20
+        }
+      },
+      "dataAccess": {
+        "tp": 48,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "env": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-rust-axum-realworld",
+      "routes": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 19,
+          "total": 19
+        }
+      },
+      "calls": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 14,
+        "precision": 1,
+        "recall": 0.7021276595744681
+      },
+      "dataAccess": {
+        "tp": 49,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "env": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-sveltekit-realworld",
+      "routes": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 11,
+          "total": 11
+        }
+      },
+      "calls": {
+        "tp": 17,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "components": {
+        "tp": 24,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "renders": {
+        "tp": 17,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "pages": {
+        "tp": 13,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "internet-vue-realworld",
+      "calls": {
+        "tp": 14,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "components": {
+        "tp": 22,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "renders": {
+        "tp": 33,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "pages": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "stores": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "storeAccess": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "styleLinks": {
+        "tp": 241,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "ky",
+      "calls": {
+        "tp": 13,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "sample": "nestjs-starter",
+      "routes": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "fullPath": {
+          "correct": 1,
+          "total": 1
+        }
+      },
+      "calls": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    }
+  ],
+  "totals": {
+    "routes": {
+      "tp": 406,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.9975429975429976,
+      "fullPath": {
+        "correct": 406,
+        "total": 406
+      }
+    },
+    "calls": {
+      "tp": 1025,
+      "fp": 0,
+      "fn": 45,
+      "precision": 1,
+      "recall": 0.9579439252336449
+    },
+    "dataAccess": {
+      "tp": 378,
+      "fp": 0,
+      "fn": 17,
+      "precision": 1,
+      "recall": 0.9569620253164557
+    },
+    "components": {
+      "tp": 95,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1,
+      "recall": 0.9895833333333334
+    },
+    "renders": {
+      "tp": 102,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "pages": {
+      "tp": 66,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "requests": {
+      "tp": 199,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "stores": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "storeAccess": {
+      "tp": 11,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "env": {
+      "tp": 80,
+      "fp": 4,
+      "fn": 4,
+      "precision": 0.9523809523809523,
+      "recall": 0.9523809523809523
+    },
+    "scripts": {
+      "tp": 42,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "runs": {
+      "tp": 24,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "envDeclarations": {
+      "tp": 18,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "styleLinks": {
+      "tp": 504,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "sqlTables": {
+      "tp": 10,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "rpcs": {
+      "tp": 31,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "buildTargets": {
+      "tp": 311,
+      "fp": 0,
+      "fn": 6,
+      "precision": 1,
+      "recall": 0.9810725552050473
+    },
+    "includes": {
+      "tp": 95,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    }
+  }
+}
