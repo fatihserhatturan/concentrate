@@ -1,0 +1,60 @@
+{
+  "sample": "internet-cpp-sqlitecpp-examples",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. SRombauts/SQLiteCpp, only its examples/ directory (sparse checkout). Data access by function from the SQL string of each `db.exec(\"\u2026\")`, `db.execAndGet(\"\u2026\")` and `SQLite::Statement q(db, \"\u2026\")` (example1 also prepares a `SELECT * FROM test WHERE weight > :min_weight` in the initializer list of the `Example` constructor): table `test`, read by the SELECTs, created by the INSERTs and updated by the UPDATE; the `DROP TABLE` and `CREATE TABLE` statements are not data access.",
+  "dataAccess": {
+    "scope": [
+      "examples/"
+    ],
+    "items": [
+      {
+        "file": "examples/example1/main.cpp",
+        "function": "Example",
+        "model": "test",
+        "operation": "read",
+        "table": "test"
+      },
+      {
+        "file": "examples/example1/main.cpp",
+        "function": "main",
+        "model": "test",
+        "operation": "read",
+        "table": "test"
+      },
+      {
+        "file": "examples/example1/main.cpp",
+        "function": "main",
+        "model": "test",
+        "operation": "create",
+        "table": "test"
+      },
+      {
+        "file": "examples/example1/main.cpp",
+        "function": "main",
+        "model": "test",
+        "operation": "update",
+        "table": "test"
+      },
+      {
+        "file": "examples/example2/src/main.cpp",
+        "function": "main",
+        "model": "test",
+        "operation": "read",
+        "table": "test"
+      },
+      {
+        "file": "examples/example2/src/main.cpp",
+        "function": "main",
+        "model": "test",
+        "operation": "create",
+        "table": "test"
+      },
+      {
+        "file": "examples/example2/src/main.cpp",
+        "function": "main",
+        "model": "test",
+        "operation": "update",
+        "table": "test"
+      }
+    ]
+  }
+}

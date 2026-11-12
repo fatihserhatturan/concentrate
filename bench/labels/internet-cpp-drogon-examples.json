@@ -1,0 +1,239 @@
+{
+  "sample": "internet-cpp-drogon-examples",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. drogonframework/drogon, only its examples/ directory (sparse checkout). Every route registration: `app().registerHandler(path, handler, {methods})` (all methods when the list is left out), `METHOD_ADD` (path under `/<namespace>/<Class>`, from lib/inc/drogon/HttpController.h), `ADD_METHOD_TO` and `ADD_METHOD_VIA_REGEX` (path or regular expression as written; no method list or only filters means all methods), `PATH_ADD` of an HttpSimpleController (all methods without a list) and `WS_PATH_ADD` / `WS_ADD_PATH_VIA_REGEX` of a WebSocketController (a GET handshake). One label per method, at the line of the macro or of `registerHandler(`. Method lists were read from the source of each handler (`{Get, Options}` in examples/cors).",
+  "routes": {
+    "scope": [
+      "examples/"
+    ],
+    "items": [
+      {
+        "method": "POST",
+        "path": "/stream_echo",
+        "file": "examples/async_stream/RequestStreamExampleCtrl.cc",
+        "line": 50
+      },
+      {
+        "method": "POST",
+        "path": "/stream_upload",
+        "file": "examples/async_stream/RequestStreamExampleCtrl.cc",
+        "line": 51
+      },
+      {
+        "method": "ALL",
+        "path": "/stream",
+        "file": "examples/async_stream/main.cc",
+        "line": 19
+      },
+      {
+        "method": "POST",
+        "path": "/stream_req",
+        "file": "examples/async_stream/main.cc",
+        "line": 50
+      },
+      {
+        "method": "GET",
+        "path": "/benchmark",
+        "file": "examples/benchmark/BenchmarkCtrl.h",
+        "line": 12
+      },
+      {
+        "method": "GET",
+        "path": "/json",
+        "file": "examples/benchmark/JsonCtrl.h",
+        "line": 13
+      },
+      {
+        "method": "GET",
+        "path": "/hello",
+        "file": "examples/cors/main.cc",
+        "line": 119
+      },
+      {
+        "method": "OPTIONS",
+        "path": "/hello",
+        "file": "examples/cors/main.cc",
+        "line": 119
+      },
+      {
+        "method": "POST",
+        "path": "/echo",
+        "file": "examples/cors/main.cc",
+        "line": 134
+      },
+      {
+        "method": "OPTIONS",
+        "path": "/echo",
+        "file": "examples/cors/main.cc",
+        "line": 134
+      },
+      {
+        "method": "ALL",
+        "path": "/",
+        "file": "examples/file_upload/file_upload.cc",
+        "line": 6
+      },
+      {
+        "method": "POST",
+        "path": "/upload_endpoint",
+        "file": "examples/file_upload/file_upload.cc",
+        "line": 14
+      },
+      {
+        "method": "GET",
+        "path": "/SayHello/",
+        "file": "examples/helloworld/HelloController.cc",
+        "line": 15
+      },
+      {
+        "method": "GET",
+        "path": "/SayHello/hello",
+        "file": "examples/helloworld/HelloController.cc",
+        "line": 17
+      },
+      {
+        "method": "ALL",
+        "path": "/view",
+        "file": "examples/helloworld/HelloViewController.cc",
+        "line": 17
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/helloworld/main.cc",
+        "line": 17
+      },
+      {
+        "method": "GET",
+        "path": "/user/{user-name}",
+        "file": "examples/helloworld/main.cc",
+        "line": 34
+      },
+      {
+        "method": "GET",
+        "path": "/hello?user={user-name}",
+        "file": "examples/helloworld/main.cc",
+        "line": 47
+      },
+      {
+        "method": "GET",
+        "path": "/hello_user",
+        "file": "examples/helloworld/main.cc",
+        "line": 60
+      },
+      {
+        "method": "GET",
+        "path": "/get-token",
+        "file": "examples/jsonstore/main.cc",
+        "line": 46
+      },
+      {
+        "method": "GET",
+        "path": "/([a-f0-9]{64})/(.*)",
+        "file": "examples/jsonstore/main.cc",
+        "line": 47
+      },
+      {
+        "method": "POST",
+        "path": "/([a-f0-9]{64})",
+        "file": "examples/jsonstore/main.cc",
+        "line": 48
+      },
+      {
+        "method": "DELETE",
+        "path": "/([a-f0-9]{64})",
+        "file": "examples/jsonstore/main.cc",
+        "line": 49
+      },
+      {
+        "method": "PUT",
+        "path": "/([a-f0-9]{64})/(.*)",
+        "file": "examples/jsonstore/main.cc",
+        "line": 50
+      },
+      {
+        "method": "ALL",
+        "path": "/",
+        "file": "examples/login_session/main.cc",
+        "line": 8
+      },
+      {
+        "method": "POST",
+        "path": "/logout",
+        "file": "examples/login_session/main.cc",
+        "line": 22
+      },
+      {
+        "method": "POST",
+        "path": "/login",
+        "file": "examples/login_session/main.cc",
+        "line": 33
+      },
+      {
+        "method": "ALL",
+        "path": "/fast",
+        "file": "examples/prometheus_example/controllers/PromTestCtrl.h",
+        "line": 12
+      },
+      {
+        "method": "ALL",
+        "path": "/slow",
+        "file": "examples/prometheus_example/controllers/PromTestCtrl.h",
+        "line": 13
+      },
+      {
+        "method": "GET",
+        "path": "/Client/{1}",
+        "file": "examples/redis/controllers/Client.h",
+        "line": 9
+      },
+      {
+        "method": "POST",
+        "path": "/Client/{1}",
+        "file": "examples/redis/controllers/Client.h",
+        "line": 10
+      },
+      {
+        "method": "GET",
+        "path": "/sub",
+        "file": "examples/redis/controllers/WsClient.h",
+        "line": 17
+      },
+      {
+        "method": "GET",
+        "path": "/pub",
+        "file": "examples/redis/controllers/WsClient.h",
+        "line": 18
+      },
+      {
+        "method": "GET",
+        "path": "/slow?userid={userid}",
+        "file": "examples/redis_cache/controllers/SlowCtrl.h",
+        "line": 9
+      },
+      {
+        "method": "GET",
+        "path": "/observe?userid={userid}",
+        "file": "examples/redis_cache/controllers/SlowCtrl.h",
+        "line": 10
+      },
+      {
+        "method": "GET",
+        "path": "/chat",
+        "file": "examples/redis_chat/controllers/Chat.h",
+        "line": 17
+      },
+      {
+        "method": "GET",
+        "path": "/chat",
+        "file": "examples/websocket_server/WebSocketServer.cc",
+        "line": 16
+      },
+      {
+        "method": "GET",
+        "path": "/[^/]*",
+        "file": "examples/websocket_server/WebSocketServer.cc",
+        "line": 17
+      }
+    ]
+  }
+}

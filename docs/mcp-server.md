@@ -168,7 +168,7 @@ even for large repositories; read it first to decide which tools to call.
   `init`, gRPC service methods (kind `grpc`, trigger `Service/Method`) and
   cobra commands (kind `cli`, trigger the command path, `app serve`).
 - `list_env_config`: lists environment variable usage and config declarations
-  or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate). `unread: true` lists instead the variables the scanned env
+  or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`). `unread: true` lists instead the variables the scanned env
   files (`.env`, `.env.*`) declare that no code reads (`kind: "unread"`, with
   the env file and line) and the ones code reads that no env file declares
   (`kind: "undeclared"`, with the reading file and line; not `NODE_ENV`, and
@@ -177,7 +177,7 @@ even for large repositories; read it first to decide which tools to call.
   lists data-access operations by source, model, library, and operation. Each
   row has the model's `table` when one is known. Go gorm, ent, sqlc,
   `database/sql` and sqlx accesses are included, and Rust sqlx, diesel and
-  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`), and Python SQLAlchemy, SQLModel and Django ORM ones (`library: sqlalchemy`, `sqlmodel`, `django`) with the literal SQL of DB-API cursors and drivers (`library: dbapi`, the model is the one mapped to the table when there is one). Rows with `direct: true`
+  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`), and C and C++ ones (`library: sqlite3`, `libpq`, `mysql`, `odbc`, `sqlitecpp`, `pqxx`, `soci`, `qtsql`, `drogon`: the tables of the SQL strings), and Python SQLAlchemy, SQLModel and Django ORM ones (`library: sqlalchemy`, `sqlmodel`, `django`) with the literal SQL of DB-API cursors and drivers (`library: dbapi`, the model is the one mapped to the table when there is one). Rows with `direct: true`
   (the file or function that makes the call) come first; the others are the
   callers, routes and entrypoints that reach it. `line` is in `accessFile`,
   the file of the call, which differs from the source's `file` on a
@@ -206,6 +206,8 @@ even for large repositories; read it first to decide which tools to call.
   `Unimplemented` stub aside). `name` is a substring of `package.Service/Rpc`.
   An rpc with `servedBy` and no implementations is declared but not
   implemented; one without `servedBy` has no generated Go code in the scan.
+  For C++ there is no `servedBy`: `implementations` are the methods of the
+  classes deriving the generated `X::Service` or `X::CallbackService`.
 - `list_stores({ name?, library?, file?, limit = 20 })`: frontend state stores
   (Pinia, Redux Toolkit, Zustand, Jotai, Svelte), filtered by a substring of
   the name or hook, the `library` or the declaring file. Each store has its

@@ -1,0 +1,98 @@
+{
+  "sample": "internet-cpp-grpc-examples",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. grpc/grpc, only examples/cpp/helloworld, examples/cpp/route_guide and examples/protos (sparse checkout); labeled: the rpcs of helloworld.proto and route_guide.proto. Implementations are the methods of every class deriving `Greeter::Service`, `Greeter::CallbackService`, `RouteGuide::Service` or `RouteGuide::CallbackService` (greeter_server, greeter_callback_server, xds_greeter_server, route_guide_server, route_guide_callback_server). greeter_async_server.cc uses `Greeter::AsyncService` and handles the call in a CallData state machine, with no method named after the rpc, so it implements none; SayHelloStreamReply and SayHelloBidiStream have no implementation in the sample. The commented-out alternative GetFeature of route_guide_callback_server.cc is not one. `served` is null for every rpc: the generated base class is not in the scan.",
+  "rpcs": {
+    "scope": [
+      "examples/protos/helloworld.proto",
+      "examples/protos/route_guide.proto"
+    ],
+    "items": [
+      {
+        "file": "examples/protos/helloworld.proto",
+        "service": "helloworld.Greeter",
+        "name": "SayHello",
+        "request": "HelloRequest",
+        "response": "HelloReply",
+        "streaming": "none",
+        "served": null,
+        "implementations": [
+          "examples/cpp/helloworld/greeter_callback_server.cc#GreeterServiceImpl.SayHello",
+          "examples/cpp/helloworld/greeter_server.cc#GreeterServiceImpl.SayHello",
+          "examples/cpp/helloworld/xds_greeter_server.cc#GreeterServiceImpl.SayHello"
+        ]
+      },
+      {
+        "file": "examples/protos/helloworld.proto",
+        "service": "helloworld.Greeter",
+        "name": "SayHelloStreamReply",
+        "request": "HelloRequest",
+        "response": "HelloReply",
+        "streaming": "server",
+        "served": null,
+        "implementations": []
+      },
+      {
+        "file": "examples/protos/helloworld.proto",
+        "service": "helloworld.Greeter",
+        "name": "SayHelloBidiStream",
+        "request": "HelloRequest",
+        "response": "HelloReply",
+        "streaming": "both",
+        "served": null,
+        "implementations": []
+      },
+      {
+        "file": "examples/protos/route_guide.proto",
+        "service": "routeguide.RouteGuide",
+        "name": "GetFeature",
+        "request": "Point",
+        "response": "Feature",
+        "streaming": "none",
+        "served": null,
+        "implementations": [
+          "examples/cpp/route_guide/route_guide_callback_server.cc#RouteGuideImpl.GetFeature",
+          "examples/cpp/route_guide/route_guide_server.cc#RouteGuideImpl.GetFeature"
+        ]
+      },
+      {
+        "file": "examples/protos/route_guide.proto",
+        "service": "routeguide.RouteGuide",
+        "name": "ListFeatures",
+        "request": "Rectangle",
+        "response": "Feature",
+        "streaming": "server",
+        "served": null,
+        "implementations": [
+          "examples/cpp/route_guide/route_guide_callback_server.cc#RouteGuideImpl.ListFeatures",
+          "examples/cpp/route_guide/route_guide_server.cc#RouteGuideImpl.ListFeatures"
+        ]
+      },
+      {
+        "file": "examples/protos/route_guide.proto",
+        "service": "routeguide.RouteGuide",
+        "name": "RecordRoute",
+        "request": "Point",
+        "response": "RouteSummary",
+        "streaming": "client",
+        "served": null,
+        "implementations": [
+          "examples/cpp/route_guide/route_guide_callback_server.cc#RouteGuideImpl.RecordRoute",
+          "examples/cpp/route_guide/route_guide_server.cc#RouteGuideImpl.RecordRoute"
+        ]
+      },
+      {
+        "file": "examples/protos/route_guide.proto",
+        "service": "routeguide.RouteGuide",
+        "name": "RouteChat",
+        "request": "RouteNote",
+        "response": "RouteNote",
+        "streaming": "both",
+        "served": null,
+        "implementations": [
+          "examples/cpp/route_guide/route_guide_callback_server.cc#RouteGuideImpl.RouteChat",
+          "examples/cpp/route_guide/route_guide_server.cc#RouteGuideImpl.RouteChat"
+        ]
+      }
+    ]
+  }
+}

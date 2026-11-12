@@ -195,7 +195,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       framework: {
         type: "string",
-        description: "Framework, such as express-koa, fastify, gin, chi or net/http.",
+        description: "Framework, such as express-koa, gin, crow or httplib.",
       },
       unconsumed: {
         type: "boolean",
@@ -271,7 +271,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
   },
   {
     name: "list_data_access",
-    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, bun, sqlc, sql, sqlx; Python SQLAlchemy, Django, SQL) with the files, functions, routes and entrypoints running them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
+    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, bun, sqlc, sql, sqlx; Python SQLAlchemy, Django, SQL; C/C++ sqlite3, libpq) with the files, functions, routes and entrypoints running them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
     inputSchema: objectSchema({
       model: {
         type: "string",

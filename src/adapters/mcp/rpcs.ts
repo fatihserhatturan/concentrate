@@ -80,6 +80,6 @@ export async function listRpcs(engine: IQueryEngine, args: Record<string, unknow
     query: { name: name ?? null, file: file ?? null },
     totalRpcs: result.length,
     rpcs: window.take(result),
-    note: "rpcs come from .proto files. servedBy is the generated Go server interface (found through its grpc.ServiceDesc, which must list the method); implementations are the methods of every type that implements it, not the Unimplemented stub. An rpc with no servedBy has no generated Go code in the scan; one with servedBy and no implementations is declared but unimplemented.",
+    note: "rpcs come from .proto files. servedBy is the generated Go server interface (found through its grpc.ServiceDesc, which must list the method); implementations are the methods of every type that implements it, not the Unimplemented stub. In C++ there is no servedBy (the generated base class is not in the scan); implementations are the methods of every class deriving from `X::Service` or `X::CallbackService` (not `AsyncService`). An rpc with no servedBy has no generated Go code in the scan; one with servedBy and no implementations is declared but unimplemented.",
   };
 }

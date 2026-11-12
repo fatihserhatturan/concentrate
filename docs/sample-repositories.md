@@ -33,9 +33,16 @@ sample test (`tests/golden-samples.test.ts`) all read from there.
 | internet-c-cjson | internet | DaveGamble/cJSON | `6d9f2443ab071f86e5d9b43025a40929ec41c46c` |
 | internet-cpp-tinyxml2 | internet | leethomason/tinyxml2 | `8224e427b655b83dae5e2298f1e6919523a78737` |
 | internet-cpp-googletest | internet | google/googletest (v1.15.2) | `b514bdc898e2951020cbdca1304b75f5950d1f59` |
+| internet-cpp-crow-examples | internet | CrowCpp/Crow, `examples/` only (sparse) | `7ecd59c2e7f4467c900bffde9eb5c946c4eac3f5` |
+| internet-cpp-drogon-examples | internet | drogonframework/drogon, `examples/` only (sparse) | `71b72f0ab2fa5c69d6ccaa88b3e5ace16839fb3d` |
+| internet-cpp-httplib-examples | internet | yhirose/cpp-httplib, `example/` only (sparse) | `d412e98c62ebd1df432a595b1a015e56dab05022` |
+| internet-cpp-sqlitecpp-examples | internet | SRombauts/SQLiteCpp, `examples/` only (sparse) | `2824eb49abae4ef4b99039de2f70c59f715b7d8d` |
+| internet-cpp-grpc-examples | internet | grpc/grpc, `examples/cpp/helloworld`, `examples/cpp/route_guide` and `examples/protos` (sparse) | `9098c2845ec0d8cb1b4a62c819b226e7ceacd0c3` |
+| internet-cpp-qt-network-examples | internet | qt/qtbase, `examples/network` and `examples/sql` (sparse) | `18f23ca2f1b6b7b3ce78819de2ba3bf7fd89b1b0` |
+| internet-c-curl-examples | internet | curl/curl, `docs/examples` only (sparse) | `91232fc2a23eb01e55fdbce17a412a0efcd414d3` |
 | internet-realworld-fullstack | internet | gothinkster/node-express-realworld-example-app in `backend/`, reck1ess/next-realworld-example-app in `frontend/` | `30b68e1e881462b2f4164ea09ab4c4f5699c7b0b`, `be9ef569bc395975d98c1973fac23ba9277797e7` |
 
-A sample with `parts` is assembled from several repositories, each cloned
+A sample with `paths` checks out only those directories of a large repository (a sparse checkout, so the C and C++ framework samples are a few MB each). A sample with `parts` is assembled from several repositories, each cloned
 into its own directory of the sample, so the frontend and the backend are
 scanned as one project. `apiOrigins` in the manifest is passed to the scan
 like `--api-origin`.

@@ -73,6 +73,18 @@ function cppStandIn(text: string): string {
     text = text.replace(externCOpen, (_match, guard: string, open: string) => `${guard}${blank(open)}`)
       .replace(externCClose, (_match, guard: string) => `${guard} `);
   }
+  // Drogon's controller macros and Qt's `Q_OBJECT` are statements the grammar
+  // reads as malformed declarations, and take the next declaration with them.
+  if (text.includes("_LIST_") || text.includes("ADD_METHOD") || text.includes("METHOD_ADD") || text.includes("PATH_ADD") || text.includes("PATH_VIA_REGEX") || text.includes("Q_OBJECT")) {
+    text = text
+      .replace(/\b(?:METHOD_LIST_BEGIN|METHOD_LIST_END|PATH_LIST_BEGIN|PATH_LIST_END|WS_PATH_LIST_BEGIN|WS_PATH_LIST_END|Q_OBJECT|Q_GADGET)\b/gu, blank)
+      .replace(/\b(?:METHOD_ADD|ADD_METHOD_TO|ADD_METHOD_VIA_REGEX|ADD_METHOD_VIA_REGEX_TO|PATH_ADD|WS_PATH_ADD|WS_ADD_PATH_VIA_REGEX|WS_CORO_PATH_ADD)\s*\([^;\\#]*\)\s*;/gu, blank);
+  }
+  // Flag declarations (`ABSL_FLAG(uint16_t, port, 50051, "…");`, gflags' `DEFINE_string`)
+  // are declarations without a type to the grammar and swallow what follows.
+  if (text.includes("ABSL_") || text.includes("DEFINE_") || text.includes("DECLARE_")) {
+    text = text.replace(/^[ \t]*(?:ABSL_FLAG|ABSL_DECLARE_FLAG|(?:DEFINE|DECLARE)_(?:bool|string|int32|int64|uint32|uint64|double|int))\s*\([^;\\#]*\)\s*;/gmu, blank);
+  }
   return catchStandIn(text.replace(attributeMacro, blank).replace(/\b(class|struct|union)(\s+)([A-Z][A-Z0-9_]{2,})(?=\s+[A-Za-z_]\w*\s*(?:final\s*)?[:{])/gu, (_match, keyword: string, space: string, macro: string) => `${keyword}${space}${blank(macro)}`));
 }
 
@@ -87,14 +99,26 @@ type Context = {
 
 export type CppLanguage = "c" | "cpp";
 
-export function createCppParser(language: CppLanguage): LanguageParser {
-  return { language, parse: (rootPath, filePath) => parseCppFile(language, rootPath, filePath) };
+// Parse-time semantics a framework layer adds to a C or C++ file once its
+// structure is built (routes, env reads, requests): it reads the written
+// source (comments and strings included) and may add nodes and relationships.
+export type CppParsePlugin = (file: {
+  fileNodeId: string;
+  relativePath: string;
+  language: CppLanguage;
+  source: string;
+  nodes: GraphNode[];
+  relationships: GraphRelationship[];
+}) => void;
+
+export function createCppParser(language: CppLanguage, plugins: readonly CppParsePlugin[] = []): LanguageParser {
+  return { language, parse: (rootPath, filePath) => parseCppFile(language, rootPath, filePath, plugins) };
 }
 
 export const cParser = createCppParser("c");
 export const cppParser = createCppParser("cpp");
 
-async function parseCppFile(language: CppLanguage, rootPath: string, filePath: string): Promise<ParsedSourceFile> {
+async function parseCppFile(language: CppLanguage, rootPath: string, filePath: string, plugins: readonly CppParsePlugin[]): Promise<ParsedSourceFile> {
   const source = await readFile(filePath, "utf8");
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
@@ -492,6 +516,8 @@ async function parseCppFile(language: CppLanguage, rootPath: string, filePath: s
     if (Object.keys(namespaceAliases).length > 0) scopeProperties.namespaceAliases = namespaceAliases;
     if (Object.keys(scopeProperties).length > 0) fileNode.properties.cppScope = JSON.stringify(scopeProperties);
     if (hasTests) fileNode.properties.isTest = true;
+
+    for (const plugin of plugins) plugin({ fileNodeId, relativePath, language, source, nodes, relationships });
 
     const parsed: ParsedSourceFile = { fileNodeId, nodes, relationships };
     if (skippedLines.length > 0) {

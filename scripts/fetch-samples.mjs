@@ -25,12 +25,13 @@ const git = (cwd, ...args) => execFileSync("git", args, { cwd, encoding: "utf8",
 
 mkdirSync(samplesDir, { recursive: true });
 // A sample is one repository at its root, or `parts`: repositories checked
-// out into directories of the sample.
+// out into directories of the sample. `paths` keeps only those directories
+// (a sparse checkout).
 for (const sample of selected) {
   const checkouts = sample.parts
-    ? sample.parts.map((part) => ({ label: `${sample.name}/${part.dir}`, target: path.join(samplesDir, sample.name, part.dir), repo: part.repo, sha: part.sha }))
-    : [{ label: sample.name, target: path.join(samplesDir, sample.name), repo: sample.repo, sha: sample.sha }];
-  for (const { label, target, repo, sha } of checkouts) {
+    ? sample.parts.map((part) => ({ label: `${sample.name}/${part.dir}`, target: path.join(samplesDir, sample.name, part.dir), repo: part.repo, sha: part.sha, paths: part.paths }))
+    : [{ label: sample.name, target: path.join(samplesDir, sample.name), repo: sample.repo, sha: sample.sha, paths: sample.paths }];
+  for (const { label, target, repo, sha, paths } of checkouts) {
     if (existsSync(path.join(target, ".git"))) {
       let head = "";
       try {
@@ -49,7 +50,13 @@ for (const sample of selected) {
     mkdirSync(target, { recursive: true });
     git(target, "init", "--quiet");
     git(target, "remote", "add", "origin", repo);
-    git(target, "fetch", "--quiet", "--depth", "1", "origin", sha);
+    if (paths) {
+      // Only these directories of a large repository (blobs come on checkout).
+      git(target, "sparse-checkout", "set", "--cone", ...paths);
+      git(target, "fetch", "--quiet", "--depth", "1", "--filter=blob:none", "origin", sha);
+    } else {
+      git(target, "fetch", "--quiet", "--depth", "1", "origin", sha);
+    }
     git(target, "-c", "advice.detachedHead=false", "checkout", "--quiet", "FETCH_HEAD");
   }
 }

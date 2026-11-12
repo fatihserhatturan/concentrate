@@ -97,6 +97,7 @@ export type GraphRelationshipType =
   | "RPC_RESPONSE"
   | "RPC_SERVED_BY"
   | "RPC_IMPLEMENTED_BY"
+  | "SIGNAL_CONNECTS_TO"
   | "DECLARES_STYLE"
   | "SELECTS_STYLE"
   | "USES_STYLE"

@@ -66,7 +66,7 @@ the only runtime dependency left is `web-tree-sitter`.
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
 M9 (Go), M10 (non-code files), M11 (Rust) and M12 (Python) are done. M13, the C/C++ ecosystem, has its
-language foundation (Phase 34) and its build systems (Phase 35); the frameworks and data access (Phase 36) come next.
+language foundation (Phase 34), its build systems (Phase 35) and its frameworks, data access, env and outbound HTTP (Phase 36); the measurement (Phase 37) comes next.
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -1568,28 +1568,28 @@ The preprocessor is not run: macros are read as calls. The decisions of M9 apply
 
 ### HTTP routes
 
-- [ ] Drogon (`METHOD_ADD`, `PATH_ADD`, `ADD_METHOD_TO`, `app().registerHandler`)
-- [ ] Crow (`CROW_ROUTE`, `CROW_BP_ROUTE`, blueprints with prefixes)
-- [ ] Pistache (`Routes::Get`, `Routes::bind`) and cpp-httplib (`svr.Get`, `svr.Post`)
+- [x] Drogon (`METHOD_ADD`, `PATH_ADD`, `ADD_METHOD_TO`, `app().registerHandler`)
+- [x] Crow (`CROW_ROUTE`, `CROW_BP_ROUTE`, blueprints with prefixes)
+- [x] Pistache (`Routes::Get`, `Routes::bind`) and cpp-httplib (`svr.Get`, `svr.Post`)
 
 ### RPC and signals
 
-- [ ] gRPC C++: a subclass of `X::Service` is an `EntryPoint` per method; `stub->Method(...)` calls link to the implementations (`via: "grpc"`)
-- [ ] Qt `connect(sender, &A::signal, receiver, &B::slot)` links signal to slot
+- [x] gRPC C++: a subclass of `X::Service` is an `EntryPoint` per method; `stub->Method(...)` calls link to the implementations (`via: "grpc"`)
+- [x] Qt `connect(sender, &A::signal, receiver, &B::slot)` links signal to slot
 
 ### Data and config
 
-- [ ] SQL strings in sqlite3 (`sqlite3_exec`, `sqlite3_prepare_v2`), libpq (`PQexec`, `PQexecParams`) and SOCI calls mapped to tables
-- [ ] `getenv`, `std::getenv` and `secure_getenv` as `USES_ENV`
+- [x] SQL strings in sqlite3 (`sqlite3_exec`, `sqlite3_prepare_v2`), libpq (`PQexec`, `PQexecParams`) and SOCI calls mapped to tables
+- [x] `getenv`, `std::getenv` and `secure_getenv` as `USES_ENV`
 
 ### Outbound HTTP
 
-- [ ] libcurl (`CURLOPT_URL`) and cpr (`cpr::Get`, `cpr::Post`) calls as `REQUESTS`
+- [x] libcurl (`CURLOPT_URL`) and cpr (`cpr::Get`, `cpr::Post`) calls as `REQUESTS`
 
 ### Acceptance criteria
 
-- [ ] Fixtures for Drogon or Crow, cpp-httplib, gRPC C++, Qt, sqlite3 and libcurl have golden graphs
-- [ ] `list_routes`, `find_table_usage` and `find_env_usage` answer for C/C++ services
+- [x] Fixtures for Drogon or Crow, cpp-httplib, gRPC C++, Qt, sqlite3 and libcurl have golden graphs
+- [x] `list_routes`, `find_table_usage` and `find_env_usage` answer for C/C++ services
 
 ## Phase 37: C/C++ ecosystem measurement (samples, accuracy, agent benchmark, README) ([#214](https://github.com/fatihserhatturan/concentrate/issues/214))
 
