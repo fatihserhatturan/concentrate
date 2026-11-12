@@ -12,7 +12,7 @@ export type SigmaEdge = { from: string; to: string; category: CategoryId; weight
 const LABELED = 10;
 
 function nodeColor(label: string): string {
-  return label === "File" ? themeColor("--node-file", "#94a3b8") : themeColor("--node-dir", "#64748b");
+  return label === "File" ? themeColor("--node-file", "#9a9082") : themeColor("--node-dir", "#655c51");
 }
 
 /** The directory overview: a force layout, the only place one is used. Hover shows a node's neighbours. */
@@ -32,16 +32,16 @@ class OverviewCanvas {
       labelDensity: 0.7,
       labelGridCellSize: 120,
       labelSize: 12,
-      labelColor: { color: themeColor("--fg", "#1f2328") },
+      labelColor: { color: themeColor("--fg", "#1a1613") },
       labelFont: "-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
       zIndex: true,
       nodeReducer: (id, data) => {
         const attrs = { ...data };
-        if (id === this.selected) { attrs.highlighted = true; attrs.forceLabel = true; attrs.zIndex = 2; attrs.color = themeColor("--accent", "#0969da"); }
+        if (id === this.selected) { attrs.highlighted = true; attrs.forceLabel = true; attrs.zIndex = 2; attrs.color = themeColor("--accent", "#a84d06"); }
         if (this.hovered) {
           if (id === this.hovered) { attrs.forceLabel = true; attrs.zIndex = 2; }
           else if (this.graph.areNeighbors(this.hovered, id)) attrs.forceLabel = true;
-          else { attrs.color = themeColor("--bg-muted", "#eaeef2"); attrs.label = ""; attrs.forceLabel = false; }
+          else { attrs.color = themeColor("--bg-muted", "#eae3d6"); attrs.label = ""; attrs.forceLabel = false; }
         }
         return attrs;
       },
@@ -82,7 +82,7 @@ class OverviewCanvas {
   recolor(): void {
     this.graph.forEachNode((id, attrs) => this.graph.setNodeAttribute(id, "color", nodeColor(String(attrs.kind))));
     this.graph.forEachEdge((edge, attrs) => this.graph.setEdgeAttribute(edge, "color", categoryColor(attrs.category as CategoryId)));
-    this.sigma.setSetting("labelColor", { color: themeColor("--fg", "#1f2328") });
+    this.sigma.setSetting("labelColor", { color: themeColor("--fg", "#1a1613") });
     this.sigma.refresh();
   }
 
