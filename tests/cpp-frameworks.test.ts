@@ -108,7 +108,8 @@ describe("gRPC C++ (fixtures/cpp-grpc)", () => {
   it("makes entrypoints of the service methods and links stub calls to them", async () => {
     const graph = await scan("fixtures/cpp-grpc");
     const entrypoints = graph.nodes.filter((node) => node.label === "EntryPoint" && node.properties.kind === "grpc").map((node) => `${node.properties.trigger}@${node.properties.receiverName}`).sort();
-    assert.deepEqual(entrypoints, ["Greeter/SayHello@CallbackImpl", "Greeter/SayHello@GreeterServiceImpl", "Greeter/SayHelloStreamReply@GreeterServiceImpl"]);
+    // FlagService follows a file-scope ABSL_FLAG(…); and a #define that holds one.
+    assert.deepEqual(entrypoints, ["Greeter/SayHello@CallbackImpl", "Greeter/SayHello@FlagService", "Greeter/SayHello@GreeterServiceImpl", "Greeter/SayHelloStreamReply@GreeterServiceImpl"]);
     const links = graph.relationships
       .filter((rel) => rel.type === "CALL_RESOLVES_TO" && rel.properties.via === "grpc")
       .map((rel) => `${strip(rel.from).split(":call:")[0]!.replace(/:function:.*/u, "")} ${graph.nodes.find((node) => node.id === rel.from)!.properties.expression} -> ${label(graph, rel.to)}`)
@@ -116,6 +117,7 @@ describe("gRPC C++ (fixtures/cpp-grpc)", () => {
     assert.deepEqual(links, [
       "src/client.cc stub->SayHelloStreamReply -> GreeterServiceImpl.SayHelloStreamReply",
       "src/client.cc stub_->SayHello -> CallbackImpl.SayHello",
+      "src/client.cc stub_->SayHello -> FlagService.SayHello",
       "src/client.cc stub_->SayHello -> GreeterServiceImpl.SayHello",
     ]);
   });
@@ -123,7 +125,7 @@ describe("gRPC C++ (fixtures/cpp-grpc)", () => {
   it("links the .proto rpcs to their implementations", async () => {
     const graph = await scan("fixtures/cpp-grpc");
     const implemented = graph.relationships.filter((rel) => rel.type === "RPC_IMPLEMENTED_BY").map((rel) => `${label(graph, rel.from)} -> ${label(graph, rel.to)}`).sort();
-    assert.deepEqual(implemented, ["SayHello -> CallbackImpl.SayHello", "SayHello -> GreeterServiceImpl.SayHello", "SayHelloStreamReply -> GreeterServiceImpl.SayHelloStreamReply"]);
+    assert.deepEqual(implemented, ["SayHello -> CallbackImpl.SayHello", "SayHello -> FlagService.SayHello", "SayHello -> GreeterServiceImpl.SayHello", "SayHelloStreamReply -> GreeterServiceImpl.SayHelloStreamReply"]);
   });
 });
 

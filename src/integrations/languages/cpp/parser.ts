@@ -78,12 +78,12 @@ function cppStandIn(text: string): string {
   if (text.includes("_LIST_") || text.includes("ADD_METHOD") || text.includes("METHOD_ADD") || text.includes("PATH_ADD") || text.includes("PATH_VIA_REGEX") || text.includes("Q_OBJECT")) {
     text = text
       .replace(/\b(?:METHOD_LIST_BEGIN|METHOD_LIST_END|PATH_LIST_BEGIN|PATH_LIST_END|WS_PATH_LIST_BEGIN|WS_PATH_LIST_END|Q_OBJECT|Q_GADGET)\b/gu, blank)
-      .replace(/\b(?:METHOD_ADD|ADD_METHOD_TO|ADD_METHOD_VIA_REGEX|ADD_METHOD_VIA_REGEX_TO|PATH_ADD|WS_PATH_ADD|WS_ADD_PATH_VIA_REGEX|WS_CORO_PATH_ADD)\s*\([^;]*\)\s*;/gu, blank);
+      .replace(/\b(?:METHOD_ADD|ADD_METHOD_TO|ADD_METHOD_VIA_REGEX|ADD_METHOD_VIA_REGEX_TO|PATH_ADD|WS_PATH_ADD|WS_ADD_PATH_VIA_REGEX|WS_CORO_PATH_ADD)\s*\([^;\\#]*\)\s*;/gu, blank);
   }
   // Flag declarations (`ABSL_FLAG(uint16_t, port, 50051, "…");`, gflags' `DEFINE_string`)
   // are declarations without a type to the grammar and swallow what follows.
   if (text.includes("ABSL_") || text.includes("DEFINE_") || text.includes("DECLARE_")) {
-    text = text.replace(/^[ \t]*(?:ABSL_FLAG|ABSL_DECLARE_FLAG|(?:DEFINE|DECLARE)_(?:bool|string|int32|int64|uint32|uint64|double|int))\s*\([^;]*\)\s*;/gmu, blank);
+    text = text.replace(/^[ \t]*(?:ABSL_FLAG|ABSL_DECLARE_FLAG|(?:DEFINE|DECLARE)_(?:bool|string|int32|int64|uint32|uint64|double|int))\s*\([^;\\#]*\)\s*;/gmu, blank);
   }
   return catchStandIn(text.replace(attributeMacro, blank).replace(/\b(class|struct|union)(\s+)([A-Z][A-Z0-9_]{2,})(?=\s+[A-Za-z_]\w*\s*(?:final\s*)?[:{])/gu, (_match, keyword: string, space: string, macro: string) => `${keyword}${space}${blank(macro)}`));
 }
