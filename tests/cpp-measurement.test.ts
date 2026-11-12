@@ -52,4 +52,22 @@ int after() { return 1; }
     const graph = await buildCodeGraph(root, { continueOnError: false });
     assert.ok(graph.nodes.some((node) => node.label === "Function" && node.properties.name === "after"));
   });
+
+  it("reads a statement macro without a semicolon at column 0 as blanks", async () => {
+    const root = await project({
+      "src/repeater.cc": `namespace testing {
+#define GTEST_REPEATER_METHOD_(Name, Type) void Name(const Type& p) { }
+GTEST_REPEATER_METHOD_(OnTestStart, TestInfo)
+GTEST_REPEATER_METHOD_(OnTestEnd, TestInfo)
+//  trailing comment
+GTEST_ATTRIBUTE_PRINTF_(2, 3)
+static void ColoredPrintf(int color, const char* fmt, ...) { color = 1; }
+int after() { return 1; }
+}
+`,
+    });
+    const graph = await buildCodeGraph(root, { continueOnError: false });
+    const functions = graph.nodes.filter((node) => node.label === "Function").map((node) => node.properties.name);
+    assert.ok(functions.includes("after") && functions.includes("ColoredPrintf"), functions.join(","));
+  });
 });
