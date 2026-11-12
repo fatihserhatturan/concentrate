@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 87
+        "result": 90
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 87,
+      "schemaVersion": 90,
       "stats": [
         {
           "table": "Repo",
@@ -1135,9 +1135,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true AND page.framework = \"nuxt\" OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true AND page.framework = \"nuxt\" OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN id(page) AS pageId, page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
         "rows": [
           {
+            "pageId": "file:app.vue:page",
             "fullPath": "/",
             "path": "/",
             "framework": "nuxt",
@@ -1150,6 +1151,7 @@
             "componentFile": "app.vue"
           },
           {
+            "pageId": "file:error.vue:page",
             "fullPath": "/",
             "path": "/",
             "framework": "nuxt",
@@ -1162,6 +1164,7 @@
             "componentFile": "error.vue"
           },
           {
+            "pageId": "file:pages/index.vue:page",
             "fullPath": "/",
             "path": "/",
             "framework": "nuxt",
@@ -1174,6 +1177,7 @@
             "componentFile": "pages/index.vue"
           },
           {
+            "pageId": "file:pages/(marketing)/about.vue:page",
             "fullPath": "/about",
             "path": "/about",
             "framework": "nuxt",
@@ -1186,6 +1190,7 @@
             "componentFile": "pages/(marketing)/about.vue"
           },
           {
+            "pageId": "file:pages/blog/[...slug].vue:page",
             "fullPath": "/blog/:slug(.*)*",
             "path": "/blog/:slug(.*)*",
             "framework": "nuxt",
@@ -1198,6 +1203,7 @@
             "componentFile": "pages/blog/[...slug].vue"
           },
           {
+            "pageId": "file:pages/settings/[[tab]].vue:page",
             "fullPath": "/settings/:tab?",
             "path": "/settings/:tab?",
             "framework": "nuxt",
@@ -1210,6 +1216,7 @@
             "componentFile": "pages/settings/[[tab]].vue"
           },
           {
+            "pageId": "file:pages/user-[id]-profile.vue:page",
             "fullPath": "/user-:id-profile",
             "path": "/user-:id-profile",
             "framework": "nuxt",
@@ -1222,6 +1229,7 @@
             "componentFile": "pages/user-[id]-profile.vue"
           },
           {
+            "pageId": "file:pages/users.vue:page",
             "fullPath": "/users",
             "path": "/users",
             "framework": "nuxt",
@@ -1234,6 +1242,7 @@
             "componentFile": "pages/users.vue"
           },
           {
+            "pageId": "file:pages/users/index.vue:page",
             "fullPath": "/users",
             "path": "/users",
             "framework": "nuxt",
@@ -1246,6 +1255,7 @@
             "componentFile": "pages/users/index.vue"
           },
           {
+            "pageId": "file:pages/users/[id].vue:page",
             "fullPath": "/users/:id",
             "path": "/users/:id",
             "framework": "nuxt",
@@ -1258,6 +1268,7 @@
             "componentFile": "pages/users/[id].vue"
           },
           {
+            "pageId": "file:layouts/auth.vue:page",
             "fullPath": null,
             "path": null,
             "framework": "nuxt",
@@ -1270,6 +1281,7 @@
             "componentFile": "layouts/auth.vue"
           },
           {
+            "pageId": "file:layouts/default.vue:page",
             "fullPath": null,
             "path": null,
             "framework": "nuxt",
@@ -1282,6 +1294,43 @@
             "componentFile": "layouts/default.vue"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[nav:NAVIGATES_TO]->(page:Page) WHERE id(page) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) OPTIONAL MATCH (moduleFile:File)-[:MODULE_CALLS]->(call) RETURN id(page) AS page, id(fn) AS fn, moduleFile.relativePath AS moduleFile, call.line AS line, nav.url AS url, nav.match AS match",
+        "params": {
+          "ids": [
+            "file:app.vue:page",
+            "file:error.vue:page",
+            "file:pages/index.vue:page",
+            "file:pages/(marketing)/about.vue:page",
+            "file:pages/blog/[...slug].vue:page",
+            "file:pages/settings/[[tab]].vue:page",
+            "file:pages/user-[id]-profile.vue:page",
+            "file:pages/users.vue:page",
+            "file:pages/users/index.vue:page",
+            "file:pages/users/[id].vue:page",
+            "file:layouts/auth.vue:page",
+            "file:layouts/default.vue:page"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -3484,7 +3533,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"formatName\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[resolved:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"formatName\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, resolved.provenance AS provenance, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": [
           {
             "target": "formatName",
@@ -3510,12 +3559,12 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"formatName\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[resolved:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"formatName\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, resolved.provenance AS provenance, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"formatName\" RETURN target.name AS target, target.id AS targetId, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[resolved:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"formatName\" RETURN target.name AS target, target.id AS targetId, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, resolved.provenance AS provenance, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
       },
       {
@@ -4500,7 +4549,7 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"listUsers\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[resolved:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_FUNCTION]->(caller) WHERE target.name = \"listUsers\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Function' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, resolved.provenance AS provenance, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": [
           {
             "target": "listUsers",
@@ -4515,12 +4564,12 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"listUsers\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[resolved:CALL_RESOLVES_TO]->(target:Function) MATCH (caller:Function)-[:CALLS]->(call) MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller) WHERE target.name = \"listUsers\" RETURN target.name AS target, target.id AS targetId, caller.name AS caller, 'Method' AS callerKind, class.name AS className, file.relativePath AS file, call.line AS line, call.expression AS expression, resolved.provenance AS provenance, 'CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"listUsers\" RETURN target.name AS target, target.id AS targetId, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
+        "cypher": "MATCH (call:Call)-[resolved:CALL_RESOLVES_TO]->(target:Function) MATCH (file:File)-[:MODULE_CALLS]->(call) WHERE target.name = \"listUsers\" RETURN target.name AS target, target.id AS targetId, file.relativePath AS caller, 'File' AS callerKind, file.relativePath AS file, call.line AS line, call.expression AS expression, resolved.provenance AS provenance, 'MODULE_CALLS' AS relationship ORDER BY file.relativePath, call.line LIMIT 21",
         "rows": []
       },
       {

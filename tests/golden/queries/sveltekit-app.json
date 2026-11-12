@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 87
+        "result": 90
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 87,
+      "schemaVersion": 90,
       "stats": [
         {
           "table": "Repo",
@@ -970,9 +970,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN id(page) AS pageId, page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
         "rows": [
           {
+            "pageId": "file:src/routes/+error.svelte:page",
             "fullPath": "/",
             "path": "/",
             "framework": "sveltekit",
@@ -985,6 +986,7 @@
             "componentFile": "src/routes/+error.svelte"
           },
           {
+            "pageId": "file:src/routes/+layout.svelte:page",
             "fullPath": "/",
             "path": "/",
             "framework": "sveltekit",
@@ -997,6 +999,7 @@
             "componentFile": "src/routes/+layout.svelte"
           },
           {
+            "pageId": "file:src/routes/+page.svelte:page",
             "fullPath": "/",
             "path": "/",
             "framework": "sveltekit",
@@ -1009,6 +1012,7 @@
             "componentFile": "src/routes/+page.svelte"
           },
           {
+            "pageId": "file:src/routes/(marketing)/about/+page.svelte:page",
             "fullPath": "/about",
             "path": "/about",
             "framework": "sveltekit",
@@ -1021,6 +1025,7 @@
             "componentFile": "src/routes/(marketing)/about/+page.svelte"
           },
           {
+            "pageId": "file:src/routes/blog/+page.svelte:page",
             "fullPath": "/blog",
             "path": "/blog",
             "framework": "sveltekit",
@@ -1033,6 +1038,7 @@
             "componentFile": "src/routes/blog/+page.svelte"
           },
           {
+            "pageId": "file:src/routes/blog/[slug]/+page.svelte:page",
             "fullPath": "/blog/[slug]",
             "path": "/blog/[slug]",
             "framework": "sveltekit",
@@ -1045,6 +1051,7 @@
             "componentFile": "src/routes/blog/[slug]/+page.svelte"
           },
           {
+            "pageId": "file:src/routes/login/+page.svelte:page",
             "fullPath": "/login",
             "path": "/login",
             "framework": "sveltekit",
@@ -1057,6 +1064,7 @@
             "componentFile": "src/routes/login/+page.svelte"
           },
           {
+            "pageId": "file:src/routes/settings/+layout.svelte:page",
             "fullPath": "/settings",
             "path": "/settings",
             "framework": "sveltekit",
@@ -1069,6 +1077,7 @@
             "componentFile": "src/routes/settings/+layout.svelte"
           },
           {
+            "pageId": "file:src/routes/settings/profile/+page@.svelte:page",
             "fullPath": "/settings/profile",
             "path": "/settings/profile",
             "framework": "sveltekit",
@@ -1081,6 +1090,62 @@
             "componentFile": "src/routes/settings/profile/+page@.svelte"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[nav:NAVIGATES_TO]->(page:Page) WHERE id(page) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) OPTIONAL MATCH (moduleFile:File)-[:MODULE_CALLS]->(call) RETURN id(page) AS page, id(fn) AS fn, moduleFile.relativePath AS moduleFile, call.line AS line, nav.url AS url, nav.match AS match",
+        "params": {
+          "ids": [
+            "file:src/routes/+error.svelte:page",
+            "file:src/routes/+layout.svelte:page",
+            "file:src/routes/+page.svelte:page",
+            "file:src/routes/(marketing)/about/+page.svelte:page",
+            "file:src/routes/blog/+page.svelte:page",
+            "file:src/routes/blog/[slug]/+page.svelte:page",
+            "file:src/routes/login/+page.svelte:page",
+            "file:src/routes/settings/+layout.svelte:page",
+            "file:src/routes/settings/profile/+page@.svelte:page"
+          ]
+        },
+        "rows": [
+          {
+            "page": "file:src/routes/+page.svelte:page",
+            "fn": "file:src/routes/login/+page.server.ts:function:6:default",
+            "moduleFile": null,
+            "line": 9,
+            "url": "/",
+            "match": "exact"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:function:6:default"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/routes/login/+page.server.ts:function:6:default",
+            "name": "default",
+            "className": null,
+            "file": "src/routes/login/+page.server.ts",
+            "line": 6,
+            "endLine": 10
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": [
+            "file:src/routes/login/+page.server.ts:function:6:default"
+          ]
+        },
+        "rows": []
       }
     ],
     "output": {
@@ -1122,7 +1187,16 @@
           "file": "src/routes/+page.svelte",
           "line": null,
           "component": "Page",
-          "componentFile": "src/routes/+page.svelte"
+          "componentFile": "src/routes/+page.svelte",
+          "navigatedFrom": [
+            {
+              "function": "default",
+              "file": "src/routes/login/+page.server.ts",
+              "line": 9,
+              "url": "/",
+              "match": "exact"
+            }
+          ]
         },
         {
           "fullPath": "/about",

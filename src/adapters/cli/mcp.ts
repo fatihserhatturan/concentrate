@@ -1,6 +1,6 @@
 import path from "node:path";
 import { openGraphStore } from "../../composition/graph-store.js";
-import { createFreshness, runMcpServer, type McpServerHooks } from "../mcp/index.js";
+import { createFreshness, parseListedTools, runMcpServer, type McpServerHooks } from "../mcp/index.js";
 import { startWatch } from "./watch.js";
 
 export type McpAdapterOptions = {
@@ -13,6 +13,8 @@ export type McpAdapterOptions = {
   exclude?: string[];
   apiOrigin?: string[];
   cacheDir?: string;
+  // Comma-separated tool names to list (default: CONCENTRATE_MCP_TOOLS, else all).
+  tools?: string;
 };
 
 // The longest a tool call waits for a running or pending rescan; after that
@@ -23,6 +25,8 @@ export async function runMcpAdapter(options: McpAdapterOptions): Promise<void> {
   const databasePath = path.resolve(options.database);
   const manifestPath = path.resolve(options.manifest ?? path.join(path.dirname(databasePath), "scan-manifest.json"));
   const hooks: McpServerHooks = { freshness: createFreshness(manifestPath) };
+  const toolList = options.tools ?? process.env.CONCENTRATE_MCP_TOOLS;
+  if (toolList !== undefined && toolList.trim() !== "") hooks.listedTools = parseListedTools(toolList);
 
   const watcher = options.watch === undefined ? null : startWatch(options.watch, {
     database: databasePath,

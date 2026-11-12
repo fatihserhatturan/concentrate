@@ -17,6 +17,17 @@ Start the MCP server:
 npm run mcp -- --database .concentrate/graph
 ```
 
+`--tools graph_stats,find_callers,impact_of` (or `CONCENTRATE_MCP_TOOLS`)
+limits which tools `tools/list` returns, so the list costs fewer tokens per
+request. The other tools stay callable by name; an unknown name stops the
+server at start.
+
+Test files affected by a change are also a command:
+`git diff --name-only | concentrate affected --stdin` prints the test files
+that reach the changed files through resolved imports and calls, one per line
+(`--json` adds depth and the changed file each was reached from, and lists
+arguments that are not in the graph; `--max-depth` limits the hops).
+
 Write the client configuration into the project:
 
 ```bash
@@ -108,7 +119,7 @@ JSON text block for clients that only read `content`. Every tool has a
 
 The tool list is part of every request an agent sends, so it is kept short:
 names, descriptions and input schemas come to about 18,000 characters (about
-4,500 tokens) for the 26 tools. Rules that hold for every tool (paging, the
+4,500 tokens) for the 28 tools. Rules that hold for every tool (paging, the
 24,000-character result budget) are stated once in the server
 `instructions`, not in each description; an argument without `required` is
 optional. The instructions also name, for every tool, the question it answers
@@ -134,7 +145,8 @@ and sends the same `tools/call` without `_meta`.
 `resources/list` returns one resource, `concentrate://graph/summary`
 (`application/json`): schema version, the repo root, file counts, languages,
 packages with their file counts, the 15 largest directories (first two path
-segments), routes by framework, entrypoints by kind, data models by library,
+segments), `hubs` (the 5 most connected files and the 5 most called
+functions), routes by framework, entrypoints by kind, data models by library,
 env var and config counts, and node counts per label. It is a few kilobytes
 even for large repositories; read it first to decide which tools to call.
 
@@ -176,7 +188,17 @@ even for large repositories; read it first to decide which tools to call.
   `kind` (`page`, `layout`, `index`, `lazy`, Next's `loading`, `error`, ...),
   Next's parallel-route `slot`, and the `component` it renders with its
   `componentFile`. `path` keeps pages under a prefix of whole segments
-  (`/users` matches `/users/:id`, not `/usersettings`).
+  (`/users` matches `/users/:id`, not `/usersettings`). A page that code
+  navigates to has `navigatedFrom` (up to 10 sites, `navigatedFromTotal` when
+  more): the `function`, `file`, `line`, the written `url` and the `match`
+  (`exact`, `parameter`, `catch-all`). A call is a navigation when it is
+  `navigate`, `redirect`, `permanentRedirect`, `goto`, `navigateTo` or
+  `navigateByUrl`, or `push`, `replace`, `navigate`, `navigateByUrl` or
+  `redirect` on a router-like receiver (`router`, `$router`, `Router`,
+  `history`), with a literal path (first or second argument) that one page
+  reaches; the link is the `NAVIGATES_TO` relationship from the call to the
+  page. Links in markup (`<Link href>`, `routerLink`) and calls that take an
+  object or a template are not linked yet.
 - `list_entrypoints`: lists non-HTTP backend entrypoints such as queues, cron
   jobs, events, realtime handlers, and schedulers; for Go also `main` /
   `init`, gRPC service methods (kind `grpc`, trigger `Service/Method`) and
@@ -235,6 +257,29 @@ even for large repositories; read it first to decide which tools to call.
 
 These answer a whole question in one call instead of a chain of lookups.
 
+- `explore({ question?, symbol?, file?, limit = 6, maxLines = 40 })`: one call
+  for a narrow question. The identifiers of `question` (stop words dropped; a
+  dotted name also searches by its last part) are matched against function,
+  method, class and interface names, exact names first; terms most names
+  contain count less than rare ones, and a match on a file's name only lifts
+  that file's declarations. `symbol` (`Class.method` allowed) or `file` alone
+  select declarations without a question. Returns `symbols` with `file`,
+  `line`, `callers` and `callees` counts and `source` (at most `maxLines` each
+  and about 12,000 characters together; later symbols have `source: null`),
+  `paths`: the shortest chains of resolved calls from one returned symbol to
+  another (at most 6 calls), and `impact`: counts of callers, entrypoints,
+  components, pages and tables and the routes and env vars reached within 3
+  levels. It has not yet been measured with the agent benchmark (see
+  docs/agent-benchmark.md); `--tools` can leave it out of the list.
+- `trace_calls({ from, to?, file?, toFile?, maxDepth, limit = 50 })`: over
+  resolved calls only. Without `to`: what `from` (a function name or
+  `Class.method`) calls, nearest first (`callees` with `depth`, `calledBy`;
+  `maxDepth` 3). With `to`: up to 5 shortest chains from `from` to `to`
+  (`maxDepth` 8), each with `calls`, `path` and `weakest`, the weakest
+  [provenance](#edge-provenance) among its links; a hop with a link that is not
+  `exact` carries `provenance`. Unresolved calls (dynamic dispatch, callbacks)
+  are not followed, which the note says when no chain is found. For files use
+  `trace_import_chain`.
 - `impact_of({ symbol?, file?, maxDepth = 5, limit = 50 })`: what is affected
   if a function, method, class or file changes. A symbol selects functions with
   that name and the methods of a class with that name; a file selects every
@@ -270,7 +315,10 @@ These answer a whole question in one call instead of a chain of lookups.
   `line..endLine` span they touch, and returns the impact of the changed
   functions as in `impact_of`. Changed files the graph does not know are listed
   under `unscannedFiles`; rescan, or keep `concentrate watch` running, to
-  include them. Fails when the scanned project is not in a git work tree.
+  include them. `affectedTests` lists the test files that reach the changed
+  files through resolved imports and calls (`file`, `depth` in hops; 0 is a
+  changed test; `affectedTestsTruncated` counts them when over `limit`). Fails
+  when the scanned project is not in a git work tree.
 - `route_details({ method, path, limit = 5 })`: for each matching route (method
   case-insensitive, path matched against the resolved full path or the path as
   declared): `handlers`, `lifecycle` steps (middleware, guards, hooks, ...) in
@@ -422,7 +470,14 @@ either (it stays under 19 000 characters).
   groups each depends on and is used by; `edges` between groups weighted by
   resolved file imports (`typeOnlyImports` among them) and, for packages, the
   manifest `dependencyTypes`, heaviest first. Files outside every package are
-  counted under `ungroupedFiles`.
+  counted under `ungroupedFiles`. `level: "subsystem"` clusters the code files
+  (tests left out) by how densely they import and call each other (Louvain,
+  implemented in the repository, deterministic): each group is named by the
+  directory its files share, lists its `topFiles`, and files with no import or
+  call to another file are `ungroupedFiles`. Every result has `hubs`: the most
+  connected files (`connections` are the distinct files they import, are
+  imported by or are called from) and the most called functions (test callers
+  not counted).
 
 These tools work from the graph only. Calls the scanner could not resolve
 (for example calls through an `export *` barrel to another package) are
@@ -470,6 +525,26 @@ and a `truncated` object lists how many items each lost (for example
   linked when they are bound by name (`import { listUsers } from './users'`,
   `const { auth } = require('./auth')`); default imports, namespace members
   (`handlers.list`) and re-export barrels are not followed yet.
+
+## Edge provenance
+
+The store stamps how a link was made on `CALL_RESOLVES_TO`, `REQUESTS`,
+`NAVIGATES_TO` and `USES_STYLE` relationships (`provenance`, schema 88), from the `via` and
+`match` the resolvers already record:
+
+| provenance | meaning |
+| --- | --- |
+| `exact` | resolved through scope, imports or a literal match |
+| `framework` | linked by a framework rule: gRPC stub to handler, Celery task, Qt signal to slot, C macro |
+| `inferred` | one candidate of a dispatch through a type relationship (interface, override, trait method) or a catch-all route |
+| `by-name` | matched on a class name alone (`USES_STYLE` with `match` `import` or `name`) |
+
+`NAVIGATES_TO` (schema 89) takes the same values as `REQUESTS`: `exact` for a
+literal or parameter match, `inferred` for a catch-all page.
+
+`find_callers` adds `provenance` to each caller whose link is not `exact`;
+`api_consumers` and the style users keep reporting `match`. Cypher can filter
+on it: `MATCH ()-[r:CALL_RESOLVES_TO]->() WHERE r.provenance = "exact" ...`.
 
 ## Troubleshooting
 

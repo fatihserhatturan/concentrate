@@ -90,6 +90,7 @@ export type GraphRelationshipType =
   | "READS_STORE"
   | "WRITES_STORE"
   | "REQUESTS"
+  | "NAVIGATES_TO"
   | "DECLARES_SERVICE"
   | "DECLARES_MESSAGE"
   | "HAS_RPC"

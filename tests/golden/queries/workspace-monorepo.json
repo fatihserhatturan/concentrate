@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 87
+        "result": 90
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 87,
+      "schemaVersion": 90,
       "stats": [
         {
           "table": "Repo",
@@ -528,7 +528,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 87
+        "result": 90
       },
       {
         "method": "stats",
@@ -564,7 +564,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 87,
+      "schemaVersion": 90,
       "packageName": "@sample/core",
       "stats": [
         {
@@ -765,6 +765,97 @@
             "bindings": "[{\"imported\":\"buildMessage\",\"local\":\"buildMessage\",\"kind\":\"named\"}]"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest",
+        "rows": [
+          {
+            "file": "apps/api/package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
+            "file": "apps/api/src/server.ts",
+            "language": "typescript",
+            "isTest": false
+          },
+          {
+            "file": "package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
+            "file": "packages/core/package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
+            "file": "packages/core/src/index.ts",
+            "language": "typescript",
+            "isTest": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:IMPORTS]->(imp:Import) OPTIONAL MATCH (imp)-[:RESOLVES_TO]->(target:File) RETURN id(imp) AS id, file.relativePath AS file, target.relativePath AS target, imp.source AS source, imp.specifier AS specifier, imp.line AS line, imp.isReExport AS isReExport, imp.isWildcard AS isWildcard, imp.isDynamic AS isDynamic, imp.isCjs AS isCjs, imp.isTypeOnly AS isTypeOnly, imp.bindings AS bindings",
+        "rows": [
+          {
+            "id": "file:apps/api/src/server.ts:import:1:@sample/core",
+            "file": "apps/api/src/server.ts",
+            "target": "packages/core/src/index.ts",
+            "source": "@sample/core",
+            "specifier": "import { buildMessage } from \"@sample/core\";",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"buildMessage\",\"local\":\"buildMessage\",\"kind\":\"named\"}]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:apps/api/src/server.ts:function:3:start",
+            "name": "start",
+            "className": null,
+            "file": "apps/api/src/server.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:packages/core/src/index.ts:function:1:buildMessage",
+            "name": "buildMessage",
+            "className": null,
+            "file": "packages/core/src/index.ts",
+            "line": 1,
+            "endLine": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:apps/api/src/server.ts:function:3:start",
+            "callee": "file:packages/core/src/index.ts:function:1:buildMessage",
+            "line": 4
+          }
+        ]
       }
     ],
     "output": {
@@ -801,6 +892,33 @@
           "usedBy": 1
         }
       ],
+      "hubs": {
+        "files": [
+          {
+            "file": "apps/api/src/server.ts",
+            "connections": 1,
+            "importedBy": 0,
+            "imports": 1,
+            "calledFrom": 0
+          },
+          {
+            "file": "packages/core/src/index.ts",
+            "connections": 1,
+            "importedBy": 1,
+            "imports": 0,
+            "calledFrom": 1
+          }
+        ],
+        "symbols": [
+          {
+            "name": "buildMessage",
+            "className": null,
+            "file": "packages/core/src/index.ts",
+            "line": 1,
+            "callers": 1
+          }
+        ]
+      },
       "totalEdges": 1,
       "edges": [
         {
@@ -922,6 +1040,97 @@
             "bindings": "[{\"imported\":\"buildMessage\",\"local\":\"buildMessage\",\"kind\":\"named\"}]"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest",
+        "rows": [
+          {
+            "file": "apps/api/package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
+            "file": "apps/api/src/server.ts",
+            "language": "typescript",
+            "isTest": false
+          },
+          {
+            "file": "package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
+            "file": "packages/core/package.json",
+            "language": "json",
+            "isTest": false
+          },
+          {
+            "file": "packages/core/src/index.ts",
+            "language": "typescript",
+            "isTest": false
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:IMPORTS]->(imp:Import) OPTIONAL MATCH (imp)-[:RESOLVES_TO]->(target:File) RETURN id(imp) AS id, file.relativePath AS file, target.relativePath AS target, imp.source AS source, imp.specifier AS specifier, imp.line AS line, imp.isReExport AS isReExport, imp.isWildcard AS isWildcard, imp.isDynamic AS isDynamic, imp.isCjs AS isCjs, imp.isTypeOnly AS isTypeOnly, imp.bindings AS bindings",
+        "rows": [
+          {
+            "id": "file:apps/api/src/server.ts:import:1:@sample/core",
+            "file": "apps/api/src/server.ts",
+            "target": "packages/core/src/index.ts",
+            "source": "@sample/core",
+            "specifier": "import { buildMessage } from \"@sample/core\";",
+            "line": 1,
+            "isReExport": false,
+            "isWildcard": false,
+            "isDynamic": false,
+            "isCjs": false,
+            "isTypeOnly": false,
+            "bindings": "[{\"imported\":\"buildMessage\",\"local\":\"buildMessage\",\"kind\":\"named\"}]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:apps/api/src/server.ts:function:3:start",
+            "name": "start",
+            "className": null,
+            "file": "apps/api/src/server.ts",
+            "line": 3,
+            "endLine": 5
+          },
+          {
+            "id": "file:packages/core/src/index.ts:function:1:buildMessage",
+            "name": "buildMessage",
+            "className": null,
+            "file": "packages/core/src/index.ts",
+            "line": 1,
+            "endLine": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:apps/api/src/server.ts:function:3:start",
+            "callee": "file:packages/core/src/index.ts:function:1:buildMessage",
+            "line": 4
+          }
+        ]
       }
     ],
     "output": {
@@ -959,6 +1168,33 @@
           "usedBy": 1
         }
       ],
+      "hubs": {
+        "files": [
+          {
+            "file": "apps/api/src/server.ts",
+            "connections": 1,
+            "importedBy": 0,
+            "imports": 1,
+            "calledFrom": 0
+          },
+          {
+            "file": "packages/core/src/index.ts",
+            "connections": 1,
+            "importedBy": 1,
+            "imports": 0,
+            "calledFrom": 1
+          }
+        ],
+        "symbols": [
+          {
+            "name": "buildMessage",
+            "className": null,
+            "file": "packages/core/src/index.ts",
+            "line": 1,
+            "callers": 1
+          }
+        ]
+      },
       "totalEdges": 1,
       "edges": [
         {

@@ -9,7 +9,7 @@ import { findUnusedExports } from "./unused.js";
 // Search, navigation and whole-repository analysis over the graph. Like the
 // agent tools, each pages one primary list.
 
-const limit = (fallback: number) => ({ type: "number", description: `Page size. Defaults to ${fallback}, at most 200.` });
+const limit = (fallback: number) => ({ type: "number", description: `Default ${fallback}, max 200.` });
 const kind = { type: "string", description: `${DECLARATION_KINDS.join(", ")}.` };
 
 export const analysisToolDefinitions = [
@@ -19,7 +19,7 @@ export const analysisToolDefinitions = [
     inputSchema: objectSchema({
       query: { type: "string", description: "Name or fragment." },
       kind,
-      file: { type: "string", description: "File or directory path (scan-relative), or a path suffix." },
+      file: { type: "string", description: "File, directory or path suffix." },
       sourceType: sourceTypeProperty,
       language: languageProperty,
       limit: limit(20),
@@ -30,7 +30,7 @@ export const analysisToolDefinitions = [
     description: "Where a declaration is used, each with kind, file and line: calls, callbacks, imports and re-exports (through barrels; namespace and dynamic imports marked possible), subclasses, implementations, injection sites, handled routes and entrypoints; .class, #id, --property: rules and users.",
     inputSchema: objectSchema({
       symbol: { type: "string", description: "Exact declaration name; Class.method selects one class's method." },
-      file: { type: "string", description: "File or directory path, or a path suffix, of the declaration." },
+      file: { type: "string", description: "File, directory or path suffix of the declaration." },
       kind,
       limit: limit(50),
     }, ["symbol"]),
@@ -55,9 +55,9 @@ export const analysisToolDefinitions = [
   },
   {
     name: "architecture_overview",
-    description: "Repository structure: groups (workspace packages, or directories) with file, language, function, class, route, entrypoint and data model counts, and import edges between groups, heaviest first.",
+    description: "Repository structure: groups (workspace packages, or directories) with file, language, function, class, route, entrypoint and data model counts, and import edges between groups, heaviest first; hubs: the most connected files and most called functions.",
     inputSchema: objectSchema({
-      level: { type: "string", description: "package (default) or directory." },
+      level: { type: "string", description: "package (default), directory or subsystem (clusters by edge density)." },
       depth: { type: "number", description: "For level directory: path segments per group, 1 to 6. Defaults to 2." },
       limit: limit(50),
     }),

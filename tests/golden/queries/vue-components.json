@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 87
+        "result": 90
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 87,
+      "schemaVersion": 90,
       "stats": [
         {
           "table": "Repo",
@@ -3550,9 +3550,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true AND page.framework = \"vue-router\" OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true AND page.framework = \"vue-router\" OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN id(page) AS pageId, page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
         "rows": [
           {
+            "pageId": "file:src/router/routes.ts:page:6:2",
             "fullPath": "/",
             "path": "/",
             "framework": "vue-router",
@@ -3565,6 +3566,7 @@
             "componentFile": "src/views/HomeView.vue"
           },
           {
+            "pageId": "file:src/router/routes.ts:page:7:2",
             "fullPath": "/about",
             "path": "/about",
             "framework": "vue-router",
@@ -3577,6 +3579,7 @@
             "componentFile": "src/views/AboutView.vue"
           },
           {
+            "pageId": "file:src/router/routes.ts:page:16:2",
             "fullPath": "/old-home",
             "path": "/old-home",
             "framework": "vue-router",
@@ -3589,6 +3592,7 @@
             "componentFile": null
           },
           {
+            "pageId": "file:src/router/routes.ts:page:8:2",
             "fullPath": "/settings",
             "path": "/settings",
             "framework": "vue-router",
@@ -3601,6 +3605,7 @@
             "componentFile": "src/views/SettingsLayout.vue"
           },
           {
+            "pageId": "file:src/router/routes.ts:page:12:6",
             "fullPath": "/settings",
             "path": "",
             "framework": "vue-router",
@@ -3613,6 +3618,7 @@
             "componentFile": "src/views/SettingsProfile.vue"
           },
           {
+            "pageId": "file:src/router/routes.ts:page:13:6",
             "fullPath": "/settings/security",
             "path": "security",
             "framework": "vue-router",
@@ -3625,6 +3631,7 @@
             "componentFile": "src/views/SettingsSecurity.vue"
           },
           {
+            "pageId": "file:src/router/index.ts:page:8:11",
             "fullPath": "/users/:id",
             "path": "/users/:id",
             "framework": "vue-router",
@@ -3637,6 +3644,38 @@
             "componentFile": "src/views/UserView.vue"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[nav:NAVIGATES_TO]->(page:Page) WHERE id(page) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) OPTIONAL MATCH (moduleFile:File)-[:MODULE_CALLS]->(call) RETURN id(page) AS page, id(fn) AS fn, moduleFile.relativePath AS moduleFile, call.line AS line, nav.url AS url, nav.match AS match",
+        "params": {
+          "ids": [
+            "file:src/router/routes.ts:page:6:2",
+            "file:src/router/routes.ts:page:7:2",
+            "file:src/router/routes.ts:page:16:2",
+            "file:src/router/routes.ts:page:8:2",
+            "file:src/router/routes.ts:page:12:6",
+            "file:src/router/routes.ts:page:13:6",
+            "file:src/router/index.ts:page:8:11"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
       }
     ],
     "output": {

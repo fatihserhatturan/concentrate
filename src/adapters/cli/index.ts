@@ -1,3 +1,5 @@
+export { runAffectedAdapter, type AffectedAdapterOptions } from "./affected.js";
+export { runCyclesAdapter, runUnusedAdapter, type CheckAdapterOptions, type CyclesAdapterOptions, type UnusedAdapterOptions } from "./check.js";
 export { runExportAdapter, type ExportAdapterOptions } from "./export.js";
 export { MCP_CLIENTS, mcpServerEntry, mergeCodexToml, mergeJsonConfig, runInitAdapter, type InitAdapterOptions, type McpClient, type McpServerEntry } from "./init.js";
 export { runMcpAdapter, type McpAdapterOptions } from "./mcp.js";

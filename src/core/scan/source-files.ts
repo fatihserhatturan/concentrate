@@ -10,8 +10,9 @@ export type SupportedSourceFile = {
 export function filterSupportedSourceFiles(
   files: string[],
   maxFiles: number | undefined,
+  extensions?: ReadonlyMap<string, SupportedLanguage>,
 ): SupportedSourceFile[] {
-  const all: SupportedSourceFile[] = files.map((filePath) => ({ filePath, language: detectLanguage(filePath) }));
+  const all: SupportedSourceFile[] = files.map((filePath) => ({ filePath, language: detectLanguage(filePath, extensions) }));
   // `.h` is both C and C++: a project with C++ sources reads its headers as C++.
   if (all.some((file) => file.language === "cpp")) {
     for (const file of all) if (file.language === "c" && file.filePath.endsWith(".h")) file.language = "cpp";

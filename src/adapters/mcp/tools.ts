@@ -6,7 +6,7 @@ import { asObject, fileTypeFilter, languageProperty, objectSchema, sourceTypePro
 import { fitToBudget } from "./budget.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
 import { pagedResult, pageWindow, type PageWindow } from "./paging.js";
-import { byFileAndLine, callerCompleteness, filesMatching, matchesFileOrDirectory, NO_FILE_MATCHED, unresolvedCalls } from "./agent-tools/graph.js";
+import { byFileAndLine, callerCompleteness, filesMatching, loadFunctions, matchesFileOrDirectory, NO_FILE_MATCHED, unresolvedCalls } from "./agent-tools/graph.js";
 import { listStores } from "./stores.js";
 import { listTables } from "./tables.js";
 import { listRpcs } from "./rpcs.js";
@@ -67,6 +67,8 @@ const titles: Record<string, string> = {
   list_tables: "List database tables",
   list_rpcs: "List proto rpcs",
   list_stores: "List state stores",
+  explore: "Explore the code",
+  trace_calls: "Trace calls",
   impact_of: "Impact of a change",
   detect_changes: "Detect working-tree changes",
   route_details: "Route details",
@@ -85,10 +87,8 @@ const titles: Record<string, string> = {
 // Every tool only reads the graph (detect_changes also reads git), so the
 // hints are the same for all of them.
 const annotations = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
-const cursorProperty = {
-  type: "string",
-  description: "Previous page.nextCursor.",
-};
+// No description: the server instructions say to pass page.nextCursor back as cursor.
+const cursorProperty = { type: "string" };
 
 function describeTool(definition: McpToolDefinition): McpToolDefinition {
   const paged = tools[definition.name]?.listKey !== undefined;
@@ -100,6 +100,17 @@ function describeTool(definition: McpToolDefinition): McpToolDefinition {
     inputSchema: paged ? { ...schema, properties: { ...schema.properties, cursor: cursorProperty } } : schema,
     annotations,
   };
+}
+
+// Parses `--tools a,b` / CONCENTRATE_MCP_TOOLS into the set of tool names to
+// list; an unknown name is an error, so a typo is not a silently empty list.
+export function parseListedTools(value: string): Set<string> {
+  const names = value.split(",").map((name) => name.trim()).filter(Boolean);
+  if (names.length === 0) throw new Error("--tools needs at least one tool name");
+  const known = new Set(mcpToolDefinitions.map((tool) => tool.name));
+  const unknown = names.filter((name) => !known.has(name));
+  if (unknown.length > 0) throw new Error(`Unknown tool ${unknown.join(", ")}; known tools: ${[...known].join(", ")}`);
+  return new Set(names);
 }
 
 export const mcpToolDefinitions: McpToolDefinition[] = [
@@ -129,7 +140,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       language: languageProperty,
       limit: {
         type: "number",
-        description: "Page size. Defaults to 20.",
+        description: "Default 20.",
       },
     }, ["name"]),
   },
@@ -147,7 +158,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       limit: {
         type: "number",
-        description: "Page size. Defaults to 20.",
+        description: "Default 20.",
       },
     }, ["name"]),
   },
@@ -157,13 +168,13 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "File or directory path (scan-relative), or a path suffix.",
+        description: "File, directory or path suffix.",
       },
       sourceType: sourceTypeProperty,
       language: languageProperty,
       limit: {
         type: "number",
-        description: "Page size. Defaults to 50.",
+        description: "Default 50.",
       },
     }),
   },
@@ -191,7 +202,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "File or directory path (scan-relative), or a path suffix.",
+        description: "File, directory or path suffix.",
       },
       framework: {
         type: "string",
@@ -203,17 +214,17 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       limit: {
         type: "number",
-        description: "Page size. Defaults to 50.",
+        description: "Default 50.",
       },
     }),
   },
   {
     name: "list_pages",
-    description: "UI pages (Next.js, React Router, TanStack Router, Vue Router, Nuxt, SvelteKit, Astro, Angular Router) with file, line, path, full URL path, router, kind and rendered component.",
+    description: "UI pages (Next.js, React/TanStack/Vue/Angular Router, Nuxt, SvelteKit, Astro) with file, line, path, full URL path, router, kind, rendered component and the calls that navigate to it (navigatedFrom).",
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "File or directory path (scan-relative), or a path suffix.",
+        description: "File, directory or path suffix.",
       },
       framework: {
         type: "string",
@@ -225,7 +236,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       limit: {
         type: "number",
-        description: "Page size. Defaults to 50.",
+        description: "Default 50.",
       },
     }),
   },
@@ -239,11 +250,11 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       file: {
         type: "string",
-        description: "File or directory path (scan-relative), or a path suffix.",
+        description: "File, directory or path suffix.",
       },
       limit: {
         type: "number",
-        description: "Page size. Defaults to 50.",
+        description: "Default 50.",
       },
     }),
   },
@@ -253,7 +264,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       file: {
         type: "string",
-        description: "File or directory path (scan-relative), or a path suffix.",
+        description: "File, directory or path suffix.",
       },
       name: {
         type: "string",
@@ -265,13 +276,13 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       limit: {
         type: "number",
-        description: "Page size. Defaults to 50.",
+        description: "Default 50.",
       },
     }),
   },
   {
     name: "list_data_access",
-    description: "Data-access operations (Prisma, TypeORM, Sequelize, Knex, Mongoose, Drizzle; Go gorm, ent, bun, sqlc, sql, sqlx; Python SQLAlchemy, Django, SQL; C/C++ sqlite3, libpq) with the files, functions, routes and entrypoints running them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
+    description: "Data-access operations (ORMs and SQL libraries in JS/TS, Go, Python, C/C++) with the files, functions, routes and entrypoints running them. direct: true rows (first) make the call; others reach it. line is in accessFile.",
     inputSchema: objectSchema({
       model: {
         type: "string",
@@ -291,7 +302,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       },
       limit: {
         type: "number",
-        description: "Page size. Defaults to 50.",
+        description: "Default 50.",
       },
     }),
   },
@@ -301,7 +312,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       name: { type: "string", description: "Table name substring." },
       library: { type: "string", description: "prisma, typeorm, mongoose, drizzle, knex, gorm, ent, bun, sqlc, sqlalchemy, django or sql." },
-      limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
+      limit: { type: "number", description: "Default 20." },
     }),
   },
   {
@@ -310,7 +321,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
     inputSchema: objectSchema({
       name: { type: "string", description: "Service or rpc substring (user.v1.User/Save)." },
       file: { type: "string", description: ".proto file or directory path, or a path suffix." },
-      limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
+      limit: { type: "number", description: "Default 20." },
     }),
   },
   {
@@ -320,7 +331,7 @@ export const mcpToolDefinitions: McpToolDefinition[] = [
       name: { type: "string", description: "Store name or hook substring." },
       library: { type: "string", description: "pinia, redux, zustand, jotai or svelte." },
       file: { type: "string", description: "Declaring file or directory path, or a path suffix." },
-      limit: { type: "number", description: "Page size. Defaults to 20, at most 200." },
+      limit: { type: "number", description: "Default 20." },
     }),
   },
   ...agentToolDefinitions,
@@ -412,7 +423,7 @@ async function withImplementations(engine: GraphQueryEngine, rows: DefinitionRow
   return rows;
 }
 
-type CallerRow = { target: string; targetId?: string; targetClassName?: string; targetFile?: string };
+type CallerRow = { target: string; targetId?: string; targetClassName?: string; targetFile?: string; provenance?: string | null };
 
 // When more than one function has the name (a method that several classes
 // implement, so a call through an interface resolves to each of them), every
@@ -439,7 +450,11 @@ async function withTargets(engine: GraphQueryEngine, rows: CallerRow[], predicat
       if (target) row.targetFile = target.file;
     }
   }
-  for (const row of rows) delete row.targetId;
+  for (const row of rows) {
+    delete row.targetId;
+    // Only a link that is not an exact resolution says how it was made.
+    if (row.provenance === "exact" || row.provenance == null) delete row.provenance;
+  }
   return rows;
 }
 
@@ -453,7 +468,7 @@ async function findCallers(
   const { limit, fetch } = window;
   const predicate = namePredicate("target.name", name, exact);
   const functionCallers = await engine.query(`
-    MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function)
+    MATCH (call:Call)-[resolved:CALL_RESOLVES_TO]->(target:Function)
     MATCH (caller:Function)-[:CALLS]->(call)
     MATCH (file:File)-[:DEFINES_FUNCTION]->(caller)
     WHERE ${predicate}
@@ -464,13 +479,14 @@ async function findCallers(
       file.relativePath AS file,
       call.line AS line,
       call.expression AS expression,
+      resolved.provenance AS provenance,
       'CALLS' AS relationship
     ORDER BY file.relativePath, call.line
     LIMIT ${fetch}
   `);
   // Class methods hang off their class, not off the file.
   const methodCallers = await engine.query(`
-    MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function)
+    MATCH (call:Call)-[resolved:CALL_RESOLVES_TO]->(target:Function)
     MATCH (caller:Function)-[:CALLS]->(call)
     MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(caller)
     WHERE ${predicate}
@@ -482,12 +498,13 @@ async function findCallers(
       file.relativePath AS file,
       call.line AS line,
       call.expression AS expression,
+      resolved.provenance AS provenance,
       'CALLS' AS relationship
     ORDER BY file.relativePath, call.line
     LIMIT ${fetch}
   `);
   const moduleCallers = await engine.query(`
-    MATCH (call:Call)-[:CALL_RESOLVES_TO]->(target:Function)
+    MATCH (call:Call)-[resolved:CALL_RESOLVES_TO]->(target:Function)
     MATCH (file:File)-[:MODULE_CALLS]->(call)
     WHERE ${predicate}
     RETURN target.name AS target,
@@ -497,6 +514,7 @@ async function findCallers(
       file.relativePath AS file,
       call.line AS line,
       call.expression AS expression,
+      resolved.provenance AS provenance,
       'MODULE_CALLS' AS relationship
     ORDER BY file.relativePath, call.line
     LIMIT ${fetch}
@@ -667,7 +685,8 @@ async function listPages(
       ${frameworkFilter}
       ${pathFilter}
     OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File)
-    RETURN page.fullPath AS fullPath,
+    RETURN id(page) AS pageId,
+      page.fullPath AS fullPath,
       page.path AS path,
       page.framework AS framework,
       page.router AS router,
@@ -681,7 +700,34 @@ async function listPages(
     LIMIT ${fetch}
   `);
 
-  return { query: { file, framework, path, limit }, pages: window.take(rows), ...fileNote };
+  return { query: { file, framework, path, limit }, pages: await withNavigation(engine, window.take(rows) as Array<Record<string, unknown>>), ...fileNote };
+}
+
+// The calls that navigate to each page (`router.push("/x")`, `redirect`,
+// `goto`, ...): the function and the written path, up to NAVIGATION_PER_PAGE.
+const NAVIGATION_PER_PAGE = 10;
+
+async function withNavigation(engine: GraphQueryEngine, pages: Array<Record<string, unknown>>): Promise<Array<Record<string, unknown>>> {
+  const ids = [...new Set(pages.map((page) => String(page.pageId)))];
+  const navigations = ids.length === 0 ? [] : await engine.query(`
+    MATCH (call:Call)-[nav:NAVIGATES_TO]->(page:Page)
+    WHERE id(page) IN $ids
+    OPTIONAL MATCH (fn:Function)-[:CALLS]->(call)
+    OPTIONAL MATCH (moduleFile:File)-[:MODULE_CALLS]->(call)
+    RETURN id(page) AS page, id(fn) AS fn, moduleFile.relativePath AS moduleFile, call.line AS line,
+      nav.url AS url, nav.match AS match
+  `, { ids }) as Array<Record<string, unknown>>;
+  const functions = await loadFunctions(engine, [...new Set(navigations.flatMap((row) => (row.fn == null ? [] : [String(row.fn)])))]);
+  const byPage = new Map<string, Array<Record<string, unknown>>>();
+  for (const row of navigations) {
+    const fn = row.fn == null ? null : functions.get(String(row.fn));
+    const entry = { function: fn?.name ?? null, file: fn?.file ?? (typeof row.moduleFile === "string" ? row.moduleFile : null), line: row.line ?? null, url: row.url, match: row.match };
+    byPage.set(String(row.page), [...byPage.get(String(row.page)) ?? [], entry]);
+  }
+  return pages.map(({ pageId, ...page }) => {
+    const from = (byPage.get(String(pageId)) ?? []).sort(byFileAndLine);
+    return from.length === 0 ? page : { ...page, navigatedFrom: from.slice(0, NAVIGATION_PER_PAGE), ...(from.length > NAVIGATION_PER_PAGE ? { navigatedFromTotal: from.length } : {}) };
+  });
 }
 
 async function listEntrypoints(

@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 87
+        "result": 90
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 87,
+      "schemaVersion": 90,
       "stats": [
         {
           "table": "Repo",
@@ -1815,9 +1815,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN id(page) AS pageId, page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
         "rows": [
           {
+            "pageId": "file:app/layout.tsx:page",
             "fullPath": "/",
             "path": "/",
             "framework": "nextjs",
@@ -1830,6 +1831,7 @@
             "componentFile": "app/layout.tsx"
           },
           {
+            "pageId": "file:app/not-found.tsx:page",
             "fullPath": "/",
             "path": "/",
             "framework": "nextjs",
@@ -1842,6 +1844,7 @@
             "componentFile": "app/not-found.tsx"
           },
           {
+            "pageId": "file:app/page.tsx:page",
             "fullPath": "/",
             "path": "/",
             "framework": "nextjs",
@@ -1854,6 +1857,7 @@
             "componentFile": "app/page.tsx"
           },
           {
+            "pageId": "file:app/(marketing)/about/page.tsx:page",
             "fullPath": "/about",
             "path": "/about",
             "framework": "nextjs",
@@ -1866,6 +1870,7 @@
             "componentFile": "app/(marketing)/about/page.tsx"
           },
           {
+            "pageId": "file:app/blog/[slug]/error.tsx:page",
             "fullPath": "/blog/[slug]",
             "path": "/blog/[slug]",
             "framework": "nextjs",
@@ -1878,6 +1883,7 @@
             "componentFile": "app/blog/[slug]/error.tsx"
           },
           {
+            "pageId": "file:app/blog/[slug]/loading.tsx:page",
             "fullPath": "/blog/[slug]",
             "path": "/blog/[slug]",
             "framework": "nextjs",
@@ -1890,6 +1896,7 @@
             "componentFile": "app/blog/[slug]/loading.tsx"
           },
           {
+            "pageId": "file:app/blog/[slug]/page.tsx:page",
             "fullPath": "/blog/[slug]",
             "path": "/blog/[slug]",
             "framework": "nextjs",
@@ -1902,6 +1909,7 @@
             "componentFile": "app/blog/[slug]/page.tsx"
           },
           {
+            "pageId": "file:app/dashboard/@analytics/page.tsx:page",
             "fullPath": "/dashboard",
             "path": "/dashboard",
             "framework": "nextjs",
@@ -1914,6 +1922,7 @@
             "componentFile": "app/dashboard/@analytics/page.tsx"
           },
           {
+            "pageId": "file:app/dashboard/@team/default.tsx:page",
             "fullPath": "/dashboard",
             "path": "/dashboard",
             "framework": "nextjs",
@@ -1926,6 +1935,7 @@
             "componentFile": null
           },
           {
+            "pageId": "file:app/dashboard/@team/page.tsx:page",
             "fullPath": "/dashboard",
             "path": "/dashboard",
             "framework": "nextjs",
@@ -1938,6 +1948,7 @@
             "componentFile": "app/dashboard/@team/page.tsx"
           },
           {
+            "pageId": "file:app/dashboard/layout.tsx:page",
             "fullPath": "/dashboard",
             "path": "/dashboard",
             "framework": "nextjs",
@@ -1950,6 +1961,7 @@
             "componentFile": "app/dashboard/layout.tsx"
           },
           {
+            "pageId": "file:app/docs/[...slug]/page.tsx:page",
             "fullPath": "/docs/[...slug]",
             "path": "/docs/[...slug]",
             "framework": "nextjs",
@@ -1962,6 +1974,7 @@
             "componentFile": "app/docs/[...slug]/page.tsx"
           },
           {
+            "pageId": "file:app/shop/[[...filters]]/page.tsx:page",
             "fullPath": "/shop/[[...filters]]",
             "path": "/shop/[[...filters]]",
             "framework": "nextjs",
@@ -1974,6 +1987,7 @@
             "componentFile": null
           },
           {
+            "pageId": "file:app/shop/[[...filters]]/template.tsx:page",
             "fullPath": "/shop/[[...filters]]",
             "path": "/shop/[[...filters]]",
             "framework": "nextjs",
@@ -1986,6 +2000,45 @@
             "componentFile": "app/shop/[[...filters]]/template.tsx"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[nav:NAVIGATES_TO]->(page:Page) WHERE id(page) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) OPTIONAL MATCH (moduleFile:File)-[:MODULE_CALLS]->(call) RETURN id(page) AS page, id(fn) AS fn, moduleFile.relativePath AS moduleFile, call.line AS line, nav.url AS url, nav.match AS match",
+        "params": {
+          "ids": [
+            "file:app/layout.tsx:page",
+            "file:app/not-found.tsx:page",
+            "file:app/page.tsx:page",
+            "file:app/(marketing)/about/page.tsx:page",
+            "file:app/blog/[slug]/error.tsx:page",
+            "file:app/blog/[slug]/loading.tsx:page",
+            "file:app/blog/[slug]/page.tsx:page",
+            "file:app/dashboard/@analytics/page.tsx:page",
+            "file:app/dashboard/@team/default.tsx:page",
+            "file:app/dashboard/@team/page.tsx:page",
+            "file:app/dashboard/layout.tsx:page",
+            "file:app/docs/[...slug]/page.tsx:page",
+            "file:app/shop/[[...filters]]/page.tsx:page",
+            "file:app/shop/[[...filters]]/template.tsx:page"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
       }
     ],
     "output": {

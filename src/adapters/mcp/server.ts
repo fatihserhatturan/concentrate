@@ -44,7 +44,9 @@ const STATIC_TTL_MS = 60 * 60 * 1000;
 const instructions = [
   "Concentrate answers questions about one scanned codebase from its code graph.",
   `Start with the ${resourceDefinitions[0]!.uri} resource or graph_stats for an overview.`,
-  "Prefer it to grep when a text match is not the answer: who calls or uses a symbol (find_callers, find_references: imports, re-exports, barrels, methods and injected services are resolved), what a change affects (impact_of, detect_changes, route_details), which frontend calls reach a route (api_consumers), what reads or writes a store or table (list_stores, list_tables, list_data_access), which Go code serves a .proto rpc (list_rpcs), env and config use (list_env_config), and whole-repository questions (find_import_cycles, find_unused_exports, architecture_overview, list_exports, trace_import_chain).",
+  "Prefer it to grep when a text match is not the answer: who calls or uses a symbol (find_callers, which marks links that are not exact in `provenance`, find_references: imports, re-exports, barrels, methods and injected services are resolved), what a change affects (impact_of, detect_changes, route_details), which frontend calls reach a route (api_consumers), what reads or writes a store or table (list_stores, list_tables, list_data_access), which Go code serves a .proto rpc (list_rpcs), env and config use (list_env_config), and whole-repository questions (find_import_cycles, find_unused_exports, architecture_overview, list_exports, trace_import_chain).",
+  "For a narrow question in words, explore returns the matching symbols' source, the call chains between them and what changing them reaches in one call.",
+  "trace_calls lists what a function calls, or with `to` the shortest chain of calls from one function to another.",
   "To locate code use search_symbols, find_definitions, list_routes, list_pages and list_entrypoints; to read it, get_symbol_source and get_file_outline; for UI components, component_tree and find_component_usages.",
   "List results are paged: pass page.nextCursor back as cursor, with the other arguments unchanged, for the next page.",
   `Results over ${OUTPUT_BUDGET_CHARS} characters are shortened: the paged list ends early with page.nextCursor, and \`truncated\` counts the items each other list lost.`,
@@ -63,7 +65,15 @@ type JsonRpcRequest = {
 export type McpServerHooks = {
   beforeCall?: () => Promise<void>;
   freshness?: Freshness;
+  // Names of the tools to list; the others stay callable but are not listed,
+  // so the list costs fewer tokens per request.
+  listedTools?: ReadonlySet<string>;
 };
+
+function listedDefinitions(hooks: McpServerHooks) {
+  const listed = hooks.listedTools;
+  return listed ? mcpToolDefinitions.filter((tool) => listed.has(tool.name)) : mcpToolDefinitions;
+}
 
 export async function runMcpServer(engineFactory: () => Promise<GraphQueryEngine>, hooks: McpServerHooks = {}): Promise<void> {
   const rl = createInterface({ input, crlfDelay: Infinity });
@@ -142,7 +152,7 @@ async function handleModern(
         cacheScope: "public",
       };
     case "tools/list":
-      return { tools: mcpToolDefinitions, ttlMs: STATIC_TTL_MS, cacheScope: "public" };
+      return { tools: listedDefinitions(hooks), ttlMs: STATIC_TTL_MS, cacheScope: "public" };
     case "tools/call":
       return callTool(params, engineFactory, hooks);
     case "resources/list":
@@ -176,7 +186,7 @@ async function handleLegacy(
     case "ping":
       return {};
     case "tools/list":
-      return { tools: mcpToolDefinitions };
+      return { tools: listedDefinitions(hooks) };
     case "tools/call":
       return callTool(params, engineFactory, hooks);
     case "resources/list":

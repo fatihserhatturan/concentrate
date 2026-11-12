@@ -16,6 +16,13 @@ export const CODE_LANGUAGES: ReadonlySet<SupportedLanguage> = new Set<CodeLangua
   "javascript", "typescript", "html", "vue", "svelte", "astro", "python", "go", "rust", "c", "cpp",
 ]);
 
+export const LANGUAGE_NAMES: readonly SupportedLanguage[] = [
+  ...CODE_LANGUAGES,
+  "css", "scss", "less", "json", "yaml", "toml", "markdown",
+  "shell", "powershell", "dockerfile", "makefile", "cmake", "sql", "proto",
+  "other", "asset",
+];
+
 export function isCodeLanguage(language: SupportedLanguage): language is CodeLanguage {
   return CODE_LANGUAGES.has(language);
 }
@@ -91,10 +98,12 @@ function languageByName(fileName: string): SupportedLanguage | null {
   return null;
 }
 
-export function detectLanguage(filePath: string): SupportedLanguage {
+// `overrides` (extension → language, lower case, from concentrate.json) win over the built-in table.
+export function detectLanguage(filePath: string, overrides?: ReadonlyMap<string, SupportedLanguage>): SupportedLanguage {
   const fileName = path.basename(filePath);
   const extension = path.extname(fileName).toLowerCase();
-  return extensionToLanguage.get(path.extname(fileName))
+  return overrides?.get(extension)
+    ?? extensionToLanguage.get(path.extname(fileName))
     ?? languageByName(fileName)
     ?? extensionToLanguage.get(extension)
     ?? (assetExtensions.has(extension) ? "asset" : "other");

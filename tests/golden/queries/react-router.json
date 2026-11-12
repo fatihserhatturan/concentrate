@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 87
+        "result": 90
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 87,
+      "schemaVersion": 90,
       "stats": [
         {
           "table": "Repo",
@@ -752,9 +752,10 @@
     "calls": [
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true AND (page.fullPath = \"/users\" OR page.fullPath STARTS WITH \"/users/\") OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page) WHERE true AND (page.fullPath = \"/users\" OR page.fullPath STARTS WITH \"/users/\") OPTIONAL MATCH (page)-[:PAGE_RENDERS]->(component:Component)<-[:DECLARES_COMPONENT]-(componentFile:File) RETURN id(page) AS pageId, page.fullPath AS fullPath, page.path AS path, page.framework AS framework, page.router AS router, page.kind AS kind, page.slot AS slot, file.relativePath AS file, page.line AS line, component.name AS component, componentFile.relativePath AS componentFile ORDER BY page.fullPath, file.relativePath, page.line, page.kind LIMIT 51",
         "rows": [
           {
+            "pageId": "file:src/App.tsx:page:13:8",
             "fullPath": "/users",
             "path": "users",
             "framework": "react-router",
@@ -767,6 +768,7 @@
             "componentFile": null
           },
           {
+            "pageId": "file:src/App.tsx:page:14:10",
             "fullPath": "/users",
             "path": null,
             "framework": "react-router",
@@ -779,6 +781,7 @@
             "componentFile": "src/pages/users.tsx"
           },
           {
+            "pageId": "file:src/App.tsx:page:15:10",
             "fullPath": "/users/:userId",
             "path": ":userId",
             "framework": "react-router",
@@ -791,6 +794,34 @@
             "componentFile": "src/pages/users.tsx"
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call)-[nav:NAVIGATES_TO]->(page:Page) WHERE id(page) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) OPTIONAL MATCH (moduleFile:File)-[:MODULE_CALLS]->(call) RETURN id(page) AS page, id(fn) AS fn, moduleFile.relativePath AS moduleFile, call.line AS line, nav.url AS url, nav.match AS match",
+        "params": {
+          "ids": [
+            "file:src/App.tsx:page:13:8",
+            "file:src/App.tsx:page:14:10",
+            "file:src/App.tsx:page:15:10"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {
+          "ids": []
+        },
+        "rows": []
       }
     ],
     "output": {

@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { installGitHooks, scanShellCommand } from "./init-hooks.js";
 import { instructionFile, mergeClaudeHook, mergeInstructions, nudgeCommand } from "./init-steering.js";
 
 export type McpClient = "claude" | "cursor" | "codex";
@@ -11,6 +12,8 @@ export type InitAdapterOptions = {
   database?: string;
   client: string[];
   npx: boolean;
+  // Also install git hooks (post-commit, post-checkout, post-merge) that rescan in the background.
+  hooks?: boolean;
   // Write the instruction-file section (CLAUDE.md, AGENTS.md); default true.
   instructions?: boolean;
   // Also add the advisory Claude Code PreToolUse hook to .claude/settings.json.
@@ -100,6 +103,12 @@ export async function runInitAdapter(projectPath: string, options: InitAdapterOp
     await mkdir(path.dirname(file), { recursive: true });
     await writeFile(file, text);
     console.log(`${existing === null ? "wrote" : "updated"} ${displayPath(file)} (${client})`);
+  }
+  if (options.hooks) {
+    const cliPath = fileURLToPath(new URL("../../index.js", import.meta.url));
+    for (const hook of await installGitHooks(root, scanShellCommand({ root, database: databasePath, npx: options.npx, cliPath }))) {
+      console.log(`${hook.created ? "wrote" : "updated"} ${displayPath(hook.file)} (git ${hook.name} hook)`);
+    }
   }
   if (options.instructions !== false) {
     for (const name of new Set((clients as McpClient[]).map(instructionFile))) {

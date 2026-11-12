@@ -1,5 +1,6 @@
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { fileTypeFilter, optionalString, requiredString } from "../args.js";
+import { createGlobMatcher } from "../../../core/scan/glob.js";
 import { matchesFileOrDirectory } from "../agent-tools/graph.js";
 import type { PageWindow } from "../paging.js";
 import { byFileAndLine, type DeclarationKind, describeDeclaration, loadDeclarations, loadFiles } from "./model.js";
@@ -36,13 +37,17 @@ export async function searchSymbols(engine: IQueryEngine, args: Record<string, u
     return (!types.sourceType || info?.sourceType === types.sourceType) && (!types.language || info?.language === types.language);
   };
 
+  // Files concentrate.json lists under `deprioritize` stay searchable but rank lower.
+  const deprioritized = await deprioritizedMatcher(engine);
   const qualified = query.includes(".");
   const ranked = (await loadDeclarations(engine))
     .filter((declaration) => (!kind || declaration.kind === kind) && (!file || matchesFileOrDirectory(declaration.file, file)) && typeMatches(declaration.file))
     .flatMap((declaration) => {
       const name = qualified && declaration.className ? `${declaration.className}.${declaration.name}` : declaration.name;
       const match = matchName(name, query);
-      return match ? [{ declaration, name, ...match }] : [];
+      if (!match) return [];
+      const lowered = deprioritized(declaration.file);
+      return [{ declaration, name, ...match, score: lowered ? match.score - DEPRIORITIZE_PENALTY : match.score, lowered }];
     })
     .sort((a, b) =>
       b.score - a.score
@@ -53,13 +58,24 @@ export async function searchSymbols(engine: IQueryEngine, args: Record<string, u
   return {
     query: { query, kind: kind ?? null, file: file ?? null, ...types },
     total: ranked.length,
-    symbols: window.take(ranked).map(({ declaration, score, match }) => ({
+    symbols: window.take(ranked).map(({ declaration, score, match, lowered }) => ({
       ...describeDeclaration(declaration),
       isExported: declaration.isExported,
       match,
       score,
+      ...(lowered ? { deprioritized: true } : {}),
     })),
   };
+}
+
+// A deprioritized file drops one and a half match tiers: an exact match there still beats a prefix match elsewhere.
+const DEPRIORITIZE_PENALTY = 1500;
+
+async function deprioritizedMatcher(engine: IQueryEngine): Promise<(file: string) => boolean> {
+  const [repo] = await engine.query("MATCH (repo:Repo) RETURN repo.deprioritize AS deprioritize LIMIT 1") as Array<{ deprioritize?: unknown }>;
+  if (typeof repo?.deprioritize !== "string") return () => false;
+  const matchers = (JSON.parse(repo.deprioritize) as string[]).map(createGlobMatcher);
+  return (file) => matchers.some((matcher) => matcher.matches(file));
 }
 
 // Scores `name` against `query`, or null when it does not match at all.
