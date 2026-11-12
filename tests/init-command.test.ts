@@ -65,8 +65,8 @@ describe("init: Codex TOML", () => {
 describe("init: command", () => {
   it("parses its options", () => {
     const init = program.commands.find((command) => command.name === "init")!;
-    assert.deepEqual(parseCommandArgs(init, ["."]), { positionals: ["."], options: { client: [], npx: false } });
-    assert.deepEqual(parseCommandArgs(init, [".", "--client", "codex", "--npx", "-d", "g"]).options, { client: ["codex"], npx: true, database: "g" });
+    assert.deepEqual(parseCommandArgs(init, ["."]), { positionals: ["."], options: { client: [], npx: false, hooks: false } });
+    assert.deepEqual(parseCommandArgs(init, [".", "--client", "codex", "--npx", "-d", "g"]).options, { client: ["codex"], npx: true, database: "g", hooks: false });
   });
 
   it("writes every client's config into the project", async () => {

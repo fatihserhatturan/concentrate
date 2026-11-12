@@ -17,6 +17,8 @@ export type OptionSpec = {
 export type ArgumentSpec = {
   name: string;
   description: string;
+  /** Last argument only: takes zero or more values, passed to the action as one array. */
+  variadic?: boolean;
 };
 
 export type CommandSpec = {
@@ -173,7 +175,13 @@ export function parseCommandArgs(
   }
 
   const expected = command.args ?? [];
-  const positionals = parsed.positionals;
+  let positionals = parsed.positionals;
+  if (expected.at(-1)?.variadic) {
+    const fixed = expected.length - 1;
+    if (positionals.length < fixed) throw new CliError(`missing required argument '${expected[positionals.length]!.name}'`);
+    positionals = [...positionals.slice(0, fixed), positionals.slice(fixed) as unknown as string];
+    return { positionals, options };
+  }
   if (positionals.length < expected.length) {
     throw new CliError(`missing required argument '${expected[positionals.length]!.name}'`);
   }
@@ -267,7 +275,7 @@ function programHelp(program: ProgramSpec, io: CliIo): string {
 
 function commandHelp(program: ProgramSpec, command: CommandSpec, io: CliIo): string {
   const args = command.args ?? [];
-  const usage = [program.name, command.name, "[options]", ...args.map((arg) => `<${arg.name}>`)].join(" ");
+  const usage = [program.name, command.name, "[options]", ...args.map(argumentTerm)].join(" ");
   return renderHelp(io, usage, command.description, [
     { title: "Arguments", items: args.map((arg) => ({ term: arg.name, description: arg.description })) },
     { title: "Options", items: [...command.options, HELP_FLAG].map(optionItem) },
@@ -275,7 +283,11 @@ function commandHelp(program: ProgramSpec, command: CommandSpec, io: CliIo): str
 }
 
 function commandTerm(command: CommandSpec): string {
-  return [command.name, "[options]", ...(command.args ?? []).map((arg) => `<${arg.name}>`)].join(" ");
+  return [command.name, "[options]", ...(command.args ?? []).map(argumentTerm)].join(" ");
+}
+
+function argumentTerm(arg: ArgumentSpec): string {
+  return arg.variadic ? `[${arg.name}...]` : `<${arg.name}>`;
 }
 
 function optionItem(spec: OptionSpec): { term: string; description: string } {

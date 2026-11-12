@@ -34,6 +34,10 @@ npm run dev -- export ./path/to/project --output .concentrate/export
 # Start MCP server (for AI tool integration)
 npm run dev -- mcp
 
+# Test files that reach changed files through imports and calls
+git diff --name-only | npm run dev -- affected --stdin
+npm run dev -- affected src/util.ts --json
+
 # Write the MCP config of Claude Code, Cursor and Codex into a project
 npm run dev -- init ./path/to/project
 
@@ -65,7 +69,7 @@ the random token in the URL it prints, and a scan writes `<project>/.concentrate
 ## Connect an AI agent
 
 `concentrate mcp` serves the scanned graph to any MCP client over stdio. It
-offers 26 tools, a graph summary resource, and paged, structured results.
+offers 28 tools, a graph summary resource, and paged, structured results.
 [mcp-server.md](mcp-server.md#run) has the client configuration and
 [mcp-server.md](mcp-server.md#tools) the tool reference. `concentrate init
 <path>` writes the client configuration for Claude Code, Cursor and Codex
@@ -92,6 +96,39 @@ into the project, with an absolute `--database` path.
   (`https://api.example.com/users`) links to the scanned routes once that
   origin is declared: `--api-origin https://api.example.com` (repeatable)
   treats it like `localhost`. Calls to other origins stay unlinked.
+
+- **Project settings.** A `concentrate.json` at the project root is read by
+  every scan (and by `watch`). All keys are optional:
+
+  ```json
+  {
+    "extensions": { ".mjsx": "javascript" },
+    "include": ["src/**"],
+    "exclude": ["**/*.gen.ts"],
+    "deprioritize": ["legacy/**"],
+    "apiOrigins": ["https://api.example.com"]
+  }
+  ```
+
+  `extensions` maps a file extension to a language, for files the scanner
+  would read as plain text. `include`, `exclude` and `apiOrigins` are as the
+  `--include`, `--exclude` and `--api-origin` flags; the command line's
+  `--include` replaces the file's, the other two are added to it.
+  `deprioritize` lists files that stay in the graph but rank lower in
+  `search_symbols` (their rows say `deprioritized: true`). An unknown key, a
+  broken file or an unknown language stops the scan with a message naming it.
+- **CI checks.** `concentrate cycles` and `concentrate unused` print import
+  cycles and unused-export candidates from the graph store and exit 1 when
+  there are more than `--max` (default 0). `cycles` leaves out cycles that only
+  go through type-only imports unless `--include-type-only`, and takes
+  `--scope package` and `--path`; both take `--json`. Start from a project's
+  current count with `--max`.
+- **Git hooks.** `concentrate init --hooks` installs `post-commit`,
+  `post-checkout` (branch switches only) and `post-merge` hooks that rescan the
+  project in the background; the project must be a git work tree, existing hooks
+  keep their content (the scan sits between `# >>> concentrate (managed) >>>`
+  markers and a rerun replaces it), and `core.hooksPath` is respected. With the
+  MCP server's `--watch` the hooks are rarely needed.
 
 What the graph can and cannot see is listed in
 [known-limitations.md](known-limitations.md).

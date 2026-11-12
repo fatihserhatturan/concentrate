@@ -5,6 +5,7 @@ import { promisify } from "node:util";
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalInteger, optionalString } from "../args.js";
 import type { PageWindow } from "../paging.js";
+import { affectedTests } from "./affected.js";
 import { loadRunners } from "./runners.js";
 import { isStyleFilePath, loadStyleTargets, parseStyleSymbol, styleImpact } from "./styles.js";
 import { callerCompleteness, computeImpact, loadFunctions, loadSymbols, matchesFileOrDirectory, type SymbolInfo, unresolvedCalls } from "./graph.js";
@@ -159,9 +160,15 @@ export async function detectChanges(engine: IQueryEngine, args: Record<string, u
 
   const changedFunctionIds = changedSymbols.filter((symbol) => symbol.kind === "function" || symbol.kind === "method").map((symbol) => symbol.id);
   const impact = changedFunctionIds.length > 0 ? await computeImpact(engine, changedFunctionIds, maxDepth, limit) : null;
+  // Test files that reach the changed files through imports and calls.
+  const tests = changedFiles.length > 0
+    ? (await affectedTests(engine, changedFiles.map((entry) => entry.file))).tests
+    : [];
   return {
     base,
     changedFiles: window.take(changedFiles),
+    affectedTests: tests.slice(0, limit).map(({ file, depth }) => ({ file, depth })),
+    ...(tests.length > limit ? { affectedTestsTruncated: tests.length } : {}),
     unscannedFiles: unscannedFiles.slice(0, limit),
     ...(unscannedFiles.length > 0
       ? { note: "Some changed files are not in the graph (new, unsupported or excluded). Rescan, or keep `concentrate watch` running, to include new files." }

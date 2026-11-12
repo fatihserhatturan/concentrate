@@ -2,6 +2,7 @@ import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { CODE_LANGUAGES, type SupportedLanguage } from "../../../core/scan/language.js";
 import { optionalInteger, optionalString } from "../args.js";
 import type { PageWindow } from "../paging.js";
+import { loadFileGraph, subsystems, topHubs } from "./hubs.js";
 import { loadImports } from "./model.js";
 
 type Row = Record<string, unknown>;
@@ -23,7 +24,7 @@ type Group = {
 // import edges between groups weighted by the number of file imports.
 export async function architectureOverview(engine: IQueryEngine, args: Record<string, unknown>, window: PageWindow) {
   const level = optionalString(args.level) ?? "package";
-  if (level !== "package" && level !== "directory") throw new Error(`Unknown level ${JSON.stringify(level)}; expected package or directory`);
+  if (level !== "package" && level !== "directory" && level !== "subsystem") throw new Error(`Unknown level ${JSON.stringify(level)}; expected package, directory or subsystem`);
   const depth = optionalInteger(args.depth, 2, 1, 6);
 
   const [files, membership, functionCounts, methodCounts, classCounts, routeCounts, entrypointCounts, fileModels, functionModels, declared, imports] = await Promise.all([
@@ -55,9 +56,14 @@ export async function architectureOverview(engine: IQueryEngine, args: Record<st
   ]) as [Row[], Row[], Map<string, number>, Map<string, number>, Map<string, number>, Map<string, number>, Map<string, number>, Row[], Row[], Row[], Awaited<ReturnType<typeof loadImports>>];
 
   const packageOf = new Map(membership.map((row) => [String(row.file), String(row.package)]));
+  const fileGraph = await loadFileGraph(engine);
+  const clusters = level === "subsystem" ? subsystems(fileGraph) : [];
+  const subsystemOf = new Map(clusters.flatMap((cluster) => cluster.files.map((file) => [file, cluster.name] as const)));
   const groupOf = (file: string): string | null => level === "package"
     ? packageOf.get(file) ?? null
-    : file.split("/").slice(0, -1).slice(0, depth).join("/") || ".";
+    : level === "subsystem"
+      ? subsystemOf.get(file) ?? null
+      : file.split("/").slice(0, -1).slice(0, depth).join("/") || ".";
 
   const groups = new Map<string, Group>();
   const group = (name: string) => {
@@ -131,16 +137,20 @@ export async function architectureOverview(engine: IQueryEngine, args: Record<st
       .sort((a, b) => b.files - a.files || a.name.localeCompare(b.name))
       .map(({ dataModels, ...entry }) => ({
         ...entry,
+        ...(level === "subsystem" ? { topFiles: clusters.find((cluster) => cluster.name === entry.name)?.topFiles } : {}),
         dataModels: dataModels.size,
         dependsOn: dependencies(entry.name, "from"),
         usedBy: dependencies(entry.name, "to"),
       })),
     ...(ungrouped > 0 ? { ungroupedFiles: ungrouped } : {}),
+    hubs: topHubs(fileGraph, 5),
     totalEdges: sortedEdges.length,
     edges: window.take(sortedEdges),
     note: level === "package"
       ? "Groups are workspace packages; edges count resolved file imports between them (dependencyTypes: manifest entries and source imports the scanner recorded). Files outside every package are counted under ungroupedFiles."
-      : `Groups are directories cut at ${depth} path segments ("." is the root); edges count resolved file imports between them.`,
+      : level === "subsystem"
+        ? "Groups are clusters of files by import and call density (Louvain), named by the directory their files share; topFiles are the best connected. Files without imports or calls to other files belong to none (ungroupedFiles). Edges count resolved file imports between them."
+        : `Groups are directories cut at ${depth} path segments ("." is the root); edges count resolved file imports between them.`,
   };
 }
 

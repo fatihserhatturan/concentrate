@@ -39,7 +39,7 @@ import { createVariableResolver } from "./variable-resolver.js";
 // Only values that are URLs or paths are used, and a URL resolved through env
 // is kept only when it ends up a path; otherwise it stays as written.
 
-type RouteSegment = { kind: "literal"; value: string } | { kind: "param" } | { kind: "catch-all"; optional: boolean };
+export type RouteSegment = { kind: "literal"; value: string } | { kind: "param" } | { kind: "catch-all"; optional: boolean };
 type RouteEntry = { id: string; method: string; segments: RouteSegment[]; trailingSlash: boolean };
 
 export const httpRequestsContributor: ISemanticContributor = {
@@ -245,7 +245,7 @@ function requestOf(method: string, url: string): Request | null {
   return { method, url, segments };
 }
 
-function routeSegments(fullPath: string): RouteSegment[] {
+export function routeSegments(fullPath: string): RouteSegment[] {
   return fullPath.split("/").filter(Boolean).map((segment): RouteSegment => {
     if (/^\[\[\.\.\..+\]\]$/u.test(segment)) return { kind: "catch-all", optional: true };
     if (/^\[\.\.\..+\]$/u.test(segment) || segment === "*" || /^:[^/]+[*+]$/u.test(segment) || segment === "(.*)") {
@@ -258,7 +258,7 @@ function routeSegments(fullPath: string): RouteSegment[] {
 }
 
 // Segment scores: 3 for a literal, 2 for a parameter, 1 for a catch-all.
-function matchSegments(url: ReadonlyArray<string | null>, route: readonly RouteSegment[]): { score: number; match: string } | null {
+export function matchSegments(url: ReadonlyArray<string | null>, route: readonly RouteSegment[]): { score: number; match: string } | null {
   let score = 0;
   let exact = true;
   for (let index = 0; index < route.length; index++) {
@@ -281,7 +281,7 @@ function matchSegments(url: ReadonlyArray<string | null>, route: readonly RouteS
   return url.length === route.length ? { score, match: exact ? "exact" : "parameter" } : null;
 }
 
-function decodeSegment(segment: string): string {
+export function decodeSegment(segment: string): string {
   try {
     return decodeURIComponent(segment);
   } catch {

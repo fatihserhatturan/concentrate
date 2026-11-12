@@ -298,6 +298,7 @@
 {"kind":"rel","from":"file:src/routes/login/+page.server.ts:function:6:default","type":"CALLS","to":"file:src/routes/login/+page.server.ts:function:6:default:call:8:4:login","properties":{}}
 {"kind":"rel","from":"file:src/routes/login/+page.server.ts:function:6:default","type":"CALLS","to":"file:src/routes/login/+page.server.ts:function:6:default:call:9:4:redirect","properties":{}}
 {"kind":"rel","from":"file:src/routes/login/+page.server.ts:function:6:default:call:8:4:login","type":"CALL_RESOLVES_TO","to":"file:src/lib/server/session.ts:function:1:login","properties":{}}
+{"kind":"rel","from":"file:src/routes/login/+page.server.ts:function:6:default:call:9:4:redirect","type":"NAVIGATES_TO","to":"file:src/routes/+page.svelte:page","properties":{"match":"exact","url":"/"}}
 {"kind":"rel","from":"file:src/routes/login/+page.server.ts:import:2:$lib/server/session","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}
 {"kind":"rel","from":"file:src/routes/login/+page.server.ts:import:2:$lib/server/session","type":"RESOLVES_TO","to":"file:src/lib/server/session.ts","properties":{}}
 {"kind":"rel","from":"file:src/routes/login/+page.server.ts:route:11:0:POST:/login?/logout","type":"ROUTE_HANDLED_BY","to":"file:src/routes/login/+page.server.ts:function:11:logout","properties":{}}

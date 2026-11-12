@@ -31,6 +31,7 @@ import { angularRouteMountsContributor } from "../integrations/frameworks/js-ts/
 import { nuxtAutoImportsContributor, nuxtPagesContributor, nuxtServerRoutesContributor, vueGlobalComponentsContributor } from "../integrations/frameworks/js-ts/nuxt.js";
 import { storeAccessContributor } from "../integrations/frameworks/js-ts/resolution/store-access.js";
 import { httpRequestsContributor } from "../integrations/frameworks/js-ts/resolution/http-requests.js";
+import { navigationContributor } from "../integrations/frameworks/js-ts/resolution/navigation.js";
 import { trpcRoutesContributor } from "../integrations/frameworks/js-ts/resolution/trpc-routes.js";
 import type { ILanguageResolver } from "../core/contracts/language-resolver.js";
 import { CoreIntegrationRegistry } from "../core/integrations/registry.js";
@@ -94,6 +95,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     vueGlobalComponentsContributor,
     nextjsPagesContributor,
     nuxtPagesContributor,
+    navigationContributor,
     // After every contributor that makes Table nodes: SQL files merge into them by name.
     sqlSchemaContributor,
     protoContributor,

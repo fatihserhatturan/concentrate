@@ -21,6 +21,7 @@ import type { ILanguageResolver } from "../contracts/language-resolver.js";
 import type { ISemanticContributor } from "../contracts/semantic-contributor.js";
 import type { ScanReport } from "./report.js";
 import { createScanReport } from "./report.js";
+import { loadProjectSettings } from "./project-settings.js";
 import type { BuildCodeGraphOptions, BuildCodeGraphResult } from "./result.js";
 
 export interface ScanDependencies {
@@ -65,12 +66,18 @@ export async function buildCodeGraph(
 ): Promise<BuildCodeGraphResult> {
   const rootPath = path.resolve(projectPath);
   const repoNodeId = `repo:${rootPath}`;
+  // concentrate.json: the command line's `--include` replaces its include list;
+  // excludes and API origins are added to the file's.
+  const settings = await loadProjectSettings(rootPath);
+  const include = options.include && options.include.length > 0 ? options.include : settings.include;
+  const exclude = [...settings.exclude, ...options.exclude ?? []];
+  const apiOrigins = [...settings.apiOrigins, ...options.apiOrigins ?? []];
   const files = await discoverFiles(rootPath, {
-    include: options.include,
-    exclude: options.exclude,
+    include: include.length > 0 ? include : undefined,
+    exclude: exclude.length > 0 ? exclude : undefined,
   });
 
-  const supportedFiles = filterSupportedSourceFiles(files, options.maxFiles);
+  const supportedFiles = filterSupportedSourceFiles(files, options.maxFiles, settings.extensions);
   const manifest = await createScanManifest(rootPath, supportedFiles);
 
   const graph = new GraphBuilder();
@@ -89,6 +96,7 @@ export async function buildCodeGraph(
     properties: {
       path: rootPath,
       name: path.basename(rootPath),
+      ...(settings.deprioritize.length > 0 ? { deprioritize: JSON.stringify(settings.deprioritize) } : {}),
     },
   });
   await addProjectConfigNodes(graph, repoNodeId, rootPath, report);
@@ -96,10 +104,13 @@ export async function buildCodeGraph(
   let progressCount = 0;
   const progress = (filePath: string) =>
     options.onProgress?.(++progressCount, supportedFiles.length, path.relative(rootPath, filePath));
+  const languageOf = new Map(supportedFiles.map((file) => [file.filePath, file.language]));
   const cacheKey = (filePath: string) => {
     const relativePath = path.relative(rootPath, filePath).split(path.sep).join(path.posix.sep);
     const contentHash = contentHashes.get(relativePath);
-    return cache && contentHash ? { key: cache.key(relativePath, contentHash), contentHash } : null;
+    // A language chosen in concentrate.json is part of the key: the same content read as another language is another parse.
+    const overridden = settings.extensions.has(path.extname(filePath).toLowerCase());
+    return cache && contentHash ? { key: cache.key(relativePath, overridden ? `${contentHash}\0${languageOf.get(filePath)}` : contentHash), contentHash } : null;
   };
 
   // Pass 1: parse results the cache already has.
@@ -161,7 +172,7 @@ export async function buildCodeGraph(
 
   await cache?.prune();
   await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report, deps.readProjectPackages);
-  await finalizeGraphRelationships(graph, rootPath, report, deps.resolvers, deps.contributors, files, { apiOrigins: options.apiOrigins ?? [] });
+  await finalizeGraphRelationships(graph, rootPath, report, deps.resolvers, deps.contributors, files, { apiOrigins });
   report.status = report.failedFiles.length > 0 ? "partial" : "success";
 
   return createResult(rootPath, graph, report, manifest);

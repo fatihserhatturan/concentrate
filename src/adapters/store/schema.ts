@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 87;
+export const SCHEMA_VERSION = 90;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -22,7 +22,7 @@ export type RelationshipTable = {
 };
 
 export const nodeTables: readonly NodeTable[] = [
-  { label: "Repo", properties: { path: "STRING", name: "STRING" } },
+  { label: "Repo", properties: { path: "STRING", name: "STRING", deprioritize: "STRING" } },
   { label: "Package", properties: { path: "STRING", relativePath: "STRING", name: "STRING", version: "STRING", isPrivate: "BOOLEAN", manager: "STRING", workspaceRoot: "BOOLEAN", targetType: "STRING", buildFile: "STRING", unresolved: "INT64" } },
   { label: "Directory", properties: { path: "STRING", relativePath: "STRING", name: "STRING" } },
   { label: "File", properties: { path: "STRING", relativePath: "STRING", language: "STRING", defaultExport: "STRING", defaultExportFrom: "STRING", sourceType: "STRING", isTest: "BOOLEAN", isFixture: "BOOLEAN", isSupport: "BOOLEAN", isGenerated: "BOOLEAN", isDocs: "BOOLEAN", dynamicRouteCalls: "STRING", packageName: "STRING", rustCrate: "STRING", rustCrateName: "STRING", rustModule: "STRING", allNames: "STRING", cppScope: "STRING" } },
@@ -82,7 +82,7 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "RE_EXPORTS_CLASS", from: "File", to: "Class", properties: {} },
   { type: "RE_EXPORTS_VARIABLE", from: "File", to: "Variable", properties: {} },
   { type: "CALLS", from: "Function", to: "Call", properties: {} },
-  { type: "CALL_RESOLVES_TO", from: "Call", to: "Function", properties: { via: "STRING" } },
+  { type: "CALL_RESOLVES_TO", from: "Call", to: "Function", properties: { via: "STRING", provenance: "STRING" } },
   { type: "MODULE_CALLS", from: "File", to: "Call", properties: {} },
   { type: "PASSED_TO", from: "Function", to: "Call", properties: {} },
   { type: "INITIALIZED_BY", from: "Variable", to: "Call", properties: {} },
@@ -99,7 +99,8 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "STORE_ACTION", from: "Store", to: "Function", properties: {} },
   { type: "READS_STORE", from: "Function", to: "Store", properties: { line: "INT64", members: "STRING" } },
   { type: "WRITES_STORE", from: "Function", to: "Store", properties: { line: "INT64", members: "STRING" } },
-  { type: "REQUESTS", from: "Call", to: "Route", properties: { method: "STRING", url: "STRING", match: "STRING" } },
+  { type: "REQUESTS", from: "Call", to: "Route", properties: { method: "STRING", url: "STRING", match: "STRING", provenance: "STRING" } },
+  { type: "NAVIGATES_TO", from: "Call", to: "Page", properties: { url: "STRING", match: "STRING", provenance: "STRING" } },
   { type: "COMPONENT_DEFINED_BY", from: "Component", to: "Class", properties: {} },
   { type: "COMPONENT_DEFINED_BY_FUNCTION", from: "Component", to: "Function", properties: {} },
   { type: "RENDERS", from: "Component", to: "Component", properties: { props: "STRING", line: "INT64", client: "STRING", template: "STRING" } },
@@ -134,9 +135,9 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "ACCESSES_DATA_ENTRYPOINT", from: "EntryPoint", to: "DataModel", properties: { operation: "STRING", library: "STRING", line: "INT64", expression: "STRING", file: "STRING", direct: "BOOLEAN" } },
   { type: "DECLARES_STYLE", from: "File", to: "Style", properties: {} },
   { type: "SELECTS_STYLE", from: "Style", to: "Style", properties: {} },
-  { type: "USES_STYLE_FILE", from: "File", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING" } },
-  { type: "USES_STYLE_FUNCTION", from: "Function", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING" } },
-  { type: "USES_STYLE_COMPONENT", from: "Component", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING" } },
+  { type: "USES_STYLE_FILE", from: "File", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING", provenance: "STRING" } },
+  { type: "USES_STYLE_FUNCTION", from: "Function", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING", provenance: "STRING" } },
+  { type: "USES_STYLE_COMPONENT", from: "Component", to: "Style", properties: { line: "INT64", match: "STRING", expression: "STRING", provenance: "STRING" } },
   { type: "DECLARES_SERVICE", from: "File", to: "Service", properties: {} },
   { type: "DECLARES_MESSAGE", from: "File", to: "Message", properties: {} },
   { type: "HAS_RPC", from: "Service", to: "Rpc", properties: {} },

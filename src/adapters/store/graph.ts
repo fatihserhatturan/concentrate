@@ -1,6 +1,7 @@
 import path from "node:path";
 import type { GraphNode, GraphRelationship } from "../../core/graph/model.js";
 import { physicalRelationshipType } from "./physical-types.js";
+import { withProvenance } from "./provenance.js";
 import { nodeTableByLabel, relationshipTableByType, type PropertyType } from "./schema.js";
 
 export type PropertyValue = string | number | boolean | null;
@@ -159,7 +160,7 @@ export class MemoryGraph {
     for (const node of nodes) this.addNode(node.label, node.id, node.properties);
     const labels = new Map(nodes.map((node) => [node.id, node.label]));
     for (const relationship of relationships) {
-      this.addRelationship(physicalRelationshipType(relationship, labels), relationship.from, relationship.to, relationship.properties);
+      this.addRelationship(physicalRelationshipType(relationship, labels), relationship.from, relationship.to, withProvenance(relationship));
     }
   }
 }

@@ -1,6 +1,7 @@
 import type { IQueryEngine } from "../../core/contracts/query-engine.js";
 import { CODE_LANGUAGES, type SupportedLanguage } from "../../core/scan/language.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
+import { loadFileGraph, topHubs } from "./analysis-tools/hubs.js";
 
 // MCP resources: one JSON summary of the scanned graph, small enough for an
 // agent to read before choosing tools.
@@ -12,7 +13,7 @@ export const resourceDefinitions = [
     uri: GRAPH_SUMMARY_URI,
     name: "graph-summary",
     title: "Graph summary",
-    description: "Overview of the scanned repository: node counts, languages, packages, the largest directories, routes and entrypoints by framework, and data model, env var and config counts.",
+    description: "Overview of the scanned repository: node counts, languages, packages, the largest directories, hubs (most connected files, most called functions), routes and entrypoints by framework, and data model, env var and config counts.",
     mimeType: "application/json",
   },
 ];
@@ -20,6 +21,7 @@ export const resourceDefinitions = [
 type Row = Record<string, unknown>;
 
 const TOP_DIRECTORIES = 15;
+const TOP_HUBS = 5;
 
 export async function readResource(engine: IQueryEngine, uri: string): Promise<{ contents: Array<{ uri: string; mimeType: string; text: string }> }> {
   if (uri !== GRAPH_SUMMARY_URI) throw new McpProtocolError(INVALID_PARAMS, `Resource not found: ${uri}`, { uri });
@@ -78,6 +80,7 @@ export async function graphSummary(engine: IQueryEngine): Promise<Record<string,
     tablesByLibrary: counts(tables),
     envVars: Number(envVars[0]?.count ?? 0),
     configValues: Number(configValues[0]?.count ?? 0),
+    hubs: topHubs(await loadFileGraph(engine), TOP_HUBS),
     stats,
   };
 }

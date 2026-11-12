@@ -9,7 +9,7 @@
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
   <img alt="Node.js 22+" src="https://img.shields.io/badge/node-%E2%89%A522-339933.svg">
   <img alt="Runtime dependencies: 1" src="https://img.shields.io/badge/runtime%20deps-1-brightgreen.svg">
-  <img alt="MCP: 26 tools" src="https://img.shields.io/badge/MCP-26%20tools-6f42c1.svg">
+  <img alt="MCP: 28 tools" src="https://img.shields.io/badge/MCP-28%20tools-6f42c1.svg">
   <img alt="Languages" src="https://img.shields.io/badge/languages-TS%20%7C%20JS%20%7C%20Python%20%7C%20Go%20%7C%20Rust%20%7C%20C%2FC%2B%2B-informational.svg">
 </p>
 
@@ -50,7 +50,7 @@ flowchart LR
   B --> C[Extract<br/>languages + frameworks]
   C --> D[Resolve<br/>across files]
   D --> E[(Graph<br/>snapshot)]
-  E --> F[MCP · 26 tools]
+  E --> F[MCP · 28 tools]
   E --> G[Cypher]
   E --> H[CLI · export]
 ```
@@ -132,7 +132,7 @@ The full plan is in [docs/ROADMAP.md](docs/ROADMAP.md).
 | | |
 | --- | --- |
 | [Getting started](docs/getting-started.md) | install, scan, query, watch, and connect an agent |
-| [MCP server](docs/mcp-server.md) | client setup and the reference for all 26 tools |
+| [MCP server](docs/mcp-server.md) | client setup and the reference for all 28 tools |
 | [Cypher subset](docs/cypher.md) | querying the graph directly |
 | [Architecture](docs/architecture.md) | the scan pipeline and source layout |
 | [Accuracy](docs/accuracy.md) · [Benchmarks](docs/benchmarks.md) · [Agent benchmark](docs/agent-benchmark.md) | how the numbers above are measured |
