@@ -55,6 +55,11 @@ describe("GET /api/fs", () => {
     assert.deepEqual(body.entries.map((e: { name: string }) => e.name), ["project"]);
     assert.equal(body.entries[0].hasGraph, false);
   });
+  it("flags the listed directory itself", async () => {
+    const body = await (await fetch(`${base}/api/fs?path=${encodeURIComponent(path.join(work, "project"))}`, { headers: auth })).json();
+    assert.equal(body.current.isGitRepository, false);
+    assert.equal(typeof body.current.hasGraph, "boolean");
+  });
   it("errors on a missing path", async () => {
     assert.equal((await fetch(`${base}/api/fs?path=${encodeURIComponent(path.join(work, "nope"))}`, { headers: auth })).status, 400);
   });
@@ -90,5 +95,28 @@ describe("POST /api/scan", () => {
       body: JSON.stringify({ path: path.join(work, "nope") }),
     });
     assert.match(await missing.text(), /event: error/);
+  });
+});
+
+describe("GET /api/project", () => {
+  const info = async (target: string) => (await fetch(`${base}/api/project?path=${encodeURIComponent(target)}`, { headers: auth })).json();
+  it("describes a scanned project: scan time, files and nodes", async () => {
+    const body = await info(path.join(work, "project"));
+    assert.equal(body.exists, true);
+    assert.equal(body.name, "project");
+    assert.equal(body.hasGraph, true);
+    assert.ok(Date.now() - Date.parse(body.scannedAt) < 60_000);
+    assert.ok(body.files > 0 && body.nodes > 0);
+    assert.equal(typeof body.schemaVersion, "number");
+  });
+  it("describes a folder without a graph and one that does not exist", async () => {
+    const plain = await info(work);
+    assert.deepEqual([plain.exists, plain.hasGraph, plain.scannedAt, plain.nodes], [true, false, null, null]);
+    const missing = await info(path.join(work, "nope"));
+    assert.deepEqual([missing.exists, missing.hasGraph], [false, false]);
+  });
+  it("needs a path and the token", async () => {
+    assert.equal((await fetch(`${base}/api/project`, { headers: auth })).status, 400);
+    assert.equal((await fetch(`${base}/api/project?path=/`)).status, 401);
   });
 });

@@ -3,7 +3,14 @@ import os from "node:os";
 import path from "node:path";
 
 export type FsEntry = { name: string; path: string; isGitRepository: boolean; hasGraph: boolean };
-export type FsListing = { path: string; parent: string | null; home: string; entries: FsEntry[] };
+export type FsListing = {
+  path: string;
+  parent: string | null;
+  home: string;
+  /** The listed directory itself: is it a git repository, does it have a graph. */
+  current: { isGitRepository: boolean; hasGraph: boolean };
+  entries: FsEntry[];
+};
 
 async function exists(target: string): Promise<boolean> {
   try {
@@ -33,5 +40,11 @@ export async function listDirectories(requested: string | undefined): Promise<Fs
   }
   entries.sort((a, b) => a.name.localeCompare(b.name));
   const parent = path.dirname(target);
-  return { path: target, parent: parent === target ? null : parent, home: os.homedir(), entries };
+  return {
+    path: target,
+    parent: parent === target ? null : parent,
+    home: os.homedir(),
+    current: { isGitRepository: await exists(path.join(target, ".git")), hasGraph: await exists(path.join(target, ".concentrate", "graph")) },
+    entries,
+  };
 }

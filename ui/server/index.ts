@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { listDirectories } from "./api/fs.js";
 import { parseScanRequest, runScan } from "./api/scan.js";
+import { projectInfo } from "./api/project.js";
 import { runQuery } from "./api/query.js";
 import { preset } from "./graph/presets.js";
 import { parseExportRequest, sendExport } from "./export/index.js";
@@ -82,6 +83,12 @@ export function createUiServer(token: string) {
         });
         await runScan(scanRequest, (event) => response.write(`event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`));
         response.end();
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/project") {
+        const target = url.searchParams.get("path");
+        if (!target) throw new Error("`path` is required");
+        sendJson(response, 200, await projectInfo(target));
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/query") {
