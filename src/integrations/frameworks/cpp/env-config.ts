@@ -23,11 +23,13 @@ const READERS: Array<{ names: string; index: number }> = [
   { names: "getenv_s", index: 3 },
   { names: "_dupenv_s|_wdupenv_s", index: 2 },
   { names: "envname", index: 0 },
+  // A namespaced wrapper of getenv (googletest's `internal::posix::GetEnv`, gRPC's `grpc_core::GetEnv`).
+  { names: "GetEnv", index: 0 },
 ];
 type Pending = { owner: string; line: number; access: string; constant: string };
 
 export const cppEnvConfigPlugin: CppParsePlugin = ({ fileNodeId, source: written, nodes, relationships }) => {
-  if (!/\b(?:getenv|secure_getenv|_wgetenv|qgetenv|qEnvironmentVariable\w*|GetEnvironmentVariable\w*|getenv_s|_w?dupenv_s|envname)\b|#\s*define\s+\w+\s+"[A-Z][A-Z0-9_]*"|"[A-Z][A-Z0-9_]*"\s*;/u.test(written)) return;
+  if (!/\b(?:getenv|secure_getenv|_wgetenv|qgetenv|qEnvironmentVariable\w*|GetEnvironmentVariable\w*|getenv_s|_w?dupenv_s|envname|GetEnv)\b|#\s*define\s+\w+\s+"[A-Z][A-Z0-9_]*"|"[A-Z][A-Z0-9_]*"\s*;/u.test(written)) return;
   const source = readCppSource(written);
   const constants = stringConstants(source);
   const owner = ownerOf(nodes, fileNodeId);
@@ -38,7 +40,7 @@ export const cppEnvConfigPlugin: CppParsePlugin = ({ fileNodeId, source: written
     if (!written.includes(names.split("|")[0]!.replace(/\[.*$/u, ""))) continue;
     for (const call of findInvocations(source, names)) {
       // `getenv` is a function, `envname` a CLI11 method; a method named like a reader is not.
-      if (call.name === "envname" ? call.receiver === null : call.receiver !== null || (call.qualifier !== null && !/^(?:std|)$/u.test(call.qualifier.replace(/^::/u, "")))) continue;
+      if (call.name === "envname" ? call.receiver === null : call.name === "GetEnv" ? call.receiver !== null : call.receiver !== null || (call.qualifier !== null && !/^(?:std|)$/u.test(call.qualifier.replace(/^::/u, "")))) continue;
       const argument = call.args[index];
       if (argument === undefined) continue;
       const value = stringValue(argument, constants);
