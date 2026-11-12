@@ -27,3 +27,6 @@ export {
 export { graphSummary } from "./adapters/mcp/resources.js";
 export { nodeLabels, relationshipTables, type RelationshipTable } from "./adapters/store/schema.js";
 export { matchName, type MatchType } from "./adapters/mcp/analysis-tools/search.js";
+export { findUnusedExports } from "./adapters/mcp/analysis-tools/unused.js";
+export { findImportCycles } from "./adapters/mcp/analysis-tools/cycles.js";
+export type { PageWindow } from "./adapters/mcp/paging.js";

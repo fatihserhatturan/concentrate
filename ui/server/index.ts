@@ -8,6 +8,9 @@ import { parseScanRequest, runScan } from "./api/scan.js";
 import { projectInfo } from "./api/project.js";
 import { runQuery } from "./api/query.js";
 import { preset } from "./graph/presets.js";
+import { dashboard } from "./graph/dashboard.js";
+import { catalog, entities } from "./graph/entities.js";
+import { issues } from "./graph/issues.js";
 import { parseExportRequest, sendExport } from "./export/index.js";
 import { neighbors, nodeDetail, nodeSource, overview, parseKinds, search, summary } from "./graph/views.js";
 import { createToken, isAllowedHost, tokenFromRequest, tokenMatches } from "./security.js";
@@ -113,6 +116,10 @@ export function createUiServer(token: string) {
           return sendJson(response, 200, await neighbors(project, param("id") ?? "", parseKinds(param("types")), Number(param("depth") ?? 1)));
         }
         if (url.pathname === "/api/graph/preset") return sendJson(response, 200, await preset(project, param("name") ?? ""));
+        if (url.pathname === "/api/graph/catalog") return sendJson(response, 200, await catalog(project));
+        if (url.pathname === "/api/graph/dashboard") return sendJson(response, 200, await dashboard(project));
+        if (url.pathname === "/api/graph/entities") return sendJson(response, 200, await entities(project, param("kind") ?? ""));
+        if (url.pathname === "/api/graph/issues") return sendJson(response, 200, await issues(project));
         if (url.pathname === "/api/graph/node") return sendJson(response, 200, await nodeDetail(project, param("id") ?? ""));
         if (url.pathname === "/api/graph/source") return sendJson(response, 200, await nodeSource(project, param("id") ?? ""));
         if (url.pathname === "/api/search") return sendJson(response, 200, await search(project, param("q") ?? "", param("label") ?? undefined));
