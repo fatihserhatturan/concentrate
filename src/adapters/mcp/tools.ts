@@ -717,8 +717,26 @@ async function withNavigation(engine: GraphQueryEngine, pages: Array<Record<stri
     RETURN id(page) AS page, id(fn) AS fn, moduleFile.relativePath AS moduleFile, call.line AS line,
       nav.url AS url, nav.match AS match
   `, { ids }) as Array<Record<string, unknown>>;
+  const links = ids.length === 0 ? [] : await engine.query(`
+    MATCH (file:File)-[nav:NAVIGATES_TO_FILE]->(page:Page)
+    WHERE id(page) IN $ids
+    OPTIONAL MATCH (file)-[:DECLARES_COMPONENT]->(component:Component)
+    RETURN id(page) AS page, file.relativePath AS file, nav.line AS line, nav.url AS url, nav.match AS match, component.name AS component
+  `, { ids }) as Array<Record<string, unknown>>;
   const functions = await loadFunctions(engine, [...new Set(navigations.flatMap((row) => (row.fn == null ? [] : [String(row.fn)])))]);
   const byPage = new Map<string, Array<Record<string, unknown>>>();
+  // A link in markup: the file and line of the tag, and the component when the file declares just one.
+  const markup = new Map<string, { page: string; file: unknown; line: unknown; url: unknown; match: unknown; components: Set<string> }>();
+  for (const row of links) {
+    const key = `${String(row.page)}\0${String(row.file)}\0${String(row.line)}\0${String(row.url)}`;
+    const entry = markup.get(key) ?? { page: String(row.page), file: row.file, line: row.line, url: row.url, match: row.match, components: new Set<string>() };
+    if (typeof row.component === "string") entry.components.add(row.component);
+    markup.set(key, entry);
+  }
+  for (const entry of markup.values()) {
+    const item = { function: null, ...(entry.components.size === 1 ? { component: [...entry.components][0] } : {}), file: entry.file, line: entry.line, url: entry.url, match: entry.match, markup: true };
+    byPage.set(entry.page, [...byPage.get(entry.page) ?? [], item]);
+  }
   for (const row of navigations) {
     const fn = row.fn == null ? null : functions.get(String(row.fn));
     const entry = { function: fn?.name ?? null, file: fn?.file ?? (typeof row.moduleFile === "string" ? row.moduleFile : null), line: row.line ?? null, url: row.url, match: row.match };

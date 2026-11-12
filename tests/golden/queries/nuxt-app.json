@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 90
+        "result": 91
       },
       {
         "method": "stats",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 90,
+      "schemaVersion": 91,
       "stats": [
         {
           "table": "Repo",
@@ -1318,6 +1318,36 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[nav:NAVIGATES_TO_FILE]->(page:Page) WHERE id(page) IN $ids OPTIONAL MATCH (file)-[:DECLARES_COMPONENT]->(component:Component) RETURN id(page) AS page, file.relativePath AS file, nav.line AS line, nav.url AS url, nav.match AS match, component.name AS component",
+        "params": {
+          "ids": [
+            "file:app.vue:page",
+            "file:error.vue:page",
+            "file:pages/index.vue:page",
+            "file:pages/(marketing)/about.vue:page",
+            "file:pages/blog/[...slug].vue:page",
+            "file:pages/settings/[[tab]].vue:page",
+            "file:pages/user-[id]-profile.vue:page",
+            "file:pages/users.vue:page",
+            "file:pages/users/index.vue:page",
+            "file:pages/users/[id].vue:page",
+            "file:layouts/auth.vue:page",
+            "file:layouts/default.vue:page"
+          ]
+        },
+        "rows": [
+          {
+            "page": "file:pages/index.vue:page",
+            "file": "components/AppHeader.vue",
+            "line": 3,
+            "url": "/",
+            "match": "exact",
+            "component": "AppHeader"
+          }
+        ]
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
         "params": {
           "ids": []
@@ -1373,7 +1403,18 @@
           "file": "pages/index.vue",
           "line": null,
           "component": "Index",
-          "componentFile": "pages/index.vue"
+          "componentFile": "pages/index.vue",
+          "navigatedFrom": [
+            {
+              "function": null,
+              "component": "AppHeader",
+              "file": "components/AppHeader.vue",
+              "line": 3,
+              "url": "/",
+              "match": "exact",
+              "markup": true
+            }
+          ]
         },
         {
           "fullPath": "/about",

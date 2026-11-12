@@ -206,6 +206,7 @@
 {"kind":"rel","from":"file:app.vue","type":"DECLARES_PAGE","to":"file:app.vue:page","properties":{}}
 {"kind":"rel","from":"file:app.vue:page","type":"PAGE_RENDERS","to":"file:app.vue:component:1:App","properties":{}}
 {"kind":"rel","from":"file:components/AppHeader.vue","type":"DECLARES_COMPONENT","to":"file:components/AppHeader.vue:component:1:AppHeader","properties":{}}
+{"kind":"rel","from":"file:components/AppHeader.vue","type":"NAVIGATES_TO","to":"file:pages/index.vue:page","properties":{"line":3,"match":"exact","url":"/"}}
 {"kind":"rel","from":"file:components/AppHeader.vue:component:1:AppHeader","type":"RENDERS","to":"file:components/forms/index.vue:component:1:Index","properties":{"line":4,"props":""}}
 {"kind":"rel","from":"file:components/UserCard.client.vue","type":"DECLARES_COMPONENT","to":"file:components/UserCard.client.vue:component:1:UserCardClient","properties":{}}
 {"kind":"rel","from":"file:components/UserCard.client.vue","type":"DEFINES_FUNCTION","to":"file:components/UserCard.client.vue:function:5:<script setup>","properties":{}}

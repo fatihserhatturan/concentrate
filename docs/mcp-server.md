@@ -48,7 +48,9 @@ default. The server command is this build's CLI under the current Node with
 an absolute `--database` path, `<path>/.concentrate/graph` unless `-d` names
 another. `--npx` writes `npx -y concentrate mcp …` instead, for an installed
 package. When the graph does not exist yet, `init` prints the scan command.
-Running it again replaces only the `concentrate` entry.
+Running it again replaces only the `concentrate` entry. `--watch` writes
+`mcp --watch <path>` into the entry, so the server scans at start and keeps the
+graph current while you edit (see [Troubleshooting](#troubleshooting)).
 
 Agents search text first even when a graph tool would answer in one call (see
 [agent-benchmark.md](agent-benchmark.md)), so `init` also steers them:
@@ -197,8 +199,14 @@ even for large repositories; read it first to decide which tools to call.
   `redirect` on a router-like receiver (`router`, `$router`, `Router`,
   `history`), with a literal path (first or second argument) that one page
   reaches; the link is the `NAVIGATES_TO` relationship from the call to the
-  page. Links in markup (`<Link href>`, `routerLink`) and calls that take an
-  object or a template are not linked yet.
+  page. Links in markup are linked from the file (`NAVIGATES_TO_FILE`, schema
+  91; `markup: true`, the `line` of the tag, and the `component` when the file
+  declares just one): `<Link href>`, `<Link to>`, `<NavLink>`, `<Navigate to>`,
+  `<NuxtLink to>`, `<router-link to>` and `<a href>` in JSX, Vue, Svelte, Astro
+  and HTML, and `routerLink` on any element of an Angular template, with a
+  literal internal path. A bound value that is not a plain literal (an object,
+  a template with `${}`, an array of several parts) and calls that take an
+  object or a template are not linked.
 - `list_entrypoints`: lists non-HTTP backend entrypoints such as queues, cron
   jobs, events, realtime handlers, and schedulers; for Go also `main` /
   `init`, gRPC service methods (kind `grpc`, trigger `Service/Method`) and
@@ -269,8 +277,9 @@ These answer a whole question in one call instead of a chain of lookups.
   `paths`: the shortest chains of resolved calls from one returned symbol to
   another (at most 6 calls), and `impact`: counts of callers, entrypoints,
   components, pages and tables and the routes and env vars reached within 3
-  levels. It has not yet been measured with the agent benchmark (see
-  docs/agent-benchmark.md); `--tools` can leave it out of the list.
+  levels. The agent benchmark has not measured it yet: in the v2 run of
+  2026-11-12 the agent never called it (see docs/agent-benchmark.md);
+  `--tools` can leave it out of the list.
 - `trace_calls({ from, to?, file?, toFile?, maxDepth, limit = 50 })`: over
   resolved calls only. Without `to`: what `from` (a function name or
   `Class.method`) calls, nearest first (`callees` with `depth`, `calledBy`;

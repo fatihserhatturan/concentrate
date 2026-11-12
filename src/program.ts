@@ -171,6 +171,7 @@ export const program: ProgramSpec = {
         { flags: "-d, --database <path>", description: "Graph store directory (default: <path>/.concentrate/graph)" },
         { flags: "--client <name>", description: "claude, cursor or codex, repeatable (default: all three)", multiple: true },
         { flags: "--npx", description: "Start the server with npx -y concentrate instead of this build's CLI", type: "boolean" },
+        { flags: "--watch", description: "Start the MCP server with --watch <path>: it scans at start and keeps the graph current while you edit", type: "boolean" },
         { flags: "--hooks", description: "Also install git hooks (post-commit, post-checkout, post-merge) that rescan the project in the background", type: "boolean" },
         { flags: "--no-instructions", description: "Do not write the Concentrate section into CLAUDE.md and AGENTS.md" },
         { flags: "--hook", description: "Also add an advisory Claude Code PreToolUse hook (.claude/settings.json) that points to the graph before Grep and Read", type: "boolean" },

@@ -324,6 +324,33 @@ unused exports (−72% to −79% tokens). Everywhere else, including callers,
 impact and diffs, an agent that can grep reaches the same answer at about
 the same cost, and sometimes spends more checking the graph's answer.
 
+### v2 questions with `explore` and the tool list of 2026-11-12 (#251)
+
+The v2 questions again with the server as it is after #251 (28 tools, among them
+`explore`, `trace_calls` and the shortened descriptions), sonnet, one run per
+question and mode, `--max-turns 25`
+([`agent-v2-explore-sonnet-runs1-2026-11-12.json`](../bench/results/agent-v2-explore-sonnet-runs1-2026-11-12.json),
+CLI cost estimate $1.37 for the 18 sessions, the 18 sessions' baseline half
+unchanged by the server):
+
+| | Baseline | Concentrate |
+| --- | ---: | ---: |
+| Correct | 9/9 | 9/9 |
+| Median input tokens | 98.1k | 101.8k (+4%) |
+| Median tool calls | 3 | 2 (−33%) |
+| Total cost | $0.84 | $0.53 |
+
+Unused exports stayed the one large difference (666.7k → 136.2k input tokens,
+21 → 4 tool calls); the full-stack route question took 2 calls instead of 6.
+The agent called an MCP tool in 3 of 9 runs (`api_consumers`, `find_callers`,
+`impact_of`, `find_unused_exports`) and **never called `explore`**, so this run
+does not measure it: it shows that the larger list did not cost the questions
+that need a graph tool, not that `explore` helps or hurts. One run per
+question is also too few to separate +4% from noise (the three-run medians of
+2026-11-02 for sonnet were +2% to +3% on these categories). Measuring `explore`
+needs questions an agent would answer with it, in words and without naming an
+identifier, and several runs each; that set does not exist yet.
+
 ### Frontend and full-stack questions
 
 [`bench/agent/questions-frontend.json`](../bench/agent/questions-frontend.json)
