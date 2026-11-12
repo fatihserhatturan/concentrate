@@ -1,0 +1,51 @@
+/* Design tokens: one scale for space, type, radius and colour, in light and dark. */
+:root {
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px;
+  --radius-sm: 4px; --radius: 6px; --radius-lg: 10px;
+  --text-xs: 12px; --text-sm: 13px; --text-md: 14px; --text-lg: 16px; --text-xl: 20px; --text-2xl: 28px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --topbar-height: 48px;
+
+  --bg: #ffffff; --bg-subtle: #f6f8fa; --bg-muted: #eaeef2; --bg-hover: #f0f3f6;
+  --fg: #1f2328; --fg-muted: #59636e; --fg-faint: #818b98;
+  --line: #d1d9e0; --line-strong: #b4bdc7;
+  --accent: #0969da; --accent-hover: #0757b5; --accent-fg: #ffffff; --accent-subtle: #ddf4ff;
+  --ok: #1a7f37; --ok-subtle: #dafbe1; --warn: #9a6700; --warn-subtle: #fff8c5; --danger: #cf222e; --danger-subtle: #ffebe9;
+  --shadow: 0 1px 2px rgba(31, 35, 40, .06), 0 4px 12px rgba(31, 35, 40, .08);
+  --focus: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+  color-scheme: light;
+
+  /* names the graph view still uses */
+  --muted: var(--fg-muted); --panel: var(--bg-subtle); --bad: var(--danger);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1117; --bg-subtle: #151b23; --bg-muted: #212830; --bg-hover: #1a2029;
+    --fg: #e6edf3; --fg-muted: #9198a1; --fg-faint: #6e7681;
+    --line: #3d444d; --line-strong: #59636e;
+    --accent: #4493f8; --accent-hover: #6cb0ff; --accent-fg: #0d1117; --accent-subtle: #121d2f;
+    --ok: #3fb950; --ok-subtle: #12261e; --warn: #d29922; --warn-subtle: #272115; --danger: #f85149; --danger-subtle: #2d1214;
+    --shadow: 0 1px 2px rgba(1, 4, 9, .4), 0 4px 12px rgba(1, 4, 9, .5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1117; --bg-subtle: #151b23; --bg-muted: #212830; --bg-hover: #1a2029;
+  --fg: #e6edf3; --fg-muted: #9198a1; --fg-faint: #6e7681;
+  --line: #3d444d; --line-strong: #59636e;
+  --accent: #4493f8; --accent-hover: #6cb0ff; --accent-fg: #0d1117; --accent-subtle: #121d2f;
+  --ok: #3fb950; --ok-subtle: #12261e; --warn: #d29922; --warn-subtle: #272115; --danger: #f85149; --danger-subtle: #2d1214;
+  --shadow: 0 1px 2px rgba(1, 4, 9, .4), 0 4px 12px rgba(1, 4, 9, .5);
+  color-scheme: dark;
+}
+
+/* syntax colours */
+:root { --syn-keyword: #cf222e; --syn-string: #0a3069; --syn-comment: #6e7781; --syn-title: #8250df; --syn-number: #0550ae; --syn-type: #953800; --syn-attr: #116329; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --syn-keyword: #ff7b72; --syn-string: #a5d6ff; --syn-comment: #8b949e; --syn-title: #d2a8ff; --syn-number: #79c0ff; --syn-type: #ffa657; --syn-attr: #7ee787; } }
+:root[data-theme="dark"] { --syn-keyword: #ff7b72; --syn-string: #a5d6ff; --syn-comment: #8b949e; --syn-title: #d2a8ff; --syn-number: #79c0ff; --syn-type: #ffa657; --syn-attr: #7ee787; }
+
+/* graph: five relationship categories that can be told apart (colour, and a dash for structure) and neutral nodes */
+:root { --cat-imports: #2563eb; --cat-calls: #d97706; --cat-web: #9333ea; --cat-data: #059669; --cat-structure: #8b949e; --node-bg: #ffffff; --node-line: #b4bdc7; --node-dir: #64748b; --node-file: #94a3b8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --cat-imports: #60a5fa; --cat-calls: #fbbf24; --cat-web: #c084fc; --cat-data: #34d399; --cat-structure: #6e7681; --node-bg: #151b23; --node-line: #3d444d; --node-dir: #8b949e; --node-file: #6e7681; } }
+:root[data-theme="dark"] { --cat-imports: #60a5fa; --cat-calls: #fbbf24; --cat-web: #c084fc; --cat-data: #34d399; --cat-structure: #6e7681; --node-bg: #151b23; --node-line: #3d444d; --node-dir: #8b949e; --node-file: #6e7681; }

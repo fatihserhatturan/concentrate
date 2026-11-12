@@ -36,9 +36,31 @@ npm run dev -- mcp
 
 # Write the MCP config of Claude Code, Cursor and Codex into a project
 npm run dev -- init ./path/to/project
+
+# Start the optional local web interface (needs ui/ installed, see below)
+npm run dev -- ui
 ```
 
 The Cypher subset is described in [cypher.md](cypher.md).
+
+## The optional UI
+
+A local web interface lives in `ui/`: pick a directory, scan it, look at the graph, run the
+question presets or a read-only Cypher query, and export the graph (JSON, JSONL, GraphML, DOT or a
+single HTML file). It is a separate package with its own dependencies; `npm install` at the root
+installs nothing for it, and the core never imports from it.
+
+```bash
+npm run build            # the UI imports the built core (dist/)
+cd ui
+npm install
+npm start                # builds the web app, starts the server, opens the browser
+```
+
+Once `ui/` is installed, `npm run dev -- ui` (or `concentrate ui`) starts it from the root (`--port`, `--no-open`);
+without it, the command prints these steps. The server listens on `127.0.0.1` only, every API call needs
+the random token in the URL it prints, and a scan writes `<project>/.concentrate/graph`, the same graph
+`concentrate mcp` and `concentrate query` read. [ui/README.md](../ui/README.md) has the details.
 
 ## Connect an AI agent
 

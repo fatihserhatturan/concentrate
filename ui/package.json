@@ -1,0 +1,37 @@
+{
+  "name": "concentrate-ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Optional local web interface for Concentrate: scan a repository, view the graph, export it.",
+  "type": "module",
+  "scripts": {
+    "build:core": "npm --prefix .. run build",
+    "build:web": "vite build web",
+    "build": "npm run build:core && npm run build:web",
+    "start": "npm run build && tsx server/index.ts",
+    "start:server": "tsx server/index.ts",
+    "dev:web": "vite web",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p web/tsconfig.json --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "test:browser": "npm run build:web && tsx --test tests/browser/*.test.ts"
+  },
+  "dependencies": {
+    "@dagrejs/dagre": "^1.1.8",
+    "graphology": "^0.26.0",
+    "graphology-layout-forceatlas2": "^0.10.1",
+    "graphology-types": "^0.24.8",
+    "highlight.js": "^11.12.0",
+    "preact": "^10.29.8",
+    "sigma": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "playwright": "^1.56.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

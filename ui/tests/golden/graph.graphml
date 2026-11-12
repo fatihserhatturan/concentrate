@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+  <key id="nlabel" for="node" attr.name="label" attr.type="string"/>
+  <key id="n_path" for="node" attr.name="path" attr.type="string"/>
+  <key id="n_name" for="node" attr.name="name" attr.type="string"/>
+  <key id="n_relativePath" for="node" attr.name="relativePath" attr.type="string"/>
+  <key id="n_language" for="node" attr.name="language" attr.type="string"/>
+  <key id="n_sourceType" for="node" attr.name="sourceType" attr.type="string"/>
+  <key id="n_isTest" for="node" attr.name="isTest" attr.type="boolean"/>
+  <key id="n_isFixture" for="node" attr.name="isFixture" attr.type="boolean"/>
+  <key id="n_isSupport" for="node" attr.name="isSupport" attr.type="boolean"/>
+  <key id="n_isGenerated" for="node" attr.name="isGenerated" attr.type="boolean"/>
+  <key id="n_isDocs" for="node" attr.name="isDocs" attr.type="boolean"/>
+  <key id="n_kind" for="node" attr.name="kind" attr.type="string"/>
+  <key id="n_line" for="node" attr.name="line" attr.type="long"/>
+  <key id="n_endLine" for="node" attr.name="endLine" attr.type="long"/>
+  <key id="n_isExported" for="node" attr.name="isExported" attr.type="boolean"/>
+  <key id="n_isAsync" for="node" attr.name="isAsync" attr.type="boolean"/>
+  <key id="n_isAbstract" for="node" attr.name="isAbstract" attr.type="boolean"/>
+  <key id="n_visibility" for="node" attr.name="visibility" attr.type="string"/>
+  <key id="n_parameters" for="node" attr.name="parameters" attr.type="string"/>
+  <key id="n_returnType" for="node" attr.name="returnType" attr.type="string"/>
+  <key id="n_stringValue" for="node" attr.name="stringValue" attr.type="string"/>
+  <key id="n_expression" for="node" attr.name="expression" attr.type="string"/>
+  <key id="n_callee" for="node" attr.name="callee" attr.type="string"/>
+  <key id="n_columnNumber" for="node" attr.name="columnNumber" attr.type="long"/>
+  <key id="n_args" for="node" attr.name="args" attr.type="string"/>
+  <key id="n_value" for="node" attr.name="value" attr.type="string"/>
+  <key id="n_valueType" for="node" attr.name="valueType" attr.type="string"/>
+  <key id="etype" for="edge" attr.name="type" attr.type="string"/>
+  <graph id="G" edgedefault="directed">
+    <node id="repo:<root>"><data key="nlabel">Repo</data><data key="n_path"><root></data><data key="n_name">project</data></node>
+    <node id="dir:."><data key="nlabel">Directory</data><data key="n_path"><root></data><data key="n_relativePath">.</data><data key="n_name">project</data></node>
+    <node id="file:nested.ts"><data key="nlabel">File</data><data key="n_path"><root>/nested.ts</data><data key="n_relativePath">nested.ts</data><data key="n_language">typescript</data><data key="n_sourceType">production</data><data key="n_isTest">false</data><data key="n_isFixture">false</data><data key="n_isSupport">false</data><data key="n_isGenerated">false</data><data key="n_isDocs">false</data></node>
+    <node id="file:odd.ts"><data key="nlabel">File</data><data key="n_path"><root>/odd.ts</data><data key="n_relativePath">odd.ts</data><data key="n_language">typescript</data><data key="n_sourceType">production</data><data key="n_isTest">false</data><data key="n_isFixture">false</data><data key="n_isSupport">false</data><data key="n_isGenerated">false</data><data key="n_isDocs">false</data></node>
+    <node id="file:nested.ts:function:5:outer"><data key="nlabel">Function</data><data key="n_name">outer</data><data key="n_kind">function_declaration</data><data key="n_line">5</data><data key="n_endLine">13</data><data key="n_isExported">true</data><data key="n_isAsync">false</data><data key="n_isAbstract">false</data><data key="n_visibility">public</data><data key="n_parameters">[]</data><data key="n_returnType">void</data></node>
+    <node id="file:nested.ts:function:8:inner"><data key="nlabel">Function</data><data key="n_name">inner</data><data key="n_kind">function_declaration</data><data key="n_line">8</data><data key="n_endLine">10</data><data key="n_isExported">false</data><data key="n_isAsync">false</data><data key="n_isAbstract">false</data><data key="n_visibility">public</data><data key="n_parameters">[]</data><data key="n_returnType">void</data></node>
+    <node id="file:odd.ts:function:1:weird"><data key="nlabel">Function</data><data key="n_name">weird</data><data key="n_kind">function_declaration</data><data key="n_line">1</data><data key="n_endLine">1</data><data key="n_isExported">true</data><data key="n_isAsync">false</data><data key="n_isAbstract">false</data><data key="n_visibility">public</data><data key="n_parameters">[]</data></node>
+    <node id="file:odd.ts:variable:2:odd"><data key="nlabel">Variable</data><data key="n_name">odd</data><data key="n_kind">const</data><data key="n_isExported">true</data><data key="n_line">2</data><data key="n_stringValue">a&lt;b&gt;&amp;é</data></node>
+    <node id="file:nested.ts:function:5:outer:call:12:2:finish"><data key="nlabel">Call</data><data key="n_name">finish</data><data key="n_expression">finish</data><data key="n_callee">finish</data><data key="n_line">12</data><data key="n_columnNumber">2</data><data key="n_args">[]</data></node>
+    <node id="file:nested.ts:function:5:outer:call:6:2:setup"><data key="nlabel">Call</data><data key="n_name">setup</data><data key="n_expression">setup</data><data key="n_callee">setup</data><data key="n_line">6</data><data key="n_columnNumber">2</data><data key="n_args">[]</data></node>
+    <node id="file:nested.ts:function:8:inner:call:9:4:nestedOnly"><data key="nlabel">Call</data><data key="n_name">nestedOnly</data><data key="n_expression">nestedOnly</data><data key="n_callee">nestedOnly</data><data key="n_line">9</data><data key="n_columnNumber">4</data><data key="n_args">[]</data></node>
+    <node id="file:odd.ts:config:2:odd"><data key="nlabel">ConfigValue</data><data key="n_name">odd</data><data key="n_value">a&lt;b&gt;&amp;é</data><data key="n_valueType">string</data><data key="n_line">2</data></node>
+    <edge id="e0" source="repo:<root>" target="dir:."><data key="etype">CONTAINS_ROOT</data></edge>
+    <edge id="e1" source="dir:." target="file:nested.ts"><data key="etype">CONTAINS_FILE</data></edge>
+    <edge id="e2" source="dir:." target="file:odd.ts"><data key="etype">CONTAINS_FILE</data></edge>
+    <edge id="e3" source="file:nested.ts" target="file:nested.ts:function:5:outer"><data key="etype">DEFINES_FUNCTION</data></edge>
+    <edge id="e4" source="file:nested.ts" target="file:nested.ts:function:8:inner"><data key="etype">DEFINES_FUNCTION</data></edge>
+    <edge id="e5" source="file:odd.ts" target="file:odd.ts:function:1:weird"><data key="etype">DEFINES_FUNCTION</data></edge>
+    <edge id="e6" source="file:odd.ts" target="file:odd.ts:variable:2:odd"><data key="etype">DEFINES_VARIABLE</data></edge>
+    <edge id="e7" source="file:nested.ts:function:5:outer" target="file:nested.ts:function:5:outer:call:12:2:finish"><data key="etype">CALLS</data></edge>
+    <edge id="e8" source="file:nested.ts:function:5:outer" target="file:nested.ts:function:5:outer:call:6:2:setup"><data key="etype">CALLS</data></edge>
+    <edge id="e9" source="file:nested.ts:function:8:inner" target="file:nested.ts:function:8:inner:call:9:4:nestedOnly"><data key="etype">CALLS</data></edge>
+    <edge id="e10" source="file:odd.ts" target="file:odd.ts:config:2:odd"><data key="etype">DECLARES_CONFIG_FILE</data></edge>
+  </graph>
+</graphml>

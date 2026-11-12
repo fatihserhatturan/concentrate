@@ -1,0 +1,28 @@
+digraph concentrate {
+  rankdir=LR;
+  node [shape=box, fontsize=10];
+  edge [fontsize=9];
+  "repo:<root>" [label="project", kind="Repo"];
+  "dir:." [label="project", kind="Directory"];
+  "file:nested.ts" [label="nested.ts", kind="File"];
+  "file:odd.ts" [label="odd.ts", kind="File"];
+  "file:nested.ts:function:5:outer" [label="outer", kind="Function"];
+  "file:nested.ts:function:8:inner" [label="inner", kind="Function"];
+  "file:odd.ts:function:1:weird" [label="weird", kind="Function"];
+  "file:odd.ts:variable:2:odd" [label="odd", kind="Variable"];
+  "file:nested.ts:function:5:outer:call:12:2:finish" [label="finish", kind="Call"];
+  "file:nested.ts:function:5:outer:call:6:2:setup" [label="setup", kind="Call"];
+  "file:nested.ts:function:8:inner:call:9:4:nestedOnly" [label="nestedOnly", kind="Call"];
+  "file:odd.ts:config:2:odd" [label="odd", kind="ConfigValue"];
+  "repo:<root>" -> "dir:." [label="CONTAINS_ROOT", type="CONTAINS_ROOT"];
+  "dir:." -> "file:nested.ts" [label="CONTAINS_FILE", type="CONTAINS_FILE"];
+  "dir:." -> "file:odd.ts" [label="CONTAINS_FILE", type="CONTAINS_FILE"];
+  "file:nested.ts" -> "file:nested.ts:function:5:outer" [label="DEFINES_FUNCTION", type="DEFINES_FUNCTION"];
+  "file:nested.ts" -> "file:nested.ts:function:8:inner" [label="DEFINES_FUNCTION", type="DEFINES_FUNCTION"];
+  "file:odd.ts" -> "file:odd.ts:function:1:weird" [label="DEFINES_FUNCTION", type="DEFINES_FUNCTION"];
+  "file:odd.ts" -> "file:odd.ts:variable:2:odd" [label="DEFINES_VARIABLE", type="DEFINES_VARIABLE"];
+  "file:nested.ts:function:5:outer" -> "file:nested.ts:function:5:outer:call:12:2:finish" [label="CALLS", type="CALLS"];
+  "file:nested.ts:function:5:outer" -> "file:nested.ts:function:5:outer:call:6:2:setup" [label="CALLS", type="CALLS"];
+  "file:nested.ts:function:8:inner" -> "file:nested.ts:function:8:inner:call:9:4:nestedOnly" [label="CALLS", type="CALLS"];
+  "file:odd.ts" -> "file:odd.ts:config:2:odd" [label="DECLARES_CONFIG_FILE", type="DECLARES_CONFIG_FILE"];
+}

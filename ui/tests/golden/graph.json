@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 87,
+  "rootPath": "<root>",
+  "nodes": [
+    {"id":"repo:<root>","label":"Repo","properties":{"path":"<root>","name":"project"}},
+    {"id":"dir:.","label":"Directory","properties":{"path":"<root>","relativePath":".","name":"project"}},
+    {"id":"file:nested.ts","label":"File","properties":{"path":"<root>/nested.ts","relativePath":"nested.ts","language":"typescript","defaultExport":null,"defaultExportFrom":null,"sourceType":"production","isTest":false,"isFixture":false,"isSupport":false,"isGenerated":false,"isDocs":false,"dynamicRouteCalls":null,"packageName":null,"rustCrate":null,"rustCrateName":null,"rustModule":null,"allNames":null,"cppScope":null}},
+    {"id":"file:odd.ts","label":"File","properties":{"path":"<root>/odd.ts","relativePath":"odd.ts","language":"typescript","defaultExport":null,"defaultExportFrom":null,"sourceType":"production","isTest":false,"isFixture":false,"isSupport":false,"isGenerated":false,"isDocs":false,"dynamicRouteCalls":null,"packageName":null,"rustCrate":null,"rustCrateName":null,"rustModule":null,"allNames":null,"cppScope":null}},
+    {"id":"file:nested.ts:function:5:outer","label":"Function","properties":{"name":"outer","kind":"function_declaration","methodKind":null,"line":5,"endLine":13,"className":null,"isExported":true,"isAsync":false,"isAbstract":false,"visibility":"public","parameters":"[]","returnType":"void","storeRefs":null,"storeSelects":null,"formAction":null,"typeParameters":null,"testKind":null,"implementsTrait":null,"namespace":null,"qualifiedName":null,"isVirtual":null,"isOverride":null,"isDeclaration":null}},
+    {"id":"file:nested.ts:function:8:inner","label":"Function","properties":{"name":"inner","kind":"function_declaration","methodKind":null,"line":8,"endLine":10,"className":null,"isExported":false,"isAsync":false,"isAbstract":false,"visibility":"public","parameters":"[]","returnType":"void","storeRefs":null,"storeSelects":null,"formAction":null,"typeParameters":null,"testKind":null,"implementsTrait":null,"namespace":null,"qualifiedName":null,"isVirtual":null,"isOverride":null,"isDeclaration":null}},
+    {"id":"file:odd.ts:function:1:weird","label":"Function","properties":{"name":"weird","kind":"function_declaration","methodKind":null,"line":1,"endLine":1,"className":null,"isExported":true,"isAsync":false,"isAbstract":false,"visibility":"public","parameters":"[]","returnType":null,"storeRefs":null,"storeSelects":null,"formAction":null,"typeParameters":null,"testKind":null,"implementsTrait":null,"namespace":null,"qualifiedName":null,"isVirtual":null,"isOverride":null,"isDeclaration":null}},
+    {"id":"file:odd.ts:variable:2:odd","label":"Variable","properties":{"name":"odd","kind":"const","isExported":true,"line":2,"stringValue":"a<b>&é","stringTemplate":null,"goType":null,"goConstructor":null,"httpClient":null,"httpBaseUrl":null,"trpcRouter":null,"trpcMounts":null,"visibility":null,"typeName":null,"constructorName":null}},
+    {"id":"file:nested.ts:function:5:outer:call:12:2:finish","label":"Call","properties":{"name":"finish","expression":"finish","callee":"finish","receiver":null,"requireSource":null,"line":12,"columnNumber":2,"args":"[]","httpClient":null,"httpReceiver":null,"httpMethod":null,"httpUrl":null,"httpUrlAlternatives":null,"storeAccess":null,"reduxAccess":null,"receiverType":null,"receiverConstructor":null,"receiverIsLocal":null,"qualifier":null,"argCount":null}},
+    {"id":"file:nested.ts:function:5:outer:call:6:2:setup","label":"Call","properties":{"name":"setup","expression":"setup","callee":"setup","receiver":null,"requireSource":null,"line":6,"columnNumber":2,"args":"[]","httpClient":null,"httpReceiver":null,"httpMethod":null,"httpUrl":null,"httpUrlAlternatives":null,"storeAccess":null,"reduxAccess":null,"receiverType":null,"receiverConstructor":null,"receiverIsLocal":null,"qualifier":null,"argCount":null}},
+    {"id":"file:nested.ts:function:8:inner:call:9:4:nestedOnly","label":"Call","properties":{"name":"nestedOnly","expression":"nestedOnly","callee":"nestedOnly","receiver":null,"requireSource":null,"line":9,"columnNumber":4,"args":"[]","httpClient":null,"httpReceiver":null,"httpMethod":null,"httpUrl":null,"httpUrlAlternatives":null,"storeAccess":null,"reduxAccess":null,"receiverType":null,"receiverConstructor":null,"receiverIsLocal":null,"qualifier":null,"argCount":null}},
+    {"id":"file:odd.ts:config:2:odd","label":"ConfigValue","properties":{"name":"odd","value":"a<b>&é","valueType":"string","line":2}}
+  ],
+  "relationships": [
+    {"from":"repo:<root>","to":"dir:.","type":"CONTAINS_ROOT","properties":{}},
+    {"from":"dir:.","to":"file:nested.ts","type":"CONTAINS_FILE","properties":{}},
+    {"from":"dir:.","to":"file:odd.ts","type":"CONTAINS_FILE","properties":{}},
+    {"from":"file:nested.ts","to":"file:nested.ts:function:5:outer","type":"DEFINES_FUNCTION","properties":{}},
+    {"from":"file:nested.ts","to":"file:nested.ts:function:8:inner","type":"DEFINES_FUNCTION","properties":{}},
+    {"from":"file:odd.ts","to":"file:odd.ts:function:1:weird","type":"DEFINES_FUNCTION","properties":{}},
+    {"from":"file:odd.ts","to":"file:odd.ts:variable:2:odd","type":"DEFINES_VARIABLE","properties":{}},
+    {"from":"file:nested.ts:function:5:outer","to":"file:nested.ts:function:5:outer:call:12:2:finish","type":"CALLS","properties":{}},
+    {"from":"file:nested.ts:function:5:outer","to":"file:nested.ts:function:5:outer:call:6:2:setup","type":"CALLS","properties":{}},
+    {"from":"file:nested.ts:function:8:inner","to":"file:nested.ts:function:8:inner:call:9:4:nestedOnly","type":"CALLS","properties":{}},
+    {"from":"file:odd.ts","to":"file:odd.ts:config:2:odd","type":"DECLARES_CONFIG_FILE","properties":{}}
+  ]
+}
