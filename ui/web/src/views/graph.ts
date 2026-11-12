@@ -7,17 +7,18 @@ const KINDS = Object.keys(EDGE_KIND_LABELS);
 // Structure is shown when a node is expanded; the overview never draws it.
 const OVERVIEW_DEFAULT = KINDS.filter((k) => k !== "defines");
 
-export function mountGraphView(root: HTMLElement, onBack: () => void): void {
+/** The first-stage graph view. It mounts into the shell's main area, writes the selection into the inspector, and returns its cleanup. */
+export function mountGraphView(root: HTMLElement, options: { inspector: HTMLElement }): () => void {
+  const inspectorEl = options.inspector;
   root.innerHTML = `
     <div class="gv">
       <header class="gv-bar">
-        <button id="back">← Scan</button>
         <select id="level"><option value="package">Packages</option><option value="directory" selected>Directories</option><option value="file">Files</option></select>
         <button id="up" title="Up one directory">↑</button>
         <span class="tag" id="crumb"></span>
         <div class="search"><input type="text" id="q" placeholder="Search symbols and files" /><ul id="hits" class="hits" hidden></ul></div>
         <span class="tag" id="stats"></span>
-        <button id="query">Query</button><button id="export">Export…</button><button id="theme" title="Theme">◐</button>
+        <button id="query">Query</button><button id="export">Export…</button>
       </header>
       <aside class="gv-side">
         <h2>Questions</h2>
@@ -34,7 +35,6 @@ export function mountGraphView(root: HTMLElement, onBack: () => void): void {
         <p class="tag">Click selects, double-click expands. Directories drill down; files and symbols show their neighbours.</p>
       </aside>
       <div class="gv-canvas" id="canvas"></div>
-      <aside class="gv-detail" id="detail"><p class="tag">Select a node.</p></aside>
       <div class="gv-msg" id="msg" hidden></div>
       <section class="gv-query" id="queryPanel" hidden>
         <div class="row"><strong>Cypher (read-only)</strong><button id="runQuery" class="primary">Run</button><button id="closeQuery">Close</button><span class="tag" id="queryInfo"></span></div>
@@ -112,27 +112,27 @@ export function mountGraphView(root: HTMLElement, onBack: () => void): void {
   const toCanvasNode = (n: ViewNode) => ({ id: n.id, label: n.label, name: n.name, size: n.label === "File" ? 7 : 5 });
 
   async function showDetail(id: string | null): Promise<void> {
-    if (!id) { $("detail").innerHTML = `<p class="tag">Select a node.</p>`; return; }
+    if (!id) { inspectorEl.innerHTML = `<p class="tag">Select a node.</p>`; return; }
     if (id.startsWith("dir:") || id.startsWith("package:")) {
-      $("detail").innerHTML = `<h2>${esc(canvas.graph.getNodeAttribute(id, "label"))}</h2><p class="tag">${esc(canvas.graph.getNodeAttribute(id, "nodeLabel"))} — double-click to drill down.</p>`;
+      inspectorEl.innerHTML = `<h2>${esc(canvas.graph.getNodeAttribute(id, "label"))}</h2><p class="tag">${esc(canvas.graph.getNodeAttribute(id, "nodeLabel"))} — double-click to drill down.</p>`;
       return;
     }
-    $("detail").innerHTML = `<p class="tag">Loading…</p>`;
+    inspectorEl.innerHTML = `<p class="tag">Loading…</p>`;
     try {
       const [detail, source] = await Promise.all([graphNode(id), graphSource(id).catch(() => null)]);
       const props = Object.entries(detail.properties).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(typeof v === "string" && v.length > 120 ? `${v.slice(0, 120)}…` : v)}</td></tr>`).join("");
       const rels = (title: string, groups: NodeDetailGroups) => Object.keys(groups).length === 0 ? "" :
         `<h3>${title}</h3>${Object.entries(groups).map(([type, items]) => `<div class="tag">${esc(type)}</div><ul class="rels">${items.map((i) => `<li data-id="${esc(i.id)}">${esc(i.name)} <span class="tag">${esc(i.label)}</span></li>`).join("")}</ul>`).join("")}`;
-      $("detail").innerHTML = `<h2>${esc(detail.name)}</h2>
+      inspectorEl.innerHTML = `<h2>${esc(detail.name)}</h2>
         <div class="tag"><span class="dot" style="background:${color(detail.label)}"></span>${esc(detail.label)}${detail.file ? ` · ${esc(detail.file)}${detail.line ? `:${detail.line}` : ""}` : ""}</div>
         ${source?.source ? `<pre class="src">${esc(source.source)}${source.truncated ? "\n…" : ""}</pre>` : ""}
         ${rels("Outgoing", detail.outgoing)}${rels("Incoming", detail.incoming)}
         <h3>Properties</h3><table class="props">${props}</table>`;
-    } catch (error) { $("detail").innerHTML = `<p class="bad">${esc((error as Error).message)}</p>`; }
+    } catch (error) { inspectorEl.innerHTML = `<p class="bad">${esc((error as Error).message)}</p>`; }
   }
   type NodeDetailGroups = Record<string, Array<{ id: string; label: string; name: string }>>;
 
-  $("detail").addEventListener("click", (e) => {
+  inspectorEl.addEventListener("click", (e) => {
     const li = (e.target as HTMLElement).closest("li[data-id]") as HTMLElement | null;
     if (li) void focusNode(li.dataset.id!);
   });
@@ -219,21 +219,13 @@ export function mountGraphView(root: HTMLElement, onBack: () => void): void {
     if (tr) void focusNode(tr.dataset.id!);
   });
 
-  // Theme: follow the system until the toggle is used.
-  const applyTheme = (theme: string | null) => {
-    if (theme) document.documentElement.dataset.theme = theme; else delete document.documentElement.dataset.theme;
-    const dark = theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-    canvas.setTheme(dark);
-  };
-  let stored: string | null = null;
-  try { stored = localStorage.getItem("concentrate-theme"); } catch { /* storage unavailable */ }
-  applyTheme(stored);
-  $("theme").addEventListener("click", () => {
-    const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-    const next = dark ? "light" : "dark";
-    try { localStorage.setItem("concentrate-theme", next); } catch { /* storage unavailable */ }
-    applyTheme(next);
-  });
+  // The shell owns the theme; the canvas only needs to know about it.
+  const onTheme = (event: Event) => canvas.setTheme((event as CustomEvent<{ dark: boolean }>).detail.dark);
+  window.addEventListener("concentrate:theme", onTheme);
+  canvas.setTheme(document.documentElement.dataset.theme ? document.documentElement.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches);
+  const onSearch = () => $<HTMLInputElement>("q").focus();
+  window.addEventListener("concentrate:search", onSearch);
+  inspectorEl.innerHTML = `<p class="tag">Select a node.</p>`;
 
   const updateExport = () => {
     const scope = $<HTMLSelectElement>("scope").value as "graph" | "view";
@@ -251,7 +243,6 @@ export function mountGraphView(root: HTMLElement, onBack: () => void): void {
   canvas.onExpand = (id) => void expand(id);
   $("level").addEventListener("change", () => { prefix = ""; void loadOverview(); });
   $("up").addEventListener("click", () => { prefix = prefix.includes("/") ? prefix.slice(0, prefix.lastIndexOf("/")) : ""; void loadOverview(); });
-  $("back").addEventListener("click", () => { canvas.destroy(); onBack(); });
 
   let timer: number | undefined;
   $("q").addEventListener("input", () => {
@@ -276,6 +267,11 @@ export function mountGraphView(root: HTMLElement, onBack: () => void): void {
   void graphSummary().catch(() => undefined);
   void loadOverview();
   void currentProject;
+  return () => {
+    window.removeEventListener("concentrate:theme", onTheme);
+    window.removeEventListener("concentrate:search", onSearch);
+    canvas.destroy();
+  };
 }
 
 function dominantKind(byKind: Record<string, number>): string {

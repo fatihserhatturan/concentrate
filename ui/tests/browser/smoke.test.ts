@@ -39,14 +39,17 @@ describe("browser smoke", () => {
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(`${base}/#token=${TOKEN}`);
 
-    await page.fill("#path", path.join(work, "project"));
-    await page.click("#scan");
-    await page.waitForSelector("#view", { timeout: 60_000 });
-    assert.match(await page.textContent("#report") ?? "", /Scan complete/);
+    await page.getByTestId("path").fill(path.join(work, "project"));
+    await page.getByTestId("path").press("Enter");
+    await page.waitForFunction(() => /project/.test(document.querySelector(".current h3")?.textContent ?? ""));
+    await page.getByTestId("primary-action").click();
+    await page.getByTestId("open-graph").waitFor({ timeout: 60_000 });
+    assert.match(await page.getByTestId("scan-report").textContent() ?? "", /Scan complete/);
 
-    await page.click("#view");
+    await page.getByTestId("open-graph").click();
     await page.waitForFunction(() => /^[1-9]\d* nodes/.test(document.querySelector("#stats")?.textContent ?? ""), null, { timeout: 30_000 });
     assert.ok((await page.locator("canvas").count()) > 0, "the graph is drawn on a canvas");
+    assert.match(page.url(), /project=/, "the project is in the URL");
 
     await page.click("#export");
     await page.selectOption("#fmt", "json");

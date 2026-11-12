@@ -12,7 +12,7 @@ const token = readToken();
 const headers = { "x-concentrate-token": token };
 
 export type FsEntry = { name: string; path: string; isGitRepository: boolean; hasGraph: boolean };
-export type FsListing = { path: string; parent: string | null; home: string; entries: FsEntry[] };
+export type FsListing = { path: string; parent: string | null; home: string; current: { isGitRepository: boolean; hasGraph: boolean }; entries: FsEntry[] };
 
 export async function listDirectories(dir?: string): Promise<FsListing> {
   const response = await fetch(`/api/fs${dir ? `?path=${encodeURIComponent(dir)}` : ""}`, { headers });
@@ -114,6 +114,17 @@ export async function runQuery(query: string): Promise<QueryResult> {
     headers: { ...headers, "content-type": "application/json" },
     body: JSON.stringify({ project, query }),
   });
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.error ?? response.statusText);
+  return body;
+}
+
+export type ProjectInfo = {
+  path: string; name: string; exists: boolean; isGitRepository: boolean; hasGraph: boolean;
+  scannedAt: string | null; files: number | null; nodes: number | null; schemaVersion: number | null;
+};
+export async function projectInfo(path: string): Promise<ProjectInfo> {
+  const response = await fetch(`/api/project?path=${encodeURIComponent(path)}`, { headers });
   const body = await response.json();
   if (!response.ok) throw new Error(body.error ?? response.statusText);
   return body;

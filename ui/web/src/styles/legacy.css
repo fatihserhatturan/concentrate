@@ -1,0 +1,34 @@
+/* The graph view of the first stage. It is replaced by the focus-mode graph in stage 3. */
+.gv { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: auto 1fr; height: 100%; position: relative; }
+.gv-bar { grid-column: 1 / -1; display: flex; gap: var(--space-2); align-items: center; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.gv-side { overflow: auto; padding: var(--space-2) var(--space-3); border-right: 1px solid var(--line); font-size: var(--text-sm); }
+.gv-side h2 { font-size: var(--text-sm); margin: var(--space-3) 0 var(--space-2); }
+.gv-canvas { position: relative; min-width: 0; }
+.gv-msg { position: absolute; left: 240px; bottom: 12px; background: var(--bg-subtle); border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 10px; font-size: var(--text-sm); z-index: 3; }
+.gv-side label, .gv-side div { display: block; }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+.tag { color: var(--fg-muted); font-size: var(--text-xs); }
+.search { position: relative; flex: 1; max-width: 420px; }
+.search input { width: 100%; }
+.hits { list-style: none; margin: 2px 0 0; padding: 0; position: absolute; z-index: 6; left: 0; right: 0; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); max-height: 320px; overflow: auto; box-shadow: var(--shadow); }
+.hits li, .rels li { padding: 3px 8px; cursor: pointer; } .hits li:hover, .rels li:hover { background: var(--bg-hover); }
+.rels { list-style: none; padding: 0; margin: 2px 0 8px; }
+.src { background: var(--bg-subtle); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px; overflow: auto; max-height: 260px; font: var(--text-xs) var(--font-mono); }
+.props { border-collapse: collapse; } .props td, .props th { padding: 1px 6px 1px 0; vertical-align: top; font-size: var(--text-xs); word-break: break-all; text-align: left; } .props td:first-child { color: var(--fg-muted); }
+.presets { display: flex; flex-direction: column; gap: 4px; } .presets button { text-align: left; font-size: var(--text-xs); padding: 4px 8px; }
+.gv-query { position: absolute; left: 220px; right: 0; bottom: 0; background: var(--bg); border-top: 1px solid var(--line); padding: 8px 12px; max-height: 45%; display: flex; flex-direction: column; gap: 6px; z-index: 4; }
+.gv-query[hidden] { display: none; }
+.gv-query textarea { width: 100%; }
+.gv-query .results { overflow: auto; } tr.link { cursor: pointer; } tr.link:hover { background: var(--bg-hover); }
+dialog { background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: var(--radius-lg); min-width: 340px; }
+dialog::backdrop { background: rgba(0, 0, 0, .4); }
+.gv select, dialog select { height: 32px; padding: 0 var(--space-2); border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--fg); font: inherit; font-size: var(--text-sm); }
+.gv .bad, .bad { color: var(--danger); } .warn { color: var(--warn); }
+.gv button, dialog button { height: 28px; padding: 0 var(--space-3); border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-subtle); color: var(--fg); font: inherit; font-size: var(--text-sm); cursor: pointer; }
+.gv button:hover:not(:disabled), dialog button:hover { background: var(--bg-hover); border-color: var(--line-strong); }
+.gv button:disabled { opacity: .5; cursor: not-allowed; }
+.gv button.primary, dialog button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.gv .presets button { height: auto; min-height: 28px; padding: 4px 8px; }
+.gv input[type="text"], .gv textarea, dialog input { height: 28px; padding: 0 var(--space-2); border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--fg); font: inherit; font-size: var(--text-sm); }
+.gv textarea { height: auto; padding: var(--space-2); font-family: var(--font-mono); }
+.gv h2, dialog h2 { font-size: var(--text-md); }
