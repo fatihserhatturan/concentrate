@@ -1,5 +1,5 @@
 import type { ComponentChildren } from "preact";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { graphFocus, graphOverview, graphPathBetween, graphPreset, type OverviewNode, type ViewEdge, type ViewNode } from "../api.js";
 import { Icon } from "../components/icons.js";
 import { SummaryList } from "../components/Inspector.js";
@@ -11,6 +11,7 @@ import { ErrorState, Loading } from "../components/State.js";
 import { CATEGORIES, categoryOfKind, kindsOf, parseEnabled, type CategoryId } from "../graph/categories.js";
 import { LayeredGraph } from "../graph/LayeredGraph.js";
 import { SigmaGraph, type SigmaEdge, type SigmaNode } from "../graph/SigmaGraph.js";
+import { useRegisterCommands, type Command } from "../lib/commands.js";
 import { number } from "../lib/format.js";
 import { navigate, type Route } from "../lib/router.js";
 import { useLoad } from "../lib/useLoad.js";
@@ -75,6 +76,44 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
   const go = (patch: Partial<GraphFields>, replace = false) => navigate({ project: props.project, view: "graph", ...current, ...patch }, { replace });
 
   useEffect(() => { setLimit(DEFAULT_LIMIT); setTracing(false); setPseudo(null); }, [route.focus, route.preset, route.level, route.prefix]);
+
+  // Commands for the palette, and Esc: step back out of the most recent thing, one at a time.
+  const latest = useRef({ go, route, mode, queryOpen, tracing, pseudo });
+  latest.current = { go, route, mode, queryOpen, tracing, pseudo };
+  const commands = useMemo<Command[]>(() => {
+    const act = () => latest.current;
+    const overviewOnly = mode === "overview" ? undefined : "Only in the folder overview";
+    const focusOnly = mode === "focus" ? undefined : "Focus a node first";
+    return [
+      { id: "graph.fit", title: "Fit the graph in view", group: "Graph", shortcut: "F", keywords: "zoom reset center", run: () => window.dispatchEvent(new CustomEvent("concentrate:fit")) },
+      { id: "graph.back", title: "Back to the folder overview", group: "Graph", disabledReason: mode === "overview" ? "Already showing the overview" : undefined, run: () => act().go({ focus: undefined, to: undefined, preset: undefined }) },
+      { id: "graph.trace", title: "Trace a path from the focused node", group: "Graph", keywords: "route between connect", disabledReason: focusOnly, run: () => setTracing(true) },
+      { id: "graph.query", title: queryOpen ? "Close the Cypher query panel" : "Open the Cypher query panel", group: "Graph", keywords: "cypher sql", run: () => setQueryOpen((open) => !open) },
+      { id: "graph.export", title: "Export the graph…", group: "Graph", keywords: "download json graphml dot html jsonl", run: () => setExportOpen(true) },
+      { id: "graph.legend", title: legendOpen ? "Hide the legend" : "Show the legend", group: "Graph", keywords: "filters relationships", run: () => setLegendOpen((open) => !open) },
+      ...([1, 2, 3] as const).map((n): Command => ({ id: `graph.depth.${n}`, title: `Show ${n} ${n === 1 ? "step" : "steps"} each way`, group: "Graph", keywords: "depth neighbours", disabledReason: focusOnly, run: () => act().go({ depth: n }, true) })),
+      ...([["package", "packages"], ["directory", "folders"], ["file", "files"]] as const).map(([id, label]): Command => ({ id: `graph.level.${id}`, title: `Overview by ${label}`, group: "Graph", keywords: "level", disabledReason: overviewOnly, run: () => act().go({ level: id, prefix: undefined }) })),
+      { id: "graph.noise", title: route.noise ? "Hide dot-folders and build output" : "Show dot-folders and build output", group: "Graph", keywords: "noise hidden", disabledReason: overviewOnly, run: () => act().go({ noise: act().route.noise ? undefined : true }, true) },
+      { id: "q.imports", title: "Question: Import graph", group: "Questions", keywords: "files import", run: () => act().go({ preset: undefined, focus: undefined, to: undefined, level: "file", prefix: undefined, show: "imports" }) },
+      { id: "q.calls", title: "Question: Calls around the focused node", group: "Questions", keywords: "callers callees", disabledReason: focusOnly, run: () => act().go({ show: "calls", depth: 2, to: undefined, preset: undefined }) },
+      ...PRESETS.map((p): Command => ({ id: `q.${p.id}`, title: `Question: ${p.title}`, group: "Questions", keywords: p.text, run: () => act().go({ preset: p.id, focus: undefined, to: undefined }) })),
+    ];
+  }, [mode, queryOpen, legendOpen, route.noise]);
+  useRegisterCommands("graph", commands);
+
+  useEffect(() => {
+    const onEscape = () => {
+      const { go: navigateTo, route: r, queryOpen: q, tracing: t, pseudo: p } = latest.current;
+      if (q) setQueryOpen(false);
+      else if (t) setTracing(false);
+      else if (r.to) navigateTo({ to: undefined });
+      else if (r.preset) navigateTo({ preset: undefined });
+      else if (r.focus) navigateTo({ focus: undefined });
+      else if (p) setPseudo(null);
+    };
+    window.addEventListener("concentrate:escape", onEscape);
+    return () => window.removeEventListener("concentrate:escape", onEscape);
+  }, []);
 
   const key = JSON.stringify([mode, level, prefix, route.focus, route.to, depth, kinds, route.preset, limit]);
   const [state, retry] = useLoad<Loaded>(async () => {

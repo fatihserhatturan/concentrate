@@ -130,8 +130,10 @@ export function SigmaGraph(props: {
     const instance = new OverviewCanvas(host.current, { onClick: (id) => handlers.current.onClick(id), onDoubleClick: (id) => handlers.current.onDoubleClick(id) });
     canvas.current = instance;
     const onTheme = () => instance.recolor();
+    const onFit = () => instance.fit();
     window.addEventListener("concentrate:theme", onTheme);
-    return () => { window.removeEventListener("concentrate:theme", onTheme); instance.destroy(); canvas.current = null; };
+    window.addEventListener("concentrate:fit", onFit);
+    return () => { window.removeEventListener("concentrate:theme", onTheme); window.removeEventListener("concentrate:fit", onFit); instance.destroy(); canvas.current = null; };
   }, []);
 
   useEffect(() => { canvas.current?.set(props.nodes, props.edges); canvas.current?.select(props.selectedId ?? null); }, [props.nodes, props.edges]);

@@ -61,12 +61,17 @@ let project = "";
 export const setProject = (p: string) => { project = p; };
 export const currentProject = () => project;
 
+/** An error answered by the server; `status` tells a lost session (401) from the rest. */
+export class ApiError extends Error {
+  constructor(message: string, readonly status: number) { super(message); }
+}
+
 async function getJson<T>(endpoint: string, params: Record<string, string | undefined> = {}): Promise<T> {
   const query = new URLSearchParams({ project });
   for (const [key, value] of Object.entries(params)) if (value !== undefined && value !== "") query.set(key, value);
   const response = await fetch(`${endpoint}?${query}`, { headers });
-  const body = await response.json();
-  if (!response.ok) throw new Error(body.error ?? response.statusText);
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new ApiError(body.error ?? response.statusText, response.status);
   return body;
 }
 

@@ -1,6 +1,7 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { Icon, type IconName } from "./icons.js";
+import { modifierKey } from "../lib/commands.js";
 import { useTheme } from "../lib/theme.js";
 
 export type NavItem = { id: string; label: string; icon: IconName; count?: number; group?: string };
@@ -96,8 +97,6 @@ export function Shell(props: {
   onRescan: () => void;
   /** The inspector's content: the selected node, or the summary of the current view. */
   inspector: ComponentChildren;
-  /** Set when search cannot be used in the current view; the button then says why. */
-  searchDisabledReason?: string;
   flush?: boolean;
   children: ComponentChildren;
 }) {
@@ -116,8 +115,8 @@ export function Shell(props: {
           ))}
         </nav>
         <span class="spacer" />
-        <button class="search-trigger" onClick={props.onSearch} aria-label="Search" disabled={!!props.searchDisabledReason} title={props.searchDisabledReason}>
-          <Icon name="search" /> <span>Search symbols and files</span> <span class="kbd">/</span>
+        <button class="search-trigger" onClick={props.onSearch} aria-label="Search and commands" title={`Search and commands (${modifierKey()}+K)`}>
+          <Icon name="search" /> <span>Search and commands</span> <span class="kbd">{modifierKey()} K</span>
         </button>
         <button class="btn btn-ghost" onClick={props.onRescan} title="Scan this project again (the parse cache keeps it fast)">
           <Icon name="refresh" /> Rescan

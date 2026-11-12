@@ -35,6 +35,13 @@ The legend is also the filter: five relationship categories that can be switched
 The server keeps the whole graph in memory per project and answers `GET /api/graph/{summary,overview,focus,path,neighbors,node,source,preset,
 catalog,entities,dashboard,issues}` and `GET /api/search` (all take `project=`).
 
+## Keyboard
+
+`Ctrl/Cmd+K` opens the command palette: views, graph actions, the questions, and symbols, files and routes from the graph. Actions
+that cannot run now stay in the list and say why. `/` searches (in the graph) or opens the palette, `F` fits the graph, `Esc` steps back out
+of the most recent thing (a panel, a traced path, a question, the focus), the arrow keys move between neighbouring nodes in the graph and
+between rows in a table, `Enter` refocuses or selects, and `?` lists them all.
+
 ## Questions and Cypher
 
 The **Questions** menu answers what Concentrate is for: the import graph, the calls around the selected symbol (two levels),

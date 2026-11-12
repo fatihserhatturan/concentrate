@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ViewEdge, ViewNode } from "../api.js";
 import { KindGlyphSvg } from "../components/KindGlyph.js";
 import { CATEGORIES, categoryOfKind, type CategoryId } from "./categories.js";
-import { edgeId, layeredLayout, NODE_HEIGHT, smoothPath, nodeWidth } from "./layout.js";
+import { edgeId, layeredLayout, neighbour, NODE_HEIGHT, smoothPath, nodeWidth, type Direction } from "./layout.js";
 import { ZoomControls } from "./ZoomControls.js";
 import { useViewport } from "./useViewport.js";
 
@@ -36,7 +36,8 @@ export function LayeredGraph(props: {
   tracing?: boolean;
 }) {
   const { nodes, edges, centerId } = props;
-  const { ref, view, fit, zoomIn, zoomOut, handlers, dragged } = useViewport();
+  const { ref, view, setView, fit, zoomIn, zoomOut, handlers, dragged } = useViewport();
+  const elements = useRef(new Map<string, SVGGElement>());
   const [hovered, setHovered] = useState<string | null>(null);
 
   const layout = useMemo(() => {
@@ -48,6 +49,11 @@ export function LayeredGraph(props: {
   }, [nodes, edges, centerId, props.stubs?.in?.more, props.stubs?.out?.more]);
 
   useEffect(() => { fit(layout.width, layout.height); }, [props.fitKey, layout]);
+  useEffect(() => {
+    const onFit = () => fit(layout.width, layout.height);
+    window.addEventListener("concentrate:fit", onFit);
+    return () => window.removeEventListener("concentrate:fit", onFit);
+  }, [layout]);
 
   // One line per pair of nodes; its category is the first one among the relationships between them.
   const pairs = useMemo(() => {
@@ -94,8 +100,29 @@ export function LayeredGraph(props: {
     props.onActivate(id, { trace: props.tracing === true || event.shiftKey });
   };
 
+  // Arrow keys move the keyboard focus to the nearest node in that direction; Enter on it refocuses the graph.
+  const ARROWS: Record<string, Direction> = { ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down" };
+  const onKeyDown = (event: KeyboardEvent) => {
+    const direction = ARROWS[event.key];
+    if (!direction || event.metaKey || event.ctrlKey || event.altKey) return;
+    event.preventDefault();
+    const fromId = [...elements.current].find(([, el]) => el === (event.target as Element).closest("g.node"))?.[0] ?? (centerId && layout.nodes.has(centerId) ? centerId : [...layout.nodes.keys()][0]);
+    if (!fromId) return;
+    const next = neighbour(layout.nodes, fromId, direction) ?? fromId;
+    elements.current.get(next)?.focus({ preventScroll: true });
+    // keep the node in view
+    const box = ref.current?.getBoundingClientRect();
+    const placed = layout.nodes.get(next);
+    if (box && placed) {
+      const sx = placed.x * view.k + view.x;
+      const sy = placed.y * view.k + view.y;
+      if (sx < 60 || sx > box.width - 60 || sy < 40 || sy > box.height - 40) setView((v) => ({ ...v, x: box.width / 2 - placed.x * v.k, y: box.height / 2 - placed.y * v.k }));
+    }
+  };
+  const track = (id: string) => (el: SVGGElement | null) => { if (el) elements.current.set(id, el); else elements.current.delete(id); };
+
   return (
-    <div class="graph-surface" ref={ref} {...handlers} role="application" aria-label="Graph. Drag to pan, scroll to zoom.">
+    <div class="graph-surface" ref={ref} {...handlers} onKeyDown={onKeyDown} role="application" aria-label="Graph. Drag to pan, scroll to zoom, arrow keys move between nodes, Enter refocuses.">
       <svg class="layered" width="100%" height="100%">
         <defs>
           {CATEGORIES.map((c) => (
@@ -134,7 +161,7 @@ export function LayeredGraph(props: {
               if (id === STUB_IN || id === STUB_OUT) {
                 const stub = id === STUB_IN ? props.stubs?.in : props.stubs?.out;
                 return (
-                  <g class="node stub" transform={`translate(${x},${y})`} role="button" tabIndex={0} aria-label={`Show more: ${stub?.more} more neighbours`} onClick={() => stub?.onMore()} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); stub?.onMore(); } }}>
+                  <g class="node stub" ref={track(id)} transform={`translate(${x},${y})`} role="button" tabIndex={0} aria-label={`Show more: ${stub?.more} more neighbours`} onClick={() => stub?.onMore()} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); stub?.onMore(); } }}>
                     <rect width={box.width} height={NODE_HEIGHT} rx="8" />
                     <text x={box.width / 2} y={NODE_HEIGHT / 2 + 4} text-anchor="middle">{`+${stub?.more} more · show more`}</text>
                   </g>
@@ -148,6 +175,7 @@ export function LayeredGraph(props: {
               return (
                 <g
                   class={`node${id === centerId ? " center" : ""}${dim ? " dim" : ""}${props.pathIds?.has(id) ? " on-path" : ""}`}
+                  ref={track(id)}
                   transform={`translate(${x},${y})`}
                   role="button"
                   tabIndex={0}

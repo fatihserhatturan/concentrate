@@ -66,3 +66,27 @@ export function smoothPath(points: Array<{ x: number; y: number }>): string {
   }
   return d;
 }
+
+export type Direction = "left" | "right" | "up" | "down";
+
+/**
+ * The node an arrow key moves to: left and right go to the nearest node in that direction (a node
+ * straight across counts for more than one far above or below); up and down stay in the column.
+ */
+export function neighbour(nodes: Map<string, Placed>, from: string, direction: Direction): string | null {
+  const a = nodes.get(from);
+  if (!a) return null;
+  let best: { id: string; cost: number } | null = null;
+  for (const [id, b] of nodes) {
+    if (id === from) continue;
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    let cost: number | null = null;
+    if (direction === "left" && dx < -8) cost = -dx + 2 * Math.abs(dy);
+    else if (direction === "right" && dx > 8) cost = dx + 2 * Math.abs(dy);
+    else if (direction === "up" && Math.abs(dx) <= 8 && dy < -1) cost = -dy;
+    else if (direction === "down" && Math.abs(dx) <= 8 && dy > 1) cost = dy;
+    if (cost !== null && (best === null || cost < best.cost || (cost === best.cost && id < best.id))) best = { id, cost };
+  }
+  return best?.id ?? null;
+}

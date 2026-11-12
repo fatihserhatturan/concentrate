@@ -114,20 +114,29 @@ export function Start({ rescan }: { rescan?: string }) {
   const [origins, setOrigins] = useState("");
   const [cache, setCache] = useState(true);
   const started = useRef(false);
+  const pathInput = useRef<HTMLInputElement>(null);
+  /** The user has typed in the path field since the last folder they chose; a late answer must not overwrite it. */
+  const typed = useRef(false);
+  /** Folder requests can finish out of order; only the latest one may change the list. */
+  const latest = useRef(0);
 
-  async function browse(dir?: string): Promise<void> {
+  async function browse(dir?: string, explicit = true): Promise<void> {
+    const mine = ++latest.current;
+    if (explicit) typed.current = false;
     setLoading(true);
     try {
       const next = await listDirectories(dir);
+      if (mine !== latest.current) return;
       setListing(next);
-      setPathText(next.path);
+      // An answer nobody asked for just now (the first listing) must not replace what the user is about to type.
+      if (explicit || (!typed.current && document.activeElement !== pathInput.current)) setPathText(next.path);
       setListError(null);
       setCurrent(null);
       if (next.current.hasGraph) projectInfo(next.path).then((info) => setCurrent((now) => (now === null ? info : now)), () => undefined);
     } catch (error) {
-      setListError((error as Error).message);
+      if (mine === latest.current) setListError((error as Error).message);
     } finally {
-      setLoading(false);
+      if (mine === latest.current) setLoading(false);
     }
   }
 
@@ -160,7 +169,7 @@ export function Start({ rescan }: { rescan?: string }) {
     if (rescan) {
       void browse(rescan);
       void run(rescan);
-    } else void browse(recents[0]?.path);
+    } else void browse(recents[0]?.path, false);
   }, []);
 
   const selected = listing?.path ?? "";
@@ -201,10 +210,10 @@ export function Start({ rescan }: { rescan?: string }) {
               <ScanPanel state={state as Exclude<ScanState, { status: "idle" }>} onOpen={() => state.status === "done" && openProject(state.path)} onBack={() => setState({ status: "idle" })} />
             ) : (
               <>
-                <form class="browser-bar" onSubmit={(e) => { e.preventDefault(); void browse(pathText); }}>
+                <form class="browser-bar" onSubmit={(e) => { e.preventDefault(); void browse(pathInput.current?.value ?? pathText); }}>
                   <button type="button" class="btn btn-icon" title={listing?.parent ? "Up one folder" : "This is the top folder"} aria-label="Up one folder" disabled={!listing?.parent} onClick={() => listing?.parent && void browse(listing.parent)}><Icon name="up" /></button>
-                  <button type="button" class="btn btn-icon" title="Home folder" aria-label="Home folder" disabled={!listing} onClick={() => listing && void browse(listing.home)}><Icon name="home" /></button>
-                  <input class="input" data-testid="path" aria-label="Folder path" spellcheck={false} placeholder="/path/to/project (paste a path and press Enter)" value={pathText} onInput={(e) => setPathText((e.target as HTMLInputElement).value)} />
+                  <button type="button" class="btn btn-icon" title={listing ? "Home folder" : "Waiting for the folder list"} aria-label="Home folder" disabled={!listing} onClick={() => listing && void browse(listing.home)}><Icon name="home" /></button>
+                  <input ref={pathInput} class="input" data-testid="path" aria-label="Folder path" spellcheck={false} placeholder="/path/to/project (paste a path and press Enter)" value={pathText} onInput={(e) => { typed.current = true; setPathText((e.target as HTMLInputElement).value); }} />
                   <button class="btn" type="submit">Go</button>
                 </form>
                 {listError ? <div class="empty"><h3>Cannot open that folder</h3><p>{listError}</p></div>
@@ -234,11 +243,11 @@ export function Start({ rescan }: { rescan?: string }) {
                     </div>
                     {hasGraph ? (
                       <>
-                        <button class="btn btn-ghost btn-lg" data-testid="rescan" disabled={busy} onClick={() => void run(selected)}><Icon name="refresh" /> Rescan</button>
+                        <button class="btn btn-ghost btn-lg" data-testid="rescan" disabled={busy} title={busy ? "A scan is already running" : "Scan again; only changed files are parsed"} onClick={() => void run(selected)}><Icon name="refresh" /> Rescan</button>
                         <button class="btn btn-primary btn-lg" data-testid="primary-action" onClick={() => openProject(selected)}>Open graph <Icon name="arrow" /></button>
                       </>
                     ) : (
-                      <button class="btn btn-primary btn-lg" data-testid="primary-action" disabled={busy} onClick={() => void run(selected)}>Scan</button>
+                      <button class="btn btn-primary btn-lg" data-testid="primary-action" disabled={busy} title={busy ? "A scan is already running" : undefined} onClick={() => void run(selected)}>Scan</button>
                     )}
                   </div>
                 )}

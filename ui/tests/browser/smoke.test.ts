@@ -50,8 +50,22 @@ describe("browser smoke", () => {
     await page.getByRole("heading", { name: "Most connected files" }).waitFor({ timeout: 30_000 });
     assert.match(page.url(), /project=/, "the project is in the URL");
 
-    // Views with rows are in the navigation; a row opens the inspector, which offers the graph.
-    await page.getByRole("button", { name: /^Routes/ }).click();
+    // ? lists the shortcuts and Esc closes the sheet.
+    await page.keyboard.press("?");
+    await page.getByRole("heading", { name: "Keyboard shortcuts" }).waitFor();
+    await page.keyboard.press("Escape");
+    await page.getByRole("heading", { name: "Keyboard shortcuts" }).waitFor({ state: "hidden" });
+
+    // The command palette goes anywhere: Ctrl+K, type, Enter.
+    await page.keyboard.press("Control+k");
+    await page.getByRole("dialog", { name: "Command palette" }).waitFor();
+    await page.keyboard.type("routes");
+    await page.getByRole("option", { name: /Go to Routes/ }).waitFor();
+    await page.keyboard.press("Enter");
+    await page.getByRole("dialog", { name: "Command palette" }).waitFor({ state: "hidden" });
+    assert.match(page.url(), /view=routes/, "the palette navigated");
+
+    // A row opens the inspector, which offers the graph.
     await page.locator("table.data tbody tr").first().waitFor();
     await page.locator("table.data tbody tr").first().click();
     await page.getByRole("button", { name: "Show in graph" }).waitFor({ timeout: 15_000 });
@@ -61,7 +75,22 @@ describe("browser smoke", () => {
     await page.locator("svg.layered g.node.center").waitFor({ timeout: 15_000 });
     assert.match(page.url(), /view=graph&focus=/);
 
-    // Back returns to the routes table.
+    // Arrow keys move between neighbouring nodes (when there are any); Enter refocuses on one.
+    const drawn = await page.locator("svg.layered g.node").count();
+    await page.locator("svg.layered g.node.center").focus();
+    await page.keyboard.press("ArrowRight");
+    if (drawn > 1) assert.equal(await page.evaluate(() => document.activeElement?.classList.contains("center")), false, "the keyboard focus moved off the focused node");
+
+    // f fits the view, Esc steps back out of the focus to the overview.
+    await page.keyboard.press("f");
+    await page.keyboard.press("Escape");
+    await page.waitForFunction(() => !location.search.includes("focus="));
+    assert.match(page.url(), /view=graph/);
+    await page.waitForSelector(".graph-body canvas, .graph-empty", { timeout: 30_000 });
+
+    // Back returns to the focus, and back again to the routes table.
+    await page.goBack();
+    await page.locator("svg.layered g.node.center").waitFor();
     await page.goBack();
     await page.locator("table.data tbody tr").first().waitFor();
 
@@ -75,6 +104,12 @@ describe("browser smoke", () => {
     const file = await download.path();
     const body = JSON.parse(await readFile(file, "utf8"));
     assert.ok(body.nodes.length > 0 && body.relationships.length > 0);
+
+    // A folder without a graph gets a designed empty state, not a blank view.
+    await page.goto(`${base}/?project=${encodeURIComponent(work)}`);
+    await page.getByRole("heading", { name: "No graph for this project yet" }).waitFor({ timeout: 15_000 });
+    await page.getByRole("button", { name: "Scan this project" }).waitFor();
+
     assert.deepEqual(errors, []);
     await page.close();
   });
