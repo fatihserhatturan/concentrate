@@ -75,10 +75,10 @@ function cppStandIn(text: string): string {
   }
   // Drogon's controller macros and Qt's `Q_OBJECT` are statements the grammar
   // reads as malformed declarations, and take the next declaration with them.
-  if (text.includes("_LIST_") || text.includes("ADD_METHOD") || text.includes("METHOD_ADD") || text.includes("PATH_ADD") || text.includes("Q_OBJECT")) {
+  if (text.includes("_LIST_") || text.includes("ADD_METHOD") || text.includes("METHOD_ADD") || text.includes("PATH_ADD") || text.includes("PATH_VIA_REGEX") || text.includes("Q_OBJECT")) {
     text = text
       .replace(/\b(?:METHOD_LIST_BEGIN|METHOD_LIST_END|PATH_LIST_BEGIN|PATH_LIST_END|WS_PATH_LIST_BEGIN|WS_PATH_LIST_END|Q_OBJECT|Q_GADGET)\b/gu, blank)
-      .replace(/\b(?:METHOD_ADD|ADD_METHOD_TO|ADD_METHOD_VIA_REGEX|ADD_METHOD_VIA_REGEX_TO|PATH_ADD|WS_PATH_ADD)\s*\([^;]*\)\s*;/gu, blank);
+      .replace(/\b(?:METHOD_ADD|ADD_METHOD_TO|ADD_METHOD_VIA_REGEX|ADD_METHOD_VIA_REGEX_TO|PATH_ADD|WS_PATH_ADD|WS_ADD_PATH_VIA_REGEX|WS_CORO_PATH_ADD)\s*\([^;]*\)\s*;/gu, blank);
   }
   // Flag declarations (`ABSL_FLAG(uint16_t, port, 50051, "…");`, gflags' `DEFINE_string`)
   // are declarations without a type to the grammar and swallow what follows.
