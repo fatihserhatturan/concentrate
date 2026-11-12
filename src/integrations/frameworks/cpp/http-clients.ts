@@ -1,6 +1,6 @@
 import type { GraphNode } from "../../../core/graph/model.js";
 import type { CppParsePlugin } from "../../languages/cpp/parser.js";
-import { findInvocations, ownerOf, readCppSource, resolveString, stringConstants, stringValue, type CppSource, type Invocation } from "./scan.js";
+import { findInvocations, functionStartOf, ownerOf, readCppSource, resolveString, stringConstants, stringValue, type CppSource, type Invocation } from "./scan.js";
 
 // C and C++ outbound HTTP, recorded on the Call node like the JS/TS, Go and
 // Rust clients (`httpClient`, `httpMethod`, `httpUrl`) so the http-requests
@@ -27,10 +27,7 @@ export const cppHttpClientsPlugin: CppParsePlugin = ({ fileNodeId, source: writt
   const source = readCppSource(written);
   const constants = stringConstants(source);
   const owner = ownerOf(nodes, fileNodeId);
-  const functions = nodes
-    .filter((node) => node.label === "Function" && node.properties.isDeclaration !== true && typeof node.properties.line === "number" && typeof node.properties.endLine === "number")
-    .map((node) => ({ id: node.id, start: source.offsetOfLine(Number(node.properties.line)), end: source.offsetOfLine(Number(node.properties.endLine) + 1) }));
-  const functionStart = (offset: number) => functions.filter((fn) => fn.start <= offset && offset < fn.end).sort((left, right) => (left.end - left.start) - (right.end - right.start))[0]?.start ?? 0;
+  const functionStart = functionStartOf(nodes, source);
   const calls = nodes.filter((node) => node.label === "Call");
   const callAt = (call: Invocation): GraphNode | undefined => {
     const candidates = calls.filter((node) => node.properties.line === call.line && node.properties.callee === call.name && Number(node.properties.columnNumber) <= call.column);

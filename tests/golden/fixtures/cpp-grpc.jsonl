@@ -1,4 +1,4 @@
-{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":5,"supportedFiles":4,"parsedFiles":4,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"cpp-grpc","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"dir:proto","label":"Directory","properties":{"name":"proto","path":"<root>/proto","relativePath":"proto"}}
 {"kind":"node","id":"dir:src","label":"Directory","properties":{"name":"src","path":"<root>/src","relativePath":"src"}}
@@ -31,6 +31,13 @@
 {"kind":"node","id":"file:src/client.h:import:2:memory","label":"Import","properties":{"isSystem":true,"line":2,"source":"memory","specifier":"#include <memory>"}}
 {"kind":"node","id":"file:src/client.h:import:3:grpcpp/grpcpp.h","label":"Import","properties":{"isSystem":true,"line":3,"source":"grpcpp/grpcpp.h","specifier":"#include <grpcpp/grpcpp.h>"}}
 {"kind":"node","id":"file:src/client.h:import:4:greeter.grpc.pb.h","label":"Import","properties":{"isSystem":false,"line":4,"source":"greeter.grpc.pb.h","specifier":"#include \"greeter.grpc.pb.h\""}}
+{"kind":"node","id":"file:src/flags.cc","label":"File","properties":{"cppScope":"{\"usingNames\":[{\"name\":\"grpc::ServerContext\"},{\"name\":\"grpc::Status\"},{\"name\":\"helloworld::Greeter\"}]}","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/src/flags.cc","relativePath":"src/flags.cc","sourceType":"production"}}
+{"kind":"node","id":"file:src/flags.cc:class:14:FlagService","label":"Class","properties":{"bases":"[{\"name\":\"Greeter::Service\",\"access\":\"public\",\"virtual\":false}]","endLine":18,"fields":"[]","isAbstract":false,"isExported":true,"kind":"class","line":14,"name":"FlagService","namespace":"","qualifiedName":"FlagService","visibility":null}}
+{"kind":"node","id":"file:src/flags.cc:entrypoint:15:grpc:Greeter/FlagService.SayHello","label":"EntryPoint","properties":{"handlerName":"SayHello","kind":"grpc","library":"grpc","line":15,"receiverName":"FlagService","trigger":"Greeter/SayHello"}}
+{"kind":"node","id":"file:src/flags.cc:function:15:FlagService::SayHello","label":"Function","properties":{"className":"FlagService","endLine":17,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":true,"isVirtual":true,"kind":"method","line":15,"methodKind":null,"name":"SayHello","namespace":"FlagService","parameters":"[{\"name\":\"context\",\"type\":\"ServerContext*\"},{\"name\":\"request\",\"type\":\"const helloworld::HelloRequest*\"},{\"name\":\"reply\",\"type\":\"helloworld::HelloReply*\"}]","qualifiedName":"FlagService::SayHello","returnType":"Status","visibility":"private"}}
+{"kind":"node","id":"file:src/flags.cc:function:8:MAKE_FLAG","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":false,"isOverride":false,"isVirtual":false,"kind":"macro","line":8,"methodKind":null,"name":"MAKE_FLAG","namespace":"","parameters":"[{\"name\":\"name\",\"type\":null}]","qualifiedName":"MAKE_FLAG","returnType":null,"visibility":"external"}}
+{"kind":"node","id":"file:src/flags.cc:import:1:grpcpp/grpcpp.h","label":"Import","properties":{"isSystem":true,"line":1,"source":"grpcpp/grpcpp.h","specifier":"#include <grpcpp/grpcpp.h>"}}
+{"kind":"node","id":"file:src/flags.cc:import:2:greeter.grpc.pb.h","label":"Import","properties":{"isSystem":false,"line":2,"source":"greeter.grpc.pb.h","specifier":"#include \"greeter.grpc.pb.h\""}}
 {"kind":"node","id":"file:src/server.cc","label":"File","properties":{"cppScope":"{\"usingNames\":[{\"name\":\"grpc::ServerContext\"},{\"name\":\"grpc::Status\"},{\"name\":\"helloworld::Greeter\"},{\"name\":\"helloworld::HelloReply\"},{\"name\":\"helloworld::HelloRequest\"}]}","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/src/server.cc","relativePath":"src/server.cc","sourceType":"production"}}
 {"kind":"node","id":"file:src/server.cc:class:10:GreeterServiceImpl","label":"Class","properties":{"bases":"[{\"name\":\"Greeter::Service\",\"access\":\"public\",\"virtual\":false}]","endLine":18,"fields":"[]","isAbstract":false,"isExported":true,"kind":"class","line":10,"name":"GreeterServiceImpl","namespace":"","qualifiedName":"GreeterServiceImpl","visibility":null}}
 {"kind":"node","id":"file:src/server.cc:class:20:CallbackImpl","label":"Class","properties":{"bases":"[{\"name\":\"helloworld::Greeter::CallbackService\",\"access\":\"public\",\"virtual\":false}]","endLine":26,"fields":"[]","isAbstract":false,"isExported":true,"kind":"class","line":20,"name":"CallbackImpl","namespace":"","qualifiedName":"CallbackImpl","visibility":null}}
@@ -54,10 +61,12 @@
 {"kind":"rel","from":"dir:proto","type":"CONTAINS_FILE","to":"file:proto/greeter.proto","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/client.cc","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/client.h","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/flags.cc","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/server.cc","properties":{}}
 {"kind":"rel","from":"file:proto/greeter.proto","type":"DECLARES_MESSAGE","to":"file:proto/greeter.proto:message:HelloReply","properties":{}}
 {"kind":"rel","from":"file:proto/greeter.proto","type":"DECLARES_MESSAGE","to":"file:proto/greeter.proto:message:HelloRequest","properties":{}}
 {"kind":"rel","from":"file:proto/greeter.proto","type":"DECLARES_SERVICE","to":"file:proto/greeter.proto:service:Greeter","properties":{}}
+{"kind":"rel","from":"file:proto/greeter.proto:rpc:Greeter.SayHello","type":"RPC_IMPLEMENTED_BY","to":"file:src/flags.cc:function:15:FlagService::SayHello","properties":{}}
 {"kind":"rel","from":"file:proto/greeter.proto:rpc:Greeter.SayHello","type":"RPC_IMPLEMENTED_BY","to":"file:src/server.cc:function:11:GreeterServiceImpl::SayHello","properties":{}}
 {"kind":"rel","from":"file:proto/greeter.proto:rpc:Greeter.SayHello","type":"RPC_IMPLEMENTED_BY","to":"file:src/server.cc:function:21:CallbackImpl::SayHello","properties":{}}
 {"kind":"rel","from":"file:proto/greeter.proto:rpc:Greeter.SayHello","type":"RPC_REQUEST","to":"file:proto/greeter.proto:message:HelloRequest","properties":{}}
@@ -85,6 +94,7 @@
 {"kind":"rel","from":"file:src/client.cc:function:5:GreeterClient::SayHello","type":"CALLS","to":"file:src/client.cc:function:5:GreeterClient::SayHello:call:10:23:reply.message","properties":{}}
 {"kind":"rel","from":"file:src/client.cc:function:5:GreeterClient::SayHello","type":"CALLS","to":"file:src/client.cc:function:5:GreeterClient::SayHello:call:10:9:status.ok","properties":{}}
 {"kind":"rel","from":"file:src/client.cc:function:5:GreeterClient::SayHello","type":"CALLS","to":"file:src/client.cc:function:5:GreeterClient::SayHello:call:9:24:stub_->SayHello","properties":{}}
+{"kind":"rel","from":"file:src/client.cc:function:5:GreeterClient::SayHello:call:9:24:stub_->SayHello","type":"CALL_RESOLVES_TO","to":"file:src/flags.cc:function:15:FlagService::SayHello","properties":{"via":"grpc"}}
 {"kind":"rel","from":"file:src/client.cc:function:5:GreeterClient::SayHello:call:9:24:stub_->SayHello","type":"CALL_RESOLVES_TO","to":"file:src/server.cc:function:11:GreeterServiceImpl::SayHello","properties":{"via":"grpc"}}
 {"kind":"rel","from":"file:src/client.cc:function:5:GreeterClient::SayHello:call:9:24:stub_->SayHello","type":"CALL_RESOLVES_TO","to":"file:src/server.cc:function:21:CallbackImpl::SayHello","properties":{"via":"grpc"}}
 {"kind":"rel","from":"file:src/client.cc:import:1:client.h","type":"RESOLVES_TO","to":"file:src/client.h","properties":{}}
@@ -96,6 +106,13 @@
 {"kind":"rel","from":"file:src/client.h:class:5:GreeterClient","type":"DEFINES_METHOD","to":"file:src/client.h:function:8:GreeterClient::SayHello","properties":{}}
 {"kind":"rel","from":"file:src/client.h:function:7:GreeterClient::GreeterClient","type":"DEFINED_BY","to":"file:src/client.cc:function:3:GreeterClient::GreeterClient","properties":{}}
 {"kind":"rel","from":"file:src/client.h:function:8:GreeterClient::SayHello","type":"DEFINED_BY","to":"file:src/client.cc:function:5:GreeterClient::SayHello","properties":{}}
+{"kind":"rel","from":"file:src/flags.cc","type":"DECLARES_ENTRYPOINT","to":"file:src/flags.cc:entrypoint:15:grpc:Greeter/FlagService.SayHello","properties":{}}
+{"kind":"rel","from":"file:src/flags.cc","type":"DEFINES_CLASS","to":"file:src/flags.cc:class:14:FlagService","properties":{}}
+{"kind":"rel","from":"file:src/flags.cc","type":"DEFINES_FUNCTION","to":"file:src/flags.cc:function:8:MAKE_FLAG","properties":{}}
+{"kind":"rel","from":"file:src/flags.cc","type":"IMPORTS","to":"file:src/flags.cc:import:1:grpcpp/grpcpp.h","properties":{}}
+{"kind":"rel","from":"file:src/flags.cc","type":"IMPORTS","to":"file:src/flags.cc:import:2:greeter.grpc.pb.h","properties":{}}
+{"kind":"rel","from":"file:src/flags.cc:class:14:FlagService","type":"DEFINES_METHOD","to":"file:src/flags.cc:function:15:FlagService::SayHello","properties":{}}
+{"kind":"rel","from":"file:src/flags.cc:entrypoint:15:grpc:Greeter/FlagService.SayHello","type":"ENTRYPOINT_HANDLED_BY","to":"file:src/flags.cc:function:15:FlagService::SayHello","properties":{}}
 {"kind":"rel","from":"file:src/server.cc","type":"DECLARES_ENTRYPOINT","to":"file:src/server.cc:entrypoint:11:grpc:Greeter/GreeterServiceImpl.SayHello","properties":{}}
 {"kind":"rel","from":"file:src/server.cc","type":"DECLARES_ENTRYPOINT","to":"file:src/server.cc:entrypoint:15:grpc:Greeter/GreeterServiceImpl.SayHelloStreamReply","properties":{}}
 {"kind":"rel","from":"file:src/server.cc","type":"DECLARES_ENTRYPOINT","to":"file:src/server.cc:entrypoint:21:grpc:Greeter/CallbackImpl.SayHello","properties":{}}

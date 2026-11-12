@@ -287,6 +287,14 @@ export function stringValue(written: string, constants: ReadonlyMap<string, stri
   return null;
 }
 
+// Where the function around an offset starts (0 outside any function).
+export function functionStartOf(nodes: readonly GraphNode[], source: CppSource): (offset: number) => number {
+  const functions = nodes
+    .filter((node) => node.label === "Function" && node.properties.isDeclaration !== true && typeof node.properties.line === "number" && typeof node.properties.endLine === "number")
+    .map((node) => ({ start: source.offsetOfLine(Number(node.properties.line)), end: source.offsetOfLine(Number(node.properties.endLine) + 1) }));
+  return (offset) => functions.filter((fn) => fn.start <= offset && offset < fn.end).sort((left, right) => (left.end - left.start) - (right.end - right.start))[0]?.start ?? 0;
+}
+
 // The function node an offset (line) falls in, the smallest first; the file
 // when none does.
 export function ownerOf(nodes: readonly GraphNode[], fileNodeId: string): (line: number) => string {
@@ -298,8 +306,6 @@ export function ownerOf(nodes: readonly GraphNode[], fileNodeId: string): (line:
     .filter((owner) => owner.line <= line && line <= owner.endLine)
     .sort((left, right) => (left.endLine - left.line) - (right.endLine - right.line))[0]?.id ?? fileNodeId;
 }
-
-export const HTTP_METHODS = new Set(["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "TRACE", "CONNECT"]);
 
 const LOCAL_TYPES = String.raw`(?:const\s+)?(?:static\s+)?(?:std::string|std::string_view|string|QString|QByteArray|const\s+char\s*\*(?:\s*const)?|char\s*\*|auto|std::string&|QUrl|cpr::Url)`;
 

@@ -4,7 +4,7 @@ import type { CppParsePlugin } from "../../languages/cpp/parser.js";
 import { SqlSchema, splitStatements } from "../../languages/plain/sql-schema.js";
 import { fileOfNodeId } from "../js-ts/resolution/data-access.js";
 import { sqlTableAccesses } from "../go/sql.js";
-import { findInvocations, ownerOf, readArguments, readCppSource, resolveString, stringConstants, matching, type CppSource } from "./scan.js";
+import { findInvocations, functionStartOf, ownerOf, readArguments, readCppSource, resolveString, stringConstants, matching, type CppSource } from "./scan.js";
 
 // C and C++ data access: the SQL strings of the database libraries, mapped to
 // the tables they touch (a DataModel of the library named by the table, which
@@ -53,10 +53,7 @@ export const cppDataAccessPlugin: CppParsePlugin = ({ fileNodeId, source: writte
   const source = readCppSource(written);
   const constants = stringConstants(source);
   const owner = ownerOf(nodes, fileNodeId);
-  const functions = nodes
-    .filter((node) => node.label === "Function" && node.properties.isDeclaration !== true && typeof node.properties.line === "number" && typeof node.properties.endLine === "number")
-    .map((node) => ({ start: source.offsetOfLine(Number(node.properties.line)), end: source.offsetOfLine(Number(node.properties.endLine) + 1) }));
-  const functionStart = (offset: number) => functions.filter((fn) => fn.start <= offset && offset < fn.end).sort((left, right) => (left.end - left.start) - (right.end - right.start))[0]?.start ?? 0;
+  const functionStart = functionStartOf(nodes, source);
   // Routes with a lambda handler that holds the line.
   const lambdas = nodes
     .filter((node) => node.label === "Route" && typeof node.properties.cppPending === "string")
