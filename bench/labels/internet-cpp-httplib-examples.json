@@ -1,0 +1,131 @@
+{
+  "sample": "internet-cpp-httplib-examples",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. yhirose/cpp-httplib, only its example/ directory (sparse checkout; the single-header library itself is left out): every `Get`, `Post`, `Put`, `Delete`, `Patch` and `Options` registration on an `httplib::Server` or `SSLServer` (named `svr`, `http` or `https`), one label per call at the line of the call. The same method names on a `Client` (`cli.Get(\"/hi\")`) are requests, not routes, and are not labeled. The first labeling pass listed the calls with a grep that filtered out client variables and missed `svr.Post(\"/post\")` of server_and_client.cc (a real route the scan had found, shown as an unlabeled detection); a second pass over every `.Get(`/`.Post(` call of example/ added it.",
+  "routes": {
+    "scope": [
+      "example/"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/api/data",
+        "file": "example/accept_header.cc",
+        "line": 74
+      },
+      {
+        "method": "GET",
+        "path": "/hi",
+        "file": "example/hello.cc",
+        "line": 14
+      },
+      {
+        "method": "GET",
+        "path": "/hi",
+        "file": "example/one_time_request.cc",
+        "line": 13
+      },
+      {
+        "method": "GET",
+        "path": "/test",
+        "file": "example/redirect.cc",
+        "line": 22
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "example/redirect.cc",
+        "line": 32
+      },
+      {
+        "method": "GET",
+        "path": "/hi",
+        "file": "example/redirect.cc",
+        "line": 36
+      },
+      {
+        "method": "GET",
+        "path": "/stop",
+        "file": "example/redirect.cc",
+        "line": 40
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "example/server.cc",
+        "line": 79
+      },
+      {
+        "method": "GET",
+        "path": "/hi",
+        "file": "example/server.cc",
+        "line": 83
+      },
+      {
+        "method": "GET",
+        "path": "/slow",
+        "file": "example/server.cc",
+        "line": 87
+      },
+      {
+        "method": "GET",
+        "path": "/dump",
+        "file": "example/server.cc",
+        "line": 92
+      },
+      {
+        "method": "GET",
+        "path": "/stop",
+        "file": "example/server.cc",
+        "line": 96
+      },
+      {
+        "method": "POST",
+        "path": "/post",
+        "file": "example/server_and_client.cc",
+        "line": 69
+      },
+      {
+        "method": "POST",
+        "path": "/multipart",
+        "file": "example/simplesvr.cc",
+        "line": 116
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "example/ssesvr.cc",
+        "line": 73
+      },
+      {
+        "method": "GET",
+        "path": "/event1",
+        "file": "example/ssesvr.cc",
+        "line": 77
+      },
+      {
+        "method": "GET",
+        "path": "/event2",
+        "file": "example/ssesvr.cc",
+        "line": 85
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "example/upload.cc",
+        "line": 35
+      },
+      {
+        "method": "POST",
+        "path": "/post",
+        "file": "example/upload.cc",
+        "line": 39
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "example/wsecho.cc",
+        "line": 108
+      }
+    ]
+  }
+}

@@ -37,7 +37,7 @@ export const cppRoutesPlugin: CppParsePlugin = ({ fileNodeId, relativePath, sour
   if (/(^|[\\/])(?:tests?|unittests?)[\\/]/u.test(relativePath)) return;
   const frameworks = {
     crow: /\bCROW_(?:BP_)?ROUTE\b|\bcrow::/u.test(written),
-    drogon: /\b(?:METHOD_ADD|ADD_METHOD_TO|ADD_METHOD_VIA_REGEX|PATH_ADD|registerHandler(?:ViaRegex)?)\b/u.test(written),
+    drogon: /\b(?:METHOD_ADD|ADD_METHOD_TO|ADD_METHOD_VIA_REGEX|PATH_ADD|WS_PATH_ADD|WS_ADD_PATH_VIA_REGEX|registerHandler(?:ViaRegex)?)\b/u.test(written),
     pistache: /\bRoutes::(?:Get|Post|Put|Delete|Patch|Head|Options)\b/u.test(written),
     httplib: /\bhttplib\b/u.test(written),
   };
@@ -162,12 +162,14 @@ export const cppRoutesPlugin: CppParsePlugin = ({ fileNodeId, relativePath, sour
       const scope = scopeAt(scopes, call.start);
       const className = scope.className ?? target?.className ?? null;
       // METHOD_ADD paths follow the controller; ADD_METHOD_TO's are absolute.
-      const prefixed = call.name === "METHOD_ADD" || call.name === "ADD_METHOD_VIA_REGEX";
+      const prefixed = call.name === "METHOD_ADD";
+      // A regular expression is registered as written.
+      const regex = call.name.includes("VIA_REGEX");
       let path = pattern;
       if (path !== null && prefixed && className) {
         const controller = `/${[...scope.namespace.split("::").filter(Boolean), className].join("/")}`;
         path = pattern === "" ? controller : `${controller}${pattern!.startsWith("/") ? "" : "/"}${pattern}`;
-      } else if (path !== null && path !== "" && !path.startsWith("/") && !path.startsWith("^")) {
+      } else if (path !== null && path !== "" && !path.startsWith("/") && !regex) {
         path = `/${path}`;
       }
       for (const method of methods.length > 0 ? methods : ["ALL"]) {
@@ -179,8 +181,10 @@ export const cppRoutesPlugin: CppParsePlugin = ({ fileNodeId, relativePath, sour
         });
       }
     }
-    // `PATH_ADD("/x", Get)` of an HttpSimpleController.
-    for (const call of findInvocations(source, "PATH_ADD")) {
+    // `PATH_ADD("/x", Get)` of an HttpSimpleController, `WS_PATH_ADD("/x")` of a
+    // WebSocketController (a GET handshake handled by `handleNewMessage`).
+    for (const call of findInvocations(source, "PATH_ADD|WS_PATH_ADD|WS_ADD_PATH_VIA_REGEX|WS_CORO_PATH_ADD|WS_CORO_ADD_PATH_VIA_REGEX")) {
+      const websocket = call.name.startsWith("WS_");
       const pathText = call.args[0];
       const path = pathText === undefined ? null : stringValue(pathText, constants);
       const className = scopeAt(scopes, call.start).className;
@@ -188,11 +192,12 @@ export const cppRoutesPlugin: CppParsePlugin = ({ fileNodeId, relativePath, sour
         const named = DROGON_METHODS.exec(argument.trim())?.[1];
         return named ? [named.toUpperCase()] : [];
       });
-      for (const method of methods.length > 0 ? methods : ["ALL"]) {
+      const handlerName = websocket ? "handleNewMessage" : "asyncHandleHttpRequest";
+      for (const method of websocket ? ["GET"] : methods.length > 0 ? methods : ["ALL"]) {
         addRoute({
           method, path, expression: path === null ? pathText ?? null : null, framework: "drogon", line: call.line, column: call.column,
-          handlerName: className ? `${className}::asyncHandleHttpRequest` : null,
-          pending: { handler: className ? { className, name: "asyncHandleHttpRequest" } : null, blueprint: null, lambda: null, prefix: "" },
+          handlerName: className ? `${className}::${handlerName}` : null,
+          pending: { handler: className ? { className, name: handlerName } : null, blueprint: null, lambda: null, prefix: "" },
           scopeFunctionId: owner(call.line),
         });
       }

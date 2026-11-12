@@ -97,6 +97,15 @@ export const cppDataAccessPlugin: CppParsePlugin = ({ fileNodeId, source: writte
     const argument = sqlite ? args[1] : args[0];
     if (argument !== undefined) add(sqlite ? "sqlitecpp" : "qtsql", match.index, match[0].replace(/\s*[({]$/u, ""), argument);
   }
+  // A `SQLite::Statement` member prepared in a constructor's initializer list: `mQuery(db, "SELECT …")`.
+  if (/\bSQLite\b/u.test(written)) {
+    const members = [...source.code.matchAll(/\b(?:SQLite::)?Statement\s+(\w+)\s*;/gu)].map((match) => match[1]!);
+    if (members.length > 0) {
+      for (const call of findInvocations(source, members.join("|"))) {
+        if (call.receiver === null && call.args[1] !== undefined) add("sqlitecpp", call.start, call.name, call.args[1]);
+      }
+    }
+  }
   // SOCI: `sql << "SELECT …"`, `sql.once << "…"`, `sql.prepare << "…"`.
   if (hasSoci) {
     for (const match of source.code.matchAll(/\b(\w+(?:\.(?:once|prepare))?)\s*<<\s*(?=(?:u8|L)?")/gu)) {

@@ -1,0 +1,365 @@
+{
+  "sample": "internet-cpp-crow-examples",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. CrowCpp/Crow, only its examples/ directory (sparse checkout): every CROW_ROUTE, CROW_BP_ROUTE and CROW_WEBSOCKET_ROUTE registration outside comments, one label per method with the path as written (`.methods(\"POST\"_method)` and `crow::HTTPMethod::Post` read; GET otherwise; a websocket route is a GET) and the line of the macro. A blueprint route carries its blueprint prefix and those of the blueprints it is registered on (`bp_prefix/bp2` in example_blueprint.cpp, `bp` in example_middleware.cpp). CROW_CATCHALL_ROUTE has no path and is not labeled.",
+  "routes": {
+    "scope": [
+      "examples/"
+    ],
+    "items": [
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/example.cpp",
+        "line": 46
+      },
+      {
+        "method": "GET",
+        "path": "/about",
+        "file": "examples/example.cpp",
+        "line": 51
+      },
+      {
+        "method": "GET",
+        "path": "/path/",
+        "file": "examples/example.cpp",
+        "line": 57
+      },
+      {
+        "method": "GET",
+        "path": "/json",
+        "file": "examples/example.cpp",
+        "line": 64
+      },
+      {
+        "method": "GET",
+        "path": "/json-initializer-list-constructor",
+        "file": "examples/example.cpp",
+        "line": 71
+      },
+      {
+        "method": "GET",
+        "path": "/json_list",
+        "file": "examples/example.cpp",
+        "line": 88
+      },
+      {
+        "method": "GET",
+        "path": "/hello/<int>",
+        "file": "examples/example.cpp",
+        "line": 96
+      },
+      {
+        "method": "GET",
+        "path": "/hello_status/<int>",
+        "file": "examples/example.cpp",
+        "line": 106
+      },
+      {
+        "method": "GET",
+        "path": "/add/<int>/<int>",
+        "file": "examples/example.cpp",
+        "line": 116
+      },
+      {
+        "method": "GET",
+        "path": "/add_mustache/<int>/<int>",
+        "file": "examples/example.cpp",
+        "line": 125
+      },
+      {
+        "method": "POST",
+        "path": "/add_json",
+        "file": "examples/example.cpp",
+        "line": 153
+      },
+      {
+        "method": "GET",
+        "path": "/params",
+        "file": "examples/example.cpp",
+        "line": 167
+      },
+      {
+        "method": "GET",
+        "path": "/large",
+        "file": "examples/example.cpp",
+        "line": 205
+      },
+      {
+        "method": "GET",
+        "path": "/multipart",
+        "file": "examples/example.cpp",
+        "line": 211
+      },
+      {
+        "method": "GET",
+        "path": "/bp_prefix/bp2/",
+        "file": "examples/example_blueprint.cpp",
+        "line": 12
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/example_catchall.cpp",
+        "line": 9
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/example_chat.cpp",
+        "line": 32
+      },
+      {
+        "method": "GET",
+        "path": "/logs",
+        "file": "examples/example_chat.cpp",
+        "line": 38
+      },
+      {
+        "method": "GET",
+        "path": "/logs/<int>",
+        "file": "examples/example_chat.cpp",
+        "line": 50
+      },
+      {
+        "method": "GET",
+        "path": "/send",
+        "file": "examples/example_chat.cpp",
+        "line": 79
+      },
+      {
+        "method": "POST",
+        "path": "/send",
+        "file": "examples/example_chat.cpp",
+        "line": 79
+      },
+      {
+        "method": "GET",
+        "path": "/hello",
+        "file": "examples/example_compression.cpp",
+        "line": 9
+      },
+      {
+        "method": "GET",
+        "path": "/hello_compressed",
+        "file": "examples/example_compression.cpp",
+        "line": 17
+      },
+      {
+        "method": "POST",
+        "path": "/uploadfile",
+        "file": "examples/example_file_upload.cpp",
+        "line": 7
+      },
+      {
+        "method": "GET",
+        "path": "/json",
+        "file": "examples/example_json_map.cpp",
+        "line": 11
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/example_middleware.cpp",
+        "line": 61
+      },
+      {
+        "method": "GET",
+        "path": "/secret",
+        "file": "examples/example_middleware.cpp",
+        "line": 66
+      },
+      {
+        "method": "GET",
+        "path": "/bp/",
+        "file": "examples/example_middleware.cpp",
+        "line": 77
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/example_static_file.cpp",
+        "line": 13
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/example_unix_socket.cpp",
+        "line": 9
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/example_vs.cpp",
+        "line": 46
+      },
+      {
+        "method": "GET",
+        "path": "/about",
+        "file": "examples/example_vs.cpp",
+        "line": 51
+      },
+      {
+        "method": "GET",
+        "path": "/path/",
+        "file": "examples/example_vs.cpp",
+        "line": 57
+      },
+      {
+        "method": "GET",
+        "path": "/json",
+        "file": "examples/example_vs.cpp",
+        "line": 63
+      },
+      {
+        "method": "GET",
+        "path": "/hello/<int>",
+        "file": "examples/example_vs.cpp",
+        "line": 70
+      },
+      {
+        "method": "GET",
+        "path": "/add/<int>/<int>",
+        "file": "examples/example_vs.cpp",
+        "line": 79
+      },
+      {
+        "method": "POST",
+        "path": "/add_json",
+        "file": "examples/example_vs.cpp",
+        "line": 94
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/example_with_all.cpp",
+        "line": 16
+      },
+      {
+        "method": "GET",
+        "path": "/about",
+        "file": "examples/example_with_all.cpp",
+        "line": 21
+      },
+      {
+        "method": "GET",
+        "path": "/json",
+        "file": "examples/example_with_all.cpp",
+        "line": 27
+      },
+      {
+        "method": "GET",
+        "path": "/json-initializer-list-constructor",
+        "file": "examples/example_with_all.cpp",
+        "line": 34
+      },
+      {
+        "method": "GET",
+        "path": "/json_list",
+        "file": "examples/example_with_all.cpp",
+        "line": 52
+      },
+      {
+        "method": "GET",
+        "path": "/hello/<int>",
+        "file": "examples/example_with_all.cpp",
+        "line": 58
+      },
+      {
+        "method": "GET",
+        "path": "/add/<int>/<int>",
+        "file": "examples/example_with_all.cpp",
+        "line": 69
+      },
+      {
+        "method": "POST",
+        "path": "/add_json",
+        "file": "examples/example_with_all.cpp",
+        "line": 84
+      },
+      {
+        "method": "GET",
+        "path": "/params",
+        "file": "examples/example_with_all.cpp",
+        "line": 95
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/helloworld.cpp",
+        "line": 7
+      },
+      {
+        "method": "GET",
+        "path": "/read",
+        "file": "examples/middlewares/example_cookies.cpp",
+        "line": 9
+      },
+      {
+        "method": "GET",
+        "path": "/write",
+        "file": "examples/middlewares/example_cookies.cpp",
+        "line": 17
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/middlewares/example_cors.cpp",
+        "line": 31
+      },
+      {
+        "method": "GET",
+        "path": "/cors",
+        "file": "examples/middlewares/example_cors.cpp",
+        "line": 36
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/middlewares/example_session.cpp",
+        "line": 31
+      },
+      {
+        "method": "GET",
+        "path": "/get",
+        "file": "examples/middlewares/example_session.cpp",
+        "line": 58
+      },
+      {
+        "method": "GET",
+        "path": "/set",
+        "file": "examples/middlewares/example_session.cpp",
+        "line": 83
+      },
+      {
+        "method": "GET",
+        "path": "/remove",
+        "file": "examples/middlewares/example_session.cpp",
+        "line": 96
+      },
+      {
+        "method": "GET",
+        "path": "/lock",
+        "file": "examples/middlewares/example_session.cpp",
+        "line": 106
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/ssl/example_ssl.cpp",
+        "line": 7
+      },
+      {
+        "method": "GET",
+        "path": "/ws",
+        "file": "examples/websocket/example_ws.cpp",
+        "line": 13
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "file": "examples/websocket/example_ws.cpp",
+        "line": 33
+      }
+    ]
+  }
+}
