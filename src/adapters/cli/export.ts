@@ -2,11 +2,11 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { printScanReport } from "./report.js";
 import { ProgressReporter } from "./progress.js";
-import type { GraphNode, GraphRelationship } from "../../core/graph/model.js";
 import { formatNormalizedGraph, normalizeGraph } from "../../core/graph/normalize.js";
 import { didFailFast, didPartiallySucceed } from "../../core/scan/index.js";
 import { scanOrchestrator } from "../../composition/orchestrator.js";
 import type { CliAdapterResult } from "./scan.js";
+import { writeJsonl } from "./jsonl.js";
 
 export type ExportAdapterOptions = {
   output: string;
@@ -81,14 +81,6 @@ export async function runExportAdapter(projectPath: string, options: ExportAdapt
   printExportReport(outputPath, result.nodes.length, result.relationships.length, options.normalized === true);
   printScanReport(result.report, result.nodes.length, result.relationships.length, outputPath);
   return { exitCode: didPartiallySucceed(result) ? 1 : 0 };
-}
-
-async function writeJsonl(
-  filePath: string,
-  records: Array<GraphNode | GraphRelationship>,
-): Promise<void> {
-  const content = records.map((record) => JSON.stringify(record)).join("\n");
-  await writeFile(filePath, content.length > 0 ? `${content}\n` : "", "utf8");
 }
 
 function printExportReport(
