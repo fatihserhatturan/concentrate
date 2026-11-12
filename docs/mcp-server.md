@@ -50,6 +50,20 @@ another. `--npx` writes `npx -y concentrate mcp …` instead, for an installed
 package. When the graph does not exist yet, `init` prints the scan command.
 Running it again replaces only the `concentrate` entry.
 
+Agents search text first even when a graph tool would answer in one call (see
+[agent-benchmark.md](agent-benchmark.md)), so `init` also steers them:
+
+- **Instruction files.** A section between `<!-- concentrate:start -->` and
+  `<!-- concentrate:end -->` names the questions the graph answers better than
+  grep and the tool for each. Claude Code gets it in `CLAUDE.md`, Cursor and
+  Codex in `AGENTS.md`; the files are created when missing, the text outside
+  the markers is never touched, and a rerun replaces the section in place.
+  `--no-instructions` skips it.
+- **`--hook`** (Claude Code, opt-in) adds a `PreToolUse` hook for `Grep|Read`
+  to `.claude/settings.json`. The hook runs `concentrate nudge`, which prints
+  advisory context once per session when the graph exists. It never denies a
+  call and never fails one.
+
 Example MCP client command configuration by hand:
 
 ```json

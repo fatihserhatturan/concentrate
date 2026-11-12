@@ -9,6 +9,7 @@ import { watchCommand } from "./commands/watch.js";
 import { affectedCommand } from "./commands/affected.js";
 import { cyclesCommand, unusedCommand } from "./commands/check.js";
 import { initCommand } from "./commands/init.js";
+import { nudgeCommand } from "./commands/nudge.js";
 import { uiCommand } from "./commands/ui.js";
 
 /** Command-line surface of `concentrate`: every command, argument and flag. */
@@ -171,8 +172,18 @@ export const program: ProgramSpec = {
         { flags: "--client <name>", description: "claude, cursor or codex, repeatable (default: all three)", multiple: true },
         { flags: "--npx", description: "Start the server with npx -y concentrate instead of this build's CLI", type: "boolean" },
         { flags: "--hooks", description: "Also install git hooks (post-commit, post-checkout, post-merge) that rescan the project in the background", type: "boolean" },
+        { flags: "--no-instructions", description: "Do not write the Concentrate section into CLAUDE.md and AGENTS.md" },
+        { flags: "--hook", description: "Also add an advisory Claude Code PreToolUse hook (.claude/settings.json) that points to the graph before Grep and Read", type: "boolean" },
       ],
       action: initCommand,
+    },
+    {
+      name: "nudge",
+      description: "Claude Code PreToolUse hook body: reads the hook input on stdin and prints advisory context once per session. Installed by init --hook.",
+      options: [
+        { flags: "-d, --database <path>", description: "Graph store directory", default: ".concentrate/graph" },
+      ],
+      action: nudgeCommand,
     },
     {
       name: "ui",
