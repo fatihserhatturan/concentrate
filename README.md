@@ -84,6 +84,7 @@ Every number below comes from pinned open-source repositories and can be reprodu
 - Against hand-written labels, 100% of reported routes, call targets, database accesses, React, Vue, Svelte and Angular components, component renders, pages, frontend → backend API requests and Pinia store reads and writes are correct.
 - On the Rust samples (a Conduit backend each in axum + sqlx and actix-web + diesel, and the Next.js frontend against the axum one), 39 routes, 97 data accesses, 5 env reads and 33 frontend requests are all 100% precision and 100% recall; the 47 labeled call sites of the axum sample reach 100% precision and 70% recall ([accuracy.md](docs/accuracy.md)).
 - On the Python samples (a Conduit backend each in Django REST framework, Flask and FastAPI, a Next.js frontend against each, and the FastAPI full-stack template), 57 routes, 81 data accesses, 26 env reads and 98 frontend requests are all 100% precision, with recall 100% for routes, env and requests and 85% for data access; the 143 labeled call sites of the Flask and FastAPI backends reach 100% precision and 58.7% and 98.8% recall ([accuracy.md](docs/accuracy.md)).
+- On the C and C++ samples (the cJSON and tinyxml2 libraries, the Crow, Drogon and cpp-httplib examples, SQLiteCpp, gRPC C++, Qt SQL and googletest), 117 of 118 routes, 188 of 192 call sites, 21 of 26 data accesses, 10 rpcs, 311 of 317 build-target facts, 95 `#include` resolutions and 2 client requests are found with 100% precision; the one weak row is env reads in googletest (3 of 7, 4 false positives, 42.9%), where the C++ parser leaves most of `gtest.cc` out ([accuracy.md](docs/accuracy.md#c-and-c-samples-phase-37)).
 - Route recall, route full paths, data-access recall and component-render recall (on the RealWorld React, Vue, SvelteKit and Angular frontends) are 100%.
 - Call recall is 100% on the 497 labeled call sites with a project target (372 of them in two Go backends, gin and echo); API requests are 100% on 66 (the same Next.js frontend against an Express and a gin backend); the remaining gap (components 99%) is in [accuracy.md](docs/accuracy.md) and the [open issues](https://github.com/fatihserhatturan/concentrate/issues).
 
@@ -120,10 +121,7 @@ The goal is a code graph an agent can rely on as much as on the source itself. T
 - the backend and frontend semantics agents ask about most;
 - easy setup in any MCP client (`concentrate init` writes the configuration for Claude Code, Cursor and Codex).
 
-Done so far: the JS/TS backend, the frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular), Go, the non-code files of a project, Rust and Python, plus the agent benchmark v2 and the `init` command.
-
-Next up:
-- **C/C++** (M13, [#211](https://github.com/fatihserhatturan/concentrate/issues/211)–[#214](https://github.com/fatihserhatturan/concentrate/issues/214)): the language, CMake and Make, the common HTTP and RPC frameworks, Qt signals, data access, env and outbound HTTP are read; the measurement phase ([#214](https://github.com/fatihserhatturan/concentrate/issues/214)) is not done yet.
+Done so far: the JS/TS backend, the frontend frameworks (React/Next.js, Vue/Nuxt, Svelte/SvelteKit, Astro, Angular), Go, the non-code files of a project, Rust, Python, and C and C++, plus the agent benchmark v2 and the `init` command. Every phase of the roadmap (M1–M13) is done.
 
 Publishing to npm is not planned for now.
 

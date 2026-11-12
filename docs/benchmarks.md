@@ -436,3 +436,66 @@ Django, Flask and FastAPI backends and the FastAPI full-stack sample:
   (`/usr/bin/time -l`). The Django and Flask samples have no shell script and stay
   under 280 MB cold; the warm scan of every Python sample is 91–148 MB.
 
+## C and C++ samples (Phase 37)
+
+`npm run bench:release -- --sample internet-c-cjson --sample internet-c-curl-examples --sample
+internet-cpp-tinyxml2 --sample internet-cpp-googletest --sample internet-cpp-crow-examples --sample
+internet-cpp-drogon-examples --sample internet-cpp-httplib-examples --sample
+internet-cpp-sqlitecpp-examples --sample internet-cpp-grpc-examples --sample
+internet-cpp-qt-network-examples --runs 5 --out bench/results/0.1.0-2026-11-12-cpp.json` on the same
+Apple M4 (10 CPUs), Node v24.13.0, recorded 2026-11-12 for 0.1.0
+([`bench/results/0.1.0-2026-11-12-cpp.json`](../bench/results/0.1.0-2026-11-12-cpp.json)).
+The framework samples are sparse checkouts of one directory (`examples/`, `example/`).
+
+| Sample | Nodes | Rels | Cold scan ms | Cold peak RSS MB | Warm scan ms | Warm peak RSS MB |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-c-cjson (C library, 161 files) | 4888 | 7785 | 402 | 749 | 251 | 175 |
+| internet-c-curl-examples (libcurl, `docs/examples`) | 4186 | 4447 | 363 | 855 | 224 | 146 |
+| internet-cpp-tinyxml2 (CMake C++ library, 272 files) | 8597 | 28651 | 974 | 892 | 393 | 281 |
+| internet-cpp-googletest (275 KB `gtest.cc`, 247 files) | 27799 | 39874 | 1267 | 1124 | 791 | 696 |
+| internet-cpp-crow-examples | 589 | 665 | 169 | 379 | 132 | 91 |
+| internet-cpp-drogon-examples | 1131 | 1311 | 240 | 918 | 168 | 113 |
+| internet-cpp-httplib-examples | 553 | 638 | 269 | 728 | 148 | 96 |
+| internet-cpp-sqlitecpp-examples | 1370 | 1794 | 309 | 918 | 160 | 104 |
+| internet-cpp-grpc-examples | 1216 | 1614 | 289 | 411 | 236 | 123 |
+| internet-cpp-qt-network-examples | 6971 | 8624 | 445 | 548 | 311 | 196 |
+
+Tool latency, p50 / p95 ms (20 calls; a selection, the JSON has every tool):
+
+| Tool | cJSON | tinyxml2 | googletest | Crow | Drogon | gRPC |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| graph_stats | 2.17 / 2.63 | 3.54 / 7.01 | 11.09 / 12.79 | 0.45 / 0.51 | 0.63 / 3.16 | 0.65 / 0.96 |
+| find_callers | 16.15 / 23.72 | 35.8 / 48.77 | 80.67 / 124.31 | 0.94 / 1.05 | 0.98 / 1.79 | 1.16 / 2.12 |
+| list_routes | 0.24 / 0.27 | 0.28 / 0.32 | 0.46 / 5.24 | 0.38 / 0.41 | 0.33 / 2.36 | 0.17 / 0.18 |
+| impact_of | 10.77 / 12.78 | 18.8 / 23.53 | 52.31 / 65.97 | 2.03 / 5.06 | 2.32 / 5.7 | 2.22 / 4.13 |
+| find_unused_exports | 22.25 / 24.84 | 31.11 / 35.65 | 116.38 / 126.86 | 3.27 / 8.04 | 5.58 / 11.03 | 5.08 / 7.21 |
+| detect_changes | 22.61 / 24.57 | 25.12 / 63.15 | 21.92 / 23.57 | 20.99 / 40.34 | 21.98 / 29.24 | 22 / 23.44 |
+
+**What the C and C++ grammar costs.** The peak RSS of `concentrate scan
+--no-cache` (the probe of `bench:release`), three runs each, with and without the C and C++
+sources (`--exclude '**/*.c' --exclude '**/*.cc' --exclude '**/*.cpp' --exclude '**/*.h'
+--exclude '**/*.hpp'`), parsing on the main thread (`--workers 0`) so the number is the
+grammar and the parse and not the worker pool:
+
+| Sample | Without C/C++ sources | With | Cost |
+| --- | ---: | ---: | ---: |
+| internet-c-cjson | 638–682 MB | 726–751 MB | +45–110 MB |
+| internet-cpp-tinyxml2 | 326–399 MB | 591–602 MB | +190–275 MB |
+| internet-cpp-googletest | 685–723 MB | 1000–1002 MB | +280–315 MB |
+
+A scan of a tiny project (one file) peaks at 79–80 MB with a `.c` file, 88 MB with a `.cpp`
+file and 90 MB with a `CMakeLists.txt`, against 82–95 MB for one `.ts` file: loading the C
+and C++ grammars (4 MB of wasm added to the package) is not what costs memory; the parse of
+many files is. With the default worker pool (4 workers once 100+ files need parsing) tinyxml2's
+cold scan peaks at 882–914 MB, googletest's at 1025–1061 MB.
+
+- A C or C++ scan costs about what a Go or Rust scan does per file: cJSON (161 files) in
+  402 ms, tinyxml2 (272 files, 28.6k relationships) in 974 ms, googletest in 1.3 s; the framework
+  example samples take 169–309 ms. Every tool's p50 is under 120 ms; `find_callers`,
+  `impact_of` and `find_unused_exports` are the slowest because they walk many calls (googletest
+  has 27.8k nodes). `detect_changes` runs `git`, 20–25 ms.
+- Most of the 700–1100 MB cold peak of the larger samples is not C or C++: cJSON without any
+  C source (its shell script, CMake, JSON and Markdown files) still peaks at 638–682 MB,
+  the same non-code grammar cost as in the Python samples above. The warm scan of every C and
+  C++ sample is 91–281 MB, googletest 696 MB.
+

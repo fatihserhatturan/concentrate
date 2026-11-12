@@ -2182,7 +2182,22 @@ the call recall leaves out:
   Network (`QNetworkAccessManager::get`), Boost.Beast, Poco, libhv and curlpp are not
   read. The requests link to routes like every other client (`REQUESTS`, local origins
   dropped, `--api-origin`).
-- Measured (`docs/accuracy.md`, "C and C++ frameworks"): routes of the Crow, Drogon
+- **Unknown macros.** A macro the grammar does not know (thread-safety annotations after a
+  declarator such as `GTEST_LOCK_EXCLUDED_(mutex_)`, `__try` / `__except`, pointer-to-member calls
+  `(obj->*method)()`) is an error; the statement is left out and listed in the scan warning,
+  and in a large file the recovery can leave out an enclosing `namespace` with its functions:
+  googletest's `gtest.cc` keeps 5 of its functions (23 statements left out, down from 38 after
+  the Phase 37 stand-ins for flag macros and column-0 statement macros), so calls, env reads and
+  data access in the rest of the file are attributed to the file. Smaller files and the
+  macros listed above are not affected.
+- Measured (Phase 37, `docs/accuracy.md`, "C and C++ samples"): 117 of 118 routes, 188 of 192
+  call sites, 21 of 26 data accesses, 10 of 10 rpcs, 311 of 317 build-target facts and 95 of 95
+  include resolutions with no false positive; env reads in googletest 3 of 7 with 4 false
+  positives (the macro limitation above); the misses are `setQuery` / `setTable` reads in Qt SQL,
+  a catch-all Crow route, platform-conditional CMake targets (`if(MSVC)`) and four nested calls
+  in a gRPC callback server. Cost of the grammars: 45–315 MB of peak RSS on cJSON, tinyxml2 and
+  googletest (`docs/benchmarks.md`).
+- Measured earlier (`docs/accuracy.md`, "C and C++ frameworks"): routes of the Crow, Drogon
   and cpp-httplib examples 117 labeled, 117 found, no false positive; SQLiteCpp
   examples data access 7/7; the gRPC examples' rpcs and implementations 7/7. libcurl and Qt are
   counted against a grep, not labeled. Cost: about 3 to 4% of a scan of cJSON,

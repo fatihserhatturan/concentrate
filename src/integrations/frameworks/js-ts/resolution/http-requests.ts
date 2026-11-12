@@ -105,6 +105,17 @@ export const httpRequestsContributor: ISemanticContributor = {
             tied = [same[0]!];
           }
         }
+        // Several programs of one repository registering the same path (the
+        // cpp-httplib examples): the route in the file of the call is the
+        // one it reaches.
+        if (best && tied.length > 1) {
+          const callFile = fileOfNodeId(call.id);
+          const sameFile = callFile === null ? [] : tied.filter((route) => fileOfNodeId(route.id) === callFile);
+          if (sameFile.length === 1) {
+            best = { ...best, route: sameFile[0]! };
+            tied = [sameFile[0]!];
+          }
+        }
         if (!best || tied.length > 1 || linked.has(best.route.id)) continue;
         linked.add(best.route.id);
         added.push({
@@ -118,6 +129,11 @@ export const httpRequestsContributor: ISemanticContributor = {
     for (const rel of added) graph.addRelationship(rel);
   },
 };
+
+// `file:<path>:function:…`, `file:<path>:route:…`: the file a node id belongs to.
+function fileOfNodeId(id: string): string | null {
+  return /^file:(.+?):(?:function|route|call)\b/u.exec(id)?.[1] ?? null;
+}
 
 function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship[], env: EnvFiles, origins: readonly string[]): void {
   const calls = nodes.filter((node) => node.label === "Call" && (node.properties.httpMethod !== undefined || node.properties.httpReceiver !== undefined));

@@ -1,6 +1,6 @@
 {
   "sample": "internet-cpp-crow-examples",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. CrowCpp/Crow, only its examples/ directory (sparse checkout): every CROW_ROUTE, CROW_BP_ROUTE and CROW_WEBSOCKET_ROUTE registration outside comments, one label per method with the path as written (`.methods(\"POST\"_method)` and `crow::HTTPMethod::Post` read; GET otherwise; a websocket route is a GET) and the line of the macro. A blueprint route carries its blueprint prefix and those of the blueprints it is registered on (`bp_prefix/bp2` in example_blueprint.cpp, `bp` in example_middleware.cpp). CROW_CATCHALL_ROUTE has no path and is not labeled.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json): every route registration in the sample's source files (counted independently with grep over the framework's registration macros and calls, commented-out registrations excluded). CROW_CATCHALL_ROUTE (example_catchall.cpp) is labeled as ALL /*; the blueprint catch-all and the block-commented CROW_BP_ROUTE of example_blueprint.cpp are not.",
   "routes": {
     "scope": [
       "examples/"
@@ -359,6 +359,427 @@
         "path": "/",
         "file": "examples/websocket/example_ws.cpp",
         "line": 33
+      },
+      {
+        "method": "ALL",
+        "path": "/*",
+        "file": "examples/example_catchall.cpp",
+        "line": 15
+      }
+    ]
+  },
+  "buildTargets": {
+    "scope": [
+      "examples/"
+    ],
+    "items": [
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "helloworld",
+        "kind": "executable",
+        "sources": [
+          "examples/helloworld.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_compression",
+        "kind": "executable",
+        "sources": [
+          "examples/example_compression.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_ssl",
+        "kind": "executable",
+        "sources": [
+          "examples/ssl/example_ssl.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_websocket",
+        "kind": "executable",
+        "sources": [
+          "examples/websocket/example_ws.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "basic_example",
+        "kind": "executable",
+        "sources": [
+          "examples/example.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_with_all",
+        "kind": "executable",
+        "sources": [
+          "examples/example_with_all.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_chat",
+        "kind": "executable",
+        "sources": [
+          "examples/example_chat.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_static_file",
+        "kind": "executable",
+        "sources": [
+          "examples/example_static_file.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_catchall",
+        "kind": "executable",
+        "sources": [
+          "examples/example_catchall.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_json_map",
+        "kind": "executable",
+        "sources": [
+          "examples/example_json_map.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_blueprint",
+        "kind": "executable",
+        "sources": [
+          "examples/example_blueprint.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_middleware",
+        "kind": "executable",
+        "sources": [
+          "examples/example_middleware.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_cors",
+        "kind": "executable",
+        "sources": [
+          "examples/middlewares/example_cors.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_cookies",
+        "kind": "executable",
+        "sources": [
+          "examples/middlewares/example_cookies.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_session",
+        "kind": "executable",
+        "sources": [
+          "examples/middlewares/example_session.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_file_upload",
+        "kind": "executable",
+        "sources": [
+          "examples/example_file_upload.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_unix_socket",
+        "kind": "executable",
+        "sources": [
+          "examples/example_unix_socket.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "example_vs",
+        "kind": "executable",
+        "sources": [
+          "examples/example_vs.cpp"
+        ],
+        "links": [
+          "Crow"
+        ]
+      }
+    ]
+  },
+  "includes": {
+    "files": [
+      "examples/example.cpp",
+      "examples/example_blueprint.cpp",
+      "examples/example_catchall.cpp",
+      "examples/example_chat.cpp",
+      "examples/example_compression.cpp",
+      "examples/example_file_upload.cpp",
+      "examples/example_json_map.cpp",
+      "examples/example_middleware.cpp",
+      "examples/example_static_file.cpp",
+      "examples/example_unix_socket.cpp",
+      "examples/example_vs.cpp",
+      "examples/example_with_all.cpp",
+      "examples/helloworld.cpp",
+      "examples/middlewares/example_cookies.cpp",
+      "examples/middlewares/example_cors.cpp",
+      "examples/middlewares/example_session.cpp",
+      "examples/ssl/example_ssl.cpp",
+      "examples/websocket/example_ws.cpp"
+    ],
+    "items": [
+      {
+        "file": "examples/example.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_blueprint.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_catchall.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_chat.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_chat.cpp",
+        "line": 2,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/example_chat.cpp",
+        "line": 3,
+        "source": "vector",
+        "target": null
+      },
+      {
+        "file": "examples/example_chat.cpp",
+        "line": 4,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "examples/example_compression.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_compression.cpp",
+        "line": 2,
+        "source": "crow/compression.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_file_upload.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_json_map.cpp",
+        "line": 2,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_middleware.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_static_file.cpp",
+        "line": 4,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_unix_socket.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_unix_socket.cpp",
+        "line": 3,
+        "source": "sys/stat.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_vs.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/example_with_all.cpp",
+        "line": 1,
+        "source": "crow_all.h",
+        "target": null
+      },
+      {
+        "file": "examples/helloworld.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/middlewares/example_cookies.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/middlewares/example_cookies.cpp",
+        "line": 2,
+        "source": "crow/middlewares/cookie_parser.h",
+        "target": null
+      },
+      {
+        "file": "examples/middlewares/example_cors.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/middlewares/example_cors.cpp",
+        "line": 2,
+        "source": "crow/middlewares/cors.h",
+        "target": null
+      },
+      {
+        "file": "examples/middlewares/example_session.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/middlewares/example_session.cpp",
+        "line": 2,
+        "source": "crow/middlewares/session.h",
+        "target": null
+      },
+      {
+        "file": "examples/ssl/example_ssl.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/websocket/example_ws.cpp",
+        "line": 1,
+        "source": "crow.h",
+        "target": null
+      },
+      {
+        "file": "examples/websocket/example_ws.cpp",
+        "line": 2,
+        "source": "unordered_set",
+        "target": null
+      },
+      {
+        "file": "examples/websocket/example_ws.cpp",
+        "line": 3,
+        "source": "mutex",
+        "target": null
       }
     ]
   }

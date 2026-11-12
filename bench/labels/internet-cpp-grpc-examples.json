@@ -1,12 +1,31 @@
 {
   "sample": "internet-cpp-grpc-examples",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. grpc/grpc, only examples/cpp/helloworld, examples/cpp/route_guide and examples/protos (sparse checkout); labeled: the rpcs of helloworld.proto and route_guide.proto. Implementations are the methods of every class deriving `Greeter::Service`, `Greeter::CallbackService`, `RouteGuide::Service` or `RouteGuide::CallbackService` (greeter_server, greeter_callback_server, xds_greeter_server, route_guide_server, route_guide_callback_server). greeter_async_server.cc uses `Greeter::AsyncService` and handles the call in a CallData state machine, with no method named after the rpc, so it implements none; SayHelloStreamReply and SayHelloBidiStream have no implementation in the sample. The commented-out alternative GetFeature of route_guide_callback_server.cc is not one. `served` is null for every rpc: the generated base class is not in the scan.",
+  "$comment": "Hand-labeled from the pinned sample source: every rpc of examples/protos (10 rpcs in 5 services) with its messages and streaming kind, and the C++ methods that implement it (service impl classes deriving from the generated Service or CallbackService; the async server examples use the generated AsyncService and implement no method). There is no generated Go interface, so served is null. Build targets: the CMake files of helloworld and route_guide (the foreach loops over executable names expanded by hand; links to imported targets such as absl::check and gRPC::grpc++ are not labeled, the generated protobuf sources of the *_grpc_proto libraries are not in the scan). The two Makefiles are labeled too: the executables of the `all` target with the .cc files of their .o prerequisites (the generated *.pb.cc are not in the scan). Calls: every call whose callee is a function or method of this repository in route_guide_server.cc, route_guide_client.cc, route_guide_callback_server.cc, helper.cc, greeter_server.cc and greeter_client.cc, labeled with its definition (checked by searching each in-repository function name in the six files); calls into gRPC, protobuf and the C++ library are not labeled. A call through a generated stub (stub_->SayHello, stub_->GetFeature) runs the service implementations, which are its targets, one per implementing class.",
   "rpcs": {
     "scope": [
-      "examples/protos/helloworld.proto",
-      "examples/protos/route_guide.proto"
+      "examples/"
     ],
     "items": [
+      {
+        "file": "examples/protos/auth_sample.proto",
+        "service": "grpc.testing.TestService",
+        "name": "UnaryCall",
+        "request": "Request",
+        "response": "Response",
+        "streaming": "none",
+        "served": null,
+        "implementations": []
+      },
+      {
+        "file": "examples/protos/hellostreamingworld.proto",
+        "service": "hellostreamingworld.MultiGreeter",
+        "name": "sayHello",
+        "request": "HelloRequest",
+        "response": "HelloReply",
+        "streaming": "server",
+        "served": null,
+        "implementations": []
+      },
       {
         "file": "examples/protos/helloworld.proto",
         "service": "helloworld.Greeter",
@@ -37,6 +56,16 @@
         "name": "SayHelloBidiStream",
         "request": "HelloRequest",
         "response": "HelloReply",
+        "streaming": "both",
+        "served": null,
+        "implementations": []
+      },
+      {
+        "file": "examples/protos/keyvaluestore.proto",
+        "service": "keyvaluestore.KeyValueStore",
+        "name": "GetValues",
+        "request": "Request",
+        "response": "Response",
         "streaming": "both",
         "served": null,
         "implementations": []
@@ -92,6 +121,2056 @@
           "examples/cpp/route_guide/route_guide_callback_server.cc#RouteGuideImpl.RouteChat",
           "examples/cpp/route_guide/route_guide_server.cc#RouteGuideImpl.RouteChat"
         ]
+      }
+    ]
+  },
+  "buildTargets": {
+    "scope": [
+      "examples/cpp/"
+    ],
+    "items": [
+      {
+        "file": "examples/cpp/helloworld/CMakeLists.txt",
+        "system": "cmake",
+        "name": "hw_grpc_proto",
+        "kind": "library",
+        "sources": [],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/helloworld/CMakeLists.txt",
+        "system": "cmake",
+        "name": "greeter_client",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_client.cc"
+        ],
+        "links": [
+          "hw_grpc_proto"
+        ]
+      },
+      {
+        "file": "examples/cpp/helloworld/CMakeLists.txt",
+        "system": "cmake",
+        "name": "greeter_server",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_server.cc"
+        ],
+        "links": [
+          "hw_grpc_proto"
+        ]
+      },
+      {
+        "file": "examples/cpp/helloworld/CMakeLists.txt",
+        "system": "cmake",
+        "name": "greeter_callback_client",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_callback_client.cc"
+        ],
+        "links": [
+          "hw_grpc_proto"
+        ]
+      },
+      {
+        "file": "examples/cpp/helloworld/CMakeLists.txt",
+        "system": "cmake",
+        "name": "greeter_callback_server",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_callback_server.cc"
+        ],
+        "links": [
+          "hw_grpc_proto"
+        ]
+      },
+      {
+        "file": "examples/cpp/helloworld/CMakeLists.txt",
+        "system": "cmake",
+        "name": "greeter_async_client",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_async_client.cc"
+        ],
+        "links": [
+          "hw_grpc_proto"
+        ]
+      },
+      {
+        "file": "examples/cpp/helloworld/CMakeLists.txt",
+        "system": "cmake",
+        "name": "greeter_async_client2",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_async_client2.cc"
+        ],
+        "links": [
+          "hw_grpc_proto"
+        ]
+      },
+      {
+        "file": "examples/cpp/helloworld/CMakeLists.txt",
+        "system": "cmake",
+        "name": "greeter_async_server",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_async_server.cc"
+        ],
+        "links": [
+          "hw_grpc_proto"
+        ]
+      },
+      {
+        "file": "examples/cpp/route_guide/CMakeLists.txt",
+        "system": "cmake",
+        "name": "rg_grpc_proto",
+        "kind": "library",
+        "sources": [],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/route_guide/CMakeLists.txt",
+        "system": "cmake",
+        "name": "route_guide_helper",
+        "kind": "library",
+        "sources": [
+          "examples/cpp/route_guide/helper.h",
+          "examples/cpp/route_guide/helper.cc"
+        ],
+        "links": [
+          "rg_grpc_proto"
+        ]
+      },
+      {
+        "file": "examples/cpp/route_guide/CMakeLists.txt",
+        "system": "cmake",
+        "name": "route_guide_client",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/route_guide/route_guide_client.cc"
+        ],
+        "links": [
+          "rg_grpc_proto",
+          "route_guide_helper"
+        ]
+      },
+      {
+        "file": "examples/cpp/route_guide/CMakeLists.txt",
+        "system": "cmake",
+        "name": "route_guide_server",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/route_guide/route_guide_server.cc"
+        ],
+        "links": [
+          "rg_grpc_proto",
+          "route_guide_helper"
+        ]
+      },
+      {
+        "file": "examples/cpp/route_guide/CMakeLists.txt",
+        "system": "cmake",
+        "name": "route_guide_callback_client",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/route_guide/route_guide_callback_client.cc"
+        ],
+        "links": [
+          "rg_grpc_proto",
+          "route_guide_helper"
+        ]
+      },
+      {
+        "file": "examples/cpp/route_guide/CMakeLists.txt",
+        "system": "cmake",
+        "name": "route_guide_callback_server",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/route_guide/route_guide_callback_server.cc"
+        ],
+        "links": [
+          "rg_grpc_proto",
+          "route_guide_helper"
+        ]
+      },
+      {
+        "file": "examples/cpp/helloworld/Makefile",
+        "system": "make",
+        "name": "greeter_client",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_client.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/helloworld/Makefile",
+        "system": "make",
+        "name": "greeter_server",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_server.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/helloworld/Makefile",
+        "system": "make",
+        "name": "greeter_async_client",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_async_client.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/helloworld/Makefile",
+        "system": "make",
+        "name": "greeter_async_client2",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_async_client2.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/helloworld/Makefile",
+        "system": "make",
+        "name": "greeter_async_server",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_async_server.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/helloworld/Makefile",
+        "system": "make",
+        "name": "greeter_callback_client",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_callback_client.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/helloworld/Makefile",
+        "system": "make",
+        "name": "greeter_callback_server",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/helloworld/greeter_callback_server.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/route_guide/Makefile",
+        "system": "make",
+        "name": "route_guide_client",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/route_guide/route_guide_client.cc",
+          "examples/cpp/route_guide/helper.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/cpp/route_guide/Makefile",
+        "system": "make",
+        "name": "route_guide_server",
+        "kind": "executable",
+        "sources": [
+          "examples/cpp/route_guide/route_guide_server.cc",
+          "examples/cpp/route_guide/helper.cc"
+        ],
+        "links": []
+      }
+    ]
+  },
+  "includes": {
+    "files": [
+      "examples/cpp/helloworld/cocoapods/HelloWorldCpp/AppDelegate.h",
+      "examples/cpp/helloworld/cocoapods/HelloWorldCpp/ViewController.h",
+      "examples/cpp/helloworld/greeter_async_client.cc",
+      "examples/cpp/helloworld/greeter_async_client2.cc",
+      "examples/cpp/helloworld/greeter_async_server.cc",
+      "examples/cpp/helloworld/greeter_callback_client.cc",
+      "examples/cpp/helloworld/greeter_callback_server.cc",
+      "examples/cpp/helloworld/greeter_client.cc",
+      "examples/cpp/helloworld/greeter_server.cc",
+      "examples/cpp/helloworld/xds_greeter_client.cc",
+      "examples/cpp/helloworld/xds_greeter_server.cc",
+      "examples/cpp/route_guide/helper.cc",
+      "examples/cpp/route_guide/helper.h",
+      "examples/cpp/route_guide/route_guide_callback_client.cc",
+      "examples/cpp/route_guide/route_guide_callback_server.cc",
+      "examples/cpp/route_guide/route_guide_client.cc",
+      "examples/cpp/route_guide/route_guide_server.cc"
+    ],
+    "items": [
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 19,
+        "source": "grpcpp/grpcpp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 21,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 22,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 23,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 25,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 26,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 27,
+        "source": "absl/log/check.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 28,
+        "source": "absl/log/initialize.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 31,
+        "source": "examples/protos/helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client.cc",
+        "line": 33,
+        "source": "helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 19,
+        "source": "grpcpp/grpcpp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 21,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 22,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 23,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 24,
+        "source": "thread",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 26,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 27,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 28,
+        "source": "absl/log/check.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 31,
+        "source": "examples/protos/helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_client2.cc",
+        "line": 33,
+        "source": "helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 19,
+        "source": "grpcpp/grpcpp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 21,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 22,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 23,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 24,
+        "source": "thread",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 26,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 27,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 28,
+        "source": "absl/log/check.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 29,
+        "source": "absl/strings/str_format.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 32,
+        "source": "examples/protos/helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_async_server.cc",
+        "line": 34,
+        "source": "helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 19,
+        "source": "grpcpp/grpcpp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 21,
+        "source": "condition_variable",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 22,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 23,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 24,
+        "source": "mutex",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 25,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 27,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 28,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 31,
+        "source": "examples/protos/helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_client.cc",
+        "line": 33,
+        "source": "helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 19,
+        "source": "grpcpp/ext/proto_server_reflection_plugin.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 20,
+        "source": "grpcpp/grpcpp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 21,
+        "source": "grpcpp/health_check_service_interface.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 23,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 24,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 25,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 27,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 28,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 29,
+        "source": "absl/strings/str_format.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 32,
+        "source": "examples/protos/helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+        "line": 34,
+        "source": "helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 19,
+        "source": "grpcpp/grpcpp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 21,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 22,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 23,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 25,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 26,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 29,
+        "source": "examples/protos/helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 31,
+        "source": "helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 19,
+        "source": "grpcpp/ext/proto_server_reflection_plugin.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 20,
+        "source": "grpcpp/grpcpp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 21,
+        "source": "grpcpp/health_check_service_interface.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 23,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 24,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 25,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 27,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 28,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 29,
+        "source": "absl/log/initialize.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 30,
+        "source": "absl/strings/str_format.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 33,
+        "source": "examples/protos/helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 35,
+        "source": "helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_client.cc",
+        "line": 19,
+        "source": "grpcpp/grpcpp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_client.cc",
+        "line": 21,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_client.cc",
+        "line": 22,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_client.cc",
+        "line": 23,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_client.cc",
+        "line": 25,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_client.cc",
+        "line": 26,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_client.cc",
+        "line": 29,
+        "source": "examples/protos/helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_client.cc",
+        "line": 31,
+        "source": "helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 19,
+        "source": "grpcpp/ext/admin_services.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 20,
+        "source": "grpcpp/ext/proto_server_reflection_plugin.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 21,
+        "source": "grpcpp/grpcpp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 22,
+        "source": "grpcpp/health_check_service_interface.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 23,
+        "source": "grpcpp/xds_server_builder.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 25,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 26,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 27,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 29,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 30,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 31,
+        "source": "absl/log/log.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 32,
+        "source": "absl/strings/str_cat.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 35,
+        "source": "examples/protos/helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+        "line": 37,
+        "source": "helloworld.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 19,
+        "source": "algorithm",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 20,
+        "source": "cctype",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 21,
+        "source": "fstream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 22,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 23,
+        "source": "regex",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 24,
+        "source": "sstream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 25,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 26,
+        "source": "vector",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 28,
+        "source": "absl/flags/flag.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 29,
+        "source": "absl/log/log.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 32,
+        "source": "examples/protos/route_guide.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 34,
+        "source": "route_guide.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.h",
+        "line": 22,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.h",
+        "line": 23,
+        "source": "vector",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 19,
+        "source": "grpc/grpc.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 20,
+        "source": "grpcpp/alarm.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 21,
+        "source": "grpcpp/channel.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 22,
+        "source": "grpcpp/client_context.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 23,
+        "source": "grpcpp/create_channel.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 24,
+        "source": "grpcpp/security/credentials.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 26,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 27,
+        "source": "condition_variable",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 28,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 29,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 30,
+        "source": "mutex",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 31,
+        "source": "random",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 32,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 33,
+        "source": "thread",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 35,
+        "source": "helper.h",
+        "target": "examples/cpp/route_guide/helper.h"
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 36,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 37,
+        "source": "absl/log/initialize.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 39,
+        "source": "examples/protos/route_guide.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_client.cc",
+        "line": 41,
+        "source": "route_guide.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 19,
+        "source": "grpc/grpc.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 20,
+        "source": "grpcpp/security/server_credentials.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 21,
+        "source": "grpcpp/server.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 22,
+        "source": "grpcpp/server_builder.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 23,
+        "source": "grpcpp/server_context.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 25,
+        "source": "algorithm",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 26,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 27,
+        "source": "cmath",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 28,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 29,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 30,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 31,
+        "source": "thread",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 33,
+        "source": "helper.h",
+        "target": "examples/cpp/route_guide/helper.h"
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 34,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 35,
+        "source": "absl/log/globals.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 36,
+        "source": "absl/log/initialize.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 37,
+        "source": "absl/log/log.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 39,
+        "source": "examples/protos/route_guide.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 41,
+        "source": "route_guide.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 19,
+        "source": "grpc/grpc.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 20,
+        "source": "grpcpp/channel.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 21,
+        "source": "grpcpp/client_context.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 22,
+        "source": "grpcpp/create_channel.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 23,
+        "source": "grpcpp/security/credentials.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 25,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 26,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 27,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 28,
+        "source": "random",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 29,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 30,
+        "source": "thread",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 32,
+        "source": "helper.h",
+        "target": "examples/cpp/route_guide/helper.h"
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 33,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 34,
+        "source": "absl/log/initialize.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 36,
+        "source": "examples/protos/route_guide.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 38,
+        "source": "route_guide.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 19,
+        "source": "grpc/grpc.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 20,
+        "source": "grpcpp/security/server_credentials.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 21,
+        "source": "grpcpp/server.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 22,
+        "source": "grpcpp/server_builder.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 23,
+        "source": "grpcpp/server_context.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 25,
+        "source": "algorithm",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 26,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 27,
+        "source": "cmath",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 28,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 29,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 30,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 32,
+        "source": "helper.h",
+        "target": "examples/cpp/route_guide/helper.h"
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 33,
+        "source": "absl/flags/parse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 34,
+        "source": "absl/log/initialize.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 36,
+        "source": "examples/protos/route_guide.grpc.pb.h",
+        "target": null
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 38,
+        "source": "route_guide.grpc.pb.h",
+        "target": null
+      }
+    ]
+  },
+  "calls": {
+    "files": [
+      "examples/cpp/route_guide/route_guide_server.cc",
+      "examples/cpp/route_guide/route_guide_client.cc",
+      "examples/cpp/route_guide/helper.cc",
+      "examples/cpp/route_guide/route_guide_callback_server.cc",
+      "examples/cpp/helloworld/greeter_server.cc",
+      "examples/cpp/helloworld/greeter_client.cc"
+    ],
+    "items": [
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 63,
+        "callee": "SayHello",
+        "target": null,
+        "targets": [
+          {
+            "file": "examples/cpp/helloworld/greeter_callback_server.cc",
+            "name": "SayHello",
+            "className": "GreeterServiceImpl"
+          },
+          {
+            "file": "examples/cpp/helloworld/greeter_server.cc",
+            "name": "SayHello",
+            "className": "GreeterServiceImpl"
+          },
+          {
+            "file": "examples/cpp/helloworld/xds_greeter_server.cc",
+            "name": "SayHello",
+            "className": "GreeterServiceImpl"
+          }
+        ]
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_client.cc",
+        "line": 90,
+        "callee": "SayHello",
+        "target": {
+          "file": "examples/cpp/helloworld/greeter_client.cc",
+          "name": "SayHello",
+          "className": "GreeterClient"
+        }
+      },
+      {
+        "file": "examples/cpp/helloworld/greeter_server.cc",
+        "line": 82,
+        "callee": "RunServer",
+        "target": {
+          "file": "examples/cpp/helloworld/greeter_server.cc",
+          "name": "RunServer"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 64,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 65,
+        "callee": "SetFailedAndReturnFalse",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "SetFailedAndReturnFalse",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 72,
+        "callee": "Finished",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Finished",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 72,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 73,
+        "callee": "SetFailedAndReturnFalse",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "SetFailedAndReturnFalse",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 75,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 75,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 75,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 76,
+        "callee": "SetFailedAndReturnFalse",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "SetFailedAndReturnFalse",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 79,
+        "callee": "ReadLong",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "ReadLong",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 81,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 81,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 82,
+        "callee": "SetFailedAndReturnFalse",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "SetFailedAndReturnFalse",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 84,
+        "callee": "ReadLong",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "ReadLong",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 86,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 86,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 86,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 87,
+        "callee": "SetFailedAndReturnFalse",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "SetFailedAndReturnFalse",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 93,
+        "callee": "SetFailedAndReturnFalse",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "SetFailedAndReturnFalse",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 96,
+        "callee": "Match",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Match",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 100,
+        "callee": "SetFailedAndReturnFalse",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "SetFailedAndReturnFalse",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 150,
+        "callee": "Finished",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "Finished",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/helper.cc",
+        "line": 152,
+        "callee": "TryParseOne",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "TryParseOne",
+          "className": "Parser"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 65,
+        "callee": "ConvertToRadians",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+          "name": "ConvertToRadians"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 66,
+        "callee": "ConvertToRadians",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+          "name": "ConvertToRadians"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 67,
+        "callee": "ConvertToRadians",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+          "name": "ConvertToRadians"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 68,
+        "callee": "ConvertToRadians",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+          "name": "ConvertToRadians"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 92,
+        "callee": "ParseDb",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "ParseDb"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 102,
+        "callee": "GetFeatureName",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+          "name": "GetFeatureName"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 122,
+        "callee": "GetFeatureName",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+          "name": "GetFeatureName"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 204,
+        "callee": "GetFeatureName",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+          "name": "GetFeatureName"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 208,
+        "callee": "GetDistance",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+          "name": "GetDistance"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 331,
+        "callee": "GetDbFileContent",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "GetDbFileContent"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+        "line": 332,
+        "callee": "RunServer",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+          "name": "RunServer"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 64,
+        "callee": "MakePoint",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "MakePoint"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 72,
+        "callee": "MakePoint",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "MakePoint"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 80,
+        "callee": "ParseDb",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "ParseDb"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 86,
+        "callee": "MakePoint",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "MakePoint"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 87,
+        "callee": "GetOneFeature",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "GetOneFeature",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 88,
+        "callee": "MakePoint",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "MakePoint"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 89,
+        "callee": "GetOneFeature",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "GetOneFeature",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 105,
+        "callee": "ListFeatures",
+        "target": null,
+        "targets": [
+          {
+            "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+            "name": "ListFeatures",
+            "className": "RouteGuideImpl"
+          },
+          {
+            "file": "examples/cpp/route_guide/route_guide_server.cc",
+            "name": "ListFeatures",
+            "className": "RouteGuideImpl"
+          }
+        ]
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 132,
+        "callee": "RecordRoute",
+        "target": null,
+        "targets": [
+          {
+            "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+            "name": "RecordRoute",
+            "className": "RouteGuideImpl"
+          },
+          {
+            "file": "examples/cpp/route_guide/route_guide_server.cc",
+            "name": "RecordRoute",
+            "className": "RouteGuideImpl"
+          }
+        ]
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 162,
+        "callee": "RouteChat",
+        "target": null,
+        "targets": [
+          {
+            "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+            "name": "RouteChat",
+            "className": "RouteGuideImpl"
+          },
+          {
+            "file": "examples/cpp/route_guide/route_guide_server.cc",
+            "name": "RouteChat",
+            "className": "RouteGuideImpl"
+          }
+        ]
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 165,
+        "callee": "MakeRouteNote",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "MakeRouteNote"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 166,
+        "callee": "MakeRouteNote",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "MakeRouteNote"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 167,
+        "callee": "MakeRouteNote",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "MakeRouteNote"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 168,
+        "callee": "MakeRouteNote",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "MakeRouteNote"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 194,
+        "callee": "GetFeature",
+        "target": null,
+        "targets": [
+          {
+            "file": "examples/cpp/route_guide/route_guide_callback_server.cc",
+            "name": "GetFeature",
+            "className": "RouteGuideImpl"
+          },
+          {
+            "file": "examples/cpp/route_guide/route_guide_server.cc",
+            "name": "GetFeature",
+            "className": "RouteGuideImpl"
+          }
+        ]
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 224,
+        "callee": "GetDbFileContent",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "GetDbFileContent"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 231,
+        "callee": "GetFeature",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "GetFeature",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 233,
+        "callee": "ListFeatures",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "ListFeatures",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 235,
+        "callee": "RecordRoute",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "RecordRoute",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_client.cc",
+        "line": 237,
+        "callee": "RouteChat",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_client.cc",
+          "name": "RouteChat",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 65,
+        "callee": "ConvertToRadians",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_server.cc",
+          "name": "ConvertToRadians"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 66,
+        "callee": "ConvertToRadians",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_server.cc",
+          "name": "ConvertToRadians"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 67,
+        "callee": "ConvertToRadians",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_server.cc",
+          "name": "ConvertToRadians"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 68,
+        "callee": "ConvertToRadians",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_server.cc",
+          "name": "ConvertToRadians"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 92,
+        "callee": "ParseDb",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "ParseDb"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 97,
+        "callee": "GetFeatureName",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_server.cc",
+          "name": "GetFeatureName"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 132,
+        "callee": "GetFeatureName",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_server.cc",
+          "name": "GetFeatureName"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 136,
+        "callee": "GetDistance",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_server.cc",
+          "name": "GetDistance"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 190,
+        "callee": "GetDbFileContent",
+        "target": {
+          "file": "examples/cpp/route_guide/helper.cc",
+          "name": "GetDbFileContent"
+        }
+      },
+      {
+        "file": "examples/cpp/route_guide/route_guide_server.cc",
+        "line": 191,
+        "callee": "RunServer",
+        "target": {
+          "file": "examples/cpp/route_guide/route_guide_server.cc",
+          "name": "RunServer"
+        }
       }
     ]
   }

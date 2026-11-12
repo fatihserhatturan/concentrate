@@ -44,7 +44,7 @@ for (const labelFile of labelFiles) {
     process.exit(1);
   }
   const entry = manifest.find((sample) => sample.name === labels.sample);
-  const graph = await buildCodeGraph(projectPath, { continueOnError: entry?.continueOnError === true, apiOrigins: entry?.apiOrigins });
+  const graph = await buildCodeGraph(projectPath, { continueOnError: entry?.continueOnError === true, apiOrigins: entry?.apiOrigins, exclude: entry?.exclude });
   const scores: Scores = {};
   if (labels.routes) scores.routes = compareRoutes(graph, labels.routes);
   if (labels.calls) scores.calls = compareCalls(graph, labels.calls);

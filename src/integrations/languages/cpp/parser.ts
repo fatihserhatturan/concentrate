@@ -67,6 +67,9 @@ const cplusplusGuard = String.raw`#[ \t]*if(?:def)?[ \t]+(?:defined[ \t]*\(?[ \t
 const externCOpen = new RegExp(`(${cplusplusGuard})(extern\\s+"C"\\s*\\{)`, "gu");
 const externCClose = new RegExp(`(${cplusplusGuard})\\}`, "gu");
 
+const macroArguments = String.raw`(?:"(?:[^"\\\n]|\\.)*"|[^;{}\\#"()]|\((?:[^;{}()"]|"(?:[^"\\\n]|\\.)*")*\))*`;
+const topLevelStatementMacro = new RegExp(String.raw`^[A-Z][A-Z0-9]*(?:_[A-Z0-9]*)+[ \t]*\(${macroArguments}\)[ \t]*(?=\r?\n\s*(?:[A-Za-z_#/}]|$))`, "gmu");
+
 function cppStandIn(text: string): string {
   const blank = (match: string) => match.replace(/[^\r\n]/gu, " ");
   if (text.includes("__cplusplus")) {
@@ -80,11 +83,17 @@ function cppStandIn(text: string): string {
       .replace(/\b(?:METHOD_LIST_BEGIN|METHOD_LIST_END|PATH_LIST_BEGIN|PATH_LIST_END|WS_PATH_LIST_BEGIN|WS_PATH_LIST_END|Q_OBJECT|Q_GADGET)\b/gu, blank)
       .replace(/\b(?:METHOD_ADD|ADD_METHOD_TO|ADD_METHOD_VIA_REGEX|ADD_METHOD_VIA_REGEX_TO|PATH_ADD|WS_PATH_ADD|WS_ADD_PATH_VIA_REGEX|WS_CORO_PATH_ADD)\s*\([^;\\#]*\)\s*;/gu, blank);
   }
-  // Flag declarations (`ABSL_FLAG(uint16_t, port, 50051, "…");`, gflags' `DEFINE_string`)
+  // Flag declarations (`ABSL_FLAG(uint16_t, port, 50051, "…");`, gflags' `DEFINE_string`, googletest's `GTEST_DEFINE_bool_`)
   // are declarations without a type to the grammar and swallow what follows.
   if (text.includes("ABSL_") || text.includes("DEFINE_") || text.includes("DECLARE_")) {
-    text = text.replace(/^[ \t]*(?:ABSL_FLAG|ABSL_DECLARE_FLAG|(?:DEFINE|DECLARE)_(?:bool|string|int32|int64|uint32|uint64|double|int))\s*\([^;\\#]*\)\s*;/gmu, blank);
+    text = text.replace(/^[ \t]*(?:ABSL_FLAG|ABSL_DECLARE_FLAG|(?:[A-Z][A-Z0-9]*_)?(?:DEFINE|DECLARE)_(?:bool|string|int32|int64|uint32|uint64|double|int)_?)\s*\((?:"(?:[^"\\\n]|\\.)*"|[^;\\#"])*\)\s*;/gmu, blank);
   }
+  // A statement macro at column 0 without a `;` (googletest's
+  // `GTEST_REPEATER_METHOD_(OnTestStart, TestInfo)`, `GTEST_ATTRIBUTE_PRINTF_(2, 3)`
+  // before a declaration) is an error to the grammar that takes the whole
+  // enclosing namespace with it: it is read as blanks when the next line
+  // starts a new declaration, directive or comment.
+  if (text.includes("_(")) text = text.replace(topLevelStatementMacro, blank);
   return catchStandIn(text.replace(attributeMacro, blank).replace(/\b(class|struct|union)(\s+)([A-Z][A-Z0-9_]{2,})(?=\s+[A-Za-z_]\w*\s*(?:final\s*)?[:{])/gu, (_match, keyword: string, space: string, macro: string) => `${keyword}${space}${blank(macro)}`));
 }
 

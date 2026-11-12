@@ -1,0 +1,167 @@
+{
+  "$comment": "C and C++ agent benchmark questions over the pinned cJSON, tinyxml2, googletest, Crow, Drogon, cpp-httplib, gRPC C++ and Qt SQL samples: routes, callers, change impact, header \u2192 definition, build targets, env reads and data access. Expected answers were written by reading the pinned source (the registration macros and calls, the call sites of cJSON_New_Item and ParseDb, the tinyxml2 and cJSON declarations, the CMakeLists of Crow and gRPC, the GetEnv calls of gtest.cc, the Qt table setup), not from Concentrate output. Scoring as in questions.json.",
+  "questions": [
+    {
+      "id": "cpp-crow-chat-routes",
+      "sample": "internet-cpp-crow-examples",
+      "category": "routes",
+      "question": "In the Crow examples, which route paths does examples/example_chat.cpp register besides the index page?",
+      "expected": {
+        "mustInclude": [
+          "/logs",
+          "/logs/<int>",
+          "/send"
+        ]
+      }
+    },
+    {
+      "id": "cpp-drogon-hello-routes",
+      "sample": "internet-cpp-drogon-examples",
+      "category": "routes",
+      "question": "Which URL paths does examples/helloworld/main.cc register with app().registerHandler?",
+      "expected": {
+        "mustInclude": [
+          "/user/{user-name}",
+          "/hello_user",
+          "/hello?user={user-name}"
+        ]
+      }
+    },
+    {
+      "id": "cpp-httplib-server-routes",
+      "sample": "internet-cpp-httplib-examples",
+      "category": "routes",
+      "question": "Which route paths does example/server.cc register on its httplib::Server?",
+      "expected": {
+        "mustInclude": [
+          "/hi",
+          "/slow",
+          "/dump",
+          "/stop"
+        ]
+      }
+    },
+    {
+      "id": "cpp-cjson-new-item-callers",
+      "sample": "internet-c-cjson",
+      "category": "callers",
+      "question": "Which functions in cJSON.c call the static function cJSON_New_Item? List the function names.",
+      "expected": {
+        "mustInclude": [
+          "parse_array",
+          "parse_object",
+          "create_reference",
+          "cJSON_CreateNull",
+          "cJSON_CreateBool",
+          "cJSON_CreateNumber",
+          "cJSON_CreateString",
+          "cJSON_CreateRaw",
+          "cJSON_CreateArray",
+          "cJSON_CreateObject",
+          "cJSON_Duplicate_rec"
+        ]
+      }
+    },
+    {
+      "id": "cpp-grpc-radians-callers",
+      "sample": "internet-cpp-grpc-examples",
+      "category": "callers",
+      "question": "Which function calls ConvertToRadians in examples/cpp/route_guide/route_guide_server.cc?",
+      "expected": {
+        "mustInclude": [
+          "GetDistance"
+        ]
+      }
+    },
+    {
+      "id": "cpp-grpc-parsedb-impact",
+      "sample": "internet-cpp-grpc-examples",
+      "category": "impact",
+      "question": "If I change the signature of routeguide::ParseDb (examples/cpp/route_guide/helper.cc), which C++ files under examples/cpp/route_guide call it?",
+      "expected": {
+        "mustInclude": [
+          "route_guide_client.cc",
+          "route_guide_server.cc",
+          "route_guide_callback_client.cc",
+          "route_guide_callback_server.cc"
+        ]
+      }
+    },
+    {
+      "id": "cpp-tinyxml2-loadfile-definition",
+      "sample": "internet-cpp-tinyxml2",
+      "category": "definition",
+      "question": "In which file is XMLDocument::LoadFile(const char*) defined, and in which header is it declared?",
+      "expected": {
+        "mustInclude": [
+          "tinyxml2.cpp",
+          "tinyxml2.h"
+        ]
+      }
+    },
+    {
+      "id": "cpp-cjson-parse-definition",
+      "sample": "internet-c-cjson",
+      "category": "definition",
+      "question": "Which source file defines cJSON_Parse and which header declares it?",
+      "expected": {
+        "mustInclude": [
+          "cJSON.c",
+          "cJSON.h"
+        ]
+      }
+    },
+    {
+      "id": "cpp-crow-chat-target",
+      "sample": "internet-cpp-crow-examples",
+      "category": "build",
+      "question": "Which CMake target builds examples/example_chat.cpp, and which library does it link?",
+      "expected": {
+        "mustInclude": [
+          "example_chat",
+          "Crow"
+        ]
+      }
+    },
+    {
+      "id": "cpp-grpc-route-guide-targets",
+      "sample": "internet-cpp-grpc-examples",
+      "category": "build",
+      "question": "Which executable targets do the CMake file of examples/cpp/route_guide build, and which library holds helper.cc?",
+      "expected": {
+        "mustInclude": [
+          "route_guide_client",
+          "route_guide_server",
+          "route_guide_callback_client",
+          "route_guide_callback_server",
+          "route_guide_helper"
+        ]
+      }
+    },
+    {
+      "id": "cpp-googletest-env",
+      "sample": "internet-cpp-googletest",
+      "category": "env",
+      "question": "Which environment variables does googletest/src/gtest.cc read with a literal name through posix::GetEnv?",
+      "expected": {
+        "mustInclude": [
+          "TESTBRIDGE_TEST_ONLY",
+          "TESTBRIDGE_TEST_RUNNER_FAIL_FAST",
+          "TERM",
+          "TEST_PREMATURE_EXIT_FILE"
+        ]
+      }
+    },
+    {
+      "id": "cpp-qt-relational-tables",
+      "sample": "internet-cpp-qt-network-examples",
+      "category": "data",
+      "question": "In the Qt SQL examples, which function creates the employee, city and country tables?",
+      "expected": {
+        "mustInclude": [
+          "createRelationalTables"
+        ]
+      }
+    }
+  ]
+}
