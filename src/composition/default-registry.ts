@@ -6,13 +6,12 @@ import { astroParser, htmlParser, javascriptParser, svelteParser, typescriptPars
 import { goDataAccessContributor, goDiContributor, goEntrypointsContributor, goEnvConfigContributor, goForeignRoutersContributor, goFrameworkParser, goGrpcContributor, goHttpClientsContributor, goRoutesContributor } from "../integrations/frameworks/go/index.js";
 import { rustEnvConfigContributor, rustDataAccessContributor, rustHttpClientsContributor, rustEntrypointsContributor, rustFrameworkParser, rustRoutesContributor } from "../integrations/frameworks/rust/index.js";
 import { pythonEntrypointsContributor, pythonFrameworkParser, pythonRoutesContributor } from "../integrations/frameworks/python/index.js";
-import { cParser, cppParser } from "../integrations/languages/cpp/parser.js";
 import { plainFileParsers } from "../integrations/languages/plain/parser.js";
 import { protoContributor } from "../integrations/frameworks/proto/index.js";
 import { sqlSchemaContributor } from "../integrations/frameworks/sql/index.js";
 import { stylesContributor } from "../integrations/frameworks/styles/index.js";
 import { scriptsContributor } from "../integrations/frameworks/scripts/index.js";
-import { cppBuildContributor } from "../integrations/frameworks/cpp/build.js";
+import { cFrameworkParser, cppFrameworkParser, cppBuildContributor, cppRoutesContributor, cppEnvConfigContributor, cppDataAccessContributor, cppGrpcContributor, cppQtContributor } from "../integrations/frameworks/cpp/index.js";
 import {
   nestjsModulesContributor,
   nestjsInjectionContributor,
@@ -41,7 +40,7 @@ export { CoreIntegrationRegistry };
 export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry {
   const registry = new CoreIntegrationRegistry();
 
-  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cParser, cppParser, ...plainFileParsers]) {
+  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, ...plainFileParsers]) {
     registry.registerLanguageParser(parser);
   }
 
@@ -68,6 +67,11 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     rustEnvConfigContributor,
     rustDataAccessContributor,
     rustHttpClientsContributor,
+    cppRoutesContributor,
+    cppGrpcContributor,
+    cppQtContributor,
+    cppEnvConfigContributor,
+    cppDataAccessContributor,
     pythonRoutesContributor,
     pythonEntrypointsContributor,
     nextjsRoutesContributor,

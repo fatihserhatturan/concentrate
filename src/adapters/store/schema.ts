@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 86;
+export const SCHEMA_VERSION = 87;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -144,6 +144,7 @@ export const relationshipTables: readonly RelationshipTable[] = [
   { type: "RPC_RESPONSE", from: "Rpc", to: "Message", properties: {} },
   { type: "RPC_SERVED_BY", from: "Rpc", to: "Interface", properties: { method: "STRING" } },
   { type: "RPC_IMPLEMENTED_BY", from: "Rpc", to: "Function", properties: {} },
+  { type: "SIGNAL_CONNECTS_TO", from: "Function", to: "Function", properties: { line: "INT64", file: "STRING", style: "STRING" } },
   { type: "MAPS_TO_TABLE", from: "DataModel", to: "Table", properties: {} },
   { type: "RELATES_TO", from: "DataModel", to: "DataModel", properties: { field: "STRING", kind: "STRING", fields: "STRING", references: "STRING", relationName: "STRING", onDelete: "STRING" } },
   { type: "READS_FILE", from: "File", to: "Table", properties: { operation: "STRING", line: "INT64", expression: "STRING", model: "STRING" } },
