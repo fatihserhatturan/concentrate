@@ -97,5 +97,248 @@
         }
       }
     ]
+  },
+  "buildTargets": {
+    "scope": [
+      "CMakeLists.txt",
+      "Makefile"
+    ],
+    "items": [
+      {
+        "file": "CMakeLists.txt",
+        "system": "cmake",
+        "name": "tinyxml2",
+        "kind": "library",
+        "sources": [
+          "tinyxml2.cpp",
+          "tinyxml2.h"
+        ],
+        "links": []
+      },
+      {
+        "file": "CMakeLists.txt",
+        "system": "cmake",
+        "name": "xmltest",
+        "kind": "executable",
+        "sources": [
+          "xmltest.cpp"
+        ],
+        "links": [
+          "tinyxml2"
+        ]
+      },
+      {
+        "file": "Makefile",
+        "system": "make",
+        "name": "libtinyxml2.a",
+        "kind": "library",
+        "sources": [
+          "tinyxml2.cpp"
+        ],
+        "links": []
+      },
+      {
+        "file": "Makefile",
+        "system": "make",
+        "name": "xmltest",
+        "kind": "executable",
+        "sources": [
+          "xmltest.cpp"
+        ],
+        "links": [
+          "libtinyxml2.a"
+        ]
+      }
+    ]
+  },
+  "includes": {
+    "files": [
+      "contrib/html5-printer.cpp",
+      "tinyxml2.cpp",
+      "tinyxml2.h",
+      "xmltest.cpp"
+    ],
+    "items": [
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 43,
+        "source": "../tinyxml2.h",
+        "target": "tinyxml2.h"
+      },
+      {
+        "file": "contrib/html5-printer.cpp",
+        "line": 44,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.cpp",
+        "line": 24,
+        "source": "tinyxml2.h",
+        "target": "tinyxml2.h"
+      },
+      {
+        "file": "tinyxml2.cpp",
+        "line": 26,
+        "source": "new",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.cpp",
+        "line": 28,
+        "source": "stddef.h",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.cpp",
+        "line": 29,
+        "source": "stdarg.h",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.cpp",
+        "line": 31,
+        "source": "cstddef",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.cpp",
+        "line": 32,
+        "source": "cstdarg",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 28,
+        "source": "ctype.h",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 29,
+        "source": "limits.h",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 30,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 31,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 32,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 34,
+        "source": "cctype",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 35,
+        "source": "climits",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 36,
+        "source": "cstdio",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 37,
+        "source": "cstdlib",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 38,
+        "source": "cstring",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 40,
+        "source": "stdint.h",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 74,
+        "source": "android/log.h",
+        "target": null
+      },
+      {
+        "file": "tinyxml2.h",
+        "line": 77,
+        "source": "assert.h",
+        "target": null
+      },
+      {
+        "file": "xmltest.cpp",
+        "line": 7,
+        "source": "tinyxml2.h",
+        "target": "tinyxml2.h"
+      },
+      {
+        "file": "xmltest.cpp",
+        "line": 8,
+        "source": "cerrno",
+        "target": null
+      },
+      {
+        "file": "xmltest.cpp",
+        "line": 9,
+        "source": "cstdlib",
+        "target": null
+      },
+      {
+        "file": "xmltest.cpp",
+        "line": 10,
+        "source": "cstring",
+        "target": null
+      },
+      {
+        "file": "xmltest.cpp",
+        "line": 11,
+        "source": "ctime",
+        "target": null
+      },
+      {
+        "file": "xmltest.cpp",
+        "line": 14,
+        "source": "crtdbg.h",
+        "target": null
+      },
+      {
+        "file": "xmltest.cpp",
+        "line": 16,
+        "source": "windows.h",
+        "target": null
+      },
+      {
+        "file": "xmltest.cpp",
+        "line": 20,
+        "source": "sys/stat.h",
+        "target": null
+      },
+      {
+        "file": "xmltest.cpp",
+        "line": 21,
+        "source": "sys/types.h",
+        "target": null
+      }
+    ]
   }
 }

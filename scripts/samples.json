@@ -22,6 +22,7 @@
     { "name": "internet-remark42-frontend", "suite": "internet", "repo": "https://github.com/umputun/remark42", "sha": "a479228ac26bad909fa26ca20027d81d3be3e24e", "exclude": ["backend/**", "site/**"] },
     { "name": "internet-c-cjson", "golden": true, "suite": "internet", "repo": "https://github.com/DaveGamble/cJSON", "sha": "6d9f2443ab071f86e5d9b43025a40929ec41c46c" },
     { "name": "internet-cpp-tinyxml2", "golden": true, "suite": "internet", "repo": "https://github.com/leethomason/tinyxml2", "sha": "8224e427b655b83dae5e2298f1e6919523a78737" },
+    { "name": "internet-cpp-googletest", "suite": "internet", "repo": "https://github.com/google/googletest", "sha": "b514bdc898e2951020cbdca1304b75f5950d1f59", "continueOnError": true },
     { "name": "internet-nextjs-taxonomy", "suite": "internet", "repo": "https://github.com/shadcn-ui/taxonomy", "sha": "298a8857c7128a0d121e7f699dfd729f23b3966d" },
     { "name": "internet-realworld-fullstack", "suite": "internet", "parts": [
       { "dir": "backend", "repo": "https://github.com/gothinkster/node-express-realworld-example-app", "sha": "30b68e1e881462b2f4164ea09ab4c4f5699c7b0b" },

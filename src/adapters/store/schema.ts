@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 85;
+export const SCHEMA_VERSION = 86;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -23,7 +23,7 @@ export type RelationshipTable = {
 
 export const nodeTables: readonly NodeTable[] = [
   { label: "Repo", properties: { path: "STRING", name: "STRING" } },
-  { label: "Package", properties: { path: "STRING", relativePath: "STRING", name: "STRING", version: "STRING", isPrivate: "BOOLEAN", manager: "STRING", workspaceRoot: "BOOLEAN" } },
+  { label: "Package", properties: { path: "STRING", relativePath: "STRING", name: "STRING", version: "STRING", isPrivate: "BOOLEAN", manager: "STRING", workspaceRoot: "BOOLEAN", targetType: "STRING", buildFile: "STRING", unresolved: "INT64" } },
   { label: "Directory", properties: { path: "STRING", relativePath: "STRING", name: "STRING" } },
   { label: "File", properties: { path: "STRING", relativePath: "STRING", language: "STRING", defaultExport: "STRING", defaultExportFrom: "STRING", sourceType: "STRING", isTest: "BOOLEAN", isFixture: "BOOLEAN", isSupport: "BOOLEAN", isGenerated: "BOOLEAN", isDocs: "BOOLEAN", dynamicRouteCalls: "STRING", packageName: "STRING", rustCrate: "STRING", rustCrateName: "STRING", rustModule: "STRING", allNames: "STRING", cppScope: "STRING" } },
   { label: "Import", properties: { source: "STRING", specifier: "STRING", line: "INT64", isReExport: "BOOLEAN", isWildcard: "BOOLEAN", isDynamic: "BOOLEAN", isCjs: "BOOLEAN", isTypeOnly: "BOOLEAN", bindings: "STRING", alias: "STRING", isModule: "BOOLEAN", inlineModules: "STRING", pathAttribute: "STRING", isSystem: "BOOLEAN" } },

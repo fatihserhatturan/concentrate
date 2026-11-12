@@ -1,22 +1,51 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { readBuildModel } from "./build/index.js";
 
 // Where `#include` looks beyond the including file's directory: the `-I`,
 // `-iquote`, `-isystem` and `-idirafter` directories of the project's
-// `compile_commands.json`. (CMake files are read by Phase 35.)
+// `compile_commands.json`, of its CMake files (`include_directories`,
+// `target_include_directories`, through the targets a target links to) and of
+// its Makefile compile rules. The `-D` / `target_compile_definitions` values
+// resolve a computed include (`#include CONFIG_HEADER`).
 export type CppIncludeConfig = {
   // Include directories (relative to the scan root) per source file.
   dirsByFile: Map<string, string[]>;
   // The union of them: what a header (which has no compile command) sees.
   allDirs: string[];
+  // Definitions per source file (`-DNAME=value`), and the union of them for headers.
+  definitionsByFile: Map<string, Map<string, string>>;
+  allDefinitions: Map<string, string>;
   // The compile_commands.json read, relative to the scan root.
   source: string | null;
+  // The CMake files and Makefiles read.
+  buildFiles: string[];
 };
 
 const compileCommandsLocations = ["compile_commands.json", "build/compile_commands.json", "out/compile_commands.json", "cmake-build-debug/compile_commands.json", "cmake-build-release/compile_commands.json"];
 
-export async function readCppIncludeConfig(rootPath: string): Promise<CppIncludeConfig> {
-  const empty: CppIncludeConfig = { dirsByFile: new Map(), allDirs: [], source: null };
+export async function readCppIncludeConfig(rootPath: string, relativeFiles: Iterable<string> = []): Promise<CppIncludeConfig> {
+  const config = await readCompileCommands(rootPath);
+  const model = await readBuildModel(rootPath, relativeFiles);
+  for (const [file, dirs] of model.includeDirsByFile) {
+    const known = config.dirsByFile.get(file);
+    config.dirsByFile.set(file, known ? [...known, ...dirs.filter((dir) => !known.includes(dir))] : dirs);
+  }
+  for (const [file, definitions] of model.definitionsByFile) {
+    const known = config.definitionsByFile.get(file) ?? new Map<string, string>();
+    for (const [name, value] of definitions) if (!known.has(name)) known.set(name, value);
+    config.definitionsByFile.set(file, known);
+  }
+  config.buildFiles = model.files;
+  const all = new Set<string>(config.allDirs);
+  for (const dirs of config.dirsByFile.values()) for (const dir of dirs) all.add(dir);
+  config.allDirs = [...all];
+  for (const definitions of config.definitionsByFile.values()) for (const [name, value] of definitions) if (!config.allDefinitions.has(name)) config.allDefinitions.set(name, value);
+  return config;
+}
+
+async function readCompileCommands(rootPath: string): Promise<CppIncludeConfig> {
+  const empty: CppIncludeConfig = { dirsByFile: new Map(), allDirs: [], definitionsByFile: new Map(), allDefinitions: new Map(), source: null, buildFiles: [] };
   for (const location of compileCommandsLocations) {
     let entries: unknown;
     try {
@@ -26,6 +55,7 @@ export async function readCppIncludeConfig(rootPath: string): Promise<CppInclude
     }
     if (!Array.isArray(entries)) continue;
     const dirsByFile = new Map<string, string[]>();
+    const definitionsByFile = new Map<string, Map<string, string>>();
     const all = new Set<string>();
     for (const entry of entries as Array<Record<string, unknown>>) {
       if (typeof entry?.file !== "string") continue;
@@ -39,9 +69,11 @@ export async function readCppIncludeConfig(rootPath: string): Promise<CppInclude
       const file = relativeToRoot(rootPath, path.resolve(rootPath, directory, entry.file));
       if (file === null) continue;
       dirsByFile.set(file, dirs);
+      const definitions = definitionsOf(args);
+      if (definitions.size > 0) definitionsByFile.set(file, definitions);
       for (const dir of dirs) all.add(dir);
     }
-    return { dirsByFile, allDirs: [...all], source: location };
+    return { ...empty, dirsByFile, allDirs: [...all], definitionsByFile, source: location };
   }
   return empty;
 }
@@ -100,6 +132,19 @@ function includeDirectories(args: string[]): string[] {
   return dirs;
 }
 
+// `-DNAME`, `-DNAME=value` and `-D NAME=value` of a compile command.
+function definitionsOf(args: string[]): Map<string, string> {
+  const definitions = new Map<string, string>();
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index]!;
+    const text = arg === "-D" ? args[++index] : arg.startsWith("-D") ? arg.slice(2) : undefined;
+    if (!text) continue;
+    const equals = text.indexOf("=");
+    definitions.set(equals === -1 ? text : text.slice(0, equals), equals === -1 ? "" : text.slice(equals + 1));
+  }
+  return definitions;
+}
+
 export type CppFileIndex = {
   files: ReadonlySet<string>;
   // Files by the last path segment, for the unique-suffix fallback.
@@ -131,6 +176,13 @@ export function resolveCppInclude(
   index: CppFileIndex,
   config: CppIncludeConfig,
 ): string | null {
+  // `#include CONFIG_HEADER` with `-DCONFIG_HEADER="cfg.h"` (or `<cfg.h>`).
+  if (/^[A-Za-z_]\w*$/u.test(source)) {
+    const value = (config.definitionsByFile.get(importerFile) ?? config.allDefinitions).get(source);
+    const written = value === undefined ? null : /^\\?"(.+?)\\?"$/u.exec(value) ?? /^<(.+)>$/u.exec(value);
+    if (!written) return null;
+    return resolveCppInclude(written[1]!, value!.startsWith("<"), importerFile, index, config);
+  }
   const candidates: string[] = [];
   if (!isSystem) candidates.push(path.posix.join(path.posix.dirname(importerFile), source));
   for (const dir of config.dirsByFile.get(importerFile) ?? config.allDirs) candidates.push(path.posix.join(dir, source));

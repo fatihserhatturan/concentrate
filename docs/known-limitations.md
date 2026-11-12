@@ -1952,9 +1952,15 @@ the call recall leaves out:
   the only scanned file whose path ends with the written path (a project without
   compile commands). `#include <…>` resolves only through the include directories;
   one that does not is external and not counted. A quoted include nothing resolves
-  is counted in `unresolvedRelativeImports`. CMake's `include_directories` and
-  `target_include_directories` are not read yet (Phase 35); neither are `-include`
-  flags, `#include_next`, macro-named includes (`#include MACRO`) or `.def` files.
+  is counted in `unresolvedRelativeImports`. The include directories also come from
+  CMake (`include_directories`, `target_include_directories`, and what the targets a
+  target links to export, see "Build systems" below) and from the `-I` flags of
+  Makefile compile rules; a source file sees the directories of its own target (or
+  compile command), a header the union of all of them. A computed include
+  (`#include CONFIG_HEADER`) resolves when `-DCONFIG_HEADER="cfg.h"`,
+  `target_compile_definitions` or `add_definitions` defines it for that file (or, for a
+  header, anywhere in the project). `-include` flags, `#include_next` and `.def` files
+  are not read.
 - Names are visible through includes: a call sees the declarations of its own file and
   of every file it includes, transitively. A name that is only reachable because the
   include did not resolve, or that comes from a library outside the scan, leaves the
@@ -2020,8 +2026,81 @@ the call recall leaves out:
   WebAssembly heap (tinyxml2.h before the export macro was read as blank: +285 MB RSS
   once, reused afterwards), and each parse worker has its own heap. cJSON (161
   files, 55 code files) scans in 0.25 s and tinyxml2 (272 files) in 1.2 s.
-- Not read yet: CMake and Make (Phase 35), HTTP and RPC frameworks, env and data access
-  (Phase 36).
+- Not read yet: HTTP and RPC frameworks, env and data access (Phase 36).
+
+### Build systems (CMake, Make, compile_commands.json)
+
+- `CMakeLists.txt` and `*.cmake` files are `File` nodes of language `cmake`, read by a
+  small command reader (there is no CMake grammar on npm; an unclosed `(` is a warning).
+  The commands interpreted are `project`, `set`, `option`, `list`, `file(GLOB)` and
+  `file(GLOB_RECURSE)` (against the scanned files, not the disk),
+  `aux_source_directory`, `include` of a project `.cmake` file, `foreach`,
+  `add_subdirectory`, `add_executable`, `add_library` (also `ALIAS`), `target_sources`,
+  `target_link_libraries`, `include_directories`, `target_include_directories`,
+  `add_definitions`, `add_compile_definitions`, `target_compile_definitions`, and the
+  `function` and `macro` the project defines (parameters, `ARGN`, `ARGV`,
+  `PARENT_SCOPE`). `${CMAKE_CURRENT_SOURCE_DIR}`, `${CMAKE_SOURCE_DIR}`,
+  `${PROJECT_SOURCE_DIR}`, `${<project>_SOURCE_DIR}` and
+  `$<BUILD_INTERFACE:…>` are expanded; `$<INSTALL_INTERFACE:…>` is dropped.
+- Each executable and library is a `Package` node (`manager` cmake or make,
+  `targetType` executable, static, shared, module, object, interface or library,
+  `buildFile`, `unresolved`) with `PACKAGE_CONTAINS_FILE` to the sources and headers
+  it lists, and `PACKAGE_IMPORTS_PACKAGE` (`dependencyType` `link`) to the targets it
+  links. A file two targets compile (a test helper, `gtest-all.cc`) is in both; the
+  MCP tools that group by package (`architecture_overview`) show the last one.
+  An executable CMake target is an `EntryPoint` (kind `cmake-executable`, declared by
+  the `CMakeLists.txt` that creates it, trigger the target name) that `RUNS` the `main`
+  entrypoints of its sources, so `impact_of` lists it as a runner of those files. A
+  Makefile executable reuses the `make` entrypoint of its target (a target with a `/` in
+  its name, `bin/app`, gets one of its own) and `RUNS` the same way. A target without
+  a `main` in a scanned source (a library, or a main the grammar could not parse) has no
+  `RUNS`.
+- Conditions are evaluated only for the platform and compiler tests the scan decides
+  by assuming a POSIX GCC/Clang build (`MSVC`, `WIN32`, `MINGW`, `CYGWIN`, `UNIX`,
+  `CMAKE_<LANG>_COMPILER_ID STREQUAL "MSVC"`, `NOT`/`AND`/`OR` of them): the Windows
+  and MSVC branches are skipped. Every other branch of an `if` (options, `DEFINED`,
+  `TARGET`, version tests) is read, so a target an option switches off still exists,
+  and a source an option adds belongs to the target for every option value. When two
+  branches create the same target the first one wins. `cmake_parse_arguments`, string
+  and path functions (`string()`, `get_filename_component()`, `cmake_path()`), `find_package`
+  results (`${Boost_LIBRARIES}`), `$<…>` expressions other than the three above,
+  `foreach(… RANGE …)`, `add_custom_target`, `add_test`, `ExternalProject` and
+  `FetchContent` are not read. An argument that names an unset variable, such an
+  expression, a subdirectory without a `CMakeLists.txt` or a source that is no scanned
+  file is counted in the target's `unresolved` and left out; a link to a name that is no
+  target (`m`, `Threads::Threads`, `-lfoo`) is a system library and not counted.
+- A source file the grammar fails on (googletest's `gmock_main.cc`) is no `File` node,
+  so a target that names it lacks it (and counts it in `unresolved`).
+- Makefiles: variables (`=`, `:=`, `?=`, `+=`), `include` of a project file, `VPATH` and
+  `vpath`, pattern rules (`build/%.o: src/%.c`), static pattern rules, the built-in
+  `%.o: %.c` and `%: %.c` rules, and the functions `wildcard` (against the scanned
+  files), `patsubst`, `subst`, `addprefix`, `addsuffix`, `notdir`, `dir`, `basename`,
+  `suffix`, `strip`, `sort`, `firstword`, `filter`, `filter-out` and `$(VAR:.c=.o)`. A
+  recipe that runs a compiler (`cc`, `gcc`, `g++`, `c++`, `clang`, `clang++`, `mpicc`, `ld`,
+  with an optional `ccache`) with `-o` and without `-c` links an executable (`-shared` or
+  `-dynamiclib`: a shared library); `ar` makes a static library. Objects are traced to
+  their sources through the rule, the pattern rules and the built-in rules. The `-I`,
+  `-isystem`, `-iquote` and `-D` flags of the compile recipe (or `CPPFLAGS` plus `CFLAGS`
+  / `CXXFLAGS` when the rule has no recipe) belong to the sources it compiles. Not read:
+  `$(shell …)`, `$(call …)`, `$(foreach …)`, `$(eval …)` (counted as unresolved), conditional
+  lines (every branch is read, the last assignment wins: cJSON's `SHARED = dylib` on
+  Darwin overrides `so`), recursive `$(MAKE) -C dir`, automake and `pkg-config` output.
+- `compile_commands.json` gives each file its own `-I`, `-iquote`, `-isystem`,
+  `-idirafter` and `-D` flags, merged with the directories of CMake and Make (a file's
+  compile command first). CMake and Make are read from the scanned files; a project that
+  generates its build files (`configure`, `meson`, `bazel`, `premake`, Qt `qmake`) has the
+  include paths only from `compile_commands.json`, if it keeps one.
+- Cost: reading the build files adds about 20 ms to a scan of a small project (cJSON 254 → 273 ms,
+  googletest 1,349 → 1,363 ms, tinyxml2 unchanged at 1.26 s; one process, 2 workers); the
+  files are read once for the includes and once for the targets.
+- Measured (`docs/accuracy.md`, "C and C++ build systems"): CMake and Make targets of
+  cJSON (125 labeled facts), tinyxml2 (11) and googletest's `googlemock` (80: 76
+  right, the 4 misses are sources the C++ grammar cannot parse), no false positive.
+  The include directories of those three samples add no resolved include: their includes
+  already resolve by directory or by path suffix. What the CMake paths add is shown by the
+  `cpp-cmake` fixture (a `core/core.h` include that only `target_include_directories`
+  reaches, `#include APP_CONFIG_HEADER` through `target_compile_definitions`), and moving
+  `fixtures/cpp-includes` from `compile_commands.json` to CMake resolves the same includes.
 
 ## Non-code files
 

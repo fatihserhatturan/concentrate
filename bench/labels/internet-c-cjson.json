@@ -998,5 +998,1363 @@
         }
       }
     ]
+  },
+  "buildTargets": {
+    "scope": [
+      "CMakeLists.txt",
+      "tests/CMakeLists.txt",
+      "fuzzing/CMakeLists.txt",
+      "Makefile"
+    ],
+    "items": [
+      {
+        "file": "CMakeLists.txt",
+        "system": "cmake",
+        "name": "cjson",
+        "kind": "library",
+        "sources": [
+          "cJSON.h",
+          "cJSON.c"
+        ],
+        "links": []
+      },
+      {
+        "file": "CMakeLists.txt",
+        "system": "cmake",
+        "name": "cjson-static",
+        "kind": "library",
+        "sources": [
+          "cJSON.h",
+          "cJSON.c"
+        ],
+        "links": []
+      },
+      {
+        "file": "CMakeLists.txt",
+        "system": "cmake",
+        "name": "cjson_utils",
+        "kind": "library",
+        "sources": [
+          "cJSON_Utils.h",
+          "cJSON_Utils.c"
+        ],
+        "links": [
+          "cjson"
+        ]
+      },
+      {
+        "file": "CMakeLists.txt",
+        "system": "cmake",
+        "name": "cjson_utils-static",
+        "kind": "library",
+        "sources": [
+          "cJSON_Utils.h",
+          "cJSON_Utils.c"
+        ],
+        "links": [
+          "cjson-static"
+        ]
+      },
+      {
+        "file": "CMakeLists.txt",
+        "system": "cmake",
+        "name": "cJSON_test",
+        "kind": "executable",
+        "sources": [
+          "test.c"
+        ],
+        "links": [
+          "cjson"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "unity",
+        "kind": "library",
+        "sources": [
+          "tests/unity/src/unity.c"
+        ],
+        "links": []
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "parse_examples",
+        "kind": "executable",
+        "sources": [
+          "tests/parse_examples.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "parse_number",
+        "kind": "executable",
+        "sources": [
+          "tests/parse_number.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "parse_hex4",
+        "kind": "executable",
+        "sources": [
+          "tests/parse_hex4.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "parse_string",
+        "kind": "executable",
+        "sources": [
+          "tests/parse_string.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "parse_array",
+        "kind": "executable",
+        "sources": [
+          "tests/parse_array.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "parse_object",
+        "kind": "executable",
+        "sources": [
+          "tests/parse_object.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "parse_value",
+        "kind": "executable",
+        "sources": [
+          "tests/parse_value.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "print_string",
+        "kind": "executable",
+        "sources": [
+          "tests/print_string.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "print_number",
+        "kind": "executable",
+        "sources": [
+          "tests/print_number.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "print_array",
+        "kind": "executable",
+        "sources": [
+          "tests/print_array.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "print_object",
+        "kind": "executable",
+        "sources": [
+          "tests/print_object.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "print_value",
+        "kind": "executable",
+        "sources": [
+          "tests/print_value.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "misc_tests",
+        "kind": "executable",
+        "sources": [
+          "tests/misc_tests.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "parse_with_opts",
+        "kind": "executable",
+        "sources": [
+          "tests/parse_with_opts.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "compare_tests",
+        "kind": "executable",
+        "sources": [
+          "tests/compare_tests.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "cjson_add",
+        "kind": "executable",
+        "sources": [
+          "tests/cjson_add.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "readme_examples",
+        "kind": "executable",
+        "sources": [
+          "tests/readme_examples.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "minify_tests",
+        "kind": "executable",
+        "sources": [
+          "tests/minify_tests.c"
+        ],
+        "links": [
+          "cjson",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "json_patch_tests",
+        "kind": "executable",
+        "sources": [
+          "tests/json_patch_tests.c"
+        ],
+        "links": [
+          "cjson",
+          "cjson_utils",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "old_utils_tests",
+        "kind": "executable",
+        "sources": [
+          "tests/old_utils_tests.c"
+        ],
+        "links": [
+          "cjson",
+          "cjson_utils",
+          "unity"
+        ]
+      },
+      {
+        "file": "tests/CMakeLists.txt",
+        "system": "cmake",
+        "name": "misc_utils_tests",
+        "kind": "executable",
+        "sources": [
+          "tests/misc_utils_tests.c"
+        ],
+        "links": [
+          "cjson",
+          "cjson_utils",
+          "unity"
+        ]
+      },
+      {
+        "file": "fuzzing/CMakeLists.txt",
+        "system": "cmake",
+        "name": "afl-main",
+        "kind": "executable",
+        "sources": [
+          "fuzzing/afl.c"
+        ],
+        "links": [
+          "cjson"
+        ]
+      },
+      {
+        "file": "fuzzing/CMakeLists.txt",
+        "system": "cmake",
+        "name": "fuzz_main",
+        "kind": "executable",
+        "sources": [
+          "fuzzing/fuzz_main.c",
+          "fuzzing/cjson_read_fuzzer.c"
+        ],
+        "links": [
+          "cjson"
+        ]
+      },
+      {
+        "file": "Makefile",
+        "system": "make",
+        "name": "cJSON_test",
+        "kind": "executable",
+        "sources": [
+          "cJSON.c",
+          "test.c"
+        ],
+        "links": []
+      },
+      {
+        "file": "Makefile",
+        "system": "make",
+        "name": "libcjson.a",
+        "kind": "library",
+        "sources": [
+          "cJSON.c"
+        ],
+        "links": []
+      },
+      {
+        "file": "Makefile",
+        "system": "make",
+        "name": "libcjson_utils.a",
+        "kind": "library",
+        "sources": [
+          "cJSON_Utils.c"
+        ],
+        "links": []
+      },
+      {
+        "file": "Makefile",
+        "system": "make",
+        "name": "libcjson.dylib.1.7.19",
+        "kind": "library",
+        "sources": [
+          "cJSON.c"
+        ],
+        "links": []
+      },
+      {
+        "file": "Makefile",
+        "system": "make",
+        "name": "libcjson_utils.dylib.1.7.19",
+        "kind": "library",
+        "sources": [
+          "cJSON_Utils.c",
+          "cJSON.c"
+        ],
+        "links": []
+      }
+    ]
+  },
+  "includes": {
+    "files": [
+      "cJSON.c",
+      "cJSON.h",
+      "cJSON_Utils.c",
+      "cJSON_Utils.h",
+      "fuzzing/afl.c",
+      "fuzzing/cjson_read_fuzzer.c",
+      "fuzzing/fuzz_main.c",
+      "test.c",
+      "tests/cjson_add.c",
+      "tests/common.h",
+      "tests/compare_tests.c",
+      "tests/json_patch_tests.c",
+      "tests/minify_tests.c",
+      "tests/misc_tests.c",
+      "tests/misc_utils_tests.c",
+      "tests/old_utils_tests.c",
+      "tests/parse_array.c",
+      "tests/parse_examples.c",
+      "tests/parse_hex4.c",
+      "tests/parse_number.c",
+      "tests/parse_object.c",
+      "tests/parse_string.c",
+      "tests/parse_value.c",
+      "tests/parse_with_opts.c",
+      "tests/print_array.c",
+      "tests/print_number.c",
+      "tests/print_object.c",
+      "tests/print_string.c",
+      "tests/print_value.c",
+      "tests/readme_examples.c",
+      "tests/unity_setup.c"
+    ],
+    "items": [
+      {
+        "file": "cJSON.c",
+        "line": 40,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "cJSON.c",
+        "line": 41,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "cJSON.c",
+        "line": 42,
+        "source": "math.h",
+        "target": null
+      },
+      {
+        "file": "cJSON.c",
+        "line": 43,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "cJSON.c",
+        "line": 44,
+        "source": "limits.h",
+        "target": null
+      },
+      {
+        "file": "cJSON.c",
+        "line": 45,
+        "source": "ctype.h",
+        "target": null
+      },
+      {
+        "file": "cJSON.c",
+        "line": 46,
+        "source": "float.h",
+        "target": null
+      },
+      {
+        "file": "cJSON.c",
+        "line": 49,
+        "source": "locale.h",
+        "target": null
+      },
+      {
+        "file": "cJSON.c",
+        "line": 59,
+        "source": "cJSON.h",
+        "target": "cJSON.h"
+      },
+      {
+        "file": "cJSON.h",
+        "line": 86,
+        "source": "stddef.h",
+        "target": null
+      },
+      {
+        "file": "cJSON_Utils.c",
+        "line": 37,
+        "source": "ctype.h",
+        "target": null
+      },
+      {
+        "file": "cJSON_Utils.c",
+        "line": 38,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "cJSON_Utils.c",
+        "line": 39,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "cJSON_Utils.c",
+        "line": 40,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "cJSON_Utils.c",
+        "line": 41,
+        "source": "limits.h",
+        "target": null
+      },
+      {
+        "file": "cJSON_Utils.c",
+        "line": 42,
+        "source": "math.h",
+        "target": null
+      },
+      {
+        "file": "cJSON_Utils.c",
+        "line": 43,
+        "source": "float.h",
+        "target": null
+      },
+      {
+        "file": "cJSON_Utils.c",
+        "line": 44,
+        "source": "math.h",
+        "target": null
+      },
+      {
+        "file": "cJSON_Utils.c",
+        "line": 53,
+        "source": "cJSON_Utils.h",
+        "target": "cJSON_Utils.h"
+      },
+      {
+        "file": "cJSON_Utils.h",
+        "line": 31,
+        "source": "cJSON.h",
+        "target": "cJSON.h"
+      },
+      {
+        "file": "fuzzing/afl.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "fuzzing/afl.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "fuzzing/afl.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "fuzzing/afl.c",
+        "line": 27,
+        "source": "../cJSON.h",
+        "target": "cJSON.h"
+      },
+      {
+        "file": "fuzzing/cjson_read_fuzzer.c",
+        "line": 1,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "fuzzing/cjson_read_fuzzer.c",
+        "line": 2,
+        "source": "stdint.h",
+        "target": null
+      },
+      {
+        "file": "fuzzing/cjson_read_fuzzer.c",
+        "line": 3,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "fuzzing/cjson_read_fuzzer.c",
+        "line": 9,
+        "source": "../cJSON.h",
+        "target": "cJSON.h"
+      },
+      {
+        "file": "fuzzing/fuzz_main.c",
+        "line": 1,
+        "source": "stdint.h",
+        "target": null
+      },
+      {
+        "file": "fuzzing/fuzz_main.c",
+        "line": 2,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "fuzzing/fuzz_main.c",
+        "line": 3,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "test.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "test.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "test.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "test.c",
+        "line": 26,
+        "source": "cJSON.h",
+        "target": "cJSON.h"
+      },
+      {
+        "file": "tests/cjson_add.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/cjson_add.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/cjson_add.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/cjson_add.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/cjson_add.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/cjson_add.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/common.h",
+        "line": 26,
+        "source": "../cJSON.c",
+        "target": "cJSON.c"
+      },
+      {
+        "file": "tests/compare_tests.c",
+        "line": 23,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/compare_tests.c",
+        "line": 24,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/compare_tests.c",
+        "line": 25,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/json_patch_tests.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/json_patch_tests.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/json_patch_tests.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/json_patch_tests.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/json_patch_tests.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/json_patch_tests.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/json_patch_tests.c",
+        "line": 30,
+        "source": "../cJSON_Utils.h",
+        "target": "cJSON_Utils.h"
+      },
+      {
+        "file": "tests/minify_tests.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/minify_tests.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/minify_tests.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/minify_tests.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/minify_tests.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/minify_tests.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/misc_tests.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/misc_tests.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/misc_tests.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/misc_tests.c",
+        "line": 26,
+        "source": "math.h",
+        "target": null
+      },
+      {
+        "file": "tests/misc_tests.c",
+        "line": 28,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/misc_tests.c",
+        "line": 29,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/misc_tests.c",
+        "line": 30,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/misc_utils_tests.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/misc_utils_tests.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/misc_utils_tests.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/misc_utils_tests.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/misc_utils_tests.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/misc_utils_tests.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/misc_utils_tests.c",
+        "line": 30,
+        "source": "../cJSON_Utils.h",
+        "target": "cJSON_Utils.h"
+      },
+      {
+        "file": "tests/old_utils_tests.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/old_utils_tests.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/old_utils_tests.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/old_utils_tests.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/old_utils_tests.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/old_utils_tests.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/old_utils_tests.c",
+        "line": 30,
+        "source": "../cJSON_Utils.h",
+        "target": "cJSON_Utils.h"
+      },
+      {
+        "file": "tests/parse_array.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_array.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_array.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_array.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/parse_array.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/parse_array.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/parse_examples.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_examples.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_examples.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_examples.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/parse_examples.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/parse_examples.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/parse_hex4.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_hex4.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_hex4.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_hex4.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/parse_hex4.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/parse_hex4.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/parse_number.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_number.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_number.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_number.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/parse_number.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/parse_number.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/parse_object.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_object.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_object.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_object.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/parse_object.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/parse_object.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/parse_string.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_string.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_string.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_string.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/parse_string.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/parse_string.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/parse_value.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_value.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_value.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/parse_value.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/parse_value.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/parse_value.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/parse_with_opts.c",
+        "line": 23,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/parse_with_opts.c",
+        "line": 24,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/parse_with_opts.c",
+        "line": 25,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/print_array.c",
+        "line": 23,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/print_array.c",
+        "line": 24,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/print_array.c",
+        "line": 25,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/print_number.c",
+        "line": 23,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/print_number.c",
+        "line": 24,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/print_number.c",
+        "line": 25,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/print_object.c",
+        "line": 23,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/print_object.c",
+        "line": 24,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/print_object.c",
+        "line": 25,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/print_string.c",
+        "line": 23,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/print_string.c",
+        "line": 24,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/print_string.c",
+        "line": 25,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/print_value.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/print_value.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/print_value.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/print_value.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/print_value.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/print_value.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      },
+      {
+        "file": "tests/readme_examples.c",
+        "line": 23,
+        "source": "stdio.h",
+        "target": null
+      },
+      {
+        "file": "tests/readme_examples.c",
+        "line": 24,
+        "source": "stdlib.h",
+        "target": null
+      },
+      {
+        "file": "tests/readme_examples.c",
+        "line": 25,
+        "source": "string.h",
+        "target": null
+      },
+      {
+        "file": "tests/readme_examples.c",
+        "line": 27,
+        "source": "unity/examples/unity_config.h",
+        "target": "tests/unity/examples/unity_config.h"
+      },
+      {
+        "file": "tests/readme_examples.c",
+        "line": 28,
+        "source": "unity/src/unity.h",
+        "target": "tests/unity/src/unity.h"
+      },
+      {
+        "file": "tests/readme_examples.c",
+        "line": 29,
+        "source": "common.h",
+        "target": "tests/common.h"
+      }
+    ]
   }
 }

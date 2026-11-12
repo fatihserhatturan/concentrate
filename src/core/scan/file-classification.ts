@@ -66,7 +66,7 @@ export function classifyFile(relativePath: string, generatedContent = false, cod
   ]) || /(?:^|[.-])(mock|mocks|stub|stubs|setup|setupTests)\.[cm]?[jt]sx?$/u.test(fileName);
 
   const isDocs = !code && (
-    /\.(?:md|mdx|markdown|rst|adoc|txt)$/iu.test(fileName)
+    (/\.(?:md|mdx|markdown|rst|adoc|txt)$/iu.test(fileName) && fileName !== "CMakeLists.txt")
     || /^(?:LICEN[CS]E|COPYING|NOTICE|AUTHORS|CONTRIBUTORS|CHANGELOG|CHANGES|HISTORY|README|CODE_OF_CONDUCT|CONTRIBUTING|SECURITY)(?:[.-].*)?$/iu.test(fileName)
     || hasSegment(segments, ["docs", "doc"])
   );
