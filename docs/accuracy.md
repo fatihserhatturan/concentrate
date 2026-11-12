@@ -702,3 +702,78 @@ change nothing here. The includes the CMake paths decide are pinned by the fixtu
 of `fixtures/cpp-includes` from `compile_commands.json` into CMake and gets the same
 resolved includes.
 
+## C and C++ frameworks (Phase 36)
+
+Five samples are pinned as sparse checkouts (`paths` in `scripts/samples.json`: only
+the examples of each project) and labeled from their source, not from the tool's
+output; rows in the same label files as the other samples. Reproduce with
+`npm run samples:fetch -- --suite internet` and
+`npm run bench:accuracy -- --sample <name>`.
+
+**Routes.** One label per method at the line of the registration macro or call
+(`bench/labels/internet-cpp-crow-examples.json`, `internet-cpp-drogon-examples.json`,
+`internet-cpp-httplib-examples.json`).
+
+| Sample | Labels | TP | FP | FN | Precision | Recall | Full path |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-cpp-crow-examples (`CROW_ROUTE`, `CROW_BP_ROUTE` with nested blueprints, `CROW_WEBSOCKET_ROUTE`) | 59 | 59 | 0 | 0 | 100.0% | 100.0% | 100.0% (59/59) |
+| internet-cpp-drogon-examples (`registerHandler`, `METHOD_ADD`, `ADD_METHOD_TO`, `ADD_METHOD_VIA_REGEX`, `PATH_ADD`, `WS_PATH_ADD`) | 38 | 38 | 0 | 0 | 100.0% | 100.0% | 100.0% (38/38) |
+| internet-cpp-httplib-examples (`svr.Get` … on `Server` and `SSLServer`) | 20 | 20 | 0 | 0 | 100.0% | 100.0% | 100.0% (20/20) |
+| **all** | 117 | 117 | 0 | 0 | **100.0%** | **100.0%** | **100.0% (117/117)** |
+
+- **What the labeling found.** Reading Drogon's own `HttpController.h` showed that
+  `ADD_METHOD_VIA_REGEX` registers the regular expression as written, with no
+  `/<namespace>/<Class>` prefix (the first version of the reader added it); and that
+  `PATH_ADD` and the `WS_PATH_ADD` macros of a `WebSocketController` are routes too.
+  The httplib labels first missed `svr.Post("/post")` of `server_and_client.cc` (a grep
+  that filtered out client variables); the scan had found it, so it showed as a false
+  positive until a second pass over every `.Get(` / `.Post(` call added the label.
+  Scanning the samples also showed that Drogon's `METHOD_LIST_BEGIN` / `PATH_ADD` macros
+  and a file-scope `ABSL_FLAG(…);` made the grammar drop the next declaration (a whole
+  gRPC service class, a controller's handlers); they are read as blanks now.
+- **Route handlers.** A named handler (`&Ctrl::fn`, `Routes::bind(&Endpoint::fn, this)`,
+  `svr.Post("/x", fn)`, Drogon's `Class::fn`) is linked (ROUTE_HANDLED_BY) when its
+  function is found; a lambda is the route itself. 23 of the 38 Drogon routes have a
+  named handler, all linked (the other 15 are lambdas); the Crow examples and cpp-httplib examples are lambdas.
+
+**Data access.** The SQL of `db.exec`, `db.execAndGet`, `SQLite::Statement` and a
+`Statement` member prepared in a constructor's initializer list
+(`bench/labels/internet-cpp-sqlitecpp-examples.json`), by function: 7 labels (table
+`test` read, created and updated by `main` of both examples, read by the
+`Example` constructor), 7 found, no false positive. The first version missed the
+initializer-list `mQuery(mDb, "SELECT …")` (6 of 7, 85.7%); the member is read now.
+
+**Rpcs.** The rpcs of `helloworld.proto` and `route_guide.proto` and the methods that
+implement them (`bench/labels/internet-cpp-grpc-examples.json`): 7 labels, 7 found
+(5 sync and callback servers, with `greeter_async_server.cc` implementing none by
+design, see `docs/known-limitations.md#c-and-c`).
+
+| Sample | Labels | TP | FP | FN | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-cpp-sqlitecpp-examples (data access) | 7 | 7 | 0 | 0 | 100.0% | 100.0% |
+| internet-cpp-grpc-examples (rpcs) | 7 | 7 | 0 | 0 | 100.0% | 100.0% |
+
+**Checked but not labeled.** Three label kinds do not exist for these, so they are
+measured as counts against an independent grep, not as precision and recall:
+
+- **libcurl** (`internet-c-curl-examples`, curl's `docs/examples`): of the 104 files that
+  call `curl_easy_perform`, 45 set an HTTP(S) or scheme-less literal `CURLOPT_URL` (a grep);
+  every one of them has a request with that URL, and the method of
+  `CURLOPT_POSTFIELDS`, `CURLOPT_CUSTOMREQUEST` and `CURLOPT_UPLOAD`. 43 more name an
+  FTP, IMAP, POP3, SMTP, SFTP, RTSP, WebSocket or file URL (not a request to a route) and
+  16 take the URL from `argv` or a variable the function does not assign. Files that only
+  use the multi interface (`curl_multi_add_handle`) are read as well (49 files in all).
+- **Qt** (`internet-cpp-qt-network-examples`, qtbase's `examples/network` and
+  `examples/sql`): 171 `connect(` texts, 36 of them signal-to-slot connections between
+  classes of the sample (SIGNAL_CONNECTS_TO) and 134 resolved to their slot; spot-checked by
+  reading the 11 connections of `network-chat`'s `chatdialog.cpp` and `client.cpp`: the 10
+  whose slot is in the sample resolve to the right slot (the other connects to Qt's own
+  `deleteLater`), and the 7 whose signal the sample declares have SIGNAL_CONNECTS_TO. The examples' SQL (`QSqlQuery::exec`) is read too.
+- **REQUESTS to routes.** The three client libraries are linked to routes in
+  `fixtures/cpp-clients` (7 requests, each to the route with the right method and path),
+  which is the golden; no pinned sample has a C++ client and server of its own.
+
+**Cost.** Median scan time of three runs, one process, 2 workers, this change against
+`main`: cJSON 180 → 186 ms, tinyxml2 1,082 → 1,096 ms, googletest 1,180 → 1,231 ms (the
+plugins read each file's text once; about 3 to 4%). The graphs of cJSON and tinyxml2 are
+unchanged (the sample goldens pass).

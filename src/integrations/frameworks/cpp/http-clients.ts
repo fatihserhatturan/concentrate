@@ -5,7 +5,7 @@ import { findInvocations, ownerOf, readCppSource, resolveString, stringConstants
 // C and C++ outbound HTTP, recorded on the Call node like the JS/TS, Go and
 // Rust clients (`httpClient`, `httpMethod`, `httpUrl`) so the http-requests
 // contributor links it to the Route it reaches (REQUESTS):
-//   - libcurl: the request is the `curl_easy_perform(handle)` call, with the
+//   - libcurl: the request is the `curl_easy_perform(handle)` (or `curl_multi_add_handle(multi, handle)`) call, with the
 //     `CURLOPT_URL` of the handle (a literal, a constant, a local string, `+`
 //     concatenation, `x.c_str()`; other parts are `${expression}`) and the
 //     method of `CURLOPT_CUSTOMREQUEST` / `CURLOPT_POST` / `CURLOPT_POSTFIELDS`
@@ -20,7 +20,7 @@ const CPR_METHODS = "Get|Post|Put|Patch|Delete|Head|Options";
 const HTTP_METHOD = /^(?:Get|Post|Put|Patch|Delete|Head|Options)/u;
 
 export const cppHttpClientsPlugin: CppParsePlugin = ({ fileNodeId, source: written, nodes, relationships }) => {
-  const hasCurl = /\bcurl_easy_perform\b/u.test(written);
+  const hasCurl = /\bcurl_easy_perform\b|\bcurl_multi_add_handle\b/u.test(written);
   const hasCpr = /\bcpr\b/u.test(written);
   const hasHttplib = /\bhttplib\b/u.test(written);
   if (!hasCurl && !hasCpr && !hasHttplib) return;
@@ -62,8 +62,9 @@ export const cppHttpClientsPlugin: CppParsePlugin = ({ fileNodeId, source: writt
   // ---- libcurl ----
   if (hasCurl) {
     const options = findInvocations(source, "curl_easy_setopt").filter((call) => call.args.length >= 3);
-    for (const perform of findInvocations(source, "curl_easy_perform")) {
-      const handle = perform.args[0]?.trim();
+    // The request is made where the handle is performed, or added to a multi handle.
+    for (const perform of findInvocations(source, "curl_easy_perform|curl_multi_add_handle")) {
+      const handle = perform.args[perform.name === "curl_easy_perform" ? 0 : 1]?.trim();
       if (!handle) continue;
       const from = functionStart(perform.start);
       const own = options.filter((option) => option.args[0]!.trim() === handle && option.start >= from && option.start < perform.start);

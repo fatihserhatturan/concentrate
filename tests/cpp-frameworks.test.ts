@@ -142,7 +142,7 @@ describe("Qt signals and slots (fixtures/cpp-qt)", () => {
 });
 
 describe("C and C++ data access and env (fixtures/cpp-data, fixtures/c-services)", () => {
-  it("maps SQL strings of sqlite3, libpq and SOCI to tables, merging with .sql files and CREATE strings", async () => {
+  it("maps SQL strings of sqlite3, libpq, libpqxx, MySQL, ODBC, Drogon and SOCI to tables, merging with .sql files and CREATE strings", async () => {
     const graph = await scan("fixtures/cpp-data");
     const direct = graph.relationships
       .filter((rel) => rel.type === "ACCESSES_DATA" && rel.properties.direct === true)
@@ -150,17 +150,23 @@ describe("C and C++ data access and env (fixtures/cpp-data, fixtures/c-services)
       .sort();
     assert.deepEqual(direct, [
       "addUser sqlite3 create users",
+      "drogonDb drogon read sessions",
+      "legacy mysql delete finance",
+      "legacy mysql read finance",
       "listUsers sqlite3 read orders",
       "listUsers sqlite3 read users",
       "main sqlite3 create users",
       "main sqlite3 read users",
+      "odbc odbc update inventory",
       "removeOrders libpq delete orders",
       "removeOrders libpq update accounts",
+      "report pqxx create employee",
+      "report pqxx read employee",
       "touch soci read events",
       "touch soci update users",
     ]);
     const tables = graph.nodes.filter((node) => node.label === "Table").map((node) => `${node.properties.name}@${node.properties.declaredIn ?? "-"}`).sort();
-    assert.deepEqual(tables, ["accounts@schema.sql", "events@-", "orders@schema.sql", "users@src/store.cpp"]);
+    assert.deepEqual(tables, ["accounts@schema.sql", "employee@-", "events@-", "finance@-", "inventory@-", "orders@schema.sql", "sessions@-", "users@src/store.cpp"]);
     const users = graph.nodes.find((node) => node.label === "Table" && node.properties.name === "users")!;
     assert.deepEqual((JSON.parse(String(users.properties.columns)) as Array<{ name: string }>).map((column) => column.name), ["id", "name", "email"]);
   });

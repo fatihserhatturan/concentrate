@@ -2102,6 +2102,92 @@ the call recall leaves out:
   reaches, `#include APP_CONFIG_HEADER` through `target_compile_definitions`), and moving
   `fixtures/cpp-includes` from `compile_commands.json` to CMake resolves the same includes.
 
+### C and C++ frameworks, data access, env and outbound HTTP
+
+- **Read from the written text.** The grammar cannot keep the macros these frameworks
+  use, so the layer reads each file's source with comments blanked and string contents
+  hidden for finding calls (`#define` bodies are not calls either). Nothing is expanded:
+  a route registered through a project macro, a template or a helper that takes the
+  path as a parameter is not found. Strings are literals, `#define` / `const` /
+  `constexpr` / `static const std::string` constants of the same file, `std::string("…")`
+  and `QStringLiteral("…")` wrappers, `+` concatenations and locals of the same
+  function (`std::string url = base + "/x"`); any other part of a URL or SQL is a
+  `${name}` parameter, and an expression with no known part gives nothing. A name
+  constant of another file is followed only for env reads, when it is declared once.
+- **Statement macros the parser reads as blanks.** Drogon's `METHOD_LIST_BEGIN/END`,
+  `METHOD_ADD`, `ADD_METHOD_TO`, `ADD_METHOD_VIA_REGEX`, `PATH_ADD`, `PATH_LIST_*`,
+  `WS_PATH_*`, Qt's `Q_OBJECT` / `Q_GADGET`, and a file-scope `ABSL_FLAG(…);` /
+  gflags `DEFINE_string(…);` are read as blanks, so they no longer take the next
+  declaration (a class, the handlers of a controller) with them. Other statement
+  macros still do.
+- **Routes.** Crow (`CROW_ROUTE`, `CROW_BP_ROUTE`, `CROW_WEBSOCKET_ROUTE` as a GET,
+  `.methods(…)` in `"POST"_method` and `crow::HTTPMethod::Post` form; blueprint
+  prefixes are followed through `register_blueprint`, a name declared in several
+  files is read in the route's own file; `CROW_CATCHALL_ROUTE` and
+  `route_dynamic` are not read), Drogon (`METHOD_ADD` under `/<namespace>/<Class>` with the
+  class name's case kept although Drogon matches it case-insensitively,
+  `ADD_METHOD_TO` and `registerHandler` as written, regular expressions as written,
+  `PATH_ADD` handled by `asyncHandleHttpRequest`, `WS_PATH_ADD` by `handleNewMessage`;
+  no method list means method `ALL`; filters are not recorded), Pistache
+  (`Routes::Get(router, path, Routes::bind(&C::m, this))`) and cpp-httplib (a `Server`
+  or `SSLServer` variable declared in the file, or a call whose second argument is a
+  lambda, a function or `std::bind`; a `Client`'s `cli.Get("/x")` is a request). Oat++,
+  Wt, CppCMS, Boost.Beast, libmicrohttpd, userver, Poco and Restbed are not read. A
+  named handler is the function of that name (and class) nearest the route's file; one
+  name found in several unrelated places with no class stays unlinked. Middleware,
+  Crow's `CROW_MIDDLEWARES` and Drogon filters are not recorded.
+- **gRPC.** The server is a class deriving `X::Service` or `X::CallbackService`;
+  each method it overrides (or whose parameters name a `ServerContext`) is an
+  EntryPoint (kind `grpc`). `X::AsyncService` servers (a CallData state machine
+  with no method named after the rpc) have none. A stub call is a call on a
+  variable declared `X::Stub` or made by `X::NewStub(channel)`, including `AsyncX` and
+  `PrepareAsyncX`; a stub declared in a header and called in a source file is found by
+  its variable name when only one service uses that name. A call links to the method of
+  every class implementing the service of that name: the proto package is not
+  compared, so two services of one name in a scan link to each other's clients. There
+  is no RPC_SERVED_BY (the generated base class is not in the scan).
+- **Qt.** `connect(a, &A::signal, b, &B::slot)`, `QObject::connect` and the string form
+  `SIGNAL(x(int))` / `SLOT(y())`. The classes of the string form come from `this` (the
+  enclosing class) or, when the class is not written, from the only class with a member
+  of that name; the signal and slot are looked up in the class and its bases, the
+  declaration nearest the connect call winning over a class of the same name elsewhere.
+  Signals of Qt's own classes (`&QPushButton::clicked`) are not in the scan, so those
+  connects have a CALL_RESOLVES_TO to the slot but no SIGNAL_CONNECTS_TO; a lambda or
+  functor slot has no name to link. `Q_PROPERTY` and QML are not read.
+- **Data access.** sqlite3, libpq, MySQL (`mysql_query`, `mysql_stmt_prepare`), ODBC,
+  SQLiteCpp, libpqxx (`txn.exec(…)`, `exec_params`, `prepare`, `query_value`), SOCI
+  (`sql << "…"`, `.once`, `.prepare`), Qt SQL (`QSqlQuery`) and Drogon's DbClient
+  (`execSqlAsync`, `execSqlSync`); the SQL is a literal or one of the strings above.
+  Every table of a SELECT, INSERT, UPDATE or DELETE (CTEs, joins and upserts as for Go
+  and Rust) is a DataModel of the library named by the table; a `CREATE TABLE` string
+  declares the table with its columns (migrations and `ALTER` apply in the order of
+  the file), and `.sql` files enrich the same table. A route handled by a lambda owns the
+  access inside it. Query builders and ORMs (sqlite_orm, sqlpp11, ODB, Qt's
+  `QSqlTableModel::setTable`, SOCI's ORM `type_conversion`), SQL a function builds from
+  several statements or reads from a file, and parameters bound apart from the string
+  are not read.
+- **Env.** `getenv`, `std::getenv`, `::getenv`, `secure_getenv`, `_wgetenv`, `getenv_s`,
+  `_dupenv_s`, Windows `GetEnvironmentVariable(A/W)`, Qt `qgetenv`, `qEnvironmentVariable*`
+  and CLI11's `->envname("X")`, with a literal or constant name; a computed name is
+  skipped. Boost.Program_options `env_var`, dotenv libraries and `QProcessEnvironment`
+  are not read (a `.env` file is, by the env files reader).
+- **Outbound HTTP.** libcurl: the `CURLOPT_URL` of the handle set in the same function as
+  the `curl_easy_perform(handle)` (or `curl_multi_add_handle(multi, handle)`) that sends it,
+  with the method of `CURLOPT_CUSTOMREQUEST`, `CURLOPT_POST*`, `CURLOPT_UPLOAD` and
+  `CURLOPT_NOBODY` (GET otherwise); options set in an init helper are not seen. Only an
+  `http(s)` or scheme-less URL is a request (FTP, IMAP, POP3, SMTP, SFTP, RTSP, WebSocket
+  and file URLs are not). cpr: `cpr::Get(cpr::Url{…})` … `Post`, `Put`, `Patch`, `Delete`,
+  `Head`, `Options` (and `Async` / `Callback`), and a `cpr::Session` with `SetUrl`.
+  cpp-httplib: `cli.Get("/path")` on a `Client("host", port)` declared in the file. Qt
+  Network (`QNetworkAccessManager::get`), Boost.Beast, Poco, libhv and curlpp are not
+  read. The requests link to routes like every other client (`REQUESTS`, local origins
+  dropped, `--api-origin`).
+- Measured (`docs/accuracy.md`, "C and C++ frameworks"): routes of the Crow, Drogon
+  and cpp-httplib examples 117 labeled, 117 found, no false positive; SQLiteCpp
+  examples data access 7/7; the gRPC examples' rpcs and implementations 7/7. libcurl and Qt are
+  counted against a grep, not labeled. Cost: about 3 to 4% of a scan of cJSON,
+  tinyxml2 and googletest.
+
 ## Non-code files
 
 - Every discovered file is a `File` node with a `language` and a `sourceType`.
