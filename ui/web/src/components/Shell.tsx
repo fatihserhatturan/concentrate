@@ -20,12 +20,52 @@ function storedWidth(): number {
   }
 }
 
+// The app icon: a ring around one node, three edges out to three nodes (docs/assets/brand/icon.svg).
 export function Logo({ size = 20 }: { size?: number }) {
   return (
-    <svg class="logo" width={size} height={size} viewBox="0 0 16 16" aria-hidden="true">
-      <rect width="16" height="16" rx="4" fill="var(--accent)" />
-      <circle cx="8" cy="8" r="2.4" fill="var(--accent-fg)" />
-      <circle cx="8" cy="8" r="5.2" fill="none" stroke="var(--accent-fg)" stroke-width="1.2" opacity=".7" />
+    <svg class="logo" width={size} height={size} viewBox="0 0 56 56" aria-hidden="true">
+      <rect width="56" height="56" rx="14" fill="var(--brand-tile)" />
+      <g fill="none" stroke="var(--brand-ink)" stroke-width="3.5" stroke-linecap="round">
+        <circle cx="28" cy="28" r="10" />
+        <path d="M20.5 21.4L10 12M35.9 21.9L46 14M33.6 36.3L40 46" />
+      </g>
+      <g fill="var(--brand-ink)">
+        <circle cx="28" cy="28" r="3.6" /><circle cx="10" cy="12" r="3.6" /><circle cx="46" cy="14" r="3.6" /><circle cx="40" cy="46" r="3.6" />
+      </g>
+    </svg>
+  );
+}
+
+const WORDMARK_STROKES = [
+  "M30.7 29.3A18 18 0 1 0 30.7 54.7",
+  "M91 60L91 24M91 42A16 18 0 0 1 123 42L123 60",
+  "M165.7 29.3A18 18 0 1 0 165.7 54.7",
+  "M178 42L214 42A18 18 0 1 0 208.7 54.7",
+  "M226 60L226 24M226 42A16 18 0 0 1 258 42L258 60",
+  "M276 10L276 48Q276 60 288 60L290 60M266 24L290 24",
+  "M302 60L302 24M302 42A20 18 0 0 1 322 24",
+  "M368 24L368 60",
+  "M388 10L388 48Q388 60 400 60L402 60M378 24L402 24",
+  "M414 42L450 42A18 18 0 1 0 444.7 54.7",
+].join("");
+// Stroke ends of the letters; the first is the centre of the o.
+const WORDMARK_NODES: ReadonlyArray<readonly [number, number]> = [
+  [61, 42], [30.7, 29.3], [30.7, 54.7], [91, 24], [91, 60], [123, 60], [165.7, 29.3], [165.7, 54.7], [208.7, 54.7],
+  [226, 24], [226, 60], [258, 60], [276, 10], [290, 60], [302, 24], [302, 60], [322, 24],
+  [368, 24], [368, 60], [388, 10], [402, 60], [444.7, 54.7],
+];
+
+// "concentrate" as drawn in docs/assets/brand/wordmark-*.svg: strokes in the text colour, nodes in the brand colour.
+export function Wordmark({ height = 18 }: { height?: number }) {
+  return (
+    <svg class="wordmark" height={height} width={(height * 467) / 70} viewBox="-6 0 467 70" role="img" aria-label="Concentrate">
+      <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="61" cy="42" r="18" /><circle cx="350" cy="42" r="18" />
+        <path d={WORDMARK_STROKES} />
+      </g>
+      <g fill="var(--brand)">
+        {WORDMARK_NODES.map(([x, y], index) => <circle cx={x} cy={y} r={index === 0 ? 5 : 4.4} />)}
+      </g>
     </svg>
   );
 }
@@ -104,7 +144,7 @@ export function Shell(props: {
     <div class="shell">
       <header class="topbar">
         <button class="brand" onClick={props.onHome} title="Back to the start screen">
-          <Logo /> Concentrate
+          <Logo /> <Wordmark />
         </button>
         <nav class="crumbs" aria-label="Breadcrumb">
           {props.crumbs.map((crumb, i) => (

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { listDirectories, projectInfo, scan, type FsListing, type ProjectInfo, type ScanDone } from "../api.js";
 import { Icon } from "../components/icons.js";
-import { Logo, ThemeButton } from "../components/Shell.js";
+import { Logo, ThemeButton, Wordmark } from "../components/Shell.js";
 import { baseName, formatDuration, number, timeAgo } from "../lib/format.js";
 import { forgetProject, loadRecents, rememberProject } from "../lib/recents.js";
 import { DEFAULT_VIEW, navigate } from "../lib/router.js";
@@ -182,7 +182,7 @@ export function Start({ rescan }: { rescan?: string }) {
       <div class="start-inner">
         <header class="start-header">
           <Logo size={36} />
-          <div><h1>Concentrate</h1><p>Turn a codebase into a graph you can ask questions.</p></div>
+          <div><h1><Wordmark height={30} /></h1><p>Turn a codebase into a graph you can ask questions.</p></div>
           <span class="spacer" />
           <ThemeButton />
         </header>

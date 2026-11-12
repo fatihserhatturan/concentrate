@@ -1,7 +1,7 @@
 // The viewer inlined into the HTML export: plain JavaScript on a 2D canvas, no dependency, no network.
 export const VIEWER_CSS = `
-:root{--bg:#fff;--fg:#1b1f24;--muted:#656d76;--line:#d0d7de;--panel:#f6f8fa}
-@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--muted:#8b949e;--line:#30363d;--panel:#161b22}}
+:root{--bg:#fbf8f2;--fg:#1a1613;--muted:#655c51;--line:#ddd5c7;--panel:#f6f1e7}
+@media (prefers-color-scheme:dark){:root{--bg:#14110f;--fg:#f4efe6;--muted:#a69e92;--line:#3a342e;--panel:#1b1815}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 system-ui,sans-serif;display:grid;grid-template-columns:1fr 320px;grid-template-rows:auto 1fr;height:100vh}
 header{grid-column:1/-1;padding:8px 12px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 header input{padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);min-width:220px}

@@ -1,4 +1,9 @@
-<h1 align="center">Concentrate</h1>
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/logo-dark.svg">
+    <img src="docs/assets/brand/logo-light.svg" alt="Concentrate" width="420">
+  </picture>
+</h1>
 
 <p align="center">
   <b>A code graph for AI agents.</b><br>
