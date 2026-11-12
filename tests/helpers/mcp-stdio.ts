@@ -7,9 +7,9 @@ export type McpResponse = { id: number; result?: any; error?: { code: number; me
 
 // Runs `concentrate mcp` from sources against a graph and talks JSON-RPC to it
 // one request at a time.
-export function startMcpServer(databasePath: string) {
+export function startMcpServer(databasePath: string, extraArgs: string[] = []) {
   const cli = path.resolve("src/index.ts");
-  const child = spawn(process.execPath, ["--import", "tsx", cli, "mcp", "-d", databasePath], {
+  const child = spawn(process.execPath, ["--import", "tsx", cli, "mcp", "-d", databasePath, ...extraArgs], {
     stdio: ["pipe", "pipe", "inherit"],
   });
   const lines = createInterface({ input: child.stdout! })[Symbol.asyncIterator]();

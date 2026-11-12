@@ -112,6 +112,13 @@ export const program: ProgramSpec = {
       description: "Run a read-only MCP server over the graph store.",
       options: [
         { flags: "-d, --database <path>", description: "Graph store directory", default: ".concentrate/graph" },
+        { flags: "--watch <path>", description: "Project to keep the graph current for: scan it at start and rescan when files change; tool calls wait for a pending rescan" },
+        { flags: "--manifest <path>", description: "Scan manifest used to flag answers that name changed files (default: scan-manifest.json next to the store)" },
+        { flags: "--continue-on-error", description: "With --watch: write a partial graph when a file fails to parse", type: "boolean" },
+        { flags: "--include <pattern>", description: "With --watch: include glob pattern, repeatable", multiple: true },
+        { flags: "--exclude <pattern>", description: "With --watch: exclude glob pattern, repeatable", multiple: true },
+        { flags: "--api-origin <url>", description: "With --watch: origin that serves this project's routes, repeatable", multiple: true },
+        { flags: "--cache-dir <path>", description: "With --watch: parse cache directory (default: cache next to the store)" },
       ],
       action: mcpCommand,
     },
