@@ -18,7 +18,14 @@ export async function summary(projectPath: string): Promise<unknown> {
   }
 }
 
-export type OverviewNode = { id: string; label: string; name: string; files: number; package: string | null; degree: number };
+export type OverviewNode = { id: string; label: string; name: string; files: number; package: string | null; degree: number; noise: boolean };
+
+const NOISE_SEGMENTS = new Set(["node_modules", "dist", "build", "out", "target", "coverage", "vendor", "__pycache__", "venv"]);
+
+/** Dot-directories and build output: kept out of the way by default. */
+export function isNoisePath(relativePath: string): boolean {
+  return relativePath.split("/").some((segment) => (segment.startsWith(".") && segment.length > 1 && segment !== "..") || NOISE_SEGMENTS.has(segment));
+}
 export type OverviewEdge = { from: string; to: string; count: number; byKind: Partial<Record<EdgeKind, number>> };
 export type Overview = { level: string; prefix: string; nodes: OverviewNode[]; edges: OverviewEdge[]; truncated: boolean; isolatedHidden: number };
 
@@ -35,7 +42,7 @@ export async function overview(projectPath: string, level: string, prefix = "", 
 
   // Group key of every file at this level. A directory level with one single
   // directory in it goes down until there is something to compare.
-  let keyOfFile = new Map<string, { id: string; label: string; name: string; package: string | null }>();
+  let keyOfFile = new Map<string, { id: string; label: string; name: string; package: string | null; noise: boolean }>();
   let groups = new Map<string, OverviewNode>();
   for (;;) {
     keyOfFile = new Map();
@@ -44,14 +51,14 @@ export async function overview(projectPath: string, level: string, prefix = "", 
       const pkg = index.packageOf.get(file.id) ?? null;
       if (level === "package") {
         const name = pkg ?? NONE;
-        keyOfFile.set(file.id, { id: `package:${name}`, label: "Package", name, package: pkg });
+        keyOfFile.set(file.id, { id: `package:${name}`, label: "Package", name, package: pkg, noise: false });
       } else if (level === "directory") {
         const segments = rel.split("/");
         if (segments.length - 1 > depth) {
           const dir = segments.slice(0, depth + 1).join("/");
-          keyOfFile.set(file.id, { id: `dir:${dir}`, label: "Directory", name: segments[depth]!, package: pkg });
-        } else keyOfFile.set(file.id, { id: file.id, label: "File", name: rel, package: pkg });
-      } else keyOfFile.set(file.id, { id: file.id, label: "File", name: rel, package: pkg });
+          keyOfFile.set(file.id, { id: `dir:${dir}`, label: "Directory", name: segments[depth]!, package: pkg, noise: isNoisePath(dir) });
+        } else keyOfFile.set(file.id, { id: file.id, label: "File", name: rel, package: pkg, noise: isNoisePath(rel) });
+      } else keyOfFile.set(file.id, { id: file.id, label: "File", name: rel, package: pkg, noise: isNoisePath(rel) });
     }
     groups = new Map();
     for (const key of keyOfFile.values()) {
@@ -107,7 +114,7 @@ const relPath = (file: IndexNode) => String(file.props.relativePath ?? "");
 export type ViewNode = { id: string; label: string; name: string; file: string | null; line: number | null; package: string | null };
 export type ViewEdge = { from: string; to: string; type: string; kind: EdgeKind };
 
-function viewNode(index: GraphIndex, node: IndexNode): ViewNode {
+export function viewNode(index: GraphIndex, node: IndexNode): ViewNode {
   const file = index.fileOf.get(node.id);
   return {
     id: node.id,

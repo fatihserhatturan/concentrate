@@ -9,6 +9,7 @@ import { projectInfo } from "./api/project.js";
 import { runQuery } from "./api/query.js";
 import { preset } from "./graph/presets.js";
 import { dashboard } from "./graph/dashboard.js";
+import { DEFAULT_FOCUS_LIMIT, focus, path as graphPathBetween } from "./graph/focus.js";
 import { catalog, entities } from "./graph/entities.js";
 import { issues } from "./graph/issues.js";
 import { parseExportRequest, sendExport } from "./export/index.js";
@@ -116,6 +117,10 @@ export function createUiServer(token: string) {
           return sendJson(response, 200, await neighbors(project, param("id") ?? "", parseKinds(param("types")), Number(param("depth") ?? 1)));
         }
         if (url.pathname === "/api/graph/preset") return sendJson(response, 200, await preset(project, param("name") ?? ""));
+        if (url.pathname === "/api/graph/focus") {
+          return sendJson(response, 200, await focus(project, param("id") ?? "", parseKinds(param("types")), Number(param("depth") ?? 1), Number(param("limit") ?? DEFAULT_FOCUS_LIMIT)));
+        }
+        if (url.pathname === "/api/graph/path") return sendJson(response, 200, await graphPathBetween(project, param("from") ?? "", param("to") ?? "", parseKinds(param("types"))));
         if (url.pathname === "/api/graph/catalog") return sendJson(response, 200, await catalog(project));
         if (url.pathname === "/api/graph/dashboard") return sendJson(response, 200, await dashboard(project));
         if (url.pathname === "/api/graph/entities") return sendJson(response, 200, await entities(project, param("kind") ?? ""));
