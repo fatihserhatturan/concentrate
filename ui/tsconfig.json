@@ -7,8 +7,12 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["node"],
-    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+    "types": [
+      "node"
+    ]
   },
-  "include": ["server/**/*.ts", "web/src/**/*.ts", "tests/**/*.ts"]
+  "include": [
+    "server/**/*.ts",
+    "tests/**/*.ts"
+  ]
 }

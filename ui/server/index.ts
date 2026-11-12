@@ -5,6 +5,10 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { listDirectories } from "./api/fs.js";
 import { parseScanRequest, runScan } from "./api/scan.js";
+import { runQuery } from "./api/query.js";
+import { preset } from "./graph/presets.js";
+import { parseExportRequest, sendExport } from "./export/index.js";
+import { neighbors, nodeDetail, nodeSource, overview, parseKinds, search, summary } from "./graph/views.js";
 import { createToken, isAllowedHost, tokenFromRequest, tokenMatches } from "./security.js";
 
 const WEB_DIST = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "web", "dist");
@@ -79,6 +83,32 @@ export function createUiServer(token: string) {
         await runScan(scanRequest, (event) => response.write(`event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`));
         response.end();
         return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/query") {
+        const body = (await readBody(request)) as { project?: string; query?: unknown };
+        if (!body.project) throw new Error("`project` is required");
+        sendJson(response, 200, await runQuery(body.project, body.query));
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/export") {
+        await sendExport(parseExportRequest(url.searchParams), response);
+        return;
+      }
+      if (request.method === "GET" && (url.pathname.startsWith("/api/graph/") || url.pathname === "/api/search")) {
+        const project = url.searchParams.get("project");
+        if (!project) throw new Error("`project` is required");
+        const param = (name: string) => url.searchParams.get(name);
+        if (url.pathname === "/api/graph/summary") return sendJson(response, 200, await summary(project));
+        if (url.pathname === "/api/graph/overview") {
+          return sendJson(response, 200, await overview(project, param("level") ?? "package", param("prefix") ?? "", parseKinds(param("types"))));
+        }
+        if (url.pathname === "/api/graph/neighbors") {
+          return sendJson(response, 200, await neighbors(project, param("id") ?? "", parseKinds(param("types")), Number(param("depth") ?? 1)));
+        }
+        if (url.pathname === "/api/graph/preset") return sendJson(response, 200, await preset(project, param("name") ?? ""));
+        if (url.pathname === "/api/graph/node") return sendJson(response, 200, await nodeDetail(project, param("id") ?? ""));
+        if (url.pathname === "/api/graph/source") return sendJson(response, 200, await nodeSource(project, param("id") ?? ""));
+        if (url.pathname === "/api/search") return sendJson(response, 200, await search(project, param("q") ?? "", param("label") ?? undefined));
       }
       sendJson(response, 404, { error: "Unknown endpoint" });
     } catch (error) {

@@ -1,5 +1,6 @@
 import { stat } from "node:fs/promises";
 import path from "node:path";
+import { invalidateIndex } from "../graph/index.js";
 import { didFailFast, didPartiallySucceed, scanIntoStore, type ScanAdapterOptions } from "../core.js";
 
 export type ScanRequest = {
@@ -14,6 +15,9 @@ export type ScanEvent =
   | { type: "progress"; current: number; total: number; file: string }
   | { type: "done"; status: "ok" | "partial" | "failed"; nodes: number; relationships: number; report: unknown; database: string }
   | { type: "error"; message: string };
+
+/** The options of the last scan of each project, so a JSONL export can rebuild the same graph. */
+export const lastScanRequests = new Map<string, ScanRequest>();
 
 export function parseScanRequest(body: unknown): ScanRequest {
   if (typeof body !== "object" || body === null) throw new Error("Body must be a JSON object");
@@ -57,6 +61,7 @@ export async function runScan(request: ScanRequest, emit: (event: ScanEvent) => 
     return;
   }
   const options = scanOptionsFor(projectPath, request);
+  lastScanRequests.set(projectPath, request);
   let lastEmit = 0;
   try {
     const result = await scanIntoStore(projectPath, options, (current, total, file) => {
@@ -65,6 +70,7 @@ export async function runScan(request: ScanRequest, emit: (event: ScanEvent) => 
       lastEmit = now;
       emit({ type: "progress", current, total, file });
     });
+    invalidateIndex(projectPath);
     emit({
       type: "done",
       status: didFailFast(result) ? "failed" : didPartiallySucceed(result) ? "partial" : "ok",

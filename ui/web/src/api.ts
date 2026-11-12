@@ -1,6 +1,6 @@
 // The token arrives in the URL fragment, which is never sent to the server or logged.
 function readToken(): string {
-  const match = /token=([a-f0-9]+)/.exec(location.hash);
+  const match = /token=([\w-]+)/.exec(location.hash);
   if (match) {
     sessionStorage.setItem("concentrate-token", match[1]);
     history.replaceState(null, "", location.pathname);
@@ -54,4 +54,67 @@ export async function scan(
     }
   }
   throw new Error("The scan ended without a result");
+}
+
+// ---- graph API ----
+let project = "";
+export const setProject = (p: string) => { project = p; };
+export const currentProject = () => project;
+
+async function getJson<T>(endpoint: string, params: Record<string, string | undefined> = {}): Promise<T> {
+  const query = new URLSearchParams({ project });
+  for (const [key, value] of Object.entries(params)) if (value !== undefined && value !== "") query.set(key, value);
+  const response = await fetch(`${endpoint}?${query}`, { headers });
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.error ?? response.statusText);
+  return body;
+}
+
+export type OverviewNode = { id: string; label: string; name: string; files: number; package: string | null; degree: number };
+export type OverviewEdge = { from: string; to: string; count: number; byKind: Record<string, number> };
+export type Overview = { level: string; prefix: string; nodes: OverviewNode[]; edges: OverviewEdge[]; truncated: boolean; isolatedHidden: number };
+export type ViewNode = { id: string; label: string; name: string; file: string | null; line: number | null; package: string | null };
+export type ViewEdge = { from: string; to: string; type: string; kind: string };
+export type Neighbors = { nodes: ViewNode[]; edges: ViewEdge[]; truncated: boolean };
+export type NodeDetail = {
+  id: string; label: string; name: string; properties: Record<string, unknown>; file: string | null; line: number | null;
+  outgoing: Record<string, Array<{ id: string; label: string; name: string }>>;
+  incoming: Record<string, Array<{ id: string; label: string; name: string }>>;
+};
+export type SearchResult = ViewNode & { match: string };
+
+export const graphSummary = () => getJson<any>("/api/graph/summary");
+export const graphOverview = (level: string, prefix: string, types: string[]) =>
+  getJson<Overview>("/api/graph/overview", { level, prefix, types: types.join(",") });
+export const graphNeighbors = (id: string, types: string[], depth = 1) =>
+  getJson<Neighbors>("/api/graph/neighbors", { id, types: types.join(","), depth: String(depth) });
+export const graphNode = (id: string) => getJson<NodeDetail>("/api/graph/node", { id });
+export const graphSource = (id: string) => getJson<{ file?: string; line?: number; source: string | null; truncated?: boolean; note?: string }>("/api/graph/source", { id });
+export const graphSearch = (q: string) => getJson<{ total: number; results: SearchResult[] }>("/api/search", { q });
+
+export type ExportOptions = { format: string; scope: "graph" | "view"; types: string[]; prefix: string; focus?: string };
+/** A download URL; the token travels in the query because a link cannot set headers. */
+export function exportUrl(options: ExportOptions): string {
+  const query = new URLSearchParams({ project, token, format: options.format, scope: options.scope });
+  if (options.scope === "view") {
+    query.set("types", options.types.join(","));
+    if (options.focus) query.set("focus", options.focus);
+    else if (options.prefix) query.set("prefix", options.prefix);
+  }
+  return `/api/export?${query}`;
+}
+
+export type PresetResult = { preset: string; nodes: ViewNode[]; edges: Array<ViewEdge & { highlight?: boolean }>; truncated: boolean; note: string };
+export const graphPreset = (name: string) => getJson<PresetResult>("/api/graph/preset", { name });
+
+export type QueryResult = { columns: string[]; rows: Array<Record<string, unknown>>; total: number; truncated: boolean };
+export async function runQuery(query: string): Promise<QueryResult> {
+  const response = await fetch("/api/query", {
+    method: "POST",
+    headers: { ...headers, "content-type": "application/json" },
+    body: JSON.stringify({ project, query }),
+  });
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.error ?? response.statusText);
+  return body;
 }

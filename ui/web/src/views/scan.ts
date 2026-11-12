@@ -1,4 +1,4 @@
-import { listDirectories, scan, type FsListing } from "../api.js";
+import { listDirectories, scan, setProject, type FsListing } from "../api.js";
 
 const RECENT_KEY = "concentrate-recent";
 
@@ -11,7 +11,7 @@ function remember(path: string): void {
 const lines = (text: string) => text.split("\n").map((l) => l.trim()).filter(Boolean);
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
-export function mountScanView(root: HTMLElement): void {
+export function mountScanView(root: HTMLElement, onOpenGraph: (project: string) => void = () => {}): void {
   root.innerHTML = `
     <h1>Concentrate</h1>
     <h2>Project</h2>
@@ -21,7 +21,7 @@ export function mountScanView(root: HTMLElement): void {
     <h2>Options</h2>
     <div class="row"><textarea id="include" rows="2" placeholder="include globs, one per line"></textarea><textarea id="exclude" rows="2" placeholder="exclude globs, one per line"></textarea></div>
     <div class="row" style="margin-top:8px"><input type="text" id="origins" placeholder="API origins, comma separated" /><label><input type="checkbox" id="cache" checked /> use parse cache</label></div>
-    <div class="row" style="margin-top:12px"><button class="primary" id="scan">Scan</button></div>
+    <div class="row" style="margin-top:12px"><button class="primary" id="scan">Scan</button><button id="open">Open existing graph</button></div>
     <div id="progress" hidden><progress id="bar" value="0" max="1"></progress><div class="file" id="file"></div></div>
     <div id="report"></div>`;
   const $ = <T extends HTMLElement>(id: string) => root.querySelector<T>(`#${id}`)!;
@@ -50,6 +50,7 @@ export function mountScanView(root: HTMLElement): void {
     const a = (e.target as HTMLElement).closest("a");
     if (a) { e.preventDefault(); void navigate(a.dataset.path); }
   });
+  $("open").addEventListener("click", () => { const p = $<HTMLInputElement>("path").value; setProject(p); remember(p); onOpenGraph(p); });
   $("up").addEventListener("click", () => listing?.parent && void navigate(listing.parent));
   $("go").addEventListener("click", () => void navigate($<HTMLInputElement>("path").value));
 
@@ -77,9 +78,10 @@ export function mountScanView(root: HTMLElement): void {
       const warnings: any[] = done.report?.warnings ?? [];
       const failures: any[] = done.report?.failedFiles ?? [];
       $("report").innerHTML = `<div class="card"><strong>${done.status === "ok" ? "Scan complete" : done.status === "partial" ? "Scan finished with failures" : "Scan failed"}</strong>
-        <div>${done.nodes} nodes, ${done.relationships} relationships</div><div class="tag">Graph: ${esc(done.database)}</div></div>
+        <div>${done.nodes} nodes, ${done.relationships} relationships</div><div class="row" style="margin-top:6px"><button class="primary" id="view">View graph</button></div><div class="tag">Graph: ${esc(done.database)}</div></div>
         ${failures.length ? `<div class="card bad"><strong>${failures.length} failed files</strong><br>${failures.slice(0, 20).map((f) => esc(`${f.path ?? ""}: ${f.message ?? ""}`)).join("<br>")}</div>` : ""}
         ${warnings.length ? `<div class="card warn"><strong>${warnings.length} warnings</strong><br>${warnings.slice(0, 20).map((w) => esc(w.message ?? JSON.stringify(w))).join("<br>")}</div>` : ""}`;
+      root.querySelector<HTMLButtonElement>("#view")?.addEventListener("click", () => { setProject(projectPath); onOpenGraph(projectPath); });
     } catch (error) {
       $("report").innerHTML = `<div class="card bad">${esc((error as Error).message)}</div>`;
     } finally {
