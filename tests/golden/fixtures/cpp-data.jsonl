@@ -1,6 +1,10 @@
-{"kind":"report","status":"success","discoveredFiles":3,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[]}
+{"kind":"report","status":"success","discoveredFiles":4,"supportedFiles":3,"parsedFiles":3,"failedFiles":[],"warnings":[]}
+{"kind":"node","id":"datamodel:drogon:sessions","label":"DataModel","properties":{"library":"drogon","name":"sessions"}}
 {"kind":"node","id":"datamodel:libpq:accounts","label":"DataModel","properties":{"library":"libpq","name":"accounts"}}
 {"kind":"node","id":"datamodel:libpq:orders","label":"DataModel","properties":{"library":"libpq","name":"orders"}}
+{"kind":"node","id":"datamodel:mysql:finance","label":"DataModel","properties":{"library":"mysql","name":"finance"}}
+{"kind":"node","id":"datamodel:odbc:inventory","label":"DataModel","properties":{"library":"odbc","name":"inventory"}}
+{"kind":"node","id":"datamodel:pqxx:employee","label":"DataModel","properties":{"library":"pqxx","name":"employee"}}
 {"kind":"node","id":"datamodel:soci:events","label":"DataModel","properties":{"library":"soci","name":"events"}}
 {"kind":"node","id":"datamodel:soci:users","label":"DataModel","properties":{"library":"soci","name":"users"}}
 {"kind":"node","id":"datamodel:sqlite3:orders","label":"DataModel","properties":{"library":"sqlite3","name":"orders"}}
@@ -11,6 +15,23 @@
 {"kind":"node","id":"env:APP_DB_PATH","label":"EnvVar","properties":{"name":"APP_DB_PATH"}}
 {"kind":"node","id":"env:APP_PORT","label":"EnvVar","properties":{"name":"APP_PORT"}}
 {"kind":"node","id":"file:schema.sql","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"sql","path":"<root>/schema.sql","relativePath":"schema.sql","sourceType":"production"}}
+{"kind":"node","id":"file:src/drivers.cpp","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/src/drivers.cpp","relativePath":"src/drivers.cpp","sourceType":"production"}}
+{"kind":"node","id":"file:src/drivers.cpp:function:14:legacy","label":"Function","properties":{"className":null,"endLine":17,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":14,"methodKind":null,"name":"legacy","namespace":"","parameters":"[{\"name\":\"conn\",\"type\":\"MYSQL*\"}]","qualifiedName":"legacy","returnType":"void","visibility":"external"}}
+{"kind":"node","id":"file:src/drivers.cpp:function:14:legacy:call:15:2:mysql_query","label":"Call","properties":{"argCount":2,"callee":"mysql_query","columnNumber":2,"expression":"mysql_query","line":15,"name":"mysql_query","receiver":null}}
+{"kind":"node","id":"file:src/drivers.cpp:function:14:legacy:call:16:2:mysql_query","label":"Call","properties":{"argCount":2,"callee":"mysql_query","columnNumber":2,"expression":"mysql_query","line":16,"name":"mysql_query","receiver":null}}
+{"kind":"node","id":"file:src/drivers.cpp:function:19:odbc","label":"Function","properties":{"className":null,"endLine":21,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":19,"methodKind":null,"name":"odbc","namespace":"","parameters":"[{\"name\":\"hstmt\",\"type\":\"SQLHSTMT\"}]","qualifiedName":"odbc","returnType":"void","visibility":"external"}}
+{"kind":"node","id":"file:src/drivers.cpp:function:19:odbc:call:20:2:SQLExecDirect","label":"Call","properties":{"argCount":3,"callee":"SQLExecDirect","columnNumber":2,"expression":"SQLExecDirect","line":20,"name":"SQLExecDirect","receiver":null}}
+{"kind":"node","id":"file:src/drivers.cpp:function:23:drogonDb","label":"Function","properties":{"className":null,"endLine":25,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":23,"methodKind":null,"name":"drogonDb","namespace":"","parameters":"[{\"name\":\"client\",\"type\":\"const drogon::orm::DbClientPtr&\"},{\"name\":\"id\",\"type\":\"int\"}]","qualifiedName":"drogonDb","returnType":"void","visibility":"external"}}
+{"kind":"node","id":"file:src/drivers.cpp:function:23:drogonDb:call:24:2:client->execSqlAsync","label":"Call","properties":{"argCount":4,"callee":"execSqlAsync","columnNumber":2,"expression":"client->execSqlAsync","line":24,"name":"client->execSqlAsync","receiver":"client","receiverType":"drogon::orm::DbClientPtr"}}
+{"kind":"node","id":"file:src/drivers.cpp:function:7:report","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":7,"methodKind":null,"name":"report","namespace":"","parameters":"[{\"name\":\"c\",\"type\":\"pqxx::connection&\"},{\"name\":\"id\",\"type\":\"int\"}]","qualifiedName":"report","returnType":"void","visibility":"external"}}
+{"kind":"node","id":"file:src/drivers.cpp:function:7:report:call:10:2:txn.exec_params","label":"Call","properties":{"argCount":2,"callee":"exec_params","columnNumber":2,"expression":"txn.exec_params","line":10,"name":"txn.exec_params","receiver":"txn","receiverType":"pqxx::work"}}
+{"kind":"node","id":"file:src/drivers.cpp:function:7:report:call:11:2:txn.commit","label":"Call","properties":{"argCount":0,"callee":"commit","columnNumber":2,"expression":"txn.commit","line":11,"name":"txn.commit","receiver":"txn","receiverType":"pqxx::work"}}
+{"kind":"node","id":"file:src/drivers.cpp:function:7:report:call:9:17:txn.exec","label":"Call","properties":{"argCount":1,"callee":"exec","columnNumber":17,"expression":"txn.exec","line":9,"name":"txn.exec","receiver":"txn","receiverType":"pqxx::work"}}
+{"kind":"node","id":"file:src/drivers.cpp:import:1:drogon/orm/DbClient.h","label":"Import","properties":{"isSystem":true,"line":1,"source":"drogon/orm/DbClient.h","specifier":"#include <drogon/orm/DbClient.h>"}}
+{"kind":"node","id":"file:src/drivers.cpp:import:2:mysql/mysql.h","label":"Import","properties":{"isSystem":true,"line":2,"source":"mysql/mysql.h","specifier":"#include <mysql/mysql.h>"}}
+{"kind":"node","id":"file:src/drivers.cpp:import:3:pqxx/pqxx","label":"Import","properties":{"isSystem":true,"line":3,"source":"pqxx/pqxx","specifier":"#include <pqxx/pqxx>"}}
+{"kind":"node","id":"file:src/drivers.cpp:import:4:sql.h","label":"Import","properties":{"isSystem":true,"line":4,"source":"sql.h","specifier":"#include <sql.h>"}}
+{"kind":"node","id":"file:src/drivers.cpp:import:5:sqlext.h","label":"Import","properties":{"isSystem":true,"line":5,"source":"sqlext.h","specifier":"#include <sqlext.h>"}}
 {"kind":"node","id":"file:src/server.cpp","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"cpp","path":"<root>/src/server.cpp","relativePath":"src/server.cpp","sourceType":"production"}}
 {"kind":"node","id":"file:src/server.cpp:entrypoint:5:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"cpp","line":5,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:src/server.cpp:function:5:main","label":"Function","properties":{"className":null,"endLine":17,"isAbstract":false,"isAsync":false,"isDeclaration":false,"isExported":true,"isOverride":false,"isVirtual":false,"kind":"function","line":5,"methodKind":null,"name":"main","namespace":"","parameters":"[]","qualifiedName":"main","returnType":"int","visibility":"external"}}
@@ -59,19 +80,56 @@
 {"kind":"node","id":"file:src/store.cpp:variable:8:kSchema","label":"Variable","properties":{"isExported":false,"kind":"const","line":8,"name":"kSchema","typeName":"char","visibility":"internal"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"cpp-data","path":"<root>"}}
 {"kind":"node","id":"table:cpp:-:accounts","label":"Table","properties":{"columns":"[{\"name\":\"id\",\"column\":\"id\",\"type\":\"INTEGER\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"balance\",\"column\":\"balance\",\"type\":\"INTEGER\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false}]","declaredIn":"schema.sql","indexes":"[]","kind":"table","library":"sql","line":2,"migrations":"[{\"file\":\"schema.sql\",\"line\":2,\"order\":0,\"change\":\"create\"}]","name":"accounts","provider":null,"schemaName":null}}
+{"kind":"node","id":"table:cpp:-:employee","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"sql","line":null,"name":"employee","provider":null,"schemaName":null}}
 {"kind":"node","id":"table:cpp:-:events","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"sql","line":null,"name":"events","provider":null,"schemaName":null}}
+{"kind":"node","id":"table:cpp:-:finance","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"sql","line":null,"name":"finance","provider":null,"schemaName":null}}
+{"kind":"node","id":"table:cpp:-:inventory","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"sql","line":null,"name":"inventory","provider":null,"schemaName":null}}
 {"kind":"node","id":"table:cpp:-:orders","label":"Table","properties":{"columns":"[{\"name\":\"id\",\"column\":\"id\",\"type\":\"INTEGER\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"user_id\",\"column\":\"user_id\",\"type\":\"INTEGER\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"total\",\"column\":\"total\",\"type\":\"REAL\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false}]","declaredIn":"schema.sql","indexes":"[]","kind":"table","library":"sql","line":1,"migrations":"[{\"file\":\"schema.sql\",\"line\":1,\"order\":0,\"change\":\"create\"}]","name":"orders","provider":null,"schemaName":null}}
+{"kind":"node","id":"table:cpp:-:sessions","label":"Table","properties":{"columns":"[]","declaredIn":null,"kind":"table","library":"sql","line":null,"name":"sessions","provider":null,"schemaName":null}}
 {"kind":"node","id":"table:cpp:-:users","label":"Table","properties":{"columns":"[{\"name\":\"id\",\"column\":\"id\",\"type\":\"INTEGER\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"name\",\"column\":\"name\",\"type\":\"TEXT\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"email\",\"column\":\"email\",\"type\":\"TEXT\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":true}]","declaredIn":"src/store.cpp","indexes":"[]","kind":"table","library":"sql","line":14,"migrations":"[{\"file\":\"src/store.cpp\",\"line\":14,\"order\":0,\"change\":\"create\"}]","name":"users","provider":null,"schemaName":null}}
+{"kind":"rel","from":"datamodel:drogon:sessions","type":"MAPS_TO_TABLE","to":"table:cpp:-:sessions","properties":{}}
 {"kind":"rel","from":"datamodel:libpq:accounts","type":"MAPS_TO_TABLE","to":"table:cpp:-:accounts","properties":{}}
 {"kind":"rel","from":"datamodel:libpq:orders","type":"MAPS_TO_TABLE","to":"table:cpp:-:orders","properties":{}}
+{"kind":"rel","from":"datamodel:mysql:finance","type":"MAPS_TO_TABLE","to":"table:cpp:-:finance","properties":{}}
+{"kind":"rel","from":"datamodel:odbc:inventory","type":"MAPS_TO_TABLE","to":"table:cpp:-:inventory","properties":{}}
+{"kind":"rel","from":"datamodel:pqxx:employee","type":"MAPS_TO_TABLE","to":"table:cpp:-:employee","properties":{}}
 {"kind":"rel","from":"datamodel:soci:events","type":"MAPS_TO_TABLE","to":"table:cpp:-:events","properties":{}}
 {"kind":"rel","from":"datamodel:soci:users","type":"MAPS_TO_TABLE","to":"table:cpp:-:users","properties":{}}
 {"kind":"rel","from":"datamodel:sqlite3:orders","type":"MAPS_TO_TABLE","to":"table:cpp:-:orders","properties":{}}
 {"kind":"rel","from":"datamodel:sqlite3:users","type":"MAPS_TO_TABLE","to":"table:cpp:-:users","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:schema.sql","properties":{}}
+{"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/drivers.cpp","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/server.cpp","properties":{}}
 {"kind":"rel","from":"dir:src","type":"CONTAINS_FILE","to":"file:src/store.cpp","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp","type":"DEFINES_FUNCTION","to":"file:src/drivers.cpp:function:14:legacy","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp","type":"DEFINES_FUNCTION","to":"file:src/drivers.cpp:function:19:odbc","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp","type":"DEFINES_FUNCTION","to":"file:src/drivers.cpp:function:23:drogonDb","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp","type":"DEFINES_FUNCTION","to":"file:src/drivers.cpp:function:7:report","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp","type":"IMPORTS","to":"file:src/drivers.cpp:import:1:drogon/orm/DbClient.h","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp","type":"IMPORTS","to":"file:src/drivers.cpp:import:2:mysql/mysql.h","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp","type":"IMPORTS","to":"file:src/drivers.cpp:import:3:pqxx/pqxx","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp","type":"IMPORTS","to":"file:src/drivers.cpp:import:4:sql.h","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp","type":"IMPORTS","to":"file:src/drivers.cpp:import:5:sqlext.h","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:14:legacy","type":"ACCESSES_DATA","to":"datamodel:mysql:finance","properties":{"direct":true,"expression":"mysql_query","file":"src/drivers.cpp","library":"mysql","line":15,"operation":"read"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:14:legacy","type":"ACCESSES_DATA","to":"datamodel:mysql:finance","properties":{"direct":true,"expression":"mysql_query","file":"src/drivers.cpp","library":"mysql","line":16,"operation":"delete"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:14:legacy","type":"CALLS","to":"file:src/drivers.cpp:function:14:legacy:call:15:2:mysql_query","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:14:legacy","type":"CALLS","to":"file:src/drivers.cpp:function:14:legacy:call:16:2:mysql_query","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:14:legacy","type":"READS","to":"table:cpp:-:finance","properties":{"expression":"mysql_query","line":15,"model":"finance","operation":"read"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:14:legacy","type":"WRITES","to":"table:cpp:-:finance","properties":{"expression":"mysql_query","line":16,"model":"finance","operation":"delete"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:19:odbc","type":"ACCESSES_DATA","to":"datamodel:odbc:inventory","properties":{"direct":true,"expression":"SQLExecDirect","file":"src/drivers.cpp","library":"odbc","line":20,"operation":"update"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:19:odbc","type":"CALLS","to":"file:src/drivers.cpp:function:19:odbc:call:20:2:SQLExecDirect","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:19:odbc","type":"WRITES","to":"table:cpp:-:inventory","properties":{"expression":"SQLExecDirect","line":20,"model":"inventory","operation":"update"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:23:drogonDb","type":"ACCESSES_DATA","to":"datamodel:drogon:sessions","properties":{"direct":true,"expression":"client->execSqlAsync","file":"src/drivers.cpp","library":"drogon","line":24,"operation":"read"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:23:drogonDb","type":"CALLS","to":"file:src/drivers.cpp:function:23:drogonDb:call:24:2:client->execSqlAsync","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:23:drogonDb","type":"READS","to":"table:cpp:-:sessions","properties":{"expression":"client->execSqlAsync","line":24,"model":"sessions","operation":"read"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:7:report","type":"ACCESSES_DATA","to":"datamodel:pqxx:employee","properties":{"direct":true,"expression":"txn.exec","file":"src/drivers.cpp","library":"pqxx","line":9,"operation":"read"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:7:report","type":"ACCESSES_DATA","to":"datamodel:pqxx:employee","properties":{"direct":true,"expression":"txn.exec_params","file":"src/drivers.cpp","library":"pqxx","line":10,"operation":"create"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:7:report","type":"CALLS","to":"file:src/drivers.cpp:function:7:report:call:10:2:txn.exec_params","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:7:report","type":"CALLS","to":"file:src/drivers.cpp:function:7:report:call:11:2:txn.commit","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:7:report","type":"CALLS","to":"file:src/drivers.cpp:function:7:report:call:9:17:txn.exec","properties":{}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:7:report","type":"READS","to":"table:cpp:-:employee","properties":{"expression":"txn.exec","line":9,"model":"employee","operation":"read"}}
+{"kind":"rel","from":"file:src/drivers.cpp:function:7:report","type":"WRITES","to":"table:cpp:-:employee","properties":{"expression":"txn.exec_params","line":10,"model":"employee","operation":"create"}}
 {"kind":"rel","from":"file:src/server.cpp","type":"DECLARES_ENTRYPOINT","to":"file:src/server.cpp:entrypoint:5:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:src/server.cpp","type":"DECLARES_ROUTE","to":"file:src/server.cpp:route:13:6:POST:/api/users","properties":{}}
 {"kind":"rel","from":"file:src/server.cpp","type":"DECLARES_ROUTE","to":"file:src/server.cpp:route:9:6:GET:/api/users","properties":{}}
