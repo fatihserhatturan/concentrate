@@ -347,9 +347,39 @@ The agent called an MCP tool in 3 of 9 runs (`api_consumers`, `find_callers`,
 does not measure it: it shows that the larger list did not cost the questions
 that need a graph tool, not that `explore` helps or hurts. One run per
 question is also too few to separate +4% from noise (the three-run medians of
-2026-11-02 for sonnet were +2% to +3% on these categories). Measuring `explore`
-needs questions an agent would answer with it, in words and without naming an
-identifier, and several runs each; that set does not exist yet.
+2026-11-02 for sonnet were +2% to +3% on these categories).
+
+#### Questions written for `explore`
+
+[`bench/agent/questions-explore.json`](../bench/agent/questions-explore.json)
+has seven narrow questions about how code works, asked in words with no tool
+named and no identifier given (how Express computes an ETag, what runs when a
+template is rendered, how ky waits between retries, which route logs a user in
+and what it calls). The expected answers were written from the pinned source
+(`express`, `ky`, `internet-node-express-realworld`). Recorded 2026-11-12 with
+sonnet, three runs per question and mode, `--max-turns 25`
+([`agent-explore-sonnet-runs3-2026-11-12.json`](../bench/results/agent-explore-sonnet-runs3-2026-11-12.json),
+CLI cost estimate $2.29 for the 42 sessions):
+
+| | Baseline | Concentrate |
+| --- | ---: | ---: |
+| Correct | 21/21 | 21/21 |
+| Median input tokens | 66.2k | 67.4k (+2%) |
+| Median tool calls | 2 | 2 |
+| Median wall time | 8.2 s | 8.8 s (+8%) |
+| Total cost | $1.12 | $1.17 |
+
+**The agent called no Concentrate tool in any of the 21 runs, and made no
+`ToolSearch` call to look for one.** It answered each question with one to
+three `Grep` and `Read` calls. These questions name a function or a file the
+agent can guess, on repositories small enough to grep, so the graph has
+nothing to add, and `explore` is not chosen. The run measures what the larger
+tool list costs when it is not used (+2% input tokens, +$0.05 over 21 runs),
+not what `explore` does when it is. To measure that, the questions need
+repositories or phrasings where grep fails (several candidate files, names the
+agent cannot guess), or the tool must be offered more directly, for example
+named in the prompt or loaded by default instead of deferred behind
+`ToolSearch`. Neither has been tried.
 
 ### Frontend and full-stack questions
 

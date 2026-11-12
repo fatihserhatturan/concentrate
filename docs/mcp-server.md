@@ -277,9 +277,10 @@ These answer a whole question in one call instead of a chain of lookups.
   `paths`: the shortest chains of resolved calls from one returned symbol to
   another (at most 6 calls), and `impact`: counts of callers, entrypoints,
   components, pages and tables and the routes and env vars reached within 3
-  levels. The agent benchmark has not measured it yet: in the v2 run of
-  2026-11-12 the agent never called it (see docs/agent-benchmark.md);
-  `--tools` can leave it out of the list.
+  levels. The agent benchmark has not shown a use for it yet: in 30 runs
+  (v2 questions and seven questions written for it, 2026-11-12) the agent never
+  called it, answering with grep (see docs/agent-benchmark.md); `--tools` can
+  leave it out of the list.
 - `trace_calls({ from, to?, file?, toFile?, maxDepth, limit = 50 })`: over
   resolved calls only. Without `to`: what `from` (a function name or
   `Class.method`) calls, nearest first (`callees` with `depth`, `calledBy`;
