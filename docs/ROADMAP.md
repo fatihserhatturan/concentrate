@@ -1613,7 +1613,7 @@ The preprocessor is not run: macros are read as calls. The decisions of M9 apply
 
 ### Agent benchmark
 
-- [ ] C/C++ questions (routes, callers, impact, header → definition, build targets, env) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
+- [x] C/C++ questions (routes, callers, impact, header → definition, build targets, env) in the agent benchmark; results per category committed and documented (cost estimate and approval before paid runs)
 
 ### Docs
 

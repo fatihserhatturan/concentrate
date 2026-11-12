@@ -690,3 +690,64 @@ agent called a Concentrate tool:
 - Questions this size say little about correctness; a larger Python repository,
   where grep cannot read everything, would be the fairer test. None is pinned yet.
 
+### C and C++ questions (Phase 37)
+
+[`bench/agent/questions-cpp.json`](../bench/agent/questions-cpp.json) has twelve questions over
+cJSON, tinyxml2, googletest, the Crow, Drogon and cpp-httplib examples, gRPC C++ and the Qt SQL
+examples:
+
+- **routes:** the paths of Crow's `example_chat.cpp`, Drogon's `helloworld/main.cc` and
+  cpp-httplib's `server.cc`;
+- **callers / impact:** the 11 functions that call cJSON's static `cJSON_New_Item`; the caller of
+  `ConvertToRadians` in the route_guide server; the four route_guide files that call
+  `routeguide::ParseDb`;
+- **definition:** the `.cpp` and header of tinyxml2's `XMLDocument::LoadFile` and of cJSON's
+  `cJSON_Parse`;
+- **build:** the CMake target and library of Crow's `example_chat`, the five targets of route_guide's
+  CMake file;
+- **env:** the four variables googletest's `gtest.cc` reads with a literal name;
+- **data:** the Qt function that creates the employee, city and country tables.
+
+Expected answers were written from the source, not from Concentrate output.
+
+```bash
+npm run bench:agent -- --questions bench/agent/questions-cpp.json --runs 3 --model sonnet --max-turns 25
+npm run bench:agent -- --questions bench/agent/questions-cpp.json --runs 3 --model haiku --max-turns 25
+```
+
+Recorded 2026-11-12, three runs each, `--max-turns 25`, after the cost estimate (about $4.9) was
+approved ($4.06 spent by the CLI's estimate)
+([`agent-cpp-sonnet-runs3-2026-11-12.json`](../bench/results/agent-cpp-sonnet-runs3-2026-11-12.json),
+[`agent-cpp-haiku-runs3-2026-11-12.json`](../bench/results/agent-cpp-haiku-runs3-2026-11-12.json)).
+Per category, correct runs (baseline / concentrate), median input tokens (baseline → concentrate)
+and the runs in which the agent called a Concentrate tool:
+
+| Category | Runs | sonnet: correct | sonnet: input tokens | sonnet: MCP runs | haiku: correct | haiku: input tokens | haiku: MCP runs |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| routes | 9 | 9/9 / 9/9 | 65.0k → 66.3k (+2%) | 0/9 | 9/9 / 9/9 | 100.2k → 69.1k (−31%) | 0/9 |
+| callers | 6 | 5/6 / 5/6 | 67.4k → 102.6k (+52%) | 1/6 | 5/6 / 6/6 | 120.0k → 142.3k (+19%) | 0/6 |
+| impact | 3 | 3/3 / 3/3 | 64.4k → 66.1k (+3%) | 0/3 | 3/3 / 3/3 | 66.1k → 104.0k (+57%) | 2/3 |
+| definition | 6 | 6/6 / 6/6 | 64.1k → 66.0k (+3%) | 0/6 | 6/6 / 6/6 | 66.9k → 68.7k (+3%) | 0/6 |
+| build | 6 | 6/6 / 6/6 | 65.7k → 66.9k (+2%) | 0/6 | 6/6 / 6/6 | 87.5k → 89.9k (+3%) | 0/6 |
+| env | 3 | 3/3 / 3/3 | 96.7k → 99.5k (+3%) | 0/3 | 3/3 / 3/3 | 99.8k → 142.9k (+43%) | 0/3 |
+| data | 3 | 3/3 / 3/3 | 96.8k → 99.5k (+3%) | 0/3 | 3/3 / 3/3 | 136.9k → 103.7k (−24%) | 0/3 |
+
+| | sonnet: baseline | sonnet: concentrate | haiku: baseline | haiku: concentrate |
+| --- | ---: | ---: | ---: | ---: |
+| Correct | 35/36 | 35/36 | 35/36 | 36/36 |
+| Median input tokens | 65.0k | 66.3k | 99.9k | 102.3k |
+| Median tool calls | 1 | 1 | 2 | 2 |
+| Total cost (CLI estimate) | $1.87 | $1.92 | $0.13 | $0.13 |
+
+- 142 of 144 runs were correct; the misses are all in the `callers` category (the 11 callers of
+  `cJSON_New_Item`): one run per mode on sonnet and one baseline run on haiku missed a name.
+- The agent called a Concentrate tool in only 3 of 72 concentrate runs (`find_callers` in 1 sonnet and 2
+  haiku runs, `impact_of` not at all by sonnet): these repositories, or the one directory of them
+  the questions touch, are small enough for one `grep` or a file read, so the median tool
+  call count is 1–2 in both modes and input tokens differ by the noise of a few runs. The
+  large category swings (haiku routes −31%, impact +57%, env +43%) are single runs of 3 per cell,
+  not an effect of the graph.
+- This benchmark therefore shows that the C/C++ graph does not make the agent worse and costs the same
+  on small questions; it does not show a gain. A whole-repository C or C++ question (a large call graph,
+  unused exports, include cycles) would, as for the JS/TS questions above, be the fairer test.
+

@@ -1,0 +1,2814 @@
+{
+  "recordedAt": "2026-11-12T07:28:07.180Z",
+  "model": "sonnet",
+  "runs": 3,
+  "maxTurns": 25,
+  "totals": {
+    "baseline": {
+      "runs": 36,
+      "correct": 35,
+      "medianInputTokens": 65013,
+      "medianOutputTokens": 402,
+      "medianToolCalls": 1,
+      "medianTurns": 2,
+      "medianDurationMs": 8727.5,
+      "medianCostUsd": 0.0501,
+      "spread": {
+        "inputTokens": {
+          "min": 64075,
+          "max": 135241
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 3
+        },
+        "durationMs": {
+          "min": 6260,
+          "max": 16801
+        },
+        "costUsd": {
+          "min": 0.0418,
+          "max": 0.09
+        }
+      },
+      "totalCostUsd": 1.8749,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
+    },
+    "concentrate": {
+      "runs": 36,
+      "correct": 35,
+      "medianInputTokens": 66299,
+      "medianOutputTokens": 378,
+      "medianToolCalls": 1,
+      "medianTurns": 2,
+      "medianDurationMs": 8278.5,
+      "medianCostUsd": 0.0493,
+      "spread": {
+        "inputTokens": {
+          "min": 65838,
+          "max": 169841
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 4
+        },
+        "durationMs": {
+          "min": 6311,
+          "max": 16051
+        },
+        "costUsd": {
+          "min": 0.0459,
+          "max": 0.0858
+        }
+      },
+      "totalCostUsd": 1.9178,
+      "mcpRuns": 1,
+      "mcpTools": {
+        "find_callers": 1
+      },
+      "toolSearchCalls": 1
+    }
+  },
+  "categories": {
+    "routes": {
+      "baseline": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 65009,
+        "medianOutputTokens": 409,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 8764,
+        "medianCostUsd": 0.0482,
+        "spread": {
+          "inputTokens": {
+            "min": 64099,
+            "max": 96850
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 6379,
+            "max": 9858
+          },
+          "costUsd": {
+            "min": 0.0423,
+            "max": 0.0604
+          }
+        },
+        "totalCostUsd": 0.45,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 9,
+        "correct": 9,
+        "medianInputTokens": 66281,
+        "medianOutputTokens": 381,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 8068,
+        "medianCostUsd": 0.049,
+        "spread": {
+          "inputTokens": {
+            "min": 65910,
+            "max": 99623
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 6945,
+            "max": 12655
+          },
+          "costUsd": {
+            "min": 0.0465,
+            "max": 0.0566
+          }
+        },
+        "totalCostUsd": 0.4555,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "callers": {
+      "baseline": {
+        "runs": 6,
+        "correct": 5,
+        "medianInputTokens": 67422.5,
+        "medianOutputTokens": 773.5,
+        "medianToolCalls": 1.5,
+        "medianTurns": 2.5,
+        "medianDurationMs": 10516.5,
+        "medianCostUsd": 0.0641,
+        "spread": {
+          "inputTokens": {
+            "min": 64268,
+            "max": 135241
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 7473,
+            "max": 16801
+          },
+          "costUsd": {
+            "min": 0.0439,
+            "max": 0.09
+          }
+        },
+        "totalCostUsd": 0.3813,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 5,
+        "medianInputTokens": 102649,
+        "medianOutputTokens": 784,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 12261.5,
+        "medianCostUsd": 0.0651,
+        "spread": {
+          "inputTokens": {
+            "min": 66034,
+            "max": 169841
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 7123,
+            "max": 16051
+          },
+          "costUsd": {
+            "min": 0.0474,
+            "max": 0.0858
+          }
+        },
+        "totalCostUsd": 0.3993,
+        "mcpRuns": 1,
+        "mcpTools": {
+          "find_callers": 1
+        },
+        "toolSearchCalls": 1
+      }
+    },
+    "impact": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 64390,
+        "medianOutputTokens": 349,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 7305,
+        "medianCostUsd": 0.0445,
+        "spread": {
+          "inputTokens": {
+            "min": 64388,
+            "max": 64390
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 1
+          },
+          "durationMs": {
+            "min": 6915,
+            "max": 8518
+          },
+          "costUsd": {
+            "min": 0.0444,
+            "max": 0.0473
+          }
+        },
+        "totalCostUsd": 0.1362,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 66144,
+        "medianOutputTokens": 371,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 7381,
+        "medianCostUsd": 0.0483,
+        "spread": {
+          "inputTokens": {
+            "min": 66140,
+            "max": 66146
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 1
+          },
+          "durationMs": {
+            "min": 7355,
+            "max": 8284
+          },
+          "costUsd": {
+            "min": 0.048,
+            "max": 0.0483
+          }
+        },
+        "totalCostUsd": 0.1446,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "definition": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 64137,
+        "medianOutputTokens": 269.5,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 6981.5,
+        "medianCostUsd": 0.0435,
+        "spread": {
+          "inputTokens": {
+            "min": 64075,
+            "max": 97003
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 6260,
+            "max": 9667
+          },
+          "costUsd": {
+            "min": 0.0418,
+            "max": 0.0576
+          }
+        },
+        "totalCostUsd": 0.2787,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 65985,
+        "medianOutputTokens": 230,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 6785.5,
+        "medianCostUsd": 0.0467,
+        "spread": {
+          "inputTokens": {
+            "min": 65838,
+            "max": 66212
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 1
+          },
+          "durationMs": {
+            "min": 6311,
+            "max": 8273
+          },
+          "costUsd": {
+            "min": 0.0459,
+            "max": 0.0473
+          }
+        },
+        "totalCostUsd": 0.2795,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "build": {
+      "baseline": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 65720,
+        "medianOutputTokens": 338,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 7718,
+        "medianCostUsd": 0.0511,
+        "spread": {
+          "inputTokens": {
+            "min": 64535,
+            "max": 97793
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 7149,
+            "max": 9344
+          },
+          "costUsd": {
+            "min": 0.0444,
+            "max": 0.0565
+          }
+        },
+        "totalCostUsd": 0.302,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 6,
+        "correct": 6,
+        "medianInputTokens": 66921.5,
+        "medianOutputTokens": 336.5,
+        "medianToolCalls": 1,
+        "medianTurns": 2,
+        "medianDurationMs": 7510,
+        "medianCostUsd": 0.0512,
+        "spread": {
+          "inputTokens": {
+            "min": 66044,
+            "max": 100436
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 6910,
+            "max": 10675
+          },
+          "costUsd": {
+            "min": 0.0472,
+            "max": 0.0575
+          }
+        },
+        "totalCostUsd": 0.3134,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "env": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 96717,
+        "medianOutputTokens": 706,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 11418,
+        "medianCostUsd": 0.0518,
+        "spread": {
+          "inputTokens": {
+            "min": 96658,
+            "max": 96870
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 10340,
+            "max": 11635
+          },
+          "costUsd": {
+            "min": 0.0507,
+            "max": 0.0624
+          }
+        },
+        "totalCostUsd": 0.165,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 99502,
+        "medianOutputTokens": 678,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 11341,
+        "medianCostUsd": 0.0558,
+        "spread": {
+          "inputTokens": {
+            "min": 65921,
+            "max": 99537
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 9014,
+            "max": 11389
+          },
+          "costUsd": {
+            "min": 0.0504,
+            "max": 0.0565
+          }
+        },
+        "totalCostUsd": 0.1628,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    },
+    "data": {
+      "baseline": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 96804,
+        "medianOutputTokens": 563,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 10578,
+        "medianCostUsd": 0.0507,
+        "spread": {
+          "inputTokens": {
+            "min": 96787,
+            "max": 96847
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 10130,
+            "max": 10692
+          },
+          "costUsd": {
+            "min": 0.0506,
+            "max": 0.0605
+          }
+        },
+        "totalCostUsd": 0.1618,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 3,
+        "correct": 3,
+        "medianInputTokens": 99463,
+        "medianOutputTokens": 557,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 10469,
+        "medianCostUsd": 0.0542,
+        "spread": {
+          "inputTokens": {
+            "min": 99368,
+            "max": 99633
+          },
+          "toolCalls": {
+            "min": 2,
+            "max": 2
+          },
+          "durationMs": {
+            "min": 9154,
+            "max": 10656
+          },
+          "costUsd": {
+            "min": 0.0541,
+            "max": 0.0544
+          }
+        },
+        "totalCostUsd": 0.1627,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "cpp-crow-chat-routes",
+      "sample": "internet-cpp-crow-examples",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64156,
+            "medianOutputTokens": 346,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7528,
+            "medianCostUsd": 0.0442,
+            "spread": {
+              "inputTokens": {
+                "min": 64099,
+                "max": 64173
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6379,
+                "max": 8764
+              },
+              "costUsd": {
+                "min": 0.0423,
+                "max": 0.0532
+              }
+            },
+            "totalCostUsd": 0.1397,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Besides the index page (`/`), `examples/example_chat.cpp` registers three routes:\n\n- `/logs` (line 38)\n- `/logs/<int>` (line 50), which takes an integer path parameter\n- `/send` (line 79)\n\nI only searched for route macros and `.route` calls, and each of these four matches is a `CROW_ROUTE`. I didn't read the handler bodies, so I can't say which HTTP methods each route accepts.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8764,
+              "costUsd": 0.0532005,
+              "inputTokens": 4,
+              "outputTokens": 346,
+              "cacheCreationTokens": 11107,
+              "cacheReadTokens": 53045,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Besides the index page (`/`), `examples/example_chat.cpp` registers three routes:\n\n- `/logs` (line 38)\n- `/logs/<int>` (line 50), which takes an integer path parameter\n- `/send` (line 79)\n\nI searched for `CROW_ROUTE`, `CROW_WEBSOCKET_ROUTE`, `CROW_BP_ROUTE` and `.route(`. Only the four `CROW_ROUTE` registrations matched, so the file has no WebSocket or blueprint routes.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7528,
+              "costUsd": 0.04420930000000001,
+              "inputTokens": 4,
+              "outputTokens": 387,
+              "cacheCreationTokens": 8696,
+              "cacheReadTokens": 55473,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Besides the index page (`/`), `examples/example_chat.cpp` registers these routes:\n\n- `/logs` at line 38\n- `/logs/<int>` at line 50, which takes an integer path parameter\n- `/send` at line 79",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6379,
+              "costUsd": 0.042292800000000005,
+              "inputTokens": 4,
+              "outputTokens": 223,
+              "cacheCreationTokens": 8627,
+              "cacheReadTokens": 55468,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 65912,
+            "medianOutputTokens": 368,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7065,
+            "medianCostUsd": 0.0476,
+            "spread": {
+              "inputTokens": {
+                "min": 65910,
+                "max": 65912
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6945,
+                "max": 7577
+              },
+              "costUsd": {
+                "min": 0.0465,
+                "max": 0.0477
+              }
+            },
+            "totalCostUsd": 0.1418,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Besides the index page (`/`), `examples/example_chat.cpp` registers three routes:\n\n- `/logs` (line 38)\n- `/logs/<int>` (line 50), which takes an integer path parameter\n- `/send` (line 79)\n\nI searched the file for `CROW_ROUTE`, `CROW_WEBSOCKET_ROUTE` and `CROW_BP_ROUTE`. Only `CROW_ROUTE` matched, so there are no WebSocket or blueprint routes. I haven't checked which HTTP methods each route accepts.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6945,
+              "costUsd": 0.0476809,
+              "inputTokens": 4,
+              "outputTokens": 381,
+              "cacheCreationTokens": 9557,
+              "cacheReadTokens": 56349,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Besides the index page (`/`), `examples/example_chat.cpp` registers three routes:\n\n- `/logs` (line 38)\n- `/logs/<int>` (line 50), which takes an integer path parameter\n- `/send` (line 79)\n\nI searched the file for `CROW_ROUTE`, `CROW_WEBSOCKET_ROUTE` and `CROW_BP_ROUTE`. Only `CROW_ROUTE` matched. I didn't open the file to check the HTTP methods or the handler logic.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7577,
+              "costUsd": 0.047555,
+              "inputTokens": 4,
+              "outputTokens": 368,
+              "cacheCreationTokens": 9558,
+              "cacheReadTokens": 56350,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Besides the index page (`/`), `examples/example_chat.cpp` registers three routes:\n\n- `/logs` (line 38)\n- `/logs/<int>` (line 50)\n- `/send` (line 79)",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7065,
+              "costUsd": 0.046515,
+              "inputTokens": 4,
+              "outputTokens": 264,
+              "cacheCreationTokens": 9558,
+              "cacheReadTokens": 56350,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-drogon-hello-routes",
+      "sample": "internet-cpp-drogon-examples",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 65011,
+            "medianOutputTokens": 409,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7784,
+            "medianCostUsd": 0.0482,
+            "spread": {
+              "inputTokens": {
+                "min": 65009,
+                "max": 65015
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7048,
+                "max": 9092
+              },
+              "costUsd": {
+                "min": 0.0476,
+                "max": 0.0573
+              }
+            },
+            "totalCostUsd": 0.1531,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`examples/helloworld/main.cc` registers four paths with `app().registerHandler`. All four are GET-only.\n\n| Path | Line | What it does |\n|---|---|---|\n| `/` | 18 | Returns \"Hello, World!\". |\n| `/user/{user-name}` | 35 | Takes the name from the URL path and returns \"Hello, <name>!\". |\n| `/hello?user={user-name}` | 48 | Takes the name from the query string and returns \"Hello, <name>!\". |\n| `/hello_user` | 61 | Reads the `user` query parameter itself with `req->getOptionalParameter`. It returns \"Please tell me your name\" if the parameter is missing. |",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7048,
+              "costUsd": 0.05725480000000001,
+              "inputTokens": 4,
+              "outputTokens": 409,
+              "cacheCreationTokens": 11963,
+              "cacheReadTokens": 53048,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`examples/helloworld/main.cc` registers four paths, all GET-only:\n\n| Line | Path | Behavior |\n|---|---|---|\n| 17 | `/` | Returns \"Hello, World!\" |\n| 34 | `/user/{user-name}` | Takes the name from the URL path and returns \"Hello, <name>!\" |\n| 47 | `/hello?user={user-name}` | Takes the name from the `user` query parameter and returns \"Hello, <name>!\" |\n| 60 | `/hello_user` | Reads the `user` query parameter in the handler. It returns \"Please tell me your name\" if the parameter is missing. |",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7784,
+              "costUsd": 0.047623,
+              "inputTokens": 4,
+              "outputTokens": 392,
+              "cacheCreationTokens": 9537,
+              "cacheReadTokens": 55470,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`examples/helloworld/main.cc` registers four paths with `app().registerHandler`. All four accept GET only.\n\n| Line | Path | Behavior |\n|---|---|---|\n| 17 | `/` | Returns \"Hello, World!\" and logs whether the connection is open. |\n| 34 | `/user/{user-name}` | Takes the name from the path and returns \"Hello, <name>!\". |\n| 47 | `/hello?user={user-name}` | Takes the name from the `user` query parameter and returns \"Hello, <name>!\". |\n| 60 | `/hello_user` | Reads the `user` query parameter inside the handler. It returns \"Please tell me your name\" if the parameter is missing. |\n\nI only read the first 12 lines after each match, so I haven't checked whether the file registers more handlers further down.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 9092,
+              "costUsd": 0.0481889,
+              "inputTokens": 4,
+              "outputTokens": 449,
+              "cacheCreationTokens": 9536,
+              "cacheReadTokens": 55469,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66281,
+            "medianOutputTokens": 360,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 8068,
+            "medianCostUsd": 0.049,
+            "spread": {
+              "inputTokens": {
+                "min": 66277,
+                "max": 66283
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7901,
+                "max": 8462
+              },
+              "costUsd": {
+                "min": 0.0489,
+                "max": 0.0493
+              }
+            },
+            "totalCostUsd": 0.1471,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`examples/helloworld/main.cc` registers four handlers with `app().registerHandler`:\n\n1. `/` (line 18) is the root path.\n2. `/user/{user-name}` (line 35) captures the path segment as a parameter.\n3. `/hello?user={user-name}` (line 48) takes the parameter from the `user` query string.\n4. `/hello_user` (line 61) is a plain path. Its handler takes the full `req`, so it probably reads the user from the request itself.\n\nI only searched for `registerHandler` calls and didn't read the handler bodies. I'm inferring the behavior of `/hello_user` from its signature.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8462,
+              "costUsd": 0.049265100000000006,
+              "inputTokens": 4,
+              "outputTokens": 391,
+              "cacheCreationTokens": 9928,
+              "cacheReadTokens": 56351,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`examples/helloworld/main.cc` registers four paths with `app().registerHandler`:\n\n1. `\"/\"` (line 18) is the root path.\n2. `\"/user/{user-name}\"` (line 35) takes the user name from the path.\n3. `\"/hello?user={user-name}\"` (line 48) takes the user name from the `user` query parameter.\n4. `\"/hello_user\"` (line 61) is a plain path. Its handler takes the request object, so it probably reads the parameters from the request itself. I didn't read the handler body to confirm.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8068,
+              "costUsd": 0.048951,
+              "inputTokens": 4,
+              "outputTokens": 360,
+              "cacheCreationTokens": 9927,
+              "cacheReadTokens": 56350,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`examples/helloworld/main.cc` registers four paths with `app().registerHandler`:\n\n1. `/` (line 17–18): a plain root handler.\n2. `/user/{user-name}` (line 34–35): the username comes from the path and is passed to the handler as a parameter.\n3. `/hello?user={user-name}` (line 47–48): the username comes from the `user` query parameter.\n4. `/hello_user` (line 60–61): a handler that takes the request object (`req`) directly, with no path parameters.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7901,
+              "costUsd": 0.0488528,
+              "inputTokens": 4,
+              "outputTokens": 351,
+              "cacheCreationTokens": 9925,
+              "cacheReadTokens": 56348,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-httplib-server-routes",
+      "sample": "internet-cpp-httplib-examples",
+      "category": "routes",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 96818,
+            "medianOutputTokens": 553,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 9835,
+            "medianCostUsd": 0.0513,
+            "spread": {
+              "inputTokens": {
+                "min": 64176,
+                "max": 96850
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 9199,
+                "max": 9858
+              },
+              "costUsd": {
+                "min": 0.0455,
+                "max": 0.0604
+              }
+            },
+            "totalCostUsd": 0.1572,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`example/server.cc` registers five GET routes on its `httplib::Server`:\n\n| Path | Line |\n|---|---|\n| `/` | 79 |\n| `/hi` | 83 |\n| `/slow` | 87 |\n| `/dump` | 92 |\n| `/stop` | 96 |\n\n`/stop` calls `svr.stop()`. The file registers no POST, PUT or DELETE routes and no static mount points. It also sets an error handler (line 99) and a logger (line 106). It then listens on `localhost:8080`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9858,
+              "costUsd": 0.0603806,
+              "inputTokens": 6,
+              "outputTokens": 553,
+              "cacheCreationTokens": 11578,
+              "cacheReadTokens": 85266,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`example/server.cc` registers five routes on its `httplib::Server`, and all of them are GET handlers:\n\n| Line | Path |\n|---|---|\n| 79 | `/` |\n| 83 | `/hi` |\n| 87 | `/slow` |\n| 92 | `/dump` |\n| 96 | `/stop` |\n\nI found these by searching the file for `Get`, `Post`, `Put`, `Delete`, `Patch` and `Options` calls. Only the GET calls matched, so there are no POST, PUT or DELETE routes. The search wouldn't catch routes added indirectly, for example through a helper function or a macro.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 9199,
+              "costUsd": 0.0455468,
+              "inputTokens": 4,
+              "outputTokens": 502,
+              "cacheCreationTokens": 8744,
+              "cacheReadTokens": 55428,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`example/server.cc` registers five routes on its `httplib::Server`, and all of them are `GET` handlers:\n\n| Line | Path |\n|---|---|\n| 79 | `/` |\n| 83 | `/hi` |\n| 87 | `/slow` |\n| 92 | `/dump` |\n| 96 | `/stop` |\n\nI found no `Post`, `Put` or `Delete` routes and no `set_mount_point` calls for static files.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9835,
+              "costUsd": 0.05131190000000001,
+              "inputTokens": 6,
+              "outputTokens": 600,
+              "cacheCreationTokens": 9133,
+              "cacheReadTokens": 87679,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 99519,
+            "medianOutputTokens": 619,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 10079,
+            "medianCostUsd": 0.0551,
+            "spread": {
+              "inputTokens": {
+                "min": 99431,
+                "max": 99623
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 10005,
+                "max": 12655
+              },
+              "costUsd": {
+                "min": 0.055,
+                "max": 0.0566
+              }
+            },
+            "totalCostUsd": 0.1667,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`example/server.cc` registers five routes on its `httplib::Server`. All five are `GET` routes:\n\n| Line | Path |\n|---|---|\n| 79 | `/` |\n| 83 | `/hi` |\n| 87 | `/slow` |\n| 92 | `/dump` |\n| 96 | `/stop` |\n\nIt also sets an error handler with `set_error_handler` at line 99. That handler isn't a route. It runs when a request gets an error status.\n\nI found these by grepping the file for `Get`, `Post`, `Put`, `Delete`, `Patch` and `Options` calls. I didn't open the file to check for routes registered another way, such as a regex pattern or a helper function.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12655,
+              "costUsd": 0.055085999999999996,
+              "inputTokens": 6,
+              "outputTokens": 619,
+              "cacheCreationTokens": 9985,
+              "cacheReadTokens": 89440,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`example/server.cc` registers five routes on its `httplib::Server`. All five are `GET`:\n\n| Path | Line |\n|---|---|\n| `/` | 79 |\n| `/hi` | 83 |\n| `/slow` | 87 |\n| `/dump` | 92 |\n| `/stop` | 96 |\n\nThe `/stop` handler calls `svr.stop()`. The server also sets an error handler (line 99) and a logger (line 106), then listens on `localhost:8080`. It has no `POST`, `PUT` or `DELETE` routes and no mount points.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10005,
+              "costUsd": 0.0550119,
+              "inputTokens": 6,
+              "outputTokens": 576,
+              "cacheCreationTokens": 10074,
+              "cacheReadTokens": 89439,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`example/server.cc` registers five routes on its `httplib::Server`. All of them are `GET`:\n\n| Path | Line | Behavior |\n|---|---|---|\n| `/` | 79 | Redirects to `/hi` |\n| `/hi` | 83 | Returns `Hello World!` as `text/plain` |\n| `/slow` | 87 | Sleeps 2 seconds, then responds |\n| `/dump` | 92 | Returns the request headers as `text/plain` |\n| `/stop` | 96 | Calls `svr.stop()` to shut the server down |\n\nThe file also sets an error handler at line 99. It renders an HTML \"Error Status\" page, and it isn't a route. I found no `Post`, `Put`, `Delete` or `Patch` handlers and no mount points.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10079,
+              "costUsd": 0.056560799999999994,
+              "inputTokens": 6,
+              "outputTokens": 685,
+              "cacheCreationTokens": 10189,
+              "cacheReadTokens": 89428,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-cjson-new-item-callers",
+      "sample": "internet-c-cjson",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 2,
+            "medianInputTokens": 102482,
+            "medianOutputTokens": 1126,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 13733,
+            "medianCostUsd": 0.0751,
+            "spread": {
+              "inputTokens": {
+                "min": 70059,
+                "max": 135241
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 12342,
+                "max": 16801
+              },
+              "costUsd": {
+                "min": 0.0716,
+                "max": 0.09
+              }
+            },
+            "totalCostUsd": 0.2368,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`cJSON_New_Item` (defined at `cJSON.c:241`) is called by these 17 functions in `cJSON.c`. I matched each call site to its enclosing function by line number.\n\n| Line | Function |\n|---|---|\n| 1166 | `cJSON_ParseWithLengthOpts` |\n| 1535 | `parse_array` |\n| 1698 | `parse_object` |\n| 2014 | `create_reference` |\n| 2463 | `cJSON_CreateNull` |\n| 2474 | `cJSON_CreateTrue` |\n| 2485 | `cJSON_CreateFalse` |\n| 2496 | `cJSON_CreateBool` |\n| 2507 | `cJSON_CreateNumber` |\n| 2533 | `cJSON_CreateString` |\n| 2550 | `cJSON_CreateStringReference` |\n| 2562 | `cJSON_CreateObjectReference` |\n| 2572 | `cJSON_CreateStringReference`* |\n| 2583 | `cJSON_CreateRaw` |\n| 2600 | `cJSON_CreateArray` |\n| 2611 | `cJSON_CreateObject` |\n| 2802 | `cJSON_Duplicate` |\n\n\\*The call at line 2572 isn't `cJSON_CreateStringReference`. The listing has no function definition between 2562 and 2581 other than `cJSON_CreateObjectReference` (2560) and `cJSON_CreateRaw` (2581). So line 2572 is inside a function my definition search missed, and I haven't read the source to confirm which one. I suspect `cJSON_CreateArrayReference`, whose signature probably didn't match my pattern.\n\nWithout that row, the list is 16 distinct functions plus the unresolved one.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 16801,
+              "costUsd": 0.0900118,
+              "inputTokens": 8,
+              "outputTokens": 1105,
+              "cacheCreationTokens": 16775,
+              "cacheReadTokens": 118458,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": false,
+              "missing": [
+                "cJSON_Duplicate_rec"
+              ]
+            },
+            {
+              "answer": "`cJSON_New_Item` is called directly from these functions in `cJSON.c`:\n\n**Parsing**\n- `cJSON_ParseWithLengthOpts` (line 1166)\n- `parse_array` (line 1535)\n- `parse_object` (line 1698)\n\n**Internal helpers**\n- `create_reference` (line 2014)\n- `cJSON_Duplicate_rec` (line 2802)\n\n**Public `cJSON_Create*` constructors** (lines 2463–2611)\n- `cJSON_CreateNull`\n- `cJSON_CreateTrue`\n- `cJSON_CreateFalse`\n- `cJSON_CreateBool`\n- `cJSON_CreateNumber`\n- `cJSON_CreateString`\n- `cJSON_CreateStringReference`\n- `cJSON_CreateObjectReference`\n- `cJSON_CreateArrayReference`\n- `cJSON_CreateRaw`\n- `cJSON_CreateArray`\n- `cJSON_CreateObject`\n\n`cJSON_CreateIntArray`, `cJSON_CreateFloatArray`, `cJSON_CreateDoubleArray` and `cJSON_CreateStringArray` don't call it directly. They go through `cJSON_CreateNumber`, `cJSON_CreateString` and `cJSON_CreateArray`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 13733,
+              "costUsd": 0.0716231,
+              "inputTokens": 6,
+              "outputTokens": 1197,
+              "cacheCreationTokens": 12665,
+              "cacheReadTokens": 89811,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 3
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`cJSON_New_Item` (defined at `cJSON.c:241`) is called from these 18 functions. I matched each call site's line number to the function that contains it.\n\n| Function | Call line |\n|---|---|\n| `cJSON_ParseWithLengthOpts` | 1166 |\n| `parse_array` | 1535 |\n| `parse_object` | 1698 |\n| `create_reference` | 2014 |\n| `cJSON_CreateNull` | 2463 |\n| `cJSON_CreateTrue` | 2474 |\n| `cJSON_CreateFalse` | 2485 |\n| `cJSON_CreateBool` | 2496 |\n| `cJSON_CreateNumber` | 2507 |\n| `cJSON_CreateString` | 2533 |\n| `cJSON_CreateStringReference` | 2550 |\n| `cJSON_CreateObjectReference` | 2562 |\n| `cJSON_CreateArrayReference` | 2572 |\n| `cJSON_CreateRaw` | 2583 |\n| `cJSON_CreateArray` | 2600 |\n| `cJSON_CreateObject` | 2611 |\n| `cJSON_Duplicate_rec` | 2802 |\n\nThat is 17 rows because `cJSON_CreateBool` is the only one I haven't counted separately below. The count is 17, not 18.\n\nThe other `cJSON_Create*Array` functions (`CreateIntArray`, `CreateFloatArray`, `CreateDoubleArray`, `CreateStringArray`) don't call it directly. They go through `cJSON_CreateArray`, `cJSON_CreateNumber` and `cJSON_CreateString`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 12342,
+              "costUsd": 0.0751316,
+              "inputTokens": 4,
+              "outputTokens": 1126,
+              "cacheCreationTokens": 14579,
+              "cacheReadTokens": 55476,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 2,
+            "medianInputTokens": 139122,
+            "medianOutputTokens": 1120,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 15915,
+            "medianCostUsd": 0.0809,
+            "spread": {
+              "inputTokens": {
+                "min": 104970,
+                "max": 169841
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 13540,
+                "max": 16051
+              },
+              "costUsd": {
+                "min": 0.0743,
+                "max": 0.0858
+              }
+            },
+            "totalCostUsd": 0.241,
+            "mcpRuns": 1,
+            "mcpTools": {
+              "find_callers": 1
+            },
+            "toolSearchCalls": 1
+          },
+          "runs": [
+            {
+              "answer": "These 17 functions in `cJSON.c` call `cJSON_New_Item`. The code graph reports no unresolved calls, so the list is complete.\n\n**Parsing**\n- `cJSON_ParseWithLengthOpts` (line 1166)\n- `parse_array` (line 1535)\n- `parse_object` (line 1698)\n\n**Reference and duplication helpers**\n- `create_reference` (line 2014)\n- `cJSON_Duplicate_rec` (line 2802)\n\n**`cJSON_Create*` constructors**\n- `cJSON_CreateNull` (line 2463)\n- `cJSON_CreateTrue` (line 2474)\n- `cJSON_CreateFalse` (line 2485)\n- `cJSON_CreateBool` (line 2496)\n- `cJSON_CreateNumber` (line 2507)\n- `cJSON_CreateString` (line 2533)\n- `cJSON_CreateStringReference` (line 2550)\n- `cJSON_CreateObjectReference` (line 2562)\n- `cJSON_CreateArrayReference` (line 2572)\n- `cJSON_CreateRaw` (line 2583)\n- `cJSON_CreateArray` (line 2600)\n- `cJSON_CreateObject` (line 2611)\n\nThe function is defined at line 241.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 15915,
+              "costUsd": 0.07429530000000001,
+              "inputTokens": 12,
+              "outputTokens": 988,
+              "cacheCreationTokens": 12156,
+              "cacheReadTokens": 157673,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 1,
+                "Bash": 1,
+                "ToolSearch": 1,
+                "mcp__concentrate__find_callers": 1
+              },
+              "mcpCalls": [
+                {
+                  "tool": "find_callers",
+                  "input": {
+                    "name": "cJSON_New_Item",
+                    "limit": 50
+                  },
+                  "result": "{\"query\":{\"name\":\"cJSON_New_Item\",\"exact\":true,\"limit\":50},\"callers\":[{\"target\":\"cJSON_New_Item\",\"caller\":\"cJSON_ParseWithLengthOpts\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":1166,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"parse_array\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":1535,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"parse_object\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":1698,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"create_reference\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":2014,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"cJSON_CreateNull\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":2463,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"cJSON_CreateTrue\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":2474,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"cJSON_CreateFalse\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":2485,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"cJSON_CreateBool\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":2496,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"cJSON_CreateNumber\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":2507,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"cJSON_CreateString\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":2533,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"cJSON_CreateStringReference\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":2550,\"expression\":\"cJSON_New_Item\",\"relationship\":\"CALLS\"},{\"target\":\"cJSON_New_Item\",\"caller\":\"cJSON_CreateObjectReference\",\"callerKind\":\"Function\",\"file\":\"cJSON.c\",\"line\":2562,\"expression\":… (3141 chars)",
+                  "isError": false
+                }
+              ],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Mapping each call line to its enclosing function:\n\n- 1166 → `cJSON_ParseWithLengthOpts` (1147–1226)\n- 1535 → `parse_array`\n- 1698 → `parse_object`\n- 2014 → `create_reference`\n- 2463 → `cJSON_CreateNull`\n- 2474 → `cJSON_CreateTrue`\n- 2485 → `cJSON_CreateFalse`\n- 2496 → `cJSON_CreateBool`\n- 2507 → `cJSON_CreateNumber`\n- 2533 → `cJSON_CreateString`\n- 2550 → `cJSON_CreateStringReference`\n- 2562 → `cJSON_CreateObjectReference`\n- 2572 → `cJSON_CreateStringReference`'s neighbor, which is `cJSON_CreateArrayReference`. It isn't in my grep output because its signature is formatted differently, but it sits between 2560 and 2581.\n- 2583 → `cJSON_CreateRaw`\n- 2600 → `cJSON_CreateArray`\n- 2611 → `cJSON_CreateObject`\n- 2802 → `cJSON_Duplicate_rec`\n\nFunctions in `cJSON.c` that call `cJSON_New_Item`:\n\n1. `cJSON_ParseWithLengthOpts`\n2. `parse_array`\n3. `parse_object`\n4. `create_reference`\n5. `cJSON_CreateNull`\n6. `cJSON_CreateTrue`\n7. `cJSON_CreateFalse`\n8. `cJSON_CreateBool`\n9. `cJSON_CreateNumber`\n10. `cJSON_CreateString`\n11. `cJSON_CreateStringReference`\n12. `cJSON_CreateObjectReference`\n13. `cJSON_CreateArrayReference`\n14. `cJSON_CreateRaw`\n15. `cJSON_CreateArray`\n16. `cJSON_CreateObject`\n17. `cJSON_Duplicate_rec`\n\nI inferred `cJSON_CreateArrayReference` (line 2572) from its position between 2560 and 2581. I didn't read its source to confirm. The other 16 come straight from the matched lines and function boundaries.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 13540,
+              "costUsd": 0.0809137,
+              "inputTokens": 6,
+              "outputTokens": 1141,
+              "cacheCreationTokens": 15127,
+              "cacheReadTokens": 89837,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`cJSON_New_Item` (defined at `cJSON.c:241`) is called from these 17 call sites, which sit in 16 functions:\n\n| Function | Line |\n|---|---|\n| `cJSON_ParseWithLengthOpts` | 1166 |\n| `parse_array` | 1535 |\n| `parse_object` | 1698 |\n| `create_reference` | 2014 |\n| `cJSON_CreateNull` | 2463 |\n| `cJSON_CreateTrue` | 2474 |\n| `cJSON_CreateFalse` | 2485 |\n| `cJSON_CreateBool` | 2496 |\n| `cJSON_CreateNumber` | 2507 |\n| `cJSON_CreateString` | 2533 |\n| `cJSON_CreateStringReference` | 2550 |\n| `cJSON_CreateObjectReference` | 2562 |\n| `cJSON_CreateArrayReference` | 2572 |\n| `cJSON_CreateRaw` | 2583 |\n| `cJSON_CreateArray` | 2600 |\n| `cJSON_CreateObject` | 2611 |\n| `cJSON_Duplicate` | 2802 |\n\nI matched each line number to its enclosing function using the function-definition listing from the same file. `parse_array` and `parse_object` each call it once per parsed element (lines 1535 and 1698), and I counted each as one function. The `cJSON_CreateIntArray`, `cJSON_CreateFloatArray`, `cJSON_CreateDoubleArray` and `cJSON_CreateStringArray` functions reach it only indirectly, through `cJSON_CreateNumber`, `cJSON_CreateString` and `cJSON_CreateArray`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 16051,
+              "costUsd": 0.0857763,
+              "inputTokens": 8,
+              "outputTokens": 1120,
+              "cacheCreationTokens": 15551,
+              "cacheReadTokens": 123563,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 2,
+                "Bash": 1
+              },
+              "mcpCalls": [],
+              "correct": false,
+              "missing": [
+                "cJSON_Duplicate_rec"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-grpc-radians-callers",
+      "sample": "internet-cpp-grpc-examples",
+      "category": "callers",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64330,
+            "medianOutputTokens": 329,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 8061,
+            "medianCostUsd": 0.044,
+            "spread": {
+              "inputTokens": {
+                "min": 64268,
+                "max": 64786
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7473,
+                "max": 8691
+              },
+              "costUsd": {
+                "min": 0.0439,
+                "max": 0.0566
+              }
+            },
+            "totalCostUsd": 0.1446,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`GetDistance` is the only function that calls `ConvertToRadians` in `examples/cpp/route_guide/route_guide_server.cc`. It calls it four times, at lines 65–68:\n\n- `lat_rad_1 = ConvertToRadians(lat_1)`\n- `lat_rad_2 = ConvertToRadians(lat_2)`\n- `delta_lat_rad = ConvertToRadians(lat_2 - lat_1)`\n- `delta_lon_rad = ConvertToRadians(lon_2 - lon_1)`\n\n`ConvertToRadians` is defined at line 56. `GetDistance` is defined at line 59 and is called from the `RecordRoute` handler at line 136.\n\n`route_guide_callback_server.cc` has the same helper and the same four calls from `GetDistance`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8061,
+              "costUsd": 0.0566454,
+              "inputTokens": 4,
+              "outputTokens": 442,
+              "cacheCreationTokens": 11728,
+              "cacheReadTokens": 53054,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`GetDistance` is the only function that calls `ConvertToRadians`. It does so four times, at lines 65–68 of `examples/cpp/route_guide/route_guide_server.cc`. It uses it to convert the two latitudes and the latitude and longitude differences to radians for the haversine distance calculation.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8691,
+              "costUsd": 0.0439849,
+              "inputTokens": 4,
+              "outputTokens": 308,
+              "cacheCreationTokens": 8837,
+              "cacheReadTokens": 55489,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`GetDistance` calls `ConvertToRadians`. It does so four times, at lines 65–68 of `examples/cpp/route_guide/route_guide_server.cc`. It converts `lat_1`, `lat_2`, `lat_2 - lat_1` and `lon_2 - lon_1`.\n\n`ConvertToRadians` itself is defined at line 56. `GetDistance` is in turn called at line 136, inside the route-recording logic.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7473,
+              "costUsd": 0.043946900000000004,
+              "inputTokens": 4,
+              "outputTokens": 329,
+              "cacheCreationTokens": 8775,
+              "cacheReadTokens": 55489,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 99567,
+            "medianOutputTokens": 529,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 9738,
+            "medianCostUsd": 0.0549,
+            "spread": {
+              "inputTokens": {
+                "min": 66034,
+                "max": 100328
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 7123,
+                "max": 10983
+              },
+              "costUsd": {
+                "min": 0.0474,
+                "max": 0.056
+              }
+            },
+            "totalCostUsd": 0.1583,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`GetDistance` calls `ConvertToRadians`. It's the only caller in `examples/cpp/route_guide/route_guide_server.cc`, and it calls it four times, at lines 65–68:\n\n- `lat_rad_1 = ConvertToRadians(lat_1)`\n- `lat_rad_2 = ConvertToRadians(lat_2)`\n- `delta_lat_rad = ConvertToRadians(lat_2 - lat_1)`\n- `delta_lon_rad = ConvertToRadians(lon_2 - lon_1)`\n\n`ConvertToRadians` itself is defined at line 56. `GetDistance` uses these values in its distance formula, which is based on the mathforum link in the comment at line 58.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10983,
+              "costUsd": 0.054939699999999994,
+              "inputTokens": 6,
+              "outputTokens": 580,
+              "cacheCreationTokens": 10044,
+              "cacheReadTokens": 89517,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`GetDistance` calls `ConvertToRadians`, in `examples/cpp/route_guide/route_guide_server.cc`. It calls it four times, at lines 65–68, to convert the latitudes and the latitude and longitude deltas to radians.\n\n`ConvertToRadians` is defined at line 56. `GetDistance` is defined at line 59 and is itself called at line 136, in the route-summary logic.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7123,
+              "costUsd": 0.0474372,
+              "inputTokens": 4,
+              "outputTokens": 316,
+              "cacheCreationTokens": 9658,
+              "cacheReadTokens": 56372,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`GetDistance` calls `ConvertToRadians` in `examples/cpp/route_guide/route_guide_server.cc`. It calls it four times, at lines 65–68:\n\n- `ConvertToRadians(lat_1)`\n- `ConvertToRadians(lat_2)`\n- `ConvertToRadians(lat_2 - lat_1)`\n- `ConvertToRadians(lon_2 - lon_1)`\n\n`ConvertToRadians` is defined at line 56 of the same file. `route_guide_callback_server.cc` has its own copy of both functions, with the same calls at the same line numbers.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9738,
+              "costUsd": 0.0559566,
+              "inputTokens": 6,
+              "outputTokens": 529,
+              "cacheCreationTokens": 10416,
+              "cacheReadTokens": 89906,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-grpc-parsedb-impact",
+      "sample": "internet-cpp-grpc-examples",
+      "category": "impact",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64390,
+            "medianOutputTokens": 349,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7305,
+            "medianCostUsd": 0.0445,
+            "spread": {
+              "inputTokens": {
+                "min": 64388,
+                "max": 64390
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6915,
+                "max": 8518
+              },
+              "costUsd": {
+                "min": 0.0444,
+                "max": 0.0473
+              }
+            },
+            "totalCostUsd": 0.1362,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Four C++ files under `examples/cpp/route_guide` call `routeguide::ParseDb`:\n\n- `route_guide_server.cc:92`\n- `route_guide_client.cc:80`\n- `route_guide_callback_server.cc:92`\n- `route_guide_callback_client.cc:80`\n\nYou would also need to update two other files:\n\n- `helper.cc:144` has the definition.\n- `helper.h:30` has the declaration.\n\nAll four callers use the same call, `routeguide::ParseDb(db, &feature_list_);`. I searched only `examples/cpp/route_guide`. Other directories could include `helper.h`, but I haven't checked.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8518,
+              "costUsd": 0.0472698,
+              "inputTokens": 4,
+              "outputTokens": 375,
+              "cacheCreationTokens": 9506,
+              "cacheReadTokens": 54878,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four C++ files under `examples/cpp/route_guide` call `routeguide::ParseDb`:\n\n- `route_guide_server.cc:92`\n- `route_guide_client.cc:80`\n- `route_guide_callback_server.cc:92`\n- `route_guide_callback_client.cc:80`\n\nThe definition is in `helper.cc:144`, and the declaration is in `helper.h:30`. You'd need to update both of those along with the four callers.\n\nI searched only for the literal name `ParseDb`. A build file that refers to it indirectly wouldn't show up in this search.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7305,
+              "costUsd": 0.044463300000000004,
+              "inputTokens": 4,
+              "outputTokens": 349,
+              "cacheCreationTokens": 8853,
+              "cacheReadTokens": 55533,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four C++ files under `examples/cpp/route_guide` call `routeguide::ParseDb`:\n\n- `route_guide_server.cc:92`\n- `route_guide_client.cc:80`\n- `route_guide_callback_server.cc:92`\n- `route_guide_callback_client.cc:80`\n\nThe definition is at `helper.cc:144`, and the declaration is in `helper.h:30`. You'd need to update both if you change the signature.\n\nI only searched for the literal name `ParseDb` under this directory. Callers elsewhere in the repo would not show up.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6915,
+              "costUsd": 0.044423300000000006,
+              "inputTokens": 4,
+              "outputTokens": 345,
+              "cacheCreationTokens": 8853,
+              "cacheReadTokens": 55533,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66144,
+            "medianOutputTokens": 371,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7381,
+            "medianCostUsd": 0.0483,
+            "spread": {
+              "inputTokens": {
+                "min": 66140,
+                "max": 66146
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7355,
+                "max": 8284
+              },
+              "costUsd": {
+                "min": 0.048,
+                "max": 0.0483
+              }
+            },
+            "totalCostUsd": 0.1446,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "Four C++ files under `examples/cpp/route_guide` call `routeguide::ParseDb`:\n\n- `route_guide_server.cc:92`\n- `route_guide_client.cc:80`\n- `route_guide_callback_server.cc:92`\n- `route_guide_callback_client.cc:80`\n\nEach calls it as `routeguide::ParseDb(db, &feature_list_);`.\n\nIf you change the signature, you also need to update the declaration at `helper.h:30` and the definition at `helper.cc:144`.\n\nI used a text search for `ParseDb`, not the code graph. It found no other references in this directory, such as wrappers or calls through other names.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7355,
+              "costUsd": 0.04832310000000001,
+              "inputTokens": 4,
+              "outputTokens": 375,
+              "cacheCreationTokens": 9731,
+              "cacheReadTokens": 56411,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four C++ files under `examples/cpp/route_guide` call `routeguide::ParseDb`:\n\n- `route_guide_server.cc:92`\n- `route_guide_client.cc:80`\n- `route_guide_callback_server.cc:92`\n- `route_guide_callback_client.cc:80`\n\nThe other two matches are the definition and the declaration. If you change the signature, update both:\n\n- `helper.cc:144` (definition)\n- `helper.h:30` (declaration)\n\nI used a text search for `ParseDb`, not the code graph. It covers the `route_guide` directory only, so callers elsewhere in the repo wouldn't show up.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8284,
+              "costUsd": 0.0482708,
+              "inputTokens": 4,
+              "outputTokens": 371,
+              "cacheCreationTokens": 9728,
+              "cacheReadTokens": 56408,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Four C++ files under `examples/cpp/route_guide` call `routeguide::ParseDb`:\n\n- `route_guide_server.cc:92`\n- `route_guide_client.cc:80`\n- `route_guide_callback_server.cc:92`\n- `route_guide_callback_client.cc:80`\n\n`helper.cc:144` is the definition and `helper.h:30` is the declaration. Both need updating along with the callers if you change the signature.\n\nI used a text search, so it would miss calls made through a macro or an alias. In this directory the only matches were these direct calls.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7381,
+              "costUsd": 0.048019,
+              "inputTokens": 4,
+              "outputTokens": 345,
+              "cacheCreationTokens": 9730,
+              "cacheReadTokens": 56410,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-tinyxml2-loadfile-definition",
+      "sample": "internet-cpp-tinyxml2",
+      "category": "definition",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64102,
+            "medianOutputTokens": 280,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7458,
+            "medianCostUsd": 0.0428,
+            "spread": {
+              "inputTokens": {
+                "min": 64075,
+                "max": 96445
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 6260,
+                "max": 9667
+              },
+              "costUsd": {
+                "min": 0.0425,
+                "max": 0.0576
+              }
+            },
+            "totalCostUsd": 0.1429,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`XMLDocument::LoadFile(const char*)` is defined in `tinyxml2.cpp:2352` as `XMLError XMLDocument::LoadFile( const char* filename )`.\n\nIt is declared in `tinyxml2.h:1756`, inside the `XMLDocument` class, as `XMLError LoadFile( const char* filename );`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9667,
+              "costUsd": 0.0576168,
+              "inputTokens": 6,
+              "outputTokens": 416,
+              "cacheCreationTokens": 11231,
+              "cacheReadTokens": 85208,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`XMLDocument::LoadFile(const char*)` is declared and defined in these two places:\n\n- **Declared** in `tinyxml2.h:1756` as `XMLError LoadFile( const char* filename );`, inside the `XMLDocument` class.\n- **Defined** in `tinyxml2.cpp:2352` as `XMLError XMLDocument::LoadFile( const char* filename )`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6260,
+              "costUsd": 0.042820199999999996,
+              "inputTokens": 4,
+              "outputTokens": 280,
+              "cacheCreationTokens": 8616,
+              "cacheReadTokens": 55482,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`XMLDocument::LoadFile(const char*)` is declared and defined in these two places:\n\n- **Declared** in `tinyxml2.h:1756`, as `XMLError LoadFile( const char* filename );`, inside the `XMLDocument` class.\n- **Defined** in `tinyxml2.cpp:2352`, as `XMLError XMLDocument::LoadFile( const char* filename )`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7458,
+              "costUsd": 0.04250999999999999,
+              "inputTokens": 4,
+              "outputTokens": 259,
+              "cacheCreationTokens": 8591,
+              "cacheReadTokens": 55480,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 65855,
+            "medianOutputTokens": 248,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7488,
+            "medianCostUsd": 0.046,
+            "spread": {
+              "inputTokens": {
+                "min": 65838,
+                "max": 65915
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6595,
+                "max": 8273
+              },
+              "costUsd": {
+                "min": 0.0459,
+                "max": 0.0466
+              }
+            },
+            "totalCostUsd": 0.1386,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`XMLDocument::LoadFile(const char*)` is defined in `tinyxml2.cpp:2352`. It is declared in `tinyxml2.h:1756`, inside the `XMLDocument` class, as `XMLError LoadFile( const char* filename );`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7488,
+              "costUsd": 0.045948,
+              "inputTokens": 4,
+              "outputTokens": 234,
+              "cacheCreationTokens": 9491,
+              "cacheReadTokens": 56360,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`XMLDocument::LoadFile(const char*)` is declared in `tinyxml2.h` at line 1756 (`XMLError LoadFile( const char* filename );`). It is defined in `tinyxml2.cpp` at line 2352.\n\nBoth files have an overload that takes a `FILE*`: the declaration is at `tinyxml2.h:1769` and the definition at `tinyxml2.cpp:2371`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8273,
+              "costUsd": 0.0465841,
+              "inputTokens": 4,
+              "outputTokens": 274,
+              "cacheCreationTokens": 9550,
+              "cacheReadTokens": 56361,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`XMLDocument::LoadFile(const char*)` is declared in `tinyxml2.h` at line 1756 as `XMLError LoadFile( const char* filename );`, inside the `XMLDocument` class. It is defined in `tinyxml2.cpp` at line 2352 as `XMLError XMLDocument::LoadFile( const char* filename )`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6595,
+              "costUsd": 0.04602,
+              "inputTokens": 4,
+              "outputTokens": 248,
+              "cacheCreationTokens": 9474,
+              "cacheReadTokens": 56360,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-cjson-parse-definition",
+      "sample": "internet-c-cjson",
+      "category": "definition",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64138,
+            "medianOutputTokens": 156,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 6505,
+            "medianCostUsd": 0.0443,
+            "spread": {
+              "inputTokens": {
+                "min": 64136,
+                "max": 97003
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 6495,
+                "max": 9211
+              },
+              "costUsd": {
+                "min": 0.0418,
+                "max": 0.0497
+              }
+            },
+            "totalCostUsd": 0.1357,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`cJSON_Parse` is defined in `cJSON.c:1227` and declared in `cJSON.h:154`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6505,
+              "costUsd": 0.044250700000000004,
+              "inputTokens": 4,
+              "outputTokens": 154,
+              "cacheCreationTokens": 9305,
+              "cacheReadTokens": 54827,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`cJSON_Parse` is defined in `cJSON.c:1227` and declared in the header `cJSON.h:154`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6495,
+              "costUsd": 0.0418373,
+              "inputTokens": 4,
+              "outputTokens": 156,
+              "cacheCreationTokens": 8681,
+              "cacheReadTokens": 55453,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`cJSON_Parse` is defined in `cJSON.c` at line 1227. It is declared in `cJSON.h` at line 154:\n\n```c\nCJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value);\n```\n\nThe function is a thin wrapper that parses with the default options. Per the comment at `cJSON.c:1226`, those are the defaults for `cJSON_Parse`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9211,
+              "costUsd": 0.0496572,
+              "inputTokens": 6,
+              "outputTokens": 428,
+              "cacheCreationTokens": 9145,
+              "cacheReadTokens": 87852,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66063,
+            "medianOutputTokens": 226,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 6764,
+            "medianCostUsd": 0.0468,
+            "spread": {
+              "inputTokens": {
+                "min": 66055,
+                "max": 66212
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6311,
+                "max": 6807
+              },
+              "costUsd": {
+                "min": 0.0468,
+                "max": 0.0473
+              }
+            },
+            "totalCostUsd": 0.1409,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "- **Defined in:** `cJSON.c:1227`, as `CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value)`.\n- **Declared in:** `cJSON.h:154`, with the same signature.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6764,
+              "costUsd": 0.0473474,
+              "inputTokens": 4,
+              "outputTokens": 221,
+              "cacheCreationTokens": 9874,
+              "cacheReadTokens": 56334,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "- **Defined in:** `cJSON.c:1227`, as `CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value)`.\n- **Declared in:** `cJSON.h:154`, as `CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value);`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6311,
+              "costUsd": 0.046777200000000005,
+              "inputTokens": 4,
+              "outputTokens": 226,
+              "cacheCreationTokens": 9719,
+              "cacheReadTokens": 56332,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "- **Defined in:** `cJSON.c:1227`, as `CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value)`.\n- **Declared in:** `cJSON.h:154`, as `CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value);`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6807,
+              "costUsd": 0.046793600000000005,
+              "inputTokens": 4,
+              "outputTokens": 226,
+              "cacheCreationTokens": 9723,
+              "cacheReadTokens": 56336,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-crow-chat-target",
+      "sample": "internet-cpp-crow-examples",
+      "category": "build",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64541,
+            "medianOutputTokens": 320,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7240,
+            "medianCostUsd": 0.045,
+            "spread": {
+              "inputTokens": {
+                "min": 64535,
+                "max": 65787
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7149,
+                "max": 7405
+              },
+              "costUsd": {
+                "min": 0.0444,
+                "max": 0.0527
+              }
+            },
+            "totalCostUsd": 0.1422,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The target is **`example_chat`**. `examples/CMakeLists.txt:50` defines it with `add_executable(example_chat example_chat.cpp)`.\n\nIt links **`Crow::Crow`**, the Crow library target, with `target_link_libraries(example_chat PUBLIC Crow::Crow)` at `examples/CMakeLists.txt:52`. Line 51 also applies `add_warnings_optimizations(example_chat)`.\n\nThe same file also creates an `example_chat_copy` target (lines 53–58). It is part of `ALL` and copies `example_chat.html` into the build's `templates/` directory, which the chat executable needs at runtime.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7405,
+              "costUsd": 0.05269009999999999,
+              "inputTokens": 4,
+              "outputTokens": 343,
+              "cacheCreationTokens": 10942,
+              "cacheReadTokens": 54841,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The target is `example_chat`. `examples/CMakeLists.txt:50` defines it with `add_executable(example_chat example_chat.cpp)`.\n\nIt links `Crow::Crow` (`examples/CMakeLists.txt:52`), publicly.\n\nThe file also has a helper target, `example_chat_copy`. It copies `example_chat.html` into the build's `templates/` directory.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7149,
+              "costUsd": 0.044434100000000004,
+              "inputTokens": 4,
+              "outputTokens": 260,
+              "cacheCreationTokens": 9070,
+              "cacheReadTokens": 55461,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The target is **`example_chat`**, defined in `examples/CMakeLists.txt:50`:\n\n```cmake\nadd_executable(example_chat example_chat.cpp)\nadd_warnings_optimizations(example_chat)\ntarget_link_libraries(example_chat PUBLIC Crow::Crow)\n```\n\nIt links **`Crow::Crow`**, the Crow library's CMake target, publicly.\n\nThere is also a helper target, `example_chat_copy`, at line 58. It's part of `ALL` and copies `example_chat.html` into the build's `templates/` directory.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7240,
+              "costUsd": 0.0450464,
+              "inputTokens": 4,
+              "outputTokens": 320,
+              "cacheCreationTokens": 9073,
+              "cacheReadTokens": 55464,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66315,
+            "medianOutputTokens": 333,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7474,
+            "medianCostUsd": 0.0489,
+            "spread": {
+              "inputTokens": {
+                "min": 66044,
+                "max": 66436
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7290,
+                "max": 7546
+              },
+              "costUsd": {
+                "min": 0.0472,
+                "max": 0.0493
+              }
+            },
+            "totalCostUsd": 0.1454,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The target is `example_chat`, defined at `examples/CMakeLists.txt:50` with `add_executable(example_chat example_chat.cpp)`. It links `Crow::Crow` (`examples/CMakeLists.txt:52`, `target_link_libraries(example_chat PUBLIC Crow::Crow)`).\n\nThe same file also defines a helper target, `example_chat_copy`, which is part of `ALL`. It copies `example_chat.html` into the build directory's `templates/` folder.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7546,
+              "costUsd": 0.047201999999999994,
+              "inputTokens": 4,
+              "outputTokens": 276,
+              "cacheCreationTokens": 9700,
+              "cacheReadTokens": 56340,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The target is **`example_chat`**. `examples/CMakeLists.txt:50` defines it with `add_executable(example_chat example_chat.cpp)`.\n\nIt links **`Crow::Crow`**, the Crow library's imported target. The line is `target_link_libraries(example_chat PUBLIC Crow::Crow)` at `examples/CMakeLists.txt:52`.\n\nThe same file also adds a helper target, `example_chat_copy`. It is part of `ALL`, and it copies `example_chat.html` into the build's `templates/` directory.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7474,
+              "costUsd": 0.048895999999999995,
+              "inputTokens": 4,
+              "outputTokens": 337,
+              "cacheCreationTokens": 9971,
+              "cacheReadTokens": 56340,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The target is **`example_chat`**, defined at `examples/CMakeLists.txt:50` with `add_executable(example_chat example_chat.cpp)`.\n\nIt links **`Crow::Crow`**, the Crow library's imported target, at `examples/CMakeLists.txt:52`:\n\n```cmake\ntarget_link_libraries(example_chat PUBLIC Crow::Crow)\n```\n\nThe same file also defines a helper target, `example_chat_copy`. It's part of `ALL`, and it copies `example_chat.html` into `templates/` in the build directory. That way the chat example can serve its HTML page.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7290,
+              "costUsd": 0.049328300000000005,
+              "inputTokens": 4,
+              "outputTokens": 333,
+              "cacheCreationTokens": 10089,
+              "cacheReadTokens": 56343,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-grpc-route-guide-targets",
+      "sample": "internet-cpp-grpc-examples",
+      "category": "build",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97787,
+            "medianOutputTokens": 395,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 9229,
+            "medianCostUsd": 0.0537,
+            "spread": {
+              "inputTokens": {
+                "min": 65653,
+                "max": 97793
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 8031,
+                "max": 9344
+              },
+              "costUsd": {
+                "min": 0.0495,
+                "max": 0.0565
+              }
+            },
+            "totalCostUsd": 0.1598,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`examples/cpp/route_guide/CMakeLists.txt` builds four executables. They come from the `foreach` loop at lines 74–89, which compiles each `<target>.cc` and links it against `rg_grpc_proto`, `route_guide_helper`, the absl libraries, gRPC++ and protobuf:\n\n- `route_guide_client`\n- `route_guide_server`\n- `route_guide_callback_client`\n- `route_guide_callback_server`\n\n`helper.cc` is in the `route_guide_helper` static library (lines 64–66, together with `helper.h`). That library links against `rg_grpc_proto`, the library built from the generated protobuf and gRPC sources. All four executables link `route_guide_helper`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9344,
+              "costUsd": 0.0565455,
+              "inputTokens": 6,
+              "outputTokens": 430,
+              "cacheCreationTokens": 10886,
+              "cacheReadTokens": 86895,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`examples/cpp/route_guide/CMakeLists.txt` builds four executables. The `foreach` loop at lines 74–89 creates them, and each one is built from `<name>.cc`:\n\n- `route_guide_client`\n- `route_guide_server`\n- `route_guide_callback_client`\n- `route_guide_callback_server`\n\n`helper.cc`, together with `helper.h`, is in the `route_guide_helper` static library (lines 64–66). That library links against `rg_grpc_proto`, which holds the generated protobuf and gRPC sources. All four executables link against both `route_guide_helper` and `rg_grpc_proto`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8031,
+              "costUsd": 0.049515199999999995,
+              "inputTokens": 4,
+              "outputTokens": 333,
+              "cacheCreationTokens": 10157,
+              "cacheReadTokens": 55492,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The CMake file at `examples/cpp/route_guide/CMakeLists.txt` builds four executables. The `foreach` loop at lines 74-89 creates them:\n\n- `route_guide_client`\n- `route_guide_server`\n- `route_guide_callback_client`\n- `route_guide_callback_server`\n\n`helper.cc` (with `helper.h`) is in the static library `route_guide_helper`, defined at lines 64-66. That library links against `rg_grpc_proto`, which holds the generated protobuf and gRPC sources. All four executables link against both `rg_grpc_proto` and `route_guide_helper`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9229,
+              "costUsd": 0.05372740000000001,
+              "inputTokens": 6,
+              "outputTokens": 395,
+              "cacheCreationTokens": 10253,
+              "cacheReadTokens": 87534,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 100436,
+            "medianOutputTokens": 385,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 9165,
+            "medianCostUsd": 0.0573,
+            "spread": {
+              "inputTokens": {
+                "min": 67407,
+                "max": 100436
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 6910,
+                "max": 10675
+              },
+              "costUsd": {
+                "min": 0.0531,
+                "max": 0.0575
+              }
+            },
+            "totalCostUsd": 0.1679,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`examples/cpp/route_guide/CMakeLists.txt` builds four executables. It creates them in a `foreach` loop (lines 74–89), one per `<name>.cc` source:\n\n- `route_guide_client`\n- `route_guide_server`\n- `route_guide_callback_client`\n- `route_guide_callback_server`\n\n`helper.cc` (with `helper.h`) is in the static library `route_guide_helper` (lines 64–66). That library links against `rg_grpc_proto`, the library holding the generated protobuf and gRPC sources. All four executables link against both `route_guide_helper` and `rg_grpc_proto`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9165,
+              "costUsd": 0.057477600000000004,
+              "inputTokens": 6,
+              "outputTokens": 400,
+              "cacheCreationTokens": 11134,
+              "cacheReadTokens": 89296,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`examples/cpp/route_guide/CMakeLists.txt` builds four executables. It creates them in a `foreach` loop at lines 74–89, each from a `<name>.cc` file:\n\n- `route_guide_client`\n- `route_guide_server`\n- `route_guide_callback_client`\n- `route_guide_callback_server`\n\n`helper.cc` (with `helper.h`) is in the static library `route_guide_helper`, defined at lines 64–66. All four executables link against it. The library itself links against `rg_grpc_proto`, the library built from the generated protobuf and gRPC sources.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10675,
+              "costUsd": 0.057327600000000006,
+              "inputTokens": 6,
+              "outputTokens": 385,
+              "cacheCreationTokens": 11134,
+              "cacheReadTokens": 89296,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Glob": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`examples/cpp/route_guide/CMakeLists.txt` builds four executables. It creates them in a `foreach` loop (lines 74–89), and each one is built from `<name>.cc`:\n\n- `route_guide_client`\n- `route_guide_server`\n- `route_guide_callback_client`\n- `route_guide_callback_server`\n\n`helper.cc` is in the static library **`route_guide_helper`** (lines 64–66, together with `helper.h`). That library links against `rg_grpc_proto`, the library built from the generated protobuf and gRPC sources. All four executables link against both `route_guide_helper` and `rg_grpc_proto`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6910,
+              "costUsd": 0.0531409,
+              "inputTokens": 4,
+              "outputTokens": 336,
+              "cacheCreationTokens": 11034,
+              "cacheReadTokens": 56369,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-googletest-env",
+      "sample": "internet-cpp-googletest",
+      "category": "env",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 96717,
+            "medianOutputTokens": 706,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 11418,
+            "medianCostUsd": 0.0518,
+            "spread": {
+              "inputTokens": {
+                "min": 96658,
+                "max": 96870
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 10340,
+                "max": 11635
+              },
+              "costUsd": {
+                "min": 0.0507,
+                "max": 0.0624
+              }
+            },
+            "totalCostUsd": 0.165,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "In `googletest/src/gtest.cc`, `posix::GetEnv` is called with a literal name in four places:\n\n| Line | Variable |\n|---|---|\n| 235 | `TESTBRIDGE_TEST_ONLY` |\n| 246 | `TESTBRIDGE_TEST_RUNNER_FAIL_FAST` |\n| 3271 | `TERM` |\n| 5490 | `TEST_PREMATURE_EXIT_FILE` |\n\nI searched with a multiline regex, so calls split across lines are covered. The file reads other variables, such as the `GTEST_*` ones, through helpers like `StringFromGTestEnv` or `Int32FromGTestEnv`. Those build the name at runtime instead of passing a literal to `GetEnv`, so they aren't in the table.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 11635,
+              "costUsd": 0.0624494,
+              "inputTokens": 6,
+              "outputTokens": 755,
+              "cacheCreationTokens": 11590,
+              "cacheReadTokens": 85274,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`googletest/src/gtest.cc` reads four environment variables by literal name through `posix::GetEnv`:\n\n| Variable | Line |\n|---|---|\n| `TESTBRIDGE_TEST_ONLY` | 235 |\n| `TESTBRIDGE_TEST_RUNNER_FAIL_FAST` | 246 |\n| `TERM` | 3271 |\n| `TEST_PREMATURE_EXIT_FILE` | 5490 |\n\nI also searched for calls where the argument starts on the next line. There are none, so these four are the full set of literal-name calls.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10340,
+              "costUsd": 0.05072120000000001,
+              "inputTokens": 6,
+              "outputTokens": 610,
+              "cacheCreationTokens": 8960,
+              "cacheReadTokens": 87692,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`googletest/src/gtest.cc` calls `posix::GetEnv` with a literal name in four places:\n\n| Variable | Line | Purpose |\n|---|---|---|\n| `TESTBRIDGE_TEST_ONLY` | 235 | Bazel test filter |\n| `TESTBRIDGE_TEST_RUNNER_FAIL_FAST` | 246 | Bazel fail-fast setting |\n| `TERM` | 3271 | Checks whether the terminal supports color |\n| `TEST_PREMATURE_EXIT_FILE` | 5490 | Path of the file used to detect a premature exit |\n\nI also searched for calls that break the line right after `GetEnv(` and found none. The `posix::GetEnv` calls that pass a computed name instead of a literal aren't in this list.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 11418,
+              "costUsd": 0.05178850000000001,
+              "inputTokens": 6,
+              "outputTokens": 706,
+              "cacheCreationTokens": 8986,
+              "cacheReadTokens": 87725,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 99502,
+            "medianOutputTokens": 678,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 11341,
+            "medianCostUsd": 0.0558,
+            "spread": {
+              "inputTokens": {
+                "min": 65921,
+                "max": 99537
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 9014,
+                "max": 11389
+              },
+              "costUsd": {
+                "min": 0.0504,
+                "max": 0.0565
+              }
+            },
+            "totalCostUsd": 0.1628,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "In `googletest/src/gtest.cc`, `posix::GetEnv` is called with a literal name for four environment variables. A multiline search found no other literal-name calls.\n\n| Variable | Line |\n|---|---|\n| `TESTBRIDGE_TEST_ONLY` | 235 |\n| `TESTBRIDGE_TEST_RUNNER_FAIL_FAST` | 246 |\n| `TERM` | 3271 |\n| `TEST_PREMATURE_EXIT_FILE` | 5490 |\n\nThe `GTEST_*` variables, such as `GTEST_FILTER` and `GTEST_COLOR`, are not in this list. The file reads them through flag-name helpers that build the name at runtime, not through a literal string.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 11341,
+              "costUsd": 0.0565379,
+              "inputTokens": 6,
+              "outputTokens": 737,
+              "cacheCreationTokens": 10052,
+              "cacheReadTokens": 89479,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`googletest/src/gtest.cc` passes four literal names to `posix::GetEnv`:\n\n| Variable | Line |\n|---|---|\n| `TESTBRIDGE_TEST_ONLY` | 235 |\n| `TESTBRIDGE_TEST_RUNNER_FAIL_FAST` | 246 |\n| `TERM` | 3271 |\n| `TEST_PREMATURE_EXIT_FILE` | 5490 |\n\nI searched with a multiline pattern as well, so calls split across lines would have shown up. The file also reads other environment variables, such as the `GTEST_*` flag values. Those names are built at runtime and aren't passed as literals.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 11389,
+              "costUsd": 0.05580790000000001,
+              "inputTokens": 6,
+              "outputTokens": 678,
+              "cacheCreationTokens": 10017,
+              "cacheReadTokens": 89479,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "In `googletest/src/gtest.cc`, `posix::GetEnv` is called with a literal name for these four environment variables:\n\n| Variable | Line | Purpose |\n|---|---|---|\n| `TESTBRIDGE_TEST_ONLY` | 235 | Bazel test filter, used as the default for `--gtest_filter` |\n| `TESTBRIDGE_TEST_RUNNER_FAIL_FAST` | 246 | Bazel fail-fast setting, used as the default for `--gtest_fail_fast` |\n| `TERM` | 3271 | Checked when deciding whether the terminal supports colored output |\n| `TEST_PREMATURE_EXIT_FILE` | 5490 | Path of the file used to detect a premature exit |\n\nI searched for `GetEnv(` followed by a string literal, allowing whitespace before the quote. A call that puts the literal on the next line would not match. Calls that build the variable name at runtime, such as the `GTEST_*` flag variables, aren't literal names, so they are not in the list either.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 9014,
+              "costUsd": 0.0504417,
+              "inputTokens": 4,
+              "outputTokens": 648,
+              "cacheCreationTokens": 9580,
+              "cacheReadTokens": 56337,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cpp-qt-relational-tables",
+      "sample": "internet-cpp-qt-network-examples",
+      "category": "data",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 96804,
+            "medianOutputTokens": 563,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 10578,
+            "medianCostUsd": 0.0507,
+            "spread": {
+              "inputTokens": {
+                "min": 96787,
+                "max": 96847
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 10130,
+                "max": 10692
+              },
+              "costUsd": {
+                "min": 0.0506,
+                "max": 0.0605
+              }
+            },
+            "totalCostUsd": 0.1618,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The function is **`createRelationalTables()`**, in `examples/sql/relationaltablemodel/relationaltablemodel.cpp:45`. It's part of the Qt SQL relational table model example.\n\nIt runs these three statements through `QSqlQuery::exec()`:\n- `create table employee(id int primary key, name varchar(20), city int, country int)` (line 48)\n- `create table city(id int, name varchar(20))` (line 53)\n- `create table country(id int, name varchar(20))` (line 58)\n\n`main()` calls it to set up the data. The `city` and `country` columns in `employee` are foreign keys, which `initializeModel()` maps to the other two tables through `QSqlRelationalTableModel`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10130,
+              "costUsd": 0.0605268,
+              "inputTokens": 6,
+              "outputTokens": 593,
+              "cacheCreationTokens": 11513,
+              "cacheReadTokens": 85328,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`createRelationalTables()` creates them. It's defined at `examples/sql/relationaltablemodel/relationaltablemodel.cpp:45` in the `relationaltablemodel` example.\n\nIt runs these queries:\n- `employee(id int primary key, name varchar(20), city int, country int)` at line 48\n- `city(id int, name varchar(20))` at line 53\n- `country(id int, name varchar(20))` at line 58\n\nIt also inserts sample rows. `employee.city` and `employee.country` are foreign keys into the other two tables. `initializeModel()` then uses them to set up the `QSqlRelationalTableModel`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10692,
+              "costUsd": 0.050726,
+              "inputTokens": 6,
+              "outputTokens": 563,
+              "cacheCreationTokens": 9078,
+              "cacheReadTokens": 87720,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The `createRelationalTables()` function creates them. It's defined at `examples/sql/relationaltablemodel/relationaltablemodel.cpp:45` and runs these statements:\n\n- `employee(id int primary key, name varchar(20), city int, country int)` at line 48\n- `city(id int, name varchar(20))` at line 53\n- `country(id int, name varchar(20))` at line 58\n\n`main()` calls it to set up the data for the `QSqlRelationalTableModel` example. `employee.city` and `employee.country` are foreign keys into the `city` and `country` tables.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10578,
+              "costUsd": 0.0505504,
+              "inputTokens": 6,
+              "outputTokens": 546,
+              "cacheCreationTokens": 9077,
+              "cacheReadTokens": 87704,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 99463,
+            "medianOutputTokens": 557,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 10469,
+            "medianCostUsd": 0.0542,
+            "spread": {
+              "inputTokens": {
+                "min": 99368,
+                "max": 99633
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 9154,
+                "max": 10656
+              },
+              "costUsd": {
+                "min": 0.0541,
+                "max": 0.0544
+              }
+            },
+            "totalCostUsd": 0.1627,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "In the Qt SQL examples, **`createRelationalTables()`** creates those tables. It's defined at `examples/sql/relationaltablemodel/relationaltablemodel.cpp:45` and called from `main()` at line 70.\n\nIt runs three `CREATE TABLE` statements through a `QSqlQuery`:\n- `employee(id int primary key, name varchar(20), city int, country int)`, at line 48\n- `city(id int, name varchar(20))`, at line 53\n- `country(id int, name varchar(20))`, at line 58\n\n`initializeModel()` then uses these tables as the relational model's data.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10469,
+              "costUsd": 0.054406800000000005,
+              "inputTokens": 6,
+              "outputTokens": 557,
+              "cacheCreationTokens": 9969,
+              "cacheReadTokens": 89488,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "In the Qt SQL examples, the function is `createRelationalTables()`. It's defined at `examples/sql/relationaltablemodel/relationaltablemodel.cpp:45`.\n\nIt runs these statements:\n- `create table employee(id int primary key, name varchar(20), city int, country int)` at line 48\n- `create table city(id int, name varchar(20))` at line 53\n- `create table country(id int, name varchar(20))` at line 58\n\nThe `city` and `country` columns in `employee` hold IDs that refer to the other two tables. `initializeModel()` (line 11) then sets up the `QSqlRelationalTableModel` on top of them.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10656,
+              "costUsd": 0.054117000000000005,
+              "inputTokens": 6,
+              "outputTokens": 559,
+              "cacheCreationTokens": 9892,
+              "cacheReadTokens": 89470,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The function is `createRelationalTables()`. It's in `examples/sql/relationaltablemodel/relationaltablemodel.cpp:45`.\n\nIt runs `create table` for `employee`, `city` and `country` through a `QSqlQuery`. After each table is created, it inserts a few sample rows. `employee` stores `city` and `country` as integer ids. The relational model resolves those ids against the `city` and `country` tables.\n\n`main()` calls it after `createConnection()` succeeds.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9154,
+              "costUsd": 0.054223900000000005,
+              "inputTokens": 6,
+              "outputTokens": 436,
+              "cacheCreationTokens": 10228,
+              "cacheReadTokens": 89399,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
