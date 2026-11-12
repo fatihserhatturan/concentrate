@@ -39,3 +39,8 @@
   --shadow: 0 1px 2px rgba(1, 4, 9, .4), 0 4px 12px rgba(1, 4, 9, .5);
   color-scheme: dark;
 }
+
+/* syntax colours */
+:root { --syn-keyword: #cf222e; --syn-string: #0a3069; --syn-comment: #6e7781; --syn-title: #8250df; --syn-number: #0550ae; --syn-type: #953800; --syn-attr: #116329; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --syn-keyword: #ff7b72; --syn-string: #a5d6ff; --syn-comment: #8b949e; --syn-title: #d2a8ff; --syn-number: #79c0ff; --syn-type: #ffa657; --syn-attr: #7ee787; } }
+:root[data-theme="dark"] { --syn-keyword: #ff7b72; --syn-string: #a5d6ff; --syn-comment: #8b949e; --syn-title: #d2a8ff; --syn-number: #79c0ff; --syn-type: #ffa657; --syn-attr: #7ee787; }

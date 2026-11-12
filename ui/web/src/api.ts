@@ -89,7 +89,7 @@ export const graphOverview = (level: string, prefix: string, types: string[]) =>
 export const graphNeighbors = (id: string, types: string[], depth = 1) =>
   getJson<Neighbors>("/api/graph/neighbors", { id, types: types.join(","), depth: String(depth) });
 export const graphNode = (id: string) => getJson<NodeDetail>("/api/graph/node", { id });
-export const graphSource = (id: string) => getJson<{ file?: string; line?: number; source: string | null; truncated?: boolean; note?: string }>("/api/graph/source", { id });
+export const graphSource = (id: string) => getJson<{ file?: string; line?: number; endLine?: number; source: string | null; truncated?: boolean; note?: string }>("/api/graph/source", { id });
 export const graphSearch = (q: string) => getJson<{ total: number; results: SearchResult[] }>("/api/search", { q });
 
 export type ExportOptions = { format: string; scope: "graph" | "view"; types: string[]; prefix: string; focus?: string };
@@ -129,3 +129,28 @@ export async function projectInfo(path: string): Promise<ProjectInfo> {
   if (!response.ok) throw new Error(body.error ?? response.statusText);
   return body;
 }
+
+// ---- views ----
+export type Column = { key: string; label: string; kind?: "text" | "number" | "badge" | "code"; filter?: boolean };
+export type EntityRow = { id: string } & Record<string, string | number | boolean | null>;
+export type EntityKind = "files" | "routes" | "tables" | "components" | "env" | "entrypoints";
+export type EntityTable = { kind: EntityKind; columns: Column[]; rows: EntityRow[]; summary: { by: string; groups: Array<{ label: string; count: number }> } };
+export const graphCatalog = () => getJson<{ views: Record<EntityKind, number> }>("/api/graph/catalog");
+export const graphEntities = (kind: EntityKind) => getJson<EntityTable>("/api/graph/entities", { kind });
+
+export type Dashboard = {
+  repo: { name: string; path: string }; schemaVersion: number | null; files: { total: number; tests: number };
+  languages: Array<{ name: string; count: number }>;
+  packages: Array<{ name: string; path: string; manager: string | null; files: number }>;
+  kinds: Array<{ label: string; count: number; view: string | null }>;
+  topFiles: Array<{ id: string; path: string; language: string; usedBy: number; uses: number; links: number }>;
+};
+export const graphDashboard = () => getJson<Dashboard>("/api/graph/dashboard");
+
+export type Issues = {
+  cycles: Array<{ size: number; typeOnly: boolean; files: Array<{ id: string | null; path: string }>; cycle: string[] }>;
+  unused: Array<{ id: string | null; kind: string; name: string; className?: string; file: string; line: number | null; usedInFile: boolean }>;
+  deadFunctions: Array<{ id: string | null; kind: string; name: string; file: string; line: number | null }>;
+  note: string;
+};
+export const graphIssues = () => getJson<Issues>("/api/graph/issues");

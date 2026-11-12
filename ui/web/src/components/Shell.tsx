@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { Icon, type IconName } from "./icons.js";
 import { useTheme } from "../lib/theme.js";
 
-export type NavItem = { id: string; label: string; icon: IconName; count?: number };
+export type NavItem = { id: string; label: string; icon: IconName; count?: number; group?: string };
 export type Crumb = { label: string; onClick?: () => void };
 
 const INSPECTOR_KEY = "concentrate-inspector-width";
@@ -40,7 +40,7 @@ export function ThemeButton() {
 }
 
 /** A right-hand panel whose left edge can be dragged; the width is remembered. */
-function Inspector({ onElement }: { onElement: (element: HTMLElement | null) => void }) {
+function Inspector({ children }: { children: ComponentChildren }) {
   const [width, setWidth] = useState(storedWidth);
   const [dragging, setDragging] = useState(false);
   const start = useRef({ x: 0, width: 0 });
@@ -80,7 +80,7 @@ function Inspector({ onElement }: { onElement: (element: HTMLElement | null) => 
         onKeyDown={onKey}
       />
       <div class="inspector-head">Inspector</div>
-      <div class="inspector-body" ref={onElement} />
+      <div class="inspector-body">{children}</div>
     </aside>
   );
 }
@@ -94,8 +94,10 @@ export function Shell(props: {
   onHome: () => void;
   onSearch: () => void;
   onRescan: () => void;
-  /** Receives the inspector's body element; views render their selection summary there. */
-  onInspector: (element: HTMLElement | null) => void;
+  /** The inspector's content: the selected node, or the summary of the current view. */
+  inspector: ComponentChildren;
+  /** Set when search cannot be used in the current view; the button then says why. */
+  searchDisabledReason?: string;
   flush?: boolean;
   children: ComponentChildren;
 }) {
@@ -114,7 +116,7 @@ export function Shell(props: {
           ))}
         </nav>
         <span class="spacer" />
-        <button class="search-trigger" onClick={props.onSearch} aria-label="Search">
+        <button class="search-trigger" onClick={props.onSearch} aria-label="Search" disabled={!!props.searchDisabledReason} title={props.searchDisabledReason}>
           <Icon name="search" /> <span>Search symbols and files</span> <span class="kbd">/</span>
         </button>
         <button class="btn btn-ghost" onClick={props.onRescan} title="Scan this project again (the parse cache keeps it fast)">
@@ -124,16 +126,18 @@ export function Shell(props: {
       </header>
       <div class="workspace">
         <nav class="nav" aria-label="Views">
-          <div class="nav-heading">Explore</div>
-          {props.nav.map((item) => (
-            <button class="nav-item" aria-current={item.id === props.view ? "page" : undefined} onClick={() => props.onNavigate(item.id)}>
+          {props.nav.map((item, i) => (
+            <>
+              {item.group && item.group !== props.nav[i - 1]?.group && <div class="nav-heading">{item.group}</div>}
+              <button class="nav-item" aria-current={item.id === props.view ? "page" : undefined} onClick={() => props.onNavigate(item.id)}>
               <Icon name={item.icon} /> <span class="label">{item.label}</span>
               {item.count !== undefined && <span class="count">{item.count.toLocaleString("en-US")}</span>}
-            </button>
+              </button>
+            </>
           ))}
         </nav>
         <main class={`main${props.flush ? " flush" : ""}`}>{props.children}</main>
-        <Inspector onElement={props.onInspector} />
+        <Inspector>{props.inspector}</Inspector>
       </div>
     </div>
   );

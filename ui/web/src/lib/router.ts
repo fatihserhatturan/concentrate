@@ -1,5 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 
+export const DEFAULT_VIEW = "overview";
+
 /** The whole UI state that belongs in the URL: which project, which view, which node is focused. */
 export type Route = {
   /** Project path, null on the start screen. */
@@ -15,7 +17,7 @@ export function parseRoute(search: string): Route {
   const project = params.get("project");
   return {
     project: project && project.length > 0 ? project : null,
-    view: params.get("view") ?? "graph",
+    view: params.get("view") ?? DEFAULT_VIEW,
     focus: params.get("focus") ?? undefined,
     scan: params.get("scan") ?? undefined,
   };
@@ -25,7 +27,7 @@ export function formatRoute(route: Route): string {
   const params = new URLSearchParams();
   if (route.project) {
     params.set("project", route.project);
-    if (route.view !== "graph") params.set("view", route.view);
+    if (route.view !== DEFAULT_VIEW) params.set("view", route.view);
     if (route.focus) params.set("focus", route.focus);
   } else if (route.scan) params.set("scan", route.scan);
   const query = params.toString();

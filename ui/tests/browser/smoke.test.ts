@@ -47,9 +47,26 @@ describe("browser smoke", () => {
     assert.match(await page.getByTestId("scan-report").textContent() ?? "", /Scan complete/);
 
     await page.getByTestId("open-graph").click();
+    await page.getByRole("heading", { name: "Most connected files" }).waitFor({ timeout: 30_000 });
+    assert.match(page.url(), /project=/, "the project is in the URL");
+
+    // Views with rows are in the navigation; a row opens the inspector, which offers the graph.
+    await page.getByRole("button", { name: /^Routes/ }).click();
+    await page.locator("table.data tbody tr").first().waitFor();
+    await page.locator("table.data tbody tr").first().click();
+    await page.getByRole("button", { name: "Show in graph" }).waitFor({ timeout: 15_000 });
+    assert.match(page.url(), /view=routes&focus=/, "the selection is in the URL");
+    await page.getByRole("button", { name: "Show in graph" }).click();
     await page.waitForFunction(() => /^[1-9]\d* nodes/.test(document.querySelector("#stats")?.textContent ?? ""), null, { timeout: 30_000 });
     assert.ok((await page.locator("canvas").count()) > 0, "the graph is drawn on a canvas");
-    assert.match(page.url(), /project=/, "the project is in the URL");
+    assert.match(page.url(), /view=graph&focus=/);
+
+    // Back returns to the routes table.
+    await page.goBack();
+    await page.locator("table.data tbody tr").first().waitFor();
+
+    await page.getByRole("button", { name: /^Graph/ }).click();
+    await page.waitForFunction(() => /^[1-9]\d* nodes/.test(document.querySelector("#stats")?.textContent ?? ""), null, { timeout: 30_000 });
 
     await page.click("#export");
     await page.selectOption("#fmt", "json");

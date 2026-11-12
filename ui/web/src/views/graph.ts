@@ -8,7 +8,7 @@ const KINDS = Object.keys(EDGE_KIND_LABELS);
 const OVERVIEW_DEFAULT = KINDS.filter((k) => k !== "defines");
 
 /** The first-stage graph view. It mounts into the shell's main area, writes the selection into the inspector, and returns its cleanup. */
-export function mountGraphView(root: HTMLElement, options: { inspector: HTMLElement }): () => void {
+export function mountGraphView(root: HTMLElement, options: { inspector: HTMLElement; focus?: string }): () => void {
   const inspectorEl = options.inspector;
   root.innerHTML = `
     <div class="gv">
@@ -265,7 +265,8 @@ export function mountGraphView(root: HTMLElement, options: { inspector: HTMLElem
   });
 
   void graphSummary().catch(() => undefined);
-  void loadOverview();
+  if (options.focus) void focusNode(options.focus);
+  else void loadOverview();
   void currentProject;
   return () => {
     window.removeEventListener("concentrate:theme", onTheme);

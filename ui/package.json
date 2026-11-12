@@ -19,6 +19,7 @@
     "graphology": "^0.26.0",
     "graphology-layout-forceatlas2": "^0.10.1",
     "graphology-types": "^0.24.8",
+    "highlight.js": "^11.12.0",
     "preact": "^10.29.8",
     "sigma": "^3.0.3"
   },

@@ -4,7 +4,7 @@ import { Icon } from "../components/icons.js";
 import { Logo, ThemeButton } from "../components/Shell.js";
 import { baseName, formatDuration, number, timeAgo } from "../lib/format.js";
 import { forgetProject, loadRecents, rememberProject } from "../lib/recents.js";
-import { navigate } from "../lib/router.js";
+import { DEFAULT_VIEW, navigate } from "../lib/router.js";
 
 type ScanState =
   | { status: "idle" }
@@ -16,7 +16,7 @@ const lines = (text: string) => text.split("\n").map((l) => l.trim()).filter(Boo
 
 function openProject(path: string): void {
   rememberProject(path);
-  navigate({ project: path, view: "graph" });
+  navigate({ project: path, view: DEFAULT_VIEW });
 }
 
 function ProjectCard(props: { path: string; info: ProjectInfo | null; onSelect: () => void; onRemove: () => void }) {

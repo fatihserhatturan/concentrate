@@ -1,33 +1,70 @@
+import type { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import { setProject } from "./api.js";
+import { graphCatalog, graphIssues, setProject, type EntityKind } from "./api.js";
+import { InspectorPanel } from "./components/Inspector.js";
 import { Shell, type NavItem } from "./components/Shell.js";
 import { baseName } from "./lib/format.js";
-import { navigate, useRoute } from "./lib/router.js";
+import { DEFAULT_VIEW, navigate, useRoute } from "./lib/router.js";
+import { useLoad } from "./lib/useLoad.js";
+import { ENTITY_INFO, EntityView } from "./screens/EntityView.js";
+import { Issues } from "./screens/Issues.js";
 import { LegacyGraph } from "./screens/LegacyGraph.js";
+import { Overview } from "./screens/Overview.js";
 import { Start } from "./screens/Start.js";
 
-// Views are added here as they are built; a view that has nothing to show is left out.
-const NAV: NavItem[] = [{ id: "graph", label: "Graph", icon: "graph" }];
+const ENTITY_VIEWS: Array<{ id: EntityKind; icon: NavItem["icon"] }> = [
+  { id: "files", icon: "file" }, { id: "routes", icon: "route" }, { id: "tables", icon: "table" },
+  { id: "components", icon: "component" }, { id: "env", icon: "env" }, { id: "entrypoints", icon: "entry" },
+];
+const isEntity = (view: string): view is EntityKind => ENTITY_VIEWS.some((v) => v.id === view);
 
-function ProjectScreen({ project, view }: { project: string; view: string }) {
-  const [inspector, setInspector] = useState<HTMLElement | null>(null);
+function ProjectScreen({ project, view, focus }: { project: string; view: string; focus?: string }) {
   setProject(project);
-  const active = NAV.find((item) => item.id === view) ?? NAV[0]!;
-  const name = baseName(project);
+  const [catalog] = useLoad(graphCatalog, [project]);
+  const [issues] = useLoad(graphIssues, [project]);
+  const [summary, setSummaryState] = useState<{ view: string; node: ComponentChildren } | null>(null);
+  const [legacyEl, setLegacyEl] = useState<HTMLElement | null>(null);
+  const setSummary = (node: ComponentChildren) => setSummaryState({ view, node });
+
+  // A view with nothing to show is left out of the navigation.
+  const counts = catalog.status === "ready" ? catalog.data.views : null;
+  const issueCount = issues.status === "ready" ? issues.data.cycles.length + issues.data.unused.length + issues.data.deadFunctions.length : null;
+  const nav: NavItem[] = [
+    { id: "overview", label: "Overview", icon: "overview", group: "Explore" },
+    ...ENTITY_VIEWS.filter((v) => counts === null || counts[v.id] > 0 || v.id === view).map((v) => ({ id: v.id, label: ENTITY_INFO[v.id].title, icon: v.icon, count: counts?.[v.id], group: "Browse" })),
+    ...(issueCount === null || issueCount > 0 || view === "issues" ? [{ id: "issues", label: "Issues", icon: "issue" as const, count: issueCount ?? undefined, group: "Analyse" }] : []),
+    { id: "graph", label: "Graph", icon: "graph", group: "Analyse" },
+  ];
+  const active = nav.find((item) => item.id === view) ?? nav[0]!;
+  const select = (id: string | null) => navigate({ project, view: active.id, focus: id ?? undefined }, { replace: true });
+  const open = (id: string) => navigate({ project, view: active.id, focus: id });
+  const showInGraph = (id: string) => navigate({ project, view: "graph", focus: id });
+  const onGraph = active.id === "graph";
+
+  useEffect(() => { if (!onGraph) setLegacyEl(null); }, [onGraph]);
+
+  const inspector = onGraph ? <div ref={setLegacyEl} /> : (
+    <InspectorPanel id={focus ?? null} summary={summary?.view === active.id ? summary.node : <p class="muted small">Select a row to inspect it.</p>} onSelect={open} onClear={() => select(null)} onShowInGraph={showInGraph} />
+  );
+
   return (
     <Shell
       project={project}
-      crumbs={[{ label: name }, { label: active.label }]}
-      nav={NAV}
+      crumbs={[{ label: baseName(project) }, { label: active.label }]}
+      nav={nav}
       view={active.id}
-      flush
+      flush={onGraph}
       onNavigate={(next) => navigate({ project, view: next })}
-      onHome={() => navigate({ project: null, view: "graph" })}
+      onHome={() => navigate({ project: null, view: DEFAULT_VIEW })}
       onSearch={() => window.dispatchEvent(new CustomEvent("concentrate:search"))}
-      onRescan={() => navigate({ project: null, view: "graph", scan: project })}
-      onInspector={setInspector}
+      searchDisabledReason={onGraph ? undefined : "Search works in the Graph view for now; the command palette is coming"}
+      onRescan={() => navigate({ project: null, view: DEFAULT_VIEW, scan: project })}
+      inspector={inspector}
     >
-      {inspector && <LegacyGraph key={project} inspector={inspector} />}
+      {active.id === "overview" && <Overview key={project} project={project} onOpenView={(next) => navigate({ project, view: next })} onSelect={open} setSummary={setSummary} />}
+      {isEntity(active.id) && <EntityView key={active.id} kind={active.id} project={project} selectedId={focus} onSelect={open} setSummary={setSummary} />}
+      {active.id === "issues" && <Issues project={project} selectedId={focus} onSelect={open} setSummary={setSummary} />}
+      {onGraph && legacyEl && <LegacyGraph key={project} inspector={legacyEl} focus={focus} />}
     </Shell>
   );
 }
@@ -37,5 +74,5 @@ export function App() {
   useEffect(() => {
     document.title = route.project ? `${baseName(route.project)} · Concentrate` : "Concentrate";
   }, [route.project]);
-  return route.project ? <ProjectScreen project={route.project} view={route.view} /> : <Start key={route.scan ?? "start"} rescan={route.scan} />;
+  return route.project ? <ProjectScreen project={route.project} view={route.view} focus={route.focus} /> : <Start key={route.scan ?? "start"} rescan={route.scan} />;
 }
