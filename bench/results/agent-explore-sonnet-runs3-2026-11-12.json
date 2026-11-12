@@ -1,0 +1,1469 @@
+{
+  "recordedAt": "2026-11-12T15:45:29.182Z",
+  "model": "sonnet",
+  "runs": 3,
+  "maxTurns": 25,
+  "totals": {
+    "baseline": {
+      "runs": 21,
+      "correct": 21,
+      "medianInputTokens": 66249,
+      "medianOutputTokens": 481,
+      "medianToolCalls": 2,
+      "medianTurns": 3,
+      "medianDurationMs": 8187,
+      "medianCostUsd": 0.0524,
+      "spread": {
+        "inputTokens": {
+          "min": 64187,
+          "max": 131794
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 3
+        },
+        "durationMs": {
+          "min": 5588,
+          "max": 12153
+        },
+        "costUsd": {
+          "min": 0.0435,
+          "max": 0.0648
+        }
+      },
+      "totalCostUsd": 1.119,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
+    },
+    "concentrate": {
+      "runs": 21,
+      "correct": 21,
+      "medianInputTokens": 67423,
+      "medianOutputTokens": 535,
+      "medianToolCalls": 2,
+      "medianTurns": 3,
+      "medianDurationMs": 8832,
+      "medianCostUsd": 0.0536,
+      "spread": {
+        "inputTokens": {
+          "min": 66162,
+          "max": 135470
+        },
+        "toolCalls": {
+          "min": 1,
+          "max": 4
+        },
+        "durationMs": {
+          "min": 5874,
+          "max": 12923
+        },
+        "costUsd": {
+          "min": 0.0484,
+          "max": 0.0687
+        }
+      },
+      "totalCostUsd": 1.1666,
+      "mcpRuns": 0,
+      "mcpTools": {},
+      "toolSearchCalls": 0
+    }
+  },
+  "categories": {
+    "explore": {
+      "baseline": {
+        "runs": 21,
+        "correct": 21,
+        "medianInputTokens": 66249,
+        "medianOutputTokens": 481,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 8187,
+        "medianCostUsd": 0.0524,
+        "spread": {
+          "inputTokens": {
+            "min": 64187,
+            "max": 131794
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 3
+          },
+          "durationMs": {
+            "min": 5588,
+            "max": 12153
+          },
+          "costUsd": {
+            "min": 0.0435,
+            "max": 0.0648
+          }
+        },
+        "totalCostUsd": 1.119,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      },
+      "concentrate": {
+        "runs": 21,
+        "correct": 21,
+        "medianInputTokens": 67423,
+        "medianOutputTokens": 535,
+        "medianToolCalls": 2,
+        "medianTurns": 3,
+        "medianDurationMs": 8832,
+        "medianCostUsd": 0.0536,
+        "spread": {
+          "inputTokens": {
+            "min": 66162,
+            "max": 135470
+          },
+          "toolCalls": {
+            "min": 1,
+            "max": 4
+          },
+          "durationMs": {
+            "min": 5874,
+            "max": 12923
+          },
+          "costUsd": {
+            "min": 0.0484,
+            "max": 0.0687
+          }
+        },
+        "totalCostUsd": 1.1666,
+        "mcpRuns": 0,
+        "mcpTools": {},
+        "toolSearchCalls": 0
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "explore-express-etag",
+      "sample": "express",
+      "category": "explore",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64854,
+            "medianOutputTokens": 549,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 8187,
+            "medianCostUsd": 0.0487,
+            "spread": {
+              "inputTokens": {
+                "min": 64851,
+                "max": 64863
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7822,
+                "max": 8188
+              },
+              "costUsd": {
+                "min": 0.0485,
+                "max": 0.0504
+              }
+            },
+            "totalCostUsd": 0.1476,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**File:** `lib/response.js`, inside `res.send()`. Around lines 160–187, it reads `app.get('etag fn')`. If the response has no `ETag` yet and that is a function, it calls `etagFn(chunk, encoding)` and sets the result with `this.set('ETag', etag)`.\n\n**Default function:** `wetag` in `lib/utils.js`. This is how it gets there:\n- `lib/application.js:95` sets the default with `this.set('etag', 'weak')`.\n- `lib/application.js:364-365` handles the `etag` setting by calling `this.set('etag fn', compileETag(val))`.\n- `compileETag` (`lib/utils.js:130`) maps `'weak'` to `exports.wetag` (line 140). `'strong'` maps to `exports.etag` instead (line 145).\n- `wetag` is `createETagGenerator({ weak: true })` (`lib/utils.js:51`). That wraps the `etag` npm package.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7822,
+              "costUsd": 0.0503732,
+              "inputTokens": 4,
+              "outputTokens": 481,
+              "cacheCreationTokens": 10018,
+              "cacheReadTokens": 54832,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The ETag is computed in **`lib/response.js`**, inside `res.send()`:\n\n- `lib/response.js:161-162` reads the configured function with `app.get('etag fn')`. It only generates an ETag if the `ETag` header isn't already set.\n- `lib/response.js:185-187` calls `etagFn(chunk, encoding)` and sets the result with `this.set('ETag', etag)`.\n\nThe default is weak ETags, and it works like this:\n\n- `lib/application.js:95` sets the default with `this.set('etag', 'weak')`.\n- `lib/application.js:364-365` handles the `etag` setting with `this.set('etag fn', compileETag(val))`.\n- `compileETag` in `lib/utils.js:130` maps `'weak'` to **`exports.wetag`** (`lib/utils.js:140`).\n- `wetag` is defined at `lib/utils.js:51` as `createETagGenerator({ weak: true })`. It wraps the `etag` npm package.\n\nSo by default, `res.send()` computes the ETag with `wetag` from `lib/utils.js`. The strong variant is `exports.etag`, which uses `{ weak: false }`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8187,
+              "costUsd": 0.0484867,
+              "inputTokens": 4,
+              "outputTokens": 549,
+              "cacheCreationTokens": 9360,
+              "cacheReadTokens": 55487,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The ETag is computed in **`lib/response.js`**, inside `res.send()`.\n\n- `lib/response.js:161` reads the configured generator with `app.get('etag fn')`.\n- `lib/response.js:162` only generates an ETag if the `ETag` header isn't already set and `etag fn` is a function.\n- `lib/response.js:186-187` calls `etagFn(chunk, encoding)` and sets the `ETag` header to the result.\n\nBy default the app uses **`wetag`** from `lib/utils.js`, which produces weak ETags:\n\n- `lib/application.js:95` sets the default with `this.set('etag', 'weak')`.\n- `lib/application.js:364-365` handles that setting by calling `compileETag(val)` and storing the result as `etag fn`.\n- `compileETag` (`lib/utils.js:130`) maps `'weak'` to `exports.wetag` (`lib/utils.js:140`).\n- `exports.wetag` is defined at `lib/utils.js:51` as `createETagGenerator({ weak: true })`.\n\n`createETagGenerator` (`lib/utils.js:249`) wraps the `etag` npm package. It converts the body to a Buffer and calls `etag(buf, options)`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8188,
+              "costUsd": 0.0487213,
+              "inputTokens": 4,
+              "outputTokens": 570,
+              "cacheCreationTokens": 9366,
+              "cacheReadTokens": 55493,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66838,
+            "medianOutputTokens": 535,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 8321,
+            "medianCostUsd": 0.0524,
+            "spread": {
+              "inputTokens": {
+                "min": 66827,
+                "max": 66842
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7234,
+                "max": 8959
+              },
+              "costUsd": {
+                "min": 0.0523,
+                "max": 0.0526
+              }
+            },
+            "totalCostUsd": 0.1573,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The ETag is computed in **`lib/response.js`**, inside `res.send()`. Around lines 160–187, it reads `app.get('etag fn')` and checks that no `ETag` header is already set. It then calls `etagFn(chunk, encoding)` and sets the result with `this.set('ETag', etag)`.\n\nThe default function is **`wetag`**, exported from `lib/utils.js:51` as `createETagGenerator({ weak: true })`. It works like this:\n- `lib/application.js:95` sets the default with `this.set('etag', 'weak')`.\n- When the `etag` setting is applied (`lib/application.js:364-365`), `compileETag('weak')` runs. It maps `'weak'` to `exports.wetag` (`lib/utils.js:140`) and stores it as the `'etag fn'` setting.\n- `createETagGenerator` (`lib/utils.js:249`) wraps the `etag` npm package. It turns the body into a Buffer and returns `etag(buf, { weak: true })`.\n\nThe strong variant, `exports.etag` (`{ weak: false }`), is used only when the setting is `'strong'`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8959,
+              "costUsd": 0.052414199999999994,
+              "inputTokens": 4,
+              "outputTokens": 535,
+              "cacheCreationTokens": 10352,
+              "cacheReadTokens": 56482,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The ETag is computed in **`lib/response.js`**, inside `res.send()`. The relevant code is at lines 160–187:\n\n- Line 161 reads the configured generator with `app.get('etag fn')`.\n- Line 162 only generates an ETag if the response has no `ETag` header yet and that generator is a function.\n- Lines 185–187 call `etagFn(chunk, encoding)` and set the result as the `ETag` header.\n\nThe default configuration is in `lib/application.js`:\n\n- Line 95 sets `this.set('etag', 'weak')`.\n- Lines 364–365 run when the `etag` setting changes. They call `compileETag(val)` from `lib/utils.js` and store the result as `'etag fn'`.\n\nFor `'weak'`, `compileETag` in `lib/utils.js` (line 140) picks **`exports.wetag`**, which is defined at line 51 as `createETagGenerator({ weak: true })`. The strong variant is `exports.etag` (line 40), used for `'strong'`.\n\nSo the default is **`wetag`**. It is built by `createETagGenerator` (`lib/utils.js:249`), which hashes the body using the `etag` npm package.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8321,
+              "costUsd": 0.0525524,
+              "inputTokens": 4,
+              "outputTokens": 548,
+              "cacheCreationTokens": 10354,
+              "cacheReadTokens": 56484,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The ETag is computed in **`lib/response.js`**, inside `res.send()`.\n\n- **Where it happens:** `lib/response.js:160-187`. `res.send()` reads the app's `etag fn` setting (`app.get('etag fn')`). It generates an ETag only if no `ETag` header is already set and that setting is a function. It then calls `etagFn(chunk, encoding)` and sets the result with `this.set('ETag', etag)`.\n- **How the default is configured:**\n  - `lib/application.js:95` sets `this.set('etag', 'weak')` as the default.\n  - The `etag` setter (`lib/application.js:364-365`) turns that value into a function with `compileETag(val)` and stores it as `etag fn`.\n  - `compileETag` in `lib/utils.js:130` maps `'weak'` to `exports.wetag` (`lib/utils.js:140`).\n\nSo the function is **`wetag`** from `lib/utils.js`. It is defined at line 51 as `createETagGenerator({ weak: true })`, which wraps the `etag` npm module. The strong-ETag counterpart is `exports.etag` (`lib/utils.js:40`).",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7234,
+              "costUsd": 0.0523324,
+              "inputTokens": 4,
+              "outputTokens": 532,
+              "cacheCreationTokens": 10339,
+              "cacheReadTokens": 56484,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "explore-express-render",
+      "sample": "express",
+      "category": "explore",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97350,
+            "medianOutputTokens": 793,
+            "medianToolCalls": 3,
+            "medianTurns": 4,
+            "medianDurationMs": 10639,
+            "medianCostUsd": 0.0566,
+            "spread": {
+              "inputTokens": {
+                "min": 64187,
+                "max": 97525
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 8102,
+                "max": 12153
+              },
+              "costUsd": {
+                "min": 0.0446,
+                "max": 0.0577
+              }
+            },
+            "totalCostUsd": 0.1589,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Application-level method that builds the view:** `app.render` in `lib/application.js` (line 522).\n\n- `res.render` in `lib/response.js` (line 894) calls `app.render`.\n- `app.render` builds the view object with `new View(name, {defaultEngine, root, engines})`. It takes the class from `this.get('view')`, which is `lib/view.js` by default. It reuses a cached view when view caching is on.\n- It then calls the helper `tryRender` (`lib/application.js:625`), which runs `view.render(options, callback)` inside a try/catch.\n\n**View class method that renders the template:** `View.prototype.render` in `lib/view.js` (line 133). It calls the template engine function, `this.engine(this.path, options, cb)`, and makes sure the callback always behaves asynchronously.\n\n**Call chain:** `res.render` (`lib/response.js`) → `app.render` (`lib/application.js`) → `tryRender` (`lib/application.js`) → `View.prototype.render` (`lib/view.js`) → the engine.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10639,
+              "costUsd": 0.05770599999999999,
+              "inputTokens": 6,
+              "outputTokens": 793,
+              "cacheCreationTokens": 10264,
+              "cacheReadTokens": 87080,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The application-level method is `app.render`, in `lib/application.js:522`. The view class method that renders the template is `View.prototype.render`, in `lib/view.js:133`.\n\nThe call chain:\n\n1. `res.render` (`lib/response.js:894`) calls `app.render` on the application.\n2. `app.render` (`lib/application.js:522`) builds the view. It looks the view up in the cache or creates a new `View` instance from the view name, engine and root paths.\n3. `app.render` then calls the helper `tryRender` (`lib/application.js:625`). That helper runs `view.render(options, callback)` inside a try/catch (line 627).\n4. `View.prototype.render` (`lib/view.js:133`) calls `this.engine(this.path, options, ...)`, which is the template engine's render function. That call produces the final output. It also wraps the engine callback so that synchronous callbacks are normalized.\n\nI read lines 133–149 of `lib/view.js` and lines 575–630 of `lib/application.js`. I didn't open the body of `app.render` itself or `res.render`. Their roles in steps 1–2 come from the grep hits and from how Express is structured, not from reading those functions here.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12153,
+              "costUsd": 0.0565677,
+              "inputTokens": 6,
+              "outputTokens": 842,
+              "cacheCreationTokens": 9842,
+              "cacheReadTokens": 87677,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The flow is `res.render`, then `app.render`, then `View.prototype.render`.\n\n- **Application-level method:** `app.render` in `lib/application.js:522`. `res.render` in `lib/response.js:894` calls it. It looks up or creates the `View` instance (the view cache and the `View` constructor from `lib/view.js`). It then calls the internal `tryRender` helper at `lib/application.js:574`.\n- **View-class method:** `View.prototype.render` in `lib/view.js:133`. `tryRender` (`lib/application.js:625`) calls it as `view.render(options, callback)`. It hands the resolved template path to the engine function (`this.engine(this.path, options, callback)`), and that call renders the template.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8102,
+              "costUsd": 0.0446436,
+              "inputTokens": 4,
+              "outputTokens": 426,
+              "cacheCreationTokens": 8707,
+              "cacheReadTokens": 55476,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66208,
+            "medianOutputTokens": 463,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 8832,
+            "medianCostUsd": 0.049,
+            "spread": {
+              "inputTokens": {
+                "min": 66162,
+                "max": 66252
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 7022,
+                "max": 9073
+              },
+              "costUsd": {
+                "min": 0.0484,
+                "max": 0.0506
+              }
+            },
+            "totalCostUsd": 0.1481,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The chain is `res.render`, then `app.render`, then `View.prototype.render`.\n\n1. **`res.render`** is in `lib/response.js:894`. It merges the options, then calls `app.render(view, opts, done)`.\n2. **`app.render`** is the application-level method that builds the view. It's in `lib/application.js:522`. If the view isn't cached, it does `new View(name, {...})` at line 552. That constructor is in `lib/view.js` and resolves the template file and the engine. `app.render` then calls the private helper `tryRender(view, renderOptions, done)`, and that helper calls `view.render(options, callback)` at `lib/application.js:627`.\n3. **`View.prototype.render`** is the method that finally renders the template. It's in `lib/view.js:133`. It calls `this.engine(this.path, options, ...)`, which is the template engine's render function for the resolved file.\n\nThe result goes back through the callback to `res.render`. By default it then calls `res.send(str)`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 8832,
+              "costUsd": 0.0506392,
+              "inputTokens": 4,
+              "outputTokens": 588,
+              "cacheCreationTokens": 9776,
+              "cacheReadTokens": 56472,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The chain is `res.render` → `app.render` → `View.prototype.render`.\n\n- **Application method:** `app.render` in `lib/application.js:522`. `res.render` in `lib/response.js:894` calls it at line 917 with `app.render(view, opts, done)`. `app.render` builds the view with `new View(name, {...})` at line 552. It then calls `view.render(options, callback)` at line 627.\n- **View method:** `View.prototype.render` in `lib/view.js:133`. This is the method that finally renders the template. It does so by invoking the template engine function the view resolved for the file.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7022,
+              "costUsd": 0.04840319999999999,
+              "inputTokens": 4,
+              "outputTokens": 382,
+              "cacheCreationTokens": 9732,
+              "cacheReadTokens": 56472,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Flow, from the lines found:\n\n1. `res.render` (`lib/response.js:894`) calls the application-level **`app.render`**.\n2. **`app.render`** (`lib/application.js:522`) builds the view. It looks up or creates a `View` instance, using the view cache when it's enabled. It then calls the helper `tryRender` (`lib/application.js:625`), which runs `view.render(options, callback)` inside a try/catch.\n3. **`View.prototype.render`** (`lib/view.js:133`) finally renders the template. It calls the engine function that was loaded for the file's extension, `this.engine(this.path, options, callback)`.\n\nI didn't read the bodies of these functions, only the grep hits. The call from `res.render` to `app.render`, and `View` doing the rendering through its engine, are from my knowledge of Express rather than from this checkout. If you want, I can open the files to confirm.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 9073,
+              "costUsd": 0.04902530000000001,
+              "inputTokens": 4,
+              "outputTokens": 463,
+              "cacheCreationTokens": 9685,
+              "cacheReadTokens": 56473,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "explore-express-download",
+      "sample": "express",
+      "category": "explore",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 64382,
+            "medianOutputTokens": 403,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 5796,
+            "medianCostUsd": 0.0453,
+            "spread": {
+              "inputTokens": {
+                "min": 64232,
+                "max": 64493
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 5588,
+                "max": 6977
+              },
+              "costUsd": {
+                "min": 0.0435,
+                "max": 0.0482
+              }
+            },
+            "totalCostUsd": 0.137,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`res.download` calls **`res.sendFile`** to send the file. It does this at `lib/response.js:481` with `return this.sendFile(fullPath, opts, done)`.\n\nBoth are defined in `lib/response.js`. `res.sendFile` is at line 371 and `res.download` is at line 433.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 5796,
+              "costUsd": 0.0482272,
+              "inputTokens": 4,
+              "outputTokens": 403,
+              "cacheCreationTokens": 9677,
+              "cacheReadTokens": 54812,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`res.download()` calls **`res.sendFile()`** to send the file. Both are defined in `lib/response.js`: `res.sendFile` at line 371 and `res.download` at line 433.\n\n`res.download` sets the `Content-Disposition` header, builds the full path, and then returns `this.sendFile(fullPath, opts, done)` at line 481.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 5588,
+              "costUsd": 0.043458399999999994,
+              "inputTokens": 4,
+              "outputTokens": 277,
+              "cacheCreationTokens": 8784,
+              "cacheReadTokens": 55444,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`res.download` calls **`res.sendFile`** to send the file. It does this at `lib/response.js:481` with `return this.sendFile(fullPath, opts, done)`.\n\nBoth are defined in `lib/response.js`. `res.sendFile` is at line 371 and `res.download` is at line 433.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 6977,
+              "costUsd": 0.0453323,
+              "inputTokens": 4,
+              "outputTokens": 404,
+              "cacheCreationTokens": 8935,
+              "cacheReadTokens": 55443,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66371,
+            "medianOutputTokens": 396,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 5976,
+            "medianCostUsd": 0.0495,
+            "spread": {
+              "inputTokens": {
+                "min": 66366,
+                "max": 66413
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 5874,
+                "max": 6682
+              },
+              "costUsd": {
+                "min": 0.0493,
+                "max": 0.0498
+              }
+            },
+            "totalCostUsd": 0.1485,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "`res.download` calls `res.sendFile` to send the file. The call is `return this.sendFile(fullPath, opts, done)` at `lib/response.js:481`.\n\nBoth methods are defined in `lib/response.js`. `res.sendFile` is at line 371 and `res.download` is at line 433.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 5976,
+              "costUsd": 0.0493161,
+              "inputTokens": 4,
+              "outputTokens": 396,
+              "cacheCreationTokens": 9926,
+              "cacheReadTokens": 56441,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`res.download` calls `res.sendFile` to send the file. At `lib/response.js:481` it does `return this.sendFile(fullPath, opts, done)`.\n\nBoth are defined in `lib/response.js`. `res.sendFile` is at line 371 and `res.download` is at line 433.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 5874,
+              "costUsd": 0.0494502,
+              "inputTokens": 4,
+              "outputTokens": 393,
+              "cacheCreationTokens": 9967,
+              "cacheReadTokens": 56442,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "`res.download` calls **`res.sendFile`** to send the file. It does this at the end of the function with `return this.sendFile(fullPath, opts, done)`, at `lib/response.js:481`.\n\nBoth methods are defined in `lib/response.js`:\n- `res.sendFile` at line 371\n- `res.download` at line 433\n\nBefore that call, `res.download` sets the `Content-Disposition` header from the filename and resolves the path.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 6682,
+              "costUsd": 0.049757800000000005,
+              "inputTokens": 4,
+              "outputTokens": 441,
+              "cacheCreationTokens": 9924,
+              "cacheReadTokens": 56438,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "explore-ky-retry-delay",
+      "sample": "ky",
+      "category": "explore",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 97356,
+            "medianOutputTokens": 745,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 9389,
+            "medianCostUsd": 0.0632,
+            "spread": {
+              "inputTokens": {
+                "min": 97212,
+                "max": 131794
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 8909,
+                "max": 11583
+              },
+              "costUsd": {
+                "min": 0.0545,
+                "max": 0.0648
+              }
+            },
+            "totalCostUsd": 0.1825,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The private method is `#calculateDelay()` in `source/core/Ky.ts:487`, and the option that caps the delay is `retry.backoffLimit`.\n\n`#calculateDelay()` calls `retry.delay(retryCount + 1)` and applies `retry.jitter` if it's set. It then returns `Math.min(retry.backoffLimit, jitteredDelay)` (line 501). `backoffLimit` is documented in `source/types/retry.ts:65` and defaults to `Number.POSITIVE_INFINITY`, so there is no cap unless you set one.\n\n`#calculateRetryDelay(error)` at line 504 is a different method. It decides whether to retry at all, checking `retry.limit` first. Per the note in `source/core/constants.ts:77`, custom delays, such as those from `Retry-After` headers, bypass both jitter and `backoffLimit`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8909,
+              "costUsd": 0.0631635,
+              "inputTokens": 6,
+              "outputTokens": 690,
+              "cacheCreationTokens": 11931,
+              "cacheReadTokens": 85275,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The private method is `#calculateDelay()` in `source/core/Ky.ts:487`. It takes the configured `retry.delay(retryCount + 1)`, applies `retry.jitter` if one is set, and returns `Math.min(this.#options.retry.backoffLimit, jitteredDelay)`.\n\nThe option that caps the delay is **`retry.backoffLimit`**. Its default is `Number.POSITIVE_INFINITY` (`source/utils/normalize.ts:22`), so there is no cap unless you set one.\n\nThere is a second private method with a similar name, `#calculateRetryDelay(error)` at `Ky.ts:504`. It decides whether to retry at all, and then calls `#calculateDelay()` for the backoff.\n\nTwo cases skip `backoffLimit`:\n- **Server-supplied timing:** when a `Retry-After`-style header applies, the delay is capped by `retry.maxRetryAfter` instead.\n- **Custom delays:** a delay that a forced retry from `afterResponse` supplies is used as given.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 11583,
+              "costUsd": 0.0648379,
+              "inputTokens": 8,
+              "outputTokens": 856,
+              "cacheCreationTokens": 11047,
+              "cacheReadTokens": 120739,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Two private methods in `source/core/Ky.ts` are involved, and the one that does the delay computation is `#calculateDelay()`.\n\n- **`#calculateDelay()`** (line 487) computes the wait. It calls `retry.delay(retryCount + 1)` and applies `retry.jitter` if one is set. It then returns `Math.min(retry.backoffLimit, jitteredDelay)`.\n- **`#calculateRetryDelay(error)`** (line 504) is the wrapper around it. It first decides whether to retry at all. It checks the retry `limit`, the allowed `methods` and `shouldRetry`, and it handles `Retry-After` headers. It calls `#calculateDelay()` to get the actual delay. If you meant the method that decides whether a retry happens and how long it waits, that's this one.\n\nThe option that caps the delay is **`retry.backoffLimit`**. Its default is `Number.POSITIVE_INFINITY` (`source/utils/normalize.ts:22`), so there is no cap unless you set one.\n\nThe cap does not apply to custom delays. Delays from a `ForceRetryError` with `customDelay`, or from `Retry-After` headers, skip jitter and `backoffLimit` (see the note at `source/core/constants.ts:77`).",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9389,
+              "costUsd": 0.054496600000000006,
+              "inputTokens": 6,
+              "outputTokens": 745,
+              "cacheCreationTokens": 9564,
+              "cacheReadTokens": 87786,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 100993,
+            "medianOutputTokens": 845,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 11242,
+            "medianCostUsd": 0.0611,
+            "spread": {
+              "inputTokens": {
+                "min": 99867,
+                "max": 135470
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 9907,
+                "max": 12386
+              },
+              "costUsd": {
+                "min": 0.0568,
+                "max": 0.0679
+              }
+            },
+            "totalCostUsd": 0.1858,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The private method is `#calculateDelay()` in `source/core/Ky.ts:487`. It's a true `#private` method.\n\n- **What it does:** It calls `retry.delay(retryCount + 1)` for the base backoff. It then applies `retry.jitter`, which can be `true` or a function. Finally it returns `Math.min(retry.backoffLimit, jitteredDelay)`.\n- **The option that caps it:** `retry.backoffLimit`. It defaults to `Number.POSITIVE_INFINITY` (`source/utils/normalize.ts:22`) and is documented in `source/types/retry.ts:65`.\n\n`#calculateRetryDelay(error)` at line 504 is the method that decides whether to retry at all. It calls `#calculateDelay()` for the normal cases.\n\nDelays taken from a `Retry-After`-style header go through `retry.maxRetryAfter` instead, and a custom `ForceRetryError` delay bypasses both jitter and `backoffLimit`.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 12386,
+              "costUsd": 0.0678996,
+              "inputTokens": 8,
+              "outputTokens": 845,
+              "cacheCreationTokens": 11766,
+              "cacheReadTokens": 123696,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The private method is **`#calculateRetryDelay(error)`** in `source/core/Ky.ts:504`. It's the one `#retry` calls (line 855) to get the wait before the next attempt. It first checks the retry limit and whether the error is retriable. It then works out the delay, either from a `Retry-After` header or by calling a helper, `#calculateDelay()`.\n\n`#calculateDelay()` (just above it, ending at line 501) does the backoff arithmetic. It calls `retry.delay(attempt)`, applies `jitter`, and returns the result.\n\nTwo options cap the delay, depending on where it comes from:\n- **`backoffLimit`** caps the computed backoff delay. `#calculateDelay()` does this at line 501 with `Math.min(retry.backoffLimit, jitteredDelay)`.\n- **`maxRetryAfter`** caps delays that come from a `Retry-After` header. It's applied at lines 568 and 574.\n\nIf you want one answer to \"which option caps the delay\", it's **`backoffLimit`**. Both default to `Infinity` (`source/utils/normalize.ts:21-22`).\n\nCustom delays returned from an `afterResponse` hook's forced retry bypass both jitter and `backoffLimit` (see the note in `source/core/constants.ts:77`).",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 11242,
+              "costUsd": 0.0610561,
+              "inputTokens": 6,
+              "outputTokens": 849,
+              "cacheCreationTokens": 10886,
+              "cacheReadTokens": 90101,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The private method is **`#calculateDelay()`**, in `source/core/Ky.ts:487`. It's a true ES private method, not a TypeScript `private`.\n\nIt works in three steps:\n1. It gets the base delay from `retry.delay(this.#retryCount + 1)`.\n2. It applies jitter if `retry.jitter` is set. With `true`, the delay becomes `Math.random() * retryDelay`. With a function, the delay becomes that function's result, and a non-finite or negative result falls back to the base delay.\n3. It returns `Math.min(this.#options.retry.backoffLimit, jitteredDelay)`.\n\nThe retry option that caps the delay is **`retry.backoffLimit`**.\n\nThere is also `#calculateRetryDelay(error)` at line 504, which decides whether to retry at all. When the server sends a `Retry-After` header, it caps that wait with a separate option, **`retry.maxRetryAfter`** (lines 568 and 574). It falls back to `#calculateDelay()` in one of those cases.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9907,
+              "costUsd": 0.056816200000000004,
+              "inputTokens": 6,
+              "outputTokens": 673,
+              "cacheCreationTokens": 10279,
+              "cacheReadTokens": 89582,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "explore-ky-timeout",
+      "sample": "ky",
+      "category": "explore",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 98494,
+            "medianOutputTokens": 554,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 9119,
+            "medianCostUsd": 0.0548,
+            "spread": {
+              "inputTokens": {
+                "min": 98494,
+                "max": 98506
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 8307,
+                "max": 10272
+              },
+              "costUsd": {
+                "min": 0.0544,
+                "max": 0.0552
+              }
+            },
+            "totalCostUsd": 0.1644,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The request timeout is implemented by the default-exported function `timeout` in `source/utils/timeout.ts`.\n\nWhen the timer set from `options.timeout` fires, it aborts the request through the `AbortController`, if one was given. It then rejects with a `TimeoutError`, built as `new TimeoutError(request)` (`source/utils/timeout.ts:21`).\n\n`TimeoutError` is defined in `source/errors/TimeoutError.ts` and extends `KyError`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8307,
+              "costUsd": 0.055217100000000005,
+              "inputTokens": 6,
+              "outputTokens": 395,
+              "cacheCreationTokens": 10617,
+              "cacheReadTokens": 87871,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The request timeout is implemented by the default-exported `timeout` function in `source/utils/timeout.ts`.\n\n- **How it works:** `timeout(request, init, abortController, options)` starts a `setTimeout` for `options.timeout` milliseconds and calls `options.fetch(request, init)` at the same time. If the fetch settles first, the timer is cleared. If the timer fires first, it aborts the `AbortController` (when one is provided) and rejects.\n- **Error class:** it rejects with `new TimeoutError(request)` (`source/utils/timeout.ts:21`). `TimeoutError` is defined in `source/errors/TimeoutError.ts` and extends `KyError`. The `isTimeoutError()` type guard in `source/utils/type-guards.ts` detects it.\n\n`source/core/Ky.ts` also throws `TimeoutError` directly in several places. Those cover the overall timeout across retries and delays, not the per-request one.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9119,
+              "costUsd": 0.05442930000000001,
+              "inputTokens": 6,
+              "outputTokens": 554,
+              "cacheCreationTokens": 10007,
+              "cacheReadTokens": 88493,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The request timeout is implemented by the default-exported `timeout` function in `source/utils/timeout.ts`.\n\n- **How it works:** It wraps `options.fetch(request, init)` in a `Promise` and starts a `setTimeout` for `options.timeout` milliseconds. If the timer fires first, it aborts the `AbortController` (when one is given) and rejects. If the fetch settles first, the timer is cleared.\n- **Error class:** It rejects with `TimeoutError`, constructed as `new TimeoutError(request)` at `source/utils/timeout.ts:21`. The class is defined in `source/errors/TimeoutError.ts` and extends `KyError`. Ky exports it from `source/index.ts`, and you can detect it with the `isTimeoutError()` type guard.\n\n`source/core/Ky.ts` also throws `TimeoutError` directly in a few places (for example at lines 643, 763 and 861). Those appear to be checks against the overall timeout, which covers retries and delays. I didn't read that code, so I haven't confirmed what each one does.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 10272,
+              "costUsd": 0.054802500000000004,
+              "inputTokens": 6,
+              "outputTokens": 593,
+              "cacheCreationTokens": 10003,
+              "cacheReadTokens": 88485,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 101524,
+            "medianOutputTokens": 548,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 9697,
+            "medianCostUsd": 0.0583,
+            "spread": {
+              "inputTokens": {
+                "min": 101000,
+                "max": 101533
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 2
+              },
+              "durationMs": {
+                "min": 8491,
+                "max": 9901
+              },
+              "costUsd": {
+                "min": 0.0575,
+                "max": 0.0592
+              }
+            },
+            "totalCostUsd": 0.1751,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The request timeout is implemented by the default-exported `timeout` function in `source/utils/timeout.ts`.\n\nWhen the timer set from `options.timeout` fires, `timeout` aborts the request's `AbortController` if one exists. It then rejects with `new TimeoutError(request)`. `TimeoutError` is defined in `source/errors/TimeoutError.ts` and extends `KyError`.\n\nIf the fetch settles first, the timer is cleared.\n\n`Ky.ts` also throws `TimeoutError` in several other places. The `timeout` option's doc comment in `source/types/options.ts` describes it as an overall timeout covering retries and delays, and some of those throws are likely for that overall limit. I only read `timeout.ts`, so I haven't confirmed that.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 8491,
+              "costUsd": 0.0582957,
+              "inputTokens": 6,
+              "outputTokens": 515,
+              "cacheCreationTokens": 11021,
+              "cacheReadTokens": 90497,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The request timeout is the default-exported function `timeout` in `source/utils/timeout.ts`.\n\nIt wraps the fetch call in a `Promise` and starts a `setTimeout` for `options.timeout` milliseconds. If the timer fires first, it aborts the request through the `AbortController` (when one is provided). It then rejects with `new TimeoutError(request)` (`source/utils/timeout.ts:21`). If the fetch settles first, the timer is cleared.\n\n`TimeoutError` is defined in `source/errors/TimeoutError.ts` and extends `KyError`. Ky exports it from `source/index.ts`, and the `isTimeoutError()` type guard checks for it.\n\n`source/core/Ky.ts` also throws `TimeoutError` directly in a few places, such as `source/core/Ky.ts:643` and `source/core/Ky.ts:763`. I didn't read those lines, but the `timeout` option's docs describe an overall timeout that includes retries and delays, so those throws are probably where that overall limit is enforced.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9901,
+              "costUsd": 0.0592383,
+              "inputTokens": 6,
+              "outputTokens": 608,
+              "cacheCreationTokens": 11024,
+              "cacheReadTokens": 90503,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "The request timeout is implemented by the default-exported function `timeout`, in `source/utils/timeout.ts:9`. When the timer fires, it rejects with `TimeoutError`.\n\nThe function sets a `setTimeout` for `options.timeout` milliseconds and starts `options.fetch(request, init)`. If the timer fires first, it aborts the `AbortController` if one was passed in. It then rejects with `new TimeoutError(request)` (line 21). If the fetch settles first, the timer is cleared.\n\n`TimeoutError` is defined in `source/errors/TimeoutError.ts` and extends `KyError`. Ky exports it from `source/index.ts`, along with an `isTimeoutError` type guard.\n\n`source/core/Ky.ts` also throws `TimeoutError` directly, at lines 643 and 763. I didn't check what those two cases are.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9697,
+              "costUsd": 0.057543699999999996,
+              "inputTokens": 6,
+              "outputTokens": 548,
+              "cacheCreationTokens": 10757,
+              "cacheReadTokens": 90237,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "explore-realworld-login",
+      "sample": "internet-node-express-realworld",
+      "category": "explore",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 66388,
+            "medianOutputTokens": 430,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 7250,
+            "medianCostUsd": 0.0622,
+            "spread": {
+              "inputTokens": {
+                "min": 65349,
+                "max": 101272
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 3
+              },
+              "durationMs": {
+                "min": 6914,
+                "max": 10540
+              },
+              "costUsd": {
+                "min": 0.0495,
+                "max": 0.0629
+              }
+            },
+            "totalCostUsd": 0.1746,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "- **Route:** `POST /users/login`, defined in `src/app/routes/auth/auth.controller.ts:30`.\n- **Service function:** the handler calls `login(req.body.user)` (line 32). It is defined in `src/app/routes/auth/auth.service.ts:84`.\n- **Password comparison:** `bcryptjs`, through `bcrypt.compare(password, user.password)` at `auth.service.ts:111`.\n- **Token helper:** `generateToken(user.id)`, the default export of `src/app/routes/auth/token.utils.ts`. It calls `jwt.sign` from `jsonwebtoken` with `JWT_SECRET`. `login` calls it at `auth.service.ts:119`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7250,
+              "costUsd": 0.06290699999999999,
+              "inputTokens": 4,
+              "outputTokens": 418,
+              "cacheCreationTokens": 13354,
+              "cacheReadTokens": 53030,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "- **Route:** `POST /users/login`, defined in `src/app/routes/auth/auth.controller.ts:30`.\n- **Service function:** the handler calls `login(req.body.user)` from `src/app/routes/auth/auth.service.ts:84`.\n- **Password comparison:** `bcrypt.compare(password, user.password)` at `auth.service.ts:111`, using the `bcryptjs` library.\n- **Token helper:** `generateToken(user.id)` at `auth.service.ts:119`. It lives in `src/app/routes/auth/token.utils.ts` and calls `jwt.sign` from `jsonwebtoken`. The token expires after 60 days and is signed with `JWT_SECRET`, which falls back to `'superSecret'` if unset.",
+              "isError": false,
+              "turns": 4,
+              "durationMs": 10540,
+              "costUsd": 0.0622484,
+              "inputTokens": 6,
+              "outputTokens": 694,
+              "cacheCreationTokens": 11582,
+              "cacheReadTokens": 89684,
+              "toolCalls": 3,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "- **Route:** `POST /users/login`, defined in `src/app/routes/auth/auth.controller.ts:30`.\n- **Service function:** the handler calls `login(req.body.user)`. That function is in `src/app/routes/auth/auth.service.ts:84`.\n- **Password comparison:** `bcryptjs`, via `bcrypt.compare(password, user.password)` at `auth.service.ts:111`.\n- **Token helper:** `generateToken(user.id)`, called at `auth.service.ts:119`. It is the default export of `src/app/routes/auth/token.utils.ts`, which uses `jsonwebtoken`'s `jwt.sign` to build the token.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6914,
+              "costUsd": 0.049452499999999996,
+              "inputTokens": 4,
+              "outputTokens": 430,
+              "cacheCreationTokens": 9900,
+              "cacheReadTokens": 55445,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 101664,
+            "medianOutputTokens": 560,
+            "medianToolCalls": 2,
+            "medianTurns": 3,
+            "medianDurationMs": 9623,
+            "medianCostUsd": 0.0611,
+            "spread": {
+              "inputTokens": {
+                "min": 101661,
+                "max": 104576
+              },
+              "toolCalls": {
+                "min": 2,
+                "max": 4
+              },
+              "durationMs": {
+                "min": 9127,
+                "max": 12923
+              },
+              "costUsd": {
+                "min": 0.0609,
+                "max": 0.0687
+              }
+            },
+            "totalCostUsd": 0.1907,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "- **Route:** `POST /users/login`. It's defined in `src/app/routes/auth/auth.controller.ts:30`.\n- **Service function:** the handler calls `login(req.body.user)`, from `src/app/routes/auth/auth.service.ts:84`.\n- **Password comparison:** `bcryptjs`, through `bcrypt.compare(password, user.password)` at `auth.service.ts:111`.\n- **Token helper:** `generateToken(user.id)`, the default export of `./token.utils` (`src/app/routes/auth/token.utils`). It's called at `auth.service.ts:119`.\n\nIf the email or password is wrong, `login` throws a 403 `HttpException`.",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9127,
+              "costUsd": 0.060893100000000006,
+              "inputTokens": 6,
+              "outputTokens": 537,
+              "cacheCreationTokens": 11627,
+              "cacheReadTokens": 90031,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Here is how login works in this app:\n\n- **Route:** `POST /users/login`, defined in `src/app/routes/auth/auth.controller.ts:30`.\n- **Service function:** the handler calls `login(req.body.user)` from `src/app/routes/auth/auth.service.ts:84`.\n- **Password comparison:** `bcryptjs`. `login` calls `bcrypt.compare(password, user.password)` at `auth.service.ts:111`.\n- **Token helper:** `generateToken(user.id)`, the default export of `src/app/routes/auth/token.utils.ts`. It uses `jsonwebtoken`'s `jwt.sign` to sign `{ user: { id } }` with `JWT_SECRET`, expiring in 60 days. If `JWT_SECRET` isn't set, it falls back to the hardcoded string `'superSecret'`.",
+              "isError": false,
+              "turns": 5,
+              "durationMs": 12923,
+              "costUsd": 0.0687236,
+              "inputTokens": 6,
+              "outputTokens": 867,
+              "cacheCreationTokens": 12714,
+              "cacheReadTokens": 91856,
+              "toolCalls": 4,
+              "toolsByName": {
+                "Grep": 2,
+                "Read": 2
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "- **Route:** `POST /users/login`, defined in `src/app/routes/auth/auth.controller.ts:30`.\n- **Service function:** the handler calls `login(req.body.user)` (line 32), which is defined in `src/app/routes/auth/auth.service.ts:84`.\n- **Password comparison:** `bcryptjs`. `login` calls `bcrypt.compare(password, user.password)` at `auth.service.ts:111`.\n- **Token helper:** `generateToken(user.id)`, the default export of `./token.utils`. It's called at `auth.service.ts:119` after a successful match.\n\nIf the email or password is missing, `login` throws a 422. If the user isn't found or the password doesn't match, it throws a 403 with \"email or password is invalid\".",
+              "isError": false,
+              "turns": 3,
+              "durationMs": 9623,
+              "costUsd": 0.061118900000000004,
+              "inputTokens": 6,
+              "outputTokens": 560,
+              "cacheCreationTokens": 11626,
+              "cacheReadTokens": 90029,
+              "toolCalls": 2,
+              "toolsByName": {
+                "Grep": 1,
+                "Read": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "explore-realworld-favorite",
+      "sample": "internet-node-express-realworld",
+      "category": "explore",
+      "modes": {
+        "baseline": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 65617,
+            "medianOutputTokens": 344,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 6691,
+            "medianCostUsd": 0.0521,
+            "spread": {
+              "inputTokens": {
+                "min": 65605,
+                "max": 66249
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6263,
+                "max": 7164
+              },
+              "costUsd": {
+                "min": 0.0495,
+                "max": 0.0524
+              }
+            },
+            "totalCostUsd": 0.154,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "The route is `POST /articles/:slug/favorite`, defined in `src/app/routes/article/article.controller.ts:211`. Its handler calls `favoriteArticle(req.params.slug, req.auth?.user?.id)` at line 215.\n\n`favoriteArticle` is imported from the article service, `src/app/routes/article/article.service.ts`. The matching unfavorite route is `DELETE /articles/:slug/favorite`, which calls `unfavoriteArticle`.\n\nI didn't open `article.service.ts`, so I haven't read the body of `favoriteArticle`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6263,
+              "costUsd": 0.052133200000000005,
+              "inputTokens": 4,
+              "outputTokens": 344,
+              "cacheCreationTokens": 10801,
+              "cacheReadTokens": 54812,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Favoriting an article uses **`POST /articles/:slug/favorite`**. It is defined in `src/app/routes/article/article.controller.ts:211`.\n\nThe handler calls **`favoriteArticle(req.params.slug, req.auth?.user?.id)`** (`article.controller.ts:215`). That function is defined in `src/app/routes/article/article.service.ts:562`.\n\nUnfavoriting is the mirror image. `DELETE /articles/:slug/favorite` (`article.controller.ts:231`) calls `unfavoriteArticle` (`article.service.ts:608`).",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6691,
+              "costUsd": 0.052378499999999995,
+              "inputTokens": 4,
+              "outputTokens": 347,
+              "cacheCreationTokens": 10840,
+              "cacheReadTokens": 55405,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "**Route:** `POST /articles/:slug/favorite`, defined in `src/app/routes/article/article.controller.ts:211`. It requires auth.\n\n**Service function:** the handler calls `favoriteArticle(req.params.slug, req.auth?.user?.id)` (`article.controller.ts:215`). That function is imported from `article.service.ts` in the same folder.\n\nThe reverse route is `DELETE /articles/:slug/favorite`, which calls `unfavoriteArticle`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7164,
+              "costUsd": 0.0494664,
+              "inputTokens": 4,
+              "outputTokens": 313,
+              "cacheCreationTokens": 10197,
+              "cacheReadTokens": 55404,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        },
+        "concentrate": {
+          "summary": {
+            "runs": 3,
+            "correct": 3,
+            "medianInputTokens": 67423,
+            "medianOutputTokens": 387,
+            "medianToolCalls": 1,
+            "medianTurns": 2,
+            "medianDurationMs": 6984,
+            "medianCostUsd": 0.0536,
+            "spread": {
+              "inputTokens": {
+                "min": 67417,
+                "max": 67601
+              },
+              "toolCalls": {
+                "min": 1,
+                "max": 1
+              },
+              "durationMs": {
+                "min": 6668,
+                "max": 7088
+              },
+              "costUsd": {
+                "min": 0.0536,
+                "max": 0.0539
+              }
+            },
+            "totalCostUsd": 0.1611,
+            "mcpRuns": 0,
+            "mcpTools": {},
+            "toolSearchCalls": 0
+          },
+          "runs": [
+            {
+              "answer": "**Route:** `POST /articles/:slug/favorite`, defined in `src/app/routes/article/article.controller.ts:211`.\n\n**Service function:** its handler calls `favoriteArticle(req.params.slug, req.auth?.user?.id)` at `article.controller.ts:215`. That function is imported from `article.service.ts`. I didn't open the service file to read the function body.\n\nThe matching unfavorite route is `DELETE /articles/:slug/favorite`, which calls `unfavoriteArticle`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6984,
+              "costUsd": 0.053602300000000005,
+              "inputTokens": 4,
+              "outputTokens": 389,
+              "cacheCreationTokens": 11016,
+              "cacheReadTokens": 56403,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Favoriting an article is done by **`POST /articles/:slug/favorite`**. The route is defined in `src/app/routes/article/article.controller.ts:211`.\n\nIts handler calls the service function **`favoriteArticle(req.params.slug, req.auth?.user?.id)`** (`article.controller.ts:215`). That function is imported from `article.service.ts` in the same folder.\n\nThe reverse operation is `DELETE /articles/:slug/favorite`, which calls `unfavoriteArticle`.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 6668,
+              "costUsd": 0.053570000000000007,
+              "inputTokens": 4,
+              "outputTokens": 387,
+              "cacheCreationTokens": 11013,
+              "cacheReadTokens": 56400,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            },
+            {
+              "answer": "Favoriting is **`POST /articles/:slug/favorite`**. The route is in `src/app/routes/article/article.controller.ts:211`.\n\nIts handler calls **`favoriteArticle(req.params.slug, req.auth?.user?.id)`** (line 215), which is defined in `src/app/routes/article/article.service.ts`. The opposite route, `DELETE /articles/:slug/favorite`, calls `unfavoriteArticle`.\n\nI didn't open `article.service.ts` to confirm where `favoriteArticle` is defined. That location comes from the controller's imports and the service test file.",
+              "isError": false,
+              "turns": 2,
+              "durationMs": 7088,
+              "costUsd": 0.0539282,
+              "inputTokens": 4,
+              "outputTokens": 350,
+              "cacheCreationTokens": 11195,
+              "cacheReadTokens": 56402,
+              "toolCalls": 1,
+              "toolsByName": {
+                "Grep": 1
+              },
+              "mcpCalls": [],
+              "correct": true,
+              "missing": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

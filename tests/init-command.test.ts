@@ -15,6 +15,8 @@ describe("init: MCP server entry", () => {
   it("runs this build's CLI under the current Node, or npx", () => {
     assert.deepEqual(mcpServerEntry("/g", { npx: false, cliPath: "/cli.js" }), { command: process.execPath, args: ["/cli.js", "mcp", "--database", "/g"] });
     assert.deepEqual(mcpServerEntry("/g", { npx: true }), { command: "npx", args: ["-y", "concentrate", "mcp", "--database", "/g"] });
+    assert.deepEqual(mcpServerEntry("/g", { npx: true, watch: "/p" }), { command: "npx", args: ["-y", "concentrate", "mcp", "--database", "/g", "--watch", "/p"] });
+    assert.deepEqual(mcpServerEntry("/g", { npx: false, cliPath: "/cli.js", watch: "/p" }).args, ["/cli.js", "mcp", "--database", "/g", "--watch", "/p"]);
   });
 });
 
@@ -67,8 +69,8 @@ describe("init: Codex TOML", () => {
 describe("init: command", () => {
   it("parses its options", () => {
     const init = program.commands.find((command) => command.name === "init")!;
-    assert.deepEqual(parseCommandArgs(init, ["."]), { positionals: ["."], options: { client: [], npx: false, instructions: true, hook: false, hooks: false } });
-    assert.deepEqual(parseCommandArgs(init, [".", "--client", "codex", "--npx", "-d", "g"]).options, { client: ["codex"], npx: true, database: "g", instructions: true, hook: false, hooks: false });
+    assert.deepEqual(parseCommandArgs(init, ["."]), { positionals: ["."], options: { client: [], npx: false, instructions: true, hook: false, hooks: false, watch: false } });
+    assert.deepEqual(parseCommandArgs(init, [".", "--client", "codex", "--npx", "-d", "g"]).options, { client: ["codex"], npx: true, database: "g", instructions: true, hook: false, hooks: false, watch: false });
   });
 
   it("writes every client's config into the project", async () => {

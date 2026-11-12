@@ -1,0 +1,54 @@
+{
+  "$comment": "Agent benchmark questions for explore (#251): narrow questions about how code works, asked in words with no tool named and no identifier given, so an agent may reach for explore, grep or the other tools. Expected answers were written by reading the pinned source, not from Concentrate output. Scoring as in questions.json.",
+  "questions": [
+    {
+      "id": "explore-express-etag",
+      "sample": "express",
+      "category": "explore",
+      "question": "When an Express response body is sent, in which file is the ETag header computed, and which function from lib/utils.js does the application configure to compute it by default (weak ETags)?",
+      "expected": { "mustInclude": ["response.js", "wetag"], "anyOf": [["compileETag", "etag fn"]] }
+    },
+    {
+      "id": "explore-express-render",
+      "sample": "express",
+      "category": "explore",
+      "question": "A route handler renders a template with the response's render method. Which application-level method builds the view, and which method of the view class finally renders the template? Name the files.",
+      "expected": { "mustInclude": ["application.js", "view.js"] }
+    },
+    {
+      "id": "explore-express-download",
+      "sample": "express",
+      "category": "explore",
+      "question": "Which other response method does Express's download helper call to actually send the file, and in which file are both defined?",
+      "expected": { "mustInclude": ["sendFile", "response.js"] }
+    },
+    {
+      "id": "explore-ky-retry-delay",
+      "sample": "ky",
+      "category": "explore",
+      "question": "In ky, which private method of the Ky class computes how long to wait before a retry attempt, and which retry option caps that delay?",
+      "expected": { "mustInclude": ["calculateDelay", "backoffLimit"] }
+    },
+    {
+      "id": "explore-ky-timeout",
+      "sample": "ky",
+      "category": "explore",
+      "question": "In ky, which utility function implements the request timeout, in which file, and which error class does it reject with when the time runs out?",
+      "expected": { "mustInclude": ["timeout.ts", "TimeoutError"] }
+    },
+    {
+      "id": "explore-realworld-login",
+      "sample": "internet-node-express-realworld",
+      "category": "explore",
+      "question": "In this app, which route handles logging in, which service function does its handler call, and which library compares the password and which helper creates the token?",
+      "expected": { "mustInclude": ["/users/login", "login", "bcrypt", "generateToken"] }
+    },
+    {
+      "id": "explore-realworld-favorite",
+      "sample": "internet-node-express-realworld",
+      "category": "explore",
+      "question": "Which route favorites an article, and which service function does its handler call?",
+      "expected": { "mustInclude": ["/articles/:slug/favorite", "favoriteArticle"] }
+    }
+  ]
+}

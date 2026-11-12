@@ -18,6 +18,8 @@ export type InitAdapterOptions = {
   instructions?: boolean;
   // Also add the advisory Claude Code PreToolUse hook to .claude/settings.json.
   hook?: boolean;
+  // Start the MCP server with --watch <path>, so it keeps the graph current.
+  watch?: boolean;
 };
 
 export type McpServerEntry = { command: string; args: string[] };
@@ -34,8 +36,10 @@ const CONFIG_FILES: Record<McpClient, string> = {
 // The command a client runs to start the server: this build's CLI under the
 // current Node by default, so it works without a published package;
 // `npx -y concentrate` with `npx`.
-export function mcpServerEntry(databasePath: string, options: { npx: boolean; cliPath?: string }): McpServerEntry {
-  const mcpArgs = ["mcp", "--database", databasePath];
+// With `watch` (the project root) the server also keeps the graph current:
+// `mcp --watch <root>` scans at start and rescans on change.
+export function mcpServerEntry(databasePath: string, options: { npx: boolean; cliPath?: string; watch?: string }): McpServerEntry {
+  const mcpArgs = ["mcp", "--database", databasePath, ...(options.watch ? ["--watch", options.watch] : [])];
   if (options.npx) return { command: "npx", args: ["-y", "concentrate", ...mcpArgs] };
   const cliPath = options.cliPath ?? fileURLToPath(new URL("../../index.js", import.meta.url));
   return { command: process.execPath, args: [cliPath, ...mcpArgs] };
@@ -95,7 +99,7 @@ export async function runInitAdapter(projectPath: string, options: InitAdapterOp
   if (unknown.length > 0) throw new Error(`Unknown client ${unknown.join(", ")}; use ${MCP_CLIENTS.join(", ")}`);
 
   const databasePath = options.database ? path.resolve(options.database) : path.join(root, ".concentrate/graph");
-  const entry = mcpServerEntry(databasePath, { npx: options.npx });
+  const entry = mcpServerEntry(databasePath, { npx: options.npx, watch: options.watch ? root : undefined });
   for (const client of new Set(clients as McpClient[])) {
     const file = path.join(root, CONFIG_FILES[client]);
     const existing = existsSync(file) ? await readFile(file, "utf8") : null;

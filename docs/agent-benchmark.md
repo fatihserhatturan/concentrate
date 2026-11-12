@@ -324,6 +324,63 @@ unused exports (−72% to −79% tokens). Everywhere else, including callers,
 impact and diffs, an agent that can grep reaches the same answer at about
 the same cost, and sometimes spends more checking the graph's answer.
 
+### v2 questions with `explore` and the tool list of 2026-11-12 (#251)
+
+The v2 questions again with the server as it is after #251 (28 tools, among them
+`explore`, `trace_calls` and the shortened descriptions), sonnet, one run per
+question and mode, `--max-turns 25`
+([`agent-v2-explore-sonnet-runs1-2026-11-12.json`](../bench/results/agent-v2-explore-sonnet-runs1-2026-11-12.json),
+CLI cost estimate $1.37 for the 18 sessions, the 18 sessions' baseline half
+unchanged by the server):
+
+| | Baseline | Concentrate |
+| --- | ---: | ---: |
+| Correct | 9/9 | 9/9 |
+| Median input tokens | 98.1k | 101.8k (+4%) |
+| Median tool calls | 3 | 2 (−33%) |
+| Total cost | $0.84 | $0.53 |
+
+Unused exports stayed the one large difference (666.7k → 136.2k input tokens,
+21 → 4 tool calls); the full-stack route question took 2 calls instead of 6.
+The agent called an MCP tool in 3 of 9 runs (`api_consumers`, `find_callers`,
+`impact_of`, `find_unused_exports`) and **never called `explore`**, so this run
+does not measure it: it shows that the larger list did not cost the questions
+that need a graph tool, not that `explore` helps or hurts. One run per
+question is also too few to separate +4% from noise (the three-run medians of
+2026-11-02 for sonnet were +2% to +3% on these categories).
+
+#### Questions written for `explore`
+
+[`bench/agent/questions-explore.json`](../bench/agent/questions-explore.json)
+has seven narrow questions about how code works, asked in words with no tool
+named and no identifier given (how Express computes an ETag, what runs when a
+template is rendered, how ky waits between retries, which route logs a user in
+and what it calls). The expected answers were written from the pinned source
+(`express`, `ky`, `internet-node-express-realworld`). Recorded 2026-11-12 with
+sonnet, three runs per question and mode, `--max-turns 25`
+([`agent-explore-sonnet-runs3-2026-11-12.json`](../bench/results/agent-explore-sonnet-runs3-2026-11-12.json),
+CLI cost estimate $2.29 for the 42 sessions):
+
+| | Baseline | Concentrate |
+| --- | ---: | ---: |
+| Correct | 21/21 | 21/21 |
+| Median input tokens | 66.2k | 67.4k (+2%) |
+| Median tool calls | 2 | 2 |
+| Median wall time | 8.2 s | 8.8 s (+8%) |
+| Total cost | $1.12 | $1.17 |
+
+**The agent called no Concentrate tool in any of the 21 runs, and made no
+`ToolSearch` call to look for one.** It answered each question with one to
+three `Grep` and `Read` calls. These questions name a function or a file the
+agent can guess, on repositories small enough to grep, so the graph has
+nothing to add, and `explore` is not chosen. The run measures what the larger
+tool list costs when it is not used (+2% input tokens, +$0.05 over 21 runs),
+not what `explore` does when it is. To measure that, the questions need
+repositories or phrasings where grep fails (several candidate files, names the
+agent cannot guess), or the tool must be offered more directly, for example
+named in the prompt or loaded by default instead of deferred behind
+`ToolSearch`. Neither has been tried.
+
 ### Frontend and full-stack questions
 
 [`bench/agent/questions-frontend.json`](../bench/agent/questions-frontend.json)

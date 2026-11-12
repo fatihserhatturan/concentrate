@@ -177,6 +177,7 @@
 {"kind":"rel","from":"dir:src/routes/settings/profile","type":"CONTAINS_FILE","to":"file:src/routes/settings/profile/+page@.svelte","properties":{}}
 {"kind":"rel","from":"file:src/lib/components/PostCard.svelte","type":"DECLARES_COMPONENT","to":"file:src/lib/components/PostCard.svelte:component:1:PostCard","properties":{}}
 {"kind":"rel","from":"file:src/lib/components/PostCard.svelte","type":"DEFINES_FUNCTION","to":"file:src/lib/components/PostCard.svelte:function:1:<script>","properties":{}}
+{"kind":"rel","from":"file:src/lib/components/PostCard.svelte","type":"NAVIGATES_TO","to":"file:src/routes/blog/[slug]/+page.svelte:page","properties":{"line":5,"match":"parameter","url":"/blog/{post.slug}"}}
 {"kind":"rel","from":"file:src/lib/components/PostCard.svelte:component:1:PostCard","type":"COMPONENT_DEFINED_BY_FUNCTION","to":"file:src/lib/components/PostCard.svelte:function:1:<script>","properties":{}}
 {"kind":"rel","from":"file:src/lib/components/PostCard.svelte:function:1:<script>","type":"CALLS","to":"file:src/lib/components/PostCard.svelte:function:1:<script>:call:2:17:$props","properties":{}}
 {"kind":"rel","from":"file:src/lib/server/db.ts","type":"DEFINES_FUNCTION","to":"file:src/lib/server/db.ts:function:11:createPost","properties":{}}

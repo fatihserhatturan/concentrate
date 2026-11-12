@@ -20,6 +20,10 @@ export function physicalRelationshipType(
     return sourceLabelRelationshipType("USES_ENV", relationship, nodeLabelById);
   }
 
+  if (relationship.type === "NAVIGATES_TO") {
+    return nodeLabelById.get(relationship.from) === "File" ? "NAVIGATES_TO_FILE" : "NAVIGATES_TO";
+  }
+
   if (relationship.type === "USES_STYLE") {
     const source = nodeLabelById.get(relationship.from);
     return source === "Function" ? "USES_STYLE_FUNCTION" : source === "Component" ? "USES_STYLE_COMPONENT" : "USES_STYLE_FILE";
