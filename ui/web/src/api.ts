@@ -70,7 +70,7 @@ async function getJson<T>(endpoint: string, params: Record<string, string | unde
   return body;
 }
 
-export type OverviewNode = { id: string; label: string; name: string; files: number; package: string | null; degree: number };
+export type OverviewNode = { id: string; label: string; name: string; files: number; package: string | null; degree: number; noise: boolean };
 export type OverviewEdge = { from: string; to: string; count: number; byKind: Record<string, number> };
 export type Overview = { level: string; prefix: string; nodes: OverviewNode[]; edges: OverviewEdge[]; truncated: boolean; isolatedHidden: number };
 export type ViewNode = { id: string; label: string; name: string; file: string | null; line: number | null; package: string | null };
@@ -154,3 +154,11 @@ export type Issues = {
   note: string;
 };
 export const graphIssues = () => getJson<Issues>("/api/graph/issues");
+
+// ---- focus and path ----
+export type FocusResult = { center: string; nodes: ViewNode[]; edges: ViewEdge[]; incoming: { total: number; shown: number }; outgoing: { total: number; shown: number } };
+export const graphFocus = (id: string, types: string[], depth: number, limit: number) =>
+  getJson<FocusResult>("/api/graph/focus", { id, types: types.join(","), depth: String(depth), limit: String(limit) });
+export type PathResult = { found: boolean; directed: boolean; nodes: ViewNode[]; edges: ViewEdge[] };
+export const graphPathBetween = (from: string, to: string, types: string[]) =>
+  getJson<PathResult>("/api/graph/path", { from, to, types: types.join(",") });

@@ -44,3 +44,8 @@
 :root { --syn-keyword: #cf222e; --syn-string: #0a3069; --syn-comment: #6e7781; --syn-title: #8250df; --syn-number: #0550ae; --syn-type: #953800; --syn-attr: #116329; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --syn-keyword: #ff7b72; --syn-string: #a5d6ff; --syn-comment: #8b949e; --syn-title: #d2a8ff; --syn-number: #79c0ff; --syn-type: #ffa657; --syn-attr: #7ee787; } }
 :root[data-theme="dark"] { --syn-keyword: #ff7b72; --syn-string: #a5d6ff; --syn-comment: #8b949e; --syn-title: #d2a8ff; --syn-number: #79c0ff; --syn-type: #ffa657; --syn-attr: #7ee787; }
+
+/* graph: five relationship categories that can be told apart (colour, and a dash for structure) and neutral nodes */
+:root { --cat-imports: #2563eb; --cat-calls: #d97706; --cat-web: #9333ea; --cat-data: #059669; --cat-structure: #8b949e; --node-bg: #ffffff; --node-line: #b4bdc7; --node-dir: #64748b; --node-file: #94a3b8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --cat-imports: #60a5fa; --cat-calls: #fbbf24; --cat-web: #c084fc; --cat-data: #34d399; --cat-structure: #6e7681; --node-bg: #151b23; --node-line: #3d444d; --node-dir: #8b949e; --node-file: #6e7681; } }
+:root[data-theme="dark"] { --cat-imports: #60a5fa; --cat-calls: #fbbf24; --cat-web: #c084fc; --cat-data: #34d399; --cat-structure: #6e7681; --node-bg: #151b23; --node-line: #3d444d; --node-dir: #8b949e; --node-file: #6e7681; }

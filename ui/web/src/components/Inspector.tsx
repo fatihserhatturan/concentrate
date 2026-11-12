@@ -51,7 +51,8 @@ export function InspectorPanel(props: {
   summary: ComponentChildren;
   onSelect: (id: string) => void;
   onClear: () => void;
-  onShowInGraph: (id: string) => void;
+  /** Left out where the graph is already showing the node. */
+  onShowInGraph?: (id: string) => void;
 }) {
   const [state, setState] = useState<{ status: "idle" } | { status: "loading" } | { status: "error"; message: string } | { status: "ready"; detail: NodeDetail; source: Source | null }>({ status: "idle" });
 
@@ -103,9 +104,11 @@ export function InspectorPanel(props: {
         <h3 class="insp-title">{detail.name}</h3>
         {detail.file && <div class="mono muted xs insp-path" title={detail.file}>{detail.file}{detail.line ? `:${detail.line}` : ""}</div>}
       </div>
-      <div class="row">
-        <button class="btn btn-primary" onClick={() => props.onShowInGraph(detail.id)}><Icon name="graph" /> Show in graph</button>
-      </div>
+      {props.onShowInGraph && (
+        <div class="row">
+          <button class="btn btn-primary" onClick={() => props.onShowInGraph!(detail.id)}><Icon name="graph" /> Show in graph</button>
+        </div>
+      )}
       {source && <section><h4 class="section-h">Source</h4><SourceView source={source} file={detail.file} /></section>}
       {relations("Uses (outgoing)", detail.outgoing)}
       {relations("Used by (incoming)", detail.incoming)}

@@ -24,14 +24,20 @@ The scan writes `<project>/.concentrate/graph`, the CLI default, so `concentrate
 Phases 1 to 4 of #252 are in: the core entry point (`src/api.ts`), the scan view, the graph view, the exports, the question presets, the Cypher panel and the light/dark theme.
 The docs in `docs/getting-started.md`, the `concentrate ui` command and a separate CI job (`.github/workflows/ui.yml`) are in too (phase 5).
 
-The graph view starts at the directory level and drills down on double-click: directories open, files show their
-declarations and neighbours. Relationship kinds can be filtered, the search box focuses a symbol or file, and the
-detail panel shows its properties, source and relationships. The server keeps the whole graph in memory per project
-and answers `GET /api/graph/{summary,overview,neighbors,node,source}` and `GET /api/search` (all take `project=`).
+The graph is always about something. **Focus** (click a symbol or file, or use search or *Show in graph*) puts one node in
+the middle, what uses it on the left and what it uses on the right, in a layered layout that is the same every time; click
+a neighbour to refocus, use the 1 to 3 steps switch to walk further, and **Trace path** (or Shift+click) draws the shortest chain of
+relationships to a second node. The **folder overview** is the one place with a force layout: folders, files or packages, where
+dot-folders and build output and nodes without relationships are kept out of the picture with a count in the legend.
+The legend is also the filter: five relationship categories that can be switched on and off. Everything is in the URL
+(`view=graph&focus=…&to=…&show=…`), so back and forward work.
+
+The server keeps the whole graph in memory per project and answers `GET /api/graph/{summary,overview,focus,path,neighbors,node,source,preset,
+catalog,entities,dashboard,issues}` and `GET /api/search` (all take `project=`).
 
 ## Questions and Cypher
 
-The **Questions** list answers what Concentrate is for: the import graph, the calls around the selected symbol (two levels),
+The **Questions** menu answers what Concentrate is for: the import graph, the calls around the selected symbol (two levels),
 routes → handlers → tables, frontend requests → routes, the component tree, and import cycles (strongly connected groups of
 files, drawn with red edges). They are `GET /api/graph/preset?name=`.
 

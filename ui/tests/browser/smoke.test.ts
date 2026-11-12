@@ -57,8 +57,8 @@ describe("browser smoke", () => {
     await page.getByRole("button", { name: "Show in graph" }).waitFor({ timeout: 15_000 });
     assert.match(page.url(), /view=routes&focus=/, "the selection is in the URL");
     await page.getByRole("button", { name: "Show in graph" }).click();
-    await page.waitForFunction(() => /^[1-9]\d* nodes/.test(document.querySelector("#stats")?.textContent ?? ""), null, { timeout: 30_000 });
-    assert.ok((await page.locator("canvas").count()) > 0, "the graph is drawn on a canvas");
+    await page.waitForFunction(() => /^[1-9]\d* nodes/.test(document.querySelector("[data-testid=graph-stats]")?.textContent ?? ""), null, { timeout: 30_000 });
+    await page.locator("svg.layered g.node.center").waitFor({ timeout: 15_000 });
     assert.match(page.url(), /view=graph&focus=/);
 
     // Back returns to the routes table.
@@ -66,11 +66,11 @@ describe("browser smoke", () => {
     await page.locator("table.data tbody tr").first().waitFor();
 
     await page.getByRole("button", { name: /^Graph/ }).click();
-    await page.waitForFunction(() => /^[1-9]\d* nodes/.test(document.querySelector("#stats")?.textContent ?? ""), null, { timeout: 30_000 });
+    await page.waitForSelector(".graph-body canvas, .graph-empty", { timeout: 30_000 });
 
-    await page.click("#export");
-    await page.selectOption("#fmt", "json");
-    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#download")]);
+    await page.getByRole("button", { name: "Export…" }).click();
+    await page.selectOption("#export-format", "json");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.getByTestId("export-download").click()]);
     assert.match(download.suggestedFilename(), /project-graph\.json$/);
     const file = await download.path();
     const body = JSON.parse(await readFile(file, "utf8"));
