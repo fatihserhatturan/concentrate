@@ -5,6 +5,8 @@ import { createGlobMatcher, walkFiles } from "./glob.js";
 
 const defaultIgnorePatterns = [
   ".git",
+  // The graph, parse cache and manifest of Concentrate itself.
+  ".concentrate",
   "node_modules",
   "dist",
   "build",

@@ -7,6 +7,7 @@ import { smokeCommand } from "./commands/smoke.js";
 import { mcpCommand } from "./commands/mcp.js";
 import { watchCommand } from "./commands/watch.js";
 import { initCommand } from "./commands/init.js";
+import { uiCommand } from "./commands/ui.js";
 
 /** Command-line surface of `concentrate`: every command, argument and flag. */
 export const program: ProgramSpec = {
@@ -124,6 +125,15 @@ export const program: ProgramSpec = {
         { flags: "--npx", description: "Start the server with npx -y concentrate instead of this build's CLI", type: "boolean" },
       ],
       action: initCommand,
+    },
+    {
+      name: "ui",
+      description: "Start the optional local web interface (ui/); prints the install steps when it is not installed.",
+      options: [
+        { flags: "--port <n>", description: "Port to listen on (default: a free one)", type: "number" },
+        { flags: "--no-open", description: "Do not open the browser" },
+      ],
+      action: uiCommand,
     },
   ],
 };

@@ -4,6 +4,7 @@ export { runMcpAdapter, type McpAdapterOptions } from "./mcp.js";
 export { runQueryAdapter, type OutputFormat, type QueryAdapterOptions } from "./query.js";
 export { runScanAdapter, type CliAdapterResult, type ScanAdapterOptions } from "./scan.js";
 export { runStatsAdapter, type StatsAdapterOptions } from "./stats.js";
+export { installSteps, runUiAdapter, uiState, type UiAdapterOptions, type UiState } from "./ui.js";
 export { runWatchAdapter, startWatch, type WatchAdapterOptions, type WatchHandle, type WatchScan } from "./watch.js";
 export {
   runSmokeValidation,

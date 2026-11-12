@@ -25,3 +25,5 @@ export {
   type ScanWarning,
 } from "./core/scan/index.js";
 export { graphSummary } from "./adapters/mcp/resources.js";
+export { nodeLabels, relationshipTables, type RelationshipTable } from "./adapters/store/schema.js";
+export { matchName, type MatchType } from "./adapters/mcp/analysis-tools/search.js";
