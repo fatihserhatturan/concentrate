@@ -22,7 +22,7 @@ The scan writes `<project>/.concentrate/graph`, the CLI default, so `concentrate
 ## Status
 
 Phases 1 to 4 of #252 are in: the core entry point (`src/api.ts`), the scan view, the graph view, the exports, the question presets, the Cypher panel and the light/dark theme.
-The docs in `docs/getting-started.md`, the `concentrate ui` command and a separate CI job (`.github/workflows/ui.yml`) are in too (phase 5).
+The docs in `docs/getting-started.md` and the `concentrate ui` command are in too (phase 5).
 
 The graph is always about something. **Focus** (click a symbol or file, or use search or *Show in graph*) puts one node in
 the middle, what uses it on the left and what it uses on the right, in a layered layout that is the same every time; click
