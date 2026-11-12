@@ -465,8 +465,18 @@ and a `truncated` object lists how many items each lost (for example
   `--database` path.
 - The server never locks the store, so it can stay running while you scan. A
   finished scan is picked up on the next tool call; no restart is needed.
-  Run `concentrate watch <project>` next to the server to keep the graph
-  current while you edit.
+  Start the server with `concentrate mcp --watch <project>` to keep the graph
+  current while you edit: it scans at start, rescans on change with the parse
+  cache, and a tool call waits (up to 30 s) for a pending rescan before it
+  answers. `--include`, `--exclude`, `--api-origin`, `--cache-dir`,
+  `--manifest` and `--continue-on-error` work as in `scan`. Progress and
+  scan errors go to stderr.
+- A tool result that names a file changed since the graph was built (its mtime
+  differs from the scan manifest, or the file is gone) carries a `stale`
+  field: `files` (up to 20, `more` counts the rest) and a `note` telling the
+  agent to read them directly. The manifest is `scan-manifest.json` next to
+  the store unless `--manifest` names another. Files created after the scan
+  are not detected without `--watch`.
 - If the path is an old `.kuzu` database, the server reports it. Delete it and
   scan again (the default store is now the `.concentrate/graph/` directory).
 - If a tool returns fewer semantic rows than expected, verify the graph with

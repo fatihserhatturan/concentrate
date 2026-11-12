@@ -12,6 +12,7 @@ import {
   UNSUPPORTED_PROTOCOL_VERSION,
 } from "./errors.js";
 import { readResource, resourceDefinitions } from "./resources.js";
+import type { Freshness } from "./freshness.js";
 import type { GraphQueryEngine } from "./tools.js";
 import { callMcpTool, mcpToolDefinitions, toolErrorResult } from "./tools.js";
 
@@ -56,7 +57,15 @@ type JsonRpcRequest = {
   params?: unknown;
 };
 
-export async function runMcpServer(engineFactory: () => Promise<GraphQueryEngine>): Promise<void> {
+// Optional behavior around every request: `beforeCall` runs before a tool
+// call or resource read (watch mode waits for a pending rescan there) and
+// `freshness` marks tool results that name files changed since the scan.
+export type McpServerHooks = {
+  beforeCall?: () => Promise<void>;
+  freshness?: Freshness;
+};
+
+export async function runMcpServer(engineFactory: () => Promise<GraphQueryEngine>, hooks: McpServerHooks = {}): Promise<void> {
   const rl = createInterface({ input, crlfDelay: Infinity });
   const state: { engine?: GraphQueryEngine } = {};
 
@@ -78,7 +87,7 @@ export async function runMcpServer(engineFactory: () => Promise<GraphQueryEngine
         const result = await handleMcpRequest(request, async () => {
           state.engine ??= await engineFactory();
           return state.engine;
-        });
+        }, hooks);
         writeResponse(request.id, result);
       } catch (error) {
         writeResponse(request.id, null, error instanceof McpProtocolError
@@ -95,6 +104,7 @@ export async function runMcpServer(engineFactory: () => Promise<GraphQueryEngine
 export async function handleMcpRequest(
   request: JsonRpcRequest,
   engineFactory: () => Promise<GraphQueryEngine>,
+  hooks: McpServerHooks = {},
 ): Promise<unknown> {
   if (request === null || typeof request !== "object" || typeof request.method !== "string") {
     throw new McpProtocolError(INVALID_REQUEST, "Invalid request: method must be a string");
@@ -103,7 +113,7 @@ export async function handleMcpRequest(
   const requested = asObject(params._meta)[VERSION_KEY];
 
   if (requested === undefined || request.method === "initialize") {
-    return handleLegacy(request.method, params, engineFactory);
+    return handleLegacy(request.method, params, engineFactory, hooks);
   }
   if (requested !== MODERN_PROTOCOL_VERSION) {
     throw new McpProtocolError(UNSUPPORTED_PROTOCOL_VERSION, "Unsupported protocol version", {
@@ -112,7 +122,7 @@ export async function handleMcpRequest(
     });
   }
 
-  const result = await handleModern(request.method, params, engineFactory);
+  const result = await handleModern(request.method, params, engineFactory, hooks);
   return { ...result, resultType: "complete", _meta: { [SERVER_INFO_KEY]: serverInfo } };
 }
 
@@ -120,6 +130,7 @@ async function handleModern(
   method: string,
   params: Record<string, unknown>,
   engineFactory: () => Promise<GraphQueryEngine>,
+  hooks: McpServerHooks,
 ): Promise<Record<string, unknown>> {
   switch (method) {
     case "server/discover":
@@ -133,10 +144,11 @@ async function handleModern(
     case "tools/list":
       return { tools: mcpToolDefinitions, ttlMs: STATIC_TTL_MS, cacheScope: "public" };
     case "tools/call":
-      return callTool(params, engineFactory);
+      return callTool(params, engineFactory, hooks);
     case "resources/list":
       return { resources: resourceDefinitions, ttlMs: STATIC_TTL_MS, cacheScope: "public" };
     case "resources/read":
+      await hooks.beforeCall?.();
       return { ...await readResource(await engineFactory(), resourceUri(params)), ttlMs: 0, cacheScope: "private" };
     default:
       throw new McpProtocolError(METHOD_NOT_FOUND, `Method not found: ${method}`);
@@ -147,6 +159,7 @@ async function handleLegacy(
   method: string,
   params: Record<string, unknown>,
   engineFactory: () => Promise<GraphQueryEngine>,
+  hooks: McpServerHooks,
 ): Promise<Record<string, unknown>> {
   switch (method) {
     case "initialize": {
@@ -165,10 +178,11 @@ async function handleLegacy(
     case "tools/list":
       return { tools: mcpToolDefinitions };
     case "tools/call":
-      return callTool(params, engineFactory);
+      return callTool(params, engineFactory, hooks);
     case "resources/list":
       return { resources: resourceDefinitions };
     case "resources/read":
+      await hooks.beforeCall?.();
       return readResource(await engineFactory(), resourceUri(params));
     default:
       throw new McpProtocolError(METHOD_NOT_FOUND, `Method not found: ${method}`);
@@ -180,6 +194,7 @@ async function handleLegacy(
 async function callTool(
   params: Record<string, unknown>,
   engineFactory: () => Promise<GraphQueryEngine>,
+  hooks: McpServerHooks,
 ): Promise<Record<string, unknown>> {
   if (typeof params.name !== "string" || params.name.length === 0) {
     throw new McpProtocolError(INVALID_PARAMS, "tools/call needs a tool name");
@@ -187,9 +202,11 @@ async function callTool(
   if (params.arguments !== undefined && (typeof params.arguments !== "object" || params.arguments === null || Array.isArray(params.arguments))) {
     throw new McpProtocolError(INVALID_PARAMS, "tools/call arguments must be an object");
   }
+  await hooks.beforeCall?.();
   const engine = await engineFactory();
   try {
-    return await callMcpTool(engine, params.name, params.arguments ?? {});
+    const result = await callMcpTool(engine, params.name, params.arguments ?? {});
+    return hooks.freshness ? { ...await hooks.freshness.annotate(result) } : result;
   } catch (error) {
     if (error instanceof McpProtocolError) throw error;
     return toolErrorResult(errorMessage(error));
