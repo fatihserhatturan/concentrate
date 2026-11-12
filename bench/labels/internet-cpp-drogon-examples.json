@@ -1,6 +1,6 @@
 {
   "sample": "internet-cpp-drogon-examples",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. drogonframework/drogon, only its examples/ directory (sparse checkout). Every route registration: `app().registerHandler(path, handler, {methods})` (all methods when the list is left out), `METHOD_ADD` (path under `/<namespace>/<Class>`, from lib/inc/drogon/HttpController.h), `ADD_METHOD_TO` and `ADD_METHOD_VIA_REGEX` (path or regular expression as written; no method list or only filters means all methods), `PATH_ADD` of an HttpSimpleController (all methods without a list) and `WS_PATH_ADD` / `WS_ADD_PATH_VIA_REGEX` of a WebSocketController (a GET handshake). One label per method, at the line of the macro or of `registerHandler(`. Method lists were read from the source of each handler (`{Get, Options}` in examples/cors).",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json): every route registration in the sample's source files (counted independently with grep over the framework's registration macros and calls, commented-out registrations excluded). Covers ADD_METHOD_TO / ADD_METHOD_VIA_REGEX / METHOD_ADD / PATH_ADD / WS_PATH_ADD / WS_ADD_PATH_VIA_REGEX and app().registerHandler; METHOD_ADD paths carry the controller prefix.",
   "routes": {
     "scope": [
       "examples/"
@@ -233,6 +233,839 @@
         "path": "/[^/]*",
         "file": "examples/websocket_server/WebSocketServer.cc",
         "line": 17
+      }
+    ]
+  },
+  "buildTargets": {
+    "scope": [
+      "examples/"
+    ],
+    "items": [
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "client",
+        "kind": "executable",
+        "sources": [
+          "examples/client_example/main.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "websocket_client",
+        "kind": "executable",
+        "sources": [
+          "examples/websocket_client/WebSocketClient.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "websocket_server",
+        "kind": "executable",
+        "sources": [
+          "examples/websocket_server/WebSocketServer.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "benchmark",
+        "kind": "executable",
+        "sources": [
+          "examples/benchmark/BenchmarkCtrl.cc",
+          "examples/benchmark/JsonCtrl.cc",
+          "examples/benchmark/main.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "helloworld",
+        "kind": "executable",
+        "sources": [
+          "examples/helloworld/main.cc",
+          "examples/helloworld/HelloController.cc",
+          "examples/helloworld/HelloViewController.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "file_upload",
+        "kind": "executable",
+        "sources": [
+          "examples/file_upload/file_upload.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "login_session",
+        "kind": "executable",
+        "sources": [
+          "examples/login_session/main.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "jsonstore",
+        "kind": "executable",
+        "sources": [
+          "examples/jsonstore/main.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "redis_simple",
+        "kind": "executable",
+        "sources": [
+          "examples/redis/main.cc",
+          "examples/redis/controllers/Client.cc",
+          "examples/redis/controllers/WsClient.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "redis_chat",
+        "kind": "executable",
+        "sources": [
+          "examples/redis_chat/main.cc",
+          "examples/redis_chat/controllers/Chat.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "async_stream",
+        "kind": "executable",
+        "sources": [
+          "examples/async_stream/main.cc",
+          "examples/async_stream/RequestStreamExampleCtrl.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/CMakeLists.txt",
+        "system": "cmake",
+        "name": "cors",
+        "kind": "executable",
+        "sources": [
+          "examples/cors/main.cc"
+        ],
+        "links": []
+      },
+      {
+        "file": "examples/redis_chat/CMakeLists.txt",
+        "system": "cmake",
+        "name": "redis_chat",
+        "kind": "executable",
+        "sources": [
+          "examples/redis_chat/main.cc",
+          "examples/redis_chat/controllers/Chat.cc"
+        ],
+        "links": [
+          "drogon"
+        ]
+      },
+      {
+        "file": "examples/redis/CMakeLists.txt",
+        "system": "cmake",
+        "name": "redis",
+        "kind": "executable",
+        "sources": [
+          "examples/redis/main.cc",
+          "examples/redis/controllers/Client.cc",
+          "examples/redis/controllers/WsClient.cc"
+        ],
+        "links": [
+          "drogon"
+        ]
+      },
+      {
+        "file": "examples/redis_cache/CMakeLists.txt",
+        "system": "cmake",
+        "name": "redis_cache",
+        "kind": "executable",
+        "sources": [
+          "examples/redis_cache/main.cc",
+          "examples/redis_cache/controllers/SlowCtrl.cc",
+          "examples/redis_cache/filters/TimeFilter.cc"
+        ],
+        "links": [
+          "drogon"
+        ]
+      },
+      {
+        "file": "examples/simple_reverse_proxy/CMakeLists.txt",
+        "system": "cmake",
+        "name": "simple_reverse_proxy",
+        "kind": "executable",
+        "sources": [
+          "examples/simple_reverse_proxy/main.cc",
+          "examples/simple_reverse_proxy/plugins/SimpleReverseProxy.cc"
+        ],
+        "links": [
+          "drogon"
+        ]
+      },
+      {
+        "file": "examples/prometheus_example/CMakeLists.txt",
+        "system": "cmake",
+        "name": "prometheus_example",
+        "kind": "executable",
+        "sources": [
+          "examples/prometheus_example/main.cc",
+          "examples/prometheus_example/controllers/PromTestCtrl.cc",
+          "examples/prometheus_example/filters/PromStat.cc"
+        ],
+        "links": [
+          "drogon"
+        ]
+      },
+      {
+        "file": "examples/redis_cache/test/CMakeLists.txt",
+        "system": "cmake",
+        "name": "redis_cache_test",
+        "kind": "executable",
+        "sources": [
+          "examples/redis_cache/test/test_main.cc"
+        ],
+        "links": [
+          "drogon"
+        ]
+      },
+      {
+        "file": "examples/prometheus_example/test/CMakeLists.txt",
+        "system": "cmake",
+        "name": "prometheus_example_test",
+        "kind": "executable",
+        "sources": [
+          "examples/prometheus_example/test/test_main.cc"
+        ],
+        "links": [
+          "drogon"
+        ]
+      }
+    ]
+  },
+  "includes": {
+    "files": [
+      "examples/async_stream/RequestStreamExampleCtrl.cc",
+      "examples/async_stream/main.cc",
+      "examples/benchmark/BenchmarkCtrl.cc",
+      "examples/benchmark/BenchmarkCtrl.h",
+      "examples/benchmark/JsonCtrl.cc",
+      "examples/benchmark/JsonCtrl.h",
+      "examples/benchmark/main.cc",
+      "examples/client_example/main.cc",
+      "examples/cors/main.cc",
+      "examples/file_upload/file_upload.cc",
+      "examples/helloworld/HelloController.cc",
+      "examples/helloworld/HelloViewController.cc",
+      "examples/helloworld/main.cc",
+      "examples/jsonstore/main.cc",
+      "examples/login_session/main.cc",
+      "examples/prometheus_example/controllers/PromTestCtrl.cc",
+      "examples/prometheus_example/controllers/PromTestCtrl.h",
+      "examples/prometheus_example/filters/PromStat.cc",
+      "examples/prometheus_example/filters/PromStat.h",
+      "examples/prometheus_example/main.cc",
+      "examples/prometheus_example/test/test_main.cc",
+      "examples/redis/controllers/Client.cc",
+      "examples/redis/controllers/Client.h",
+      "examples/redis/controllers/WsClient.cc",
+      "examples/redis/controllers/WsClient.h",
+      "examples/redis/main.cc",
+      "examples/redis_cache/DateFuncs.h",
+      "examples/redis_cache/RedisCache.h",
+      "examples/redis_cache/controllers/SlowCtrl.cc",
+      "examples/redis_cache/controllers/SlowCtrl.h",
+      "examples/redis_cache/filters/TimeFilter.cc",
+      "examples/redis_cache/filters/TimeFilter.h",
+      "examples/redis_cache/main.cc",
+      "examples/redis_cache/test/test_main.cc",
+      "examples/redis_chat/controllers/Chat.cc",
+      "examples/redis_chat/controllers/Chat.h",
+      "examples/redis_chat/main.cc",
+      "examples/simple_reverse_proxy/main.cc",
+      "examples/simple_reverse_proxy/plugins/SimpleReverseProxy.cc",
+      "examples/simple_reverse_proxy/plugins/SimpleReverseProxy.h",
+      "examples/websocket_client/WebSocketClient.cc",
+      "examples/websocket_server/WebSocketServer.cc"
+    ],
+    "items": [
+      {
+        "file": "examples/async_stream/RequestStreamExampleCtrl.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/RequestStreamExampleCtrl.cc",
+        "line": 2,
+        "source": "drogon/HttpController.h",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/RequestStreamExampleCtrl.cc",
+        "line": 3,
+        "source": "drogon/HttpRequest.h",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/RequestStreamExampleCtrl.cc",
+        "line": 4,
+        "source": "fstream",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/main.cc",
+        "line": 2,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/main.cc",
+        "line": 3,
+        "source": "functional",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/main.cc",
+        "line": 4,
+        "source": "mutex",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/main.cc",
+        "line": 5,
+        "source": "unordered_map",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/main.cc",
+        "line": 6,
+        "source": "trantor/utils/Logger.h",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/main.cc",
+        "line": 7,
+        "source": "trantor/net/callbacks.h",
+        "target": null
+      },
+      {
+        "file": "examples/async_stream/main.cc",
+        "line": 8,
+        "source": "trantor/net/TcpConnection.h",
+        "target": null
+      },
+      {
+        "file": "examples/benchmark/BenchmarkCtrl.cc",
+        "line": 1,
+        "source": "BenchmarkCtrl.h",
+        "target": "examples/benchmark/BenchmarkCtrl.h"
+      },
+      {
+        "file": "examples/benchmark/BenchmarkCtrl.h",
+        "line": 2,
+        "source": "drogon/HttpSimpleController.h",
+        "target": null
+      },
+      {
+        "file": "examples/benchmark/JsonCtrl.cc",
+        "line": 1,
+        "source": "JsonCtrl.h",
+        "target": "examples/benchmark/JsonCtrl.h"
+      },
+      {
+        "file": "examples/benchmark/JsonCtrl.h",
+        "line": 2,
+        "source": "drogon/HttpSimpleController.h",
+        "target": null
+      },
+      {
+        "file": "examples/benchmark/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/client_example/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/client_example/main.cc",
+        "line": 3,
+        "source": "future",
+        "target": null
+      },
+      {
+        "file": "examples/client_example/main.cc",
+        "line": 4,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/client_example/main.cc",
+        "line": 7,
+        "source": "sys/socket.h",
+        "target": null
+      },
+      {
+        "file": "examples/client_example/main.cc",
+        "line": 8,
+        "source": "netinet/tcp.h",
+        "target": null
+      },
+      {
+        "file": "examples/cors/main.cc",
+        "line": 1,
+        "source": "drogon/HttpAppFramework.h",
+        "target": null
+      },
+      {
+        "file": "examples/cors/main.cc",
+        "line": 2,
+        "source": "drogon/HttpResponse.h",
+        "target": null
+      },
+      {
+        "file": "examples/cors/main.cc",
+        "line": 3,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/cors/main.cc",
+        "line": 4,
+        "source": "trantor/utils/Logger.h",
+        "target": null
+      },
+      {
+        "file": "examples/file_upload/file_upload.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/helloworld/HelloController.cc",
+        "line": 1,
+        "source": "drogon/HttpController.h",
+        "target": null
+      },
+      {
+        "file": "examples/helloworld/HelloViewController.cc",
+        "line": 1,
+        "source": "drogon/HttpSimpleController.h",
+        "target": null
+      },
+      {
+        "file": "examples/helloworld/HelloViewController.cc",
+        "line": 2,
+        "source": "drogon/HttpResponse.h",
+        "target": null
+      },
+      {
+        "file": "examples/helloworld/main.cc",
+        "line": 1,
+        "source": "trantor/utils/Logger.h",
+        "target": null
+      },
+      {
+        "file": "examples/helloworld/main.cc",
+        "line": 3,
+        "source": "ws2tcpip.h",
+        "target": null
+      },
+      {
+        "file": "examples/helloworld/main.cc",
+        "line": 5,
+        "source": "netinet/tcp.h",
+        "target": null
+      },
+      {
+        "file": "examples/helloworld/main.cc",
+        "line": 6,
+        "source": "sys/socket.h",
+        "target": null
+      },
+      {
+        "file": "examples/helloworld/main.cc",
+        "line": 9,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/jsonstore/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/login_session/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/login_session/main.cc",
+        "line": 2,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/controllers/PromTestCtrl.cc",
+        "line": 1,
+        "source": "PromTestCtrl.h",
+        "target": "examples/prometheus_example/controllers/PromTestCtrl.h"
+      },
+      {
+        "file": "examples/prometheus_example/controllers/PromTestCtrl.h",
+        "line": 3,
+        "source": "drogon/HttpController.h",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/controllers/PromTestCtrl.h",
+        "line": 4,
+        "source": "drogon/utils/coroutine.h",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/filters/PromStat.cc",
+        "line": 7,
+        "source": "PromStat.h",
+        "target": "examples/prometheus_example/filters/PromStat.h"
+      },
+      {
+        "file": "examples/prometheus_example/filters/PromStat.cc",
+        "line": 8,
+        "source": "drogon/plugins/PromExporter.h",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/filters/PromStat.cc",
+        "line": 9,
+        "source": "drogon/utils/monitoring/Counter.h",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/filters/PromStat.cc",
+        "line": 10,
+        "source": "drogon/utils/monitoring/Histogram.h",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/filters/PromStat.cc",
+        "line": 11,
+        "source": "drogon/HttpAppFramework.h",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/filters/PromStat.cc",
+        "line": 12,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/filters/PromStat.h",
+        "line": 9,
+        "source": "drogon/HttpMiddleware.h",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/test/test_main.cc",
+        "line": 2,
+        "source": "drogon/drogon_test.h",
+        "target": null
+      },
+      {
+        "file": "examples/prometheus_example/test/test_main.cc",
+        "line": 3,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis/controllers/Client.cc",
+        "line": 1,
+        "source": "Client.h",
+        "target": "examples/redis/controllers/Client.h"
+      },
+      {
+        "file": "examples/redis/controllers/Client.h",
+        "line": 2,
+        "source": "drogon/HttpController.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis/controllers/WsClient.cc",
+        "line": 1,
+        "source": "WsClient.h",
+        "target": "examples/redis/controllers/WsClient.h"
+      },
+      {
+        "file": "examples/redis/controllers/WsClient.cc",
+        "line": 3,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/redis/controllers/WsClient.cc",
+        "line": 4,
+        "source": "unordered_set",
+        "target": null
+      },
+      {
+        "file": "examples/redis/controllers/WsClient.h",
+        "line": 3,
+        "source": "drogon/WebSocketController.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/DateFuncs.h",
+        "line": 2,
+        "source": "RedisCache.h",
+        "target": "examples/redis_cache/RedisCache.h"
+      },
+      {
+        "file": "examples/redis_cache/RedisCache.h",
+        "line": 2,
+        "source": "drogon/utils/coroutine.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/RedisCache.h",
+        "line": 3,
+        "source": "drogon/nosql/RedisClient.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/controllers/SlowCtrl.cc",
+        "line": 1,
+        "source": "SlowCtrl.h",
+        "target": "examples/redis_cache/controllers/SlowCtrl.h"
+      },
+      {
+        "file": "examples/redis_cache/controllers/SlowCtrl.cc",
+        "line": 2,
+        "source": "RedisCache.h",
+        "target": "examples/redis_cache/RedisCache.h"
+      },
+      {
+        "file": "examples/redis_cache/controllers/SlowCtrl.cc",
+        "line": 3,
+        "source": "DateFuncs.h",
+        "target": "examples/redis_cache/DateFuncs.h"
+      },
+      {
+        "file": "examples/redis_cache/controllers/SlowCtrl.cc",
+        "line": 4,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/controllers/SlowCtrl.h",
+        "line": 2,
+        "source": "drogon/HttpController.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/filters/TimeFilter.cc",
+        "line": 5,
+        "source": "TimeFilter.h",
+        "target": "examples/redis_cache/filters/TimeFilter.h"
+      },
+      {
+        "file": "examples/redis_cache/filters/TimeFilter.cc",
+        "line": 6,
+        "source": "drogon/utils/coroutine.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/filters/TimeFilter.cc",
+        "line": 7,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/filters/TimeFilter.cc",
+        "line": 8,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/filters/TimeFilter.cc",
+        "line": 9,
+        "source": "RedisCache.h",
+        "target": "examples/redis_cache/RedisCache.h"
+      },
+      {
+        "file": "examples/redis_cache/filters/TimeFilter.cc",
+        "line": 10,
+        "source": "DateFuncs.h",
+        "target": "examples/redis_cache/DateFuncs.h"
+      },
+      {
+        "file": "examples/redis_cache/filters/TimeFilter.h",
+        "line": 7,
+        "source": "drogon/HttpFilter.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/test/test_main.cc",
+        "line": 2,
+        "source": "drogon/drogon_test.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_cache/test/test_main.cc",
+        "line": 3,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_chat/controllers/Chat.cc",
+        "line": 1,
+        "source": "Chat.h",
+        "target": "examples/redis_chat/controllers/Chat.h"
+      },
+      {
+        "file": "examples/redis_chat/controllers/Chat.cc",
+        "line": 3,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/redis_chat/controllers/Chat.cc",
+        "line": 4,
+        "source": "unordered_set",
+        "target": null
+      },
+      {
+        "file": "examples/redis_chat/controllers/Chat.h",
+        "line": 3,
+        "source": "drogon/WebSocketController.h",
+        "target": null
+      },
+      {
+        "file": "examples/redis_chat/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/simple_reverse_proxy/main.cc",
+        "line": 1,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/simple_reverse_proxy/plugins/SimpleReverseProxy.cc",
+        "line": 7,
+        "source": "SimpleReverseProxy.h",
+        "target": "examples/simple_reverse_proxy/plugins/SimpleReverseProxy.h"
+      },
+      {
+        "file": "examples/simple_reverse_proxy/plugins/SimpleReverseProxy.h",
+        "line": 9,
+        "source": "drogon/plugins/Plugin.h",
+        "target": null
+      },
+      {
+        "file": "examples/simple_reverse_proxy/plugins/SimpleReverseProxy.h",
+        "line": 10,
+        "source": "drogon/drogon.h",
+        "target": null
+      },
+      {
+        "file": "examples/simple_reverse_proxy/plugins/SimpleReverseProxy.h",
+        "line": 11,
+        "source": "vector",
+        "target": null
+      },
+      {
+        "file": "examples/simple_reverse_proxy/plugins/SimpleReverseProxy.h",
+        "line": 12,
+        "source": "memory",
+        "target": null
+      },
+      {
+        "file": "examples/websocket_client/WebSocketClient.cc",
+        "line": 1,
+        "source": "drogon/WebSocketClient.h",
+        "target": null
+      },
+      {
+        "file": "examples/websocket_client/WebSocketClient.cc",
+        "line": 2,
+        "source": "drogon/HttpAppFramework.h",
+        "target": null
+      },
+      {
+        "file": "examples/websocket_client/WebSocketClient.cc",
+        "line": 4,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "examples/websocket_server/WebSocketServer.cc",
+        "line": 1,
+        "source": "drogon/WebSocketController.h",
+        "target": null
+      },
+      {
+        "file": "examples/websocket_server/WebSocketServer.cc",
+        "line": 2,
+        "source": "drogon/PubSubService.h",
+        "target": null
+      },
+      {
+        "file": "examples/websocket_server/WebSocketServer.cc",
+        "line": 3,
+        "source": "drogon/HttpAppFramework.h",
+        "target": null
       }
     ]
   }

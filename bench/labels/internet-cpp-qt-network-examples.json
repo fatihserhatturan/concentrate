@@ -1,0 +1,144 @@
+{
+  "sample": "internet-cpp-qt-network-examples",
+  "$comment": "Hand-labeled from the pinned sample source (examples/sql): every Qt SQL access with a literal table: QSqlQuery exec / prepare of create table, insert into and update (insert counts as create), QSqlQueryModel::setQuery of a select and QSqlTableModel::setTable of a literal table name (a read). Table names held in variables (setTable(items), setTable(tableName)) are not labeled.",
+  "dataAccess": {
+    "scope": [
+      "examples/sql/"
+    ],
+    "items": [
+      {
+        "file": "examples/sql/connection.h",
+        "function": "createConnection",
+        "model": "person",
+        "operation": "create",
+        "table": "person"
+      },
+      {
+        "file": "examples/sql/connection.h",
+        "function": "createConnection",
+        "model": "items",
+        "operation": "create",
+        "table": "items"
+      },
+      {
+        "file": "examples/sql/connection.h",
+        "function": "createConnection",
+        "model": "images",
+        "operation": "create",
+        "table": "images"
+      },
+      {
+        "file": "examples/sql/masterdetail/database.h",
+        "function": "createConnection",
+        "model": "artists",
+        "operation": "create",
+        "table": "artists"
+      },
+      {
+        "file": "examples/sql/masterdetail/database.h",
+        "function": "createConnection",
+        "model": "albums",
+        "operation": "create",
+        "table": "albums"
+      },
+      {
+        "file": "examples/sql/querymodel/editablesqlmodel.cpp",
+        "function": "setFirstName",
+        "model": "person",
+        "operation": "update",
+        "table": "person"
+      },
+      {
+        "file": "examples/sql/querymodel/editablesqlmodel.cpp",
+        "function": "setLastName",
+        "model": "person",
+        "operation": "update",
+        "table": "person"
+      },
+      {
+        "file": "examples/sql/relationaltablemodel/relationaltablemodel.cpp",
+        "function": "createRelationalTables",
+        "model": "employee",
+        "operation": "create",
+        "table": "employee"
+      },
+      {
+        "file": "examples/sql/relationaltablemodel/relationaltablemodel.cpp",
+        "function": "createRelationalTables",
+        "model": "city",
+        "operation": "create",
+        "table": "city"
+      },
+      {
+        "file": "examples/sql/relationaltablemodel/relationaltablemodel.cpp",
+        "function": "createRelationalTables",
+        "model": "country",
+        "operation": "create",
+        "table": "country"
+      },
+      {
+        "file": "examples/sql/sqlbrowser/browser.cpp",
+        "function": "openNewConnectionDialog",
+        "model": "Movies",
+        "operation": "create",
+        "table": "Movies"
+      },
+      {
+        "file": "examples/sql/sqlbrowser/browser.cpp",
+        "function": "openNewConnectionDialog",
+        "model": "Names",
+        "operation": "create",
+        "table": "Names"
+      },
+      {
+        "file": "examples/sql/sqlwidgetmapper/window.cpp",
+        "function": "setupModel",
+        "model": "person",
+        "operation": "create",
+        "table": "person"
+      },
+      {
+        "file": "examples/sql/sqlwidgetmapper/window.cpp",
+        "function": "setupModel",
+        "model": "addresstype",
+        "operation": "create",
+        "table": "addresstype"
+      },
+      {
+        "file": "examples/sql/querymodel/editablesqlmodel.cpp",
+        "function": "refresh",
+        "model": "person",
+        "operation": "read",
+        "table": "person"
+      },
+      {
+        "file": "examples/sql/querymodel/main.cpp",
+        "function": "initializeModel",
+        "model": "person",
+        "operation": "read",
+        "table": "person"
+      },
+      {
+        "file": "examples/sql/tablemodel/tablemodel.cpp",
+        "function": "initializeModel",
+        "model": "person",
+        "operation": "read",
+        "table": "person"
+      },
+      {
+        "file": "examples/sql/relationaltablemodel/relationaltablemodel.cpp",
+        "function": "initializeModel",
+        "model": "employee",
+        "operation": "read",
+        "table": "employee"
+      },
+      {
+        "file": "examples/sql/sqlwidgetmapper/window.cpp",
+        "function": "setupModel",
+        "model": "person",
+        "operation": "read",
+        "table": "person"
+      }
+    ]
+  }
+}

@@ -1,323 +1,52 @@
 {
   "sample": "internet-cpp-googletest",
-  "$comment": "Targets of googlemock/CMakeLists.txt, written from the file and the functions of googletest/cmake/internal_utils.cmake it calls (cxx_library, cxx_test, cxx_executable), for the non-MSVC build with tests on. Sources the scan could not parse (googlemock/src/gmock_main.cc and several test files fail the C++ grammar) are not File nodes and count as misses.",
-  "buildTargets": {
+  "$comment": "Hand-labeled from the pinned sample source: the environment variables googletest's own sources read with a literal name (gtest.cc and gtest-port.cc), through the internal::posix::GetEnv wrapper of getenv. Names held in constants (kTestTotalShards, kTestShardStatusFile) are labeled with their value; reads with a computed name (variable_name, the GTEST_ flags' env_var) are not.",
+  "env": {
     "scope": [
-      "googlemock/CMakeLists.txt"
+      "googletest/src/"
     ],
     "items": [
       {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock",
-        "kind": "library",
-        "sources": [
-          "googlemock/src/gmock-all.cc"
-        ],
-        "links": [
-          "gtest"
-        ]
+        "file": "googletest/src/gtest.cc",
+        "line": 235,
+        "name": "TESTBRIDGE_TEST_ONLY",
+        "function": "GetDefaultFilter"
       },
       {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_main",
-        "kind": "library",
-        "sources": [
-          "googlemock/src/gmock_main.cc"
-        ],
-        "links": [
-          "gmock"
-        ]
+        "file": "googletest/src/gtest.cc",
+        "line": 246,
+        "name": "TESTBRIDGE_TEST_RUNNER_FAIL_FAST",
+        "function": "GetDefaultFailFast"
       },
       {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-actions_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-actions_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
+        "file": "googletest/src/gtest.cc",
+        "line": 3271,
+        "name": "TERM",
+        "function": "ShouldUseColor"
       },
       {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-cardinalities_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-cardinalities_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
+        "file": "googletest/src/gtest.cc",
+        "line": 5490,
+        "name": "TEST_PREMATURE_EXIT_FILE",
+        "function": "Run"
       },
       {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_ex_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock_ex_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
+        "file": "googletest/src/gtest-port.cc",
+        "line": 1414,
+        "name": "XML_OUTPUT_FILE",
+        "function": "OutputFlagAlsoCheckEnvVar"
       },
       {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-function-mocker_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-function-mocker_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
+        "file": "googletest/src/gtest.cc",
+        "line": 3433,
+        "name": "GTEST_TOTAL_SHARDS",
+        "function": "OnTestIterationStart"
       },
       {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-internal-utils_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-internal-utils_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-matchers-arithmetic_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-matchers-arithmetic_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-matchers-comparisons_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-matchers-comparisons_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-matchers-containers_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-matchers-containers_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-matchers-misc_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-matchers-misc_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-more-actions_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-more-actions_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-nice-strict_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-nice-strict_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-port_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-port_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-spec-builders_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-spec-builders_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_link_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock_link_test.cc",
-          "googlemock/test/gmock_link2_test.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_stress_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock_stress_test.cc"
-        ],
-        "links": [
-          "gmock"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_main_no_exception",
-        "kind": "library",
-        "sources": [
-          "googlemock/src/gmock_main.cc"
-        ],
-        "links": [
-          "gmock"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_main_no_rtti",
-        "kind": "library",
-        "sources": [
-          "googlemock/src/gmock_main.cc"
-        ],
-        "links": [
-          "gmock"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock-more-actions_no_exception_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-more-actions_test.cc"
-        ],
-        "links": [
-          "gmock_main_no_exception"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_no_rtti_test",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-spec-builders_test.cc"
-        ],
-        "links": [
-          "gmock_main_no_rtti"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "shared_gmock_main",
-        "kind": "library",
-        "sources": [
-          "googletest/src/gtest-all.cc",
-          "googlemock/src/gmock-all.cc",
-          "googlemock/src/gmock_main.cc"
-        ],
-        "links": []
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "shared_gmock_test_",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock-spec-builders_test.cc"
-        ],
-        "links": [
-          "shared_gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_leak_test_",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock_leak_test_.cc"
-        ],
-        "links": [
-          "gmock_main"
-        ]
-      },
-      {
-        "file": "googlemock/CMakeLists.txt",
-        "system": "cmake",
-        "name": "gmock_output_test_",
-        "kind": "executable",
-        "sources": [
-          "googlemock/test/gmock_output_test_.cc"
-        ],
-        "links": [
-          "gmock"
-        ]
+        "file": "googletest/src/gtest.cc",
+        "line": 6048,
+        "name": "GTEST_SHARD_STATUS_FILE",
+        "function": "WriteToShardStatusFileIfNeeded"
       }
     ]
   }

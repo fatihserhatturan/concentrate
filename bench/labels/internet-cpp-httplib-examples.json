@@ -1,6 +1,6 @@
 {
   "sample": "internet-cpp-httplib-examples",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. yhirose/cpp-httplib, only its example/ directory (sparse checkout; the single-header library itself is left out): every `Get`, `Post`, `Put`, `Delete`, `Patch` and `Options` registration on an `httplib::Server` or `SSLServer` (named `svr`, `http` or `https`), one label per call at the line of the call. The same method names on a `Client` (`cli.Get(\"/hi\")`) are requests, not routes, and are not labeled. The first labeling pass listed the calls with a grep that filtered out client variables and missed `svr.Post(\"/post\")` of server_and_client.cc (a real route the scan had found, shown as an unlabeled detection); a second pass over every `.Get(`/`.Post(` call of example/ added it.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json): every route registration in the sample's source files (counted independently with grep over the framework's registration macros and calls, commented-out registrations excluded). svr.Get / Post / Put / Delete registrations of the example programs (httplib.h itself is excluded from the scan). Requests: the client calls of a program that also registers the route it requests (server_and_client.cc, one_time_request.cc); the other client programs request servers that run elsewhere (host and port are not tied to a route, and /hi exists in four programs) and are not labeled.",
   "routes": {
     "scope": [
       "example/"
@@ -125,6 +125,304 @@
         "path": "/",
         "file": "example/wsecho.cc",
         "line": 108
+      }
+    ]
+  },
+  "requests": {
+    "scope": [
+      "example/"
+    ],
+    "items": [
+      {
+        "file": "example/server_and_client.cc",
+        "line": 87,
+        "route": "POST /post",
+        "routeFile": "example/server_and_client.cc"
+      },
+      {
+        "file": "example/one_time_request.cc",
+        "line": 30,
+        "route": "GET /hi",
+        "routeFile": "example/one_time_request.cc"
+      }
+    ]
+  },
+  "includes": {
+    "files": [
+      "example/accept_header.cc",
+      "example/benchmark.cc",
+      "example/client.cc",
+      "example/hello.cc",
+      "example/one_time_request.cc",
+      "example/redirect.cc",
+      "example/server.cc",
+      "example/server_and_client.cc",
+      "example/simplecli.cc",
+      "example/simplesvr.cc",
+      "example/ssecli-stream.cc",
+      "example/ssecli.cc",
+      "example/ssesvr.cc",
+      "example/upload.cc",
+      "example/wsecho.cc"
+    ],
+    "items": [
+      {
+        "file": "example/accept_header.cc",
+        "line": 1,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/accept_header.cc",
+        "line": 2,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/benchmark.cc",
+        "line": 1,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "example/benchmark.cc",
+        "line": 2,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/benchmark.cc",
+        "line": 3,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/client.cc",
+        "line": 8,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/client.cc",
+        "line": 9,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/hello.cc",
+        "line": 8,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/one_time_request.cc",
+        "line": 1,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/one_time_request.cc",
+        "line": 2,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/redirect.cc",
+        "line": 8,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/server.cc",
+        "line": 8,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "example/server.cc",
+        "line": 9,
+        "source": "cstdio",
+        "target": null
+      },
+      {
+        "file": "example/server.cc",
+        "line": 10,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/server_and_client.cc",
+        "line": 8,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/server_and_client.cc",
+        "line": 9,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/server_and_client.cc",
+        "line": 10,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "example/simplecli.cc",
+        "line": 8,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/simplecli.cc",
+        "line": 9,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/simplesvr.cc",
+        "line": 8,
+        "source": "cstdio",
+        "target": null
+      },
+      {
+        "file": "example/simplesvr.cc",
+        "line": 9,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/simplesvr.cc",
+        "line": 10,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/ssecli-stream.cc",
+        "line": 11,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/ssecli-stream.cc",
+        "line": 13,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "example/ssecli-stream.cc",
+        "line": 14,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/ssecli-stream.cc",
+        "line": 15,
+        "source": "string",
+        "target": null
+      },
+      {
+        "file": "example/ssecli-stream.cc",
+        "line": 16,
+        "source": "thread",
+        "target": null
+      },
+      {
+        "file": "example/ssecli.cc",
+        "line": 8,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/ssecli.cc",
+        "line": 10,
+        "source": "csignal",
+        "target": null
+      },
+      {
+        "file": "example/ssecli.cc",
+        "line": 11,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/ssesvr.cc",
+        "line": 1,
+        "source": "atomic",
+        "target": null
+      },
+      {
+        "file": "example/ssesvr.cc",
+        "line": 2,
+        "source": "chrono",
+        "target": null
+      },
+      {
+        "file": "example/ssesvr.cc",
+        "line": 3,
+        "source": "condition_variable",
+        "target": null
+      },
+      {
+        "file": "example/ssesvr.cc",
+        "line": 4,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/ssesvr.cc",
+        "line": 5,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/ssesvr.cc",
+        "line": 6,
+        "source": "mutex",
+        "target": null
+      },
+      {
+        "file": "example/ssesvr.cc",
+        "line": 7,
+        "source": "sstream",
+        "target": null
+      },
+      {
+        "file": "example/ssesvr.cc",
+        "line": 8,
+        "source": "thread",
+        "target": null
+      },
+      {
+        "file": "example/upload.cc",
+        "line": 8,
+        "source": "fstream",
+        "target": null
+      },
+      {
+        "file": "example/upload.cc",
+        "line": 9,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/upload.cc",
+        "line": 10,
+        "source": "iostream",
+        "target": null
+      },
+      {
+        "file": "example/wsecho.cc",
+        "line": 1,
+        "source": "httplib.h",
+        "target": null
+      },
+      {
+        "file": "example/wsecho.cc",
+        "line": 2,
+        "source": "iostream",
+        "target": null
       }
     ]
   }
