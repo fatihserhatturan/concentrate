@@ -23,3 +23,4 @@ export {
   type SmokeSampleResult,
   type SmokeSuite,
 } from "./smoke.js";
+export { runNudgeAdapter, type NudgeAdapterOptions } from "./nudge.js";

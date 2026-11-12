@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { instructionFile, mergeClaudeHook, mergeInstructions, nudgeCommand } from "./init-steering.js";
 
 export type McpClient = "claude" | "cursor" | "codex";
 export const MCP_CLIENTS: readonly McpClient[] = ["claude", "cursor", "codex"];
@@ -10,6 +11,10 @@ export type InitAdapterOptions = {
   database?: string;
   client: string[];
   npx: boolean;
+  // Write the instruction-file section (CLAUDE.md, AGENTS.md); default true.
+  instructions?: boolean;
+  // Also add the advisory Claude Code PreToolUse hook to .claude/settings.json.
+  hook?: boolean;
 };
 
 export type McpServerEntry = { command: string; args: string[] };
@@ -95,6 +100,22 @@ export async function runInitAdapter(projectPath: string, options: InitAdapterOp
     await mkdir(path.dirname(file), { recursive: true });
     await writeFile(file, text);
     console.log(`${existing === null ? "wrote" : "updated"} ${displayPath(file)} (${client})`);
+  }
+  if (options.instructions !== false) {
+    for (const name of new Set((clients as McpClient[]).map(instructionFile))) {
+      const file = path.join(root, name);
+      const existing = existsSync(file) ? await readFile(file, "utf8") : null;
+      await writeFile(file, mergeInstructions(existing));
+      console.log(`${existing === null ? "wrote" : "updated"} ${displayPath(file)} (Concentrate section)`);
+    }
+  }
+  if (options.hook) {
+    const file = path.join(root, ".claude/settings.json");
+    const existing = existsSync(file) ? await readFile(file, "utf8") : null;
+    const cliPath = fileURLToPath(new URL("../../index.js", import.meta.url));
+    await mkdir(path.dirname(file), { recursive: true });
+    await writeFile(file, mergeClaudeHook(existing, nudgeCommand(databasePath, { npx: options.npx, cliPath }), file));
+    console.log(`${existing === null ? "wrote" : "updated"} ${displayPath(file)} (PreToolUse hook)`);
   }
   if (clients.includes("codex")) console.log("Codex reads .codex/config.toml only in projects it trusts.");
   if (!existsSync(databasePath)) {
