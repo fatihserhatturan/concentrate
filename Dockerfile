@@ -10,6 +10,7 @@ WORKDIR /app/ui
 COPY ui/package.json ui/package-lock.json ./
 RUN npm ci
 COPY ui/server ./server
+COPY ui/shared ./shared
 COPY ui/web ./web
 COPY ui/tsconfig.json ./
 RUN npx vite build web
@@ -25,6 +26,7 @@ WORKDIR /app/ui
 COPY ui/package.json ui/package-lock.json ./
 RUN npm ci --omit=dev && npm install -g tsx@4
 COPY ui/server ./server
+COPY ui/shared ./shared
 COPY --from=build /app/ui/web/dist ./web/dist
 USER node
 EXPOSE 4173

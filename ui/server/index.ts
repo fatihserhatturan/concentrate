@@ -13,7 +13,7 @@ import { DEFAULT_FOCUS_LIMIT, focus, path as graphPathBetween } from "./graph/fo
 import { catalog, entities } from "./graph/entities.js";
 import { issues } from "./graph/issues.js";
 import { parseExportRequest, sendExport } from "./export/index.js";
-import { neighbors, nodeDetail, nodeSource, overview, parseKinds, search, summary } from "./graph/views.js";
+import { DEFAULT_FULL_LIMIT, fullGraph, neighbors, nodeDetail, nodeSource, overview, parseKinds, search, summary } from "./graph/views.js";
 import { createToken, isAllowedHost, tokenFromRequest, tokenMatches } from "./security.js";
 
 const WEB_DIST = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "web", "dist");
@@ -112,6 +112,9 @@ export function createUiServer(token: string) {
         if (url.pathname === "/api/graph/summary") return sendJson(response, 200, await summary(project));
         if (url.pathname === "/api/graph/overview") {
           return sendJson(response, 200, await overview(project, param("level") ?? "package", param("prefix") ?? "", parseKinds(param("types"))));
+        }
+        if (url.pathname === "/api/graph/full") {
+          return sendJson(response, 200, await fullGraph(project, parseKinds(param("types")), Number(param("limit") ?? DEFAULT_FULL_LIMIT)));
         }
         if (url.pathname === "/api/graph/neighbors") {
           return sendJson(response, 200, await neighbors(project, param("id") ?? "", parseKinds(param("types")), Number(param("depth") ?? 1)));

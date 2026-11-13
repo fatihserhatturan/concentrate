@@ -187,7 +187,7 @@ export function Start({ rescan }: { rescan?: string }) {
       <div class="start-inner">
         <header class="start-header">
           <Logo size={36} />
-          <div><h1><Wordmark height={30} /></h1><p>Turn a codebase into a graph you can ask questions.</p></div>
+          <div><h1><Wordmark height={30} /></h1></div>
           <span class="spacer" />
           <ThemeButton />
         </header>

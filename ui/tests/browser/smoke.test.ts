@@ -91,6 +91,9 @@ describe("browser smoke", () => {
     await page.waitForFunction(() => !location.search.includes("focus="));
     assert.match(page.url(), /view=graph/);
     await page.waitForSelector(".graph-body canvas, .graph-empty", { timeout: 30_000 });
+    // Without a focus the graph is the whole project: every connected node, in folder clusters (the legend lists node kinds).
+    await page.getByRole("heading", { name: "Nodes" }).waitFor({ timeout: 30_000 });
+    assert.equal(await page.getByRole("group", { name: "Level" }).getByRole("button", { name: "All" }).getAttribute("aria-pressed"), "true");
 
     // Back returns to the focus, and back again to the routes table.
     await page.goBack();

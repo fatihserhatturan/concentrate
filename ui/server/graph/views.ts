@@ -2,7 +2,8 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { graphSummary, matchName, openGraphStore } from "../core.js";
 import { graphPath, loadIndex, nodeName, type GraphIndex, type IndexEdge, type IndexNode } from "./index.js";
-import { EDGE_KINDS, type EdgeKind } from "./kinds.js";
+import { clusterOf } from "../../shared/clusters.js";
+import { EDGE_KINDS, HIDDEN_LABELS, type EdgeKind } from "./kinds.js";
 
 export const MAX_OVERVIEW_NODES = 5000;
 export const MAX_NEIGHBORS = 300;
@@ -107,6 +108,66 @@ export async function overview(projectPath: string, level: string, prefix = "", 
   }
   const keep = new Set(nodes.map((n) => n.id));
   return { level, prefix, nodes, edges: [...edgeMap.values()].filter((e) => keep.has(e.from) && keep.has(e.to)), truncated, isolatedHidden };
+}
+
+export type FullNode = { id: string; label: string; name: string; group: string; degree: number; file: string | null; line: number | null };
+export type FullEdge = { from: string; to: string; kind: EdgeKind };
+export type FullGraph = { nodes: FullNode[]; edges: FullEdge[]; groups: Array<{ name: string; count: number }>; total: number; truncated: boolean; isolated: number };
+
+export const DEFAULT_FULL_LIMIT = 20000;
+
+/**
+ * The whole graph for the first view: every visible node with a relationship of
+ * the wanted kinds, and those relationships. Each node carries the folder cluster
+ * of its file (deep enough to tell at least six clusters apart, at most three
+ * levels) so the picture can place clusters apart. Above `limit` nodes the most
+ * connected are kept.
+ */
+export async function fullGraph(projectPath: string, kinds?: Set<string>, limit = DEFAULT_FULL_LIMIT): Promise<FullGraph> {
+  const index = await loadIndex(projectPath);
+  const fileOf = (id: string) => { const owner = index.fileOf.get(id); return owner ? relPath(index.nodes.get(owner)!) : null; };
+
+  const degree = new Map<string, number>();
+  const edges: FullEdge[] = [];
+  for (const edge of index.edges) {
+    if (kinds && !kinds.has(edge.kind)) continue;
+    const a = index.nodes.get(edge.from);
+    const b = index.nodes.get(edge.to);
+    if (!a || !b || HIDDEN_LABELS.has(a.label) || HIDDEN_LABELS.has(b.label)) continue;
+    edges.push({ from: edge.from, to: edge.to, kind: edge.kind });
+    degree.set(edge.from, (degree.get(edge.from) ?? 0) + 1);
+    degree.set(edge.to, (degree.get(edge.to) ?? 0) + 1);
+  }
+
+  const visible = [...index.nodes.values()].filter((n) => !HIDDEN_LABELS.has(n.label) && n.label !== "Repo");
+  const connected = visible.filter((n) => (degree.get(n.id) ?? 0) > 0);
+  const isolated = visible.length - connected.length;
+
+  let kept = connected;
+  let truncated = false;
+  if (kept.length > limit) {
+    kept = [...kept].sort((x, y) => (degree.get(y.id) ?? 0) - (degree.get(x.id) ?? 0)).slice(0, limit);
+    truncated = true;
+  }
+  const ids = new Set(kept.map((n) => n.id));
+
+  const files = kept.map((n) => fileOf(n.id) ?? (n.label === "Directory" ? `${relPath(n) || String(n.props.path ?? "")}/x` : null));
+  const clusters = clusterOf(files);
+
+  const counts = new Map<string, number>();
+  const nodes = kept.map((n, i): FullNode => {
+    const group = clusters[i]!;
+    counts.set(group, (counts.get(group) ?? 0) + 1);
+    return { id: n.id, label: n.label, name: nodeName(n), group, degree: degree.get(n.id) ?? 0, file: fileOf(n.id), line: typeof n.props.line === "number" ? n.props.line : null };
+  });
+  return {
+    nodes,
+    edges: edges.filter((e) => ids.has(e.from) && ids.has(e.to)),
+    groups: [...counts].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count),
+    total: connected.length,
+    truncated,
+    isolated,
+  };
 }
 
 const relPath = (file: IndexNode) => String(file.props.relativePath ?? "");
