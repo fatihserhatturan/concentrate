@@ -91,6 +91,13 @@ export type SearchResult = ViewNode & { match: string };
 export const graphSummary = () => getJson<any>("/api/graph/summary");
 export const graphOverview = (level: string, prefix: string, types: string[]) =>
   getJson<Overview>("/api/graph/overview", { level, prefix, types: types.join(",") });
+export type FullGraph = {
+  nodes: Array<{ id: string; label: string; name: string; group: string; degree: number; file: string | null; line: number | null }>;
+  edges: Array<{ from: string; to: string; kind: string }>;
+  groups: Array<{ name: string; count: number }>;
+  total: number; truncated: boolean; isolated: number;
+};
+export const graphFull = (types: string[]) => getJson<FullGraph>("/api/graph/full", { types: types.join(",") });
 export const graphNeighbors = (id: string, types: string[], depth = 1) =>
   getJson<Neighbors>("/api/graph/neighbors", { id, types: types.join(","), depth: String(depth) });
 export const graphNode = (id: string) => getJson<NodeDetail>("/api/graph/node", { id });

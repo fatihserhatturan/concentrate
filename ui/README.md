@@ -27,9 +27,14 @@ The docs in `docs/getting-started.md` and the `concentrate ui` command are in to
 The graph is always about something. **Focus** (click a symbol or file, or use search or *Show in graph*) puts one node in
 the middle, what uses it on the left and what it uses on the right, in a layered layout that is the same every time; click
 a neighbour to refocus, use the 1 to 3 steps switch to walk further, and **Trace path** (or Shift+click) draws the shortest chain of
-relationships to a second node. The **folder overview** is the one place with a force layout: folders, files or packages, where
+relationships to a second node. **Open graph** lands on the whole graph (`All`): every file and symbol that has a relationship,
+one cluster per folder, colour by kind of node, size by number of links. Far out you read the folder names; zoom in and the
+most connected nodes get labels, then all of them. Click a node to inspect it, double-click to focus on it. Each folder is laid
+out on its own and placed in a disc reserved for it (`shared/seed-layout.ts`, `web/src/graph/clusterLayout.ts`), so clusters stay
+apart. Above 20,000 nodes the most connected are kept and the inspector says so. The HTML export uses the same layout, palette
+and labels. `Packages`, `Folders` and `Files` are the older, aggregated overviews (the other place with a force layout), where
 dot-folders and build output and nodes without relationships are kept out of the picture with a count in the legend.
-The legend is also the filter: five relationship categories that can be switched on and off. Everything is in the URL
+The legend is also the filter: five relationship categories and, in the whole graph, each kind of node can be switched on and off. Everything is in the URL
 (`view=graph&focus=…&to=…&show=…`), so back and forward work.
 
 The server keeps the whole graph in memory per project and answers `GET /api/graph/{summary,overview,focus,path,neighbors,node,source,preset,

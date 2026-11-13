@@ -1,6 +1,6 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { graphFocus, graphOverview, graphPathBetween, graphPreset, type OverviewNode, type ViewEdge, type ViewNode } from "../api.js";
+import { graphFocus, graphFull, graphOverview, graphPathBetween, graphPreset, type OverviewNode, type ViewEdge, type ViewNode } from "../api.js";
 import { Icon } from "../components/icons.js";
 import { SummaryList } from "../components/Inspector.js";
 import { KindGlyph } from "../components/KindGlyph.js";
@@ -9,6 +9,8 @@ import { SearchBox } from "../components/SearchBox.js";
 import { ExportDialog } from "../components/ExportDialog.js";
 import { ErrorState, Loading } from "../components/State.js";
 import { CATEGORIES, categoryOfKind, kindsOf, parseEnabled, type CategoryId } from "../graph/categories.js";
+import { FullGraph } from "../graph/FullGraph.js";
+import { color } from "../graph/colors.js";
 import { LayeredGraph } from "../graph/LayeredGraph.js";
 import { SigmaGraph, type SigmaEdge, type SigmaNode } from "../graph/SigmaGraph.js";
 import { useRegisterCommands, type Command } from "../lib/commands.js";
@@ -26,6 +28,7 @@ const PRESETS: Array<{ id: string; title: string; text: string }> = [
 ];
 
 type Loaded =
+  | { mode: "all"; data: Awaited<ReturnType<typeof graphFull>> }
   | { mode: "overview"; level: string; data: Awaited<ReturnType<typeof graphOverview>> }
   | { mode: "focus"; data: Awaited<ReturnType<typeof graphFocus>> }
   | { mode: "path"; data: Awaited<ReturnType<typeof graphPathBetween>> }
@@ -60,10 +63,10 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
   const { route } = props;
   const enabled = parseEnabled(route.show);
   const kinds = kindsOf(enabled);
-  const level = route.level ?? "directory";
+  const level = route.level ?? "all";
   const prefix = route.prefix ?? "";
   const depth = route.depth && route.depth > 1 ? Math.min(3, route.depth) : 1;
-  const mode: Loaded["mode"] = route.preset ? "preset" : route.focus && route.to ? "path" : route.focus ? "focus" : "overview";
+  const mode: Loaded["mode"] = route.preset ? "preset" : route.focus && route.to ? "path" : route.focus ? "focus" : level === "all" ? "all" : "overview";
 
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
   const [tracing, setTracing] = useState(false);
@@ -72,6 +75,8 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
   const [queryOpen, setQueryOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [pseudo, setPseudo] = useState<string | null>(null);
+  const [hiddenKinds, setHiddenKinds] = useState<Set<string>>(new Set());
+  const [flyTo, setFlyTo] = useState<string | null>(null);
 
   const current: GraphFields = { focus: route.focus, to: route.to, level: route.level, prefix: route.prefix, depth: route.depth, show: route.show, noise: route.noise, preset: route.preset };
   const go = (patch: Partial<GraphFields>, replace = false) => navigate({ project: props.project, view: "graph", ...current, ...patch }, { replace });
@@ -83,17 +88,17 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
   latest.current = { go, route, mode, queryOpen, tracing, pseudo };
   const commands = useMemo<Command[]>(() => {
     const act = () => latest.current;
-    const overviewOnly = mode === "overview" ? undefined : "Only in the folder overview";
+    const overviewOnly = mode === "overview" || mode === "all" ? undefined : "Only in the overviews";
     const focusOnly = mode === "focus" ? undefined : "Focus a node first";
     return [
       { id: "graph.fit", title: "Fit the graph in view", group: "Graph", shortcut: "F", keywords: "zoom reset center", run: () => window.dispatchEvent(new CustomEvent("concentrate:fit")) },
-      { id: "graph.back", title: "Back to the folder overview", group: "Graph", disabledReason: mode === "overview" ? "Already showing the overview" : undefined, run: () => act().go({ focus: undefined, to: undefined, preset: undefined }) },
+      { id: "graph.back", title: "Back to the folder overview", group: "Graph", disabledReason: mode === "overview" || mode === "all" ? "Already showing the overview" : undefined, run: () => act().go({ focus: undefined, to: undefined, preset: undefined }) },
       { id: "graph.trace", title: "Trace a path from the focused node", group: "Graph", keywords: "route between connect", disabledReason: focusOnly, run: () => setTracing(true) },
       { id: "graph.query", title: queryOpen ? "Close the Cypher query panel" : "Open the Cypher query panel", group: "Graph", keywords: "cypher sql", run: () => setQueryOpen((open) => !open) },
       { id: "graph.export", title: "Export the graph…", group: "Graph", keywords: "download json graphml dot html jsonl", run: () => setExportOpen(true) },
       { id: "graph.legend", title: legendOpen ? "Hide the legend" : "Show the legend", group: "Graph", keywords: "filters relationships", run: () => setLegendOpen((open) => !open) },
       ...([1, 2, 3] as const).map((n): Command => ({ id: `graph.depth.${n}`, title: `Show ${n} ${n === 1 ? "step" : "steps"} each way`, group: "Graph", keywords: "depth neighbours", disabledReason: focusOnly, run: () => act().go({ depth: n }, true) })),
-      ...([["package", "packages"], ["directory", "folders"], ["file", "files"]] as const).map(([id, label]): Command => ({ id: `graph.level.${id}`, title: `Overview by ${label}`, group: "Graph", keywords: "level", disabledReason: overviewOnly, run: () => act().go({ level: id, prefix: undefined }) })),
+      ...([["all", "the whole graph"], ["package", "packages"], ["directory", "folders"], ["file", "files"]] as const).map(([id, label]): Command => ({ id: `graph.level.${id}`, title: `Overview by ${label}`, group: "Graph", keywords: "level", disabledReason: id === "all" ? undefined : overviewOnly, run: () => act().go({ level: id, prefix: undefined }) })),
       { id: "graph.noise", title: route.noise ? "Hide dot-folders and build output" : "Show dot-folders and build output", group: "Graph", keywords: "noise hidden", disabledReason: overviewOnly, run: () => act().go({ noise: act().route.noise ? undefined : true }, true) },
       { id: "q.imports", title: "Question: Import graph", group: "Questions", keywords: "files import", run: () => act().go({ preset: undefined, focus: undefined, to: undefined, level: "file", prefix: undefined, show: "imports" }) },
       { id: "q.calls", title: "Question: Calls around the focused node", group: "Questions", keywords: "callers callees", disabledReason: focusOnly, run: () => act().go({ show: "calls", depth: 2, to: undefined, preset: undefined }) },
@@ -121,6 +126,7 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
     if (mode === "preset") return { mode, data: await graphPreset(route.preset!) };
     if (mode === "path") return { mode, data: await graphPathBetween(route.focus!, route.to!, kinds) };
     if (mode === "focus") return { mode, data: await graphFocus(route.focus!, kinds, depth, limit) };
+    if (mode === "all") return { mode: "all", data: await graphFull(kinds) };
     return { mode: "overview", level, data: await graphOverview(level, prefix, kinds.filter((k) => k !== "defines")) };
   }, [key, props.project]);
 
@@ -196,6 +202,37 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
     props.setSummary(<p class="muted small">Click a node in the graph to refocus on it.</p>);
   }, [loaded?.mode]);
 
+  // The whole graph: how many nodes of each kind, and the selected node with its neighbours.
+  const kindCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    if (loaded?.mode === "all") for (const n of loaded.data.nodes) counts.set(n.label, (counts.get(n.label) ?? 0) + 1);
+    return [...counts].sort((a, b) => b[1] - a[1]);
+  }, [loaded]);
+  useEffect(() => {
+    if (loaded?.mode !== "all") return;
+    const { nodes, edges, groups, total, truncated, isolated } = loaded.data;
+    const node = pseudo ? nodes.find((n) => n.id === pseudo) : undefined;
+    if (node) {
+      const names = new Map(nodes.map((n) => [n.id, n]));
+      const links = edges.flatMap((e) => (e.from === node.id ? [{ to: names.get(e.to), uses: true }] : e.to === node.id ? [{ to: names.get(e.from), uses: false }] : []));
+      props.setSummary(
+        <div class="stack">
+          <div><span class="badge"><span class="dot" style={{ background: color(node.label), marginRight: 4 }} />{node.label}</span><h3 class="insp-title">{node.name}</h3>{node.file && <p class="muted small mono">{node.file}{node.line ? `:${node.line}` : ""}</p>}</div>
+          <div class="kv"><div><span class="v">{number(node.degree)}</span><span class="k">links</span></div></div>
+          <div class="row"><button class="btn btn-primary" onClick={() => go({ focus: node.id, to: undefined, preset: undefined })}>Focus on this node</button></div>
+          {links.length > 0 && (
+            <section><h4 class="section-h">Linked</h4>
+              <ul class="plain-list">{links.slice(0, 14).map((l) => l.to && <li><button class="link-button small" title={l.to.name} onClick={() => { setPseudo(l.to!.id); setFlyTo(l.to!.id); }}>{l.uses ? "uses " : "used by "}{l.to.name}</button><span class="muted small">{l.to.label}</span></li>)}</ul>
+              {links.length > 14 && <p class="muted small">and {links.length - 14} more; focus the node to see all.</p>}
+            </section>
+          )}
+        </div>,
+      );
+      return;
+    }
+    props.setSummary(<SummaryList title="Whole graph" subtitle={truncated ? `The ${number(nodes.length)} most connected of ${number(total)} nodes, by folder` : "Nodes by folder"} groups={groups.map((g) => ({ label: g.name === "(other)" ? "shared" : g.name, count: g.count }))} total={nodes.length} hint={`Click a node to inspect it, double-click to focus on it.${isolated > 0 ? ` ${number(isolated)} nodes without relationships of the selected kinds are left out.` : ""}`} />);
+  }, [loaded, pseudo]);
+
   const centerName = loaded && loaded.mode !== "overview" ? (loaded.data.nodes as ViewNode[]).find((n) => n.id === (route.focus ?? ""))?.name : undefined;
   const toName = loaded?.mode === "path" ? loaded.data.nodes.find((n) => n.id === route.to)?.name : undefined;
 
@@ -215,6 +252,7 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
     if (mode === "preset") return <>{home}<span class="sep">/</span><strong>{PRESETS.find((p) => p.id === route.preset)?.title ?? route.preset}</strong></>;
     if (mode === "path") return <>{home}<span class="sep">/</span><button onClick={() => go({ to: undefined })}>{centerName ?? "…"}</button><span class="sep">to</span><strong>{toName ?? "…"}</strong></>;
     if (mode === "focus") return <>{home}<span class="sep">/</span><strong>{centerName ?? "…"}</strong></>;
+    if (mode === "all") return <strong>Whole graph</strong>;
     // The server goes down through folders that hold a single folder, so show where the picture really is.
     const segments = (loaded?.mode === "overview" ? loaded.data.prefix : prefix).split("/").filter(Boolean);
     return (
@@ -235,6 +273,17 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
     if (state.status === "loading") return <Loading label={mode === "focus" ? "Finding what surrounds it…" : "Reading the graph…"} />;
     if (state.status === "error") return <ErrorState message={state.message} onRetry={retry} />;
     const data = state.data;
+    if (data.mode === "all") {
+      if (data.data.nodes.length === 0) {
+        return (
+          <div class="graph-empty"><div class="card card-pad">
+            <h3>Nothing related to show</h3>
+            <p class="muted small" style={{ marginTop: "var(--space-2)" }}>{enabled.size === 0 ? "No relationship category is switched on. Switch some on in the legend." : "No node has relationships of the selected kinds."}</p>
+          </div></div>
+        );
+      }
+      return <FullGraph data={data.data} hiddenKinds={hiddenKinds} selectedId={pseudo} flyToId={flyTo} onClick={(id) => setPseudo(id || null)} onDoubleClick={(id) => go({ focus: id, to: undefined, preset: undefined })} />;
+    }
     if (data.mode === "overview") {
       if (!overview || overview.nodes.length === 0) {
         return (
@@ -311,9 +360,9 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
       <div class="graph-bar">
         <nav class="graph-crumbs" aria-label="Graph location">{crumbs}</nav>
         <span class="spacer" />
-        {mode === "overview" && (
+        {(mode === "overview" || mode === "all") && (
           <div class="segmented" role="group" aria-label="Level">
-            {([["package", "Packages"], ["directory", "Folders"], ["file", "Files"]] as const).map(([id, label]) => (
+            {([["all", "All"], ["package", "Packages"], ["directory", "Folders"], ["file", "Files"]] as const).map(([id, label]) => (
               <button aria-pressed={level === id} onClick={() => go({ level: id, prefix: undefined })}>{label}</button>
             ))}
           </div>
@@ -333,7 +382,10 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
             {PRESETS.map((p) => <button onClick={() => { close(); go({ preset: p.id, focus: undefined, to: undefined }); }}>{p.title}<small>{p.text}</small></button>)}
           </>
         )}</Menu>
-        <SearchBox onPick={(id) => go({ focus: id, to: undefined, preset: undefined })} />
+        <SearchBox onPick={(id) => {
+          // In the whole graph a found node is shown where it is; elsewhere it is focused.
+          if (loaded?.mode === "all" && loaded.data.nodes.some((n) => n.id === id)) { setPseudo(id); setFlyTo(id); setTimeout(() => setFlyTo(null), 600); } else go({ focus: id, to: undefined, preset: undefined });
+        }} />
         <button class="btn" aria-pressed={queryOpen} onClick={() => setQueryOpen(!queryOpen)}>Query</button>
         <button class="btn" onClick={() => setExportOpen(true)}>Export…</button>
         <span class="muted small" data-testid="graph-stats" aria-live="polite">{loaded ? `${number(loaded.mode === "overview" ? overview?.nodes.length : loaded.data.nodes.length)} nodes` : ""}</span>
@@ -350,7 +402,15 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
                 {c.label}<span class="count">{enabled.has(c.id) && categoryCounts.get(c.id) ? number(categoryCounts.get(c.id)) : ""}</span>
               </label>
             ))}
-            {kindsShown.length > 0 && <><h4>Nodes</h4>{kindsShown.map((k) => <div class="kind"><KindGlyph label={k} /> {k}</div>)}</>}
+            {mode === "all" && kindCounts.length > 0 && (
+              <><h4>Nodes</h4>{kindCounts.map(([kind, count]) => (
+                <label title={`Show or hide ${kind} nodes`}>
+                  <input type="checkbox" checked={!hiddenKinds.has(kind)} onChange={() => setHiddenKinds((now) => { const next = new Set(now); if (next.has(kind)) next.delete(kind); else next.add(kind); return next; })} />
+                  <span class="dot" style={{ background: color(kind) }} />{kind}<span class="count">{number(count)}</span>
+                </label>
+              ))}</>
+            )}
+            {mode !== "all" && kindsShown.length > 0 && <><h4>Nodes</h4>{kindsShown.map((k) => <div class="kind"><KindGlyph label={k} /> {k}</div>)}</>}
             {mode === "overview" && overview && (overview.noise.length > 0 || overview.isolated.length > 0) && (
               <>
                 <h4>Left out</h4>
