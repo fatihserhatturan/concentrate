@@ -67,7 +67,8 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
 
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
   const [tracing, setTracing] = useState(false);
-  const [legendOpen, setLegendOpen] = useState(true);
+  // Docked beside the graph: on a narrow window it would leave the graph a sliver, so it starts closed there.
+  const [legendOpen, setLegendOpen] = useState(() => window.innerWidth >= 1200);
   const [queryOpen, setQueryOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [pseudo, setPseudo] = useState<string | null>(null);

@@ -77,6 +77,7 @@ and the HTML adds each file's declarations as detail.
 - `server/` — plain `node:http`; `core.ts` is the only file that imports the built core.
 - `web/` — Vite + TypeScript browser app.
 - `tests/` — server API and export tests (`npm test`); `tests/browser/` is the Playwright smoke test (`npm run test:browser`, needs `npx playwright install chromium`).
+  There is no CI job for `ui/` (dropped on purpose), so run `npm run build:core && npm test` in `ui/` after a change to the core's schema or exports. The export golden does not pin the schema number, so a schema bump alone does not break it; other changes to the graph's properties do (`UPDATE_GOLDEN=1 npm test`, then review the diff).
 
 ## Docker
 
