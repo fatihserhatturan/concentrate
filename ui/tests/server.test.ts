@@ -6,7 +6,7 @@ import path from "node:path";
 import { after, before, describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 import { createUiServer } from "../server/index.js";
-import { isAllowedHost } from "../server/security.js";
+import { createToken, isAllowedHost } from "../server/security.js";
 
 const TOKEN = "test-token";
 const FIXTURES = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "fixtures");
@@ -40,6 +40,11 @@ describe("security", () => {
     assert.equal(isAllowedHost("evil.example.com"), false);
     assert.equal(isAllowedHost("127.0.0.1.evil.com"), false);
     assert.equal(isAllowedHost(undefined), false);
+  });
+  it("uses CONCENTRATE_TOKEN when set and validates it", () => {
+    assert.equal(createToken({ CONCENTRATE_TOKEN: "abcdefgh12345678" }), "abcdefgh12345678");
+    assert.throws(() => createToken({ CONCENTRATE_TOKEN: "short" }));
+    assert.equal(createToken({}).length, 48);
   });
   it("binds to loopback only", () => {
     assert.equal((server.address() as AddressInfo).address, "127.0.0.1");

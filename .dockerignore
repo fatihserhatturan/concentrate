@@ -1,0 +1,12 @@
+node_modules
+ui/node_modules
+.git
+.concentrate
+bench
+fixtures
+tests
+ui/tests
+dist
+ui/web/dist
+docs
+.env

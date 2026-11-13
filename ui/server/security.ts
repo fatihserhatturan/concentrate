@@ -1,7 +1,13 @@
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import type { IncomingMessage } from "node:http";
 
-export function createToken(): string {
+/** A fixed token from `CONCENTRATE_TOKEN` (so a container keeps the same URL across restarts), else a random one. */
+export function createToken(env: NodeJS.ProcessEnv = process.env): string {
+  const fixed = env.CONCENTRATE_TOKEN;
+  if (fixed !== undefined && fixed !== "") {
+    if (!/^[A-Za-z0-9_-]{16,}$/.test(fixed)) throw new Error("CONCENTRATE_TOKEN must be at least 16 characters of A-Z a-z 0-9 _ -");
+    return fixed;
+  }
   return randomBytes(24).toString("hex");
 }
 
