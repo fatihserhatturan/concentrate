@@ -3,3 +3,4 @@ dist/
 .concentrate/
 .DS_Store
 coverage/
+.env

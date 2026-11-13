@@ -77,3 +77,19 @@ and the HTML adds each file's declarations as detail.
 - `server/` — plain `node:http`; `core.ts` is the only file that imports the built core.
 - `web/` — Vite + TypeScript browser app.
 - `tests/` — server API and export tests (`npm test`); `tests/browser/` is the Playwright smoke test (`npm run test:browser`, needs `npx playwright install chromium`).
+
+## Docker
+
+The UI can run in a container that stays up; open it in your browser and scan projects from a mounted folder.
+
+```bash
+cp .env.example .env     # set WORKSPACE (folder that holds your projects) and CONCENTRATE_TOKEN (openssl rand -hex 24)
+docker compose up -d --build
+```
+
+Open `http://127.0.0.1:4173/#token=<CONCENTRATE_TOKEN>`. The port is published on `127.0.0.1` only, the token is fixed so the URL survives restarts,
+and `WORKSPACE` is mounted read-write at `/workspace` (the folder picker starts there). Graphs are written to `<project>/.concentrate/graph`,
+the same place the CLI and `concentrate mcp` read. The container runs as `UID:GID` from your environment (default 1000:1000); on macOS/Linux
+export them if the mounted folder is not writable: `UID=$(id -u) GID=$(id -g) docker compose up -d`.
+With Colima, run `colima start` first. Stop with `docker compose down`.
+Environment: `HOST` (bind address, `0.0.0.0` in the image), `CONCENTRATE_TOKEN`, `PUBLIC_PORT` (port shown in the logged URL).

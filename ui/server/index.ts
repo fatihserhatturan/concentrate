@@ -147,9 +147,10 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const token = createToken();
   const port = Number(process.env.PORT ?? 0);
   const server = createUiServer(token);
-  server.listen(port, "127.0.0.1", () => {
+  // HOST=0.0.0.0 is for containers; publish the port on 127.0.0.1 only (see docker-compose.yml).
+  server.listen(port, process.env.HOST ?? "127.0.0.1", () => {
     const address = server.address();
-    const actual = typeof address === "object" && address ? address.port : port;
+    const actual = Number(process.env.PUBLIC_PORT) || (typeof address === "object" && address ? address.port : port);
     const url = `http://127.0.0.1:${actual}/#token=${token}`;
     console.log(`Concentrate UI: ${url}`);
     if (process.env.NO_OPEN !== "1") openBrowser(url);

@@ -1,0 +1,12 @@
+services:
+  concentrate-ui:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${PORT:-4173}:4173"
+    environment:
+      CONCENTRATE_TOKEN: ${CONCENTRATE_TOKEN:?set CONCENTRATE_TOKEN in .env (see .env.example)}
+      PUBLIC_PORT: ${PORT:-4173}
+    volumes:
+      - ${WORKSPACE:?set WORKSPACE in .env (the folder that holds your projects)}:/workspace
+    user: "${UID:-1000}:${GID:-1000}"
