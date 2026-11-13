@@ -1118,7 +1118,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
         "params": {
           "ids": [
             "file:server/app.js:route:5:0:GET:/api/articles",
@@ -1145,6 +1145,7 @@
             "method": "GET",
             "url": "/api/articles",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/articles.service.ts:function:13:list"
           },
           {
@@ -1161,6 +1162,7 @@
             "method": "POST",
             "url": "/api/articles",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/articles.service.ts:function:21:create"
           },
           {
@@ -1177,6 +1179,7 @@
             "method": "GET",
             "url": "/api/articles/${slug}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:src/app/articles.service.ts:function:17:get"
           },
           {
@@ -1193,6 +1196,7 @@
             "method": "PUT",
             "url": "/api/articles/${article.slug}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:src/app/articles.service.ts:function:25:update"
           },
           {
@@ -1209,6 +1213,7 @@
             "method": "DELETE",
             "url": "/api/articles/${slug}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:src/app/articles.service.ts:function:29:remove"
           },
           {
@@ -1225,6 +1230,7 @@
             "method": "GET",
             "url": "/api/tags",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/user.service.ts:function:12:tags"
           },
           {
@@ -1241,6 +1247,7 @@
             "method": "POST",
             "url": "/api/users/login",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/user.service.ts:function:8:login"
           }
         ]
@@ -1602,7 +1609,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
         "params": {
           "ids": [
             "file:server/app.js:route:8:0:PUT:/api/articles/:slug"
@@ -1623,6 +1630,7 @@
             "method": "PUT",
             "url": "/api/articles/${article.slug}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:src/app/articles.service.ts:function:25:update"
           }
         ]

@@ -339,8 +339,7 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
       </div>
 
       <div class="graph-body">
-        {body}
-        {legendOpen ? (
+        {legendOpen && (
           <aside class="legend" aria-label="Legend and filters">
             <div class="row" style={{ justifyContent: "space-between", marginBottom: "var(--space-2)" }}><h4 style={{ margin: 0 }}>Relationships</h4><button class="btn btn-ghost btn-icon" style={{ height: 22, width: 22 }} onClick={() => setLegendOpen(false)} title="Hide the legend" aria-label="Hide the legend"><Icon name="x" /></button></div>
             {CATEGORIES.map((c) => (
@@ -362,11 +361,13 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
               </>
             )}
           </aside>
-        ) : (
-          <button class="btn legend-toggle" onClick={() => setLegendOpen(true)}>Legend</button>
         )}
-        {overviewNotes && <div class="graph-note"><span>{overviewNotes}</span></div>}
-        {queryOpen && <QueryPanel onClose={() => setQueryOpen(false)} onPick={(id) => go({ focus: id, to: undefined, preset: undefined })} />}
+        <div class="graph-main">
+          {body}
+          {!legendOpen && <button class="btn legend-toggle" onClick={() => setLegendOpen(true)}>Legend</button>}
+          {overviewNotes && <div class="graph-note"><span>{overviewNotes}</span></div>}
+          {queryOpen && <QueryPanel onClose={() => setQueryOpen(false)} onPick={(id) => go({ focus: id, to: undefined, preset: undefined })} />}
+        </div>
       </div>
       <ExportDialog open={exportOpen} onClose={() => setExportOpen(false)} types={kinds} prefix={prefix} focus={mode === "focus" ? route.focus : undefined} />
     </div>

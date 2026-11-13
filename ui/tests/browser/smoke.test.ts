@@ -42,6 +42,10 @@ describe("browser smoke", () => {
     await page.getByTestId("path").fill(path.join(work, "project"));
     await page.getByTestId("path").press("Enter");
     await page.waitForFunction(() => /project/.test(document.querySelector(".current h3")?.textContent ?? ""));
+    // The fixture has no git repository or manifest: the first click only asks.
+    await page.getByTestId("primary-action").click();
+    await page.getByTestId("not-a-project").waitFor();
+    assert.equal(await page.getByTestId("scan-progress").count(), 0, "nothing was scanned yet");
     await page.getByTestId("primary-action").click();
     await page.getByTestId("open-graph").waitFor({ timeout: 60_000 });
     assert.match(await page.getByTestId("scan-report").textContent() ?? "", /Scan complete/);

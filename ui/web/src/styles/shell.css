@@ -1,5 +1,5 @@
 /* App shell: top bar, left navigation, main area, resizable inspector. */
-.shell { display: grid; grid-template-rows: var(--topbar-height) 1fr; height: 100%; }
+.shell { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: var(--topbar-height) minmax(0, 1fr); height: 100%; }
 .topbar { display: flex; align-items: center; gap: var(--space-3); padding: 0 var(--space-3); border-bottom: 1px solid var(--line); background: var(--bg); min-width: 0; }
 .brand { display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 700; font-size: var(--text-md); color: var(--fg); background: none; border: 0; cursor: pointer; padding: var(--space-1) var(--space-2); border-radius: var(--radius); }
 .brand:hover { background: var(--bg-hover); }
@@ -10,7 +10,7 @@
 .search-trigger { display: flex; align-items: center; gap: var(--space-2); width: min(360px, 32vw); height: 30px; padding: 0 var(--space-3); border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-subtle); color: var(--fg-faint); font: inherit; font-size: var(--text-sm); cursor: pointer; }
 .search-trigger:hover { border-color: var(--line-strong); }
 .search-trigger .kbd { margin-left: auto; }
-.workspace { display: flex; min-height: 0; }
+.workspace { display: flex; min-height: 0; min-width: 0; }
 .nav { width: 208px; flex: none; padding: var(--space-3) var(--space-2); border-right: 1px solid var(--line); background: var(--bg-subtle); overflow: auto; }
 .nav-item { display: flex; align-items: center; gap: var(--space-2); width: 100%; height: 32px; padding: 0 var(--space-3); border: 0; border-radius: var(--radius); background: none; color: var(--fg); font: inherit; font-size: var(--text-sm); cursor: pointer; text-align: left; }
 .nav-item:hover { background: var(--bg-hover); }

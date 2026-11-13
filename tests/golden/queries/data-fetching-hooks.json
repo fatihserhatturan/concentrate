@@ -962,7 +962,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
         "params": {
           "ids": [
             "file:server/app.js:route:7:0:GET:/api/todos/:id"
@@ -983,6 +983,7 @@
             "method": "GET",
             "url": "/api/todos/${id}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:web/query.tsx:function:9:Todo"
           },
           {
@@ -999,6 +1000,7 @@
             "method": "GET",
             "url": "/api/todos/${token}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:web/swr.tsx:function:6:Profile"
           }
         ]
@@ -1243,7 +1245,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
         "params": {
           "ids": [
             "file:server/app.js:route:5:0:GET:/api/user",
@@ -1267,6 +1269,7 @@
             "method": "GET",
             "url": "/api/user",
             "match": "exact",
+            "provenance": "exact",
             "fn": null
           },
           {
@@ -1283,6 +1286,7 @@
             "method": "GET",
             "url": "/api/user",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/swr.tsx:function:6:Profile"
           },
           {
@@ -1299,6 +1303,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/query.tsx:function:5:Todos"
           },
           {
@@ -1315,6 +1320,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/query.tsx:function:16:OwnFn"
           },
           {
@@ -1331,6 +1337,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/swr.tsx:function:6:Profile"
           },
           {
@@ -1347,6 +1354,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/todo-page.tsx:function:4:TodoList"
           },
           {
@@ -1363,6 +1371,7 @@
             "method": "GET",
             "url": "/api/todos/${id}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:web/query.tsx:function:9:Todo"
           },
           {
@@ -1379,6 +1388,7 @@
             "method": "GET",
             "url": "/api/todos/${token}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:web/swr.tsx:function:6:Profile"
           }
         ]
@@ -1874,7 +1884,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
         "params": {
           "ids": [
             "file:server/app.js:route:6:0:GET:/api/todos"
@@ -1895,6 +1905,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/query.tsx:function:5:Todos"
           },
           {
@@ -1911,6 +1922,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/query.tsx:function:16:OwnFn"
           },
           {
@@ -1927,6 +1939,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/swr.tsx:function:6:Profile"
           },
           {
@@ -1943,6 +1956,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/todo-page.tsx:function:4:TodoList"
           }
         ]
@@ -2593,7 +2607,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
         "params": {
           "ids": [
             "file:server/app.js:route:5:0:GET:/api/user",
@@ -2617,6 +2631,7 @@
             "method": "GET",
             "url": "/api/user",
             "match": "exact",
+            "provenance": "exact",
             "fn": null
           },
           {
@@ -2633,6 +2648,7 @@
             "method": "GET",
             "url": "/api/user",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/swr.tsx:function:6:Profile"
           },
           {
@@ -2649,6 +2665,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/query.tsx:function:5:Todos"
           },
           {
@@ -2665,6 +2682,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/query.tsx:function:16:OwnFn"
           },
           {
@@ -2681,6 +2699,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/swr.tsx:function:6:Profile"
           },
           {
@@ -2697,6 +2716,7 @@
             "method": "GET",
             "url": "/api/todos",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:web/todo-page.tsx:function:4:TodoList"
           },
           {
@@ -2713,6 +2733,7 @@
             "method": "GET",
             "url": "/api/todos/${id}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:web/query.tsx:function:9:Todo"
           },
           {
@@ -2729,6 +2750,7 @@
             "method": "GET",
             "url": "/api/todos/${token}",
             "match": "parameter",
+            "provenance": "exact",
             "fn": "file:web/swr.tsx:function:6:Profile"
           }
         ]

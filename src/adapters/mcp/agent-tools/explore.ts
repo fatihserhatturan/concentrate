@@ -72,7 +72,9 @@ export function rankSymbols(symbols: readonly SymbolInfo[], terms: readonly stri
       // A term most names contain ("command") says little; a rare one says a lot.
       const weight = 1 / (1 + Math.log(1 + (frequency.get(hit.term) ?? 1)));
       // A name the question spells out beats names that only contain its words.
-      score += (hit.score + hit.term.length * 20) * weight + (hit.match === "exact" || hit.match === "exact-ignore-case" ? 8000 : 0);
+      // The exact-name bonus shrinks with the term's frequency: `server` naming 375 structs is no answer to a question about the MCP server.
+      const exactBonus = hit.match === "exact" || hit.match === "exact-ignore-case" ? 8000 * Math.min(1, weight * 1.7) : 0;
+      score += (hit.score + hit.term.length * 20) * weight + exactBonus;
     }
     if (hits.length > 1) score += (hits.length - 1) * 4000;
     return { symbol, score, terms: hits.map((hit) => hit.term) };

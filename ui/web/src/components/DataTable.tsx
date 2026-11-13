@@ -13,12 +13,20 @@ function compare(a: unknown, b: unknown): number {
   return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
 }
 
+/** A long path keeps its start and its end: the file name is what tells rows apart. */
+function middle(value: string, max = 56): string {
+  if (value.length <= max) return value;
+  const tail = Math.ceil((max - 1) * 0.6);
+  return `${value.slice(0, max - 1 - tail)}…${value.slice(value.length - tail)}`;
+}
+
 function Cell({ column, value }: { column: Column; value: unknown }) {
   if (value === null || value === undefined || value === "") return <span class="faint">–</span>;
   if (column.kind === "badge") return <span class="badge">{String(value)}</span>;
   if (column.kind === "number") return <>{Number(value).toLocaleString("en-US")}</>;
-  if (column.kind === "code") return <span class="mono cell-code" title={String(value)}>{String(value)}</span>;
-  return <span title={String(value)}>{String(value)}</span>;
+  if (column.kind === "code") return <span class="mono cell-code" title={String(value)}>{middle(String(value))}</span>;
+  const text = String(value);
+  return <span title={text}>{text.includes("/") && !/\s/.test(text) ? middle(text) : text}</span>;
 }
 
 /** A filterable, sortable table. Rows are keyboard focusable: Enter selects, the arrow keys move. */

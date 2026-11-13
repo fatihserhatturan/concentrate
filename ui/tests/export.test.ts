@@ -6,6 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import { after, before, describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
+import { GRAPH_SCHEMA_VERSION } from "../server/core.js";
 import { createUiServer } from "../server/index.js";
 import { dotString } from "../server/export/dot.js";
 import { escapeXml } from "../server/export/xml.js";
@@ -82,10 +83,11 @@ describe("export formats", () => {
     assert.match(response.headers.get("content-disposition") ?? "", /attachment; filename=".*\.json"/);
     const text = await response.text();
     const body = JSON.parse(text);
-    assert.equal(typeof body.schemaVersion, "number");
+    assert.equal(body.schemaVersion, GRAPH_SCHEMA_VERSION);
     assert.equal(body.rootPath, project);
     assert.ok(body.nodes.length > 0 && body.relationships.length > 0);
-    await assertGolden("graph.json", normalize(text));
+    // The schema number moves with the core; the golden must not (it would fail on every schema bump).
+    await assertGolden("graph.json", normalize(text).replace(`"schemaVersion": ${GRAPH_SCHEMA_VERSION},`, `"schemaVersion": "<schema>",`));
   });
 
   it("JSONL: the files of `concentrate export`", async () => {

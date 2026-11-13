@@ -1,6 +1,6 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import { openGraphStore } from "../core.js";
+import { GRAPH_SCHEMA_VERSION, openGraphStore } from "../core.js";
 import { graphPath } from "../graph/index.js";
 
 export type ProjectInfo = {
@@ -14,6 +14,8 @@ export type ProjectInfo = {
   files: number | null;
   nodes: number | null;
   schemaVersion: number | null;
+  /** The schema this build writes; a graph of an older one should be scanned again. */
+  currentSchemaVersion: number;
 };
 
 const cache = new Map<string, { signature: string; nodes: number; schemaVersion: number | null }>();
@@ -35,6 +37,7 @@ export async function projectInfo(requested: string): Promise<ProjectInfo> {
     files: null,
     nodes: null,
     schemaVersion: null,
+    currentSchemaVersion: GRAPH_SCHEMA_VERSION,
   };
   const info = await stat(root).catch(() => null);
   if (!info?.isDirectory()) return base;

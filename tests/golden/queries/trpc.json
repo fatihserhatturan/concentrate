@@ -1414,7 +1414,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
         "params": {
           "ids": [
             "file:src/server/routers/user.ts:route:4:6:QUERY:me"
@@ -1435,6 +1435,7 @@
             "method": "QUERY",
             "url": "user.me",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:15:Me"
           }
         ]
@@ -1614,7 +1615,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
         "params": {
           "ids": [
             "file:src/server/root.ts:route:8:10:QUERY:health",
@@ -1641,6 +1642,7 @@
             "method": "QUERY",
             "url": "health",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:20:health"
           },
           {
@@ -1657,6 +1659,7 @@
             "method": "QUERY",
             "url": "post.all",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:4:Posts"
           },
           {
@@ -1673,6 +1676,7 @@
             "method": "QUERY",
             "url": "post.byId",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:4:Posts"
           },
           {
@@ -1689,6 +1693,7 @@
             "method": "MUTATION",
             "url": "post.create",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:4:Posts"
           },
           {
@@ -1705,6 +1710,7 @@
             "method": "MUTATION",
             "url": "post.create",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:20:health"
           },
           {
@@ -1721,6 +1727,7 @@
             "method": "QUERY",
             "url": "post.comments.list",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:4:Posts"
           },
           {
@@ -1737,6 +1744,7 @@
             "method": "QUERY",
             "url": "user.me",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:15:Me"
           }
         ]
@@ -2005,7 +2013,7 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
         "params": {
           "ids": [
             "file:src/server/routers/post.ts:route:7:10:MUTATION:create"
@@ -2026,6 +2034,7 @@
             "method": "MUTATION",
             "url": "post.create",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:4:Posts"
           },
           {
@@ -2042,6 +2051,7 @@
             "method": "MUTATION",
             "url": "post.create",
             "match": "exact",
+            "provenance": "exact",
             "fn": "file:src/app/posts.tsx:function:20:health"
           }
         ]

@@ -8,7 +8,7 @@ export type FsListing = {
   parent: string | null;
   home: string;
   /** The listed directory itself: is it a git repository, does it have a graph. */
-  current: { isGitRepository: boolean; hasGraph: boolean };
+  current: { isGitRepository: boolean; hasGraph: boolean; /** A git repository or a folder with a manifest file: something worth scanning. */ looksLikeProject: boolean };
   entries: FsEntry[];
 };
 
@@ -19,6 +19,16 @@ async function exists(target: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+const MANIFESTS = ["package.json", "go.mod", "Cargo.toml", "pyproject.toml", "setup.py", "requirements.txt", "pom.xml", "build.gradle", "build.gradle.kts", "CMakeLists.txt", "Makefile", "composer.json", "Gemfile", "deno.json", "tsconfig.json", "concentrate.json"];
+
+async function looksLikeProject(directory: string): Promise<boolean> {
+  // The home folder and the filesystem root hold projects; they are not one, even with a stray .git or manifest.
+  if (directory === os.homedir() || path.dirname(directory) === directory) return false;
+  if (await exists(path.join(directory, ".git"))) return true;
+  for (const name of MANIFESTS) if (await exists(path.join(directory, name))) return true;
+  return false;
 }
 
 /** Lists the sub-directories of a path, hidden ones excluded. */
@@ -44,7 +54,7 @@ export async function listDirectories(requested: string | undefined): Promise<Fs
     path: target,
     parent: parent === target ? null : parent,
     home: os.homedir(),
-    current: { isGitRepository: await exists(path.join(target, ".git")), hasGraph: await exists(path.join(target, ".concentrate", "graph")) },
+    current: { isGitRepository: await exists(path.join(target, ".git")), hasGraph: await exists(path.join(target, ".concentrate", "graph")), looksLikeProject: await looksLikeProject(target) },
     entries,
   };
 }

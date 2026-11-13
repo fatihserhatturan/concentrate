@@ -19,6 +19,8 @@ function openProject(path: string): void {
   navigate({ project: path, view: DEFAULT_VIEW });
 }
 
+const outdated = (info: ProjectInfo | null) => info !== null && info.schemaVersion !== null && info.schemaVersion < info.currentSchemaVersion;
+
 function ProjectCard(props: { path: string; info: ProjectInfo | null; onSelect: () => void; onRemove: () => void }) {
   const { info, path } = props;
   const missing = info !== null && !info.exists;
@@ -31,7 +33,7 @@ function ProjectCard(props: { path: string; info: ProjectInfo | null; onSelect: 
       <div class="path" title={path}>{path}</div>
       {info === null ? <div class="stats faint">Checking…</div> : missing ? <div class="stats">Folder not found</div> : info.hasGraph ? (
         <div class="stats">
-          <span class="badge badge-ok">Graph ready</span>
+          {outdated(info) ? <span class="badge badge-warn">Outdated: rescan</span> : <span class="badge badge-ok">Graph ready</span>}
           <span>Scanned {timeAgo(info.scannedAt)}</span>
           {info.files !== null && <span>{number(info.files)} files</span>}
           {info.nodes !== null && <span>{number(info.nodes)} nodes</span>}
@@ -113,6 +115,8 @@ export function Start({ rescan }: { rescan?: string }) {
   const [exclude, setExclude] = useState("");
   const [origins, setOrigins] = useState("");
   const [cache, setCache] = useState(true);
+  /** The user confirmed scanning a folder that does not look like a project. */
+  const [sure, setSure] = useState(false);
   const started = useRef(false);
   const pathInput = useRef<HTMLInputElement>(null);
   /** The user has typed in the path field since the last folder they chose; a late answer must not overwrite it. */
@@ -123,6 +127,7 @@ export function Start({ rescan }: { rescan?: string }) {
   async function browse(dir?: string, explicit = true): Promise<void> {
     const mine = ++latest.current;
     if (explicit) typed.current = false;
+    setSure(false);
     setLoading(true);
     try {
       const next = await listDirectories(dir);
@@ -222,7 +227,7 @@ export function Start({ rescan }: { rescan?: string }) {
                   : (
                     <ul class="dir-list" style={{ opacity: loading ? 0.6 : 1 }}>
                       {listing.entries.map((entry) => (
-                        <li><button class="dir-item" onClick={() => void browse(entry.path)}>
+                        <li><button class="dir-item" aria-label={`Open folder ${entry.name}`} onClick={() => void browse(entry.path)}>
                           <Icon name="folder" /> <span class="name">{entry.name}</span>
                           {entry.isGitRepository && <span class="badge"><Icon name="git" /> git</span>}
                           {entry.hasGraph && <span class="badge badge-ok">graph</span>}
@@ -235,7 +240,7 @@ export function Start({ rescan }: { rescan?: string }) {
                     <div class="what">
                       <h3><Icon name="folder" /> {baseName(selected)}
                         {listing.current.isGitRepository && <span class="badge"><Icon name="git" /> git</span>}
-                        {hasGraph ? <span class="badge badge-ok">graph ready</span> : <span class="badge">no graph yet</span>}
+                        {hasGraph ? (outdated(current) ? <span class="badge badge-warn">outdated: rescan</span> : <span class="badge badge-ok">graph ready</span>) : <span class="badge">no graph yet</span>}
                       </h3>
                       <p class="muted small">{hasGraph
                         ? current ? `Scanned ${timeAgo(current.scannedAt)}${current.files !== null ? ` · ${number(current.files)} files` : ""}${current.nodes !== null ? ` · ${number(current.nodes)} nodes` : ""}` : "Checking the graph…"
@@ -247,8 +252,13 @@ export function Start({ rescan }: { rescan?: string }) {
                         <button class="btn btn-primary btn-lg" data-testid="primary-action" onClick={() => openProject(selected)}>Open graph <Icon name="arrow" /></button>
                       </>
                     ) : (
-                      <button class="btn btn-primary btn-lg" data-testid="primary-action" disabled={busy} title={busy ? "A scan is already running" : undefined} onClick={() => void run(selected)}>Scan</button>
+                      <button class="btn btn-primary btn-lg" data-testid="primary-action" disabled={busy} title={busy ? "A scan is already running" : undefined} onClick={() => (listing.current.looksLikeProject || sure ? void run(selected) : setSure(true))}>{sure ? "Scan anyway" : "Scan"}</button>
                     )}
+                  </div>
+                )}
+                {listing && !hasGraph && !listing.current.looksLikeProject && sure && (
+                  <div class="alert alert-warn" style={{ margin: "0 var(--space-4) var(--space-4)" }} role="alert" data-testid="not-a-project">
+                    <strong>This folder does not look like a project.</strong> It has no git repository or manifest file, so a scan may read a lot of unrelated files. Pick a project folder, or scan anyway.
                   </div>
                 )}
                 <details class="disclosure" style={{ margin: "var(--space-4)", marginTop: 0 }}>

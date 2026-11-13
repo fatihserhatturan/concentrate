@@ -19,6 +19,7 @@ const SECTION_BODY = [
   "- what a change affects: `impact_of`, `detect_changes`, `route_details`",
   "- which frontend code calls an API route: `api_consumers`; what reads or writes a store or table: `list_stores`, `list_tables`, `list_data_access`",
   "- env and config use: `list_env_config`; import cycles and dead code: `find_import_cycles`, `find_unused_exports`",
+  "- a question in words (\"how does X work\"): `explore` returns the matching symbols with source, callers and callees in one call; the call chain from one function to another or what a function calls: `trace_calls`",
   "- where code lives: `search_symbols`, `find_definitions`, `list_routes`, `list_pages`, `list_entrypoints`; to read it: `get_symbol_source`, `get_file_outline`",
   "",
   "Start with `graph_stats` or the `concentrate://graph/summary` resource. Use grep for plain text (strings, comments, config values). If a result has a `stale` field, those files changed after the graph was built: read them directly.",
@@ -50,7 +51,7 @@ export function mergeInstructions(existing: string | null): string {
 export const HOOK_MATCHER = "Grep|Read";
 const HOOK_MARKER = " nudge --database ";
 
-export const NUDGE_MESSAGE = "A Concentrate code graph exists for this project. For who-calls, what-uses, impact, routes, tables and env questions, the concentrate MCP tools (find_callers, find_references, impact_of, route_details, list_data_access, list_env_config, search_symbols) answer in one call. Use text search for plain strings.";
+export const NUDGE_MESSAGE = "A Concentrate code graph exists for this project. For who-calls, what-uses, impact, routes, tables and env questions, the concentrate MCP tools (explore, trace_calls, find_callers, find_references, impact_of, route_details, list_data_access, list_env_config, search_symbols) answer in one call. Use text search for plain strings.";
 
 export function nudgeCommand(databasePath: string, options: { npx: boolean; cliPath: string }): string {
   const quote = (value: string) => JSON.stringify(value);
