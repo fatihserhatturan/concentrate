@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 87,
+  "schemaVersion": "<schema>",
   "rootPath": "<root>",
   "nodes": [
-    {"id":"repo:<root>","label":"Repo","properties":{"path":"<root>","name":"project"}},
+    {"id":"repo:<root>","label":"Repo","properties":{"path":"<root>","name":"project","deprioritize":null}},
     {"id":"dir:.","label":"Directory","properties":{"path":"<root>","relativePath":".","name":"project"}},
     {"id":"file:nested.ts","label":"File","properties":{"path":"<root>/nested.ts","relativePath":"nested.ts","language":"typescript","defaultExport":null,"defaultExportFrom":null,"sourceType":"production","isTest":false,"isFixture":false,"isSupport":false,"isGenerated":false,"isDocs":false,"dynamicRouteCalls":null,"packageName":null,"rustCrate":null,"rustCrateName":null,"rustModule":null,"allNames":null,"cppScope":null}},
     {"id":"file:odd.ts","label":"File","properties":{"path":"<root>/odd.ts","relativePath":"odd.ts","language":"typescript","defaultExport":null,"defaultExportFrom":null,"sourceType":"production","isTest":false,"isFixture":false,"isSupport":false,"isGenerated":false,"isDocs":false,"dynamicRouteCalls":null,"packageName":null,"rustCrate":null,"rustCrateName":null,"rustModule":null,"allNames":null,"cppScope":null}},

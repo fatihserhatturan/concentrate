@@ -1,4 +1,5 @@
 import path from "node:path";
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { GitIgnore } from "./gitignore.js";
 import { createGlobMatcher, walkFiles } from "./glob.js";
@@ -37,6 +38,13 @@ export async function discoverFiles(rootPath: string, options: DiscoverFilesOpti
   const includes = patterns.filter((pattern) => !pattern.startsWith("!")).map(createGlobMatcher);
   const negatedIncludes = patterns.filter((pattern) => pattern.startsWith("!")).map((pattern) => createGlobMatcher(pattern.slice(1)));
 
+  // A folder of several clones (no `.git` of its own) is scanned as a whole; the rule is for a repository that holds copies of itself.
+  const rootIsRepository = existsSync(path.join(rootPath, ".git"));
+  // `include` patterns that name a path inside a nested repository bring it back.
+  const explicit = options.include && options.include.length > 0 ? includes : [];
+  const broughtBack = (directory: string) =>
+    explicit.some((include) => include.pattern === directory || include.pattern.startsWith(`${directory}/`));
+
   const entries = await walkFiles(rootPath, {
     enterDirectory: async (directory, entryNames) => {
       if (entryNames.includes(".gitignore")) {
@@ -49,6 +57,7 @@ export async function discoverFiles(rootPath: string, options: DiscoverFilesOpti
     },
     accept: (relativePath, isDirectory) => {
       if (ignoreRules.ignores(relativePath, isDirectory)) return false;
+      if (isDirectory && rootIsRepository && isNestedRepository(rootPath, relativePath) && !broughtBack(relativePath)) return false;
       if (isDirectory) return includes.some((include) => include.mayContain(relativePath));
       return includes.some((include) => include.matches(relativePath))
         && !negatedIncludes.some((include) => include.matches(relativePath));
@@ -56,6 +65,15 @@ export async function discoverFiles(rootPath: string, options: DiscoverFilesOpti
   });
 
   return entries.map((entry) => path.join(rootPath, entry));
+}
+
+/**
+ * Inside a repository, a subdirectory with a `.git` file or directory of its
+ * own is a worktree, submodule or clone: another copy of code, not part of
+ * this project.
+ */
+function isNestedRepository(rootPath: string, relativeDirectory: string): boolean {
+  return existsSync(path.join(rootPath, relativeDirectory, ".git"));
 }
 
 async function addGitIgnore(rootPath: string, directory: string, ignoreRules: GitIgnore): Promise<void> {

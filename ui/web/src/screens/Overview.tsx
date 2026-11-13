@@ -4,6 +4,7 @@ import { graphDashboard, graphIssues, projectInfo, type Dashboard } from "../api
 import { SummaryList } from "../components/Inspector.js";
 import { ErrorState, Loading, ViewHeader } from "../components/State.js";
 import { number, timeAgo } from "../lib/format.js";
+import { DEFAULT_VIEW, navigate } from "../lib/router.js";
 import { useLoad } from "../lib/useLoad.js";
 
 function Bars({ groups, total }: { groups: Array<{ name: string; count: number }>; total: number }) {
@@ -68,6 +69,12 @@ export function Overview(props: {
       <ViewHeader title={d.repo.name || "Overview"} text={`${d.repo.path}`}>
         <div class="muted small">{info.scannedAt ? `Scanned ${timeAgo(info.scannedAt)}` : ""}{d.schemaVersion !== null ? ` · schema ${d.schemaVersion}` : ""}</div>
       </ViewHeader>
+      {info.schemaVersion !== null && info.schemaVersion < info.currentSchemaVersion && (
+        <div class="alert alert-warn issues-note" role="status" data-testid="outdated-graph">
+          <strong>This graph is outdated.</strong> It was written with schema {info.schemaVersion}; this version writes schema {info.currentSchemaVersion}, so some views and counts may be missing.{" "}
+          <button class="btn" style={{ marginLeft: "var(--space-2)" }} onClick={() => navigate({ project: null, view: DEFAULT_VIEW, scan: props.project })}>Rescan now</button>
+        </div>
+      )}
       <div class="dash">
         <section class="tiles" aria-label="Counts by kind">
           {d2.kinds.map((k) => (

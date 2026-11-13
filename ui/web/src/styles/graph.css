@@ -17,13 +17,14 @@
 .menu-list button:hover:not(:disabled) { background: var(--bg-hover); }
 .menu-list button:disabled { color: var(--fg-faint); cursor: not-allowed; }
 .menu-list small { display: block; color: var(--fg-muted); font-size: var(--text-xs); }
-.graph-body { position: relative; flex: 1; min-height: 0; }
+.graph-body { position: relative; flex: 1; min-height: 0; display: flex; }
+.graph-main { position: relative; flex: 1; min-width: 0; min-height: 0; }
 .graph-surface { position: absolute; inset: 0; overflow: hidden; touch-action: none; cursor: grab; background: radial-gradient(var(--bg-muted) 1px, transparent 1px) 0 0 / 22px 22px, var(--bg); }
 .graph-surface:active { cursor: grabbing; }
 .sigma-host { position: absolute; inset: 0; }
 .zoom-controls { position: absolute; right: var(--space-3); bottom: var(--space-3); display: flex; gap: var(--space-1); z-index: 3; cursor: default; }
 .zoom-controls .btn { background: var(--bg); box-shadow: var(--shadow); }
-.legend { position: absolute; left: var(--space-3); top: var(--space-3); width: 230px; max-height: calc(100% - 24px); overflow: auto; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: var(--space-3); z-index: 4; font-size: var(--text-sm); }
+.legend { flex: none; order: -1; width: 230px; overflow: auto; background: var(--bg); border-right: 1px solid var(--line); padding: var(--space-3); z-index: 4; font-size: var(--text-sm); }
 .legend h4 { text-transform: uppercase; font-size: 11px; letter-spacing: .04em; color: var(--fg-muted); margin: 0 0 var(--space-2); }
 .legend h4:not(:first-child) { margin-top: var(--space-3); }
 .legend label { display: flex; align-items: center; gap: var(--space-2); padding: 3px 0; cursor: pointer; }

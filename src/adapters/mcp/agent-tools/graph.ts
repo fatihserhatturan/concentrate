@@ -662,7 +662,7 @@ export async function apiConsumers(
     RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath,
       route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine,
       id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client,
-      request.method AS method, request.url AS url, request.match AS match, id(fn) AS fn
+      request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn
   `, { ids: routeIds ?? [] }) as Row[];
   const describe = (id: string) => describeFunction(functions.get(id), id);
   const consumers = rows.map((row) => {
@@ -674,6 +674,8 @@ export async function apiConsumers(
       method: str(row.method),
       url: str(row.url),
       match: str(row.match),
+      // Only a link that is not exact says how it was made (a catch-all URL).
+      ...(typeof row.provenance === "string" && row.provenance !== "exact" ? { provenance: row.provenance } : {}),
       file: caller?.file ?? callFile(String(row.call)),
       line: num(row.line),
       expression: str(row.expression),

@@ -60,12 +60,16 @@ export function describeStyle(target: StyleTarget) {
   return { name: `${prefix}${target.name}`, kind: target.kind, file: target.file, line: target.line, ...(target.scope ? { scope: target.scope } : {}) };
 }
 
+const provenanceOf = (row: Row) => (typeof row.provenance === "string" && row.provenance !== "exact" ? { provenance: row.provenance } : {});
+
 export type StyleUse = {
   as: "component" | "function" | "file";
   name: string;
   file: string | null;
   line: number | null;
   match: string | null;
+  // Set when the link is not exact (a class matched on its name alone).
+  provenance?: string;
   expression: string | null;
   style: string;
   // Component or Function node id of the user; null for a file.
@@ -81,17 +85,17 @@ export async function loadStyleUses(engine: IQueryEngine, ids: readonly string[]
     engine.query(`
       MATCH (owner:File)-[rel:USES_STYLE_FILE]->(style:Style)
       WHERE id(style) IN $ids
-      RETURN id(style) AS style, owner.relativePath AS file, rel.line AS line, rel.match AS match, rel.expression AS expression
+      RETURN id(style) AS style, owner.relativePath AS file, rel.line AS line, rel.match AS match, rel.provenance AS provenance, rel.expression AS expression
     `, params),
     engine.query(`
       MATCH (owner:Function)-[rel:USES_STYLE_FUNCTION]->(style:Style)
       WHERE id(style) IN $ids
-      RETURN id(style) AS style, id(owner) AS id, rel.line AS line, rel.match AS match, rel.expression AS expression
+      RETURN id(style) AS style, id(owner) AS id, rel.line AS line, rel.match AS match, rel.provenance AS provenance, rel.expression AS expression
     `, params),
     engine.query(`
       MATCH (file:File)-[:DECLARES_COMPONENT]->(owner:Component)-[rel:USES_STYLE_COMPONENT]->(style:Style)
       WHERE id(style) IN $ids
-      RETURN id(style) AS style, id(owner) AS id, owner.name AS name, file.relativePath AS file, rel.line AS line, rel.match AS match, rel.expression AS expression
+      RETURN id(style) AS style, id(owner) AS id, owner.name AS name, file.relativePath AS file, rel.line AS line, rel.match AS match, rel.provenance AS provenance, rel.expression AS expression
     `, params),
     engine.query(`
       MATCH (file:File)-[:DECLARES_STYLE]->(rule:Style)-[:SELECTS_STYLE]->(style:Style)
@@ -101,7 +105,7 @@ export async function loadStyleUses(engine: IQueryEngine, ids: readonly string[]
   ]) as Row[][];
   const functionInfo = await loadFunctions(engine, [...new Set(functions!.map((row) => String(row.id)))]);
   const uses: StyleUse[] = [
-    ...files!.map((row): StyleUse => ({ as: "file", name: String(row.file), file: str(row.file), line: num(row.line), match: str(row.match), expression: str(row.expression), style: String(row.style), id: null })),
+    ...files!.map((row): StyleUse => ({ as: "file", name: String(row.file), file: str(row.file), line: num(row.line), match: str(row.match), ...provenanceOf(row), expression: str(row.expression), style: String(row.style), id: null })),
     ...functions!.map((row): StyleUse => {
       const info = functionInfo.get(String(row.id));
       return {
@@ -110,12 +114,13 @@ export async function loadStyleUses(engine: IQueryEngine, ids: readonly string[]
         file: info?.file ?? null,
         line: num(row.line),
         match: str(row.match),
+        ...provenanceOf(row),
         expression: str(row.expression),
         style: String(row.style),
         id: String(row.id),
       };
     }),
-    ...components!.map((row): StyleUse => ({ as: "component", name: String(row.name), file: str(row.file), line: num(row.line), match: str(row.match), expression: str(row.expression), style: String(row.style), id: String(row.id) })),
+    ...components!.map((row): StyleUse => ({ as: "component", name: String(row.name), file: str(row.file), line: num(row.line), match: str(row.match), ...provenanceOf(row), expression: str(row.expression), style: String(row.style), id: String(row.id) })),
   ];
   return { uses: uses.sort(byFileAndLine), rules: rules!.sort(byFileAndLine) };
 }

@@ -12,7 +12,7 @@ const token = readToken();
 const headers = { "x-concentrate-token": token };
 
 export type FsEntry = { name: string; path: string; isGitRepository: boolean; hasGraph: boolean };
-export type FsListing = { path: string; parent: string | null; home: string; current: { isGitRepository: boolean; hasGraph: boolean }; entries: FsEntry[] };
+export type FsListing = { path: string; parent: string | null; home: string; current: { isGitRepository: boolean; hasGraph: boolean; looksLikeProject: boolean }; entries: FsEntry[] };
 
 export async function listDirectories(dir?: string): Promise<FsListing> {
   const response = await fetch(`/api/fs${dir ? `?path=${encodeURIComponent(dir)}` : ""}`, { headers });
@@ -126,7 +126,7 @@ export async function runQuery(query: string): Promise<QueryResult> {
 
 export type ProjectInfo = {
   path: string; name: string; exists: boolean; isGitRepository: boolean; hasGraph: boolean;
-  scannedAt: string | null; files: number | null; nodes: number | null; schemaVersion: number | null;
+  scannedAt: string | null; files: number | null; nodes: number | null; schemaVersion: number | null; currentSchemaVersion: number;
 };
 export async function projectInfo(path: string): Promise<ProjectInfo> {
   const response = await fetch(`/api/project?path=${encodeURIComponent(path)}`, { headers });

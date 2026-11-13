@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { scanIntoStore } from "../src/adapters/cli/scan.js";
-import { callPaths, questionTerms } from "../src/adapters/mcp/agent-tools/explore.js";
+import { callPaths, questionTerms, rankSymbols } from "../src/adapters/mcp/agent-tools/explore.js";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { provenanceOf } from "../src/adapters/store/provenance.js";
 import { SCHEMA_VERSION } from "../src/adapters/store/schema.js";
@@ -157,5 +157,17 @@ describe("edge provenance", () => {
     } finally {
       await store.close();
     }
+  });
+});
+
+describe("rankSymbols", () => {
+  it("does not let an exact match on a very common word outrank the rest of the question", () => {
+    const make = (name: string, file: string, i: number) => ({ id: `${file}#${i}`, kind: "function" as const, name, className: null, file, path: `/p/${file}`, line: 1, endLine: 2 });
+    const symbols = [
+      ...Array.from({ length: 300 }, (_, i) => make("server", `fixtures/f${i}.go`, i)),
+      make("annotateStale", "src/freshness.ts", 1000),
+    ];
+    const ranked = rankSymbols(symbols, ["server", "annotate", "stale"]);
+    assert.equal(ranked[0]!.symbol.file, "src/freshness.ts");
   });
 });

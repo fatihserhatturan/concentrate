@@ -114,6 +114,10 @@ into the project, with an absolute `--database` path.
   would read as plain text. `include`, `exclude` and `apiOrigins` are as the
   `--include`, `--exclude` and `--api-origin` flags; the command line's
   `--include` replaces the file's, the other two are added to it.
+  Inside a git repository, a subfolder that has its own `.git` (a worktree,
+  submodule or clone) is skipped, since it is another copy of code; an
+  `include` pattern that names a path inside it brings it back (`"include":
+  ["**/*", "vendor/lib/**"]`).
   `deprioritize` lists files that stay in the graph but rank lower in
   `search_symbols` (their rows say `deprioritized: true`). An unknown key, a
   broken file or an unknown language stops the scan with a message naming it.
