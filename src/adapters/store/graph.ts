@@ -97,7 +97,11 @@ export class MemoryGraph {
     if (this.nodesById.has(id)) {
       throw new Error(`Cannot write node ${id}: duplicate primary key`);
     }
-    const node = new NodeRecord(id, label, validateProperties(`node ${id}`, table.properties, properties));
+    return this.insertNode(new NodeRecord(id, label, validateProperties(`node ${id}`, table.properties, properties)));
+  }
+
+  private insertNode(node: NodeRecord): NodeRecord {
+    const { id, label } = node;
     this.nodesById.set(id, node);
     let labelSet = this.nodesByLabel.get(label);
     if (!labelSet) this.nodesByLabel.set(label, labelSet = new Set());
@@ -115,6 +119,38 @@ export class MemoryGraph {
     return node;
   }
 
+  /**
+   * Add a node read back from a snapshot. Its properties were validated when the
+   * snapshot was written, so the parsed object is used as is, and the label comes
+   * from the schema table so all nodes of a label share one string.
+   */
+  addTrustedNode(label: string, id: string, properties: Properties): NodeRecord {
+    const table = nodeTableByLabel.get(label);
+    if (!table) {
+      throw new Error(`Cannot write node ${id}: table ${label} does not exist`);
+    }
+    if (this.nodesById.has(id)) {
+      throw new Error(`Cannot write node ${id}: duplicate primary key`);
+    }
+    return this.insertNode(new NodeRecord(id, table.label, properties));
+  }
+
+  /** Trusted counterpart of addRelationship for snapshot loading; still checks the table and endpoint labels. */
+  addTrustedRelationship(type: string, fromId: string, toId: string, properties: Properties): boolean {
+    const table = relationshipTableByType.get(type);
+    if (!table) {
+      throw new Error(`Cannot write relationship ${fromId} -> ${toId}: table ${type} does not exist`);
+    }
+    const from = this.nodesById.get(fromId);
+    const to = this.nodesById.get(toId);
+    if (!from || !to) return false;
+    if (from.label !== table.from || to.label !== table.to) {
+      throw new Error(`Cannot write ${type} from ${from.label} ${fromId} to ${to.label} ${toId}: expected ${table.from} -> ${table.to}`);
+    }
+    this.link(new RelationshipRecord(table.type, from, to, properties));
+    return true;
+  }
+
   /** Returns false, like Kuzu's `MATCH ... CREATE`, when an endpoint does not exist. */
   addRelationship(type: string, fromId: string, toId: string, properties: Record<string, unknown>): boolean {
     const table = relationshipTableByType.get(type);
@@ -127,11 +163,14 @@ export class MemoryGraph {
     if (from.label !== table.from || to.label !== table.to) {
       throw new Error(`Cannot write ${type} from ${from.label} ${fromId} to ${to.label} ${toId}: expected ${table.from} -> ${table.to}`);
     }
-    const relationship = new RelationshipRecord(type, from, to, validateProperties(`${type} ${fromId} -> ${toId}`, table.properties, properties));
-    from.outgoing.push(relationship);
-    to.incoming.push(relationship);
-    this.relationshipTotal += 1;
+    this.link(new RelationshipRecord(type, from, to, validateProperties(`${type} ${fromId} -> ${toId}`, table.properties, properties)));
     return true;
+  }
+
+  private link(relationship: RelationshipRecord): void {
+    relationship.from.outgoing.push(relationship);
+    relationship.to.incoming.push(relationship);
+    this.relationshipTotal += 1;
   }
 
   /** Remove a node and every relationship touching it (`DETACH DELETE`). */

@@ -29,6 +29,8 @@ const SEGMENT_GRACE_MS = 60_000;
 const READ_ATTEMPTS = 3;
 /** Segments being hashed, compressed and written at the same time. */
 const WRITE_CONCURRENCY = 4;
+/** Segments being read, decompressed and parsed at the same time. */
+const READ_CONCURRENCY = 8;
 
 const gzipAsync = promisify(gzip);
 const gunzipAsync = promisify(gunzip);
@@ -62,27 +64,33 @@ export async function readHead(directory: string): Promise<Head | null> {
   return head;
 }
 
-/** Load the current snapshot. A segment deleted under us means a newer HEAD exists, so start over. */
+/**
+ * Load the current snapshot, one segment at a time. A segment deleted under us
+ * means a newer HEAD exists, so start over.
+ *
+ * A per-file segment holds nodes before relationships (lines are sorted) and
+ * only relationships inside the file, so it resolves on its own. The global
+ * segment holds the cross-file relationships and is loaded after all others,
+ * so its relationships resolve at once too. Anything whose endpoint is still
+ * missing waits in a compact list and is resolved at the end.
+ */
 export async function loadSnapshot(directory: string): Promise<{ head: Head | null; graph: MemoryGraph }> {
   for (let attempt = 1; ; attempt += 1) {
     const head = await readHead(directory);
     const graph = new MemoryGraph();
     if (!head) return { head, graph };
     try {
-      const segments = await Promise.all(Object.values(head.segments).map(async (file) => (
-        (await gunzipAsync(await readFile(path.join(directory, SEGMENTS_DIR, file)))).toString("utf8")
-      )));
-      const relationshipLines: RelationshipLine[] = [];
-      for (const segment of segments) {
-        for (const line of segment.split("\n")) {
-          if (!line) continue;
-          const record = JSON.parse(line) as NodeLine | RelationshipLine;
-          if (record[0] === "n") graph.addNode(record[1], record[2], record[3]);
-          else relationshipLines.push(record);
-        }
-      }
-      for (const [, type, from, to, properties] of relationshipLines) {
-        if (!graph.addRelationship(type, from, to, properties)) {
+      const pending: RelationshipLine[] = [];
+      const loadSegment = async (file: string) => {
+        const content = (await gunzipAsync(await readFile(path.join(directory, SEGMENTS_DIR, file)))).toString("utf8");
+        addSegment(graph, content, pending);
+      };
+      const keys = Object.keys(head.segments);
+      const files = keys.filter((key) => key !== GLOBAL_SEGMENT).map((key) => head.segments[key]!);
+      await runConcurrently(files, READ_CONCURRENCY, loadSegment);
+      if (head.segments[GLOBAL_SEGMENT]) await loadSegment(head.segments[GLOBAL_SEGMENT]);
+      for (const [, type, from, to, properties] of pending) {
+        if (!graph.addTrustedRelationship(type, from, to, properties)) {
           throw new Error(`Corrupt graph store in ${directory}: ${type} ${from} -> ${to} has a missing endpoint`);
         }
       }
@@ -91,6 +99,30 @@ export async function loadSnapshot(directory: string): Promise<{ head: Head | nu
       if ((error as NodeJS.ErrnoException).code !== "ENOENT" || attempt >= READ_ATTEMPTS) throw error;
     }
   }
+}
+
+/** Add the lines of one segment; relationships with a missing endpoint go to `pending`. */
+function addSegment(graph: MemoryGraph, content: string, pending: RelationshipLine[]): void {
+  let start = 0;
+  while (start < content.length) {
+    let end = content.indexOf("\n", start);
+    if (end === -1) end = content.length;
+    if (end > start) {
+      const record = JSON.parse(content.slice(start, end)) as NodeLine | RelationshipLine;
+      if (record[0] === "n") graph.addTrustedNode(record[1], record[2], record[3]);
+      else if (!graph.addTrustedRelationship(record[1], record[2], record[3], record[4])) pending.push(record);
+    }
+    start = end + 1;
+  }
+}
+
+/** Run `task` for every item with at most `limit` in flight. */
+async function runConcurrently<T>(items: readonly T[], limit: number, task: (item: T) => Promise<void>): Promise<void> {
+  let next = 0;
+  const worker = async () => {
+    while (next < items.length) await task(items[next++]!);
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
 }
 
 /** Write `graph` as the next generation. The caller holds the writer lock. */
@@ -129,27 +161,22 @@ export async function commitScannedSnapshot(
 
   const keys = [...new Set([...plan.nodesByKey.keys(), ...plan.relationshipsByKey.keys()])].sort();
   const files = new Map<string, string>();
-  let next = 0;
-  const worker = async () => {
-    while (next < keys.length) {
-      const key = keys[next++]!;
-      const lines: string[] = [];
-      for (const index of plan.nodesByKey.get(key) ?? []) {
-        const node = nodes[index]!;
-        const table = nodeTableByLabel.get(node.label)!;
-        lines.push(JSON.stringify(["n", node.label, node.id, validateProperties(`node ${node.id}`, table.properties, node.properties)] satisfies NodeLine));
-      }
-      for (const index of plan.relationshipsByKey.get(key) ?? []) {
-        const relationship = relationships[index]!;
-        const type = plan.types[index]!;
-        const table = relationshipTableByType.get(type)!;
-        const properties = validateProperties(`${type} ${relationship.from} -> ${relationship.to}`, table.properties, withProvenance(relationship));
-        lines.push(JSON.stringify(["r", type, relationship.from, relationship.to, properties] satisfies RelationshipLine));
-      }
-      files.set(key, await writeSegment(segmentsDirectory, `${lines.sort().join("\n")}\n`, reusable));
+  await runConcurrently(keys, WRITE_CONCURRENCY, async (key) => {
+    const lines: string[] = [];
+    for (const index of plan.nodesByKey.get(key) ?? []) {
+      const node = nodes[index]!;
+      const table = nodeTableByLabel.get(node.label)!;
+      lines.push(JSON.stringify(["n", node.label, node.id, validateProperties(`node ${node.id}`, table.properties, node.properties)] satisfies NodeLine));
     }
-  };
-  await Promise.all(Array.from({ length: Math.min(WRITE_CONCURRENCY, keys.length) }, worker));
+    for (const index of plan.relationshipsByKey.get(key) ?? []) {
+      const relationship = relationships[index]!;
+      const type = plan.types[index]!;
+      const table = relationshipTableByType.get(type)!;
+      const properties = validateProperties(`${type} ${relationship.from} -> ${relationship.to}`, table.properties, withProvenance(relationship));
+      lines.push(JSON.stringify(["r", type, relationship.from, relationship.to, properties] satisfies RelationshipLine));
+    }
+    files.set(key, await writeSegment(segmentsDirectory, `${lines.sort().join("\n")}\n`, reusable));
+  });
 
   const segments: Record<string, string> = {};
   for (const key of keys) segments[key] = files.get(key)!;

@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { gzipSync } from "node:zlib";
 import os from "node:os";
 import path from "node:path";
 import { after, describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { MemoryGraph } from "../src/adapters/store/graph.js";
-import { commitScannedSnapshot, commitSnapshot, readHead } from "../src/adapters/store/persistence.js";
+import { commitScannedSnapshot, commitSnapshot, loadSnapshot, readHead, serializeSegments } from "../src/adapters/store/persistence.js";
 import { SCHEMA_VERSION } from "../src/adapters/store/schema.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
@@ -102,5 +103,30 @@ describe("streaming snapshot write", () => {
     await store.write([node("file:b.ts", "File", { relativePath: "b.ts" })], []);
     assert.equal((await readHead(directory))!.generation, 2);
     assert.deepEqual(await store.query("MATCH (f:File) RETURN f.relativePath AS path"), [{ path: "b.ts" }]);
+  });
+
+  it("loads a snapshot segment by segment into the same graph", async () => {
+    for (const fixture of fixtures) {
+      const built = await buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: false });
+      const expected = new MemoryGraph();
+      expected.write(built.nodes, built.relationships);
+      const directory = freshDirectory();
+      await commitScannedSnapshot(directory, built.nodes, built.relationships, { schemaVersion: SCHEMA_VERSION, previous: null });
+      const { graph } = await loadSnapshot(directory);
+      assert.equal(graph.nodeCount, expected.nodeCount);
+      assert.equal(graph.relationshipCount, expected.relationshipCount);
+      assert.deepEqual(serializeSegments(graph), serializeSegments(expected));
+    }
+  });
+
+  it("reports a relationship whose endpoint is in no segment as corruption", async () => {
+    const directory = freshDirectory();
+    const nodes = [{ id: "file:a.ts", label: "File", properties: { relativePath: "a.ts" } }] as GraphNode[];
+    const head = await commitScannedSnapshot(directory, nodes, [], { schemaVersion: SCHEMA_VERSION, previous: null });
+    const broken = `${JSON.stringify(["r", "DEFINES_FUNCTION", "file:a.ts", "file:a.ts:function:gone", {}])}\n`;
+    const file = "ffffffffffffffffffffffffffffffff.jsonl.gz";
+    await writeFile(path.join(directory, "segments", file), gzipSync(broken));
+    await writeFile(path.join(directory, "HEAD.json"), JSON.stringify({ ...head, segments: { ...head.segments, global: file } }));
+    await assert.rejects(loadSnapshot(directory), /Corrupt graph store .*DEFINES_FUNCTION file:a.ts -> file:a.ts:function:gone has a missing endpoint/);
   });
 });
