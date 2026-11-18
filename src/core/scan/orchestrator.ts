@@ -7,8 +7,8 @@ import { runWithConcurrency } from "./concurrency.js";
 import { discoverFiles } from "./discover-files.js";
 import { compactUnresolvedCalls } from "./call-sites.js";
 import { finalizeGraphRelationships } from "./graph-finalize.js";
-import { parseFileWithContext, type ParseResult } from "./parse-source.js";
-import { addParseResultsToGraph } from "./parse-results.js";
+import { parseFileWithContext } from "./parse-source.js";
+import { OrderedParseResults } from "./parse-results.js";
 import { addProjectConfigNodes } from "./project-config.js";
 import { createScanManifest, type ScanManifest } from "./manifest.js";
 import { ParseCache } from "./parse-cache.js";
@@ -39,6 +39,9 @@ export interface ScanDependencies {
   // Whether options.workers unset may start workers; false keeps that case on
   // the main thread (an explicit count still starts them).
   autoParseWorkers?: boolean;
+  // Called between the steps of a scan, where the previous step's working
+  // data has just become garbage; may run a garbage collection.
+  collectGarbage?: () => void;
 }
 
 // Below this many files to parse, starting workers costs more than it saves.
@@ -114,8 +117,11 @@ export async function buildCodeGraph(
     return cache && contentHash ? { key: cache.key(relativePath, overridden ? `${contentHash}\0${languageOf.get(filePath)}` : contentHash), contentHash } : null;
   };
 
+  // Each result goes into the graph as soon as the results of the files
+  // before it are in, so the scan does not hold a result per file.
+  const parseResults = new OrderedParseResults(graph, repoNodeId, rootPath, report, options.continueOnError);
+
   // Pass 1: parse results the cache already has.
-  const parseResults: ParseResult[] = new Array(supportedFiles.length);
   const misses: number[] = [];
   await runWithConcurrency([...supportedFiles.keys()], concurrency, async (index) => {
     const { filePath } = supportedFiles[index]!;
@@ -123,7 +129,7 @@ export async function buildCodeGraph(
     const cached = entry ? await cache!.read(entry.key) : null;
     if (cached) {
       progress(filePath);
-      parseResults[index] = { ok: true, parsed: cached, filePath };
+      parseResults.set(index, { ok: true, parsed: cached, filePath });
     } else {
       misses.push(index);
     }
@@ -149,31 +155,24 @@ export async function buildCodeGraph(
         // has the content the manifest hashed (it may change during the scan).
         const entry = cacheKey(filePath);
         if (entry && await hashFile(filePath) === entry.contentHash) await cache!.write(entry.key, parsed);
-        parseResults[index] = { ok: true, parsed, filePath };
+        parseResults.set(index, { ok: true, parsed, filePath });
       } catch (error) {
-        parseResults[index] = { ok: false, error, filePath };
+        parseResults.set(index, { ok: false, error, filePath });
       }
     });
   } finally {
     await pool?.close();
   }
 
-  const parsedFully = addParseResultsToGraph(
-    graph,
-    repoNodeId,
-    rootPath,
-    parseResults,
-    report,
-    options.continueOnError,
-  );
-  if (!parsedFully) {
+  if (!parseResults.complete) {
     report.status = "failed";
     return createResult(rootPath, graph, report, manifest);
   }
 
   await cache?.prune();
+  deps.collectGarbage?.();
   await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report, deps.readProjectPackages);
-  await finalizeGraphRelationships(graph, rootPath, report, deps.resolvers, deps.contributors, files, { apiOrigins });
+  await finalizeGraphRelationships(graph, rootPath, report, deps.resolvers, deps.contributors, files, { apiOrigins }, deps.collectGarbage);
   if (!options.keepCallSites) compactUnresolvedCalls(graph);
   report.status = report.failedFiles.length > 0 ? "partial" : "success";
 

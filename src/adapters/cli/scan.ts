@@ -5,6 +5,7 @@ import { ProgressReporter } from "./progress.js";
 import { didFailFast, didPartiallySucceed, type BuildCodeGraphResult } from "../../core/scan/index.js";
 import { scanOrchestrator } from "../../composition/orchestrator.js";
 import { openGraphStore } from "../../composition/graph-store.js";
+import { collectGarbageAfterGrowth } from "../../composition/garbage.js";
 
 export type ScanAdapterOptions = {
   database: string;
@@ -65,6 +66,8 @@ export async function scanIntoStore(
       // Always the whole graph: cross-file results (resolved calls, route paths)
       // can change in files that did not, and writing everything takes milliseconds.
       await writer.reset();
+      // The scan's GraphBuilder and its lookups are garbage now.
+      collectGarbageAfterGrowth();
       await writer.write(result.nodes, result.relationships);
     } finally {
       await writer.close();
