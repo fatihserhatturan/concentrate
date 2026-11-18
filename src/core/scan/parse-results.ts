@@ -3,6 +3,7 @@ import { GraphBuilder } from "../graph/builder.js";
 import { addDirectoryChain } from "./directory-graph.js";
 import { classifyFile } from "./file-classification.js";
 import { isCodeLanguage, type SupportedLanguage } from "./language.js";
+import type { ParsedSourceFile } from "../graph/model.js";
 import type { ParseResult } from "./parse-source.js";
 import { addUniqueScanWarning, createScanFailure, type ScanReport } from "./report.js";
 
@@ -56,6 +57,7 @@ function addParsedFileToGraph(
   for (const message of result.parsed.warnings ?? []) {
     addUniqueScanWarning(report, { path: relativePath, message });
   }
+  shareStrings(result.parsed);
   graph.addNodes(result.parsed.nodes);
   graph.addRelationships(result.parsed.relationships);
   graph.addRelationship({
@@ -65,4 +67,38 @@ function addParsedFileToGraph(
     properties: {},
   });
   return code;
+}
+
+/**
+ * Make equal strings of one parsed file one string. A file parsed in a worker
+ * or read from the parse cache arrives with a separate copy of every
+ * occurrence: a node's id and the `from` / `to` of each relationship that
+ * touches it, and property values such as a call's `name`, `expression` and
+ * `callee`, which are often the same text. On a large repository these copies
+ * are a few hundred MB of the scan's live heap.
+ */
+function shareStrings(parsed: ParsedSourceFile): void {
+  const strings = new Map<string, string>();
+  const share = (value: string): string => {
+    const known = strings.get(value);
+    if (known !== undefined) return known;
+    strings.set(value, value);
+    return value;
+  };
+  for (const node of parsed.nodes) {
+    node.id = share(node.id);
+    shareProperties(node.properties, share);
+  }
+  for (const relationship of parsed.relationships) {
+    relationship.from = share(relationship.from);
+    relationship.to = share(relationship.to);
+    shareProperties(relationship.properties, share);
+  }
+}
+
+function shareProperties(properties: Record<string, unknown>, share: (value: string) => string): void {
+  for (const key in properties) {
+    const value = properties[key];
+    if (typeof value === "string") properties[key] = share(value);
+  }
 }
