@@ -69,8 +69,8 @@ export const storeAccessContributor: ISemanticContributor = {
     }
     if (fileByStoreId.size === 0) return;
 
-    const index = createResolutionRelationshipIndex(graph.relationships);
-    const importNodesByFile = indexImportNodesByFile(graph.nodes, index.fileByImportId);
+    const index = createResolutionRelationshipIndex(graph);
+    const importNodesByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), index.fileByImportId);
     const resolved = new Set(graph.relationshipsOfType("CALL_RESOLVES_TO").map((rel) => rel.from));
     // `fileId:line:column:callee` → Call, for action calls.
     const callsByPosition = new Map<string, string>();

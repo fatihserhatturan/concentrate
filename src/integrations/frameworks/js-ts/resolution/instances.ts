@@ -16,11 +16,11 @@ export function addInstanceMethodResolutionRelationships(graph: IGraphContributo
   // A resolved call needs a variable initialized by `new C()` with a scanned class.
   if (graph.relationshipsOfType("INITIALIZED_BY").length === 0 || graph.nodesWithLabel("Class").length === 0) return;
 
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-  const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
+  const relationshipIndex = createResolutionRelationshipIndex(graph);
+  const classesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Class"), relationshipIndex.fileByClassId, "Class");
   const methodsByClassAndName = indexMethodsByClassAndName(graph);
   const baseClassesByClass = indexBaseClasses(graph);
-  const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
+  const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
   const fileIdByVariableId = indexFileIdByVariableId(graph);
   const classIdByVariableId = new Map<string, string>();
 

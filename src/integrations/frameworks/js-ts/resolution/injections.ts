@@ -10,10 +10,10 @@ export function addInjectionRelationships(graph: IGraphContributor): void {
   // Injections and `this.field.method()` calls need a typed field and a class.
   if (graph.relationshipsOfType("DEFINES_FIELD").length === 0 || graph.nodesWithLabel("Class").length === 0) return;
 
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-  const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
+  const relationshipIndex = createResolutionRelationshipIndex(graph);
+  const classesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Class"), relationshipIndex.fileByClassId, "Class");
   const functionsByClassAndName = indexMethodsByClassAndName(graph);
-  const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
+  const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
   const fieldsByClass = indexFieldsByClass(graph);
   const classIdByMethodId = indexClassIdByMethodId(graph);
   const callerFunctionByCallId = relationshipIndex.callerFunctionByCallId;

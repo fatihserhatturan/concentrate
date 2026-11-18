@@ -53,11 +53,11 @@ export const nuxtAutoImportsContributor: ISemanticContributor = {
     let indexes: { index: ReturnType<typeof createResolutionRelationshipIndex>; resolved: Set<string>; importNodesByFile: Map<string, GraphNode[]> } | undefined;
     const resolutionIndexes = () => {
       if (!indexes) {
-        const index = createResolutionRelationshipIndex(graph.relationships);
+        const index = createResolutionRelationshipIndex(graph);
         indexes = {
           index,
           resolved: new Set(graph.relationshipsOfType("CALL_RESOLVES_TO").map((rel) => rel.from)),
-          importNodesByFile: indexImportNodesByFile(graph.nodes, index.fileByImportId),
+          importNodesByFile: indexImportNodesByFile(graph.nodesWithLabel("Import"), index.fileByImportId),
         };
       }
       return indexes;
@@ -234,8 +234,8 @@ export const vueGlobalComponentsContributor: ISemanticContributor = {
     }
     if (vueComponents.size === 0) return;
 
-    const index = createResolutionRelationshipIndex(graph.relationships);
-    const importNodesByFile = indexImportNodesByFile(graph.nodes, index.fileByImportId);
+    const index = createResolutionRelationshipIndex(graph);
+    const importNodesByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), index.fileByImportId);
     const packageByFile = new Map<string, string>();
     for (const rel of graph.relationshipsOfType("PACKAGE_CONTAINS_FILE")) {
       packageByFile.set(rel.to, rel.from);

@@ -28,9 +28,9 @@ const keysByDecorator: Record<string, ReadonlySet<ModuleMetadataKey>> = {
 export function addNestJsModuleRelationships(graph: IGraphContributor): void {
   if (graph.relationshipsOfType("HAS_DECORATOR").length === 0) return;
 
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-  const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
-  const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
+  const relationshipIndex = createResolutionRelationshipIndex(graph);
+  const classesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Class"), relationshipIndex.fileByClassId, "Class");
+  const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
   const angularComponentClasses = new Set(graph.relationshipsOfType("COMPONENT_DEFINED_BY")
     .filter((rel) => graph.node(rel.from)?.properties.framework === "angular")
     .map((rel) => rel.to));

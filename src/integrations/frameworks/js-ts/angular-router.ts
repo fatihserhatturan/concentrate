@@ -190,8 +190,8 @@ export const angularRouteMountsContributor: ISemanticContributor = {
     // Only pages that load children are mounted.
     if (pagesByFile.size === 0) return;
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-    const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
+    const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
     for (const rel of graph.relationshipsOfType("DEFINES_CLASS")) {
       const target = graph.node(rel.to);
       if (!target) continue;

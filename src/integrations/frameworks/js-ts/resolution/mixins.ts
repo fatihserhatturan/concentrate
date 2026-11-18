@@ -22,8 +22,8 @@ type Mixin = { target: string; moduleFileId: string };
 // of that file with the called name. A parameter of the calling function
 // with the receiver's name hides it, and calls that already resolve are kept.
 export function addMixinMethodResolutionRelationships(graph: IGraphContributor): void {
-  const index = createResolutionRelationshipIndex(graph.relationships);
-  const importsByFile = indexImportNodesByFile(graph.nodes, index.fileByImportId);
+  const index = createResolutionRelationshipIndex(graph);
+  const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), index.fileByImportId);
 
   const resolved = new Set<string>();
   const callTargetByCallId = new Map<string, string>();

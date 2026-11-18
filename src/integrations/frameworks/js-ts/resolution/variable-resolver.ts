@@ -15,8 +15,8 @@ export type VariableResolver = {
 };
 
 export function createVariableResolver(graph: IGraphContributor): VariableResolver {
-  const index = createResolutionRelationshipIndex(graph.relationships);
-  const importNodesByFile = indexImportNodesByFile(graph.nodes, index.fileByImportId);
+  const index = createResolutionRelationshipIndex(graph);
+  const importNodesByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), index.fileByImportId);
   const fileByVariableId = new Map<string, string>();
   const variablesByFileAndName = new Map<string, Map<string, string[]>>();
   for (const rel of graph.relationshipsOfType("DEFINES_VARIABLE")) {

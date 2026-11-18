@@ -42,8 +42,8 @@ export function addComponentRelationships(graph: IGraphContributor): void {
   }
   if (fileByComponentId.size === 0) return;
 
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-  const importNodesByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
+  const relationshipIndex = createResolutionRelationshipIndex(graph);
+  const importNodesByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
 
   // `export default function App()` / `export default App`, a component
   // exported through a wrapper (`export default connect(...)(App)`), or the
