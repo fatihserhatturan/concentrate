@@ -32,38 +32,37 @@ export const componentGraphContributor: ISemanticContributor = {
 };
 
 export function addComponentRelationships(graph: IGraphContributor): void {
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-  const importNodesByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
-  const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const fileByComponentId = new Map<string, string>();
   const componentsByFileAndName = new Map<string, Map<string, string[]>>();
-  for (const rel of graph.relationships) {
-    if (rel.type !== "DECLARES_COMPONENT") continue;
-    const name = nodesById.get(rel.to)?.properties.name;
+  for (const rel of graph.relationshipsOfType("DECLARES_COMPONENT")) {
+    const name = graph.node(rel.to)?.properties.name;
     if (typeof name !== "string") continue;
     fileByComponentId.set(rel.to, rel.from);
     addDeclaration(componentsByFileAndName, rel.from, name, rel.to);
   }
   if (fileByComponentId.size === 0) return;
 
+  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+  const importNodesByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
+
   // `export default function App()` / `export default App`, a component
   // exported through a wrapper (`export default connect(...)(App)`), or the
   // component of a `.vue`, `.svelte` or `.astro` file.
   for (const [fileId, byName] of componentsByFileAndName) {
-    const file = nodesById.get(fileId);
+    const file = graph.node(fileId);
     const defaultExport = file?.properties.defaultExport;
     const language = file?.properties.language;
     const ids = language === "vue" || language === "svelte" || language === "astro"
-      ? [...byName.values()].flat().filter((id) => nodesById.get(id)?.properties.framework === language)
+      ? [...byName.values()].flat().filter((id) => graph.node(id)?.properties.framework === language)
       : typeof defaultExport === "string"
       ? byName.get(defaultExport)
-      : [...byName.values()].flat().filter((id) => typeof nodesById.get(id)?.properties.defaultExportWrapper === "string");
+      : [...byName.values()].flat().filter((id) => typeof graph.node(id)?.properties.defaultExportWrapper === "string");
     if (ids && ids.length > 0 && !byName.has("default")) byName.set("default", ids);
   }
 
   const contextsByFileAndName = new Map<string, Map<string, string[]>>();
   for (const [componentId, fileId] of fileByComponentId) {
-    const component = nodesById.get(componentId)!;
+    const component = graph.node(componentId)!;
     if (component.properties.kind === "context") addDeclaration(contextsByFileAndName, fileId, String(component.properties.name), componentId);
   }
   const resolveContext = (name: string, fileId: string) =>
@@ -71,7 +70,7 @@ export function addComponentRelationships(graph: IGraphContributor): void {
 
   const added: GraphRelationship[] = [];
   for (const [componentId, fileId] of fileByComponentId) {
-    const component = nodesById.get(componentId)!;
+    const component = graph.node(componentId)!;
     const { lazySource, lazyExport } = component.properties;
     if (typeof lazySource !== "string" || typeof lazyExport !== "string") continue;
     const importNode = (importNodesByFile.get(fileId) ?? []).find((node) => node.properties.isDynamic === true && node.properties.source === lazySource);
@@ -84,7 +83,7 @@ export function addComponentRelationships(graph: IGraphContributor): void {
     }
   }
   for (const [componentId, fileId] of fileByComponentId) {
-    const component = nodesById.get(componentId)!;
+    const component = graph.node(componentId)!;
     const renders = parsePendingRenders(component.properties.pendingRenders);
     if (renders.length === 0) continue;
 
@@ -106,9 +105,8 @@ export function addComponentRelationships(graph: IGraphContributor): void {
     component.properties.pendingRenders = unresolved.length > 0 ? JSON.stringify(unresolved) : null;
   }
 
-  for (const rel of graph.relationships) {
-    if (rel.type !== "DECLARES_PAGE") continue;
-    const page = nodesById.get(rel.to);
+  for (const rel of graph.relationshipsOfType("DECLARES_PAGE")) {
+    const page = graph.node(rel.to);
     const name = page?.properties.component;
     const source = page?.properties.componentSource;
     if (page && typeof source === "string") {
@@ -130,16 +128,16 @@ export function addComponentRelationships(graph: IGraphContributor): void {
 
   // Functions that may call hooks: those defining a component, and custom hooks.
   const componentFunctionIds = new Set(
-    graph.relationships.filter((rel) => rel.type === "COMPONENT_DEFINED_BY_FUNCTION").map((rel) => rel.to),
+    graph.relationshipsOfType("COMPONENT_DEFINED_BY_FUNCTION").map((rel) => rel.to),
   );
   const resolvedByCallId = new Map<string, string>();
-  for (const rel of graph.relationships) {
-    if (rel.type === "CALL_RESOLVES_TO") resolvedByCallId.set(rel.from, rel.to);
+  for (const rel of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
+    resolvedByCallId.set(rel.from, rel.to);
   }
   for (const [callId, functionId] of relationshipIndex.callerFunctionByCallId) {
-    const call = nodesById.get(callId);
+    const call = graph.node(callId);
     if (!call || !isHookCall(call)) continue;
-    const caller = nodesById.get(functionId);
+    const caller = graph.node(functionId);
     const callerName = caller?.properties.name;
     if (!componentFunctionIds.has(functionId) && !(typeof callerName === "string" && /^use[A-Z0-9]/u.test(callerName))) continue;
     const line = Number(call.properties.line);

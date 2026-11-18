@@ -1,10 +1,11 @@
-import type { GraphNode, GraphRelationship } from "../../../../core/graph/model.js";
+import type { GraphNode } from "../../../../core/graph/model.js";
+import type { IGraphContributor } from "../../../../core/contracts/graph-contributor.js";
 import { resolveDeclaration } from "../../../../core/scan/resolution/call-targets.js";
 import { createResolutionRelationshipIndex, indexImportNodesByFile, type ResolutionRelationshipIndex } from "../../../../core/scan/resolution/indexes.js";
 
 export type VariableResolver = {
   index: ResolutionRelationshipIndex;
-  nodeById: Map<string, GraphNode>;
+  node(id: string): GraphNode | undefined;
   fileByVariableId: Map<string, string>;
   // The Variable `name` refers to in `fileId`: declared there, or imported
   // by name or as the default export (`export default api`), through barrels.
@@ -13,14 +14,13 @@ export type VariableResolver = {
   fileOfCall(callId: string): string | undefined;
 };
 
-export function createVariableResolver(nodes: GraphNode[], relationships: GraphRelationship[]): VariableResolver {
-  const index = createResolutionRelationshipIndex(relationships);
-  const importNodesByFile = indexImportNodesByFile(nodes, index.fileByImportId);
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+export function createVariableResolver(graph: IGraphContributor): VariableResolver {
+  const index = createResolutionRelationshipIndex(graph.relationships);
+  const importNodesByFile = indexImportNodesByFile(graph.nodes, index.fileByImportId);
   const fileByVariableId = new Map<string, string>();
   const variablesByFileAndName = new Map<string, Map<string, string[]>>();
-  for (const rel of relationships) {
-    const variable = rel.type === "DEFINES_VARIABLE" ? nodeById.get(rel.to) : undefined;
+  for (const rel of graph.relationshipsOfType("DEFINES_VARIABLE")) {
+    const variable = graph.node(rel.to);
     if (variable?.label !== "Variable" || typeof variable.properties.name !== "string") continue;
     fileByVariableId.set(variable.id, rel.from);
     const byName = variablesByFileAndName.get(rel.from) ?? new Map<string, string[]>();
@@ -30,17 +30,17 @@ export function createVariableResolver(nodes: GraphNode[], relationships: GraphR
   // `export default api` names a variable (and also records a "default"
   // export Variable, which the named one replaces).
   for (const [fileId, byName] of variablesByFileAndName) {
-    const name = nodeById.get(fileId)?.properties.defaultExport;
+    const name = graph.node(fileId)?.properties.defaultExport;
     const ids = typeof name === "string" && name !== "default" ? byName.get(name) : undefined;
     if (ids) byName.set("default", ids);
   }
   return {
     index,
-    nodeById,
+    node: (id) => graph.node(id),
     fileByVariableId,
     variableOf(name, fileId) {
       const id = resolveDeclaration(name, fileId, variablesByFileAndName, importNodesByFile, index.resolvedFileByImportId);
-      return id ? nodeById.get(id) : undefined;
+      return id ? graph.node(id) : undefined;
     },
     fileOfCall(callId) {
       const callerFunctionId = index.callerFunctionByCallId.get(callId);

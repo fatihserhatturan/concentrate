@@ -11,14 +11,12 @@ type RoutePathContext = {
 
 export function resolveRouteFullPaths(graph: IGraphContributor): void {
   resolveImportedMountTargets(graph);
-  const context = createRoutePathContext(graph.nodes, graph.relationships);
+  const context = createRoutePathContext(graph);
 
-  resolveImportedStringConstants(graph.nodes, graph.relationships, context.constantsByFileId);
-  resolveMountPathExpressions(graph.relationships, context);
+  resolveImportedStringConstants(graph, context.constantsByFileId);
+  resolveMountPathExpressions(graph, context);
 
-  for (const route of graph.nodes) {
-    if (route.label !== "Route") continue;
-
+  for (const route of graph.nodesWithLabel("Route")) {
     const fileId = context.fileIdByRouteId.get(route.id);
     // Go routes get their paths in frameworks/go/route-mounts.ts.
     if (!fileId || fileId.endsWith(".go")) continue;
@@ -50,19 +48,17 @@ export function resolveRouteFullPaths(graph: IGraphContributor): void {
 // (`export default Router().use(...)`), or the named export's variable. A
 // mount whose router is not found is dropped.
 function resolveImportedMountTargets(graph: IGraphContributor): void {
-  const mounts = graph.relationships.filter((rel) => rel.type === "MOUNTS" && typeof rel.properties.importedName === "string");
+  const mounts = graph.relationshipsOfType("MOUNTS").filter((rel) => typeof rel.properties.importedName === "string");
   if (mounts.length === 0) return;
 
-  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const resolvedFileByImportId = new Map<string, string>();
   const variableIdByFileAndName = new Map<string, string>();
-  for (const rel of graph.relationships) {
-    if (rel.type === "RESOLVES_TO") {
-      resolvedFileByImportId.set(rel.from, rel.to);
-    } else if (rel.type === "DEFINES_VARIABLE") {
-      const name = nodeById.get(rel.to)?.properties.name;
-      if (typeof name === "string") variableIdByFileAndName.set(key(rel.from, name), rel.to);
-    }
+  for (const rel of graph.relationshipsOfType("RESOLVES_TO")) {
+    resolvedFileByImportId.set(rel.from, rel.to);
+  }
+  for (const rel of graph.relationshipsOfType("DEFINES_VARIABLE")) {
+    const name = graph.node(rel.to)?.properties.name;
+    if (typeof name === "string") variableIdByFileAndName.set(key(rel.from, name), rel.to);
   }
 
   const unresolved = new Set<GraphRelationship>();
@@ -71,7 +67,7 @@ function resolveImportedMountTargets(graph: IGraphContributor): void {
     delete mount.properties.importedName;
 
     const fileId = resolvedFileByImportId.get(mount.to);
-    const defaultName = fileId ? nodeById.get(fileId)?.properties.defaultExport : undefined;
+    const defaultName = fileId ? graph.node(fileId)?.properties.defaultExport : undefined;
     const targetId = !fileId
       ? undefined
       : importedName === "default"
@@ -82,10 +78,7 @@ function resolveImportedMountTargets(graph: IGraphContributor): void {
     else unresolved.add(mount);
   }
 
-  if (unresolved.size === 0) return;
-  for (let index = graph.relationships.length - 1; index >= 0; index -= 1) {
-    if (unresolved.has(graph.relationships[index]!)) graph.relationships.splice(index, 1);
-  }
+  graph.removeRelationships(unresolved);
 }
 
 // app.setGlobalPrefix('api') prefixes every NestJS route of the application.
@@ -94,17 +87,17 @@ function resolveImportedMountTargets(graph: IGraphContributor): void {
 // alone. The `exclude` option is not modelled.
 function applyNestGlobalPrefixes(graph: IGraphContributor, context: RoutePathContext): void {
   const packageIdByFileId = new Map<string, string>();
-  for (const rel of graph.relationships) {
-    if (rel.type === "PACKAGE_CONTAINS_FILE") packageIdByFileId.set(rel.to, rel.from);
+  for (const rel of graph.relationshipsOfType("PACKAGE_CONTAINS_FILE")) {
+    packageIdByFileId.set(rel.to, rel.from);
   }
   const fileIds = new Set(context.fileIdByRouteId.values());
-  for (const node of graph.nodes) {
-    if (node.label === "File") fileIds.add(node.id);
+  for (const node of graph.nodesWithLabel("File")) {
+    fileIds.add(node.id);
   }
 
   const prefixesByScope = new Map<string, Set<string>>();
-  for (const call of graph.nodes) {
-    if (call.label !== "Call" || call.properties.callee !== "setGlobalPrefix" || !call.properties.receiver) continue;
+  for (const call of graph.nodesWithLabel("Call")) {
+    if (call.properties.callee !== "setGlobalPrefix" || !call.properties.receiver) continue;
 
     const fileId = owningFileId(call.id, fileIds);
     const argument = fileId ? firstCallArg(call) : null;
@@ -115,8 +108,8 @@ function applyNestGlobalPrefixes(graph: IGraphContributor, context: RoutePathCon
     prefixesByScope.set(scope, (prefixesByScope.get(scope) ?? new Set()).add(prefix));
   }
 
-  for (const route of graph.nodes) {
-    if (route.label !== "Route" || route.properties.framework !== "nestjs") continue;
+  for (const route of graph.nodesWithLabel("Route")) {
+    if (route.properties.framework !== "nestjs") continue;
 
     const fileId = context.fileIdByRouteId.get(route.id);
     const fullPath = route.properties.fullPath;
@@ -148,42 +141,36 @@ function firstCallArg(call: GraphNode): string | null {
   }
 }
 
-function createRoutePathContext(nodes: GraphNode[], relationships: GraphRelationship[]): RoutePathContext {
+function createRoutePathContext(graph: IGraphContributor): RoutePathContext {
   const fileIdByRouteId = new Map<string, string>();
   const variableIdByFileAndName = new Map<string, string>();
   const fileIdByVariableId = new Map<string, string>();
   const constantsByFileId = new Map<string, Map<string, string>>();
   const incomingMountsByTargetId = new Map<string, GraphRelationship[]>();
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
 
-  for (const rel of relationships) {
-    if (rel.type === "DECLARES_ROUTE") {
-      fileIdByRouteId.set(rel.to, rel.from);
-      continue;
+  for (const rel of graph.relationshipsOfType("DECLARES_ROUTE")) {
+    fileIdByRouteId.set(rel.to, rel.from);
+  }
+
+  for (const rel of graph.relationshipsOfType("DEFINES_VARIABLE")) {
+    const variable = graph.node(rel.to);
+    if (variable?.label !== "Variable") continue;
+    const name = variable.properties.name;
+    if (typeof name !== "string") continue;
+
+    variableIdByFileAndName.set(key(rel.from, name), variable.id);
+    fileIdByVariableId.set(variable.id, rel.from);
+
+    const stringValue = variable.properties.stringValue;
+    if (typeof stringValue === "string") {
+      setFileConstant(constantsByFileId, rel.from, name, stringValue);
     }
+  }
 
-    if (rel.type === "DEFINES_VARIABLE") {
-      const variable = nodeById.get(rel.to);
-      if (variable?.label !== "Variable") continue;
-      const name = variable.properties.name;
-      if (typeof name !== "string") continue;
-
-      variableIdByFileAndName.set(key(rel.from, name), variable.id);
-      fileIdByVariableId.set(variable.id, rel.from);
-
-      const stringValue = variable.properties.stringValue;
-      if (typeof stringValue === "string") {
-        setFileConstant(constantsByFileId, rel.from, name, stringValue);
-      }
-      continue;
-    }
-
-    if (rel.type === "MOUNTS") {
-      incomingMountsByTargetId.set(rel.to, [
-        ...(incomingMountsByTargetId.get(rel.to) ?? []),
-        rel,
-      ]);
-    }
+  for (const rel of graph.relationshipsOfType("MOUNTS")) {
+    const list = incomingMountsByTargetId.get(rel.to);
+    if (list) list.push(rel);
+    else incomingMountsByTargetId.set(rel.to, [rel]);
   }
 
   return {
@@ -196,27 +183,24 @@ function createRoutePathContext(nodes: GraphNode[], relationships: GraphRelation
 }
 
 function resolveImportedStringConstants(
-  nodes: GraphNode[],
-  relationships: GraphRelationship[],
+  graph: IGraphContributor,
   constantsByFileId: Map<string, Map<string, string>>,
 ): void {
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
   const importFileIdByImportId = new Map<string, string>();
   const resolvedFileIdByImportId = new Map<string, string>();
 
-  for (const rel of relationships) {
-    if (rel.type === "IMPORTS") {
-      importFileIdByImportId.set(rel.to, rel.from);
-    } else if (rel.type === "RESOLVES_TO") {
-      resolvedFileIdByImportId.set(rel.from, rel.to);
-    }
+  for (const rel of graph.relationshipsOfType("IMPORTS")) {
+    importFileIdByImportId.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationshipsOfType("RESOLVES_TO")) {
+    resolvedFileIdByImportId.set(rel.from, rel.to);
   }
 
   for (const [importId, importerFileId] of importFileIdByImportId) {
     const targetFileId = resolvedFileIdByImportId.get(importId);
     if (!targetFileId) continue;
 
-    const importNode = nodeById.get(importId);
+    const importNode = graph.node(importId);
     if (importNode?.label !== "Import") continue;
 
     const bindings = parseImportBindings(importNode.properties.bindings);
@@ -231,9 +215,8 @@ function resolveImportedStringConstants(
   }
 }
 
-function resolveMountPathExpressions(relationships: GraphRelationship[], context: RoutePathContext): void {
-  for (const rel of relationships) {
-    if (rel.type !== "MOUNTS") continue;
+function resolveMountPathExpressions(graph: IGraphContributor, context: RoutePathContext): void {
+  for (const rel of graph.relationshipsOfType("MOUNTS")) {
     if (typeof rel.properties.path === "string") continue;
 
     const expression = rel.properties.pathExpression;

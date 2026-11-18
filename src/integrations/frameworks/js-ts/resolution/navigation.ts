@@ -33,8 +33,8 @@ type PageEntry = { id: string; segments: RouteSegment[] };
 export const navigationContributor: ISemanticContributor = {
   async contribute(graph) {
     const pages: PageEntry[] = [];
-    for (const node of graph.nodes) {
-      if (node.label !== "Page" || typeof node.properties.fullPath !== "string") continue;
+    for (const node of graph.nodesWithLabel("Page")) {
+      if (typeof node.properties.fullPath !== "string") continue;
       if (!DESTINATION_KINDS.has(node.properties.kind as string | undefined)) continue;
       pages.push({ id: node.id, segments: routeSegments(node.properties.fullPath) });
     }
@@ -59,17 +59,16 @@ export const navigationContributor: ISemanticContributor = {
     };
 
     const added: GraphRelationship[] = [];
-    for (const call of graph.nodes) {
-      if (call.label !== "Call") continue;
+    for (const call of graph.nodesWithLabel("Call")) {
       const url = navigationTarget(call);
       const target = url === null ? null : pageFor(url);
       if (target) added.push({ from: call.id, to: target.page.id, type: "NAVIGATES_TO", properties: { url: url!, match: target.match } });
     }
 
     // Files with markup: every markup file, and the files that declare components (JSX, Angular inline templates).
-    const withComponents = new Set(graph.relationships.filter((relationship) => relationship.type === "DECLARES_COMPONENT").map((relationship) => relationship.from));
-    for (const file of graph.nodes) {
-      if (file.label !== "File" || typeof file.properties.path !== "string") continue;
+    const withComponents = new Set(graph.relationshipsOfType("DECLARES_COMPONENT").map((relationship) => relationship.from));
+    for (const file of graph.nodesWithLabel("File")) {
+      if (typeof file.properties.path !== "string") continue;
       if (!MARKUP_FILE.test(file.properties.path) && !withComponents.has(file.id)) continue;
       const text = await readFile(file.properties.path, "utf8").catch(() => null);
       if (text === null || !MAYBE_LINK.test(text)) continue;

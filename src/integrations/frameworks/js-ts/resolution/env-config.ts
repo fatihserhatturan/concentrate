@@ -10,18 +10,16 @@ function addRouteEnvRelationships(graph: IGraphContributor): void {
   const envRelationshipsByFunctionId = new Map<string, GraphRelationship[]>();
   const handledFunctionIdsByRouteId = new Map<string, string[]>();
 
-  for (const rel of graph.relationships) {
-    if (rel.type === "USES_ENV" && rel.from.includes(":function:")) {
-      envRelationshipsByFunctionId.set(rel.from, [
-        ...(envRelationshipsByFunctionId.get(rel.from) ?? []),
-        rel,
-      ]);
-    } else if (rel.type === "ROUTE_HANDLED_BY") {
-      handledFunctionIdsByRouteId.set(rel.from, [
-        ...(handledFunctionIdsByRouteId.get(rel.from) ?? []),
-        rel.to,
-      ]);
-    }
+  for (const rel of graph.relationshipsOfType("USES_ENV")) {
+    if (!rel.from.includes(":function:")) continue;
+    const list = envRelationshipsByFunctionId.get(rel.from);
+    if (list) list.push(rel);
+    else envRelationshipsByFunctionId.set(rel.from, [rel]);
+  }
+  for (const rel of graph.relationshipsOfType("ROUTE_HANDLED_BY")) {
+    const list = handledFunctionIdsByRouteId.get(rel.from);
+    if (list) list.push(rel.to);
+    else handledFunctionIdsByRouteId.set(rel.from, [rel.to]);
   }
 
   for (const [routeId, functionIds] of handledFunctionIdsByRouteId) {
@@ -42,30 +40,30 @@ function addRouteEnvRelationships(graph: IGraphContributor): void {
 }
 
 function addConfigConsumerRelationships(graph: IGraphContributor): void {
-  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const fileIdByImportId = new Map<string, string>();
   const resolvedFileIdByImportId = new Map<string, string>();
   const configValueIdByFileAndName = new Map<string, string>();
 
-  for (const rel of graph.relationships) {
-    if (rel.type === "IMPORTS") {
-      fileIdByImportId.set(rel.to, rel.from);
-    } else if (rel.type === "RESOLVES_TO") {
-      resolvedFileIdByImportId.set(rel.from, rel.to);
-    } else if (rel.type === "DECLARES_CONFIG") {
-      const configNode = nodeById.get(rel.to);
-      const name = configNode?.properties.name;
-      if (typeof name === "string") {
-        configValueIdByFileAndName.set(key(rel.from, name), rel.to);
-      }
+  for (const rel of graph.relationshipsOfType("DECLARES_CONFIG")) {
+    const name = graph.node(rel.to)?.properties.name;
+    if (typeof name === "string") {
+      configValueIdByFileAndName.set(key(rel.from, name), rel.to);
     }
+  }
+  if (configValueIdByFileAndName.size === 0) return;
+
+  for (const rel of graph.relationshipsOfType("IMPORTS")) {
+    fileIdByImportId.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationshipsOfType("RESOLVES_TO")) {
+    resolvedFileIdByImportId.set(rel.from, rel.to);
   }
 
   for (const [importId, fileId] of fileIdByImportId) {
     const targetFileId = resolvedFileIdByImportId.get(importId);
     if (!targetFileId) continue;
 
-    const importNode = nodeById.get(importId);
+    const importNode = graph.node(importId);
     if (importNode?.label !== "Import") continue;
 
     for (const binding of parseImportBindings(importNode.properties.bindings)) {

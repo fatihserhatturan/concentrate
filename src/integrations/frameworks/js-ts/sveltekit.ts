@@ -88,15 +88,18 @@ function unwrap(node: SyntaxNode | null): SyntaxNode | null {
 
 export const svelteKitContributor: ISemanticContributor = {
   async contribute(graph) {
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
     const functionsByFile = new Map<string, GraphNode[]>();
     const componentByFile = new Map<string, string>();
-    for (const rel of graph.relationships) {
-      const target = nodesById.get(rel.to);
-      if (rel.type === "DEFINES_FUNCTION" && target && target.properties.className == null) {
-        functionsByFile.set(rel.from, [...functionsByFile.get(rel.from) ?? [], target]);
-      }
-      if (rel.type === "DECLARES_COMPONENT" && target?.properties.framework === "svelte") componentByFile.set(rel.from, target.id);
+    for (const rel of graph.relationshipsOfType("DEFINES_FUNCTION")) {
+      const target = graph.node(rel.to);
+      if (!target || target.properties.className != null) continue;
+      const list = functionsByFile.get(rel.from);
+      if (list) list.push(target);
+      else functionsByFile.set(rel.from, [target]);
+    }
+    for (const rel of graph.relationshipsOfType("DECLARES_COMPONENT")) {
+      const target = graph.node(rel.to);
+      if (target?.properties.framework === "svelte") componentByFile.set(rel.from, target.id);
     }
 
     const nodes: GraphNode[] = [];
@@ -122,7 +125,7 @@ export const svelteKitContributor: ISemanticContributor = {
       relationships.push({ from: route.id, to: handler.id, type: "ROUTE_HANDLED_BY", properties: {} });
     };
 
-    for (const project of await dependentPackages(graph, nodesById, "@sveltejs/kit")) {
+    for (const project of await dependentPackages(graph, "@sveltejs/kit")) {
       const routeFiles = project.files.flatMap(({ file, path: filePath }) => {
         const match = file.properties.isTest === true ? null : routesFile.exec(filePath);
         return match ? [{ file, dir: match[1] ?? "", name: match[2]! }] : [];

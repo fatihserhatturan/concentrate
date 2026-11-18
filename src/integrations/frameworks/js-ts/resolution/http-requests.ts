@@ -1,5 +1,6 @@
 import path from "node:path";
 import type { GraphNode, GraphRelationship } from "../../../../core/graph/model.js";
+import type { IGraphContributor } from "../../../../core/contracts/graph-contributor.js";
 import type { ISemanticContributor } from "../../../../core/contracts/semantic-contributor.js";
 import { ENV_VALUE_FILES, readEnvFiles, type EnvFiles } from "../env-files.js";
 import { createVariableResolver } from "./variable-resolver.js";
@@ -51,12 +52,12 @@ export const httpRequestsContributor: ISemanticContributor = {
         return [];
       }
     });
-    resolveRequestUrls(graph.nodes, graph.relationships, await readEnvFiles(rootPath, files), origins);
+    resolveRequestUrls(graph, await readEnvFiles(rootPath, files), origins);
     const routes: RouteEntry[] = [];
     // `METHOD:fullPath` → tRPC procedure routes.
     const trpcRoutes = new Map<string, string[]>();
-    for (const node of graph.nodes) {
-      if (node.label !== "Route" || typeof node.properties.fullPath !== "string") continue;
+    for (const node of graph.nodesWithLabel("Route")) {
+      if (typeof node.properties.fullPath !== "string") continue;
       if (node.properties.framework === "trpc") {
         const key = `${node.properties.method}:${node.properties.fullPath}`;
         trpcRoutes.set(key, [...(trpcRoutes.get(key) ?? []), node.id]);
@@ -67,8 +68,8 @@ export const httpRequestsContributor: ISemanticContributor = {
       routes.push({ id: node.id, method, segments: routeSegments(node.properties.fullPath), trailingSlash: node.properties.fullPath.length > 1 && node.properties.fullPath.endsWith("/") });
     }
     const added: GraphRelationship[] = [];
-    for (const call of graph.nodes) {
-      if (call.label !== "Call" || call.properties.httpClient !== "trpc") continue;
+    for (const call of graph.nodesWithLabel("Call")) {
+      if (call.properties.httpClient !== "trpc") continue;
       const { httpMethod: method, httpUrl: url } = call.properties;
       const ids = trpcRoutes.get(`${method}:${url}`);
       if (ids?.length === 1) added.push({ from: call.id, to: ids[0]!, type: "REQUESTS", properties: { method, url, match: "exact" } });
@@ -78,7 +79,7 @@ export const httpRequestsContributor: ISemanticContributor = {
       return;
     }
 
-    for (const call of graph.nodes) {
+    for (const call of graph.nodesWithLabel("Call")) {
       if (call.properties.httpClient === "trpc") continue;
       const linked = new Set<string>();
       for (const request of requestsOf(call)) {
@@ -135,12 +136,12 @@ function fileOfNodeId(id: string): string | null {
   return /^file:(.+?):(?:function|route|call)\b/u.exec(id)?.[1] ?? null;
 }
 
-function resolveRequestUrls(nodes: GraphNode[], relationships: GraphRelationship[], env: EnvFiles, origins: readonly string[]): void {
-  const calls = nodes.filter((node) => node.label === "Call" && (node.properties.httpMethod !== undefined || node.properties.httpReceiver !== undefined));
+function resolveRequestUrls(graph: IGraphContributor, env: EnvFiles, origins: readonly string[]): void {
+  const calls = graph.nodesWithLabel("Call").filter((node) => (node.properties.httpMethod !== undefined || node.properties.httpReceiver !== undefined));
   if (calls.length === 0) return;
-  const { nodeById, fileByVariableId, variableOf, fileOfCall } = createVariableResolver(nodes, relationships);
+  const { node: nodeOf, fileByVariableId, variableOf, fileOfCall } = createVariableResolver(graph);
   const envValue = (name: string, fileId: string): string | undefined => {
-    const relativePath = nodeById.get(fileId)?.properties.relativePath;
+    const relativePath = nodeOf(fileId)?.properties.relativePath;
     if (typeof relativePath !== "string") return undefined;
     let directory = path.posix.dirname(relativePath);
     for (;;) {

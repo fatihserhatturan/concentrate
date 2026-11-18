@@ -34,12 +34,13 @@ const specialPages = new Map([
 
 export const nextjsPagesContributor: ISemanticContributor = {
   async contribute(graph) {
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
     const componentsByFile = new Map<string, GraphNode[]>();
-    for (const rel of graph.relationships) {
-      if (rel.type !== "DECLARES_COMPONENT") continue;
-      const component = nodesById.get(rel.to);
-      if (component) componentsByFile.set(rel.from, [...componentsByFile.get(rel.from) ?? [], component]);
+    for (const rel of graph.relationshipsOfType("DECLARES_COMPONENT")) {
+      const component = graph.node(rel.to);
+      if (!component) continue;
+      const list = componentsByFile.get(rel.from);
+      if (list) list.push(component);
+      else componentsByFile.set(rel.from, [component]);
     }
 
     const nodes: GraphNode[] = [];
@@ -52,7 +53,7 @@ export const nextjsPagesContributor: ISemanticContributor = {
       if (component) relationships.push({ from: page.id, to: component.id, type: "PAGE_RENDERS", properties: {} });
     };
 
-    for (const project of await nextProjects(graph, nodesById)) {
+    for (const project of await nextProjects(graph)) {
       for (const { file, segments } of project.pagesFiles) {
         if (segments[0] === "api") continue;
         const special = segments.length === 1 ? specialPages.get(segments[0]!) : undefined;
@@ -96,12 +97,13 @@ const middlewareFile = /^(?:src\/)?(middleware|proxy)\.(jsx?|tsx?|mjs|cjs)$/u;
 
 export const nextjsRoutesContributor: ISemanticContributor = {
   async contribute(graph) {
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
     const functionsByFile = new Map<string, GraphNode[]>();
-    for (const rel of graph.relationships) {
-      if (rel.type !== "DEFINES_FUNCTION") continue;
-      const fn = nodesById.get(rel.to);
-      if (fn && fn.properties.className == null) functionsByFile.set(rel.from, [...functionsByFile.get(rel.from) ?? [], fn]);
+    for (const rel of graph.relationshipsOfType("DEFINES_FUNCTION")) {
+      const fn = graph.node(rel.to);
+      if (!fn || fn.properties.className != null) continue;
+      const list = functionsByFile.get(rel.from);
+      if (list) list.push(fn);
+      else functionsByFile.set(rel.from, [fn]);
     }
 
     const nodes: GraphNode[] = [];
@@ -126,7 +128,7 @@ export const nextjsRoutesContributor: ISemanticContributor = {
       if (handler) relationships.push({ from: route.id, to: handler.id, type: "ROUTE_HANDLED_BY", properties: {} });
     };
 
-    for (const project of await nextProjects(graph, nodesById)) {
+    for (const project of await nextProjects(graph)) {
       for (const { file, segments, name } of project.appFiles) {
         if (!routeFile.test(name)) continue;
         const routePath = appRouterPath(segments);
@@ -191,17 +193,19 @@ type NextProject = { files: Array<{ file: GraphNode; path: string }>; appFiles: 
 // files keep their folder segments and file name, minus private folders and
 // intercepting routes; Pages Router files keep their path without the
 // extension, minus tests.
-async function nextProjects(graph: IGraphContributor, nodesById: Map<string, GraphNode>): Promise<NextProject[]> {
+async function nextProjects(graph: IGraphContributor): Promise<NextProject[]> {
   const filesByPackage = new Map<string, GraphNode[]>();
-  for (const rel of graph.relationships) {
-    if (rel.type !== "PACKAGE_CONTAINS_FILE") continue;
-    const file = nodesById.get(rel.to);
-    if (file?.label === "File") filesByPackage.set(rel.from, [...filesByPackage.get(rel.from) ?? [], file]);
+  for (const rel of graph.relationshipsOfType("PACKAGE_CONTAINS_FILE")) {
+    const file = graph.node(rel.to);
+    if (file?.label !== "File") continue;
+    const list = filesByPackage.get(rel.from);
+    if (list) list.push(file);
+    else filesByPackage.set(rel.from, [file]);
   }
 
   const projects: NextProject[] = [];
   for (const [packageId, files] of filesByPackage) {
-    const packageNode = nodesById.get(packageId);
+    const packageNode = graph.node(packageId);
     const packagePath = packageNode?.properties.path;
     const packageRelativePath = packageNode?.properties.relativePath;
     if (typeof packagePath !== "string" || typeof packageRelativePath !== "string") continue;

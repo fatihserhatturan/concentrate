@@ -7,26 +7,30 @@ import { createLifecycleRelationships, type PendingHandlerRefs } from "../route-
 // to their Function nodes. The parse-time route graph sees one file only and
 // records what it could not resolve in Route.pendingHandlerRefs.
 export function addImportedRouteHandlerRelationships(graph: IGraphContributor): void {
-  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+  if (graph.nodesWithLabel("Route").length === 0) return;
+
   const fileIdByRouteId = new Map<string, string>();
   const functionIdsByFile = new Map<string, Map<string, string>>();
   const importIdsByFile = new Map<string, string[]>();
   const resolvedFileByImportId = new Map<string, string>();
 
-  for (const rel of graph.relationships) {
-    if (rel.type === "DECLARES_ROUTE") {
-      fileIdByRouteId.set(rel.to, rel.from);
-    } else if (rel.type === "DEFINES_FUNCTION") {
-      const name = nodeById.get(rel.to)?.properties.name;
-      if (typeof name !== "string") continue;
-      const functions = functionIdsByFile.get(rel.from) ?? new Map<string, string>();
-      if (!functions.has(name)) functions.set(name, rel.to);
-      functionIdsByFile.set(rel.from, functions);
-    } else if (rel.type === "IMPORTS") {
-      importIdsByFile.set(rel.from, [...(importIdsByFile.get(rel.from) ?? []), rel.to]);
-    } else if (rel.type === "RESOLVES_TO") {
-      resolvedFileByImportId.set(rel.from, rel.to);
-    }
+  for (const rel of graph.relationshipsOfType("DECLARES_ROUTE")) {
+    fileIdByRouteId.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationshipsOfType("DEFINES_FUNCTION")) {
+    const name = graph.node(rel.to)?.properties.name;
+    if (typeof name !== "string") continue;
+    const functions = functionIdsByFile.get(rel.from) ?? new Map<string, string>();
+    if (!functions.has(name)) functions.set(name, rel.to);
+    functionIdsByFile.set(rel.from, functions);
+  }
+  for (const rel of graph.relationshipsOfType("IMPORTS")) {
+    const ids = importIdsByFile.get(rel.from);
+    if (ids) ids.push(rel.to);
+    else importIdsByFile.set(rel.from, [rel.to]);
+  }
+  for (const rel of graph.relationshipsOfType("RESOLVES_TO")) {
+    resolvedFileByImportId.set(rel.from, rel.to);
   }
 
   const resolveName = (fileId: string, name: string): string | null => {
@@ -35,7 +39,7 @@ export function addImportedRouteHandlerRelationships(graph: IGraphContributor): 
 
     for (const importId of importIdsByFile.get(fileId) ?? []) {
       const targetFileId = resolvedFileByImportId.get(importId);
-      const importNode = nodeById.get(importId);
+      const importNode = graph.node(importId);
       if (!targetFileId || importNode?.label !== "Import") continue;
 
       const binding = parseImportBindings(importNode.properties.bindings)
@@ -50,9 +54,7 @@ export function addImportedRouteHandlerRelationships(graph: IGraphContributor): 
   };
 
   const added: GraphRelationship[] = [];
-  for (const node of graph.nodes) {
-    if (node.label !== "Route") continue;
-
+  for (const node of graph.nodesWithLabel("Route")) {
     const pending = parsePendingHandlerRefs(node.properties.pendingHandlerRefs);
     const fileId = fileIdByRouteId.get(node.id);
     if (!pending || !fileId) continue;

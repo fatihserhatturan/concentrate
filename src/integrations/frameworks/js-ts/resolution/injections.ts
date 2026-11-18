@@ -1,5 +1,5 @@
 import type { IGraphContributor } from "../../../../core/contracts/graph-contributor.js";
-import type { GraphNode, GraphRelationship } from "../../../../core/graph/model.js";
+import type { GraphNode } from "../../../../core/graph/model.js";
 import {
   createResolutionRelationshipIndex,
   indexImportNodesByFile,
@@ -7,12 +7,15 @@ import {
 } from "../../../../core/scan/resolution/indexes.js";
 
 export function addInjectionRelationships(graph: IGraphContributor): void {
+  // Injections and `this.field.method()` calls need a typed field and a class.
+  if (graph.relationshipsOfType("DEFINES_FIELD").length === 0 || graph.nodesWithLabel("Class").length === 0) return;
+
   const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
   const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
-  const functionsByClassAndName = indexMethodsByClassAndName(graph.nodes, graph.relationships);
+  const functionsByClassAndName = indexMethodsByClassAndName(graph);
   const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
-  const fieldsByClass = indexFieldsByClass(graph.nodes, graph.relationships);
-  const classIdByMethodId = indexClassIdByMethodId(graph.relationships);
+  const fieldsByClass = indexFieldsByClass(graph);
+  const classIdByMethodId = indexClassIdByMethodId(graph);
   const callerFunctionByCallId = relationshipIndex.callerFunctionByCallId;
   const classIdByInjectedField = new Map<string, Map<string, string>>();
 
@@ -55,9 +58,7 @@ export function addInjectionRelationships(graph: IGraphContributor): void {
     }
   }
 
-  for (const callNode of graph.nodes) {
-    if (callNode.label !== "Call") continue;
-
+  for (const callNode of graph.nodesWithLabel("Call")) {
     const receiver = callNode.properties.receiver;
     const callee = callNode.properties.callee;
     if (typeof receiver !== "string" || typeof callee !== "string") continue;
@@ -87,44 +88,33 @@ export function addInjectionRelationships(graph: IGraphContributor): void {
   }
 }
 
-function indexFieldsByClass(
-  nodes: GraphNode[],
-  relationships: GraphRelationship[],
-): Map<string, GraphNode[]> {
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+function indexFieldsByClass(graph: IGraphContributor): Map<string, GraphNode[]> {
   const fields = new Map<string, GraphNode[]>();
 
-  for (const rel of relationships) {
-    if (rel.type !== "DEFINES_FIELD") continue;
-    const field = nodeById.get(rel.to);
+  for (const rel of graph.relationshipsOfType("DEFINES_FIELD")) {
+    const field = graph.node(rel.to);
     if (field?.label !== "Field") continue;
-    fields.set(rel.from, [...(fields.get(rel.from) ?? []), field]);
+    const list = fields.get(rel.from);
+    if (list) list.push(field);
+    else fields.set(rel.from, [field]);
   }
 
   return fields;
 }
 
-function indexClassIdByMethodId(relationships: GraphRelationship[]): Map<string, string> {
+function indexClassIdByMethodId(graph: IGraphContributor): Map<string, string> {
   const classIds = new Map<string, string>();
-  for (const rel of relationships) {
-    if (rel.type === "DEFINES_METHOD") {
-      classIds.set(rel.to, rel.from);
-    }
+  for (const rel of graph.relationshipsOfType("DEFINES_METHOD")) {
+    classIds.set(rel.to, rel.from);
   }
   return classIds;
 }
 
-function indexMethodsByClassAndName(
-  nodes: GraphNode[],
-  relationships: GraphRelationship[],
-): Map<string, Map<string, string[]>> {
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+function indexMethodsByClassAndName(graph: IGraphContributor): Map<string, Map<string, string[]>> {
   const methods = new Map<string, Map<string, string[]>>();
 
-  for (const rel of relationships) {
-    if (rel.type !== "DEFINES_METHOD") continue;
-
-    const method = nodeById.get(rel.to);
+  for (const rel of graph.relationshipsOfType("DEFINES_METHOD")) {
+    const method = graph.node(rel.to);
     const name = method?.properties.name;
     if (method?.label !== "Function" || typeof name !== "string") continue;
 
@@ -133,7 +123,9 @@ function indexMethodsByClassAndName(
       byName = new Map();
       methods.set(rel.from, byName);
     }
-    byName.set(name, [...(byName.get(name) ?? []), method.id]);
+    const ids = byName.get(name);
+    if (ids) ids.push(method.id);
+    else byName.set(name, [method.id]);
   }
 
   return methods;

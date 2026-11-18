@@ -9,13 +9,13 @@ import { createVariableResolver } from "./variable-resolver.js";
 // null `fullPath` and are not linked. A router nobody mounts is a root.
 export const trpcRoutesContributor: ISemanticContributor = {
   contribute(graph) {
-    const routes = graph.nodes.filter((node) => node.label === "Route" && node.properties.framework === "trpc");
+    const routes = graph.nodesWithLabel("Route").filter((node) => node.properties.framework === "trpc");
     if (routes.length === 0) return;
-    const { variableOf, fileByVariableId } = createVariableResolver(graph.nodes, graph.relationships);
+    const { variableOf, fileByVariableId } = createVariableResolver(graph);
 
     const parents = new Map<string, Array<{ parent: GraphNode; path: string }>>();
-    for (const router of graph.nodes) {
-      if (router.label !== "Variable" || router.properties.trpcRouter !== true || typeof router.properties.trpcMounts !== "string") continue;
+    for (const router of graph.nodesWithLabel("Variable")) {
+      if (router.properties.trpcRouter !== true || typeof router.properties.trpcMounts !== "string") continue;
       const fileId = fileByVariableId.get(router.id);
       if (!fileId) continue;
       for (const { path, name } of JSON.parse(router.properties.trpcMounts) as Array<{ path: string; name: string }>) {
@@ -36,7 +36,7 @@ export const trpcRoutesContributor: ISemanticContributor = {
       return prefix;
     };
 
-    const fileByRouteId = new Map(graph.relationships.filter((rel) => rel.type === "DECLARES_ROUTE").map((rel) => [rel.to, rel.from]));
+    const fileByRouteId = new Map(graph.relationshipsOfType("DECLARES_ROUTE").map((rel) => [rel.to, rel.from]));
     for (const route of routes) {
       const fileId = fileByRouteId.get(route.id);
       const router = fileId && typeof route.properties.receiverName === "string" ? variableOf(route.properties.receiverName, fileId) : undefined;
