@@ -21,6 +21,8 @@ export type GraphStoreOpenOptions = {
  */
 export class GraphStore implements IGraphStore {
   private pendingReset = false;
+  /** The load in progress, shared by concurrent readers. */
+  private loading: Promise<MemoryGraph> | null = null;
   /**
    * The arrays of the last streamed commit, until the first read needs a graph.
    * A query on this store right after a scan builds the graph from them, in
@@ -151,8 +153,20 @@ export class GraphStore implements IGraphStore {
     return this.graph ?? await this.loadGraph();
   }
 
+  /**
+   * The graph of the current head, loaded once however many callers ask at
+   * the same time (an MCP server or the UI runs several queries at once on a
+   * fresh store; each loading its own copy would multiply the graph).
+   */
+  private loadGraph(): Promise<MemoryGraph> {
+    this.loading ??= this.readGraph().finally(() => {
+      this.loading = null;
+    });
+    return this.loading;
+  }
+
   /** Build the graph of the current head: from the arrays of this store's last streamed commit, else from disk. */
-  private async loadGraph(): Promise<MemoryGraph> {
+  private async readGraph(): Promise<MemoryGraph> {
     const scanned = this.scanned;
     this.scanned = null;
     if (scanned) {

@@ -155,3 +155,18 @@ describe("loading a large segment", () => {
     assert.equal(graph.node(nodes[5]!.id)?.outgoing[0]?.to.id, nodes[6]!.id);
   });
 });
+
+describe("lazy loading", () => {
+  it("loads the snapshot once for concurrent readers of a fresh store", async () => {
+    const directory = freshDirectory();
+    const nodes: GraphNode[] = [{ id: "repo:/x", label: "Repo", properties: { path: "/x", name: "x" } }];
+    await commitScannedSnapshot(directory, nodes, [], { schemaVersion: SCHEMA_VERSION, previous: null });
+    const store = await GraphStore.open(directory);
+    const original = (store as unknown as { readGraph: () => Promise<unknown> }).readGraph.bind(store);
+    let loads = 0;
+    (store as unknown as { readGraph: () => Promise<unknown> }).readGraph = async () => { loads += 1; return original(); };
+    const results = await Promise.all(Array.from({ length: 5 }, () => store.query("MATCH (r:Repo) RETURN r.name AS name")));
+    for (const rows of results) assert.deepEqual(rows, [{ name: "x" }]);
+    assert.equal(loads, 1);
+  });
+});
