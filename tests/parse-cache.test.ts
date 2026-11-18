@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { gunzipSync } from "node:zlib";
 import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { formatNormalizedGraph, normalizeGraph } from "../src/core/graph/normalize.js";
@@ -121,5 +122,54 @@ describe("parse cache", () => {
     await second.prune();
     assert.equal(second.report.pruned, 0);
     assert.deepEqual(await new ParseCache(directory, "/first", "parser").read(first.key("a.ts", "hash")), parsed);
+  });
+
+  it("stores entries gzip-compressed", async () => {
+    const directory = await tempDirectory("concentrate-cache-gzip-");
+    const parsed = { fileNodeId: "file:a.ts", nodes: [], relationships: [] };
+    const cache = new ParseCache(directory, "/project", "parser");
+    const key = cache.key("a.ts", "hash");
+    await cache.write(key, parsed);
+    const projectDirectory = path.join(directory, (await readdir(directory))[0]!);
+    assert.deepEqual(await readdir(projectDirectory), [`${key}.json.gz`]);
+    const raw = await readFile(path.join(projectDirectory, `${key}.json.gz`));
+    assert.deepEqual([raw[0], raw[1]], [0x1f, 0x8b]);
+    assert.deepEqual(JSON.parse(gunzipSync(raw).toString("utf8")).parsed, parsed);
+  });
+
+  it("treats an uncompressed entry from before compression as a miss and prunes it", async () => {
+    const directory = await tempDirectory("concentrate-cache-old-");
+    const parsed = { fileNodeId: "file:a.ts", nodes: [], relationships: [] };
+    const cache = new ParseCache(directory, "/project", "parser");
+    const key = cache.key("a.ts", "hash");
+    await cache.write(key, parsed);
+    const projectDirectory = path.join(directory, (await readdir(directory))[0]!);
+    await writeFile(path.join(projectDirectory, `${key}.json`), JSON.stringify({ version: 1, parsed }));
+    await rm(path.join(projectDirectory, `${key}.json.gz`));
+
+    const next = new ParseCache(directory, "/project", "parser");
+    assert.equal(await next.read(key), null);
+    assert.equal(next.report.misses, 1);
+    await next.prune();
+    assert.equal(next.report.pruned, 1);
+    assert.deepEqual(await readdir(projectDirectory), []);
+  });
+
+  it("treats a corrupt gzip entry as a miss", async () => {
+    const directory = await tempDirectory("concentrate-cache-corrupt-");
+    const parsed = { fileNodeId: "file:a.ts", nodes: [], relationships: [] };
+    const cache = new ParseCache(directory, "/project", "parser");
+    const key = cache.key("a.ts", "hash");
+    await cache.write(key, parsed);
+    const projectDirectory = path.join(directory, (await readdir(directory))[0]!);
+    const target = path.join(projectDirectory, `${key}.json.gz`);
+    const raw = await readFile(target);
+
+    await writeFile(target, raw.subarray(0, Math.floor(raw.length / 2)));
+    assert.equal(await cache.read(key), null);
+    await writeFile(target, "not gzip at all");
+    assert.equal(await cache.read(key), null);
+    assert.equal(cache.report.misses, 2);
+    assert.equal(cache.report.hits, 0);
   });
 });
