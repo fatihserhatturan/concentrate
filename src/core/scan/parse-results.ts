@@ -15,19 +15,56 @@ export function addParseResultsToGraph(
   report: ScanReport,
   continueOnError: boolean,
 ): boolean {
-  for (const result of parseResults) {
-    if (result.ok) {
-      if (addParsedFileToGraph(graph, repoNodeId, rootPath, result, report)) report.parsedFiles += 1;
-      continue;
-    }
+  const sink = new OrderedParseResults(graph, repoNodeId, rootPath, report, continueOnError);
+  parseResults.forEach((result, index) => sink.set(index, result));
+  return sink.complete;
+}
 
-    report.failedFiles.push(createScanFailure(rootPath, result.filePath, result.error));
-    if (!continueOnError) {
-      return false;
-    }
+/**
+ * Adds parse results to the graph in file order while they arrive in any
+ * order. A result waits only until the results of every file before it are
+ * in, then it is added and dropped, so a scan holds a few results instead of
+ * one per file (on a large repository, gigabytes of parsed nodes). The graph
+ * is the same as adding every result at the end in file order.
+ */
+export class OrderedParseResults {
+  private readonly waiting = new Map<number, ParseResult>();
+  private next = 0;
+  private stopped = false;
+
+  constructor(
+    private readonly graph: GraphBuilder,
+    private readonly repoNodeId: string,
+    private readonly rootPath: string,
+    private readonly report: ScanReport,
+    private readonly continueOnError: boolean,
+  ) {}
+
+  /** False once a failed file stopped the scan (without continueOnError). */
+  get complete(): boolean {
+    return !this.stopped;
   }
 
-  return true;
+  /** The result of the file at `index`; each index from 0 up is set once. */
+  set(index: number, result: ParseResult): void {
+    if (this.stopped) return;
+    this.waiting.set(index, result);
+    for (let ready = this.waiting.get(this.next); ready !== undefined && !this.stopped; ready = this.waiting.get(this.next)) {
+      this.waiting.delete(this.next);
+      this.next += 1;
+      this.add(ready);
+    }
+    if (this.stopped) this.waiting.clear();
+  }
+
+  private add(result: ParseResult): void {
+    if (result.ok) {
+      if (addParsedFileToGraph(this.graph, this.repoNodeId, this.rootPath, result, this.report)) this.report.parsedFiles += 1;
+      return;
+    }
+    this.report.failedFiles.push(createScanFailure(this.rootPath, result.filePath, result.error));
+    if (!this.continueOnError) this.stopped = true;
+  }
 }
 
 function addParsedFileToGraph(

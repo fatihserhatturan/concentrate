@@ -32,8 +32,8 @@ import { discoverFiles } from "../src/core/scan/discover-files.js";
 import { createScanManifest } from "../src/core/scan/manifest.js";
 import { isCodeLanguage } from "../src/core/scan/language.js";
 import { ParseCache } from "../src/core/scan/parse-cache.js";
-import { addParseResultsToGraph } from "../src/core/scan/parse-results.js";
-import { parseFileWithContext, type ParseResult } from "../src/core/scan/parse-source.js";
+import { OrderedParseResults } from "../src/core/scan/parse-results.js";
+import { parseFileWithContext } from "../src/core/scan/parse-source.js";
 import { addProjectConfigNodes } from "../src/core/scan/project-config.js";
 import { loadProjectSettings } from "../src/core/scan/project-settings.js";
 import { createScanReport } from "../src/core/scan/report.js";
@@ -129,16 +129,20 @@ const cacheKey = (filePath: string) => {
   return cache && contentHash ? { key: cache.key(relativePath, overridden ? `${contentHash}\0${languageOf.get(filePath)}` : contentHash), contentHash } : null;
 };
 
-// 2. Parse: cache reads, then workers for the misses. Results are held, as the scan holds them.
+// 2. Parse: cache reads, then workers for the misses. As in a scan, each
+// result goes into the GraphBuilder (with its dedupe sets) once the results
+// of the files before it are in.
 let graph: GraphBuilder | null = new GraphBuilder();
-let parseResults: ParseResult[] | null = await step("parse (results held)", async () => {
-  const results: ParseResult[] = new Array(supportedFiles.length);
+await step("parse + add to graph (streamed)", async () => {
+  graph!.addNode({ id: repoNodeId, label: "Repo", properties: { path: rootPath, name: path.basename(rootPath) } });
+  await addProjectConfigNodes(graph!, repoNodeId, rootPath, report);
+  const results = new OrderedParseResults(graph!, repoNodeId, rootPath, report, true);
   const misses: number[] = [];
   const concurrency = os.availableParallelism();
   await runWithConcurrency([...supportedFiles.keys()], concurrency, async (index) => {
     const entry = cacheKey(supportedFiles[index]!.filePath);
     const cached = entry ? await cache!.read(entry.key) : null;
-    if (cached) results[index] = { ok: true, parsed: cached, filePath: supportedFiles[index]!.filePath };
+    if (cached) results.set(index, { ok: true, parsed: cached, filePath: supportedFiles[index]!.filePath });
     else misses.push(index);
   });
   misses.sort((a, b) => a - b);
@@ -158,23 +162,15 @@ let parseResults: ParseResult[] | null = await step("parse (results held)", asyn
         const parsed = await parseFileWithContext(rootPath, filePath, language, parser);
         const entry = cacheKey(filePath);
         if (entry && await hashFile(filePath) === entry.contentHash) await cache!.write(entry.key, parsed);
-        results[index] = { ok: true, parsed, filePath };
+        results.set(index, { ok: true, parsed, filePath });
       } catch (error) {
-        results[index] = { ok: false, error, filePath };
+        results.set(index, { ok: false, error, filePath });
       }
     });
   } finally {
     await pool?.close();
   }
   console.error(`  (${codeFiles} code files, ${report.parseWorkers} workers, cache ${cache ? `${report.parseCache.hits} hits / ${report.parseCache.misses} misses` : "off"})`);
-  return results;
-});
-
-// 3. GraphBuilder: the parse results added to the graph (with its dedupe sets).
-await step("addParseResultsToGraph (builder)", async () => {
-  graph!.addNode({ id: repoNodeId, label: "Repo", properties: { path: rootPath, name: path.basename(rootPath) } });
-  await addProjectConfigNodes(graph!, repoNodeId, rootPath, report);
-  addParseResultsToGraph(graph!, repoNodeId, rootPath, parseResults!, report, true);
 });
 
 // 4. Workspace packages and the language resolvers.
@@ -197,8 +193,7 @@ await step("compact unresolved call sites", () => compactUnresolvedCalls(graph!)
 let nodes: GraphNode[] | null = graph!.nodes;
 let relationships: GraphRelationship[] | null = graph!.relationships;
 graph = null;
-parseResults = null;
-await step("release builder and parse results (scan result only)", () => undefined);
+await step("release builder (scan result only)", () => undefined);
 
 // 7. The store write: scanIntoStore's `reset()` + `write()` into a temporary directory.
 const workDirectory = await mkdtemp(path.join(os.tmpdir(), "concentrate-memory-probe-"));

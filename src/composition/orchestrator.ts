@@ -4,6 +4,7 @@ import type { BuildCodeGraphOptions, BuildCodeGraphResult } from "../core/scan/r
 import { readPythonProjects } from "../integrations/languages/python/project.js";
 import { parserFingerprint } from "./parser-fingerprint.js";
 import { autoParseWorkers, createParserPool } from "./parser-pool.js";
+import { collectGarbageAfterGrowth } from "./garbage.js";
 
 const deps = {
   getParser: (language: string) => coreIntegrationRegistry.getLanguageParser(language),
@@ -13,6 +14,7 @@ const deps = {
   parserFingerprint,
   createParserPool,
   autoParseWorkers,
+  collectGarbage: collectGarbageAfterGrowth,
 };
 
 export const scanOrchestrator = createScanOrchestrator(deps);

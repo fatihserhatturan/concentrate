@@ -11,12 +11,16 @@ export async function finalizeGraphRelationships(
   contributors: readonly ISemanticContributor[],
   files: readonly string[],
   settings: ScanSettings = { apiOrigins: [] },
+  // Runs after each resolver and contributor (ScanDependencies.collectGarbage).
+  afterStep?: () => void,
 ): Promise<void> {
   for (const resolver of resolvers) {
     await resolver.resolve(graph, rootPath, report);
+    afterStep?.();
   }
 
   for (const contributor of contributors) {
     await contributor.contribute(graph, rootPath, report, files, settings);
+    afterStep?.();
   }
 }
