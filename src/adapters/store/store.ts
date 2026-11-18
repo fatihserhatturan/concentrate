@@ -22,11 +22,13 @@ export type GraphStoreOpenOptions = {
 export class GraphStore implements IGraphStore {
   private pendingReset = false;
   /**
-   * The arrays of the last streamed commit, held weakly. A caller that still has
-   * them (a scan result being queried right after it was written) gets a graph in
-   * scan order without reading the snapshot back; otherwise it loads from disk.
+   * The arrays of the last streamed commit, until the first read needs a graph.
+   * A query on this store right after a scan builds the graph from them, in
+   * scan order like before; the caller owns these arrays anyway, so holding
+   * them costs nothing while it does, and a store that is closed after the
+   * write (the scan CLI) never builds a graph at all.
    */
-  private scanned: { nodes: WeakRef<readonly GraphNode[]>; relationships: WeakRef<readonly GraphRelationship[]> } | null = null;
+  private scanned: { nodes: readonly GraphNode[]; relationships: readonly GraphRelationship[] } | null = null;
 
   private constructor(
     private readonly directory: string,
@@ -100,7 +102,7 @@ export class GraphStore implements IGraphStore {
       const previous = await readHead(this.directory);
       this.head = await commitScannedSnapshot(this.directory, nodes, relationships, { schemaVersion: SCHEMA_VERSION, previous });
       this.graph = null;
-      this.scanned = { nodes: new WeakRef(nodes), relationships: new WeakRef(relationships) };
+      this.scanned = { nodes, relationships };
       this.pendingReset = false;
     } finally {
       await release();
@@ -139,14 +141,13 @@ export class GraphStore implements IGraphStore {
     return this.graph ?? await this.loadGraph();
   }
 
-  /** Build the graph of the current head: from the still-referenced scan arrays, else from disk. */
+  /** Build the graph of the current head: from the arrays of this store's last streamed commit, else from disk. */
   private async loadGraph(): Promise<MemoryGraph> {
-    const nodes = this.scanned?.nodes.deref();
-    const relationships = this.scanned?.relationships.deref();
+    const scanned = this.scanned;
     this.scanned = null;
-    if (nodes && relationships) {
+    if (scanned) {
       const graph = new MemoryGraph();
-      graph.write(nodes, relationships);
+      graph.write(scanned.nodes, scanned.relationships);
       return this.graph = graph;
     }
     ({ head: this.head, graph: this.graph } = await loadSnapshot(this.directory));
