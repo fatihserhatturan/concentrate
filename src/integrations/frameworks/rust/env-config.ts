@@ -214,7 +214,7 @@ function constantPath(node: SyntaxNode): string | null {
 // literal is taken when the name is declared once, with one value, in the project.
 export const rustEnvConfigContributor: ISemanticContributor = {
   contribute(graph) {
-    const files = graph.nodes.filter((node) => node.label === "File" && (typeof node.properties.rustEnvPending === "string" || typeof node.properties.rustEnvConsts === "string"));
+    const files = graph.nodesWithLabel("File").filter((node) => (typeof node.properties.rustEnvPending === "string" || typeof node.properties.rustEnvConsts === "string"));
     if (files.length === 0) return;
     const values = new Map<string, Set<string>>();
     const pending: Array<{ owner: string; line: number; access: string; constant: string; file: string }> = [];
@@ -228,7 +228,7 @@ export const rustEnvConfigContributor: ISemanticContributor = {
       delete file.properties.rustEnvConsts;
       delete file.properties.rustEnvPending;
     }
-    const known = new Set(graph.nodes.filter((node) => node.label === "EnvVar").map((node) => node.id));
+    const known = new Set(graph.nodesWithLabel("EnvVar").map((node) => node.id));
     const nodes: GraphNode[] = [];
     const relationships: GraphRelationship[] = [];
     const seen = new Set<string>();

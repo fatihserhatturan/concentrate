@@ -88,7 +88,7 @@ type Provider = { fn: GraphNode; fileId: string; as: string[] };
 
 export const goDiContributor: ISemanticContributor = {
   contribute(graph) {
-    const files = graph.nodes.filter((node) => node.label === "File" && typeof node.properties.goDi === "string");
+    const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.goDi === "string");
     if (files.length === 0) return;
     const entriesByFile = new Map<string, DiEntry[]>();
     for (const file of files) {
@@ -97,7 +97,7 @@ export const goDiContributor: ISemanticContributor = {
     }
     const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
     const index = createGoCallIndex(graph, relationshipIndex);
-    const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+    const nodeById = { get: (id: string) => graph.node(id), has: (id: string) => graph.node(id) !== undefined };
     const key = (type: TypeRef) => `${type.pkg}\0${type.name}`;
     const classOf = (type: TypeRef | null) => (type ? index.typesByPackage.get(type.pkg)?.get(type.name)?.node : undefined);
     const interfaceOf = (type: TypeRef | null) => (type ? index.interfacesByPackage.get(type.pkg)?.get(type.name)?.node : undefined);

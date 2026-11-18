@@ -391,9 +391,9 @@ type ModelRef = { classNode: GraphNode; fileId: string; pkg: string };
 
 export const goDataAccessContributor: ISemanticContributor = {
   contribute(graph) {
-    const pending = graph.nodes.filter((node) => node.label === "Call" && typeof node.properties.goDataAccess === "string");
-    const gormClasses = graph.nodes.filter((node) => node.label === "Class" && typeof node.properties.goGorm === "string");
-    const entClasses = graph.nodes.filter((node) => node.label === "Class" && typeof node.properties.goEnt === "string");
+    const pending = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.goDataAccess === "string");
+    const gormClasses = graph.nodesWithLabel("Class").filter((node) => typeof node.properties.goGorm === "string");
+    const entClasses = graph.nodesWithLabel("Class").filter((node) => typeof node.properties.goEnt === "string");
     const cleanup = () => {
       for (const node of graph.nodes) {
         delete node.properties.goDataAccess;
@@ -414,14 +414,14 @@ export const goDataAccessContributor: ISemanticContributor = {
 
     const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
     const goIndex = createGoCallIndex(graph, relationshipIndex);
-    const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+    const nodeById = { get: (id: string) => graph.node(id), has: (id: string) => graph.node(id) !== undefined };
     const fileOfFunction = (id: string) => relationshipIndex.fileByFunctionId.get(id) ?? goIndex.fileByFunctionId.get(id) ?? null;
     const relativePath = (fileId: string) => String(nodeById.get(fileId)?.properties.relativePath ?? fileId.slice("file:".length));
 
     // Imported package sources per file by local name.
     const sourcesByFile = new Map<string, Map<string, string>>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type !== "IMPORTS" || !relationship.from.endsWith(".go")) continue;
+    for (const relationship of graph.relationshipsOfType("IMPORTS")) {
+      if (!relationship.from.endsWith(".go")) continue;
       const imported = nodeById.get(relationship.to);
       const source = imported?.properties.source;
       if (imported?.label !== "Import" || typeof source !== "string") continue;
@@ -454,8 +454,8 @@ export const goDataAccessContributor: ISemanticContributor = {
     };
 
     const variables = new Map<string, { node: GraphNode; fileId: string }>();
-    for (const node of graph.nodes) {
-      if (node.label !== "Variable" || typeof node.properties.goVarRoot !== "string") continue;
+    for (const node of graph.nodesWithLabel("Variable")) {
+      if (typeof node.properties.goVarRoot !== "string") continue;
       const fileId = node.id.slice(0, node.id.indexOf(":variable:"));
       const pkg = goIndex.packageByFile.get(fileId);
       if (pkg !== undefined) variables.set(`${pkg}\0${node.properties.name}`, { node, fileId });
@@ -590,8 +590,7 @@ export const goDataAccessContributor: ISemanticContributor = {
     const accesses: Access[] = [];
     const sqlCalls: Array<{ call: GraphNode; sql: string; library: string }> = [];
     const sqlCallersOf = new Map<string, GraphNode[]>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type !== "CALL_RESOLVES_TO") continue;
+    for (const relationship of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
       const call = nodeById.get(relationship.from);
       if (call) sqlCallersOf.set(relationship.to, [...sqlCallersOf.get(relationship.to) ?? [], call]);
     }
@@ -813,17 +812,16 @@ export const goDataAccessContributor: ISemanticContributor = {
     const entrypointsByFunction = new Map<string, string[]>();
     const callsByCaller = new Map<string, string[]>();
     const targetsByCall = new Map<string, string[]>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type === "CALLS") {
-        callerByCall.set(relationship.to, relationship.from);
-        callsByCaller.set(relationship.from, [...callsByCaller.get(relationship.from) ?? [], relationship.to]);
-      } else if (relationship.type === "ROUTE_HANDLED_BY") routesByFunction.set(relationship.to, [...routesByFunction.get(relationship.to) ?? [], relationship.from]);
-      else if (relationship.type === "ENTRYPOINT_HANDLED_BY") entrypointsByFunction.set(relationship.to, [...entrypointsByFunction.get(relationship.to) ?? [], relationship.from]);
-      else if (relationship.type === "CALL_RESOLVES_TO") targetsByCall.set(relationship.from, [...targetsByCall.get(relationship.from) ?? [], relationship.to]);
+    for (const relationship of graph.relationshipsOfType("CALLS")) {
+      callerByCall.set(relationship.to, relationship.from);
+      callsByCaller.set(relationship.from, [...callsByCaller.get(relationship.from) ?? [], relationship.to]);
     }
+    for (const relationship of graph.relationshipsOfType("ROUTE_HANDLED_BY")) routesByFunction.set(relationship.to, [...routesByFunction.get(relationship.to) ?? [], relationship.from]);
+    for (const relationship of graph.relationshipsOfType("ENTRYPOINT_HANDLED_BY")) entrypointsByFunction.set(relationship.to, [...entrypointsByFunction.get(relationship.to) ?? [], relationship.from]);
+    for (const relationship of graph.relationshipsOfType("CALL_RESOLVES_TO")) targetsByCall.set(relationship.from, [...targetsByCall.get(relationship.from) ?? [], relationship.to]);
     const accessesByFunction = new Map<string, Access[]>();
     const seen = new Set<string>();
-    const filePaths = new Set(graph.nodes.flatMap((node) => (node.label === "File" && typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : [])));
+    const filePaths = new Set(graph.nodesWithLabel("File").flatMap((node) => (typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : [])));
     // `direct`: the function that makes the call; its routes, entrypoints
     // and callers reach it, and `file` says where `line` is.
     const record = (from: string, access: Access, direct: boolean) => {

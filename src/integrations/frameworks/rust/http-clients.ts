@@ -306,10 +306,10 @@ export const rustHttpClientsPlugin: RustParsePlugin = ({ fileNodeId, root, nodes
 // file (only a URL or path value). Runs before the http-requests contributor.
 export const rustHttpClientsContributor: ISemanticContributor = {
   async contribute(graph, rootPath, _report, files) {
-    const calls = graph.nodes.filter((node) => node.label === "Call" && node.properties.httpClient === "reqwest" && typeof node.properties.httpUrl === "string" && node.properties.httpUrl.includes("${env:"));
+    const calls = graph.nodesWithLabel("Call").filter((node) => node.properties.httpClient === "reqwest" && typeof node.properties.httpUrl === "string" && node.properties.httpUrl.includes("${env:"));
     if (calls.length === 0) return;
     const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-    const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+    const nodeById = { get: (id: string) => graph.node(id), has: (id: string) => graph.node(id) !== undefined };
     const env = await readEnvFiles(rootPath, files);
     const envValue = (name: string, fileId: string): string | undefined => {
       let directory = path.posix.dirname(String(nodeById.get(fileId)?.properties.relativePath ?? "").replaceAll("\\", "/"));

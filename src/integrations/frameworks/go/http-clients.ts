@@ -298,20 +298,20 @@ function withoutQuery(url: string): string {
 export const goHttpClientsContributor: ISemanticContributor = {
   async contribute(graph, rootPath, _report, files) {
     const templates = new Map<string, string>();
-    for (const node of graph.nodes) {
-      if (node.label === "Variable" && typeof node.properties.goStringTemplate === "string") {
+    for (const node of graph.nodesWithLabel("Variable")) {
+      if (typeof node.properties.goStringTemplate === "string") {
         templates.set(node.id, node.properties.goStringTemplate);
         delete node.properties.goStringTemplate;
       }
     }
-    const calls = graph.nodes.filter((node) => node.label === "Call" && (node.properties.goHttpBase !== undefined || (typeof node.properties.httpUrl === "string" && node.properties.httpUrl.includes("${"))));
+    const calls = graph.nodesWithLabel("Call").filter((node) => (node.properties.goHttpBase !== undefined || (typeof node.properties.httpUrl === "string" && node.properties.httpUrl.includes("${"))));
     if (calls.length === 0) return;
     const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
     const index = createGoCallIndex(graph, relationshipIndex);
-    const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+    const nodeById = { get: (id: string) => graph.node(id), has: (id: string) => graph.node(id) !== undefined };
     const strings = new Map<string, Map<string, string>>();
-    for (const rel of graph.relationships) {
-      const variable = rel.type === "DEFINES_VARIABLE" ? nodeById.get(rel.to) : undefined;
+    for (const rel of graph.relationshipsOfType("DEFINES_VARIABLE")) {
+      const variable = nodeById.get(rel.to);
       const pkg = index.packageByFile.get(rel.from);
       const value = variable?.label === "Variable" ? variable.properties.stringValue ?? templates.get(variable.id) : undefined;
       if (pkg === undefined || typeof value !== "string") continue;

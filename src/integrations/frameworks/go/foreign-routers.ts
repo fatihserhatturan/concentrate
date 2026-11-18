@@ -15,11 +15,15 @@ import { createGoRoutesPlugin, routerPackages, routerTypeOf, type GoForeignRoute
 // which finishes them like any other.
 export const goForeignRoutersContributor: ISemanticContributor = {
   async contribute(graph, rootPath) {
+    // Only a Go file that imports a router package can have such a function.
+    const routerImports = graph.nodesWithLabel("Import").filter((node) => typeof node.properties.source === "string" && routerPackages.some(([, pattern]) => pattern.test(String(node.properties.source))));
+    if (routerImports.length === 0) return;
     const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-    const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+    // Nodes this contributor parsed but has not added yet are found like the rest.
+    const fresh = new Map<string, GraphNode>();
+    const nodeById = { get: (id: string) => graph.node(id) ?? fresh.get(id), has: (id: string) => graph.node(id) !== undefined || fresh.has(id) };
     const importsByFile = new Map<string, Map<GoRouteFramework, string>>();
-    for (const node of graph.nodes) {
-      if (node.label !== "Import" || typeof node.properties.source !== "string") continue;
+    for (const node of routerImports) {
       const fileId = relationshipIndex.fileByImportId.get(node.id);
       const framework = routerPackages.find(([, pattern]) => pattern.test(String(node.properties.source)))?.[0];
       if (!fileId || !framework) continue;
@@ -31,8 +35,8 @@ export const goForeignRoutersContributor: ISemanticContributor = {
     }
     // Functions that return a router.
     const constructors = new Map<string, GoForeignRouter>();
-    for (const node of graph.nodes) {
-      if (node.label !== "Function" || node.properties.className != null) continue;
+    for (const node of graph.nodesWithLabel("Function")) {
+      if (node.properties.className != null) continue;
       const fileId = relationshipIndex.fileByFunctionId.get(node.id);
       const aliases = fileId ? importsByFile.get(fileId) : undefined;
       const result = aliases ? firstResultType(node.properties.returnType) : null;
@@ -42,8 +46,8 @@ export const goForeignRoutersContributor: ISemanticContributor = {
     if (constructors.size === 0) return;
 
     const hintsByFile = new Map<string, Map<string, GoForeignRouter>>();
-    for (const rel of graph.relationships) {
-      const type = rel.type === "CALL_RESOLVES_TO" ? constructors.get(rel.to) : undefined;
+    for (const rel of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
+      const type = constructors.get(rel.to);
       const call = type ? nodeById.get(rel.from) : undefined;
       const callerFunctionId = call ? relationshipIndex.callerFunctionByCallId.get(call.id) : undefined;
       const fileId = callerFunctionId ? relationshipIndex.fileByFunctionId.get(callerFunctionId) : undefined;
@@ -53,6 +57,7 @@ export const goForeignRoutersContributor: ISemanticContributor = {
       hintsByFile.set(fileId, hints);
     }
 
+    if (hintsByFile.size === 0) return;
     const relationshipKeys = new Set(graph.relationships.map((rel) => `${rel.from}\0${rel.type}\0${rel.to}`));
     for (const [fileId, hints] of hintsByFile) {
       const file = nodeById.get(fileId);
@@ -69,18 +74,19 @@ export const goForeignRoutersContributor: ISemanticContributor = {
         const existing = nodeById.get(node.id);
         if (!existing) {
           added.push(node);
-          nodeById.set(node.id, node);
+          fresh.set(node.id, node);
           continue;
         }
         if (node.label === "Call" && typeof node.properties.routerArguments === "string") existing.properties.routerArguments = node.properties.routerArguments;
         if (node.label === "File" && typeof node.properties.dynamicRouteCalls === "string") existing.properties.dynamicRouteCalls = node.properties.dynamicRouteCalls;
       }
       graph.addNodes(added);
+      fresh.clear();
       const closures = new Set(added.filter((node) => node.label === "Function").map((node) => node.id));
       for (const rel of parsed.relationships) {
         // A call in a closure handler moves from the enclosing function to it.
         if (rel.type === "CALLS" && closures.has(rel.from)) {
-          const moved = graph.relationships.find((existing) => existing.type === "CALLS" && existing.to === rel.to);
+          const moved = graph.relationshipsOfType("CALLS").find((existing) => existing.to === rel.to);
           if (moved) moved.from = rel.from;
           continue;
         }
