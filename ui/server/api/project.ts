@@ -1,7 +1,7 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import { GRAPH_SCHEMA_VERSION, openGraphStore } from "../core.js";
-import { graphPath } from "../graph/index.js";
+import { GRAPH_SCHEMA_VERSION } from "../core.js";
+import { graphPath, readGraphHead } from "../graph/index.js";
 
 export type ProjectInfo = {
   path: string;
@@ -18,13 +18,11 @@ export type ProjectInfo = {
   currentSchemaVersion: number;
 };
 
-const cache = new Map<string, { signature: string; nodes: number; schemaVersion: number | null }>();
-
 async function mtime(target: string): Promise<number | null> {
   return (await stat(target).catch(() => null))?.mtimeMs ?? null;
 }
 
-/** What a project card shows: cheap facts from the store folder, the manifest and the store's own counts. */
+/** What a project card shows: cheap facts from the store's HEAD.json and the scan manifest; the store itself is never opened. */
 export async function projectInfo(requested: string): Promise<ProjectInfo> {
   const root = path.resolve(requested);
   const base: ProjectInfo = {
@@ -43,32 +41,16 @@ export async function projectInfo(requested: string): Promise<ProjectInfo> {
   if (!info?.isDirectory()) return base;
   base.exists = true;
   base.isGitRepository = (await mtime(path.join(root, ".git"))) !== null;
-  const graphDir = graphPath(root);
-  const written = (await mtime(path.join(graphDir, "HEAD"))) ?? (await mtime(graphDir));
-  if (written === null) return base;
+  const head = await readGraphHead(graphPath(root));
+  if (!head) return base;
   base.hasGraph = true;
-  base.scannedAt = new Date(written).toISOString();
+  // The scan time is when the store committed; the file's mtime stands in for an older manifest without it.
+  const written = head.writtenAt ? Date.parse(head.writtenAt) : Number.NaN;
+  base.scannedAt = new Date(Number.isFinite(written) ? written : head.mtimeMs).toISOString();
+  base.nodes = head.nodes;
+  base.schemaVersion = head.schemaVersion;
 
   const manifest = await readFile(path.join(root, ".concentrate", "scan-manifest.json"), "utf8").then(JSON.parse, () => null);
   if (manifest && Array.isArray(manifest.files)) base.files = manifest.files.length;
-
-  const signature = String(written);
-  let counts = cache.get(root);
-  if (!counts || counts.signature !== signature) {
-    const store = await openGraphStore(graphDir, { retryLock: false }).catch(() => null);
-    if (store) {
-      try {
-        const stats = await store.stats();
-        counts = { signature, nodes: stats.reduce((sum, row) => sum + Number(row.count), 0), schemaVersion: await store.schemaVersion() };
-        cache.set(root, counts);
-      } finally {
-        await store.close();
-      }
-    }
-  }
-  if (counts) {
-    base.nodes = counts.nodes;
-    base.schemaVersion = counts.schemaVersion;
-  }
   return base;
 }

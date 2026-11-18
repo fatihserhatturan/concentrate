@@ -1,4 +1,4 @@
-import { loadIndex, nodeName, type GraphIndex, type IndexEdge, type IndexNode } from "../graph/index.js";
+import { loadIndex, readRawGraph, nodeName, type GraphIndex, type IndexEdge, type IndexNode } from "../graph/index.js";
 import { HIDDEN_LABELS } from "../graph/kinds.js";
 import { neighbors, overview, parseKinds, MAX_OVERVIEW_NODES } from "../graph/views.js";
 
@@ -20,7 +20,9 @@ const rawEdge = (e: IndexEdge): ExportEdge => ({ from: e.from, to: e.to, type: e
 export async function select(projectPath: string, options: SelectOptions): Promise<Selection> {
   const index = await loadIndex(projectPath);
   if (options.scope === "graph") {
-    return { index, nodes: [...index.nodes.values()].map(raw), edges: index.stored.map(rawEdge) };
+    // The index leaves Call and Import nodes out; the export of the whole graph has them, so it reads the store again.
+    const whole = await readRawGraph(projectPath);
+    return { index, nodes: whole.nodes, edges: whole.edges };
   }
   const kinds = parseKinds(options.types ?? null);
   if (options.focus) {

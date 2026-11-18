@@ -120,4 +120,29 @@ describe("browser smoke", () => {
     assert.deepEqual(errors, []);
     await page.close();
   });
+
+  it("says the server stopped when the scan connection drops without a result", async () => {
+    for (const drop of ["closed stream", "aborted request"]) {
+      const fresh = path.join(work, `unscanned-${drop.replace(/ /g, "-")}`);
+      await cp(path.join(HERE, "..", "..", "..", "fixtures", "express-koa-routes"), fresh, { recursive: true });
+      const page = await browser.newPage();
+      await page.route("**/api/scan", (route) =>
+        drop === "aborted request"
+          ? route.abort("connectionreset")
+          : route.fulfill({ status: 200, contentType: "text/event-stream", body: `event: progress\ndata: ${JSON.stringify({ type: "progress", current: 1, total: 9, file: "a.ts" })}\n\n` }));
+      await page.goto(`${base}/#token=${TOKEN}`);
+      await page.getByTestId("path").fill(fresh);
+      await page.getByTestId("path").press("Enter");
+      await page.waitForFunction(() => /unscanned/.test(document.querySelector(".current h3")?.textContent ?? ""));
+      await page.getByTestId("primary-action").click();
+      await page.getByTestId("not-a-project").waitFor();
+      await page.getByTestId("primary-action").click();
+      await page.getByTestId("scan-error").waitFor({ timeout: 15_000 });
+      const message = (await page.getByTestId("scan-error").textContent()) ?? "";
+      assert.match(message, /server stopped during the scan/, drop);
+      assert.match(message, /out of memory/, drop);
+      assert.match(message, /max-old-space-size/, drop);
+      await page.close();
+    }
+  });
 });
