@@ -84,7 +84,7 @@ export const goGrpcContributor: ISemanticContributor = {
       }
       return;
     }
-    const index = createGoCallIndex(graph, createResolutionRelationshipIndex(graph.relationships));
+    const index = createGoCallIndex(graph, createResolutionRelationshipIndex(graph));
     const targets = new Map<string, string[]>();
     // service name → the generated server interface, and the implementations of each method
     const served = new Map<string, { interfaceId: string; methods: Map<string, string[]> }>();

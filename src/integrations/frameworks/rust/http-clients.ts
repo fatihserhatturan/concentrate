@@ -308,7 +308,7 @@ export const rustHttpClientsContributor: ISemanticContributor = {
   async contribute(graph, rootPath, _report, files) {
     const calls = graph.nodesWithLabel("Call").filter((node) => node.properties.httpClient === "reqwest" && typeof node.properties.httpUrl === "string" && node.properties.httpUrl.includes("${env:"));
     if (calls.length === 0) return;
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const nodeById = { get: (id: string) => graph.node(id), has: (id: string) => graph.node(id) !== undefined };
     const env = await readEnvFiles(rootPath, files);
     const envValue = (name: string, fileId: string): string | undefined => {

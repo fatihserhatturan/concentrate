@@ -22,7 +22,7 @@ export const rustRoutesContributor: ISemanticContributor = {
     const mountOwners = graph.nodesWithLabel("Function").filter((node) => typeof node.properties.rustMounts === "string");
     if (routes.length === 0 && mountOwners.length === 0) return;
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const index = createRustCallIndex(graph, relationshipIndex);
     const fileOfFunction = (functionId: string) => relationshipIndex.fileByFunctionId.get(functionId) ?? index.fileByFunctionId.get(functionId) ?? null;
 

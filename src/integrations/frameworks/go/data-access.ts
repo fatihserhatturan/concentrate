@@ -412,7 +412,7 @@ export const goDataAccessContributor: ISemanticContributor = {
       return;
     }
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const goIndex = createGoCallIndex(graph, relationshipIndex);
     const nodeById = { get: (id: string) => graph.node(id), has: (id: string) => graph.node(id) !== undefined };
     const fileOfFunction = (id: string) => relationshipIndex.fileByFunctionId.get(id) ?? goIndex.fileByFunctionId.get(id) ?? null;

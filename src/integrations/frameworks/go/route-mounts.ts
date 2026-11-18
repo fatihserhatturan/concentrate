@@ -23,7 +23,7 @@ export const goRoutesContributor: ISemanticContributor = {
     const routerCalls = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.routerArguments === "string");
     if (routes.length === 0 && routerCalls.length === 0) return;
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const goIndex = createGoCallIndex(graph, relationshipIndex);
     const fileOfFunction = (functionId: string) => relationshipIndex.fileByFunctionId.get(functionId) ?? goIndex.fileByFunctionId.get(functionId) ?? null;
 

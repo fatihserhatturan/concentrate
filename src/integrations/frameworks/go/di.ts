@@ -95,7 +95,7 @@ export const goDiContributor: ISemanticContributor = {
       entriesByFile.set(file.id, JSON.parse(String(file.properties.goDi)) as DiEntry[]);
       delete file.properties.goDi;
     }
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const index = createGoCallIndex(graph, relationshipIndex);
     const nodeById = { get: (id: string) => graph.node(id), has: (id: string) => graph.node(id) !== undefined };
     const key = (type: TypeRef) => `${type.pkg}\0${type.name}`;

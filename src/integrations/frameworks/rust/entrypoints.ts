@@ -301,7 +301,7 @@ export const rustEntrypointsContributor: ISemanticContributor = {
     const files = graph.nodesWithLabel("File").filter((node) => (typeof node.properties.rustGrpcServers === "string" || typeof node.properties.rustClap === "string"));
     if (files.length === 0) return;
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const index = createRustCallIndex(graph, relationshipIndex);
     const newNodes: GraphNode[] = [];
     const newRelationships: GraphRelationship[] = [];

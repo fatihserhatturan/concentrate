@@ -18,7 +18,7 @@ export const goForeignRoutersContributor: ISemanticContributor = {
     // Only a Go file that imports a router package can have such a function.
     const routerImports = graph.nodesWithLabel("Import").filter((node) => typeof node.properties.source === "string" && routerPackages.some(([, pattern]) => pattern.test(String(node.properties.source))));
     if (routerImports.length === 0) return;
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     // Nodes this contributor parsed but has not added yet are found like the rest.
     const fresh = new Map<string, GraphNode>();
     const nodeById = { get: (id: string) => graph.node(id) ?? fresh.get(id), has: (id: string) => graph.node(id) !== undefined || fresh.has(id) };

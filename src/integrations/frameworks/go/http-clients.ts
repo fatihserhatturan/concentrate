@@ -306,7 +306,7 @@ export const goHttpClientsContributor: ISemanticContributor = {
     }
     const calls = graph.nodesWithLabel("Call").filter((node) => (node.properties.goHttpBase !== undefined || (typeof node.properties.httpUrl === "string" && node.properties.httpUrl.includes("${"))));
     if (calls.length === 0) return;
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const index = createGoCallIndex(graph, relationshipIndex);
     const nodeById = { get: (id: string) => graph.node(id), has: (id: string) => graph.node(id) !== undefined };
     const strings = new Map<string, Map<string, string>>();

@@ -220,7 +220,7 @@ export const goEntrypointsContributor: ISemanticContributor = {
     const trees = graph.nodesWithLabel("File").filter((node) => typeof node.properties.goCommandTree === "string");
     if (registrations.length === 0 && commands.length === 0 && trees.length === 0) return;
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const goIndex = createGoCallIndex(graph, relationshipIndex);
     const fileOfFunction = (functionId: string) => relationshipIndex.fileByFunctionId.get(functionId) ?? goIndex.fileByFunctionId.get(functionId) ?? null;
     const functionsById = { get: (id: string) => { const node = graph.node(id); return node?.label === "Function" ? node : undefined; } };

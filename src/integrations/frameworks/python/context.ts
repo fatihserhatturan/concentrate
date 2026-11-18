@@ -69,7 +69,7 @@ export async function createPythonContext(graph: IGraphContributor, rootPath: st
   const hasPython = [...fileIds.keys()].some((file) => file.endsWith(".py"));
   if (!hasPython) return null;
 
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+  const relationshipIndex = createResolutionRelationshipIndex(graph);
   const index = createPythonCallIndex(graph, relationshipIndex);
   const projects = await readPythonProjects(rootPath, fileIds.keys());
   const resolver = createPythonResolver(projects, new Set(fileIds.keys()));
