@@ -11,8 +11,8 @@ import { createPythonResolver } from "../../languages/python/resolution.js";
 export const pythonEntrypointsContributor: ISemanticContributor = {
   async contribute(graph, rootPath) {
     const files = new Map<string, string>();
-    for (const node of graph.nodes) {
-      if (node.label === "File" && typeof node.properties.relativePath === "string") files.set(node.properties.relativePath.split("\\").join("/"), node.id);
+    for (const node of graph.nodesWithLabel("File")) {
+      if (typeof node.properties.relativePath === "string") files.set(node.properties.relativePath.split("\\").join("/"), node.id);
     }
     const projects = (await readPythonProjects(rootPath, files.keys())).filter((project) => project.scripts.length > 0);
     if (projects.length === 0) return;
@@ -20,11 +20,11 @@ export const pythonEntrypointsContributor: ISemanticContributor = {
 
     const functionsByFile = new Map<string, GraphNode[]>();
     const fileByFunction = new Map<string, string>();
-    for (const rel of graph.relationships) if (rel.type === "DEFINES_FUNCTION" || rel.type === "DEFINES_METHOD") fileByFunction.set(rel.to, rel.from);
+    for (const rel of graph.relationshipsOfType("DEFINES_FUNCTION")) fileByFunction.set(rel.to, rel.from);
+    for (const rel of graph.relationshipsOfType("DEFINES_METHOD")) fileByFunction.set(rel.to, rel.from);
     const fileOfClass = new Map<string, string>();
-    for (const rel of graph.relationships) if (rel.type === "DEFINES_CLASS") fileOfClass.set(rel.to, rel.from);
-    for (const node of graph.nodes) {
-      if (node.label !== "Function") continue;
+    for (const rel of graph.relationshipsOfType("DEFINES_CLASS")) fileOfClass.set(rel.to, rel.from);
+    for (const node of graph.nodesWithLabel("Function")) {
       let file = fileByFunction.get(node.id);
       if (file && fileOfClass.has(file)) file = fileOfClass.get(file);
       if (!file) continue;

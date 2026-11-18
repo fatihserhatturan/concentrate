@@ -314,8 +314,7 @@ export function addPythonRoutes(context: PythonContext): { handlerIds: Set<strin
   };
 
   // Decorators: routes and hooks.
-  for (const node of graph.nodes) {
-    if (node.label !== "Function") continue;
+  for (const node of graph.nodesWithLabel("Function")) {
     const decorators = decoratorsOfHandler(node.id);
     if (decorators.length === 0) continue;
     const fileId = context.fileOfFunction(node.id) ?? (node.id.split(":function:")[0] ?? "");

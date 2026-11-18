@@ -71,15 +71,18 @@ export const cppQtPlugin: CppParsePlugin = ({ fileNodeId, relativePath, source: 
 
 export const cppQtContributor: ISemanticContributor = {
   contribute(graph) {
-    const files = graph.nodes.filter((node) => node.label === "File" && typeof node.properties.cppQtConnects === "string");
+    const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.cppQtConnects === "string");
     if (files.length === 0) return;
     const methods = new Map<string, GraphNode[]>();
     const bases = new Map<string, string[]>();
-    for (const node of graph.nodes) {
-      if (node.label === "Function" && typeof node.properties.className === "string" && node.properties.kind !== "constructor" && node.properties.kind !== "destructor") {
+    for (const node of graph.nodesWithLabel("Function")) {
+      if (typeof node.properties.className === "string" && node.properties.kind !== "constructor" && node.properties.kind !== "destructor") {
         const key = `${node.properties.className}\0${node.properties.name}`;
         methods.set(key, [...methods.get(key) ?? [], node]);
-      } else if (node.label === "Class" && typeof node.properties.bases === "string") {
+      }
+    }
+    for (const node of graph.nodesWithLabel("Class")) {
+      if (typeof node.properties.bases === "string") {
         const names = (JSON.parse(node.properties.bases) as Array<{ name: string }>).map((base) => base.name.split("::").at(-1)!);
         bases.set(String(node.properties.name), [...bases.get(String(node.properties.name)) ?? [], ...names]);
       }

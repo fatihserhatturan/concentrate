@@ -13,12 +13,12 @@ import { readBuildModel, type BuildTarget } from "../../languages/cpp/build/inde
 
 export const cppBuildContributor: ISemanticContributor = {
   async contribute(graph, rootPath) {
-    const repo = graph.nodes.find((node) => node.label === "Repo");
+    const repo = graph.nodesWithLabel("Repo")[0];
     if (!repo) return;
     const fileIds = new Map<string, string>();
     let hasBuildFiles = false;
-    for (const node of graph.nodes) {
-      if (node.label !== "File" || typeof node.properties.relativePath !== "string") continue;
+    for (const node of graph.nodesWithLabel("File")) {
+      if (typeof node.properties.relativePath !== "string") continue;
       fileIds.set(node.properties.relativePath.split(path.sep).join("/"), node.id);
       if (node.properties.language === "cmake" || node.properties.language === "makefile") hasBuildFiles = true;
     }
@@ -29,15 +29,13 @@ export const cppBuildContributor: ISemanticContributor = {
 
     const mainsByFile = new Map<string, string[]>();
     const existing = new Set<string>();
-    for (const node of graph.nodes) {
-      if (node.label === "EntryPoint") existing.add(node.id);
-    }
     const mains = new Set<string>();
-    for (const node of graph.nodes) {
-      if (node.label === "EntryPoint" && node.properties.kind === "main" && (node.properties.library === "c" || node.properties.library === "cpp")) mains.add(node.id);
+    for (const node of graph.nodesWithLabel("EntryPoint")) {
+      existing.add(node.id);
+      if (node.properties.kind === "main" && (node.properties.library === "c" || node.properties.library === "cpp")) mains.add(node.id);
     }
-    for (const rel of graph.relationships) {
-      if (rel.type !== "DECLARES_ENTRYPOINT" || !mains.has(rel.to)) continue;
+    for (const rel of graph.relationshipsOfType("DECLARES_ENTRYPOINT")) {
+      if (!mains.has(rel.to)) continue;
       mainsByFile.set(rel.from, [...mainsByFile.get(rel.from) ?? [], rel.to]);
     }
 

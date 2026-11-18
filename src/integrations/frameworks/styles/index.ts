@@ -29,19 +29,17 @@ export const stylesContributor: ISemanticContributor = {
   contribute(graph) {
     const definitions = new Map<string, Array<{ id: string; file: string }>>();
     const fileOfStyle = new Map<string, string>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type === "DECLARES_STYLE") fileOfStyle.set(relationship.to, relationship.from);
-    }
-    for (const node of graph.nodes) {
-      if (node.label !== "Style" || node.properties.kind !== "custom-property") continue;
+    for (const relationship of graph.relationshipsOfType("DECLARES_STYLE")) fileOfStyle.set(relationship.to, relationship.from);
+    for (const node of graph.nodesWithLabel("Style")) {
+      if (node.properties.kind !== "custom-property") continue;
       const name = String(node.properties.name);
       const list = definitions.get(name) ?? [];
       list.push({ id: node.id, file: fileOfStyle.get(node.id) ?? "" });
       definitions.set(name, list);
     }
 
-    for (const file of graph.nodes) {
-      if (file.label !== "File" || typeof file.properties.styleVarUses !== "string") continue;
+    for (const file of graph.nodesWithLabel("File")) {
+      if (typeof file.properties.styleVarUses !== "string") continue;
       const uses = JSON.parse(file.properties.styleVarUses) as VarUse[];
       delete file.properties.styleVarUses;
       const linked = new Set<string>();
@@ -72,12 +70,7 @@ export const stylesContributor: ISemanticContributor = {
 type Graph = Parameters<ISemanticContributor["contribute"]>[0];
 
 function linkClassRefs(graph: Graph): void {
-  const nodes = new Map<string, GraphNode>();
-  const filesWithRefs: GraphNode[] = [];
-  for (const node of graph.nodes) {
-    nodes.set(node.id, node);
-    if (node.label === "File" && typeof node.properties.styleRefs === "string") filesWithRefs.push(node);
-  }
+  const filesWithRefs = graph.nodesWithLabel("File").filter((node) => typeof node.properties.styleRefs === "string");
   if (filesWithRefs.length === 0) return;
 
   const classesByName = new Map<string, Array<{ id: string; file: string; scope: string | null }>>();
@@ -93,52 +86,35 @@ function linkClassRefs(graph: Graph): void {
     if (list) list.push(value);
     else map.set(key, [value]);
   };
-  for (const relationship of graph.relationships) {
-    switch (relationship.type) {
-      case "DECLARES_STYLE":
-        fileOfNode.set(relationship.to, relationship.from);
-        break;
-      case "RESOLVES_TO":
-        push(resolvesTo, relationship.from, relationship.to);
-        break;
-      case "IMPORTS":
-        push(importsOf, relationship.from, relationship.to);
-        break;
-      case "DECLARES_COMPONENT":
-        push(componentsOfFile, relationship.from, relationship.to);
-        fileOfNode.set(relationship.to, relationship.from);
-        break;
-      case "COMPONENT_DEFINED_BY_FUNCTION":
-        componentOfFunction.set(relationship.to, relationship.from);
-        break;
-      case "COMPONENT_DEFINED_BY":
-        componentOfClass.set(relationship.to, relationship.from);
-        break;
-      case "DEFINES_METHOD":
-        classOfMethod.set(relationship.to, relationship.from);
-        break;
-      default:
-    }
+  for (const relationship of graph.relationshipsOfType("DECLARES_STYLE")) fileOfNode.set(relationship.to, relationship.from);
+  for (const relationship of graph.relationshipsOfType("RESOLVES_TO")) push(resolvesTo, relationship.from, relationship.to);
+  for (const relationship of graph.relationshipsOfType("IMPORTS")) push(importsOf, relationship.from, relationship.to);
+  for (const relationship of graph.relationshipsOfType("DECLARES_COMPONENT")) {
+    push(componentsOfFile, relationship.from, relationship.to);
+    fileOfNode.set(relationship.to, relationship.from);
   }
-  for (const node of nodes.values()) {
-    if (node.label !== "Style" || node.properties.kind !== "class") continue;
+  for (const relationship of graph.relationshipsOfType("COMPONENT_DEFINED_BY_FUNCTION")) componentOfFunction.set(relationship.to, relationship.from);
+  for (const relationship of graph.relationshipsOfType("COMPONENT_DEFINED_BY")) componentOfClass.set(relationship.to, relationship.from);
+  for (const relationship of graph.relationshipsOfType("DEFINES_METHOD")) classOfMethod.set(relationship.to, relationship.from);
+  for (const node of graph.nodesWithLabel("Style")) {
+    if (node.properties.kind !== "class") continue;
     const entry = { id: node.id, file: fileOfNode.get(node.id) ?? "", scope: typeof node.properties.scope === "string" ? node.properties.scope : null };
     push(classesByName, String(node.properties.name), entry);
   }
 
   // An Angular template file belongs to the component whose `templateUrl` names it.
   const componentsOfTemplate = new Map<string, string[]>();
-  for (const node of nodes.values()) {
-    if (node.label !== "Component" || typeof node.properties.templateUrl !== "string") continue;
-    const owner = nodes.get(fileOfNode.get(node.id) ?? "");
+  for (const node of graph.nodesWithLabel("Component")) {
+    if (typeof node.properties.templateUrl !== "string") continue;
+    const owner = graph.node(fileOfNode.get(node.id) ?? "");
     if (!owner || typeof owner.properties.relativePath !== "string") continue;
     const directory = path.posix.dirname(owner.properties.relativePath.split(path.sep).join("/"));
     push(componentsOfTemplate, `file:${path.posix.normalize(path.posix.join(directory, node.properties.templateUrl))}`, node.id);
   }
 
   const styleFileIds = new Set<string>();
-  for (const node of nodes.values()) {
-    if (node.label === "File" && ["css", "scss", "less"].includes(String(node.properties.language))) styleFileIds.add(node.id);
+  for (const node of graph.nodesWithLabel("File")) {
+    if (["css", "scss", "less"].includes(String(node.properties.language))) styleFileIds.add(node.id);
   }
   const reachable = new Map<string, Set<string>>();
   const styleSheetsOf = (fileId: string): Set<string> => {
@@ -175,7 +151,7 @@ function linkClassRefs(graph: Graph): void {
     const own = componentsOfFile.get(file.id) ?? [];
     const owners = (ref: StyleRef): string[] => {
       if (ref.o) {
-        if (nodes.get(ref.o)?.label === "Function") {
+        if (graph.node(ref.o)?.label === "Function") {
           const component = componentOfFunction.get(ref.o) ?? componentOfClass.get(classOfMethod.get(ref.o) ?? "");
           return [component ?? ref.o];
         }
@@ -192,7 +168,7 @@ function linkClassRefs(graph: Graph): void {
         const files = ref.i ? (resolvesTo.get(ref.i) ?? []) : [file.id];
         for (const target of files) {
           const id = styleNodeId(target, "class", ref.n);
-          if (nodes.has(id) && (nodes.get(id)!.properties.scope === "module" || ref.i)) targets.push({ id, match: "module" });
+          if (graph.node(id) && (graph.node(id)!.properties.scope === "module" || ref.i)) targets.push({ id, match: "module" });
         }
       } else {
         const candidates = (classesByName.get(ref.n) ?? []).filter((entry) => entry.scope !== "module" && (entry.scope !== "scoped" || entry.file === file.id));

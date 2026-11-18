@@ -22,13 +22,13 @@ const NPM_HOOKS = ["pre", "post"];
 
 export const scriptsContributor: ISemanticContributor = {
   async contribute(graph, rootPath, _report, files) {
-    const repo = graph.nodes.find((node) => node.label === "Repo");
+    const repo = graph.nodesWithLabel("Repo")[0];
     if (!repo) return;
 
     const fileIds = new Map<string, string>();
     const languages = new Map<string, string>();
-    for (const node of graph.nodes) {
-      if (node.label !== "File" || typeof node.properties.relativePath !== "string") continue;
+    for (const node of graph.nodesWithLabel("File")) {
+      if (typeof node.properties.relativePath !== "string") continue;
       const relative = toPosix(node.properties.relativePath);
       fileIds.set(relative, node.id);
       languages.set(relative, String(node.properties.language));
@@ -248,13 +248,13 @@ function dockerDeclared(instruction: string, args: string): string[] {
 function resolveRuns(ctx: Context): void {
   const goMainFiles = new Map<string, string[]>();
   const functionNames = new Map<string, string>();
-  for (const node of ctx.graph.nodes) {
-    if (node.label === "Function" && node.properties.name === "main") functionNames.set(node.id, node.id);
+  for (const node of ctx.graph.nodesWithLabel("Function")) {
+    if (node.properties.name === "main") functionNames.set(node.id, node.id);
   }
   if (functionNames.size > 0) {
     const relativeById = new Map([...ctx.fileIds].map(([relative, id]) => [id, relative]));
-    for (const rel of ctx.graph.relationships) {
-      if (rel.type !== "DEFINES_FUNCTION" || !functionNames.has(rel.to)) continue;
+    for (const rel of ctx.graph.relationshipsOfType("DEFINES_FUNCTION")) {
+      if (!functionNames.has(rel.to)) continue;
       const relative = relativeById.get(rel.from);
       if (!relative?.endsWith(".go")) continue;
       const directory = path.posix.dirname(relative) === "." ? "" : path.posix.dirname(relative);

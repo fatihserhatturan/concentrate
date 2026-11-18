@@ -336,9 +336,9 @@ const upper = (name: string) => name.toUpperCase();
 
 export function addPythonEnv(context: PythonContext): void {
   const { graph, index } = context;
-  const files = graph.nodes.filter((node) => node.label === "File" && context.envByFile.has(node.id));
+  const files = graph.nodesWithLabel("File").filter((node) => context.envByFile.has(node.id));
   if (files.length === 0) return;
-  const known = new Set(graph.nodes.filter((node) => node.label === "EnvVar").map((node) => node.id));
+  const known = new Set(graph.nodesWithLabel("EnvVar").map((node) => node.id));
   const nodes: GraphNode[] = [];
   const relationships: GraphRelationship[] = [];
   const seen = new Set<string>();
@@ -406,8 +406,8 @@ export function addPythonEnv(context: PythonContext): void {
     const names = new Set([...settingsByClass.keys()].map((id) => String(context.nodeById.get(id)?.properties.name)));
     // Where a settings class is instantiated, its fields are read.
     const relationshipIndex = context.relationshipIndex;
-    for (const call of graph.nodes) {
-      if (call.label !== "Call" || typeof call.properties.callee !== "string" || call.properties.receiver) continue;
+    for (const call of graph.nodesWithLabel("Call")) {
+      if (typeof call.properties.callee !== "string" || call.properties.receiver) continue;
       if (!names.has(call.properties.callee)) continue;
       const functionId = relationshipIndex.callerFunctionByCallId.get(call.id);
       const fileId = relationshipIndex.callerFileByModuleCallId.get(call.id) ?? (functionId ? relationshipIndex.fileByFunctionId.get(functionId) : undefined);

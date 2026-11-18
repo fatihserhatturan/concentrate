@@ -43,8 +43,8 @@ export const sqlSchemaContributor: ISemanticContributor = {
   async contribute(graph, rootPath, _report, files) {
     const sqlFiles: Array<{ absolute: string; relative: string }> = [];
     const known = new Map<string, GraphNode>();
-    for (const node of graph.nodes) {
-      if (node.label === "File" && node.properties.language === "sql" && typeof node.properties.relativePath === "string") {
+    for (const node of graph.nodesWithLabel("File")) {
+      if (node.properties.language === "sql" && typeof node.properties.relativePath === "string") {
         known.set(node.properties.relativePath.split(path.sep).join("/"), node);
       }
     }
@@ -79,8 +79,8 @@ export const sqlSchemaContributor: ISemanticContributor = {
     if (schema.tables.size === 0) return;
 
     const codeTables = new Map<string, GraphNode[]>();
-    for (const node of graph.nodes) {
-      if (node.label !== "Table" || (node.properties.kind !== "table" && node.properties.kind !== "view")) continue;
+    for (const node of graph.nodesWithLabel("Table")) {
+      if ((node.properties.kind !== "table" && node.properties.kind !== "view")) continue;
       const key = String(node.properties.name).toLowerCase();
       codeTables.set(key, [...(codeTables.get(key) ?? []), node]);
     }

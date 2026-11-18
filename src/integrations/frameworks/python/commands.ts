@@ -57,10 +57,9 @@ export function addPythonCommands(context: PythonContext, handlerIds: Set<string
   };
 
   const fileOf = (functionId: string) => context.fileOfFunction(functionId) ?? functionId.split(":function:")[0]!;
-  const functions = [...context.nodeById.values()].filter((node) => node.label === "Function" && node.properties.className === null);
+  const functions = graph.nodesWithLabel("Function").filter((node) => node.properties.className === null);
   const importsOf = new Map<string, Set<string>>();
-  for (const rel of graph.relationships) {
-    if (rel.type !== "IMPORTS") continue;
+  for (const rel of graph.relationshipsOfType("IMPORTS")) {
     const source = String(context.nodeById.get(rel.to)?.properties.source ?? "").split(".")[0]!;
     if (source === "click" || source === "typer" || source === "celery") {
       const set = importsOf.get(rel.from) ?? new Set<string>();
@@ -109,15 +108,15 @@ export function addPythonCommands(context: PythonContext, handlerIds: Set<string
       if (rel.type === "CALLS") fileOfCall.set(rel.to, fileOf(rel.from));
       else if (rel.type === "MODULE_CALLS") fileOfCall.set(rel.to, rel.from);
     }
-    const resolved = new Set(graph.relationships.filter((rel) => rel.type === "CALL_RESOLVES_TO").map((rel) => `${rel.from}\0${rel.to}`));
+    const resolved = new Set(graph.relationshipsOfType("CALL_RESOLVES_TO").map((rel) => `${rel.from}\0${rel.to}`));
     const link = (callId: string, taskId: string) => {
       const key = `${callId}\0${taskId}`;
       if (resolved.has(key)) return;
       resolved.add(key);
       relationships.push({ from: callId, to: taskId, type: "CALL_RESOLVES_TO", properties: { via: "celery" } });
     };
-    for (const node of context.nodeById.values()) {
-      if (node.label !== "Call" || typeof node.properties.receiver !== "string" || !CELERY_CALLS.has(String(node.properties.callee))) continue;
+    for (const node of graph.nodesWithLabel("Call")) {
+      if (typeof node.properties.receiver !== "string" || !CELERY_CALLS.has(String(node.properties.callee))) continue;
       const fileId = fileOfCall.get(node.id);
       if (!fileId) continue;
       const taskId = index.lookupFunction(String(node.properties.receiver), fileId);

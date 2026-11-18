@@ -24,7 +24,7 @@ export type PythonContext = {
   resolver: PythonResolver;
   decoratorsOf: (functionId: string) => Decorator[];
   fileOfFunction: (functionId: string) => string | null;
-  nodeById: Map<string, GraphNode>;
+  nodeById: { get(id: string): GraphNode | undefined; has(id: string): boolean };
   // The functions and calls of every file, by file.
   callsByFile: Map<string, Array<PyCall & { fileId: string }>>;
   listsByFile: Map<string, PyList[]>;
@@ -47,8 +47,7 @@ export async function createPythonContext(graph: IGraphContributor, rootPath: st
   const dataByFile = new Map<string, PyDataFacts>();
   const fileIds = new Map<string, string>();
   const relativeOf = new Map<string, string>();
-  for (const node of graph.nodes) {
-    if (node.label !== "File") continue;
+  for (const node of graph.nodesWithLabel("File")) {
     if (typeof node.properties.relativePath === "string") {
       const relative = node.properties.relativePath.split("\\").join("/");
       fileIds.set(relative, node.id);
@@ -75,12 +74,10 @@ export async function createPythonContext(graph: IGraphContributor, rootPath: st
   const projects = await readPythonProjects(rootPath, fileIds.keys());
   const resolver = createPythonResolver(projects, new Set(fileIds.keys()));
 
-  const nodeById = new Map<string, GraphNode>();
-  for (const node of graph.nodes) nodeById.set(node.id, node);
+  const nodeById: PythonContext["nodeById"] = { get: (id) => graph.node(id), has: (id) => graph.node(id) !== undefined };
 
   const decoratorsByFunction = new Map<string, Decorator[]>();
-  for (const rel of graph.relationships) {
-    if (rel.type !== "HAS_METHOD_DECORATOR") continue;
+  for (const rel of graph.relationshipsOfType("HAS_METHOD_DECORATOR")) {
     const node = nodeById.get(rel.to);
     if (!node || !node.id.includes(":decorator:")) continue;
     const args = typeof node.properties.args === "string" ? JSON.parse(node.properties.args) as string[] : [];

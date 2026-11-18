@@ -43,8 +43,8 @@ type Implementation = { service: string; className: string; methods: Map<string,
 
 export const cppGrpcContributor: ISemanticContributor = {
   contribute(graph) {
-    const calls = graph.nodes.filter((node) => node.label === "Call" && typeof node.properties.cppGrpcMethod === "string");
-    const files = graph.nodes.filter((node) => node.label === "File" && typeof node.properties.cppGrpcStubs === "string");
+    const calls = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.cppGrpcMethod === "string");
+    const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.cppGrpcStubs === "string");
     const strip = () => {
       for (const node of [...calls, ...files]) {
         delete node.properties.cppGrpcMethod;
@@ -54,8 +54,8 @@ export const cppGrpcContributor: ISemanticContributor = {
       }
     };
     const serviceClasses: Array<{ node: GraphNode; service: string }> = [];
-    for (const node of graph.nodes) {
-      if (node.label !== "Class" || typeof node.properties.bases !== "string" || !node.properties.bases.includes("Service")) continue;
+    for (const node of graph.nodesWithLabel("Class")) {
+      if (typeof node.properties.bases !== "string" || !node.properties.bases.includes("Service")) continue;
       for (const base of JSON.parse(node.properties.bases) as Array<{ name: string }>) {
         const match = /(?:^|::)(\w+)::(?:Service|CallbackService)$/u.exec(base.name);
         if (match) serviceClasses.push({ node, service: match[1]! });
@@ -67,14 +67,12 @@ export const cppGrpcContributor: ISemanticContributor = {
     }
 
     const methodsByClass = new Map<string, GraphNode[]>();
-    for (const node of graph.nodes) {
-      if (node.label !== "Function" || typeof node.properties.className !== "string" || node.properties.kind !== "method") continue;
+    for (const node of graph.nodesWithLabel("Function")) {
+      if (typeof node.properties.className !== "string" || node.properties.kind !== "method") continue;
       methodsByClass.set(node.properties.className, [...methodsByClass.get(node.properties.className) ?? [], node]);
     }
     const fileByClass = new Map<string, string>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type === "DEFINES_CLASS") fileByClass.set(relationship.to, relationship.from);
-    }
+    for (const relationship of graph.relationshipsOfType("DEFINES_CLASS")) fileByClass.set(relationship.to, relationship.from);
 
     const implementations: Implementation[] = [];
     const nodes: GraphNode[] = [];
@@ -143,8 +141,7 @@ export const cppGrpcContributor: ISemanticContributor = {
         relationships.push({ from: call.id, to, type: "CALL_RESOLVES_TO", properties: { via: "grpc" } });
       }
     }
-    for (const rpc of graph.nodes) {
-      if (rpc.label !== "Rpc") continue;
+    for (const rpc of graph.nodesWithLabel("Rpc")) {
       const service = String(rpc.properties.service).split(".").at(-1)!;
       for (const implementation of implementations) {
         const id = implementation.service === service ? implementation.methods.get(String(rpc.properties.name)) : undefined;
