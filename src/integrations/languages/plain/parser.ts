@@ -4,7 +4,8 @@ import type { LanguageParser } from "../../../core/contracts/language-parser.js"
 import type { GraphNode, ParsedSourceFile } from "../../../core/graph/model.js";
 import { lockfiles } from "../../../core/scan/file-classification.js";
 import { CODE_LANGUAGES, type FileLanguage, type SupportedLanguage } from "../../../core/scan/language.js";
-import { withSyntaxTree, type GrammarName, type SyntaxNode } from "../syntax/tree-sitter.js";
+import type { GrammarName } from "../syntax/tree-sitter.js";
+import { syntaxErrorLines } from "../syntax/syntax-errors.js";
 import { readCMake } from "./cmake.js";
 import { readDockerfile } from "./dockerfile.js";
 import { readProto } from "./proto.js";
@@ -64,23 +65,6 @@ async function looksBinary(filePath: string): Promise<boolean> {
   }
 }
 
-// Lines of the first syntax errors of a tree, at most `limit`.
-function errorLines(root: SyntaxNode, limit: number): number[] {
-  const lines = new Set<number>();
-  const visit = (node: SyntaxNode) => {
-    if (lines.size >= limit) return;
-    if (node.isError || node.isMissing) {
-      lines.add(node.startPosition.row + 1);
-      return;
-    }
-    for (const child of node.children) {
-      if (child.hasError || child.isMissing) visit(child);
-    }
-  };
-  visit(root);
-  return [...lines].sort((a, b) => a - b);
-}
-
 function syntaxWarning(lines: number[]): string {
   return `Syntax error at line${lines.length === 1 ? "" : "s"} ${lines.join(", ")}`;
 }
@@ -99,7 +83,7 @@ async function syntaxWarnings(filePath: string, relativePath: string, language: 
   // Helm, Jinja and Ansible fill YAML in: `{{ .Values.x }}` is not YAML.
   if (language === "yaml" && source.includes("{{")) return [];
   if (grammar) {
-    const lines = await withSyntaxTree(grammar, source, (tree) => (tree.rootNode.hasError ? errorLines(tree.rootNode, 5) : []));
+    const lines = await syntaxErrorLines(grammar, source, 5);
     return lines.length > 0 ? [syntaxWarning(lines)] : [];
   }
   const errors = language === "dockerfile" ? readDockerfile(source).errors : language === "cmake" ? readCMake(source).errors : readProto(source).errors;
