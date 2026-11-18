@@ -527,18 +527,19 @@ npm run probe:memory -- <project path> [--workers N] [--no-cache] [--cache-dir d
 node --expose-gc --max-old-space-size=10240 --import tsx scripts/scan-memory-probe.ts <project path> --no-cache --json probe.json
 ```
 
-Steps, in order: discover files and manifest; parse (results held, parse
-cache and workers as in a scan; `--workers` defaults to the scan's choice);
-`addParseResultsToGraph` (GraphBuilder with its dedupe sets); workspace
-packages and the language resolvers; the semantic contributors; the scan
-result alone (builder and parse results released, as after a real scan); the
+Steps, in order: discover files and manifest; parse, each result added to
+the GraphBuilder (with its dedupe sets) as soon as the results of the files
+before it are in (parse cache and workers as in a scan; `--workers` defaults
+to the scan's choice); workspace packages and the language resolvers; the semantic contributors; the scan
+result alone (builder released, as after a real scan); the
 store's `reset()` + `write()` into a temporary directory, with the store open
 and after `close()`; a fresh `openGraphStore` (loads the snapshot) and
 `stats()`. Only public functions are used, so the store's and builder's
 internals can change without touching the probe. The parse cache lives in the
 system temp directory unless `--cache-dir` is given; use `--no-cache` for a
-cold measurement. Live heap is what a step leaves behind, so the probe's last
-store steps can differ from a real scan, which does not keep the parse results.
+cold measurement. Live heap is what a step leaves behind. The probe collects
+garbage after every step, so its peak RSS is lower than a scan's was before
+the scan collected between its steps (see "Parse step and peak RSS" below).
 
 ### Baseline (before #264)
 
@@ -685,3 +686,67 @@ are not stored as nodes; their caller keeps `[callee, line, expression]` in the
 `unresolvedCalls` property (schema 92). On this repository (1,902 files) the
 scan holds 10,506 `Call` nodes instead of 39,726 and 46,723 relationships
 instead of 75,943; `stats` peaks at 194 MB RSS instead of 258 MB.
+
+### Parse step and peak RSS (after #264)
+
+Same checkout and machine, `concentrate scan . --continue-on-error --no-cache`,
+default heap, 4 parse workers. Before is main at 71ae6f7 (#271). The machine
+was not idle (load average 4 to 5), so times vary by about ±10 s.
+
+| Run | Before (3 runs) | After (3 runs) |
+| --- | --- | --- |
+| Grafana, `/usr/bin/time -l` | 67 to 82 s, peak RSS 4.64 to 4.84 GB | 65 to 83 s, peak RSS 2.80 to 2.83 GB, plus a 73 MB helper process |
+| `fixtures/scripts-infra` (20 files, two `.ps1`) | 0.71 s, 2.47 GB | 0.19 s, 138 MB |
+
+The graph is byte-identical: `HEAD.json` (counts and segment names) and all
+24,177 segment files of Grafana, and the graph of all 175 fixtures, are the same
+as on main; so is the scan report, apart from the order of the project config
+warnings of `fixtures/malformed-config`, which also changes between runs on
+main.
+
+What it measured:
+
+- Worker heaps: 150 to 190 MB each (`v8.getHeapStatistics()` in the worker every
+  500 files; at most 122 MB used), so about 0.7 GB for four. Fewer workers do
+  not lower the peak on their own: `--workers 0`, 2 and 4 peaked at 3.98, 4.17
+  and 4.64 GB on main (125, 88 and 67 s).
+- Held results: the live heap after parsing was 0.9 GB with every result held
+  (probe). Adding each result to the GraphBuilder as soon as the results of
+  the files before it are in (`OrderedParseResults`; 0 to 49 results waited
+  when sampled every 2,000 files on Grafana) brought the scan to 3.3 to 4.1 GB. What was left came from
+  two places.
+- TurboFan: V8 recompiles hot WebAssembly with its optimizing compiler. The
+  lexers of the bash and powershell grammars are one function each (160 KB and
+  360 KB of code), and compiling them took 0.66 and 2.38 GB of memory for 113
+  and 384 ms (`node --trace-wasm-compilation-times`); every other grammar
+  function needed 21 MB or less. On Grafana the one `.ps1` file put a spike of
+  up to 1.4 GB on top of the parse step (3.56 GB at 9 s), and a main-thread
+  parse of all Grafana files peaked at 2.6 GB RSS with a live heap of 0.3 GB.
+  The syntax check of these two grammars now runs in a helper process started
+  with `--liftoff-only`. Alternatives measured: `--liftoff-only` for the whole
+  process (3.3 to 3.7 GB, TypeScript parsing 13 to 17% slower); enabling the
+  inspector's debugger in the main thread, which keeps its WebAssembly on
+  Liftoff (3.5 to 3.7 GB, but the tree-sitter runtime module is shared by all
+  threads, so the workers ran debug code too: parse step +15 s, +60 s CPU);
+  `v8.setFlagsFromString("--liftoff-only")` at run time has no effect.
+- Garbage between steps: with a live graph of 1.0 to 1.15 GB, V8 let the heap
+  grow to 2.4 GB before a full collection during the resolvers, the
+  contributors and the store write. The scan now collects at those step
+  boundaries once the heap has grown by 256 MB since the last collection
+  (about ten collections of 0.1 s on Grafana); the heap then stays at or below
+  1.5 GB.
+
+Probe (`npm run probe:memory -- <grafana> --no-cache`, 4 workers; the probe
+collects after every step):
+
+| Step | Before: live / peak sampled / RSS | After: live / peak sampled / RSS |
+| --- | ---: | ---: |
+| Parse, results held (before) or streamed into the GraphBuilder (after) | 907 / 1,134 / 1,333 MB | 1,006 / 1,574 / 1,552 MB |
+| `addParseResultsToGraph` (before only) | 1,062 / 1,363 / 1,560 MB | |
+| Workspace packages and 4 resolvers | 1,156 / 1,549 / 1,584 MB | 1,100 / 1,609 / 1,782 MB |
+| 48 semantic contributors | 1,250 / 2,379 / 1,999 MB | 1,194 / 2,389 / 2,078 MB |
+| Store `reset()` + `write()` | 611 / 1,071 / 2,083 MB | 604 / 1,063 / 2,146 MB |
+| Peak RSS of the probe process | 3,153 MB (`time -l`: 3.31 GB) | 2,873 MB (`time -l`: 3.01 GB) |
+
+The probe's own collections already kept its heap low, so its peak moves
+less than the scan's; what it lost is the main-thread TurboFan spike.
