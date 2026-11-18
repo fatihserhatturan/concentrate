@@ -1,6 +1,6 @@
 import path from "node:path";
-import { findImportCycles, findUnusedExports, openGraphStore, type PageWindow } from "../core.js";
-import { graphPath, loadIndex, type GraphIndex } from "./index.js";
+import { findImportCycles, findUnusedExports, type PageWindow } from "../core.js";
+import { loadIndex, projectStore, type GraphIndex } from "./index.js";
 
 export type Issues = {
   cycles: Array<{ size: number; typeOnly: boolean; files: Array<{ id: string | null; path: string }>; cycle: string[] }>;
@@ -39,15 +39,9 @@ export async function issues(projectPath: string): Promise<Issues> {
   const cached = cache.get(root);
   if (cached && cached.signature === index.signature) return cached.issues;
 
-  const store = await openGraphStore(graphPath(root), { retryLock: false });
-  let cycleResult: any;
-  let unusedResult: any;
-  try {
-    cycleResult = await findImportCycles(store, { scope: "file" }, everything);
-    unusedResult = await findUnusedExports(store, {}, everything);
-  } finally {
-    await store.close();
-  }
+  const store = await projectStore(root);
+  const cycleResult: any = await findImportCycles(store, { scope: "file" }, everything);
+  const unusedResult: any = await findUnusedExports(store, {}, everything);
   const ids = nodeIds(index);
   const result: Issues = {
     cycles: (cycleResult.cycles as Array<{ size: number; members: string[]; cycle: string[]; typeOnly?: boolean }>).map((c) => ({

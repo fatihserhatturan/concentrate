@@ -57,6 +57,24 @@ async function signatureOf(projectPath: string): Promise<string> {
   return `${head.generation ?? head.mtimeMs}:${head.writtenAt ?? head.mtimeMs}`;
 }
 
+const stores = new Map<string, Promise<IGraphStore>>();
+
+/**
+ * The project's store, opened once and shared by every request: a reader follows new generations by itself,
+ * and each open store holds its own copy of the graph (1.1 GB for Grafana), so opening one per request ran the
+ * server out of memory. Never close it.
+ */
+export function projectStore(projectPath: string): Promise<IGraphStore> {
+  const resolved = path.resolve(projectPath);
+  let store = stores.get(resolved);
+  if (!store) {
+    store = openGraphStore(graphPath(resolved), { retryLock: false });
+    stores.set(resolved, store);
+    store.catch(() => stores.delete(resolved));
+  }
+  return store;
+}
+
 const cache = new Map<string, GraphIndex>();
 /** One build per project at a time: concurrent requests wait for the same promise. */
 const building = new Map<string, { signature: string; promise: Promise<GraphIndex> }>();
@@ -72,14 +90,12 @@ export async function loadIndex(projectPath: string): Promise<GraphIndex> {
   if (running && running.signature === signature) return running.promise;
   const entry: { signature: string; promise: Promise<GraphIndex> } = { signature, promise: undefined as never };
   entry.promise = (async () => {
-    const store = await openGraphStore(graphPath(resolved), { retryLock: false });
     try {
-      const index = await buildIndex(resolved, store, signature);
+      const index = await buildIndex(resolved, await projectStore(resolved), signature);
       // A scan that finished meanwhile invalidated this build: hand it to the waiting callers, do not keep it.
       if (building.get(resolved) === entry) cache.set(resolved, index);
       return index;
     } finally {
-      await store.close();
       if (building.get(resolved) === entry) building.delete(resolved);
     }
   })();
@@ -98,26 +114,22 @@ type RawEdge = { from: string; to: string; type: string; properties: Record<stri
 
 /** The stored graph as written, Call and Import nodes included (the index leaves them out); for the whole-graph export. */
 export async function readRawGraph(projectPath: string): Promise<{ nodes: RawNode[]; edges: RawEdge[] }> {
-  const store = await openGraphStore(graphPath(path.resolve(projectPath)), { retryLock: false });
-  try {
-    const nodes: RawNode[] = [];
-    for (const label of nodeLabels) {
-      for (const { n } of (await store.query(`MATCH (n:${label}) RETURN n`)) as Array<{ n: Record<string, unknown> }>) {
-        const { _label, id, ...properties } = n;
-        nodes.push({ id: String(id), label, properties });
-      }
+  const store = await projectStore(projectPath);
+  const nodes: RawNode[] = [];
+  for (const label of nodeLabels) {
+    for (const { n } of (await store.query(`MATCH (n:${label}) RETURN n`)) as Array<{ n: Record<string, unknown> }>) {
+      const { _label, id, ...properties } = n;
+      nodes.push({ id: String(id), label, properties });
     }
-    const edges: RawEdge[] = [];
-    for (const table of relationshipTables) {
-      for (const { r } of (await store.query(`MATCH ()-[r:${table.type}]->() RETURN r`)) as Array<{ r: Record<string, unknown> }>) {
-        const { _label, _src, _dst, ...properties } = r;
-        edges.push({ from: String(_src), to: String(_dst), type: table.type, properties });
-      }
-    }
-    return { nodes, edges };
-  } finally {
-    await store.close();
   }
+  const edges: RawEdge[] = [];
+  for (const table of relationshipTables) {
+    for (const { r } of (await store.query(`MATCH ()-[r:${table.type}]->() RETURN r`)) as Array<{ r: Record<string, unknown> }>) {
+      const { _label, _src, _dst, ...properties } = r;
+      edges.push({ from: String(_src), to: String(_dst), type: table.type, properties });
+    }
+  }
+  return { nodes, edges };
 }
 
 /** Labels the index does not keep: they only carry the call and import edges, which are collapsed. */
