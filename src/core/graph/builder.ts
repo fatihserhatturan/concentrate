@@ -109,6 +109,22 @@ export class GraphBuilder {
     return this.relationshipsByType.get(type) ?? NONE;
   }
 
+  /** Remove these nodes from `nodes` and the lookups (their relationships are the caller's business). */
+  removeNodes(remove: ReadonlySet<GraphNode>): void {
+    if (remove.size === 0) return;
+    const keep = (node: GraphNode) => !remove.has(node);
+    let length = 0;
+    for (const node of this.nodes) if (keep(node)) this.nodes[length++] = node;
+    this.nodes.length = length;
+    for (const node of remove) if (this.nodesById.get(node.id) === node) this.nodesById.delete(node.id);
+    for (const [label, list] of this.nodesByLabel) {
+      const remaining = list.filter(keep);
+      if (remaining.length === list.length) continue;
+      if (remaining.length === 0) this.nodesByLabel.delete(label);
+      else this.nodesByLabel.set(label, remaining);
+    }
+  }
+
   /**
    * Remove these relationships from `relationships` and the type lookup. Like
    * splicing them out of `relationships` before, an identical relationship

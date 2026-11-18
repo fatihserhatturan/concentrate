@@ -93,3 +93,16 @@ describe("GraphBuilder lookups", () => {
     assert.deepEqual(graph.relationships, [second]);
   });
 });
+
+describe("GraphBuilder.removeNodes", () => {
+  it("removes nodes from the array and the lookups", () => {
+    const graph = new GraphBuilder();
+    const a: GraphNode = { id: "a", label: "Call", properties: {} };
+    const b: GraphNode = { id: "b", label: "Call", properties: {} };
+    graph.addNodes([a, b]);
+    graph.removeNodes(new Set([a]));
+    assert.deepEqual(graph.nodes, [b]);
+    assert.equal(graph.node("a"), undefined);
+    assert.deepEqual(graph.nodesWithLabel("Call"), [b]);
+  });
+});
