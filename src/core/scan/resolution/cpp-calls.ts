@@ -64,8 +64,7 @@ function createCppIndex(graph: IGraphContributor, relationshipIndex: ResolutionR
     fieldCache: new Map(),
   };
   const cppFiles = new Set<string>();
-  for (const node of graph.nodes) {
-    if (node.label !== "File") continue;
+  for (const node of graph.nodesWithLabel("File")) {
     if (node.properties.language !== "c" && node.properties.language !== "cpp") continue;
     cppFiles.add(node.id);
     if (typeof node.properties.cppScope === "string") {
@@ -74,44 +73,47 @@ function createCppIndex(graph: IGraphContributor, relationshipIndex: ResolutionR
     }
   }
   // Files of the nodes DEFINES_* does not reach through the shared index.
-  for (const relationship of graph.relationships) {
-    if (relationship.type === "DEFINES_VARIABLE" || relationship.type === "DEFINES_TYPE_ALIAS" || relationship.type === "DEFINES_ENUM") {
-      index.fileByNodeId.set(relationship.to, relationship.from);
-    }
+  for (const type of ["DEFINES_VARIABLE", "DEFINES_TYPE_ALIAS", "DEFINES_ENUM"] as const) {
+    for (const relationship of graph.relationshipsOfType(type)) index.fileByNodeId.set(relationship.to, relationship.from);
   }
   const fileOf = (id: string) => relationshipIndex.fileByFunctionId.get(id) ?? relationshipIndex.fileByClassId.get(id) ?? index.fileByNodeId.get(id);
-  for (const node of graph.nodes) {
-    const file = fileOf(node.id);
-    if (!file || !cppFiles.has(file)) continue;
-    index.fileByNodeId.set(node.id, file);
-    index.nodesById.set(node.id, node);
-    const qualified = typeof node.properties.qualifiedName === "string" ? node.properties.qualifiedName : String(node.properties.name);
-    if (node.label === "Function") {
-      if (node.properties.kind === "macro") push(index.macrosByName, String(node.properties.name), node);
-      else if (node.properties.kind !== "test") push(index.functionsByQualifiedName, qualified, node);
-    } else if (node.label === "Class") {
-      push(index.classesByQualifiedName, qualified, node);
-    } else if (node.label === "TypeAlias") {
-      push(index.aliasesByQualifiedName, qualified, node);
-    } else if (node.label === "Variable") {
-      push(index.variablesByName, String(node.properties.name), node);
+  // The labels fileOf can reach (functions, classes, and the DEFINES_* targets
+  // above); the order matters only within a label.
+  for (const label of ["Function", "Class", "TypeAlias", "Variable", "Enum"] as const) {
+    for (const node of graph.nodesWithLabel(label)) {
+      const file = fileOf(node.id);
+      if (!file || !cppFiles.has(file)) continue;
+      index.fileByNodeId.set(node.id, file);
+      index.nodesById.set(node.id, node);
+      const qualified = typeof node.properties.qualifiedName === "string" ? node.properties.qualifiedName : String(node.properties.name);
+      if (label === "Function") {
+        if (node.properties.kind === "macro") push(index.macrosByName, String(node.properties.name), node);
+        else if (node.properties.kind !== "test") push(index.functionsByQualifiedName, qualified, node);
+      } else if (label === "Class") {
+        push(index.classesByQualifiedName, qualified, node);
+      } else if (label === "TypeAlias") {
+        push(index.aliasesByQualifiedName, qualified, node);
+      } else if (label === "Variable") {
+        push(index.variablesByName, String(node.properties.name), node);
+      }
     }
   }
-  for (const relationship of graph.relationships) {
-    if (relationship.type === "RESOLVES_TO") {
-      const importer = relationshipIndex.fileByImportId.get(relationship.from);
-      if (importer && cppFiles.has(importer)) {
-        const list = index.includesByFile.get(importer) ?? [];
-        list.push(relationship.to);
-        index.includesByFile.set(importer, list);
-      }
-    } else if (relationship.type === "EXTENDS" && index.nodesById.has(relationship.from)) {
-      addBase(index, relationship.from, relationship.to);
-    } else if (relationship.type === "DEFINED_BY" && index.nodesById.has(relationship.from)) {
-      const list = index.definitionsByDeclaration.get(relationship.from) ?? [];
+  for (const relationship of graph.relationshipsOfType("RESOLVES_TO")) {
+    const importer = relationshipIndex.fileByImportId.get(relationship.from);
+    if (importer && cppFiles.has(importer)) {
+      const list = index.includesByFile.get(importer) ?? [];
       list.push(relationship.to);
-      index.definitionsByDeclaration.set(relationship.from, list);
+      index.includesByFile.set(importer, list);
     }
+  }
+  for (const relationship of graph.relationshipsOfType("EXTENDS")) {
+    if (index.nodesById.has(relationship.from)) addBase(index, relationship.from, relationship.to);
+  }
+  for (const relationship of graph.relationshipsOfType("DEFINED_BY")) {
+    if (!index.nodesById.has(relationship.from)) continue;
+    const list = index.definitionsByDeclaration.get(relationship.from) ?? [];
+    list.push(relationship.to);
+    index.definitionsByDeclaration.set(relationship.from, list);
   }
   return index;
 }

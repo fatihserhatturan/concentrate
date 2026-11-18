@@ -90,22 +90,17 @@ export function addImportPackageRelationships(graph: IGraphContributor): void {
   const packageIdByFileId = packageFileIndex(graph);
   const packageIdByImportId = new Map<string, string>();
 
-  for (const relationship of graph.relationships) {
-    if (relationship.type !== "IMPORTS" && relationship.type !== "RE_EXPORTS") {
-      continue;
-    }
-
-    const sourcePackageId = packageIdByFileId.get(relationship.from);
-    if (sourcePackageId) {
-      packageIdByImportId.set(relationship.to, sourcePackageId);
+  for (const type of ["IMPORTS", "RE_EXPORTS"] as const) {
+    for (const relationship of graph.relationshipsOfType(type)) {
+      const sourcePackageId = packageIdByFileId.get(relationship.from);
+      if (sourcePackageId) {
+        packageIdByImportId.set(relationship.to, sourcePackageId);
+      }
     }
   }
 
-  for (const relationship of graph.relationships) {
-    if (relationship.type !== "RESOLVES_TO") {
-      continue;
-    }
-
+  // Copy: the loop adds relationships of other types only, but stay a snapshot.
+  for (const relationship of [...graph.relationshipsOfType("RESOLVES_TO")]) {
     const targetPackageId = packageIdByFileId.get(relationship.to);
     if (!targetPackageId) {
       continue;
@@ -182,8 +177,8 @@ async function detectProjectPackages(
   read: ProjectPackageReader,
 ): Promise<WorkspacePackage[]> {
   const relativePaths: string[] = [];
-  for (const node of graph.nodes) {
-    if (node.label === "File" && typeof node.properties.relativePath === "string") relativePaths.push(toPosix(node.properties.relativePath));
+  for (const node of graph.nodesWithLabel("File")) {
+    if (typeof node.properties.relativePath === "string") relativePaths.push(toPosix(node.properties.relativePath));
   }
   const projects = await read(rootPath, relativePaths);
   const packages: WorkspacePackage[] = [];
@@ -370,11 +365,7 @@ function addPackageFileRelationships(graph: IGraphContributor, packages: Workspa
     (a, b) => pathDepth(b.relativePath) - pathDepth(a.relativePath),
   );
 
-  for (const node of graph.nodes) {
-    if (node.label !== "File") {
-      continue;
-    }
-
+  for (const node of [...graph.nodesWithLabel("File")]) {
     const relativePath = node.properties.relativePath;
     if (typeof relativePath !== "string") {
       continue;
@@ -424,10 +415,8 @@ function addPackageDependencyRelationships(graph: IGraphContributor, packages: W
 
 function packageFileIndex(graph: IGraphContributor): Map<string, string> {
   const packageIdByFileId = new Map<string, string>();
-  for (const relationship of graph.relationships) {
-    if (relationship.type === "PACKAGE_CONTAINS_FILE") {
-      packageIdByFileId.set(relationship.to, relationship.from);
-    }
+  for (const relationship of graph.relationshipsOfType("PACKAGE_CONTAINS_FILE")) {
+    packageIdByFileId.set(relationship.to, relationship.from);
   }
   return packageIdByFileId;
 }

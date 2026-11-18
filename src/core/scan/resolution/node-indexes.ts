@@ -1,7 +1,7 @@
 import type { GraphNode } from "../../graph/model.js";
 
 export function indexNodesByFileAndName(
-  nodes: GraphNode[],
+  nodes: readonly GraphNode[],
   fileByNodeId: Map<string, string>,
   label: "Class" | "Function" | "Interface",
 ): Map<string, Map<string, string[]>> {
@@ -28,7 +28,7 @@ export function indexNodesByFileAndName(
 }
 
 export function indexImportNodesByFile(
-  nodes: GraphNode[],
+  nodes: readonly GraphNode[],
   fileByImportId: Map<string, string>,
 ): Map<string, GraphNode[]> {
   const result = new Map<string, GraphNode[]>();

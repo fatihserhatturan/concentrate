@@ -10,14 +10,12 @@ import {
 } from "./indexes.js";
 
 export function addInheritanceRelationships(graph: IGraphContributor): void {
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-  const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
-  const interfacesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByInterfaceId, "Interface");
-  const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
+  const relationshipIndex = createResolutionRelationshipIndex(graph);
+  const classesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Class"), relationshipIndex.fileByClassId, "Class");
+  const interfacesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Interface"), relationshipIndex.fileByInterfaceId, "Interface");
+  const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
 
-  for (const node of graph.nodes) {
-    if (node.label !== "Class") continue;
-
+  for (const node of graph.nodesWithLabel("Class")) {
     const fileId = relationshipIndex.fileByClassId.get(node.id);
     if (!fileId) continue;
     // Python bases are looked up through its import bindings and re-exports.
@@ -66,8 +64,8 @@ export function addInheritanceRelationships(graph: IGraphContributor): void {
 
   // Rust: `impl Trait for Type` blocks the parser recorded on the file (the
   // type and the trait may live in other files, found through its `use`s).
-  for (const node of graph.nodes) {
-    if (node.label !== "File" || typeof node.properties.rustImpls !== "string") continue;
+  for (const node of graph.nodesWithLabel("File")) {
+    if (typeof node.properties.rustImpls !== "string") continue;
     const impls = JSON.parse(node.properties.rustImpls) as Array<{ type: string; trait: string }>;
     delete node.properties.rustImpls;
     const seen = new Set<string>();

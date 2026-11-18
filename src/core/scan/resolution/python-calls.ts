@@ -42,7 +42,7 @@ export function createPythonCallIndex(graph: IGraphContributor, relationshipInde
   const functionsById = new Map<string, GraphNode>();
   const variablesById = new Map<string, GraphNode>();
   const fileByVariableId = new Map<string, string>();
-  for (const rel of graph.relationships) if (rel.type === "DEFINES_VARIABLE") fileByVariableId.set(rel.to, rel.from);
+  for (const rel of graph.relationshipsOfType("DEFINES_VARIABLE")) fileByVariableId.set(rel.to, rel.from);
 
   const freeFunctions = new Map<string, Map<string, string[]>>();
   const types = new Map<string, Map<string, string[]>>();
@@ -55,27 +55,34 @@ export function createPythonCallIndex(graph: IGraphContributor, relationshipInde
     map.set(file, byName);
   };
 
-  for (const node of graph.nodes) {
+  // One pass per label: each fills its own maps (Class and Interface share
+  // `owners` and `types`, which only differ in order for one name in one file).
+  for (const node of graph.nodesWithLabel("Function")) {
     const name = String(node.properties.name ?? "");
-    if (node.label === "Function") {
-      const file = relationshipIndex.fileByFunctionId.get(node.id);
-      if (!file?.endsWith(".py")) continue;
-      functionsById.set(node.id, node);
-      if (node.properties.className === null) add(freeFunctions, file, name, node.id);
-    } else if (node.label === "Class" || node.label === "Interface") {
-      const file = (node.label === "Class" ? relationshipIndex.fileByClassId : relationshipIndex.fileByInterfaceId).get(node.id);
+    const file = relationshipIndex.fileByFunctionId.get(node.id);
+    if (!file?.endsWith(".py")) continue;
+    functionsById.set(node.id, node);
+    if (node.properties.className === null) add(freeFunctions, file, name, node.id);
+  }
+  for (const label of ["Class", "Interface"] as const) {
+    const fileByTypeId = label === "Class" ? relationshipIndex.fileByClassId : relationshipIndex.fileByInterfaceId;
+    for (const node of graph.nodesWithLabel(label)) {
+      const name = String(node.properties.name ?? "");
+      const file = fileByTypeId.get(node.id);
       if (!file?.endsWith(".py")) continue;
       owners.set(node.id, { id: node.id, node, fileId: file });
       add(types, file, name, node.id);
       const byName = classByFileAndName.get(file) ?? new Map<string, string>();
       if (!byName.has(name)) byName.set(name, node.id);
       classByFileAndName.set(file, byName);
-    } else if (node.label === "Variable") {
-      const file = fileByVariableId.get(node.id);
-      if (!file?.endsWith(".py")) continue;
-      variablesById.set(node.id, node);
-      add(variables, file, name, node.id);
     }
+  }
+  for (const node of graph.nodesWithLabel("Variable")) {
+    const name = String(node.properties.name ?? "");
+    const file = fileByVariableId.get(node.id);
+    if (!file?.endsWith(".py")) continue;
+    variablesById.set(node.id, node);
+    add(variables, file, name, node.id);
   }
 
   const methods = new Map<string, Map<string, string[]>>();
@@ -84,8 +91,8 @@ export function createPythonCallIndex(graph: IGraphContributor, relationshipInde
     byName.set(name, [...byName.get(name) ?? [], id]);
     methods.set(ownerId, byName);
   };
-  for (const rel of graph.relationships) {
-    if (rel.type !== "DEFINES_METHOD" || !owners.has(rel.from)) continue;
+  for (const rel of graph.relationshipsOfType("DEFINES_METHOD")) {
+    if (!owners.has(rel.from)) continue;
     const fn = functionsById.get(rel.to);
     if (fn) addMethod(rel.from, String(fn.properties.name), fn.id);
   }
@@ -99,13 +106,15 @@ export function createPythonCallIndex(graph: IGraphContributor, relationshipInde
 
   const supers = new Map<string, string[]>();
   const subs = new Map<string, string[]>();
+  // Both types feed the same lists in relationship order, which the two
+  // per-type lookups cannot reproduce, so this stays a pass over all of them.
   for (const rel of graph.relationships) {
     if ((rel.type !== "EXTENDS" && rel.type !== "IMPLEMENTS") || !owners.has(rel.from) || !owners.has(rel.to)) continue;
     supers.set(rel.from, [...supers.get(rel.from) ?? [], rel.to]);
     subs.set(rel.to, [...subs.get(rel.to) ?? [], rel.from]);
   }
 
-  const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
+  const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
   const resolved = relationshipIndex.resolvedFileByImportId;
   return {
     lookupFunction: createPythonNameLookup(freeFunctions, importsByFile, resolved),
