@@ -1,6 +1,6 @@
 import { readdir, stat } from "node:fs/promises";
 import type { GraphNode, GraphRelationship } from "../../core/graph/model.js";
-import type { IGraphStore } from "../../core/contracts/graph-store.js";
+import type { GraphRecordVisitor, IGraphStore } from "../../core/contracts/graph-store.js";
 import type { GraphStatsOptions, GraphStatsRow } from "../../core/contracts/query-engine.js";
 import { executeCypher, type QueryParameters } from "./cypher/executor.js";
 import { MemoryGraph } from "./graph.js";
@@ -59,6 +59,16 @@ export class GraphStore implements IGraphStore {
 
   async query(cypher: string, params: QueryParameters = {}): Promise<unknown[]> {
     return executeCypher(await this.current(), cypher, params);
+  }
+
+  async forEachRecord(visitor: GraphRecordVisitor): Promise<void> {
+    const graph = await this.current();
+    if (visitor.node) for (const node of graph.nodes()) visitor.node(node.label, node.id, node.properties);
+    if (visitor.relationship) {
+      for (const relationship of graph.relationships()) {
+        visitor.relationship(relationship.type, relationship.from.id, relationship.to.id, relationship.properties);
+      }
+    }
   }
 
   async stats(options: GraphStatsOptions = {}): Promise<GraphStatsRow[]> {

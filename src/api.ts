@@ -11,7 +11,7 @@ export type {
   GraphRelationship,
   GraphRelationshipType,
 } from "./core/graph/model.js";
-export type { IGraphStore } from "./core/contracts/graph-store.js";
+export type { GraphRecordVisitor, IGraphStore } from "./core/contracts/graph-store.js";
 export type { GraphStatsOptions, GraphStatsRow, IQueryEngine, QueryParameters } from "./core/contracts/query-engine.js";
 export {
   didFailFast,
@@ -25,7 +25,7 @@ export {
   type ScanWarning,
 } from "./core/scan/index.js";
 export { graphSummary } from "./adapters/mcp/resources.js";
-export { nodeLabels, relationshipTables, type RelationshipTable } from "./adapters/store/schema.js";
+export { nodeLabels, nodeTables, relationshipTables, type NodeTable, type RelationshipTable } from "./adapters/store/schema.js";
 export { matchName, type MatchType } from "./adapters/mcp/analysis-tools/search.js";
 export { findUnusedExports } from "./adapters/mcp/analysis-tools/unused.js";
 export { findImportCycles } from "./adapters/mcp/analysis-tools/cycles.js";
