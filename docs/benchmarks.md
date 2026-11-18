@@ -669,3 +669,9 @@ step 7 of the issue:
 | Do not store the 811,401 `Call` nodes (75%) whose only relationship is the incoming `CALLS` (no resolved target) | 484 MB | 254 MB of node JSON plus their `CALLS` lines |
 | Drop `expression`, equal to `name` on every `Call` | 14 MB | 39 MB |
 | Shorter `Call` ids (now 139 characters on average) | about 75 MB | about 170 MB |
+
+Decision (user, "middle way"): unresolved call sites with no other relationship
+are not stored as nodes; their caller keeps `[callee, line, expression]` in the
+`unresolvedCalls` property (schema 92). On this repository (1,902 files) the
+scan holds 10,506 `Call` nodes instead of 39,726 and 46,723 relationships
+instead of 75,943; `stats` peaks at 194 MB RSS instead of 258 MB.

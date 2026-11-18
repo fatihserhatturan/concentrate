@@ -814,6 +814,33 @@ const UNRESOLVED_SITE_LIMIT = 10;
 // first sites otherwise tell the agent which lines to check.
 export async function unresolvedCalls(engine: IQueryEngine, names: readonly string[]) {
   if (names.length === 0) return { count: 0, sites: [] as Row[] };
+  const wanted = new Set(names);
+  // Call sites with no relationship but their caller's are not nodes: they are
+  // the caller's `unresolvedCalls` property, a JSON array of [callee, line,
+  // expression]. The prefilter keeps the rows to callers that mention a name.
+  const params: Record<string, unknown> = {};
+  const mentions = (owner: string) => [...wanted].map((name, index) => {
+    params[`name${index}`] = JSON.stringify(name);
+    return `${owner}.unresolvedCalls CONTAINS $name${index}`;
+  }).join(" OR ");
+  const propertyQuery = (owner: string, variable: string, caller: string) => engine.query(`
+    MATCH ${owner}
+    WHERE ${mentions(variable)}
+    RETURN file.relativePath AS file, ${caller} AS caller, ${variable}.unresolvedCalls AS sites
+  `, params) as Promise<Array<{ file: string; caller: string | null; sites: string }>>;
+  const properties = (await Promise.all([
+    propertyQuery("(file:File)-[:DEFINES_FUNCTION]->(fn:Function)", "fn", "fn.name"),
+    propertyQuery("(file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)", "fn", "fn.name"),
+    propertyQuery("(file:File)", "file", "null"),
+  ])).flat();
+  const propertySites: Row[] = [];
+  for (const row of properties) {
+    for (const [callee, line, expression] of JSON.parse(row.sites) as Array<[string, number, string]>) {
+      if (wanted.has(callee)) propertySites.push({ file: row.file, line, expression, caller: row.caller });
+    }
+  }
+
+  // Calls still nodes (a callback, a request, ...) that resolve to nothing.
   const calls = await engine.query(`
     MATCH (call:Call)
     WHERE call.callee IN $names
@@ -821,21 +848,25 @@ export async function unresolvedCalls(engine: IQueryEngine, names: readonly stri
     RETURN id(call) AS id, count(target) AS resolved
   `, { names: [...names] }) as Array<{ id: string; resolved: number }>;
   const unresolved = new Set(calls.filter((call) => Number(call.resolved) === 0).map((call) => call.id));
-  if (unresolved.size === 0) return { count: 0, sites: [] as Row[] };
-  const siteQuery = (owner: string, caller: string) => engine.query(`
-    MATCH ${owner}
-    WHERE call.callee IN $names
-    RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, ${caller} AS caller
-  `, { names: [...names] }) as Promise<Array<Row & { id: string }>>;
-  const sites = (await Promise.all([
-    siteQuery("(file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call)", "fn.name"),
-    siteQuery("(file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call)", "fn.name"),
-    siteQuery("(file:File)-[:MODULE_CALLS]->(call:Call)", "null"),
-  ])).flat()
-    .filter((site) => unresolved.has(site.id))
-    .map(({ id: _id, ...site }) => site)
-    .sort(byFileAndLine);
-  return { count: unresolved.size, sites: sites.slice(0, UNRESOLVED_SITE_LIMIT) };
+  let nodeSites: Row[] = [];
+  if (unresolved.size > 0) {
+    const siteQuery = (owner: string, caller: string) => engine.query(`
+      MATCH ${owner}
+      WHERE call.callee IN $names
+      RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, ${caller} AS caller
+    `, { names: [...names] }) as Promise<Array<Row & { id: string }>>;
+    nodeSites = (await Promise.all([
+      siteQuery("(file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call)", "fn.name"),
+      siteQuery("(file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call)", "fn.name"),
+      siteQuery("(file:File)-[:MODULE_CALLS]->(call:Call)", "null"),
+    ])).flat()
+      .filter((site) => unresolved.has(site.id))
+      .map(({ id: _id, ...site }) => site);
+  }
+  const count = propertySites.length + unresolved.size;
+  if (count === 0) return { count: 0, sites: [] as Row[] };
+  const sites = [...propertySites, ...nodeSites].sort(byFileAndLine);
+  return { count, sites: sites.slice(0, UNRESOLVED_SITE_LIMIT) };
 }
 
 // The completeness fields of a caller answer: `unresolvedCalls` with its

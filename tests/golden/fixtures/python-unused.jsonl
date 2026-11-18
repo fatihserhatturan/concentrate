@@ -12,10 +12,8 @@
 {"kind":"node","id":"file:pyproject.toml:entrypoint:0:0:script:kit","label":"EntryPoint","properties":{"handlerName":"main","kind":"script","library":"python","line":0,"receiverName":null,"trigger":"kit"}}
 {"kind":"node","id":"file:src/app/__init__.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/app/__init__.py","relativePath":"src/app/__init__.py","sourceType":"production"}}
 {"kind":"node","id":"file:src/app/main.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/src/app/main.py","relativePath":"src/app/main.py","sourceType":"production"}}
-{"kind":"node","id":"file:src/app/main.py:function:7:run","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":7,"methodKind":null,"name":"run","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:src/app/main.py:function:7:run","label":"Function","properties":{"className":null,"endLine":8,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_definition","line":7,"methodKind":null,"name":"run","parameters":"[]","returnType":null,"unresolvedCalls":"[[\"len\",8,\"len\"],[\"UsedClass\",8,\"UsedClass\"]]","visibility":"public"}}
 {"kind":"node","id":"file:src/app/main.py:function:7:run:call:8:11:used_fn","label":"Call","properties":{"callee":"used_fn","columnNumber":11,"expression":"used_fn","line":8,"name":"used_fn","receiver":null}}
-{"kind":"node","id":"file:src/app/main.py:function:7:run:call:8:31:len","label":"Call","properties":{"callee":"len","columnNumber":31,"expression":"len","line":8,"name":"len","receiver":null}}
-{"kind":"node","id":"file:src/app/main.py:function:7:run:call:8:36:UsedClass","label":"Call","properties":{"callee":"UsedClass","columnNumber":36,"expression":"UsedClass","line":8,"name":"UsedClass","receiver":null}}
 {"kind":"node","id":"file:src/app/main.py:function:7:run:call:8:49:starred","label":"Call","properties":{"callee":"starred","columnNumber":49,"expression":"starred","line":8,"name":"starred","receiver":null}}
 {"kind":"node","id":"file:src/app/main.py:function:7:run:call:8:66:whole.via_module","label":"Call","properties":{"callee":"via_module","columnNumber":66,"expression":"whole.via_module","line":8,"name":"whole.via_module","receiver":"whole"}}
 {"kind":"node","id":"file:src/app/main.py:import:1:kit","label":"Import","properties":{"bindings":"[{\"imported\":\"used_fn\",\"local\":\"used_fn\",\"kind\":\"named\"}]","line":1,"source":"kit","specifier":"from kit import used_fn"}}
@@ -75,8 +73,6 @@
 {"kind":"rel","from":"file:src/app/main.py","type":"IMPORTS","to":"file:src/app/main.py:import:3:kit.star","properties":{}}
 {"kind":"rel","from":"file:src/app/main.py","type":"IMPORTS","to":"file:src/app/main.py:import:4:kit","properties":{}}
 {"kind":"rel","from":"file:src/app/main.py:function:7:run","type":"CALLS","to":"file:src/app/main.py:function:7:run:call:8:11:used_fn","properties":{}}
-{"kind":"rel","from":"file:src/app/main.py:function:7:run","type":"CALLS","to":"file:src/app/main.py:function:7:run:call:8:31:len","properties":{}}
-{"kind":"rel","from":"file:src/app/main.py:function:7:run","type":"CALLS","to":"file:src/app/main.py:function:7:run:call:8:36:UsedClass","properties":{}}
 {"kind":"rel","from":"file:src/app/main.py:function:7:run","type":"CALLS","to":"file:src/app/main.py:function:7:run:call:8:49:starred","properties":{}}
 {"kind":"rel","from":"file:src/app/main.py:function:7:run","type":"CALLS","to":"file:src/app/main.py:function:7:run:call:8:66:whole.via_module","properties":{}}
 {"kind":"rel","from":"file:src/app/main.py:function:7:run:call:8:11:used_fn","type":"CALL_RESOLVES_TO","to":"file:src/kit/core.py:function:5:used_fn","properties":{}}

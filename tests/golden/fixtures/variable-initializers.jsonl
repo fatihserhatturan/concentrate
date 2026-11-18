@@ -1,8 +1,7 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"variable-initializers","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"file:index.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/index.ts","relativePath":"index.ts","sourceType":"production"}}
-{"kind":"node","id":"file:index.ts:function:10:configure","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":10,"methodKind":null,"name":"configure","parameters":"[]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:index.ts:function:10:configure:call:11:16:express","label":"Call","properties":{"args":"[]","callee":"express","columnNumber":16,"expression":"express","line":11,"name":"express","receiver":null}}
+{"kind":"node","id":"file:index.ts:function:10:configure","label":"Function","properties":{"className":null,"endLine":13,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":10,"methodKind":null,"name":"configure","parameters":"[]","returnType":null,"unresolvedCalls":"[[\"express\",11,\"express\"]]","visibility":"public"}}
 {"kind":"node","id":"file:index.ts:import:1:express","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"express\",\"kind\":\"default\"},{\"imported\":\"Router\",\"local\":\"Router\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"express","specifier":"import express, { Router } from 'express'"}}
 {"kind":"node","id":"file:index.ts:import:2:@prisma/client","label":"Import","properties":{"bindings":"[{\"imported\":\"PrismaClient\",\"local\":\"PrismaClient\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"@prisma/client","specifier":"import { PrismaClient } from '@prisma/client'"}}
 {"kind":"node","id":"file:index.ts:initializercall:4:12:express","label":"Call","properties":{"args":"[]","callee":"express","columnNumber":12,"expression":"express","line":4,"name":"express","receiver":null}}
@@ -24,7 +23,6 @@
 {"kind":"rel","from":"file:index.ts","type":"DEFINES_VARIABLE","to":"file:index.ts:variable:8:port","properties":{}}
 {"kind":"rel","from":"file:index.ts","type":"IMPORTS","to":"file:index.ts:import:1:express","properties":{}}
 {"kind":"rel","from":"file:index.ts","type":"IMPORTS","to":"file:index.ts:import:2:@prisma/client","properties":{}}
-{"kind":"rel","from":"file:index.ts:function:10:configure","type":"CALLS","to":"file:index.ts:function:10:configure:call:11:16:express","properties":{}}
 {"kind":"rel","from":"file:index.ts:variable:4:app","type":"INITIALIZED_BY","to":"file:index.ts:initializercall:4:12:express","properties":{}}
 {"kind":"rel","from":"file:index.ts:variable:5:db","type":"INITIALIZED_BY","to":"file:index.ts:initializercall:5:11:new PrismaClient","properties":{}}
 {"kind":"rel","from":"file:index.ts:variable:6:router","type":"INITIALIZED_BY","to":"file:index.ts:initializercall:6:15:Router","properties":{}}

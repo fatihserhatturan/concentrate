@@ -10,8 +10,7 @@
 {"kind":"node","id":"file:main.ts:import:3:./utils-a","label":"Import","properties":{"bindings":"[{\"imported\":\"*\",\"local\":\"A\",\"kind\":\"namespace\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"./utils-a","specifier":"import * as A from './utils-a';"}}
 {"kind":"node","id":"file:utils-a.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/utils-a.ts","relativePath":"utils-a.ts","sourceType":"production"}}
 {"kind":"node","id":"file:utils-a.ts:function:1:format","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"format","parameters":"[{\"name\":\"value\",\"type\":\"string\"}]","returnType":"string","visibility":"public"}}
-{"kind":"node","id":"file:utils-a.ts:function:5:parse","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"parse","parameters":"[{\"name\":\"value\",\"type\":\"string\"}]","returnType":"number","visibility":"public"}}
-{"kind":"node","id":"file:utils-a.ts:function:5:parse:call:6:9:parseInt","label":"Call","properties":{"args":"[\"value\",\"10\"]","callee":"parseInt","columnNumber":9,"expression":"parseInt","line":6,"name":"parseInt","receiver":null}}
+{"kind":"node","id":"file:utils-a.ts:function:5:parse","label":"Function","properties":{"className":null,"endLine":7,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"parse","parameters":"[{\"name\":\"value\",\"type\":\"string\"}]","returnType":"number","unresolvedCalls":"[[\"parseInt\",6,\"parseInt\"]]","visibility":"public"}}
 {"kind":"node","id":"file:utils-b.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/utils-b.ts","relativePath":"utils-b.ts","sourceType":"production"}}
 {"kind":"node","id":"file:utils-b.ts:function:1:format","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"format","parameters":"[{\"name\":\"value\",\"type\":\"string\"}]","returnType":"string","visibility":"public"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"named-imports","path":"<root>"}}
@@ -33,6 +32,5 @@
 {"kind":"rel","from":"file:main.ts:import:3:./utils-a","type":"RESOLVES_TO","to":"file:utils-a.ts","properties":{}}
 {"kind":"rel","from":"file:utils-a.ts","type":"DEFINES_FUNCTION","to":"file:utils-a.ts:function:1:format","properties":{}}
 {"kind":"rel","from":"file:utils-a.ts","type":"DEFINES_FUNCTION","to":"file:utils-a.ts:function:5:parse","properties":{}}
-{"kind":"rel","from":"file:utils-a.ts:function:5:parse","type":"CALLS","to":"file:utils-a.ts:function:5:parse:call:6:9:parseInt","properties":{}}
 {"kind":"rel","from":"file:utils-b.ts","type":"DEFINES_FUNCTION","to":"file:utils-b.ts:function:1:format","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 91
+        "result": 92
       },
       {
         "method": "stats",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 27
+            "count": 16
           },
           {
             "table": "Route",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 91,
+      "schemaVersion": 92,
       "stats": [
         {
           "table": "Repo",
@@ -179,7 +179,7 @@
         },
         {
           "table": "Call",
-          "count": 27
+          "count": 16
         },
         {
           "table": "Route",

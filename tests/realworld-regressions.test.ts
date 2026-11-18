@@ -22,7 +22,7 @@ async function scan(files: Record<string, string>) {
     await mkdir(path.dirname(path.join(root, file)), { recursive: true });
     await writeFile(path.join(root, file), content);
   }
-  const graph = await buildCodeGraph(root, { continueOnError: false });
+  const graph = await buildCodeGraph(root, { continueOnError: false, keepCallSites: true });
   assert.equal(graph.report.failedFiles.length, 0);
   return graph;
 }

@@ -15,6 +15,9 @@ export type BuildCodeGraphOptions = {
   apiOrigins?: string[];
   // Reuse per-file parse results stored here (see parse-cache.ts); unset parses every file.
   cacheDirectory?: string;
+  // Keep every Call node. By default the call sites nothing resolved are not
+  // nodes but a property of their caller (see compactUnresolvedCalls).
+  keepCallSites?: boolean;
   onProgress?: (current: number, total: number, relativePath: string) => void;
 };
 

@@ -39,6 +39,7 @@ import { loadProjectSettings } from "../src/core/scan/project-settings.js";
 import { createScanReport } from "../src/core/scan/report.js";
 import { filterSupportedSourceFiles } from "../src/core/scan/source-files.js";
 import { addWorkspacePackageGraph } from "../src/core/scan/workspace-packages.js";
+import { compactUnresolvedCalls } from "../src/core/scan/call-sites.js";
 import { GraphBuilder } from "../src/core/graph/builder.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import type { ILanguageParser } from "../src/core/contracts/language-parser.js";
@@ -188,6 +189,9 @@ await step(`${registry.semanticContributors.length} semantic contributors`, asyn
     await contributor.contribute(graph!, rootPath, report, files, { apiOrigins: settings.apiOrigins });
   }
 });
+
+// 5b. Unresolved call sites become a property of their caller (as in buildCodeGraph).
+await step("compact unresolved call sites", () => compactUnresolvedCalls(graph!));
 
 // 6. What a scan keeps once it returns: only the node and relationship arrays.
 let nodes: GraphNode[] | null = graph!.nodes;

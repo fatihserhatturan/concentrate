@@ -8,9 +8,8 @@
 {"kind":"node","id":"file:cmd/tool/main.go:entrypoint:12:0:init:<none>","label":"EntryPoint","properties":{"handlerName":"init","kind":"init","library":"go","line":12,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:cmd/tool/main.go:entrypoint:16:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":16,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:cmd/tool/main.go:function:12:init","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":12,"methodKind":null,"name":"init","parameters":"[]","returnType":null,"visibility":"unexported"}}
-{"kind":"node","id":"file:cmd/tool/main.go:function:16:main","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":16,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
+{"kind":"node","id":"file:cmd/tool/main.go:function:16:main","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":16,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"unresolvedCalls":"[[\"Println\",17,\"fmt.Println\"]]","visibility":"unexported"}}
 {"kind":"node","id":"file:cmd/tool/main.go:function:16:main:call:17:13:mathx.Add","label":"Call","properties":{"callee":"Add","columnNumber":13,"expression":"mathx.Add","line":17,"name":"mathx.Add","receiver":"mathx"}}
-{"kind":"node","id":"file:cmd/tool/main.go:function:16:main:call:17:1:fmt.Println","label":"Call","properties":{"callee":"Println","columnNumber":1,"expression":"fmt.Println","line":17,"name":"fmt.Println","receiver":"fmt"}}
 {"kind":"node","id":"file:cmd/tool/main.go:function:16:main:call:18:1:Run","label":"Call","properties":{"callee":"Run","columnNumber":1,"expression":"Run","line":18,"name":"Run","receiver":null}}
 {"kind":"node","id":"file:cmd/tool/main.go:function:22:Run","label":"Function","properties":{"className":null,"endLine":22,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":22,"methodKind":null,"name":"Run","parameters":"[]","returnType":null,"visibility":"exported"}}
 {"kind":"node","id":"file:cmd/tool/main.go:import:4:fmt","label":"Import","properties":{"line":4,"source":"fmt","specifier":"\"fmt\""}}
@@ -37,9 +36,8 @@
 {"kind":"node","id":"file:mathx/mathx_test.go:function:11:BenchmarkAdd:call:12:1:Add","label":"Call","properties":{"callee":"Add","columnNumber":1,"expression":"Add","line":12,"name":"Add","receiver":null}}
 {"kind":"node","id":"file:mathx/mathx_test.go:function:15:Testable","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":15,"methodKind":null,"name":"Testable","parameters":"[]","returnType":null,"visibility":"exported"}}
 {"kind":"node","id":"file:mathx/mathx_test.go:function:17:ExampleAdd","label":"Function","properties":{"className":null,"endLine":17,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":17,"methodKind":null,"name":"ExampleAdd","parameters":"[]","returnType":null,"testKind":"example","visibility":"exported"}}
-{"kind":"node","id":"file:mathx/mathx_test.go:function:5:TestAdd","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"TestAdd","parameters":"[{\"name\":\"t\",\"type\":\"*testing.T\"}]","returnType":null,"testKind":"test","visibility":"exported"}}
+{"kind":"node","id":"file:mathx/mathx_test.go:function:5:TestAdd","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":5,"methodKind":null,"name":"TestAdd","parameters":"[{\"name\":\"t\",\"type\":\"*testing.T\"}]","returnType":null,"testKind":"test","unresolvedCalls":"[[\"Fatal\",7,\"t.Fatal\"]]","visibility":"exported"}}
 {"kind":"node","id":"file:mathx/mathx_test.go:function:5:TestAdd:call:6:4:Add","label":"Call","properties":{"callee":"Add","columnNumber":4,"expression":"Add","line":6,"name":"Add","receiver":null}}
-{"kind":"node","id":"file:mathx/mathx_test.go:function:5:TestAdd:call:7:2:t.Fatal","label":"Call","properties":{"callee":"Fatal","columnNumber":2,"expression":"t.Fatal","line":7,"name":"t.Fatal","receiver":"t","receiverType":"*testing.T"}}
 {"kind":"node","id":"file:mathx/mathx_test.go:import:3:testing","label":"Import","properties":{"line":3,"source":"testing","specifier":"\"testing\""}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-entrypoints","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:cmd","properties":{}}
@@ -63,7 +61,6 @@
 {"kind":"rel","from":"file:cmd/tool/main.go:entrypoint:12:0:init:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:cmd/tool/main.go:function:12:init","properties":{}}
 {"kind":"rel","from":"file:cmd/tool/main.go:entrypoint:16:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:cmd/tool/main.go:function:16:main","properties":{}}
 {"kind":"rel","from":"file:cmd/tool/main.go:function:16:main","type":"CALLS","to":"file:cmd/tool/main.go:function:16:main:call:17:13:mathx.Add","properties":{}}
-{"kind":"rel","from":"file:cmd/tool/main.go:function:16:main","type":"CALLS","to":"file:cmd/tool/main.go:function:16:main:call:17:1:fmt.Println","properties":{}}
 {"kind":"rel","from":"file:cmd/tool/main.go:function:16:main","type":"CALLS","to":"file:cmd/tool/main.go:function:16:main:call:18:1:Run","properties":{}}
 {"kind":"rel","from":"file:cmd/tool/main.go:function:16:main:call:17:13:mathx.Add","type":"CALL_RESOLVES_TO","to":"file:mathx/mathx.go:function:3:Add","properties":{}}
 {"kind":"rel","from":"file:cmd/tool/main.go:function:16:main:call:18:1:Run","type":"CALL_RESOLVES_TO","to":"file:cmd/tool/main.go:function:22:Run","properties":{}}
@@ -90,6 +87,5 @@
 {"kind":"rel","from":"file:mathx/mathx_test.go:function:11:BenchmarkAdd","type":"CALLS","to":"file:mathx/mathx_test.go:function:11:BenchmarkAdd:call:12:1:Add","properties":{}}
 {"kind":"rel","from":"file:mathx/mathx_test.go:function:11:BenchmarkAdd:call:12:1:Add","type":"CALL_RESOLVES_TO","to":"file:mathx/mathx.go:function:3:Add","properties":{}}
 {"kind":"rel","from":"file:mathx/mathx_test.go:function:5:TestAdd","type":"CALLS","to":"file:mathx/mathx_test.go:function:5:TestAdd:call:6:4:Add","properties":{}}
-{"kind":"rel","from":"file:mathx/mathx_test.go:function:5:TestAdd","type":"CALLS","to":"file:mathx/mathx_test.go:function:5:TestAdd:call:7:2:t.Fatal","properties":{}}
 {"kind":"rel","from":"file:mathx/mathx_test.go:function:5:TestAdd:call:6:4:Add","type":"CALL_RESOLVES_TO","to":"file:mathx/mathx.go:function:3:Add","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

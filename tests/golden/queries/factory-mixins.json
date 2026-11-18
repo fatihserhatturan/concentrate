@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 91
+        "result": 92
       },
       {
         "method": "stats",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 23
+            "count": 14
           },
           {
             "table": "Route",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 91,
+      "schemaVersion": 92,
       "stats": [
         {
           "table": "Repo",
@@ -179,7 +179,7 @@
         },
         {
           "table": "Call",
-          "count": 23
+          "count": 14
         },
         {
           "table": "Route",
@@ -699,6 +699,42 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"listen\""
+        },
+        "rows": [
+          {
+            "file": "negative.js",
+            "caller": "start",
+            "sites": "[[\"listen\",5,\"app.listen\"]]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"listen\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"listen\""
+        },
+        "rows": [
+          {
+            "file": "negative.js",
+            "caller": null,
+            "sites": "[[\"listen\",13,\"other.listen\"],[\"missing\",14,\"app.missing\"]]"
+          }
+        ]
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
         "params": {
           "names": [
@@ -707,69 +743,8 @@
         },
         "rows": [
           {
-            "id": "file:negative.js:function:4:start:call:5:2:app.listen",
-            "resolved": 0
-          },
-          {
-            "id": "file:negative.js:modulecall:13:0:other.listen",
-            "resolved": 0
-          },
-          {
             "id": "file:server.js:modulecall:6:0:app.listen",
             "resolved": 1
-          }
-        ]
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
-        "params": {
-          "names": [
-            "listen"
-          ]
-        },
-        "rows": [
-          {
-            "id": "file:negative.js:function:4:start:call:5:2:app.listen",
-            "file": "negative.js",
-            "line": 5,
-            "expression": "app.listen",
-            "caller": "start"
-          }
-        ]
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
-        "params": {
-          "names": [
-            "listen"
-          ]
-        },
-        "rows": []
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
-        "params": {
-          "names": [
-            "listen"
-          ]
-        },
-        "rows": [
-          {
-            "id": "file:negative.js:modulecall:13:0:other.listen",
-            "file": "negative.js",
-            "line": 13,
-            "expression": "other.listen",
-            "caller": null
-          },
-          {
-            "id": "file:server.js:modulecall:6:0:app.listen",
-            "file": "server.js",
-            "line": 6,
-            "expression": "app.listen",
-            "caller": null
           }
         ]
       }
@@ -854,6 +829,30 @@
             "targets": 1
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"handle\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"handle\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"handle\""
+        },
+        "rows": []
       },
       {
         "method": "query",
@@ -948,6 +947,30 @@
             "targets": 1
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"init\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"init\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"init\""
+        },
+        "rows": []
       },
       {
         "method": "query",

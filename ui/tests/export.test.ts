@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { cp, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
+import { appendFile, cp, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import type { AddressInfo } from "node:net";
 import os from "node:os";
 import path from "node:path";
@@ -61,8 +61,10 @@ before(async () => {
   work = await realpath(await mkdtemp(path.join(os.tmpdir(), "concentrate-ui-export-")));
   project = path.join(work, "project");
   await cp(path.join(ROOT, "fixtures", "call-graph"), project, { recursive: true });
-  // A name with every character the XML and DOT writers must escape.
+  // A name with every character the XML and DOT writers must escape, and a
+  // resolved call (calls nothing resolves are no nodes, see unresolvedCalls).
   await writeFile(path.join(project, "odd.ts"), `export function weird() { return 1; }\nexport const odd = "a<b>&é";\n`);
+  await appendFile(path.join(project, "nested.ts"), "\nexport function caller(): void {\n  outer();\n}\n");
   const scan = await fetch(`${base}/api/scan`, { method: "POST", headers: auth, body: JSON.stringify({ path: project }) });
   assert.match(await scan.text(), /event: done/);
 });

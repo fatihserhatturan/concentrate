@@ -10,7 +10,7 @@ import { classifyFile } from "../src/core/scan/file-classification.js";
 type Scan = Awaited<ReturnType<typeof buildCodeGraph>>;
 
 async function scan(fixture: string): Promise<Scan> {
-  return buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: true, concurrency: 2 });
+  return buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: true, concurrency: 2, keepCallSites: true });
 }
 
 // Every call as `file:line expression` → resolved targets as `file#qualified[ via]`.

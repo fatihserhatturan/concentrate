@@ -2,8 +2,7 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"shadowed-calls","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"file:helpers.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/helpers.js","relativePath":"helpers.js","sourceType":"production"}}
 {"kind":"node","id":"file:helpers.js:function:1:helper","label":"Function","properties":{"className":null,"endLine":1,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":1,"methodKind":null,"name":"helper","parameters":"[]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:helpers.js:function:3:run","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"run","parameters":"[{\"name\":\"helper\",\"type\":null}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:helpers.js:function:3:run:call:4:9:helper","label":"Call","properties":{"args":"[]","callee":"helper","columnNumber":9,"expression":"helper","line":4,"name":"helper","receiver":null}}
+{"kind":"node","id":"file:helpers.js:function:3:run","label":"Function","properties":{"className":null,"endLine":5,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":3,"methodKind":null,"name":"run","parameters":"[{\"name\":\"helper\",\"type\":null}]","returnType":null,"unresolvedCalls":"[[\"helper\",4,\"helper\"]]","visibility":"public"}}
 {"kind":"node","id":"file:helpers.js:function:7:direct","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":7,"methodKind":null,"name":"direct","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:helpers.js:function:7:direct:call:8:9:helper","label":"Call","properties":{"args":"[]","callee":"helper","columnNumber":9,"expression":"helper","line":8,"name":"helper","receiver":null}}
 {"kind":"node","id":"file:main.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/main.js","relativePath":"main.js","sourceType":"production"}}
@@ -17,8 +16,7 @@
 {"kind":"node","id":"file:view.js","label":"File","properties":{"defaultExport":"View","isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/view.js","relativePath":"view.js","sourceType":"production"}}
 {"kind":"node","id":"file:view.js:function:12:resolve","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_expression","line":12,"methodKind":null,"name":"resolve","parameters":"[{\"name\":\"dir\",\"type\":null},{\"name\":\"file\",\"type\":null}]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:view.js:function:4:View","label":"Function","properties":{"className":null,"endLine":4,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":4,"methodKind":null,"name":"View","parameters":"[{\"name\":\"name\",\"type\":null}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:view.js:function:6:lookup","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_expression","line":6,"methodKind":null,"name":"lookup","parameters":"[{\"name\":\"name\",\"type\":null}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:view.js:function:6:lookup:call:7:12:resolve","label":"Call","properties":{"args":"[\"/root\",\"name\"]","callee":"resolve","columnNumber":12,"expression":"resolve","line":7,"name":"resolve","receiver":null}}
+{"kind":"node","id":"file:view.js:function:6:lookup","label":"Function","properties":{"className":null,"endLine":9,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_expression","line":6,"methodKind":null,"name":"lookup","parameters":"[{\"name\":\"name\",\"type\":null}]","returnType":null,"unresolvedCalls":"[[\"resolve\",7,\"resolve\"]]","visibility":"public"}}
 {"kind":"node","id":"file:view.js:function:6:lookup:call:8:9:this.resolve","label":"Call","properties":{"args":"[\"loc\",\"name\"]","callee":"resolve","columnNumber":9,"expression":"this.resolve","line":8,"name":"this.resolve","receiver":"this"}}
 {"kind":"node","id":"file:view.js:import:1:path","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"path\",\"kind\":\"default\"}]","isCjs":true,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"path","specifier":"require('path')"}}
 {"kind":"node","id":"file:view.js:initializercall:1:11:require","label":"Call","properties":{"args":"[\"path\"]","callee":"require","columnNumber":11,"expression":"require","line":1,"name":"require","receiver":null}}
@@ -32,7 +30,6 @@
 {"kind":"rel","from":"file:helpers.js","type":"DEFINES_FUNCTION","to":"file:helpers.js:function:1:helper","properties":{}}
 {"kind":"rel","from":"file:helpers.js","type":"DEFINES_FUNCTION","to":"file:helpers.js:function:3:run","properties":{}}
 {"kind":"rel","from":"file:helpers.js","type":"DEFINES_FUNCTION","to":"file:helpers.js:function:7:direct","properties":{}}
-{"kind":"rel","from":"file:helpers.js:function:3:run","type":"CALLS","to":"file:helpers.js:function:3:run:call:4:9:helper","properties":{}}
 {"kind":"rel","from":"file:helpers.js:function:7:direct","type":"CALLS","to":"file:helpers.js:function:7:direct:call:8:9:helper","properties":{}}
 {"kind":"rel","from":"file:helpers.js:function:7:direct:call:8:9:helper","type":"CALL_RESOLVES_TO","to":"file:helpers.js:function:1:helper","properties":{}}
 {"kind":"rel","from":"file:main.js","type":"DEFINES_VARIABLE","to":"file:main.js:variable:1:build","properties":{}}
@@ -49,7 +46,6 @@
 {"kind":"rel","from":"file:view.js","type":"DEFINES_VARIABLE","to":"file:view.js:variable:1:path","properties":{}}
 {"kind":"rel","from":"file:view.js","type":"DEFINES_VARIABLE","to":"file:view.js:variable:2:resolve","properties":{}}
 {"kind":"rel","from":"file:view.js","type":"IMPORTS","to":"file:view.js:import:1:path","properties":{}}
-{"kind":"rel","from":"file:view.js:function:6:lookup","type":"CALLS","to":"file:view.js:function:6:lookup:call:7:12:resolve","properties":{}}
 {"kind":"rel","from":"file:view.js:function:6:lookup","type":"CALLS","to":"file:view.js:function:6:lookup:call:8:9:this.resolve","properties":{}}
 {"kind":"rel","from":"file:view.js:function:6:lookup:call:8:9:this.resolve","type":"CALL_RESOLVES_TO","to":"file:view.js:function:12:resolve","properties":{}}
 {"kind":"rel","from":"file:view.js:variable:1:path","type":"INITIALIZED_BY","to":"file:view.js:initializercall:1:11:require","properties":{}}

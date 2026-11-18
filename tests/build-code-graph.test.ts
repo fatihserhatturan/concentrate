@@ -56,6 +56,7 @@ describe("buildCodeGraph", () => {
   it("keeps nested function calls attached to their own function", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "call-graph"), {
       continueOnError: false,
+      keepCallSites: true,
     });
 
     const callsByFunction = new Map<string, string[]>();
@@ -451,6 +452,7 @@ describe("buildCodeGraph", () => {
   it("extracts Go files, imports, structs, functions, methods, and calls", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "go-basic"), {
       continueOnError: false,
+      keepCallSites: true,
     });
 
     assert.equal(graph.report.discoveredFiles, 1);
@@ -542,6 +544,7 @@ describe("buildCodeGraph", () => {
   it("extracts Rust files, imports, structs, functions, impl methods, and calls", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "rust-basic"), {
       continueOnError: false,
+      keepCallSites: true,
     });
 
     assert.equal(graph.report.discoveredFiles, 2);
@@ -701,6 +704,7 @@ describe("buildCodeGraph", () => {
   it("extracts arrow functions and function expressions in TypeScript", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "arrow-functions"), {
       continueOnError: false,
+      keepCallSites: true,
     });
 
     assert.equal(graph.report.failedFiles.length, 0);
@@ -1057,6 +1061,7 @@ describe("buildCodeGraph", () => {
   it("captures new_expression constructor calls in function bodies and at module level", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "new-expression"), {
       continueOnError: false,
+      keepCallSites: true,
     });
 
     assert.equal(graph.report.failedFiles.length, 0);
@@ -1102,6 +1107,7 @@ describe("buildCodeGraph", () => {
   it("extracts inline route handler functions as Function nodes linked via PASSED_TO", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "inline-handlers"), {
       continueOnError: false,
+      keepCallSites: true,
     });
 
     assert.equal(graph.report.failedFiles.length, 0);
@@ -1168,6 +1174,7 @@ describe("buildCodeGraph", () => {
   it("captures module-level call expressions as Call nodes linked via MODULE_CALLS", async () => {
     const graph = await buildCodeGraph(path.join(fixturesRoot, "module-calls"), {
       continueOnError: false,
+      keepCallSites: true,
     });
 
     assert.equal(graph.report.failedFiles.length, 0);

@@ -12,11 +12,10 @@
 {"kind":"node","id":"file:factory.ts:variable:7:instance","label":"Variable","properties":{"isExported":false,"kind":"const","line":7,"name":"instance","stringValue":null}}
 {"kind":"node","id":"file:factory.ts:variable:8:default","label":"Variable","properties":{"isExported":true,"kind":"export_default","line":8,"name":"default"}}
 {"kind":"node","id":"file:main.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/main.ts","relativePath":"main.ts","sourceType":"production"}}
-{"kind":"node","id":"file:main.ts:function:7:run","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":7,"methodKind":null,"name":"run","parameters":"[]","returnType":null,"visibility":"public"}}
+{"kind":"node","id":"file:main.ts:function:7:run","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":7,"methodKind":null,"name":"run","parameters":"[]","returnType":null,"unresolvedCalls":"[[\"instance\",13,\"instance\"]]","visibility":"public"}}
 {"kind":"node","id":"file:main.ts:function:7:run:call:10:2:aliased","label":"Call","properties":{"args":"[]","callee":"aliased","columnNumber":2,"expression":"aliased","line":10,"name":"aliased","receiver":null}}
 {"kind":"node","id":"file:main.ts:function:7:run:call:11:2:fromBarrel","label":"Call","properties":{"args":"[\"2\"]","callee":"fromBarrel","columnNumber":2,"expression":"fromBarrel","line":11,"name":"fromBarrel","receiver":null}}
 {"kind":"node","id":"file:main.ts:function:7:run:call:12:2:viaBarrelDefault","label":"Call","properties":{"args":"[]","callee":"viaBarrelDefault","columnNumber":2,"expression":"viaBarrelDefault","line":12,"name":"viaBarrelDefault","receiver":null}}
-{"kind":"node","id":"file:main.ts:function:7:run:call:13:2:instance","label":"Call","properties":{"args":"[]","callee":"instance","columnNumber":2,"expression":"instance","line":13,"name":"instance","receiver":null}}
 {"kind":"node","id":"file:main.ts:function:7:run:call:8:2:generateToken","label":"Call","properties":{"args":"[\"1\"]","callee":"generateToken","columnNumber":2,"expression":"generateToken","line":8,"name":"generateToken","receiver":null}}
 {"kind":"node","id":"file:main.ts:function:7:run:call:9:2:named","label":"Call","properties":{"args":"[]","callee":"named","columnNumber":2,"expression":"named","line":9,"name":"named","receiver":null}}
 {"kind":"node","id":"file:main.ts:import:1:./token","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"generateToken\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"./token","specifier":"import generateToken from './token';"}}
@@ -59,7 +58,6 @@
 {"kind":"rel","from":"file:main.ts:function:7:run","type":"CALLS","to":"file:main.ts:function:7:run:call:10:2:aliased","properties":{}}
 {"kind":"rel","from":"file:main.ts:function:7:run","type":"CALLS","to":"file:main.ts:function:7:run:call:11:2:fromBarrel","properties":{}}
 {"kind":"rel","from":"file:main.ts:function:7:run","type":"CALLS","to":"file:main.ts:function:7:run:call:12:2:viaBarrelDefault","properties":{}}
-{"kind":"rel","from":"file:main.ts:function:7:run","type":"CALLS","to":"file:main.ts:function:7:run:call:13:2:instance","properties":{}}
 {"kind":"rel","from":"file:main.ts:function:7:run","type":"CALLS","to":"file:main.ts:function:7:run:call:8:2:generateToken","properties":{}}
 {"kind":"rel","from":"file:main.ts:function:7:run","type":"CALLS","to":"file:main.ts:function:7:run:call:9:2:named","properties":{}}
 {"kind":"rel","from":"file:main.ts:function:7:run:call:10:2:aliased","type":"CALL_RESOLVES_TO","to":"file:alias.ts:function:1:aliased","properties":{}}

@@ -17,8 +17,7 @@
 {"kind":"node","id":"file:src/lib/helper.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/lib/helper.ts","relativePath":"src/lib/helper.ts","sourceType":"production"}}
 {"kind":"node","id":"file:src/lib/helper.ts:function:1:helper","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"helper","parameters":"[]","returnType":"string","visibility":"public"}}
 {"kind":"node","id":"file:src/utils/format.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/utils/format.ts","relativePath":"src/utils/format.ts","sourceType":"production"}}
-{"kind":"node","id":"file:src/utils/format.ts:function:1:format","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"format","parameters":"[{\"name\":\"value\",\"type\":\"string\"}]","returnType":"string","visibility":"public"}}
-{"kind":"node","id":"file:src/utils/format.ts:function:1:format:call:2:9:value.trim","label":"Call","properties":{"args":"[]","callee":"trim","columnNumber":9,"expression":"value.trim","line":2,"name":"value.trim","receiver":"value"}}
+{"kind":"node","id":"file:src/utils/format.ts:function:1:format","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":1,"methodKind":null,"name":"format","parameters":"[{\"name\":\"value\",\"type\":\"string\"}]","returnType":"string","unresolvedCalls":"[[\"trim\",2,\"value.trim\"]]","visibility":"public"}}
 {"kind":"node","id":"file:tsconfig.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/tsconfig.json","relativePath":"tsconfig.json","sourceType":"production"}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"ts-paths","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_DIRECTORY","to":"dir:src","properties":{}}
@@ -45,6 +44,5 @@
 {"kind":"rel","from":"file:src/internal.ts","type":"DEFINES_FUNCTION","to":"file:src/internal.ts:function:1:internal","properties":{}}
 {"kind":"rel","from":"file:src/lib/helper.ts","type":"DEFINES_FUNCTION","to":"file:src/lib/helper.ts:function:1:helper","properties":{}}
 {"kind":"rel","from":"file:src/utils/format.ts","type":"DEFINES_FUNCTION","to":"file:src/utils/format.ts:function:1:format","properties":{}}
-{"kind":"rel","from":"file:src/utils/format.ts:function:1:format","type":"CALLS","to":"file:src/utils/format.ts:function:1:format:call:2:9:value.trim","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"DECLARES_CONFIG","to":"config:tsconfig.json:compilerOptions.baseUrl","properties":{}}

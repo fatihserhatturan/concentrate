@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 91
+        "result": 92
       },
       {
         "method": "stats",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 8
+            "count": 6
           },
           {
             "table": "Route",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 91,
+      "schemaVersion": 92,
       "stats": [
         {
           "table": "Repo",
@@ -179,7 +179,7 @@
         },
         {
           "table": "Call",
-          "count": 8
+          "count": 6
         },
         {
           "table": "Route",
@@ -698,6 +698,30 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"setToken\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"setToken\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"setToken\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
         "params": {
           "names": [
@@ -795,6 +819,42 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"get\""
+        },
+        "rows": [
+          {
+            "file": "shadow.ts",
+            "caller": "withApi",
+            "sites": "[[\"get\",4,\"api.get\"]]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"get\""
+        },
+        "rows": [
+          {
+            "file": "client.ts",
+            "caller": "users",
+            "sites": "[[\"get\",5,\"this.get\"]]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"get\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
         "params": {
           "names": [
@@ -803,71 +863,10 @@
         },
         "rows": [
           {
-            "id": "file:client.ts:function:4:users:call:5:11:this.get",
-            "resolved": 0
-          },
-          {
-            "id": "file:shadow.ts:function:3:withApi:call:4:9:api.get",
-            "resolved": 0
-          },
-          {
             "id": "file:via-barrel.ts:function:3:load:call:4:9:client.get",
             "resolved": 1
           }
         ]
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
-        "params": {
-          "names": [
-            "get"
-          ]
-        },
-        "rows": [
-          {
-            "id": "file:shadow.ts:function:3:withApi:call:4:9:api.get",
-            "file": "shadow.ts",
-            "line": 4,
-            "expression": "api.get",
-            "caller": "withApi"
-          },
-          {
-            "id": "file:via-barrel.ts:function:3:load:call:4:9:client.get",
-            "file": "via-barrel.ts",
-            "line": 4,
-            "expression": "client.get",
-            "caller": "load"
-          }
-        ]
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
-        "params": {
-          "names": [
-            "get"
-          ]
-        },
-        "rows": [
-          {
-            "id": "file:client.ts:function:4:users:call:5:11:this.get",
-            "file": "client.ts",
-            "line": 5,
-            "expression": "this.get",
-            "caller": "users"
-          }
-        ]
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
-        "params": {
-          "names": [
-            "get"
-          ]
-        },
-        "rows": []
       }
     ],
     "output": {
@@ -950,6 +949,30 @@
             "targets": 1
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"users\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"users\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"users\""
+        },
+        "rows": []
       },
       {
         "method": "query",
