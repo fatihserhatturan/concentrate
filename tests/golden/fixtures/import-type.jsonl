@@ -1,8 +1,7 @@
 {"kind":"report","status":"success","discoveredFiles":2,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"import-type","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"file:index.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/index.ts","relativePath":"index.ts","sourceType":"production"}}
-{"kind":"node","id":"file:index.ts:function:8:handler","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":8,"methodKind":null,"name":"handler","parameters":"[{\"name\":\"req\",\"type\":\"Request\"},{\"name\":\"res\",\"type\":\"Response\"}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:index.ts:function:8:handler:call:9:9:createServer","label":"Call","properties":{"args":"[]","callee":"createServer","columnNumber":9,"expression":"createServer","line":9,"name":"createServer","receiver":null}}
+{"kind":"node","id":"file:index.ts:function:8:handler","label":"Function","properties":{"className":null,"endLine":10,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":8,"methodKind":null,"name":"handler","parameters":"[{\"name\":\"req\",\"type\":\"Request\"},{\"name\":\"res\",\"type\":\"Response\"}]","returnType":null,"unresolvedCalls":"[[\"createServer\",9,\"createServer\"]]","visibility":"public"}}
 {"kind":"node","id":"file:index.ts:import:1:./types","label":"Import","properties":{"bindings":"[{\"imported\":\"User\",\"local\":\"User\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":1,"source":"./types","specifier":"import type { User } from './types'"}}
 {"kind":"node","id":"file:index.ts:import:2:express","label":"Import","properties":{"bindings":"[{\"imported\":\"Request\",\"local\":\"Request\",\"kind\":\"named\"},{\"imported\":\"Response\",\"local\":\"Response\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":true,"isWildcard":false,"line":2,"source":"express","specifier":"import type { Request, Response } from 'express'"}}
 {"kind":"node","id":"file:index.ts:import:3:http","label":"Import","properties":{"bindings":"[{\"imported\":\"createServer\",\"local\":\"createServer\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":3,"source":"http","specifier":"import { createServer } from 'http'"}}
@@ -19,7 +18,6 @@
 {"kind":"rel","from":"file:index.ts","type":"IMPORTS","to":"file:index.ts:import:3:http","properties":{}}
 {"kind":"rel","from":"file:index.ts","type":"IMPORTS","to":"file:index.ts:import:4:fs/promises","properties":{}}
 {"kind":"rel","from":"file:index.ts","type":"IMPORTS","to":"file:index.ts:import:6:./types","properties":{}}
-{"kind":"rel","from":"file:index.ts:function:8:handler","type":"CALLS","to":"file:index.ts:function:8:handler:call:9:9:createServer","properties":{}}
 {"kind":"rel","from":"file:index.ts:import:1:./types","type":"RESOLVES_TO","to":"file:types.ts","properties":{}}
 {"kind":"rel","from":"file:index.ts:import:6:./types","type":"RESOLVES_TO","to":"file:types.ts","properties":{}}
 {"kind":"rel","from":"file:types.ts","type":"DEFINES_TYPE_ALIAS","to":"file:types.ts:type-alias:1:User","properties":{}}

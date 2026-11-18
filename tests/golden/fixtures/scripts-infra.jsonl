@@ -90,10 +90,8 @@
 {"kind":"node","id":"file:Dockerfile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"dockerfile","path":"<root>/Dockerfile","relativePath":"Dockerfile","sourceType":"production"}}
 {"kind":"node","id":"file:Makefile","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"makefile","path":"<root>/Makefile","relativePath":"Makefile","sourceType":"production"}}
 {"kind":"node","id":"file:api/Dockerfile.dev","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"dockerfile","path":"<root>/api/Dockerfile.dev","relativePath":"api/Dockerfile.dev","sourceType":"production"}}
-{"kind":"node","id":"file:app/manage.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/manage.py","relativePath":"app/manage.py","sourceType":"production"}}
-{"kind":"node","id":"file:app/manage.py:call:1:0:print","label":"Call","properties":{"callee":"print","columnNumber":0,"expression":"print","line":1,"name":"print","receiver":null}}
-{"kind":"node","id":"file:app/tools/seed.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/tools/seed.py","relativePath":"app/tools/seed.py","sourceType":"production"}}
-{"kind":"node","id":"file:app/tools/seed.py:call:1:0:print","label":"Call","properties":{"callee":"print","columnNumber":0,"expression":"print","line":1,"name":"print","receiver":null}}
+{"kind":"node","id":"file:app/manage.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/manage.py","relativePath":"app/manage.py","sourceType":"production","unresolvedCalls":"[[\"print\",1,\"print\"]]"}}
+{"kind":"node","id":"file:app/tools/seed.py","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"python","path":"<root>/app/tools/seed.py","relativePath":"app/tools/seed.py","sourceType":"production","unresolvedCalls":"[[\"print\",1,\"print\"]]"}}
 {"kind":"node","id":"file:cmd/server/main.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"main","path":"<root>/cmd/server/main.go","relativePath":"cmd/server/main.go","sourceType":"production"}}
 {"kind":"node","id":"file:cmd/server/main.go:entrypoint:3:0:main:<none>","label":"EntryPoint","properties":{"handlerName":"main","kind":"main","library":"go","line":3,"receiverName":null,"trigger":null}}
 {"kind":"node","id":"file:cmd/server/main.go:function:3:main","label":"Function","properties":{"className":null,"endLine":3,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":3,"methodKind":null,"name":"main","parameters":"[]","returnType":null,"visibility":"unexported"}}
@@ -104,8 +102,7 @@
 {"kind":"node","id":"file:scripts/build.sh","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"shell","path":"<root>/scripts/build.sh","relativePath":"scripts/build.sh","sourceType":"production"}}
 {"kind":"node","id":"file:scripts/deploy.sh","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"shell","path":"<root>/scripts/deploy.sh","relativePath":"scripts/deploy.sh","sourceType":"production"}}
 {"kind":"node","id":"file:scripts/migrate.sh","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"shell","path":"<root>/scripts/migrate.sh","relativePath":"scripts/migrate.sh","sourceType":"production"}}
-{"kind":"node","id":"file:scripts/postbuild.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/scripts/postbuild.js","relativePath":"scripts/postbuild.js","sourceType":"production"}}
-{"kind":"node","id":"file:scripts/postbuild.js:modulecall:1:0:console.log","label":"Call","properties":{"args":"[\"postbuild\"]","callee":"log","columnNumber":0,"expression":"console.log","line":1,"name":"console.log","receiver":"console"}}
+{"kind":"node","id":"file:scripts/postbuild.js","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"javascript","path":"<root>/scripts/postbuild.js","relativePath":"scripts/postbuild.js","sourceType":"production","unresolvedCalls":"[[\"log\",1,\"console.log\"]]"}}
 {"kind":"node","id":"file:scripts/setup.ps1","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"powershell","path":"<root>/scripts/setup.ps1","relativePath":"scripts/setup.ps1","sourceType":"production"}}
 {"kind":"node","id":"file:scripts/setup2.ps1","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"powershell","path":"<root>/scripts/setup2.ps1","relativePath":"scripts/setup2.ps1","sourceType":"production"}}
 {"kind":"node","id":"file:src/index.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/src/index.ts","relativePath":"src/index.ts","sourceType":"production"}}
@@ -225,8 +222,6 @@
 {"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:lint","properties":{}}
 {"kind":"rel","from":"file:Makefile","type":"DECLARES_ENTRYPOINT","to":"entrypoint:make:Makefile:test","properties":{}}
 {"kind":"rel","from":"file:api/Dockerfile.dev","type":"DECLARES_ENTRYPOINT","to":"entrypoint:docker:api/Dockerfile.dev:2","properties":{}}
-{"kind":"rel","from":"file:app/manage.py","type":"MODULE_CALLS","to":"file:app/manage.py:call:1:0:print","properties":{}}
-{"kind":"rel","from":"file:app/tools/seed.py","type":"MODULE_CALLS","to":"file:app/tools/seed.py:call:1:0:print","properties":{}}
 {"kind":"rel","from":"file:cmd/server/main.go","type":"DECLARES_ENTRYPOINT","to":"file:cmd/server/main.go:entrypoint:3:0:main:<none>","properties":{}}
 {"kind":"rel","from":"file:cmd/server/main.go","type":"DEFINES_FUNCTION","to":"file:cmd/server/main.go:function:3:main","properties":{}}
 {"kind":"rel","from":"file:cmd/server/main.go:entrypoint:3:0:main:<none>","type":"ENTRYPOINT_HANDLED_BY","to":"file:cmd/server/main.go:function:3:main","properties":{}}
@@ -251,7 +246,6 @@
 {"kind":"rel","from":"file:scripts/build.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/build.sh","properties":{}}
 {"kind":"rel","from":"file:scripts/deploy.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/deploy.sh","properties":{}}
 {"kind":"rel","from":"file:scripts/migrate.sh","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/migrate.sh","properties":{}}
-{"kind":"rel","from":"file:scripts/postbuild.js","type":"MODULE_CALLS","to":"file:scripts/postbuild.js:modulecall:1:0:console.log","properties":{}}
 {"kind":"rel","from":"file:scripts/setup.ps1","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/setup.ps1","properties":{}}
 {"kind":"rel","from":"file:scripts/setup2.ps1","type":"DECLARES_ENTRYPOINT","to":"entrypoint:script:scripts/setup2.ps1","properties":{}}
 {"kind":"rel","from":"file:src/index.ts","type":"DEFINES_VARIABLE","to":"file:src/index.ts:variable:1:port","properties":{}}

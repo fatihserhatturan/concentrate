@@ -9,7 +9,7 @@ import { GraphStore } from "../src/adapters/store/store.js";
 
 let result: BuildCodeGraphResult;
 before(async () => {
-  result = await buildCodeGraph(path.resolve("fixtures/python-calls"), { continueOnError: true, concurrency: 2 });
+  result = await buildCodeGraph(path.resolve("fixtures/python-calls"), { continueOnError: true, concurrency: 2, keepCallSites: true });
 });
 
 const functionLabel = (id: string) => id.replace(/^file:/u, "").replace(/:function:\d+:/u, "::");
@@ -136,7 +136,7 @@ describe("Python graphs in the store", () => {
 
   it("writes every Python property the parser sets (schema covers them)", async () => {
     for (const fixture of ["python-calls", "python-declarations", "python-project", "python-poetry"]) {
-      const graph = await buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: true, concurrency: 2 });
+      const graph = await buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: true, concurrency: 2, keepCallSites: true });
       await store.reset();
       await store.write(graph.nodes, graph.relationships);
       const rows = await store.query("MATCH (f:File) WHERE f.language = 'python' RETURN count(f) AS files");

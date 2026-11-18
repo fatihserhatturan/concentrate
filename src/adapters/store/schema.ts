@@ -5,7 +5,7 @@
  */
 
 /** Bump when tables or properties change; scans of an older version are rewritten, never patched. */
-export const SCHEMA_VERSION = 91;
+export const SCHEMA_VERSION = 92;
 
 export type PropertyType = "STRING" | "INT64" | "BOOLEAN";
 
@@ -25,9 +25,9 @@ export const nodeTables: readonly NodeTable[] = [
   { label: "Repo", properties: { path: "STRING", name: "STRING", deprioritize: "STRING" } },
   { label: "Package", properties: { path: "STRING", relativePath: "STRING", name: "STRING", version: "STRING", isPrivate: "BOOLEAN", manager: "STRING", workspaceRoot: "BOOLEAN", targetType: "STRING", buildFile: "STRING", unresolved: "INT64" } },
   { label: "Directory", properties: { path: "STRING", relativePath: "STRING", name: "STRING" } },
-  { label: "File", properties: { path: "STRING", relativePath: "STRING", language: "STRING", defaultExport: "STRING", defaultExportFrom: "STRING", sourceType: "STRING", isTest: "BOOLEAN", isFixture: "BOOLEAN", isSupport: "BOOLEAN", isGenerated: "BOOLEAN", isDocs: "BOOLEAN", dynamicRouteCalls: "STRING", packageName: "STRING", rustCrate: "STRING", rustCrateName: "STRING", rustModule: "STRING", allNames: "STRING", cppScope: "STRING" } },
+  { label: "File", properties: { path: "STRING", relativePath: "STRING", language: "STRING", defaultExport: "STRING", defaultExportFrom: "STRING", sourceType: "STRING", isTest: "BOOLEAN", isFixture: "BOOLEAN", isSupport: "BOOLEAN", isGenerated: "BOOLEAN", isDocs: "BOOLEAN", dynamicRouteCalls: "STRING", packageName: "STRING", rustCrate: "STRING", rustCrateName: "STRING", rustModule: "STRING", allNames: "STRING", cppScope: "STRING", unresolvedCalls: "STRING" } },
   { label: "Import", properties: { source: "STRING", specifier: "STRING", line: "INT64", isReExport: "BOOLEAN", isWildcard: "BOOLEAN", isDynamic: "BOOLEAN", isCjs: "BOOLEAN", isTypeOnly: "BOOLEAN", bindings: "STRING", alias: "STRING", isModule: "BOOLEAN", inlineModules: "STRING", pathAttribute: "STRING", isSystem: "BOOLEAN" } },
-  { label: "Function", properties: { name: "STRING", kind: "STRING", methodKind: "STRING", line: "INT64", endLine: "INT64", className: "STRING", isExported: "BOOLEAN", isAsync: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", parameters: "STRING", returnType: "STRING", storeRefs: "STRING", storeSelects: "STRING", formAction: "STRING", typeParameters: "STRING", testKind: "STRING", implementsTrait: "STRING", namespace: "STRING", qualifiedName: "STRING", isVirtual: "BOOLEAN", isOverride: "BOOLEAN", isDeclaration: "BOOLEAN" } },
+  { label: "Function", properties: { name: "STRING", kind: "STRING", methodKind: "STRING", line: "INT64", endLine: "INT64", className: "STRING", isExported: "BOOLEAN", isAsync: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", parameters: "STRING", returnType: "STRING", storeRefs: "STRING", storeSelects: "STRING", formAction: "STRING", typeParameters: "STRING", testKind: "STRING", implementsTrait: "STRING", namespace: "STRING", qualifiedName: "STRING", isVirtual: "BOOLEAN", isOverride: "BOOLEAN", isDeclaration: "BOOLEAN", unresolvedCalls: "STRING" } },
   { label: "Class", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", isAbstract: "BOOLEAN", visibility: "STRING", extendsNames: "STRING", implementsNames: "STRING", fields: "STRING", typeParameters: "STRING", kind: "STRING", attributes: "STRING", bases: "STRING", namespace: "STRING", qualifiedName: "STRING" } },
   { label: "Interface", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", methods: "STRING", methodSignatures: "STRING", embeds: "STRING", typeParameters: "STRING", visibility: "STRING", kind: "STRING" } },
   { label: "TypeAlias", properties: { name: "STRING", line: "INT64", endLine: "INT64", isExported: "BOOLEAN", aliasOf: "STRING", isAlias: "BOOLEAN", typeParameters: "STRING", visibility: "STRING", namespace: "STRING", qualifiedName: "STRING" } },

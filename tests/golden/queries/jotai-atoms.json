@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 91
+        "result": 92
       },
       {
         "method": "stats",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 18
+            "count": 6
           },
           {
             "table": "Route",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 91,
+      "schemaVersion": 92,
       "stats": [
         {
           "table": "Repo",
@@ -179,7 +179,7 @@
         },
         {
           "table": "Call",
-          "count": 18
+          "count": 6
         },
         {
           "table": "Route",
@@ -2373,6 +2373,30 @@
             "line": 21
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"Counter\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"Counter\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"Counter\""
+        },
+        "rows": []
       },
       {
         "method": "query",

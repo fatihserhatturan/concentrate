@@ -1,24 +1,17 @@
 {"kind":"report","status":"success","discoveredFiles":2,"supportedFiles":2,"parsedFiles":2,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"module-calls","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:app.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app.ts","relativePath":"app.ts","sourceType":"production"}}
-{"kind":"node","id":"file:app.ts:function:10:bootstrap","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_declaration","line":10,"methodKind":null,"name":"bootstrap","parameters":"[]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:app.ts:function:10:bootstrap:call:11:8:app.listen","label":"Call","properties":{"args":"[\"4000\"]","callee":"listen","columnNumber":8,"expression":"app.listen","line":11,"name":"app.listen","receiver":"app"}}
+{"kind":"node","id":"file:app.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/app.ts","relativePath":"app.ts","sourceType":"production","unresolvedCalls":"[[\"use\",6,\"app.use\"],[\"use\",7,\"app.use\"],[\"listen\",8,\"app.listen\"]]"}}
+{"kind":"node","id":"file:app.ts:function:10:bootstrap","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"function_declaration","line":10,"methodKind":null,"name":"bootstrap","parameters":"[]","returnType":null,"unresolvedCalls":"[[\"listen\",11,\"app.listen\"]]","visibility":"public"}}
 {"kind":"node","id":"file:app.ts:import:1:express","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"express\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"express","specifier":"import express from 'express'"}}
 {"kind":"node","id":"file:app.ts:import:2:cors","label":"Import","properties":{"bindings":"[{\"imported\":\"default\",\"local\":\"cors\",\"kind\":\"default\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":2,"source":"cors","specifier":"import cors from 'cors'"}}
 {"kind":"node","id":"file:app.ts:initializercall:4:12:express","label":"Call","properties":{"args":"[]","callee":"express","columnNumber":12,"expression":"express","line":4,"name":"express","receiver":null}}
-{"kind":"node","id":"file:app.ts:modulecall:6:0:app.use","label":"Call","properties":{"args":"[]","callee":"use","columnNumber":0,"expression":"app.use","line":6,"name":"app.use","receiver":"app"}}
-{"kind":"node","id":"file:app.ts:modulecall:7:0:app.use","label":"Call","properties":{"args":"[]","callee":"use","columnNumber":0,"expression":"app.use","line":7,"name":"app.use","receiver":"app"}}
-{"kind":"node","id":"file:app.ts:modulecall:8:0:app.listen","label":"Call","properties":{"args":"[\"3000\"]","callee":"listen","columnNumber":0,"expression":"app.listen","line":8,"name":"app.listen","receiver":"app"}}
 {"kind":"node","id":"file:app.ts:route:6:0:USE:<none>","label":"Route","properties":{"framework":"express-koa","fullPath":null,"handlerName":null,"line":6,"method":"USE","path":null,"pathExpression":null,"receiverName":"app"}}
 {"kind":"node","id":"file:app.ts:route:7:0:USE:<none>","label":"Route","properties":{"framework":"express-koa","fullPath":null,"handlerName":null,"line":7,"method":"USE","path":null,"pathExpression":null,"receiverName":"app"}}
 {"kind":"node","id":"file:app.ts:variable:4:app","label":"Variable","properties":{"isExported":false,"kind":"const","line":4,"name":"app","stringValue":null}}
-{"kind":"node","id":"file:server.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/server.ts","relativePath":"server.ts","sourceType":"production"}}
+{"kind":"node","id":"file:server.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/server.ts","relativePath":"server.ts","sourceType":"production","unresolvedCalls":"[[\"listen\",5,\"server.listen\"],[\"on\",6,\"server.on\"],[\"close\",8,\"server.close\"]]"}}
 {"kind":"node","id":"file:server.ts:entrypoint:6:0:event:error","label":"EntryPoint","properties":{"handlerName":null,"kind":"event","library":"event-emitter","line":6,"receiverName":"server","trigger":"error"}}
 {"kind":"node","id":"file:server.ts:import:1:http","label":"Import","properties":{"bindings":"[{\"imported\":\"createServer\",\"local\":\"createServer\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"http","specifier":"import { createServer } from 'http'"}}
 {"kind":"node","id":"file:server.ts:initializercall:3:15:createServer","label":"Call","properties":{"args":"[]","callee":"createServer","columnNumber":15,"expression":"createServer","line":3,"name":"createServer","receiver":null}}
-{"kind":"node","id":"file:server.ts:modulecall:5:0:server.listen","label":"Call","properties":{"args":"[\"8080\"]","callee":"listen","columnNumber":0,"expression":"server.listen","line":5,"name":"server.listen","receiver":"server"}}
-{"kind":"node","id":"file:server.ts:modulecall:6:0:server.on","label":"Call","properties":{"args":"[\"error\",\"console.error\"]","callee":"on","columnNumber":0,"expression":"server.on","line":6,"name":"server.on","receiver":"server"}}
-{"kind":"node","id":"file:server.ts:modulecall:8:6:server.close","label":"Call","properties":{"args":"[]","callee":"close","columnNumber":6,"expression":"server.close","line":8,"name":"server.close","receiver":"server"}}
 {"kind":"node","id":"file:server.ts:variable:3:server","label":"Variable","properties":{"isExported":false,"kind":"const","line":3,"name":"server","stringValue":null}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"module-calls","path":"<root>"}}
 {"kind":"rel","from":"dir:.","type":"CONTAINS_FILE","to":"file:app.ts","properties":{}}
@@ -29,16 +22,9 @@
 {"kind":"rel","from":"file:app.ts","type":"DEFINES_VARIABLE","to":"file:app.ts:variable:4:app","properties":{}}
 {"kind":"rel","from":"file:app.ts","type":"IMPORTS","to":"file:app.ts:import:1:express","properties":{}}
 {"kind":"rel","from":"file:app.ts","type":"IMPORTS","to":"file:app.ts:import:2:cors","properties":{}}
-{"kind":"rel","from":"file:app.ts","type":"MODULE_CALLS","to":"file:app.ts:modulecall:6:0:app.use","properties":{}}
-{"kind":"rel","from":"file:app.ts","type":"MODULE_CALLS","to":"file:app.ts:modulecall:7:0:app.use","properties":{}}
-{"kind":"rel","from":"file:app.ts","type":"MODULE_CALLS","to":"file:app.ts:modulecall:8:0:app.listen","properties":{}}
-{"kind":"rel","from":"file:app.ts:function:10:bootstrap","type":"CALLS","to":"file:app.ts:function:10:bootstrap:call:11:8:app.listen","properties":{}}
 {"kind":"rel","from":"file:app.ts:variable:4:app","type":"INITIALIZED_BY","to":"file:app.ts:initializercall:4:12:express","properties":{}}
 {"kind":"rel","from":"file:server.ts","type":"DECLARES_ENTRYPOINT","to":"file:server.ts:entrypoint:6:0:event:error","properties":{}}
 {"kind":"rel","from":"file:server.ts","type":"DEFINES_VARIABLE","to":"file:server.ts:variable:3:server","properties":{}}
 {"kind":"rel","from":"file:server.ts","type":"IMPORTS","to":"file:server.ts:import:1:http","properties":{}}
-{"kind":"rel","from":"file:server.ts","type":"MODULE_CALLS","to":"file:server.ts:modulecall:5:0:server.listen","properties":{}}
-{"kind":"rel","from":"file:server.ts","type":"MODULE_CALLS","to":"file:server.ts:modulecall:6:0:server.on","properties":{}}
-{"kind":"rel","from":"file:server.ts","type":"MODULE_CALLS","to":"file:server.ts:modulecall:8:6:server.close","properties":{}}
 {"kind":"rel","from":"file:server.ts:variable:3:server","type":"INITIALIZED_BY","to":"file:server.ts:initializercall:3:15:createServer","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

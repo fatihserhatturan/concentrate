@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 91
+        "result": 92
       },
       {
         "method": "stats",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 33
+            "count": 13
           },
           {
             "table": "Route",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 91,
+      "schemaVersion": 92,
       "stats": [
         {
           "table": "Repo",
@@ -179,7 +179,7 @@
         },
         {
           "table": "Call",
-          "count": 33
+          "count": 13
         },
         {
           "table": "Route",
@@ -3850,6 +3850,36 @@
       {
         "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 OR fn.unresolvedCalls CONTAINS $name1 OR fn.unresolvedCalls CONTAINS $name2 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"constructor\"",
+          "name1": "\"list\"",
+          "name2": "\"add\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 OR fn.unresolvedCalls CONTAINS $name1 OR fn.unresolvedCalls CONTAINS $name2 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"constructor\"",
+          "name1": "\"list\"",
+          "name2": "\"add\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 OR file.unresolvedCalls CONTAINS $name1 OR file.unresolvedCalls CONTAINS $name2 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"constructor\"",
+          "name1": "\"list\"",
+          "name2": "\"add\""
+        },
         "rows": []
       },
       {

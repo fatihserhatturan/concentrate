@@ -21,7 +21,7 @@ after(() => rm(workRoot, { recursive: true, force: true }));
 describe("Cypher conformance corpus", () => {
   for (const fixture of corpus.fixtures) {
     it(fixture, async () => {
-      const graph = codeFilesOnly(await buildCodeGraph(path.join(fixturesRoot, fixture), { continueOnError: true, concurrency: 4 }));
+      const graph = codeFilesOnly(await buildCodeGraph(path.join(fixturesRoot, fixture), { continueOnError: true, concurrency: 4, keepCallSites: true }));
       const store = await GraphStore.open(path.join(workRoot, `${fixture}.graph`));
       await store.reset();
       await store.write(graph.nodes, graph.relationships);

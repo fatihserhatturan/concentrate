@@ -48,7 +48,7 @@ async function withStore<T>(graph: Graph, run: (tool: (name: string, args: Recor
 describe("Go gorm data access", () => {
   let graph: Graph;
   before(async () => {
-    graph = await buildCodeGraph(path.resolve("fixtures/go-gorm"), { continueOnError: false });
+    graph = await buildCodeGraph(path.resolve("fixtures/go-gorm"), { continueOnError: false, keepCallSites: true });
   });
 
   it("finds the model of each chain and the models Preload and Association reach", () => {
@@ -120,7 +120,7 @@ describe("Go gorm data access", () => {
 describe("Go database/sql and sqlx data access", () => {
   let graph: Graph;
   before(async () => {
-    graph = await buildCodeGraph(path.resolve("fixtures/go-sql"), { continueOnError: false });
+    graph = await buildCodeGraph(path.resolve("fixtures/go-sql"), { continueOnError: false, keepCallSites: true });
   });
 
   it("reads the tables of literal SQL, constants, locals and SQL a helper is passed, and skips dynamic SQL", () => {
@@ -166,7 +166,7 @@ describe("Go database/sql and sqlx data access", () => {
 describe("Go bun data access", () => {
   let graph: Graph;
   before(async () => {
-    graph = await buildCodeGraph(path.resolve("fixtures/go-bun"), { continueOnError: false });
+    graph = await buildCodeGraph(path.resolve("fixtures/go-bun"), { continueOnError: false, keepCallSites: true });
   });
 
   it("reads each query a bun chain runs, by its model or table", () => {
@@ -189,7 +189,7 @@ describe("Go bun data access", () => {
 describe("Go sqlc data access", () => {
   let graph: Graph;
   before(async () => {
-    graph = await buildCodeGraph(path.resolve("fixtures/go-sqlc"), { continueOnError: false });
+    graph = await buildCodeGraph(path.resolve("fixtures/go-sqlc"), { continueOnError: false, keepCallSites: true });
   });
 
   it("reads each generated query's SQL constant on the DBTX interface", () => {
@@ -212,7 +212,7 @@ describe("Go sqlc data access", () => {
 describe("Go ent data access", () => {
   let graph: Graph;
   before(async () => {
-    graph = await buildCodeGraph(path.resolve("fixtures/go-ent"), { continueOnError: false });
+    graph = await buildCodeGraph(path.resolve("fixtures/go-ent"), { continueOnError: false, keepCallSites: true });
   });
 
   it("maps client builders to the schema's entity, edges included", () => {

@@ -107,6 +107,18 @@ tools.
   from '$lib/server/session'`) resolves only through the import: a module
   cannot also declare that name, so an object property function of the file
   with it (`actions = { logout: async () => … }`) is never the target.
+- Unresolved call sites are not `Call` nodes. A call that no resolver linked
+  (no `CALL_RESOLVES_TO`) and that has no other relationship (`PASSED_TO`,
+  `INITIALIZED_BY`, `REQUESTS`, `NAVIGATES_TO`) is removed at the end of the
+  scan, and its caller (the `Function`, or the `File` for module-level code)
+  keeps it in the STRING property `unresolvedCalls`: a JSON array of
+  `[callee, line, expression]`, sorted by line, then column. A call that
+  carries an outbound request (`httpClient`) or a store access (`storeAccess`,
+  `reduxAccess`) stays a node. On Grafana this keeps 75% of the `Call` nodes
+  (484 MB of the loaded graph) out of the store. A Cypher query for
+  `Call` nodes sees only resolved calls and the ones above; read
+  `unresolvedCalls` for the rest. `find_callers`, `trace_impact` and the other
+  tools report both kinds in `unresolvedCalls`.
 - Parameter decorators such as `@Param()` or `@InjectRepository()` are recorded
   as `Call` nodes of their method; class and method decorators are `Decorator`
   nodes.

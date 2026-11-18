@@ -1,6 +1,6 @@
 {"kind":"report","status":"success","discoveredFiles":1,"supportedFiles":1,"parsedFiles":1,"failedFiles":[],"warnings":[]}
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"backend-entrypoints","path":"<root>","relativePath":"."}}
-{"kind":"node","id":"file:service.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production"}}
+{"kind":"node","id":"file:service.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/service.ts","relativePath":"service.ts","sourceType":"production","unresolvedCalls":"[[\"on\",21,\"emitter.on\"],[\"process\",22,\"queue.process\"],[\"on\",26,\"io.on\"]]"}}
 {"kind":"node","id":"file:service.ts:class:28:TasksService","label":"Class","properties":{"endLine":33,"extendsNames":null,"implementsNames":null,"isAbstract":false,"isExported":false,"line":28,"name":"TasksService","visibility":"public"}}
 {"kind":"node","id":"file:service.ts:entrypoint:21:0:event:data","label":"EntryPoint","properties":{"handlerName":"handleData","kind":"event","library":"event-emitter","line":21,"receiverName":"emitter","trigger":"data"}}
 {"kind":"node","id":"file:service.ts:entrypoint:22:0:queue:email","label":"EntryPoint","properties":{"handlerName":"handleJob","kind":"queue","library":"bull","line":22,"receiverName":"queue","trigger":"email"}}
@@ -8,8 +8,7 @@
 {"kind":"node","id":"file:service.ts:entrypoint:26:0:realtime:connection","label":"EntryPoint","properties":{"handlerName":"handleConnection","kind":"realtime","library":"socket.io","line":26,"receiverName":"io","trigger":"connection"}}
 {"kind":"node","id":"file:service.ts:entrypoint:29:0:scheduler:0 * * * *","label":"EntryPoint","properties":{"handlerName":"syncUsers","kind":"scheduler","library":"nestjs-schedule","line":29,"receiverName":null,"trigger":"0 * * * *"}}
 {"kind":"node","id":"file:service.ts:function:13:handleJob","label":"Function","properties":{"className":null,"endLine":15,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":13,"methodKind":null,"name":"handleJob","parameters":"[{\"name\":\"job\",\"type\":null}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:service.ts:function:17:handleConnection","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":17,"methodKind":null,"name":"handleConnection","parameters":"[{\"name\":\"socket\",\"type\":null}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:service.ts:function:17:handleConnection:call:18:2:socket.emit","label":"Call","properties":{"args":"[\"ready\"]","callee":"emit","columnNumber":2,"expression":"socket.emit","line":18,"name":"socket.emit","receiver":"socket"}}
+{"kind":"node","id":"file:service.ts:function:17:handleConnection","label":"Function","properties":{"className":null,"endLine":19,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":17,"methodKind":null,"name":"handleConnection","parameters":"[{\"name\":\"socket\",\"type\":null}]","returnType":null,"unresolvedCalls":"[[\"emit\",18,\"socket.emit\"]]","visibility":"public"}}
 {"kind":"node","id":"file:service.ts:function:23:<cron.schedule:*/5 * * * *:arg1>","label":"Function","properties":{"className":null,"endLine":25,"isAbstract":false,"isAsync":true,"isExported":false,"kind":"arrow_function","line":23,"methodKind":null,"name":"<cron.schedule:*/5 * * * *:arg1>","parameters":"[]","returnType":null,"visibility":"public"}}
 {"kind":"node","id":"file:service.ts:function:23:<cron.schedule:*/5 * * * *:arg1>:call:24:2:handleJob","label":"Call","properties":{"args":"[]","callee":"handleJob","columnNumber":2,"expression":"handleJob","line":24,"name":"handleJob","receiver":null}}
 {"kind":"node","id":"file:service.ts:function:30:syncUsers","label":"Function","properties":{"className":"TasksService","endLine":32,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"method_definition","line":30,"methodKind":"method","name":"syncUsers","parameters":"[]","returnType":null,"visibility":"public"}}
@@ -22,10 +21,7 @@
 {"kind":"node","id":"file:service.ts:initializercall:5:16:new EventEmitter","label":"Call","properties":{"args":"[]","callee":"EventEmitter","columnNumber":16,"expression":"new EventEmitter","line":5,"name":"new EventEmitter","receiver":null}}
 {"kind":"node","id":"file:service.ts:initializercall:6:14:createQueue","label":"Call","properties":{"args":"[]","callee":"createQueue","columnNumber":14,"expression":"createQueue","line":6,"name":"createQueue","receiver":null}}
 {"kind":"node","id":"file:service.ts:initializercall:7:11:createSocketServer","label":"Call","properties":{"args":"[]","callee":"createSocketServer","columnNumber":11,"expression":"createSocketServer","line":7,"name":"createSocketServer","receiver":null}}
-{"kind":"node","id":"file:service.ts:modulecall:21:0:emitter.on","label":"Call","properties":{"args":"[\"data\",\"handleData\"]","callee":"on","columnNumber":0,"expression":"emitter.on","line":21,"name":"emitter.on","receiver":"emitter"}}
-{"kind":"node","id":"file:service.ts:modulecall:22:0:queue.process","label":"Call","properties":{"args":"[\"email\",\"handleJob\"]","callee":"process","columnNumber":0,"expression":"queue.process","line":22,"name":"queue.process","receiver":"queue"}}
 {"kind":"node","id":"file:service.ts:modulecall:23:0:cron.schedule","label":"Call","properties":{"args":"[\"*/5 * * * *\"]","callee":"schedule","columnNumber":0,"expression":"cron.schedule","line":23,"name":"cron.schedule","receiver":"cron"}}
-{"kind":"node","id":"file:service.ts:modulecall:26:0:io.on","label":"Call","properties":{"args":"[\"connection\",\"handleConnection\"]","callee":"on","columnNumber":0,"expression":"io.on","line":26,"name":"io.on","receiver":"io"}}
 {"kind":"node","id":"file:service.ts:variable:5:emitter","label":"Variable","properties":{"isExported":false,"kind":"const","line":5,"name":"emitter","stringValue":null}}
 {"kind":"node","id":"file:service.ts:variable:6:queue","label":"Variable","properties":{"isExported":false,"kind":"const","line":6,"name":"queue","stringValue":null}}
 {"kind":"node","id":"file:service.ts:variable:7:io","label":"Variable","properties":{"isExported":false,"kind":"const","line":7,"name":"io","stringValue":null}}
@@ -47,17 +43,13 @@
 {"kind":"rel","from":"file:service.ts","type":"IMPORTS","to":"file:service.ts:import:1:node:events","properties":{}}
 {"kind":"rel","from":"file:service.ts","type":"IMPORTS","to":"file:service.ts:import:2:node-cron","properties":{}}
 {"kind":"rel","from":"file:service.ts","type":"IMPORTS","to":"file:service.ts:import:3:@nestjs/schedule","properties":{}}
-{"kind":"rel","from":"file:service.ts","type":"MODULE_CALLS","to":"file:service.ts:modulecall:21:0:emitter.on","properties":{}}
-{"kind":"rel","from":"file:service.ts","type":"MODULE_CALLS","to":"file:service.ts:modulecall:22:0:queue.process","properties":{}}
 {"kind":"rel","from":"file:service.ts","type":"MODULE_CALLS","to":"file:service.ts:modulecall:23:0:cron.schedule","properties":{}}
-{"kind":"rel","from":"file:service.ts","type":"MODULE_CALLS","to":"file:service.ts:modulecall:26:0:io.on","properties":{}}
 {"kind":"rel","from":"file:service.ts:class:28:TasksService","type":"DEFINES_METHOD","to":"file:service.ts:function:30:syncUsers","properties":{}}
 {"kind":"rel","from":"file:service.ts:entrypoint:21:0:event:data","type":"ENTRYPOINT_HANDLED_BY","to":"file:service.ts:function:9:handleData","properties":{}}
 {"kind":"rel","from":"file:service.ts:entrypoint:22:0:queue:email","type":"ENTRYPOINT_HANDLED_BY","to":"file:service.ts:function:13:handleJob","properties":{}}
 {"kind":"rel","from":"file:service.ts:entrypoint:23:0:cron:*/5 * * * *","type":"ENTRYPOINT_HANDLED_BY","to":"file:service.ts:function:23:<cron.schedule:*/5 * * * *:arg1>","properties":{}}
 {"kind":"rel","from":"file:service.ts:entrypoint:26:0:realtime:connection","type":"ENTRYPOINT_HANDLED_BY","to":"file:service.ts:function:17:handleConnection","properties":{}}
 {"kind":"rel","from":"file:service.ts:entrypoint:29:0:scheduler:0 * * * *","type":"ENTRYPOINT_HANDLED_BY","to":"file:service.ts:function:30:syncUsers","properties":{}}
-{"kind":"rel","from":"file:service.ts:function:17:handleConnection","type":"CALLS","to":"file:service.ts:function:17:handleConnection:call:18:2:socket.emit","properties":{}}
 {"kind":"rel","from":"file:service.ts:function:23:<cron.schedule:*/5 * * * *:arg1>","type":"CALLS","to":"file:service.ts:function:23:<cron.schedule:*/5 * * * *:arg1>:call:24:2:handleJob","properties":{}}
 {"kind":"rel","from":"file:service.ts:function:23:<cron.schedule:*/5 * * * *:arg1>","type":"PASSED_TO","to":"file:service.ts:modulecall:23:0:cron.schedule","properties":{}}
 {"kind":"rel","from":"file:service.ts:function:23:<cron.schedule:*/5 * * * *:arg1>:call:24:2:handleJob","type":"CALL_RESOLVES_TO","to":"file:service.ts:function:13:handleJob","properties":{}}

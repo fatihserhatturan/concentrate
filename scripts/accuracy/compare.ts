@@ -226,7 +226,14 @@ export function scanCalls(graph: Graph, files: readonly string[]): FoundCall[] {
   for (const rel of graph.relationships) {
     if (rel.type === "CALL_RESOLVES_TO") targetsOf.set(rel.from, [...targetsOf.get(rel.from) ?? [], rel.to]);
   }
-  return graph.nodes.flatMap((node) => {
+  // Unresolved call sites that are no nodes: the caller's `unresolvedCalls` property.
+  const compact = graph.nodes.flatMap((node) => {
+    if (node.label !== "Function" && node.label !== "File") return [];
+    const file = fileOfNodeId(node.id, paths);
+    if (!file || !wanted.has(file)) return [];
+    return unresolvedSites(node).map(([callee, line]) => ({ file, line, callee, target: null, targets: [] }));
+  });
+  return [...compact, ...graph.nodes.flatMap((node) => {
     if (node.label !== "Call") return [];
     const file = fileOfNodeId(node.id, paths);
     if (!file || !wanted.has(file)) return [];
@@ -242,7 +249,13 @@ export function scanCalls(graph: Graph, files: readonly string[]): FoundCall[] {
         : [];
     });
     return [{ file, line: num(node.properties.line), callee: String(node.properties.callee ?? node.properties.name), target: targets[0] ?? null, targets }];
-  });
+  })];
+}
+
+// The call sites a caller carries as a property: [callee, line, expression].
+function unresolvedSites(node: { properties: Record<string, unknown> }): Array<[string, number, string]> {
+  const value = node.properties.unresolvedCalls;
+  return typeof value === "string" ? JSON.parse(value) as Array<[string, number, string]> : [];
 }
 
 // A labeled constructor (`new X` -> X's constructor) also matches the class itself.
@@ -310,6 +323,15 @@ export function scanDataAccess(graph: Graph): FoundAccess[] {
       const table = byId.get(rel.to)?.properties.name;
       if (typeof table === "string") tableOf.set(rel.from, table);
     }
+  }
+  // Calls without a node still count as the function's own calls.
+  for (const node of graph.nodes) {
+    if (node.label !== "Function") continue;
+    const sites = unresolvedSites(node);
+    if (sites.length === 0) continue;
+    const list = callsByFunction.get(node.id) ?? [];
+    for (const [, line, expression] of sites) list.push({ line, expression });
+    callsByFunction.set(node.id, list);
   }
   return graph.relationships.flatMap((rel) => {
     if (rel.type !== "ACCESSES_DATA") return [];

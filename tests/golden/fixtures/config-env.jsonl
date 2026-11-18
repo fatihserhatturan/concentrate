@@ -23,13 +23,10 @@
 {"kind":"node","id":"file:config.ts:variable:3:ENABLE_CACHE","label":"Variable","properties":{"isExported":true,"kind":"const","line":3,"name":"ENABLE_CACHE","stringValue":null}}
 {"kind":"node","id":"file:config.ts:variable:5:INTERNAL_ONLY","label":"Variable","properties":{"isExported":false,"kind":"const","line":5,"name":"INTERNAL_ONLY","stringValue":"hidden"}}
 {"kind":"node","id":"file:package.json","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"json","path":"<root>/package.json","relativePath":"package.json","sourceType":"production"}}
-{"kind":"node","id":"file:server.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/server.ts","relativePath":"server.ts","sourceType":"production"}}
-{"kind":"node","id":"file:server.ts:function:6:listUsers","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":6,"methodKind":null,"name":"listUsers","parameters":"[{\"name\":\"req\",\"type\":null},{\"name\":\"res\",\"type\":null}]","returnType":null,"visibility":"public"}}
-{"kind":"node","id":"file:server.ts:function:6:listUsers:call:11:2:res.json","label":"Call","properties":{"args":"[]","callee":"json","columnNumber":2,"expression":"res.json","line":11,"name":"res.json","receiver":"res"}}
-{"kind":"node","id":"file:server.ts:function:6:listUsers:call:9:4:res.set","label":"Call","properties":{"args":"[\"x-feature\",\"FEATURE_FLAG\"]","callee":"set","columnNumber":4,"expression":"res.set","line":9,"name":"res.set","receiver":"res"}}
+{"kind":"node","id":"file:server.ts","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"typescript","path":"<root>/server.ts","relativePath":"server.ts","sourceType":"production","unresolvedCalls":"[[\"get\",14,\"app.get\"]]"}}
+{"kind":"node","id":"file:server.ts:function:6:listUsers","label":"Function","properties":{"className":null,"endLine":12,"isAbstract":false,"isAsync":false,"isExported":false,"kind":"function_declaration","line":6,"methodKind":null,"name":"listUsers","parameters":"[{\"name\":\"req\",\"type\":null},{\"name\":\"res\",\"type\":null}]","returnType":null,"unresolvedCalls":"[[\"set\",9,\"res.set\"],[\"json\",11,\"res.json\"]]","visibility":"public"}}
 {"kind":"node","id":"file:server.ts:import:1:./config","label":"Import","properties":{"bindings":"[{\"imported\":\"FEATURE_FLAG\",\"local\":\"FEATURE_FLAG\",\"kind\":\"named\"},{\"imported\":\"RETRY_LIMIT\",\"local\":\"RETRY_LIMIT\",\"kind\":\"named\"}]","isCjs":false,"isDynamic":false,"isReExport":false,"isTypeOnly":false,"isWildcard":false,"line":1,"source":"./config","specifier":"import { FEATURE_FLAG, RETRY_LIMIT } from './config'"}}
 {"kind":"node","id":"file:server.ts:initializercall:3:12:express","label":"Call","properties":{"args":"[]","callee":"express","columnNumber":12,"expression":"express","line":3,"name":"express","receiver":null}}
-{"kind":"node","id":"file:server.ts:modulecall:14:0:app.get","label":"Call","properties":{"args":"[\"/users\",\"listUsers\"]","callee":"get","columnNumber":0,"expression":"app.get","line":14,"name":"app.get","receiver":"app"}}
 {"kind":"node","id":"file:server.ts:route:14:0:GET:/users","label":"Route","properties":{"framework":"express-koa","fullPath":"/users","handlerName":"listUsers","line":14,"method":"GET","path":"/users","pathExpression":"'/users'","receiverName":"app"}}
 {"kind":"node","id":"file:server.ts:variable:3:app","label":"Variable","properties":{"isExported":false,"kind":"const","line":3,"name":"app","stringValue":null}}
 {"kind":"node","id":"file:server.ts:variable:4:token","label":"Variable","properties":{"isExported":false,"kind":"const","line":4,"name":"token","stringTemplate":"${process.env.API_TOKEN}","stringValue":null}}
@@ -55,12 +52,9 @@
 {"kind":"rel","from":"file:server.ts","type":"DEFINES_VARIABLE","to":"file:server.ts:variable:3:app","properties":{}}
 {"kind":"rel","from":"file:server.ts","type":"DEFINES_VARIABLE","to":"file:server.ts:variable:4:token","properties":{}}
 {"kind":"rel","from":"file:server.ts","type":"IMPORTS","to":"file:server.ts:import:1:./config","properties":{}}
-{"kind":"rel","from":"file:server.ts","type":"MODULE_CALLS","to":"file:server.ts:modulecall:14:0:app.get","properties":{}}
 {"kind":"rel","from":"file:server.ts","type":"USES_ENV","to":"env:API_TOKEN","properties":{"access":"member","line":4}}
 {"kind":"rel","from":"file:server.ts","type":"USES_ENV","to":"env:DATABASE_URL","properties":{"access":"subscript","line":7}}
 {"kind":"rel","from":"file:server.ts","type":"USES_ENV","to":"env:NODE_ENV","properties":{"access":"member","line":8}}
-{"kind":"rel","from":"file:server.ts:function:6:listUsers","type":"CALLS","to":"file:server.ts:function:6:listUsers:call:11:2:res.json","properties":{}}
-{"kind":"rel","from":"file:server.ts:function:6:listUsers","type":"CALLS","to":"file:server.ts:function:6:listUsers:call:9:4:res.set","properties":{}}
 {"kind":"rel","from":"file:server.ts:function:6:listUsers","type":"USES_ENV","to":"env:DATABASE_URL","properties":{"access":"subscript","line":7}}
 {"kind":"rel","from":"file:server.ts:function:6:listUsers","type":"USES_ENV","to":"env:NODE_ENV","properties":{"access":"member","line":8}}
 {"kind":"rel","from":"file:server.ts:import:1:./config","type":"IMPORTS_PACKAGE","to":"package:.","properties":{}}

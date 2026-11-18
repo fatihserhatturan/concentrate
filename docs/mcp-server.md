@@ -163,7 +163,9 @@ even for large repositories; read it first to decide which tools to call.
   returns `unresolvedCalls` (`count` and up to 10 `sites` with file, line,
   expression and caller): calls with that callee name that resolve to no
   function, such as calls on library objects or dynamic receivers, or callers
-  the graph missed. `completeness` says what that means: with a count of 0,
+  the graph missed (unresolved sites are read from the caller's
+  `unresolvedCalls` property, since they are no `Call` nodes; see
+  known-limitations.md). `completeness` says what that means: with a count of 0,
   every call by that name is among the resolved callers, so the answer needs
   no grep to confirm; otherwise the sites are the lines to check. A substring
   search (`exact: false`) checks the names of up to 20 matching functions.

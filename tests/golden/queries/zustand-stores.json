@@ -5,7 +5,7 @@
     "calls": [
       {
         "method": "schemaVersion",
-        "result": 91
+        "result": 92
       },
       {
         "method": "stats",
@@ -65,7 +65,7 @@
           },
           {
             "table": "Call",
-            "count": 22
+            "count": 15
           },
           {
             "table": "Route",
@@ -123,7 +123,7 @@
       }
     ],
     "output": {
-      "schemaVersion": 91,
+      "schemaVersion": 92,
       "stats": [
         {
           "table": "Repo",
@@ -179,7 +179,7 @@
         },
         {
           "table": "Call",
-          "count": 22
+          "count": 15
         },
         {
           "table": "Route",
@@ -1532,50 +1532,37 @@
       },
       {
         "method": "query",
-        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
         "params": {
-          "names": [
-            "increase"
-          ]
+          "name0": "\"increase\""
         },
         "rows": [
           {
-            "id": "file:src/components/BearCounter.tsx:function:5:BearCounter:call:11:27:increase",
-            "resolved": 0
-          }
-        ]
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
-        "params": {
-          "names": [
-            "increase"
-          ]
-        },
-        "rows": [
-          {
-            "id": "file:src/components/BearCounter.tsx:function:5:BearCounter:call:11:27:increase",
             "file": "src/components/BearCounter.tsx",
-            "line": 11,
-            "expression": "increase",
-            "caller": "BearCounter"
+            "caller": "BearCounter",
+            "sites": "[[\"useShallow\",8,\"useShallow\"],[\"increase\",11,\"increase\"]]"
           }
         ]
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
         "params": {
-          "names": [
-            "increase"
-          ]
+          "name0": "\"increase\""
         },
         "rows": []
       },
       {
         "method": "query",
-        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"increase\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
         "params": {
           "names": [
             "increase"
@@ -1749,6 +1736,36 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"log\""
+        },
+        "rows": [
+          {
+            "file": "src/stores/bears.ts",
+            "caller": "log",
+            "sites": "[[\"log\",12,\"console.log\"]]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"log\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"log\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
         "params": {
           "names": [
@@ -1757,10 +1774,6 @@
         },
         "rows": [
           {
-            "id": "file:src/stores/bears.ts:function:11:log:call:12:2:console.log",
-            "resolved": 0
-          },
-          {
             "id": "file:src/stores/bears.ts:function:21:increase:call:22:10:log",
             "resolved": 1
           },
@@ -1769,58 +1782,6 @@
             "resolved": 1
           }
         ]
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
-        "params": {
-          "names": [
-            "log"
-          ]
-        },
-        "rows": [
-          {
-            "id": "file:src/stores/bears.ts:function:11:log:call:12:2:console.log",
-            "file": "src/stores/bears.ts",
-            "line": 12,
-            "expression": "console.log",
-            "caller": "log"
-          },
-          {
-            "id": "file:src/stores/bears.ts:function:21:increase:call:22:10:log",
-            "file": "src/stores/bears.ts",
-            "line": 22,
-            "expression": "log",
-            "caller": "increase"
-          },
-          {
-            "id": "file:src/stores/bears.ts:function:25:reset:call:26:10:log",
-            "file": "src/stores/bears.ts",
-            "line": 26,
-            "expression": "log",
-            "caller": "reset"
-          }
-        ]
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function)-[:CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, fn.name AS caller",
-        "params": {
-          "names": [
-            "log"
-          ]
-        },
-        "rows": []
-      },
-      {
-        "method": "query",
-        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call) WHERE call.callee IN $names RETURN id(call) AS id, file.relativePath AS file, call.line AS line, call.expression AS expression, null AS caller",
-        "params": {
-          "names": [
-            "log"
-          ]
-        },
-        "rows": []
       }
     ],
     "output": {
@@ -1906,6 +1867,30 @@
             "targets": 1
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"reset\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"reset\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"reset\""
+        },
+        "rows": []
       },
       {
         "method": "query",

@@ -5,6 +5,7 @@ import path from "node:path";
 import { GraphBuilder } from "../graph/builder.js";
 import { runWithConcurrency } from "./concurrency.js";
 import { discoverFiles } from "./discover-files.js";
+import { compactUnresolvedCalls } from "./call-sites.js";
 import { finalizeGraphRelationships } from "./graph-finalize.js";
 import { parseFileWithContext, type ParseResult } from "./parse-source.js";
 import { addParseResultsToGraph } from "./parse-results.js";
@@ -173,6 +174,7 @@ export async function buildCodeGraph(
   await cache?.prune();
   await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report, deps.readProjectPackages);
   await finalizeGraphRelationships(graph, rootPath, report, deps.resolvers, deps.contributors, files, { apiOrigins });
+  if (!options.keepCallSites) compactUnresolvedCalls(graph);
   report.status = report.failedFiles.length > 0 ? "partial" : "success";
 
   return createResult(rootPath, graph, report, manifest);

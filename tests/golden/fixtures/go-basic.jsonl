@@ -2,10 +2,8 @@
 {"kind":"node","id":"dir:.","label":"Directory","properties":{"name":"go-basic","path":"<root>","relativePath":"."}}
 {"kind":"node","id":"file:service.go","label":"File","properties":{"isDocs":false,"isFixture":false,"isGenerated":false,"isSupport":false,"isTest":false,"language":"go","packageName":"sample","path":"<root>/service.go","relativePath":"service.go","sourceType":"production"}}
 {"kind":"node","id":"file:service.go:class:8:Service","label":"Class","properties":{"endLine":10,"fields":"[{\"name\":\"Name\",\"type\":\"string\"}]","isAbstract":false,"isExported":true,"line":8,"name":"Service","visibility":"exported"}}
-{"kind":"node","id":"file:service.go:function:12:NewService","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":12,"methodKind":null,"name":"NewService","parameters":"[{\"name\":\"name\",\"type\":\"string\"}]","returnType":"*Service","visibility":"exported"}}
-{"kind":"node","id":"file:service.go:function:12:NewService:call:13:23:strings.TrimSpace","label":"Call","properties":{"callee":"TrimSpace","columnNumber":23,"expression":"strings.TrimSpace","line":13,"name":"strings.TrimSpace","receiver":"strings"}}
-{"kind":"node","id":"file:service.go:function:16:Run","label":"Function","properties":{"className":"Service","endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":16,"methodKind":null,"name":"Run","parameters":"[]","returnType":null,"visibility":"exported"}}
-{"kind":"node","id":"file:service.go:function:16:Run:call:17:1:fmt.Println","label":"Call","properties":{"callee":"Println","columnNumber":1,"expression":"fmt.Println","line":17,"name":"fmt.Println","receiver":"fmt"}}
+{"kind":"node","id":"file:service.go:function:12:NewService","label":"Function","properties":{"className":null,"endLine":14,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"function_declaration","line":12,"methodKind":null,"name":"NewService","parameters":"[{\"name\":\"name\",\"type\":\"string\"}]","returnType":"*Service","unresolvedCalls":"[[\"TrimSpace\",13,\"strings.TrimSpace\"]]","visibility":"exported"}}
+{"kind":"node","id":"file:service.go:function:16:Run","label":"Function","properties":{"className":"Service","endLine":18,"isAbstract":false,"isAsync":false,"isExported":true,"kind":"method_declaration","line":16,"methodKind":null,"name":"Run","parameters":"[]","returnType":null,"unresolvedCalls":"[[\"Println\",17,\"fmt.Println\"]]","visibility":"exported"}}
 {"kind":"node","id":"file:service.go:import:4:fmt","label":"Import","properties":{"line":4,"source":"fmt","specifier":"\"fmt\""}}
 {"kind":"node","id":"file:service.go:import:5:strings","label":"Import","properties":{"line":5,"source":"strings","specifier":"\"strings\""}}
 {"kind":"node","id":"repo:<root>","label":"Repo","properties":{"name":"go-basic","path":"<root>"}}
@@ -15,6 +13,4 @@
 {"kind":"rel","from":"file:service.go","type":"IMPORTS","to":"file:service.go:import:4:fmt","properties":{}}
 {"kind":"rel","from":"file:service.go","type":"IMPORTS","to":"file:service.go:import:5:strings","properties":{}}
 {"kind":"rel","from":"file:service.go:class:8:Service","type":"DEFINES_METHOD","to":"file:service.go:function:16:Run","properties":{}}
-{"kind":"rel","from":"file:service.go:function:12:NewService","type":"CALLS","to":"file:service.go:function:12:NewService:call:13:23:strings.TrimSpace","properties":{}}
-{"kind":"rel","from":"file:service.go:function:16:Run","type":"CALLS","to":"file:service.go:function:16:Run:call:17:1:fmt.Println","properties":{}}
 {"kind":"rel","from":"repo:<root>","type":"CONTAINS_ROOT","to":"dir:.","properties":{}}

@@ -34,7 +34,7 @@ function routes(graph: Graph): Array<[string, string | null, string, string | nu
 describe("Go gin routes", () => {
   let graph: Graph;
   before(async () => {
-    graph = await buildCodeGraph(path.resolve("fixtures/go-gin"), { continueOnError: false });
+    graph = await buildCodeGraph(path.resolve("fixtures/go-gin"), { continueOnError: false, keepCallSites: true });
   });
 
   it("joins group paths across functions and keeps gin's middleware order", () => {
@@ -86,7 +86,7 @@ describe("Go gin routes", () => {
 describe("Go net/http routes", () => {
   let graph: Graph;
   before(async () => {
-    graph = await buildCodeGraph(path.resolve("fixtures/go-nethttp"), { continueOnError: false });
+    graph = await buildCodeGraph(path.resolve("fixtures/go-nethttp"), { continueOnError: false, keepCallSites: true });
   });
 
   it("reads ServeMux patterns, StripPrefix mounts, the default mux and wrapped handlers", () => {
@@ -117,7 +117,7 @@ describe("Go net/http routes", () => {
 });
 
 async function scan(fixture: string): Promise<Graph> {
-  return buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: false });
+  return buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: false, keepCallSites: true });
 }
 
 describe("Go echo, chi, fiber, gorilla/mux, routegroup and kratos routes", () => {
@@ -210,7 +210,7 @@ describe("route MCP tools on Go", () => {
   const tool = async (name: string, args: Record<string, unknown>) => (await callMcpTool(store, name, args)).structuredContent as Record<string, any>;
 
   before(async () => {
-    const graph = await buildCodeGraph(path.resolve("fixtures/go-gin"), { continueOnError: false });
+    const graph = await buildCodeGraph(path.resolve("fixtures/go-gin"), { continueOnError: false, keepCallSites: true });
     store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-routes-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
