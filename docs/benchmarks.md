@@ -584,7 +584,69 @@ What it shows:
 
 ### After #264
 
-_Not measured yet: to be filled in with the probe's tables for the same
-checkout, the run table above (default heap, no flags) and the targets of the
-issue (scan under 3 GB peak RSS, `stats` / `mcp` start under 2 GB, UI scan then
-graph without failure, cold scan time not slower than 105 s)._
+Same checkout and machine, default heap (no flags), with the store, GraphBuilder
+and UI server changes of #264. The machine was not idle (load average 4 to 7),
+so times vary by about ±15 s between runs. RSS is `maximum resident set size`
+of `/usr/bin/time -l`; macOS also reports a "peak memory footprint", given where
+it tells something different.
+
+| Run | Before | After |
+| --- | --- | --- |
+| `concentrate scan . --no-cache`, default heap | out of memory after 93 s | completes in 92 to 116 s, peak RSS 4.2 to 4.9 GB |
+| same with `--max-old-space-size=10240` | 105 s (225 s on a loaded machine), 6.2 GB | not needed |
+| `concentrate stats` | 7.3 s (19.9 s loaded), 3.6 to 5.8 GB | 5.2 s, 1.6 GB |
+| UI server, default heap: scan Grafana, then open the graph | out of memory even with a 10 GB heap | scan 92 s, summary 8 s, server keeps running |
+
+The graph is byte-identical: the same 24,177 segment files and HEAD counts as
+before the change.
+
+Live heap after GC, step by step (`npm run probe:memory`, 4 workers, cold):
+
+| Step | Live heap after GC | Heap before GC (peak sampled) |
+| --- | ---: | ---: |
+| Parse; results held | 905 MB | 1,100 MB |
+| `addParseResultsToGraph` | 1,016 MB | 1,255 MB |
+| Workspace packages and 4 resolvers | 1,104 MB | 1,880 MB |
+| 48 semantic contributors | 1,198 MB | 4,209 MB (5,685 MB sampled with a 10 GB heap) |
+| Scan result alone | 993 MB | |
+| Store `reset()` + `write()` (streamed, no `MemoryGraph`) | 994 MB | 1,757 MB |
+| Fresh store, `stats()` (graph loaded) | 1,108 MB | |
+
+What changed, by step of the issue:
+
+1. A full rewrite streams segments straight from the scan arrays, a few at a
+   time: no `MemoryGraph` copy and no array of all segment strings (−2 GB at
+   the end of a scan).
+2. Opening the store reads `HEAD.json` only; the graph loads on the first
+   read, once for concurrent readers. A rescan no longer loads the old graph.
+3. GraphBuilder dedupes relationships with a numeric hash of from/type/to and
+   compares properties only on a hit (2 M synthetic relationships: 1,323 MB
+   → 557 MB, 18% faster).
+4. Loading reads segments with bounded concurrency, streams segments over 1 MB
+   compressed (the global segment is 136 MB of text), uses the parsed
+   properties as they are, and starts each adjacency list at its exact size
+   (live graph 1,328 MB → 1,108 MB).
+5. The UI server reads `HEAD.json` for project cards, builds its index from the
+   store's records in one pass without query rows or Call/Import nodes, builds
+   it once per project at a time, and shares one store per project instead of
+   opening one (and loading one more copy of the graph) per request.
+6. Equal strings within a parsed file are shared: −65 MB of scan result. Small,
+   because most ids are already shared between a node and its relationships.
+
+Why the scan's peak RSS is still above 3 GB: the live heap never exceeds
+about 1.2 GB, but the semantic contributors allocate 300 to 800 MB of
+short-lived objects each (205 places in `src/core` and `src/integrations`
+loop over, filter or build a map of all nodes or relationships), and macOS keeps the freed pages
+resident: `vmmap` during a scan shows 1.4 to 1.5 GB of `MALLOC_LARGE (empty)`.
+A scan capped at `--max-old-space-size=2560` also completes, with the same
+peak RSS. The next lever is shared indexes on the GraphBuilder (nodes by id
+and label, relationships by type) instead of per-contributor passes.
+
+Cost of call sites in the loaded graph (1,101 MB live), for the decision in
+step 7 of the issue:
+
+| Option | Saves (loaded graph) | On disk / JSON |
+| --- | ---: | ---: |
+| Do not store the 811,401 `Call` nodes (75%) whose only relationship is the incoming `CALLS` (no resolved target) | 484 MB | 254 MB of node JSON plus their `CALLS` lines |
+| Drop `expression`, equal to `name` on every `Call` | 14 MB | 39 MB |
+| Shorter `Call` ids (now 139 characters on average) | about 75 MB | about 170 MB |
