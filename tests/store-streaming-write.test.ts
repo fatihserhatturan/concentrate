@@ -130,3 +130,28 @@ describe("streaming snapshot write", () => {
     await assert.rejects(loadSnapshot(directory), /Corrupt graph store .*DEFINES_FUNCTION file:a.ts -> file:a.ts:function:gone has a missing endpoint/);
   });
 });
+
+describe("loading a large segment", () => {
+  it("streams a segment over 1 MB compressed and loads the same graph, multi-byte text included", async () => {
+    // Package nodes and relationships between them belong to the global segment.
+    const random = (index: number) => `${index}-${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+    const nodes: GraphNode[] = Array.from({ length: 40_000 }, (_, index) => ({
+      id: `package:${random(index)}`,
+      label: "Package",
+      properties: { name: `pkg-${random(index)}-ü日本`, relativePath: random(index) },
+    }));
+    const relationships: GraphRelationship[] = nodes.slice(1).map((node, index) => ({
+      from: nodes[index]!.id, to: node.id, type: "PACKAGE_IMPORTS_PACKAGE", properties: {},
+    }));
+    const directory = freshDirectory();
+    const head = await commitScannedSnapshot(directory, nodes, relationships, { schemaVersion: SCHEMA_VERSION, previous: null });
+    const file = path.join(directory, "segments", head.segments.global!);
+    assert.ok((await readFile(file)).length > 1 << 20, "the global segment must be large enough to be streamed");
+
+    const { graph } = await loadSnapshot(directory);
+    assert.equal(graph.nodeCount, nodes.length);
+    assert.equal(graph.relationshipCount, relationships.length);
+    assert.deepEqual(graph.node(nodes[123]!.id)?.properties, nodes[123]!.properties);
+    assert.equal(graph.node(nodes[5]!.id)?.outgoing[0]?.to.id, nodes[6]!.id);
+  });
+});

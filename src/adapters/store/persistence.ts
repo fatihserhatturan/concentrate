@@ -2,7 +2,8 @@ import { createHash } from "node:crypto";
 import { mkdir, readdir, readFile, rename, stat, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
-import { gunzip, gzip } from "node:zlib";
+import { StringDecoder } from "node:string_decoder";
+import { createGunzip, gunzip, gzip } from "node:zlib";
 import type { GraphNode, GraphRelationship } from "../../core/graph/model.js";
 import { MemoryGraph, validateProperties, type NodeRecord, type PropertyValue, type RelationshipRecord } from "./graph.js";
 import { physicalRelationshipType } from "./physical-types.js";
@@ -31,6 +32,8 @@ const READ_ATTEMPTS = 3;
 const WRITE_CONCURRENCY = 4;
 /** Segments being read, decompressed and parsed at the same time. */
 const READ_CONCURRENCY = 8;
+/** Segments larger than this (compressed) are decompressed and parsed as a stream. */
+const STREAM_SEGMENT_BYTES = 1 << 20;
 
 const gzipAsync = promisify(gzip);
 const gunzipAsync = promisify(gunzip);
@@ -82,8 +85,12 @@ export async function loadSnapshot(directory: string): Promise<{ head: Head | nu
     try {
       const pending: RelationshipLine[] = [];
       const loadSegment = async (file: string) => {
-        const content = (await gunzipAsync(await readFile(path.join(directory, SEGMENTS_DIR, file)))).toString("utf8");
-        addSegment(graph, content, pending);
+        const compressed = await readFile(path.join(directory, SEGMENTS_DIR, file));
+        if (compressed.length <= STREAM_SEGMENT_BYTES) {
+          addSegment(graph, (await gunzipAsync(compressed)).toString("utf8"), pending);
+        } else {
+          await addSegmentStreamed(graph, compressed, pending);
+        }
       };
       const keys = Object.keys(head.segments);
       const files = keys.filter((key) => key !== GLOBAL_SEGMENT).map((key) => head.segments[key]!);
@@ -101,19 +108,41 @@ export async function loadSnapshot(directory: string): Promise<{ head: Head | nu
   }
 }
 
-/** Add the lines of one segment; relationships with a missing endpoint go to `pending`. */
-function addSegment(graph: MemoryGraph, content: string, pending: RelationshipLine[]): void {
+/**
+ * Add the lines of one segment; relationships with a missing endpoint go to
+ * `pending`. Returns the unterminated text after the last newline, which only
+ * a chunk of a streamed segment has.
+ */
+function addSegment(graph: MemoryGraph, content: string, pending: RelationshipLine[]): string {
   let start = 0;
-  while (start < content.length) {
-    let end = content.indexOf("\n", start);
-    if (end === -1) end = content.length;
-    if (end > start) {
-      const record = JSON.parse(content.slice(start, end)) as NodeLine | RelationshipLine;
-      if (record[0] === "n") graph.addTrustedNode(record[1], record[2], record[3]);
-      else if (!graph.addTrustedRelationship(record[1], record[2], record[3], record[4])) pending.push(record);
-    }
+  for (let end = content.indexOf("\n"); end !== -1; end = content.indexOf("\n", start)) {
+    if (end > start) addLine(graph, content.slice(start, end), pending);
     start = end + 1;
   }
+  return content.slice(start);
+}
+
+function addLine(graph: MemoryGraph, line: string, pending: RelationshipLine[]): void {
+  const record = JSON.parse(line) as NodeLine | RelationshipLine;
+  if (record[0] === "n") graph.addTrustedNode(record[1], record[2], record[3]);
+  else if (!graph.addTrustedRelationship(record[1], record[2], record[3], record[4])) pending.push(record);
+}
+
+/**
+ * Decompress and add a large segment chunk by chunk, so neither its whole
+ * text nor its decompressed bytes exist at once (the global segment of a
+ * 17,000-file repository is 136 MB of text).
+ */
+async function addSegmentStreamed(graph: MemoryGraph, compressed: Buffer, pending: RelationshipLine[]): Promise<void> {
+  const decoder = new StringDecoder("utf8");
+  const gunzipStream = createGunzip();
+  gunzipStream.end(compressed);
+  let rest = "";
+  for await (const chunk of gunzipStream as AsyncIterable<Buffer>) {
+    rest = addSegment(graph, rest + decoder.write(chunk), pending);
+  }
+  rest += decoder.end();
+  if (rest) addLine(graph, rest, pending);
 }
 
 /** Run `task` for every item with at most `limit` in flight. */
