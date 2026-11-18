@@ -1,11 +1,11 @@
 import { readdir, stat } from "node:fs/promises";
 import type { GraphNode, GraphRelationship } from "../../core/graph/model.js";
-import type { IGraphStore } from "../../core/contracts/graph-store.js";
+import type { GraphRecordVisitor, IGraphStore } from "../../core/contracts/graph-store.js";
 import type { GraphStatsOptions, GraphStatsRow } from "../../core/contracts/query-engine.js";
 import { executeCypher, type QueryParameters } from "./cypher/executor.js";
 import { MemoryGraph } from "./graph.js";
 import { acquireWriteLock } from "./lock.js";
-import { commitSnapshot, loadSnapshot, readHead, type Head } from "./persistence.js";
+import { commitScannedSnapshot, commitSnapshot, loadSnapshot, readHead, type Head } from "./persistence.js";
 import { nodeLabels, SCHEMA_VERSION } from "./schema.js";
 
 export type GraphStoreOpenOptions = {
@@ -21,10 +21,21 @@ export type GraphStoreOpenOptions = {
  */
 export class GraphStore implements IGraphStore {
   private pendingReset = false;
+  /** The load in progress, shared by concurrent readers. */
+  private loading: Promise<MemoryGraph> | null = null;
+  /**
+   * The arrays of the last streamed commit, until the first read needs a graph.
+   * A query on this store right after a scan builds the graph from them, in
+   * scan order like before; the caller owns these arrays anyway, so holding
+   * them costs nothing while it does, and a store that is closed after the
+   * write (the scan CLI) never builds a graph at all.
+   */
+  private scanned: { nodes: readonly GraphNode[]; relationships: readonly GraphRelationship[] } | null = null;
 
   private constructor(
     private readonly directory: string,
-    private graph: MemoryGraph,
+    /** Loaded on first use; always the graph of `head` when set. */
+    private graph: MemoryGraph | null,
     private head: Head | null,
     private readonly retryLock: boolean,
   ) {}
@@ -32,28 +43,39 @@ export class GraphStore implements IGraphStore {
   /** Open (or, on first write, create) the store at `directory`. Reading never creates it. */
   static async open(directory: string, options: GraphStoreOpenOptions = {}): Promise<GraphStore> {
     await assertStoreDirectory(directory);
-    const { head, graph } = await loadSnapshot(directory);
-    return new GraphStore(directory, graph, head, options.retryLock ?? false);
+    return new GraphStore(directory, null, await readHead(directory), options.retryLock ?? false);
   }
 
   /** Start from an empty graph. Committed by the next write or close. */
   async reset(): Promise<void> {
-    this.graph = new MemoryGraph();
+    this.graph = null;
+    this.scanned = null;
     this.pendingReset = true;
   }
 
   async write(nodes: GraphNode[], relationships: GraphRelationship[]): Promise<void> {
-    await this.mutate((graph) => graph.write(nodes, relationships));
+    // After a reset the whole graph is replaced, so stream it to disk without a MemoryGraph copy.
+    if (this.pendingReset) await this.commitReplacement(nodes, relationships);
+    else await this.mutate((graph) => graph.write(nodes, relationships));
   }
 
   async query(cypher: string, params: QueryParameters = {}): Promise<unknown[]> {
-    await this.refresh();
-    return executeCypher(this.graph, cypher, params);
+    return executeCypher(await this.current(), cypher, params);
+  }
+
+  async forEachRecord(visitor: GraphRecordVisitor): Promise<void> {
+    const graph = await this.current();
+    if (visitor.node) for (const node of graph.nodes()) visitor.node(node.label, node.id, node.properties);
+    if (visitor.relationship) {
+      for (const relationship of graph.relationships()) {
+        visitor.relationship(relationship.type, relationship.from.id, relationship.to.id, relationship.properties);
+      }
+    }
   }
 
   async stats(options: GraphStatsOptions = {}): Promise<GraphStatsRow[]> {
-    await this.refresh();
-    const count = (cypher: string, params: QueryParameters = {}) => executeCypher(this.graph, cypher, params)[0]?.count ?? 0;
+    const graph = await this.current();
+    const count = (cypher: string, params: QueryParameters = {}) => executeCypher(graph, cypher, params)[0]?.count ?? 0;
 
     if (!options.packageName) {
       return nodeLabels.map((label) => ({ table: label, count: count(`MATCH (n:${label}) RETURN count(n) AS count`) }));
@@ -76,13 +98,27 @@ export class GraphStore implements IGraphStore {
   }
 
   async schemaVersion(): Promise<number | null> {
-    await this.refresh();
     if (this.pendingReset) return SCHEMA_VERSION;
+    await this.refreshHead();
     return this.head?.schemaVersion ?? null;
   }
 
   async close(): Promise<void> {
-    if (this.pendingReset) await this.mutate(() => undefined);
+    if (this.pendingReset) await this.commitReplacement([], []);
+  }
+
+  /** Commit a new graph that replaces the current one (after reset), streamed from the arrays. */
+  private async commitReplacement(nodes: readonly GraphNode[], relationships: readonly GraphRelationship[]): Promise<void> {
+    const release = await acquireWriteLock(this.directory, { wait: this.retryLock });
+    try {
+      const previous = await readHead(this.directory);
+      this.head = await commitScannedSnapshot(this.directory, nodes, relationships, { schemaVersion: SCHEMA_VERSION, previous });
+      this.graph = null;
+      this.scanned = { nodes, relationships };
+      this.pendingReset = false;
+    } finally {
+      await release();
+    }
   }
 
   /** Apply a change under the writer lock and commit it as the next generation. */
@@ -90,31 +126,65 @@ export class GraphStore implements IGraphStore {
     const release = await acquireWriteLock(this.directory, { wait: this.retryLock });
     try {
       const latest = await readHead(this.directory);
-      if (!this.pendingReset && latest?.generation !== this.head?.generation) {
-        ({ head: this.head, graph: this.graph } = await loadSnapshot(this.directory));
+      if (latest?.generation !== this.head?.generation) {
+        this.graph = null;
+        this.scanned = null;
       }
+      const graph = this.graph ?? await this.loadGraph();
       let result: T;
       try {
-        result = change(this.graph);
+        result = change(graph);
       } catch (error) {
-        // Like a rolled-back transaction: drop the half-applied change.
-        this.graph = this.pendingReset ? new MemoryGraph() : (await loadSnapshot(this.directory)).graph;
+        // Like a rolled-back transaction: drop the half-applied change; the next use reloads from disk.
+        this.graph = null;
         throw error;
       }
-      this.head = await commitSnapshot(this.directory, this.graph, { schemaVersion: SCHEMA_VERSION, previous: latest });
-      this.pendingReset = false;
+      this.head = await commitSnapshot(this.directory, graph, { schemaVersion: SCHEMA_VERSION, previous: latest });
       return result;
     } finally {
       await release();
     }
   }
 
-  /** Readers follow the latest committed generation unless a local reset is pending. */
-  private async refresh(): Promise<void> {
-    if (this.pendingReset) return;
+  /** The graph to read: empty after a local reset, otherwise the latest committed generation, loaded on demand. */
+  private async current(): Promise<MemoryGraph> {
+    if (this.pendingReset) return this.graph ??= new MemoryGraph();
+    await this.refreshHead();
+    return this.graph ?? await this.loadGraph();
+  }
+
+  /**
+   * The graph of the current head, loaded once however many callers ask at
+   * the same time (an MCP server or the UI runs several queries at once on a
+   * fresh store; each loading its own copy would multiply the graph).
+   */
+  private loadGraph(): Promise<MemoryGraph> {
+    this.loading ??= this.readGraph().finally(() => {
+      this.loading = null;
+    });
+    return this.loading;
+  }
+
+  /** Build the graph of the current head: from the arrays of this store's last streamed commit, else from disk. */
+  private async readGraph(): Promise<MemoryGraph> {
+    const scanned = this.scanned;
+    this.scanned = null;
+    if (scanned) {
+      const graph = new MemoryGraph();
+      graph.write(scanned.nodes, scanned.relationships);
+      return this.graph = graph;
+    }
+    ({ head: this.head, graph: this.graph } = await loadSnapshot(this.directory));
+    return this.graph;
+  }
+
+  /** Follow the latest committed generation; a newer one drops the loaded graph. */
+  private async refreshHead(): Promise<void> {
     const latest = await readHead(this.directory);
     if (latest?.generation === this.head?.generation) return;
-    ({ head: this.head, graph: this.graph } = await loadSnapshot(this.directory));
+    this.head = latest;
+    this.graph = null;
+    this.scanned = null;
   }
 }
 
