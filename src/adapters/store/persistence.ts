@@ -3,7 +3,11 @@ import { mkdir, readdir, readFile, rename, stat, unlink, writeFile } from "node:
 import path from "node:path";
 import { promisify } from "node:util";
 import { gunzip, gzip } from "node:zlib";
-import { MemoryGraph, type NodeRecord, type PropertyValue, type RelationshipRecord } from "./graph.js";
+import type { GraphNode, GraphRelationship } from "../../core/graph/model.js";
+import { MemoryGraph, validateProperties, type NodeRecord, type PropertyValue, type RelationshipRecord } from "./graph.js";
+import { physicalRelationshipType } from "./physical-types.js";
+import { withProvenance } from "./provenance.js";
+import { nodeTableByLabel, relationshipTableByType } from "./schema.js";
 
 /**
  * On-disk snapshot of a MemoryGraph:
@@ -23,6 +27,8 @@ const SEGMENTS_DIR = "segments";
 /** Unreferenced segments are kept this long so readers of the previous HEAD can finish. */
 const SEGMENT_GRACE_MS = 60_000;
 const READ_ATTEMPTS = 3;
+/** Segments being hashed, compressed and written at the same time. */
+const WRITE_CONCURRENCY = 4;
 
 const gzipAsync = promisify(gzip);
 const gunzipAsync = promisify(gunzip);
@@ -95,25 +101,163 @@ export async function commitSnapshot(
 ): Promise<Head> {
   const segmentsDirectory = path.join(directory, SEGMENTS_DIR);
   await mkdir(segmentsDirectory, { recursive: true });
-
+  const reusable = reusableSegments(options.previous);
   const segments: Record<string, string> = {};
   for (const [key, content] of serializeSegments(graph)) {
-    const file = `${createHash("sha256").update(content).digest("hex").slice(0, 32)}.jsonl.gz`;
-    segments[key] = file;
-    if (options.previous && Object.values(options.previous.segments).includes(file)) continue;
-    const target = path.join(segmentsDirectory, file);
-    const temporary = `${target}.${process.pid}.tmp`;
-    await writeFile(temporary, await gzipAsync(content));
-    await rename(temporary, target);
+    segments[key] = await writeSegment(segmentsDirectory, content, reusable);
   }
+  return writeHead(directory, segments, { nodes: graph.nodeCount, relationships: graph.relationshipCount }, options);
+}
 
+/**
+ * Write a scanned graph as the next generation without building a MemoryGraph:
+ * the snapshot is produced segment by segment straight from the arrays, so
+ * only a few segments' text exist at a time. The files and HEAD are identical
+ * to what `commitSnapshot` of `MemoryGraph.write(nodes, relationships)` writes.
+ * The caller holds the writer lock. On failure HEAD is left untouched.
+ */
+export async function commitScannedSnapshot(
+  directory: string,
+  nodes: readonly GraphNode[],
+  relationships: readonly GraphRelationship[],
+  options: { schemaVersion: number; previous: Head | null },
+): Promise<Head> {
+  const plan = planSegments(nodes, relationships);
+  const segmentsDirectory = path.join(directory, SEGMENTS_DIR);
+  await mkdir(segmentsDirectory, { recursive: true });
+  const reusable = reusableSegments(options.previous);
+
+  const keys = [...new Set([...plan.nodesByKey.keys(), ...plan.relationshipsByKey.keys()])].sort();
+  const files = new Map<string, string>();
+  let next = 0;
+  const worker = async () => {
+    while (next < keys.length) {
+      const key = keys[next++]!;
+      const lines: string[] = [];
+      for (const index of plan.nodesByKey.get(key) ?? []) {
+        const node = nodes[index]!;
+        const table = nodeTableByLabel.get(node.label)!;
+        lines.push(JSON.stringify(["n", node.label, node.id, validateProperties(`node ${node.id}`, table.properties, node.properties)] satisfies NodeLine));
+      }
+      for (const index of plan.relationshipsByKey.get(key) ?? []) {
+        const relationship = relationships[index]!;
+        const type = plan.types[index]!;
+        const table = relationshipTableByType.get(type)!;
+        const properties = validateProperties(`${type} ${relationship.from} -> ${relationship.to}`, table.properties, withProvenance(relationship));
+        lines.push(JSON.stringify(["r", type, relationship.from, relationship.to, properties] satisfies RelationshipLine));
+      }
+      files.set(key, await writeSegment(segmentsDirectory, `${lines.sort().join("\n")}\n`, reusable));
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(WRITE_CONCURRENCY, keys.length) }, worker));
+
+  const segments: Record<string, string> = {};
+  for (const key of keys) segments[key] = files.get(key)!;
+  return writeHead(directory, segments, { nodes: nodes.length, relationships: plan.kept }, options);
+}
+
+type SegmentPlan = {
+  nodesByKey: Map<string, number[]>;
+  relationshipsByKey: Map<string, number[]>;
+  /** Physical type per relationship index; undefined for dropped ones. */
+  types: (string | undefined)[];
+  kept: number;
+};
+
+/**
+ * Decide, with the same checks as `MemoryGraph.write`, which segment every
+ * node and kept relationship belongs to. Holds indexes, not copies.
+ */
+function planSegments(nodes: readonly GraphNode[], relationships: readonly GraphRelationship[]): SegmentPlan {
+  const indexById = new Map<string, number>();
+  const fileKeys = new Map<string, string>();
+  nodes.forEach((node, index) => {
+    if (!nodeTableByLabel.has(node.label)) {
+      throw new Error(`Cannot write node ${node.id}: table ${node.label} does not exist`);
+    }
+    if (indexById.has(node.id)) {
+      throw new Error(`Cannot write node ${node.id}: duplicate primary key`);
+    }
+    indexById.set(node.id, index);
+    if (node.label === "File") fileKeys.set(node.id, node.id);
+  });
+
+  const owners: string[] = new Array(nodes.length);
+  const nodesByKey = new Map<string, number[]>();
+  nodes.forEach((node, index) => {
+    const key = owningFile(node.id, fileKeys) ?? GLOBAL_SEGMENT;
+    owners[index] = key;
+    pushTo(nodesByKey, key, index);
+  });
+
+  // physicalRelationshipType only ever calls `.get` on the label map.
+  const labelById = {
+    get: (id: string) => {
+      const index = indexById.get(id);
+      return index === undefined ? undefined : nodes[index]!.label;
+    },
+  } as unknown as Map<string, GraphNode["label"]>;
+
+  const relationshipsByKey = new Map<string, number[]>();
+  const types: (string | undefined)[] = new Array(relationships.length);
+  let kept = 0;
+  relationships.forEach((relationship, index) => {
+    const requested = physicalRelationshipType(relationship, labelById);
+    const table = relationshipTableByType.get(requested);
+    if (!table) {
+      throw new Error(`Cannot write relationship ${relationship.from} -> ${relationship.to}: table ${requested} does not exist`);
+    }
+    const fromIndex = indexById.get(relationship.from);
+    const toIndex = indexById.get(relationship.to);
+    if (fromIndex === undefined || toIndex === undefined) return;
+    const fromLabel = nodes[fromIndex]!.label;
+    const toLabel = nodes[toIndex]!.label;
+    if (fromLabel !== table.from || toLabel !== table.to) {
+      throw new Error(`Cannot write ${table.type} from ${fromLabel} ${relationship.from} to ${toLabel} ${relationship.to}: expected ${table.from} -> ${table.to}`);
+    }
+    types[index] = table.type;
+    kept += 1;
+    const from = owners[fromIndex]!;
+    pushTo(relationshipsByKey, from === owners[toIndex] ? from : GLOBAL_SEGMENT, index);
+  });
+  return { nodesByKey, relationshipsByKey, types, kept };
+}
+
+function pushTo(map: Map<string, number[]>, key: string, value: number): void {
+  const list = map.get(key);
+  if (list) list.push(value);
+  else map.set(key, [value]);
+}
+
+function reusableSegments(previous: Head | null): ReadonlySet<string> {
+  return new Set(previous ? Object.values(previous.segments) : []);
+}
+
+/** Hash, compress and write one segment unless the previous HEAD already has it. Returns its file name. */
+async function writeSegment(segmentsDirectory: string, content: string, reusable: ReadonlySet<string>): Promise<string> {
+  const file = `${createHash("sha256").update(content).digest("hex").slice(0, 32)}.jsonl.gz`;
+  if (reusable.has(file)) return file;
+  const target = path.join(segmentsDirectory, file);
+  const temporary = `${target}.${process.pid}.tmp`;
+  await writeFile(temporary, await gzipAsync(content));
+  await rename(temporary, target);
+  return file;
+}
+
+/** Publish `segments` as the next generation: atomically replace HEAD.json, then collect garbage. */
+async function writeHead(
+  directory: string,
+  segments: Record<string, string>,
+  counts: { nodes: number; relationships: number },
+  options: { schemaVersion: number; previous: Head | null },
+): Promise<Head> {
   const head: Head = {
     format: STORE_FORMAT,
     schemaVersion: options.schemaVersion,
     generation: (options.previous?.generation ?? 0) + 1,
     writtenAt: new Date().toISOString(),
-    nodes: graph.nodeCount,
-    relationships: graph.relationshipCount,
+    nodes: counts.nodes,
+    relationships: counts.relationships,
     segments,
   };
   const headPath = path.join(directory, HEAD_FILE);
@@ -121,7 +265,7 @@ export async function commitSnapshot(
   await writeFile(temporary, `${JSON.stringify(head, null, 2)}\n`);
   await rename(temporary, headPath);
 
-  await collectGarbage(segmentsDirectory, new Set(Object.values(segments)));
+  await collectGarbage(path.join(directory, SEGMENTS_DIR), new Set(Object.values(segments)));
   return head;
 }
 
@@ -184,12 +328,12 @@ function relationshipLine(relationship: RelationshipRecord): string {
 }
 
 /** The longest File id that equals `id` or is followed by `:` in it. */
-function owningFile(id: string, fileIds: ReadonlySet<string>): string | undefined {
-  if (fileIds.has(id)) return id;
+function owningFile(id: string, fileIds: ReadonlyMap<string, string> | ReadonlySet<string>): string | undefined {
+  if (fileIds.has(id)) return fileIds instanceof Map ? fileIds.get(id) : id;
   if (!id.startsWith("file:")) return undefined;
   for (let index = id.lastIndexOf(":"); index > "file:".length - 1; index = id.lastIndexOf(":", index - 1)) {
     const candidate = id.slice(0, index);
-    if (fileIds.has(candidate)) return candidate;
+    if (fileIds.has(candidate)) return fileIds instanceof Map ? fileIds.get(candidate) : candidate;
   }
   return undefined;
 }

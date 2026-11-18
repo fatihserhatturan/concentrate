@@ -176,7 +176,7 @@ function removeFrom(list: RelationshipRecord[], relationship: RelationshipRecord
   if (index !== -1) list.splice(index, 1);
 }
 
-function validateProperties(
+export function validateProperties(
   owner: string,
   columns: Readonly<Record<string, PropertyType>>,
   properties: Record<string, unknown>,
