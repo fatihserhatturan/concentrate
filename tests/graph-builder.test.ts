@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { GraphBuilder, hashRelationship } from "../src/core/graph/builder.js";
-import type { GraphRelationship } from "../src/core/graph/model.js";
+import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 
 function rel(from: string, to: string, properties: GraphRelationship["properties"] = {}): GraphRelationship {
   return { from, to, type: "CALLS", properties };
@@ -61,5 +61,35 @@ describe("GraphBuilder relationships", () => {
       builder.relationships.map((r) => `${r.from}>${r.to}:${JSON.stringify(r.properties)}`),
       ["a>b:{}", "c>d:{}", "e>f:{}", 'a>b:{"n":1}'],
     );
+  });
+});
+
+describe("GraphBuilder lookups", () => {
+  const node = (id: string, label: GraphNode["label"]): GraphNode => ({ id, label, properties: {} });
+  const rel = (from: string, to: string, type: GraphRelationship["type"]): GraphRelationship => ({ from, to, type, properties: {} });
+
+  it("finds nodes by id and label and relationships by type, in insertion order", () => {
+    const graph = new GraphBuilder();
+    graph.addNodes([node("a", "File"), node("b", "Function"), node("c", "Function"), node("a", "Function")]);
+    graph.addRelationships([rel("a", "b", "DEFINES_FUNCTION"), rel("b", "c", "CALLS"), rel("a", "c", "DEFINES_FUNCTION"), rel("a", "b", "DEFINES_FUNCTION")]);
+    assert.equal(graph.node("a")?.label, "File");
+    assert.equal(graph.node("missing"), undefined);
+    assert.deepEqual(graph.nodesWithLabel("Function").map((n) => n.id), ["b", "c"]);
+    assert.deepEqual(graph.nodesWithLabel("Route"), []);
+    assert.deepEqual(graph.relationshipsOfType("DEFINES_FUNCTION").map((r) => r.to), ["b", "c"]);
+  });
+
+  it("removes relationships from the array and the type lookup, and still treats them as duplicates", () => {
+    const graph = new GraphBuilder();
+    const first = rel("a", "b", "CALLS");
+    const second = rel("a", "c", "CALLS");
+    const third = rel("a", "d", "IMPORTS");
+    graph.addRelationships([first, second, third]);
+    graph.removeRelationships(new Set([first, third]));
+    assert.deepEqual(graph.relationships, [second]);
+    assert.deepEqual(graph.relationshipsOfType("CALLS"), [second]);
+    assert.deepEqual(graph.relationshipsOfType("IMPORTS"), []);
+    graph.addRelationship(rel("a", "b", "CALLS"));
+    assert.deepEqual(graph.relationships, [second]);
   });
 });

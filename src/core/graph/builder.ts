@@ -30,11 +30,23 @@ function sameRelationship(a: GraphRelationship, b: GraphRelationship): boolean {
   );
 }
 
+const NONE: readonly never[] = Object.freeze([]);
+
+/**
+ * The graph a scan builds. Besides the `nodes` and `relationships` arrays it
+ * keeps lookups by id, label and type, so resolvers and contributors find what
+ * they need without a pass (and a Map) over the whole graph each: on a large
+ * repository those passes were hundreds of MB of short-lived objects apiece.
+ * Add through the methods only; `removeRelationships` is the one way to take
+ * relationships out.
+ */
 export class GraphBuilder {
   readonly nodes: GraphNode[] = [];
   readonly relationships: GraphRelationship[] = [];
 
-  private readonly nodeIds = new Set<string>();
+  private readonly nodesById = new Map<string, GraphNode>();
+  private readonly nodesByLabel = new Map<string, GraphNode[]>();
+  private readonly relationshipsByType = new Map<string, GraphRelationship[]>();
   // Relationships already added, by hash. A bucket holds an array only on a hash
   // collision or when the same endpoints carry different properties.
   private readonly relationshipsByHash = new Map<number, GraphRelationship | GraphRelationship[]>();
@@ -42,12 +54,15 @@ export class GraphBuilder {
   constructor(private readonly hash: RelationshipHash = hashRelationship) {}
 
   addNode(node: GraphNode): void {
-    if (this.nodeIds.has(node.id)) {
+    if (this.nodesById.has(node.id)) {
       return;
     }
 
-    this.nodeIds.add(node.id);
+    this.nodesById.set(node.id, node);
     this.nodes.push(node);
+    const sameLabel = this.nodesByLabel.get(node.label);
+    if (sameLabel) sameLabel.push(node);
+    else this.nodesByLabel.set(node.label, [node]);
   }
 
   addNodes(nodes: GraphNode[]): void {
@@ -74,6 +89,43 @@ export class GraphBuilder {
     }
 
     this.relationships.push(relationship);
+    const sameType = this.relationshipsByType.get(relationship.type);
+    if (sameType) sameType.push(relationship);
+    else this.relationshipsByType.set(relationship.type, [relationship]);
+  }
+
+  /** The node with this id (the first one added wins, as in `nodes`). */
+  node(id: string): GraphNode | undefined {
+    return this.nodesById.get(id);
+  }
+
+  /** Nodes with this label, in the order they were added. Do not change the array. */
+  nodesWithLabel(label: GraphNode["label"]): readonly GraphNode[] {
+    return this.nodesByLabel.get(label) ?? NONE;
+  }
+
+  /** Relationships of this type, in the order they were added. Do not change the array. */
+  relationshipsOfType(type: GraphRelationship["type"]): readonly GraphRelationship[] {
+    return this.relationshipsByType.get(type) ?? NONE;
+  }
+
+  /**
+   * Remove these relationships from `relationships` and the type lookup. Like
+   * splicing them out of `relationships` before, an identical relationship
+   * added later is still treated as a duplicate.
+   */
+  removeRelationships(remove: ReadonlySet<GraphRelationship>): void {
+    if (remove.size === 0) return;
+    const keep = (relationship: GraphRelationship) => !remove.has(relationship);
+    let length = 0;
+    for (const relationship of this.relationships) if (keep(relationship)) this.relationships[length++] = relationship;
+    this.relationships.length = length;
+    for (const [type, list] of this.relationshipsByType) {
+      const remaining = list.filter(keep);
+      if (remaining.length === list.length) continue;
+      if (remaining.length === 0) this.relationshipsByType.delete(type);
+      else this.relationshipsByType.set(type, remaining);
+    }
   }
 
   addRelationships(relationships: GraphRelationship[]): void {

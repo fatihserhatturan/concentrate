@@ -7,4 +7,12 @@ export interface IGraphContributor {
   addNodes(nodes: GraphNode[]): void;
   addRelationship(relationship: GraphRelationship): void;
   addRelationships(relationships: GraphRelationship[]): void;
+  /** The node with this id. */
+  node(id: string): GraphNode | undefined;
+  /** Nodes with this label, in insertion order (read only). */
+  nodesWithLabel(label: GraphNode["label"]): readonly GraphNode[];
+  /** Relationships of this type, in insertion order (read only). */
+  relationshipsOfType(type: GraphRelationship["type"]): readonly GraphRelationship[];
+  /** Remove these relationships; never splice `relationships` directly. */
+  removeRelationships(remove: ReadonlySet<GraphRelationship>): void;
 }
