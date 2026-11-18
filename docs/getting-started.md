@@ -78,7 +78,8 @@ into the project, with an absolute `--database` path.
 ## Scans
 
 - **Parse cache.** Repeated scans reuse per-file parse results from
-  `.concentrate/cache/`, so only changed files are parsed again. Cross-file
+  `.concentrate/cache/` (one gzip-compressed `.json.gz` file per source file,
+  about a quarter of the uncompressed size), so only changed files are parsed again. Cross-file
   resolution always runs over the whole graph, so the result is the same as a
   full scan. A code or grammar change invalidates the cache automatically;
   `--no-cache` skips it.

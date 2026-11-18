@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
 import { mkdir, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { promisify } from "node:util";
+import { gunzip as gunzipCallback, gzip as gzipCallback } from "node:zlib";
 import type { ParsedSourceFile } from "../graph/model.js";
 
 // Per-file parse results, reused while a file and the parsers are unchanged.
@@ -13,9 +15,17 @@ import type { ParsedSourceFile } from "../graph/model.js";
 // they run over the whole graph on every scan, so a cached scan produces the
 // same graph as a full one.
 //
-// Layout: <directory>/<project>/<key>.json, where <project> is derived from
+// Layout: <directory>/<project>/<key>.json.gz, where <project> is derived from
 // the scanned root so several projects can share one cache directory.
 
+const gzip = promisify(gzipCallback);
+const gunzip = promisify(gunzipCallback);
+
+// Entries are gzip-compressed JSON (4–6x smaller on disk). The file
+// extension is part of the format: entries from before compression are
+// `<key>.json`, never match a lookup and are removed by prune().
+const ENTRY_EXTENSION = ".json.gz";
+const GZIP_LEVEL = 6;
 const ENTRY_VERSION = 1;
 
 type CacheEntry = {
@@ -55,13 +65,13 @@ export class ParseCache {
   async read(key: string): Promise<ParsedSourceFile | null> {
     this.usedKeys.add(key);
     try {
-      const entry = JSON.parse(await readFile(this.entryPath(key), "utf8")) as Partial<CacheEntry>;
+      const entry = JSON.parse((await gunzip(await readFile(this.entryPath(key)))).toString("utf8")) as Partial<CacheEntry>;
       if (entry.version === ENTRY_VERSION && entry.parsed) {
         this.report.hits += 1;
         return entry.parsed;
       }
     } catch {
-      // Missing or unreadable entries are misses.
+      // Missing, corrupt or unreadable entries are misses.
     }
     this.report.misses += 1;
     return null;
@@ -75,8 +85,9 @@ export class ParseCache {
     const target = this.entryPath(key);
     const temporary = `${target}.${process.pid}.tmp`;
     try {
+      const compressed = await gzip(json, { level: GZIP_LEVEL });
       await mkdir(this.projectDirectory, { recursive: true });
-      await writeFile(temporary, json);
+      await writeFile(temporary, compressed);
       await rename(temporary, target);
       this.report.written += 1;
     } catch {
@@ -95,14 +106,14 @@ export class ParseCache {
       return;
     }
     for (const file of files) {
-      if (this.usedKeys.has(file.replace(/\.json$/, ""))) continue;
+      if (this.usedKeys.has(file.endsWith(ENTRY_EXTENSION) ? file.slice(0, -ENTRY_EXTENSION.length) : file)) continue;
       await rm(path.join(this.projectDirectory, file), { force: true });
       this.report.pruned += 1;
     }
   }
 
   private entryPath(key: string): string {
-    return path.join(this.projectDirectory, `${key}.json`);
+    return path.join(this.projectDirectory, `${key}${ENTRY_EXTENSION}`);
   }
 }
 

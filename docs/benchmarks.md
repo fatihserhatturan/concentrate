@@ -85,6 +85,16 @@ two builds alternating so neither always runs on a warm file cache.
 
 ## Parse cache
 
+Entries are stored gzip-compressed (level 6, `<key>.json.gz`). Measured on a
+loaded Apple M4, Node v24.13.0: the cache is 3.6–5.7× smaller (Concentrate
+33 MB to 8.7 MB, remark42 18 MB to 3.2 MB, NestJS 36 MB to 9.1 MB) and warm
+scans take the same time within noise (Concentrate 1.8–2.5 s before, 2.1–2.3 s
+after; remark42 0.95 s before, 1.0–1.1 s after; NestJS 1.9–2.9 s before,
+2.1–3.7 s after). Reading the 2115 NestJS entries costs 31 ms of gunzip. Level 1
+is 16% larger and only about 90 ms faster to write across all entries, so level 6
+is kept. Entries from before compression (`<key>.json`) are never read and are
+removed by the next scan's prune.
+
 `npm run benchmark:incremental` (Phase 5), Apple M4, Node v24.13.0, recorded
 2026-10-28. In-process `buildGraph` times in milliseconds for a full scan (no
 cache), a cold-cache scan (parses everything and writes the cache) and a
