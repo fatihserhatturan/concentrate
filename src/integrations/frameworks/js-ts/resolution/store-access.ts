@@ -1,4 +1,5 @@
 import type { GraphNode, GraphRelationship } from "../../../../core/graph/model.js";
+import type { IGraphContributor } from "../../../../core/contracts/graph-contributor.js";
 import type { ISemanticContributor } from "../../../../core/contracts/semantic-contributor.js";
 import { resolveDeclaration } from "../../../../core/scan/resolution/call-targets.js";
 import { createResolutionRelationshipIndex, indexImportNodesByFile } from "../../../../core/scan/resolution/indexes.js";
@@ -39,58 +40,58 @@ const writeMethods = new Set(["$patch", "$reset", "setState"]);
 
 export const storeAccessContributor: ISemanticContributor = {
   contribute(graph) {
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
     const storesByFileAndName = new Map<string, Map<string, string[]>>();
     const svelteStoresByFileAndName = new Map<string, Map<string, string[]>>();
     const actionsByStore = new Map<string, Map<string, string>>();
     const fileByStoreId = new Map<string, string>();
-    for (const rel of graph.relationships) {
-      const target = nodesById.get(rel.to);
-      if (rel.type === "DECLARES_STORE" && target) fileByStoreId.set(target.id, rel.from);
-      if (rel.type === "DECLARES_STORE" && target && target.properties.library !== "redux") {
+    for (const rel of graph.relationshipsOfType("DECLARES_STORE")) {
+      const target = graph.node(rel.to);
+      if (target) fileByStoreId.set(target.id, rel.from);
+      if (target && target.properties.library !== "redux") {
         // Svelte stores and Jotai atoms are used by their binding.
         const index = target.properties.library === "svelte" || target.properties.library === "jotai" ? svelteStoresByFileAndName : storesByFileAndName;
         const byName = index.get(rel.from) ?? new Map<string, string[]>();
         const hook = String(target.properties.hook);
         byName.set(hook, [...byName.get(hook) ?? [], target.id]);
         // `export default useCounterStore` after the declaration.
-        if (hook !== "default" && nodesById.get(rel.from)?.properties.defaultExport === hook) {
+        if (hook !== "default" && graph.node(rel.from)?.properties.defaultExport === hook) {
           byName.set("default", [...byName.get("default") ?? [], target.id]);
         }
         index.set(rel.from, byName);
       }
-      if (rel.type === "STORE_ACTION" && target) {
-        const actions = actionsByStore.get(rel.from) ?? new Map<string, string>();
-        actions.set(String(target.properties.name), target.id);
-        actionsByStore.set(rel.from, actions);
-      }
+    }
+    for (const rel of graph.relationshipsOfType("STORE_ACTION")) {
+      const target = graph.node(rel.to);
+      if (!target) continue;
+      const actions = actionsByStore.get(rel.from) ?? new Map<string, string>();
+      actions.set(String(target.properties.name), target.id);
+      actionsByStore.set(rel.from, actions);
     }
     if (fileByStoreId.size === 0) return;
 
-    const index = createResolutionRelationshipIndex(graph.relationships);
-    const importNodesByFile = indexImportNodesByFile(graph.nodes, index.fileByImportId);
-    const resolved = new Set(graph.relationships.filter((rel) => rel.type === "CALL_RESOLVES_TO").map((rel) => rel.from));
+    const index = createResolutionRelationshipIndex(graph);
+    const importNodesByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), index.fileByImportId);
+    const resolved = new Set(graph.relationshipsOfType("CALL_RESOLVES_TO").map((rel) => rel.from));
     // `fileId:line:column:callee` → Call, for action calls.
     const callsByPosition = new Map<string, string>();
     const fileOfCall = (callId: string) => {
       const caller = index.callerFunctionByCallId.get(callId);
       return caller ? index.fileByFunctionId.get(caller) : index.callerFileByModuleCallId.get(callId);
     };
-    for (const node of graph.nodes) {
-      if (node.label !== "Call") continue;
+    for (const node of graph.nodesWithLabel("Call")) {
       const fileId = fileOfCall(node.id);
       if (fileId) callsByPosition.set(`${fileId}:${node.properties.line}:${node.properties.columnNumber}:${node.properties.callee}`, node.id);
     }
 
     const added: GraphRelationship[] = [];
-    for (const call of graph.nodes) {
-      if (call.label !== "Call" || typeof call.properties.storeAccess !== "string") continue;
+    for (const call of graph.nodesWithLabel("Call")) {
+      if (typeof call.properties.storeAccess !== "string") continue;
       const functionId = index.callerFunctionByCallId.get(call.id);
       const fileId = functionId ? index.fileByFunctionId.get(functionId) : undefined;
       if (!functionId || !fileId) continue;
       const access = parseAccess(call.properties.storeAccess);
       const storeId = resolveDeclaration(access.hook ?? String(call.properties.callee), fileId, storesByFileAndName, importNodesByFile, index.resolvedFileByImportId);
-      const store = storeId ? nodesById.get(storeId) : undefined;
+      const store = storeId ? graph.node(storeId) : undefined;
       if (!store) continue;
 
       const actions = actionsByStore.get(store.id) ?? new Map<string, string>();
@@ -108,13 +109,13 @@ export const storeAccessContributor: ISemanticContributor = {
       added.push({ from: functionId, to: store.id, type: "READS_STORE", properties: { line, members: [...reads].join(",") } });
       if (writes.size > 0) added.push({ from: functionId, to: store.id, type: "WRITES_STORE", properties: { line, members: [...writes].join(",") } });
     }
-    for (const fn of graph.nodes) {
-      if (fn.label !== "Function" || typeof fn.properties.storeRefs !== "string") continue;
+    for (const fn of graph.nodesWithLabel("Function")) {
+      if (typeof fn.properties.storeRefs !== "string") continue;
       const fileId = index.fileByFunctionId.get(fn.id);
       if (!fileId) continue;
       for (const ref of parseRefs(fn.properties.storeRefs)) {
         const storeId = resolveDeclaration(ref.binding, fileId, svelteStoresByFileAndName, importNodesByFile, index.resolvedFileByImportId);
-        const store = storeId ? nodesById.get(storeId) : undefined;
+        const store = storeId ? graph.node(storeId) : undefined;
         if (!store) continue;
         const actions = actionsByStore.get(store.id) ?? new Map<string, string>();
         const actionNames = new Set(String(store.properties.actions ?? "").split(",").filter(Boolean));
@@ -135,7 +136,7 @@ export const storeAccessContributor: ISemanticContributor = {
         if (write || writes.size > 0) added.push({ from: fn.id, to: store.id, type: "WRITES_STORE", properties: { line: ref.line, members: [...writes].join(",") } });
       }
     }
-    added.push(...reduxAccess(graph.nodes, nodesById, fileByStoreId, index, importNodesByFile));
+    added.push(...reduxAccess(graph, fileByStoreId, index, importNodesByFile));
     for (const rel of added) graph.addRelationship(rel);
   },
 };
@@ -143,14 +144,13 @@ export const storeAccessContributor: ISemanticContributor = {
 type ResolutionIndex = ReturnType<typeof createResolutionRelationshipIndex>;
 
 function reduxAccess(
-  nodes: readonly GraphNode[],
-  nodesById: ReadonlyMap<string, GraphNode>,
+  graph: IGraphContributor,
   fileByStoreId: ReadonlyMap<string, string>,
   index: ResolutionIndex,
   importNodesByFile: Map<string, GraphNode[]>,
 ): GraphRelationship[] {
-  const slices = nodes.filter((node) => node.label === "Store" && node.properties.library === "redux" && node.properties.kind === "slice");
-  const roots = nodes.filter((node) => node.label === "Store" && node.properties.library === "redux" && node.properties.kind === "store");
+  const slices = graph.nodesWithLabel("Store").filter((node) => node.properties.library === "redux" && node.properties.kind === "slice");
+  const roots = graph.nodesWithLabel("Store").filter((node) => node.properties.library === "redux" && node.properties.kind === "store");
   if (slices.length === 0) return [];
   // file → name → slice ids, for slice variables, reducer names and actions.
   const byHook = new Map<string, Map<string, string[]>>();
@@ -198,8 +198,8 @@ function reduxAccess(
 
   const added: GraphRelationship[] = [];
   const selectors = new Map<string, Map<string, string[]>>();
-  for (const fn of nodes) {
-    if (fn.label !== "Function" || typeof fn.properties.storeSelects !== "string") continue;
+  for (const fn of graph.nodesWithLabel("Function")) {
+    if (typeof fn.properties.storeSelects !== "string") continue;
     const fileId = index.fileByFunctionId.get(fn.id);
     if (!fileId) continue;
     add(selectors, fileId, String(fn.properties.name), fn.id);
@@ -208,8 +208,8 @@ function reduxAccess(
       added.push({ from: fn.id, to: sliceId, type: "READS_STORE", properties: { line, members: [...members].join(",") } });
     }
   }
-  for (const call of nodes) {
-    if (call.label !== "Call" || typeof call.properties.reduxAccess !== "string") continue;
+  for (const call of graph.nodesWithLabel("Call")) {
+    if (typeof call.properties.reduxAccess !== "string") continue;
     const functionId = index.callerFunctionByCallId.get(call.id);
     const fileId = functionId ? index.fileByFunctionId.get(functionId) : undefined;
     if (!functionId || !fileId) continue;
@@ -218,7 +218,7 @@ function reduxAccess(
     let reads = access.reads ?? [];
     if (access.selector) {
       const selectorId = resolve(selectors, access.selector, fileId);
-      reads = selectorId ? parseJson(nodesById.get(selectorId)?.properties.storeSelects ?? null, []) : [];
+      reads = selectorId ? parseJson(graph.node(selectorId)?.properties.storeSelects ?? null, []) : [];
     }
     for (const [sliceId, members] of readsBySlice(reads)) {
       added.push({ from: functionId, to: sliceId, type: "READS_STORE", properties: { line, members: [...members].join(",") } });
@@ -228,7 +228,7 @@ function reduxAccess(
       const receiver = typeof call.properties.receiver === "string" ? call.properties.receiver : "";
       const owner = /^([A-Za-z_$][\w$]*)\.actions$/u.exec(receiver);
       const sliceId = owner ? resolve(byHook, owner[1]!, fileId) : receiver === "" ? resolve(byAction, action, fileId) : null;
-      const slice = sliceId ? nodesById.get(sliceId) : undefined;
+      const slice = sliceId ? graph.node(sliceId) : undefined;
       if (slice && names(slice.properties.actions).includes(action)) {
         added.push({ from: functionId, to: slice.id, type: "WRITES_STORE", properties: { line, members: action } });
       }

@@ -642,6 +642,25 @@ A scan capped at `--max-old-space-size=2560` also completes, with the same
 peak RSS. The next lever is shared indexes on the GraphBuilder (nodes by id
 and label, relationships by type) instead of per-contributor passes.
 
+Shared GraphBuilder lookups (after #264): `GraphBuilder` keeps nodes by id and
+by label and relationships by type as they are added (`node`,
+`nodesWithLabel`, `relationshipsOfType`, plus `removeRelationships` and
+`removeNodes`), and the resolvers and contributors use them instead of
+filtering or mapping all nodes and relationships. Contributors for a
+framework or language that is not in the repository return after a lookup.
+The graph is byte-identical (all 24,177 segment files). Probe, cold, 4
+workers:
+
+| Step | Before: live / peak sampled | After: live / peak sampled |
+| --- | ---: | ---: |
+| `addParseResultsToGraph` | 1,016 / 1,255 MB | 1,061 / 1,339 MB (the lookups: +45 MB) |
+| Workspace packages and 4 resolvers | 1,104 / 1,880 MB, 15.8 s | 1,156 / 1,552 MB, 15 s |
+| 48 semantic contributors | 1,198 / 5,685 MB, 28.3 s | 1,250 / 2,389 MB, 12.3 s |
+
+`concentrate scan . --no-cache` peaks at 4.35 GB RSS (4.8 before). What is left
+of the peak is the parse step: the worker threads and the held parse results
+(probe RSS 2.4 to 2.5 GB right after parsing).
+
 Cost of call sites in the loaded graph (1,101 MB live), for the decision in
 step 7 of the issue:
 

@@ -230,7 +230,7 @@ function withoutQuery(url: string): string {
 export async function addPythonHttpEnv(context: PythonContext, rootPath: string, files: readonly string[] | undefined): Promise<void> {
   const { graph } = context;
   const clients = new Set(["requests", "httpx", "aiohttp"]);
-  const calls = graph.nodes.filter((node) => node.label === "Call" && typeof node.properties.httpClient === "string" && clients.has(node.properties.httpClient) && typeof node.properties.httpUrl === "string" && node.properties.httpUrl.includes("${env:"));
+  const calls = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.httpClient === "string" && clients.has(node.properties.httpClient) && typeof node.properties.httpUrl === "string" && node.properties.httpUrl.includes("${env:"));
   if (calls.length === 0) return;
   const env = await readEnvFiles(rootPath, files as never);
   const envValue = (name: string, fileId: string): string | undefined => {

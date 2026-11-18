@@ -176,25 +176,34 @@ function lazyImport(node: SyntaxNode | null): { source: string; exportName: stri
 // of a root array.
 export const angularRouteMountsContributor: ISemanticContributor = {
   contribute(graph) {
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-    const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
     const pagesByFile = new Map<string, GraphNode[]>();
     const classesByFile = new Map<string, Map<string, string>>();
     const fileOfClass = new Map<string, string>();
     const moduleImports = new Map<string, string[]>();
-    for (const rel of graph.relationships) {
-      const target = nodesById.get(rel.to);
-      if (rel.type === "DECLARES_PAGE" && target?.properties.framework === "angular") {
-        pagesByFile.set(rel.from, [...pagesByFile.get(rel.from) ?? [], target]);
-      }
-      if (rel.type === "DEFINES_CLASS" && target) {
-        const byName = classesByFile.get(rel.from) ?? new Map<string, string>();
-        byName.set(String(target.properties.name), target.id);
-        classesByFile.set(rel.from, byName);
-        fileOfClass.set(target.id, rel.from);
-      }
-      if (rel.type === "MODULE_IMPORTS") moduleImports.set(rel.from, [...moduleImports.get(rel.from) ?? [], rel.to]);
+    for (const rel of graph.relationshipsOfType("DECLARES_PAGE")) {
+      const target = graph.node(rel.to);
+      if (target?.properties.framework !== "angular") continue;
+      const list = pagesByFile.get(rel.from);
+      if (list) list.push(target);
+      else pagesByFile.set(rel.from, [target]);
+    }
+    // Only pages that load children are mounted.
+    if (pagesByFile.size === 0) return;
+
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
+    const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
+    for (const rel of graph.relationshipsOfType("DEFINES_CLASS")) {
+      const target = graph.node(rel.to);
+      if (!target) continue;
+      const byName = classesByFile.get(rel.from) ?? new Map<string, string>();
+      byName.set(String(target.properties.name), target.id);
+      classesByFile.set(rel.from, byName);
+      fileOfClass.set(target.id, rel.from);
+    }
+    for (const rel of graph.relationshipsOfType("MODULE_IMPORTS")) {
+      const list = moduleImports.get(rel.from);
+      if (list) list.push(rel.to);
+      else moduleImports.set(rel.from, [rel.to]);
     }
 
     // Loaded page id → the page that loads it.
@@ -207,7 +216,7 @@ export const angularRouteMountsContributor: ISemanticContributor = {
         const importNode = (importsByFile.get(fileId) ?? []).find((node) => node.properties.isDynamic === true && node.properties.source === source);
         const targetFileId = importNode ? relationshipIndex.resolvedFileByImportId.get(importNode.id) : undefined;
         if (!targetFileId) continue;
-        const name = exportName || String(nodesById.get(targetFileId)?.properties.defaultExport ?? "");
+        const name = exportName || String(graph.node(targetFileId)?.properties.defaultExport ?? "");
         let loaded = (pagesByFile.get(targetFileId) ?? []).filter((candidate) => name !== "" && candidate.properties.routes === name);
         const moduleClass = classesByFile.get(targetFileId)?.get(name);
         if (loaded.length === 0 && moduleClass) {

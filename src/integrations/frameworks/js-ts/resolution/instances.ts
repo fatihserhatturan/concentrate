@@ -13,20 +13,20 @@ import {
 // its base classes. A parameter of the calling function with the same name
 // hides the variable.
 export function addInstanceMethodResolutionRelationships(graph: IGraphContributor): void {
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-  const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
-  const methodsByClassAndName = indexMethodsByClassAndName(graph.nodes, graph.relationships);
-  const baseClassesByClass = indexBaseClasses(graph.relationships);
-  const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
-  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
-  const fileIdByVariableId = indexFileIdByVariableId(graph.relationships);
+  // A resolved call needs a variable initialized by `new C()` with a scanned class.
+  if (graph.relationshipsOfType("INITIALIZED_BY").length === 0 || graph.nodesWithLabel("Class").length === 0) return;
+
+  const relationshipIndex = createResolutionRelationshipIndex(graph);
+  const classesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Class"), relationshipIndex.fileByClassId, "Class");
+  const methodsByClassAndName = indexMethodsByClassAndName(graph);
+  const baseClassesByClass = indexBaseClasses(graph);
+  const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
+  const fileIdByVariableId = indexFileIdByVariableId(graph);
   const classIdByVariableId = new Map<string, string>();
 
-  for (const rel of graph.relationships) {
-    if (rel.type !== "INITIALIZED_BY") continue;
-
-    const variable = nodeById.get(rel.from);
-    const call = nodeById.get(rel.to);
+  for (const rel of graph.relationshipsOfType("INITIALIZED_BY")) {
+    const variable = graph.node(rel.from);
+    const call = graph.node(rel.to);
     if (variable?.label !== "Variable" || call?.label !== "Call") continue;
 
     const fileId = fileIdByVariableId.get(variable.id);
@@ -49,13 +49,12 @@ export function addInstanceMethodResolutionRelationships(graph: IGraphContributo
   }
 
   const classIdByVariableNameByFile = indexClassIdsByVariableNameByFile(
-    graph.nodes,
+    graph,
     classIdByVariableId,
     fileIdByVariableId,
   );
 
-  for (const call of graph.nodes) {
-    if (call.label !== "Call") continue;
+  for (const call of graph.nodesWithLabel("Call")) {
 
     const receiver = call.properties.receiver;
     const callee = call.properties.callee;
@@ -67,7 +66,7 @@ export function addInstanceMethodResolutionRelationships(graph: IGraphContributo
     const callerFileId = relationshipIndex.fileByFunctionId.get(callerFunctionId);
     if (!callerFileId) continue;
 
-    if (parameterNames(nodeById.get(callerFunctionId)?.properties.parameters).has(receiver)) continue;
+    if (parameterNames(graph.node(callerFunctionId)?.properties.parameters).has(receiver)) continue;
 
     const classId = classIdByVariableNameByFile.get(callerFileId)?.get(receiver)?.[0]
       ?? resolveImportedFreeCall(receiver, callerFileId, classIdByVariableNameByFile, importsByFile, relationshipIndex.resolvedFileByImportId);
@@ -85,26 +84,22 @@ export function addInstanceMethodResolutionRelationships(graph: IGraphContributo
   }
 }
 
-function indexFileIdByVariableId(relationships: GraphRelationship[]): Map<string, string> {
+function indexFileIdByVariableId(graph: IGraphContributor): Map<string, string> {
   const fileIds = new Map<string, string>();
-  for (const rel of relationships) {
-    if (rel.type === "DEFINES_VARIABLE") {
-      fileIds.set(rel.to, rel.from);
-    }
+  for (const rel of graph.relationshipsOfType("DEFINES_VARIABLE")) {
+    fileIds.set(rel.to, rel.from);
   }
   return fileIds;
 }
 
 function indexClassIdsByVariableNameByFile(
-  nodes: GraphNode[],
+  graph: IGraphContributor,
   classIdByVariableId: Map<string, string>,
   fileIdByVariableId: Map<string, string>,
 ): Map<string, Map<string, string[]>> {
   const result = new Map<string, Map<string, string[]>>();
 
-  for (const node of nodes) {
-    if (node.label !== "Variable") continue;
-
+  for (const node of graph.nodesWithLabel("Variable")) {
     const classId = classIdByVariableId.get(node.id);
     const fileId = fileIdByVariableId.get(node.id);
     const name = node.properties.name;
@@ -121,17 +116,11 @@ function indexClassIdsByVariableNameByFile(
   return result;
 }
 
-function indexMethodsByClassAndName(
-  nodes: GraphNode[],
-  relationships: GraphRelationship[],
-): Map<string, Map<string, string[]>> {
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+function indexMethodsByClassAndName(graph: IGraphContributor): Map<string, Map<string, string[]>> {
   const methods = new Map<string, Map<string, string[]>>();
 
-  for (const rel of relationships) {
-    if (rel.type !== "DEFINES_METHOD") continue;
-
-    const method = nodeById.get(rel.to);
+  for (const rel of graph.relationshipsOfType("DEFINES_METHOD")) {
+    const method = graph.node(rel.to);
     const name = method?.properties.name;
     if (method?.label !== "Function" || typeof name !== "string") continue;
 
@@ -140,16 +129,20 @@ function indexMethodsByClassAndName(
       byName = new Map();
       methods.set(rel.from, byName);
     }
-    byName.set(name, [...(byName.get(name) ?? []), method.id]);
+    const ids = byName.get(name);
+    if (ids) ids.push(method.id);
+    else byName.set(name, [method.id]);
   }
 
   return methods;
 }
 
-function indexBaseClasses(relationships: GraphRelationship[]): Map<string, string[]> {
+function indexBaseClasses(graph: IGraphContributor): Map<string, string[]> {
   const bases = new Map<string, string[]>();
-  for (const rel of relationships) {
-    if (rel.type === "EXTENDS") bases.set(rel.from, [...bases.get(rel.from) ?? [], rel.to]);
+  for (const rel of graph.relationshipsOfType("EXTENDS")) {
+    const list = bases.get(rel.from);
+    if (list) list.push(rel.to);
+    else bases.set(rel.from, [rel.to]);
   }
   return bases;
 }

@@ -32,8 +32,8 @@ type Field = { name: string; type: string; embedded?: true; fields?: Field[] };
 
 export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: ResolutionRelationshipIndex): GoCallIndex {
   const files = new Map<string, GraphNode>();
-  for (const node of graph.nodes) {
-    if (node.label === "File" && isGoFile(node.id)) files.set(node.id, node);
+  for (const node of graph.nodesWithLabel("File")) {
+    if (isGoFile(node.id)) files.set(node.id, node);
   }
   const packageByFile = new Map<string, string>();
   for (const [fileId, node] of files) {
@@ -55,59 +55,62 @@ export function createGoCallIndex(graph: IGraphContributor, relationshipIndex: R
   };
 
   const targetsByImport = new Map<string, string[]>();
-  for (const relationship of graph.relationships) {
-    if (relationship.type !== "RESOLVES_TO" || !isGoFile(relationship.from.split(":import:")[0]!)) continue;
+  for (const relationship of graph.relationshipsOfType("RESOLVES_TO")) {
+    if (!isGoFile(relationship.from.split(":import:")[0]!)) continue;
     targetsByImport.set(relationship.from, [...targetsByImport.get(relationship.from) ?? [], relationship.to]);
   }
 
-  for (const node of graph.nodes) {
-    if (node.label === "Function") {
-      index.functionsById.set(node.id, node);
-      const pkg = packageByFile.get(relationshipIndex.fileByFunctionId.get(node.id) ?? "");
-      if (pkg === undefined) continue;
-      const name = String(node.properties.name);
-      const className = node.properties.className;
-      if (typeof className === "string") {
-        nested(index.methodsByPackage, pkg).set(`${className}.${name}`, node.id);
-      } else if (!nested(index.functionsByPackage, pkg).has(name)) {
-        nested(index.functionsByPackage, pkg).set(name, node);
-      }
-    } else if (node.label === "Class") {
-      const fileId = relationshipIndex.fileByClassId.get(node.id);
-      const pkg = packageByFile.get(fileId ?? "");
-      if (pkg !== undefined) nested(index.typesByPackage, pkg).set(String(node.properties.name), { node, fileId: fileId! });
-    } else if (node.label === "Interface") {
-      const fileId = relationshipIndex.fileByInterfaceId.get(node.id);
-      const pkg = packageByFile.get(fileId ?? "");
-      if (pkg !== undefined) nested(index.interfacesByPackage, pkg).set(String(node.properties.name), { node, fileId: fileId! });
-    } else if (node.label === "Variable" && (typeof node.properties.goType === "string" || typeof node.properties.goConstructor === "string")) {
-      const fileId = node.id.slice(0, node.id.indexOf(":variable:"));
-      const pkg = packageByFile.get(fileId);
-      if (pkg === undefined) continue;
-      nested(index.variablesByPackage, pkg).set(String(node.properties.name), {
-        ...typeof node.properties.goType === "string" ? { type: node.properties.goType } : { factory: String(node.properties.goConstructor) },
-        fileId,
-      });
-    } else if (node.label === "Import") {
-      const fileId = relationshipIndex.fileByImportId.get(node.id);
-      const targets = targetsByImport.get(node.id);
-      if (!fileId || !targets || !packageByFile.has(fileId)) continue;
-      const pkg = packageByFile.get(targets[0]!);
-      if (pkg === undefined) continue;
-      const alias = typeof node.properties.alias === "string" ? node.properties.alias : null;
-      if (alias === "_") continue;
-      const local = alias ?? packageName(pkg) ?? defaultPackageName(String(node.properties.source));
-      const imports = nested(index.importsByFile, fileId);
-      imports.set(local, [...imports.get(local) ?? [], pkg]);
+  // Each label's nodes fill their own maps, so one pass per label gives the same index.
+  for (const node of graph.nodesWithLabel("Function")) {
+    index.functionsById.set(node.id, node);
+    const pkg = packageByFile.get(relationshipIndex.fileByFunctionId.get(node.id) ?? "");
+    if (pkg === undefined) continue;
+    const name = String(node.properties.name);
+    const className = node.properties.className;
+    if (typeof className === "string") {
+      nested(index.methodsByPackage, pkg).set(`${className}.${name}`, node.id);
+    } else if (!nested(index.functionsByPackage, pkg).has(name)) {
+      nested(index.functionsByPackage, pkg).set(name, node);
     }
+  }
+  for (const node of graph.nodesWithLabel("Class")) {
+    const fileId = relationshipIndex.fileByClassId.get(node.id);
+    const pkg = packageByFile.get(fileId ?? "");
+    if (pkg !== undefined) nested(index.typesByPackage, pkg).set(String(node.properties.name), { node, fileId: fileId! });
+  }
+  for (const node of graph.nodesWithLabel("Interface")) {
+    const fileId = relationshipIndex.fileByInterfaceId.get(node.id);
+    const pkg = packageByFile.get(fileId ?? "");
+    if (pkg !== undefined) nested(index.interfacesByPackage, pkg).set(String(node.properties.name), { node, fileId: fileId! });
+  }
+  for (const node of graph.nodesWithLabel("Variable")) {
+    if (typeof node.properties.goType !== "string" && typeof node.properties.goConstructor !== "string") continue;
+    const fileId = node.id.slice(0, node.id.indexOf(":variable:"));
+    const pkg = packageByFile.get(fileId);
+    if (pkg === undefined) continue;
+    nested(index.variablesByPackage, pkg).set(String(node.properties.name), {
+      ...typeof node.properties.goType === "string" ? { type: node.properties.goType } : { factory: String(node.properties.goConstructor) },
+      fileId,
+    });
+  }
+  for (const node of graph.nodesWithLabel("Import")) {
+    const fileId = relationshipIndex.fileByImportId.get(node.id);
+    const targets = targetsByImport.get(node.id);
+    if (!fileId || !targets || !packageByFile.has(fileId)) continue;
+    const pkg = packageByFile.get(targets[0]!);
+    if (pkg === undefined) continue;
+    const alias = typeof node.properties.alias === "string" ? node.properties.alias : null;
+    if (alias === "_") continue;
+    const local = alias ?? packageName(pkg) ?? defaultPackageName(String(node.properties.source));
+    const imports = nested(index.importsByFile, fileId);
+    imports.set(local, [...imports.get(local) ?? [], pkg]);
   }
 
   const typeRefByClassId = new Map<string, TypeRef>();
   for (const [pkg, types] of index.typesByPackage) {
     for (const [name, { node }] of types) typeRefByClassId.set(node.id, { pkg, name });
   }
-  for (const relationship of graph.relationships) {
-    if (relationship.type !== "IMPLEMENTS") continue;
+  for (const relationship of graph.relationshipsOfType("IMPLEMENTS")) {
     const implementer = typeRefByClassId.get(relationship.from);
     if (implementer) index.implementersByInterface.set(relationship.to, [...index.implementersByInterface.get(relationship.to) ?? [], implementer]);
   }
@@ -131,7 +134,7 @@ export function addGoImplementsRelationships(graph: IGraphContributor, relations
     .map((ref) => ({ ref, id: index.interfacesByPackage.get(ref.pkg)!.get(ref.name)!.node.id, methods: interfaceMethods(ref, index, 0), signatures: interfaceSignatures(ref, index, 0) }))
     .filter((entry) => entry.methods !== null && entry.methods.size > 0);
   if (required.length === 0) return;
-  const functionById = new Map(graph.nodes.filter((node) => node.label === "Function").map((node) => [node.id, node]));
+  const functionById = index.functionsById;
   const matches = (functionIds: string[], wanted: string | undefined) =>
     functionIds.length > 0 && (wanted === undefined || functionIds.some((id) => {
       const fn = functionById.get(id);

@@ -298,10 +298,10 @@ function selfType(at: SyntaxNode): string | null {
 
 export const rustEntrypointsContributor: ISemanticContributor = {
   contribute(graph) {
-    const files = graph.nodes.filter((node) => node.label === "File" && (typeof node.properties.rustGrpcServers === "string" || typeof node.properties.rustClap === "string"));
+    const files = graph.nodesWithLabel("File").filter((node) => (typeof node.properties.rustGrpcServers === "string" || typeof node.properties.rustClap === "string"));
     if (files.length === 0) return;
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const index = createRustCallIndex(graph, relationshipIndex);
     const newNodes: GraphNode[] = [];
     const newRelationships: GraphRelationship[] = [];
@@ -317,8 +317,8 @@ export const rustEntrypointsContributor: ISemanticContributor = {
 
     // tonic: the methods of each implementation of the served trait.
     const implementations = new Map<string, GraphNode[]>();
-    for (const node of graph.nodes) {
-      if (node.label !== "Function" || typeof node.properties.implementsTrait !== "string") continue;
+    for (const node of graph.nodesWithLabel("Function")) {
+      if (typeof node.properties.implementsTrait !== "string") continue;
       const list = implementations.get(node.properties.implementsTrait) ?? [];
       list.push(node);
       implementations.set(node.properties.implementsTrait, list);

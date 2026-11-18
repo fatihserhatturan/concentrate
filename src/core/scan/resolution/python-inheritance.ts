@@ -27,11 +27,9 @@ export function addPythonInheritanceRelationships(
   };
 
   const methodsByClass = new Map<string, Set<string>>();
-  const nameById = new Map<string, string>();
-  for (const node of graph.nodes) if (node.label === "Function") nameById.set(node.id, String(node.properties.name));
-  for (const rel of graph.relationships) {
-    if (rel.type !== "DEFINES_METHOD") continue;
-    const name = nameById.get(rel.to);
+  for (const rel of graph.relationshipsOfType("DEFINES_METHOD")) {
+    const method = graph.node(rel.to);
+    const name = method?.label === "Function" ? String(method.properties.name) : undefined;
     if (!name) continue;
     const set = methodsByClass.get(rel.from) ?? new Set<string>();
     set.add(name);
@@ -39,8 +37,7 @@ export function addPythonInheritanceRelationships(
   }
 
   const classes: Array<{ node: GraphNode; fileId: string }> = [];
-  for (const node of graph.nodes) {
-    if (node.label !== "Class") continue;
+  for (const node of graph.nodesWithLabel("Class")) {
     const fileId = index.fileByClassId.get(node.id);
     if (!fileId || !fileId.endsWith(".py")) continue;
     classes.push({ node, fileId });
@@ -57,8 +54,8 @@ export function addPythonInheritanceRelationships(
 
   // Structural: Protocols.
   const protocolsByFile = new Map<string, Array<{ id: string; methods: string[] }>>();
-  for (const node of graph.nodes) {
-    if (node.label !== "Interface" || node.properties.kind !== "protocol") continue;
+  for (const node of graph.nodesWithLabel("Interface")) {
+    if (node.properties.kind !== "protocol") continue;
     const fileId = index.fileByInterfaceId.get(node.id);
     const methods = parseNames(node.properties.methods).filter((method) => !(method.startsWith("__") && method.endsWith("__")));
     if (!fileId || methods.length === 0) continue;

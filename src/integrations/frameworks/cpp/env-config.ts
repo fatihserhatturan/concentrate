@@ -77,7 +77,7 @@ export const cppEnvConfigPlugin: CppParsePlugin = ({ fileNodeId, source: written
 
 export const cppEnvConfigContributor: ISemanticContributor = {
   contribute(graph) {
-    const files = graph.nodes.filter((node) => node.label === "File" && (typeof node.properties.cppEnvPending === "string" || typeof node.properties.cppEnvConsts === "string"));
+    const files = graph.nodesWithLabel("File").filter((node) => (typeof node.properties.cppEnvPending === "string" || typeof node.properties.cppEnvConsts === "string"));
     if (files.length === 0) return;
     const values = new Map<string, Set<string>>();
     const pending: Array<Pending & { file: string }> = [];
@@ -91,7 +91,7 @@ export const cppEnvConfigContributor: ISemanticContributor = {
       delete file.properties.cppEnvConsts;
       delete file.properties.cppEnvPending;
     }
-    const known = new Set(graph.nodes.filter((node) => node.label === "EnvVar").map((node) => node.id));
+    const known = new Set(graph.nodesWithLabel("EnvVar").map((node) => node.id));
     const nodes: GraphNode[] = [];
     const relationships: GraphRelationship[] = [];
     const seen = new Set<string>();

@@ -18,11 +18,11 @@ type Incoming = { mount: RustMount; callerFunctionId: string; fileId: string };
 // (`Path`, `Query`, `Json`, `State`…) are recorded on the route.
 export const rustRoutesContributor: ISemanticContributor = {
   contribute(graph) {
-    const routes = graph.nodes.filter((node) => node.label === "Route" && typeof node.properties.rustPending === "string");
-    const mountOwners = graph.nodes.filter((node) => node.label === "Function" && typeof node.properties.rustMounts === "string");
+    const routes = graph.nodesWithLabel("Route").filter((node) => typeof node.properties.rustPending === "string");
+    const mountOwners = graph.nodesWithLabel("Function").filter((node) => typeof node.properties.rustMounts === "string");
     if (routes.length === 0 && mountOwners.length === 0) return;
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const index = createRustCallIndex(graph, relationshipIndex);
     const fileOfFunction = (functionId: string) => relationshipIndex.fileByFunctionId.get(functionId) ?? index.fileByFunctionId.get(functionId) ?? null;
 
@@ -63,8 +63,8 @@ export const rustRoutesContributor: ISemanticContributor = {
     };
 
     const fileByRoute = new Map<string, string>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type === "DECLARES_ROUTE") fileByRoute.set(relationship.to, relationship.from);
+    for (const relationship of graph.relationshipsOfType("DECLARES_ROUTE")) {
+      fileByRoute.set(relationship.to, relationship.from);
     }
 
     const newNodes: GraphNode[] = [];
@@ -78,7 +78,7 @@ export const rustRoutesContributor: ISemanticContributor = {
       const path = typeof route.properties.path === "string" ? route.properties.path : null;
       const own = pending.layerRefs.map((ref) => ({ ref, fileId }));
       const handler = pending.attribute ? scopeFunctionId : pending.handler ? resolveRef(pending.handler, fileId, scopeFunctionId, index)[0] ?? null : null;
-      if (handler) route.properties.extractors = extractorsOf(graph.nodes, handler);
+      if (handler) route.properties.extractors = extractorsOf(graph.node(handler));
 
       const mounts = [...new Map(mountsOf(scopeFunctionId, 0, new Set())
         .map((mount) => [`${mount.prefix}\0${mount.layerRefs.map((step) => step.ref.expression).join("\0")}`, mount])).values()];
@@ -161,8 +161,7 @@ const extractorKinds = new Map([
 
 // The parameters of the handler that axum, actix-web and Rocket fill from the
 // request, as `[{kind, type}]`.
-function extractorsOf(nodes: readonly GraphNode[], functionId: string): string | null {
-  const fn = nodes.find((node) => node.id === functionId);
+function extractorsOf(fn: GraphNode | undefined): string | null {
   if (typeof fn?.properties.parameters !== "string") return null;
   const found: Array<{ kind: string; type: string }> = [];
   for (const parameter of JSON.parse(fn.properties.parameters) as Array<{ name: string | null; type: string | null }>) {

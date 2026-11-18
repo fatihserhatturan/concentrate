@@ -341,7 +341,7 @@ type Access = { owner: string; modelId: string; operation: Operation; library: s
 
 export const rustDataAccessContributor: ISemanticContributor = {
   contribute(graph) {
-    const files = graph.nodes.filter((node) => node.label === "File" && typeof node.properties.rustData === "string");
+    const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.rustData === "string");
     if (files.length === 0) return;
     const parsed = files.map((file) => {
       const data = JSON.parse(String(file.properties.rustData)) as FileData;
@@ -507,13 +507,11 @@ export const rustDataAccessContributor: ISemanticContributor = {
     const routesByFunction = new Map<string, string[]>();
     const entrypointsByFunction = new Map<string, string[]>();
     const targetsByCall = new Map<string, string[]>();
-    for (const rel of graph.relationships) {
-      if (rel.type === "CALLS") callerByCall.set(rel.to, rel.from);
-      else if (rel.type === "ROUTE_HANDLED_BY") routesByFunction.set(rel.to, [...routesByFunction.get(rel.to) ?? [], rel.from]);
-      else if (rel.type === "ENTRYPOINT_HANDLED_BY") entrypointsByFunction.set(rel.to, [...entrypointsByFunction.get(rel.to) ?? [], rel.from]);
-      else if (rel.type === "CALL_RESOLVES_TO") targetsByCall.set(rel.from, [...targetsByCall.get(rel.from) ?? [], rel.to]);
-    }
-    const filePaths = new Set(graph.nodes.flatMap((node) => (node.label === "File" && typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : [])));
+    for (const rel of graph.relationshipsOfType("CALLS")) callerByCall.set(rel.to, rel.from);
+    for (const rel of graph.relationshipsOfType("ROUTE_HANDLED_BY")) routesByFunction.set(rel.to, [...routesByFunction.get(rel.to) ?? [], rel.from]);
+    for (const rel of graph.relationshipsOfType("ENTRYPOINT_HANDLED_BY")) entrypointsByFunction.set(rel.to, [...entrypointsByFunction.get(rel.to) ?? [], rel.from]);
+    for (const rel of graph.relationshipsOfType("CALL_RESOLVES_TO")) targetsByCall.set(rel.from, [...targetsByCall.get(rel.from) ?? [], rel.to]);
+    const filePaths = new Set(graph.nodesWithLabel("File").flatMap((node) => (typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : [])));
     const accessesByFunction = new Map<string, Access[]>();
     const seen = new Set<string>();
     const record = (from: string, access: Access, direct: boolean) => {

@@ -52,7 +52,7 @@ export function parseEnvFile(content: string): Array<{ name: string; value: stri
 // are `USES_ENV` from the Repo with their file.
 export const envFilesContributor: ISemanticContributor = {
   async contribute(graph, rootPath, _report, files) {
-    const repo = graph.nodes.find((node) => node.label === "Repo");
+    const repo = graph.nodesWithLabel("Repo")[0];
     if (!repo) return;
     for (const file of files) {
       const env = isEnvFile(file);

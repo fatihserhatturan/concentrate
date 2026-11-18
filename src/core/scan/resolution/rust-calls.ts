@@ -60,8 +60,8 @@ export function createRustCallIndex(graph: IGraphContributor, relationshipIndex:
     fileByFunctionId: relationshipIndex.fileByFunctionId,
   };
 
-  for (const node of graph.nodes) {
-    if (node.label !== "File" || !isRustFile(node.id)) continue;
+  for (const node of graph.nodesWithLabel("File")) {
+    if (!isRustFile(node.id)) continue;
     const crate = typeof node.properties.rustCrate === "string" ? node.properties.rustCrate : null;
     index.crateByFile.set(node.id, crate);
     if (crate === null) continue;
@@ -74,10 +74,8 @@ export function createRustCallIndex(graph: IGraphContributor, relationshipIndex:
 
   const fileByEnumId = new Map<string, string>();
   const fileByAliasId = new Map<string, string>();
-  for (const relationship of graph.relationships) {
-    if (relationship.type === "DEFINES_ENUM") fileByEnumId.set(relationship.to, relationship.from);
-    else if (relationship.type === "DEFINES_TYPE_ALIAS") fileByAliasId.set(relationship.to, relationship.from);
-  }
+  for (const relationship of graph.relationshipsOfType("DEFINES_ENUM")) fileByEnumId.set(relationship.to, relationship.from);
+  for (const relationship of graph.relationshipsOfType("DEFINES_TYPE_ALIAS")) fileByAliasId.set(relationship.to, relationship.from);
 
   const addType = (kind: TypeEntity["kind"], node: GraphNode, fileId: string | undefined) => {
     if (!fileId || !isRustFile(fileId)) return;
@@ -89,6 +87,8 @@ export function createRustCallIndex(graph: IGraphContributor, relationshipIndex:
     index.typesByCrate.set(key, [...index.typesByCrate.get(key) ?? [], entity]);
   };
 
+  // The kinds of type share `typesByFile` and `typesByCrate`, whose order across
+  // kinds follows the nodes, so this stays one pass over all nodes.
   for (const node of graph.nodes) {
     if (node.label === "Class") addType("class", node, relationshipIndex.fileByClassId.get(node.id));
     else if (node.label === "Interface") addType("trait", node, relationshipIndex.fileByInterfaceId.get(node.id));
@@ -96,8 +96,7 @@ export function createRustCallIndex(graph: IGraphContributor, relationshipIndex:
     else if (node.label === "TypeAlias") addType("alias", node, fileByAliasId.get(node.id));
   }
 
-  for (const node of graph.nodes) {
-    if (node.label !== "Function") continue;
+  for (const node of graph.nodesWithLabel("Function")) {
     const fileId = relationshipIndex.fileByFunctionId.get(node.id);
     if (!fileId || !isRustFile(fileId)) continue;
     index.functionsById.set(node.id, node);
@@ -137,8 +136,7 @@ export function createRustCallIndex(graph: IGraphContributor, relationshipIndex:
   }
 
   const targetByImport = relationshipIndex.resolvedFileByImportId;
-  for (const node of graph.nodes) {
-    if (node.label !== "Import") continue;
+  for (const node of graph.nodesWithLabel("Import")) {
     const fileId = relationshipIndex.fileByImportId.get(node.id);
     if (!fileId || !isRustFile(fileId)) continue;
     const source = String(node.properties.source);

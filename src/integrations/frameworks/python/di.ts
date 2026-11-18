@@ -108,8 +108,8 @@ export function addPythonDi(context: PythonContext): void {
   const { graph, index } = context;
   const diByFile = new Map<string, PyDiFacts>();
   const constructed = new Map<string, Set<string>>();
-  for (const node of graph.nodes) {
-    if (node.label === "File" && typeof node.properties.pyDi === "string") {
+  for (const node of graph.nodesWithLabel("File")) {
+    if (typeof node.properties.pyDi === "string") {
       const facts = JSON.parse(node.properties.pyDi) as PyDiFacts;
       diByFile.set(node.id, facts);
       for (const [functionId, names] of Object.entries(facts.constructs ?? {})) constructed.set(functionId, new Set(names));

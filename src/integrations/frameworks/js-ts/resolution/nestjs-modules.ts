@@ -26,19 +26,18 @@ const keysByDecorator: Record<string, ReadonlySet<ModuleMetadataKey>> = {
 };
 
 export function addNestJsModuleRelationships(graph: IGraphContributor): void {
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
-  const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
-  const importsByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
-  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
-  const angularComponentClasses = new Set(graph.relationships
-    .filter((rel) => rel.type === "COMPONENT_DEFINED_BY" && nodeById.get(rel.from)?.properties.framework === "angular")
+  if (graph.relationshipsOfType("HAS_DECORATOR").length === 0) return;
+
+  const relationshipIndex = createResolutionRelationshipIndex(graph);
+  const classesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Class"), relationshipIndex.fileByClassId, "Class");
+  const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
+  const angularComponentClasses = new Set(graph.relationshipsOfType("COMPONENT_DEFINED_BY")
+    .filter((rel) => graph.node(rel.from)?.properties.framework === "angular")
     .map((rel) => rel.to));
 
-  for (const rel of graph.relationships) {
-    if (rel.type !== "HAS_DECORATOR") continue;
-
-    const moduleClass = nodeById.get(rel.from);
-    const decorator = nodeById.get(rel.to);
+  for (const rel of graph.relationshipsOfType("HAS_DECORATOR")) {
+    const moduleClass = graph.node(rel.from);
+    const decorator = graph.node(rel.to);
     if (moduleClass?.label !== "Class" || decorator?.label !== "Decorator") continue;
     const keys = keysByDecorator[String(decorator.properties.name)];
     if (!keys || (decorator.properties.name === "Component" && !angularComponentClasses.has(moduleClass.id))) continue;

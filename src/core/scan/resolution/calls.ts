@@ -16,15 +16,15 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
   resolved: number;
   unresolved: number;
 } {
-  const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+  const relationshipIndex = createResolutionRelationshipIndex(graph);
   const functionsByFileAndName = indexNodesByFileAndName(
-    graph.nodes,
+    graph.nodesWithLabel("Function"),
     relationshipIndex.fileByFunctionId,
     "Function",
   );
-  const importNodesByFile = indexImportNodesByFile(graph.nodes, relationshipIndex.fileByImportId);
+  const importNodesByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), relationshipIndex.fileByImportId);
   indexDefaultExports(graph, functionsByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId);
-  const classesByFileAndName = indexNodesByFileAndName(graph.nodes, relationshipIndex.fileByClassId, "Class");
+  const classesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Class"), relationshipIndex.fileByClassId, "Class");
   indexDefaultExports(graph, classesByFileAndName, importNodesByFile, relationshipIndex.resolvedFileByImportId);
   const classes: ClassIndex = {
     byFileAndName: classesByFileAndName,
@@ -41,9 +41,7 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
   let resolved = 0;
   let unresolved = 0;
 
-  for (const node of graph.nodes) {
-    if (node.label !== "Call") continue;
-
+  for (const node of graph.nodesWithLabel("Call")) {
     const callee = node.properties.callee as string | null;
     const receiver = node.properties.receiver as string | null;
     const requireSource = node.properties.requireSource;
@@ -183,19 +181,16 @@ function indexScopes(
 ): ScopeIndex {
   const parametersByFunction = new Map<string, Set<string>>();
   const lineByFunction = new Map<string, number>();
-  const variables = new Map<string, GraphNode>();
-  for (const node of graph.nodes) {
-    if (node.label === "Variable") variables.set(node.id, node);
-    if (node.label !== "Function") continue;
+  for (const node of graph.nodesWithLabel("Function")) {
     lineByFunction.set(node.id, Number(node.properties.line));
     const names = parameterNames(node.properties.parameters);
     if (names.size > 0) parametersByFunction.set(node.id, names);
   }
 
   const variableLinesByFileAndName = new Map<string, number[]>();
-  for (const relationship of graph.relationships) {
-    if (relationship.type !== "DEFINES_VARIABLE") continue;
-    const variable = variables.get(relationship.to);
+  for (const relationship of graph.relationshipsOfType("DEFINES_VARIABLE")) {
+    const found = graph.node(relationship.to);
+    const variable = found?.label === "Variable" ? found : undefined;
     const name = variable?.properties.name;
     if (typeof name !== "string" || variable!.properties.kind === "export_default") continue;
     const key = `${relationship.from}\0${name}`;
@@ -282,22 +277,18 @@ function findMethod(classId: string, name: string, classes: ClassIndex, visited:
 }
 
 function indexClassMembers(graph: IGraphContributor): Pick<ClassIndex, "methodsByClass" | "baseClassesByClass"> {
-  const namesById = new Map<string, unknown>();
-  for (const node of graph.nodes) {
-    if (node.label === "Function") namesById.set(node.id, node.properties.name);
-  }
   const methodsByClass = new Map<string, Map<string, string>>();
   const baseClassesByClass = new Map<string, string[]>();
-  for (const relationship of graph.relationships) {
-    if (relationship.type === "DEFINES_METHOD") {
-      const name = namesById.get(relationship.to);
-      if (typeof name !== "string") continue;
-      let methods = methodsByClass.get(relationship.from);
-      if (!methods) methodsByClass.set(relationship.from, methods = new Map());
-      if (!methods.has(name)) methods.set(name, relationship.to);
-    } else if (relationship.type === "EXTENDS") {
-      baseClassesByClass.set(relationship.from, [...baseClassesByClass.get(relationship.from) ?? [], relationship.to]);
-    }
+  for (const relationship of graph.relationshipsOfType("DEFINES_METHOD")) {
+    const method = graph.node(relationship.to);
+    const name = method?.label === "Function" ? method.properties.name : undefined;
+    if (typeof name !== "string") continue;
+    let methods = methodsByClass.get(relationship.from);
+    if (!methods) methodsByClass.set(relationship.from, methods = new Map());
+    if (!methods.has(name)) methods.set(name, relationship.to);
+  }
+  for (const relationship of graph.relationshipsOfType("EXTENDS")) {
+    baseClassesByClass.set(relationship.from, [...baseClassesByClass.get(relationship.from) ?? [], relationship.to]);
   }
   return { methodsByClass, baseClassesByClass };
 }
@@ -316,8 +307,7 @@ function indexDefaultExports(
 ): void {
   const defaults = new Map<string, string>();
   const forwards = new Map<string, string>();
-  for (const node of graph.nodes) {
-    if (node.label !== "File") continue;
+  for (const node of graph.nodesWithLabel("File")) {
     if (typeof node.properties.defaultExport === "string") defaults.set(node.id, node.properties.defaultExport);
     if (typeof node.properties.defaultExportFrom === "string") forwards.set(node.id, node.properties.defaultExportFrom);
   }
@@ -347,11 +337,9 @@ function indexOwnDefaults(
 ): void {
   if (defaults.size === 0) return;
 
-  const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const variableLines = new Map<string, number[]>();
-  for (const relationship of graph.relationships) {
-    if (relationship.type !== "DEFINES_VARIABLE") continue;
-    const variable = nodesById.get(relationship.to);
+  for (const relationship of graph.relationshipsOfType("DEFINES_VARIABLE")) {
+    const variable = graph.node(relationship.to);
     if (variable?.properties.name !== defaults.get(relationship.from)) continue;
     const key = `${relationship.from}\0${variable!.properties.name}`;
     variableLines.set(key, [...variableLines.get(key) ?? [], Number(variable!.properties.line)]);
@@ -361,7 +349,7 @@ function indexOwnDefaults(
     const functions = declarationsByFileAndName.get(fileId);
     if (!functions || functions.has("default")) continue;
     const lines = variableLines.get(`${fileId}\0${name}`);
-    const targets = (functions.get(name) ?? []).filter((id) => !lines || lines.includes(Number(nodesById.get(id)?.properties.line)));
+    const targets = (functions.get(name) ?? []).filter((id) => !lines || lines.includes(Number(graph.node(id)?.properties.line)));
     if (targets.length > 0) functions.set("default", targets);
   }
 }

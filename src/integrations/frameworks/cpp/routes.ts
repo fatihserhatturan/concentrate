@@ -291,8 +291,8 @@ function crowMethods(list: string): string[] {
 
 export const cppRoutesContributor: ISemanticContributor = {
   contribute(graph) {
-    const routes = graph.nodes.filter((node) => node.label === "Route" && typeof node.properties.cppPending === "string");
-    const files = graph.nodes.filter((node) => node.label === "File" && typeof node.properties.cppBlueprints === "string");
+    const routes = graph.nodesWithLabel("Route").filter((node) => typeof node.properties.cppPending === "string");
+    const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.cppBlueprints === "string");
     if (routes.length === 0 && files.length === 0) return;
 
     // Blueprints by name; a name declared in several files is read in the
@@ -316,15 +316,13 @@ export const cppRoutesContributor: ISemanticContributor = {
     };
 
     const functions = new Map<string, GraphNode[]>();
-    for (const node of graph.nodes) {
-      if (node.label !== "Function" || node.properties.kind === "macro") continue;
+    for (const node of graph.nodesWithLabel("Function")) {
+      if (node.properties.kind === "macro") continue;
       const key = String(node.properties.name);
       functions.set(key, [...functions.get(key) ?? [], node]);
     }
     const fileByRoute = new Map<string, string>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type === "DECLARES_ROUTE") fileByRoute.set(relationship.to, relationship.from);
-    }
+    for (const relationship of graph.relationshipsOfType("DECLARES_ROUTE")) fileByRoute.set(relationship.to, relationship.from);
     // Function ids start with their file's id.
     const fileOfFunction = (node: GraphNode) => node.id.split(":function:")[0]!;
     const stem = (fileId: string) => fileId.replace(/^file:/u, "").replace(/\.[^./]+$/u, "");

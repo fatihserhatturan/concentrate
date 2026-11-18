@@ -22,36 +22,35 @@ type Mixin = { target: string; moduleFileId: string };
 // of that file with the called name. A parameter of the calling function
 // with the receiver's name hides it, and calls that already resolve are kept.
 export function addMixinMethodResolutionRelationships(graph: IGraphContributor): void {
-  const index = createResolutionRelationshipIndex(graph.relationships);
-  const importsByFile = indexImportNodesByFile(graph.nodes, index.fileByImportId);
-  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+  const index = createResolutionRelationshipIndex(graph);
+  const importsByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), index.fileByImportId);
 
   const resolved = new Set<string>();
   const callTargetByCallId = new Map<string, string>();
   const variableByInitializerCall = new Map<string, string>();
   const fileByVariableId = new Map<string, string>();
   const functionsByFileAndName = new Map<string, Map<string, string>>();
-  for (const rel of graph.relationships) {
-    if (rel.type === "CALL_RESOLVES_TO") {
-      resolved.add(rel.from);
-      callTargetByCallId.set(rel.from, rel.to);
-    } else if (rel.type === "INITIALIZED_BY") {
-      variableByInitializerCall.set(rel.to, rel.from);
-    } else if (rel.type === "DEFINES_VARIABLE") {
-      fileByVariableId.set(rel.to, rel.from);
-    } else if (rel.type === "DEFINES_FUNCTION") {
-      const name = nodeById.get(rel.to)?.properties.name;
-      if (typeof name !== "string") continue;
-      const byName = functionsByFileAndName.get(rel.from) ?? new Map<string, string>();
-      if (!byName.has(name)) byName.set(name, rel.to);
-      functionsByFileAndName.set(rel.from, byName);
-    }
+  for (const rel of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
+    resolved.add(rel.from);
+    callTargetByCallId.set(rel.from, rel.to);
+  }
+  for (const rel of graph.relationshipsOfType("INITIALIZED_BY")) {
+    variableByInitializerCall.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationshipsOfType("DEFINES_VARIABLE")) {
+    fileByVariableId.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationshipsOfType("DEFINES_FUNCTION")) {
+    const name = graph.node(rel.to)?.properties.name;
+    if (typeof name !== "string") continue;
+    const byName = functionsByFileAndName.get(rel.from) ?? new Map<string, string>();
+    if (!byName.has(name)) byName.set(name, rel.to);
+    functionsByFileAndName.set(rel.from, byName);
   }
 
   // The mixins each factory applies.
   const mixinsByFactory = new Map<string, Mixin[]>();
-  for (const call of graph.nodes) {
-    if (call.label !== "Call") continue;
+  for (const call of graph.nodesWithLabel("Call")) {
     const factoryId = index.callerFunctionByCallId.get(call.id);
     const fileId = factoryId && index.fileByFunctionId.get(factoryId);
     const args = parseArgs(call.properties.args);
@@ -67,10 +66,10 @@ export function addMixinMethodResolutionRelationships(graph: IGraphContributor):
   // factory and the functions nested in it, and file-level variables
   // initialized by calling the factory.
   const nestedFactory = (functionId: string): string | null => {
-    const fn = nodeById.get(functionId);
+    const fn = graph.node(functionId);
     const fileId = index.fileByFunctionId.get(functionId);
     for (const factoryId of mixinsByFactory.keys()) {
-      const factory = nodeById.get(factoryId);
+      const factory = graph.node(factoryId);
       if (factoryId === functionId) return factoryId;
       if (!fn || !factory || index.fileByFunctionId.get(factoryId) !== fileId) continue;
       const [line, endLine] = [Number(fn.properties.line), Number(fn.properties.endLine ?? fn.properties.line)];
@@ -82,22 +81,22 @@ export function addMixinMethodResolutionRelationships(graph: IGraphContributor):
   for (const [callId, variableId] of variableByInitializerCall) {
     const factoryId = callTargetByCallId.get(callId);
     const fileId = fileByVariableId.get(variableId);
-    const name = nodeById.get(variableId)?.properties.name;
+    const name = graph.node(variableId)?.properties.name;
     if (!factoryId || !mixinsByFactory.has(factoryId) || !fileId || typeof name !== "string") continue;
     const byName = factoryByFileAndVariable.get(fileId) ?? new Map<string, string>();
     byName.set(name, factoryId);
     factoryByFileAndVariable.set(fileId, byName);
   }
 
-  for (const call of graph.nodes) {
-    if (call.label !== "Call" || resolved.has(call.id)) continue;
+  for (const call of graph.nodesWithLabel("Call")) {
+    if (resolved.has(call.id)) continue;
     const receiver = call.properties.receiver;
     const callee = call.properties.callee;
     if (typeof receiver !== "string" || typeof callee !== "string" || !isIdentifier(receiver)) continue;
     const callerId = index.callerFunctionByCallId.get(call.id);
     const callerFileId = callerId ? index.fileByFunctionId.get(callerId) : index.callerFileByModuleCallId.get(call.id);
     if (!callerFileId) continue;
-    if (callerId && parameterNames(nodeById.get(callerId)?.properties.parameters).has(receiver)) continue;
+    if (callerId && parameterNames(graph.node(callerId)?.properties.parameters).has(receiver)) continue;
 
     const enclosing = callerId ? nestedFactory(callerId) : null;
     const mixins = enclosing && mixinsByFactory.get(enclosing)!.some((mixin) => mixin.target === receiver)

@@ -328,7 +328,6 @@ function maskTemplateSyntax(source: string): string {
 // `pendingRenders`.
 export const angularTemplatesContributor: ISemanticContributor = {
   async contribute(graph) {
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
     const components: Array<{ component: GraphNode; file: GraphNode }> = [];
     const classOf = new Map<string, string>();
     const methodsOfClass = new Map<string, Map<string, string>>();
@@ -338,25 +337,35 @@ export const angularTemplatesContributor: ISemanticContributor = {
       MODULE_DECLARES: new Map<string, string[]>(),
     };
     const declaredBy = new Map<string, string[]>();
-    for (const rel of graph.relationships) {
-      if (rel.type === "MODULE_IMPORTS" || rel.type === "MODULE_EXPORTS" || rel.type === "MODULE_DECLARES") {
-        const edges = moduleEdges[rel.type];
-        edges.set(rel.from, [...edges.get(rel.from) ?? [], rel.to]);
-        if (rel.type === "MODULE_DECLARES") declaredBy.set(rel.to, [...declaredBy.get(rel.to) ?? [], rel.from]);
-      }
-      const target = nodesById.get(rel.to);
-      if (rel.type === "DECLARES_COMPONENT" && target?.properties.framework === "angular") {
-        const file = nodesById.get(rel.from);
-        if (file) components.push({ component: target, file });
-      }
-      if (rel.type === "COMPONENT_DEFINED_BY") classOf.set(rel.from, rel.to);
-      if (rel.type === "DEFINES_METHOD" && target) {
-        const methods = methodsOfClass.get(rel.from) ?? new Map<string, string>();
-        methods.set(String(target.properties.name), target.id);
-        methodsOfClass.set(rel.from, methods);
-      }
+    for (const rel of graph.relationshipsOfType("DECLARES_COMPONENT")) {
+      const target = graph.node(rel.to);
+      if (target?.properties.framework !== "angular") continue;
+      const file = graph.node(rel.from);
+      if (file) components.push({ component: target, file });
     }
     if (components.length === 0) return;
+
+    for (const type of ["MODULE_IMPORTS", "MODULE_EXPORTS", "MODULE_DECLARES"] as const) {
+      const edges = moduleEdges[type];
+      for (const rel of graph.relationshipsOfType(type)) {
+        const list = edges.get(rel.from);
+        if (list) list.push(rel.to);
+        else edges.set(rel.from, [rel.to]);
+        if (type === "MODULE_DECLARES") {
+          const declarers = declaredBy.get(rel.to);
+          if (declarers) declarers.push(rel.from);
+          else declaredBy.set(rel.to, [rel.from]);
+        }
+      }
+    }
+    for (const rel of graph.relationshipsOfType("COMPONENT_DEFINED_BY")) classOf.set(rel.from, rel.to);
+    for (const rel of graph.relationshipsOfType("DEFINES_METHOD")) {
+      const target = graph.node(rel.to);
+      if (!target) continue;
+      const methods = methodsOfClass.get(rel.from) ?? new Map<string, string>();
+      methods.set(String(target.properties.name), target.id);
+      methodsOfClass.set(rel.from, methods);
+    }
 
     const bySelector = new Map<string, string[]>();
     for (const { component } of components) {
@@ -380,7 +389,7 @@ export const angularTemplatesContributor: ISemanticContributor = {
           renders.push(...facts.renders.map((render) => ({ ...render, template: templatePath })));
           const templateFileId = `file:${templatePath}`;
           const methods = methodsOfClass.get(classOf.get(component.id) ?? "");
-          if (nodesById.has(templateFileId)) {
+          if (graph.node(templateFileId) !== undefined) {
             for (const listener of facts.listeners) {
               const entrypoint = createEntrypointNode({
                 fileNodeId: templateFileId,

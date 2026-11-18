@@ -74,9 +74,9 @@ export const goGrpcPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, functions
 
 export const goGrpcContributor: ISemanticContributor = {
   contribute(graph) {
-    const files = graph.nodes.filter((node) => node.label === "File" && typeof node.properties.goGrpcServices === "string");
-    const calls = graph.nodes.filter((node) => node.label === "Call" && typeof node.properties.grpcMethod === "string");
-    const rpcs = graph.nodes.filter((node) => node.label === "Rpc");
+    const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.goGrpcServices === "string");
+    const calls = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.grpcMethod === "string");
+    const rpcs = graph.nodesWithLabel("Rpc");
     if (files.length === 0 || (calls.length === 0 && rpcs.length === 0)) {
       for (const node of [...files, ...calls]) {
         delete node.properties.goGrpcServices;
@@ -84,7 +84,7 @@ export const goGrpcContributor: ISemanticContributor = {
       }
       return;
     }
-    const index = createGoCallIndex(graph, createResolutionRelationshipIndex(graph.relationships));
+    const index = createGoCallIndex(graph, createResolutionRelationshipIndex(graph));
     const targets = new Map<string, string[]>();
     // service name → the generated server interface, and the implementations of each method
     const served = new Map<string, { interfaceId: string; methods: Map<string, string[]> }>();

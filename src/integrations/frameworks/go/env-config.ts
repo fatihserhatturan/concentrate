@@ -169,7 +169,7 @@ export const goEnvConfigPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, rela
 // config package).
 export const goEnvConfigContributor: ISemanticContributor = {
   contribute(graph) {
-    const files = graph.nodes.filter((node) => node.label === "File" && typeof node.properties.goViper === "string");
+    const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.goViper === "string");
     if (files.length === 0) return;
     const parsed = files.map((file) => {
       const value = JSON.parse(String(file.properties.goViper)) as ViperFile;

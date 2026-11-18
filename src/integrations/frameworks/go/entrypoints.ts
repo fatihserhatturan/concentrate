@@ -215,18 +215,18 @@ function implementationValue(node: SyntaxNode, locals: ReadonlyMap<string, Local
 // (`app serve`).
 export const goEntrypointsContributor: ISemanticContributor = {
   contribute(graph) {
-    const registrations = graph.nodes.filter((node) => node.label === "Call" && typeof node.properties.grpcRegistration === "string");
-    const commands = graph.nodes.filter((node) => node.label === "EntryPoint" && node.properties.library === "cobra" && typeof node.properties.goPending === "string");
-    const trees = graph.nodes.filter((node) => node.label === "File" && typeof node.properties.goCommandTree === "string");
+    const registrations = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.grpcRegistration === "string");
+    const commands = graph.nodesWithLabel("EntryPoint").filter((node) => node.properties.library === "cobra" && typeof node.properties.goPending === "string");
+    const trees = graph.nodesWithLabel("File").filter((node) => typeof node.properties.goCommandTree === "string");
     if (registrations.length === 0 && commands.length === 0 && trees.length === 0) return;
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const goIndex = createGoCallIndex(graph, relationshipIndex);
     const fileOfFunction = (functionId: string) => relationshipIndex.fileByFunctionId.get(functionId) ?? goIndex.fileByFunctionId.get(functionId) ?? null;
-    const functionsById = new Map(graph.nodes.filter((node) => node.label === "Function").map((node) => [node.id, node]));
+    const functionsById = { get: (id: string) => { const node = graph.node(id); return node?.label === "Function" ? node : undefined; } };
     const targetsByCall = new Map<string, string[]>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type === "CALL_RESOLVES_TO") targetsByCall.set(relationship.from, [...targetsByCall.get(relationship.from) ?? [], relationship.to]);
+    for (const relationship of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
+      targetsByCall.set(relationship.from, [...targetsByCall.get(relationship.from) ?? [], relationship.to]);
     }
 
     const newNodes: GraphNode[] = [];
@@ -271,10 +271,10 @@ export const goEntrypointsContributor: ISemanticContributor = {
     // Command paths per package: a child's path is its parent's and its own
     // name.
     const fileByEntrypoint = new Map<string, string>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type === "DECLARES_ENTRYPOINT") fileByEntrypoint.set(relationship.to, relationship.from);
+    for (const relationship of graph.relationshipsOfType("DECLARES_ENTRYPOINT")) {
+      fileByEntrypoint.set(relationship.to, relationship.from);
     }
-    const packageOf = (fileId: string) => `${path.posix.dirname(fileId.slice("file:".length).replaceAll("\\", "/"))}\0${graph.nodes.find((node) => node.id === fileId)?.properties.packageName ?? ""}`;
+    const packageOf = (fileId: string) => `${path.posix.dirname(fileId.slice("file:".length).replaceAll("\\", "/"))}\0${graph.node(fileId)?.properties.packageName ?? ""}`;
     const namesByPackage = new Map<string, Map<string, string>>();
     const parentsByPackage = new Map<string, Map<string, string>>();
     const aliasesByPackage = new Map<string, Map<string, string>>();

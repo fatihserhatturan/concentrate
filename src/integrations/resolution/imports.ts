@@ -26,7 +26,6 @@ import { createRustModuleTree, type RustImportRecord } from "../languages/rust/r
 import { isStyleFile, resolveStyleImport } from "../languages/plain/style-resolution.js";
 import { isProtoFile, resolveProtoImport } from "../languages/plain/proto-resolution.js";
 import { resolveImport } from "../languages/js-ts/resolution/import-dispatch.js";
-import { createFileIndex, createImporterIndex } from "../languages/js-ts/resolution/import-indexes.js";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { addUniqueScanWarning, type ScanReport } from "../../core/scan/report.js";
@@ -39,8 +38,14 @@ export async function addImportResolutionRelationships(
   resolved: number;
   unresolved: number;
 }> {
-  const fileIdByRelativePath = createFileIndex(graph.nodes);
-  const importerFileIdByImportId = createImporterIndex(graph.relationships);
+  // Through the graph's lookups: only the File and IMPORTS entries are read.
+  const fileIdByRelativePath = new Map<string, string>();
+  for (const node of graph.nodesWithLabel("File")) {
+    const relativePath = node.properties.relativePath;
+    if (typeof relativePath === "string") fileIdByRelativePath.set(relativePath.split(path.sep).join(path.posix.sep), node.id);
+  }
+  const importerFileIdByImportId = new Map<string, string>();
+  for (const relationship of graph.relationshipsOfType("IMPORTS")) importerFileIdByImportId.set(relationship.to, relationship.from);
   const jsTsConfig = await readJsTsResolutionConfigWithWarnings(rootPath, (filePath, error) => {
     if (!report) return;
     addUniqueScanWarning(report, {
@@ -77,11 +82,7 @@ export async function addImportResolutionRelationships(
   let resolved = 0;
   let unresolved = 0;
 
-  for (const node of graph.nodes) {
-    if (node.label !== "Import") {
-      continue;
-    }
-
+  for (const node of graph.nodesWithLabel("Import")) {
     const source = node.properties.source;
     if (typeof source !== "string") {
       continue;
@@ -228,8 +229,7 @@ async function createRustTree(
   importerFileIdByImportId: Map<string, string>,
 ) {
   const records: RustImportRecord[] = [];
-  for (const node of graph.nodes) {
-    if (node.label !== "Import") continue;
+  for (const node of graph.nodesWithLabel("Import")) {
     const importer = importerFileIdByImportId.get(node.id);
     if (importer && isRustFile(importer)) records.push(rustImportRecord(node.properties, importer));
   }
@@ -244,8 +244,8 @@ async function createRustTree(
   const tree = createRustModuleTree(config, records, (file) => fileIdByRelativePath.has(file), (dir) => directories.get(dir) ?? [], [...fileIdByRelativePath.keys()].filter((file) => file.endsWith(".rs")));
   // The call resolver (core) cannot see the tree: each file carries its crate
   // and module path.
-  for (const node of graph.nodes) {
-    if (node.label !== "File" || node.properties.language !== "rust") continue;
+  for (const node of graph.nodesWithLabel("File")) {
+    if (node.properties.language !== "rust") continue;
     const info = tree.fileInfo(String(node.properties.relativePath).replaceAll("\\", "/"));
     if (!info) continue;
     node.properties.rustCrate = info.crate;
@@ -269,8 +269,7 @@ async function createPythonResolverFor(
   importerFileIdByImportId: Map<string, string>,
 ): Promise<PythonResolver | null> {
   let any = false;
-  for (const node of graph.nodes) {
-    if (node.label !== "Import") continue;
+  for (const node of graph.nodesWithLabel("Import")) {
     const importer = importerFileIdByImportId.get(node.id);
     if (importer && isPythonFile(importer)) {
       any = true;

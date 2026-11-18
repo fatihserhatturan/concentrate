@@ -19,17 +19,17 @@ type CallerArgument = { argument: GoRouterArgument; callerFunctionId: string; fi
 // references become ROUTE_HANDLED_BY and ROUTE_LIFECYCLE_STEP.
 export const goRoutesContributor: ISemanticContributor = {
   contribute(graph) {
-    const routes = graph.nodes.filter((node) => node.label === "Route" && typeof node.properties.goPending === "string");
-    const routerCalls = graph.nodes.filter((node) => node.label === "Call" && typeof node.properties.routerArguments === "string");
+    const routes = graph.nodesWithLabel("Route").filter((node) => typeof node.properties.goPending === "string");
+    const routerCalls = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.routerArguments === "string");
     if (routes.length === 0 && routerCalls.length === 0) return;
 
-    const relationshipIndex = createResolutionRelationshipIndex(graph.relationships);
+    const relationshipIndex = createResolutionRelationshipIndex(graph);
     const goIndex = createGoCallIndex(graph, relationshipIndex);
     const fileOfFunction = (functionId: string) => relationshipIndex.fileByFunctionId.get(functionId) ?? goIndex.fileByFunctionId.get(functionId) ?? null;
 
     const targetsByCall = new Map<string, string[]>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type === "CALL_RESOLVES_TO") targetsByCall.set(relationship.from, [...targetsByCall.get(relationship.from) ?? [], relationship.to]);
+    for (const relationship of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
+      targetsByCall.set(relationship.from, [...targetsByCall.get(relationship.from) ?? [], relationship.to]);
     }
     const argumentsByFunction = new Map<string, CallerArgument[]>();
     // Functions that return a router: their routes, or a router they pass on
@@ -61,7 +61,7 @@ export const goRoutesContributor: ISemanticContributor = {
 
     // A test that mounts a production router (`UsersRegister(r.Group("/users"))`
     // in a _test.go file) does not give the production routes another path.
-    const testFiles = new Set(graph.nodes.filter((node) => node.label === "File" && node.properties.isTest === true).map((node) => node.id));
+    const testFiles = new Set(graph.nodesWithLabel("File").filter((node) => node.properties.isTest === true).map((node) => node.id));
     // A mount of what a call returns (`mux.Handle("/x", withAuth(h))`) is a
     // route of its own unless the function called returns a router.
     for (const { call, argument, fileId } of fallbacks) {
@@ -99,8 +99,8 @@ export const goRoutesContributor: ISemanticContributor = {
     };
 
     const fileByRoute = new Map<string, string>();
-    for (const relationship of graph.relationships) {
-      if (relationship.type === "DECLARES_ROUTE") fileByRoute.set(relationship.to, relationship.from);
+    for (const relationship of graph.relationshipsOfType("DECLARES_ROUTE")) {
+      fileByRoute.set(relationship.to, relationship.from);
     }
 
     const newNodes: GraphNode[] = [];

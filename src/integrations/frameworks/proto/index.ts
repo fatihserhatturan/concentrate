@@ -10,16 +10,12 @@ import type { GraphNode } from "../../../core/graph/model.js";
 export const protoContributor: ISemanticContributor = {
   contribute(graph) {
     const messages = new Map<string, GraphNode>();
-    const rpcs: GraphNode[] = [];
-    for (const node of graph.nodes) {
-      if (node.label === "Message") {
-        const fullName = String(node.properties.fullName);
-        if (!messages.has(fullName)) messages.set(fullName, node);
-      } else if (node.label === "Rpc") {
-        rpcs.push(node);
-      }
-    }
+    const rpcs = graph.nodesWithLabel("Rpc");
     if (rpcs.length === 0) return;
+    for (const node of graph.nodesWithLabel("Message")) {
+      const fullName = String(node.properties.fullName);
+      if (!messages.has(fullName)) messages.set(fullName, node);
+    }
     const resolve = (type: string, pkg: string | null): GraphNode | undefined => {
       if (type.startsWith(".")) return messages.get(type.slice(1));
       const scopes = pkg ? pkg.split(".") : [];

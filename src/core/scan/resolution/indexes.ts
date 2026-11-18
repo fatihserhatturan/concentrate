@@ -15,9 +15,31 @@ export type ResolutionRelationshipIndex = {
   resolvedFileByImportId: Map<string, string>;
 };
 
+type RelationshipSource = {
+  relationshipsOfType(type: GraphRelationship["type"]): readonly GraphRelationship[];
+};
+
+const INDEXED_TYPES: GraphRelationship["type"][] = [
+  "CALLS",
+  "MODULE_CALLS",
+  "DEFINES_FUNCTION",
+  "DEFINES_CLASS",
+  "DEFINES_INTERFACE",
+  "IMPORTS",
+  "RESOLVES_TO",
+  "DEFINES_VARIABLE",
+  "INITIALIZED_BY",
+  "DEFINES_METHOD",
+];
+
+// Pass the graph to read only the types needed through its lookups; a plain
+// array is grouped by type in one pass first.
 export function createResolutionRelationshipIndex(
-  relationships: GraphRelationship[],
+  source: readonly GraphRelationship[] | RelationshipSource,
 ): ResolutionRelationshipIndex {
+  const of: RelationshipSource = Array.isArray(source)
+    ? groupByType(source as readonly GraphRelationship[])
+    : (source as RelationshipSource);
   const index: ResolutionRelationshipIndex = {
     callerFunctionByCallId: new Map(),
     callerFileByModuleCallId: new Map(),
@@ -28,49 +50,24 @@ export function createResolutionRelationshipIndex(
     resolvedFileByImportId: new Map(),
   };
 
-  for (const rel of relationships) {
-    switch (rel.type) {
-      case "CALLS":
-        index.callerFunctionByCallId.set(rel.to, rel.from);
-        break;
-      case "MODULE_CALLS":
-        index.callerFileByModuleCallId.set(rel.to, rel.from);
-        break;
-      case "DEFINES_FUNCTION":
-        index.fileByFunctionId.set(rel.to, rel.from);
-        break;
-      case "DEFINES_CLASS":
-        index.fileByClassId.set(rel.to, rel.from);
-        break;
-      case "DEFINES_INTERFACE":
-        index.fileByInterfaceId.set(rel.to, rel.from);
-        break;
-      case "IMPORTS":
-        index.fileByImportId.set(rel.to, rel.from);
-        break;
-      case "RESOLVES_TO":
-        index.resolvedFileByImportId.set(rel.from, rel.to);
-        break;
-    }
-  }
+  for (const rel of of.relationshipsOfType("CALLS")) index.callerFunctionByCallId.set(rel.to, rel.from);
+  for (const rel of of.relationshipsOfType("MODULE_CALLS")) index.callerFileByModuleCallId.set(rel.to, rel.from);
+  for (const rel of of.relationshipsOfType("DEFINES_FUNCTION")) index.fileByFunctionId.set(rel.to, rel.from);
+  for (const rel of of.relationshipsOfType("DEFINES_CLASS")) index.fileByClassId.set(rel.to, rel.from);
+  for (const rel of of.relationshipsOfType("DEFINES_INTERFACE")) index.fileByInterfaceId.set(rel.to, rel.from);
+  for (const rel of of.relationshipsOfType("IMPORTS")) index.fileByImportId.set(rel.to, rel.from);
+  for (const rel of of.relationshipsOfType("RESOLVES_TO")) index.resolvedFileByImportId.set(rel.from, rel.to);
 
   // A call initializing a file-level variable (`const ky = createInstance()`)
   // is made by the file's top-level code too.
   const fileByVariableId = new Map<string, string>();
-  for (const rel of relationships) {
-    if (rel.type === "DEFINES_VARIABLE") fileByVariableId.set(rel.to, rel.from);
-  }
-  for (const rel of relationships) {
-    if (rel.type !== "INITIALIZED_BY") continue;
+  for (const rel of of.relationshipsOfType("DEFINES_VARIABLE")) fileByVariableId.set(rel.to, rel.from);
+  for (const rel of of.relationshipsOfType("INITIALIZED_BY")) {
     const fileId = fileByVariableId.get(rel.from);
     if (fileId && !index.callerFunctionByCallId.has(rel.to)) index.callerFileByModuleCallId.set(rel.to, fileId);
   }
 
-  for (const rel of relationships) {
-    if (rel.type !== "DEFINES_METHOD") {
-      continue;
-    }
-
+  for (const rel of of.relationshipsOfType("DEFINES_METHOD")) {
     const fileId = index.fileByClassId.get(rel.from);
     if (fileId) {
       index.fileByFunctionId.set(rel.to, fileId);
@@ -78,4 +75,16 @@ export function createResolutionRelationshipIndex(
   }
 
   return index;
+}
+
+function groupByType(relationships: readonly GraphRelationship[]): RelationshipSource {
+  const wanted = new Set<string>(INDEXED_TYPES);
+  const byType = new Map<string, GraphRelationship[]>();
+  for (const rel of relationships) {
+    if (!wanted.has(rel.type)) continue;
+    const list = byType.get(rel.type);
+    if (list) list.push(rel);
+    else byType.set(rel.type, [rel]);
+  }
+  return { relationshipsOfType: (type) => byType.get(type) ?? [] };
 }

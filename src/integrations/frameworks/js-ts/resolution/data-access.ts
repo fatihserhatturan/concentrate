@@ -103,17 +103,16 @@ export function addDataAccessRelationships(
   graph: IGraphContributor,
   prismaModels: PrismaModelIndex = { schemas: [], packageDirectories: [] },
 ): void {
-  const context = createDataAccessContext(graph.nodes, graph.relationships);
+  const context = createDataAccessContext(graph);
   const directAccesses: Array<{ from: string; to: string; dataAccess: DataAccess }> = [];
-  const filePaths = new Set(graph.nodes.flatMap((node) => (
-    node.label === "File" && typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : []
+  const filePaths = new Set(graph.nodesWithLabel("File").flatMap((node) => (
+    typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : []
   )));
-  const declaredModels = new DeclaredModels(graph.nodes, prismaModels.packageDirectories);
+  const declaredModels = new DeclaredModels(graph.nodesWithLabel("DataModel"), prismaModels.packageDirectories);
   addDeclaredRelations(graph, declaredModels);
 
-  for (const callNode of [...graph.nodes]) {
-    if (callNode.label !== "Call") continue;
-
+  // A copy: the loop adds nodes.
+  for (const callNode of [...graph.nodesWithLabel("Call")]) {
     const dataAccess = classifyDataAccessCall(callNode, context);
     if (!dataAccess) continue;
 
@@ -153,7 +152,7 @@ class DeclaredModels {
   constructor(nodes: readonly GraphNode[], private readonly packageDirectories: readonly string[]) {
     for (const node of nodes) {
       const { name, library, declaredIn } = node.properties;
-      if (node.label !== "DataModel" || library === "prisma" || typeof name !== "string" || typeof library !== "string" || typeof declaredIn !== "string") continue;
+      if (library === "prisma" || typeof name !== "string" || typeof library !== "string" || typeof declaredIn !== "string") continue;
       const key = `${library}\0${name}`;
       this.byKey.set(key, [...(this.byKey.get(key) ?? []), { id: node.id, packageDirectory: this.packageOf(declaredIn) }]);
     }
@@ -176,9 +175,9 @@ class DeclaredModels {
 // RELATES_TO for the relations declarations name by class or variable
 // (`pendingRelations`, set at parse time), then the property is dropped.
 function addDeclaredRelations(graph: IGraphContributor, declaredModels: DeclaredModels): void {
-  for (const node of graph.nodes) {
+  for (const node of graph.nodesWithLabel("DataModel")) {
     const pending = node.properties.pendingRelations;
-    if (node.label !== "DataModel" || pending === undefined) continue;
+    if (pending === undefined) continue;
     delete node.properties.pendingRelations;
     if (typeof pending !== "string" || typeof node.properties.declaredIn !== "string") continue;
     let relations: PendingRelation[];
@@ -233,16 +232,16 @@ function addKnexTable(graph: IGraphContributor, modelId: string, name: string): 
 function addTableAccessRelationships(graph: IGraphContributor): void {
   const tableByModel = new Map<string, string>();
   const modelNames = new Map<string, string>();
-  for (const relationship of graph.relationships) {
-    if (relationship.type === "MAPS_TO_TABLE") tableByModel.set(relationship.from, relationship.to);
+  for (const relationship of graph.relationshipsOfType("MAPS_TO_TABLE")) {
+    tableByModel.set(relationship.from, relationship.to);
   }
   if (tableByModel.size === 0) return;
-  for (const node of graph.nodes) {
-    if (node.label === "DataModel" && typeof node.properties.name === "string") modelNames.set(node.id, node.properties.name);
+  for (const node of graph.nodesWithLabel("DataModel")) {
+    if (typeof node.properties.name === "string") modelNames.set(node.id, node.properties.name);
   }
 
-  for (const relationship of [...graph.relationships]) {
-    if (relationship.type !== "ACCESSES_DATA") continue;
+  // A copy: the loop adds relationships.
+  for (const relationship of [...graph.relationshipsOfType("ACCESSES_DATA")]) {
     const table = tableByModel.get(relationship.to);
     const operation = String(relationship.properties.operation);
     const type = readOperations.has(operation) ? "READS" : writeOperations.has(operation) ? "WRITES" : null;
@@ -261,7 +260,7 @@ function addTableAccessRelationships(graph: IGraphContributor): void {
   }
 }
 
-function createDataAccessContext(nodes: GraphNode[], relationships: GraphRelationship[]): {
+function createDataAccessContext(graph: IGraphContributor): {
   callerFunctionByCallId: Map<string, string>;
   moduleFileByCallId: Map<string, string>;
   routesByFunctionId: Map<string, string[]>;
@@ -284,10 +283,8 @@ function createDataAccessContext(nodes: GraphNode[], relationships: GraphRelatio
   const modelHintByFieldByClassId = new Map<string, Map<string, ModelHint>>();
   const classIdByMethodId = new Map<string, string>();
   const resolvedFunctionByCallId = new Map<string, string>();
-  const nodesById = new Map(nodes.map((node) => [node.id, node]));
 
-  for (const node of nodes) {
-    if (node.label !== "Variable") continue;
+  for (const node of graph.nodesWithLabel("Variable")) {
     const name = node.properties.name;
     const stringValue = node.properties.stringValue;
     if (typeof name === "string" && typeof stringValue === "string") {
@@ -295,49 +292,53 @@ function createDataAccessContext(nodes: GraphNode[], relationships: GraphRelatio
     }
   }
 
-  for (const rel of relationships) {
-    if (rel.type === "IMPORTS") {
-      const importNode = nodesById.get(rel.to);
-      if (importNode?.label === "Import") {
-        addImportedLibraryHints(importedLibraryByName, importNode);
-      }
+  for (const rel of graph.relationshipsOfType("IMPORTS")) {
+    const importNode = graph.node(rel.to);
+    if (importNode?.label === "Import") {
+      addImportedLibraryHints(importedLibraryByName, importNode);
     }
   }
 
-  for (const rel of relationships) {
-    if (rel.type === "CALLS") {
-      callerFunctionByCallId.set(rel.to, rel.from);
-    } else if (rel.type === "MODULE_CALLS") {
-      moduleFileByCallId.set(rel.to, rel.from);
-    } else if (rel.type === "ROUTE_HANDLED_BY") {
-      routesByFunctionId.set(rel.to, [...(routesByFunctionId.get(rel.to) ?? []), rel.from]);
-    } else if (rel.type === "ENTRYPOINT_HANDLED_BY") {
-      entrypointsByFunctionId.set(rel.to, [...(entrypointsByFunctionId.get(rel.to) ?? []), rel.from]);
-    } else if (rel.type === "DEFINES_METHOD") {
-      classIdByMethodId.set(rel.to, rel.from);
-    } else if (rel.type === "CALL_RESOLVES_TO") {
-      resolvedFunctionByCallId.set(rel.from, rel.to);
-    } else if (rel.type === "INITIALIZED_BY") {
-      const variable = nodesById.get(rel.from);
-      const initializer = nodesById.get(rel.to);
-      const variableName = variable?.properties.name;
-      const library = inferVariableLibrary(initializer, importedLibraryByName);
-      if (typeof variableName === "string" && library) {
-        variableLibraryByName.set(variableName, library);
-        modelHintByVariableName.set(variableName, {
-          library,
-          modelName: inferModelNameFromVariable(variableName, library),
-        });
-      }
+  for (const rel of graph.relationshipsOfType("CALLS")) {
+    callerFunctionByCallId.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationshipsOfType("MODULE_CALLS")) {
+    moduleFileByCallId.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationshipsOfType("ROUTE_HANDLED_BY")) {
+    const list = routesByFunctionId.get(rel.to);
+    if (list) list.push(rel.from);
+    else routesByFunctionId.set(rel.to, [rel.from]);
+  }
+  for (const rel of graph.relationshipsOfType("ENTRYPOINT_HANDLED_BY")) {
+    const list = entrypointsByFunctionId.get(rel.to);
+    if (list) list.push(rel.from);
+    else entrypointsByFunctionId.set(rel.to, [rel.from]);
+  }
+  for (const rel of graph.relationshipsOfType("DEFINES_METHOD")) {
+    classIdByMethodId.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
+    resolvedFunctionByCallId.set(rel.from, rel.to);
+  }
+  for (const rel of graph.relationshipsOfType("INITIALIZED_BY")) {
+    const variable = graph.node(rel.from);
+    const initializer = graph.node(rel.to);
+    const variableName = variable?.properties.name;
+    const library = inferVariableLibrary(initializer, importedLibraryByName);
+    if (typeof variableName === "string" && library) {
+      variableLibraryByName.set(variableName, library);
+      modelHintByVariableName.set(variableName, {
+        library,
+        modelName: inferModelNameFromVariable(variableName, library),
+      });
     }
   }
 
-  const prismaClientClasses = prismaClientSubclasses(nodes);
-  const sequelizeModelClasses = sequelizeModelSubclasses(nodes, relationships, nodesById);
-  for (const rel of relationships) {
-    if (rel.type !== "DEFINES_FIELD") continue;
-
-    const field = nodesById.get(rel.to);
+  const prismaClientClasses = prismaClientSubclasses(graph);
+  const sequelizeModelClasses = sequelizeModelSubclasses(graph);
+  for (const rel of graph.relationshipsOfType("DEFINES_FIELD")) {
+    const field = graph.node(rel.to);
     if (field?.label !== "Field") continue;
 
     const fieldName = field.properties.name;
@@ -758,20 +759,14 @@ function inferLibraryFromImport(source: string, imported: string, kind: string):
 // file imports from sequelize or sequelize-typescript, directly or through
 // other model classes (`class Customer extends Model` + `Customer.init(…)`,
 // or a `@Table` class).
-function sequelizeModelSubclasses(
-  nodes: readonly GraphNode[],
-  relationships: readonly GraphRelationship[],
-  nodesById: ReadonlyMap<string, GraphNode>,
-): Set<string> {
+function sequelizeModelSubclasses(graph: IGraphContributor): Set<string> {
   const modelBasesByFile = new Map<string, Set<string>>();
   const fileByClassId = new Map<string, string>();
-  for (const rel of relationships) {
-    if (rel.type === "DEFINES_CLASS") {
-      fileByClassId.set(rel.to, rel.from);
-      continue;
-    }
-    if (rel.type !== "IMPORTS") continue;
-    const importNode = nodesById.get(rel.to);
+  for (const rel of graph.relationshipsOfType("DEFINES_CLASS")) {
+    fileByClassId.set(rel.to, rel.from);
+  }
+  for (const rel of graph.relationshipsOfType("IMPORTS")) {
+    const importNode = graph.node(rel.to);
     const source = importNode?.properties.source;
     const bindings = importNode?.properties.bindings;
     if (source !== "sequelize" && source !== "sequelize-typescript") continue;
@@ -789,8 +784,8 @@ function sequelizeModelSubclasses(
   }
 
   const parentsByClass = new Map<string, { parents: string[]; bases: ReadonlySet<string> }>();
-  for (const node of nodes) {
-    if (node.label !== "Class" || typeof node.properties.name !== "string" || typeof node.properties.extendsNames !== "string") continue;
+  for (const node of graph.nodesWithLabel("Class")) {
+    if (typeof node.properties.name !== "string" || typeof node.properties.extendsNames !== "string") continue;
     try {
       const parents = JSON.parse(node.properties.extendsNames) as unknown;
       if (!Array.isArray(parents)) continue;
@@ -818,10 +813,10 @@ function sequelizeModelSubclasses(
 
 // Names of classes that extend PrismaClient, directly or through other
 // classes (`class PrismaService extends PrismaClient`, the NestJS pattern).
-function prismaClientSubclasses(nodes: readonly GraphNode[]): Set<string> {
+function prismaClientSubclasses(graph: IGraphContributor): Set<string> {
   const parentsByClass = new Map<string, string[]>();
-  for (const node of nodes) {
-    if (node.label !== "Class" || typeof node.properties.name !== "string" || typeof node.properties.extendsNames !== "string") continue;
+  for (const node of graph.nodesWithLabel("Class")) {
+    if (typeof node.properties.name !== "string" || typeof node.properties.extendsNames !== "string") continue;
     try {
       const parents = JSON.parse(node.properties.extendsNames) as unknown;
       if (Array.isArray(parents)) parentsByClass.set(node.properties.name, parents.map(String));

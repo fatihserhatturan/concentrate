@@ -45,15 +45,26 @@ const scriptExtension = /\.(ts|js|mjs|mts)$/u;
 
 export const nuxtAutoImportsContributor: ISemanticContributor = {
   async contribute(graph) {
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
-    const index = createResolutionRelationshipIndex(graph.relationships);
-    const resolved = new Set(graph.relationships.filter((rel) => rel.type === "CALL_RESOLVES_TO").map((rel) => rel.from));
-    const functionsByFile = groupBy(graph.relationships, "DEFINES_FUNCTION", nodesById);
-    const variablesByFile = groupBy(graph.relationships, "DEFINES_VARIABLE", nodesById);
-    const importNodesByFile = indexImportNodesByFile(graph.nodes, index.fileByImportId);
+    const projects = await nuxtProjects(graph);
+    if (projects.length === 0) return;
+    const functionsByFile = groupBy(graph, "DEFINES_FUNCTION");
+    const variablesByFile = groupBy(graph, "DEFINES_VARIABLE");
+    // The resolution indexes cost a pass over the graph: built when a project exports something.
+    let indexes: { index: ReturnType<typeof createResolutionRelationshipIndex>; resolved: Set<string>; importNodesByFile: Map<string, GraphNode[]> } | undefined;
+    const resolutionIndexes = () => {
+      if (!indexes) {
+        const index = createResolutionRelationshipIndex(graph);
+        indexes = {
+          index,
+          resolved: new Set(graph.relationshipsOfType("CALL_RESOLVES_TO").map((rel) => rel.from)),
+          importNodesByFile: indexImportNodesByFile(graph.nodesWithLabel("Import"), index.fileByImportId),
+        };
+      }
+      return indexes;
+    };
 
     const added: GraphRelationship[] = [];
-    for (const project of await nuxtProjects(graph, nodesById)) {
+    for (const project of projects) {
       const exported = { app: new Map<string, string[]>(), server: new Map<string, string[]>() };
       for (const { file, path: filePath } of project.files) {
         const scope = autoImportScope(filePath, project.srcDir);
@@ -61,11 +72,14 @@ export const nuxtAutoImportsContributor: ISemanticContributor = {
         for (const fn of functionsByFile.get(file.id) ?? []) {
           if (fn.properties.isExported !== true || fn.properties.className != null) continue;
           const name = String(fn.properties.name);
-          exported[scope].set(name, [...exported[scope].get(name) ?? [], fn.id]);
+          const ids = exported[scope].get(name);
+          if (ids) ids.push(fn.id);
+          else exported[scope].set(name, [fn.id]);
         }
       }
       if (exported.app.size === 0 && exported.server.size === 0) continue;
 
+      const { index, resolved, importNodesByFile } = resolutionIndexes();
       const pathByFile = new Map(project.files.map(({ file, path: filePath }) => [file.id, filePath]));
       const topLevelNames = new Map<string, Set<string>>();
       const namesOf = (fileId: string) => {
@@ -80,8 +94,8 @@ export const nuxtAutoImportsContributor: ISemanticContributor = {
         }
         return names;
       };
-      for (const node of graph.nodes) {
-        if (node.label !== "Call" || resolved.has(node.id) || node.properties.receiver != null) continue;
+      for (const node of graph.nodesWithLabel("Call")) {
+        if (resolved.has(node.id) || node.properties.receiver != null) continue;
         const callee = String(node.properties.callee);
         const caller = index.callerFunctionByCallId.get(node.id);
         const fileId = caller ? index.fileByFunctionId.get(caller) : index.callerFileByModuleCallId.get(node.id);
@@ -98,10 +112,9 @@ export const nuxtAutoImportsContributor: ISemanticContributor = {
 
 export const nuxtPagesContributor: ISemanticContributor = {
   async contribute(graph) {
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
     const vueComponentByFile = new Map<string, string>();
-    for (const rel of graph.relationships) {
-      if (rel.type === "DECLARES_COMPONENT" && nodesById.get(rel.to)?.properties.framework === "vue") vueComponentByFile.set(rel.from, rel.to);
+    for (const rel of graph.relationshipsOfType("DECLARES_COMPONENT")) {
+      if (graph.node(rel.to)?.properties.framework === "vue") vueComponentByFile.set(rel.from, rel.to);
     }
 
     const nodes: GraphNode[] = [];
@@ -118,7 +131,7 @@ export const nuxtPagesContributor: ISemanticContributor = {
       if (component) relationships.push({ from: page.id, to: component, type: "PAGE_RENDERS", properties: {} });
     };
 
-    for (const project of await nuxtProjects(graph, nodesById)) {
+    for (const project of await nuxtProjects(graph)) {
       const pagesDir = `${project.srcDir}pages/`;
       const pageFiles = project.files.filter(({ file, path: filePath }) => (
         filePath.startsWith(pagesDir) && filePath.endsWith(".vue") && file.properties.isTest !== true
@@ -150,19 +163,20 @@ const serverRouteFile = /^server\/(api|routes)\/(.+?)(?:\.(get|post|put|patch|de
 
 export const nuxtServerRoutesContributor: ISemanticContributor = {
   async contribute(graph) {
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
-    const functionsByFile = groupBy(graph.relationships, "DEFINES_FUNCTION", nodesById);
-    const variablesByFile = groupBy(graph.relationships, "DEFINES_VARIABLE", nodesById);
+    const functionsByFile = groupBy(graph, "DEFINES_FUNCTION");
+    const variablesByFile = groupBy(graph, "DEFINES_VARIABLE");
     const initializerByVariable = new Map<string, string>();
     const passedToCall = new Map<string, string[]>();
-    for (const rel of graph.relationships) {
-      if (rel.type === "INITIALIZED_BY") initializerByVariable.set(rel.from, rel.to);
-      if (rel.type === "PASSED_TO") passedToCall.set(rel.to, [...passedToCall.get(rel.to) ?? [], rel.from]);
+    for (const rel of graph.relationshipsOfType("INITIALIZED_BY")) initializerByVariable.set(rel.from, rel.to);
+    for (const rel of graph.relationshipsOfType("PASSED_TO")) {
+      const list = passedToCall.get(rel.to);
+      if (list) list.push(rel.from);
+      else passedToCall.set(rel.to, [rel.from]);
     }
 
     const nodes: GraphNode[] = [];
     const relationships: GraphRelationship[] = [];
-    for (const project of await nuxtProjects(graph, nodesById)) {
+    for (const project of await nuxtProjects(graph)) {
       for (const { file, path: filePath } of project.files) {
         const match = serverRouteFile.exec(filePath);
         if (!match || file.properties.isTest === true) continue;
@@ -170,8 +184,8 @@ export const nuxtServerRoutesContributor: ISemanticContributor = {
         const routePath = nuxtPath(dir === "api" ? `api/${route}` : route!);
         const functions = (functionsByFile.get(file.id) ?? []).filter((fn) => fn.properties.className == null);
         const exported = (variablesByFile.get(file.id) ?? []).find((variable) => variable.properties.name === "default");
-        const call = exported ? nodesById.get(initializerByVariable.get(exported.id) ?? "") : undefined;
-        const passed = call ? (passedToCall.get(call.id) ?? []).map((id) => nodesById.get(id)).find((fn) => fn?.label === "Function") : undefined;
+        const call = exported ? graph.node(initializerByVariable.get(exported.id) ?? "") : undefined;
+        const passed = call ? (passedToCall.get(call.id) ?? []).map((id) => graph.node(id)).find((fn) => fn?.label === "Function") : undefined;
         const named = call ? parseArgs(call.properties.args).flatMap((arg) => functions.filter((fn) => fn.properties.name === arg))[0] : undefined;
         const defaultName = file.properties.defaultExport;
         const handler = passed ?? named ?? functions.find((fn) => typeof defaultName === "string" && fn.properties.name === defaultName) ?? null;
@@ -203,25 +217,28 @@ export const nuxtServerRoutesContributor: ISemanticContributor = {
 
 export const vueGlobalComponentsContributor: ISemanticContributor = {
   async contribute(graph) {
-    const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
-    const index = createResolutionRelationshipIndex(graph.relationships);
-    const importNodesByFile = indexImportNodesByFile(graph.nodes, index.fileByImportId);
     const vueComponents = new Map<string, string>();
     const componentsByFileAndName = new Map<string, Map<string, string[]>>();
-    for (const rel of graph.relationships) {
-      const component = rel.type === "DECLARES_COMPONENT" ? nodesById.get(rel.to) : undefined;
+    for (const rel of graph.relationshipsOfType("DECLARES_COMPONENT")) {
+      const component = graph.node(rel.to);
       if (!component) continue;
       const names = [String(component.properties.name), ...(component.properties.framework === "vue" ? ["default"] : [])];
       let byName = componentsByFileAndName.get(rel.from);
       if (!byName) componentsByFileAndName.set(rel.from, byName = new Map());
-      for (const name of names) byName.set(name, [...byName.get(name) ?? [], component.id]);
+      for (const name of names) {
+        const ids = byName.get(name);
+        if (ids) ids.push(component.id);
+        else byName.set(name, [component.id]);
+      }
       if (component.properties.framework === "vue") vueComponents.set(component.id, rel.from);
     }
     if (vueComponents.size === 0) return;
 
+    const index = createResolutionRelationshipIndex(graph);
+    const importNodesByFile = indexImportNodesByFile(graph.nodesWithLabel("Import"), index.fileByImportId);
     const packageByFile = new Map<string, string>();
-    for (const rel of graph.relationships) {
-      if (rel.type === "PACKAGE_CONTAINS_FILE") packageByFile.set(rel.to, rel.from);
+    for (const rel of graph.relationshipsOfType("PACKAGE_CONTAINS_FILE")) {
+      packageByFile.set(rel.to, rel.from);
     }
     // Package (or "" outside any) → tag name → component; null when two
     // components claim the name.
@@ -232,7 +249,7 @@ export const vueGlobalComponentsContributor: ISemanticContributor = {
       byName.set(name, byName.has(name) && byName.get(name) !== componentId ? null : componentId);
     };
     const nuxtPackages = new Set<string>();
-    for (const project of await nuxtProjects(graph, nodesById)) {
+    for (const project of await nuxtProjects(graph)) {
       nuxtPackages.add(project.packageId);
       const componentsDir = `${project.srcDir}components/`;
       for (const { file, path: filePath } of project.files) {
@@ -241,8 +258,8 @@ export const vueGlobalComponentsContributor: ISemanticContributor = {
         if (componentId) register(project.packageId, nuxtComponentName(filePath.slice(componentsDir.length)), componentId);
       }
     }
-    for (const node of graph.nodes) {
-      const registration = node.label === "Call" ? globalRegistration(node) : null;
+    for (const node of graph.nodesWithLabel("Call")) {
+      const registration = globalRegistration(node);
       if (!registration) continue;
       const caller = index.callerFunctionByCallId.get(node.id);
       const fileId = caller ? index.fileByFunctionId.get(caller) : index.callerFileByModuleCallId.get(node.id);
@@ -255,7 +272,7 @@ export const vueGlobalComponentsContributor: ISemanticContributor = {
     if (globals.size === 0) return;
 
     for (const [componentId, fileId] of vueComponents) {
-      const component = nodesById.get(componentId)!;
+      const component = graph.node(componentId)!;
       const renders = parsePendingRenders(component.properties.pendingRenders);
       if (renders.length === 0) continue;
       const packageId = packageByFile.get(fileId) ?? "";
@@ -275,8 +292,8 @@ export const vueGlobalComponentsContributor: ISemanticContributor = {
 
 type NuxtProject = { packageId: string; srcDir: string; files: Array<{ file: GraphNode; path: string }> };
 
-async function nuxtProjects(graph: IGraphContributor, nodesById: Map<string, GraphNode>): Promise<NuxtProject[]> {
-  return (await dependentPackages(graph, nodesById, "nuxt")).map((project) => {
+async function nuxtProjects(graph: IGraphContributor): Promise<NuxtProject[]> {
+  return (await dependentPackages(graph, "nuxt")).map((project) => {
     const srcDir = project.files.some(({ path: filePath }) => /^app\/(?:pages|layouts|components)\/|^app\/app\.vue$/u.test(filePath)) ? "app/" : "";
     return { ...project, srcDir };
   });
@@ -286,18 +303,19 @@ async function nuxtProjects(graph: IGraphContributor, nodesById: Map<string, Gra
 // relative to the package.
 export async function dependentPackages(
   graph: IGraphContributor,
-  nodesById: Map<string, GraphNode>,
   dependency: string,
 ): Promise<Array<{ packageId: string; files: Array<{ file: GraphNode; path: string }> }>> {
   const filesByPackage = new Map<string, GraphNode[]>();
-  for (const rel of graph.relationships) {
-    if (rel.type !== "PACKAGE_CONTAINS_FILE") continue;
-    const file = nodesById.get(rel.to);
-    if (file?.label === "File") filesByPackage.set(rel.from, [...filesByPackage.get(rel.from) ?? [], file]);
+  for (const rel of graph.relationshipsOfType("PACKAGE_CONTAINS_FILE")) {
+    const file = graph.node(rel.to);
+    if (file?.label !== "File") continue;
+    const list = filesByPackage.get(rel.from);
+    if (list) list.push(file);
+    else filesByPackage.set(rel.from, [file]);
   }
   const projects: Array<{ packageId: string; files: Array<{ file: GraphNode; path: string }> }> = [];
   for (const [packageId, files] of filesByPackage) {
-    const packageNode = nodesById.get(packageId);
+    const packageNode = graph.node(packageId);
     const packagePath = packageNode?.properties.path;
     const packageRelativePath = packageNode?.properties.relativePath;
     if (typeof packagePath !== "string" || typeof packageRelativePath !== "string") continue;
@@ -385,11 +403,14 @@ function importedNames(importNode: GraphNode): string[] {
   }
 }
 
-function groupBy(relationships: readonly GraphRelationship[], type: GraphRelationship["type"], nodesById: Map<string, GraphNode>): Map<string, GraphNode[]> {
+function groupBy(graph: IGraphContributor, type: GraphRelationship["type"]): Map<string, GraphNode[]> {
   const grouped = new Map<string, GraphNode[]>();
-  for (const rel of relationships) {
-    const node = rel.type === type ? nodesById.get(rel.to) : undefined;
-    if (node) grouped.set(rel.from, [...grouped.get(rel.from) ?? [], node]);
+  for (const rel of graph.relationshipsOfType(type)) {
+    const node = graph.node(rel.to);
+    if (!node) continue;
+    const list = grouped.get(rel.from);
+    if (list) list.push(node);
+    else grouped.set(rel.from, [node]);
   }
   return grouped;
 }
