@@ -55,8 +55,9 @@ export function createPythonCallIndex(graph: IGraphContributor, relationshipInde
     map.set(file, byName);
   };
 
-  // One pass per label: each fills its own maps (Class and Interface share
-  // `owners` and `types`, which only differ in order for one name in one file).
+  // One pass per label: each fills its own maps. Class and Interface share
+  // `owners`, `types` and `classByFileAndName`, so they keep node order in one
+  // plain (allocation-free) pass.
   for (const node of graph.nodesWithLabel("Function")) {
     const name = String(node.properties.name ?? "");
     const file = relationshipIndex.fileByFunctionId.get(node.id);
@@ -64,18 +65,16 @@ export function createPythonCallIndex(graph: IGraphContributor, relationshipInde
     functionsById.set(node.id, node);
     if (node.properties.className === null) add(freeFunctions, file, name, node.id);
   }
-  for (const label of ["Class", "Interface"] as const) {
-    const fileByTypeId = label === "Class" ? relationshipIndex.fileByClassId : relationshipIndex.fileByInterfaceId;
-    for (const node of graph.nodesWithLabel(label)) {
-      const name = String(node.properties.name ?? "");
-      const file = fileByTypeId.get(node.id);
-      if (!file?.endsWith(".py")) continue;
-      owners.set(node.id, { id: node.id, node, fileId: file });
-      add(types, file, name, node.id);
-      const byName = classByFileAndName.get(file) ?? new Map<string, string>();
-      if (!byName.has(name)) byName.set(name, node.id);
-      classByFileAndName.set(file, byName);
-    }
+  for (const node of graph.nodes) {
+    if (node.label !== "Class" && node.label !== "Interface") continue;
+    const name = String(node.properties.name ?? "");
+    const file = (node.label === "Class" ? relationshipIndex.fileByClassId : relationshipIndex.fileByInterfaceId).get(node.id);
+    if (!file?.endsWith(".py")) continue;
+    owners.set(node.id, { id: node.id, node, fileId: file });
+    add(types, file, name, node.id);
+    const byName = classByFileAndName.get(file) ?? new Map<string, string>();
+    if (!byName.has(name)) byName.set(name, node.id);
+    classByFileAndName.set(file, byName);
   }
   for (const node of graph.nodesWithLabel("Variable")) {
     const name = String(node.properties.name ?? "");
