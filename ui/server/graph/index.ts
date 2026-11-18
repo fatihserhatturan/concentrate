@@ -137,34 +137,57 @@ type TypeSets = Map<string, Map<string, string | string[]>>;
  * Relationships that touch a Call or Import are not kept in `stored`; the whole-graph export reads the raw graph.
  */
 export async function buildIndex(projectPath: string, store: IGraphStore, signature: string): Promise<GraphIndex> {
+  // One pass over the store's records, without query rows: nodes are kept per label (to insert them in schema
+  // order, as the per-label queries did), relationships per type as three parallel arrays (no object per
+  // relationship), and only the types the index reads. Properties are the store's own objects, not copies.
+  const nodesByLabel = new Map<string, Array<[string, Readonly<Record<string, unknown>>]>>();
+  type Bucket = { from: string[]; to: string[]; props: Array<Readonly<Record<string, unknown>>> };
+  const kept = new Map<string, boolean>();
+  for (const table of relationshipTables) {
+    const collapsed = COLLAPSED.has(table.from) || COLLAPSED.has(table.to);
+    kept.set(table.type, !collapsed || THROUGH_COLLAPSED.has(table.type) || table.type === "RESOLVES_TO" || table.type === "CALL_RESOLVES_TO" || table.type === "REQUESTS");
+  }
+  const buckets = new Map<string, Bucket>();
+  await store.forEachRecord({
+    node(label, id, properties) {
+      if (COLLAPSED.has(label)) return;
+      const list = nodesByLabel.get(label);
+      if (list) list.push([id, properties]);
+      else nodesByLabel.set(label, [[id, properties]]);
+    },
+    relationship(type, from, to, properties) {
+      if (!kept.get(type)) return;
+      let bucket = buckets.get(type);
+      if (!bucket) buckets.set(type, (bucket = { from: [], to: [], props: [] }));
+      bucket.from.push(from);
+      bucket.to.push(to);
+      bucket.props.push(properties);
+    },
+  });
   const nodes = new Map<string, IndexNode>();
   for (const label of nodeLabels) {
-    if (COLLAPSED.has(label)) continue;
-    const rows = (await store.query(`MATCH (n:${label}) RETURN n`)) as Array<{ n: Record<string, unknown> }>;
-    for (let i = 0; i < rows.length; i++) {
-      // The row is let go as soon as it is copied. (Deleting `_label`/`id` from the row instead keeps it as a
-      // dictionary-mode object, which measured about 4x the retained memory of the rest copy.)
-      const { _label, id, ...props } = rows[i]!.n;
-      rows[i] = undefined as never;
-      nodes.set(String(id), { id: String(id), label, props });
-    }
+    for (const [id, props] of nodesByLabel.get(label) ?? []) nodes.set(id, { id, label, props: props as Record<string, unknown> });
+    nodesByLabel.delete(label);
   }
+  const rowsOf = (type: string): Bucket => buckets.get(type) ?? { from: [], to: [], props: [] };
 
-  const rowsOf = async (type: string) => (await store.query(`MATCH ()-[r:${type}]->() RETURN r`)) as Array<{ r: Record<string, unknown> }>;
   const pushTo = <T>(map: Map<string, T[]>, key: string, value: T) => {
     const list = map.get(key);
     if (list) list.push(value);
     else map.set(key, [value]);
   };
 
-  // Small side tables first: what Imports and Calls resolve to, and the Calls that make requests.
+  // Side tables first: what Imports and Calls resolve to, and the Calls that make requests.
   const resolvesTo = new Map<string, string[]>();
   const callTargets = new Map<string, string[]>();
-  for (const { r } of await rowsOf("RESOLVES_TO")) pushTo(resolvesTo, String(r._src), String(r._dst));
-  for (const { r } of await rowsOf("CALL_RESOLVES_TO")) pushTo(callTargets, String(r._src), String(r._dst));
-  const requests = await rowsOf("REQUESTS");
-  const requestCalls = new Set<string>();
-  for (const { r } of requests) requestCalls.add(String(r._src));
+  const resolves = rowsOf("RESOLVES_TO");
+  for (let i = 0; i < resolves.from.length; i++) pushTo(resolvesTo, resolves.from[i]!, resolves.to[i]!);
+  const callResolves = rowsOf("CALL_RESOLVES_TO");
+  for (let i = 0; i < callResolves.from.length; i++) pushTo(callTargets, callResolves.from[i]!, callResolves.to[i]!);
+  buckets.delete("RESOLVES_TO");
+  buckets.delete("CALL_RESOLVES_TO");
+  const requests = rowsOf("REQUESTS");
+  const requestCalls = new Set<string>(requests.from);
   // For those Calls only: the functions that call them and whatever owns them, in stored order.
   const callerFunctions = new Map<string, string[]>();
   const callOwners = new Map<string, string[]>();
@@ -201,13 +224,12 @@ export async function buildIndex(projectPath: string, store: IGraphStore, signat
     }
     const collapsed = COLLAPSED.has(table.from) || COLLAPSED.has(table.to);
     if (collapsed && !THROUGH_COLLAPSED.has(type)) continue;
-    const rows = await rowsOf(type);
+    const rows = rowsOf(type);
+    buckets.delete(type);
     const kind = kindOf(type);
-    for (let i = 0; i < rows.length; i++) {
-      const r = rows[i]!.r;
-      rows[i] = undefined as never;
-      const from = String(r._src);
-      const to = String(r._dst);
+    for (let i = 0; i < rows.from.length; i++) {
+      const from = rows.from[i]!;
+      const to = rows.to[i]!;
       if (collapsed) {
         if (requestCalls.has(to)) {
           pushTo(callOwners, to, from);
@@ -221,8 +243,7 @@ export async function buildIndex(projectPath: string, store: IGraphStore, signat
         }
         continue;
       }
-      const { _label, _src, _dst, ...props } = r;
-      const edge: IndexEdge = { from, to, type, kind, props };
+      const edge: IndexEdge = { from, to, type, kind, props: rows.props[i] as Record<string, unknown> };
       stored.push(edge);
       const fromNode = nodes.get(from);
       if (fromNode?.label === "File" && FILE_OWNING.test(type)) pushTo(children, from, to);
@@ -260,16 +281,15 @@ export async function buildIndex(projectPath: string, store: IGraphStore, signat
   // The Call is hidden: attribute the request to the function that made it, else to the file that owns the call.
   const requestEdges: IndexEdge[] = [];
   const requestSeen: TypeSets = new Map();
-  for (const { r } of requests) {
-    const call = String(r._src);
-    const route = String(r._dst);
+  for (let i = 0; i < requests.from.length; i++) {
+    const call = requests.from[i]!;
+    const route = requests.to[i]!;
     if (!nodes.has(route)) continue;
     const callerFunction = (callerFunctions.get(call) ?? []).find((id) => nodes.get(id)?.label === "Function");
     const file = (callOwners.get(call) ?? []).map((owner) => fileOf.get(owner)).find((id) => id !== undefined && nodes.has(id));
     const origin = callerFunction ?? file;
     if (!origin) continue;
-    const { _label, _src, _dst, ...props } = r;
-    add({ from: origin, to: route, type: "REQUESTS", kind: "requests", props }, requestEdges, requestSeen);
+    add({ from: origin, to: route, type: "REQUESTS", kind: "requests", props: requests.props[i] as Record<string, unknown> }, requestEdges, requestSeen);
   }
   const ordered = requestEdges.length === 0 ? edges : edges.slice(0, requestsAt).concat(requestEdges, edges.slice(requestsAt));
 
