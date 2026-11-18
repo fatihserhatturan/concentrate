@@ -499,3 +499,92 @@ cold scan peaks at 882–914 MB, googletest's at 1025–1061 MB.
   the same non-code grammar cost as in the Python samples above. The warm scan of every C and
   C++ sample is 91–281 MB, googletest 696 MB.
 
+
+## Scan memory (large repositories)
+
+`npm run probe:memory` (issue #264) shows where a scan's memory goes. It runs
+the steps of `buildCodeGraph` and `scanIntoStore` one at a time in one process
+and, after each step, forces `global.gc()` twice and records the live heap
+(`heapUsed`), the heap before the collection, the RSS, the step's time and the
+highest `heapUsed` that a 50 ms sampler saw during the step (it only runs while
+the event loop is free, so short synchronous bursts can be missed). It then
+prints the item count and JSON size (sum of `JSON.stringify` length per
+record) of the scan result by node label and relationship type.
+
+```bash
+npm run probe:memory -- <project path> [--workers N] [--no-cache] [--cache-dir dir] [--json out.json]
+# large repository: raise the heap, the probe holds the whole scan like a scan does
+node --expose-gc --max-old-space-size=10240 --import tsx scripts/scan-memory-probe.ts <project path> --no-cache --json probe.json
+```
+
+Steps, in order: discover files and manifest; parse (results held, parse
+cache and workers as in a scan; `--workers` defaults to the scan's choice);
+`addParseResultsToGraph` (GraphBuilder with its dedupe sets); workspace
+packages and the language resolvers; the semantic contributors; the scan
+result alone (builder and parse results released, as after a real scan); the
+store's `reset()` + `write()` into a temporary directory, with the store open
+and after `close()`; a fresh `openGraphStore` (loads the snapshot) and
+`stats()`. Only public functions are used, so the store's and builder's
+internals can change without touching the probe. The parse cache lives in the
+system temp directory unless `--cache-dir` is given; use `--no-cache` for a
+cold measurement. Live heap is what a step leaves behind, so the probe's last
+store steps can differ from a real scan, which does not keep the parse results.
+
+### Baseline (before #264)
+
+`grafana/grafana` at `d97fbf6a` (shallow clone): 24,178 files, 17,265 code files
+(7,320 Go, 9,992 TS/TSX). 16 GB, 10-core machine, Node 24. The graph has
+1,394,814 nodes and 2,113,711 relationships; on disk 127 MB (gzip segments),
+parse cache 843 MB. The largest scan measured before this was 1,714 files.
+
+| Run | Heap limit | Result |
+| --- | --- | --- |
+| UI in Docker (Colima VM with 2 GB) | about 1 GB | `JavaScript heap out of memory` during the scan; the browser shows "The scan failed. network error" |
+| `concentrate scan . --no-cache` | default (about 4 GB) | `JavaScript heap out of memory` after 93 s |
+| `concentrate scan . --no-cache` with `--max-old-space-size=10240` | 10 GB | finishes in 105 s, peak RSS 6.2 GB |
+| `concentrate stats` on the finished graph | default | 7.3 s, peak RSS 5.8 GB |
+| UI server (not Docker) with `--max-old-space-size=10240` | 10 GB | `JavaScript heap out of memory` about 200 s after start |
+
+Live heap after a forced GC, step by step (an earlier throwaway version of the
+probe; it kept the GraphBuilder alive during the last two steps, which a real
+scan does not, so the real numbers there are somewhat lower):
+
+| Step | Live heap after GC | Added | Heap before GC |
+| --- | ---: | ---: | ---: |
+| Parse (4 workers, 31 s); results held in `parseResults` | 1,360 MB | +1,335 MB | 1,387 MB |
+| `addParseResultsToGraph` (GraphBuilder and its two dedupe sets) | 1,770 MB | +410 MB | 1,868 MB |
+| Workspace packages and 4 resolvers (18 s) | 1,968 MB | +200 MB | 2,435 MB |
+| 48 semantic contributors (45 s) | 2,048 MB | +80 MB | up to 2,772 MB |
+| `MemoryGraph.write` (the store's own copy of the graph) | 3,038 MB | +995 MB | 3,304 MB |
+| `serializeSegments` (every segment as a JSONL string, all at once) | 4,127 MB | +1,090 MB | 5,336 MB |
+
+Size of the scan result by kind (JSON):
+
+| Kind | Items | JSON size |
+| --- | ---: | ---: |
+| `Call` nodes | 1,082,792 (78% of nodes) | 304 MB of about 410 MB |
+| `CALLS` relationships | 1,069,698 (51%) | 254 MB of about 420 MB |
+| `CALL_RESOLVES_TO` | 302,559 | 63 MB |
+| `RESOLVES_TO` | 292,064 | 47 MB |
+| `Import` nodes | 124,816 | 40 MB |
+| `Function` nodes | 97,491 | 38 MB |
+
+What it shows:
+
+- The graph exists three times at the end of a scan: the scan result (about
+  2 GB), the store's `MemoryGraph` (+1.0 GB) and the serialized segments
+  (+1.1 GB for 918 MB of JSONL in 24,177 segments).
+- Dedupe keys are a large part of the builder: `GraphBuilder.addRelationship`
+  keeps a `${from}:${type}:${to}:${JSON.stringify(properties)}` string per
+  relationship.
+- Call sites are most of the graph; at most 28% of the `Call` nodes have a
+  resolved target.
+- Reading is as expensive as writing: `loadSnapshot` holds every segment as a
+  string at once (the 5.8 GB of `concentrate stats`).
+
+### After #264
+
+_Not measured yet: to be filled in with the probe's tables for the same
+checkout, the run table above (default heap, no flags) and the targets of the
+issue (scan under 3 GB peak RSS, `stats` / `mcp` start under 2 GB, UI scan then
+graph without failure, cold scan time not slower than 105 s)._

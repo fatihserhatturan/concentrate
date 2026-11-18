@@ -40,6 +40,7 @@
     "bench:parser": "npm run build && tsx scripts/bench-parser.ts --dist",
     "bench:accuracy": "tsx scripts/bench-accuracy.ts",
     "bench:release": "npm run build && tsx scripts/bench-release.ts",
+    "probe:memory": "node --expose-gc --import tsx scripts/scan-memory-probe.ts",
     "bench:agent": "npm run build && tsx scripts/bench-agent.ts",
     "benchmark:incremental": "npm run smoke:samples -- --suite all --incremental-benchmark --report .concentrate/incremental-benchmark-report.json --semantic-samples 5",
     "stats": "tsx src/index.ts stats",
