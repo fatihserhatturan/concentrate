@@ -17,6 +17,9 @@ From the repository root, `concentrate ui` (`npm run dev -- ui`) starts it once 
 The server binds to `127.0.0.1` on a random port (`PORT=4000` to choose one, `NO_OPEN=1` to keep the browser closed).
 The URL carries a random token for this start; every API call needs it, and requests whose `Host` is not `127.0.0.1` / `localhost` are refused.
 
+A very large repository can exhaust Node's default heap; the browser then says the server stopped during the scan. Start it with
+more memory, for example `NODE_OPTIONS=--max-old-space-size=8192 npm start`.
+
 The scan writes `<project>/.concentrate/graph`, the CLI default, so `concentrate mcp` and `concentrate query` read the same graph.
 
 ## Status
@@ -37,7 +40,8 @@ dot-folders and build output and nodes without relationships are kept out of the
 The legend is also the filter: five relationship categories and, in the whole graph, each kind of node can be switched on and off. Everything is in the URL
 (`view=graph&focus=…&to=…&show=…`), so back and forward work.
 
-The server keeps the whole graph in memory per project and answers `GET /api/graph/{summary,overview,focus,path,neighbors,node,source,preset,
+The server keeps the graph in memory per project (without the Call and Import nodes, whose edges are collapsed into the derived
+call and import edges) and answers `GET /api/graph/{summary,overview,focus,path,neighbors,node,source,preset,
 catalog,entities,dashboard,issues}` and `GET /api/search` (all take `project=`).
 
 ## Keyboard

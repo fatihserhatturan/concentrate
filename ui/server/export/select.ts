@@ -1,5 +1,6 @@
-import { loadIndex, nodeName, type GraphIndex, type IndexEdge, type IndexNode } from "../graph/index.js";
+import { loadIndex, readRawGraph, nodeName, type GraphIndex, type IndexEdge, type IndexNode } from "../graph/index.js";
 import { HIDDEN_LABELS } from "../graph/kinds.js";
+import { nodeTables } from "../core.js";
 import { neighbors, overview, parseKinds, MAX_OVERVIEW_NODES } from "../graph/views.js";
 
 export type ExportNode = { id: string; label: string; properties: Record<string, unknown> };
@@ -13,14 +14,26 @@ export type Selection = {
 };
 export type SelectOptions = { scope: "graph" | "view"; types?: string | null; prefix?: string; focus?: string };
 
-const raw = (n: IndexNode): ExportNode => ({ id: n.id, label: n.label, properties: n.props });
+// The index holds a node's properties as stored, without its unset columns; an export lists every column of
+// the node's table, unset ones as null, like a `RETURN n` row (relationship rows have only what is set).
+const nodeColumns = new Map(nodeTables.map((table) => [table.label, Object.keys(table.properties).filter((column) => column !== "id")]));
+const withColumns = (label: string, props: Record<string, unknown>): Record<string, unknown> => {
+  const columns = nodeColumns.get(label);
+  if (!columns) return props;
+  const result: Record<string, unknown> = {};
+  for (const column of columns) result[column] = props[column] ?? null;
+  return result;
+};
+const raw = (n: IndexNode): ExportNode => ({ id: n.id, label: n.label, properties: withColumns(n.label, n.props) });
 const rawEdge = (e: IndexEdge): ExportEdge => ({ from: e.from, to: e.to, type: e.type, properties: e.props });
 
 /** The nodes and relationships an export writes: the stored graph, or what the view shows. */
 export async function select(projectPath: string, options: SelectOptions): Promise<Selection> {
   const index = await loadIndex(projectPath);
   if (options.scope === "graph") {
-    return { index, nodes: [...index.nodes.values()].map(raw), edges: index.stored.map(rawEdge) };
+    // The index leaves Call and Import nodes out; the export of the whole graph has them, so it reads the store again.
+    const whole = await readRawGraph(projectPath);
+    return { index, nodes: whole.nodes, edges: whole.edges };
   }
   const kinds = parseKinds(options.types ?? null);
   if (options.focus) {

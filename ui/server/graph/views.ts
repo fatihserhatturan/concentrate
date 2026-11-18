@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { graphSummary, matchName, openGraphStore } from "../core.js";
-import { graphPath, loadIndex, nodeName, type GraphIndex, type IndexEdge, type IndexNode } from "./index.js";
+import { graphSummary, matchName } from "../core.js";
+import { loadIndex, projectStore, nodeName, type GraphIndex, type IndexEdge, type IndexNode } from "./index.js";
 import { clusterOf } from "../../shared/clusters.js";
 import { EDGE_KINDS, HIDDEN_LABELS, type EdgeKind } from "./kinds.js";
 
@@ -11,12 +11,7 @@ const MAX_SOURCE_LINES = 400;
 
 export async function summary(projectPath: string): Promise<unknown> {
   await loadIndex(projectPath); // fails with a clear message when there is no graph
-  const store = await openGraphStore(graphPath(path.resolve(projectPath)), { retryLock: false });
-  try {
-    return await graphSummary(store);
-  } finally {
-    await store.close();
-  }
+  return graphSummary(await projectStore(projectPath));
 }
 
 export type OverviewNode = { id: string; label: string; name: string; files: number; package: string | null; degree: number; noise: boolean };

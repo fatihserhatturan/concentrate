@@ -24,23 +24,38 @@ export async function listDirectories(dir?: string): Promise<FsListing> {
 export type ScanOptions = { path: string; include: string[]; exclude: string[]; apiOrigins: string[]; cache: boolean };
 export type ScanDone = { status: "ok" | "partial" | "failed"; nodes: number; relationships: number; report: any; database: string };
 
+/** The connection to the server dropped before the scan reported a result: the server process most likely died (out of memory). */
+export const SCAN_CONNECTION_LOST =
+  "The server stopped during the scan, most likely because it ran out of memory. Start it again with more memory and scan again, " +
+  "for example `NODE_OPTIONS=--max-old-space-size=8192 npm start` in the ui folder (the same variable works with `concentrate ui`).";
+
 export async function scan(
   options: ScanOptions,
   onProgress: (current: number, total: number, file: string) => void,
 ): Promise<ScanDone> {
-  const response = await fetch("/api/scan", {
-    method: "POST",
-    headers: { ...headers, "content-type": "application/json" },
-    body: JSON.stringify(options),
-  });
+  let response: Response;
+  try {
+    response = await fetch("/api/scan", {
+      method: "POST",
+      headers: { ...headers, "content-type": "application/json" },
+      body: JSON.stringify(options),
+    });
+  } catch {
+    throw new Error(SCAN_CONNECTION_LOST);
+  }
   if (!response.ok || !response.body) throw new Error((await response.json()).error ?? response.statusText);
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
   for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
+    let chunk: ReadableStreamReadResult<Uint8Array>;
+    try {
+      chunk = await reader.read();
+    } catch {
+      throw new Error(SCAN_CONNECTION_LOST);
+    }
+    if (chunk.done) break;
+    buffer += decoder.decode(chunk.value, { stream: true });
     let index: number;
     while ((index = buffer.indexOf("\n\n")) >= 0) {
       const block = buffer.slice(0, index);
@@ -53,7 +68,8 @@ export async function scan(
       else if (event.type === "done") return event;
     }
   }
-  throw new Error("The scan ended without a result");
+  // The stream ended without a done or error event.
+  throw new Error(SCAN_CONNECTION_LOST);
 }
 
 // ---- graph API ----
