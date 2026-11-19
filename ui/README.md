@@ -34,8 +34,12 @@ relationships to a second node. **Open graph** lands on the whole graph (`All`):
 one cluster per folder, colour by kind of node, size by number of links. Far out you read the folder names; zoom in and the
 most connected nodes get labels, then all of them. Click a node to inspect it, double-click to focus on it. Each folder is laid
 out on its own and placed in a disc reserved for it (`shared/seed-layout.ts`, `web/src/graph/clusterLayout.ts`), so clusters stay
-apart. Above 20,000 nodes the most connected are kept and the inspector says so. The HTML export uses the same layout, palette
-and labels. `Packages`, `Folders` and `Files` are the older, aggregated overviews (the other place with a force layout), where
+apart. The force layout runs in a web worker, so the page stays responsive while it settles. Above 20,000 connected nodes
+(Grafana has about 1.4 million) the whole graph opens a folder at a time instead (`web/src/graph/ZoomGraph.tsx`,
+`GET /api/graph/scene`): far out each top folder is one disc sized by its nodes, with the relationships between folders added
+up; zoom into a disc (or double-click it) and it opens in place into its subfolders and its own most connected nodes (1,500 per
+folder, at most 15,000 on screen), zoom back out and it closes again. The HTML export uses the same layout, palette and labels as the
+smaller whole graph. `Packages`, `Folders` and `Files` are the older, aggregated overviews (the other place with a force layout), where
 dot-folders and build output and nodes without relationships are kept out of the picture with a count in the legend.
 The legend is also the filter: five relationship categories and, in the whole graph, each kind of node can be switched on and off. Everything is in the URL
 (`view=graph&focus=…&to=…&show=…`), so back and forward work.
