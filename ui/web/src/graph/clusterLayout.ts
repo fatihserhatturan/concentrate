@@ -9,7 +9,7 @@ import { seedLayout } from "../../../shared/seed-layout.js";
  * relationships pull) and then scaled into the disc `seedLayout` reserved for it.
  * Links between folders are simply drawn across the gaps.
  */
-export function layoutClusters(data: FullGraph): Map<string, { x: number; y: number }> {
+export function layoutClusters(data: Pick<FullGraph, "nodes" | "edges" | "groups">): Map<string, { x: number; y: number }> {
   const { positions: seeds, centers } = seedLayout(data.nodes, data.groups);
   const groupOf = new Map(data.nodes.map((n) => [n.id, n.group]));
   const members = new Map<string, string[]>();
