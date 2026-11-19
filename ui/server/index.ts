@@ -12,6 +12,7 @@ import { dashboard } from "./graph/dashboard.js";
 import { DEFAULT_FOCUS_LIMIT, focus, path as graphPathBetween } from "./graph/focus.js";
 import { catalog, entities } from "./graph/entities.js";
 import { issues } from "./graph/issues.js";
+import { DEFAULT_LEAF_LIMIT, scene } from "./graph/scene.js";
 import { parseExportRequest, sendExport } from "./export/index.js";
 import { DEFAULT_FULL_LIMIT, fullGraph, neighbors, nodeDetail, nodeSource, overview, parseKinds, search, summary } from "./graph/views.js";
 import { createToken, isAllowedHost, tokenFromRequest, tokenMatches } from "./security.js";
@@ -115,6 +116,9 @@ export function createUiServer(token: string) {
         }
         if (url.pathname === "/api/graph/full") {
           return sendJson(response, 200, await fullGraph(project, parseKinds(param("types")), Number(param("limit") ?? DEFAULT_FULL_LIMIT)));
+        }
+        if (url.pathname === "/api/graph/scene") {
+          return sendJson(response, 200, await scene(project, url.searchParams.getAll("open"), parseKinds(param("types")), Number(param("limit") ?? DEFAULT_LEAF_LIMIT)));
         }
         if (url.pathname === "/api/graph/neighbors") {
           return sendJson(response, 200, await neighbors(project, param("id") ?? "", parseKinds(param("types")), Number(param("depth") ?? 1)));

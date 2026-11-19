@@ -1,6 +1,6 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { graphFocus, graphFull, graphOverview, graphPathBetween, graphPreset, type OverviewNode, type ViewEdge, type ViewNode } from "../api.js";
+import { graphFocus, graphFull, graphOverview, graphPathBetween, graphPreset, graphScene, type OverviewNode, type Scene, type ViewEdge, type ViewNode } from "../api.js";
 import { Icon } from "../components/icons.js";
 import { SummaryList } from "../components/Inspector.js";
 import { KindGlyph } from "../components/KindGlyph.js";
@@ -13,6 +13,7 @@ import { FullGraph } from "../graph/FullGraph.js";
 import { color } from "../graph/colors.js";
 import { LayeredGraph } from "../graph/LayeredGraph.js";
 import { SigmaGraph, type SigmaEdge, type SigmaNode } from "../graph/SigmaGraph.js";
+import { ZoomGraph } from "../graph/ZoomGraph.js";
 import { useRegisterCommands, type Command } from "../lib/commands.js";
 import { number } from "../lib/format.js";
 import { navigate, type Route } from "../lib/router.js";
@@ -20,6 +21,8 @@ import { useLoad } from "../lib/useLoad.js";
 
 const DEFAULT_LIMIT = 40;
 const LAYERED_MAX = 400;
+/** Above this many connected nodes the whole graph opens a folder at a time (`ZoomGraph`) instead of drawing them all. */
+const FULL_MAX = 20000;
 const PRESETS: Array<{ id: string; title: string; text: string }> = [
   { id: "routes-handlers-tables", title: "Routes → handlers → tables", text: "Which routes exist, who handles them and what they read and write" },
   { id: "requests-routes", title: "Frontend requests → routes", text: "Which frontend calls reach which backend routes" },
@@ -29,6 +32,7 @@ const PRESETS: Array<{ id: string; title: string; text: string }> = [
 
 type Loaded =
   | { mode: "all"; data: Awaited<ReturnType<typeof graphFull>> }
+  | { mode: "zoom"; data: Scene }
   | { mode: "overview"; level: string; data: Awaited<ReturnType<typeof graphOverview>> }
   | { mode: "focus"; data: Awaited<ReturnType<typeof graphFocus>> }
   | { mode: "path"; data: Awaited<ReturnType<typeof graphPathBetween>> }
@@ -66,7 +70,7 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
   const level = route.level ?? "all";
   const prefix = route.prefix ?? "";
   const depth = route.depth && route.depth > 1 ? Math.min(3, route.depth) : 1;
-  const mode: Loaded["mode"] = route.preset ? "preset" : route.focus && route.to ? "path" : route.focus ? "focus" : level === "all" ? "all" : "overview";
+  const mode: Exclude<Loaded["mode"], "zoom"> = route.preset ? "preset" : route.focus && route.to ? "path" : route.focus ? "focus" : level === "all" ? "all" : "overview";
 
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
   const [tracing, setTracing] = useState(false);
@@ -77,6 +81,8 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
   const [pseudo, setPseudo] = useState<string | null>(null);
   const [hiddenKinds, setHiddenKinds] = useState<Set<string>>(new Set());
   const [flyTo, setFlyTo] = useState<string | null>(null);
+  /** What the folder-at-a-time view shows right now: it changes as folders open and close. */
+  const [zoomScene, setZoomScene] = useState<Scene | null>(null);
 
   const current: GraphFields = { focus: route.focus, to: route.to, level: route.level, prefix: route.prefix, depth: route.depth, show: route.show, noise: route.noise, preset: route.preset };
   const go = (patch: Partial<GraphFields>, replace = false) => navigate({ project: props.project, view: "graph", ...current, ...patch }, { replace });
@@ -126,7 +132,10 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
     if (mode === "preset") return { mode, data: await graphPreset(route.preset!) };
     if (mode === "path") return { mode, data: await graphPathBetween(route.focus!, route.to!, kinds) };
     if (mode === "focus") return { mode, data: await graphFocus(route.focus!, kinds, depth, limit) };
-    if (mode === "all") return { mode: "all", data: await graphFull(kinds) };
+    if (mode === "all") {
+      const top = await graphScene([], kinds);
+      return top.total > FULL_MAX ? { mode: "zoom", data: top } : { mode: "all", data: await graphFull(kinds) };
+    }
     return { mode: "overview", level, data: await graphOverview(level, prefix, kinds.filter((k) => k !== "defines")) };
   }, [key, props.project]);
 
@@ -164,11 +173,12 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
   const categoryCounts = useMemo(() => {
     const counts = new Map<CategoryId, number>();
     if (loaded?.mode === "overview") for (const e of overview?.edges ?? []) for (const [kind, n] of Object.entries(e.byKind)) counts.set(categoryOfKind(kind).id, (counts.get(categoryOfKind(kind).id) ?? 0) + n);
+    else if (loaded?.mode === "zoom") for (const e of (zoomScene ?? loaded.data).edges) counts.set(categoryOfKind(e.kind).id, (counts.get(categoryOfKind(e.kind).id) ?? 0) + e.count);
     else if (loaded) for (const e of loaded.data.edges as ViewEdge[]) counts.set(categoryOfKind(e.kind).id, (counts.get(categoryOfKind(e.kind).id) ?? 0) + 1);
     return counts;
-  }, [loaded, overview]);
+  }, [loaded, overview, zoomScene]);
 
-  const drawnNodes: Array<{ label: string }> = loaded?.mode === "overview" ? overview?.nodes ?? [] : loaded?.data.nodes ?? [];
+  const drawnNodes: Array<{ label: string }> = loaded?.mode === "overview" ? overview?.nodes ?? [] : loaded?.mode === "zoom" ? (zoomScene ?? loaded.data).items : loaded?.data.nodes ?? [];
   const kindsShown = [...new Set(drawnNodes.map((n) => n.label))].sort();
 
   // The inspector shows the selected node; with none, the summary of the view or of a selected folder.
@@ -206,8 +216,47 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
   const kindCounts = useMemo(() => {
     const counts = new Map<string, number>();
     if (loaded?.mode === "all") for (const n of loaded.data.nodes) counts.set(n.label, (counts.get(n.label) ?? 0) + 1);
+    if (loaded?.mode === "zoom" && zoomScene) for (const n of zoomScene.items) if (n.type === "node") counts.set(n.label, (counts.get(n.label) ?? 0) + 1);
     return [...counts].sort((a, b) => b[1] - a[1]);
-  }, [loaded]);
+  }, [loaded, zoomScene]);
+  useEffect(() => {
+    if (loaded?.mode !== "zoom") return;
+    const scene = zoomScene ?? loaded.data;
+    const items = new Map(scene.items.map((i) => [i.id, i]));
+    const item = pseudo ? items.get(pseudo) : undefined;
+    const nameOf = (id: string) => { const other = items.get(id); return other ? (other.type === "cluster" ? `${other.path}/` : other.name) : id; };
+    if (item?.type === "cluster") {
+      props.setSummary(
+        <div class="stack">
+          <div><span class="badge">Folder</span><h3 class="insp-title">{item.name === "(other)" ? "shared" : item.name}</h3><p class="muted small mono">{item.path === "(other)" ? "Nodes no file owns" : item.path}</p></div>
+          <div class="kv"><div><span class="v">{number(item.nodes)}</span><span class="k">nodes</span></div><div><span class="v">{number(item.children)}</span><span class="k">subfolders</span></div><div><span class="v">{number(item.direct)}</span><span class="k">directly in it</span></div></div>
+          <div class="row"><button class="btn btn-primary" onClick={() => setFlyTo(`${item.id}#${Date.now()}`)}>Zoom in</button>{item.path !== "(other)" && <button class="btn" onClick={() => go({ level: "directory", prefix: item.path, focus: undefined })}>Folder overview</button>}</div>
+        </div>,
+      );
+      return;
+    }
+    if (item?.type === "node") {
+      const links = scene.edges.flatMap((e) => (e.from === item.id ? [{ id: e.to, uses: true, count: e.count }] : e.to === item.id ? [{ id: e.from, uses: false, count: e.count }] : []));
+      props.setSummary(
+        <div class="stack">
+          <div><span class="badge"><span class="dot" style={{ background: color(item.label), marginRight: 4 }} />{item.label}</span><h3 class="insp-title">{item.name}</h3>{item.file && <p class="muted small mono">{item.file}{item.line ? `:${item.line}` : ""}</p>}</div>
+          <div class="kv"><div><span class="v">{number(item.degree)}</span><span class="k">links</span></div></div>
+          <div class="row"><button class="btn btn-primary" onClick={() => go({ focus: item.id, to: undefined, preset: undefined })}>Focus on this node</button></div>
+          {links.length > 0 && (
+            <section><h4 class="section-h">Linked</h4>
+              <ul class="plain-list">{links.slice(0, 14).map((l) => <li><button class="link-button small" title={nameOf(l.id)} onClick={() => { setPseudo(l.id); setFlyTo(`${l.id}#${Date.now()}`); }}>{l.uses ? "uses " : "used by "}{nameOf(l.id)}</button><span class="muted small">{l.count > 1 ? number(l.count) : items.get(l.id)?.type === "cluster" ? "folder" : (items.get(l.id) as { label?: string } | undefined)?.label}</span></li>)}</ul>
+              {links.length > 14 && <p class="muted small">and {links.length - 14} more; focus the node to see all.</p>}
+            </section>
+          )}
+        </div>,
+      );
+      return;
+    }
+    const top = scene.items.filter((i) => i.type === "cluster" && i.parent === "dir:") as Array<Extract<Scene["items"][number], { type: "cluster" }>>;
+    const hidden = Object.values(scene.hidden).reduce((a, b) => a + b, 0);
+    props.setSummary(<SummaryList title="Whole graph" subtitle={`${number(scene.total)} nodes, a folder at a time`} groups={top.map((g) => ({ label: g.name === "(other)" ? "shared" : g.name, count: g.nodes }))} total={scene.total} hint={`Zoom into a folder to open it, zoom out to close it again. Double-click a folder to zoom into it, a node to focus on it.${hidden > 0 ? ` Open folders show their most connected nodes; ${number(hidden)} more are left out.` : ""}${scene.isolated > 0 ? ` ${number(scene.isolated)} nodes without relationships of the selected kinds are left out.` : ""}`} />);
+  }, [loaded, zoomScene, pseudo]);
+
   useEffect(() => {
     if (loaded?.mode !== "all") return;
     const { nodes, edges, groups, total, truncated, isolated } = loaded.data;
@@ -233,7 +282,7 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
     props.setSummary(<SummaryList title="Whole graph" subtitle={truncated ? `The ${number(nodes.length)} most connected of ${number(total)} nodes, by folder` : "Nodes by folder"} groups={groups.map((g) => ({ label: g.name === "(other)" ? "shared" : g.name, count: g.count }))} total={nodes.length} hint={`Click a node to inspect it, double-click to focus on it.${isolated > 0 ? ` ${number(isolated)} nodes without relationships of the selected kinds are left out.` : ""}`} />);
   }, [loaded, pseudo]);
 
-  const centerName = loaded && loaded.mode !== "overview" ? (loaded.data.nodes as ViewNode[]).find((n) => n.id === (route.focus ?? ""))?.name : undefined;
+  const centerName = loaded && loaded.mode !== "overview" && loaded.mode !== "zoom" ? (loaded.data.nodes as ViewNode[]).find((n) => n.id === (route.focus ?? ""))?.name : undefined;
   const toName = loaded?.mode === "path" ? loaded.data.nodes.find((n) => n.id === route.to)?.name : undefined;
 
   const toggleCategory = (id: CategoryId) => {
@@ -283,6 +332,9 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
         );
       }
       return <FullGraph data={data.data} hiddenKinds={hiddenKinds} selectedId={pseudo} flyToId={flyTo} onClick={(id) => setPseudo(id || null)} onDoubleClick={(id) => go({ focus: id, to: undefined, preset: undefined })} />;
+    }
+    if (data.mode === "zoom") {
+      return <ZoomGraph scene={data.data} types={kinds} hiddenKinds={hiddenKinds} selectedId={pseudo} flyToId={flyTo?.split("#")[0] ?? null} onScene={setZoomScene} onClick={(id) => setPseudo(id || null)} onDoubleClick={(id) => go({ focus: id, to: undefined, preset: undefined })} />;
     }
     if (data.mode === "overview") {
       if (!overview || overview.nodes.length === 0) {
@@ -388,7 +440,7 @@ export function GraphScreen(props: { project: string; route: Route; setSummary: 
         }} />
         <button class="btn" aria-pressed={queryOpen} onClick={() => setQueryOpen(!queryOpen)}>Query</button>
         <button class="btn" onClick={() => setExportOpen(true)}>Export…</button>
-        <span class="muted small" data-testid="graph-stats" aria-live="polite">{loaded ? `${number(loaded.mode === "overview" ? overview?.nodes.length : loaded.data.nodes.length)} nodes` : ""}</span>
+        <span class="muted small" data-testid="graph-stats" aria-live="polite">{loaded ? (loaded.mode === "zoom" ? `${number((zoomScene ?? loaded.data).items.length)} of ${number(loaded.data.total)} shown` : `${number(loaded.mode === "overview" ? overview?.nodes.length : loaded.data.nodes.length)} nodes`) : ""}</span>
       </div>
 
       <div class="graph-body">

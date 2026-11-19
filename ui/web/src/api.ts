@@ -114,6 +114,23 @@ export type FullGraph = {
   total: number; truncated: boolean; isolated: number;
 };
 export const graphFull = (types: string[]) => getJson<FullGraph>("/api/graph/full", { types: types.join(",") });
+export type SceneCluster = { type: "cluster"; id: string; path: string; name: string; parent: string; nodes: number; direct: number; children: number; label: string };
+export type SceneLeaf = { type: "node"; id: string; label: string; name: string; parent: string; degree: number; file: string | null; line: number | null };
+export type Scene = {
+  items: Array<SceneCluster | SceneLeaf>;
+  edges: Array<{ from: string; to: string; count: number; kind: string }>;
+  total: number; isolated: number; hidden: Record<string, number>;
+};
+/** The whole graph with the given folders open; the others are one cluster each. */
+export async function graphScene(open: string[], types: string[], signal?: AbortSignal): Promise<Scene> {
+  const query = new URLSearchParams({ project });
+  if (types.length > 0) query.set("types", types.join(","));
+  for (const path of open) query.append("open", path);
+  const response = await fetch(`/api/graph/scene?${query}`, { headers, signal });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new ApiError(body.error ?? response.statusText, response.status);
+  return body;
+}
 export const graphNeighbors = (id: string, types: string[], depth = 1) =>
   getJson<Neighbors>("/api/graph/neighbors", { id, types: types.join(","), depth: String(depth) });
 export const graphNode = (id: string) => getJson<NodeDetail>("/api/graph/node", { id });
