@@ -296,6 +296,7 @@ function withoutQuery(url: string): string {
 // package's exported one) and `os.Getenv("X")` from the nearest `.env*` file
 // (only a URL or path value). Runs before the http-requests contributor.
 export const goHttpClientsContributor: ISemanticContributor = {
+  id: "go.http-clients",
   async contribute(graph, rootPath, _report, files) {
     const templates = new Map<string, string>();
     for (const node of graph.nodesWithLabel("Variable")) {

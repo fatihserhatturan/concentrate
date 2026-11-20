@@ -6,6 +6,7 @@ import { after, describe, it } from "node:test";
 import { unresolvedCalls } from "../src/core/queries/graph.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
+import { openTestStore } from "./helpers/store.js";
 
 const fixture = path.resolve("fixtures/call-graph");
 const workRoot = await mkdtemp(path.join(os.tmpdir(), "concentrate-call-sites-"));
@@ -47,7 +48,7 @@ describe("unresolved call sites", () => {
 
     const answers = [];
     for (const [index, graph] of [full, compact].entries()) {
-      const store = await GraphStore.open(path.join(workRoot, `g${index}`));
+      const store = await openTestStore(path.join(workRoot, `g${index}`));
       await store.reset();
       await store.write(graph.nodes, graph.relationships);
       answers.push(await unresolvedCalls(store, names));

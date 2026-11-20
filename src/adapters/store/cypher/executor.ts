@@ -23,7 +23,7 @@ type Context = {
 /** Parse, bind and run a read-only query against `graph`. */
 export function executeCypher(graph: MemoryGraph, source: string, params: QueryParameters = {}): Record<string, unknown>[] {
   const query = parseCypher(source);
-  const bound = bindQuery(query, params);
+  const bound = bindQuery(query, params, graph.schema);
   const context: Context = { graph, bound, params };
 
   let rows: Iterable<Row> = [{}];
@@ -35,7 +35,7 @@ export function executeCypher(graph: MemoryGraph, source: string, params: QueryP
 
   return [...rows].map((row) => {
     const output: Record<string, unknown> = {};
-    for (const column of bound.columns) output[column] = toOutput(row[column] ?? null);
+    for (const column of bound.columns) output[column] = toOutput(row[column] ?? null, graph.schema);
     return output;
   });
 }
@@ -315,7 +315,7 @@ function walk(expression: Expression, visit: (expression: Expression) => boolean
 function count(expression: Expression, clause: string, context: Context): number {
   const value = evaluate(expression, {}, context);
   if (typeof value !== "number" || !Number.isInteger(value) || value < 0) {
-    throw new CypherError("runtime", `${clause} expects a non-negative integer, got ${JSON.stringify(toOutput(value))}`);
+    throw new CypherError("runtime", `${clause} expects a non-negative integer, got ${JSON.stringify(toOutput(value, context.graph.schema))}`);
   }
   return value;
 }
@@ -423,7 +423,7 @@ function evaluateBinary(expression: Extract<Expression, { kind: "binary" }>, row
       // Like Kuzu, string concatenation treats null as the empty string.
       if (typeof left === "string" || typeof right === "string" || stringTyped(expression, context)) {
         if (Array.isArray(left) || Array.isArray(right)) throw new CypherError("runtime", "cannot add a string and a list");
-        return `${left === null ? "" : String(toOutput(left))}${right === null ? "" : String(toOutput(right))}`;
+        return `${left === null ? "" : String(toOutput(left, context.graph.schema))}${right === null ? "" : String(toOutput(right, context.graph.schema))}`;
       }
       if (left === null || right === null) return null;
       if (Array.isArray(left) || Array.isArray(right)) {

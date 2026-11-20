@@ -9,6 +9,7 @@ import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { startMcpServer } from "./helpers/mcp-stdio.js";
+import { openTestStore } from "./helpers/store.js";
 
 // A two-package workspace: @w/core publishes a barrel (export * and a named
 // re-export); @w/app imports from it, has a runtime import cycle, a
@@ -65,7 +66,7 @@ async function createProject(files: Record<string, string> = PROJECT_FILES) {
   }
   const graph = await buildCodeGraph(projectPath, { continueOnError: false });
   const databasePath = path.join(root, "graph");
-  const store = await GraphStore.open(databasePath);
+  const store = await openTestStore(databasePath);
   await store.reset();
   await store.write(graph.nodes, graph.relationships);
   return { databasePath, store };
@@ -241,7 +242,7 @@ describe("analysis MCP tools", () => {
       assert.equal((await call("architecture_overview", {})).groups.length, 2);
     } finally {
       await server.close();
-      project.store = await GraphStore.open(project.databasePath);
+      project.store = await openTestStore(project.databasePath);
     }
   });
 });
@@ -252,7 +253,7 @@ describe("analysis MCP tools on Go", () => {
 
   before(async () => {
     const graph = await buildCodeGraph(path.resolve("fixtures/go-entrypoints"), { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-unused-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-unused-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });
@@ -323,7 +324,7 @@ describe("analysis MCP tools on Rust", () => {
 
   before(async () => {
     const graph = await buildCodeGraph(path.resolve("fixtures/rust-unused"), { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-unused-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-unused-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });
@@ -348,7 +349,7 @@ describe("find_unused_exports on Python", () => {
 
   before(async () => {
     const graph = await buildCodeGraph(path.resolve("fixtures/python-unused"), { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-unused-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-unused-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });
@@ -376,7 +377,7 @@ describe("find_unused_exports on C++", () => {
 
   before(async () => {
     const graph = await buildCodeGraph(path.resolve("fixtures/cpp-unused"), { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-cpp-unused-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-cpp-unused-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });

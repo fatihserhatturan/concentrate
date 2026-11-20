@@ -44,6 +44,7 @@ export type RouteSegment = { kind: "literal"; value: string } | { kind: "param" 
 type RouteEntry = { id: string; method: string; segments: RouteSegment[]; trailingSlash: boolean };
 
 export const httpRequestsContributor: ISemanticContributor = {
+  id: "js-ts.http-requests",
   async contribute(graph, rootPath, _report, files, settings) {
     const origins = (settings?.apiOrigins ?? []).flatMap((origin) => {
       try {

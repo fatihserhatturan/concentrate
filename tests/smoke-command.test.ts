@@ -10,7 +10,7 @@ import {
   resolveSamples,
   samplesDirectory,
 } from "../src/adapters/cli/smoke.js";
-import { SCHEMA_VERSION } from "../src/adapters/store/schema.js";
+import { BASE_SCHEMA_VERSION as SCHEMA_VERSION } from "../src/core/graph/schema.js";
 
 describe("smoke validation", () => {
   it("runs scan, writes the graph store, checks expected counts, and writes a report", async () => {

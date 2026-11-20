@@ -3,8 +3,9 @@ import { describe, it } from "node:test";
 import { CypherError, type CypherErrorKind } from "../src/adapters/store/cypher/errors.js";
 import { executeCypher } from "../src/adapters/store/cypher/executor.js";
 import { MemoryGraph } from "../src/adapters/store/graph.js";
+import { defaultGraphSchemaIndex } from "../src/composition/default-schema.js";
 
-const graph = new MemoryGraph();
+const graph = new MemoryGraph(defaultGraphSchemaIndex);
 graph.addNode("File", "file:a.ts", { relativePath: "a.ts" });
 graph.addNode("Function", "file:a.ts:function:run", { name: "run", isExported: true, line: 3 });
 graph.addNode("Function", "file:a.ts:function:stop", { name: "stop", isExported: true, line: 9 });

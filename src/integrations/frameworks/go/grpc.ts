@@ -73,6 +73,7 @@ export const goGrpcPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, functions
 };
 
 export const goGrpcContributor: ISemanticContributor = {
+  id: "go.grpc",
   contribute(graph) {
     const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.goGrpcServices === "string");
     const calls = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.grpcMethod === "string");

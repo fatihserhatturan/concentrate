@@ -8,6 +8,7 @@ import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import { compareEnv } from "../scripts/accuracy/compare.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -31,7 +32,7 @@ describe("Rust env and config", () => {
 
   before(async () => {
     graph = await buildCodeGraph(path.resolve("fixtures/rust-env"), { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-env-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-env-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });

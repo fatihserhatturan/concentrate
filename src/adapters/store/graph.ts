@@ -2,7 +2,7 @@ import path from "node:path";
 import type { GraphNode, GraphRelationship } from "../../core/graph/model.js";
 import { physicalRelationshipType } from "./physical-types.js";
 import { withProvenance } from "./provenance.js";
-import { nodeTableByLabel, relationshipTableByType, type PropertyType } from "./schema.js";
+import type { GraphSchemaIndex, PropertyType } from "../../core/graph/schema.js";
 
 export type PropertyValue = string | number | boolean | null;
 export type Properties = Readonly<Record<string, PropertyValue>>;
@@ -58,6 +58,9 @@ export class MemoryGraph {
   private readonly valueIndex = new Map<string, Map<PropertyValue, Set<NodeRecord>>>();
   private relationshipTotal = 0;
 
+  /** The tables writes are validated against; the Cypher binder resolves names against them too. */
+  constructor(readonly schema: GraphSchemaIndex) {}
+
   get nodeCount(): number {
     return this.nodesById.size;
   }
@@ -81,7 +84,7 @@ export class MemoryGraph {
   /** Nodes with `label` whose indexed `property` equals `value`; undefined if the property is not indexed. */
   lookup(label: string, property: string, value: PropertyValue): ReadonlySet<NodeRecord> | undefined {
     if (!(INDEXED_PROPERTIES as readonly string[]).includes(property)) return undefined;
-    if (!nodeTableByLabel.get(label)?.properties[property]) return EMPTY;
+    if (!this.schema.nodeTableByLabel.get(label)?.properties[property]) return EMPTY;
     return this.valueIndex.get(indexKey(label, property))?.get(value) ?? EMPTY;
   }
 
@@ -97,7 +100,7 @@ export class MemoryGraph {
   }
 
   addNode(label: string, id: string, properties: Record<string, unknown>): NodeRecord {
-    const table = nodeTableByLabel.get(label);
+    const table = this.schema.nodeTableByLabel.get(label);
     if (!table) {
       throw new Error(`Cannot write node ${id}: table ${label} does not exist`);
     }
@@ -132,7 +135,7 @@ export class MemoryGraph {
    * from the schema table so all nodes of a label share one string.
    */
   addTrustedNode(label: string, id: string, properties: Properties): NodeRecord {
-    const table = nodeTableByLabel.get(label);
+    const table = this.schema.nodeTableByLabel.get(label);
     if (!table) {
       throw new Error(`Cannot write node ${id}: table ${label} does not exist`);
     }
@@ -144,7 +147,7 @@ export class MemoryGraph {
 
   /** Trusted counterpart of addRelationship for snapshot loading; still checks the table and endpoint labels. */
   addTrustedRelationship(type: string, fromId: string, toId: string, properties: Properties): boolean {
-    const table = relationshipTableByType.get(type);
+    const table = this.schema.relationshipTableByType.get(type);
     if (!table) {
       throw new Error(`Cannot write relationship ${fromId} -> ${toId}: table ${type} does not exist`);
     }
@@ -160,7 +163,7 @@ export class MemoryGraph {
 
   /** Returns false, like Kuzu's `MATCH ... CREATE`, when an endpoint does not exist. */
   addRelationship(type: string, fromId: string, toId: string, properties: Record<string, unknown>): boolean {
-    const table = relationshipTableByType.get(type);
+    const table = this.schema.relationshipTableByType.get(type);
     if (!table) {
       throw new Error(`Cannot write relationship ${fromId} -> ${toId}: table ${type} does not exist`);
     }

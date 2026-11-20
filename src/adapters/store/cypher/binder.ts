@@ -1,4 +1,4 @@
-import { nodeLabels, nodeTableByLabel, nodeTables, relationshipTableByType, relationshipTables } from "../schema.js";
+import type { GraphSchemaIndex } from "../../../core/graph/schema.js";
 import type { Clause, Expression, MatchClause, NodePattern, ProjectionClause, Query, RelationshipPattern } from "./ast.js";
 import { CypherError } from "./errors.js";
 import { AGGREGATE_FUNCTIONS, SCALAR_FUNCTIONS } from "./functions.js";
@@ -23,6 +23,8 @@ export type Scope = Map<string, VariableInfo>;
 
 export type BoundQuery = {
   query: Query;
+  /** The tables names and properties were resolved against. */
+  schema: GraphSchemaIndex;
   /** Scope visible at the start of each clause. */
   scopes: Scope[];
   types: WeakMap<Expression, StaticType>;
@@ -31,10 +33,8 @@ export type BoundQuery = {
   columns: string[];
 };
 
-const allRelationshipTypes = relationshipTables.map((table) => table.type);
-
-export function bindQuery(query: Query, params: Readonly<Record<string, unknown>>): BoundQuery {
-  const bound: BoundQuery = { query, scopes: [], types: new WeakMap(), anonymous: new WeakMap(), columns: [] };
+export function bindQuery(query: Query, params: Readonly<Record<string, unknown>>, schema: GraphSchemaIndex): BoundQuery {
+  const bound: BoundQuery = { query, schema, scopes: [], types: new WeakMap(), anonymous: new WeakMap(), columns: [] };
   let scope: Scope = new Map();
   let anonymousCount = 0;
 
@@ -74,11 +74,11 @@ function bindMatch(
   for (const part of clause.patterns) {
     part.relationships.forEach((relationship, index) => {
       if (relationship.hops) return;
-      const types = relationship.types.length > 0 ? relationship.types : allRelationshipTypes;
+      const types = relationship.types.length > 0 ? relationship.types : bound.schema.relationshipTypes;
       const left = part.nodes[index]!;
       const right = part.nodes[index + 1]!;
-      const froms = new Set(types.map((type) => relationshipTableByType.get(type)!.from));
-      const tos = new Set(types.map((type) => relationshipTableByType.get(type)!.to));
+      const froms = new Set(types.map((type) => bound.schema.relationshipTableByType.get(type)!.from));
+      const tos = new Set(types.map((type) => bound.schema.relationshipTableByType.get(type)!.to));
       const both = new Set([...froms, ...tos]);
       const leftAllowed = relationship.direction === "out" ? froms : relationship.direction === "in" ? tos : both;
       const rightAllowed = relationship.direction === "out" ? tos : relationship.direction === "in" ? froms : both;
@@ -90,13 +90,13 @@ function bindMatch(
   for (const part of clause.patterns) {
     for (const node of part.nodes) {
       for (const [name, expression] of node.properties) {
-        checkProperty(scope.get(nameOf(node, bound))!, name, nameOf(node, bound));
+        checkProperty(scope.get(nameOf(node, bound))!, name, nameOf(node, bound), bound.schema);
         bindExpression(expression, scope, bound, params, "pattern");
       }
     }
     for (const relationship of part.relationships) {
       for (const [name, expression] of relationship.properties) {
-        checkProperty(scope.get(nameOf(relationship, bound))!, name, nameOf(relationship, bound));
+        checkProperty(scope.get(nameOf(relationship, bound))!, name, nameOf(relationship, bound), bound.schema);
         bindExpression(expression, scope, bound, params, "pattern");
       }
     }
@@ -112,12 +112,12 @@ function nameOf(element: NodePattern | RelationshipPattern, bound: BoundQuery): 
 
 function declareNode(node: NodePattern, scope: Scope, bound: BoundQuery, anonymousName: () => string): void {
   for (const label of node.labels) {
-    if (!nodeTableByLabel.has(label)) throw new CypherError("binder", `Table ${label} does not exist.`);
+    if (!bound.schema.nodeTableByLabel.has(label)) throw new CypherError("binder", `Table ${label} does not exist.`);
   }
   if (!node.variable) bound.anonymous.set(node, anonymousName());
   const name = nameOf(node, bound);
   const existing = scope.get(name);
-  const labels = node.labels.length > 0 ? node.labels : nodeLabels;
+  const labels = node.labels.length > 0 ? node.labels : bound.schema.nodeLabels;
   if (!existing) {
     scope.set(name, { kind: "node", labels: [...labels], labeled: node.labels.length > 0 });
     return;
@@ -137,7 +137,7 @@ function declareRelationship(
   anonymousName: () => string,
 ): void {
   for (const type of relationship.types) {
-    if (!relationshipTableByType.has(type)) throw new CypherError("binder", `Table ${type} does not exist.`);
+    if (!bound.schema.relationshipTableByType.has(type)) throw new CypherError("binder", `Table ${type} does not exist.`);
   }
   if (!relationship.variable) {
     bound.anonymous.set(relationship, anonymousName());
@@ -148,7 +148,7 @@ function declareRelationship(
   }
   scope.set(relationship.variable, {
     kind: "rel",
-    types: relationship.types.length > 0 ? [...relationship.types] : allRelationshipTypes,
+    types: relationship.types.length > 0 ? [...relationship.types] : bound.schema.relationshipTypes,
     list: relationship.hops !== undefined,
   });
 }
@@ -241,7 +241,7 @@ function inferType(
       recurse(expression.object);
       if (expression.object.kind === "variable") {
         const info = scope.get(expression.object.name)!;
-        return checkProperty(info, expression.name, expression.object.name);
+        return checkProperty(info, expression.name, expression.object.name, bound.schema);
       }
       return "ANY";
     }
@@ -316,21 +316,21 @@ function inferType(
   }
 }
 
-function checkProperty(info: VariableInfo, property: string, variable: string): StaticType {
+function checkProperty(info: VariableInfo, property: string, variable: string, schema: GraphSchemaIndex): StaticType {
   if (info.kind === "value") {
     if (info.type === "ANY" || info.type === "NULL") return "ANY";
     throw new CypherError("binder", `${variable} has type ${info.type} and has no property ${property}.`);
   }
   const tables = info.kind === "node"
-    ? info.labels.map((label) => nodeTableByLabel.get(label)!.properties)
-    : info.types.map((type) => relationshipTableByType.get(type)!.properties);
+    ? info.labels.map((label) => schema.nodeTableByLabel.get(label)!.properties)
+    : info.types.map((type) => schema.relationshipTableByType.get(type)!.properties);
   if (info.kind === "node" && property === "id") return "STRING";
   // Endpoint labels no relationship table allows: Kuzu returns no rows rather than an error.
   if (tables.length === 0) return "ANY";
   const types = new Set(tables.map((properties) => properties[property]).filter((type) => type !== undefined));
   if (types.size === 0) {
     // Kuzu checks an unlabeled node against every node table, not just the ones its relationships allow.
-    if (info.kind === "node" && !info.labeled && nodeTables.some((table) => property in table.properties)) return "ANY";
+    if (info.kind === "node" && !info.labeled && schema.nodeTables.some((table) => property in table.properties)) return "ANY";
     throw new CypherError("binder", `Cannot find property ${property} for ${variable}.`);
   }
   if (types.size > 1) return "ANY";

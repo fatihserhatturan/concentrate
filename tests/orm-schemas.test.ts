@@ -7,6 +7,7 @@ import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { mongooseCollectionName, snakeCase } from "../src/integrations/frameworks/js-ts/data-schemas.js";
+import { openTestStore } from "./helpers/store.js";
 
 const fixturePath = path.join(import.meta.dirname, "../fixtures/orm-schemas");
 
@@ -27,7 +28,7 @@ describe("TypeORM, Mongoose and Drizzle declarations", () => {
   let tables: Table[];
   before(async () => {
     graph = await buildCodeGraph(fixturePath, { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-orm-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-orm-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
     tables = (await call("list_tables", { limit: 50 })).tables;

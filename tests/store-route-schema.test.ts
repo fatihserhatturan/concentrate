@@ -4,8 +4,9 @@ import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
-import { SCHEMA_VERSION } from "../src/adapters/store/schema.js";
+import { BASE_SCHEMA_VERSION as SCHEMA_VERSION } from "../src/core/graph/schema.js";
 import { GraphStore } from "../src/adapters/store/store.js";
+import { openTestStore } from "./helpers/store.js";
 
 describe("graph store route schema", () => {
   it("writes Route nodes and route relationships", async () => {
@@ -13,7 +14,7 @@ describe("graph store route schema", () => {
       await mkdtemp(path.join(os.tmpdir(), "concentrate-route-schema-")),
       "graph",
     );
-    const writer = await GraphStore.open(databasePath);
+    const writer = await openTestStore(databasePath);
     await writer.reset();
 
     const nodes: GraphNode[] = [

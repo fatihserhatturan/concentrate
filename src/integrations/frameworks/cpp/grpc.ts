@@ -42,6 +42,7 @@ export const cppGrpcPlugin: CppParsePlugin = ({ fileNodeId, source: written, nod
 type Implementation = { service: string; className: string; methods: Map<string, string> };
 
 export const cppGrpcContributor: ISemanticContributor = {
+  id: "cpp.grpc",
   contribute(graph) {
     const calls = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.cppGrpcMethod === "string");
     const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.cppGrpcStubs === "string");

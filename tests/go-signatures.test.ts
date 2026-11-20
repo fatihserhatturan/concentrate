@@ -7,6 +7,7 @@ import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -45,7 +46,7 @@ describe("Go interfaces matched by signature, closure parameters and shadowed na
   });
 
   it("lists an interface's implementations with its definition and the implementation each caller reaches", async () => {
-    const store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-signatures-")), "graph"));
+    const store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-signatures-")), "graph"));
     try {
       await store.reset();
       await store.write(graph.nodes, graph.relationships);

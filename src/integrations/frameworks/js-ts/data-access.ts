@@ -10,6 +10,7 @@ import type { ISemanticContributor } from "../../../core/contracts/semantic-cont
 // their tables and relations first, and Prisma calls link to those models;
 // accesses to models with a table also get READS / WRITES to it.
 export const dataAccessContributor: ISemanticContributor = {
+  id: "js-ts.data-access",
   async contribute(graph, rootPath, report, files) {
     const prismaModels = addPrismaSchemaGraph(graph, await loadPrismaSchemas(rootPath, files, report));
     addDataAccessRelationships(graph, prismaModels);

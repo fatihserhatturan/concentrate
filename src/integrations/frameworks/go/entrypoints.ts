@@ -214,6 +214,7 @@ function implementationValue(node: SyntaxNode, locals: ReadonlyMap<string, Local
 // methods; cobra commands get their handler and their full command path
 // (`app serve`).
 export const goEntrypointsContributor: ISemanticContributor = {
+  id: "go.entrypoints",
   contribute(graph) {
     const registrations = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.grpcRegistration === "string");
     const commands = graph.nodesWithLabel("EntryPoint").filter((node) => node.properties.library === "cobra" && typeof node.properties.goPending === "string");

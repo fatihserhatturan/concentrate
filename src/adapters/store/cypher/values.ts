@@ -1,5 +1,5 @@
 import { NodeRecord, RelationshipRecord } from "../graph.js";
-import { nodeTableByLabel } from "../schema.js";
+import type { GraphSchemaIndex } from "../../../core/graph/schema.js";
 
 /** Runtime values. Variable-length relationships are lists of RelationshipRecord. */
 export type Value = null | number | string | boolean | NodeRecord | RelationshipRecord | Value[];
@@ -97,10 +97,11 @@ export function valueKey(value: Value): string {
 }
 
 /** Plain JSON-friendly output, shaped like the Kuzu Node.js driver's. */
-export function toOutput(value: Value): unknown {
+export function toOutput(value: Value, schema?: GraphSchemaIndex): unknown {
   if (value instanceof NodeRecord) {
     const result: Record<string, unknown> = { _label: value.label, id: value.id };
-    for (const property of Object.keys(nodeTableByLabel.get(value.label)!.properties)) {
+    // Result columns follow the table's property order; error messages, which have no schema at hand, the node's own.
+    for (const property of Object.keys(schema ? schema.nodeTableByLabel.get(value.label)!.properties : value.properties)) {
       if (property !== "id") result[property] = value.properties[property] ?? null;
     }
     return result;
@@ -108,6 +109,6 @@ export function toOutput(value: Value): unknown {
   if (value instanceof RelationshipRecord) {
     return { _label: value.type, _src: value.from.id, _dst: value.to.id, ...value.properties };
   }
-  if (Array.isArray(value)) return value.map(toOutput);
+  if (Array.isArray(value)) return value.map((item) => toOutput(item, schema));
   return value;
 }

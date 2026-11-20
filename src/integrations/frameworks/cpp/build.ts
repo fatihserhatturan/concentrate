@@ -12,6 +12,7 @@ import { readBuildModel, type BuildTarget } from "../../languages/cpp/build/inde
 // entrypoint) that `RUNS` the `main` entrypoints of its sources.
 
 export const cppBuildContributor: ISemanticContributor = {
+  id: "cpp.build",
   async contribute(graph, rootPath) {
     const repo = graph.nodesWithLabel("Repo")[0];
     if (!repo) return;

@@ -7,6 +7,7 @@ import { describe, it } from "node:test";
 import { failPythonParsingOfBrokenFiles } from "./helpers/failing-parser.js";
 import { startWatch, type WatchScan } from "../src/adapters/cli/watch.js";
 import { GraphStore } from "../src/adapters/store/store.js";
+import { openTestStore } from "./helpers/store.js";
 
 // fs.watch can deliver events late, split one burst of writes over two scans,
 // or report a write made just before the watcher started. idle() only knows
@@ -56,7 +57,7 @@ describe("watch", () => {
       let scan = await scanWhere(handle, scans, 0, async () => true);
       assert.equal(scan.result?.report.status, "success");
       // A reader opened once, like a running MCP server, sees every new graph.
-      const reader = await GraphStore.open(options.database);
+      const reader = await openTestStore(options.database);
       assert.deepEqual(await functionNames(reader), ["one"]);
       const names = async () => (await functionNames(reader)).join(",");
 

@@ -8,7 +8,8 @@ import type { GraphNode, GraphRelationship } from "../../core/graph/model.js";
 import { MemoryGraph, validateProperties, type NodeRecord, type PropertyValue, type RelationshipRecord } from "./graph.js";
 import { physicalRelationshipType } from "./physical-types.js";
 import { withProvenance } from "./provenance.js";
-import { nodeTableByLabel, relationshipTableByType } from "./schema.js";
+import type { GraphSchemaIndex } from "../../core/graph/schema.js";
+import { schemaFingerprint } from "./schema-fingerprint.js";
 
 /**
  * On-disk snapshot of a MemoryGraph:
@@ -41,6 +42,8 @@ const gunzipAsync = promisify(gunzip);
 export type Head = {
   format: number;
   schemaVersion: number;
+  /** Tables the snapshot was written for (see schemaFingerprint); heads from before it was added have none. */
+  schemaFingerprint?: string;
   generation: number;
   writtenAt: string;
   nodes: number;
@@ -77,10 +80,10 @@ export async function readHead(directory: string): Promise<Head | null> {
  * so its relationships resolve at once too. Anything whose endpoint is still
  * missing waits in a compact list and is resolved at the end.
  */
-export async function loadSnapshot(directory: string): Promise<{ head: Head | null; graph: MemoryGraph }> {
+export async function loadSnapshot(directory: string, schema: GraphSchemaIndex): Promise<{ head: Head | null; graph: MemoryGraph }> {
   for (let attempt = 1; ; attempt += 1) {
     const head = await readHead(directory);
-    const graph = new MemoryGraph();
+    const graph = new MemoryGraph(schema);
     if (!head) return { head, graph };
     try {
       const pending: RelationshipLine[] = [];
@@ -158,7 +161,7 @@ async function runConcurrently<T>(items: readonly T[], limit: number, task: (ite
 export async function commitSnapshot(
   directory: string,
   graph: MemoryGraph,
-  options: { schemaVersion: number; previous: Head | null },
+  options: { previous: Head | null },
 ): Promise<Head> {
   const segmentsDirectory = path.join(directory, SEGMENTS_DIR);
   await mkdir(segmentsDirectory, { recursive: true });
@@ -167,7 +170,7 @@ export async function commitSnapshot(
   for (const [key, content] of serializeSegments(graph)) {
     segments[key] = await writeSegment(segmentsDirectory, content, reusable);
   }
-  return writeHead(directory, segments, { nodes: graph.nodeCount, relationships: graph.relationshipCount }, options);
+  return writeHead(directory, segments, { nodes: graph.nodeCount, relationships: graph.relationshipCount }, { schema: graph.schema, previous: options.previous });
 }
 
 /**
@@ -181,9 +184,10 @@ export async function commitScannedSnapshot(
   directory: string,
   nodes: readonly GraphNode[],
   relationships: readonly GraphRelationship[],
-  options: { schemaVersion: number; previous: Head | null },
+  options: { schema: GraphSchemaIndex; previous: Head | null },
 ): Promise<Head> {
-  const plan = planSegments(nodes, relationships);
+  const { schema } = options;
+  const plan = planSegments(nodes, relationships, schema);
   const segmentsDirectory = path.join(directory, SEGMENTS_DIR);
   await mkdir(segmentsDirectory, { recursive: true });
   const reusable = reusableSegments(options.previous);
@@ -194,13 +198,13 @@ export async function commitScannedSnapshot(
     const lines: string[] = [];
     for (const index of plan.nodesByKey.get(key) ?? []) {
       const node = nodes[index]!;
-      const table = nodeTableByLabel.get(node.label)!;
+      const table = schema.nodeTableByLabel.get(node.label)!;
       lines.push(JSON.stringify(["n", node.label, node.id, validateProperties(`node ${node.id}`, table.properties, node.properties)] satisfies NodeLine));
     }
     for (const index of plan.relationshipsByKey.get(key) ?? []) {
       const relationship = relationships[index]!;
       const type = plan.types[index]!;
-      const table = relationshipTableByType.get(type)!;
+      const table = schema.relationshipTableByType.get(type)!;
       const properties = validateProperties(`${type} ${relationship.from} -> ${relationship.to}`, table.properties, withProvenance(relationship));
       lines.push(JSON.stringify(["r", type, relationship.from, relationship.to, properties] satisfies RelationshipLine));
     }
@@ -224,11 +228,11 @@ type SegmentPlan = {
  * Decide, with the same checks as `MemoryGraph.write`, which segment every
  * node and kept relationship belongs to. Holds indexes, not copies.
  */
-function planSegments(nodes: readonly GraphNode[], relationships: readonly GraphRelationship[]): SegmentPlan {
+function planSegments(nodes: readonly GraphNode[], relationships: readonly GraphRelationship[], schema: GraphSchemaIndex): SegmentPlan {
   const indexById = new Map<string, number>();
   const fileKeys = new Map<string, string>();
   nodes.forEach((node, index) => {
-    if (!nodeTableByLabel.has(node.label)) {
+    if (!schema.nodeTableByLabel.has(node.label)) {
       throw new Error(`Cannot write node ${node.id}: table ${node.label} does not exist`);
     }
     if (indexById.has(node.id)) {
@@ -259,7 +263,7 @@ function planSegments(nodes: readonly GraphNode[], relationships: readonly Graph
   let kept = 0;
   relationships.forEach((relationship, index) => {
     const requested = physicalRelationshipType(relationship, labelById);
-    const table = relationshipTableByType.get(requested);
+    const table = schema.relationshipTableByType.get(requested);
     if (!table) {
       throw new Error(`Cannot write relationship ${relationship.from} -> ${relationship.to}: table ${requested} does not exist`);
     }
@@ -305,11 +309,12 @@ async function writeHead(
   directory: string,
   segments: Record<string, string>,
   counts: { nodes: number; relationships: number },
-  options: { schemaVersion: number; previous: Head | null },
+  options: { schema: GraphSchemaIndex; previous: Head | null },
 ): Promise<Head> {
   const head: Head = {
     format: STORE_FORMAT,
-    schemaVersion: options.schemaVersion,
+    schemaVersion: options.schema.version,
+    schemaFingerprint: schemaFingerprint(options.schema),
     generation: (options.previous?.generation ?? 0) + 1,
     writtenAt: new Date().toISOString(),
     nodes: counts.nodes,

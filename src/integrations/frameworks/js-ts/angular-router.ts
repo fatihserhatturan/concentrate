@@ -175,6 +175,7 @@ function lazyImport(node: SyntaxNode | null): { source: string; exportName: stri
 // route's, which may itself be mounted. Routes nothing mounts keep the path
 // of a root array.
 export const angularRouteMountsContributor: ISemanticContributor = {
+  id: "js-ts.angular-route-mounts",
   contribute(graph) {
     const pagesByFile = new Map<string, GraphNode[]>();
     const classesByFile = new Map<string, Map<string, string>>();

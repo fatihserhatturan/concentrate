@@ -1,31 +1,9 @@
-export type GraphNodeLabel =
-  | "Repo"
-  | "Package"
-  | "Directory"
-  | "File"
-  | "Import"
-  | "Function"
-  | "Class"
-  | "Field"
-  | "Variable"
-  | "Decorator"
-  | "Interface"
-  | "TypeAlias"
-  | "Enum"
-  | "Call"
-  | "Route"
-  | "EntryPoint"
-  | "EnvVar"
-  | "ConfigValue"
-  | "DataModel"
-  | "Table"
-  | "Component"
-  | "Page"
-  | "Store"
-  | "Style"
-  | "Service"
-  | "Rpc"
-  | "Message";
+import type { CoreNodeLabel } from "./schema.js";
+
+// Derived from the base schema's node tables, so the labels exist once. It stays
+// a closed union (narrowing and exhaustive switches keep working); the nodes of
+// a schema extension's own tables are written with a cast to this type.
+export type GraphNodeLabel = CoreNodeLabel;
 
 export type GraphRelationshipType =
   | "CONTAINS_ROOT"

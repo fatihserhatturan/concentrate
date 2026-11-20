@@ -327,6 +327,7 @@ function maskTemplateSyntax(source: string): string {
 // and import (an imported NgModule's `exports`). The rest stay in
 // `pendingRenders`.
 export const angularTemplatesContributor: ISemanticContributor = {
+  id: "js-ts.angular-templates",
   async contribute(graph) {
     const components: Array<{ component: GraphNode; file: GraphNode }> = [];
     const classOf = new Map<string, string>();

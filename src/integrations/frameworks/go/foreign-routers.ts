@@ -14,6 +14,7 @@ import { createGoRoutesPlugin, routerPackages, routerTypeOf, type GoForeignRoute
 // parse come back with the same ids and are kept as they are. Runs before goRoutesContributor,
 // which finishes them like any other.
 export const goForeignRoutersContributor: ISemanticContributor = {
+  id: "go.foreign-routers",
   async contribute(graph, rootPath) {
     // Only a Go file that imports a router package can have such a function.
     const routerImports = graph.nodesWithLabel("Import").filter((node) => typeof node.properties.source === "string" && routerPackages.some(([, pattern]) => pattern.test(String(node.properties.source))));

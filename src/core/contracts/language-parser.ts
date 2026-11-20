@@ -3,6 +3,8 @@ import type { SupportedLanguage } from "../scan/language.js";
 
 export interface ILanguageParser {
   readonly language: SupportedLanguage;
+  // Part of the parse cache fingerprint: a plugin bumps it when its parse output changes.
+  readonly version?: string;
   parse(rootPath: string, filePath: string): Promise<ParsedSourceFile>;
 }
 

@@ -390,6 +390,7 @@ type Access = { callId: string; modelId: string; operation: string; library: str
 type ModelRef = { classNode: GraphNode; fileId: string; pkg: string };
 
 export const goDataAccessContributor: ISemanticContributor = {
+  id: "go.data-access",
   contribute(graph) {
     const pending = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.goDataAccess === "string");
     const gormClasses = graph.nodesWithLabel("Class").filter((node) => typeof node.properties.goGorm === "string");

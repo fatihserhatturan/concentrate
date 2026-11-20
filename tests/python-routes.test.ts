@@ -8,6 +8,7 @@ import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import { cleanRegexPath, joinPaths } from "../src/integrations/frameworks/python/routes.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 type Row = [string, string | null, string, string | null, string[]];
@@ -205,7 +206,7 @@ describe("Python routes over MCP", () => {
 
   before(async () => {
     const graph = await scan("python-fastapi");
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-routes-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-routes-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });

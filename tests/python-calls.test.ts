@@ -6,6 +6,7 @@ import { after, before, describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { BuildCodeGraphResult } from "../src/core/scan/result.js";
 import { GraphStore } from "../src/adapters/store/store.js";
+import { openTestStore } from "./helpers/store.js";
 
 let result: BuildCodeGraphResult;
 before(async () => {
@@ -127,7 +128,7 @@ describe("Python entrypoints and tests", () => {
 describe("Python graphs in the store", () => {
   let store: GraphStore;
   before(async () => {
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-store-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-store-")), "graph"));
     await store.reset();
   });
   after(async () => {

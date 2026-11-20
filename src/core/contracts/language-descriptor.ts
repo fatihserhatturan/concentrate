@@ -9,6 +9,8 @@ export type DetectedFile = { filePath: string; language: string };
 export interface LanguageDescriptor {
   /** The value of `File.language`, the key of the parser, and the name a `concentrate.json` extension override uses. */
   readonly id: string;
+  /** Part of the parse cache fingerprint. */
+  readonly version?: string;
   /** True when the parser reads declarations, imports and calls; false for a file that is only a `File` node. */
   readonly code: boolean;
   /** Extensions with their dot, lower case (".ts"). Matched case-sensitively first, then in lower case. */

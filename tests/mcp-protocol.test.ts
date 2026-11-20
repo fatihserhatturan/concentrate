@@ -7,10 +7,11 @@ import { McpProtocolError } from "../src/adapters/mcp/errors.js";
 import { pagedResult, pageWindow } from "../src/adapters/mcp/paging.js";
 import { GRAPH_SUMMARY_URI } from "../src/adapters/mcp/resources.js";
 import { handleMcpRequest, MODERN_PROTOCOL_VERSION } from "../src/adapters/mcp/server.js";
-import { SCHEMA_VERSION } from "../src/adapters/store/schema.js";
+import { BASE_SCHEMA_VERSION as SCHEMA_VERSION } from "../src/core/graph/schema.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { startMcpServer } from "./helpers/mcp-stdio.js";
+import { openTestStore } from "./helpers/store.js";
 
 const FUNCTIONS = 37;
 
@@ -35,7 +36,7 @@ async function createProject() {
   ].join("\n"));
   const graph = await buildCodeGraph(projectPath, { continueOnError: false });
   const databasePath = path.join(root, "graph");
-  const store = await GraphStore.open(databasePath);
+  const store = await openTestStore(databasePath);
   await store.reset();
   await store.write(graph.nodes, graph.relationships);
   return { databasePath, store };

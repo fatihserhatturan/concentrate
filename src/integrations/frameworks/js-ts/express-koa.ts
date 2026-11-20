@@ -25,6 +25,7 @@ export function applyExpressKoaParseSemantics(
 // from another file. Runs before the env-config and data-access contributors,
 // which read ROUTE_HANDLED_BY.
 export const routeHandlerContributor: ISemanticContributor = {
+  id: "js-ts.express-koa-route-handlers",
   contribute(graph) {
     addImportedRouteHandlerRelationships(graph);
   },

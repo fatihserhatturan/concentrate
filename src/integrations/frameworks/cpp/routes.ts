@@ -290,6 +290,7 @@ function crowMethods(list: string): string[] {
 // ---- finishing, once every file is parsed ----
 
 export const cppRoutesContributor: ISemanticContributor = {
+  id: "cpp.routes",
   contribute(graph) {
     const routes = graph.nodesWithLabel("Route").filter((node) => typeof node.properties.cppPending === "string");
     const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.cppBlueprints === "string");

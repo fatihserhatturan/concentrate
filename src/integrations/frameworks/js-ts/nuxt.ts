@@ -44,6 +44,7 @@ import type { PendingRender } from "./react.js";
 const scriptExtension = /\.(ts|js|mjs|mts)$/u;
 
 export const nuxtAutoImportsContributor: ISemanticContributor = {
+  id: "js-ts.nuxt-auto-imports",
   async contribute(graph) {
     const projects = await nuxtProjects(graph);
     if (projects.length === 0) return;
@@ -111,6 +112,7 @@ export const nuxtAutoImportsContributor: ISemanticContributor = {
 };
 
 export const nuxtPagesContributor: ISemanticContributor = {
+  id: "js-ts.nuxt-pages",
   async contribute(graph) {
     const vueComponentByFile = new Map<string, string>();
     for (const rel of graph.relationshipsOfType("DECLARES_COMPONENT")) {
@@ -162,6 +164,7 @@ export const nuxtPagesContributor: ISemanticContributor = {
 const serverRouteFile = /^server\/(api|routes)\/(.+?)(?:\.(get|post|put|patch|delete|head|options))?\.(?:ts|js|mjs|mts)$/u;
 
 export const nuxtServerRoutesContributor: ISemanticContributor = {
+  id: "js-ts.nuxt-server-routes",
   async contribute(graph) {
     const functionsByFile = groupBy(graph, "DEFINES_FUNCTION");
     const variablesByFile = groupBy(graph, "DEFINES_VARIABLE");
@@ -216,6 +219,7 @@ export const nuxtServerRoutesContributor: ISemanticContributor = {
 };
 
 export const vueGlobalComponentsContributor: ISemanticContributor = {
+  id: "js-ts.vue-global-components",
   async contribute(graph) {
     const vueComponents = new Map<string, string>();
     const componentsByFileAndName = new Map<string, Map<string, string[]>>();

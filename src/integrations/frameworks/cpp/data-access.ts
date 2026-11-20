@@ -136,6 +136,7 @@ function literalEnd(source: CppSource, from: number): number {
 type Access = { owner: string; extra: string[]; modelId: string; operation: string; library: string; line: number; expression: string };
 
 export const cppDataAccessContributor: ISemanticContributor = {
+  id: "cpp.data-access",
   contribute(graph) {
     const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.cppData === "string");
     if (files.length === 0) return;

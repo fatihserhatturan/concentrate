@@ -305,6 +305,7 @@ export const rustHttpClientsPlugin: RustParsePlugin = ({ fileNodeId, root, nodes
 // Resolves the `${env:X}` parts of Rust request URLs from the nearest `.env*`
 // file (only a URL or path value). Runs before the http-requests contributor.
 export const rustHttpClientsContributor: ISemanticContributor = {
+  id: "rust.http-clients",
   async contribute(graph, rootPath, _report, files) {
     const calls = graph.nodesWithLabel("Call").filter((node) => node.properties.httpClient === "reqwest" && typeof node.properties.httpUrl === "string" && node.properties.httpUrl.includes("${env:"));
     if (calls.length === 0) return;

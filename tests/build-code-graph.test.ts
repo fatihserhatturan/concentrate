@@ -6,7 +6,7 @@ import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { coreIntegrationRegistry } from "../src/composition/default-registry.js";
 import { scanCommand } from "../src/commands/scan.js";
-import { SCHEMA_VERSION } from "../src/adapters/store/schema.js";
+import { BASE_SCHEMA_VERSION as SCHEMA_VERSION } from "../src/core/graph/schema.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { parseJsTsWithRootNode } from "../src/integrations/languages/js-ts/parser.js";
 import { applyExpressKoaParseSemantics } from "../src/integrations/frameworks/js-ts/express-koa.js";
@@ -14,6 +14,7 @@ import { applyFastifyParseSemantics } from "../src/integrations/frameworks/js-ts
 import { failPythonParsingOfBrokenFiles } from "./helpers/failing-parser.js";
 import { parseTsconfig } from "../src/integrations/languages/js-ts/resolution/tsconfig.js";
 import type { GraphNode, GraphRelationship, GraphNodeLabel, GraphRelationshipType } from "../src/core/graph/model.js";
+import { openTestStore } from "./helpers/store.js";
 
 const fixturesRoot = path.resolve("fixtures");
 
@@ -201,7 +202,7 @@ describe("buildCodeGraph", () => {
 
     process.exitCode = previousExitCode;
 
-    const writer = await GraphStore.open(databasePath);
+    const writer = await openTestStore(databasePath);
     try {
       const rows = await writer.query("MATCH (fn:Function) RETURN fn.name AS name ORDER BY name");
       const names = rows.map((row) => String((row as { name: unknown }).name));
@@ -242,7 +243,7 @@ describe("buildCodeGraph", () => {
     const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as { files?: unknown[] };
     assert.equal(manifest.files?.length, 2);
 
-    const writer = await GraphStore.open(databasePath);
+    const writer = await openTestStore(databasePath);
     try {
       assert.equal(await writer.schemaVersion(), SCHEMA_VERSION);
       const rows = await writer.query(

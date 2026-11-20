@@ -6,6 +6,7 @@ import { after, before, describe, it } from "node:test";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
+import { openTestStore } from "./helpers/store.js";
 
 describe("proto rpcs in list_rpcs", () => {
   let store: GraphStore;
@@ -13,7 +14,7 @@ describe("proto rpcs in list_rpcs", () => {
   before(async () => {
     root = await mkdtemp(path.join(os.tmpdir(), "concentrate-mcp-rpcs-"));
     const graph = await buildCodeGraph(path.resolve("fixtures/proto-services"), { continueOnError: false });
-    store = await GraphStore.open(path.join(root, "graph"));
+    store = await openTestStore(path.join(root, "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });

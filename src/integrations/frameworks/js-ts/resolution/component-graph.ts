@@ -26,6 +26,7 @@ import { isHookCall, type PendingRender } from "../react.js";
 //   its export named `Page.component` (Angular's `.then((m) => m.X)`), or
 //   else its default export.
 export const componentGraphContributor: ISemanticContributor = {
+  id: "js-ts.component-graph",
   contribute(graph) {
     addComponentRelationships(graph);
   },

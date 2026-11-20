@@ -8,6 +8,7 @@ import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import { sqlTableAccesses } from "../src/integrations/frameworks/go/sql.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -34,7 +35,7 @@ describe("Rust data access", () => {
 
   before(async () => {
     graph = await buildCodeGraph(path.resolve("fixtures/rust-data"), { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-data-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-data-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });

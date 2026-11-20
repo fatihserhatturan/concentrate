@@ -143,6 +143,7 @@ const handlerMethods = new Set(["GET", "POST", "PUT", "PATCH", "DELETE", "OPTION
 const endpointExtension = /\.[cm]?[jt]s$/u;
 
 export const astroPagesContributor: ISemanticContributor = {
+  id: "js-ts.astro-pages",
   async contribute(graph) {
     const functionsByFile = new Map<string, GraphNode[]>();
     const componentByFile = new Map<string, string>();

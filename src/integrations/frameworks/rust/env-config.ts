@@ -213,6 +213,7 @@ function constantPath(node: SyntaxNode): string | null {
 // Env reads keyed by a constant declared in another file: the constant's
 // literal is taken when the name is declared once, with one value, in the project.
 export const rustEnvConfigContributor: ISemanticContributor = {
+  id: "rust.env-config",
   contribute(graph) {
     const files = graph.nodesWithLabel("File").filter((node) => (typeof node.properties.rustEnvPending === "string" || typeof node.properties.rustEnvConsts === "string"));
     if (files.length === 0) return;

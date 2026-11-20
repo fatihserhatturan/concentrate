@@ -33,6 +33,7 @@ const specialPages = new Map([
 ]);
 
 export const nextjsPagesContributor: ISemanticContributor = {
+  id: "js-ts.nextjs-pages",
   async contribute(graph) {
     const componentsByFile = new Map<string, GraphNode[]>();
     for (const rel of graph.relationshipsOfType("DECLARES_COMPONENT")) {
@@ -96,6 +97,7 @@ const handlerMethods = new Set(["GET", "HEAD", "POST", "PUT", "DELETE", "PATCH",
 const middlewareFile = /^(?:src\/)?(middleware|proxy)\.(jsx?|tsx?|mjs|cjs)$/u;
 
 export const nextjsRoutesContributor: ISemanticContributor = {
+  id: "js-ts.nextjs-routes",
   async contribute(graph) {
     const functionsByFile = new Map<string, GraphNode[]>();
     for (const rel of graph.relationshipsOfType("DEFINES_FUNCTION")) {

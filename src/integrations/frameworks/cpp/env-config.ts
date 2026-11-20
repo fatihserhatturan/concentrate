@@ -76,6 +76,7 @@ export const cppEnvConfigPlugin: CppParsePlugin = ({ fileNodeId, source: written
 };
 
 export const cppEnvConfigContributor: ISemanticContributor = {
+  id: "cpp.env-config",
   contribute(graph) {
     const files = graph.nodesWithLabel("File").filter((node) => (typeof node.properties.cppEnvPending === "string" || typeof node.properties.cppEnvConsts === "string"));
     if (files.length === 0) return;

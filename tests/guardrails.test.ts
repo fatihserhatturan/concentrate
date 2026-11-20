@@ -197,9 +197,7 @@ const ECOSYSTEM_FILE_NAME = /node_modules|package\.json|package-lock|tsconfig|pn
 const LANGUAGE_EXTENSION_TEST = /\.endsWith\(\s*["']\.(py|go|rs|c|cc|cpp|cxx|h|hh|hpp|java|ts|tsx|js|jsx|mjs|cjs)["']\s*\)/;
 
 /** Adapter modules src/api.ts still re-exports. Shrinks as use cases move into core. */
-const API_ADAPTER_EXPORT_DEBT: readonly string[] = [
-  "adapters/store/schema.js",
-];
+const API_ADAPTER_EXPORT_DEBT: readonly string[] = [];
 
 describe("Core purity ratchets", () => {
   it("src/core/ uses only pure node: built-ins outside the platform I/O allow-list", async () => {
@@ -467,6 +465,15 @@ describe("Architecture dependency guardrails", () => {
       violations,
       [],
       `Storage engine leaks into CLI/MCP:\n${violations.map((v) => `  ${v.file}: ${v.violation}`).join("\n")}`,
+    );
+  });
+
+  it("the graph store adapter gets its schema injected, not from composition or integrations", async () => {
+    const violations = await checkFiles(path.join(srcRoot, "adapters/store"), ["composition/", "integrations/", "adapters/cli/", "adapters/mcp/"]);
+    assert.deepEqual(
+      violations,
+      [],
+      `Graph store reaches outside core:\n${violations.map((v) => `  ${v.file}: ${v.violation}`).join("\n")}`,
     );
   });
 });

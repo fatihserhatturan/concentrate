@@ -39,6 +39,8 @@ export type ProjectManifestContext = {
 
 export interface IProjectManifestReader {
   readonly id: string;
+  // Part of the parse cache fingerprint.
+  readonly version?: string;
   // Packages the ecosystem declares. When two readers declare the same directory, the first registered wins.
   readPackages?(context: ProjectManifestContext): Promise<DeclaredPackage[]>;
   // Values of the project's own manifests, added to the repository node in order.

@@ -4,10 +4,11 @@ import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
-import { SCHEMA_VERSION } from "../src/adapters/store/schema.js";
+import { BASE_SCHEMA_VERSION as SCHEMA_VERSION } from "../src/core/graph/schema.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { handleMcpRequest } from "../src/adapters/mcp/server.js";
+import { openTestStore } from "./helpers/store.js";
 
 describe("MCP tools", () => {
   it("handles MCP initialize, tools/list, tools/call, and unsupported methods", async () => {
@@ -153,7 +154,7 @@ describe("MCP tools", () => {
   it("find_callers includes callers that are class methods", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "concentrate-mcp-methods-"));
     const graph = await buildCodeGraph(path.resolve("fixtures/nestjs-injection"), { continueOnError: false });
-    const writer = await GraphStore.open(path.join(root, "graph"));
+    const writer = await openTestStore(path.join(root, "graph"));
     try {
       await writer.reset();
       await writer.write(graph.nodes, graph.relationships);
@@ -235,7 +236,7 @@ async function createMcpFixture(): Promise<{ databasePath: string; writer: Graph
   const graph = await buildCodeGraph(projectPath, {
     continueOnError: false,
   });
-  const writer = await GraphStore.open(databasePath);
+  const writer = await openTestStore(databasePath);
   await writer.reset();
   await writer.write(graph.nodes, graph.relationships);
   return { databasePath, writer };
