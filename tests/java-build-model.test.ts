@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { readdirSync } from "node:fs";
+import { mkdtempSync, readdirSync, rmSync, utimesSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { beforeEach, describe, it } from "node:test";
 import {
@@ -145,5 +146,27 @@ describe("moduleOfFile / visibleModules", () => {
     const m: JavaBuildModel = { modules: [a, b, c], files: [], unresolved: 0 };
     assert.deepEqual([...visibleModules(m, "maven:a")].sort(), ["maven:a", "maven:b", "maven:c"]);
     assert.deepEqual([...visibleModules(m, "maven:zzz")], ["maven:zzz"]);
+  });
+});
+
+describe("readJavaBuildModel cache key", () => {
+  it("follows the content of a build file even when its size and mtime are unchanged", async () => {
+    const root = mkdtempSync(path.join(tmpdir(), "java-cache-"));
+    try {
+      const file = path.join(root, "pom.xml");
+      const pom = (artifact: string) => `<project><groupId>g</groupId><artifactId>${artifact}</artifactId><version>1</version></project>`;
+      writeFileSync(file, pom("aaa"));
+      const when = new Date("2020-01-01T00:00:00Z");
+      utimesSync(file, when, when);
+      const first = await readJavaBuildModel(root, ["pom.xml"]);
+      assert.equal(first.modules[0]!.name, "g:aaa");
+      writeFileSync(file, pom("bbb"));
+      utimesSync(file, when, when);
+      const second = await readJavaBuildModel(root, ["pom.xml"]);
+      assert.equal(second.modules[0]!.name, "g:bbb");
+      assert.equal(await readJavaBuildModel(root, ["pom.xml"]), second);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });

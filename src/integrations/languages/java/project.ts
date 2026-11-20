@@ -1,9 +1,11 @@
 import path from "node:path";
 import type { DeclaredPackage, IProjectManifestReader, ProjectConfigValue, ProjectManifestContext } from "../../../core/contracts/project-manifest.js";
-import { walkFiles } from "../../../core/scan/glob.js";
+import { discoverFiles } from "../../../core/scan/discover-files.js";
 import { javaModuleKey, readJavaBuildModel, type JavaBuildModel, type JavaModule } from "./build/index.js";
 
-const SKIPPED_DIRECTORIES = new Set(["node_modules", ".git", ".gradle", ".idea", "target", "build", "out"]);
+// The ignore rules of the scan that apply to build files: its defaults (`.git`, `build`, ...) plus the
+// JS/TS descriptor's, so this walk finds the same build files the scan does.
+const SCAN_CONVENTIONS = { ignoredPatterns: ["node_modules", ".next", ".turbo"], ignoredInDirectory: () => [] as string[] };
 
 function containedIn(dir: string, file: string): boolean {
   return dir === "." || dir === "" || file === dir || file.startsWith(`${dir}/`);
@@ -46,9 +48,8 @@ async function readConfig({ rootPath, fileSystem }: ProjectManifestContext): Pro
   // Only a root build file makes this reader's output; skip the walk otherwise.
   const rootEntries = await fileSystem.readDirectory(rootPath).catch(() => []);
   if (!rootEntries.some((entry) => entry.isFile && /^(pom\.xml|settings\.gradle|settings\.gradle\.kts|build\.gradle|build\.gradle\.kts)$/u.test(entry.name))) return [];
-  const files = await walkFiles(rootPath, fileSystem, {
-    accept: (relativePath, isDirectory) => !isDirectory || (!SKIPPED_DIRECTORIES.has(path.posix.basename(relativePath)) && !path.posix.basename(relativePath).startsWith(".")),
-  });
+  // The context has no file list yet at config time: walk with the scan's own ignore rules (gitignore included).
+  const files = (await discoverFiles(rootPath, fileSystem, { conventions: SCAN_CONVENTIONS })).map((file) => path.relative(rootPath, file).split(path.sep).join("/"));
   const model = await readJavaBuildModel(rootPath, files);
   const values: ProjectConfigValue[] = [];
   for (const module of declaredJavaModules(model, files)) {

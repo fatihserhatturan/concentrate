@@ -130,7 +130,7 @@ describe("gradle build reader", () => {
     assert.equal(e.unresolved, 2);
   });
 
-  it("applies subprojects sourceSets only", () => {
+  it("applies subprojects sourceSets and dependencies", () => {
     const model = run(
       {
         "settings.gradle": "include 'a', 'b'\n",
@@ -141,7 +141,9 @@ describe("gradle build reader", () => {
     assert.deepEqual(mod(model, ":a").sourceRoots, ["a/java"]);
     assert.deepEqual(mod(model, ":b").sourceRoots, ["b/java"]);
     assert.deepEqual(mod(model, ":").sourceRoots, ["src/main/java"]);
-    assert.deepEqual(mod(model, ":b").dependencies, []);
+    assert.deepEqual(mod(model, ":b").dependencies, [{ module: "gradle::a", scope: "implementation" }]);
+    assert.deepEqual(mod(model, ":a").dependencies, []);
+    assert.deepEqual(mod(model, ":").dependencies, []);
     assert.equal(mod(model, ":").aggregator, true);
   });
 
@@ -225,5 +227,51 @@ describe("gradle build reader", () => {
     for (const text of ["", "}}}", "include(", "'unterminated", "\"\"\"x", "/* x", "a.b.c.d = ", "include ':a' project(':a').projectDir =", "${", "`"]) {
       assert.doesNotThrow(() => run({ "settings.gradle": text, "build.gradle": text }));
     }
+  });
+});
+
+describe("gradle review fixes", () => {
+  it("applies project dependencies of subprojects / configure(allprojects) to the affected modules", () => {
+    const model = run({
+      "settings.gradle": "include 'core', 'app', 'other'\n",
+      "build.gradle": "subprojects { dependencies { implementation project(':core') } }\nconfigure(allprojects) { dependencies { api project(':other') } }\n",
+      "core/build.gradle": "",
+      "app/build.gradle": "",
+    });
+    const app = mod(model, ":app").dependencies;
+    assert.ok(app.some((d) => d.module === "gradle::core" && d.scope === "implementation"));
+    assert.ok(app.some((d) => d.module === "gradle::other" && d.scope === "api"));
+    // No self dependency.
+    assert.deepEqual(mod(model, ":core").dependencies.map((d) => d.module), ["gradle::other"]);
+    assert.deepEqual(mod(model, ":other").dependencies.map((d) => d.module), ["gradle::core"]);
+    // `subprojects` does not apply to the root itself, `allprojects` does.
+    assert.deepEqual(mod(model, ":").dependencies.map((d) => d.module), ["gradle::other"]);
+  });
+
+  it("handles very deep include paths and very many includes quickly", () => {
+    const deep = Array.from({ length: 5000 }, () => "a").join(":");
+    let start = Date.now();
+    const model = run({ "settings.gradle": `include '${deep}'\ninclude 'ok'\n` });
+    const deepMs = Date.now() - start;
+    assert.ok(deepMs < 1000, `deep took ${deepMs}ms`);
+    assert.deepEqual(model.modules.map((m) => m.name), [":", ":ok"]);
+    assert.ok(model.unresolved > 0);
+
+    const many = Array.from({ length: 20000 }, (_, i) => `include 'm${i}'`).join("\n");
+    start = Date.now();
+    const big = run({ "settings.gradle": many });
+    const manyMs = Date.now() - start;
+    assert.ok(manyMs < 1000, `many took ${manyMs}ms`);
+    assert.equal(big.modules.length, 5000);
+    assert.ok(big.unresolved > 0);
+  });
+
+  it("treats backslashes in paths as separators", () => {
+    const model = run({
+      "settings.gradle": "include 'app'\n",
+      "build.gradle": "",
+      "app/build.gradle": "sourceSets { main { java { srcDirs = ['gen\\\\java'] } } }\n",
+    });
+    assert.deepEqual(mod(model, ":app").sourceRoots, ["app/gen/java"]);
   });
 });

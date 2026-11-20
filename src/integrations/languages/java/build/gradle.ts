@@ -17,8 +17,11 @@ import { emptyJavaBuildModel, javaModuleKey, type JavaBuildModel, type JavaModul
 //    `srcDir`, `srcDirs(...)` and `srcDirs += ...` add to it. A replacement none of whose
 //    values resolves is ignored (the convention stays).
 //  * `subprojects { }` / `allprojects { }` (also `configure(subprojects) { }`) are applied to the
-//    affected modules for their `sourceSets` only, and only when `sourceSets` is a direct child
-//    (or under an `if`). Anything else in those blocks (dependencies, `plugins.withType { }`) is ignored.
+//    affected modules for their `sourceSets` and for the `project(...)` / `projects.x` entries of
+//    a `dependencies { }` block, when those are direct children (or under an `if`). Anything else
+//    in those blocks (`plugins.withType { }`) is ignored.
+//  * A project path has at most 100 segments and a build at most 5000 projects; an `include` past
+//    those caps is skipped and counted in `unresolved`.
 //  * Child project directories default to `<settings dir>/<path with ":" as "/">`; a parent's
 //    `projectDir` override does not move its children. Intermediate paths (`:a` of `include("a:b")`)
 //    are modules too, as in Gradle.
@@ -260,7 +263,7 @@ function literal(rest: Tok[]): { value: string | null; interp: boolean } | null 
 }
 
 function normalizeRel(p: string): string | null {
-  const n = path.posix.normalize(p).replace(/\/+$/u, "");
+  const n = path.posix.normalize(p.replace(/\\/gu, "/")).replace(/\/+$/u, "");
   if (n === "" || n === ".") return ".";
   if (n === ".." || n.startsWith("../") || n.startsWith("/")) return null;
   return n;
@@ -270,7 +273,7 @@ type Dirs = { moduleDir: string; rootDir: string };
 
 // A string that names a file or directory, relative to the scan root; null when it cannot be known.
 function resolveFs(tok: Tok, base: string, dirs: Dirs): string | null {
-  let s = tok.v;
+  let s = tok.v.replace(/\\/gu, "/");
   let anchor = base;
   if (hasInterp(tok)) {
     const m = /^\$(?:\{([\w.]+)\}|([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*))/u.exec(s);
@@ -331,6 +334,9 @@ const SETTINGS_SKIP = new Set(["pluginManagement", "dependencyResolutionManageme
 function projectSegs(raw: string): string[] {
   return raw.split(":").map((s) => s.trim()).filter((s) => s !== "");
 }
+
+const MAX_PROJECT_SEGMENTS = 100;
+const MAX_PROJECTS_PER_BUILD = 5000;
 
 function projectPath(segs: string[]): string {
   return segs.length === 0 ? ":" : `:${segs.join(":")}`;
@@ -534,6 +540,17 @@ function setMain(info: BuildInfo, kind: "app" | "boot", rest: Tok[]): void {
   else info.bootMain = value;
 }
 
+// `project(...)` dependencies of a `subprojects` / `allprojects` block.
+function sharedDeps(stmts: Stmt[]): RawDep[] {
+  const deps: RawDep[] = [];
+  walk(stmts, [], (segs, rest) => {
+    if (segs[0] !== "dependencies") return false;
+    if (segs.length >= 2 && segs[1] !== "()") deps.push(...projectRefs(segs[1]!, rest));
+    return segs.length === 1;
+  });
+  return deps;
+}
+
 // `sourceSets` of a `subprojects` / `allprojects` block, nothing else.
 function sharedOps(stmts: Stmt[]): RawOp[] {
   const ops: RawOp[] = [];
@@ -580,8 +597,15 @@ function depthOf(dir: string): number {
   return dir === "." ? 0 : dir.split("/").length;
 }
 
-function isPrefixPath(a: string[], b: string[]): boolean {
-  return a.length <= b.length && a.every((s, i) => s === b[i]);
+// The project paths of `segs` and of its ancestors, shortest first (`:`, `:a`, `:a:b`).
+function prefixPaths(segs: string[]): string[] {
+  const out = [":"];
+  let current = "";
+  for (const seg of segs) {
+    current += `:${seg}`;
+    out.push(current);
+  }
+  return out;
 }
 
 export function interpretGradle(input: GradleInput): JavaBuildModel {
@@ -637,22 +661,24 @@ function interpret(input: GradleInput): JavaBuildModel {
   for (const [dir, settingsFile] of settingsByDir) {
     const read = readSettings(stmtsOf(settingsFile), dir);
     const build: Build = { dir, settingsFile, rootName: read.rootName, projects: [], prefix: "" };
-    const make = (segs: string[], line: number): Project => {
-      const p = projectPath(segs);
+    const make = (segs: string[], p: string, line: number): Project => {
       const pdir = read.overrides.get(p) ?? (segs.length === 0 ? dir : normalizeRel(path.posix.join(dir, ...segs)) ?? dir);
       return { segs, path: p, dir: pdir, line, exists: dirsWithFiles.has(pdir), buildFile: buildByDir.get(pdir) ?? null, unresolved: 0 };
     };
     const byPath = new Map<string, Project>();
-    const root = make([], 1);
+    const root = make([], ":", 1);
     build.projects.push(root);
     byPath.set(root.path, root);
     root.unresolved += read.unresolved;
     for (const inc of read.includes) {
+      if (inc.segs.length > MAX_PROJECT_SEGMENTS) { root.unresolved += 1; continue; }
+      let p = "";
       for (let k = 1; k <= inc.segs.length; k += 1) {
-        const segs = inc.segs.slice(0, k);
-        const p = projectPath(segs);
+        p += `:${inc.segs[k - 1]}`;
         if (byPath.has(p)) continue;
-        const project = make(segs, inc.line);
+        if (build.projects.length >= MAX_PROJECTS_PER_BUILD) { root.unresolved += 1; break; }
+        const segs = inc.segs.slice(0, k);
+        const project = make(segs, p, inc.line);
         byPath.set(p, project);
         build.projects.push(project);
         if (!project.exists) project.unresolved += 1;
@@ -696,12 +722,15 @@ function interpret(input: GradleInput): JavaBuildModel {
 
       // Source set operations: the ancestors' shared blocks first, then the module's own.
       const ops: RawOp[] = [];
-      for (const anc of build.projects) {
-        if (!isPrefixPath(anc.segs, p.segs)) continue;
+      const sharedDependencies: RawDep[] = [];
+      for (const ancestorPath of prefixPaths(p.segs)) {
+        const anc = byPath.get(ancestorPath);
+        if (anc === undefined) continue;
         const own = anc === p;
         for (const shared of infos.get(anc)!.shared) {
           if (shared.kind === "sub" && own) continue;
           ops.push(...sharedOps(shared.stmts));
+          sharedDependencies.push(...sharedDeps(shared.stmts));
         }
       }
       const sharedCount = ops.length;
@@ -723,7 +752,7 @@ function interpret(input: GradleInput): JavaBuildModel {
       }
 
       const dependencies: JavaModule["dependencies"] = [];
-      for (const dep of info.deps) {
+      for (const dep of [...sharedDependencies, ...info.deps]) {
         let target: string | null = null;
         if (dep.kind === "path") target = byPath.has(dep.path) ? dep.path : null;
         else if (dep.kind === "accessor") {

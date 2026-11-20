@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { interpretGradle } from "./gradle.js";
@@ -29,38 +30,31 @@ export function clearJavaBuildModelCache(): void {
 }
 
 // The modules of the Maven and Gradle build files among `relativeFiles` (every scanned file of
-// the project). Memoized on the latest root and the build files' paths, sizes and mtimes.
+// the project). Memoized on the latest root and a hash of each build file's path and content. The
+// scanned file list is not part of the key: the build files decide it, so `unresolved` counts
+// (a directory without files, a module path that is not a pom) may come from the first caller's list.
 export async function readJavaBuildModel(rootPath: string, relativeFiles: Iterable<string>): Promise<JavaBuildModel> {
   const files = [...relativeFiles];
   const buildFiles = files.filter(isJavaBuildFile).sort();
   if (buildFiles.length === 0) return emptyJavaBuildModel();
 
-  const stats = new Map<string, number>();
-  const parts: string[] = [];
-  for (const file of buildFiles) {
-    try {
-      const info = await stat(path.join(rootPath, file));
-      if (info.size > MAX_BUILD_FILE_BYTES) continue;
-      stats.set(file, info.size);
-      parts.push(`${file}|${info.size}|${info.mtimeMs}`);
-    } catch {
-      // Unreadable: skipped.
-    }
-  }
-  if (stats.size === 0) return emptyJavaBuildModel();
-  const signature = parts.join("\n");
-  if (cache && cache.rootPath === rootPath && cache.signature === signature) return cache.model;
-
   const mavenTexts = new Map<string, string>();
   const gradleTexts = new Map<string, string>();
-  for (const file of stats.keys()) {
+  const hash = createHash("sha256");
+  for (const file of buildFiles) {
     try {
-      const text = await readFile(path.join(rootPath, file), "utf8");
+      const absolute = path.join(rootPath, file);
+      if ((await stat(absolute)).size > MAX_BUILD_FILE_BYTES) continue;
+      const text = await readFile(absolute, "utf8");
       (isMavenBuildFile(file) ? mavenTexts : gradleTexts).set(file, text);
+      hash.update(`${file}\0${text.length}\0${text}\0`);
     } catch {
       // Unreadable: skipped.
     }
   }
+  if (mavenTexts.size + gradleTexts.size === 0) return emptyJavaBuildModel();
+  const signature = hash.digest("hex");
+  if (cache && cache.rootPath === rootPath && cache.signature === signature) return cache.model;
 
   const set = new Set(files);
   const model = emptyJavaBuildModel();
