@@ -62,6 +62,7 @@ import { rustCallResolver, rustInheritanceResolver } from "../integrations/langu
 import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
 import { javaUnusedRules } from "../integrations/languages/java/unused.js";
 import { javaBuildContributor, javaEntrypointsContributor, javaTestsContributor } from "../integrations/frameworks/java/index.js";
+import { javaFrameworkEntrypointsContributor } from "../integrations/frameworks/java/index.js";
 import { goUnusedRules } from "../integrations/languages/go/unused.js";
 import { jsTsUnusedRules } from "../integrations/languages/js-ts/unused.js";
 import { pythonUnusedRules } from "../integrations/languages/python/unused.js";
@@ -150,6 +151,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     pythonRoutesContributor,
     pythonEntrypointsContributor,
     javaEntrypointsContributor,
+    javaFrameworkEntrypointsContributor,
     javaTestsContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,
