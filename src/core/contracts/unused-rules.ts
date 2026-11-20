@@ -9,6 +9,8 @@ export type UnusedAnalysisContext = {
   readonly declarations: readonly Declaration[];
   /** The unit (package, crate, header/source pair...) a file belongs to. */
   unitOf(file: string): string;
+  /** Annotation or decorator names written on a declaration (`Override`, `org.junit.Test`). */
+  annotationsOf(declarationId: string): readonly string[];
   /** Reads every scanned file the predicate accepts (nothing without a repository path). */
   forEachSource(include: (file: string) => boolean, visit: (file: string, text: string) => void): Promise<void>;
 };
@@ -38,6 +40,12 @@ export interface IUnusedExportRules {
   readonly wildcardImportUsesWholeFile?: boolean;
   /** Files that belong together as one unit; a use from another unit counts. Default: the file itself. */
   unitOf?(file: string, info: FileInfo | undefined): string;
+  /**
+   * Which declarations are candidates at all. Default: exported non-method declarations (then
+   * `isPublicApi` narrows them). A language that judges what is NOT public (Java: package-private and
+   * private types, methods and fields) says so here; it also makes the analysis load that language's fields.
+   */
+  judges?(declaration: Declaration): boolean;
   /** Whether the declaration can leave its unit (false: not judged at all). */
   isPublicApi?(declaration: Declaration): boolean;
   /** Skip reason checked before the test-file rule (a binary crate has no dependents). */

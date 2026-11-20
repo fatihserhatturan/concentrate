@@ -58,6 +58,8 @@ import { jsTsImportResolver } from "../integrations/languages/js-ts/import-resol
 import { rustCallResolver, rustInheritanceResolver } from "../integrations/languages/rust/resolvers.js";
 
 import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
+import { javaUnusedRules } from "../integrations/languages/java/unused.js";
+import { javaEntrypointsContributor, javaTestsContributor } from "../integrations/frameworks/java/index.js";
 import { goUnusedRules } from "../integrations/languages/go/unused.js";
 import { jsTsUnusedRules } from "../integrations/languages/js-ts/unused.js";
 import { pythonUnusedRules } from "../integrations/languages/python/unused.js";
@@ -111,7 +113,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   }
 
   // The order is the order of the find_unused_exports note's language paragraphs.
-  for (const rules of [jsTsUnusedRules, goUnusedRules, rustUnusedRules, pythonUnusedRules, cppUnusedRules]) {
+  for (const rules of [jsTsUnusedRules, goUnusedRules, rustUnusedRules, pythonUnusedRules, cppUnusedRules, javaUnusedRules]) {
     registry.registerUnusedExportRules(rules);
   }
 
@@ -145,6 +147,8 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     cppDataAccessContributor,
     pythonRoutesContributor,
     pythonEntrypointsContributor,
+    javaEntrypointsContributor,
+    javaTestsContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,
     nuxtServerRoutesContributor,
