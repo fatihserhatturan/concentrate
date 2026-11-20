@@ -30,9 +30,17 @@ export const javaBuildContributor: ISemanticContributor = {
 
     const entryByFunction = new Map<string, string>();
     for (const rel of graph.relationshipsOfType("ENTRYPOINT_HANDLED_BY")) entryByFunction.set(rel.to, rel.from);
-    const classByName = new Map<string, string>();
+    // Every class of a qualified name: modules may declare the same one.
+    const classesByName = new Map<string, { id: string; file: string | undefined }[]>();
+    const fileOfNode = (id: string): string | undefined => {
+      const match = /^file:(.+?\.java)(?::|$)/u.exec(id);
+      return match?.[1];
+    };
     for (const node of graph.nodesWithLabel("Class")) {
-      if (typeof node.properties.qualifiedName === "string") classByName.set(node.properties.qualifiedName, node.id);
+      if (typeof node.properties.qualifiedName !== "string") continue;
+      const list = classesByName.get(node.properties.qualifiedName) ?? [];
+      list.push({ id: node.id, file: fileOfNode(node.id) });
+      classesByName.set(node.properties.qualifiedName, list);
     }
     // Class id -> its `main` EntryPoint.
     const mainOfClass = new Map<string, string>();
@@ -40,6 +48,18 @@ export const javaBuildContributor: ISemanticContributor = {
       const entry = entryByFunction.get(rel.to);
       if (entry && !mainOfClass.has(rel.from)) mainOfClass.set(rel.from, entry);
     }
+    const inside = (dir: string, file: string): boolean => dir === "" || dir === "." || file === dir || file.startsWith(`${dir}/`);
+    // The class of the module: in its source roots, else in its directory, else the only one.
+    const classOfModule = (name: string, module: { dir: string; sourceRoots: readonly string[] }): string | undefined => {
+      const list = classesByName.get(name) ?? [];
+      if (list.length === 0) return undefined;
+      const within = (dirs: readonly string[]) => list.filter((entry) => entry.file !== undefined && dirs.some((dir) => inside(dir, entry.file!)));
+      const byRoot = within(module.sourceRoots);
+      if (byRoot.length > 0) return byRoot[0]!.id;
+      const byDir = within([module.dir]);
+      if (byDir.length > 0) return byDir[0]!.id;
+      return list.length === 1 ? list[0]!.id : undefined;
+    };
 
     for (const module of modules) {
       const packageNode = graph.node(`package:${module.dir}`);
@@ -59,7 +79,7 @@ export const javaBuildContributor: ISemanticContributor = {
       if (!module.mainClass) continue;
       const buildFileId = fileIds.get(module.file);
       if (!buildFileId) continue;
-      const classId = classByName.get(module.mainClass) ?? classByName.get(module.mainClass.replace(/\$/gu, "."));
+      const classId = classOfModule(module.mainClass, module) ?? classOfModule(module.mainClass.replace(/\$/gu, "."), module);
       const mainId = classId ? mainOfClass.get(classId) : undefined;
       const entryId = `entrypoint:java:${module.file}:${module.name}`;
       graph.addNode({

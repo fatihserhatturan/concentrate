@@ -119,10 +119,11 @@ export function buildJavaPackageIndex(
     longestTypePrefix,
     resolveImport({ source, isWildcard, isStatic }, fromFile) {
       const filter = options.moduleFilter;
+      // Only duplicate declarations of one qualified name are filtered; a wildcard keeps its whole package.
       const visible = (files: readonly string[]): readonly string[] => (filter && fromFile !== undefined ? filter(fromFile, files) : files);
       if (isJavaPlatformPackage(source)) return { fileIds: [], expected: false };
       // `import a.b.*` is the package a.b: every file, like a Go package import.
-      if (isWildcard && !isStatic && filesByPackage.has(source)) return { fileIds: visible(filesByPackage.get(source)!), expected: true };
+      if (isWildcard && !isStatic && filesByPackage.has(source)) return { fileIds: filesByPackage.get(source)!, expected: true };
       // Anything else names a type, with a member (static) or nested types possibly after it.
       const type = longestTypePrefix(source);
       if (type !== undefined) {

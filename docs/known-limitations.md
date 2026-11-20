@@ -2268,10 +2268,16 @@ the call recall leaves out:
   class, a module path), not for every unused property.
 - External dependencies are not in the graph. Only dependencies on modules of the
   scan become `PACKAGE_IMPORTS_PACKAGE`.
-- A file sees the types of its own module and of the modules it depends on. When
-  no visible module declares a type, every candidate is kept, because the build
+- A file sees the types of its own module and of the modules it depends on. Only
+  duplicate declarations of one qualified type name are filtered: the visible ones
+  are kept, and when none is visible every declaration is kept, because the build
   file may be incomplete. A specific type import then resolves to the first
-  declaring file.
+  declaring file. A wildcard import is never narrowed and keeps every file of the
+  package, even a file of a module the importer does not see.
+- `PACKAGE_CONTAINS_FILE` is assigned by module directory, while module membership
+  for import visibility is by source root. A source root outside its module's
+  directory (`<sourceDirectory>../shared/src</sourceDirectory>`) is therefore
+  contained by another `Package`.
 - Source roots are reported even when the directory does not exist. They are
   stored on the `Package` node as JSON-string arrays (`sourceRoots`,
   `testSourceRoots`), not as list properties.
