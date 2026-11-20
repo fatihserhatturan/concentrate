@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.acme.mapper.OrderMapper">
+  <sql id="orderColumns">o.id, o.status, o.total</sql>
+
+  <sql id="fromOrders">
+    FROM orders o
+    JOIN customers c ON c.id = o.customer_id
+  </sql>
+
+  <select id="search" resultType="string">
+    SELECT <include refid="orderColumns"/>
+    <include refid="fromOrders"/>
+    <where>
+      <if test="status != null">AND o.status = #{status}</if>
+      <if test="customerId != null">AND c.id = #{customerId}</if>
+      <if test="status == 'late'">
+        AND o.id IN (SELECT order_id FROM shipments WHERE late = true)
+      </if>
+    </where>
+    ORDER BY o.id
+  </select>
+
+  <insert id="insert">
+    <![CDATA[
+    INSERT INTO orders (customer_id, status, total)
+    SELECT #{customerId}, #{status}, 0 FROM customers WHERE id = #{customerId} AND 1 < 2
+    ]]>
+  </insert>
+
+  <update id="cancelAll">
+    UPDATE orders
+    <set>status = 'cancelled'</set>
+    WHERE id IN
+    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+  </update>
+
+  <select id="notAMethod">SELECT * FROM ghosts</select>
+</mapper>

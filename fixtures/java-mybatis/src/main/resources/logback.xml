@@ -1,0 +1,6 @@
+<configuration>
+  <!-- Not a mapper: the table-looking text must not become a table. -->
+  <appender name="out" class="ch.qos.logback.core.ConsoleAppender">
+    <pattern>SELECT * FROM logs</pattern>
+  </appender>
+</configuration>
