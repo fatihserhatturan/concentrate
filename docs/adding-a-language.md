@@ -202,7 +202,7 @@ Register with `registry.registerCallResolver(toyCallResolver)`. Each result is
 a `ResolvedCallTarget`: `functionId`, plus an optional `via` (`interface`,
 `trait`, `override`...) when the match is not direct. The scan writes a
 `CALL_RESOLVES_TO` relationship for each. Examples:
-`src/integrations/languages/{go,python,rust,cpp}/resolvers.ts`.
+`src/integrations/languages/{go,python,rust,cpp,java}/resolvers.ts`.
 
 ### Imports
 
@@ -238,7 +238,7 @@ export const toyImportResolver: ILanguageImportResolver = {
 Register with `registry.registerImportResolver(toyImportResolver)`.
 `src/integrations/resolution/imports.ts` only dispatches to the resolvers and
 adds the `RESOLVES_TO` edges; no language logic lives there. Built-in
-resolvers: `src/integrations/languages/{plain,rust,cpp,python,go,js-ts}/import-resolver.ts`,
+resolvers: `src/integrations/languages/{plain,rust,cpp,java,python,go,js-ts}/import-resolver.ts`,
 registered in `default-registry.ts` in the order that decides which one wins.
 
 ### Inheritance
@@ -255,7 +255,7 @@ registry.registerInheritanceResolver(resolver);
 ```
 
 Inheritance resolvers all run, in registration order; they do not compete.
-Examples: `src/integrations/languages/{go,python,rust,cpp}/resolvers.ts`. The
+Examples: `src/integrations/languages/{go,python,rust,cpp,java}/resolvers.ts`. The
 toy language has no classes, so it has none.
 
 ## 5. Graph schema extension
@@ -314,9 +314,21 @@ export const toyUnusedRules: IUnusedExportRules = {
 Required: `id`, `languages` (the `File.language` values judged) and
 `supports(file)`. Everything else is optional: `unitOf` (files that belong
 together, such as a package or a header/source pair), `isPublicApi`,
-`binaryReason`, `entryReason`, `packageEntries`, `skipReasons`,
+`judges`, `binaryReason`, `entryReason`, `packageEntries`, `skipReasons`,
 `wildcardImportUsesWholeFile`, `createSession` (per-analysis state such as
 name mentions in other units) and `note`.
+
+By default only exported non-method declarations are candidates. A language
+that judges what is not public sets `judges(declaration)`: Java does, for its
+package-private and private types, methods and fields. The session context
+(`UnusedAnalysisContext`) has `annotationsOf(declarationId)`, the annotation or
+decorator names written on a declaration, so a rule can skip what a framework
+calls (`@Test`, `@Bean`).
+
+The `java-language` schema extension (`src/integrations/languages/java/schema.ts`)
+shows what a language may add: `DEFINES_INTERFACE_METHOD`,
+`DEFINES_INTERFACE_FIELD` and `FIELD_HAS_DECORATOR` relationships, and node
+properties such as `Function.parameterCount`.
 
 Register with `registry.registerUnusedExportRules(rules)`. Ids are unique.
 Registration order is the order of the language paragraphs in the MCP
@@ -324,7 +336,7 @@ Registration order is the order of the language paragraphs in the MCP
 registered rules. Each language name in it is the descriptor's `displayName`,
 or the id when that is not set.
 
-Examples: `src/integrations/languages/{js-ts,go,rust,python,cpp}/unused.ts`.
+Examples: `src/integrations/languages/{js-ts,go,rust,python,cpp,java}/unused.ts`.
 
 ## 7. Tests, fixtures and golden files
 
