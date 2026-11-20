@@ -1,0 +1,14 @@
+app:
+  name: Orders
+  limits:
+    max-open: 50
+    page-size: 20
+  notify:
+    base-url: ${NOTIFY_URL:http://localhost:8080}
+services:
+  audit:
+    url: ${AUDIT_URL:http://localhost:8080}
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}/orders
+    password: ${DB_PASSWORD}
