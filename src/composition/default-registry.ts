@@ -61,7 +61,7 @@ import { rustCallResolver, rustInheritanceResolver } from "../integrations/langu
 
 import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
 import { javaUnusedRules } from "../integrations/languages/java/unused.js";
-import { javaBuildContributor, javaDiContributor, javaEntrypointsContributor, javaFrameworkEntrypointsContributor, javaFrameworkParser, javaGrpcContributor, javaRoutesContributor, javaTestsContributor, javaWebfluxContributor } from "../integrations/frameworks/java/index.js";
+import { javaBuildContributor, javaConfigEnvContributor, javaDataJdbcContributor, javaDataJpaContributor, javaDiContributor, javaHttpClientsContributor, javaEntrypointsContributor, javaFrameworkEntrypointsContributor, javaFrameworkParser, javaGrpcContributor, javaRoutesContributor, javaTestsContributor, javaWebfluxContributor } from "../integrations/frameworks/java/index.js";
 import { goUnusedRules } from "../integrations/languages/go/unused.js";
 import { jsTsUnusedRules } from "../integrations/languages/js-ts/unused.js";
 import { pythonUnusedRules } from "../integrations/languages/python/unused.js";
@@ -155,6 +155,11 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     javaGrpcContributor,
     javaTestsContributor,
     javaDiContributor,
+    // Before js-ts.data-access (READS / WRITES from their accesses), js-ts.http-requests (REQUESTS) and js-ts.env-config / env-files.
+    javaDataJpaContributor,
+    javaDataJdbcContributor,
+    javaConfigEnvContributor,
+    javaHttpClientsContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,
     nuxtServerRoutesContributor,
