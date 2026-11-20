@@ -1,4 +1,4 @@
-import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
+import type { IQueryEngine } from "../contracts/query-engine.js";
 import {
   byFileAndLine,
   loadComponentFunctions,
@@ -9,7 +9,7 @@ import {
   walkCalls,
 } from "./graph.js";
 
-// Styles in the MCP tools: a class (`.btn`), an id (`#hero`) or a custom
+// Styles in the graph tools: a class (`.btn`), an id (`#hero`) or a custom
 // property (`--color-brand`), and who uses it. Shared by find_references
 // (each use) and impact_of (the components, pages and files a change reaches).
 

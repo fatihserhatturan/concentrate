@@ -6,7 +6,7 @@ import { asObject, fileTypeFilter, languageProperty, objectSchema, sourceTypePro
 import { fitToBudget } from "./budget.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
 import { pagedResult, pageWindow, type PageWindow } from "./paging.js";
-import { byFileAndLine, callerCompleteness, filesMatching, loadFunctions, matchesFileOrDirectory, NO_FILE_MATCHED, unresolvedCalls } from "./agent-tools/graph.js";
+import { byFileAndLine, callerCompleteness, filesMatching, loadFunctions, matchesFileOrDirectory, NO_FILE_MATCHED, unresolvedCalls } from "../../core/queries/graph.js";
 import { listStores } from "./stores.js";
 import { listTables } from "./tables.js";
 import { listRpcs } from "./rpcs.js";

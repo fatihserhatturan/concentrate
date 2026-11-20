@@ -1,7 +1,8 @@
 // Programmatic entry point (dist/api.js). The optional UI in ui/ imports the
 // built core through this file only, so it never reaches into internal paths.
-export { scanIntoStore, type ScanAdapterOptions } from "./adapters/cli/scan.js";
-export { formatJsonl, writeJsonl } from "./adapters/cli/jsonl.js";
+export { scanIntoStore, type ScanAdapterOptions } from "./composition/scan-into-store.js";
+export { formatJsonl } from "./core/graph/jsonl.js";
+export { writeJsonl } from "./composition/jsonl.js";
 export { scanOrchestrator, buildCodeGraph } from "./composition/orchestrator.js";
 export { openGraphStore, GRAPH_SCHEMA_VERSION, type OpenGraphStoreOptions } from "./composition/graph-store.js";
 export type {
@@ -24,9 +25,9 @@ export {
   type ScanStatus,
   type ScanWarning,
 } from "./core/scan/index.js";
-export { graphSummary } from "./adapters/mcp/resources.js";
+export { graphSummary } from "./core/queries/summary.js";
 export { nodeLabels, nodeTables, relationshipTables, type NodeTable, type RelationshipTable } from "./adapters/store/schema.js";
-export { matchName, type MatchType } from "./adapters/mcp/analysis-tools/search.js";
-export { findUnusedExports } from "./adapters/mcp/analysis-tools/unused.js";
-export { findImportCycles } from "./adapters/mcp/analysis-tools/cycles.js";
-export type { PageWindow } from "./adapters/mcp/paging.js";
+export { matchName, type MatchType } from "./core/queries/match.js";
+export type { ISourceReader } from "./core/contracts/source-reader.js";
+export { findUnusedExports, type FindUnusedExportsOptions, type UnusedExport, type UnusedExportsResult } from "./core/queries/unused.js";
+export { findImportCycles, type ImportCycle, type ImportCyclesResult } from "./core/queries/cycles.js";

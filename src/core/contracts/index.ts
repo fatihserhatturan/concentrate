@@ -6,3 +6,5 @@ export type { ISemanticContributor } from "./semantic-contributor.js";
 export type { IScanOrchestrator } from "./scan-orchestrator.js";
 export type { GraphStatsOptions, GraphStatsRow, IQueryEngine, QueryParameters } from "./query-engine.js";
 export type { IGraphStore } from "./graph-store.js";
+export type { ChangeSet, ChangeSourceOptions, IChangeSource } from "./change-source.js";
+export type { ISourceReader } from "./source-reader.js";

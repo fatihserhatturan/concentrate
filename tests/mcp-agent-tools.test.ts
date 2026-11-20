@@ -5,7 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { after, before, describe, it } from "node:test";
 import { fitToBudget } from "../src/adapters/mcp/budget.js";
-import { parseDiff } from "../src/adapters/mcp/agent-tools/impact.js";
+import { parseDiff } from "../src/core/queries/changes.js";
 import { callMcpTool, mcpToolDefinitions } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";

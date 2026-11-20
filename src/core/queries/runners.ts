@@ -1,4 +1,4 @@
-import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
+import type { IQueryEngine } from "../contracts/query-engine.js";
 
 // The scripts, Makefile targets, npm scripts, Dockerfile commands, compose
 // services and CI jobs that start a file, directly (`RUNS` to the file, or to

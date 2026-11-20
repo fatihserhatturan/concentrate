@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { after, before, describe, it } from "node:test";
-import { matchName, words } from "../src/adapters/mcp/analysis-tools/search.js";
+import { matchName, words } from "../src/core/queries/match.js";
 import { parseReExportNames } from "../src/core/graph/re-exports.js";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";

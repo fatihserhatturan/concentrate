@@ -1,6 +1,6 @@
 import path from "node:path";
 import { openGraphStore } from "../../composition/graph-store.js";
-import { affectedTests } from "../mcp/agent-tools/affected.js";
+import { affectedTests } from "../../core/queries/affected.js";
 
 export type AffectedAdapterOptions = {
   database: string;
