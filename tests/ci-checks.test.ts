@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { parseCommandArgs } from "../src/adapters/cli/args.js";
-import { scanIntoStore } from "../src/adapters/cli/scan.js";
+import { scanIntoStore } from "../src/composition/scan-into-store.js";
 import { runCyclesAdapter, runUnusedAdapter } from "../src/adapters/cli/index.js";
 import { program } from "../src/program.js";
 

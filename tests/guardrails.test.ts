@@ -66,6 +66,21 @@ function extractImportPaths(source: string): string[] {
   return [...source.matchAll(pattern)].map((match) => match[1]!);
 }
 
+/** Source with comments removed, so example code in comments is not read as an import. */
+function codeOnly(source: string): string {
+  return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'`\\])\/\/.*$/gm, "$1");
+}
+
+/** Dynamic `import("x")` and `require("x")` specifiers outside comments. */
+function extractDynamicImportPaths(source: string): string[] {
+  return [...codeOnly(source).matchAll(/\b(?:import|require)\(\s*['"]([^'"]+)['"]\s*\)/g)].map((match) => match[1]!);
+}
+
+/** Every module specifier a file imports, static and dynamic. */
+function extractAllImportPaths(source: string): string[] {
+  return [...extractImportPaths(source), ...extractDynamicImportPaths(source)];
+}
+
 function resolveImportPath(file: string, importPath: string): string | null {
   if (!importPath.startsWith(".")) {
     return null;
@@ -84,7 +99,7 @@ async function checkFiles(
 
   for (const file of files) {
     const source = await readFile(file, "utf8");
-    const imports = extractImportPaths(source);
+    const imports = extractAllImportPaths(source);
 
     for (const imp of imports) {
       const resolved = resolveImportPath(file, imp);
@@ -127,10 +142,7 @@ async function bareImportsBySourceFile(): Promise<Map<string, Set<string>>> {
   const result = new Map<string, Set<string>>();
   for (const file of await collectTsFiles(srcRoot)) {
     const source = await readFile(file, "utf8");
-    const specifiers = [
-      ...extractImportPaths(source),
-      ...[...source.matchAll(/\b(?:import|require)\(\s*['"]([^'"]+)['"]\s*\)/g)].map((match) => match[1]!),
-    ];
+    const specifiers = extractAllImportPaths(source);
     const packages = new Set(specifiers
       .filter((specifier) => !specifier.startsWith(".") && !specifier.startsWith("node:"))
       .map(packageNameOf));
@@ -140,6 +152,110 @@ async function bareImportsBySourceFile(): Promise<Map<string, Set<string>>> {
   }
   return result;
 }
+
+function relativeToSrc(file: string): string {
+  return path.relative(srcRoot, file).split(path.sep).join("/");
+}
+
+/**
+ * A shrinking allow-list: `found` must not contain anything outside `allowed`
+ * (no new debt), and every `allowed` entry must still be found (remove it once
+ * fixed, so the list only ever gets shorter).
+ */
+function assertRatchet(found: Iterable<string>, allowed: readonly string[], what: string): void {
+  const foundSet = new Set(found);
+  const added = [...foundSet].filter((entry) => !allowed.includes(entry)).sort();
+  const stale = allowed.filter((entry) => !foundSet.has(entry));
+  assert.deepEqual(added, [], `New ${what} (move it behind a contract instead):\n  ${added.join("\n  ")}`);
+  assert.deepEqual(stale, [], `Fixed ${what}; remove from the allow-list:\n  ${stale.join("\n  ")}`);
+}
+
+/**
+ * Node built-ins core may use anywhere. Path arithmetic is pure; file system,
+ * hashing, compression and OS access belong behind ports
+ * (docs/layered-core-architecture.md, "Core I/O").
+ */
+const CORE_PURE_BUILTINS: readonly string[] = ["node:path"];
+
+/** Core files that still touch the platform directly. Shrinks as I/O moves behind ports. */
+const CORE_PLATFORM_IO_DEBT: readonly string[] = [
+  "core/scan/discover-files.ts",
+  "core/scan/fs-reader.ts",
+  "core/scan/glob.ts",
+  "core/scan/orchestrator.ts",
+  "core/scan/parse-cache.ts",
+  "core/scan/project-config.ts",
+  "core/scan/project-settings.ts",
+  "core/scan/workspace-packages.ts",
+];
+
+/**
+ * Core files that know a concrete language: named after one, branching on a
+ * per-language file predicate, comparing `language` to a language id, or
+ * testing a language's file extension. Shrinks as resolution moves to
+ * src/integrations/languages/<language>/.
+ */
+const CORE_LANGUAGE_KNOWLEDGE_DEBT: readonly string[] = [
+  // Moved from the MCP adapter with its per-language rules (Go, Rust, Python, C/C++); the rules belong in the language integrations.
+  "core/queries/unused.ts",
+  "core/scan/resolution/calls.ts",
+  "core/scan/resolution/cpp-calls.ts",
+  "core/scan/resolution/file-kind.ts",
+  "core/scan/resolution/go-calls.ts",
+  "core/scan/resolution/inheritance.ts",
+  "core/scan/resolution/python-calls.ts",
+  "core/scan/resolution/python-inheritance.ts",
+  "core/scan/resolution/python-names.ts",
+  "core/scan/resolution/rust-calls.ts",
+  "core/scan/resolution/rust-types.ts",
+  "core/scan/source-files.ts",
+];
+
+const LANGUAGE_FILE_NAME = /^(go|rust|python|cpp|c|java|kotlin|ruby|php|csharp|js|ts|jsts)-/;
+const LANGUAGE_PREDICATE = /\bis(Go|Python|Rust|Cpp|C|JsTs|Java)File\b/;
+const LANGUAGE_COMPARISON = /(?<!typeof\s+(?:[\w$]+\.)*)\blanguage\s*[!=]==?\s*["'][a-z+#-]+["']/;
+const LANGUAGE_EXTENSION_TEST = /\.endsWith\(\s*["']\.(py|go|rs|c|cc|cpp|cxx|h|hh|hpp|java|ts|tsx|js|jsx|mjs|cjs)["']\s*\)/;
+
+/** Adapter modules src/api.ts still re-exports. Shrinks as use cases move into core. */
+const API_ADAPTER_EXPORT_DEBT: readonly string[] = [
+  "adapters/store/schema.js",
+];
+
+describe("Core purity ratchets", () => {
+  it("src/core/ uses only pure node: built-ins outside the platform I/O allow-list", async () => {
+    const offenders: string[] = [];
+    for (const file of await collectTsFiles(path.join(srcRoot, "core"))) {
+      const builtins = extractAllImportPaths(await readFile(file, "utf8"))
+        .filter((specifier) => specifier.startsWith("node:") && !CORE_PURE_BUILTINS.includes(specifier));
+      if (builtins.length > 0) offenders.push(relativeToSrc(file));
+    }
+    assertRatchet(offenders, CORE_PLATFORM_IO_DEBT, "platform I/O (node:fs, os, crypto, zlib...) in core");
+  });
+
+  it("src/core/ does not gain language-specific code", async () => {
+    const offenders: string[] = [];
+    for (const file of await collectTsFiles(path.join(srcRoot, "core"))) {
+      const code = codeOnly(await readFile(file, "utf8"));
+      if (
+        LANGUAGE_FILE_NAME.test(path.basename(file))
+        || LANGUAGE_PREDICATE.test(code)
+        || LANGUAGE_COMPARISON.test(code)
+        || LANGUAGE_EXTENSION_TEST.test(code)
+      ) {
+        offenders.push(relativeToSrc(file));
+      }
+    }
+    assertRatchet(offenders, CORE_LANGUAGE_KNOWLEDGE_DEBT, "language-specific code in core");
+  });
+
+  it("src/api.ts does not gain re-exports from adapters", async () => {
+    const apiFile = path.join(srcRoot, "api.ts");
+    const adapterModules = extractAllImportPaths(await readFile(apiFile, "utf8"))
+      .map((specifier) => resolveImportPath(apiFile, specifier))
+      .filter((resolved): resolved is string => resolved?.startsWith("adapters/") ?? false);
+    assertRatchet(adapterModules, API_ADAPTER_EXPORT_DEBT, "adapter re-exports in the public API");
+  });
+});
 
 describe("Architecture dependency guardrails", () => {
   it("src/core/contracts/ only imports core contracts, core graph, and core scan DTOs", async () => {
@@ -347,6 +463,17 @@ describe("Architecture dependency guardrails", () => {
       .map(([file]) => file);
 
     assert.deepEqual(importers, [path.normalize("integrations/languages/syntax/tree-sitter.ts")]);
+  });
+
+  it("CLI adapters use graph queries from core, not from the MCP adapter (only `concentrate mcp` starts the server)", async () => {
+    const violations = (await checkFiles(path.join(srcRoot, "adapters/cli"), ["adapters/mcp/"]))
+      .filter((v) => v.file !== path.normalize("adapters/cli/mcp.ts"));
+
+    assert.deepEqual(
+      violations,
+      [],
+      `CLI reaches into the MCP adapter:\n${violations.map((v) => `  ${v.file}: ${v.violation}`).join("\n")}`,
+    );
   });
 
   it("CLI and MCP adapters reach the graph store only through contracts and composition", async () => {

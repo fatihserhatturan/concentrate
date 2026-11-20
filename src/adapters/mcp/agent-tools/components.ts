@@ -12,7 +12,7 @@ import {
   walkCalls,
   type ComponentInfo,
   type RenderEdge,
-} from "./graph.js";
+} from "../../../core/queries/graph.js";
 
 type Row = Record<string, unknown>;
 

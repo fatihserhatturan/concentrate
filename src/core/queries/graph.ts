@@ -1,5 +1,4 @@
-import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
-import type { PageWindow } from "../paging.js";
+import type { IQueryEngine } from "../contracts/query-engine.js";
 
 // Graph reads shared by the agent-facing tools. Functions are identified by
 // node id (`id(fn)` in Cypher); everything else is looked up from those ids.
@@ -14,6 +13,9 @@ export type FunctionInfo = {
 };
 
 export type CallEdge = { caller: string; callee: string; line: number | null };
+
+/** A slice of an ordered list: skip `offset` items, keep `limit`. */
+export type ListWindow = { offset: number; limit: number };
 
 type Row = Record<string, unknown>;
 
@@ -137,7 +139,7 @@ export async function computeImpact(
   limit: number,
   loaded?: Map<string, FunctionInfo>,
   // Pages the callers list; without it, callers are capped at `limit` like the other lists.
-  callersWindow?: PageWindow,
+  callersWindow?: ListWindow,
   // Stores that count as changed (impact_of on a store's name).
   seedStoreIds: readonly string[] = [],
 ) {
@@ -880,4 +882,21 @@ export function callerCompleteness(names: readonly string[], unresolved: Awaited
       ? `No call ${label} in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.`
       : `${unresolved.count} call${unresolved.count === 1 ? "" : "s"} ${label} resolve${unresolved.count === 1 ? "s" : ""} to no function (library objects, dynamic receivers); check the sites in unresolvedCalls before ruling them out.`,
   };
+}
+
+/** A resolved call with how its link was made (`exact` when none is recorded). */
+export type ProvenancedCallEdge = CallEdge & { provenance: string };
+
+// Like loadCallEdges, but each edge keeps the provenance of its CALL_RESOLVES_TO link.
+export async function loadCallEdgesWithProvenance(engine: IQueryEngine): Promise<ProvenancedCallEdge[]> {
+  const rows = await engine.query(`
+    MATCH (caller:Function)-[:CALLS]->(call:Call)-[resolved:CALL_RESOLVES_TO]->(callee:Function)
+    RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line, resolved.provenance AS provenance
+  `) as Row[];
+  return rows.map((row) => ({
+    caller: String(row.caller),
+    callee: String(row.callee),
+    line: typeof row.line === "number" ? row.line : null,
+    provenance: typeof row.provenance === "string" ? row.provenance : "exact",
+  }));
 }

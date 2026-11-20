@@ -1,6 +1,6 @@
 import type { IQueryEngine } from "../../core/contracts/query-engine.js";
 import { optionalString } from "./args.js";
-import { loadFunctions, matchesFileOrDirectory } from "./agent-tools/graph.js";
+import { loadFunctions, matchesFileOrDirectory } from "../../core/queries/graph.js";
 import type { PageWindow } from "./paging.js";
 
 type Row = Record<string, unknown>;

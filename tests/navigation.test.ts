@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { scanIntoStore } from "../src/adapters/cli/scan.js";
+import { scanIntoStore } from "../src/composition/scan-into-store.js";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { markupLinks } from "../src/integrations/frameworks/js-ts/resolution/navigation.js";
 import { provenanceOf } from "../src/adapters/store/provenance.js";

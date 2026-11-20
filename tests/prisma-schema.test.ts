@@ -142,7 +142,7 @@ describe("Prisma schema scan", () => {
   });
 
   it("counts tables in the graph summary", async () => {
-    const { graphSummary } = await import("../src/adapters/mcp/resources.js");
+    const { graphSummary } = await import("../src/core/queries/summary.js");
     assert.deepEqual((await graphSummary(store)).tablesByLibrary, { knex: 1, prisma: 4 });
   });
 });

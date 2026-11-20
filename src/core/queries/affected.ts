@@ -1,4 +1,4 @@
-import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
+import type { IQueryEngine } from "../contracts/query-engine.js";
 import { loadCallEdges, loadFunctions, matchesFileOrDirectory } from "./graph.js";
 
 // Test files that reach changed files. A file depends on another when it

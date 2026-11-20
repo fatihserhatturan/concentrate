@@ -127,11 +127,51 @@ Enforced by `tests/guardrails.test.ts`:
 | --- | --- | --- |
 | `src/core/contracts/` | `src/core/graph`, `src/core/scan`, each other | `src/scanner/`, `src/graph/`, `src/integrations/`, `src/parsers/`, `src/adapters/`, `src/commands/` |
 | `src/core/` | core modules only | `src/composition/`, `src/integrations/`, `src/adapters/cli/`, `src/adapters/store/`, `src/adapters/mcp/`, `src/commands/` |
-| `src/integrations/languages/` | `src/core/`, `src/parsers/` | `src/integrations/frameworks/`, `src/commands/` |
-| `src/integrations/frameworks/` | `src/core/`, `src/integrations/languages/`, `src/parsers/` | `src/commands/`, `src/adapters/` |
+| `src/integrations/languages/` | `src/core/`, each other | `src/integrations/frameworks/`, `src/adapters/`, `src/commands/` |
+| `src/integrations/frameworks/` | `src/core/`, `src/integrations/languages/` | `src/commands/`, `src/adapters/` |
 | `src/commands/` | `src/adapters/cli/` | `src/core/`, `src/scanner/`, `src/graph/`, `src/parsers/`, `src/integrations/` |
-| `src/composition/` | `src/core/`, `src/integrations/` — default registry and orchestrator wiring | `src/adapters/`, `src/commands/` |
-| `src/adapters/` | anything — this is the platform adapter layer | — |
+| `src/composition/` | `src/core/`, `src/integrations/`, `src/adapters/store/` (to build the store) — default registry and orchestrator wiring | `src/commands/` (not yet enforced by a test) |
+| `src/adapters/` | anything — this is the platform adapter layer, except that `cli/` and `mcp/` reach the store only through `composition/` | — |
+
+Imports are read statically and from dynamic `import()` / `require()` calls
+outside comments.
+
+## Core Purity Ratchets
+
+The import rules above keep the dependency direction right, but core can still
+hold code that knows a concrete language or touches the platform. Three tests in
+`tests/guardrails.test.ts` hold that debt where it is today and only let it
+shrink. Each has an allow-list. A new offender fails the test, and so does an
+allow-listed file that no longer offends, so the list must be trimmed when debt
+is paid.
+
+| Ratchet | What counts as an offence | Allow-list | Paid down by |
+| --- | --- | --- | --- |
+| Platform I/O in core | any `node:` built-in other than `node:path` (fs, os, crypto, zlib, util...) | `CORE_PLATFORM_IO_DEBT` (8 files: discovery, glob, manifest hashing, parse cache, project config/settings, workspace packages, orchestrator) | `IFileSystem`, `IContentHasher` and `IParseCache` ports with node adapters |
+| Language knowledge in core | a file named after a language (`go-*.ts`), a per-language predicate (`isGoFile`), a `language === "<id>"` comparison, or an extension test (`.endsWith(".py")`) | `CORE_LANGUAGE_KNOWLEDGE_DEBT` (12 files, mostly `core/scan/resolution/*-calls.ts`, plus the per-language rules of `core/queries/unused.ts`) | per-language call and inheritance resolvers registered from `src/integrations/languages/<language>/` |
+| Adapter re-exports in the public API | `src/api.ts` re-exporting from `src/adapters/` | `API_ADAPTER_EXPORT_DEBT` (1 module: the store schema the UI reads) | a schema description owned by core |
+
+## Graph Queries (`src/core/queries/`)
+
+The use cases the MCP tools, the CLI and the UI share live in core as plain
+functions over `IQueryEngine`: loaders and call-graph walks (`graph.ts`,
+`model.ts`), impact and changed-file analysis (`impact.ts`, `changes.ts`,
+`affected.ts`, `styles.ts`), import cycles, unused exports and the CI check
+policy (`cycles.ts`, `unused.ts`, `check.ts`), routes, traces and explore
+(`routes.ts`, `trace.ts`, `explore.ts`), and the summary, hubs and architecture
+overview (`summary.ts`, `hubs.ts`, `architecture.ts`). They take typed options
+and return whole lists; paging, cursors, output budgets and argument parsing
+stay in the MCP adapter. I/O they need goes through ports: `ISourceReader`
+(`adapters/fs`) and `IChangeSource` (`adapters/git`). Scanning into a store is
+a composition use case (`composition/scan-into-store.ts`), since it wires the
+orchestrator and the store. CLI adapters may not import the MCP adapter, except
+`cli/mcp.ts`, which starts the server.
+
+Known debt the ratchets do not detect yet: the closed language vocabulary in
+`core/scan/language.ts` (the `CodeLanguage` union and extension table, which the
+contracts import as `SupportedLanguage`), and npm/pnpm workspace and
+`tsconfig.json` knowledge in `core/scan/workspace-packages.ts` and
+`core/scan/project-config.ts`.
 
 ## Proposed Directory Shape
 

@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalString, requiredString } from "../args.js";
 import type { PageWindow } from "../paging.js";
-import { byFileAndLine, loadSymbols, matchesFile, matchesFileOrDirectory, type SymbolInfo, type SymbolKind } from "./graph.js";
+import { byFileAndLine, loadSymbols, matchesFile, matchesFileOrDirectory, type SymbolInfo, type SymbolKind } from "../../../core/queries/graph.js";
 
 const MAX_SOURCE_LINES = 400;
 const SYMBOL_KINDS: readonly SymbolKind[] = ["function", "method", "class", "interface", "type", "enum", "variable"];

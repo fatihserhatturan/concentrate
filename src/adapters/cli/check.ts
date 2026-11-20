@@ -1,6 +1,10 @@
 import path from "node:path";
 import { openGraphStore } from "../../composition/graph-store.js";
-import { callMcpTool } from "../mcp/tools.js";
+import type { IGraphStore } from "../../core/contracts/graph-store.js";
+import { checkCycles, checkVerdict, MAX_LISTED_FINDINGS } from "../../core/queries/check.js";
+import { findImportCycles } from "../../core/queries/cycles.js";
+import { findUnusedExports } from "../../core/queries/unused.js";
+import { nodeSourceReader } from "../fs/source-reader.js";
 import type { CliAdapterResult } from "./scan.js";
 
 // CI checks on the graph: `cycles` and `unused` print what they find and exit
@@ -25,51 +29,58 @@ export type UnusedAdapterOptions = CheckAdapterOptions & {
   includeTests?: boolean;
 };
 
-type Result = Record<string, any>;
-
-async function withTool(database: string, tool: string, args: Record<string, unknown>): Promise<Result> {
+async function withStore<T>(database: string, run: (store: IGraphStore) => Promise<T>): Promise<T> {
   const store = await openGraphStore(path.resolve(database));
   try {
-    return (await callMcpTool(store, tool, args)).structuredContent as Result;
+    return await run(store);
   } finally {
     await store.close();
   }
 }
 
-const MAX_LISTED = 200;
-
 export async function runCyclesAdapter(options: CyclesAdapterOptions): Promise<CliAdapterResult> {
-  const result = await withTool(options.database, "find_import_cycles", {
-    scope: options.scope,
-    path: options.path,
-    limit: MAX_LISTED,
-  });
-  const all = result.cycles as Array<{ size: number; cycle: string[]; typeOnly?: boolean }>;
-  const counted = options.includeTypeOnly || result.scope === "package" ? all : all.filter((entry) => !entry.typeOnly);
-  const total = options.includeTypeOnly || result.scope === "package" ? Number(result.total) : Number(result.runtimeCycles);
-  const exitCode = total > (options.max ?? 0) ? 1 : 0;
+  const scope = options.scope ?? "file";
+  if (scope !== "file" && scope !== "package") throw new Error(`Unknown scope ${JSON.stringify(scope)}; expected file or package`);
+  const result = await withStore(options.database, (store) => findImportCycles(store, { scope, path: options.path }));
+  const check = checkCycles(result, { includeTypeOnly: options.includeTypeOnly, max: options.max });
+  const exitCode = check.exceeded ? 1 : 0;
+  const total = check.count;
+  const MAX_LISTED_MEMBERS = 30;
   if (options.json) {
-    console.log(JSON.stringify({ scope: result.scope, count: total, cycles: counted }, null, 2));
+    // The same entry shape the MCP tool lists: members capped per group.
+    const cycles = check.listed.map((entry) => ({
+      size: entry.size,
+      ...(entry.matchingMembers !== undefined ? { matchingMembers: entry.matchingMembers } : {}),
+      members: entry.members.slice(0, MAX_LISTED_MEMBERS),
+      ...(entry.members.length > MAX_LISTED_MEMBERS ? { moreMembers: entry.members.length - MAX_LISTED_MEMBERS } : {}),
+      cycle: entry.cycle,
+      ...(entry.typeOnly !== undefined ? { typeOnly: entry.typeOnly } : {}),
+      ...(entry.dependencyTypes ? { dependencyTypes: entry.dependencyTypes } : {}),
+    }));
+    console.log(JSON.stringify({ scope: result.scope, count: total, cycles }, null, 2));
     return { exitCode };
   }
-  for (const entry of counted) console.log(`${entry.size} ${result.scope === "package" ? "packages" : "files"}: ${entry.cycle.join(" -> ")}`);
-  if (total > counted.length) console.log(`... and ${total - counted.length} more`);
+  for (const entry of check.listed) console.log(`${entry.size} ${result.scope === "package" ? "packages" : "files"}: ${entry.cycle.join(" -> ")}`);
+  if (total > check.listed.length) console.log(`... and ${total - check.listed.length} more`);
   console.log(total === 0 ? "No import cycles." : `${total} import ${total === 1 ? "cycle" : "cycles"}${options.includeTypeOnly ? "" : " (type-only cycles not counted)"}.`);
   return { exitCode };
 }
 
 export async function runUnusedAdapter(options: UnusedAdapterOptions): Promise<CliAdapterResult> {
-  const result = await withTool(options.database, "find_unused_exports", { file: options.file, includeTests: options.includeTests, limit: MAX_LISTED });
-  const total = Number(result.total);
-  const exitCode = total > (options.max ?? 0) ? 1 : 0;
+  const result = await withStore(options.database, (store) => findUnusedExports(store, nodeSourceReader, { file: options.file, includeTests: options.includeTests }));
+  const { count: total, exceeded } = checkVerdict(result.unusedExports.length, options.max);
+  const exitCode = exceeded ? 1 : 0;
+  const listed = result.unusedExports.slice(0, MAX_LISTED_FINDINGS);
   if (options.json) {
-    console.log(JSON.stringify({ count: total, unusedExports: result.unusedExports, deadFunctions: result.deadFunctions }, null, 2));
+    const strip = <T extends { id: string }>({ id: _id, ...entry }: T) => entry;
+    const unusedExports = listed.map(({ usedInFile, ...entry }) => ({ ...strip(entry), ...(usedInFile ? { usedInFile: true } : {}) }));
+    console.log(JSON.stringify({ count: total, unusedExports, deadFunctions: result.deadFunctions.map(strip) }, null, 2));
     return { exitCode };
   }
-  for (const entry of result.unusedExports as Array<{ kind: string; name: string; file: string; line: number | null }>) {
+  for (const entry of listed) {
     console.log(`${entry.file}:${entry.line ?? "?"} ${entry.kind} ${entry.name}`);
   }
-  if (total > (result.unusedExports as unknown[]).length) console.log(`... and ${total - (result.unusedExports as unknown[]).length} more`);
+  if (total > listed.length) console.log(`... and ${total - listed.length} more`);
   console.log(total === 0 ? "No unused exports." : `${total} unused export ${total === 1 ? "candidate" : "candidates"} (check each: dynamic and outside uses are not seen).`);
   return { exitCode };
 }

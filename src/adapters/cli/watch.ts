@@ -3,7 +3,7 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import type { BuildCodeGraphResult } from "../../core/scan/index.js";
 import { didFailFast } from "../../core/scan/index.js";
-import { scanIntoStore, type ScanAdapterOptions } from "./scan.js";
+import { scanIntoStore, type ScanAdapterOptions } from "../../composition/scan-into-store.js";
 
 export type WatchAdapterOptions = ScanAdapterOptions & {
   // Quiet period after the last file event before rescanning, in milliseconds.

@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, utimes, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { scanIntoStore } from "../src/adapters/cli/scan.js";
+import { scanIntoStore } from "../src/composition/scan-into-store.js";
 import { startMcpServer } from "./helpers/mcp-stdio.js";
 
 async function createProject() {

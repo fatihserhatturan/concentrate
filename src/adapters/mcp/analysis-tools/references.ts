@@ -1,10 +1,10 @@
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
 import { optionalString, requiredString } from "../args.js";
-import { loadFunctions, matchesFileOrDirectory } from "../agent-tools/graph.js";
+import { loadFunctions, matchesFileOrDirectory } from "../../../core/queries/graph.js";
 import type { PageWindow } from "../paging.js";
-import { byFileAndLine, type Declaration, type DeclarationKind, describeDeclaration, ExportIndex, loadDeclarations, loadImports } from "./model.js";
+import { byFileAndLine, type Declaration, type DeclarationKind, describeDeclaration, ExportIndex, loadDeclarations, loadImports } from "../../../core/queries/model.js";
 import { DECLARATION_KINDS } from "./search.js";
-import { describeStyle, loadStyleTargets, loadStyleUses, parseStyleSymbol } from "../agent-tools/styles.js";
+import { describeStyle, loadStyleTargets, loadStyleUses, parseStyleSymbol } from "../../../core/queries/styles.js";
 
 type Row = Record<string, unknown>;
 

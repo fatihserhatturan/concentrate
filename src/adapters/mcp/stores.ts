@@ -1,5 +1,5 @@
 import type { IQueryEngine } from "../../core/contracts/query-engine.js";
-import { filesMatching, NO_FILE_MATCHED } from "./agent-tools/graph.js";
+import { filesMatching, NO_FILE_MATCHED } from "../../core/queries/graph.js";
 import { optionalString } from "./args.js";
 import type { PageWindow } from "./paging.js";
 

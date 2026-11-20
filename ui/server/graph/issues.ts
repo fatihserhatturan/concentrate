@@ -1,6 +1,7 @@
+import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { findImportCycles, findUnusedExports, type PageWindow } from "../core.js";
-import { loadIndex, projectStore, type GraphIndex } from "./index.js";
+import { findImportCycles, findUnusedExports, type ISourceReader } from "../core.js";
+import { loadIndex, projectStore } from "./index.js";
 
 export type Issues = {
   cycles: Array<{ size: number; typeOnly: boolean; files: Array<{ id: string | null; path: string }>; cycle: string[] }>;
@@ -10,27 +11,9 @@ export type Issues = {
   note: string;
 };
 
-// The core's tools page their lists; here the whole list is wanted.
-const everything: PageWindow = { offset: 0, limit: Number.MAX_SAFE_INTEGER, fetch: Number.MAX_SAFE_INTEGER, take: (rows) => rows.slice() };
+const sourceReader: ISourceReader = { readFile: (file) => readFile(file, "utf8").catch(() => undefined) };
 
 const cache = new Map<string, { signature: string; issues: Issues }>();
-
-type Declaration = { kind: string; name: string; className?: string; file: string; line: number | null; usedInFile?: boolean };
-
-function nodeIds(index: GraphIndex) {
-  const byFile = new Map<string, string>();
-  const declarations = new Map<string, string>();
-  for (const node of index.nodes.values()) {
-    if (node.label === "File") byFile.set(String(node.props.relativePath ?? ""), node.id);
-  }
-  for (const [file, owner] of index.fileOf) {
-    if (file === owner) continue;
-    const node = index.nodes.get(file)!;
-    const relative = String(index.nodes.get(owner)?.props.relativePath ?? "");
-    declarations.set(`${relative}\0${String(node.props.name ?? "")}\0${node.props.line ?? ""}`, node.id);
-  }
-  return { file: (rel: string) => byFile.get(rel) ?? null, declaration: (d: Declaration) => declarations.get(`${d.file}\0${d.name}\0${d.line ?? ""}`) ?? null };
-}
 
 /** Import cycles and unused exports, from the core's own analysis tools (cached per graph write). */
 export async function issues(projectPath: string): Promise<Issues> {
@@ -40,16 +23,17 @@ export async function issues(projectPath: string): Promise<Issues> {
   if (cached && cached.signature === index.signature) return cached.issues;
 
   const store = await projectStore(root);
-  const cycleResult: any = await findImportCycles(store, { scope: "file" }, everything);
-  const unusedResult: any = await findUnusedExports(store, {}, everything);
-  const ids = nodeIds(index);
+  const [cycleResult, unusedResult] = await Promise.all([
+    findImportCycles(store, { scope: "file" }),
+    findUnusedExports(store, sourceReader, {}),
+  ]);
   const result: Issues = {
-    cycles: (cycleResult.cycles as Array<{ size: number; members: string[]; cycle: string[]; typeOnly?: boolean }>).map((c) => ({
+    cycles: cycleResult.cycles.map((c) => ({
       size: c.size, typeOnly: c.typeOnly === true, cycle: c.cycle,
-      files: [...new Set([...c.members, ...c.cycle])].map((file) => ({ id: ids.file(file), path: file })),
+      files: [...new Set([...c.members, ...c.cycle])].map((file) => ({ id: cycleResult.ids[file] ?? null, path: file })),
     })),
-    unused: (unusedResult.unusedExports as Declaration[]).map((d) => ({ id: ids.declaration(d), kind: d.kind, name: d.name, ...(d.className ? { className: d.className } : {}), file: d.file, line: d.line, usedInFile: d.usedInFile === true })),
-    deadFunctions: (unusedResult.deadFunctions as Declaration[]).map((d) => ({ id: ids.declaration(d), kind: d.kind, name: d.name, file: d.file, line: d.line })),
+    unused: unusedResult.unusedExports.map((d) => ({ id: d.id, kind: d.kind, name: d.name, ...(d.className ? { className: d.className } : {}), file: d.file, line: d.line, usedInFile: d.usedInFile })),
+    deadFunctions: unusedResult.deadFunctions.map((d) => ({ id: d.id, kind: d.kind, name: d.name, file: d.file, line: d.line })),
     note: "Candidates, not proof: uses the graph cannot see (string lookups, framework conventions, consumers outside the repository) are not counted.",
   };
   cache.set(root, { signature: index.signature, issues: result });

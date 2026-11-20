@@ -6,7 +6,7 @@ import { formatNormalizedGraph, normalizeGraph } from "../../core/graph/normaliz
 import { didFailFast, didPartiallySucceed } from "../../core/scan/index.js";
 import { scanOrchestrator } from "../../composition/orchestrator.js";
 import type { CliAdapterResult } from "./scan.js";
-import { writeJsonl } from "./jsonl.js";
+import { writeJsonl } from "../../composition/jsonl.js";
 
 export type ExportAdapterOptions = {
   output: string;

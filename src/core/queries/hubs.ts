@@ -1,10 +1,13 @@
-import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
-import { louvain } from "../../../core/graph/louvain.js";
-import { CODE_LANGUAGES, type SupportedLanguage } from "../../../core/scan/language.js";
-import { loadCallEdges, loadFunctions } from "../agent-tools/graph.js";
+import type { IQueryEngine } from "../contracts/query-engine.js";
+import { louvain } from "../graph/louvain.js";
+import { CODE_LANGUAGES, type SupportedLanguage } from "../scan/language.js";
+import { loadCallEdges, loadFunctions } from "./graph.js";
 import { loadImports } from "./model.js";
 
 type Row = Record<string, unknown>;
+
+// Code files, plus files whose language is unknown; styles, JSON, docs and assets are not code.
+export const countsAsCodeFile = (value: unknown): boolean => typeof value !== "string" || CODE_LANGUAGES.has(value as SupportedLanguage);
 
 // The file graph behind hubs and subsystems: code files other than tests,
 // connected by resolved imports and by calls from one file into another.
@@ -28,7 +31,7 @@ export async function loadFileGraph(engine: IQueryEngine): Promise<FileGraph> {
     loadCallEdges(engine),
   ]);
   const files = fileRows
-    .filter((row) => row.isTest !== true && (typeof row.language !== "string" || CODE_LANGUAGES.has(row.language as SupportedLanguage)))
+    .filter((row) => row.isTest !== true && (countsAsCodeFile(row.language)))
     .map((row) => String(row.file))
     .sort();
   const included = new Set(files);

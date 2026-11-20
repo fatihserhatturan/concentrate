@@ -1,5 +1,5 @@
-import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
-import { parseNamespaceReExport, parseReExportNames } from "../../../core/graph/re-exports.js";
+import type { IQueryEngine } from "../contracts/query-engine.js";
+import { parseNamespaceReExport, parseReExportNames } from "../graph/re-exports.js";
 
 // Graph reads shared by the analysis tools: every declaration, every file and
 // the file-to-file import graph, plus an index that follows an imported name
