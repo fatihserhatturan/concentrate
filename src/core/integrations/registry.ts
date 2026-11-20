@@ -4,6 +4,7 @@ import type { IProjectManifestReader } from "../contracts/project-manifest.js";
 import type { ILanguageParser } from "../contracts/language-parser.js";
 import type { ILanguageResolver } from "../contracts/language-resolver.js";
 import type { ISemanticContributor } from "../contracts/semantic-contributor.js";
+import type { IUnusedExportRules } from "../contracts/unused-rules.js";
 import { baseGraphSchema, mergeGraphSchema, type GraphSchema, type GraphSchemaExtension } from "../graph/schema.js";
 
 export class CoreIntegrationRegistry {
@@ -14,6 +15,7 @@ export class CoreIntegrationRegistry {
   private readonly callResolverList: ILanguageCallResolver[] = [];
   private readonly inheritanceResolverList: ILanguageInheritanceResolver[] = [];
   private readonly projectManifestReaderList: IProjectManifestReader[] = [];
+  private readonly unusedExportRulesList: IUnusedExportRules[] = [];
   // The contributors in run order; dropped whenever one is registered.
   private orderedContributors: readonly ISemanticContributor[] | null = null;
   private readonly graphSchemaExtensions: GraphSchemaExtension[] = [];
@@ -96,6 +98,18 @@ export class CoreIntegrationRegistry {
     return this.projectManifestReaderList;
   }
 
+  // Per-language rules of the unused-exports analysis. Ids are unique; registration order is the note order.
+  registerUnusedExportRules(rules: IUnusedExportRules): void {
+    if (this.unusedExportRulesList.some((existing) => existing.id === rules.id)) {
+      throw new Error(`Unused-export rules already registered: ${rules.id}`);
+    }
+    this.unusedExportRulesList.push(rules);
+  }
+
+  get unusedExportRules(): readonly IUnusedExportRules[] {
+    return this.unusedExportRulesList;
+  }
+
   // New graph tables and extra properties on existing ones. Ids are unique, and an
   // extension that conflicts with the schema so far (see mergeGraphSchema) is
   // rejected here, so a bad plugin fails at registration, not at the first write.
@@ -129,6 +143,7 @@ export function describeIntegrations(registry: CoreIntegrationRegistry): string[
     ...registry.semanticContributors.map((item) => line("contributor", item.id, item.version)),
     ...registry.callResolvers.map((item) => line("call-resolver", item.id, undefined)),
     ...registry.inheritanceResolvers.map((item) => line("inheritance-resolver", item.id, undefined)),
+    ...registry.unusedExportRules.map((item) => line("unused-rules", item.id, undefined)),
     ...registry.projectManifestReaders.map((item) => line("manifest-reader", item.id, item.version)),
   ].sort();
 }
