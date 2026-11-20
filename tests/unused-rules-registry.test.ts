@@ -59,7 +59,8 @@ describe("unused-export rules through the registry", () => {
     const { names, note } = await run(registry);
     assert.deepEqual(names, ["lonely", "main"]);
     assert.ok(note.includes(toyUnusedRules.note!), note);
-    assert.ok(note.endsWith("C, C++ and toy."), note);
+    assert.ok(note.includes("Toy."), note);
+    assert.ok(note.endsWith("C, C++ and Toy."), note);
   });
 
   it("judges only what the registry's rules cover", async () => {
@@ -67,7 +68,7 @@ describe("unused-export rules through the registry", () => {
     registry.registerUnusedExportRules({ id: "nothing-public", languages: ["typescript"], supports: (file) => file.endsWith(".ts"), isPublicApi: () => false, note: "Nothing." });
     const { names, note } = await run(registry);
     assert.deepEqual(names, []);
-    assert.ok(note.endsWith("Nothing. TypeScript."), note);
-    assert.equal(unusedNote([]).endsWith("."), true);
+    assert.ok(note.endsWith("Nothing. typescript."), note);
+    assert.equal(unusedNote(createEmptyCoreIntegrationRegistry()).endsWith("."), true);
   });
 });

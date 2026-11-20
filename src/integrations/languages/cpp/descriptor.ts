@@ -10,6 +10,6 @@ function readHeadersAsCpp(files: { filePath: string; language: string }[]): void
 const isCppTestFile = (fileName: string): boolean => /(?:_(?:unit)?tests?|[a-z]Tests?)\.(?:c|cc|cpp|cxx)$|^test_.+\.(?:c|cc|cpp|cxx)$/u.test(fileName);
 
 export const cppLanguages: readonly LanguageDescriptor[] = [
-  { id: "c", code: true, extensions: [".c", ".h"], refine: readHeadersAsCpp, testFile: isCppTestFile },
-  { id: "cpp", code: true, extensions: [".cc", ".cpp", ".cxx", ".hpp", ".hh", ".hxx", ".ipp", ".inl"] },
+  { id: "c", displayName: "C", code: true, extensions: [".c", ".h"], refine: readHeadersAsCpp, testFile: isCppTestFile },
+  { id: "cpp", displayName: "C++", code: true, extensions: [".cc", ".cpp", ".cxx", ".hpp", ".hh", ".hxx", ".ipp", ".inl"] },
 ];
