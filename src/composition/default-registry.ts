@@ -50,6 +50,12 @@ import { goCallResolver, goInheritanceResolver } from "../integrations/languages
 import { pythonCallResolver, pythonInheritanceResolver } from "../integrations/languages/python/resolvers.js";
 import { rustCallResolver, rustInheritanceResolver } from "../integrations/languages/rust/resolvers.js";
 
+import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
+import { goUnusedRules } from "../integrations/languages/go/unused.js";
+import { jsTsUnusedRules } from "../integrations/languages/js-ts/unused.js";
+import { pythonUnusedRules } from "../integrations/languages/python/unused.js";
+import { rustUnusedRules } from "../integrations/languages/rust/unused.js";
+
 import { jsTsGraphSchema } from "../integrations/frameworks/js-ts/schema.js";
 import { cppBuildGraphSchema } from "../integrations/frameworks/cpp/schema.js";
 import { cppGraphSchema } from "../integrations/languages/cpp/schema.js";
@@ -87,6 +93,11 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   // js-ts first: it owns a directory that has both a package.json and a pyproject.toml.
   for (const reader of [jsTsManifestReader, pythonManifestReader]) {
     registry.registerProjectManifestReader(reader);
+  }
+
+  // The order is the order of the find_unused_exports note's language paragraphs.
+  for (const rules of [jsTsUnusedRules, goUnusedRules, rustUnusedRules, pythonUnusedRules, cppUnusedRules]) {
+    registry.registerUnusedExportRules(rules);
   }
 
   for (const resolver of createDefaultLanguageResolvers(registry)) {

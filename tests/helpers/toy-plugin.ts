@@ -6,6 +6,7 @@ import type { CoreIntegrationRegistry } from "../../src/core/integrations/regist
 import type { ILanguageCallResolver } from "../../src/core/contracts/call-resolver.js";
 import type { LanguageDescriptor } from "../../src/core/contracts/language-descriptor.js";
 import type { ILanguageParser } from "../../src/core/contracts/language-parser.js";
+import type { IUnusedExportRules } from "../../src/core/contracts/unused-rules.js";
 import type { GraphNode, GraphRelationship } from "../../src/core/graph/model.js";
 
 // A language added entirely outside src/core: `fn name` declares a function,
@@ -61,9 +62,17 @@ export function createToyRegistry(version?: string): CoreIntegrationRegistry {
   registry.registerLanguage(toyDescriptor);
   registry.registerLanguageParser(createToyParser(version));
   registry.registerCallResolver(toyCallResolver);
+  registry.registerUnusedExportRules(toyUnusedRules);
   return registry;
 }
 
 export function createRegistry(): CoreIntegrationRegistry {
   return createToyRegistry();
 }
+
+export const toyUnusedRules: IUnusedExportRules = {
+  id: "toy",
+  languages: ["toy"],
+  supports: (file) => file.endsWith(".toy"),
+  note: "Toy: every function counts as public API.",
+};
