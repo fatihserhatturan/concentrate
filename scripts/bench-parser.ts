@@ -45,6 +45,7 @@ const { values } = parseArgs({
 const code = values.dist ? "../dist" : "../src";
 const { coreIntegrationRegistry, defaultLanguageTable } = await import(`${code}/composition/default-registry.js`) as typeof import("../src/composition/default-registry.js");
 const { buildCodeGraph } = await import(`${code}/composition/orchestrator.js`) as typeof import("../src/composition/orchestrator.js");
+const { nodeFileSystem } = await import(`${code}/adapters/fs/node-file-system.js`) as typeof import("../src/adapters/fs/node-file-system.js");
 const { discoverFiles } = await import(`${code}/core/scan/discover-files.js`) as typeof import("../src/core/scan/discover-files.js");
 const { filterSupportedSourceFiles } = await import(`${code}/core/scan/source-files.js`) as typeof import("../src/core/scan/source-files.js");
 const { parseSyntaxTree } = await import(`${code}/integrations/languages/syntax/tree-sitter.js`) as typeof import("../src/integrations/languages/syntax/tree-sitter.js");
@@ -79,7 +80,7 @@ const grammars = Object.fromEntries(
 const results: SampleResult[] = [];
 for (const sample of await availableSamples(suite)) {
   const { projectPath } = sample;
-  const files = filterSupportedSourceFiles(await discoverFiles(projectPath, { exclude: sample.exclude, conventions: defaultLanguageTable.conventions }), undefined, defaultLanguageTable);
+  const files = filterSupportedSourceFiles(await discoverFiles(projectPath, nodeFileSystem, { exclude: sample.exclude, conventions: defaultLanguageTable.conventions }), undefined, defaultLanguageTable);
   const sources = await Promise.all(files.map(async (file) => ({ ...file, source: await readFile(file.filePath, "utf8") })));
 
   const parseMs = await median(async () => {

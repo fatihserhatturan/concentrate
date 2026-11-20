@@ -1,6 +1,7 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { findWorkspacePackageJsons } from "../project.js";
+import { nodeWalkFileSystem } from "./node-walk-fs.js";
 import { extractPackageExportTargets } from "./package-json-exports.js";
 
 export type JsTsPackageJsonResolutionConfig = {
@@ -81,7 +82,7 @@ export async function readJsTsWorkspacePackageResolutionConfigs(
   const packageJsonPaths = new Set<string>();
 
   for (const pattern of effectivePatterns) {
-    for (const packageJsonPath of await findWorkspacePackageJsons(rootPath, pattern)) {
+    for (const packageJsonPath of await findWorkspacePackageJsons(rootPath, pattern, nodeWalkFileSystem)) {
       packageJsonPaths.add(packageJsonPath);
     }
   }

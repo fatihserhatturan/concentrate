@@ -22,6 +22,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
+import { nodeContentHasher, nodeFileSystem } from "../src/adapters/fs/node-file-system.js";
 import { openGraphStore } from "../src/composition/graph-store.js";
 import { coreIntegrationRegistry, defaultLanguageTable } from "../src/composition/default-registry.js";
 import { parserFingerprint } from "../src/composition/parser-fingerprint.js";
@@ -29,7 +30,7 @@ import { createParserPool } from "../src/composition/parser-pool.js";
 import { runWithConcurrency } from "../src/core/scan/concurrency.js";
 import { discoverFiles } from "../src/core/scan/discover-files.js";
 import { createScanManifest } from "../src/core/scan/manifest.js";
-import { ParseCache } from "../src/core/scan/parse-cache.js";
+import { ParseCache } from "../src/adapters/fs/parse-cache.js";
 import { OrderedParseResults } from "../src/core/scan/parse-results.js";
 import { parseFileWithContext } from "../src/core/scan/parse-source.js";
 import { addProjectConfigNodes } from "../src/core/scan/project-config.js";
@@ -100,17 +101,17 @@ const hashFile = async (file: string) => createHash("sha256").update(await readF
 console.error(`Probing ${rootPath}`);
 const registry = coreIntegrationRegistry;
 const languages = defaultLanguageTable;
-const settings = await loadProjectSettings(rootPath, languages);
+const settings = await loadProjectSettings(rootPath, languages, nodeFileSystem);
 
 // 1. File discovery, language detection and the manifest (hash of every file).
 const { supportedFiles, manifest, files } = await step("discover files + manifest", async () => {
-  const discovered = await discoverFiles(rootPath, {
+  const discovered = await discoverFiles(rootPath, nodeFileSystem, {
     include: settings.include.length > 0 ? settings.include : undefined,
     exclude: settings.exclude.length > 0 ? settings.exclude : undefined,
     conventions: languages.conventions,
   });
   const supported = filterSupportedSourceFiles(discovered, undefined, languages, settings.extensions);
-  return { supportedFiles: supported, manifest: await createScanManifest(rootPath, supported), files: discovered };
+  return { supportedFiles: supported, manifest: await createScanManifest(rootPath, supported, nodeFileSystem, nodeContentHasher), files: discovered };
 });
 const codeFiles = supportedFiles.filter((file) => languages.isCode(file.language)).length;
 const report = createScanReport(files.length, codeFiles, supportedFiles.length - codeFiles);
@@ -135,7 +136,7 @@ const cacheKey = (filePath: string) => {
 let graph: GraphBuilder | null = new GraphBuilder();
 await step("parse + add to graph (streamed)", async () => {
   graph!.addNode({ id: repoNodeId, label: "Repo", properties: { path: rootPath, name: path.basename(rootPath) } });
-  await addProjectConfigNodes(graph!, repoNodeId, rootPath, report, registry.projectManifestReaders);
+  await addProjectConfigNodes(graph!, repoNodeId, rootPath, report, nodeFileSystem, registry.projectManifestReaders);
   const results = new OrderedParseResults(graph!, repoNodeId, rootPath, report, true, languages);
   const misses: number[] = [];
   const concurrency = os.availableParallelism();
@@ -175,7 +176,7 @@ await step("parse + add to graph (streamed)", async () => {
 
 // 4. Workspace packages and the language resolvers.
 await step(`workspace packages + ${registry.languageResolvers.length} resolvers`, async () => {
-  await addWorkspacePackageGraph(graph!, repoNodeId, rootPath, report, registry.projectManifestReaders);
+  await addWorkspacePackageGraph(graph!, repoNodeId, rootPath, report, nodeFileSystem, registry.projectManifestReaders);
   for (const resolver of registry.languageResolvers) await resolver.resolve(graph!, rootPath, report);
 });
 

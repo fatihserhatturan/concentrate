@@ -1,7 +1,18 @@
 import path from "node:path";
 import type { BuildCodeGraphResult } from "./result.js";
 import { createFileClassificationCounts, type FileClassificationCounts } from "./file-classification.js";
-import { createParseCacheReport, type ParseCacheReport } from "./parse-cache.js";
+
+export type ParseCacheReport = {
+  enabled: boolean;
+  hits: number;
+  misses: number;
+  written: number;
+  pruned: number;
+};
+
+export function createParseCacheReport(enabled = false): ParseCacheReport {
+  return { enabled, hits: 0, misses: 0, written: 0, pruned: 0 };
+}
 
 export type ScanStatus = "success" | "partial" | "failed";
 

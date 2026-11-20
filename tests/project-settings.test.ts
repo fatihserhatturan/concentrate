@@ -1,3 +1,4 @@
+import { nodeFileSystem } from "../src/adapters/fs/node-file-system.js";
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -10,7 +11,7 @@ import { defaultLanguageTable } from "../src/composition/default-registry.js";
 const detectLanguage = (file: string, overrides?: ReadonlyMap<string, string>) => defaultLanguageTable.detect(file, overrides);
 import { loadProjectSettings as loadSettings, parseProjectSettings as parseSettings } from "../src/core/scan/project-settings.js";
 const parseProjectSettings = (raw: unknown) => parseSettings(raw, defaultLanguageTable);
-const loadProjectSettings = (root: string) => loadSettings(root, defaultLanguageTable);
+const loadProjectSettings = (root: string) => loadSettings(root, defaultLanguageTable, nodeFileSystem);
 
 describe("concentrate.json", () => {
   it("parses every key and rejects what it cannot use", () => {

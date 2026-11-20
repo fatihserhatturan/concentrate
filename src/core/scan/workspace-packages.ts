@@ -1,4 +1,5 @@
 import path from "node:path";
+import type { IFileSystem } from "../contracts/file-system.js";
 import type { DeclaredPackage, IProjectManifestReader } from "../contracts/project-manifest.js";
 import type { IGraphContributor } from "../contracts/graph-contributor.js";
 import type { GraphNode } from "../graph/model.js";
@@ -12,9 +13,10 @@ export async function addWorkspacePackageGraph(
   repoNodeId: string,
   rootPath: string,
   report: ScanReport,
+  fileSystem: IFileSystem,
   readers: readonly IProjectManifestReader[] = [],
 ): Promise<void> {
-  const packages = await collectDeclaredPackages(graph, rootPath, report, readers);
+  const packages = await collectDeclaredPackages(graph, rootPath, report, fileSystem, readers);
   if (packages.length === 0) {
     return;
   }
@@ -41,6 +43,7 @@ async function collectDeclaredPackages(
   graph: IGraphContributor,
   rootPath: string,
   report: ScanReport,
+  fileSystem: IFileSystem,
   readers: readonly IProjectManifestReader[],
 ): Promise<DeclaredPackage[]> {
   const filePaths: string[] = [];
@@ -52,6 +55,7 @@ async function collectDeclaredPackages(
     if (!reader.readPackages) continue;
     const declared = await reader.readPackages({
       rootPath,
+      fileSystem,
       filePaths,
       warn: (filePath, error) => addScanWarning(report, rootPath, filePath, error),
     });

@@ -1,7 +1,7 @@
 import path from "node:path";
 import type { SupportedSourceFile } from "./source-files.js";
 import type { SupportedLanguage } from "./language.js";
-import { nodeFileSystemReader, type FileSystemReader } from "./fs-reader.js";
+import type { IContentHasher, IFileSystem } from "../contracts/file-system.js";
 
 export type ScanManifest = {
   version: 1;
@@ -22,10 +22,11 @@ export type ScanManifestFile = {
 export async function createScanManifest(
   rootPath: string,
   files: SupportedSourceFile[],
-  reader: FileSystemReader = nodeFileSystemReader,
+  fileSystem: IFileSystem,
+  hasher: IContentHasher,
 ): Promise<ScanManifest> {
   const entries = await Promise.all(
-    files.map((file) => createScanManifestFile(rootPath, file, reader)),
+    files.map((file) => createScanManifestFile(rootPath, file, fileSystem, hasher)),
   );
 
   return {
@@ -40,11 +41,12 @@ export async function createScanManifest(
 async function createScanManifestFile(
   rootPath: string,
   file: SupportedSourceFile,
-  reader: FileSystemReader,
+  fileSystem: IFileSystem,
+  hasher: IContentHasher,
 ): Promise<ScanManifestFile> {
   const [metadata, content] = await Promise.all([
-    reader.stat(file.filePath),
-    reader.readFile(file.filePath),
+    fileSystem.stat(file.filePath),
+    fileSystem.readFile(file.filePath),
   ]);
 
   return {
@@ -52,7 +54,7 @@ async function createScanManifestFile(
     language: file.language,
     sizeBytes: metadata.size,
     mtimeMs: metadata.mtimeMs,
-    hash: reader.hash(content, "sha256"),
+    hash: hasher.hash(content),
   };
 }
 

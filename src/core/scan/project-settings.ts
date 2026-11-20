@@ -1,5 +1,5 @@
-import { readFile } from "node:fs/promises";
 import path from "node:path";
+import type { IFileSystem } from "../contracts/file-system.js";
 import type { LanguageTable, SupportedLanguage } from "./language.js";
 
 // concentrate.json at the project root: what the project says about how it
@@ -28,13 +28,13 @@ export type ProjectSettings = {
 
 export const EMPTY_SETTINGS: ProjectSettings = { extensions: new Map(), include: [], exclude: [], deprioritize: [], apiOrigins: [] };
 
-export async function loadProjectSettings(rootPath: string, languages: LanguageTable): Promise<ProjectSettings> {
+export async function loadProjectSettings(rootPath: string, languages: LanguageTable, fileSystem: IFileSystem): Promise<ProjectSettings> {
   const file = path.join(rootPath, PROJECT_SETTINGS_FILE);
   let text: string;
   try {
-    text = await readFile(file, "utf8");
+    text = await fileSystem.readTextFile(file);
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return EMPTY_SETTINGS;
+    if ((error as { code?: string }).code === "ENOENT") return EMPTY_SETTINGS;
     throw error;
   }
   let raw: unknown;

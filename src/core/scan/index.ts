@@ -6,7 +6,7 @@ export type {
   ScanManifest,
   ScanManifestFile,
 } from "./manifest.js";
-export type { ParseCacheReport } from "./parse-cache.js";
+export type { ParseCacheReport } from "./report.js";
 export type {
   ScanFailure,
   ScanReport,

@@ -1,3 +1,4 @@
+import { nodeFileSystem } from "../src/adapters/fs/node-file-system.js";
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -90,8 +91,8 @@ describe("discoverFiles", () => {
     return root;
   }
 
-  async function discover(root: string, options?: Parameters<typeof discoverFiles>[1]): Promise<string[]> {
-    return (await discoverFiles(root, { conventions: defaultLanguageTable.conventions, ...options })).map((file) => path.relative(root, file).split(path.sep).join("/"));
+  async function discover(root: string, options?: Parameters<typeof discoverFiles>[2]): Promise<string[]> {
+    return (await discoverFiles(root, nodeFileSystem, { conventions: defaultLanguageTable.conventions, ...options })).map((file) => path.relative(root, file).split(path.sep).join("/"));
   }
 
   it("respects nested .gitignore files", async () => {

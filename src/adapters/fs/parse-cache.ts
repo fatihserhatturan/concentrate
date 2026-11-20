@@ -3,7 +3,9 @@ import { mkdir, readdir, readFile, rename, rm, writeFile } from "node:fs/promise
 import path from "node:path";
 import { promisify } from "node:util";
 import { gunzip as gunzipCallback, gzip as gzipCallback } from "node:zlib";
-import type { ParsedSourceFile } from "../graph/model.js";
+import type { IParseCache } from "../../core/contracts/parse-cache.js";
+import type { ParsedSourceFile } from "../../core/graph/model.js";
+import { createParseCacheReport, type ParseCacheReport } from "../../core/scan/report.js";
 
 // Per-file parse results, reused while a file and the parsers are unchanged.
 //
@@ -33,19 +35,7 @@ type CacheEntry = {
   parsed: ParsedSourceFile;
 };
 
-export type ParseCacheReport = {
-  enabled: boolean;
-  hits: number;
-  misses: number;
-  written: number;
-  pruned: number;
-};
-
-export function createParseCacheReport(enabled = false): ParseCacheReport {
-  return { enabled, hits: 0, misses: 0, written: 0, pruned: 0 };
-}
-
-export class ParseCache {
+export class ParseCache implements IParseCache {
   private readonly projectDirectory: string;
   private readonly usedKeys = new Set<string>();
 

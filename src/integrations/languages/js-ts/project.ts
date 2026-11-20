@@ -1,4 +1,5 @@
 import path from "node:path";
+import type { IFileSystem } from "../../../core/contracts/file-system.js";
 import type { DeclaredPackage, IProjectManifestReader, ProjectConfigValue, ProjectManifestContext } from "../../../core/contracts/project-manifest.js";
 import { createGlobMatcher, walkFiles } from "../../../core/scan/glob.js";
 import { extractWorkspacePatterns, readJsonObject, readPnpmWorkspacePatterns } from "./resolution/package-json.js";
@@ -23,14 +24,18 @@ const configFiles: ReadonlyArray<{ file: string; keys: readonly string[] }> = [
 ];
 
 /** `package.json` paths for one workspace pattern such as `packages/*`, skipping `node_modules`. */
-export async function findWorkspacePackageJsons(rootPath: string, workspacePattern: string): Promise<string[]> {
+export async function findWorkspacePackageJsons(
+  rootPath: string,
+  workspacePattern: string,
+  fileSystem: Pick<IFileSystem, "readDirectory" | "stat">,
+): Promise<string[]> {
   if (workspacePattern.startsWith("!")) return [];
   const pattern = workspacePattern.endsWith("package.json")
     ? workspacePattern
     : path.posix.join(workspacePattern, "package.json");
   const matcher = createGlobMatcher(pattern);
 
-  return walkFiles(rootPath, {
+  return walkFiles(rootPath, fileSystem, {
     start: [matcher.base],
     accept: (relativePath, isDirectory) => isDirectory
       ? path.posix.basename(relativePath) !== "node_modules" && matcher.mayContain(relativePath)
@@ -46,7 +51,7 @@ export const jsTsManifestReader: IProjectManifestReader = {
   readConfig: readJsTsConfig,
 };
 
-async function readJsTsPackages({ rootPath, warn }: ProjectManifestContext): Promise<DeclaredPackage[]> {
+async function readJsTsPackages({ rootPath, fileSystem, warn }: ProjectManifestContext): Promise<DeclaredPackage[]> {
   const rootPackage = await readJsonObject(path.join(rootPath, "package.json"), warn);
   const workspacePatterns = [
     ...extractWorkspacePatterns(rootPackage),
@@ -58,7 +63,7 @@ async function readJsTsPackages({ rootPath, warn }: ProjectManifestContext): Pro
   if (rootPackage) packageJsonPaths.add("package.json");
 
   for (const pattern of effectivePatterns) {
-    for (const packageJsonPath of await findWorkspacePackageJsons(rootPath, pattern)) {
+    for (const packageJsonPath of await findWorkspacePackageJsons(rootPath, pattern, fileSystem)) {
       packageJsonPaths.add(packageJsonPath);
     }
   }
