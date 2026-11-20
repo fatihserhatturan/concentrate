@@ -4,7 +4,7 @@ import type { GraphNode } from "../../../core/graph/model.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import type { GoParsePlugin } from "../../languages/go/parser.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
-import { createGoCallIndex } from "../../../core/scan/resolution/go-calls.js";
+import { createGoCallIndex } from "../../languages/go/calls.js";
 import { ENV_VALUE_FILES, readEnvFiles } from "../js-ts/env-files.js";
 import { importedPackages } from "./routes.js";
 import { createDefinitionLookup, descendantsOf, stringConstants, valueTypeText, type Definition } from "./scope.js";

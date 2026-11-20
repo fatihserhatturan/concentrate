@@ -1,4 +1,4 @@
-import { detectLanguage, isCodeLanguage, type SupportedLanguage } from "./language.js";
+import type { LanguageTable, SupportedLanguage } from "./language.js";
 
 export type SupportedSourceFile = {
   filePath: string;
@@ -10,14 +10,11 @@ export type SupportedSourceFile = {
 export function filterSupportedSourceFiles(
   files: string[],
   maxFiles: number | undefined,
+  languages: LanguageTable,
   extensions?: ReadonlyMap<string, SupportedLanguage>,
 ): SupportedSourceFile[] {
-  const all: SupportedSourceFile[] = files.map((filePath) => ({ filePath, language: detectLanguage(filePath, extensions) }));
-  // `.h` is both C and C++: a project with C++ sources reads its headers as C++.
-  if (all.some((file) => file.language === "cpp")) {
-    for (const file of all) if (file.language === "c" && file.filePath.endsWith(".h")) file.language = "cpp";
-  }
+  const all: SupportedSourceFile[] = languages.detectAll(files, extensions);
   if (maxFiles === undefined || maxFiles <= 0) return all;
   let code = 0;
-  return all.filter((file) => !isCodeLanguage(file.language) || ++code <= maxFiles);
+  return all.filter((file) => !languages.isCode(file.language) || ++code <= maxFiles);
 }

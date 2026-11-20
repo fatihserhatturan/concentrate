@@ -1,5 +1,6 @@
 import type { IQueryEngine } from "../../core/contracts/query-engine.js";
 import { INVALID_PARAMS, McpProtocolError } from "./errors.js";
+import { defaultLanguageTable } from "../../composition/default-registry.js";
 import { graphSummary } from "../../core/queries/summary.js";
 
 // MCP resources: one JSON summary of the scanned graph, small enough for an
@@ -19,6 +20,6 @@ export const resourceDefinitions = [
 
 export async function readResource(engine: IQueryEngine, uri: string): Promise<{ contents: Array<{ uri: string; mimeType: string; text: string }> }> {
   if (uri !== GRAPH_SUMMARY_URI) throw new McpProtocolError(INVALID_PARAMS, `Resource not found: ${uri}`, { uri });
-  const summary = await graphSummary(engine);
+  const summary = await graphSummary(engine, { codeLanguages: defaultLanguageTable.codeLanguages });
   return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(summary, null, 2) }] };
 }

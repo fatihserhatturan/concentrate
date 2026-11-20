@@ -24,6 +24,7 @@
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
+import type { GrammarName } from "../src/integrations/languages/syntax/tree-sitter.js";
 import { availableSamples, checkRegression, median as medianOf, parseSuite } from "./bench-common.js";
 
 const { values } = parseArgs({
@@ -42,7 +43,7 @@ const { values } = parseArgs({
 // From sources, parse workers only start when asked for and each one
 // compiles the TypeScript sources again, so worker timings mean little there.
 const code = values.dist ? "../dist" : "../src";
-const { coreIntegrationRegistry } = await import(`${code}/composition/default-registry.js`) as typeof import("../src/composition/default-registry.js");
+const { coreIntegrationRegistry, defaultLanguageTable } = await import(`${code}/composition/default-registry.js`) as typeof import("../src/composition/default-registry.js");
 const { buildCodeGraph } = await import(`${code}/composition/orchestrator.js`) as typeof import("../src/composition/orchestrator.js");
 const { discoverFiles } = await import(`${code}/core/scan/discover-files.js`) as typeof import("../src/core/scan/discover-files.js");
 const { filterSupportedSourceFiles } = await import(`${code}/core/scan/source-files.js`) as typeof import("../src/core/scan/source-files.js");
@@ -78,13 +79,13 @@ const grammars = Object.fromEntries(
 const results: SampleResult[] = [];
 for (const sample of await availableSamples(suite)) {
   const { projectPath } = sample;
-  const files = filterSupportedSourceFiles(await discoverFiles(projectPath, { exclude: sample.exclude }), undefined);
+  const files = filterSupportedSourceFiles(await discoverFiles(projectPath, { exclude: sample.exclude, conventions: defaultLanguageTable.conventions }), undefined, defaultLanguageTable);
   const sources = await Promise.all(files.map(async (file) => ({ ...file, source: await readFile(file.filePath, "utf8") })));
 
   const parseMs = await median(async () => {
     for (const { language, source } of sources) {
       try {
-        (await parseSyntaxTree(language, source)).delete();
+        (await parseSyntaxTree(language as GrammarName, source)).delete();
       } catch {
         // Counted as failed by the extract phase.
       }

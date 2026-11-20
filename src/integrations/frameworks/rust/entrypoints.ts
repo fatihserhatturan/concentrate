@@ -3,7 +3,7 @@ import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js"
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import { rustAttributesOf, rustBaseTypeName, type RustParsePlugin } from "../../languages/rust/parser.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
-import { createRustCallIndex, resolveRustCall } from "../../../core/scan/resolution/rust-calls.js";
+import { createRustCallIndex, resolveRustCall } from "../../languages/rust/calls.js";
 import type { RustRef } from "./routes.js";
 
 // Rust entrypoints besides `fn main`:

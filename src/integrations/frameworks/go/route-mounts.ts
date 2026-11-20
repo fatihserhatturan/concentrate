@@ -1,7 +1,7 @@
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
-import { createGoCallIndex, resolveGoCall, type GoCallIndex } from "../../../core/scan/resolution/go-calls.js";
+import { createGoCallIndex, resolveGoCall, type GoCallIndex } from "../../languages/go/calls.js";
 import { joinRoutePaths, RETURNED_ROUTER, type GoHandlerRef, type GoPendingRoute, type GoRouterArgument } from "./routes.js";
 
 // How deep a router is followed through functions that pass it on.

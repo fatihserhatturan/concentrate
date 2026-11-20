@@ -17,7 +17,7 @@ import {
   isCppFile,
   isPythonFile,
   isRustFile,
-} from "../../core/scan/resolution/file-kind.js";
+} from "../languages/file-kind.js";
 import { createCppFileIndex, readCppIncludeConfig, resolveCppInclude } from "../languages/cpp/resolution.js";
 import { readPythonProjects } from "../languages/python/project.js";
 import { createPythonResolver, type PythonResolver } from "../languages/python/resolution.js";

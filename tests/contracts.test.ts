@@ -1,3 +1,4 @@
+import { defaultLanguageTable } from "../src/composition/default-registry.js";
 import assert from "node:assert/strict";
 import path from "node:path";
 import { describe, it } from "node:test";
@@ -113,7 +114,7 @@ describe("Core contract conformance", () => {
 
   it("core scan module owns the scan orchestrator surface", () => {
     assert.equal(typeof coreBuildCodeGraph, "function");
-    const orchestrator = createScanOrchestrator({ getParser: getParserAdapter, resolvers: [], contributors: [] });
+    const orchestrator = createScanOrchestrator({ languages: defaultLanguageTable, getParser: getParserAdapter, resolvers: [], contributors: [] });
     assert.equal(typeof orchestrator.buildGraph, "function");
   });
 

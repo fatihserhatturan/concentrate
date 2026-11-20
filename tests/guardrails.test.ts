@@ -184,36 +184,23 @@ const CORE_PLATFORM_IO_DEBT: readonly string[] = [
   "core/scan/glob.ts",
   "core/scan/orchestrator.ts",
   "core/scan/parse-cache.ts",
-  "core/scan/project-config.ts",
   "core/scan/project-settings.ts",
-  "core/scan/workspace-packages.ts",
 ];
 
 /**
  * Core files that know a concrete language: named after one, branching on a
- * per-language file predicate, comparing `language` to a language id, or
- * testing a language's file extension. Shrinks as resolution moves to
+ * per-language file predicate, comparing `language` to a language id,
+ * testing a language's file extension, or naming an ecosystem's files
+ * (`package.json`, `go.mod`, `node_modules`, `conftest`...). Shrinks as resolution moves to
  * src/integrations/languages/<language>/.
  */
 const CORE_LANGUAGE_KNOWLEDGE_DEBT: readonly string[] = [
-  // Moved from the MCP adapter with its per-language rules (Go, Rust, Python, C/C++); the rules belong in the language integrations.
-  "core/queries/unused.ts",
-  "core/scan/resolution/calls.ts",
-  "core/scan/resolution/cpp-calls.ts",
-  "core/scan/resolution/file-kind.ts",
-  "core/scan/resolution/go-calls.ts",
-  "core/scan/resolution/inheritance.ts",
-  "core/scan/resolution/python-calls.ts",
-  "core/scan/resolution/python-inheritance.ts",
-  "core/scan/resolution/python-names.ts",
-  "core/scan/resolution/rust-calls.ts",
-  "core/scan/resolution/rust-types.ts",
-  "core/scan/source-files.ts",
 ];
 
 const LANGUAGE_FILE_NAME = /^(go|rust|python|cpp|c|java|kotlin|ruby|php|csharp|js|ts|jsts)-/;
 const LANGUAGE_PREDICATE = /\bis(Go|Python|Rust|Cpp|C|JsTs|Java)File\b/;
 const LANGUAGE_COMPARISON = /(?<!typeof\s+(?:[\w$]+\.)*)\blanguage\s*[!=]==?\s*["'][a-z+#-]+["']/;
+const ECOSYSTEM_FILE_NAME = /node_modules|package\.json|package-lock|tsconfig|pnpm-|yarn\.lock|go\.(?:mod|sum)\b|Cargo\.(?:toml|lock)|pyproject|__init__\.py|_test\.go|conftest|CMakeLists/;
 const LANGUAGE_EXTENSION_TEST = /\.endsWith\(\s*["']\.(py|go|rs|c|cc|cpp|cxx|h|hh|hpp|java|ts|tsx|js|jsx|mjs|cjs)["']\s*\)/;
 
 /** Adapter modules src/api.ts still re-exports. Shrinks as use cases move into core. */
@@ -241,6 +228,7 @@ describe("Core purity ratchets", () => {
         || LANGUAGE_PREDICATE.test(code)
         || LANGUAGE_COMPARISON.test(code)
         || LANGUAGE_EXTENSION_TEST.test(code)
+        || ECOSYSTEM_FILE_NAME.test(code)
       ) {
         offenders.push(relativeToSrc(file));
       }

@@ -23,14 +23,12 @@ import os from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { openGraphStore } from "../src/composition/graph-store.js";
-import { coreIntegrationRegistry } from "../src/composition/default-registry.js";
+import { coreIntegrationRegistry, defaultLanguageTable } from "../src/composition/default-registry.js";
 import { parserFingerprint } from "../src/composition/parser-fingerprint.js";
 import { createParserPool } from "../src/composition/parser-pool.js";
-import { readPythonProjects } from "../src/integrations/languages/python/project.js";
 import { runWithConcurrency } from "../src/core/scan/concurrency.js";
 import { discoverFiles } from "../src/core/scan/discover-files.js";
 import { createScanManifest } from "../src/core/scan/manifest.js";
-import { isCodeLanguage } from "../src/core/scan/language.js";
 import { ParseCache } from "../src/core/scan/parse-cache.js";
 import { OrderedParseResults } from "../src/core/scan/parse-results.js";
 import { parseFileWithContext } from "../src/core/scan/parse-source.js";
@@ -101,18 +99,20 @@ const hashFile = async (file: string) => createHash("sha256").update(await readF
 
 console.error(`Probing ${rootPath}`);
 const registry = coreIntegrationRegistry;
-const settings = await loadProjectSettings(rootPath);
+const languages = defaultLanguageTable;
+const settings = await loadProjectSettings(rootPath, languages);
 
 // 1. File discovery, language detection and the manifest (hash of every file).
 const { supportedFiles, manifest, files } = await step("discover files + manifest", async () => {
   const discovered = await discoverFiles(rootPath, {
     include: settings.include.length > 0 ? settings.include : undefined,
     exclude: settings.exclude.length > 0 ? settings.exclude : undefined,
+    conventions: languages.conventions,
   });
-  const supported = filterSupportedSourceFiles(discovered, undefined, settings.extensions);
+  const supported = filterSupportedSourceFiles(discovered, undefined, languages, settings.extensions);
   return { supportedFiles: supported, manifest: await createScanManifest(rootPath, supported), files: discovered };
 });
-const codeFiles = supportedFiles.filter((file) => isCodeLanguage(file.language)).length;
+const codeFiles = supportedFiles.filter((file) => languages.isCode(file.language)).length;
 const report = createScanReport(files.length, codeFiles, supportedFiles.length - codeFiles);
 const repoNodeId = `repo:${rootPath}`;
 
@@ -135,8 +135,8 @@ const cacheKey = (filePath: string) => {
 let graph: GraphBuilder | null = new GraphBuilder();
 await step("parse + add to graph (streamed)", async () => {
   graph!.addNode({ id: repoNodeId, label: "Repo", properties: { path: rootPath, name: path.basename(rootPath) } });
-  await addProjectConfigNodes(graph!, repoNodeId, rootPath, report);
-  const results = new OrderedParseResults(graph!, repoNodeId, rootPath, report, true);
+  await addProjectConfigNodes(graph!, repoNodeId, rootPath, report, registry.projectManifestReaders);
+  const results = new OrderedParseResults(graph!, repoNodeId, rootPath, report, true, languages);
   const misses: number[] = [];
   const concurrency = os.availableParallelism();
   await runWithConcurrency([...supportedFiles.keys()], concurrency, async (index) => {
@@ -146,7 +146,7 @@ await step("parse + add to graph (streamed)", async () => {
     else misses.push(index);
   });
   misses.sort((a, b) => a - b);
-  const codeMisses = misses.filter((index) => isCodeLanguage(supportedFiles[index]!.language)).length;
+  const codeMisses = misses.filter((index) => languages.isCode(supportedFiles[index]!.language)).length;
   const requested = values.workers === undefined ? undefined : Number.parseInt(values.workers, 10);
   // Same default as a scan: up to 4 workers once there are 100 code files to parse.
   const workers = codeMisses === 0 ? 0 : requested ?? (codeMisses >= 100 ? Math.max(0, Math.min(4, os.availableParallelism() - 1)) : 0);
@@ -156,7 +156,7 @@ await step("parse + add to graph (streamed)", async () => {
     await runWithConcurrency(misses, pool ? Math.max(concurrency, workers * 2) : concurrency, async (index) => {
       const { filePath, language } = supportedFiles[index]!;
       try {
-        const parser: ILanguageParser = pool && isCodeLanguage(language)
+        const parser: ILanguageParser = pool && languages.isCode(language)
           ? { language, parse: (root, file) => pool.parse(language, root, file) }
           : registry.getLanguageParser(language);
         const parsed = await parseFileWithContext(rootPath, filePath, language, parser);
@@ -175,7 +175,7 @@ await step("parse + add to graph (streamed)", async () => {
 
 // 4. Workspace packages and the language resolvers.
 await step(`workspace packages + ${registry.languageResolvers.length} resolvers`, async () => {
-  await addWorkspacePackageGraph(graph!, repoNodeId, rootPath, report, readPythonProjects);
+  await addWorkspacePackageGraph(graph!, repoNodeId, rootPath, report, registry.projectManifestReaders);
   for (const resolver of registry.languageResolvers) await resolver.resolve(graph!, rootPath, report);
 });
 

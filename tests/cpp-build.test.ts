@@ -4,7 +4,8 @@ import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
-import { detectLanguage } from "../src/core/scan/language.js";
+import { defaultLanguageTable } from "../src/composition/default-registry.js";
+const detectLanguage = (file: string, overrides?: ReadonlyMap<string, string>) => defaultLanguageTable.detect(file, overrides);
 import { readCMake } from "../src/integrations/languages/plain/cmake.js";
 
 type Scan = Awaited<ReturnType<typeof buildCodeGraph>>;

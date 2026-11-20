@@ -4,7 +4,8 @@ import os from "node:os";
 import path from "node:path";
 import { before, describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
-import { detectLanguage } from "../src/core/scan/language.js";
+import { defaultLanguageTable } from "../src/composition/default-registry.js";
+const detectLanguage = (file: string, overrides?: ReadonlyMap<string, string>) => defaultLanguageTable.detect(file, overrides);
 import { classifyFile } from "../src/core/scan/file-classification.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 
@@ -53,8 +54,8 @@ describe("non-code files in the graph", () => {
   });
 
   it("keeps example code under docs/ as production code", () => {
-    assert.equal(classifyFile("docs/examples/app.ts", false, true).sourceType, "production");
-    assert.equal(classifyFile("docs/examples/app.md", false, false).sourceType, "docs");
+    assert.equal(classifyFile("docs/examples/app.ts", defaultLanguageTable.conventions, false, true).sourceType, "production");
+    assert.equal(classifyFile("docs/examples/app.md", defaultLanguageTable.conventions, false, false).sourceType, "docs");
   });
 
   it("resolves imports of styles, JSON, images, new URL() and HTML links to the File", () => {

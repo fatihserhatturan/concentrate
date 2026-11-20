@@ -1,7 +1,7 @@
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 import type { GraphNode } from "../../../core/graph/model.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
-import { createPythonCallIndex, type PythonCallIndex } from "../../../core/scan/resolution/python-calls.js";
+import { createPythonCallIndex, type PythonCallIndex } from "../../languages/python/calls.js";
 import { readPythonProjects } from "../../languages/python/project.js";
 import { createPythonResolver, type PythonResolver } from "../../languages/python/resolution.js";
 import type { PyCall, PyFacts, PyList } from "./facts.js";

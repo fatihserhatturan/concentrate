@@ -3,7 +3,7 @@ import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js"
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import type { GoParsePlugin } from "../../languages/go/parser.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
-import { createGoCallIndex, firstResultType, resolveType, type GoCallIndex, type TypeRef } from "../../../core/scan/resolution/go-calls.js";
+import { createGoCallIndex, firstResultType, resolveType, type GoCallIndex, type TypeRef } from "../../languages/go/calls.js";
 import { importedPackages } from "./routes.js";
 import { descendantsOf } from "./scope.js";
 

@@ -1,7 +1,7 @@
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
-import { createRustCallIndex, resolveRustCall, type RustCallIndex } from "../../../core/scan/resolution/rust-calls.js";
+import { createRustCallIndex, resolveRustCall, type RustCallIndex } from "../../languages/rust/calls.js";
 import type { RustMount, RustPendingRoute, RustRef } from "./routes.js";
 
 const MAX_MOUNT_DEPTH = 8;

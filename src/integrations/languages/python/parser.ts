@@ -4,6 +4,7 @@ import { parseSyntaxTreeSkippingErrors, type SyntaxNode } from "../syntax/tree-s
 import { createPythonImportNodes, readDunderAll } from "./imports.js";
 import { classAttributes, calledName, localTypes, normalizeType, type LocalType } from "./locals.js";
 import { classifyFile } from "../../../core/scan/file-classification.js";
+import { pythonConventions } from "./descriptor.js";
 import { classBases, classFields, classKind, decoratorsOf, pythonParameters, type PythonDecorator } from "./declarations.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { SupportedLanguage } from "../../../core/scan/language.js";
@@ -74,7 +75,7 @@ async function parsePythonFile(
     if (allNames) nodes[0]!.properties.allNames = JSON.stringify(allNames);
 
     const parsedFunctions: PythonParsedFunction[] = [];
-    const context: FileContext = { allNames, isTestFile: classifyFile(relativePath, false, true).isTest, parsedFunctions };
+    const context: FileContext = { allNames, isTestFile: classifyFile(relativePath, pythonConventions, false, true).isTest, parsedFunctions };
     walk(tree.rootNode, (node) => {
       if (node.type === "import_statement" || node.type === "import_from_statement") {
         for (const importNode of createPythonImportNodes(fileNodeId, node, importIds)) {

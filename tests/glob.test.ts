@@ -3,7 +3,8 @@ import { mkdir, mkdtemp, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { createGlobMatcher, findWorkspacePackageJsons, matchesGlob, walkFiles } from "../src/core/scan/glob.js";
+import { findWorkspacePackageJsons } from "../src/integrations/languages/js-ts/project.js";
+import { createGlobMatcher, matchesGlob, walkFiles } from "../src/core/scan/glob.js";
 
 // [pattern, path, expected]
 const cases: Array<[string, string, boolean]> = [

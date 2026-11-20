@@ -1,7 +1,7 @@
-import type { IGraphContributor } from "../../contracts/graph-contributor.js";
-import type { GraphNode } from "../../graph/model.js";
-import type { ResolutionRelationshipIndex } from "./indexes.js";
-import { isCppFile } from "./file-kind.js";
+import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
+import type { GraphNode } from "../../../core/graph/model.js";
+import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
+import { isCppFile } from "../file-kind.js";
 
 // C and C++ names are visible through `#include`: a file sees what it and the
 // files it includes (transitively) declare. A call resolves against those

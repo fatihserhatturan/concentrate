@@ -1,8 +1,8 @@
-import type { IGraphContributor } from "../../contracts/graph-contributor.js";
-import type { GraphNode } from "../../graph/model.js";
-import type { ResolutionRelationshipIndex } from "./indexes.js";
-import { indexImportNodesByFile } from "./indexes.js";
-import { createPythonNameLookup, type PythonNameLookup } from "./python-names.js";
+import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
+import type { GraphNode } from "../../../core/graph/model.js";
+import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
+import { indexImportNodesByFile } from "../../../core/scan/resolution/indexes.js";
+import { createPythonNameLookup, type PythonNameLookup } from "./names.js";
 
 // Python calls resolve through names and types, never by guessing:
 //   f()               a function of the file or one imported (aliases, re-exports)

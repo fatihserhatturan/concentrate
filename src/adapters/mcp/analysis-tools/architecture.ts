@@ -1,4 +1,5 @@
 import type { IQueryEngine } from "../../../core/contracts/query-engine.js";
+import { defaultLanguageTable } from "../../../composition/default-registry.js";
 import { architectureOverview as computeArchitecture, type ArchitectureLevel } from "../../../core/queries/architecture.js";
 import { optionalInteger, optionalString } from "../args.js";
 import type { PageWindow } from "../paging.js";
@@ -8,6 +9,6 @@ export async function architectureOverview(engine: IQueryEngine, args: Record<st
   const level = optionalString(args.level) ?? "package";
   if (level !== "package" && level !== "directory" && level !== "subsystem") throw new Error(`Unknown level ${JSON.stringify(level)}; expected package, directory or subsystem`);
   const depth = optionalInteger(args.depth, 2, 1, 6);
-  const overview = await computeArchitecture(engine, { level: level as ArchitectureLevel, depth });
+  const overview = await computeArchitecture(engine, { level: level as ArchitectureLevel, depth, codeLanguages: defaultLanguageTable.codeLanguages });
   return { ...overview, edges: window.take(overview.edges) };
 }

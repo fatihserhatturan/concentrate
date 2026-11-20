@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { LANGUAGE_NAMES, type SupportedLanguage } from "./language.js";
+import type { LanguageTable, SupportedLanguage } from "./language.js";
 
 // concentrate.json at the project root: what the project says about how it
 // should be scanned and searched. Every key is optional.
@@ -28,7 +28,7 @@ export type ProjectSettings = {
 
 export const EMPTY_SETTINGS: ProjectSettings = { extensions: new Map(), include: [], exclude: [], deprioritize: [], apiOrigins: [] };
 
-export async function loadProjectSettings(rootPath: string): Promise<ProjectSettings> {
+export async function loadProjectSettings(rootPath: string, languages: LanguageTable): Promise<ProjectSettings> {
   const file = path.join(rootPath, PROJECT_SETTINGS_FILE);
   let text: string;
   try {
@@ -43,10 +43,10 @@ export async function loadProjectSettings(rootPath: string): Promise<ProjectSett
   } catch (error) {
     throw new Error(`${PROJECT_SETTINGS_FILE}: ${error instanceof Error ? error.message : String(error)}`);
   }
-  return parseProjectSettings(raw);
+  return parseProjectSettings(raw, languages);
 }
 
-export function parseProjectSettings(raw: unknown): ProjectSettings {
+export function parseProjectSettings(raw: unknown, languages: LanguageTable): ProjectSettings {
   if (typeof raw !== "object" || raw === null || Array.isArray(raw)) throw new Error(`${PROJECT_SETTINGS_FILE} must be a JSON object`);
   const config = raw as Record<string, unknown>;
   const known = new Set(["extensions", "include", "exclude", "deprioritize", "apiOrigins"]);
@@ -68,8 +68,8 @@ export function parseProjectSettings(raw: unknown): ProjectSettings {
     if (typeof mapped !== "object" || mapped === null || Array.isArray(mapped)) throw new Error(`${PROJECT_SETTINGS_FILE}: extensions must be an object of extension to language`);
     for (const [extension, language] of Object.entries(mapped)) {
       if (!/^\.[^./\\]+$/u.test(extension)) throw new Error(`${PROJECT_SETTINGS_FILE}: extension ${JSON.stringify(extension)} must start with a dot and have no other dot or slash`);
-      if (typeof language !== "string" || !(LANGUAGE_NAMES as readonly string[]).includes(language)) {
-        throw new Error(`${PROJECT_SETTINGS_FILE}: unknown language ${JSON.stringify(language)} for ${extension}; expected one of ${LANGUAGE_NAMES.join(", ")}`);
+      if (typeof language !== "string" || !languages.has(language)) {
+        throw new Error(`${PROJECT_SETTINGS_FILE}: unknown language ${JSON.stringify(language)} for ${extension}; expected one of ${languages.names.join(", ")}`);
       }
       extensions.set(extension.toLowerCase(), language as SupportedLanguage);
     }

@@ -36,16 +36,48 @@ import { trpcRoutesContributor } from "../integrations/frameworks/js-ts/resoluti
 import type { ILanguageResolver } from "../core/contracts/language-resolver.js";
 import { CoreIntegrationRegistry } from "../core/integrations/registry.js";
 
+import { cppLanguages } from "../integrations/languages/cpp/descriptor.js";
+import { goLanguages } from "../integrations/languages/go/descriptor.js";
+import { jsTsLanguages } from "../integrations/languages/js-ts/descriptor.js";
+import { plainLanguages } from "../integrations/languages/plain/descriptor.js";
+import { pythonLanguages } from "../integrations/languages/python/descriptor.js";
+import { rustLanguages } from "../integrations/languages/rust/descriptor.js";
+import { jsTsManifestReader } from "../integrations/languages/js-ts/project.js";
+import { pythonManifestReader } from "../integrations/languages/python/project.js";
+import { LanguageTable } from "../core/scan/language.js";
+import { cppCallResolver, cppInheritanceResolver } from "../integrations/languages/cpp/resolvers.js";
+import { goCallResolver, goInheritanceResolver } from "../integrations/languages/go/resolvers.js";
+import { pythonCallResolver, pythonInheritanceResolver } from "../integrations/languages/python/resolvers.js";
+import { rustCallResolver, rustInheritanceResolver } from "../integrations/languages/rust/resolvers.js";
+
 export { CoreIntegrationRegistry };
 
 export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry {
   const registry = new CoreIntegrationRegistry();
 
+  // Plain languages first: a file name or extension a later descriptor also claims goes to the later one.
+  for (const descriptor of [...plainLanguages, ...jsTsLanguages, ...pythonLanguages, ...goLanguages, ...rustLanguages, ...cppLanguages]) {
+    registry.registerLanguage(descriptor);
+  }
+
   for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, ...plainFileParsers]) {
     registry.registerLanguageParser(parser);
   }
 
-  for (const resolver of createDefaultLanguageResolvers()) {
+  for (const resolver of [cppCallResolver, goCallResolver, rustCallResolver, pythonCallResolver]) {
+    registry.registerCallResolver(resolver);
+  }
+
+  for (const resolver of [goInheritanceResolver, cppInheritanceResolver, pythonInheritanceResolver, rustInheritanceResolver]) {
+    registry.registerInheritanceResolver(resolver);
+  }
+
+  // js-ts first: it owns a directory that has both a package.json and a pyproject.toml.
+  for (const reader of [jsTsManifestReader, pythonManifestReader]) {
+    registry.registerProjectManifestReader(reader);
+  }
+
+  for (const resolver of createDefaultLanguageResolvers(registry)) {
     registry.registerLanguageResolver(resolver);
   }
 
@@ -106,7 +138,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   return registry;
 }
 
-function createDefaultLanguageResolvers(): ILanguageResolver[] {
+function createDefaultLanguageResolvers(registry: CoreIntegrationRegistry): ILanguageResolver[] {
   const importResolver: ILanguageResolver = {
     async resolve(graph, rootPath, report) {
       const counts = await addImportResolutionRelationships(graph, rootPath, report);
@@ -123,17 +155,23 @@ function createDefaultLanguageResolvers(): ILanguageResolver[] {
 
   const inheritanceResolver: ILanguageResolver = {
     resolve(graph) {
-      addInheritanceRelationships(graph);
+      addInheritanceRelationships(graph, registry.inheritanceResolvers);
     },
   };
 
   const callResolver: ILanguageResolver = {
     resolve(graph) {
-      addCallResolutionRelationships(graph);
+      addCallResolutionRelationships(graph, registry.callResolvers);
     },
   };
 
   return [importResolver, packageImportResolver, inheritanceResolver, callResolver];
 }
 
+// The scan's languages of a registry: its descriptors, in registration order.
+export function createLanguageTable(registry: CoreIntegrationRegistry): LanguageTable {
+  return new LanguageTable(registry.languages);
+}
+
 export const coreIntegrationRegistry = createDefaultCoreIntegrationRegistry();
+export const defaultLanguageTable = createLanguageTable(coreIntegrationRegistry);

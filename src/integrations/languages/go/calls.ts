@@ -1,8 +1,8 @@
 import path from "node:path";
-import type { IGraphContributor } from "../../contracts/graph-contributor.js";
-import type { GraphNode } from "../../graph/model.js";
-import type { ResolutionRelationshipIndex } from "./indexes.js";
-import { isGoFile } from "./file-kind.js";
+import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
+import type { GraphNode } from "../../../core/graph/model.js";
+import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
+import { isGoFile } from "../file-kind.js";
 
 // Go calls resolve by package, not by file: a package is the files of one
 // directory with the same package clause, and an import names a package.
