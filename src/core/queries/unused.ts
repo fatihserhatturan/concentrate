@@ -59,7 +59,7 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
   };
 
   const [declarations, imports, files, packages, functions, links] = await Promise.all([
-    loadDeclarations(engine),
+    loadDeclarations(engine, { fields: options.rules.some((rule) => rule.judges) }),
     loadImports(engine),
     loadFiles(engine),
     engine.query("MATCH (package:Package) RETURN package.path AS path, package.relativePath AS relativePath") as Promise<Row[]>,
@@ -140,14 +140,18 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
   // Per language, once the scan holds declarations of it: names the graph has
   // no edges for that other units mention.
   const sessions = new Map<IUnusedExportRules, UnusedLanguageSession>();
+  let annotations: Map<string, string[]> | undefined;
   for (const rule of options.rules) {
     if (!rule.createSession) continue;
     const own = declarations.filter((declaration) => rule.supports(declaration.file));
     if (own.length === 0) continue;
+    annotations ??= await loadAnnotations(engine);
+    const written = annotations;
     const context: UnusedAnalysisContext = {
       rootPath: links.rootPath,
       declarations: own,
       unitOf: scopeOf,
+      annotationsOf: (id) => written.get(id) ?? [],
       forEachSource: async (include, visit) => {
         if (!links.rootPath) return;
         for (const candidate of files.keys()) {
@@ -175,8 +179,9 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
 
   const unused: UnusedExport[] = [];
   for (const declaration of declarations) {
-    if (!declaration.isExported || declaration.kind === "method" || used.has(declaration.id) || !inScope(declaration)) continue;
     const rule = ruleFor(declaration.file);
+    const judged = rule?.judges ? rule.judges(declaration) : declaration.isExported && declaration.kind !== "method";
+    if (!judged || used.has(declaration.id) || !inScope(declaration)) continue;
     if (rule?.isPublicApi && !rule.isPublicApi(declaration)) continue;
     if (rule && sessions.get(rule)?.isMentionedElsewhere?.(declaration)) continue;
     const reason = skipReason(declaration, files.get(declaration.file)!);
@@ -225,6 +230,20 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
     deadFunctions,
     skipped,
   };
+}
+
+// Annotation / decorator names by the id of the type, method or field that carries them.
+async function loadAnnotations(engine: IQueryEngine): Promise<Map<string, string[]>> {
+  const relations = ["HAS_METHOD_DECORATOR", "HAS_DECORATOR", "INTERFACE_HAS_DECORATOR", "FIELD_HAS_DECORATOR"];
+  const result = new Map<string, string[]>();
+  for (const relation of relations) {
+    // A store without the language's relationship table has none of them.
+    const rows = await engine.query(`MATCH (owner)-[:${relation}]->(decorator:Decorator) RETURN id(owner) AS owner, decorator.name AS name`).catch(() => []) as Row[];
+    for (const row of rows) {
+      if (typeof row.owner === "string" && typeof row.name === "string") result.set(row.owner, [...result.get(row.owner) ?? [], row.name]);
+    }
+  }
+  return result;
 }
 
 type Links = {

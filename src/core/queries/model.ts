@@ -10,7 +10,7 @@ type Row = Record<string, unknown>;
 const str = (value: unknown): string | null => (typeof value === "string" ? value : null);
 const num = (value: unknown): number | null => (typeof value === "number" ? value : null);
 
-export type DeclarationKind = "function" | "method" | "class" | "interface" | "type" | "enum" | "variable";
+export type DeclarationKind = "function" | "method" | "class" | "interface" | "type" | "enum" | "variable" | "field";
 
 export type Declaration = {
   id: string;
@@ -26,6 +26,9 @@ export type Declaration = {
   visibility?: string | null;
   // Rust: `test`, `bench` or `helper` for functions of test code.
   testKind?: string | null;
+  // The node's own kind where a language has several: a Java method is a `method` or a `constructor`,
+  // a field a `field`, `constant`, `enum-constant` or `record-component`.
+  nodeKind?: string | null;
 };
 
 export type FileInfo = {
@@ -76,7 +79,7 @@ const declarationQueries: Array<{ kind: DeclarationKind; cypher: string }> = [
     cypher: `
       MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(n:Function)
       RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, n.line AS line,
-        false AS isExported, n.isDeclaration AS isDeclaration, n.kind AS nodeKind
+        false AS isExported, n.visibility AS visibility, n.testKind AS testKind, n.isDeclaration AS isDeclaration, n.kind AS nodeKind
     `,
   },
   ...([
@@ -95,22 +98,35 @@ const declarationQueries: Array<{ kind: DeclarationKind; cypher: string }> = [
   })),
 ];
 
+const fieldQuery: { kind: DeclarationKind; cypher: string } = {
+  kind: "field",
+  cypher: `
+    MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_FIELD]->(n:Field)
+    WHERE n.fieldKind IS NOT NULL
+    RETURN id(n) AS id, n.name AS name, class.name AS className, file.relativePath AS file, n.line AS line,
+      false AS isExported, n.visibility AS visibility, n.fieldKind AS nodeKind
+  `,
+};
+
 // Every declaration, in file and line order. Inline functions the scanner
 // names after their position ("<router.get:/users:arg1>") are left out.
-export async function loadDeclarations(engine: IQueryEngine): Promise<Declaration[]> {
+// `fields` also loads the fields a language gives a `fieldKind` (Java); the other tools do not list them.
+export async function loadDeclarations(engine: IQueryEngine, options: { fields?: boolean } = {}): Promise<Declaration[]> {
+  const queries = options.fields ? [...declarationQueries, fieldQuery] : declarationQueries;
   const [localExports, ...results] = await Promise.all([
     engine.query(`
       MATCH (file:File)-[:RE_EXPORTS_FUNCTION|RE_EXPORTS_CLASS|RE_EXPORTS_VARIABLE]->(n)
       RETURN id(n) AS id
     `),
-    ...declarationQueries.map(({ cypher }) => engine.query(cypher)),
+    // A store without a language's field properties has no such fields.
+    ...queries.map(({ cypher }) => (cypher === fieldQuery.cypher ? engine.query(cypher).catch(() => []) : engine.query(cypher))),
   ]) as Row[][];
   const reExported = new Set(localExports!.map((row) => str(row.id)));
 
   const seen = new Set<string>();
   const declarations: Declaration[] = [];
   results.forEach((rows, index) => {
-    const kind = declarationQueries[index]!.kind;
+    const kind = queries[index]!.kind;
     for (const row of rows) {
       const id = str(row.id);
       const name = str(row.name);
@@ -131,6 +147,7 @@ export async function loadDeclarations(engine: IQueryEngine): Promise<Declaratio
         isExported: row.isExported === true || reExported.has(id),
         visibility: str(row.visibility),
         testKind: str(row.testKind),
+        nodeKind: str(row.nodeKind),
       });
     }
   });
