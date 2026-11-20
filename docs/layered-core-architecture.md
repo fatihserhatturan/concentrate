@@ -205,9 +205,8 @@ core and scans it end to end.
 Known debt the ratchets do not detect: the default JS/TS call lookup
 (`require`, `module.exports`, default exports) still lives in
 `core/scan/resolution/calls.ts` and `call-targets.ts` as the fallback for
-files no language resolver supports; import resolution
-(`integrations/resolution/imports.ts`) is one switch over languages rather than
-a per-language contract.
+files no language resolver supports. Import resolution is a per-language
+contract (`ILanguageImportResolver`); `integrations/resolution/imports.ts` only dispatches.
 
 ## Plugin Host
 
