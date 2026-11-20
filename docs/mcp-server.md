@@ -176,7 +176,7 @@ even for large repositories; read it first to decide which tools to call.
 - `list_routes`: lists detected HTTP route declarations and handlers, Go
   ones included (`framework` `gin`, `echo`, `chi`, `fiber`, `gorilla/mux`,
   `routegroup`, `kratos` or `net/http`), and Rust ones (`axum`, `actix-web`, `rocket`
-  or `warp`; each route also carries its `layers` and the handler's `extractors`), Java ones (`spring-mvc`, `jaxrs`, `micronaut` or `spring-webflux`; a path that is a constant has `path: null` and a `pathExpression`), and Python ones (`flask`, `fastapi`, `starlette`, `django`, `django-rest-framework` or `flask-restful`; FastAPI routes carry their `Depends` as `layers`, Django ones their `MIDDLEWARE`).
+  or `warp`; each route also carries its `layers` and the handler's `extractors`), Java ones (`spring-mvc`, `jaxrs`, `micronaut` or `spring-webflux`; a path that is a constant has `path: null` and a `pathExpression`; a method inherits a mapping only through the same erased signature), and Python ones (`flask`, `fastapi`, `starlette`, `django`, `django-rest-framework` or `flask-restful`; FastAPI routes carry their `Depends` as `layers`, Django ones their `MIDDLEWARE`).
   Registrations with a method or path computed at runtime
   (`app[method](url, fn)`, `this.get(path, …)` in an `app.resource = function`
   helper) are not routes; they come back in `dynamicRouteCalls` (`file`,
@@ -216,7 +216,8 @@ even for large repositories; read it first to decide which tools to call.
   service methods (kind `grpc`, library `grpc-java`), `@SpringBootApplication`
   classes (kind `spring-boot-application`), `@Scheduled` methods (kind
   `scheduler`), Kafka, Rabbit and JMS listeners (kind `queue`), event listeners
-  (kind `event`) and picocli commands (kind `cli`).
+  (kind `event`) and picocli commands (kind `cli`); a Java trigger that is a constant, a `${...}` or `#{...}` placeholder or an unknown
+  destination is `resolved: false`).
 - `list_env_config`: lists environment variable usage and config declarations
   or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`). `unread: true` lists instead the variables the scanned env
   files (`.env`, `.env.*`) declare that no code reads (`kind: "unread"`, with
@@ -316,7 +317,9 @@ These answer a whole question in one call instead of a chain of lookups.
   (`readBy`), and `storeComponents` / `storePages`, the components and pages
   those readers (and their callers) reach, and the `dataAccess`, `tables`,
   `envVars` and `config` of the seeds themselves. A store's name or hook as
-  `symbol` makes that store the change. For a route, use `route_details`.
+  `symbol` makes that store the change. A Java interface method is a seed too
+  (`OrderRepository.save`), since calls through the interface resolve to it.
+  For a route, use `route_details`.
   A style, `.class`, `#id` or `--custom-property` as `symbol` (or a style file
   as `file` alone, for every class, id and custom property it declares), asks
   who uses it: `styles`, `users` (components, functions and files naming it,
