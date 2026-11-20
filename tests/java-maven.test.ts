@@ -205,3 +205,48 @@ describe("maven pom interpretation", () => {
     assert.deepEqual(model.files, ["pom.xml"]);
   });
 });
+
+describe("maven review fixes", () => {
+  const pom = (artifact: string, extra = "", parent = "") =>
+    `<project>${parent}<groupId>g</groupId><artifactId>${artifact}</artifactId><version>1</version>${extra}</project>`;
+  const parentRef = `<parent><groupId>g</groupId><artifactId>parent</artifactId><version>1</version></parent>`;
+
+  it("inherits <dependencies> from the parent chain, not <dependencyManagement>", () => {
+    const model = run({
+      "pom.xml": pom(
+        "parent",
+        `<packaging>pom</packaging><dependencies><dependency><groupId>g</groupId><artifactId>lib</artifactId><scope>test</scope></dependency></dependencies>
+         <dependencyManagement><dependencies><dependency><groupId>g</groupId><artifactId>managed</artifactId></dependency></dependencies></dependencyManagement>`,
+      ),
+      "lib/pom.xml": pom("lib"),
+      "managed/pom.xml": pom("managed"),
+      "app/pom.xml": pom("app", "", parentRef),
+      "own/pom.xml": pom("own", `<dependencies><dependency><groupId>g</groupId><artifactId>lib</artifactId><scope>runtime</scope></dependency></dependencies>`, parentRef),
+    });
+    assert.deepEqual(mod(model, "g:app").dependencies, [{ module: "maven:g:lib", scope: "test" }]);
+    assert.deepEqual(mod(model, "g:own").dependencies, [{ module: "maven:g:lib", scope: "runtime" }]);
+    assert.deepEqual(mod(model, "g:parent").dependencies, [{ module: "maven:g:lib", scope: "test" }]);
+    assert.deepEqual(mod(model, "g:lib").dependencies, []);
+  });
+
+  it("expands exponentially nested properties in linear time", () => {
+    let props = "<p0>x</p0>";
+    for (let i = 1; i <= 40; i += 1) props += `<p${i}>\${p${i - 1}}\${p${i - 1}}</p${i}>`;
+    const start = Date.now();
+    const model = run({ "pom.xml": pom("a", `<properties>${props}<maven.compiler.release>\${p40}</maven.compiler.release></properties>`) });
+    assert.ok(Date.now() - start < 1000, `took ${Date.now() - start}ms`);
+    const a = mod(model, "g:a");
+    assert.ok(a.unresolved > 0);
+    assert.ok(a.config.find((c) => c.key === "maven.compiler.release")!.value.includes("${p"));
+  });
+
+  it("falls back to the conventional root when <sourceDirectory> is unresolved", () => {
+    const model = run({
+      "pom.xml": pom("a", `<build><sourceDirectory>\${nope}/src</sourceDirectory><testSourceDirectory>\${nope}/t</testSourceDirectory></build>`),
+    });
+    const a = mod(model, "g:a");
+    assert.deepEqual(a.sourceRoots, ["src/main/java"]);
+    assert.deepEqual(a.testSourceRoots, ["src/test/java"]);
+    assert.equal(a.unresolved, 2);
+  });
+});

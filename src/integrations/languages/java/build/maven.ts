@@ -17,8 +17,8 @@ import { javaModuleKey, type JavaBuildModel, type JavaModule } from "./types.js"
 // unknown or recursive is left as written and counted in `unresolved`.
 //
 // Honest limits: profiles, `<dependencyManagement>`, plugin inheritance and the repository
-// (an artifact that is not a scanned module) are not read. `<sourceDirectory>` and the plugins
-// are read from the module's own pom only. Source roots are always reported, whether or not the
+// (an artifact that is not a scanned module) are not read. `<dependencies>` are inherited from the
+// parent chain; `<sourceDirectory>` and the plugins are read from the module's own pom only. Source roots are always reported, whether or not the
 // directory exists.
 
 export type MavenInput = {
@@ -34,9 +34,16 @@ type Pom = {
   root: XmlElement;
   props: Map<string, string>;
   parent: Pom | null;
+  // Expanded `${name}` values of this pom, with the unresolved references counted while expanding.
+  memo: Map<string, { value: string | null; n: number }>;
 };
 
 type Counter = { n: number };
+
+// A property whose expansion is longer than this is left unexpanded (`p1=${p0}${p0}`, ...).
+const MAX_EXPANDED_LENGTH = 10_000;
+// Set when an expansion met a cycle: its outcome depends on the call stack and is not memoized.
+let stackDependent = 0;
 
 const MAX_DEPTH = 32;
 const CONFIG_PROPERTIES = ["maven.compiler.release", "maven.compiler.source", "maven.compiler.target", "java.version"];
@@ -48,7 +55,7 @@ export function interpretMaven(input: MavenInput): JavaBuildModel {
     const root = safeRead(text);
     if (!root) continue;
     const dir = path.posix.dirname(file);
-    poms.set(file, { file, dir, root, props: readProperties(root), parent: null });
+    poms.set(file, { file, dir, root, props: readProperties(root), parent: null, memo: new Map() });
   }
 
   // Parents: by `<relativePath>` first, then by coordinates among the scanned poms.
@@ -175,7 +182,26 @@ function expand(pom: Pom, text: string, stack: string[], counter: Counter): stri
 }
 
 function resolveName(pom: Pom, name: string, stack: string[], counter: Counter): string | null {
-  if (stack.includes(name) || stack.length >= MAX_DEPTH) return null;
+  if (stack.includes(name)) {
+    stackDependent += 1;
+    return null;
+  }
+  // Past the depth limit the value is unknown; memoized like any other, so a long chain stays linear.
+  if (stack.length >= MAX_DEPTH) return null;
+  const memo = pom.memo.get(name);
+  if (memo) {
+    counter.n += memo.n;
+    return memo.value;
+  }
+  const before = counter.n;
+  const taint = stackDependent;
+  let value = resolveUncached(pom, name, stack, counter);
+  if (value !== null && value.length > MAX_EXPANDED_LENGTH) value = null;
+  if (stackDependent === taint) pom.memo.set(name, { value, n: Math.min(counter.n - before, 1000) });
+  return value;
+}
+
+function resolveUncached(pom: Pom, name: string, stack: string[], counter: Counter): string | null {
   const next = [...stack, name];
   const declared = childElement(pom.root, "parent");
   const from = (raw: string | null): string | null => (raw === null ? null : expand(pom, raw, next, counter));
@@ -224,24 +250,32 @@ function buildModule(
     if (!files.has(pomFile)) counter.n += 1;
   }
 
-  // <dependencies> on other modules of the scan (not <dependencyManagement>).
+  // <dependencies> on other modules of the scan (not <dependencyManagement>). Maven inherits them
+  // down the parent chain: a declaration of the module wins over an inherited one of the same
+  // artifact, and the scope comes from the nearest declaration.
   const dependencies: JavaModule["dependencies"] = [];
   const dependencySeen = new Set<string>();
-  for (const dependency of childElements(childElement(pom.root, "dependencies"), "dependency")) {
-    const groupId = childText(dependency, "groupId");
-    const artifactId = childText(dependency, "artifactId");
-    if (!groupId || !artifactId) continue;
-    // Counted only when the unknown reference stands in a coordinate: an external artifact
-    // with a version property the scan does not know is not ours to report.
-    const local: Counter = { n: 0 };
-    const target = `${expand(pom, groupId, [], local)}:${expand(pom, artifactId, [], local)}`;
-    counter.n += local.n;
-    if (!byKey.has(target) || target === key) continue;
-    const scope = expand(pom, childText(dependency, "scope") ?? "compile", [], counter);
-    const id = `${target}\0${scope}`;
-    if (dependencySeen.has(id)) continue;
-    dependencySeen.add(id);
-    dependencies.push({ module: javaModuleKey({ system: "maven", name: target }), scope });
+  const declaredAt = new Map<string, Pom>();
+  for (let level: Pom | null = pom; level; level = level.parent) {
+    for (const dependency of childElements(childElement(level.root, "dependencies"), "dependency")) {
+      const groupId = childText(dependency, "groupId");
+      const artifactId = childText(dependency, "artifactId");
+      if (!groupId || !artifactId) continue;
+      // Counted only when the unknown reference stands in a coordinate: an external artifact
+      // with a version property the scan does not know is not ours to report.
+      const local: Counter = { n: 0 };
+      const target = `${expand(pom, groupId, [], local)}:${expand(pom, artifactId, [], local)}`;
+      counter.n += local.n;
+      if (!byKey.has(target) || target === key) continue;
+      const nearest = declaredAt.get(target);
+      if (nearest !== undefined && nearest !== level) continue;
+      declaredAt.set(target, level);
+      const scope = expand(pom, childText(dependency, "scope") ?? "compile", [], counter);
+      const id = `${target}\0${scope}`;
+      if (dependencySeen.has(id)) continue;
+      dependencySeen.add(id);
+      dependencies.push({ module: javaModuleKey({ system: "maven", name: target }), scope });
+    }
   }
 
   // <build> source directories.
@@ -281,7 +315,10 @@ function buildModule(
 // leave the scan root are unusable: the conventional directory is kept and the value counted.
 function moduleRoot(pom: Pom, raw: string | null, conventional: string, counter: Counter): string {
   if (raw === null) return path.posix.normalize(path.posix.join(pom.dir, conventional));
+  const before = counter.n;
   const value = expand(pom, raw, [], counter).replace(/\\/gu, "/");
+  // Still holding a `${...}`: the directory is unknown, the conventional one stays.
+  if (counter.n > before) return path.posix.normalize(path.posix.join(pom.dir, conventional));
   const joined = path.posix.normalize(path.posix.join(pom.dir, value));
   if (path.posix.isAbsolute(value) || joined === ".." || joined.startsWith("../")) {
     counter.n += 1;
