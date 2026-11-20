@@ -113,6 +113,7 @@
     "isStatic": "BOOLEAN",
     "parameterCount": "INT64",
     "javaLocals": "STRING",
+    "diBean": "STRING",
     "unresolvedCalls": "STRING"
    }
   },
@@ -135,7 +136,10 @@
     "namespace": "STRING",
     "qualifiedName": "STRING",
     "outer": "STRING",
-    "nesting": "STRING"
+    "nesting": "STRING",
+    "diStereotype": "STRING",
+    "diBeanName": "STRING",
+    "ambiguousInjections": "INT64"
    }
   },
   {
@@ -867,7 +871,9 @@
    "from": "Class",
    "to": "Class",
    "properties": {
-    "fieldName": "STRING"
+    "fieldName": "STRING",
+    "via": "STRING",
+    "beanMethod": "STRING"
    }
   },
   {
