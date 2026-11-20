@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package acme.user.v1;
+
+option java_package = "com.acme.user.v1";
+
+service User {
+  rpc Get(GetUserRequest) returns (GetUserReply);
+  rpc Save(SaveUserRequest) returns (SaveUserReply);
+  rpc Watch(GetUserRequest) returns (stream GetUserReply);
+  rpc Chat(stream SaveUserRequest) returns (stream SaveUserReply);
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserReply {
+  string name = 1;
+}
+
+message SaveUserRequest {
+  string name = 1;
+}
+
+message SaveUserReply {
+  string id = 1;
+}
