@@ -48,6 +48,7 @@ import { LanguageTable } from "../core/scan/language.js";
 import { cppCallResolver, cppInheritanceResolver } from "../integrations/languages/cpp/resolvers.js";
 import { goCallResolver, goInheritanceResolver } from "../integrations/languages/go/resolvers.js";
 import { pythonCallResolver, pythonInheritanceResolver } from "../integrations/languages/python/resolvers.js";
+import { javaCallResolver, javaInheritanceResolver } from "../integrations/languages/java/resolvers.js";
 import { styleImportResolver, protoImportResolver } from "../integrations/languages/plain/import-resolver.js";
 import { rustImportResolver } from "../integrations/languages/rust/import-resolver.js";
 import { cppImportResolver } from "../integrations/languages/cpp/import-resolver.js";
@@ -91,7 +92,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     registry.registerLanguageParser(parser);
   }
 
-  for (const resolver of [cppCallResolver, goCallResolver, rustCallResolver, pythonCallResolver]) {
+  for (const resolver of [cppCallResolver, goCallResolver, rustCallResolver, pythonCallResolver, javaCallResolver]) {
     registry.registerCallResolver(resolver);
   }
 
@@ -100,7 +101,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     registry.registerImportResolver(resolver);
   }
 
-  for (const resolver of [goInheritanceResolver, cppInheritanceResolver, pythonInheritanceResolver, rustInheritanceResolver]) {
+  for (const resolver of [goInheritanceResolver, cppInheritanceResolver, pythonInheritanceResolver, rustInheritanceResolver, javaInheritanceResolver]) {
     registry.registerInheritanceResolver(resolver);
   }
 
