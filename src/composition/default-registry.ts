@@ -48,6 +48,12 @@ import { LanguageTable } from "../core/scan/language.js";
 import { cppCallResolver, cppInheritanceResolver } from "../integrations/languages/cpp/resolvers.js";
 import { goCallResolver, goInheritanceResolver } from "../integrations/languages/go/resolvers.js";
 import { pythonCallResolver, pythonInheritanceResolver } from "../integrations/languages/python/resolvers.js";
+import { styleImportResolver, protoImportResolver } from "../integrations/languages/plain/import-resolver.js";
+import { rustImportResolver } from "../integrations/languages/rust/import-resolver.js";
+import { cppImportResolver } from "../integrations/languages/cpp/import-resolver.js";
+import { pythonImportResolver } from "../integrations/languages/python/import-resolver.js";
+import { goImportResolver } from "../integrations/languages/go/import-resolver.js";
+import { jsTsImportResolver } from "../integrations/languages/js-ts/import-resolver.js";
 import { rustCallResolver, rustInheritanceResolver } from "../integrations/languages/rust/resolvers.js";
 
 import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
@@ -84,6 +90,11 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
 
   for (const resolver of [cppCallResolver, goCallResolver, rustCallResolver, pythonCallResolver]) {
     registry.registerCallResolver(resolver);
+  }
+
+  // The first that supports an importing file resolves its imports.
+  for (const resolver of [styleImportResolver, protoImportResolver, rustImportResolver, cppImportResolver, pythonImportResolver, goImportResolver, jsTsImportResolver]) {
+    registry.registerImportResolver(resolver);
   }
 
   for (const resolver of [goInheritanceResolver, cppInheritanceResolver, pythonInheritanceResolver, rustInheritanceResolver]) {
@@ -165,7 +176,7 @@ function createDefaultLanguageResolvers(registry: CoreIntegrationRegistry): ILan
   const importResolver: ILanguageResolver = {
     id: "core.imports",
     async resolve(graph, rootPath, report) {
-      const counts = await addImportResolutionRelationships(graph, rootPath, report);
+      const counts = await addImportResolutionRelationships(graph, rootPath, registry.importResolvers, report);
       report.resolvedImports = counts.resolved;
       report.unresolvedRelativeImports = counts.unresolved;
     },

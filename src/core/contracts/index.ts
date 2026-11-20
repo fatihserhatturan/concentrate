@@ -13,3 +13,4 @@ export type { DetectedFile, FileConventions, LanguageDescriptor } from "./langua
 export type { DeclaredPackage, IProjectManifestReader, ProjectConfigValue, ProjectManifestContext } from "./project-manifest.js";
 export type { IParseCache } from "./parse-cache.js";
 export type { DirectoryEntry, FileStat, IContentHasher, IFileSystem } from "./file-system.js";
+export type { ILanguageImportResolver, ImportResolution, ImportResolutionContext, ImportResolutionSession } from "./import-resolver.js";

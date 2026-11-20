@@ -8,7 +8,7 @@ import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { createScanDependencies } from "../src/composition/orchestrator.js";
 import { coreIntegrationRegistry, createDefaultCoreIntegrationRegistry } from "../src/composition/default-registry.js";
 import { parserFingerprint } from "../src/composition/parser-fingerprint.js";
-import { createEmptyCoreIntegrationRegistry } from "../src/core/integrations/registry.js";
+import { createEmptyCoreIntegrationRegistry, describeIntegrations } from "../src/core/integrations/registry.js";
 import type { ILanguageResolver } from "../src/core/contracts/language-resolver.js";
 import type { ISemanticContributor, ScanLifecycleContext } from "../src/core/contracts/semantic-contributor.js";
 import { createToyRegistry } from "./helpers/toy-plugin.js";
@@ -218,5 +218,27 @@ describe("parser fingerprint", () => {
   it("is what a scan's dependencies report", async () => {
     const registry = createToyRegistry("3");
     assert.equal(await createScanDependencies(registry).parserFingerprint!(), await parserFingerprint(registry));
+  });
+});
+
+describe("import resolution from a plugin", () => {
+  it("resolves a toy import through its registered import resolver", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "toy-imports-"));
+    try {
+      await writeFile(path.join(root, "main.toy"), "use other\nuse missing\nfn main\n");
+      await writeFile(path.join(root, "other.toy"), "fn helper\n");
+      const result = await buildCodeGraph(root, { continueOnError: false }, createToyRegistry());
+      const importNode = (source: string) => result.nodes.find((node) => node.label === "Import" && node.properties.source === source)!;
+      const resolves = result.relationships.filter((relationship) => relationship.type === "RESOLVES_TO");
+      assert.deepEqual(resolves.map((relationship) => [relationship.from, relationship.to]), [[importNode("other").id, "file:other.toy"]]);
+      assert.equal(result.report.resolvedImports, 1);
+      assert.equal(result.report.unresolvedRelativeImports, 1);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  it("lists import resolvers in the integration description", () => {
+    assert.ok(describeIntegrations(createToyRegistry()).includes("import-resolver:toy@"));
   });
 });
