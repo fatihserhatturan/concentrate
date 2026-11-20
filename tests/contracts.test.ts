@@ -36,6 +36,7 @@ const parserFixtures: Record<string, { root: string; file: string }> = {
   rust: { root: "parser-rust", file: "lib.rs" },
   c: { root: "c-basic", file: "src/list.c" },
   cpp: { root: "cpp-calls", file: "src/shape.cpp" },
+  java: { root: "java-parser-contract", file: "src/main/java/com/acme/Greeter.java" },
   html: { root: "vanilla-html", file: "index.html" },
   vue: { root: "vue-components", file: "src/App.vue" },
   svelte: { root: "svelte-components", file: "src/App.svelte" },
