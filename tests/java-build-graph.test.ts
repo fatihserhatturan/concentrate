@@ -160,3 +160,32 @@ describe("Java build graph: a mainClass the scan does not contain", () => {
     }
   });
 });
+
+describe("Java build graph: the same mainClass in two modules", () => {
+  it("runs each module's own main", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "java-build-"));
+    try {
+      const write = async (file: string, text: string) => {
+        await mkdir(path.dirname(path.join(root, file)), { recursive: true });
+        await writeFile(path.join(root, file), text);
+      };
+      await write("pom.xml", `<project><modelVersion>4.0.0</modelVersion><groupId>com.acme</groupId><artifactId>parent</artifactId><version>1</version><packaging>pom</packaging><modules><module>one</module><module>two</module></modules></project>\n`);
+      for (const name of ["one", "two"]) {
+        await write(`${name}/pom.xml`, `<project><modelVersion>4.0.0</modelVersion><groupId>com.acme</groupId><artifactId>${name}</artifactId><version>1</version>
+  <build><plugins><plugin><artifactId>spring-boot-maven-plugin</artifactId><configuration><mainClass>com.acme.Application</mainClass></configuration></plugin></plugins></build></project>\n`);
+        await write(`${name}/src/main/java/com/acme/Application.java`, "package com.acme;\npublic class Application { public static void main(String[] args) {} }\n");
+      }
+      const graph = await scan(root);
+      const entries = graph.nodes.filter((node) => node.label === "EntryPoint" && node.properties.kind === "java-main-class");
+      assert.equal(entries.length, 2);
+      for (const entry of entries) {
+        const module = entry.id.includes("one/pom.xml") ? "one" : "two";
+        const runs = graph.relationships.filter((rel) => rel.type === "RUNS" && rel.from === entry.id);
+        assert.equal(runs.length, 1, entry.id);
+        assert.ok(runs[0]!.to.includes(`${module}/src/main/java/com/acme/Application.java`), `${module} -> ${runs[0]!.to}`);
+      }
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+});

@@ -10,6 +10,8 @@ import { buildJavaPackageIndex } from "./packages.js";
 export const javaImportResolver: ILanguageImportResolver = {
   id: "java",
   supports: isJavaFile,
+  // The session installs the module filter the call resolver reads, so it runs even without Import nodes.
+  sessionWithoutImports: true,
   async createSession({ graph, rootPath, fileIdByRelativePath }) {
     // The modules of Maven and Gradle build files: their source roots (when a scanned Java file lies in
     // them) join the package index, and a file sees only the modules its module depends on.
