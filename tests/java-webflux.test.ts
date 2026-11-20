@@ -141,3 +141,67 @@ public class C {
     assert.equal(graph.nodes.filter((node) => node.label === "Route").length, 0);
   });
 });
+
+describe("Spring WebFlux functional routes: the DSL only", () => {
+  const scanSource = async (sources: Record<string, string>): Promise<Graph> => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "webflux-dsl-"));
+    try {
+      for (const [name, source] of Object.entries(sources)) await writeFile(path.join(root, name), source);
+      return await buildCodeGraph(root, { continueOnError: false });
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  };
+  const header = `package p;
+import org.springframework.web.reactive.function.server.*;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
+`;
+  const strip = (rows: string[]): string[] => rows.map((row) => row.replace(/^[A-Z]\.java:\d+ /u, ""));
+
+  it("ignores builder verbs on a receiver that is not a builder", async () => {
+    const graph = await scanSource({
+      "A.java": `${header}
+public class A {
+  interface Api { Api GET(String p, Object h); }
+  RouterFunction<ServerResponse> r(Api api) {
+    api.GET("/fake", null);
+    return RouterFunctions.route().GET("/real", req -> null).nest(path("/n"), b -> b.POST("/p", req -> null)).build();
+  }
+}
+`,
+    });
+    assert.deepEqual(strip(routes(graph)), ["GET /real -> none(null)", "POST /n/p -> none(null)"]);
+  });
+
+  it("does not read a user's own route(a, b) helper or an unimported static route", async () => {
+    const graph = await scanSource({
+      "A.java": `${header}
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+public class A {
+  RouterFunction<ServerResponse> own() { return route(GET("/own"), req -> null); }
+  RouterFunction<ServerResponse> route(Object a, Object b) { return null; }
+}
+`,
+      "B.java": `${header}
+public class B {
+  RouterFunction<ServerResponse> other() { return route(GET("/noimport"), req -> null); }
+}
+`,
+    });
+    assert.deepEqual(routes(graph), []);
+  });
+
+  it("emits no route for a nested route whose method conflicts with the enclosing predicate", async () => {
+    const graph = await scanSource({
+      "A.java": `${header}
+import static org.springframework.web.reactive.function.server.RouterFunctions.*;
+public class A {
+  RouterFunction<ServerResponse> r() {
+    return nest(GET("/a"), route(POST("/z"), req -> null)).andNest(GET("/b"), route(GET("/ok"), req -> null));
+  }
+}
+`,
+    });
+    assert.deepEqual(strip(routes(graph)), ["GET /b/ok -> none(null)"]);
+  });
+});

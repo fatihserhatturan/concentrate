@@ -213,3 +213,58 @@ describe("list_routes", () => {
     }
   });
 });
+
+describe("route precision: overrides, root resources, handler shape", () => {
+  it("inherits a mapping only from the same erased signature", async () => {
+    const graph = await scanSources({
+      "A.java": `import org.springframework.web.bind.annotation.*;
+public interface A { @GetMapping("/x") String x(String s); }`,
+      "B.java": `import org.springframework.web.bind.annotation.*;
+@RestController public class B implements A { public String x(int i) { return ""; } }`,
+      "G.java": `import org.springframework.web.bind.annotation.*;
+public interface G<T> { @GetMapping("/g") String g(T t); @GetMapping("/l") String l(java.util.List<String> a); }`,
+      "H.java": `import org.springframework.web.bind.annotation.*;
+@RestController public class H implements G<String> { public String g(String t) { return ""; } public String l(java.util.List<Integer> a) { return ""; } }`,
+    });
+    // B.x(int) is another method; G's type variable matches String; List<..> erases to List.
+    assert.deepEqual(summarize(graph), ["spring-mvc GET /g H.g", "spring-mvc GET /l H.l"]);
+  });
+
+  it("makes a JAX-RS resource of a class with its own @Path or one implementing a @Path interface, not of a subclass", async () => {
+    const graph = await scanSources({
+      "A.java": `import javax.ws.rs.*;
+@Path("/a") public class A { @GET @Path("g") public String g() { return ""; } }`,
+      "B.java": `public class B extends A { @Override public String g() { return ""; } }`,
+      "I.java": `import javax.ws.rs.*;
+@Path("/i") public interface I { @GET @Path("h") String h(); }`,
+      "C.java": `public class C implements I { public String h() { return ""; } }`,
+    });
+    assert.deepEqual(summarize(graph), ["jaxrs GET /a/g A.g", "jaxrs GET /i/h C.h"]);
+  });
+
+  it("gives no Route to private, static or (JAX-RS, Micronaut) non-public methods", async () => {
+    const graph = await scanSources({
+      "S.java": `import org.springframework.web.bind.annotation.*;
+@RestController public class S {
+  @GetMapping("/pub") public String pub() { return ""; }
+  @GetMapping("/pkg") String pkg() { return ""; }
+  @GetMapping("/priv") private String priv() { return ""; }
+  @GetMapping("/stat") public static String stat() { return ""; }
+}`,
+      "R.java": `import javax.ws.rs.*;
+@Path("/r") public class R {
+  @GET @Path("pub") public String pub() { return ""; }
+  @GET @Path("pkg") String pkg() { return ""; }
+  @GET @Path("priv") private String priv() { return ""; }
+  @GET @Path("stat") public static String stat() { return ""; }
+}`,
+      "M.java": `import io.micronaut.http.annotation.*;
+@Controller("/m") public class M {
+  @Get("/pub") public String pub() { return ""; }
+  @Get("/pkg") String pkg() { return ""; }
+  @Get("/stat") public static String stat() { return ""; }
+}`,
+    });
+    assert.deepEqual(summarize(graph), ["jaxrs GET /r/pub R.pub", "micronaut GET /m/pub M.pub", "spring-mvc GET /pkg S.pkg", "spring-mvc GET /pub S.pub"]);
+  });
+});

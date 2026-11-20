@@ -11,7 +11,8 @@ import { javaMethods } from "./shared.js";
 // implementing `XGrpc.AsyncService`) serves the service X. Each public instance method of it with a
 // gRPC signature — `(Req, StreamObserver<Resp>)`, or `StreamObserver<Resp> m(StreamObserver<Resp>)`
 // for client streams and bidi — is an EntryPoint (kind `grpc`, library `grpc-java`, trigger
-// `X/method`). When the generated class is in the scan too, the method must also be one the
+// `X/method`). Abstract classes are skipped (no instance serves; a concrete subclass is the one that
+// does; test-source fakes stay linked, as in Go). When the generated class is in the scan too, the method must also be one the
 // generated base declares (a helper with the same shape is not an rpc).
 //
 // Client side: a call on a receiver typed `XGrpc.XBlockingStub`, `XStub`, `XFutureStub` (a local,
@@ -181,6 +182,8 @@ export const javaGrpcContributor: ISemanticContributor = {
     for (const cls of graph.nodesWithLabel("Class")) {
       const fileId = fileOfClass.get(cls.id);
       if (!fileId || graph.node(fileId)?.properties.language !== "java") continue;
+      // An abstract class is no service instance: its concrete subclasses serve.
+      if (cls.properties.isAbstract === true) continue;
       const written: string[] = [];
       for (const key of ["extendsNames", "implementsNames"]) {
         if (typeof cls.properties[key] === "string") written.push(...(JSON.parse(String(cls.properties[key])) as string[]));

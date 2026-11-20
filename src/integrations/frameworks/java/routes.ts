@@ -26,6 +26,13 @@ import { javaMethods, type JavaMethod } from "./shared.js";
 // sub-resource locators (a method with only `@Path` has no HTTP method: no Route), inheritance
 // through `interface I extends J` (the graph has no edge for it), and inherited methods that the
 // subclass does not redeclare.
+//
+// Handlers are concrete-class instance methods: static and private methods never get a Route; JAX-RS and
+// Micronaut additionally need `public`. A method inherits its supertype's mapping only when the supertype
+// declares the same erased signature (simple type names, generics dropped); a differing parameter type
+// matches only where the supertype's one is its own type variable. A JAX-RS resource is a class with its
+// own `@Path` or one implementing an interface that has it; a subclass of a `@Path` class without its own
+// `@Path` is not (no duplicated routes).
 
 const SPRING_WEB = ["org.springframework.web.bind.annotation"];
 const SPRING_STEREOTYPE = ["org.springframework.stereotype", "org.springframework.web.bind.annotation"];
@@ -77,6 +84,7 @@ type Index = {
   /** Direct supertypes (EXTENDS, IMPLEMENTS). */
   supertypes: Map<string, GraphNode[]>;
   methodsOf: Map<string, GraphNode[]>;
+  ancestorCache: Map<string, GraphNode[]>;
 };
 
 function buildIndex(graph: IGraphContributor): Index {
@@ -100,11 +108,19 @@ function buildIndex(graph: IGraphContributor): Index {
       else methodsOf.set(rel.from, [method]);
     }
   }
-  return { graph, reader: javaAnnotationReader(graph), supertypes, methodsOf };
+  return { graph, reader: javaAnnotationReader(graph), supertypes, methodsOf, ancestorCache: new Map() };
 }
 
 // The type's supertypes breadth first, no repeats, nearest first.
 function ancestors(index: Index, type: GraphNode): GraphNode[] {
+  const cached = index.ancestorCache.get(type.id);
+  if (cached) return cached;
+  const order = computeAncestors(index, type);
+  index.ancestorCache.set(type.id, order);
+  return order;
+}
+
+function computeAncestors(index: Index, type: GraphNode): GraphNode[] {
   const seen = new Set<string>([type.id]);
   const order: GraphNode[] = [];
   const queue = [type];
@@ -119,25 +135,57 @@ function ancestors(index: Index, type: GraphNode): GraphNode[] {
   return order;
 }
 
-function typesOfParameters(method: GraphNode): string | null {
+// The erased parameter types of a method (simple names, no generics, no whitespace); null when unreadable.
+function typesOfParameters(method: GraphNode): string[] | null {
   try {
     const parsed: unknown = JSON.parse(String(method.properties.parameters ?? "[]"));
     if (!Array.isArray(parsed)) return null;
-    return parsed.map((parameter) => String((parameter as { type?: string }).type ?? "").replace(/\s+/gu, "")).join(",");
+    return parsed.map((parameter) => erase(String((parameter as { type?: string }).type ?? "")));
   } catch {
     return null;
   }
 }
 
-// The same method (name, parameters) in a supertype; null when absent or ambiguous.
+// `java.util.List<String>[]` -> `List[]`: generics dropped (erasure), package qualifiers dropped.
+function erase(type: string): string {
+  let text = type.replace(/\s+/gu, "");
+  for (let previous = ""; previous !== text; ) {
+    previous = text;
+    text = text.replace(/<[^<>]*>/gu, "");
+  }
+  const dimensions = /(\[\])+$|\.\.\.$/u.exec(text)?.[0] ?? "";
+  const base = text.slice(0, text.length - dimensions.length);
+  return `${base.slice(base.lastIndexOf(".") + 1)}${dimensions === "..." ? "[]" : dimensions}`;
+}
+
+function typeVariablesOf(node: GraphNode): Set<string> {
+  const names = new Set<string>();
+  try {
+    const parsed: unknown = JSON.parse(String(node.properties.typeParameters ?? "[]"));
+    if (Array.isArray(parsed)) for (const entry of parsed) names.add(String(entry).trim().split(/[\s<:]/u)[0] ?? "");
+  } catch {
+    // no type variables known
+  }
+  return names;
+}
+
+// The same method (name, erased parameter types) in a supertype; null when absent or ambiguous. A
+// parameter whose supertype type is a type variable of the supertype (class or method) matches anything.
 function overridden(index: Index, parent: GraphNode, method: GraphNode): GraphNode | null {
-  const candidates = (index.methodsOf.get(parent.id) ?? []).filter(
-    (candidate) => candidate.properties.kind === "method" && candidate.properties.name === method.properties.name && candidate.properties.parameterCount === method.properties.parameterCount,
-  );
-  if (candidates.length <= 1) return candidates[0] ?? null;
   const types = typesOfParameters(method);
-  const exact = candidates.filter((candidate) => typesOfParameters(candidate) === types);
-  return exact.length === 1 ? exact[0]! : null;
+  if (!types) return null;
+  const variables = typeVariablesOf(parent);
+  const matches = (index.methodsOf.get(parent.id) ?? []).filter((candidate) => {
+    if (candidate.properties.kind !== "method" || candidate.properties.name !== method.properties.name || candidate.properties.parameterCount !== method.properties.parameterCount) return false;
+    const theirs = typesOfParameters(candidate);
+    if (!theirs || theirs.length !== types.length) return false;
+    const own = typeVariablesOf(candidate);
+    return theirs.every((type, position) => {
+      const base = type.replace(/(\[\])+$/u, "");
+      return type === types[position] || variables.has(base) || own.has(base);
+    });
+  });
+  return matches.length === 1 ? matches[0]! : null;
 }
 
 type Found = { list: JavaAnnotationInfo[]; own: boolean };
@@ -173,9 +221,13 @@ function emit(graph: IGraphContributor, method: JavaMethod, framework: string, v
   }
 }
 
-// A concrete class's method: interfaces and abstract classes are no handlers themselves.
-function isHandlerCandidate({ owner, node }: JavaMethod): boolean {
-  return owner.label === "Class" && owner.properties.isAbstract !== true && node.properties.kind === "method";
+// A concrete class's instance method: interfaces, abstract classes and static methods are no handlers.
+// `level` is the visibility the framework needs: Spring also dispatches to package-private and
+// protected methods, JAX-RS and Micronaut only to public ones. Private methods never are.
+function isHandlerCandidate({ owner, node }: JavaMethod, level: "spring" | "public"): boolean {
+  if (owner.label !== "Class" || owner.properties.isAbstract === true || node.properties.kind !== "method" || node.properties.isStatic === true) return false;
+  const visibility = node.properties.visibility;
+  return level === "public" ? visibility === "public" : visibility !== "private";
 }
 
 // ---------------------------------------------------------------- Spring MVC
@@ -185,7 +237,7 @@ const springMapping = (list: JavaAnnotationInfo[]): JavaAnnotationInfo[] =>
   list.filter((ann) => (ann.simpleName === "RequestMapping" || ann.simpleName in SPRING_VERBS) && findAnnotations([ann], ann.simpleName, SPRING_WEB).length > 0);
 
 function springRoutes(index: Index, method: JavaMethod): void {
-  if (!isHandlerCandidate(method)) return;
+  if (!isHandlerCandidate(method, "spring")) return;
   const { owner, node } = method;
   const ownerAnnotations = index.reader.annotationsOf(owner);
   if (!hasAnnotation(ownerAnnotations, "RestController", SPRING_WEB) && !hasAnnotation(ownerAnnotations, "Controller", SPRING_STEREOTYPE)) return;
@@ -216,17 +268,35 @@ const jaxrsVerbs = (list: JavaAnnotationInfo[]): JavaAnnotationInfo[] => list.fi
 const jaxrsPath = (list: JavaAnnotationInfo[]): JavaAnnotationInfo | undefined => findAnnotations(list, "Path", JAXRS)[0];
 const jaxrsRelevant = (list: JavaAnnotationInfo[]): boolean => jaxrsVerbs(list).length > 0 || jaxrsPath(list) !== undefined;
 
-function jaxrsRoutes(index: Index, method: JavaMethod): void {
-  if (!isHandlerCandidate(method)) return;
+// The class annotations that make `owner` a root resource: its own `@Path`, else that of an interface it
+// implements directly (JAX-RS annotation inheritance). A subclass of a `@Path` class is no resource of its
+// own without one (the annotation is not @Inherited): it would only duplicate the superclass's routes.
+function resourceAnnotations(index: Index, owner: GraphNode): JavaAnnotationInfo[] | null {
+  const own = index.reader.annotationsOf(owner);
+  if (jaxrsPath(own)) return own;
+  for (const parent of index.supertypes.get(owner.id) ?? []) {
+    if (parent.label !== "Interface") continue;
+    const list = index.reader.annotationsOf(parent);
+    if (jaxrsPath(list)) return list;
+  }
+  return null;
+}
+
+function jaxrsRoutes(index: Index, method: JavaMethod, resources: Map<string, JavaAnnotationInfo[] | null>): void {
+  if (!isHandlerCandidate(method, "public")) return;
   const { owner, node } = method;
+  let classList = resources.get(owner.id);
+  if (classList === undefined) {
+    classList = resourceAnnotations(index, owner);
+    resources.set(owner.id, classList);
+  }
+  if (!classList) return;
   // JAX-RS: a method with any JAX-RS annotation of its own ignores its supertypes' ones.
   const found = methodAnnotations(index, owner, node, jaxrsRelevant);
   if (!found) return;
   const verbs = jaxrsVerbs(found.list);
   // Only `@Path`: a sub-resource locator, whose routes live in the class it returns. Not a Route.
   if (verbs.length === 0) return;
-  const classList = classAnnotations(index, owner, (list) => jaxrsPath(list) !== undefined);
-  if (!classList) return;
   const paths = combine(pathsOf(jaxrsPath(classList), ["value"]), pathsOf(jaxrsPath(found.list), ["value"]));
   for (const ann of verbs) emit(index.graph, method, "jaxrs", ann.simpleName, paths, found.own ? ann.line : Number(node.properties.line));
 }
@@ -236,7 +306,7 @@ function jaxrsRoutes(index: Index, method: JavaMethod): void {
 const MICRONAUT_VERBS: Record<string, string> = { Get: "GET", Post: "POST", Put: "PUT", Delete: "DELETE", Patch: "PATCH", Head: "HEAD", Options: "OPTIONS" };
 
 function micronautRoutes(index: Index, method: JavaMethod): void {
-  if (!isHandlerCandidate(method)) return;
+  if (!isHandlerCandidate(method, "public")) return;
   const { owner, node } = method;
   const controller = findAnnotations(index.reader.annotationsOf(owner), "Controller", MICRONAUT)[0];
   if (!controller) return;
@@ -254,9 +324,10 @@ export const javaRoutesContributor: ISemanticContributor = {
   id: "java.routes",
   contribute(graph) {
     const index = buildIndex(graph);
+    const resources = new Map<string, JavaAnnotationInfo[] | null>();
     for (const method of javaMethods(graph)) {
       springRoutes(index, method);
-      jaxrsRoutes(index, method);
+      jaxrsRoutes(index, method, resources);
       micronautRoutes(index, method);
     }
   },
