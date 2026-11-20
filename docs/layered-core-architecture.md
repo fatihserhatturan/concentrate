@@ -193,7 +193,11 @@ registry (`CoreIntegrationRegistry`, wired in
 | `ILanguageParser` | `ParsedSourceFile` for one file | `integrations/languages/go/parser.ts` |
 | `ILanguageCallResolver`, `ILanguageInheritanceResolver` (`core/contracts/call-resolver.ts`) | call targets for the files it supports; EXTENDS / IMPLEMENTS after the default lookup | `integrations/languages/rust/resolvers.ts` |
 | `IProjectManifestReader` (`core/contracts/project-manifest.ts`) | declared packages and project config values | `integrations/languages/js-ts/project.ts` (npm, yarn, pnpm workspaces; package.json and tsconfig keys) |
-| `IUnusedExportRules` (`core/contracts/unused-rules.ts`) | units, public API, entry points and name mentions for `find_unused_exports` | `integrations/languages/go/unused.ts` |
+| `ILanguageImportResolver` (`core/contracts/import-resolver.ts`) | the files an `Import` node reaches, for the importing files it supports; the first registered resolver that supports the file wins (`registry.registerImportResolver`) | `integrations/languages/go/import-resolver.ts` |
+| `IUnusedExportRules` (`core/contracts/unused-rules.ts`) | units, public API, entry points and name mentions for `find_unused_exports`; registered with `registry.registerUnusedExportRules`, and registration order is the order of the language paragraphs in the MCP note | `integrations/languages/go/unused.ts` |
+
+A language is added by registering these; the step-by-step guide is
+[adding-a-language.md](adding-a-language.md).
 
 Core builds a `LanguageTable` from the descriptors (`core/scan/language.ts`,
 passed in `ScanDependencies.languages`); `SupportedLanguage` is a string.
@@ -249,166 +253,57 @@ Still closed: extension node labels are not part of the `GraphNodeLabel`
 union, so plugin code writes them with a cast, and the logical relationship
 union in `core/graph/model.ts` is hand-written.
 
-## Proposed Directory Shape
+## Current Source Layout
 
-The exact file moves should happen gradually, but the target shape is:
-
-```text
-src/core/
-  graph/
-  scanner/
-  incremental/
-  contracts/
-
-src/integrations/languages/
-  js-ts/
-  python/
-  go/
-  rust/
-
-src/integrations/frameworks/
-  js-ts/
-    express-koa/
-    fastify/
-    nestjs/
-    backend-entrypoints/
-    env-config/
-    data-access/
-
-src/adapters/
-  store/
-  cli/
-  mcp/
-```
-
-Current directories may remain in place while compatibility wrappers are added.
-The target shape is a destination, not a requirement for the first task.
-
-## Current Migration Snapshot
-
-Implemented directories after tasks 87 through 103:
+The migration is finished: the legacy `src/scanner/`, `src/graph/`,
+`src/parsers/`, `src/mcp/` and `src/cli/` trees and their compatibility
+facades are gone. The graph model (`core/graph/model.ts`) and the scan DTOs
+(`core/scan/report.ts`, `result.ts`, `manifest.ts`, `parse-plan.ts`,
+`file-classification.ts`) are canonical in core, and the only copy.
 
 ```text
 src/core/
-  contracts/
-  graph/
-  integrations/
-  scan/
-  adapters/
+  contracts/      language, resolver, contributor, store, port and query contracts
+  graph/          model, builder, schema (base tables as data), normalize, JSONL
+  integrations/   CoreIntegrationRegistry and the registry-module contract
+  queries/        the use cases MCP, CLI and UI share, over IQueryEngine
+  scan/           orchestrator, discovery, manifest, parse plan, report
+    resolution/   default call, inheritance and name lookup
 
-src/integrations/languages/
-  js-ts/
-  python/
-  go/
-  rust/
+src/composition/  default registry, default schema, orchestrator, worker pool,
+                  scan-into-store: the only place core, integrations and
+                  adapters meet
 
-src/integrations/frameworks/js-ts/
-  backend-entrypoints.ts
-  data-access.ts
-  env-config.ts
-  express-koa.ts
-  fastify.ts
-  nestjs.ts
+src/integrations/
+  languages/
+    plain/ js-ts/ python/ go/ rust/ cpp/   descriptor, parser, resolvers,
+                                           import-resolver, unused rules,
+                                           schema, per language
+    syntax/                                tree-sitter on WebAssembly
+    file-kind.ts                           isXFile helpers built from descriptors
+  frameworks/     cpp go js-ts proto python rust scripts sql styles
+  resolution/     imports.ts: dispatches to the registered import resolvers
 
 src/adapters/
-  cli/
-  kuzu/
-  mcp/
+  cli/ mcp/ store/ fs/ git/
 ```
 
-### Core-Owned Boundaries (tasks 95–103)
+Each language directory holds what the language registers. Not every language
+has every file; `src/integrations/languages/go/` is a typical full set:
+`descriptor.ts`, `parser.ts`, `resolvers.ts` (call and inheritance),
+`import-resolver.ts`, `unused.ts`, `schema.ts`. The step-by-step guide for a
+new language is [adding-a-language.md](adding-a-language.md).
 
-The following modules now live in `src/core/` and are the authoritative source.
-Legacy `src/scanner/` and `src/graph/` paths are compatibility facades where
-indicated.
+Still open, and tracked in the ratchets and the sections above rather than
+here:
 
-| Core module | Canonical location | Legacy compat path |
-| --- | --- | --- |
-| Graph node/relationship model | `src/core/graph/model.ts` re-exports `src/graph/model.ts` | `src/graph/model.ts` (still canonical — direction not yet flipped) |
-| File classification | `src/core/scan/file-classification.ts` | `src/scanner/file-classification.ts` ← compat facade |
-| Parse plan | `src/core/scan/parse-plan.ts` | `src/scanner/parse-plan.ts` ← compat facade |
-| Scan report / warnings | `src/core/scan/report.ts` | `src/scanner/report.ts` ← compat facade |
-| BuildCodeGraph result/options | `src/core/scan/result.ts` | `src/scanner/build-code-graph-types.ts` ← compat facade |
-| Scan manifest types | `src/core/scan/manifest.ts` re-exports `src/scanner/scan-manifest.ts` | `src/scanner/scan-manifest.ts` (FS-bound — not yet flipped) |
-| Scan orchestrator | `src/core/scan/orchestrator.ts` | — |
-| Integration registry | `src/core/integrations/` | — |
+- `core/graph/schema.ts` keeps the closed `GraphNodeLabel` union, so extension
+  node labels are written with a cast, and the logical relationship union in
+  `core/graph/model.ts` is hand-written.
+- The default JS/TS call lookup (`require`, `module.exports`, default exports)
+  lives in `core/scan/resolution/calls.ts` and `call-targets.ts` as the
+  fallback for files no language call resolver supports.
 
-### Remaining Active Scanner Modules (not yet moved)
-
-These scanner files still contain real implementations and have not been moved
-to core. They remain in `src/scanner/` intentionally:
-
-- `scan-manifest.ts` — filesystem I/O (readFile, stat, crypto); should move
-  once a core I/O abstraction is introduced.
-- `source-files.ts` — language detection for discovered files; tightly coupled
-  to `scan-manifest.ts`.
-- `build-code-graph.ts` — scan entry point; delegates to core orchestrator but
-  handles Kuzu writes and report printing.
-- `directory-graph.ts`, `discover-files.ts`, `concurrency.ts` — low-level
-  filesystem and concurrency helpers.
-- `graph-finalize.ts` — post-parse relationship resolution; calls the core
-  integration registry.
-- `parse-results.ts`, `parse-source.ts` — parse aggregation and dispatch.
-- `project-config.ts`, `workspace-packages.ts` — project and monorepo config
-  reading.
-- `language.ts` — file extension to language mapping.
-- `resolution/` — import, call, inheritance, and framework-specific resolvers.
-
-### Compatibility Alias Cleanup Checklist
-
-The following aliases exist to preserve backward compatibility while callers
-migrate to core-owned paths. Remove each alias only after verifying that no
-`src/` file imports the legacy path.
-
-**Ready to clean up (compat facades pointing at core):**
-
-1. `src/scanner/file-classification.ts`
-   - Remove once all callers import from `src/core/scan/file-classification.js`.
-   - Check: `grep -r "scanner/file-classification" src/`
-
-2. `src/scanner/parse-plan.ts`
-   - Remove once all callers import from `src/core/scan/parse-plan.js`.
-   - Check: `grep -r "scanner/parse-plan" src/`
-
-3. `src/scanner/report.ts`
-   - Remove once all callers import from `src/core/scan/report.js`.
-   - Check: `grep -r "scanner/report" src/`
-
-4. `src/scanner/build-code-graph-types.ts`
-   - Remove once all callers import from `src/core/scan/result.js`.
-   - Check: `grep -r "scanner/build-code-graph-types" src/`
-
-**Pending direction flip (core currently re-exports from legacy):**
-
-5. `src/core/graph/model.ts` re-exports from `src/graph/model.ts`.
-   - When ready: copy implementation to `src/core/graph/model.ts`, turn
-     `src/graph/model.ts` into a compat facade re-exporting from core.
-   - Prerequisite: verify all `src/graph/model` importers can tolerate the
-     path change or update them to use `src/core/graph/model`.
-
-6. `src/core/scan/manifest.ts` re-exports from `src/scanner/scan-manifest.ts`.
-   - When ready: introduce a core I/O abstraction, move FS-bound logic behind
-     it, then flip the direction as with the scan DTO files.
-
-**Adapters and wiring shims:**
-
-7. ~~`src/core/adapters/`~~ — removed. Its wiring re-exports now live in
-   `src/composition/adapters.ts`, so core no longer imports composition.
-
-8. `src/core/scan/report.ts` and `src/core/scan/parse-plan.ts` import
-   `createUncheckedIncrementalEligibility` and types from
-   `src/scanner/scan-manifest.ts` as documented shims. Update to core paths
-   when item 6 above is resolved.
-
-9. `src/core/scan/parse-plan.ts` imports `SupportedSourceFile` from
-   `src/scanner/source-files.ts` as a documented shim. Update when
-   `source-files.ts` moves or its type is duplicated in core.
-
-**Removing a compat alias — general steps:**
-1. Run `grep -r "legacy/path" src/` and update each caller to the core path.
-2. Delete the compat file.
-3. Run `npm run typecheck && npm test && npm run build` to confirm no breakage.
-4. Update this checklist.
 
 ## Core Independence Phase (tasks 95–103) — Completed
 
@@ -478,24 +373,10 @@ real implementation is moved out of the legacy `src/parsers/`, `src/graph/`,
 `src/scanner/`, `src/mcp/`, and `src/cli/` trees and into the correct target
 layer. When done, those legacy directories are removed entirely.
 
-### Remaining Legacy Inventory (as of task 104)
+### Remaining Legacy Inventory
 
-| Legacy path | File count | Target location | Blocker |
-| --- | --- | --- | --- |
-| `src/graph/model.ts` | 1 | `src/core/graph/model.ts` (direction flip) | None — task 105 |
-| `src/graph/kuzu-*.ts`, `schema.ts`, `builder.ts` | 8 | `src/adapters/kuzu/` + `src/core/graph/` | Task 105 first |
-| `src/mcp/server.ts`, `tools.ts` | 2 | `src/adapters/mcp/` | None — task 107 |
-| `src/cli/progress.ts`, `report.ts`, `index.ts` | 3 | `src/adapters/cli/` | None — task 108 |
-| `src/scanner/concurrency.ts`, `directory-graph.ts`, `discover-files.ts`, `language.ts` | 4 | `src/core/scan/` | None — task 109 |
-| `src/scanner/parse-source.ts`, `parse-results.ts`, `graph-finalize.ts` | 3 | `src/core/scan/` | Task 109 first |
-| `src/scanner/project-config.ts`, `workspace-packages.ts` | 2 | `src/core/scan/` | None — task 111 |
-| `src/scanner/scan-manifest.ts`, `source-files.ts` | 2 | `src/core/scan/` | Needs I/O abstraction — task 112 |
-| `src/parsers/languages/go.ts`, `python.ts`, `rust.ts` | 3 | `src/integrations/languages/{go,python,rust}/` | None — task 113 |
-| `src/parsers/js-ts/*` (14 files) | 14 | `src/integrations/languages/js-ts/` | None — task 114 |
-| `src/scanner/resolution/` language-agnostic helpers | ~6 | `src/core/scan/resolution/` | Task 109 first |
-| `src/scanner/resolution/` JS/TS helpers | ~9 | `src/integrations/languages/js-ts/resolution/` | Task 114 first |
-| `src/scanner/resolution/` framework helpers | ~6 | `src/integrations/frameworks/js-ts/resolution/` | Task 116 first |
-| `src/types/tree-sitter-*.d.ts` | 3 | each language integration directory | Task 113 first |
+Empty. Every legacy tree listed for this phase was moved or removed (see the
+completion snapshot at the end of this document).
 
 ### Phase Completion Criteria
 
@@ -538,6 +419,8 @@ The Architecture Completion phase is done when:
 ---
 
 ## Migration Completion Snapshot — 2026-05-04
+
+This section is the record at completion. Later work (ports, language-free core, plugin host, import resolvers) changed the layout; see Current Source Layout above.
 
 **Architecture Completion phase (tasks 105–120) is complete.**
 

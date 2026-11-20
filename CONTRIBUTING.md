@@ -50,6 +50,9 @@ npm run bench:release     # scan time, memory and tool latency of the built CLI
   (`vendor/grammars/manifest.json`, checked by `tests/grammars.test.ts`). To
   upgrade one, change its version in `scripts/build-grammars.mjs`, run
   `npm run grammars:build`, and review the golden diffs.
+- **New languages** plug in through the integration registry, not by editing
+  core. [docs/adding-a-language.md](docs/adding-a-language.md) lists every
+  step, from the grammar to the UI highlight map.
 
 ## License
 
