@@ -231,3 +231,61 @@ describe("Route and EntryPoint helpers", () => {
     assert.ok(graph.relationships.some((rel) => rel.type === "ENTRYPOINT_HANDLED_BY" && rel.from === grpc.id && rel.to === handler.id));
   });
 });
+
+describe("one package-precision rule for unqualified annotations", () => {
+  const SPRING = ["org.springframework.stereotype"];
+  const MICRONAUT = ["io.micronaut.http.annotation"];
+  const files: Record<string, string> = {
+    // Wildcard from the requested package.
+    "src/main/java/a/SpringWild.java": "package a;\nimport org.springframework.stereotype.*;\n@Controller\npublic class SpringWild {}\n",
+    // Wildcard from another framework only.
+    "src/main/java/a/MicronautWild.java": "package a;\nimport io.micronaut.http.annotation.*;\n@Controller\npublic class MicronautWild {}\n",
+    // Wildcards from both: the requested one wins.
+    "src/main/java/a/Both.java": "package a;\nimport io.micronaut.http.annotation.*;\nimport org.springframework.stereotype.*;\n@Controller\npublic class Both {}\n",
+    // Nothing known: accepted as before.
+    "src/main/java/a/Plain.java": "package a;\nimport java.util.*;\n@Controller\npublic class Plain {}\n",
+    // The user's own type of that name in the same package, even beside a Spring wildcard.
+    "src/main/java/own/Controller.java": "package own;\npublic @interface Controller {}\n",
+    "src/main/java/own/Same.java": "package own;\nimport org.springframework.stereotype.*;\n@Controller\npublic class Same {}\n",
+    // The user's own type from a scanned wildcard-imported package.
+    "src/main/java/other/Wild.java": "package other;\nimport own.*;\n@Controller\npublic class Wild {}\n",
+  };
+  let ruleGraph: GraphBuilder;
+  let ruleRoot: string;
+  before(async () => {
+    ruleRoot = await mkdtemp(path.join(os.tmpdir(), "concentrate-java-annotation-rule-"));
+    for (const [file, source] of Object.entries(files)) {
+      await mkdir(path.dirname(path.join(ruleRoot, file)), { recursive: true });
+      await writeFile(path.join(ruleRoot, file), source);
+    }
+    const result = await buildCodeGraph(ruleRoot, { continueOnError: false });
+    ruleGraph = new GraphBuilder();
+    ruleGraph.addNodes(result.nodes);
+    ruleGraph.addRelationships(result.relationships);
+  });
+  after(async () => {
+    await rm(ruleRoot, { recursive: true, force: true });
+  });
+
+  const annotationsOfClass = (name: string) => {
+    const type = ruleGraph.nodes.find((node) => node.label === "Class" && node.properties.name === name);
+    assert.ok(type, name);
+    return javaAnnotationReader(ruleGraph).annotationsOf(type);
+  };
+
+  it("accepts a wildcard from a requested package, rejects one from another framework, accepts when nothing is known", () => {
+    assert.equal(hasAnnotation(annotationsOfClass("SpringWild"), "Controller", SPRING), true);
+    assert.equal(hasAnnotation(annotationsOfClass("SpringWild"), "Controller", MICRONAUT), false);
+    assert.equal(hasAnnotation(annotationsOfClass("MicronautWild"), "Controller", SPRING), false);
+    assert.equal(hasAnnotation(annotationsOfClass("MicronautWild"), "Controller", MICRONAUT), true);
+    assert.equal(hasAnnotation(annotationsOfClass("Both"), "Controller", SPRING), true);
+    assert.equal(hasAnnotation(annotationsOfClass("Both"), "Controller", MICRONAUT), true);
+    assert.equal(hasAnnotation(annotationsOfClass("Plain"), "Controller", SPRING), true);
+  });
+
+  it("rejects an annotation the scan declares in the file's package or a wildcard-imported scanned package", () => {
+    assert.equal(hasAnnotation(annotationsOfClass("Same"), "Controller", SPRING), false);
+    assert.equal(hasAnnotation(annotationsOfClass("Wild"), "Controller", SPRING), false);
+    assert.equal(hasAnnotation(annotationsOfClass("Wild"), "Controller"), true);
+  });
+});

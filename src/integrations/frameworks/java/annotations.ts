@@ -19,6 +19,13 @@ export type JavaAnnotationInfo = {
   line: number;
   /** Id of the Decorator node. */
   decoratorId: string;
+  /**
+   * True when `qualifiedName` is unknown and the scan declares a type of this simple name in the file's
+   * package, or one that a wildcard import of the file brings in: the user's own annotation, never a framework's.
+   */
+  ownType?: boolean;
+  /** The file's non-static wildcard imports (`org.springframework.stereotype`), as written. */
+  wildcardImports?: readonly string[];
 };
 
 const ANNOTATION_RELATIONS: GraphRelationship["type"][] = [
@@ -61,13 +68,43 @@ export function javaAnnotationReader(graph: IGraphContributor): JavaAnnotationRe
     for (const rel of graph.relationshipsOfType(type as GraphRelationship["type"])) parentOf.set(rel.to, rel.from);
   }
   const importsByFile = new Map<string, Map<string, string>>();
+  const wildcardsByFile = new Map<string, string[]>();
   for (const rel of graph.relationshipsOfType("IMPORTS")) {
     const properties = graph.node(rel.to)?.properties;
-    if (!properties || properties.isWildcard === true || properties.isStatic === true || typeof properties.source !== "string") continue;
+    if (!properties || properties.isStatic === true || typeof properties.source !== "string") continue;
+    if (properties.isWildcard === true) {
+      const list = wildcardsByFile.get(rel.from);
+      if (list) list.push(properties.source);
+      else wildcardsByFile.set(rel.from, [properties.source]);
+      continue;
+    }
     let imports = importsByFile.get(rel.from);
     if (!imports) importsByFile.set(rel.from, (imports = new Map()));
     imports.set(simpleNameOf(properties.source), properties.source);
   }
+  // The scan's own types: qualified names, and `package|simpleName` (nested types count for their package).
+  const declared = new Set<string>();
+  const declaredInPackage = new Set<string>();
+  const packageOfFile = new Map<string, string>();
+  for (const label of ["Class", "Interface"] as const) {
+    for (const type of graph.nodesWithLabel(label)) {
+      const { namespace, qualifiedName } = type.properties;
+      if (typeof namespace !== "string" || typeof qualifiedName !== "string") continue;
+      declared.add(qualifiedName);
+      declaredInPackage.add(`${namespace}|${simpleNameOf(qualifiedName)}`);
+    }
+  }
+  for (const type of ["DEFINES_CLASS", "DEFINES_INTERFACE"] as const) {
+    for (const rel of graph.relationshipsOfType(type)) {
+      const namespace = graph.node(rel.to)?.properties.namespace;
+      if (typeof namespace === "string") packageOfFile.set(rel.from, namespace);
+    }
+  }
+  const isOwnType = (fileId: string | null, simpleName: string): boolean => {
+    if (!fileId) return false;
+    if (declaredInPackage.has(`${packageOfFile.get(fileId) ?? ""}|${simpleName}`)) return true;
+    return (wildcardsByFile.get(fileId) ?? []).some((source) => declared.has(`${source}.${simpleName}`));
+  };
   const fileOf = (id: string): string | null => {
     let current = id;
     for (let depth = 0; depth < 32; depth += 1) {
@@ -97,24 +134,62 @@ export function javaAnnotationReader(graph: IGraphContributor): JavaAnnotationRe
           } catch {
             // Unreadable arguments count as none.
           }
-          return { name, simpleName, qualifiedName, args, line: Number(properties.line), decoratorId: decorator.id };
+          return {
+            name,
+            simpleName,
+            qualifiedName,
+            args,
+            line: Number(properties.line),
+            decoratorId: decorator.id,
+            ownType: qualifiedName === null && isOwnType(fileId, simpleName),
+            wildcardImports: (fileId ? wildcardsByFile.get(fileId) : undefined) ?? [],
+          };
         })
         .sort((a, b) => a.line - b.line);
     },
   };
 }
 
+// Packages of the frameworks the Java contributors know: a wildcard import from one of them (and from
+// none of the requested prefixes) shows an unqualified annotation is that other framework's.
+const KNOWN_FRAMEWORK_PACKAGES = [
+  "org.springframework",
+  "io.micronaut",
+  "javax.ws.rs",
+  "jakarta.ws.rs",
+  "javax.inject",
+  "jakarta.inject",
+  "javax.annotation",
+  "jakarta.annotation",
+  "picocli",
+  "io.grpc",
+];
+
+const inPackage = (name: string, prefix: string): boolean => name === prefix || name.startsWith(prefix.endsWith(".") ? prefix : `${prefix}.`);
+
 /**
- * The annotation(s) named `simpleName`. With `packagePrefixes`, an annotation whose qualified name is
- * known must start with one of them (`org.springframework.web.bind.annotation` accepts
- * `org.springframework.web.bind.annotation.GetMapping`); one whose package is unknown still counts.
+ * The annotation(s) named `simpleName`. With `packagePrefixes` the package must fit; the one rule, for
+ * every Java contributor:
+ *   - a qualified name (written, or from a single-type import) must start with a requested prefix;
+ *   - otherwise, a type of that name declared in the scan in the file's package or imported by a wildcard
+ *     from a scanned package is the user's own: rejected;
+ *   - otherwise, a wildcard import from a requested prefix accepts it; wildcard imports from other known
+ *     framework packages and none from a requested one reject it (`io.micronaut.http.annotation.*` is
+ *     not Spring);
+ *   - otherwise (no wildcard import of a framework: same package, java.lang, a missing import) it counts.
  */
 export function findAnnotations(list: readonly JavaAnnotationInfo[], simpleName: string, packagePrefixes?: readonly string[]): JavaAnnotationInfo[] {
   return list.filter((ann) => {
     if (ann.simpleName !== simpleName) return false;
-    if (!packagePrefixes || packagePrefixes.length === 0 || ann.qualifiedName === null) return true;
-    const qualified = ann.qualifiedName;
-    return packagePrefixes.some((prefix) => qualified === prefix || qualified.startsWith(prefix.endsWith(".") ? prefix : `${prefix}.`));
+    if (!packagePrefixes || packagePrefixes.length === 0) return true;
+    if (ann.qualifiedName !== null) {
+      const qualified = ann.qualifiedName;
+      return packagePrefixes.some((prefix) => inPackage(qualified, prefix));
+    }
+    if (ann.ownType === true) return false;
+    const wildcards = ann.wildcardImports ?? [];
+    if (wildcards.some((source) => packagePrefixes.some((prefix) => inPackage(source, prefix)))) return true;
+    return !wildcards.some((source) => KNOWN_FRAMEWORK_PACKAGES.some((known) => inPackage(source, known)));
   });
 }
 

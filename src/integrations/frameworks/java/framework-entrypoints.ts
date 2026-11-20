@@ -27,7 +27,7 @@ import { javaMethods } from "./shared.js";
 //                                     (Callable); @Command methods are subcommands named by `name`, else by
 //                                     the method name
 // `resolved` is false on an EntryPoint whose trigger is an expression (a constant, a placeholder) rather
-// than a literal. An annotation of another package (provably, by import or qualified name) is no match.
+// than a literal. Annotations are matched by simple name and package by `findAnnotations` (see annotations.ts).
 
 const SPRING_BOOT = ["org.springframework.boot"];
 const SPRING_SCHEDULING = ["org.springframework.scheduling.annotation"];
@@ -82,25 +82,6 @@ export const javaFrameworkEntrypointsContributor: ISemanticContributor = {
       if (graph.node(rel.from)?.properties.kind === "main") mainEntryOf.set(rel.to, rel.from);
     }
 
-    // An annotation whose package is not provable (no import, no qualified name) is the user's own when a
-    // scanned type of that name sits in the file's package (or nests in it): never a framework's.
-    const packageOfFile = new Map<string, string>();
-    for (const type of ["DEFINES_CLASS", "DEFINES_INTERFACE"] as const) {
-      for (const rel of graph.relationshipsOfType(type)) {
-        const namespace = graph.node(rel.to)?.properties.namespace;
-        if (typeof namespace === "string") packageOfFile.set(rel.from, namespace);
-      }
-    }
-    const typeNames = new Set<string>();
-    for (const label of ["Class", "Interface"] as const) {
-      for (const type of graph.nodesWithLabel(label)) {
-        const { namespace, qualifiedName } = type.properties;
-        if (typeof namespace === "string" && typeof qualifiedName === "string") typeNames.add(`${namespace}|${qualifiedName.slice(qualifiedName.lastIndexOf(".") + 1)}`);
-      }
-    }
-    const find = (fileId: string, list: readonly JavaAnnotationInfo[], name: string, prefixes: readonly string[]): JavaAnnotationInfo[] =>
-      findAnnotations(list, name, prefixes).filter((ann) => ann.qualifiedName !== null || !typeNames.has(`${packageOfFile.get(fileId) ?? ""}|${ann.simpleName}`));
-
     const emit = (fileId: string, handler: GraphNode, ann: JavaAnnotationInfo, kind: string, library: string, triggers: Trigger[]): void => {
       const list = triggers.length > 0 ? triggers : [{ value: null, resolved: true }];
       for (const trigger of list) {
@@ -117,7 +98,7 @@ export const javaFrameworkEntrypointsContributor: ISemanticContributor = {
       const annotations = reader.annotationsOf(node);
       if (annotations.length === 0) continue;
 
-      const boot = find(fileId, annotations, "SpringBootApplication", SPRING_BOOT)[0];
+      const boot = findAnnotations(annotations, "SpringBootApplication", SPRING_BOOT)[0];
       if (boot) {
         const main = (methodsOfClass.get(node.id) ?? []).find((method) => mainEntryOf.has(method.node.id));
         if (main) {
@@ -128,7 +109,7 @@ export const javaFrameworkEntrypointsContributor: ISemanticContributor = {
       }
 
       // picocli: the command's own `run()` / `call()`.
-      const command = find(fileId, annotations, "Command", PICOCLI)[0];
+      const command = findAnnotations(annotations, "Command", PICOCLI)[0];
       if (command) {
         let implemented: string[] = [];
         try {
@@ -152,8 +133,8 @@ export const javaFrameworkEntrypointsContributor: ISemanticContributor = {
 
       for (const ann of annotations) {
         if (ann.simpleName !== "Scheduled") continue;
-        const spring = find(fileId, [ann], "Scheduled", SPRING_SCHEDULING).length > 0;
-        const micronaut = find(fileId, [ann], "Scheduled", MICRONAUT_SCHEDULING).length > 0;
+        const spring = findAnnotations([ann], "Scheduled", SPRING_SCHEDULING).length > 0;
+        const micronaut = findAnnotations([ann], "Scheduled", MICRONAUT_SCHEDULING).length > 0;
         if (!spring && !micronaut) continue;
         const library = spring && micronaut
           ? (importSources.get(fileId) ?? []).some((source) => source.startsWith("io.micronaut.")) ? "micronaut" : "spring"
@@ -167,7 +148,7 @@ export const javaFrameworkEntrypointsContributor: ISemanticContributor = {
         ["RabbitListener", ["org.springframework.amqp.rabbit.annotation"], "spring-amqp", "queues"],
         ["JmsListener", ["org.springframework.jms.annotation"], "spring-jms", "destination"],
       ] as const) {
-        for (const ann of find(fileId, annotations, name, prefixes)) {
+        for (const ann of findAnnotations(annotations, name, prefixes)) {
           let triggers: Trigger[] = values(ann, key);
           // A topic pattern is marked so it is never read as a topic name.
           if (triggers.length === 0 && name === "KafkaListener") triggers = values(ann, "topicPattern").map((value) => ({ value: `pattern:${value.value}`, resolved: value.resolved }));
@@ -176,7 +157,7 @@ export const javaFrameworkEntrypointsContributor: ISemanticContributor = {
       }
 
       for (const name of ["EventListener", "TransactionalEventListener"]) {
-        for (const ann of find(fileId, annotations, name, SPRING_EVENTS)) {
+        for (const ann of findAnnotations(annotations, name, SPRING_EVENTS)) {
           let triggers: Trigger[] = [...values(ann, "classes"), ...values(ann, "value")].map((value) => ({ value: value.value.replace(/\.class$/u, ""), resolved: true }));
           if (triggers.length === 0) {
             const parameters = parametersOf(node);
@@ -187,7 +168,7 @@ export const javaFrameworkEntrypointsContributor: ISemanticContributor = {
       }
 
       // picocli subcommand methods: named by `name`, else by the method.
-      for (const ann of find(fileId, annotations, "Command", PICOCLI)) {
+      for (const ann of findAnnotations(annotations, "Command", PICOCLI)) {
         const name = values(ann, "name")[0] ?? { value: String(node.properties.name), resolved: true };
         emit(fileId, node, ann, "cli", "picocli", [name]);
       }

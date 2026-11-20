@@ -8,7 +8,7 @@ import { javaMethods } from "./shared.js";
 // Java dependency injection (Spring, JSR-330 / Jakarta `@Inject`), as INJECTS between classes like
 // NestJS and Go:
 //   - a provider is a non-abstract class with a Spring stereotype (`@Component`, `@Service`,
-//     `@Repository`, `@Controller`, `@RestController`, `@Configuration`, `@SpringBootApplication`),
+//     `@Repository`, `@Controller` (Spring's or Micronaut's), `@RestController`, `@Configuration`, `@SpringBootApplication`),
 //     `@Named` or `@Singleton`; it gets `diStereotype` and `diBeanName`. A `@Bean` method (in any
 //     provider class) provides its return type, named by the method (or `@Bean("a")`): it gets `diBean`;
 //   - injection points: the `@Autowired`/`@Inject` constructor (else the only constructor), `@Autowired`,
@@ -32,6 +32,9 @@ const STEREOTYPES: ReadonlyArray<readonly [string, readonly string[]]> = [
   ["Service", ["org.springframework.stereotype"]],
   ["Repository", ["org.springframework.stereotype"]],
   ["Controller", ["org.springframework.stereotype"]],
+  // Micronaut's `@Controller` is a bean too (its constructor injection points matter); the package check
+  // keeps Spring's and Micronaut's apart, and `diStereotype` is just the annotation's simple name.
+  ["Controller", ["io.micronaut.http.annotation"]],
   ["RestController", ["org.springframework.web.bind.annotation"]],
   ["Configuration", ["org.springframework.context.annotation"]],
   ["SpringBootApplication", ["org.springframework.boot.autoconfigure"]],
@@ -152,7 +155,8 @@ export const javaDiContributor: ISemanticContributor = {
       if (!stereotype) continue;
       providerTypes.set(type.id, type);
       const stereotypeAnn = findAnnotations(list, stereotype[0], stereotype[1])[0]!;
-      const explicit = literals(stereotypeAnn);
+      // Micronaut's `@Controller("/users")` value is a URI, not a bean name.
+      const explicit = stereotype[1][0]!.startsWith("io.micronaut") ? { values: [] as string[], unresolved: false } : literals(stereotypeAnn);
       // @Named("x") beside @Component: either gives the name.
       const named = literals(findAnnotations(list, "Named", INJECT_PACKAGES)[0]);
       const beanName = explicit.values[0] ?? named.values[0] ?? decapitalize(type.name);
