@@ -102,6 +102,12 @@
       "version": "0.23.4",
       "sha256": "f5ff3ba7af054af846f37dfd2525bdfede95530d5747a8fe30df87d070ece607",
       "bytes": 3435982
+    },
+    "java": {
+      "package": "tree-sitter-java",
+      "version": "0.23.5",
+      "sha256": "6476728734128931bd50de2d1e5e9c75c506b51e278f54eaf709836a0de35759",
+      "bytes": 415233
     }
   }
 }
