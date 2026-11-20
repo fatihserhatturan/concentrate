@@ -1,0 +1,2766 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 17
+          },
+          {
+            "table": "File",
+            "count": 14
+          },
+          {
+            "table": "Import",
+            "count": 38
+          },
+          {
+            "table": "Function",
+            "count": 38
+          },
+          {
+            "table": "Class",
+            "count": 12
+          },
+          {
+            "table": "Field",
+            "count": 12
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 14
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 21
+          },
+          {
+            "table": "Route",
+            "count": 6
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 7
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 17
+        },
+        {
+          "table": "File",
+          "count": 14
+        },
+        {
+          "table": "Import",
+          "count": 38
+        },
+        {
+          "table": "Function",
+          "count": 38
+        },
+        {
+          "table": "Class",
+          "count": 12
+        },
+        {
+          "table": "Field",
+          "count": 12
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 14
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 21
+        },
+        {
+          "table": "Route",
+          "count": 6
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 7
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "JdkClientGateway",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "LocalCache",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OkHttpGateway",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "RestClientGateway",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "RestTemplateGateway",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "WebClientGateway",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "ClientConfig",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/config/ClientConfig.java",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "User",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/model/User.java",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "HealthController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "UserController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "UserControllerTest",
+            "kind": "Class",
+            "file": "src/test/java/com/acme/portal/UserControllerTest.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "health",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "JdkClientGateway"
+          },
+          {
+            "name": "create",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 18,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "JdkClientGateway"
+          },
+          {
+            "name": "replace",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 28,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "JdkClientGateway"
+          },
+          {
+            "name": "get",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "LocalCache"
+          },
+          {
+            "name": "getForObject",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "LocalCache"
+          },
+          {
+            "name": "delete",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "LocalCache"
+          },
+          {
+            "name": "remove",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OkHttpGateway"
+          },
+          {
+            "name": "RestClientGateway",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "RestClientGateway"
+          },
+          {
+            "name": "create",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 21,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "RestClientGateway"
+          },
+          {
+            "name": "remove",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 25,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "RestClientGateway"
+          },
+          {
+            "name": "health",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 29,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "RestClientGateway"
+          },
+          {
+            "name": "RestTemplateGateway",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "RestTemplateGateway"
+          },
+          {
+            "name": "create",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 23,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "RestTemplateGateway"
+          },
+          {
+            "name": "replace",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 27,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "RestTemplateGateway"
+          },
+          {
+            "name": "remove",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 31,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "RestTemplateGateway"
+          },
+          {
+            "name": "search",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "WebClientGateway"
+          },
+          {
+            "name": "update",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 16,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "WebClientGateway"
+          },
+          {
+            "name": "health",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "WebClientGateway"
+          },
+          {
+            "name": "restTemplate",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/config/ClientConfig.java",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ClientConfig"
+          },
+          {
+            "name": "health",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "HealthController"
+          },
+          {
+            "name": "get",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserController"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "JdkClientGateway",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "LocalCache",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OkHttpGateway",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "RestClientGateway",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "RestTemplateGateway",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "WebClientGateway",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "ClientConfig",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/config/ClientConfig.java",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "User",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/model/User.java",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "HealthController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/web/HealthController.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "UserController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "UserControllerTest",
+          "kind": "Class",
+          "file": "src/test/java/com/acme/portal/UserControllerTest.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "health",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "JdkClientGateway"
+        },
+        {
+          "name": "create",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+          "line": 18,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "JdkClientGateway"
+        },
+        {
+          "name": "replace",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+          "line": 28,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "JdkClientGateway"
+        },
+        {
+          "name": "get",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "LocalCache"
+        },
+        {
+          "name": "getForObject",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "LocalCache"
+        },
+        {
+          "name": "delete",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+          "line": 14,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "LocalCache"
+        },
+        {
+          "name": "remove",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OkHttpGateway"
+        },
+        {
+          "name": "RestClientGateway",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "RestClientGateway"
+        },
+        {
+          "name": "create",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+          "line": 21,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "RestClientGateway"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "name": "JdkClientGateway",
+            "kind": "Class",
+            "line": 10,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "name": "LocalCache",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+            "name": "OkHttpGateway",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "name": "RestClientGateway",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "name": "RestTemplateGateway",
+            "kind": "Class",
+            "line": 10,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "name": "WebClientGateway",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/config/ClientConfig.java",
+            "name": "ClientConfig",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/config/Urls.java",
+            "name": "Urls",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/model/User.java",
+            "name": "User",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "name": "HealthController",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "name": "UserController",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/test/java/com/acme/portal/UserControllerTest.java",
+            "name": "UserControllerTest",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+          "name": "JdkClientGateway",
+          "kind": "Class",
+          "line": 10,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+          "name": "LocalCache",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+          "name": "OkHttpGateway",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+          "name": "RestClientGateway",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+          "name": "RestTemplateGateway",
+          "kind": "Class",
+          "line": 10,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+          "name": "WebClientGateway",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/config/ClientConfig.java",
+          "name": "ClientConfig",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/config/Urls.java",
+          "name": "Urls",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/model/User.java",
+          "name": "User",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/HealthController.java",
+          "name": "HealthController",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "name": "UserController",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/test/java/com/acme/portal/UserControllerTest.java",
+          "name": "UserControllerTest",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 12
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 8,
+            "method": "GET",
+            "path": "/health",
+            "fullPath": "/health",
+            "framework": "spring-mvc",
+            "handlerName": "health",
+            "handler": "health"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 10,
+            "method": "GET",
+            "path": "/api/users/{id}",
+            "fullPath": "/api/users/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "get",
+            "handler": "get"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 13,
+            "method": "GET",
+            "path": "/api/users/search",
+            "fullPath": "/api/users/search",
+            "framework": "spring-mvc",
+            "handlerName": "search",
+            "handler": "search"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 16,
+            "method": "POST",
+            "path": "/api/users",
+            "fullPath": "/api/users",
+            "framework": "spring-mvc",
+            "handlerName": "create",
+            "handler": "create"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 19,
+            "method": "PUT",
+            "path": "/api/users/{id}",
+            "fullPath": "/api/users/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "update",
+            "handler": "update"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 22,
+            "method": "DELETE",
+            "path": "/api/users/{id}",
+            "fullPath": "/api/users/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "delete",
+            "handler": "delete"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/main/java/com/acme/portal/web/HealthController.java",
+          "line": 8,
+          "method": "GET",
+          "path": "/health",
+          "fullPath": "/health",
+          "framework": "spring-mvc",
+          "handlerName": "health",
+          "handler": "health"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 10,
+          "method": "GET",
+          "path": "/api/users/{id}",
+          "fullPath": "/api/users/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "get",
+          "handler": "get"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 13,
+          "method": "GET",
+          "path": "/api/users/search",
+          "fullPath": "/api/users/search",
+          "framework": "spring-mvc",
+          "handlerName": "search",
+          "handler": "search"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 16,
+          "method": "POST",
+          "path": "/api/users",
+          "fullPath": "/api/users",
+          "framework": "spring-mvc",
+          "handlerName": "create",
+          "handler": "create"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 19,
+          "method": "PUT",
+          "path": "/api/users/{id}",
+          "fullPath": "/api/users/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "update",
+          "handler": "update"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 22,
+          "method": "DELETE",
+          "path": "/api/users/{id}",
+          "fullPath": "/api/users/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "delete",
+          "handler": "delete"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 6
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 2,
+            "name": "inventory.base-url",
+            "value": "http://localhost:8080/api",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 4,
+            "name": "portal.origin",
+            "value": "http://localhost:8080",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 2,
+            "name": "inventory.base-url",
+            "value": "http://localhost:8080/api",
+            "valueType": "string",
+            "consumer": "baseUrl",
+            "consumerKind": "File"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 2,
+          "name": "inventory.base-url",
+          "value": "http://localhost:8080/api",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 4,
+          "name": "portal.origin",
+          "value": "http://localhost:8080",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+          "line": 2,
+          "name": "inventory.base-url",
+          "value": "http://localhost:8080/api",
+          "valueType": "string",
+          "consumer": "baseUrl",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "method": "GET",
+      "path": "/health"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health",
+            "name": "health",
+            "className": "JdkClientGateway",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 13,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:18:com.acme.portal.client.JdkClientGateway.create",
+            "name": "create",
+            "className": "JdkClientGateway",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 18,
+            "endLine": 26
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:28:com.acme.portal.client.JdkClientGateway.replace",
+            "name": "replace",
+            "className": "JdkClientGateway",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 28,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:11:com.acme.portal.client.JdkClientGateway.<init-block>",
+            "name": "<init-block>",
+            "className": "JdkClientGateway",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 11,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:10:com.acme.portal.client.LocalCache.get",
+            "name": "get",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:12:com.acme.portal.client.LocalCache.getForObject",
+            "name": "getForObject",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 12,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:14:com.acme.portal.client.LocalCache.delete",
+            "name": "delete",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 14,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:16:com.acme.portal.client.LocalCache.warm",
+            "name": "warm",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 16,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:8:com.acme.portal.client.LocalCache.<init-block>",
+            "name": "<init-block>",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:12:com.acme.portal.client.OkHttpGateway.remove",
+            "name": "remove",
+            "className": "OkHttpGateway",
+            "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+            "line": 12,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:17:com.acme.portal.client.OkHttpGateway.find",
+            "name": "find",
+            "className": "OkHttpGateway",
+            "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+            "line": 17,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:10:com.acme.portal.client.OkHttpGateway.<init-block>",
+            "name": "<init-block>",
+            "className": "OkHttpGateway",
+            "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:13:com.acme.portal.client.RestClientGateway.RestClientGateway",
+            "name": "RestClientGateway",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 13,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:17:com.acme.portal.client.RestClientGateway.find",
+            "name": "find",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 17,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:21:com.acme.portal.client.RestClientGateway.create",
+            "name": "create",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 21,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:25:com.acme.portal.client.RestClientGateway.remove",
+            "name": "remove",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 25,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health",
+            "name": "health",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 29,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:17:com.acme.portal.client.RestTemplateGateway.RestTemplateGateway",
+            "name": "RestTemplateGateway",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 17,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:19:com.acme.portal.client.RestTemplateGateway.find",
+            "name": "find",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 19,
+            "endLine": 21
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:23:com.acme.portal.client.RestTemplateGateway.create",
+            "name": "create",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 23,
+            "endLine": 25
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:27:com.acme.portal.client.RestTemplateGateway.replace",
+            "name": "replace",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 27,
+            "endLine": 29
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:31:com.acme.portal.client.RestTemplateGateway.remove",
+            "name": "remove",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 31,
+            "endLine": 33
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:35:com.acme.portal.client.RestTemplateGateway.lookup",
+            "name": "lookup",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 35,
+            "endLine": 37
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:12:com.acme.portal.client.WebClientGateway.search",
+            "name": "search",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 12,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:16:com.acme.portal.client.WebClientGateway.update",
+            "name": "update",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health",
+            "name": "health",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:24:com.acme.portal.client.WebClientGateway.dynamicStart",
+            "name": "dynamicStart",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 24,
+            "endLine": 26
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:10:com.acme.portal.client.WebClientGateway.<init-block>",
+            "name": "<init-block>",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/config/ClientConfig.java:function:9:com.acme.portal.config.ClientConfig.restTemplate",
+            "name": "restTemplate",
+            "className": "ClientConfig",
+            "file": "src/main/java/com/acme/portal/config/ClientConfig.java",
+            "line": 9,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/config/Urls.java:function:7:com.acme.portal.config.Urls.Urls",
+            "name": "Urls",
+            "className": "Urls",
+            "file": "src/main/java/com/acme/portal/config/Urls.java",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/HealthController.java:function:8:com.acme.portal.web.HealthController.health",
+            "name": "health",
+            "className": "HealthController",
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 8,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:10:com.acme.portal.web.UserController.get",
+            "name": "get",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 10,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:13:com.acme.portal.web.UserController.search",
+            "name": "search",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 13,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:16:com.acme.portal.web.UserController.create",
+            "name": "create",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 16,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:19:com.acme.portal.web.UserController.update",
+            "name": "update",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 19,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:22:com.acme.portal.web.UserController.delete",
+            "name": "delete",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 22,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/test/java/com/acme/portal/UserControllerTest.java:function:9:com.acme.portal.UserControllerTest.healthy",
+            "name": "healthy",
+            "className": "UserControllerTest",
+            "file": "src/test/java/com/acme/portal/UserControllerTest.java",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/test/java/com/acme/portal/UserControllerTest.java:function:7:com.acme.portal.UserControllerTest.<init-block>",
+            "name": "<init-block>",
+            "className": "UserControllerTest",
+            "file": "src/test/java/com/acme/portal/UserControllerTest.java",
+            "line": 7,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:16:com.acme.portal.client.LocalCache.warm",
+            "callee": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:14:com.acme.portal.client.LocalCache.delete",
+            "line": 17
+          },
+          {
+            "caller": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:16:com.acme.portal.client.LocalCache.warm",
+            "callee": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:12:com.acme.portal.client.LocalCache.getForObject",
+            "line": 18
+          },
+          {
+            "caller": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:16:com.acme.portal.client.LocalCache.warm",
+            "callee": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:10:com.acme.portal.client.LocalCache.get",
+            "line": 18
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id",
+        "params": {
+          "method": "GET",
+          "path": "/health",
+          "routeFiles": [],
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/health",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/HealthController.java",
+            "routeLine": 8,
+            "call": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health:call:14:26:HttpRequest.newBuilder",
+            "line": 14,
+            "expression": "HttpRequest.newBuilder",
+            "client": "httpclient",
+            "method": "GET",
+            "url": "/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/health",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/HealthController.java",
+            "routeLine": 8,
+            "call": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health:call:30:11:RestClient.create(Urls.ORIGIN).get().uri",
+            "line": 30,
+            "expression": "RestClient.create(Urls.ORIGIN).get().uri",
+            "client": "restclient",
+            "method": "GET",
+            "url": "/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/health",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/HealthController.java",
+            "routeLine": 8,
+            "call": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health:call:21:11:WebClient.builder().baseUrl(Urls.ORIGIN).build().get().uri",
+            "line": 21,
+            "expression": "WebClient.builder().baseUrl(Urls.ORIGIN).build().get().uri",
+            "client": "webclient",
+            "method": "GET",
+            "url": "/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": "GET",
+        "path": "/health",
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/health",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 8
+          },
+          "client": "httpclient",
+          "method": "GET",
+          "url": "/health",
+          "match": "exact",
+          "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+          "line": 14,
+          "expression": "HttpRequest.newBuilder",
+          "function": "health"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/health",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 8
+          },
+          "client": "restclient",
+          "method": "GET",
+          "url": "/health",
+          "match": "exact",
+          "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+          "line": 30,
+          "expression": "RestClient.create(Urls.ORIGIN).get().uri",
+          "function": "health"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/health",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 8
+          },
+          "client": "webclient",
+          "method": "GET",
+          "url": "/health",
+          "match": "exact",
+          "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+          "line": 21,
+          "expression": "WebClient.builder().baseUrl(Urls.ORIGIN).build().get().uri",
+          "function": "health"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "client": "webclient"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health",
+            "name": "health",
+            "className": "JdkClientGateway",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 13,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:18:com.acme.portal.client.JdkClientGateway.create",
+            "name": "create",
+            "className": "JdkClientGateway",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 18,
+            "endLine": 26
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:28:com.acme.portal.client.JdkClientGateway.replace",
+            "name": "replace",
+            "className": "JdkClientGateway",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 28,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:11:com.acme.portal.client.JdkClientGateway.<init-block>",
+            "name": "<init-block>",
+            "className": "JdkClientGateway",
+            "file": "src/main/java/com/acme/portal/client/JdkClientGateway.java",
+            "line": 11,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:10:com.acme.portal.client.LocalCache.get",
+            "name": "get",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:12:com.acme.portal.client.LocalCache.getForObject",
+            "name": "getForObject",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 12,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:14:com.acme.portal.client.LocalCache.delete",
+            "name": "delete",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 14,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:16:com.acme.portal.client.LocalCache.warm",
+            "name": "warm",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 16,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:8:com.acme.portal.client.LocalCache.<init-block>",
+            "name": "<init-block>",
+            "className": "LocalCache",
+            "file": "src/main/java/com/acme/portal/client/LocalCache.java",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:12:com.acme.portal.client.OkHttpGateway.remove",
+            "name": "remove",
+            "className": "OkHttpGateway",
+            "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+            "line": 12,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:17:com.acme.portal.client.OkHttpGateway.find",
+            "name": "find",
+            "className": "OkHttpGateway",
+            "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+            "line": 17,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:10:com.acme.portal.client.OkHttpGateway.<init-block>",
+            "name": "<init-block>",
+            "className": "OkHttpGateway",
+            "file": "src/main/java/com/acme/portal/client/OkHttpGateway.java",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:13:com.acme.portal.client.RestClientGateway.RestClientGateway",
+            "name": "RestClientGateway",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 13,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:17:com.acme.portal.client.RestClientGateway.find",
+            "name": "find",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 17,
+            "endLine": 19
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:21:com.acme.portal.client.RestClientGateway.create",
+            "name": "create",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 21,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:25:com.acme.portal.client.RestClientGateway.remove",
+            "name": "remove",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 25,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health",
+            "name": "health",
+            "className": "RestClientGateway",
+            "file": "src/main/java/com/acme/portal/client/RestClientGateway.java",
+            "line": 29,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:17:com.acme.portal.client.RestTemplateGateway.RestTemplateGateway",
+            "name": "RestTemplateGateway",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 17,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:19:com.acme.portal.client.RestTemplateGateway.find",
+            "name": "find",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 19,
+            "endLine": 21
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:23:com.acme.portal.client.RestTemplateGateway.create",
+            "name": "create",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 23,
+            "endLine": 25
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:27:com.acme.portal.client.RestTemplateGateway.replace",
+            "name": "replace",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 27,
+            "endLine": 29
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:31:com.acme.portal.client.RestTemplateGateway.remove",
+            "name": "remove",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 31,
+            "endLine": 33
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:35:com.acme.portal.client.RestTemplateGateway.lookup",
+            "name": "lookup",
+            "className": "RestTemplateGateway",
+            "file": "src/main/java/com/acme/portal/client/RestTemplateGateway.java",
+            "line": 35,
+            "endLine": 37
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:12:com.acme.portal.client.WebClientGateway.search",
+            "name": "search",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 12,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:16:com.acme.portal.client.WebClientGateway.update",
+            "name": "update",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health",
+            "name": "health",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:24:com.acme.portal.client.WebClientGateway.dynamicStart",
+            "name": "dynamicStart",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 24,
+            "endLine": 26
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:10:com.acme.portal.client.WebClientGateway.<init-block>",
+            "name": "<init-block>",
+            "className": "WebClientGateway",
+            "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/config/ClientConfig.java:function:9:com.acme.portal.config.ClientConfig.restTemplate",
+            "name": "restTemplate",
+            "className": "ClientConfig",
+            "file": "src/main/java/com/acme/portal/config/ClientConfig.java",
+            "line": 9,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/config/Urls.java:function:7:com.acme.portal.config.Urls.Urls",
+            "name": "Urls",
+            "className": "Urls",
+            "file": "src/main/java/com/acme/portal/config/Urls.java",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/HealthController.java:function:8:com.acme.portal.web.HealthController.health",
+            "name": "health",
+            "className": "HealthController",
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 8,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:10:com.acme.portal.web.UserController.get",
+            "name": "get",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 10,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:13:com.acme.portal.web.UserController.search",
+            "name": "search",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 13,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:16:com.acme.portal.web.UserController.create",
+            "name": "create",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 16,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:19:com.acme.portal.web.UserController.update",
+            "name": "update",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 19,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:function:22:com.acme.portal.web.UserController.delete",
+            "name": "delete",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 22,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/test/java/com/acme/portal/UserControllerTest.java:function:9:com.acme.portal.UserControllerTest.healthy",
+            "name": "healthy",
+            "className": "UserControllerTest",
+            "file": "src/test/java/com/acme/portal/UserControllerTest.java",
+            "line": 9,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/test/java/com/acme/portal/UserControllerTest.java:function:7:com.acme.portal.UserControllerTest.<init-block>",
+            "name": "<init-block>",
+            "className": "UserControllerTest",
+            "file": "src/test/java/com/acme/portal/UserControllerTest.java",
+            "line": 7,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:16:com.acme.portal.client.LocalCache.warm",
+            "callee": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:14:com.acme.portal.client.LocalCache.delete",
+            "line": 17
+          },
+          {
+            "caller": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:16:com.acme.portal.client.LocalCache.warm",
+            "callee": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:12:com.acme.portal.client.LocalCache.getForObject",
+            "line": 18
+          },
+          {
+            "caller": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:16:com.acme.portal.client.LocalCache.warm",
+            "callee": "file:src/main/java/com/acme/portal/client/LocalCache.java:function:10:com.acme.portal.client.LocalCache.get",
+            "line": 18
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "",
+          "routeFiles": [],
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health"
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:route:10:0:GET:/api/users/{id}"
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:route:13:0:GET:/api/users/search"
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:route:16:0:POST:/api/users"
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:route:19:0:PUT:/api/users/{id}"
+          },
+          {
+            "id": "file:src/main/java/com/acme/portal/web/UserController.java:route:22:0:DELETE:/api/users/{id}"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health",
+            "file:src/main/java/com/acme/portal/web/UserController.java:route:10:0:GET:/api/users/{id}",
+            "file:src/main/java/com/acme/portal/web/UserController.java:route:13:0:GET:/api/users/search",
+            "file:src/main/java/com/acme/portal/web/UserController.java:route:16:0:POST:/api/users",
+            "file:src/main/java/com/acme/portal/web/UserController.java:route:19:0:PUT:/api/users/{id}",
+            "file:src/main/java/com/acme/portal/web/UserController.java:route:22:0:DELETE:/api/users/{id}"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/health",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/HealthController.java",
+            "routeLine": 8,
+            "call": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health:call:14:26:HttpRequest.newBuilder",
+            "line": 14,
+            "expression": "HttpRequest.newBuilder",
+            "client": "httpclient",
+            "method": "GET",
+            "url": "/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/health",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/HealthController.java",
+            "routeLine": 8,
+            "call": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health:call:30:11:RestClient.create(Urls.ORIGIN).get().uri",
+            "line": 30,
+            "expression": "RestClient.create(Urls.ORIGIN).get().uri",
+            "client": "restclient",
+            "method": "GET",
+            "url": "/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/HealthController.java:route:8:0:GET:/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/health",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/HealthController.java",
+            "routeLine": 8,
+            "call": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health:call:21:11:WebClient.builder().baseUrl(Urls.ORIGIN).build().get().uri",
+            "line": 21,
+            "expression": "WebClient.builder().baseUrl(Urls.ORIGIN).build().get().uri",
+            "client": "webclient",
+            "method": "GET",
+            "url": "/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:10:0:GET:/api/users/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/users/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 10,
+            "call": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:17:com.acme.portal.client.OkHttpGateway.find:call:18:22:new Request.Builder",
+            "line": 18,
+            "expression": "new Request.Builder",
+            "client": "okhttp",
+            "method": "GET",
+            "url": "/api/users/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:17:com.acme.portal.client.OkHttpGateway.find"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:10:0:GET:/api/users/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/users/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 10,
+            "call": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:17:com.acme.portal.client.RestClientGateway.find:call:18:11:client.get().uri",
+            "line": 18,
+            "expression": "client.get().uri",
+            "client": "restclient",
+            "method": "GET",
+            "url": "/api/users/{id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:17:com.acme.portal.client.RestClientGateway.find"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:10:0:GET:/api/users/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/users/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 10,
+            "call": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:19:com.acme.portal.client.RestTemplateGateway.find:call:20:11:rest.getForObject",
+            "line": 20,
+            "expression": "rest.getForObject",
+            "client": "resttemplate",
+            "method": "GET",
+            "url": "/api/users/{id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:19:com.acme.portal.client.RestTemplateGateway.find"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:13:0:GET:/api/users/search",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/users/search",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 13,
+            "call": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:12:com.acme.portal.client.WebClientGateway.search:call:13:11:web.get().uri",
+            "line": 13,
+            "expression": "web.get().uri",
+            "client": "webclient",
+            "method": "GET",
+            "url": "/api/users/search",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:12:com.acme.portal.client.WebClientGateway.search"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:16:0:POST:/api/users",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/users",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 16,
+            "call": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:18:com.acme.portal.client.JdkClientGateway.create:call:20:26:HttpRequest.newBuilder",
+            "line": 20,
+            "expression": "HttpRequest.newBuilder",
+            "client": "httpclient",
+            "method": "POST",
+            "url": "/api/users",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:18:com.acme.portal.client.JdkClientGateway.create"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:16:0:POST:/api/users",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/users",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 16,
+            "call": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:21:com.acme.portal.client.RestClientGateway.create:call:22:11:client.method(HttpMethod.POST).uri",
+            "line": 22,
+            "expression": "client.method(HttpMethod.POST).uri",
+            "client": "restclient",
+            "method": "POST",
+            "url": "/api/users",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:21:com.acme.portal.client.RestClientGateway.create"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:16:0:POST:/api/users",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/users",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 16,
+            "call": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:23:com.acme.portal.client.RestTemplateGateway.create:call:24:11:rest.postForObject",
+            "line": 24,
+            "expression": "rest.postForObject",
+            "client": "resttemplate",
+            "method": "POST",
+            "url": "/api/users",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:23:com.acme.portal.client.RestTemplateGateway.create"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:19:0:PUT:/api/users/{id}",
+            "routeMethod": "PUT",
+            "routeFullPath": "/api/users/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 19,
+            "call": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:28:com.acme.portal.client.JdkClientGateway.replace:call:29:26:HttpRequest.newBuilder",
+            "line": 29,
+            "expression": "HttpRequest.newBuilder",
+            "client": "httpclient",
+            "method": "PUT",
+            "url": "/api/users/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:28:com.acme.portal.client.JdkClientGateway.replace"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:19:0:PUT:/api/users/{id}",
+            "routeMethod": "PUT",
+            "routeFullPath": "/api/users/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 19,
+            "call": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:27:com.acme.portal.client.RestTemplateGateway.replace:call:28:4:rest.exchange",
+            "line": 28,
+            "expression": "rest.exchange",
+            "client": "resttemplate",
+            "method": "PUT",
+            "url": "/api/users/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:27:com.acme.portal.client.RestTemplateGateway.replace"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:19:0:PUT:/api/users/{id}",
+            "routeMethod": "PUT",
+            "routeFullPath": "/api/users/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 19,
+            "call": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:16:com.acme.portal.client.WebClientGateway.update:call:17:11:web.put().uri",
+            "line": 17,
+            "expression": "web.put().uri",
+            "client": "webclient",
+            "method": "PUT",
+            "url": "/api/users/{id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:16:com.acme.portal.client.WebClientGateway.update"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:22:0:DELETE:/api/users/{id}",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/users/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 22,
+            "call": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:12:com.acme.portal.client.OkHttpGateway.remove:call:13:22:new Request.Builder",
+            "line": 13,
+            "expression": "new Request.Builder",
+            "client": "okhttp",
+            "method": "DELETE",
+            "url": "/api/users/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:12:com.acme.portal.client.OkHttpGateway.remove"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:22:0:DELETE:/api/users/{id}",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/users/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 22,
+            "call": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:25:com.acme.portal.client.RestClientGateway.remove:call:26:4:client.delete().uri",
+            "line": 26,
+            "expression": "client.delete().uri",
+            "client": "restclient",
+            "method": "DELETE",
+            "url": "/api/users/{id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:25:com.acme.portal.client.RestClientGateway.remove"
+          },
+          {
+            "route": "file:src/main/java/com/acme/portal/web/UserController.java:route:22:0:DELETE:/api/users/{id}",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/users/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/portal/web/UserController.java",
+            "routeLine": 22,
+            "call": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:31:com.acme.portal.client.RestTemplateGateway.remove:call:32:4:rest.delete",
+            "line": 32,
+            "expression": "rest.delete",
+            "client": "resttemplate",
+            "method": "DELETE",
+            "url": "/api/users/{id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:31:com.acme.portal.client.RestTemplateGateway.remove"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:18:com.acme.portal.client.JdkClientGateway.create",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:21:com.acme.portal.client.RestClientGateway.create",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:23:com.acme.portal.client.RestTemplateGateway.create",
+            "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:12:com.acme.portal.client.OkHttpGateway.remove",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:25:com.acme.portal.client.RestClientGateway.remove",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:31:com.acme.portal.client.RestTemplateGateway.remove",
+            "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:17:com.acme.portal.client.OkHttpGateway.find",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:17:com.acme.portal.client.RestClientGateway.find",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:19:com.acme.portal.client.RestTemplateGateway.find",
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:28:com.acme.portal.client.JdkClientGateway.replace",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:27:com.acme.portal.client.RestTemplateGateway.replace",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:16:com.acme.portal.client.WebClientGateway.update",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:12:com.acme.portal.client.WebClientGateway.search",
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:18:com.acme.portal.client.JdkClientGateway.create",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:21:com.acme.portal.client.RestClientGateway.create",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:23:com.acme.portal.client.RestTemplateGateway.create",
+            "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:12:com.acme.portal.client.OkHttpGateway.remove",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:25:com.acme.portal.client.RestClientGateway.remove",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:31:com.acme.portal.client.RestTemplateGateway.remove",
+            "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:17:com.acme.portal.client.OkHttpGateway.find",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:17:com.acme.portal.client.RestClientGateway.find",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:19:com.acme.portal.client.RestTemplateGateway.find",
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:28:com.acme.portal.client.JdkClientGateway.replace",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:27:com.acme.portal.client.RestTemplateGateway.replace",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:16:com.acme.portal.client.WebClientGateway.update",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:12:com.acme.portal.client.WebClientGateway.search",
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:18:com.acme.portal.client.JdkClientGateway.create",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:21:com.acme.portal.client.RestClientGateway.create",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:23:com.acme.portal.client.RestTemplateGateway.create",
+            "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:12:com.acme.portal.client.OkHttpGateway.remove",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:25:com.acme.portal.client.RestClientGateway.remove",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:31:com.acme.portal.client.RestTemplateGateway.remove",
+            "file:src/main/java/com/acme/portal/client/OkHttpGateway.java:function:17:com.acme.portal.client.OkHttpGateway.find",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:17:com.acme.portal.client.RestClientGateway.find",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:19:com.acme.portal.client.RestTemplateGateway.find",
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:28:com.acme.portal.client.JdkClientGateway.replace",
+            "file:src/main/java/com/acme/portal/client/RestTemplateGateway.java:function:27:com.acme.portal.client.RestTemplateGateway.replace",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:16:com.acme.portal.client.WebClientGateway.update",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:12:com.acme.portal.client.WebClientGateway.search",
+            "file:src/main/java/com/acme/portal/client/JdkClientGateway.java:function:13:com.acme.portal.client.JdkClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/RestClientGateway.java:function:29:com.acme.portal.client.RestClientGateway.health",
+            "file:src/main/java/com/acme/portal/client/WebClientGateway.java:function:20:com.acme.portal.client.WebClientGateway.health"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": null,
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": "webclient",
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "PUT",
+            "fullPath": "/api/users/{id}",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 19
+          },
+          "client": "webclient",
+          "method": "PUT",
+          "url": "/api/users/{id}",
+          "match": "parameter",
+          "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+          "line": 17,
+          "expression": "web.put().uri",
+          "function": "update"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/users/search",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 13
+          },
+          "client": "webclient",
+          "method": "GET",
+          "url": "/api/users/search",
+          "match": "exact",
+          "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+          "line": 13,
+          "expression": "web.get().uri",
+          "function": "search"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/health",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 8
+          },
+          "client": "webclient",
+          "method": "GET",
+          "url": "/health",
+          "match": "exact",
+          "file": "src/main/java/com/acme/portal/client/WebClientGateway.java",
+          "line": 21,
+          "expression": "WebClient.builder().baseUrl(Urls.ORIGIN).build().get().uri",
+          "function": "health"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {
+      "framework": "spring-mvc"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND route.framework = \"spring-mvc\" OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/portal/web/HealthController.java",
+            "line": 8,
+            "method": "GET",
+            "path": "/health",
+            "fullPath": "/health",
+            "framework": "spring-mvc",
+            "handlerName": "health",
+            "handler": "health"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 10,
+            "method": "GET",
+            "path": "/api/users/{id}",
+            "fullPath": "/api/users/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "get",
+            "handler": "get"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 13,
+            "method": "GET",
+            "path": "/api/users/search",
+            "fullPath": "/api/users/search",
+            "framework": "spring-mvc",
+            "handlerName": "search",
+            "handler": "search"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 16,
+            "method": "POST",
+            "path": "/api/users",
+            "fullPath": "/api/users",
+            "framework": "spring-mvc",
+            "handlerName": "create",
+            "handler": "create"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 19,
+            "method": "PUT",
+            "path": "/api/users/{id}",
+            "fullPath": "/api/users/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "update",
+            "handler": "update"
+          },
+          {
+            "file": "src/main/java/com/acme/portal/web/UserController.java",
+            "line": 22,
+            "method": "DELETE",
+            "path": "/api/users/{id}",
+            "fullPath": "/api/users/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "delete",
+            "handler": "delete"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "framework": "spring-mvc",
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/main/java/com/acme/portal/web/HealthController.java",
+          "line": 8,
+          "method": "GET",
+          "path": "/health",
+          "fullPath": "/health",
+          "framework": "spring-mvc",
+          "handlerName": "health",
+          "handler": "health"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 10,
+          "method": "GET",
+          "path": "/api/users/{id}",
+          "fullPath": "/api/users/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "get",
+          "handler": "get"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 13,
+          "method": "GET",
+          "path": "/api/users/search",
+          "fullPath": "/api/users/search",
+          "framework": "spring-mvc",
+          "handlerName": "search",
+          "handler": "search"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 16,
+          "method": "POST",
+          "path": "/api/users",
+          "fullPath": "/api/users",
+          "framework": "spring-mvc",
+          "handlerName": "create",
+          "handler": "create"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 19,
+          "method": "PUT",
+          "path": "/api/users/{id}",
+          "fullPath": "/api/users/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "update",
+          "handler": "update"
+        },
+        {
+          "file": "src/main/java/com/acme/portal/web/UserController.java",
+          "line": 22,
+          "method": "DELETE",
+          "path": "/api/users/{id}",
+          "fullPath": "/api/users/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "delete",
+          "handler": "delete"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 6
+      }
+    }
+  }
+]

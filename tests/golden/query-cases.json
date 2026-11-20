@@ -1478,6 +1478,188 @@
         "tool": "list_env_config",
         "args": {}
       }
+    ],
+    "java-spring-data-jpa": [
+      {
+        "tool": "list_tables",
+        "args": {
+          "name": "customers"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "jpa"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "model": "Order",
+          "direct": true
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "findByEmailAndStatus"
+        }
+      }
+    ],
+    "java-jdbc": [
+      {
+        "tool": "list_tables",
+        "args": {
+          "name": "users"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "jdbc"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "model": "users",
+          "operation": "update"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "rename"
+        }
+      }
+    ],
+    "java-mybatis": [
+      {
+        "tool": "list_tables",
+        "args": {}
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "mybatis"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "operation": "delete"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "rename"
+        }
+      }
+    ],
+    "java-spring-config": [
+      {
+        "tool": "list_env_config",
+        "args": {
+          "name": "app.mail"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "name": "DB_PASSWORD"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "file": "EnvUsage.java"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "unread": true
+        }
+      }
+    ],
+    "java-http-clients": [
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "GET",
+          "path": "/health"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "client": "webclient"
+        }
+      },
+      {
+        "tool": "list_routes",
+        "args": {
+          "framework": "spring-mvc"
+        }
+      }
+    ],
+    "java-feign": [
+      {
+        "tool": "api_consumers",
+        "args": {
+          "client": "feign"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "GET",
+          "path": "/api/invoices/{id}"
+        }
+      },
+      {
+        "tool": "list_routes",
+        "args": {
+          "framework": "spring-mvc"
+        }
+      }
+    ],
+    "java-spring-service": [
+      {
+        "tool": "list_tables",
+        "args": {}
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "mybatis"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "name": "app.limits"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "client": "feign"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "client": "webclient"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "markShipped"
+        }
+      }
     ]
   }
 }
