@@ -65,17 +65,31 @@ const kindOfDeclaration: Record<string, TypeKind> = {
   annotation_type_declaration: "annotation",
 };
 
-export const javaParser: LanguageParser = {
-  language: "java",
-  version: "1",
-  parse: (rootPath, filePath) => parseJavaFile(rootPath, filePath),
-};
+// A method or constructor of the file with the syntax it was built from (`syntax` is its declaration).
+export type JavaParsedFunction = { syntax: SyntaxNode; node: GraphNode };
 
-export function createJavaParser(): LanguageParser {
-  return javaParser;
+// Parse-time semantics a framework layer adds to a Java file once its structure is built (the way
+// Go's parse plugins do): it may add properties, nodes and relationships. It runs while the syntax
+// tree is alive, so it can read what the graph does not keep (call arguments, nesting of calls).
+export type JavaParsePlugin = (file: {
+  fileNodeId: string;
+  root: SyntaxNode;
+  nodes: GraphNode[];
+  relationships: GraphRelationship[];
+  functions: readonly JavaParsedFunction[];
+}) => void;
+
+export function createJavaParser(plugins: readonly JavaParsePlugin[] = []): LanguageParser {
+  return {
+    language: "java",
+    version: "1",
+    parse: (rootPath, filePath) => parseJavaFile(rootPath, filePath, plugins),
+  };
 }
 
-async function parseJavaFile(rootPath: string, filePath: string): Promise<ParsedSourceFile> {
+export const javaParser: LanguageParser = createJavaParser();
+
+async function parseJavaFile(rootPath: string, filePath: string, plugins: readonly JavaParsePlugin[]): Promise<ParsedSourceFile> {
   const source = await readFile(filePath, "utf8");
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
@@ -86,6 +100,7 @@ async function parseJavaFile(rootPath: string, filePath: string): Promise<Parsed
   const nodes: GraphNode[] = [fileNode];
   const relationships: GraphRelationship[] = [];
   const usedIds = new Set<string>([fileNodeId]);
+  const parsedFunctions: JavaParsedFunction[] = [];
 
   const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors("java", source, statementParents, 4);
   try {
@@ -325,6 +340,7 @@ async function parseJavaFile(rootPath: string, filePath: string): Promise<Parsed
         },
       };
       add(fn, owner.id, owner.isInterface ? "DEFINES_INTERFACE_METHOD" : "DEFINES_METHOD");
+      if (plugins.length > 0 && spec.kind !== "initializer") parsedFunctions.push({ syntax: spec.node, node: fn });
       addDecorators(fn.id, "HAS_METHOD_DECORATOR", spec.annotations);
       if (spec.kind !== "initializer") owner.methodNames.push(spec.name);
       walkCode(spec.roots, fn, owner, locals);
@@ -587,6 +603,8 @@ async function parseJavaFile(rootPath: string, filePath: string): Promise<Parsed
           if (typeDeclarationTypes.has(child.type)) handleType(child, null, "top-level");
       }
     }
+
+    for (const plugin of plugins) plugin({ fileNodeId, root: tree.rootNode, nodes, relationships, functions: parsedFunctions });
 
     const parsed: ParsedSourceFile = { fileNodeId, nodes, relationships };
     if (skippedLines.length > 0) {
