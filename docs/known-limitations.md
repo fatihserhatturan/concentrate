@@ -2215,6 +2215,34 @@ the call recall leaves out:
   counted against a grep, not labeled. Cost: about 3 to 4% of a scan of cJSON,
   tinyxml2 and googletest.
 
+## Java
+
+- The grammar is tree-sitter-java, vendored as `vendor/grammars/java.wasm`. The
+  extension is `.java`; `module-info.java` and `package-info.java` are read too
+  (`File.javaFileKind`). A file with a syntax error is kept; the declaration with
+  the error is left out.
+- Covered: packages, classes, interfaces, enums, records and annotation types
+  (nested, local and anonymous too), methods, constructors, fields, imports (single,
+  on-demand and static), calls resolved through inheritance with override dispatch,
+  `public static void main(String[])` entrypoints, JUnit 4/5 and TestNG tests, and
+  unused-export rules.
+- `new T()` and `T::new` for a class without an explicit constructor stay
+  unresolved. The graph has no synthetic constructor to point at.
+- An interface that extends another interface is recorded in `Interface.embeds`,
+  not as an EXTENDS edge. The schema allows EXTENDS from Class to Class only.
+- Unused detection for package-private and private members is name-based within
+  the file or package: a mention of the name counts as a use.
+- Source roots come from conventions (`src/main/java`, `src/test/java`) or from the
+  package path of the file, until the build files are read (Phase 40).
+- Locals are not scope-tracked. The same name declared with different types in one
+  method gives an unknown type, so a call on it stays unresolved.
+- Method references (`Type::method`) have an unknown arity. When the method is
+  overloaded the call is ambiguous.
+- `switch` and record patterns do not feed local types.
+- `module-info.java` records only the module name (`File.javaModule`); `requires`,
+  `exports` and `opens` are not read.
+- Not read yet: build systems (Phase 40) and frameworks (Phase 41 onward).
+
 ## Non-code files
 
 - Every discovered file is a `File` node with a `language` and a `sourceType`.

@@ -9,6 +9,8 @@ export type UnusedAnalysisContext = {
   readonly declarations: readonly Declaration[];
   /** The unit (package, crate, header/source pair...) a file belongs to. */
   unitOf(file: string): string;
+  /** Annotation or decorator names written on a declaration (`Override`, `org.junit.Test`). */
+  annotationsOf(declarationId: string): readonly string[];
   /** Reads every scanned file the predicate accepts (nothing without a repository path). */
   forEachSource(include: (file: string) => boolean, visit: (file: string, text: string) => void): Promise<void>;
 };
@@ -38,6 +40,12 @@ export interface IUnusedExportRules {
   readonly wildcardImportUsesWholeFile?: boolean;
   /** Files that belong together as one unit; a use from another unit counts. Default: the file itself. */
   unitOf?(file: string, info: FileInfo | undefined): string;
+  /**
+   * Which declarations are candidates at all. Default: exported non-method declarations (then
+   * `isPublicApi` narrows them). A language that judges what is NOT public (Java: package-private and
+   * private types, methods and fields) says so here; it also makes the analysis load that language's fields.
+   */
+  judges?(declaration: Declaration): boolean;
   /** Whether the declaration can leave its unit (false: not judged at all). */
   isPublicApi?(declaration: Declaration): boolean;
   /** Skip reason checked before the test-file rule (a binary crate has no dependents). */
@@ -54,6 +62,8 @@ export interface IUnusedExportRules {
     packages: readonly { path?: unknown; relativePath?: unknown }[],
     files: ReadonlyMap<string, unknown>,
   ): Promise<string[]>;
+  /** The session reads `annotationsOf`; the analysis loads annotations only for rules that say so. */
+  readonly usesAnnotations?: boolean;
   /** Called once, only when the scan holds declarations the rule supports. */
   createSession?(context: UnusedAnalysisContext): Promise<UnusedLanguageSession>;
   /** The language's paragraph of the find_unused_exports note. */

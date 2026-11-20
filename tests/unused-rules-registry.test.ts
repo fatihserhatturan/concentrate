@@ -12,7 +12,7 @@ import { createEmptyCoreIntegrationRegistry, describeIntegrations } from "../src
 import { openTestStore } from "./helpers/store.js";
 import { createToyRegistry, toyUnusedRules } from "./helpers/toy-plugin.js";
 
-const NOTE_TAIL = "JavaScript, TypeScript, Python, Go, Rust, C and C++.";
+const NOTE_TAIL = "JavaScript, TypeScript, Python, Go, Rust, C, C++ and Java.";
 
 describe("unused-export rules through the registry", () => {
   let root: string;
@@ -38,9 +38,9 @@ describe("unused-export rules through the registry", () => {
     await rm(root, { recursive: true, force: true });
   });
 
-  it("registers the five languages in note order, and rejects a duplicate id", () => {
+  it("registers the six languages in note order, and rejects a duplicate id", () => {
     const registry = createDefaultCoreIntegrationRegistry();
-    assert.deepEqual(registry.unusedExportRules.map((rules) => rules.id), ["js-ts", "go", "rust", "python", "cpp"]);
+    assert.deepEqual(registry.unusedExportRules.map((rules) => rules.id), ["js-ts", "go", "rust", "python", "cpp", "java"]);
     assert.throws(() => registry.registerUnusedExportRules(registry.unusedExportRules[0]!), /already registered/);
     assert.ok(describeIntegrations(registry).includes("unused-rules:go@"));
     assert.deepEqual(createEmptyCoreIntegrationRegistry().unusedExportRules, []);
@@ -60,7 +60,7 @@ describe("unused-export rules through the registry", () => {
     assert.deepEqual(names, ["lonely", "main"]);
     assert.ok(note.includes(toyUnusedRules.note!), note);
     assert.ok(note.includes("Toy."), note);
-    assert.ok(note.endsWith("C, C++ and Toy."), note);
+    assert.ok(note.endsWith("C, C++, Java and Toy."), note);
   });
 
   it("judges only what the registry's rules cover", async () => {
